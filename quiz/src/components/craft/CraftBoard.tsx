@@ -722,6 +722,32 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
               </g>
             )
           })}
+          {/* Cause to effect: from the line that made a card to the card —
+              while it is new, or while that connection or the card is the
+              one being looked at. */}
+          {[...state.madeFrom].map(([made, from]) => {
+            if (!state.fresh.has(made) && !isLit(from) && focus !== made) return null
+            if (from.strength < minStrength && !isLit(from)) return null
+            const a = all[conceptKey(from.a)]
+            const b = all[conceptKey(from.b)]
+            const m = all[conceptKey(made)]
+            if (!a || !b || !m) return null
+            const { x, y } = lineLabelPoint(a, b)
+            return (
+              <path
+                key={`made:${made}`}
+                className={cn(justMade.some(n => n.toLowerCase() === made) && 'craft-made-in')}
+                d={`M${x} ${y} L${m.x} ${m.y}`}
+                fill="none"
+                stroke={ACCENT}
+                strokeWidth={1.5}
+                strokeDasharray="3 5"
+                strokeLinecap="round"
+                opacity={0.85}
+                data-testid="craft-made-link"
+              />
+            )
+          })}
         </svg>
 
         {visible.map(c => {

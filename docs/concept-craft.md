@@ -1,12 +1,13 @@
 # Concept Craft
 
-A topic crafted out of a few of its concepts. A topic is one learning objective of an
-exam page; the reader starts with a small hand of its concepts — the fewest from which
-all the rest can be made — and drops one on another. Where the vault ties the two
-together a line is drawn between them carrying the connection's **strength**, 0–100,
-and the connection **makes** what lies between them: the concepts most strongly tied
-to both, which land on the board beside the pair in the exam's colour. Where nothing
-ties them the card goes back. Every connection found stays on the board, so a topic
+A topic crafted out of its building blocks. A topic is one learning objective of an
+exam page; the reader starts with the concepts nothing else in it is made from, and
+drops one on another. Where the vault ties the two together a line is drawn between
+them carrying the connection's **strength**, 0–100, and the connection **makes** what
+is built from the pair — cause and effect: the concepts whose own pages define them by
+the two, the way frequency and severity make the pure premium. Those land on the
+board beside the pair in the exam's colour. Where nothing ties the two the card goes
+back. Every connection found stays on the board, so a topic
 ends as a map of how its concepts relate — the strongly connected drawn close
 together, the loosely connected further out.
 
@@ -36,26 +37,36 @@ anything (the map updates and that is the answer), and a concept on the board is
 in the app's own concept popup, not a summary card of the board's. But it dealt the
 whole topic at once, and set a daily "what connects A and B?" challenge.
 
-The third version — this one — brings back what made the first a game, without the
-book: **finding a connection makes concepts**, so a board starts with a few cards and
-grows. What a pair makes is read off the same graph (the concepts tied to both), so
-nothing is authored still. The challenge is gone: the reader builds and discovers on
-their own. New cards are drawn in the exam's colour, and a connection's card is
-pared down to its strength, its **Practice** button and what the pages say.
+The third version brought back what made the first a game, without the book:
+**finding a connection makes concepts**, so a board starts with a few cards and grows.
+What a pair made was read off the same graph — the concepts tied most strongly to both
+— so nothing was authored still. The challenge went: the reader builds and discovers on
+their own. New cards are drawn in the exam's colour, and a connection's card is pared
+down to its strength, its **Practice** button and what the pages say.
+
+The fourth version — this one — changes *what* a pair makes. "Tied to both" made
+concepts that were only related: Frequency and Severity made the Pure Premium, but
+also the Basic Insurance Ratios that list them; Set Theory and the Law of Total
+Probability made Conditional Probability, which the law is built *on*. Now a pair makes
+what is **built from it** — cause and effect — read off the page of the concept it
+makes (`lib/conceptRecipes.ts`, below): `Pure Premium = Frequency × Severity` is a
+recipe; a list naming both is not. A topic starts from its building blocks, and a
+connection's card says what it made and quotes the page that says why.
 
 ## The pieces
 
 | | |
 |---|---|
 | `quiz/src/lib/conceptGraph.ts` | **The graph**, pure and tested: what a page says about other concepts (`pageMentions` — links, and names written out), the strength formula (`connectionStrength`, `STRENGTH_WEIGHTS`, `MIN_STRENGTH`, `STRENGTH_TIERS`) and `buildConceptGraph`. |
-| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), what a connection makes (`MAKING`, `commonNeighbours`, `madeBy`), the starting hand (`seedConcepts`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`) and a connection's practice (`practiceQuestions`). |
+| `quiz/src/lib/conceptRecipes.ts` | **The recipes**, pure and tested: what a page's opening names and where (`openingNames`, `pageOpening`, `beforeAside`, `abbreviationOf`), each concept's best recipes (`buildRecipes`, `RECIPES`, `PLACE`) and what each connection makes (`recipesByPair`). |
+| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`) and a connection's practice (`practiceQuestions`). |
 | `quiz/src/lib/craftLayout.ts` | The board's physics and geometry, pure and tested: bodies, strength-weighted springs, collision, seeding, where a made card lands (`spawnBeside`), the camera, hit-testing, where a line's label goes. |
 | `quiz/src/hooks/useConceptCraft.ts` | The reader's boards — localStorage, pair keys only — and which connections the board shows. |
 | `quiz/src/hooks/useConceptLevels.ts` | A concept's level and collected state for drawing its card — shared with Quiz Battle's topic pick. |
 | `quiz/src/pages/Craft.tsx` | The topic picker and one topic's screen: top bar, deck, board, connection card. Lazy (`lazyRoute`). |
 | `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck`, `CraftConnection` (a connection's card), `CraftLogo`. |
-| `quiz/src/lib/conceptCraftVault.test.ts` | The topics and graphs over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from a small hand, and no quoted sentence cuts a formula in half. |
-| `quiz/e2e/craft.spec.ts` | The way in, a connection found that makes new cards with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card down to its quiz. |
+| `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), and no quoted sentence cuts a formula in half. |
+| `quiz/e2e/craft.spec.ts` | The way in, a connection found that makes new cards — drawn from the line that made them — with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card: what it made, down to its quiz. |
 
 ## Topics
 
@@ -135,47 +146,87 @@ tables, links before names, and each page's best before a second from either.
 
 ## Making concepts
 
-A connection found makes **what lies between its two concepts**: the concepts
-connected to both (`commonNeighbours`), the most strongly tied first — a concept's
-tie to the pair is the weaker of its two connections — taking at most three, and
-only those tied at 25 or more (`MAKING`, `madeBy`). On Exam 5's ratemaking board,
-*Frequency* dropped on *Severity* makes *Pure Premium*, *Loss Trend* and *Basic
-Insurance Ratios*; on Exam FM's loans board, *Loans* on *Principal* makes *Term of
-Loan*, *Outstanding Balance* and *Amortization*. The cap and the floor are what keep
-a find a discovery rather than a flood: the vault's best-connected pair has
-thirty-nine concepts in common, thirty-four of them over the floor.
+A connection found makes the concepts **built from its two ends**. The vault already
+says what a concept is built from, where it defines it: a concept page opens on its
+definition, the formula that defines it and the points under them. So a recipe is read
+off the page of the concept it makes (`lib/conceptRecipes.ts`), never authored:
 
-A concept is made once — one already in hand isn't made again — and a pair found a
-second time just pulses its line. Nineteen connections in twenty have something
-between their two ends, but a find makes only what isn't in hand yet, so early
-finds bring cards and late ones mostly add a line.
+- **Where a name sits.** A concept named in the definition sentence, or on the right of
+  a formula with the page's own concept on the left, is an ingredient first; named in
+  the rest of the lead paragraph, second; in the points under it — the page's
+  *opening*, up to its first figure, callout or heading — last (`PLACE`, 3/2/1). A
+  formula is read by its `\text{…}` names, or by the abbreviation a page gives its own
+  name (`**Expected Loss Ratio** (ELR)` reads `\text{ELR}`).
+- **What is not an ingredient.** A clause about what the concept is *for* ("used to
+  compute …", "the basis for …", "the justification for …"), what it is set *against*
+  ("rather than …", "unlike …") or what its *instances* are ("such as …", "the most
+  fundamental are …") names nothing it is made of — each sentence is read only up to its
+  first such clause (`beforeAside`). A sentence listing more than three of the topic's
+  concepts names each one faintly, and a name the topic's pages write everywhere
+  (*insurer*, *risk*) counts for less, as it does in the graph (`share`).
+- **Which way it runs.** Nothing is made from its own effects: a concept whose own
+  definition is built on the page's concept is never one of its causes. The Loss Ratio
+  is the pure premium over the average premium, so the Pure Premium page mentioning
+  the loss ratio doesn't make the loss ratio one of its ingredients. And a *foundation*
+  of the topic — a concept more of its definitions build on than on either of the two
+  — is made only by a recipe its page states plainly (`RECIPES.foundation`). The
+  *Insurance Contract Liabilities* (the liability for remaining coverage plus the
+  liability for incurred claims, by its formula) and the *MCT* (capital available
+  against the base solvency buffer, by its definition) are; *Ratemaking* and
+  *Statistics*, from the parts their pages mention in passing, aren't.
+- **A recipe** is two ingredients the graph connects, at least one of them named in the
+  definition, the lead or the formula — or both together in one short sentence of the
+  opening. It scores what each ingredient counts for, plus how specifically one
+  sentence names both, plus a little for a link. Each concept keeps its best two
+  (`RECIPES.perConcept`). A connection makes at most three concepts, the best
+  explained first, and none explained much worse than the best of them
+  (`RECIPES.perPair`, `RECIPES.nearBest`) — so *Frequency* and *Severity* make the
+  *Pure Premium* (its formula) and not the *Basic Insurance Ratios* that only list them.
+
+Each recipe keeps the page's own words for it — the sentence or formula naming both,
+or else the most definitional one naming either — and a connection's card shows them.
+
+Some examples, as the vault has them: *Frequency* and *Severity* make the *Pure
+Premium*; *Written* and *Earned Premium* the *Unearned Premium*; *Age-to-Age* and *Tail
+Factors* the *Cumulative Development Factor*; *Spot Rate* and *Yield Rate* the *Yield
+Curve*; *Face Value* and *Coupon Rate* the *Coupon*; *Limited Fluctuation Credibility*
+and the *Full Credibility Standard*, *Partial Credibility*; the *Liabilities for
+Incurred Claims* and *for Remaining Coverage*, *Insurance Contract Liabilities*.
+
+Of the vault's 5,831 connections, 769 make something — few against a board's
+hundreds of lines, but every concept that isn't a building block is made by at least
+one of them. A connection that makes nothing still draws its line.
+
+**When a recipe reads wrong**, it is the page that says the wrong thing about what its
+concept is made of — a definition naming a use as if it were an ingredient, a formula
+in symbols with no names — and the fix is to the page, not the rules.
 
 ### The starting hand
 
-A topic starts with **the seeds** (`seedConcepts`): the fewest concepts from which
-every other in the topic can be made, by finding connections between cards in
-hand and playing on with what they make. Found greedily — which on graphs this size
-is the minimum or close to it: first the connected pair that reaches the most,
-preferring the pair earliest in the syllabus (the first that reaches every concept
-wins), then, while anything is still out of reach, the concept that brings the most
-of it within reach, earliest first. A concept nothing can make — one with no
-connection, or none shared strongly enough with a pair — is always a seed.
+A topic starts with **the seeds** (`seedConcepts`): what nothing in the topic is made
+from — its building blocks — plus, where some concepts are made only from each other,
+the fewest that open the circle; and no seed the others can make. Every other concept
+can be made from them, and `conceptCraftVault.test.ts` plays every topic out from its
+seeds to check it — every concept, every connection — and checks that no seed could be
+left out.
 
-Over the vault's thirty boards that is two to eight cards, three in the middle:
-*Set Theory* and *The Law of Total Probability* are all it takes to make the
-nineteen concepts of Exam P's general probability; *Ratemaking*, *Data Issues* and
-*Coinsurance Percentage*, the seventy-nine of Exam 5's ratemaking. The seeds are
-dealt in that order, so the first two cards on a fresh board are always a connected
-pair — the one that reaches furthest — and the first drop a reader tries is likely
-to work. `conceptCraftVault.test.ts` plays every
-topic out from its seeds and checks that it reaches every concept and every
-connection.
+How many that is depends on how much the topic's pages build on each other: three
+cards for FM's *Loans* (*Loans*, *Principal*, *Interest*) and *Bonds*, eleven in the
+middle, and thirty of Exam 6C's forty-six on regulation, whose pages describe
+institutions and laws more than they derive them. PCPA's *Dealing with Data* deals all
+nine — nothing in it is defined by anything else — and plays as finding connections
+alone. Across the vault a little under two-fifths of the concepts are dealt and the
+rest are made.
+
+The seeds are dealt in syllabus order, except that the connected pair with the
+best-explained recipe comes first, so the first drop on a fresh board makes something,
+and something it plainly makes: *Spot Rate* and *Yield Rate*, the *Yield Curve*.
 
 ## Playing
 
 - **The deck** holds the concepts in hand — the seeds, then what each find made,
   in the order they came — with the new ones ringed in the exam's colour, and
-  counts them against the topic (*7 of 19*). **Drag** a card onto a card on the
+  counts them against the topic (*12 of 19*). **Drag** a card onto a card on the
   board to try the pair; onto empty board, to move it there. Cards on the board drag
   the same way.
 - **Tap** a card on the board to read it: the app's concept popup opens over the
@@ -190,7 +241,8 @@ connection.
 
 When a pair connects, **nothing opens**. The line draws in between the two cards,
 its strength pops onto it, the tally moves, and what it made lands beside the pair
-(brought into view if that is at the edge). Screen readers are told what was found
+(brought into view if that is at the edge), a dashed line in the exam's colour drawn
+to it from the line that made it — cause, then effect. Screen readers are told what was found
 and made through a live region. A find that makes a card plays `collect`, a line
 alone `correct`, a topic's last connection `complete`. A pair found before pulses
 its line. A pair nothing connects goes back, with one line of text — *No connection
@@ -218,7 +270,9 @@ stretch between the two cards, not under either).
 A card a find made lands off the middle of the line between the two cards that made
 it, on the side away from the middle of the board (`spawnBeside`), the up-to-three
 cards of one find fanned out along the line — so the map grows outward from where
-the reader is working. A card with a remembered place goes back to it. Cards with
+the reader is working. A dashed line runs to it from the middle of the line that made
+it while the card is new, and again whenever that connection or the card is being
+looked at, so which pair made what can always be read off the map. A card with a remembered place goes back to it. Cards with
 nothing to arrive beside — the seeds on a fresh board, a whole board restored without
 saved positions — are seeded side by side, or for more than three in a sunflower
 spiral (`seedPositions`), so a restored board starts as a disc the forces can settle
@@ -271,8 +325,9 @@ screen's root, and it marks what is **new** and what is **in play**: a card made
 not yet in any connection found is filled with the exam's vivid accent, with a halo of
 the soft one — the same cards are ringed in it in the deck — until the reader
 connects it to something; a held, selected or targeted card is outlined in it; lit
-lines and their strengths are drawn in it; and so is the connection card's meter and
-its **Practice** button. Everything else stays the board's greys, so the colour
+lines, their strengths and the dashed lines to what each connection made are drawn
+in it; and so is the connection card's meter, its **Practice** button and what it
+made. Everything else stays the board's greys, so the colour
 always means the same thing. Which cards are new is derived, not stored (`fresh` in
 `boardState`). The topic picker leads each topic with its exam's logo, in the same
 colour (`ExamLogo`).
@@ -295,8 +350,10 @@ colour (`ExamLogo`).
   most focused first (fewest concepts tagged), up to ten (`practiceQuestions`); both
   drawn from the quiz pool, so nothing a quiz wouldn't serve is offered. Above it,
   the two names (each opens its concept in the popup) and the strength with its band
-  and a meter marked at 40 and 70; below it, what the pages say about each other,
-  each sentence naming its page. The second version's lists — what the strength is
+  and a meter marked at 40 and 70; below it, what the connection **makes** — each
+  concept (a tap reads it) with its own page's sentence or formula for how the two
+  build it, on the exam's colour — then what the pages say about each other, each
+  sentence naming its page. The second version's lists — what the strength is
   measured on, the questions one by one, the syllabus line — are gone: they are the
   graph's working, not something to act on.
 
@@ -308,8 +365,8 @@ plus the filter. Nothing else is stored — the cards in hand, which find made e
 which are new are all re-read from that one list against the graph (`boardState`:
 the seeds, then each connection in order, kept only while both its ends were in hand
 when it was found). So a vault edit that drops a concept or a connection takes it off
-the board rather than breaking it, and one that changes what a pair makes changes
-the board with it. The earlier versions' saves — `craft.v1`'s recipe ids, `craft.v2`'s
+the board rather than breaking it, and one that changes what a pair makes — or a
+change to the rules, like the fourth version's — changes the board with it. The earlier versions' saves — `craft.v1`'s recipe ids, `craft.v2`'s
 hand-placed concepts and challenge days — mean nothing to a board whose concepts are
 made, and are removed on load. `parseCraftSave` checks every field on the way in. A
 server table, synced the way the flashcard deck is (`lib/flashcardSync.ts`), is the
@@ -331,12 +388,15 @@ Two analytics events (`docs/analytics-and-monitoring.md`):
 ## Tuning the measure
 
 The weights live in `STRENGTH_WEIGHTS` and the bands in `STRENGTH_TIERS`; both are
-exported and documented where they are defined. The same goes for `MAKING`, whose cap and
-floor set how fast a board grows and how small its starting hand can be. Before
+exported and documented where they are defined. The same goes for `RECIPES` and
+`PLACE` in `lib/conceptRecipes.ts`, which set what a pair makes and so how large a
+starting hand is. Before
 changing any of them, look at what the graph does over the real vault — `conceptCraftVault.test.ts` builds every topic's
 graph, and a throwaway test printing each topic's connection count, its strongest
 and weakest pairs and the concepts with the most connections (and how many of those
-rest on names in passing alone) is how the current numbers were chosen — for
-`MAKING`, each topic's seed count and how many cards its finds make. A topic's
+rest on names in passing alone) is how the current numbers were chosen — for the
+recipes, each topic's seed count, its opening pair, and a sample of its recipes
+spread across the topic, read one by one for whether the made concept really is built
+from the two. A topic's
 graph is built in the browser when its board opens — about a tenth of a second for
 the largest, on a laptop — so nothing is precomputed and nothing goes stale.

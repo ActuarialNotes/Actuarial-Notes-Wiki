@@ -9,7 +9,8 @@ import { test, expect, type Page } from '@playwright/test'
 //
 // The cards a topic starts with are read off the vault (`seedConcepts`), so
 // nothing here names them: the deck deals them in order, and the first two are
-// always a connected pair — the one that makes the most.
+// always a connected pair — the one whose recipe its page states most plainly,
+// so the first drop makes something.
 
 const TOPIC = '/craft/exam-p-general-probability'
 
@@ -81,9 +82,11 @@ test.describe('concept craft', () => {
 
     await expect(strength(page, a, b)).toHaveText(/^\d+$/)
     await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ connections$/)
-    // What the pair made lands on the board, in the exam's colour.
+    // What the pair made lands on the board, in the exam's colour, drawn from
+    // the line that made it — cause to effect.
     await expect.poll(() => page.locator('[data-craft-node]').count()).toBeGreaterThan(before)
     await expect(page.locator('[data-craft-node][data-new]').first()).toBeVisible()
+    await expect(page.getByTestId('craft-made-link').first()).toBeAttached()
     // The map is the answer: no card, no popup.
     await expect(page.getByTestId('craft-connection')).toHaveCount(0)
     await expect(page.getByRole('complementary', { name: /^Concept:/ })).toHaveCount(0)
@@ -96,18 +99,21 @@ test.describe('concept craft', () => {
   })
 
   test('sends back a pair nothing connects', async ({ page }) => {
-    // PCPA's *Dealing with Data* is loosely knit, so its starting hand holds
-    // pairs nothing connects; try them until one goes back.
+    // PCPA's *Dealing with Data* is loosely knit — nothing in it is built from
+    // anything else, so all nine of its cards are dealt — and its hand holds
+    // pairs nothing connects. Try them, tapping one deck card then another,
+    // until one goes back.
     await page.goto('/craft/exam-pcpa-dealing-with-data')
     const cards = await inHand(page)
+    const tiles = page.getByTestId('craft-deck-tile')
+    const notice = page.getByTestId('craft-notice').filter({ hasText: 'No connection between these two' })
     let sentBack = false
     for (let i = 0; i < cards.length && !sentBack; i++) {
       for (let j = i + 1; j < cards.length && !sentBack; j++) {
         if (await strength(page, cards[i], cards[j]).count()) continue
-        await drop(page, cards[i], cards[j])
-        sentBack = await page.getByTestId('craft-notice').filter({ hasText: 'No connection between these two' }).isVisible()
-          .catch(() => false)
-        if (!sentBack) await page.waitForTimeout(300)
+        await tiles.nth(i).click()
+        await tiles.nth(j).click()
+        sentBack = await notice.waitFor({ state: 'visible', timeout: 1000 }).then(() => true, () => false)
       }
     }
     expect(sentBack).toBe(true)
@@ -131,10 +137,11 @@ test.describe('concept craft', () => {
     await expect(page.locator(`[data-craft-node="${a}"]`)).toHaveAttribute('aria-current', 'true')
   })
 
-  test('opens a connection: its strength, and a quiz on its questions', async ({ page }) => {
+  test('opens a connection: its strength, what it made, and a quiz on its questions', async ({ page }) => {
     await page.goto(TOPIC)
     const [a, b] = await inHand(page)
     await drop(page, a, b)
+    const made = await page.locator('[data-craft-node][data-new]').first().getAttribute('data-craft-node')
     // Off the cards, so nothing is lit and every strength shows.
     await page.mouse.move(5, 5)
     await strength(page, a, b).click()
@@ -142,6 +149,8 @@ test.describe('concept craft', () => {
     const card = page.getByTestId('craft-connection')
     await expect(card).toBeVisible()
     await expect(card.getByTestId('craft-connection-strength')).toHaveText(/^\d+$/)
+    // What the connection made, with its page's words for why.
+    await expect(card.getByTestId('craft-makes').first()).toContainText(`Makes${made}`)
     const practice = card.getByRole('button', { name: /^Practice \d+ questions?$/ })
     await expect(practice).toBeVisible()
     await practice.click()

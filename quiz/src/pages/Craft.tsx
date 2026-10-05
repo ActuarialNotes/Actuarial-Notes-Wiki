@@ -33,15 +33,17 @@ import {
   combine,
   craftTopics,
   practiceQuestions,
+  recipesOf,
   seedConcepts,
   topicGraph,
   topicTally,
   withConnection,
+  type CraftGraph,
   type CraftProgress,
   type CraftTopic,
   type TopicTally,
 } from '@/lib/conceptCraft'
-import { STRENGTH_TIERS, type ConceptGraph, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
+import { STRENGTH_TIERS, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
 import { examAccentStyle } from '@/lib/examColors'
 import { setWikiContentLookup } from '@/lib/github'
 import { filterQuestions } from '@/lib/parser'
@@ -83,7 +85,7 @@ function allTopics(): CraftTopic[] {
  * vault and the quiz pool, neither of which changes while the app is open, and
  * the largest topic takes a tenth of a second or so to read.
  */
-const prepared = new Map<string, { graph: ConceptGraph; seeds: string[] }>()
+const prepared = new Map<string, { graph: CraftGraph; seeds: string[] }>()
 function prepare(topic: CraftTopic, pool: readonly GraphQuestion[]) {
   let entry = prepared.get(topic.id)
   if (!entry) {
@@ -264,7 +266,7 @@ function CraftPlay({
   pool,
 }: {
   topic: CraftTopic
-  graph: ConceptGraph
+  graph: CraftGraph
   seeds: readonly string[]
   pool: readonly GraphQuestion[]
 }) {
@@ -454,6 +456,7 @@ function CraftPlay({
 
   const open = openKey ? graph.byKey.get(openKey) ?? null : null
   const practiceIds = useMemo(() => (open ? practiceQuestions(open, pool) : []), [open, pool])
+  const openMakes = useMemo(() => (open ? recipesOf(graph, open) : []), [graph, open])
   // What the board's panels cover, so "fit" frames the map in the room left:
   // the deck down the left of a wide board, the map controls (or a
   // connection's card) down the right.
@@ -579,6 +582,7 @@ function CraftPlay({
               key={open.key}
               connection={open}
               practice={practiceIds}
+              makes={openMakes}
               layout="drawer"
               onClose={() => setOpenKey(null)}
               onRead={read}
@@ -597,6 +601,7 @@ function CraftPlay({
             key={open.key}
             connection={open}
             practice={practiceIds}
+            makes={openMakes}
             layout="sheet"
             onClose={() => setOpenKey(null)}
             onRead={read}

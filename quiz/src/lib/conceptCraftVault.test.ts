@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { EMPTY_PROGRESS, boardState, craftTopics, seedConcepts, topicGraph, withConnection, type CraftProgress } from './conceptCraft'
-import type { ConceptGraph } from './conceptGraph'
+import { EMPTY_PROGRESS, boardState, craftTopics, madeBy, seedConcepts, topicGraph, withConnection, type CraftGraph, type CraftProgress } from './conceptCraft'
 import { pageMentions } from './conceptGraph'
 import { filterQuestions, parseQuestion, type Question } from './parser'
 import { examPageIdFromFile } from './examMenu'
@@ -35,7 +34,7 @@ const topics = craftTopics(examPages, name => pages.get(name.toLowerCase())?.nam
 const graphs = topics.map(t => [t, topicGraph(t, name => pages.get(name.toLowerCase())?.markdown, questions)] as const)
 
 /** Find every connection there is to find, as a reader who tried every pair would. */
-function playEverything(graph: ConceptGraph, seeds: string[]) {
+function playEverything(graph: CraftGraph, seeds: string[]) {
   let progress: CraftProgress = EMPTY_PROGRESS
   let state = boardState(graph, seeds, progress)
   for (let grew = true; grew; ) {
@@ -69,20 +68,53 @@ describe('Concept Craft over the vault', () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
   })
 
-  it.each(graphs.map(([t, g]) => [t.id, t, g] as const))('%s connects nearly every concept, and can be made in full from a few', (_, topic, graph) => {
+  it.each(graphs.map(([t, g]) => [t.id, t, g] as const))('%s connects nearly every concept, and can be made in full from its seeds', (_, topic, graph) => {
     const unconnected = topic.concepts.filter(c => !graph.neighbours.has(c.toLowerCase()))
     expect(unconnected.length, unconnected.join(', ')).toBeLessThanOrEqual(Math.ceil(topic.concepts.length / 10))
     expect(graph.connections.length).toBeGreaterThanOrEqual(topic.concepts.length)
     const seeds = seedConcepts(graph)
-    // A hand, not the deck: never more than ten, and no more than a fifth of
-    // the topic past the five a small, loosely knit topic can need (PCPA's
-    // *Dealing with Data* makes four of its nine).
-    expect(seeds.length, seeds.join(', ')).toBeLessThanOrEqual(Math.min(10, Math.max(5, Math.ceil(topic.concepts.length / 5))))
+    // No seed the others can make: dealing one fewer would leave it out of reach.
+    for (const seed of seeds) {
+      const rest = seeds.filter(s => s !== seed)
+      expect(playEverything(graph, rest).held, seed).not.toContain(seed)
+    }
     // Finding every connection within reach, over and over, brings every
     // concept into hand and finds every connection.
     const state = playEverything(graph, seeds)
     expect(state.held.length).toBe(topic.concepts.length)
     expect(state.found.length).toBe(graph.connections.length)
+  })
+
+  it('makes most of every topic rather than dealing it', () => {
+    const concepts = graphs.reduce((n, [t]) => n + t.concepts.length, 0)
+    const dealt = graphs.reduce((n, [, g]) => n + seedConcepts(g).length, 0)
+    expect(dealt / concepts).toBeLessThan(0.45)
+  })
+
+  // What a pair makes is what the made concept's own page builds from the two.
+  // A page edit that breaks one of these is worth a look: either the page lost
+  // its definition, or the rules lost their reading of it.
+  it.each([
+    ['exam-5-ratemaking', 'Frequency', 'Severity', 'Pure Premium'],
+    ['exam-5-ratemaking', 'Written Premium', 'Earned Premium', 'Unearned Premium'],
+    ['exam-5-ratemaking', 'On Level Premium', 'Rate Change', 'On-Leveling'],
+    ['exam-5-estimating-claim-liabilities-reserving', 'Age to Age Factor', 'Tail Factor', 'Cumulative Development Factor'],
+    ['exam-fm-general-cash-flows-portfolios-and-asset-liability-management', 'Spot Rate', 'Yield Rate', 'Yield Curve'],
+    ['exam-fm-bonds', 'Face Value', 'Coupon Rate', 'Coupon'],
+    ['exam-mas-ii-introduction-to-credibility', 'Limited Fluctuation Credibility', 'Full Credibility Standard', 'Partial Credibility'],
+    ['exam-6c-canadian-financial-reporting-solvency-and-professional-responsibility', 'Liability for Incurred Claims', 'Liability for Remaining Coverage', 'Insurance Contract Liabilities'],
+  ])('%s: %s and %s make %s', (id, a, b, made) => {
+    const graph = graphs.find(([t]) => t.id === id)?.[1]
+    expect(graph, id).toBeDefined()
+    expect(madeBy(graph!, a, b)).toContain(made)
+  })
+
+  it('never makes a topic’s foundation from a passing mention', () => {
+    // Frequency and severity are what statistics is *used* to model, not what it is.
+    const statistics = graphs.find(([t]) => t.id === 'exam-mas-i-statistics')![1]
+    expect(madeBy(statistics, 'Frequency', 'Severity')).not.toContain('Statistics')
+    const ratemaking = graphs.find(([t]) => t.id === 'exam-5-ratemaking')![1]
+    for (const list of ratemaking.makes.values()) expect(list.map(r => r.makes)).not.toContain('Ratemaking')
   })
 
   it('never cuts a formula in half when it quotes a page', () => {

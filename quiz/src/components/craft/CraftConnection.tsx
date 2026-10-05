@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { Play, X } from 'lucide-react'
+import { ArrowRight, Play, X } from 'lucide-react'
 import { MarkdownText } from '@/components/MarkdownText'
 import { STRENGTH_TIERS, strengthTier, type Connection } from '@/lib/conceptGraph'
+import type { Recipe } from '@/lib/conceptRecipes'
 import { cn } from '@/lib/utils'
 
 /**
@@ -9,15 +10,18 @@ import { cn } from '@/lib/utils'
  * cards. Its job is one action: **Practice**, a quiz on the questions that test
  * the two together (or, where none do, on either concept's — see
  * `practiceQuestions`). Above it, how strong the connection is; below it, what
- * each page says about the other, transcribed from the graph
- * (`lib/conceptGraph.ts`), each naming its page. The concepts themselves are
- * read in the app's popup, which the two names open. A drawer on the right of a
- * wide board, a sheet over a phone's.
+ * the connection **makes** — each concept with its own page's words for how
+ * the two build it (`lib/conceptRecipes.ts`) — then what each page says about
+ * the other, transcribed from the graph (`lib/conceptGraph.ts`), each naming
+ * its page. The concepts themselves are read in the app's popup, which their
+ * names open. A drawer on the right of a wide board, a sheet over a phone's.
  */
 export interface CraftConnectionProps {
   connection: Connection
   /** The questions Practice starts a quiz on. */
   practice: readonly string[]
+  /** What the connection makes. */
+  makes: readonly Recipe[]
   layout: 'drawer' | 'sheet'
   onClose: () => void
   /** Open a concept in the app's popup. */
@@ -28,7 +32,7 @@ export interface CraftConnectionProps {
 
 const TIER_WORD = { weak: 'Weak connection', moderate: 'Moderate connection', strong: 'Strong connection' } as const
 
-export function CraftConnection({ connection, practice, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
+export function CraftConnection({ connection, practice, makes, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
   const { a, b, strength, mentions } = connection
   const tier = strengthTier(strength)
   const practiceRef = useRef<HTMLButtonElement>(null)
@@ -104,6 +108,32 @@ export function CraftConnection({ connection, practice, layout, onClose, onRead,
             <Play className="h-5 w-5" aria-hidden />
             Practice {practice.length} {practice.length === 1 ? 'question' : 'questions'}
           </button>
+        )}
+
+        {makes.length > 0 && (
+          <ul className="space-y-2" aria-label="What it makes">
+            {makes.map(r => (
+              <li
+                key={r.makes}
+                className="rounded-lg px-3 py-2 text-sm leading-relaxed"
+                style={{ background: 'var(--exam-accent-soft, hsl(var(--primary) / 0.15))' }}
+                data-testid="craft-makes"
+              >
+                <p className="mb-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                  Makes
+                  <button
+                    type="button"
+                    onClick={() => onRead(r.makes)}
+                    className="action-title-underline text-left text-sm font-semibold text-foreground"
+                  >
+                    {r.makes}
+                  </button>
+                </p>
+                <MarkdownText className="[&_p]:my-0">{r.text}</MarkdownText>
+              </li>
+            ))}
+          </ul>
         )}
 
         {mentions.length > 0 && (

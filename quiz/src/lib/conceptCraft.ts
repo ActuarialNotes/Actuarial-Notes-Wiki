@@ -9,11 +9,13 @@
  * never authored.
  *
  * The game is crafting the topic out of a few of its concepts. A reader starts
- * with the **seeds** — the fewest concepts from which every other can be made
- * (`seedConcepts`) — and drops one concept on another. Where the vault connects
- * the two, a line is drawn between them carrying its strength, and the
- * connection **makes** what lies between them: up to three concepts tied to both
- * (`madeBy`). Play on with what was made, and the whole topic follows.
+ * with the **seeds** — what nothing in the topic is made from, and no more
+ * besides (`seedConcepts`) — and drops one concept on another. Where the vault
+ * connects the two, a line is drawn between them carrying its strength, and
+ * the connection **makes** what is built from the pair, cause and effect: the
+ * concepts whose own pages define them by the two (`madeBy`, the recipes read
+ * off the pages in `lib/conceptRecipes.ts`). Play on with what was made, and
+ * the whole topic follows.
  *
  * A reader's progress is one list — the connections found, in order — and
  * everything else is re-read from it against the graph every time: which
@@ -35,12 +37,14 @@ import {
   type GraphQuestion,
   type SyllabusLine,
 } from './conceptGraph'
+import { buildRecipes, recipesByPair, type Recipe } from './conceptRecipes'
 import { examHue } from './examColors'
 import { examPageIdFromFile } from './examMenu'
 import { examStatus } from './examStatus'
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 export { pairKey }
+export type { Recipe }
 
 // ─── Topics ──────────────────────────────────────────────────────────────────
 
@@ -159,52 +163,39 @@ export function craftTopics(examPages: Readonly<Record<string, string>>, pageNam
   return topics
 }
 
-/** A topic's graph: how every pair of its concepts is connected. */
+/** A topic's graph: how every pair of its concepts is connected, and what each connection makes. */
 export function topicGraph(
   topic: Pick<CraftTopic, 'concepts' | 'lines'>,
   page: (name: string) => string | undefined,
   questions: readonly GraphQuestion[],
-): ConceptGraph {
-  return buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines })
+): CraftGraph {
+  return craftGraph(buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines }), page)
 }
 
 // ─── Making concepts ─────────────────────────────────────────────────────────
 
-/**
- * What a connection found makes: the concepts most strongly tied to *both* its
- * ends — at most `most` of them, and each tie at least `floor`, so what appears
- * is something the two concepts share rather than everything either touches.
- */
-export const MAKING = { most: 3, floor: 25 } as const
+/** A topic's graph, with what each of its connections makes. */
+export interface CraftGraph extends ConceptGraph {
+  /** What each connection makes, keyed by `pairKey`, the best explained first (`recipesByPair`). */
+  makes: Map<string, Recipe[]>
+}
+
+/** A graph made playable: the recipes its pages give (`lib/conceptRecipes.ts`). */
+export function craftGraph(graph: ConceptGraph, page: (name: string) => string | undefined): CraftGraph {
+  return { ...graph, makes: recipesByPair(buildRecipes(graph, page)) }
+}
 
 const norm = (name: string) => name.trim().toLowerCase()
 const otherEnd = (c: Connection, name: string) => (norm(c.a) === name ? norm(c.b) : norm(c.a))
 
-/**
- * The concepts connected to both `a` and `b`, by name, most strongly tied first
- * (by the weaker of the two ties) — what lies between two concepts.
- */
-export function commonNeighbours(graph: ConceptGraph, a: string, b: string): { concept: string; tie: number }[] {
-  const x = norm(a)
-  const y = norm(b)
-  const fromB = new Map((graph.neighbours.get(y) ?? []).map(c => [otherEnd(c, y), c]))
-  const out: { concept: string; tie: number }[] = []
-  for (const c of graph.neighbours.get(x) ?? []) {
-    const n = otherEnd(c, x)
-    const d = fromB.get(n)
-    if (!d || n === y) continue
-    out.push({ concept: norm(c.a) === n ? c.a : c.b, tie: Math.min(c.strength, d.strength) })
-  }
-  return out.sort((p, q) => q.tie - p.tie || p.concept.localeCompare(q.concept))
+/** What finding the connection between `a` and `b` makes — whether or not it is already in hand. */
+export function madeBy(graph: CraftGraph, a: string, b: string): string[] {
+  return (graph.makes.get(pairKey(a, b)) ?? []).map(r => r.makes)
 }
 
-/** What finding the connection between `a` and `b` makes — whether or not it is already in hand. */
-export function madeBy(graph: ConceptGraph, a: string, b: string): string[] {
-  if (!graph.byKey.has(pairKey(a, b))) return []
-  return commonNeighbours(graph, a, b)
-    .filter(n => n.tie >= MAKING.floor)
-    .slice(0, MAKING.most)
-    .map(n => n.concept)
+/** What a connection makes, each with the words of the page that say why. */
+export function recipesOf(graph: CraftGraph, connection: Pick<Connection, 'a' | 'b'>): Recipe[] {
+  return graph.makes.get(pairKey(connection.a, connection.b)) ?? []
 }
 
 /**
@@ -213,7 +204,7 @@ export function madeBy(graph: ConceptGraph, a: string, b: string): string[] {
  * comes — the most a reader holding `held` could ever reach. Lower-cased; grows
  * `held` in place, starting from the concepts in `from`.
  */
-function reach(graph: ConceptGraph, held: Set<string>, from: Iterable<string>): Set<string> {
+function reach(graph: CraftGraph, held: Set<string>, from: Iterable<string>): Set<string> {
   const queue = [...from]
   while (queue.length) {
     const y = queue.shift() as string
@@ -230,40 +221,28 @@ function reach(graph: ConceptGraph, held: Set<string>, from: Iterable<string>): 
   return held
 }
 
-/** How many connections, earliest in the syllabus first, are tried as the opening pair. */
-const OPENING_TRIES = 150
-
 /**
- * **The seeds** — the fewest concepts a reader needs in hand to make every
- * other concept in the topic, in the order they are dealt.
+ * **The seeds** — the concepts a reader starts with: what nothing in the topic
+ * is made from (its building blocks), plus, where some concepts are made only
+ * from each other, the fewest that open the circle — and no seed the others
+ * can make. Dealt in syllabus order, except that the connected pair with the
+ * best-explained recipe comes first, so the first drop on a fresh board makes
+ * something, and something it plainly makes.
  *
- * Found greedily, which on graphs this size is the minimum or near it: first
- * the connected pair that reaches the most (`reach`), preferring the pair
- * earliest in the syllabus — the first one that reaches everything wins —
- * then, while anything is still out of reach, the concept that brings the most
- * of it within reach, again earliest first. A concept nothing can make (one
- * with no connection, or none it shares strongly enough) is always a seed.
+ * Every concept in the topic can be made from them (`reach`), which is what
+ * `conceptCraftVault.test.ts` plays out on every board.
  */
-export function seedConcepts(graph: ConceptGraph): string[] {
+export function seedConcepts(graph: CraftGraph): string[] {
   const order = graph.concepts
   if (order.length === 0) return []
   const index = new Map(order.map((n, i) => [norm(n), i]))
   const at = (n: string) => index.get(norm(n)) ?? order.length
-  const pairs = [...graph.connections].sort((x, y) =>
-    Math.max(at(x.a), at(x.b)) - Math.max(at(y.a), at(y.b)) || Math.min(at(x.a), at(x.b)) - Math.min(at(y.a), at(y.b)))
+  const reached = (from: readonly string[]) => reach(graph, new Set(from.map(norm)), from.map(norm))
 
-  let best: { pair: string[]; held: Set<string> } | null = null
-  for (const c of pairs.slice(0, OPENING_TRIES)) {
-    const pair = [c.a, c.b].sort((p, q) => at(p) - at(q))
-    const held = reach(graph, new Set(pair.map(norm)), pair.map(norm))
-    if (!best || held.size > best.held.size) best = { pair, held }
-    if (held.size === order.length) break
-  }
-  // No connection at all: there is nothing to make, so every concept is a seed.
-  if (!best) return [...order]
-
-  const seeds = [...best.pair]
-  let held = best.held
+  const makeable = new Set([...graph.makes.values()].flat().map(r => norm(r.makes)))
+  let seeds = order.filter(n => !makeable.has(norm(n)))
+  let held = reached(seeds)
+  // Made only in a circle: deal the concept that brings the most within reach, earliest first.
   while (held.size < order.length) {
     let pick: { name: string; held: Set<string> } | null = null
     for (const name of order) {
@@ -275,7 +254,27 @@ export function seedConcepts(graph: ConceptGraph): string[] {
     seeds.push(pick.name)
     held = pick.held
   }
-  return seeds
+  // None the others make.
+  for (const seed of [...seeds].reverse()) {
+    const rest = seeds.filter(s => s !== seed)
+    if (reached(rest).has(norm(seed))) seeds = rest
+  }
+
+  seeds.sort((x, y) => at(x) - at(y))
+  let first: { pair: [string, string]; best: number; strength: number } | null = null
+  for (let i = 0; i < seeds.length; i++) {
+    for (let j = i + 1; j < seeds.length; j++) {
+      const c = graph.byKey.get(pairKey(seeds[i], seeds[j]))
+      if (!c) continue
+      const best = recipesOf(graph, c)[0]?.score ?? 0
+      if (!first || best > first.best || (best === first.best && c.strength > first.strength)) {
+        first = { pair: [seeds[i], seeds[j]], best, strength: c.strength }
+      }
+    }
+  }
+  if (!first) return seeds
+  const [p, q] = first.pair
+  return [p, q, ...seeds.filter(s => s !== p && s !== q)]
 }
 
 // ─── A reader's board ────────────────────────────────────────────────────────
@@ -304,7 +303,7 @@ export interface BoardState {
  * connection found in order — kept only while both its ends are in hand, as
  * they were when it was found — adding what it made.
  */
-export function boardState(graph: ConceptGraph, seeds: readonly string[], progress: CraftProgress): BoardState {
+export function boardState(graph: CraftGraph, seeds: readonly string[], progress: CraftProgress): BoardState {
   const names = new Map(graph.concepts.map(c => [norm(c), c]))
   const held: string[] = []
   const inHand = new Set<string>()
@@ -347,7 +346,7 @@ export type CombineOutcome =
   /** A new connection, and the concepts it makes that weren't in hand. */
   | { kind: 'new'; connection: Connection; made: string[] }
 
-export function combine(graph: ConceptGraph, state: BoardState, a: string, b: string): CombineOutcome {
+export function combine(graph: CraftGraph, state: BoardState, a: string, b: string): CombineOutcome {
   if (norm(a) === norm(b)) return { kind: 'none' }
   const connection = graph.byKey.get(pairKey(a, b))
   if (!connection) return { kind: 'none' }

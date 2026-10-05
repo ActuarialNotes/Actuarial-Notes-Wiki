@@ -20,9 +20,9 @@ A **Stochastic Process** $\{X(t) : t \in T\}$ is a collection of [[Random Variab
 
 > $$\{X(t) : t \in T\}$$
 
-- $T$ is the **index set**: a *discrete-time* process has $t = 0, 1, 2, \ldots$, while a *continuous-time* process has $t \geq 0$
+- $T$ is the **index set**: a *discrete-time* process has $t = 0, 1, 2, \ldots$, while a *continuous-time* process has $t \geq 0$. A [[Time Series]] — values of a variable recorded at equally spaced times — is a common discrete-time example
 - The set of values $X(t)$ can take is the **state space**, likewise discrete or continuous
-- A **counting process** $N(t)$ records the number of events by time $t$; the [[Poisson Process]] is the central continuous-time example, and a [[Time Series]] is a common discrete-time example
+- A **counting process** $N(t)$ records the number of events by time $t$; the [[Poisson Process]] is the central continuous-time example
 - A process has the **Markov property** when the future depends on the past only through the present state:
 
 > $$P\big(X(t_{n+1}) = j \mid X(t_n), \ldots, X(t_0)\big) = P\big(X(t_{n+1}) = j \mid X(t_n)\big)$$

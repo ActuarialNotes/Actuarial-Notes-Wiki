@@ -320,3 +320,28 @@ describe('Exam 6C (CAS).md source material', () => {
     for (const entry of entries) expect(entry.detail ?? '', entry.name).not.toContain('[[')
   })
 })
+
+// MAS-I numbers each domain's tasks the way the CAS outline does (A1–A6,
+// B1–B9, C1–C9), so its readings' task codes name objectives on the page.
+describe('Exam MAS-I (CAS).md source material', () => {
+  const md = readFileSync(path.join(REPO_ROOT, 'Exam MAS-I (CAS).md'), 'utf-8')
+  const { entries } = extractSourceMaterial(md)
+  const objectives = parseSyllabusObjectives(md)
+
+  it('numbers A1–A6, B1–B9 and C1–C9', () => {
+    expect(objectives.map(o => o.code)).toEqual([
+      ...['A1', 'A2', 'A3', 'A4', 'A5', 'A6'],
+      ...['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9'],
+      ...['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9'],
+    ])
+  })
+
+  it('cites at least one objective the page numbers for every reading', () => {
+    const codes = new Set(objectives.map(o => o.code))
+    for (const entry of entries) {
+      const cited = readingObjectives(entry.detail)
+      expect(cited, entry.name).not.toEqual([])
+      for (const code of cited) expect(codes.has(code), `${entry.name}: ${code}`).toBe(true)
+    }
+  })
+})

@@ -143,8 +143,11 @@ rather than by hand:
   points`), never assumed. `--year`/`--session` give the sitting ids the bank
   already uses — `masi-2019s-q1`, written to `masi-2019s-001.md` through the
   record's `file` stem.
-- **Where a question is filed.** The CAS moved Time Series and Statistical
-  Learning from MAS-I to MAS-II, so `question_classify` votes a MAS-I
+- **Where a question is filed.** The CAS moved Time Series and part of
+  Statistical Learning — KNN, trees and ensembles, unsupervised PCA and
+  clustering (ISLR §2.2, Ch 8, 10, 12) — from MAS-I to MAS-II, while ISLR Ch
+  5–7 (resampling, regularization, PCR/PLS, splines, GAMs) stayed on MAS-I
+  under the 2026 outline. So `question_classify` votes a MAS-I
   question's objective over both banks' neighbours (`FILED_ELSEWHERE`), and an
   objective only MAS-II uses proposes filing it there. The writer then sets
   `exam: "Exam MAS-II"` and `originally_exam: "Exam MAS-I"` — the paper it was

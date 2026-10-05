@@ -203,9 +203,12 @@ python3 scripts/pdf_extract.py --exam mas-i --year 2019 --session Spring \
   and ends on a note that the key accepted both.
 - **Settle** topic, objective, difficulty and `bank` as JSON lines with
   `question_classify.py --out judgments.jsonl --settle decisions.jsonl`. A
-  MAS-I question on time series or ISLR statistical learning is filed under
-  `exam-mas-ii` with `originally_exam: "Exam MAS-I"`; regression and GLM
-  mechanics stay in MAS-I. MAS-II questions never move.
+  MAS-I question on time series, or on the statistical learning the 2026
+  MAS-II outline holds (KNN, trees and ensembles, unsupervised PCA, clustering
+  — ISLR §2.2, Ch 8, 10, 12), is filed under `exam-mas-ii` with
+  `originally_exam: "Exam MAS-I"`. Regression, GLM mechanics and ISLR Ch 5–7
+  (cross-validation, bootstrap, subset selection, ridge/lasso, PCR/PLS,
+  splines, GAMs) stay in MAS-I. MAS-II questions never move.
 - MAS-II Q1–2 read a case study the CAS published separately
   (`casact.org/sites/default/files/2021-03/mas-ii-case-study-f2018.pdf`,
   `…-f2019.pdf`); reproduce the output the statements need, as

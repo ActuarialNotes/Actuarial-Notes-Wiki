@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:135dc9b6c6960374d483c63c64911851dcd326c9b007af184f06e1fb08285144
+  content_hash: sha256:d64ddd90e13f9afe5f37ecc04387d21aa2c0364b0f5293dd03b17ee52d84356b
   sources:
     - "Balakrishnan, CMU 36-705 Intermediate Statistics (Fall 2019), Lecture 21 §21.2: generalized LRT lambda = sup_{Theta0} L / sup_{Theta} L, reject when lambda <= c; 'Wilks' phenomenon'; under H0 and conditions -2 log lambda -> chi^2_nu with nu = dim(Theta) - dim(Theta0); the Neyman-Pearson test is optimal for simple vs simple, sha256:957e7c52577a6b3f0472bbcc14611653b64b7a934f07c5270e05228561c4df21 — https://www.stat.cmu.edu/~siva/teaching/705/lec21.pdf"
     - "NIST/SEMATECH e-Handbook of Statistical Methods §8.2.3.3 Likelihood ratio tests: lambda = L0/L1 for nested restricted/unrestricted models, chi^2 = -2 ln lambda approximately chi-square with k degrees of freedom, k = number of parameters lost (e.g. exponential as a Weibull special case), sha256:b98f507c243e5f762477ab0311358633217b98a11251c19faf056044c3b4749b — https://www.itl.nist.gov/div898/handbook/apr/section2/apr233.htm"
@@ -12,7 +12,7 @@ verification:
     - "Rodriguez, Generalized Linear Models, Appendix B §B.3.2 pp.6-7, eqs (B.11)-(B.13): -2 log lambda = [D(omega1) - D(omega2)]/phi, equal to the deviance difference when phi = 1 (binomial, Poisson), F with (p2 - p1, n - p2) df under normality with phi estimated from the larger model, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
     - "Siegrist, Random, ch.8 §5 Likelihood Ratio Tests: Neyman-Pearson lemma (likelihood-ratio region most powerful among regions of no greater size, simple vs simple) and the generalized likelihood ratio for composite hypotheses, sha256:60b047835a3f644cd2317c8ab984b8d41ae7669f53c1d32a79705942670b9b04 — https://www.randomservices.org/random/hypothesis/Likelihood.html"
     - "CAS Exam MAS-I Tables (version 01/15/2018), chi-square lower-tail table p.20 (0.950 column: df 1 = 3.84, df 2 = 5.99), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
-  open_findings: 3
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Likelihood Ratio Test.md
 ---
@@ -24,12 +24,12 @@ A **Likelihood Ratio Test** (LRT) compares two nested models by how much better 
 > $$-2\ln\Lambda = 2\left[\ell(\hat\theta) - \ell(\hat\theta_0)\right] \ \dot\sim\ \chi^2_{r}$$
 
 - $r$ is the number of **restrictions** — the difference in free parameters between the full and reduced models — and the $\chi^2$ approximation is asymptotic (Wilks' theorem)
-- Reject $H_0$ (the reduced model) when $-2\ln\Lambda$ exceeds the $\chi^2_r$ critical value: a large value means the extra parameters bought a real improvement in fit
-- For a GLM this statistic is exactly the **difference in deviances**, $\Delta D = D_{\text{reduced}} - D_{\text{full}}$, which is why the analysis of deviance table is an LRT in disguise
+- Reject $H_0$ (the reduced model) when $-2\ln\Lambda$ exceeds the upper-$\alpha$ point of $\chi^2_r$ (at $\alpha = 0.05$, the $0.950$ column of the CAS MAS-I table, which gives lower-tail areas): a large value means the extra parameters bought a real improvement in fit
+- For a GLM this statistic is the **difference in deviances divided by the dispersion**, $-2\ln\Lambda = (D_{\text{reduced}} - D_{\text{full}})/\phi$, with $D$ the unscaled deviance and $\phi$ the [[Dispersion Parameter]] (equivalently, the difference in scaled deviances). That is why the analysis of deviance table is an LRT in disguise. For Poisson and binomial models $\phi = 1$ and the statistic is the deviance difference $\Delta D$ itself
 - Models must be **nested** and fitted to the *same* data; comparing non-nested models needs [[AIC]] or [[BIC]] instead
 - By the **Neyman–Pearson lemma** the LRT is the most powerful test of a simple null against a simple alternative — it maximizes the [[Power of a Test|power]] at any given level $\alpha$
-- The Wald test (coefficient over its standard error, as printed in [[Parameter Estimate Tables]]) and the score test are asymptotically equivalent to the LRT, but the LRT is generally the most reliable in small samples
-- For a scaled deviance with unknown dispersion, use the $F$ form $\frac{\Delta D / r}{\hat\phi}$ rather than $\chi^2$
+- The Wald test (coefficient over its standard error, as printed in [[Parameter Estimate Tables]]) and the score test are asymptotically equivalent to the LRT. Their small-sample properties are not known, though some simulation studies suggest the LRT may do better than the other two in small samples
+- When $\phi$ is unknown, estimate it from the full model and use the $F$ form $F = \dfrac{(D_{\text{reduced}} - D_{\text{full}})/r}{\hat\phi_{\text{full}}}$, built from the *unscaled* deviances, on $(r,\ n - p_{\text{full}})$ degrees of freedom. For a normal linear model the deviances are residual sums of squares and this $F$ is exact
 
 ![[Media/Figures/Likelihood_Ratio_Test.svg|340]]
 
@@ -46,4 +46,4 @@ A **Likelihood Ratio Test** (LRT) compares two nested models by how much better 
 > > [!answer]-
 > > One restriction, so compare with $\chi^2_{0.05,1} = 3.84$:
 > > $$-2\ln\Lambda = 2\left[-2{,}401.2 + 2{,}403.0\right] = 3.6$$
-> > $3.6 < 3.84$, so **fail to reject** — the exponential is an adequate simplification of the Gamma here. Note how close the call is: a slightly larger sample with the same fit difference would flip it.
+> > $3.6 < 3.84$, so **fail to reject** — the exponential is an adequate simplification of the Gamma here. The call is close: the statistic depends only on the log-likelihood gap, not on $n$, and a gap above $3.84/2 = 1.92$ would have rejected.

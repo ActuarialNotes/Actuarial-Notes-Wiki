@@ -392,12 +392,16 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf',
     label: 'Content Outline',
   },
+  // v06 of 29 Jun 2026 (`MASI_CO_2026_F`) — the "2026 Content Outline" the CAS
+  // MAS-I page links. Replaces the 2023-06 upload, which now serves the Spring
+  // 2025 outline.
   'mas-i': {
-    url: 'https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf',
+    url: 'https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf',
     label: 'Content Outline',
   },
+  // The 2026 outline the CAS MAS-II page links. Replaces the 2023-06 upload.
   'mas-ii': {
-    url: 'https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf',
+    url: 'https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf',
     label: 'Content Outline',
   },
   // v.8, updated 9 Sep 2026 and effective September 2026 — the document the

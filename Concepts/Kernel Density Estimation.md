@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:61a489fba7e3716a8ccef8efc1d91121ef56bb28bfbbf47008ddcb2fe2e11de8
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Kernel Density Estimation.md
 ---

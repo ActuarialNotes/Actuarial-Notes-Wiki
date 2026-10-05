@@ -57,7 +57,7 @@ export function ExplanationPanel({
       {examinerReport && (
         <section className="space-y-1.5 border-t border-current/10 pt-3">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-            Examiner&apos;s Notes
+            Examiner&apos;s Report
           </h4>
           <MarkdownText className={QUESTION_MD_CLASS}>{examinerReport}</MarkdownText>
         </section>

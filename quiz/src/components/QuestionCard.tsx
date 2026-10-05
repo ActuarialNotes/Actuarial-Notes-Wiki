@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { AnswerOption } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
-import { MarkdownText, MARKDOWN_LIST_CLASS, QUESTION_MD_CLASS } from '@/components/MarkdownText'
+import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/components/MarkdownText'
+import { SelfGradeButtons } from '@/components/SelfGradeButtons'
+import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
@@ -127,55 +129,11 @@ interface PartCardProps {
   onPartAnswer: (label: string, value: string) => void
   selfGrade?: SelfGrade
   onSelfGrade?: (grade: SelfGrade) => void
+  /** The question's one part — asked about as the question, not "this part". */
+  isOnlyPart?: boolean
 }
 
-// A labelled block of the reference material a part reveals — its sample
-// answer, its examiner's notes.
-function AnswerSection({ label, className, children }: { label: string; className?: string; children: string }) {
-  return (
-    <section className={['space-y-1.5', className].filter(Boolean).join(' ')}>
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</h4>
-      <MarkdownText className={QUESTION_MD_CLASS}>{children}</MarkdownText>
-    </section>
-  )
-}
-
-function SelfGradeButtons({ value, onChange }: { value: SelfGrade | null; onChange: (g: SelfGrade) => void }) {
-  return (
-    <div className="space-y-2">
-      <p className="text-sm font-medium text-muted-foreground">How did you do on this part?</p>
-      <div className="grid grid-cols-3 gap-2">
-        {(['correct', 'partial', 'incorrect'] as const).map(grade => {
-          const active = value === grade
-          const cfg = {
-            correct: { mark: '✓', label: 'Full credit', active: 'bg-green-600 hover:bg-green-700 text-white', inactive: 'bg-green-600/10 text-green-700 hover:bg-green-600/20 dark:text-green-400 dark:hover:bg-green-950' },
-            partial:  { mark: '~', label: 'Partial',     active: 'bg-yellow-500 hover:bg-yellow-600 text-white', inactive: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 dark:text-yellow-400 dark:hover:bg-yellow-950' },
-            incorrect:{ mark: '✗', label: 'No credit',   active: 'bg-red-600 hover:bg-red-700 text-white',         inactive: 'bg-red-600/10 text-red-700 hover:bg-red-600/20 dark:text-red-400 dark:hover:bg-red-950' },
-          }[grade]
-          return (
-            <button
-              key={grade}
-              onClick={() => onChange(grade)}
-              aria-pressed={active}
-              className={[
-                'flex min-h-[52px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-2.5',
-                'sm:flex-row sm:gap-1.5 sm:px-3',
-                'text-[13px] sm:text-sm font-semibold leading-tight text-center transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                active ? `${cfg.active} shadow-sm` : cfg.inactive,
-              ].join(' ')}
-            >
-              <span aria-hidden="true" className="text-base leading-none">{cfg.mark}</span>
-              <span>{cfg.label}</span>
-            </button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false }: PartCardProps) {
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -204,8 +162,11 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         ? estimateEssayScore(partAnswer, part.explanation ?? '')
         : null
 
+    // The part sits flush with the question on a phone (its card is the same
+    // surface as the question's, so its padding only narrowed the text) and
+    // gets its own inset from `sm` up.
     return (
-      <div className="rounded-lg bg-card p-4 space-y-3">
+      <div className="rounded-lg bg-card sm:p-4 space-y-4">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Part {part.label.toUpperCase()}
@@ -216,25 +177,25 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           <span className="text-xs text-muted-foreground italic">Written response</span>
         </div>
 
-        <MarkdownText className={QUESTION_MD_CLASS}>{part.stem}</MarkdownText>
+        {part.stem && <MarkdownText className={READING_MD_CLASS}>{part.stem}</MarkdownText>}
 
         {!isLocked ? (
           <textarea
             value={partAnswer}
             onChange={e => onPartAnswer(part.label, e.target.value)}
             placeholder="Write your response here…"
-            rows={4}
-            className="w-full rounded-md border px-3 py-2 text-[16px] sm:text-sm bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
+            rows={5}
+            className="w-full rounded-md border px-3 py-2 text-base leading-relaxed bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
           />
         ) : (
           <div className="space-y-4">
             {partAnswer.trim() ? (
-              <div className="rounded-md bg-muted/20 p-3 space-y-1.5">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Response</p>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">{partAnswer}</p>
-              </div>
+              <section aria-label="Your response" className="rounded-xl border border-border p-4 space-y-2">
+                <h4 className="text-sm font-semibold text-foreground">Your response</h4>
+                <p className="text-base leading-relaxed whitespace-pre-wrap text-foreground">{partAnswer}</p>
+              </section>
             ) : (
-              <p className="text-xs text-muted-foreground italic">No response written</p>
+              <p className="text-sm text-muted-foreground italic">No response written</p>
             )}
 
             {keywordScore !== null && keywordScore.total > 0 && (
@@ -254,19 +215,15 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
             {/* The reference first, then the grade: a reader marks themselves
                 against the sample answer, so they read it before being asked. */}
-            {showExplanation && (part.explanation || part.examiner_report) && (
-              <div className="rounded-md bg-muted/40 p-3 sm:p-4 divide-y divide-foreground/10 [&>*]:py-3 sm:[&>*]:py-4 [&>:first-child]:pt-0 [&>:last-child]:pb-0">
-                {part.explanation && (
-                  <AnswerSection label="Sample Answer">{part.explanation}</AnswerSection>
-                )}
-                {part.examiner_report && (
-                  <AnswerSection label="Examiner's Notes">{part.examiner_report}</AnswerSection>
-                )}
-              </div>
-            )}
+            {showExplanation && part.explanation && <SampleAnswerCards markdown={part.explanation} />}
+            {showExplanation && part.examiner_report && <ExaminerReportCard markdown={part.examiner_report} />}
 
             {showExplanation && (
-              <SelfGradeButtons value={effectiveSelfGrade} onChange={handleSelfGradeClick} />
+              <SelfGradeButtons
+                value={effectiveSelfGrade}
+                onChange={handleSelfGradeClick}
+                prompt={isOnlyPart ? 'How did you do?' : 'How did you do on this part?'}
+              />
             )}
           </div>
         )}
@@ -276,7 +233,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   // ── Graded part (MC or free-entry) ─────────────────────────────────────────
   return (
-    <div className="rounded-lg bg-card p-4 space-y-3">
+    <div className="rounded-lg bg-card sm:p-4 space-y-3">
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Part {part.label.toUpperCase()}
@@ -291,7 +248,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         )}
       </div>
 
-      <MarkdownText className={QUESTION_MD_CLASS}>{part.stem}</MarkdownText>
+      {part.stem && <MarkdownText className={READING_MD_CLASS}>{part.stem}</MarkdownText>}
 
       {part.type === 'multiple-choice' ? (
         <div className="space-y-2">
@@ -321,9 +278,9 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         />
       )}
 
-      {showExplanation && isAnswered && (part.explanation || part.examiner_report) && (
+      {showExplanation && isAnswered && (part.explanation || (!autoIsRight && part.answer)) && (
         <div className={[
-          'rounded-md p-3 space-y-2 text-sm',
+          'rounded-xl p-4 space-y-2 text-sm',
           isRight
             ? 'bg-green-50 dark:bg-green-950'
             : effectiveSelfGrade === 'partial'
@@ -336,14 +293,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             </p>
           )}
           {part.explanation && (
-            <MarkdownText className={QUESTION_MD_CLASS}>{part.explanation}</MarkdownText>
-          )}
-          {part.examiner_report && (
-            <AnswerSection label="Examiner's Notes" className="border-t border-foreground/10 pt-3">
-              {part.examiner_report}
-            </AnswerSection>
+            <MarkdownText className={READING_MD_CLASS}>{part.explanation}</MarkdownText>
           )}
         </div>
+      )}
+      {showExplanation && isAnswered && part.examiner_report && (
+        <ExaminerReportCard markdown={part.examiner_report} />
       )}
     </div>
   )
@@ -558,14 +513,9 @@ export function QuestionCard({
                 ? (onEssaySelfGrade ? (grade) => onEssaySelfGrade(part.label, grade) : undefined)
                 : (onPartManualGrade ? (grade) => onPartManualGrade(part.label, grade) : undefined)
             }
+            isOnlyPart={parts.length === 1}
           />
         ))}
-
-        {isLocked && onNext && (
-          <p className="text-xs text-center text-muted-foreground pt-1 select-none">
-            Tap any answer to continue →
-          </p>
-        )}
       </CardContent>
     </Card>
   )

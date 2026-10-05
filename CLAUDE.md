@@ -609,6 +609,19 @@ Other important `lib/` modules:
   **Resources** — under Study Guides while the tab is open, the way Projects lists an open
   attempt's views; which one a path is under is `studyGuidesSection` in `wikiRoutes.ts`
   (a resource page is under Resources, an exam or concept page under Exams). Pure and tested.
+- `resourceVintages.ts` — the Resources page's **Vintage** filter: with exactly one exam
+  chosen, which *edition* of its syllabus the shelf shows (the newest by default, so a
+  retired reading an exam page keeps for the record is off it), and what that edition
+  **added** and **dropped** against the one before — two toggles under the filter row
+  highlight each (green ring / red ring, struck title, a dropped reading put back on the
+  shelf to be seen), the changes leading the grid. The editions are
+  `data/syllabusVintages.ts`: per exam, newest first, each edition's document (URL and the
+  version line it prints — CAS overwrites outline files in place) and its diff; the newest
+  edition's list is the exam page's Source Material and every earlier one is walked back
+  through the diffs. **Transcribed, never constructed** — an edition is listed once its PDF
+  has been read, and one that's no longer published is absent. `syllabusVintages.test.ts`
+  holds the table to the vault. Rides the URL as `?vintage=…&changes=added&changes=dropped`.
+  Pure and tested.
 - `amazonPrice.ts` — the **Amazon price** on a resource card's *Get a copy* menu
   (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, Amazon, Library Genesis — each
   lead with the place's own logo from `quiz/public/copy-sources/`). The price comes from
@@ -1020,8 +1033,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **187 test files /
-~2980 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **189 test files /
+~3030 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

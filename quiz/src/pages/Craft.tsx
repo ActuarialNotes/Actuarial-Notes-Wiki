@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
+  Check,
   ChevronLeft,
   Lightbulb,
   Maximize,
@@ -14,70 +15,97 @@ import {
 } from 'lucide-react'
 import wikiBundle from 'virtual:wiki-content'
 import { CraftBoard, type BoardCommands, type DropVerdict } from '@/components/craft/CraftBoard'
+import { CraftConnection } from '@/components/craft/CraftConnection'
 import { CraftDeck } from '@/components/craft/CraftDeck'
-import { CraftInspector } from '@/components/craft/CraftInspector'
 import { CraftLogo } from '@/components/craft/CraftLogo'
-import { CraftReveal, type RevealState } from '@/components/craft/CraftReveal'
-import { RelationPrompt } from '@/components/craft/RelationPrompt'
 import { ConceptTileStatic } from '@/components/ConceptTile'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
-import { SegmentedControl } from '@/components/ui/SegmentedControl'
-import { CRAFT_MODULES, craftModuleById } from '@/data/conceptCraft'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { boardFor, progressOf, useConceptCraft, type CraftMode } from '@/hooks/useConceptCraft'
+import { boardFor, progressOf, useConceptCraft, type StrengthFilter } from '@/hooks/useConceptCraft'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { usePageHead } from '@/hooks/usePageHead'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import {
-  availableNodes,
+  bridgePlan,
+  challengeOrder,
   combine,
+  craftTopics,
   dailyChallenge,
-  moduleTally,
-  nextCraft,
-  pairKey,
-  recipeId,
-  relationQuestion,
-  stepsToTarget,
-  type CraftModule,
-  type CraftRecipe,
-  type RelationQuestion,
+  isBridged,
+  isPlaced,
+  topicGraph,
+  topicTally,
+  withConnection,
+  type CraftProgress,
+  type CraftTopic,
+  type TopicTally,
 } from '@/lib/conceptCraft'
+import { STRENGTH_TIERS, type ConceptGraph, type Connection } from '@/lib/conceptGraph'
 import { examAccentStyle } from '@/lib/examColors'
 import { setWikiContentLookup } from '@/lib/github'
+import { filterQuestions, type Question } from '@/lib/parser'
 import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import { todayISO } from '@/lib/studyPlan'
-import { trackCraftCombined, trackCraftModuleCompleted } from '@/lib/analytics'
+import { trackCraftCombined, trackCraftTopicCompleted } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
-// The board reads concept pages — the inspector's summary, the reader it opens
-// — and must not depend on the network to do it: install the wiki bundle's
-// lookup, as Cowork does (lib/coworkContent.ts) for the same reason. Idempotent.
+// The board reads concept pages — the graph is built from them, and the reader
+// it opens shows them — and must not depend on the network to do it: install
+// the wiki bundle's lookup, as Cowork does (lib/coworkContent.ts) for the same
+// reason. Idempotent.
 setWikiContentLookup((path: string) => wikiBundle.files[path])
 setWikiIndexBundle(wikiBundle.index)
 
-/**
- * **Concept Craft** (docs/concept-craft.md) — `/craft` is the topic picker,
- * `/craft/:moduleId` one module's board. Opened from the Quiz tab, beside Quiz
- * Battle: a way of studying a syllabus by building it.
- */
-export default function Craft() {
-  const { moduleId } = useParams()
-  if (!moduleId) return <CraftPicker />
-  const module = craftModuleById(moduleId)
-  if (!module) return <Navigate to="/craft" replace />
-  return <CraftScreen key={module.id} module={module} />
+// ─── The vault, as the game reads it ─────────────────────────────────────────
+
+const CONCEPT_PAGES = new Map(
+  wikiBundle.index.filter(item => item.category === 'concept').map(item => [item.name.toLowerCase(), item] as const),
+)
+const conceptPageName = (name: string) => CONCEPT_PAGES.get(name.toLowerCase())?.name
+const conceptMarkdown = (name: string) => {
+  const item = CONCEPT_PAGES.get(name.toLowerCase())
+  return item ? wikiBundle.files[item.path] : undefined
 }
 
-/** "Exam P", "Exam MAS-I", "Exam 5" — a module's exam, as the ladder names it. */
-function examName(module: CraftModule): string {
-  return examDisplayName(module.examPage).replace(/-\d+$/, '')
+let topicsRead: CraftTopic[] | null = null
+/** Every topic the vault makes a board of, read once from the bundled exam pages. */
+function allTopics(): CraftTopic[] {
+  if (!topicsRead) {
+    const examPages = Object.fromEntries(Object.entries(wikiBundle.files).filter(([path]) => /^Exam\b[^/]*\.md$/i.test(path)))
+    topicsRead = craftTopics(examPages, conceptPageName)
+  }
+  return topicsRead
+}
+
+const MIN_STRENGTH_SHOWN: Record<StrengthFilter, number> = {
+  all: 0,
+  moderate: STRENGTH_TIERS.moderate,
+  strong: STRENGTH_TIERS.strong,
+}
+
+/**
+ * **Concept Craft** (docs/concept-craft.md) — `/craft` is the topic picker,
+ * `/craft/:topicId` one topic's board. Opened from the Quiz tab, beside Quiz
+ * Battle: a way of studying a syllabus by finding how its concepts connect.
+ */
+export default function Craft() {
+  const { topicId } = useParams()
+  if (!topicId) return <CraftPicker />
+  const topic = allTopics().find(t => t.id === topicId)
+  if (!topic) return <Navigate to="/craft" replace />
+  return <CraftScreen key={topic.id} topic={topic} />
+}
+
+/** "Exam P", "Exam MAS-I", "Exam 5" — a topic's exam, as the ladder names it. */
+function examName(topic: CraftTopic): string {
+  return examDisplayName(topic.examPage).replace(/-\d+$/, '')
 }
 
 function PageTitle({ onBack, children }: { onBack: () => void; children: ReactNode }) {
@@ -103,13 +131,13 @@ function CraftPicker() {
   const navigate = useNavigate()
   const boards = useConceptCraft(s => s.boards)
 
-  // Modules are authored in ladder order; group them by exam, keeping it.
+  // Topics come in ladder order; group them by exam, keeping it.
   const groups = useMemo(() => {
-    const out: { exam: string; name: string; modules: CraftModule[] }[] = []
-    for (const m of CRAFT_MODULES) {
+    const out: { exam: string; name: string; topics: CraftTopic[] }[] = []
+    for (const t of allTopics()) {
       const last = out[out.length - 1]
-      if (last && last.exam === m.exam) last.modules.push(m)
-      else out.push({ exam: m.exam, name: examName(m), modules: [m] })
+      if (last && last.name === examName(t)) last.topics.push(t)
+      else out.push({ exam: t.exam, name: examName(t), topics: [t] })
     }
     return out
   }, [])
@@ -120,33 +148,36 @@ function CraftPicker() {
       <div className="flex items-center gap-3 rounded-xl bg-card p-5">
         <CraftLogo size="lg" />
         <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">Build a syllabus out of the concepts it is made of.</span>{' '}
-          Start with a few, combine them to discover what they make, and every link you find stays on your board.
+          <span className="font-medium text-foreground">Find how a topic’s concepts connect.</span>{' '}
+          Drop one concept on another: wherever the notes tie them together, a line joins them with its strength.
         </p>
       </div>
       {groups.map(group => (
-        <section key={group.exam} className="space-y-2">
+        <section key={group.name} className="space-y-2">
           <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.name}</p>
           <ListPanel>
-            {group.modules.map(m => {
-              const tally = moduleTally(m, progressOf(boardFor(boards, m.id)))
-              const started = tally.links > 0
+            {group.topics.map(t => {
+              const board = boardFor(boards, t.id)
+              const found = board.found.length
               return (
                 <ListRow
-                  key={m.id}
-                  to={`/craft/${m.id}`}
-                  leading={<ExamLogo examKey={m.exam} size="lg" />}
-                  title={m.title}
-                  subtitle={m.blurb}
+                  key={t.id}
+                  to={`/craft/${t.id}`}
+                  leading={<ExamLogo examKey={t.exam} size="lg" />}
+                  title={t.title}
+                  subtitle={t.weight ? `${t.weight} of the exam` : undefined}
                   meta={
                     <>
-                      <span>{started ? `${tally.nodes} of ${tally.totalNodes} concepts` : `${tally.totalNodes} concepts`}</span>
-                      <span aria-hidden>·</span>
-                      <span>{started ? `${tally.links} of ${tally.totalLinks} links` : `${m.primitives.length} to start with`}</span>
+                      <span>{t.concepts.length} concepts</span>
+                      {found > 0 && (
+                        <>
+                          <span aria-hidden>·</span>
+                          <span>{found} {found === 1 ? 'connection' : 'connections'} found</span>
+                        </>
+                      )}
                     </>
                   }
-                  trailing={tally.complete ? <CheckMark className="h-5 w-5" label="Every link found" /> : undefined}
-                  data-testid="craft-module"
+                  data-testid="craft-topic"
                 />
               )
             })}
@@ -157,12 +188,53 @@ function CraftPicker() {
   )
 }
 
-// ─── One module's board ──────────────────────────────────────────────────────
+// ─── One topic's board ───────────────────────────────────────────────────────
 
-interface PromptState {
-  a: string
-  b: string
-  question: RelationQuestion
+function CraftScreen({ topic }: { topic: CraftTopic }) {
+  const { questions, loading } = useAllQuestions()
+
+  // The quiz pool: what a quiz can serve, which is also what the graph counts.
+  const pool = useMemo(() => (loading ? null : filterQuestions(questions, {})), [questions, loading])
+  const graph = useMemo(
+    () => (pool ? topicGraph(topic, conceptMarkdown, pool.map(q => ({ id: q.id, links: q.wiki_link }))) : null),
+    [topic, pool],
+  )
+  const byId = useMemo(() => (pool ? new Map(pool.map(q => [q.id, q])) : null), [pool])
+
+  const head = useMemo(() => ({
+    title: `${topic.title} — Concept Craft | Actuarial Notes`,
+    description: `${examName(topic)}: how the concepts of ${topic.title.toLowerCase()} connect.`,
+    noindex: true,
+  }), [topic])
+  usePageHead(head)
+
+  // The reader this board opens is the app's one popup; leaving the board
+  // leaves it closed.
+  useEffect(() => () => useConceptPopup.getState().close(), [])
+
+  return (
+    // Always dark: the board is a canvas the concepts are laid out on
+    // (docs/concept-craft.md). Scoped to the route like Actuaria's (style guide
+    // §2.6) — the sidebar and anything portalled to the body keep the reader's
+    // own theme. It gives up the bottom of the screen to the concept popup
+    // while that is open, so the board is never under it.
+    <div
+      className="dark relative flex flex-col overflow-hidden bg-background text-foreground"
+      style={{ colorScheme: 'dark', height: 'calc(100dvh - var(--concept-split-height, 0px))' }}
+    >
+      {graph && byId ? (
+        <CraftPlay topic={topic} graph={graph} questions={byId} />
+      ) : (
+        <>
+          <BoardHeader topic={topic} tally={null} onMenu={null} />
+          <div className="craft-floor flex min-h-0 flex-1 items-center justify-center" style={{ backgroundSize: '22px 22px' }}>
+            <p className="rounded-full bg-card px-4 py-2 text-sm text-muted-foreground" role="status">Reading the notes…</p>
+          </div>
+        </>
+      )}
+      <ConceptPopup />
+    </div>
+  )
 }
 
 interface Ghost {
@@ -172,68 +244,77 @@ interface Ghost {
   over: string | null
 }
 
-/** How long a pair answered wrongly in Mastery mode waits before it can be tried again. */
-const RETRY_MS = 15_000
-
-function CraftScreen({ module }: { module: CraftModule }) {
+function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: ConceptGraph; questions: ReadonlyMap<string, Question> }) {
   const navigate = useNavigate()
   const isPhone = useIsMobile(1023)
   const { play, resetCombo } = useSoundEffects()
   const levels = useConceptLevels()
-  const { questions, loading: questionsLoading } = useAllQuestions()
 
-  const mode = useConceptCraft(s => s.mode)
-  const setMode = useConceptCraft(s => s.setMode)
-  const board = useConceptCraft(s => boardFor(s.boards, module.id))
-  const addRecipe = useConceptCraft(s => s.addRecipe)
+  const board = useConceptCraft(s => boardFor(s.boards, topic.id))
+  const filter = useConceptCraft(s => s.filter)
+  const setFilter = useConceptCraft(s => s.setFilter)
+  const place = useConceptCraft(s => s.place)
+  const addConnection = useConceptCraft(s => s.addConnection)
   const savePositions = useConceptCraft(s => s.savePositions)
   const completeChallenge = useConceptCraft(s => s.completeChallenge)
-  const recordAnswer = useConceptCraft(s => s.recordAnswer)
   const resetBoard = useConceptCraft(s => s.resetBoard)
 
-  const progress = useMemo(() => progressOf(board), [board])
-  const available = useMemo(() => availableNodes(module, progress), [module, progress])
-  const tally = useMemo(() => moduleTally(module, progress), [module, progress])
+  // Keyed on the two lists, not the board: saving where the cards settled
+  // must not read as a move in the game.
+  const progress = useMemo<CraftProgress>(() => progressOf(board), [board.placed, board.found]) // eslint-disable-line react-hooks/exhaustive-deps
+  const tally = useMemo(() => topicTally(graph, progress), [graph, progress])
+  const placedSet = useMemo(() => new Set(progress.placed), [progress])
 
   const boardRef = useRef<BoardCommands>(null)
-  const [selected, setSelected] = useState<string | null>(null)
   const [held, setHeld] = useState<string | null>(null)
-  const [reveal, setReveal] = useState<RevealState | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
-  const [prompt, setPrompt] = useState<PromptState | null>(null)
   const [ghost, setGhost] = useState<Ghost | null>(null)
-  const [fresh, setFresh] = useState<{ node: string | null; recipe: string | null }>({ node: null, recipe: null })
+  const [notice, setNotice] = useState<string | null>(null)
+  const [announce, setAnnounce] = useState('')
+  const [fresh, setFresh] = useState<{ node: string | null; connection: string | null }>({ node: null, connection: null })
   const [flash, setFlash] = useState<string | null>(null)
+  const [openKey, setOpenKey] = useState<string | null>(null)
   const [hintLevel, setHintLevel] = useState(0)
   const [skip, setSkip] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
-  const lockouts = useRef(new Map<string, number>())
-  // The prompt's verdict, read when it closes — a right answer crafts then.
-  const lastVerdict = useRef<boolean | null>(null)
 
-  const head = useMemo(() => ({
-    title: `${module.title} — Concept Craft | Actuarial Notes`,
-    description: `${examName(module)}: ${module.blurb}`,
-    noindex: true,
-  }), [module])
-  usePageHead(head)
-
-  // The reader this board opens is the app's one popup; leaving the board
-  // leaves it closed.
-  useEffect(() => () => useConceptPopup.getState().close(), [])
+  // The concept the popup is showing, while it is open — lit on the board.
+  const reading = useConceptPopup(s => {
+    if (!s.open) return null
+    const page = s.pages[s.pageIndex]
+    return page && page.kind === 'concept' ? page.name : null
+  })
+  const popupOpen = useConceptPopup(s => s.open)
 
   // ── The day's challenge ──────────────────────────────────────────────────
   const today = todayISO()
+  const order = useMemo(() => challengeOrder(graph, topic.id, today), [graph, topic.id, today])
   const doneToday = board.challenges.includes(today)
-  const target = dailyChallenge(module, progress, today, skip)
-  const steps = target ? stepsToTarget(module, progress, target) : null
-  const hint = target ? nextCraft(module, progress, target) : null
-  const hinted = useMemo(
-    () => (hint ? [hint.a, hint.b].slice(0, hintLevel) : []),
-    [hint, hintLevel],
+  // Memoized: the page re-renders on every move of a card dragged from the deck.
+  const target = useMemo(() => dailyChallenge(graph, progress, order, skip), [graph, progress, order, skip])
+  const canSkip = useMemo(
+    () => !!target && (skip > 0 || dailyChallenge(graph, progress, order, skip + 1) !== target),
+    [graph, progress, order, skip, target],
   )
-  // A new target, or progress toward it, takes the hint back.
-  useEffect(() => { setHintLevel(0) }, [target, progress])
+  const bridge = useMemo(() => (target ? bridgePlan(graph, progress, target.a, target.b) : null), [graph, progress, target])
+  const next = bridge?.missing[0] ?? null
+  // The hint names what lies between the two first, then the drop to make.
+  const hint = useMemo<Hint | null>(() => {
+    if (!bridge || !next || hintLevel === 0) return null
+    if (hintLevel === 1) return { try: bridge.concept }
+    const other = next.a.toLowerCase() === bridge.concept.toLowerCase() ? next.b : next.a
+    return { drop: [bridge.concept, other] }
+  }, [bridge, next, hintLevel])
+  const hinted = useMemo(() => (!hint ? [] : 'try' in hint ? [hint.try] : hint.drop), [hint])
+  // A new target, or a connection found, takes the hint back — putting the
+  // hinted card down doesn't, or the hint would vanish as it was followed.
+  useEffect(() => { setHintLevel(0) }, [target?.a, target?.b, progress.found])
+
+  // The challenge's two ends go on the board, so it is never set on concepts
+  // the reader can't see.
+  useEffect(() => {
+    if (!target) return
+    if (!isPlaced(progress, target.a) || !isPlaced(progress, target.b)) place(topic.id, [target.a, target.b])
+  }, [target, progress, place, topic.id])
 
   // ── Transient feedback ───────────────────────────────────────────────────
   useEffect(() => {
@@ -247,102 +328,66 @@ function CraftScreen({ module }: { module: CraftModule }) {
     return () => window.clearTimeout(t)
   }, [flash])
   // The pop and the line drawing in are one-off; after them the board draws
-  // the link as it draws every other.
+  // the connection as it draws every other.
   useEffect(() => {
-    if (!fresh.node && !fresh.recipe) return
-    const t = window.setTimeout(() => setFresh({ node: null, recipe: null }), 1200)
+    if (!fresh.node && !fresh.connection) return
+    const t = window.setTimeout(() => setFresh({ node: null, connection: null }), 1200)
     return () => window.clearTimeout(t)
   }, [fresh])
-  const closeReveal = useCallback(() => setReveal(null), [])
+  // A card that arrived where the reader can't see it — beside one at the
+  // edge of the view — is brought into sight once it has landed.
+  useEffect(() => {
+    if (!fresh.node) return
+    const name = fresh.node
+    const t = window.setTimeout(() => boardRef.current?.reveal(name), 450)
+    return () => window.clearTimeout(t)
+  }, [fresh.node])
 
-  // ── Crafting ─────────────────────────────────────────────────────────────
-  const commit = useCallback((recipe: CraftRecipe, newNode: boolean, introduces: string[], answer?: 'right') => {
-    const before = moduleTally(module, progress)
-    addRecipe(module.id, recipe)
-    const after = moduleTally(module, { recipes: [...progress.recipes, recipeId(recipe)] })
-    setFresh({ node: newNode ? recipe.result : null, recipe: recipeId(recipe) })
-    const hitTarget = newNode && target !== null && recipe.result.toLowerCase() === target.toLowerCase()
-    let headline: string | undefined
-    if (after.complete && !before.complete) {
-      headline = `Every link in ${module.title.toLowerCase()} found`
+  // ── Finding connections ──────────────────────────────────────────────────
+  const commit = useCallback((connection: Connection, arriving: string | null) => {
+    const after = withConnection(progress, connection)
+    addConnection(topic.id, connection)
+    setFresh({ node: arriving, connection: connection.key })
+    const completed = topicTally(graph, after).complete && !tally.complete
+    const met = !!target && !isBridged(graph, progress, target.a, target.b) && isBridged(graph, after, target.a, target.b)
+    if (completed) {
       play('complete')
-      trackCraftModuleCompleted({ module: module.id, mode })
-    } else if (hitTarget) {
-      headline = doneToday ? 'Challenge met' : 'Today’s challenge met'
+      trackCraftTopicCompleted({ exam: topic.exam, topic: topic.id })
+    } else if (met) {
       play('levelUp')
     } else {
-      play(newNode ? 'collect' : 'correct')
+      play(connection.strength >= STRENGTH_TIERS.strong ? 'collect' : 'correct')
     }
-    if (hitTarget) {
-      if (!doneToday) completeChallenge(module.id, today)
+    if (met) {
+      if (!doneToday) completeChallenge(topic.id, today)
       setSkip(0)
     }
-    setReveal({ recipe, found: true, newNode, introduces, headline })
-    trackCraftCombined({ module: module.id, mode, outcome: newNode ? 'new_concept' : 'new_link', ...(answer ? { answer } : {}) })
-  }, [module, progress, addRecipe, target, doneToday, completeChallenge, today, play, mode])
+    // No card, no toast: the map is the answer. Assistive tech is told what changed.
+    setAnnounce(`Connected ${connection.a} and ${connection.b}, strength ${connection.strength}.${met ? ' Challenge met.' : ''}`)
+    trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'new', strength: connection.strength })
+  }, [progress, addConnection, topic, graph, tally.complete, target, play, doneToday, completeChallenge, today])
 
   const onCombine = useCallback((a: string, b: string): DropVerdict => {
     setHeld(null)
     if (a.toLowerCase() === b.toLowerCase()) return 'bounce'
-    const outcome = combine(module, progress, a, b)
-
+    const outcome = combine(graph, progress, a, b)
     if (outcome.kind === 'known') {
-      setFlash(recipeId(outcome.recipe))
-      setReveal({ recipe: outcome.recipe, found: false, newNode: false, introduces: [] })
-      trackCraftCombined({ module: module.id, mode, outcome: 'known' })
+      setFlash(outcome.connection.key)
+      trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'known', strength: outcome.connection.strength })
       return 'stay'
     }
-
-    if (mode === 'explore') {
-      if (outcome.kind === 'none') {
-        // Mistakes are silent (docs/sound-design.md); the card bouncing back
-        // and one line of text are the whole of it.
-        resetCombo('correct')
-        setNotice('No direct link between these concepts')
-        trackCraftCombined({ module: module.id, mode, outcome: 'none' })
-        return 'bounce'
-      }
-      commit(outcome.recipe, outcome.newNode, outcome.introduces)
-      return 'stay'
-    }
-
-    // Mastery: every pair is asked about, related or not.
-    const key = pairKey(a, b)
-    const until = lockouts.current.get(key) ?? 0
-    if (until > Date.now()) {
-      setNotice(`Give that pair a moment — try again in ${Math.ceil((until - Date.now()) / 1000)}s`)
+    if (outcome.kind === 'none') {
+      // Mistakes are silent (docs/sound-design.md); the card going back and
+      // one line of text are the whole of it.
+      resetCombo('correct')
+      setNotice('No connection between these two')
+      trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'none' })
       return 'bounce'
     }
-    play('open')
-    setPrompt({ a, b, question: relationQuestion(module, a, b) })
-    trackCraftCombined({ module: module.id, mode, outcome: 'asked' })
-    return 'bounce'
-  }, [module, progress, mode, commit, play, resetCombo])
-
-  const answerPrompt = useCallback((right: boolean) => {
-    if (!prompt) return
-    recordAnswer(module.id, right)
-    const outcome = combine(module, progress, prompt.a, prompt.b)
-    trackCraftCombined({ module: module.id, mode: 'mastery', outcome: outcome.kind === 'none' ? 'none' : 'new_link', answer: right ? 'right' : 'wrong' })
-    if (!right) {
-      resetCombo('correct')
-      if (outcome.kind !== 'none') lockouts.current.set(pairKey(prompt.a, prompt.b), Date.now() + RETRY_MS)
-      return
-    }
-    if (outcome.kind === 'none') play('correct')
-  }, [prompt, module, progress, recordAnswer, play, resetCombo])
-
-  const closePrompt = useCallback(() => {
-    if (!prompt) return
-    setPrompt(null)
-    // A right answer about a real pair is what crafts — once the prompt is
-    // closed, so the new card lands on a board the reader can see.
-    const verdictRight = lastVerdict.current
-    lastVerdict.current = null
-    if (!verdictRight) return
-    const outcome = combine(module, progress, prompt.a, prompt.b)
-    if (outcome.kind === 'new') commit(outcome.recipe, outcome.newNode, outcome.introduces, 'right')
-  }, [prompt, module, progress, commit])
+    const arriving = [a, b].find(n => !isPlaced(progress, n)) ?? null
+    commit(outcome.connection, arriving)
+    return 'stay'
+  }, [graph, progress, topic, commit, resetCombo])
 
   // ── The deck's hands ─────────────────────────────────────────────────────
   const tapDeck = useCallback((name: string) => {
@@ -356,7 +401,7 @@ function CraftScreen({ module }: { module: CraftModule }) {
     }
     setHeld(name)
     play('select')
-    boardRef.current?.focus(name)
+    boardRef.current?.reveal(name)
   }, [held, onCombine, play])
 
   const dragDeck = useCallback((name: string, x: number, y: number) => {
@@ -367,161 +412,166 @@ function CraftScreen({ module }: { module: CraftModule }) {
     setGhost(null)
     const commands = boardRef.current
     if (!commands || !commands.contains(x, y)) return
-    const target = commands.conceptAt(x, y)
-    if (target && target.toLowerCase() !== name.toLowerCase()) onCombine(name, target)
-    else if (!target) commands.place(name, x, y)
-  }, [onCombine])
+    const over = commands.conceptAt(x, y)
+    if (over && over.toLowerCase() !== name.toLowerCase()) {
+      onCombine(name, over)
+      return
+    }
+    // Empty board: put it down there.
+    commands.placeAt(name, x, y)
+    if (!isPlaced(progress, name)) {
+      place(topic.id, [name])
+      setFresh({ node: name, connection: null })
+    }
+  }, [onCombine, progress, place, topic.id])
 
-  const inspect = useCallback((name: string | null) => {
-    setSelected(name)
+  // ── Reading ──────────────────────────────────────────────────────────────
+  const read = useCallback((name: string) => {
     setHeld(null)
     setMenuOpen(false)
-  }, [])
-
-  const focusConcept = useCallback((name: string) => {
-    setSelected(name)
-    boardRef.current?.focus(name)
-  }, [])
-
-  const read = useCallback((name: string) => {
-    const list = available.map(n => ({ kind: 'concept' as const, name: n }))
-    const index = Math.max(0, available.findIndex(n => n.toLowerCase() === name.toLowerCase()))
-    // A walk of the board's concepts, not a slice of a syllabus: `corpus`
+    // A sheet and the popup would share the bottom of a phone; the popup wins.
+    if (isPhone) setOpenKey(null)
+    const list = topic.concepts.map(n => ({ kind: 'concept' as const, name: n }))
+    const index = Math.max(0, topic.concepts.findIndex(n => n.toLowerCase() === name.toLowerCase()))
+    // A walk of the topic's concepts, not a slice of a syllabus page: `corpus`
     // drops the popup's syllabus-filter picker, which has nothing to re-slice.
     useConceptPopup.getState().openAt(list, index, null, null, null, { walk: 'corpus' })
-    // The reader is the fuller view of what the inspector summarised.
-    setSelected(null)
-  }, [available])
+  }, [topic.concepts, isPhone])
 
-  const showRecipe = useCallback((recipe: CraftRecipe) => {
-    setFlash(recipeId(recipe))
-    setReveal({ recipe, found: false, newNode: false, introduces: [] })
-  }, [])
+  const showConnection = useCallback((connection: Connection) => {
+    setOpenKey(key => (key === connection.key ? null : connection.key))
+    setMenuOpen(false)
+    if (isPhone) useConceptPopup.getState().close()
+  }, [isPhone])
 
-  // Esc steps back one layer: a held card, then the inspector.
+  const practice = useCallback((ids: string[]) => {
+    try {
+      sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
+    } catch { /* private mode: the quiz falls back to its own draw */ }
+    navigate('/quiz?selection=stored')
+  }, [navigate])
+
+  // Esc steps back one layer: a held card, then the connection's card, then
+  // the menu. The popup minds its own.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape' || prompt || useConceptPopup.getState().open) return
+      if (e.key !== 'Escape' || useConceptPopup.getState().open) return
       if (held) setHeld(null)
-      else if (selected) setSelected(null)
+      else if (openKey) setOpenKey(null)
       else if (menuOpen) setMenuOpen(false)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [held, selected, menuOpen, prompt])
+  }, [held, openKey, menuOpen])
 
   const onSettle = useCallback((positions: Record<string, [number, number]>) => {
-    savePositions(module.id, positions)
-  }, [module.id, savePositions])
+    savePositions(topic.id, positions)
+  }, [topic.id, savePositions])
 
   const startOver = () => {
-    resetBoard(module.id)
-    setSelected(null)
+    resetBoard(topic.id)
     setHeld(null)
-    setReveal(null)
+    setOpenKey(null)
     setSkip(0)
     setMenuOpen(false)
   }
 
-  const openTargets = target ? (skip > 0 || dailyChallenge(module, progress, today, skip + 1) !== target) : false
-  // What the board's panels cover, so "fit" frames the graph in the room left:
+  const open = openKey ? graph.byKey.get(openKey) ?? null : null
+  // What the board's panels cover, so "fit" frames the map in the room left:
   // the challenge across the top, the deck down the left of a wide board, the
-  // map controls (or the inspector) down the right.
+  // map controls (or a connection's card) down the right.
   const boardInsets = useMemo(
     () => (isPhone
       ? { top: 56, right: 56, bottom: 8, left: 0 }
-      : { top: 56, right: selected ? 376 : 64, bottom: 8, left: 284 }),
-    [isPhone, selected],
+      : { top: 56, right: open ? 376 : 64, bottom: 8, left: 316 }),
+    [isPhone, open],
   )
-  const inspector = selected && available.some(n => n.toLowerCase() === selected.toLowerCase()) ? selected : null
+
+  const deck = (layout: 'panel' | 'strip') => (
+    <CraftDeck
+      concepts={topic.concepts}
+      placed={placedSet}
+      levels={levels}
+      held={held}
+      hinted={hinted}
+      layout={layout}
+      showHow={tally.found === 0}
+      onTap={tapDeck}
+      onDrag={dragDeck}
+      onDrop={dropDeck}
+      onCancel={() => setGhost(null)}
+    />
+  )
 
   return (
-    // Always dark: the board is a canvas the concepts are laid out on, and
-    // the PRD's feel is a dark, quiet board (docs/concept-craft.md). Scoped
-    // to the route like Actuaria's (style guide §2.6) — the sidebar and
-    // anything portalled to the body keep the reader's own theme.
-    <div className="dark relative flex h-dvh flex-col overflow-hidden bg-background text-foreground" style={{ colorScheme: 'dark' }}>
-      <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3" style={examAccentStyle(module.exam)}>
-        <MobileNavButton className="lg:hidden" />
-        <button
-          type="button"
-          onClick={() => navigate('/craft')}
-          aria-label="All topics"
-          title="All topics"
-          className="hidden shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:block"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <ExamLogo examKey={module.exam} size="sm" className="hidden sm:flex" />
-        <div className="min-w-0 flex-1">
-          <h1 className="truncate text-sm font-semibold leading-tight sm:text-base">{module.title}</h1>
-          <p className="hidden truncate text-xs tabular-nums text-muted-foreground sm:block" data-testid="craft-tally">
-            {tally.nodes} of {tally.totalNodes} concepts · {tally.links} of {tally.totalLinks} links
-          </p>
-        </div>
-        <SegmentedControl<CraftMode>
-          label="How pairs are combined"
-          size="sm"
-          value={mode}
-          onChange={setMode}
-          options={[
-            { value: 'explore', label: 'Explore' },
-            { value: 'mastery', label: 'Mastery' },
-          ]}
-          className="shrink-0"
-        />
-        <div className="relative shrink-0">
-          <button
-            type="button"
-            onClick={() => setMenuOpen(v => !v)}
-            aria-label="Board options"
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </button>
-          {menuOpen && (
-            <BoardMenu
-              onClose={() => setMenuOpen(false)}
-              onTopics={() => navigate('/craft')}
-              onTidy={() => { boardRef.current?.tidy(); setMenuOpen(false) }}
-              onStartOver={startOver}
-            />
-          )}
-        </div>
-      </header>
+    <>
+      <BoardHeader
+        topic={topic}
+        tally={tally}
+        onMenu={
+          <div className="relative shrink-0">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(v => !v)}
+              aria-label="Board options"
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+            {menuOpen && (
+              <BoardMenu
+                filter={filter}
+                onFilter={f => { setFilter(f); setMenuOpen(false) }}
+                onClose={() => setMenuOpen(false)}
+                onTopics={() => navigate('/craft')}
+                onTidy={() => { boardRef.current?.tidy(); setMenuOpen(false) }}
+                onStartOver={startOver}
+              />
+            )}
+          </div>
+        }
+      />
 
       <div className="relative min-h-0 flex-1">
         <CraftBoard
           ref={boardRef}
-          module={module}
+          graph={graph}
           progress={progress}
           saved={board.positions}
           levels={levels}
-          selected={inspector}
+          selected={popupOpen ? reading : null}
           held={held}
           hinted={hinted}
           hover={ghost?.over ?? null}
           insets={boardInsets}
+          minStrength={MIN_STRENGTH_SHOWN[filter]}
           freshNode={fresh.node}
-          freshRecipe={fresh.recipe}
-          flashRecipe={flash}
-          onSelect={inspect}
+          freshConnection={fresh.connection}
+          flashConnection={flash}
+          openConnection={openKey}
+          onOpen={read}
           onCombine={onCombine}
-          onTag={showRecipe}
+          onConnection={showConnection}
           onSettle={onSettle}
         />
 
-        {/* The challenge, over the top of the board. */}
-        <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-3">
+        {/* The challenge, over the top of the board — centred in the room
+            the deck and a connection's card leave. */}
+        <div
+          className="pointer-events-none absolute top-3 z-20 flex justify-center px-3 transition-[right] duration-200"
+          style={{ left: isPhone ? 0 : boardInsets.left, right: isPhone ? 0 : open ? boardInsets.right : 0 }}
+        >
           <ChallengeBar
+            none={order.length === 0}
             complete={tally.complete}
             target={target}
-            steps={steps}
+            steps={bridge ? bridge.missing.length : null}
             doneToday={doneToday}
-            canHint={!!hint && hintLevel < 2}
-            canSkip={openTargets}
+            hint={hint}
+            canHint={!!next && hintLevel < 2}
+            canSkip={canSkip}
             onHint={() => setHintLevel(l => Math.min(2, l + 1))}
             onSkip={() => setSkip(s => s + 1)}
           />
@@ -529,29 +579,15 @@ function CraftScreen({ module }: { module: CraftModule }) {
 
         {!isPhone && (
           <div className="pointer-events-none absolute bottom-3 left-3 top-16 z-20 flex flex-col justify-start">
-            <div className="pointer-events-auto flex max-h-full">
-              <CraftDeck
-                nodes={available}
-                total={tally.totalNodes}
-                levels={levels}
-                held={held}
-                fresh={fresh.node}
-                layout="panel"
-                showHow={tally.links === 0}
-                onTap={tapDeck}
-                onDrag={dragDeck}
-                onDrop={dropDeck}
-                onCancel={() => setGhost(null)}
-              />
-            </div>
+            <div className="pointer-events-auto flex max-h-full">{deck('panel')}</div>
           </div>
         )}
 
-        {/* Zoom, fit, tidy — the map controls, bottom right. */}
+        {/* Zoom and fit — the map controls, bottom right. */}
         <div
           className={cn(
             'absolute bottom-3 z-20 flex flex-col overflow-hidden rounded-lg bg-card shadow-[var(--shadow-card)] transition-[right] duration-200',
-            !isPhone && inspector ? 'right-[23.5rem]' : 'right-3',
+            !isPhone && open ? 'right-[23.5rem]' : 'right-3',
           )}
         >
           <MapButton label="Zoom in" onClick={() => boardRef.current?.zoom(1.25)}><ZoomIn className="h-4 w-4" /></MapButton>
@@ -559,75 +595,48 @@ function CraftScreen({ module }: { module: CraftModule }) {
           <MapButton label="Fit the board" onClick={() => boardRef.current?.fit()}><Maximize className="h-4 w-4" /></MapButton>
         </div>
 
-        {/* The reveal, the notice, and the first-run line share the bottom middle. */}
+        {/* A failed drop's one line, and the first-run line, share the bottom middle. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2 px-16">
-          {notice && (
+          {notice ? (
             <p role="status" className="toast-fade-in rounded-full bg-card px-4 py-2 text-sm text-muted-foreground shadow-lg" data-testid="craft-notice">
               {notice}
             </p>
-          )}
-          {reveal ? (
-            <CraftReveal reveal={reveal} onClose={closeReveal} onInspect={name => { setReveal(null); focusConcept(name) }} />
-          ) : tally.links === 0 && !notice ? (
+          ) : tally.found === 0 ? (
             <p className="rounded-full bg-card/80 px-4 py-2 text-center text-sm text-muted-foreground">
-              {mode === 'mastery'
-                ? 'Drop one concept on another, then say how they relate.'
-                : 'Drop one concept on another to discover what they make.'}
+              Drop one concept on another to see if they connect.
             </p>
           ) : null}
         </div>
+        <p className="sr-only" role="status" aria-live="polite">{announce}</p>
 
-        {!isPhone && inspector && (
+        {!isPhone && open && (
           <div className="absolute bottom-3 right-3 top-3 z-40">
-            <CraftInspector
-              key={inspector}
-              module={module}
-              progress={progress}
-              name={inspector}
-              levels={levels}
-              questions={questionsLoading ? null : questions}
+            <CraftConnection
+              key={open.key}
+              connection={open}
+              questions={questions}
               layout="drawer"
-              onClose={() => setSelected(null)}
-              onFocus={focusConcept}
-              onRecipe={showRecipe}
+              onClose={() => setOpenKey(null)}
               onRead={read}
+              onPractice={practice}
             />
           </div>
         )}
       </div>
 
-      {isPhone && (
-        <div className="relative z-30 shrink-0">
-          <CraftDeck
-            nodes={available}
-            total={tally.totalNodes}
-            levels={levels}
-            held={held}
-            fresh={fresh.node}
-            layout="strip"
-            showHow={tally.links === 0}
-            onTap={tapDeck}
-            onDrag={dragDeck}
-            onDrop={dropDeck}
-            onCancel={() => setGhost(null)}
-          />
-        </div>
-      )}
+      {/* While a concept is being read, a phone gives the deck's room to the board. */}
+      {isPhone && !popupOpen && <div className="relative z-30 shrink-0">{deck('strip')}</div>}
 
-      {isPhone && inspector && (
+      {isPhone && open && (
         <div className="absolute inset-x-0 bottom-0 z-40 flex flex-col justify-end">
-          <CraftInspector
-            key={inspector}
-            module={module}
-            progress={progress}
-            name={inspector}
-            levels={levels}
-            questions={questionsLoading ? null : questions}
+          <CraftConnection
+            key={open.key}
+            connection={open}
+            questions={questions}
             layout="sheet"
-            onClose={() => setSelected(null)}
-            onFocus={focusConcept}
-            onRecipe={showRecipe}
+            onClose={() => setOpenKey(null)}
             onRead={read}
+            onPractice={practice}
           />
         </div>
       )}
@@ -641,19 +650,36 @@ function CraftScreen({ module }: { module: CraftModule }) {
           <ConceptTileStatic name={ghost.name} state={levels.levelOf(ghost.name)} collected={levels.isCollected(ghost.name)} showLock={false} />
         </div>
       )}
+    </>
+  )
+}
 
-      {prompt && (
-        <RelationPrompt
-          a={prompt.a}
-          b={prompt.b}
-          question={prompt.question}
-          onAnswer={right => { lastVerdict.current = right; answerPrompt(right) }}
-          onClose={closePrompt}
-        />
-      )}
-
-      <ConceptPopup />
-    </div>
+function BoardHeader({ topic, tally, onMenu }: { topic: CraftTopic; tally: TopicTally | null; onMenu: ReactNode }) {
+  const navigate = useNavigate()
+  return (
+    <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3" style={examAccentStyle(topic.exam)}>
+      <MobileNavButton className="lg:hidden" />
+      <button
+        type="button"
+        onClick={() => navigate('/craft')}
+        aria-label="All topics"
+        title="All topics"
+        className="hidden shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:block"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <ExamLogo examKey={topic.exam} size="sm" className="hidden sm:flex" />
+      <div className="min-w-0 flex-1">
+        <h1 className="truncate text-sm font-semibold leading-tight sm:text-base">{topic.title}</h1>
+        {tally && (
+          <p className="truncate text-xs tabular-nums text-muted-foreground" data-testid="craft-tally">
+            {tally.found} of {tally.connections} connections
+            <span className="hidden sm:inline"> · {tally.placed} of {tally.concepts} concepts on the board</span>
+          </p>
+        )}
+      </div>
+      {onMenu}
+    </header>
   )
 }
 
@@ -671,12 +697,22 @@ function MapButton({ label, onClick, children }: { label: string; onClick: () =>
   )
 }
 
+const FILTER_ROWS: { value: StrengthFilter; label: string }[] = [
+  { value: 'all', label: 'Every connection' },
+  { value: 'moderate', label: `Moderate and strong (${STRENGTH_TIERS.moderate}+)` },
+  { value: 'strong', label: `Strong only (${STRENGTH_TIERS.strong}+)` },
+]
+
 function BoardMenu({
+  filter,
+  onFilter,
   onClose,
   onTopics,
   onTidy,
   onStartOver,
 }: {
+  filter: StrengthFilter
+  onFilter: (filter: StrengthFilter) => void
   onClose: () => void
   onTopics: () => void
   onTidy: () => void
@@ -693,12 +729,27 @@ function BoardMenu({
   }, [onClose])
   const row = 'flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-accent'
   return (
-    <div ref={ref} role="menu" className="absolute right-0 top-full z-50 mt-1 w-56 rounded-md bg-popover py-1 text-popover-foreground shadow-md">
+    <div ref={ref} role="menu" className="absolute right-0 top-full z-50 mt-1 w-64 rounded-md bg-popover py-1 text-popover-foreground shadow-md">
       {/* The header's back arrow, which a phone's header has no room for. */}
       <button type="button" role="menuitem" className={cn(row, 'sm:hidden')} onClick={onTopics}>
         <ChevronLeft className="h-3.5 w-3.5 shrink-0" aria-hidden />
         All topics
       </button>
+      <p className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Show</p>
+      {FILTER_ROWS.map(f => (
+        <button
+          key={f.value}
+          type="button"
+          role="menuitemradio"
+          aria-checked={filter === f.value}
+          className={row}
+          onClick={() => onFilter(f.value)}
+        >
+          <Check className={cn('h-3.5 w-3.5 shrink-0', filter !== f.value && 'invisible')} aria-hidden />
+          {f.label}
+        </button>
+      ))}
+      <div className="my-1 h-px bg-border" />
       <button type="button" role="menuitem" className={row} onClick={onTidy}>
         <Wand2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
         Tidy the layout
@@ -716,69 +767,95 @@ function BoardMenu({
   )
 }
 
+type Hint = { try: string } | { drop: [string, string] }
+
 function ChallengeBar({
+  none,
   complete,
   target,
   steps,
   doneToday,
+  hint,
   canHint,
   canSkip,
   onHint,
   onSkip,
 }: {
+  /** The topic is too tightly knit to set one: every two concepts are neighbours. */
+  none: boolean
   complete: boolean
-  target: string | null
+  target: { a: string; b: string } | null
   steps: number | null
   doneToday: boolean
+  hint: Hint | null
   canHint: boolean
   canSkip: boolean
   onHint: () => void
   onSkip: () => void
 }) {
+  if (none && !complete) return null
   if (complete || !target) {
     return (
       <p className="pointer-events-auto flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm shadow-[var(--shadow-card)]">
         <CheckMark className="h-4 w-4" />
-        Every link found
+        {complete ? 'Every connection found' : 'Every challenge met'}
       </p>
     )
   }
   return (
-    <div
-      className="pointer-events-auto flex max-w-full items-center gap-1 rounded-full bg-card py-1 pl-3.5 pr-1 text-sm shadow-[var(--shadow-card)]"
-      data-testid="craft-challenge"
-    >
-      {doneToday ? <CheckMark className="h-4 w-4 shrink-0" label="Today’s challenge met" /> : <Target className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />}
-      <span className="min-w-0 truncate pl-1">
-        <span className="text-muted-foreground">{doneToday ? 'Next: ' : 'Craft '}</span>
-        <span className="font-medium">{target}</span>
-      </span>
-      {steps !== null && (
-        <span className="shrink-0 whitespace-nowrap pl-1.5 text-xs tabular-nums text-muted-foreground" title="Crafts still to make on the way">
-          {steps} {steps === 1 ? 'step' : 'steps'}
+    <div className="flex max-w-full flex-col items-center gap-1.5">
+      <div
+        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-[1.25rem] bg-card py-1 pl-3.5 pr-1 text-sm shadow-[var(--shadow-card)]"
+        data-testid="craft-challenge"
+      >
+        {doneToday ? <CheckMark className="h-4 w-4 shrink-0" label="Today’s challenge met" /> : <Target className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />}
+        {/* Both names matter, so a narrow bar wraps rather than cutting the second off. */}
+        <span className="line-clamp-3 min-w-0 py-0.5 pl-1 leading-snug">
+          <span className="text-muted-foreground">{doneToday ? 'Next: what connects ' : 'What connects '}</span>
+          <span className="font-medium">{target.a}</span>
+          <span className="text-muted-foreground"> and </span>
+          <span className="font-medium">{target.b}</span>
+          <span className="text-muted-foreground">?</span>
         </span>
-      )}
-      {canHint && (
-        <button
-          type="button"
-          onClick={onHint}
-          aria-label="Hint"
-          title="Hint"
-          className="ml-1 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Lightbulb className="h-4 w-4" />
-        </button>
-      )}
-      {canSkip && (
-        <button
-          type="button"
-          onClick={onSkip}
-          aria-label="Another challenge"
-          title="Another challenge"
-          className="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Shuffle className="h-4 w-4" />
-        </button>
+        {steps !== null && steps > 0 && (
+          <span className="shrink-0 whitespace-nowrap pl-1.5 text-xs tabular-nums text-muted-foreground" title="Connections still to find to join them through a third concept">
+            {steps} to find
+          </span>
+        )}
+        {canHint && (
+          <button
+            type="button"
+            onClick={onHint}
+            aria-label="Hint"
+            title="Hint"
+            className="ml-1 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Lightbulb className="h-4 w-4" />
+          </button>
+        )}
+        {canSkip && (
+          <button
+            type="button"
+            onClick={onSkip}
+            aria-label="Another challenge"
+            title="Another challenge"
+            className="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Shuffle className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+      {hint && (
+        <p className="pointer-events-auto max-w-full truncate rounded-full bg-card/90 px-3 py-1 text-xs shadow-[var(--shadow-card)]" data-testid="craft-hint">
+          {'try' in hint ? (
+            <><span className="text-muted-foreground">Try </span><span className="font-medium">{hint.try}</span></>
+          ) : (
+            <>
+              <span className="text-muted-foreground">Drop </span><span className="font-medium">{hint.drop[0]}</span>
+              <span className="text-muted-foreground"> on </span><span className="font-medium">{hint.drop[1]}</span>
+            </>
+          )}
+        </p>
       )}
     </div>
   )

@@ -6,15 +6,16 @@ import {
   anyOverlap,
   bodyAt,
   cardSize,
+  connectionSpring,
   cool,
   edgeToBox,
   fitView,
+  lineLabelPoint,
   makeBody,
   seedPositions,
   separate,
-  spawnPoint,
+  spawnNear,
   step,
-  tagSize,
   toScreen,
   toWorld,
   zoomAt,
@@ -38,8 +39,14 @@ describe('sizes', () => {
     expect(cardSize('Bornhuetter-Ferguson Method').w).toBeLessThanOrEqual(176)
   })
 
-  it('sizes a relation tag to its label', () => {
-    expect(tagSize('Credibility-weighted with').w).toBeGreaterThan(tagSize('Less').w)
+  it('makes a strong connection’s spring shorter and stiffer than a weak one’s', () => {
+    const strong = connectionSpring('a', 'b', 90)
+    const weak = connectionSpring('a', 'b', 20)
+    expect(strong.length).toBeLessThan(weak.length)
+    expect(strong.k).toBeGreaterThan(weak.k as number)
+    expect(connectionSpring('a', 'b', 500)).toEqual(connectionSpring('a', 'b', 100))
+    // The cards' own widths come on top, so even the strongest leaves a gap.
+    expect(connectionSpring('a', 'b', 100, 160).length).toBe(connectionSpring('a', 'b', 100).length + 160)
   })
 })
 
@@ -51,41 +58,19 @@ describe('step', () => {
     expect(anyOverlap(Object.values(bodies))).toBe(false)
   })
 
-  it('draws a recipe’s three cards in around their tag', () => {
+  it('draws connected cards in, the strongly connected closest', () => {
     const bodies: Record<string, Body> = {
-      a: makeBody({ x: -600, y: 0 }, cardSize('Paid Losses')),
-      b: makeBody({ x: 600, y: 0 }, cardSize('Case Reserves')),
-      j: makeBody({ x: 0, y: 0 }, tagSize('Added to')),
-      c: makeBody({ x: 0, y: 500 }, cardSize('Incurred Losses')),
+      hub: makeBody({ x: 0, y: 0 }, cardSize('Credibility')),
+      near: makeBody({ x: -700, y: 0 }, cardSize('Complement of Credibility')),
+      far: makeBody({ x: 700, y: 0 }, cardSize('Homogeneity')),
     }
-    const springs: Spring[] = [
-      { a: 'a', b: 'j', length: 110 },
-      { a: 'b', b: 'j', length: 110 },
-      { a: 'j', b: 'c', length: 90 },
-    ]
-    settle(bodies, springs)
-    const d = (p: string) => Math.hypot(bodies[p].x - bodies.j.x, bodies[p].y - bodies.j.y)
-    expect(d('a')).toBeLessThan(260)
-    expect(d('b')).toBeLessThan(260)
-    expect(d('c')).toBeLessThan(260)
-    expect(anyOverlap(Object.values(bodies))).toBe(false)
-  })
-
-  it('hangs a result below the tag that made it', () => {
-    const bodies: Record<string, Body> = {
-      j: { ...makeBody({ x: 0, y: 0 }, tagSize('Added to')), pinned: true },
-      c: makeBody({ x: 300, y: -200 }, cardSize('Incurred Losses')),
-    }
-    settle(bodies, [{ a: 'j', b: 'c', length: 90, below: true }])
-    expect(Math.abs(bodies.c.x)).toBeLessThan(20)
-    expect(bodies.c.y).toBeGreaterThan(60)
-  })
-
-  it('holds a body with a row to that row, and sorts a board into rows', () => {
-    const bodies: Record<string, Body> = {}
-    for (let i = 0; i < 6; i++) bodies[`n${i}`] = { ...makeBody({ x: i * 10, y: 400 - i * 50 }, cardSize('Some Concept')), row: (i % 3) * 150 }
-    settle(bodies, [])
-    for (let i = 0; i < 6; i++) expect(Math.abs(bodies[`n${i}`].y - (i % 3) * 150)).toBeLessThan(25)
+    // As the board builds them: the cards' half-widths on top of what the strength decides.
+    const reach = (x: string, y: string) => (bodies[x].w + bodies[y].w) / 2
+    settle(bodies, [connectionSpring('hub', 'near', 95, reach('hub', 'near')), connectionSpring('hub', 'far', 20, reach('hub', 'far'))])
+    const d = (p: string) => Math.hypot(bodies[p].x - bodies.hub.x, bodies[p].y - bodies.hub.y)
+    expect(d('near')).toBeLessThan(300)
+    expect(d('far')).toBeLessThan(400)
+    expect(d('near')).toBeLessThan(d('far'))
     expect(anyOverlap(Object.values(bodies))).toBe(false)
   })
 
@@ -132,11 +117,22 @@ describe('separate', () => {
 })
 
 describe('seedPositions', () => {
-  it('lays the primitives along the top row, centred', () => {
+  it('lays a few concepts side by side across the middle, centred', () => {
     const seeds = seedPositions(3)
     expect(seeds.map(p => p.y)).toEqual([0, 0, 0])
     expect(seeds[0].x + seeds[2].x).toBe(0)
     expect(seeds[1].x).toBe(0)
+  })
+
+  it('spirals a crowd out from the middle — a disc, not a line', () => {
+    const seeds = seedPositions(64)
+    const xs = seeds.map(p => p.x)
+    const ys = seeds.map(p => p.y)
+    const width = Math.max(...xs) - Math.min(...xs)
+    const height = Math.max(...ys) - Math.min(...ys)
+    expect(width).toBeLessThan(2400)
+    expect(height).toBeGreaterThan(width / 3)
+    expect(new Set(seeds.map(p => `${p.x},${p.y}`)).size).toBe(64)
   })
 })
 
@@ -147,17 +143,19 @@ describe('cool', () => {
   })
 })
 
-describe('spawnPoint', () => {
-  it('lands off the pair’s midpoint, below it', () => {
-    const p = spawnPoint({ x: -100, y: 0 }, { x: 100, y: 0 })
-    expect(p.x).toBeCloseTo(0)
-    expect(p.y).toBeGreaterThan(50)
-    // The order of the ingredients doesn't flip it above.
-    expect(spawnPoint({ x: 100, y: 0 }, { x: -100, y: 0 }).y).toBeGreaterThan(50)
+describe('spawnNear', () => {
+  it('lands on the far side of its card from the middle of the board', () => {
+    const p = spawnNear({ x: 200, y: 0 }, { x: 0, y: 0 })
+    expect(p.x).toBeGreaterThan(200)
+    expect(p.y).toBeCloseTo(0)
   })
 
-  it('still lands somewhere when the ingredients share a spot', () => {
-    expect(spawnPoint({ x: 5, y: 5 }, { x: 5, y: 5 })).toEqual({ x: 5, y: 101 })
+  it('turns away from a spot another arrival took, and copes with a card in the middle', () => {
+    const a = spawnNear({ x: 200, y: 0 }, { x: 0, y: 0 }, 0)
+    const b = spawnNear({ x: 200, y: 0 }, { x: 0, y: 0 }, 1)
+    expect(Math.hypot(a.x - b.x, a.y - b.y)).toBeGreaterThan(50)
+    const middle = spawnNear({ x: 0, y: 0 }, { x: 0, y: 0 })
+    expect(Math.hypot(middle.x, middle.y)).toBeCloseTo(170)
   })
 })
 
@@ -173,7 +171,7 @@ describe('bodyAt', () => {
     expect(bodyAt(bodies, ['a', 'b'], { x: 0, y: 0 }, 'a')).toBeNull()
   })
 
-  it('only looks at the candidates it is given — a tag is never a drop target', () => {
+  it('only looks at the candidates it is given', () => {
     expect(bodyAt(bodies, ['b'], { x: 0, y: 0 })).toBeNull()
   })
 })
@@ -213,11 +211,18 @@ describe('the camera', () => {
   })
 })
 
-describe('edgeToBox', () => {
-  it('stops an edge at the edge of the card it points to', () => {
+describe('edgeToBox and lineLabelPoint', () => {
+  it('stops a line at the edge of the card it points to', () => {
     const box = { x: 0, y: 0, w: 100, h: 40 }
     expect(edgeToBox({ x: -300, y: 0 }, box, 0)).toEqual({ x: -50, y: 0 })
     expect(edgeToBox({ x: 0, y: 200 }, box, 0)).toEqual({ x: 0, y: 20 })
     expect(edgeToBox({ x: 10, y: 5 }, box)).toEqual({ x: 0, y: 0 })
+  })
+
+  it('labels a line in the middle of the stretch between two cards', () => {
+    const wide = { x: 0, y: 0, w: 200, h: 40 }
+    const narrow = { x: 300, y: 0, w: 60, h: 40 }
+    // The gap runs from x = 100 to x = 270, so its middle is 185, not the centres' 150.
+    expect(lineLabelPoint(wide, narrow)).toEqual({ x: 185, y: 0 })
   })
 })

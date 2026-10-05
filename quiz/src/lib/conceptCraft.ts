@@ -2,576 +2,350 @@
  * **Concept Craft** — the rules of the game, as data and pure functions
  * (docs/concept-craft.md).
  *
- * A module is a recipe book over one part of a syllabus: a few **primitive**
- * concepts the reader starts with, and **recipes** — two concepts that,
- * combined, make a third, joined by a named **relation** ("multiplied by",
- * "credibility-weighted with"). Crafting is non-destructive: the two
- * ingredients stay on the board, an edge joins them carrying the relation, and
- * the result hangs off that edge. Every node is a vault concept page, so the
- * inspector, the action menu and the reader are the ones the rest of the app
- * uses.
+ * A **topic** is one learning objective of an exam page — one of its
+ * `[!example]` callouts — and the concept pages it names. Any two of them may be
+ * connected, and how strongly is the concept graph's business
+ * (`lib/conceptGraph.ts`): read off the pages, the questions and the syllabus,
+ * never authored. The game is finding those connections: put concepts on the
+ * board, drop one on another, and where the vault ties them together a line is
+ * drawn between them carrying its strength.
  *
- * A reader's progress in a module is the list of recipes they have found —
- * nothing else. Which concepts they hold follows from it (`availableNodes`):
- * the primitives, any ingredient a milestone has introduced, and the result of
- * every recipe found. Keeping the record that small is what makes it safe to
- * store as ids and re-derive against a recipe book that has since grown.
+ * A reader's progress in a topic is two lists — the concepts put on the board,
+ * and the connections found — as names and pair keys, re-read against the graph
+ * every time. A vault edit that removes a connection takes it off the board
+ * rather than breaking it.
  *
- * Nothing here touches the DOM, storage or the clock: the date and the random
- * source are passed in, so the daily challenge and the quiz's option order are
- * reproducible in a test.
+ * Nothing here touches the DOM, storage or the clock: the date is passed in,
+ * so the daily challenge is reproducible in a test.
  */
 
-import { leadParagraph, pageBody } from './seo'
-import { cleanWikiLinks } from './wikiParser'
+import {
+  buildConceptGraph,
+  linkTargetName,
+  flattenLine,
+  pairKey,
+  type ConceptGraph,
+  type Connection,
+  type GraphQuestion,
+  type SyllabusLine,
+} from './conceptGraph'
+import { examHue } from './examColors'
+import { examPageIdFromFile } from './examMenu'
+import { examStatus } from './examStatus'
+import { hashString } from './quests'
+import { wikiExamIdToProgressKey } from './wikiParser'
 
-/** How two concepts combine — the tag on the edge between them. */
-export type CraftRelationId =
-  | 'times'
-  | 'over'
-  | 'plus'
-  | 'minus'
-  | 'weighted'
-  | 'compared'
-  | 'estimatedFrom'
-  | 'restricted'
-  | 'constrained'
-  | 'partitioning'
-  | 'unaffected'
-  | 'compounded'
-  | 'summed'
-  | 'limit'
-  | 'distributed'
-  | 'marked'
-  | 'drawnFrom'
-  | 'varying'
-  | 'differentiated'
-  | 'scaled'
-  | 'combined'
-  | 'equivalent'
-  | 'organized'
-  | 'adjusted'
+export { pairKey }
 
-export interface CraftRelation {
-  id: CraftRelationId
-  /** The edge's tag, read as "A ‹label› B". */
-  label: string
-  /** One line saying what the tag means, for the Mastery prompt. */
-  gloss: string
+// ─── Topics ──────────────────────────────────────────────────────────────────
+
+export interface CraftTopic {
+  /** URL-safe id: `/craft/<id>`. */
+  id: string
+  /** The exam_progress key — the accent colour and the logo (`P`, `MAS-I`, `CAS-5`). */
+  exam: string
+  /** The study guide page the topic is cut from, e.g. `Exam 5 (CAS)`. */
+  examPage: string
+  /** The learning objective as the page names it, e.g. `A. Ratemaking`. */
+  objective: string
+  /** The objective without its letter: `Ratemaking`. */
+  title: string
+  /** The objective's weight on the exam, as the page writes it (`45–55%`). */
+  weight?: string
+  /** The concept pages the objective names, in the order it names them. */
+  concepts: string[]
+  /** The objective's lines that name a concept, links flattened. */
+  lines: SyllabusLine[]
+}
+
+/** A topic needs this many concept pages to be worth a board. */
+export const MIN_TOPIC_CONCEPTS = 6
+
+export interface ObjectiveBlock {
+  name: string
+  weight?: string
+  lines: SyllabusLine[]
+}
+
+// The callout header `parseExamSyllabus` reads: `> [!example]- A. Ratemaking {45–55%}`.
+const CALLOUT = /^>\s*\[!(\w+)\]-?\s*([^{}\n]*?)(?:\s*\{([^}]+)\})?\s*$/
+
+/**
+ * An exam page's learning objectives, line by line: every `[!example]`
+ * callout, and each of its lines that links a concept — with the concepts it
+ * links, by page name, and the line as it reads. Read the way
+ * `parseExamSyllabus` reads the page, so a topic holds the concepts the study
+ * guide lists under that objective.
+ */
+export function objectiveBlocks(markdown: string): ObjectiveBlock[] {
+  const out: ObjectiveBlock[] = []
+  let current: ObjectiveBlock | null = null
+  for (const raw of markdown.split('\n')) {
+    const header = CALLOUT.exec(raw)
+    if (header) {
+      current = header[1].toLowerCase() === 'example' ? { name: header[2].trim(), weight: header[3]?.trim(), lines: [] } : null
+      if (current) out.push(current)
+      continue
+    }
+    if (!current || !raw.startsWith('>')) continue
+    const flat = flattenLine(raw.replace(/^>\s?/, ''))
+    const concepts = [...new Set(flat.links.map(l => linkTargetName(l.target)).filter(Boolean))]
+    if (concepts.length > 0) current.lines.push({ text: flat.text.trim(), concepts })
+  }
+  return out
+}
+
+function slug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/** "A. Ratemaking" → "Ratemaking"; an objective with no letter is left as it is. */
+export function objectiveTitle(objective: string): string {
+  return objective.replace(/^[A-Z]\.\s+/, '').trim()
 }
 
 /**
- * The relation vocabulary. Closed on purpose: the Mastery prompt asks the
- * reader to *name* the relation, and a choice between four free-text phrases
- * would be a reading test rather than a recall one. A recipe that needs a
- * relation not here is a reason to add one, with its gloss.
+ * Every topic the vault can make a board of: each learning objective of each
+ * exam that can be studied (not one still in development — `examStatus`) with
+ * at least `MIN_TOPIC_CONCEPTS` concept pages, in ladder order.
+ *
+ * `pageName` says whether a concept has a page, and what it is called — a link
+ * on an exam page may differ in case from the page it points at.
  */
-export const CRAFT_RELATIONS: Record<CraftRelationId, CraftRelation> = {
-  times: { id: 'times', label: 'Multiplied by', gloss: 'The result is the product of the two.' },
-  over: { id: 'over', label: 'Divided by', gloss: 'The result is a ratio — the first over the second.' },
-  plus: { id: 'plus', label: 'Added to', gloss: 'The result is the sum of the two.' },
-  minus: { id: 'minus', label: 'Less', gloss: 'The result is the first with the second taken away.' },
-  weighted: { id: 'weighted', label: 'Credibility-weighted with', gloss: 'A blend: weight Z on the first, 1 − Z on the second.' },
-  compared: { id: 'compared', label: 'Compared with', gloss: 'The first is measured against the second as a benchmark.' },
-  estimatedFrom: { id: 'estimatedFrom', label: 'A priori estimated from', gloss: 'The first, with its prior expectation derived from the second.' },
-  restricted: { id: 'restricted', label: 'Restricted to', gloss: 'The first, re-measured inside a smaller part of the second.' },
-  constrained: { id: 'constrained', label: 'Constrained by', gloss: 'The first, required to satisfy the rules of the second.' },
-  partitioning: { id: 'partitioning', label: 'Partitioning', gloss: 'The first splits the second into disjoint pieces that cover it.' },
-  unaffected: { id: 'unaffected', label: 'Unaffected by', gloss: 'Learning the second leaves the first unchanged.' },
-  compounded: { id: 'compounded', label: 'Compounded over', gloss: 'The first is applied once per period, across the second.' },
-  summed: { id: 'summed', label: 'Summed over', gloss: 'The first is added up across every period of the second.' },
-  limit: { id: 'limit', label: 'Taken to the limit of', gloss: 'The first as the second grows without bound.' },
-  distributed: { id: 'distributed', label: 'Distributed as', gloss: 'The first’s counts or waiting times follow the second.' },
-  marked: { id: 'marked', label: 'Marked with', gloss: 'Each event of the first carries a random amount from the second.' },
-  drawnFrom: { id: 'drawnFrom', label: 'Rate drawn from', gloss: 'The first’s rate is itself random, drawn from the second.' },
-  varying: { id: 'varying', label: 'Rate varying by', gloss: 'The first, with a rate that changes over time as the second says.' },
-  differentiated: { id: 'differentiated', label: 'Differentiated by', gloss: 'The first’s rate of change with respect to the second.' },
-  scaled: { id: 'scaled', label: 'Scaled by', gloss: 'The first rescaled by a factor built from the second.' },
-  combined: { id: 'combined', label: 'Combined with', gloss: 'Both conditions hold at once.' },
-  equivalent: { id: 'equivalent', label: 'Equivalent to', gloss: 'Two routes to the same answer.' },
-  organized: { id: 'organized', label: 'Organized by', gloss: 'The first, arranged along the second.' },
-  adjusted: { id: 'adjusted', label: 'Adjusted for', gloss: 'The first, restated to remove the effect of the second.' },
-}
+export function craftTopics(examPages: Readonly<Record<string, string>>, pageName: (name: string) => string | undefined): CraftTopic[] {
+  const exams = Object.keys(examPages)
+    .filter(file => /^Exam\b/i.test(file))
+    .map(file => {
+      const examId = examPageIdFromFile(file)
+      return { file, examId, exam: wikiExamIdToProgressKey(examId) }
+    })
+    .filter(e => examStatus(e.exam, e.examId) !== 'development' && examHue(e.exam) !== undefined)
+    .sort((x, y) => (examHue(x.exam) ?? 0) - (examHue(y.exam) ?? 0) || x.file.localeCompare(y.file))
 
-/** The Mastery prompt's always-present answer: the two don't combine. */
-export const NO_LINK = 'none' as const
-export const NO_LINK_LABEL = 'No direct link'
-
-export interface CraftRecipe {
-  /** The ingredients, in the order the relation reads: "a ‹relation› b". */
-  a: string
-  b: string
-  relation: CraftRelationId
-  result: string
-  /** Why the two make the result — one or two sentences, LaTeX allowed. */
-  why: string
-}
-
-export interface CraftModule {
-  /** URL-safe id: `/craft/<id>`. */
-  id: string
-  /** The exam_progress key — the accent colour and the logo (`P`, `FM`, `MAS-I`, `CAS-5`). */
-  exam: string
-  /** The study guide page the module is cut from, e.g. `Exam 5 (CAS)`. */
-  examPage: string
-  /**
-   * The learning objectives on that page it covers, named exactly as the page's
-   * `[!example]` callouts name them (the data test holds them to the page).
-   */
-  objectives: string[]
-  title: string
-  /** One line for the topic picker. */
-  blurb: string
-  /** What the reader starts with: three to five anchor concepts. */
-  primitives: string[]
-  /**
-   * Ingredients that join the deck at a milestone rather than at the start —
-   * scaffolding, so a module can grow past a handful of anchors without
-   * opening on all of them.
-   */
-  introduces?: { after: string; nodes: string[] }[]
-  recipes: CraftRecipe[]
-}
-
-/** A reader's place in one module: the recipes found, in the order found. */
-export interface CraftProgress {
-  recipes: string[]
-}
-
-export const EMPTY_PROGRESS: CraftProgress = { recipes: [] }
-
-function norm(name: string): string {
-  return name.trim().toLowerCase()
-}
-
-/** The order-free key for a pair of concepts — `a + b` and `b + a` are one pair. */
-export function pairKey(a: string, b: string): string {
-  const [x, y] = [norm(a), norm(b)].sort()
-  return `${x}|${y}`
-}
-
-/** A recipe's id: its pair. Within a module a pair makes one thing at most. */
-export function recipeId(recipe: Pick<CraftRecipe, 'a' | 'b'>): string {
-  return pairKey(recipe.a, recipe.b)
-}
-
-export function findRecipe(module: CraftModule, a: string, b: string): CraftRecipe | null {
-  const key = pairKey(a, b)
-  return module.recipes.find(r => recipeId(r) === key) ?? null
-}
-
-/** Every concept the module names, in a stable order: primitives, introduced, then results as authored. */
-export function moduleNodes(module: CraftModule): string[] {
-  const seen = new Set<string>()
-  const out: string[] = []
-  const add = (n: string) => {
-    if (seen.has(norm(n))) return
-    seen.add(norm(n))
-    out.push(n)
-  }
-  module.primitives.forEach(add)
-  module.introduces?.forEach(step => step.nodes.forEach(add))
-  module.recipes.forEach(r => {
-    add(r.a)
-    add(r.b)
-    add(r.result)
-  })
-  return out
-}
-
-/** What a reader in this module holds — the deck. In the order they came to hold it. */
-export function availableNodes(module: CraftModule, progress: CraftProgress): string[] {
-  const have: string[] = []
-  const holding = new Set<string>()
-  const take = (n: string) => {
-    if (holding.has(norm(n))) return false
-    holding.add(norm(n))
-    have.push(n)
-    return true
-  }
-  module.primitives.forEach(take)
-  // The milestones are re-checked after every result, so an ingredient the
-  // module introduces lands in the deck right after the node that earned it.
-  const introduce = () => {
-    let grew = true
-    while (grew) {
-      grew = false
-      for (const step of module.introduces ?? []) {
-        if (holding.has(norm(step.after))) step.nodes.forEach(n => { if (take(n)) grew = true })
+  const topics: CraftTopic[] = []
+  for (const { file, examId, exam } of exams) {
+    for (const block of objectiveBlocks(examPages[file])) {
+      const concepts: string[] = []
+      const lines: SyllabusLine[] = []
+      for (const line of block.lines) {
+        const named = line.concepts.map(pageName).filter((n): n is string => !!n)
+        for (const n of named) if (!concepts.some(c => c.toLowerCase() === n.toLowerCase())) concepts.push(n)
+        if (named.length > 0) lines.push({ text: line.text, concepts: named })
       }
+      if (concepts.length < MIN_TOPIC_CONCEPTS) continue
+      const title = objectiveTitle(block.name)
+      topics.push({
+        id: `exam-${slug(examId.replace(/-\d+$/, ''))}-${slug(title)}`,
+        exam,
+        examPage: file.replace(/\.md$/i, ''),
+        objective: block.name,
+        title,
+        weight: block.weight,
+        concepts,
+        lines,
+      })
     }
   }
-  introduce()
-  for (const id of progress.recipes) {
-    const recipe = module.recipes.find(r => recipeId(r) === id)
-    if (!recipe) continue
-    if (take(recipe.result)) introduce()
-  }
-  return have
+  return topics
 }
 
-/** The recipes found so far that the recipe book still contains — stale ids drop out. */
-export function foundRecipes(module: CraftModule, progress: CraftProgress): CraftRecipe[] {
-  const byId = new Map(module.recipes.map(r => [recipeId(r), r]))
-  const out: CraftRecipe[] = []
-  for (const id of progress.recipes) {
-    const r = byId.get(id)
-    if (r) out.push(r)
-  }
-  return out
+/** A topic's graph: how every pair of its concepts is connected. */
+export function topicGraph(
+  topic: Pick<CraftTopic, 'concepts' | 'lines'>,
+  page: (name: string) => string | undefined,
+  questions: readonly GraphQuestion[],
+): ConceptGraph {
+  return buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines })
+}
+
+// ─── A reader's board ────────────────────────────────────────────────────────
+
+/** A reader's place in one topic. */
+export interface CraftProgress {
+  /** The concepts on the board, lower-cased, in the order they were put there. */
+  placed: string[]
+  /** The connections found (`pairKey`), in the order found. */
+  found: string[]
+}
+
+export const EMPTY_PROGRESS: CraftProgress = { placed: [], found: [] }
+
+const norm = (name: string) => name.trim().toLowerCase()
+
+function canonicalNames(graph: ConceptGraph): Map<string, string> {
+  return new Map(graph.concepts.map(c => [norm(c), c]))
+}
+
+/** The concepts on the board, as the graph names them — any the topic no longer has drop out. */
+export function placedConcepts(graph: ConceptGraph, progress: CraftProgress): string[] {
+  const names = canonicalNames(graph)
+  return [...new Set(progress.placed.map(norm))].map(n => names.get(n)).filter((n): n is string => !!n)
+}
+
+/** The connections found that the graph still has, in the order found. */
+export function foundConnections(graph: ConceptGraph, progress: CraftProgress): Connection[] {
+  return [...new Set(progress.found)].map(k => graph.byKey.get(k)).filter((c): c is Connection => !!c)
+}
+
+export function isPlaced(progress: CraftProgress, name: string): boolean {
+  return progress.placed.includes(norm(name))
+}
+
+/** Progress with these concepts on the board too. Idempotent. */
+export function withPlaced(progress: CraftProgress, ...names: string[]): CraftProgress {
+  const add = [...new Set(names.map(norm))].filter(n => n && !progress.placed.includes(n))
+  return add.length ? { ...progress, placed: [...progress.placed, ...add] } : progress
+}
+
+/** Progress with one more connection found — and both its ends on the board. Idempotent. */
+export function withConnection(progress: CraftProgress, connection: Pick<Connection, 'a' | 'b'>): CraftProgress {
+  const placed = withPlaced(progress, connection.a, connection.b)
+  const key = pairKey(connection.a, connection.b)
+  return placed.found.includes(key) ? placed : { ...placed, found: [...placed.found, key] }
 }
 
 /** What happens when `a` is dropped on `b`. */
 export type CombineOutcome =
-  /** The two don't combine in this module. */
+  /** Nothing in the vault ties the two together. */
   | { kind: 'none' }
-  /** This pair was found before: nothing new, the edge lights up. */
-  | { kind: 'known'; recipe: CraftRecipe }
-  /**
-   * A new link. `newNode` is false when the result was already held (found by
-   * another route); `introduces` lists ingredients a milestone adds to the deck.
-   */
-  | { kind: 'new'; recipe: CraftRecipe; newNode: boolean; introduces: string[] }
+  /** Found before: the line between them lights up. */
+  | { kind: 'known'; connection: Connection }
+  | { kind: 'new'; connection: Connection }
 
-export function combine(module: CraftModule, progress: CraftProgress, a: string, b: string): CombineOutcome {
+export function combine(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): CombineOutcome {
   if (norm(a) === norm(b)) return { kind: 'none' }
-  const recipe = findRecipe(module, a, b)
-  if (!recipe) return { kind: 'none' }
-  const id = recipeId(recipe)
-  if (progress.recipes.includes(id)) return { kind: 'known', recipe }
-  const before = availableNodes(module, progress)
-  const after = availableNodes(module, withRecipe(progress, recipe))
-  const held = new Set(before.map(norm))
-  const gained = after.filter(n => !held.has(norm(n)))
-  return {
-    kind: 'new',
-    recipe,
-    newNode: gained.some(n => norm(n) === norm(recipe.result)),
-    introduces: gained.filter(n => norm(n) !== norm(recipe.result)),
-  }
+  const connection = graph.byKey.get(pairKey(a, b))
+  if (!connection) return { kind: 'none' }
+  return progress.found.includes(connection.key) ? { kind: 'known', connection } : { kind: 'new', connection }
 }
 
-/** Progress with one more recipe found. Idempotent. */
-export function withRecipe(progress: CraftProgress, recipe: Pick<CraftRecipe, 'a' | 'b'>): CraftProgress {
-  const id = recipeId(recipe)
-  if (progress.recipes.includes(id)) return progress
-  return { recipes: [...progress.recipes, id] }
-}
-
-export interface ModuleTally {
-  nodes: number
-  totalNodes: number
-  links: number
-  totalLinks: number
-  /** Every recipe found — the module's whole graph is on the board. */
+export interface TopicTally {
+  placed: number
+  concepts: number
+  found: number
+  connections: number
+  /** Every connection found. */
   complete: boolean
 }
 
-export function moduleTally(module: CraftModule, progress: CraftProgress): ModuleTally {
-  const links = foundRecipes(module, progress).length
+export function topicTally(graph: ConceptGraph, progress: CraftProgress): TopicTally {
+  const found = foundConnections(graph, progress).length
   return {
-    nodes: availableNodes(module, progress).length,
-    totalNodes: moduleNodes(module).length,
-    links,
-    totalLinks: module.recipes.length,
-    complete: links === module.recipes.length,
+    placed: placedConcepts(graph, progress).length,
+    concepts: graph.concepts.length,
+    found,
+    connections: graph.connections.length,
+    complete: graph.connections.length > 0 && found === graph.connections.length,
   }
 }
 
-// ─── The Mastery prompt ──────────────────────────────────────────────────────
-
-export interface RelationChoice {
-  id: CraftRelationId | typeof NO_LINK
-  label: string
+/** One concept's connections: those found, and how many it has in all. */
+export function conceptConnections(graph: ConceptGraph, progress: CraftProgress, name: string): { found: Connection[]; total: number } {
+  const all = graph.neighbours.get(norm(name)) ?? []
+  const found = new Set(progress.found)
+  return { found: all.filter(c => found.has(c.key)), total: all.length }
 }
 
-export interface RelationQuestion {
-  choices: RelationChoice[]
-  /** The id of the right choice — the recipe's relation, or `none`. */
-  answer: CraftRelationId | typeof NO_LINK
-}
+// ─── The daily challenge: what connects two concepts ─────────────────────────
 
-function shuffle<T>(items: readonly T[], rng: () => number): T[] {
-  const out = [...items]
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1))
-    ;[out[i], out[j]] = [out[j], out[i]]
+const neighbourOf = (c: Connection, name: string) => (norm(c.a) === name ? norm(c.b) : norm(c.a))
+
+/**
+ * The concepts the graph connects to both `a` and `b` — what lies between two
+ * concepts it doesn't connect directly — strongest pairing first.
+ */
+export function commonNeighbours(graph: ConceptGraph, a: string, b: string): { concept: string; via: [Connection, Connection] }[] {
+  const x = norm(a)
+  const y = norm(b)
+  const fromB = new Map((graph.neighbours.get(y) ?? []).map(c => [neighbourOf(c, y), c]))
+  const out: { concept: string; via: [Connection, Connection] }[] = []
+  for (const c of graph.neighbours.get(x) ?? []) {
+    const n = neighbourOf(c, x)
+    const d = fromB.get(n)
+    if (!d || n === y) continue
+    out.push({ concept: norm(c.a) === n ? c.a : c.b, via: [c, d] })
   }
-  return out
+  return out.sort((p, q) => Math.min(q.via[0].strength, q.via[1].strength) - Math.min(p.via[0].strength, p.via[1].strength))
+}
+
+/** Whether the connections found already join `a` and `b` through a concept connected to both. */
+export function isBridged(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): boolean {
+  const found = new Set(progress.found)
+  return commonNeighbours(graph, a, b).some(({ via }) => found.has(via[0].key) && found.has(via[1].key))
 }
 
 /**
- * The Mastery prompt for dropping `a` on `b`: "how does A relate to B?"
- *
- * Asked of **every** drop in Mastery mode, related or not, and always offering
- * *No direct link* as the last choice — if only real pairs opened a prompt,
- * the prompt itself would give away which pairs are real and spam-dragging
- * would still map the graph. A real pair offers its relation and two others;
- * an unrelated pair offers three relations, all wrong. The distractors come
- * from the module's own vocabulary first, so they are relations the reader has
- * met here rather than ones that are obviously out of place.
+ * The connections still to find to join `a` and `b` through a concept
+ * connected to both, in order from `a`: by way of the concept that needs the
+ * fewest new finds, and among those the most strongly connected — so the hint
+ * points at a bridge the pages make plainly. Empty once the two are bridged;
+ * null when no concept connects to both.
  */
-export function relationQuestion(
-  module: CraftModule,
-  a: string,
-  b: string,
-  rng: () => number = Math.random,
-): RelationQuestion {
-  const recipe = findRecipe(module, a, b)
-  const answer: RelationQuestion['answer'] = recipe ? recipe.relation : NO_LINK
-  const local = [...new Set(module.recipes.map(r => r.relation))]
-  const rest = (Object.keys(CRAFT_RELATIONS) as CraftRelationId[]).filter(id => !local.includes(id))
-  const pool = [...shuffle(local, rng), ...shuffle(rest, rng)].filter(id => id !== answer)
-  const want = recipe ? 2 : 3
-  const relations = shuffle([...(recipe ? [recipe.relation] : []), ...pool.slice(0, want)], rng)
-  return {
-    choices: [
-      ...relations.map(id => ({ id, label: CRAFT_RELATIONS[id].label })),
-      { id: NO_LINK, label: NO_LINK_LABEL },
-    ],
-    answer,
+export function bridgePlan(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): { concept: string; missing: Connection[] } | null {
+  const found = new Set(progress.found)
+  let best: { concept: string; missing: Connection[] } | null = null
+  for (const { concept, via } of commonNeighbours(graph, a, b)) {
+    const missing = via.filter(c => !found.has(c.key))
+    if (!best || missing.length < best.missing.length) best = { concept, missing }
+    if (missing.length === 0) break
   }
+  return best
 }
 
-// ─── Challenges and hints ────────────────────────────────────────────────────
-
-/**
- * The cheapest way from what is held to `target`: the recipes to make, in an
- * order that can be followed (ingredients before what they make). Empty when
- * the target is already held; null when it can't be reached at all.
- *
- * A plan is the union of its ingredients' plans, so an intermediate two routes
- * share is counted once. Picking the cheapest recipe at each node is a greedy
- * choice rather than an exact minimum, which on a recipe book this size is the
- * same answer.
- */
-export function craftPlan(module: CraftModule, progress: CraftProgress, target: string): CraftRecipe[] | null {
-  const held = new Set(availableNodes(module, progress).map(norm))
-  const introducedBy = new Map<string, string>()
-  for (const step of module.introduces ?? []) step.nodes.forEach(n => introducedBy.set(norm(n), step.after))
-
-  const plan = (node: string, path: Set<string>): CraftRecipe[] | null => {
-    const key = norm(node)
-    if (held.has(key)) return []
-    if (path.has(key)) return null
-    const next = new Set(path).add(key)
-    const trigger = introducedBy.get(key)
-    if (trigger) return plan(trigger, next)
-    let best: CraftRecipe[] | null = null
-    for (const recipe of module.recipes) {
-      if (norm(recipe.result) !== key) continue
-      const left = plan(recipe.a, next)
-      const right = left && plan(recipe.b, next)
-      if (!left || !right) continue
-      const merged: CraftRecipe[] = []
-      for (const r of [...left, ...right, recipe]) {
-        if (!merged.some(m => recipeId(m) === recipeId(r))) merged.push(r)
-      }
-      if (!best || merged.length < best.length) best = merged
-    }
-    return best
-  }
-  return plan(target, new Set())
-}
-
-/** How many crafts stand between the reader and `target` — the challenge's breadcrumb. */
-export function stepsToTarget(module: CraftModule, progress: CraftProgress, target: string): number | null {
-  return craftPlan(module, progress, target)?.length ?? null
-}
-
-/** The next craft on the way to `target` that can be made right now, for the hint. */
-export function nextCraft(module: CraftModule, progress: CraftProgress, target: string): CraftRecipe | null {
-  const plan = craftPlan(module, progress, target)
-  if (!plan) return null
-  const held = new Set(availableNodes(module, progress).map(norm))
-  return plan.find(r => held.has(norm(r.a)) && held.has(norm(r.b))) ?? null
-}
-
-// FNV-1a: a stable, dependency-free hash for the daily order.
-function hash(text: string): number {
-  let h = 0x811c9dc5
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i)
-    h = Math.imul(h, 0x01000193)
-  }
-  return h >>> 0
+export interface ChallengePair {
+  a: string
+  b: string
 }
 
 /**
- * The craftable concepts in the order the day's challenges are drawn from —
- * shuffled by the date and the module, so it is the same list all day, on
- * every device, and a different one tomorrow. The order is fixed for the day;
- * only the reader's progress moves through it.
+ * The pairs the day's challenges are drawn from: two concepts the vault does
+ * not connect directly but does through a third — "what connects these
+ * two?" Shuffled by the date and the topic, so it is the same list all day on
+ * every device and a different one tomorrow.
  */
-export function challengeOrder(module: CraftModule, date: string): string[] {
-  const results = [...new Set(module.recipes.map(r => r.result))]
-  return results.sort((x, y) => hash(`${date}|${module.id}|${x}`) - hash(`${date}|${module.id}|${y}`))
-}
-
-/**
- * Today's challenge: the first concept in the day's order the reader doesn't
- * hold yet (`skip` passes over that many more — "another challenge"). Null
- * once every concept is held. Because the order is fixed and progress only
- * grows, crafting anything *other* than the target never moves it.
- */
-export function dailyChallenge(module: CraftModule, progress: CraftProgress, date: string, skip = 0): string | null {
-  const held = new Set(availableNodes(module, progress).map(norm))
-  const open = challengeOrder(module, date).filter(n => !held.has(norm(n)))
-  if (open.length === 0) return null
-  return open[Math.min(skip, open.length - 1)] ?? null
-}
-
-// ─── The board's rows ────────────────────────────────────────────────────────
-
-/**
- * How deep each concept the reader holds sits in what they have built: 0 for
- * a primitive, one more than the deeper of its two ingredients for a crafted
- * concept (by the shallowest route found), and an ingredient a milestone
- * introduced sits on the row of the concept that introduced it. Keyed by
- * lower-cased name. The board lays its rows out by this, so a graph reads top
- * to bottom from what the reader started with to what they made of it.
- */
-export function nodeDepths(module: CraftModule, progress: CraftProgress): Map<string, number> {
-  const depth = new Map<string, number>()
-  module.primitives.forEach(p => depth.set(norm(p), 0))
-  const recipes = foundRecipes(module, progress)
-  const held = new Set(availableNodes(module, progress).map(norm))
-  // Relax until nothing moves — a few passes on a book this size.
-  for (let pass = 0; pass < 64; pass++) {
-    let changed = false
-    for (const step of module.introduces ?? []) {
-      const d = depth.get(norm(step.after))
-      if (d === undefined) continue
-      for (const n of step.nodes) {
-        if (!held.has(norm(n))) continue
-        if ((depth.get(norm(n)) ?? Infinity) > d) {
-          depth.set(norm(n), d)
-          changed = true
-        }
-      }
-    }
-    for (const r of recipes) {
-      const a = depth.get(norm(r.a))
-      const b = depth.get(norm(r.b))
-      if (a === undefined || b === undefined) continue
-      const d = Math.max(a, b) + 1
-      if ((depth.get(norm(r.result)) ?? Infinity) > d) {
-        depth.set(norm(r.result), d)
-        changed = true
-      }
-    }
-    if (!changed) break
-  }
-  return depth
-}
-
-// ─── The inspector ───────────────────────────────────────────────────────────
-
-export interface NodeConnections {
-  /** Found recipes that made this concept. */
-  madeFrom: CraftRecipe[]
-  /** Found recipes this concept is an ingredient of. */
-  usedIn: CraftRecipe[]
-  /** Recipes touching this concept that are still to find — a count, never a spoiler. */
-  undiscovered: number
-}
-
-export function nodeConnections(module: CraftModule, progress: CraftProgress, node: string): NodeConnections {
-  const key = norm(node)
-  const found = new Set(progress.recipes)
-  const touching = module.recipes.filter(r => norm(r.a) === key || norm(r.b) === key || norm(r.result) === key)
-  const known = touching.filter(r => found.has(recipeId(r)))
-  return {
-    madeFrom: known.filter(r => norm(r.result) === key),
-    usedIn: known.filter(r => norm(r.result) !== key),
-    undiscovered: touching.length - known.length,
-  }
-}
-
-/**
- * The inspector's summary of a concept page: its opening definition (the same
- * paragraph the page's search description is cut from — `leadParagraph`) with
- * wiki links flattened to their text, and the formula box that follows it —
- * the first run of `> $$…$$` lines in the page's opening (before its first
- * heading or callout), up to `max` of them. A page whose formulas only appear
- * in a later section or a worked example has none here, rather than one picked
- * out of the middle of the page.
- */
-export function conceptSummary(markdown: string, max = 2): { lead: string; formulas: string[] } {
-  const lead = cleanWikiLinks(leadParagraph(markdown)).trim()
-  const formulas: string[] = []
-  let started = false
-  for (const raw of pageBody(markdown).split('\n')) {
-    const line = raw.trim()
-    if (/^#{1,6}\s/.test(line) || /^>\s*\[!/.test(line)) break
-    const box = /^>\s*\$\$(.+)\$\$\s*$/.exec(line)
-    if (box) {
-      started = true
-      formulas.push(box[1].trim())
-      if (formulas.length >= max) break
-      continue
-    }
-    if (started && line !== '' && line !== '>') break
-  }
-  return { lead, formulas }
-}
-
-export function isPrimitive(module: CraftModule, node: string): boolean {
-  return module.primitives.some(p => norm(p) === norm(node))
-}
-
-// ─── The recipe book's own rules ─────────────────────────────────────────────
-
-/**
- * What is wrong with a module, as readable lines — empty when nothing is. The
- * data test runs this over every module, so a recipe book that can't be
- * finished, or that would put two different results on one pair, fails CI
- * rather than a reader.
- */
-export function moduleProblems(module: CraftModule): string[] {
-  const problems: string[] = []
-  const id = module.id
-  if (!/^[a-z0-9-]+$/.test(id)) problems.push(`${id}: the id must be url-safe`)
-  if (module.primitives.length < 3 || module.primitives.length > 5) {
-    problems.push(`${id}: a module starts with three to five primitives, not ${module.primitives.length}`)
-  }
-  const pairs = new Map<string, string>()
-  for (const r of module.recipes) {
-    if (norm(r.a) === norm(r.b)) problems.push(`${id}: ${r.a} is combined with itself`)
-    if (norm(r.result) === norm(r.a) || norm(r.result) === norm(r.b)) {
-      problems.push(`${id}: ${r.a} + ${r.b} makes one of its own ingredients`)
-    }
-    if (!CRAFT_RELATIONS[r.relation]) problems.push(`${id}: ${r.a} + ${r.b} has an unknown relation`)
-    if (!r.why.trim()) problems.push(`${id}: ${r.a} + ${r.b} says nothing about why`)
-    const key = recipeId(r)
-    if (pairs.has(key)) problems.push(`${id}: ${r.a} + ${r.b} is listed twice`)
-    pairs.set(key, r.result)
-  }
-  const results = new Set(module.recipes.map(r => norm(r.result)))
-  for (const p of module.primitives) {
-    if (results.has(norm(p))) problems.push(`${id}: the primitive ${p} is also a recipe's result`)
-  }
-  // Craft everything that can be crafted, in rounds, from the primitives up:
-  // whatever is left over can never reach the board.
-  let progress = EMPTY_PROGRESS
-  let grew = true
-  while (grew) {
-    grew = false
-    const held = new Set(availableNodes(module, progress).map(norm))
-    for (const r of module.recipes) {
-      if (progress.recipes.includes(recipeId(r))) continue
-      if (held.has(norm(r.a)) && held.has(norm(r.b))) {
-        progress = withRecipe(progress, r)
-        grew = true
-      }
+export function challengeOrder(graph: ConceptGraph, topicId: string, date: string): ChallengePair[] {
+  const pairs: ChallengePair[] = []
+  const names = graph.concepts
+  const adjacent = (x: string, y: string) => graph.byKey.has(pairKey(x, y))
+  for (let i = 0; i < names.length; i++) {
+    const near = new Set((graph.neighbours.get(norm(names[i])) ?? []).map(c => neighbourOf(c, norm(names[i]))))
+    if (near.size === 0) continue
+    for (let j = i + 1; j < names.length; j++) {
+      if (adjacent(names[i], names[j])) continue
+      const theirs = graph.neighbours.get(norm(names[j])) ?? []
+      if (theirs.some(c => near.has(neighbourOf(c, norm(names[j]))))) pairs.push({ a: names[i], b: names[j] })
     }
   }
-  const held = new Set(availableNodes(module, progress).map(norm))
-  for (const n of moduleNodes(module)) {
-    if (!held.has(norm(n))) problems.push(`${id}: ${n} can never be reached`)
+  const rank = (p: ChallengePair) => hashString(`${date}|${topicId}|${pairKey(p.a, p.b)}`)
+  return pairs
+    .map(p => ({ p, r: rank(p) }))
+    .sort((x, y) => x.r - y.r)
+    .map(({ p }) => p)
+}
+
+/**
+ * Today's challenge: the first pair in the day's order the reader hasn't
+ * bridged yet (`skip` passes over that many more — "another challenge"). Null
+ * once every pair is bridged. The order is fixed for the day and progress only
+ * grows, so finding connections that don't bridge the pair never moves it.
+ */
+export function dailyChallenge(
+  graph: ConceptGraph,
+  progress: CraftProgress,
+  order: readonly ChallengePair[],
+  skip = 0,
+): ChallengePair | null {
+  let left = skip
+  let last: ChallengePair | null = null
+  for (const pair of order) {
+    if (isBridged(graph, progress, pair.a, pair.b)) continue
+    last = pair
+    if (left-- <= 0) return pair
   }
-  for (const r of module.recipes) {
-    if (!progress.recipes.includes(recipeId(r))) problems.push(`${id}: ${r.a} + ${r.b} can never be made`)
-  }
-  return problems
+  return last
 }

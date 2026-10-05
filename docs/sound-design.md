@@ -489,15 +489,15 @@ competing with it. It is off with the app's mute, off with its own switch
 ## Concept Craft
 
 The board (`docs/concept-craft.md`) adds no cues of its own; it says what
-happened with the catalogue's. A link that brings a new concept onto the board
-is `collect` — a card landing in the deck, which is what it is — and a second
-route to a concept already held is `correct`, climbing the combo like a run of
-right answers; a pair that doesn't combine calls `resetCombo` and plays nothing
-(rule 7), the card bouncing back being the whole of the feedback. The day's
-challenge met is `levelUp`, a topic's last link `complete`, and the Mastery
-prompt opening is `open`, the paper of a sheet sliding out. The board's own
-cards and tags carry `data-sound="none"`: a tap and the start of a drag are the
-same press, and the cue belongs to what the press turns out to have done.
+happened with the catalogue's. Finding a strong connection (70 and up) is
+`collect` — the find worth keeping — and any other connection `correct`,
+climbing the combo like a run of right answers; a pair nothing connects calls
+`resetCombo` and plays nothing (rule 7), the card going back being the whole
+of the feedback. The day's challenge met is `levelUp` and a topic's last
+connection `complete`; picking a deck card up to play it by tapping is
+`select`. The board's own cards, its strengths and the deck's tiles carry
+`data-sound="none"`: a tap and the start of a drag are the same press, and the
+cue belongs to what the press turns out to have done.
 
 ## Wiring a new interaction
 

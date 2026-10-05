@@ -73,13 +73,13 @@ export interface AnalyticsEventMap {
   project_started: { project: string; mode: string; language: string }
   /**
    * Two concepts dropped together on a Concept Craft board (docs/concept-craft.md).
-   * `outcome` is what the drop did — `new_concept`, `new_link` (a known concept
-   * by a new route), `known` (a pair found before), `none` (no link), or, in
-   * Mastery mode, `asked` (the prompt opened). `answer` rides the prompt's verdict.
+   * `outcome` is what the drop did — `new` (a connection found), `known` (one
+   * found before) or `none` (nothing connects them); `strength` is the
+   * connection's, 0–100, when there is one.
    */
-  craft_combined: { module: string; mode: string; outcome: string; answer?: string }
-  /** Every link in a Concept Craft module found — the schema complete. */
-  craft_module_completed: { module: string; mode: string }
+  craft_combined: { exam: string; topic: string; outcome: string; strength?: number }
+  /** Every connection in a Concept Craft topic found. */
+  craft_topic_completed: { exam: string; topic: string }
   upgrade_clicked: Record<string, never>
   /** A Store product's link to its seller — the Store sells nothing itself (docs/store.md). */
   store_outbound_clicked: { product: string; seller: string; aisle: string }
@@ -476,9 +476,9 @@ export function trackCraftCombined(params: AnalyticsEventMap['craft_combined']) 
   track('craft_combined', params)
 }
 
-/** A Concept Craft module's whole graph found. */
-export function trackCraftModuleCompleted(params: AnalyticsEventMap['craft_module_completed']) {
-  track('craft_module_completed', params)
+/** Every connection in a Concept Craft topic found. */
+export function trackCraftTopicCompleted(params: AnalyticsEventMap['craft_topic_completed']) {
+  track('craft_topic_completed', params)
 }
 
 /** A project attempt is created on the Projects tab (the PCPA simulator). */

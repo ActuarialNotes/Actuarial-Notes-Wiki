@@ -5,15 +5,17 @@ import type { ConceptLevels } from '@/hooks/useConceptLevels'
 import { cn } from '@/lib/utils'
 
 /**
- * **The Concept Deck** — every concept the reader holds in this module, as the
- * app's concept tile (`components/ConceptTile.tsx`, the same card the
- * flashcard picker and Quiz Battle's topic pick draw), so a concept is one card
- * wherever it is shown, its foil edge its level.
+ * **The Concept Deck** — every concept in the topic, as the app's concept tile
+ * (`components/ConceptTile.tsx`, the same card the flashcard picker and Quiz
+ * Battle's topic pick draw), so a concept is one card wherever it is shown,
+ * its foil edge its level. Those still to place come first, then those already
+ * on the board.
  *
- * A card is dragged out onto the board to combine it with whatever it is
- * dropped on, or tapped to *hold* it — the next card tapped, here or on the
- * board, is combined with it (the way in without a drag: a keyboard, a
- * switch, a hand that can't hold a drag). Tapping a held card puts it back.
+ * A card is dragged out onto the board — dropped on empty board it is put down
+ * there; dropped on another concept it is tried against that one. Or it is
+ * tapped to *hold* it, and the next card tapped, here or on the board, is tried
+ * against it (the way in without a drag: a keyboard, a switch, a hand that
+ * can't hold a drag). Tapping a held card puts it back.
  *
  * Two shapes: a panel down the side of a wide board, and a strip along the
  * bottom of a phone's. The drag reads its axis from the shape — across the
@@ -22,13 +24,16 @@ import { cn } from '@/lib/utils'
  * any movement is a drag.
  */
 export interface CraftDeckProps {
-  nodes: readonly string[]
-  total: number
+  /** Every concept in the topic, in the order the syllabus names them. */
+  concepts: readonly string[]
+  /** Those on the board, lower-cased. */
+  placed: ReadonlySet<string>
   levels: ConceptLevels
   held: string | null
-  fresh: string | null
+  /** Concepts the challenge's hint is pointing at. */
+  hinted: readonly string[]
   layout: 'panel' | 'strip'
-  /** Say how to play — only until the first link is found; after that the board shows it. */
+  /** Say how to play — only until the first connection is found; after that the board shows it. */
   showHow: boolean
   onTap: (name: string) => void
   /** A card in flight, at a screen point — the page draws it. */
@@ -49,20 +54,28 @@ interface Press {
   dragging: boolean
 }
 
-export function CraftDeck({ nodes, total, levels, held, fresh, layout, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
+export function CraftDeck({ concepts, placed, levels, held, hinted, layout, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(false)
   const press = useRef<Press | null>(null)
 
-  const shown = useMemo(() => {
+  const { toPlace, onBoard } = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return q ? nodes.filter(n => n.toLowerCase().includes(q)) : nodes
-  }, [nodes, query])
+    const shown = q ? concepts.filter(n => n.toLowerCase().includes(q)) : concepts
+    return {
+      toPlace: shown.filter(n => !placed.has(n.toLowerCase())),
+      onBoard: shown.filter(n => placed.has(n.toLowerCase())),
+    }
+  }, [concepts, placed, query])
+  const left = concepts.length - concepts.filter(n => placed.has(n.toLowerCase())).length
 
   const tileHandlers = (name: string) => ({
     onPointerDown: (e: React.PointerEvent<HTMLButtonElement>) => {
       if (e.button !== 0 && e.pointerType === 'mouse') return
       press.current = { name, pointerId: e.pointerId, x: e.clientX, y: e.clientY, mouse: e.pointerType === 'mouse', dragging: false }
+      // A touch is held by the card it starts on anyway; a mouse is not, and a
+      // quick flick can leave the card before its first move is heard.
+      if (e.pointerType === 'mouse') e.currentTarget.setPointerCapture(e.pointerId)
     },
     onPointerMove: (e: React.PointerEvent<HTMLButtonElement>) => {
       const p = press.current
@@ -101,35 +114,44 @@ export function CraftDeck({ nodes, total, levels, held, fresh, layout, showHow, 
     },
   })
 
-  const tile = (name: string, className?: string) => (
-    <div key={name} className={cn(fresh?.toLowerCase() === name.toLowerCase() && 'craft-node-pop', className)}>
-      <ConceptTile
-        name={name}
-        state={levels.levelOf(name)}
-        collected={levels.isCollected(name)}
-        selected={held?.toLowerCase() === name.toLowerCase()}
-        showLock={false}
-        aria-pressed={held?.toLowerCase() === name.toLowerCase()}
-        aria-label={`${name}${held?.toLowerCase() === name.toLowerCase() ? ' — held' : ''}`}
-        data-sound="none"
-        data-testid="craft-deck-tile"
-        className={cn('w-full', layout === 'strip' ? 'touch-pan-x' : 'touch-pan-y', 'cursor-grab')}
-        {...tileHandlers(name)}
-      />
-    </div>
-  )
+  const tile = (name: string, className?: string) => {
+    const isHeld = held?.toLowerCase() === name.toLowerCase()
+    const down = placed.has(name.toLowerCase())
+    const hint = hinted.some(h => h.toLowerCase() === name.toLowerCase())
+    return (
+      <div key={name} className={cn('relative', className)}>
+        {hint && <span aria-hidden className="tap-pulse pointer-events-none absolute -inset-1 rounded-lg border-2 border-primary" />}
+        <ConceptTile
+          name={name}
+          state={levels.levelOf(name)}
+          collected={levels.isCollected(name)}
+          selected={isHeld}
+          showLock={false}
+          aria-pressed={isHeld}
+          aria-label={`${name}${down ? ', on the board' : ''}${isHeld ? ' — held' : ''}`}
+          data-sound="none"
+          data-testid="craft-deck-tile"
+          data-placed={down || undefined}
+          className={cn('w-full', layout === 'strip' ? 'touch-pan-x' : 'touch-pan-y', 'cursor-grab')}
+          {...tileHandlers(name)}
+        />
+      </div>
+    )
+  }
 
   if (layout === 'strip') {
     return (
       <section aria-label="Concept deck" className="border-t border-border bg-background pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2">
-        <p className="flex items-center gap-1.5 px-4 pb-1.5 text-xs text-muted-foreground">
-          <Layers className="h-3.5 w-3.5" aria-hidden />
+        <p className="flex items-center gap-1.5 whitespace-nowrap px-4 pb-1.5 text-xs text-muted-foreground">
+          <Layers className="h-3.5 w-3.5 shrink-0" aria-hidden />
           <span className="font-medium text-foreground">Concept deck</span>
-          <span className="tabular-nums">{nodes.length} of {total}</span>
-          {showHow && <span className="ml-auto">Drag a card up onto the board</span>}
+          <span className="tabular-nums">{left} to place</span>
+          {showHow && <span className="ml-auto truncate">Drag a card up</span>}
         </p>
         <div className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {nodes.map(name => tile(name, 'w-[68px] shrink-0'))}
+          {toPlace.map(name => tile(name, 'w-[68px] shrink-0'))}
+          {toPlace.length > 0 && onBoard.length > 0 && <span aria-hidden className="mx-1 w-px shrink-0 self-stretch bg-border" />}
+          {onBoard.map(name => tile(name, 'w-[68px] shrink-0 opacity-60'))}
         </div>
       </section>
     )
@@ -145,17 +167,25 @@ export function CraftDeck({ nodes, total, levels, held, fresh, layout, showHow, 
       >
         <Layers className="h-4 w-4" aria-hidden />
         Concept deck
-        <span className="tabular-nums text-muted-foreground">{nodes.length}</span>
+        <span className="tabular-nums text-muted-foreground">{left}</span>
       </button>
     )
   }
 
+  const group = (label: string, names: string[]) => names.length > 0 && (
+    <div className="space-y-2">
+      <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {label} <span className="tabular-nums">{names.length}</span>
+      </h3>
+      <div className="grid grid-cols-3 gap-2">{names.map(name => tile(name))}</div>
+    </div>
+  )
+
   return (
-    <section aria-label="Concept deck" className="flex max-h-full w-64 flex-col overflow-hidden rounded-xl bg-background/95 shadow-xl ring-1 ring-border backdrop-blur-sm">
+    <section aria-label="Concept deck" className="flex max-h-full w-72 flex-col overflow-hidden rounded-xl bg-background/95 shadow-xl ring-1 ring-border backdrop-blur-sm">
       <div className="flex items-center gap-2 px-3 pb-2 pt-3">
         <Layers className="h-4 w-4 text-muted-foreground" aria-hidden />
         <h2 className="flex-1 text-sm font-semibold">Concept deck</h2>
-        <span className="text-xs tabular-nums text-muted-foreground">{nodes.length} of {total}</span>
         <button
           type="button"
           onClick={() => setCollapsed(true)}
@@ -167,7 +197,7 @@ export function CraftDeck({ nodes, total, levels, held, fresh, layout, showHow, 
           <ChevronLeft className="h-4 w-4" />
         </button>
       </div>
-      {nodes.length > 9 && (
+      {concepts.length > 9 && (
         <label className="mx-3 mb-2 flex h-9 items-center gap-2 rounded-md bg-muted/60 px-2.5 text-sm">
           <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
           <input
@@ -179,16 +209,19 @@ export function CraftDeck({ nodes, total, levels, held, fresh, layout, showHow, 
           />
         </label>
       )}
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3 [scrollbar-width:thin]">
-        {shown.length === 0 ? (
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-3 pb-3 [scrollbar-width:thin]">
+        {toPlace.length + onBoard.length === 0 ? (
           <p className="py-6 text-center text-xs text-muted-foreground">No concept in the deck matches.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-2">{shown.map(name => tile(name))}</div>
+          <>
+            {group('To place', toPlace)}
+            {group('On the board', onBoard)}
+          </>
         )}
       </div>
       {showHow && (
         <p className="border-t border-border/60 px-3 py-2 text-[11px] leading-snug text-muted-foreground">
-          No drag? Tap a card here, then the card to combine it with.
+          No drag? Tap a card here, then the card to try it against.
         </p>
       )}
     </section>

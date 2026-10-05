@@ -58,9 +58,9 @@ const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pag
 // its catalogue, its textbook shelf and its drawings are for the readers who
 // open it.
 const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages/Store'))
-// Concept Craft (docs/concept-craft.md) — a syllabus built by combining its
-// concepts on a board. Lazy: its recipe book, its physics and the wiki bundle
-// its inspector reads are for the readers who open it.
+// Concept Craft (docs/concept-craft.md) — a topic's concepts on a board, and
+// how they connect. Lazy: its graph, its physics and the wiki bundle it reads
+// the graph from are for the readers who open it.
 const { Component: Craft, preload: loadCraft } = lazyRoute(() => import('@/pages/Craft'))
 // Actuaria Online (docs/actuaria-online.md) — the game layer, one lazy chunk,
 // so its display face, its star map and its screens never reach Study Mode.
@@ -352,7 +352,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/battle" element={<BattleRoute />} />
                 {/* Concept Craft: the topic picker, and one topic's board. */}
                 <Route path="/craft" element={<CraftRoute />} />
-                <Route path="/craft/:moduleId" element={<CraftRoute />} />
+                <Route path="/craft/:topicId" element={<CraftRoute />} />
                 {/* Actuaria Online: the title, the star map, the sectors, the
                     Daily Transmission, the Hangar and Monte Carlo Station —
                     its own routes, inside its own scope (pages/Actuaria). */}

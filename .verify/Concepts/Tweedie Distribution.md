@@ -58,3 +58,65 @@ created: 2026-10-04
 - checks_run: power-variance definition, table rows and compound Poisson-gamma structure vs Larsen p.2 and Monograph sec.2.7.3; point mass at zero vs Monograph; freq/sev vs pure-premium trade-offs vs Monograph sec.5.1.1; F-001 re-derived from Monograph eqs 7-9 (frequency ~ mu^(2-p), severity ~ mu^(p-1)); F-003 closed form re-run (1.4100036 both ways at y=3, mu=1.2, p=1.6); examples recomputed (e^5.52 = 249.6, e^5.30 = 200.3, e^0.22 = 1.246); figure read; links resolve
 - sources_checked: Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf, p.2 'Tweedie Distributions' (Var = a E(Y)^p; p = 0, 1, (1,2), 2, 3; compound Poisson-gamma; software estimating p); Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf, sec.2.7.3 (Tweedie, eqs 5-9, point mass at zero, p range, PDF pp.32-35); sec.5.1.1 (frequency/severity vs pure premium, PDF pp.53-54); scikit-learn User Guide, sec.3.4 'Mean Poisson, Gamma, and Tweedie deviances' (closed-form Tweedie deviance), sha256:7e740e140ba75771bb1c7de132babfd958c277b5529d187e7ba744e69729120c — https://scikit-learn.org/stable/modules/model_evaluation.html
 - note: F-001 (major), F-002 and F-003 (minor) confirmed and left open. No new findings. Exam pages linking it: MAS-I, PCPA.
+
+## [F-004] lambda in P(Y=0) = e^-lambda never defined
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- severity: nit
+- status: open
+- locus: formula block line 2 and bullet 1
+- claim: N ~ Poisson (no parameter named), then P(Y = 0) = e^{-lambda} and, in the second example, e^{-lambda}
+- evidence: The page's lambda is the Poisson parameter of the claim count N; Monograph 5 sec.2.7.3 (eqs.7-9, PDF pp.33-34) writes the Tweedie as Poisson(lambda) counts of gamma(alpha, theta) amounts, Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.3 (PDF pp.34-35), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf.
+- source_rank: 3
+- proposed_action: Write N ~ Poisson(lambda) in the formula block.
+- applied: true
+- fingerprint: 24fe99c2a7fc
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Bullet 2: 'it forces frequency and severity to share the same relativities' replaced by 'with phi and p constant across records it implicitly assumes frequency and severity move in the same direction: a predictor that raises pure premium raises both components'. Source: Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.3 (PDF pp.34-35), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf ('a Tweedie GLM contains the implicit assumption that frequency and severity "move in the same direction" ... that increase is made up of an increase in both its frequency and severity components'). Check (rank 5): at p = 1.6 a pure-premium relativity e^0.22 = 1.246 splits into 1.246^0.4 = 1.092 on frequency and 1.246^0.6 = 1.141 on severity — same direction, not the same relativity.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Bullet 3 transcribes the Monograph: p held constant; estimated by the software with beta, chosen from candidate values by log-likelihood or cross-validation, or selected judgmentally (1.6, 1.67 or 1.7); insurance values typically 1.5 to 1.8. 'Profile likelihood over a grid' as the usual method and the 1.4-1.7 range deleted. Sources: Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.3 (PDF pp.34-35), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; Larsen p.2 (software finds the best p when solving for the betas), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-003
+- status: resolved
+- note: Bullet 4: 'the Deviance has no simple closed form — the density itself requires an infinite series, so model comparison leans on AIC and holdout error' replaced by the closed-form unit deviance d(y,mu) = 2[y^(2-p)/((1-p)(2-p)) - y mu^(1-p)/(1-p) + mu^(2-p)/(2-p)]; the unsourced density/AIC inference deleted. Source: scikit-learn User Guide sec.3.4.6.9 'Mean Poisson, Gamma, and Tweedie deviances' (re-fetched this session, same hash), sha256:7e740e140ba75771bb1c7de132babfd958c277b5529d187e7ba744e69729120c — https://scikit-learn.org/stable/modules/model_evaluation.html. Recomputed: closed form = 2 integral_mu^y (y-t)/t^p dt = 1.4100036 at y = 3, mu = 1.2, p = 1.6; at y = 0 the closed form reduces to 2 mu^(2-p)/(2-p).
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-004
+- status: resolved
+- note: Formula block now N ~ Poisson(lambda). Source: Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.3 (PDF pp.34-35), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: every edit re-read against its source: same-direction assumption vs Monograph 2.7.3 (split re-derived: freq 1.092, sev 1.141 at p = 1.6); p determination and 1.5-1.8 range vs Monograph 2.7.3 and Larsen p.2; closed-form unit deviance vs scikit-learn and numerical integration (1.4100036); lambda now defined; power-variance table vs Larsen p.2; examples recomputed (e^5.52 = 249.6, e^5.30 = 200.3, e^0.22 = 1.246); links resolve
+- sources_checked: Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), p.2 'Tweedie Distributions', sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.3 (eqs.7-9, point mass at 0, p range and choice, PDF pp.33-35), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; scikit-learn User Guide sec.3.4.6.9 'Mean Poisson, Gamma, and Tweedie deviances' (closed-form Tweedie deviance), sha256:7e740e140ba75771bb1c7de132babfd958c277b5529d187e7ba744e69729120c — https://scikit-learn.org/stable/modules/model_evaluation.html
+- note: Resolve run: F-001 (major), F-002, F-003 (minor) and F-004 (nit, applied) resolved. Medium: the insurance-practice claims rest on the rank-3 Monograph.

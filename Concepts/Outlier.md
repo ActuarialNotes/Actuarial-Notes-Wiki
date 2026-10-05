@@ -2,17 +2,17 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-04
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:754a86e15eedaf80f5dda4f429dcbb749d88020c7aab7b796791dbe344b794a2
+  content_hash: sha256:42acc0b926deaefa128c4b5655fb70d61e87c7e3e3dcaf348fd838114eb3ff69
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?', sha256:1f1c9855ffcd8cd40165c97844e410a56edb032b8100616794732a32dfb094ee — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (box plots with fences), sha256:4cb2b0dd09d0803cb0613c9cf7dc939e80491badfc0f39b1f4fdb0468ff29730 — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.3.3 items 4-5 'Outliers' and 'High Leverage Points': recording errors, studentized residuals beyond ±3, care before removing, leverage statistic, printed pp.97-99 (PDF pp.107-109), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 11 §11.1 outlier vs high leverage vs influential; §11.2 leverage; §11.3-11.4 studentized and deleted residuals (fit pulled toward an influential point); §11.5 Cook's distance, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11.html"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 'Losses and LAE' — extraordinary (shock) losses, capping and the excess loss provision, printed pp.95-97 (PDF pp.107-109), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "CAS PCPA Exam & Project Content Outline v.8 (effective Sept 2026, updated 9.9.2026), Domain A task 4 p.4 and 'Performance Evaluation Criteria' p.6, sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"
-  open_findings: 1
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (L1 = lower quartile - 1.5 IQ, U1 = upper quartile + 1.5 IQ), sha256:4cb2b0dd09d0803cb0613c9cf7dc939e80491badfc0f39b1f4fdb0468ff29730 — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.3.3 items 4-5 'Outliers' and 'High Leverage Points': recording errors, care before removing, unusual y vs unusual x, leverage statistic (3.37), printed pp.97-99 (PDF pp.107-109), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 11 §11.1 outlier (unusual y) vs high leverage (extreme x) vs influential, 'have the potential to be influential'; §11.2 leverage h_ii, hat-matrix diagonal, 'depends only on the predictor values', 'merely quantifies the potential'; §11.4 fit pulled toward a potential outlier; §11.5 Cook's D_i = e_i²/(p MSE) x h_ii/(1-h_ii)², p = parameters incl. intercept, depends on both residual and leverage, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11.html"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 'Losses and LAE' — shock losses capped at a threshold, excess loaded back by a long-term provision, printed pp.95-97 (PDF pp.107-109), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "CAS PCPA Exam & Project Content Outline v.8 (effective Sept 2026, updated 9.9.2026), 'Performance Evaluation Criteria' p.6 (A-4: 'describes any anomalous characteristics of the data (e.g., outliers, missing data) and how they were addressed'), sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Outlier.md
 ---

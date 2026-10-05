@@ -19,7 +19,7 @@ verification:
 
 > $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\right)^{2} \qquad \text{(LOOCV, linear model)}$$
 
-- **$k$-fold**: split the data into $k$ equal parts, fit on $k-1$ and score on the held-out fold, then rotate. $k = 5$ or $10$ is the standard compromise between bias and computation
+- **$k$-fold**: split the data into $k$ equal parts, fit on $k-1$ and score on the held-out fold, then rotate. $k = 5$ or $10$ is the standard choice, a bias–variance compromise: each fit uses $(k-1)n/k$ observations, so the bias is modest, and the $k$ training sets overlap less than LOOCV's, so the estimate has lower variance — at a cost of only $k$ fits
 - **Leave-one-out** ($k = n$) is nearly unbiased but has high variance and is expensive — except in a linear model, where the shortcut above gets it from a single fit using the leverages $h_{ii}$
 - Cross-validation is what turns the [[Bias-Variance Tradeoff]] into a decision: training error falls monotonically with complexity, while CV error is U-shaped, and its minimum marks the right model size
 - It compares **non-nested** models freely (a GLM against a tree, different link functions, different sets of predictors) where a [[Likelihood Ratio Test]] cannot

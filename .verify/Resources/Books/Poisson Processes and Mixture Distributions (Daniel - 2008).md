@@ -93,3 +93,14 @@ created: 2026-10-04
 - resolves: F-003
 - status: resolved
 - note: Added the four printed Problems blocks as the last sub-bullet of their sections: 'Problems 1.1' (closing 1.1, after 1.1.1), 'Problems 1.2', 'Problems 1.3' (after 1.3.3) and 'Problems 1.4' (after 1.4.3), each with its 'From the SoA Exam MLC/M/3 archives: ...' and 'From the CAS Exam 3 archives: ...' lines transcribed mechanically (pymupdf text extraction, line breaks joined) from Daniel, Poisson processes (and mixture distributions), CAS Study Note, June 26 2008, PDF pp.6, 8, 12-13 and 15, sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf. The standard (docs/resource-pages.md §2.3 item 4) prefers a division's printed sub-divisions verbatim, and these are printed headed blocks. The Sources entry for the note now says it was read with its Problems lists.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: high
+- checks_run: F-003 fix re-read: the four Problems blocks diffed against the note's extracted text (headings, both archive lines each, incl. Problems 1.3's CAS line continuing on p.13); placement after the last subsection of each section matches the note; Sources note updated; Foreword re-read; callout re-diffed against 2026 outline p.6 (Daniel, A1-5, OP); scan p.1 label re-read; resource_lint 0 errors; verify_check clean
+- sources_checked: James W. Daniel, Poisson processes (and mixture distributions), CAS Study Note, June 26 2008 — title page, Foreword p.2, Ch.1 §§1.1-1.4.3 and Problems 1.1-1.4 (PDF pp.6, 8, 12-13, 15, text re-extracted with pymupdf), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; Daniel practice problems (CAS scan), 13 pp., p.1 read as an image (Exam 3, Spring 2007, question 1), sha256:ad09bca16833dd204964b40a5a4f4a14d2a84df1b71ea39f77bda804a5de9702 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_2.pdf
+- note: All findings closed (F-001, F-002 in run 8861; F-003 resolved here by transcribing the Problems lists). Outline complete and verbatim.

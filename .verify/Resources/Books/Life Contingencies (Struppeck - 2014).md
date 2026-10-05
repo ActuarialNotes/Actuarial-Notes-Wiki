@@ -69,3 +69,14 @@ created: 2026-10-04
 - resolves: F-002
 - status: resolved
 - note: Reworded the last bullet of ## 6 in the note's own terms: 'An annuity can pay based on the survival of more than one person ([[Joint Life|joint lives]]): until one of the two dies, a_xy, or until both have died, a_xy-bar; an arbitrage argument relates them to annuities on single lives, a_x + a_y = a_xy + a_xy-bar' (annuities-due as the page writes them). 'joint-life annuity' and 'last-survivor annuity' are gone. Source: Struppeck, Life Contingencies Study Note for CAS Exam S (Revised 9/19/2015), pp.11-12 ('an annuity that pays based on the survival of more than one person (joint lives) ... may pay until one of the two dies ... or it may pay until both persons have died ... There are relationships between annuities on single lives and annuities on joint lives ... an arbitrage argument'), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: high
+- checks_run: F-002 fix re-read against the note's own words ('joint lives', 'until one of the two dies', 'until both persons have died', 'relationships between annuities on single lives and annuities on joint lives', 'arbitrage argument'); identity unchanged; no other line changed; callout re-diffed against 2026 outline p.6 (Struppeck, A5-6, OP); [[Joint Life]] link resolves; resource_lint 0 errors; verify_check clean
+- sources_checked: Tom Struppeck, Life Contingencies Study Note for CAS Exam S (Revised 9/19/2015) — Chapter 6 pp.11-12 (joint lives, the arbitrage identity) re-read; whole note pp.1-14 in run 8861, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: All findings closed (F-001 in run 8861; F-002 reworded to the note's terms here). Every chapter's bullets were checked against the note in run 8861; the one changed bullet was re-checked now.

@@ -26,7 +26,7 @@
 > > \end{align*}
 > > $$
 > >
-> > (b) Triangular — the distances are 150, 100, 100 and 200, so the contributions are $\frac{50,\ 100,\ 100,\ 0}{200^2}$:
+> > (b) Triangular — the distances are 150, 100, 100 and 200, so the numerators $b - |x - x_i|$ are $50,\ 100,\ 100,\ 0$, each over $b^2 = 40{,}000$:
 > >
 > > $$
 > > \begin{align*}

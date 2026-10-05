@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ce02893c5fe29566442730cdcd33d476caa36863e1dbe108ffada9f063b0472c
+  content_hash: sha256:d5067603971e8a8f1dace3bcc3836c4c7b8213be14572fb64bfca27bb422723b
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, ch.1 §1.1 p.3 (a stochastic process is a collection of random variables N(t) indexed by t; counting processes), Def. & Prop. 1.2 p.4, Fact 1.25 p.13 (homogeneous increments Poisson with mean λh; stationary increments), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.15 §1 Introduction to General Markov Processes (time set T = N or [0,∞), state space S, Markov property), sha256:69b4f54fd8c976d8a7093b3bfb9e0b3e836aa60794d1ad262e55c9b4b27f043c — https://www.randomservices.org/random/markov/General.html"

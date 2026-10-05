@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:68000054e50199a9bc2e096472630de8276497b5844785fe25dd529926f6defc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Convergence in Probability.md
+---
+
 A sequence of random variables $X_n$ **converges in probability** to $X$ (often a constant $a$) if, for every tolerance $\varepsilon > 0$, the chance that $X_n$ misses $X$ by more than $\varepsilon$ goes to 0 as $n \to \infty$. It is the mode of convergence behind the weak [[Law of Large Numbers]] and the definition of a [[Consistency|consistent]] estimator.
 
 > $$X_n \xrightarrow{p} X \iff \lim_{n \to \infty} P\big(|X_n - X| > \varepsilon\big) = 0 \ \text{ for every } \varepsilon > 0$$

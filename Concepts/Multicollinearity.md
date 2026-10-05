@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:efb658ae6128d76785825f30a09183cd73b1e8f1790fe4ac3180e7877992eff9
+  content_hash: sha256:57d20253f104d402c18f34fb87d0cba25c96ae4993fd7fbccd8204c44f8bf58c
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.3.3 item 6 'Collinearity': contour valley, inflated SEs, correlation matrix, multicollinearity, VIF = 1/(1 - R²_Xj|X-j), 5-10 rule, drop or combine, printed pp.99-103 (PDF pp.109-113); §3.2.2 overall F vs individual tests, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Penn State STAT 501 Regression Methods (online course notes), Lesson 12 §12.1 structural vs data-based; §12.3 predictions within scope unaffected, interpretation lost; §12.4 VIF, Var(b_k) = sigma²/sum(x - xbar)² x 1/(1-R_k²), significant F with non-significant t-tests; §12.5 collect more data; §12.6 centering, sha256:f67694d5ded5e449996b5fde9068686e916b9c1c5cd9245c02badb257c72bc8e — https://online.stat.psu.edu/stat501/Lesson12.html"

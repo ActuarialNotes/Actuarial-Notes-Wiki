@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1bad27d9acee75d5347b8ea8ed0a3f1a3d38d57a701e022f924d0f909bb03e62
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Kolmogorov-Smirnov Test.md
+---
+
 The **Kolmogorov-Smirnov Test** (K–S) checks whether individual data came from a hypothesized continuous distribution $F^*$ by measuring the largest vertical gap $D$ between $F^*$ and the [[Empirical Distribution|empirical distribution function]] $F_n$. A large gap is evidence against the model, so $H_0$ is rejected when $D$ exceeds its [[Critical Value|critical value]].
 
 > $$D = \max_{x}\,\big|F_n(x) - F^*(x)\big|$$

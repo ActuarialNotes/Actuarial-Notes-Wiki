@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a0bf9bcaa91d646340ea3e1e3b42237b6df07ab4dda4dc009c3b8678c93cb4bc
+  content_hash: sha256:03fd2a9a9194302320045c8f93bbedda7964d6939a558a901a4287c27af7a893
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.1.2 standard errors, t-statistic (3.14), p-values and CIs, Table 3.1, printed pp.66-68 (PDF pp.76-78); §3.3.1 baseline level, printed p.86; §4.3.2 z-statistic, Table 4.1, printed p.136 (PDF p.146), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.1 Wald t-test: t with n-p df when sigma² estimated, normal when known, PDF pp.9-10, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"

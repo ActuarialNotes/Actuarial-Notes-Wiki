@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4012041a8ffaa137950bdabcecb850673024b7c2697b19e1e0e30a3a6f1a078d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Mixture Distribution.md
+---
+
 A **Mixture Distribution** describes a variable $X$ drawn from a population made of subpopulations with different distributions: first a subpopulation is chosen at random, then $X$ is drawn from it. Its density (and its [[Cumulative Distribution Function (CDF)|CDF]]) is the weighted average of the component densities, with the weights given by a [[Mixing Distribution|mixing distribution]] — discrete for a finite mixture, continuous for a continuous mixture.
 
 > $$f_X(x) = \sum_{i=1}^{k} a_i\, f_{X_i}(x), \quad a_i \ge 0,\ \sum_i a_i = 1$$

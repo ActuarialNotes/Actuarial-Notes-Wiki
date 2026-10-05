@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: low
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:14987bd8ec0101f670dc90f95fe5e7b81a241cc27971d52a09dd364502fdf8df
+  content_hash: sha256:50033e764350aaf3a5e69724aa11aeced8a2d89fd20d13d7e9d7518c64e27763
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C tasks 1-3, 7 and reading list, PDF pp.5-6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026, Domain B, PDF p.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"

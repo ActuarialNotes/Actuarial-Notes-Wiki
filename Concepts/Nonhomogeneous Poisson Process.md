@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:be42bb1af419b1a049d74f87a053a2d3291f311d153ec653c64b5defd803f9e8
+  content_hash: sha256:5855e9d5a114cf1da36a67d119345865d199f7fc5809c58030262edd2be84b0f
   sources:
     - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, Def. & Prop. 1.2 p.4 (rate function λ, increment Poisson with mean ∫λ, mean-value function m), Example 1.7 p.6 (P(T(x) > t) = exp(−∫λ); λ as a force / intensity), Fact 1.13 p.9 and §1.4.3 p.14 (thinning), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-04), ch.13 The Poisson Process, 'Non-homogeneous Poisson Processes' (independent but not stationary increments; mean function m, E = Var = m(t); infinitesimal characterisation; T_1 survival e^{-m(t)} and failure rate r; time change for strictly increasing m), sha256:ab27d84736959d91325dc48823d4e0df83bead12355c73830a28dc427de16aaf — https://www.randomservices.org/random/poisson/Nonhomogeneous.html"

@@ -61,3 +61,14 @@ created: 2026-10-04
 - resolves: F-001
 - status: resolved
 - note: Third ## Sources entry now cites [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf), same note. Its p.6 Hogg entry (sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed: 8th edition, Prentice Hall, 2018; Domain B 1.7, 2.7, 2.8, 3.7, 4.1, 4.4-4.7, 5.1, 6.1-6.5, 7.1-7.6, 8.1-8.3; Domain C 4.4, 6.3, 6.5, 7.5, 9.1-9.6; B1-B8, C1-C9) matches the callout, which is unchanged. Year 2018 left as is (C-001/C-004 are logged source conflicts; the rank-1 outline still says 2018).
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: F-001 fix re-read (2026 outline label, URL and note); outline re-diffed against the preview's contents text: 89 of 107 page entries verbatim, the other 18 differ only by the printed optional-section stars, Rao–Cramér's accent rendering, math notation and the appendix letter layout (A Mathematical Comments -> Appendix A ...), as C-001 logs; lead re-checked clause by clause against Pearson's overview; Year 2018 / ISBN against Pearson; callout re-diffed against 2026 outline p.6 (Domain B and C section lists; B1-B8, C1-C9); resource_lint 0 errors; verify_check clean
+- sources_checked: Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed., Global Edition, publisher eBook preview: title and copyright pages (PDF pp.2-3), Contents pp.5-9 (PDF pp.6-10), sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf; Pearson product page, Introduction to Mathematical Statistics 8th ed.: Title overview and hardcover ISBN-13 9780134686998 'Published 2018 (2018 update)', fetched 2026-10-05, sha256:7e7698f26a8731ddc2ccabfac24e4341c39f052ebdad72883f22f6efae9f4492 — https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: F-001 closed. Confidence stays medium: the US 8th edition's own pages were not reachable (the contents come from the Global Edition, which Pearson's list matches), and the Year conflict in C-001/C-004 (CAS and Pearson 2018 vs a (c) 2019 copyright line) is logged, not resolved; Year left at the rank-1 outline's 2018.

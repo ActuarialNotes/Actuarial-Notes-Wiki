@@ -8,17 +8,15 @@ Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-138-74151-5"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:f5a375f4e20e1f0620b2edc4bfdd1752d7c3a0f3882fad0adfd538aed539d9ba
   sources:
-    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title page (PDF p.4), copyright page (PDF p.5), Contents pp. vii-xiii (PDF pp.8-14), Preface p. xv (PDF p.16), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F, created 2026-06-29), Complete Text References p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf (Dobson & Barnett entry; Domain C readings p.5)"
-    - "Routledge product page, An Introduction to Generalized Linear Models 4th ed., Description and Table of Contents, fetched 2026-10-04, sha256:a74bdbe83be8f9ad0a6ca9f4250280b7de5ca83e0b31ae020397515223f18896 — https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515"
-    - "Larsen, Generalized Linear Models, CAS Study Note (Dec 2015, rev. June 2016), pp.1 and 3 (references to Dobson & Barnett Sections 3.2, 7.7 and 9.8), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
-    - "K10plus catalogue, MARC record for ISBN 9781138741515 (250 'Fourth edition'; 264 CRC Press [2018]; 300 xv, 376 pages), sha256:6ed95bb561ab6f399eb7cdf060d614cfa9492276cf09a0b650d0ef540db4dd05 — https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9781138741515&maximumRecords=10&recordSchema=marcxml"
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title and copyright pages, Contents pp. vii-xiii (PDF pp.8-14), Preface, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
+    - "Routledge product page, An Introduction to Generalized Linear Models 4th ed., Description, fetched 2026-10-05, sha256:09db8a693f9d97e58315f29112c66336849ec3d0c6c5ddbac0e7d6ed5957e4e8 — https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Generalized Linear Models (Dobson - 2018).md

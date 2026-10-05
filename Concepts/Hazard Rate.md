@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a4dcc4534bf1f49f404b7a7cfb21dc379d27db7dc4848e9acafd6116e1e9ef15
+  content_hash: sha256:9b1bfed525264c281942c0b6e27f31fc09a58099d5c379ade946ddb0e175cd3d
   sources:
     - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.37-44 (force of mortality: definition as limiting death rate, μ = f/S = -d/dx ln S, S = exp(-∫μ), exponential = constant force, Weibull shape γ>1 increasing / 0<γ<1 decreasing, aging vs burn-in/infant mortality, bathtub shape, Gompertz-Makeham A + Bc^x with Gompertz A = 0) and §2.5 pp.59-60, sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
     - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), 'Distribution and Quantile Functions', Reliability section, html sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"

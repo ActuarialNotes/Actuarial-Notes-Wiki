@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:908bd0462b953784e76d23242ea06527f00091f36649a86e8836b2811319c47a
+  content_hash: sha256:5669d6e93da5551091bbfe8d67b2ac73d7938f5dc2d8c860223e075ade2a7f02
   sources:
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.4 anova table (Table 2.2), §2.4.3 anova for simple regression, §2.6 one-way analysis of variance and Table 2.12 (df k-1 = 2, n-k = 17, total n-1 = 19), PDF pp.13-14, 18, 26-32, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.3.2 likelihood ratio tests and the (scaled) deviance, PDF pp.6-7, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"

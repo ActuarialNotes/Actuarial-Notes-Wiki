@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:102117df3cdcd49bca010274fa8525798e56da43712c3d90c5994ea658109f24
+  content_hash: sha256:7acf71268e60d4e7b19a773011a7efa4588a2777c1698e5a34467e12be62b3a2
   sources:
     - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.1-2 pp.1-5 (l_x, d_x = l_x - l_{x+1}, q_x = d_x/l_x, p_x, npx = l_{x+n}/l_x = p_x p_{x+1}...p_{x+n-1}, nqx = 1 - npx, radix), ch.6 p.10 (linear / exponential / hyperbolic interpolation), ch.7 p.12 (curtate expectation = sum of npx from n = 1; complete = curtate + 0.5 under uniform deaths), appendix p.13 (Ex.2: 10p50 x q60, a deferred death probability), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"

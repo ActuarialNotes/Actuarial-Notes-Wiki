@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bfcaafbb34b4605940ba09cf5243e26ca2d9e078bd13a54bba73eeb8c2ed489f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Percentile Matching.md
+---
+
 **Percentile Matching** estimates the parameters of a model by making its [[Percentile|percentiles]] equal the corresponding percentiles of the data: with $p$ unknown parameters, choose $p$ percentile levels $g_1, \ldots, g_p$ and solve the $p$ equations below. It is the percentile analogue of the [[Method of Moments]] and works even when the model's moments do not exist.
 
 > $$F(\hat\pi_{g_k} \mid \theta) = g_k, \quad k = 1, \ldots, p$$

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c51f849ef154bdcdd326c2c76408fe153286c8fc714996368d2db02d502349ed
+  content_hash: sha256:d70272b77b33fd6ed61a3c1a052b5d463abb964e64d10ef0432880631b6ec618
   sources:
     - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 pp.5-7 (whole life = unlimited term; $1 at end of year of death; A_x = νq_x + νp_xA_{x+1}; A_x = Σν^{n+1} np_x q_{x+n}; level premium A_x = Pä_x), ch.3 Ex.6 p.8 (second moment at double the force of interest; variance), appendix p.14, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"

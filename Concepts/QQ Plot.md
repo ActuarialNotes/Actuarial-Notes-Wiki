@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e9b9a1cef8c2dfe5dd2cdd02a69e78320da8a7e7314e6334abbcac35596d751f
+  content_hash: sha256:d9c6021e07b6bf6e64784be705937f59f79b30fca951a553a39e2c188740b44b
   sources:
     - "NIST/SEMATECH e-Handbook §1.3.3.24 'Quantile-Quantile Plot' (quantiles of one data set against another; 45-degree reference line; shifts in location/scale, symmetry, tails), sha256:48fc9a7ae492519938004302aff61ba8a909b70601999f3cf244690bcb6db9dc — https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm"
     - "NIST/SEMATECH e-Handbook §1.3.3.21 'Normal Probability Plot' (ordered response values vertical vs normal order statistic medians horizontal; fitted reference line whose intercept and slope estimate location and scale; used on model residuals), sha256:bdb6715e4dad4cf3d99e06540b85c460d925bb54af4d94d07e35e04dac6e0749 — https://www.itl.nist.gov/div898/handbook/eda/section3/normprpl.htm"

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: low
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:114bcb3ff73956b046592ee40215dc2bf9257da5896b38a069b2d4cf040f0d0a
+  content_hash: sha256:53bbed5ea56c511bf59a238fb4713b3714665ca5b7a908ca20e2914845b36538
   sources:
     - "CAS Exam 9 Content Outline, October 2026 sitting (Exam_9_CO_2026_Fall), Domain A statement and tasks ('manage the total exposure from catastrophic events within an insurance portfolio'), PDF p.3, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Frees et al., Loss Data Analytics (open text, arXiv:1808.06718v1, 2018), §1.2.3, PDF pp.20-21 ('the portfolio, or collection, of risks that an insurer has acquired'; reinsurance bought on that portfolio), sha256:1df1831e7d67a072712a2945645b788f5974748143da267bb471b9a7bc3baf33 — https://arxiv.org/pdf/1808.06718"

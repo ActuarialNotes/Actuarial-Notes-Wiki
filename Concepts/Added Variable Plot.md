@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e5a06e5d0c3e6d6f847af0e3ab01a70e3ca74a471fc26c2e9a963c2edc13b9d0
+  content_hash: sha256:3f315a47ca04ff0749bc08855c99dce2ee59c2b0150971bc14f0381e42a92e84
   sources:
     - "Weisberg, Computing Primer for Applied Linear Regression, 4th ed., Using R (2013), §3.1-3.1.2 pp.23-24: AV plot = residuals of y on the other regressor(s) vs residuals of x_j on them; its regression has intercept 0 and slope equal to x_j's coefficient in the full model; car::avPlots, sha256:ba7e3c9c947bb3354af65f57801b1e6f6f234a69a54f0f395c75a013bd850c9d — https://www.statpower.net/Content/313/R%20Stuff/alrprimer.pdf"
     - "StataCorp, Stata Base Reference Manual (release 19), [R] regress postestimation diagnostic plots, avplot Remarks pp.4-6: added-variable (partial-regression) plot; its regression has the same coefficient as the full model; 'cannot be used to identify functional form, or, at least, not well (see Mallows [1986]). In the construction of the added-variable plot, the relationship between y and x is forced to be linear.', sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf"

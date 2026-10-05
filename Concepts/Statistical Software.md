@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:90366829fe90a906c15f303081a231ff438215945b297539df9dfba4dc785952
+  content_hash: sha256:dc384f6abfdf5566355c60b1cca390f3bdfa588ad4ed7a7a9276f2ad6d7c121c
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C task 4 (PDF p.5) and 'Parameter and Diagnostic Tables' note (PDF p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS PCPA Exam & Project Content Outline v.8 (updated 9.9.2026), Domain A task 2 and code submission (PDF p.3), language note (PDF p.4), sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"

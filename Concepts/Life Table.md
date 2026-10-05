@@ -24,7 +24,7 @@ A **Life Table** is the tabular form of a [[Survival Model]]: starting from a ra
 - $_{t}p_x$ is the probability a life aged $x$ survives $t$ more years; $_{t|}q_x = {}_{t}p_x \cdot q_{x+t}$ is the probability of dying in the year *after* surviving $t$ years (a deferred death probability)
 - Survival probabilities **multiply** across periods: $_{s+t}p_x = {}_{s}p_x \cdot {}_{t}p_{x+s}$, which is why $\ell_x$ alone is enough to answer any question
 - The table is the discrete counterpart of the continuous survival function: $\ell_x = \ell_0\, S(x)$, and the [[Hazard Rate]] (force of mortality) is $\mu_x = -\frac{d}{dx}\ln \ell_x$
-- The **curtate expectation** $e_x$ counts complete years survived; the complete expectation is approximately $\mathring{e}_x \approx e_x + \tfrac12$ under a uniform-deaths assumption
+- The **curtate expectation** $e_x$ counts complete years survived; if deaths are uniformly distributed within each year of age, the complete expectation is exactly $\mathring{e}_x = e_x + \tfrac12$ (under a constant force it is only an approximation, close when death rates are small)
 - Fractional-age assumptions fill in between integer ages — **UDD** gives $_{s}q_x = s\,q_x$, a **constant force** gives $_{s}p_x = (p_x)^s$
 - Life-table probabilities feed straight into [[Whole Life Insurance]] and [[Life Annuity]] values, and into [[Joint Life]] statuses when two independent lives are combined by multiplying their survival probabilities
 
@@ -43,4 +43,4 @@ A **Life Table** is the tabular form of a [[Survival Model]]: starting from a ra
 >
 > > [!answer]-
 > > $$e_{60} = \frac{\ell_{61} + \ell_{62} + \ell_{63}}{\ell_{60}} = \frac{7{,}840 + 7{,}650 + 0}{8{,}000} = 1.936 \text{ years}$$
-> > A life aged $60$ completes on average $1.936$ further whole years; the complete expectation of life is roughly $1.936 + 0.5 = 2.44$ years.
+> > A life aged $60$ completes on average $1.936$ further whole years; if deaths are uniform within each year, the complete expectation of life is $1.936 + 0.5 = 2.436$ years.

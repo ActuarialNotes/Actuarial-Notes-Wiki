@@ -31,11 +31,15 @@ interface MultiSelectDropdownProps {
   /** `pill` draws the trigger as a compact outlined pill, the shape of the
    *  toggles it sits in a row with (the Store's Free). */
   shape?: 'tile' | 'pill'
+  /** One choice at a time — a radio mark, and picking closes the menu. The
+   *  Resources shelf's Vintage: an edition of the syllabus, never two. */
+  single?: boolean
 }
 
-/** A pill-style button that opens a checkbox list for multi-selecting options.
+/** A pill-style button that opens a checkbox list for multi-selecting options
+ *  (or, with `single`, a radio list for picking one).
  *  The Concepts, Source, Exam and Sitting filters of every question list
- *  (`QuestionFilterBar`) and the Exam, Publisher and Year filters of the
+ *  (`QuestionFilterBar`) and the Exam, Publisher, Year and Vintage filters of the
  *  Resources shelf (`pages/wiki/WikiResources.tsx`) are drawn with it, and so
  *  is the learning-objective filter over an exam's source material
  *  (`components/wiki/SourceMaterialGallery.tsx`). */
@@ -48,6 +52,7 @@ export function MultiSelectDropdown({
   emptyTitle,
   surface = 'background',
   shape = 'tile',
+  single: singleChoice = false,
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -130,15 +135,23 @@ export function MultiSelectDropdown({
                 <button
                   type="button"
                   data-sound="tick"
-                  onClick={() => onToggle(opt.value)}
+                  role={singleChoice ? 'menuitemradio' : undefined}
+                  aria-checked={singleChoice ? selected.has(opt.value) : undefined}
+                  onClick={() => {
+                    onToggle(opt.value)
+                    if (singleChoice) setOpen(false)
+                  }}
                   className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
                 >
                   <div
-                    className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 ${
+                    className={`h-4 w-4 ${singleChoice ? 'rounded-full' : 'rounded'} border flex items-center justify-center shrink-0 ${
                       selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
                     }`}
                   >
-                    {selected.has(opt.value) && (
+                    {selected.has(opt.value) && singleChoice && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground" />
+                    )}
+                    {selected.has(opt.value) && !singleChoice && (
                       <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 10 10">
                         <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>

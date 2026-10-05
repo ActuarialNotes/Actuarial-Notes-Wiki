@@ -120,7 +120,7 @@ Body`
 
   it('lists every ISBN search for a book with no authored link', () => {
     const meta = parseResourceMeta('---\nTitle: A First Course in Probability\nISBN: 978-0134753119\n---\nBody')
-    expect(meta.copySources?.map(s => s.label)).toEqual(['WorldCat', 'Amazon', 'Library Genesis'])
+    expect(meta.copySources?.map(s => s.label)).toEqual(['WorldCat', 'Amazon'])
     expect(meta.getCopyUrl).toBe(meta.copySources?.[0].url)
   })
 
@@ -190,7 +190,6 @@ describe('copySources', () => {
     expect(copySources('978-0134753119').map(({ id, label, url }) => ({ id, label, url }))).toEqual([
       { id: 'worldcat', label: 'WorldCat', url: 'https://search.worldcat.org/search?q=bn%3A9780134753119' },
       { id: 'amazon', label: 'Amazon', url: 'https://www.amazon.com/s?k=9780134753119&i=stripbooks' },
-      { id: 'libgen', label: 'Library Genesis', url: 'https://libgen.li/index.php?req=9780134753119' },
     ])
   })
 
@@ -198,12 +197,27 @@ describe('copySources', () => {
   // no file there would put a broken image in every row of the menu.
   it('leads each place with a logo the app itself serves', () => {
     const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../public')
-    const sources = copySources('978-0134753119')
+    const sources = copySources('978-1-64756-316-5')
     for (const { label, logo } of sources) {
       expect(logo, label).toMatch(/^\/copy-sources\/[a-z-]+\.png$/)
       expect(existsSync(path.join(publicDir, logo)), `${label}: ${logo}`).toBe(true)
     }
     expect(new Set(sources.map(s => s.logo)).size).toBe(sources.length)
+  })
+
+  // The bookstore has no search address, so its row is a product page — and
+  // only for a book it is known to stock.
+  it("adds The Actuarial Bookstore's page for a book it stocks, and never for one it doesn't", () => {
+    const stocked = copySources('978-1-64756-316-5')
+    expect(stocked.map(s => s.id)).toEqual(['worldcat', 'actuarial-bookstore', 'amazon'])
+    expect(stocked[1].url).toBe('https://www.actuarialbookstore.com/order_selection.aspx?id=453151265')
+    expect(copySources('978-0134753119').map(s => s.id)).not.toContain('actuarial-bookstore')
+  })
+
+  it('shows no shadow-library row', () => {
+    for (const isbn of ['978-0134753119', '978-1-64756-316-5']) {
+      expect(copySources(isbn).some(s => /libgen|genesis/i.test(s.id + s.label + s.url))).toBe(false)
+    }
   })
 
   it('offers nothing for a malformed or missing ISBN', () => {

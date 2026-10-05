@@ -23,13 +23,14 @@ A **Box Plot** (box-and-whisker plot) is an [[Exploratory Data Analysis]] displa
 
 > $$\text{IQR} = Q_3 - Q_1$$
 
-> $$\text{outlier if } x < Q_1 - 1.5\,\text{IQR} \ \text{ or } \ x > Q_3 + 1.5\,\text{IQR}$$
+> $$\text{potential outlier if } x < Q_1 - 1.5\,\text{IQR} \ \text{ or } \ x > Q_3 + 1.5\,\text{IQR}$$
 
 - The **box** runs from $Q_1$ to $Q_3$ and holds 50% of the observations; the line inside it is the **median**, not the mean
 - The **whiskers** extend to the furthest observation within $1.5 \times \text{IQR}$ of the box; points beyond are drawn individually as outliers
+- **The convention varies.** The $1.5\,\text{IQR}$ limits are the *inner fences*; NIST calls a point beyond one a *mild* outlier and a point beyond an *outer fence*, $Q_1 - 3\,\text{IQR}$ or $Q_3 + 3\,\text{IQR}$, an *extreme* one, and its basic box plot has no fences at all — the whiskers run to the minimum and maximum. Quartiles have several definitions too: this page takes the medians of the lower and upper halves (the median itself left out when $n$ is odd), which in the example below matches NIST's $(n+1)p$-th ordered value, while R's `boxplot` uses Tukey's hinges — so software can report different quartiles and fences for the same data
 - A median sitting left of centre with a long right whisker signals **right skew** — the usual shape for claim severity
 - Box plots are read **side by side**: one box per level of a [[Categorical Predictor]] shows whether a rating variable separates the response, which is exactly the evidence needed before adding that variable to a [[Generalized Linear Model]]
-- A box plot hides multimodality — two clusters and one broad spread give the same five numbers, so pair it with a [[Histogram]] before concluding anything about shape
+- A box plot hides multimodality — two clusters and one broad spread can give the same five numbers, so pair it with a [[Histogram]] before concluding anything about shape
 - Because it is built from [[Order Statistics]], it is resistant to extreme values: one enormous claim moves the maximum but not the box
 
 ![[Media/Figures/Box_Plot.svg|340]]
@@ -42,7 +43,7 @@ A **Box Plot** (box-and-whisker plot) is an [[Exploratory Data Analysis]] displa
 > > $$\text{IQR} = 11 - 4 = 7$$
 > > $$\text{upper fence} = Q_3 + 1.5(7) = 11 + 10.5 = 21.5$$
 > > $$\text{lower fence} = Q_1 - 1.5(7) = 4 - 10.5 = -6.5$$
-> > The value $40 > 21.5$ is an **outlier**; the upper whisker therefore stops at $14$. The five-number summary is $(2, 4, 7, 11, 40)$ with $40$ plotted separately.
+> > The value $40 > 21.5$ is an **outlier**; the upper whisker therefore stops at $14$. The five-number summary is $(2, 4, 7, 11, 40)$ with $40$ plotted separately. It also lies beyond the outer fence $Q_3 + 3(7) = 32$, so NIST would call it an *extreme* outlier. R's `boxplot` would draw $Q_1 = 4.5$ and $Q_3 = 10$ (fences $-3.75$ and $18.25$) — different numbers, the same outlier and whisker.
 
 > [!example]- Comparing Vehicle Classes {Example}
 > Box plots of severity for three vehicle classes show medians of $3.1$, $3.3$, and $6.8$ (in thousands), with the first two boxes overlapping heavily and the third sitting well above them with several high outliers. What does this suggest for the model?

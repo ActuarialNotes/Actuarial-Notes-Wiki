@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-04
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e8d234bebf3f8bce481f86c82b0063b12040c23bd795f363f7e4ac49d76ef0fb
+  content_hash: sha256:8f62bb440001aba2e3da33d6040727cf036e45613bdc1e696a3553c6e573adca
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §5.1 Cross-Validation (printed pp.198-206, PDF pp.207-215); §6.1.3 'Validation and Cross-Validation' (printed p.235, PDF p.243); §6.5.1 lab (printed p.271, PDF p.279), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §4.3.1 out-of-time validation PDF p.50; §4.3.4 cross validation PDF pp.51-52, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
-  open_findings: 1
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §5.1.2-5.1.4 printed pp.202-206 (PDF pp.211-215); §6.1.3 printed p.232 (PDF p.240); §6.5.3 lab printed p.271 (PDF p.279), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §4.3.1 Train and Test PDF p.50; §4.3.4 Cross Validation PDF pp.51-52, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Cross-Validation.md
 ---

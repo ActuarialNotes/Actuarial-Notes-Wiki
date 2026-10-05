@@ -1,8 +1,10 @@
 import { forwardRef, type ReactNode, type Ref } from 'react'
-import { Search, X } from 'lucide-react'
+import { ChevronLeft, Search, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { cn } from '@/lib/utils'
+import type { ExamStatus } from '@/lib/examStatus'
 
 /**
  * The **floating search bar** — the bar a top-level place pins to the top of
@@ -151,6 +153,63 @@ export function FloatingSearchStrip({ title, icon, backLink, children }: Floatin
       )}
       {children}
     </div>
+  )
+}
+
+/**
+ * The thin full-bleed line under an exam's strip saying how far along its
+ * material is (`lib/examStatus.ts`) — passed as the bar's `banner`. The study
+ * guide and the quiz builder draw the same one, so an exam reads the same on
+ * both tabs. A ready exam has none.
+ */
+export function ExamStatusBanner({ status }: { status: ExamStatus }) {
+  if (status === 'development') {
+    return (
+      <div className="bg-amber-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
+        In Development — syllabus outline only, not yet available to study
+      </div>
+    )
+  }
+  if (status === 'beta') {
+    return (
+      <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
+        Beta
+      </div>
+    )
+  }
+  return null
+}
+
+/**
+ * The way back at the head of a strip — the study guide's "All exams" and the
+ * quiz builder's "Change exam" are the same chevron, at the same size, so it
+ * is drawn once. A 36px target with a 24px chevron: it is the one control on
+ * the strip a thumb reaches for most.
+ */
+export function FloatingSearchBack({
+  label,
+  to,
+  state,
+  onClick,
+}: {
+  label: string
+  /** A link up the tab… */
+  to?: string
+  state?: unknown
+  /** …or a change of screen the address doesn't show. */
+  onClick?: () => void
+}) {
+  const className =
+    'not-prose -ml-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+  const chevron = <ChevronLeft className="h-6 w-6" aria-hidden />
+  return to ? (
+    <Link to={to} state={state} aria-label={label} title={label} className={className}>
+      {chevron}
+    </Link>
+  ) : (
+    <button type="button" onClick={onClick} aria-label={label} title={label} className={className}>
+      {chevron}
+    </button>
   )
 }
 

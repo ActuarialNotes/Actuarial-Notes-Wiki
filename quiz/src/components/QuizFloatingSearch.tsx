@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { History, Layers, Search, Sparkles, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
@@ -17,6 +17,7 @@ import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
+import { FloatingSearchStrip } from '@/components/FloatingSearchBar'
 
 interface FilterPill {
   label: string
@@ -60,9 +61,23 @@ interface QuizFloatingSearchProps {
   filter?: QuestionFilter
   /** Active filter chips shown at the top of the dropdown with × to remove. */
   filterPills?: FilterPill[]
+  /**
+   * The second line, for the builder of one exam: the study guide's strip, to
+   * the pixel — the way back, the exam's logo, and the exam's controls at the
+   * tail (`FloatingSearchStrip`). Hidden while the search is open, whose panel
+   * takes the height below the input.
+   */
+  strip?: {
+    title: string
+    icon?: ReactNode
+    backLink?: ReactNode
+    actions?: ReactNode
+  }
+  /** Full-bleed under the bar — the exam's Beta / In Development banner. */
+  banner?: ReactNode
 }
 
-export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchProps = {}) {
+export function QuizFloatingSearch({ filter, filterPills, strip, banner }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
@@ -256,6 +271,12 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
             )}
           </div>
 
+          {strip && !isExpanded && (
+            <FloatingSearchStrip title={strip.title} icon={strip.icon} backLink={strip.backLink}>
+              {strip.actions && <span className="inline-flex shrink-0 items-center gap-1.5">{strip.actions}</span>}
+            </FloatingSearchStrip>
+          )}
+
           {/* Selection bar — shown when selections exist and dropdown is closed */}
           {!isExpanded && selectedIds.size > 0 && (
             <div className="flex items-center justify-between gap-3 py-2">
@@ -423,6 +444,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
             </div>
           )}
         </div>
+        {!isExpanded && banner}
       </div>
     </>
   )

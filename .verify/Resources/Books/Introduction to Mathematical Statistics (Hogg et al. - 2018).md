@@ -52,3 +52,12 @@ created: 2026-10-04
 - date: 2026-10-04
 - locus: frontmatter Year; outline
 - note: Publisher eBook preview of the 8th edition, Global Edition: https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf (sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99). It has the title page (PDF p.2), the copyright page (PDF p.3), the printed Contents pp.5-9 (PDF pp.6-10) with a text layer, and the Preface. (1) A mechanical diff of its Contents text against the transcription from the gbv.de scan cited in C-002 matches every chapter, section, subsection and appendix entry. The only differences are ligatures (ffi/ff), line-break hyphens and the Preface/Index entries, and 6.2 reads 'Rao-Cramer' with a hyphen, as the page has it. The page's section-level outline is therefore confirmed by a second copy of the printed contents. (2) The copyright page (PDF p.3) reads: 'Authorized adaptation from the United States edition, entitled Introduction to Mathematical Statistics, 8th Edition, ISBN 978-0-13-468699-8, by Robert V. Hogg, Joseph W. McKean, and Allen T. Craig, published by Pearson Education (c) 2019.' This adds a publisher's own (c) 2019 for the US 8th edition to the K10plus '[2019]' in C-001. The CAS 2026 outline p.6 (rank 1) and Pearson's product page give 2018, and the page's Year 2018 follows them (higher rank). This is consistent with a January 2018 release carrying a forward-dated 2019 copyright. The conflict is logged and not filed, and a human may prefer the copyright year. It also confirms the title, the three authors in title-page order and the US hardcover ISBN 978-0-13-468699-8 the page carries.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Third ## Sources entry now cites [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf), same note. Its p.6 Hogg entry (sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed: 8th edition, Prentice Hall, 2018; Domain B 1.7, 2.7, 2.8, 3.7, 4.1, 4.4-4.7, 5.1, 6.1-6.5, 7.1-7.6, 8.1-8.3; Domain C 4.4, 6.3, 6.5, 7.5, 9.1-9.6; B1-B8, C1-C9) matches the callout, which is unchanged. Year 2018 left as is (C-001/C-004 are logged source conflicts; the rank-1 outline still says 2018).

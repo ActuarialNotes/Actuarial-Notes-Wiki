@@ -7,16 +7,16 @@ date: "2008"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf)"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1ddae7b21cbde6e80c7d99e9823c9be87f7cfe97f9f33508ec322b82ee8ccc76
+  content_hash: sha256:39267b027b6647c43ebde24792c24174a872101eef6aac815e73f7650bccabbb
   sources:
     - "James W. Daniel, Poisson processes (and mixture distributions), CAS Study Note, June 26 2008 — whole note pp.1-15 (title page, Foreword, Ch.1 §§1.1-1.4.3), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.3 and 6 (Domain A readings; Daniel citation, A1-5, OP, practice-problem note and links), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Daniel practice problems (CAS scan), 13 pp. read as page images, sha256:ad09bca16833dd204964b40a5a4f4a14d2a84df1b71ea39f77bda804a5de9702 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_2.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Poisson Processes and Mixture Distributions (Daniel - 2008).md
 ---

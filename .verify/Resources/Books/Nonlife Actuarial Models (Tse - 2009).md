@@ -59,3 +59,21 @@ created: 2026-10-04
 - date: 2026-10-04
 - locus: F-001 evidence
 - note: The publisher's eBook preview at https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf (sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404, 55 pp.) contains the title page (PDF p.5), the copyright page (PDF p.6: (c) Y.-K. Tse 2009, Hardback ISBN-13 978-0-521-76465-0, eBook 978-0-511-63023-1), the full printed Contents pp. vii-xii (PDF pp.9-14) with a text layer, the Preface (PDF pp.15-16) and Chapter 1. A mechanical diff of its Contents text against the transcription from the Google Books page images cited in F-001 agrees on all 208 entries: parts, chapters, sections, subsections, Exercises, front matter and back matter. F-001's omission count therefore stands. This PDF is the better source to transcribe the missing sections from, because it is a stable, hashable document with a text layer.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Transcribed the full printed contents pp. vii-xii from the publisher's eBook preview (PDF pp.9-14, text layer extracted with pymupdf, NFKC-normalised for the fi/fl ligatures, wrapped titles joined, running heads and page numbers dropped, then converted to the page shape by script — not retyped): Preface and Notation and convention as ## headings before Part I; the four parts as ##; Chapters 1-15 as ###; all 85 sections, 83 subsections (nested) and the 15 Exercises entries as bullets; Appendix: Review of statistics, Answers to exercises, References and Index as ## headings. 208 entries in all; the page's 41 earlier entries are all among them unchanged. Assigned sections now carry their titles (MAS-I 1.1, 2.2-2.5, 10.1, 10.2, 11.1, 12.1, 12.3, 13.2; MAS-II 6.1-6.3, 7.1-7.4, 8.1-8.2, 9.1-9.2). Concept links added only on exact-match pages that exist (2.2.1, 2.2.2, 2.3.1, 2.5.1, 2.5.3, 6.3, 7.3, 7.4, 8.4, 9.1, 12.1.1, 12.3, 12.4.2, 13.2.4, 14.3.1), display text as printed. The second ## Sources entry (the Cambridge Core p.vii image, which said pp. viii-xii could not be fetched) is replaced by the preview, cited for the copyright page and the full contents. Source: Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge University Press, 2009), publisher eBook preview, Contents pp. vii-xii (PDF pp.9-14), copyright page (PDF p.6), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Fifth and sixth ## Sources entries now cite [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) (p.6 Tse entry: Sections 1.1, 2.2, 2.3, 2.4, 2.5, 10.1, 10.2, 11.1, 12.1, 12.3, 13.2; B1-B4, B7-9; sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed) and [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) (p.4 Tse entry: Chapters 6.1-6.3, 7.1-7.4, 8.1-8.2, and 9.1-9.2; A1-A2; sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b), notes unchanged. Both URLs fetched this session (HTTP 200, hashes match). The callout is unchanged.

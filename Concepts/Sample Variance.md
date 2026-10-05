@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:657450d3fd8b09ea831e20f02d9937e2e52b5605938aea9d468d3d062eb6f31d
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Sample Variance.md
 ---

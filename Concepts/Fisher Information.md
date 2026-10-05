@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:e48e71b40322f731cdb220fb81e36ad35f3c2d8711554fe6b1498e7d8ac239cf
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Fisher Information.md
 ---

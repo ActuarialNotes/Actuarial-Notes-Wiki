@@ -61,3 +61,14 @@ created: 2026-10-04
 - resolves: F-002
 - status: resolved
 - note: Fourth ## Sources entry now cites [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) with the note 'the citation (11th, 12th or 13th edition, Academic Press, 2014/2019/2023) and the assigned sections', per its p.6 Ross entry (sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: high
+- checks_run: F-001 and F-002 fixes re-read (callout now '11th, 12th or 13th edition'; Sources entry 2026 label, URL and '2014/2019/2023'), both word for word against the 2026 outline p.6 Ross entry; section list and A1-A6 unchanged and still in the 12th-edition contents; outline re-diffed against the scan's text layer: 212 of 233 entries verbatim, the other 21 differ only by the OCR misreads logged in run 8861 (Denned/Defined, fc-Record/k-Record, M/G/l/M/G/1, Py(0/P_ij(t), dropped chapter numerals, math markup); lead re-checked against the Google Books publisher description; outline URL fetched (HTTP 200, hash matches); resource_lint 0 errors; verify_check clean
+- sources_checked: Ross, Introduction to Probability Models, Twelfth Edition (Academic Press, 2019), title page and printed Contents pp. v-x, library scan (TU Ilmenau via K10plus), re-fetched 2026-10-05, sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF; Google Books record for ISBN 9780128143469: publisher description, Twelfth Edition, Academic Press 2019, fetched 2026-10-05, sha256:9ee0a9dcaa73134607d9b364b22944e733e2fda14cb2f01dd6896383d695ff21 — https://books.google.com/books?vid=ISBN9780128143469; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: F-001 and F-002 closed. Contents from the 12th edition's own printed pages, lead from the publisher's description, scope from the rank-1 outline; no findings open.

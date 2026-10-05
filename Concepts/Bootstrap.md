@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0cc8b9655f8b750fe07503362b9bf220deae8aba4402dd8499326a973fc392f4
-  sources: []
-  open_findings: 0
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §5 intro (PDF p.206), §5.2 eqs. 5.6-5.8 and Fig. 5.11 (PDF pp.218-221), Ex. 5.4.2 (PDF pp.228-229), §8.2.1 bagging/OOB 'around two-thirds' (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Orloff & Bloom, MIT 18.05 Class 24 'Bootstrap confidence intervals' (prep-a), §§6-9 (PDF pp.3-6, 10), sha256:b3d7018c2214a25a7090228e8e0fa8e500922d6eb3fef4e52e5f08962e1dd948 — https://math.mit.edu/~dav/05.dir/class24-prep-a.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Bootstrap.md
 ---

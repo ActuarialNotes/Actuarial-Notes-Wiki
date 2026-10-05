@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:fcae0fd1b1737964d3c7d2a45dd4b875241f3848d73b127e34d4fc312fb8c7a5
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: ".verify/Concepts/Cramér-Rao Lower Bound.md"
 ---

@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b59b3d5a45a0d7aafea007091d8d4e0e28a5fc0015ce9e92bf524f603e4ac6d3
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.4.4.3 Quadratic Discriminant Analysis, eq.4.28, p(p+1)/2 and Kp(p+1)/2 parameter counts, LDA-vs-QDA bias-variance (printed pp.152-153, PDF pp.162-163); sec.4.4.4 diagonal-covariance remark (printed p.155, PDF p.165)"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), readings table (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf: James et al. Ch.4 'Sections 4.1 through 4.4; the Linear Discrimination Analysis portion of Section 4.4 will not be tested'"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Quadratic Discriminant Analysis.md

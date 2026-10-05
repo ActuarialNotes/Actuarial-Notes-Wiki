@@ -22,9 +22,9 @@ A **Nonhomogeneous Poisson Process** (NHPP) is a [[Poisson Process]] whose rate 
 
 > $$N(b) - N(a) \sim \text{Poi}\!\left(\int_a^b \lambda(u)\,du\right)$$
 
-- Independent increments still hold, but **stationary** increments do not: two intervals of the same length have different expected counts unless $\lambda$ is constant there
+- Independent increments still hold, but **stationary** increments do not: two intervals of the same length can have different expected counts (their counts share a distribution only when the integrated rates over them are equal)
 - $m(t)$ is called the **mean value function**; $E[N(t)] = \text{Var}(N(t)) = m(t)$
-- Any NHPP can be turned into a rate-$1$ homogeneous process by the **time change** $s = m(t)$ — this is what makes seasonal or trending claim arrivals tractable
+- When $\lambda(t) > 0$, so that $m$ is strictly increasing, an NHPP becomes a rate-$1$ homogeneous process under the **time change** $s = m(t)$ — this is what makes seasonal or trending claim arrivals tractable
 - Thinning a homogeneous process with a time-varying probability $p(t)$ produces an NHPP with rate $\lambda p(t)$; conversely, splitting an NHPP by event type gives independent NHPPs
 - Actuarial uses: hurricane arrivals concentrated in one season, claim reporting patterns that decay after the accident date, and exposure growth over a policy year
 - The waiting time to the first event has survival function $P(T_1 > t) = e^{-m(t)}$, so the [[Hazard Rate]] of $T_1$ is exactly $\lambda(t)$
@@ -45,4 +45,4 @@ A **Nonhomogeneous Poisson Process** (NHPP) is a [[Poisson Process]] whose rate 
 >
 > > [!answer]-
 > > $$\int_4^6 (3 + 2u)\,du = \left[3u + u^2\right]_4^6 = (18 + 36) - (12 + 16) = 26$$
-> > The count is $\text{Poi}(26)$ — larger than the $28$ expected over the *four* earlier months' worth of exposure per month, because the rate is rising. Note this is a two-month window carrying nearly the same expected count as the first four months combined.
+> > The count is $\text{Poi}(26)$: $26/2 = 13$ expected claims per month on $(4, 6]$, against $28/4 = 7$ per month on $(0, 4]$, because the rate is rising. Note this is a two-month window carrying nearly the same expected count as the first four months combined.

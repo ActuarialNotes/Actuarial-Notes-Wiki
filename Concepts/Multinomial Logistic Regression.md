@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fb5992f7c3ed488f7bc7b3b64557874a76e31150035f982fc3e5ec89633bf124
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.4.3.5 Multinomial Logistic Regression, eqs 4.10-4.13 (printed pp.140-141, PDF pp.150-151)"
+    - "Rodriguez, GLM lecture notes (Princeton), ch.6 Multinomial Response Models, sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf, secs.6.2.1-6.2.4 (baseline category, J-1 equations, reduces to logistic for J=2, log(pi1/pi2) as difference, probabilities form eq.6.5, ML by Fisher scoring/Newton-Raphson, deviance and LR chi-square) (PDF pp.3-6)"
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018; MAS-I reading) — publisher eBook preview, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf, printed contents Ch.8 (sec.8.3 'Nominal logistic regression') (PDF p.11)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Multinomial Logistic Regression.md

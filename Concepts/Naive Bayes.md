@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bd463bcc644fb40adfd0e1558dd07110f19bd8493fd3d731cf34a9fde3017e17
-  sources: []
-  open_findings: 0
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.4.4.4 Naive Bayes, eqs 4.29-4.30, estimation options for f_kj, diagonal-covariance remark (printed pp.153-156, PDF pp.163-166); sec.4.4.2 threshold trade-off (printed p.150, PDF p.160); sec.4.4 Generative Models for Classification (printed p.141, PDF p.151)"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Naive Bayes.md
 ---

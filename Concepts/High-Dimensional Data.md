@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cc6f6eaa1746876b7d61b9d79f2c5c570e4ce4a93e92a8c02138920891bbd1aa
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.6.4 Considerations in High Dimensions, 6.4.1-6.4.4 (definition p>n and 'p slightly smaller than n'; perfect fit when p >= n; Fig.6.22 n=2 line; Fig.6.23 R2->1, training MSE->0, test MSE up; Cp/AIC/BIC unusable because sigma-hat^2 = 0, adjusted R2 of 1; forward stepwise, ridge, lasso, PCR; tuning crucial; curse of dimensionality; extreme multicollinearity, one of many models, report test-set or CV error) (printed pp.261-267, PDF pp.269-275)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/High-Dimensional Data.md

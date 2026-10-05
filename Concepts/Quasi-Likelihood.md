@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4d42729b453a72eba35725d68b83f3667efd496bbecd754ee49ca742f07c9d2c
-  sources: []
+  sources:
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), 'Quasi-Likelihood' (p.1), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "Rodriguez, GLM lecture notes (Princeton), addendum 'Models for Count Data With Overdispersion' (rev. Oct 2022), sec.1 The Over-Dispersed Poisson Model (PDF pp.1-3), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
+    - "Roback & Legler, Beyond Multiple Linear Regression (CRC 2021, open online edition), ch.4 Poisson Regression, sec.4.9.1 Dispersion Parameter Adjustment, sha256:55079c7b837d6207e55badacb0258e26d6c8f07ee731d11db0878b2d6a4982d4 — https://bookdown.org/roback/bookdown-BeyondMLR/ch-poissonreg.html"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.2 overdispersed Poisson (PDF p.31) and sec.6.2.1 Nested Models and the F-Test, eq.17 (PDF pp.74-76), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Quasi-Likelihood.md

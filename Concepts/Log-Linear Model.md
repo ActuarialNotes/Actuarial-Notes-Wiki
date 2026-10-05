@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4e6dd6ad2a326e3d5bb279aab67a7854b357bb0ee3eb3effe1a7312989228d3e
-  sources: []
+  sources:
+    - "Rodriguez, GLM lecture notes (Princeton), ch.5 Log-Linear Models for Contingency Tables, sha256:b98785861711e5e1355ef6f0f2d60e0f655b512c68dc73f295953527563444d2 — https://grodri.github.io/glms/notes/c5.pdf, sec.5.1 two-dimensional tables (independence as product of margins, fitted counts from row/column totals, deviance chi-square on (I-1)(J-1) d.f., Pearson's chi-squared as the traditional test, Poisson additive model equivalent to multinomial/product-binomial schemes) (PDF pp.1-8); secs.5.2.3-5.2.4 complete and block independence (PDF pp.12-13)"
+    - "Rodriguez, GLM lecture notes (Princeton), ch.6 Multinomial Response Models, sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf, sec.6.2.5 The Equivalent Log-Linear Model (parameter per group reproduces denominators, main effect per response category, main effects become interactions, logit parameters as differences) (PDF pp.6-7)"
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018; MAS-I reading) — publisher eBook preview, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf, printed contents Ch.9 (9.3 contingency tables, 9.4 probability models: Poisson, multinomial, product multinomial; 9.5 log-linear models; 9.6 inference; 9.7 numerical examples) (PDF pp.11-12)"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), readings table (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf: Dobson & Barnett Chapters 1-9 excluding 6.3.3, 6.7, 6.8, 7.9 (Ch.9 wholly assigned)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Log-Linear Model.md

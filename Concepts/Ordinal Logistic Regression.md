@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a6298ddd412e4a19a1c611190f8effd7a5e03022021e8ed191ba0dfb3835ed78
-  sources: []
+  sources:
+    - "Rodriguez, GLM lecture notes (Princeton), ch.6 Multinomial Response Models, sha256:f559d07ae73bdf381de5c19a9f0621419c635e5c6495c0135af940ae36807cbb — https://grodri.github.io/glms/notes/c6.pdf, sec.6.5 Models for Ordinal Response Data, 6.5.1-6.5.3 (cumulative probabilities gamma_j, eq.6.20 g(gamma_ij)=theta_j+x'beta with no column of ones, cut-points theta_1<...<theta_J-1, latent variable with beta*=-beta, proportional odds name and odds lambda_j*exp(x'beta), 'not a log-linear model', continuation-ratio model) (PDF pp.15-19)"
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018; MAS-I reading) — publisher eBook preview, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf, printed contents Ch.8 (sec.8.4 Ordinal logistic regression: 8.4.1 cumulative logit, 8.4.2 proportional odds, 8.4.3 adjacent categories logit, 8.4.4 continuation ratio logit) (PDF p.11)"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Ordinal Logistic Regression.md

@@ -520,6 +520,19 @@ Other important `lib/` modules:
   `timed=1`; `components/QuizTimer.tsx` counts down in the quiz header from the first
   question (not the pre-quiz concept list), goes amber in the last tenth and counts the
   overrun in red rather than ending the quiz. Pure and tested.
+- `writtenAnswer.ts` — the **written parts** of a long-answer question (`answer === ''`: a CAS
+  essay or calculation part the reader marks against the sample answer). `splitSampleAnswers`
+  cuts a part's sample answer into the separate answers the examiners printed — `Alternatively:`,
+  `Or:`, a lead-in such as `Alternatively, with phasing:`, `Sample Answer #1` headings — so
+  `components/AnswerReference.tsx` can draw each as its own card inside one *Sample answer*
+  panel, with the examiner's report a card of its own. A bare `or`, and an alternative *inside*
+  one section of a sectioned answer, split nothing: both are used within one answer as often as
+  between two. `ungradedWrittenParts` is what makes Next (or Finish) on a question with written
+  parts still ungraded open `components/GradePartsDialog.tsx`, which takes the grades right there
+  (`components/SelfGradeButtons.tsx`, the one Full credit / Partial / No credit control) — only
+  while answers are revealed as the quiz goes. Note the grades are recorded (`manualGrades`) but
+  a written part still counts toward nothing: `questionCredit` and `effectiveIsCorrect` skip it.
+  Pure and tested; the flow is in `e2e/quiz.spec.ts`.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
   one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past
@@ -1033,8 +1046,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **189 test files /
-~3030 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **191 test files /
+~3070 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

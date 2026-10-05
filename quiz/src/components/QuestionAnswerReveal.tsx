@@ -53,7 +53,7 @@ function PartReveal({ part }: { part: Part }) {
       {part.examiner_report && (
         <div className="space-y-1.5 border-t border-foreground/10 pt-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Examiner&apos;s Notes
+            Examiner&apos;s Report
           </p>
           <MarkdownText className={QUESTION_MD_CLASS}>{part.examiner_report}</MarkdownText>
         </div>

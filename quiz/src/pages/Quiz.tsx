@@ -10,6 +10,7 @@ import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
+import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizConcepts } from '@/components/PreQuizConcepts'
@@ -17,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
+import { ungradedWrittenParts, writtenParts } from '@/lib/writtenAnswer'
 import { pendingAnswerFor, tagPendingAnswer } from '@/lib/pendingAnswer'
 import { resumesQuiz } from '@/lib/quizResume'
 import { loadRevealMode, parseRevealMode } from '@/lib/revealMode'
@@ -192,11 +194,14 @@ export default function Quiz() {
   const [showQuestionInfo, setShowQuestionInfo] = useState(false)
 
   const essayQuestions = useMemo(
-    () => storeQuestions.filter(q =>
-      q.type === 'multi-part' && (q.parts ?? []).some(p => p.answer === '')
-    ),
+    () => storeQuestions.filter(q => writtenParts(q).length > 0),
     [storeQuestions],
   )
+  // Leaving a question whose written parts aren't all graded asks for the
+  // grades first (components/GradePartsDialog.tsx). The labels are the parts
+  // that were ungraded when Next was pressed — kept fixed while the dialog is
+  // up, so a part doesn't vanish from it the moment it is graded.
+  const [gradePrompt, setGradePrompt] = useState<string[] | null>(null)
 
   // Tracks whether the user clicked "Change Answer" on the current question
   const [isChangingAnswer, setIsChangingAnswer] = useState(false)
@@ -299,7 +304,17 @@ export default function Quiz() {
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
-  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo
+  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp || showQuestionInfo || gradePrompt !== null
+
+  // Per-part grades for a multi-part question, read back from the store keyed
+  // by part label (the store keys them as `${id}__${label}`).
+  function partGradesFor(questionId: string): Record<string, SelfGrade> {
+    return Object.fromEntries(
+      Object.entries(manualGrades)
+        .filter(([k]) => k.startsWith(`${questionId}__`))
+        .map(([k, v]) => [k.slice(questionId.length + 2), v]),
+    )
+  }
 
   // Select an MC answer by its 0-based index in the options array
   function selectAnswerByIndex(i: number) {
@@ -351,7 +366,21 @@ export default function Quiz() {
     }
   }
 
+  // Next (or Finish) on an answered question — the button, Enter, →, or a tap
+  // on a locked answer. With the answers shown as the quiz goes, written parts
+  // still waiting for a self-grade are asked about first.
   function handleNextFromAnswer() {
+    if (showExplanation && currentQuestion) {
+      const ungraded = ungradedWrittenParts(currentQuestion, partGradesFor(currentQuestion.id))
+      if (ungraded.length > 0) {
+        setGradePrompt(ungraded.map(p => p.label))
+        return
+      }
+    }
+    moveOn()
+  }
+
+  function moveOn() {
     if (isLastQuestion) {
       handleFinish()
     } else {
@@ -586,13 +615,8 @@ export default function Quiz() {
     )
   }
 
-  // Per-part self-grades for the current multi-part question, read back from the
-  // store keyed by part label (the store keys them as `${id}__${label}`).
-  const partGradeMap: Record<string, SelfGrade> = Object.fromEntries(
-    Object.entries(manualGrades)
-      .filter(([k]) => k.startsWith(`${currentQuestion.id}__`))
-      .map(([k, v]) => [k.slice(currentQuestion.id.length + 2), v]),
-  )
+  // Per-part self-grades for the current multi-part question.
+  const partGradeMap = partGradesFor(currentQuestion.id)
   const setPartGrade = (partLabel: string, grade: SelfGrade) =>
     setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
 
@@ -689,6 +713,21 @@ export default function Quiz() {
         />
       )}
 
+      {gradePrompt && (
+        <GradePartsDialog
+          parts={(currentQuestion.parts ?? []).filter(p => gradePrompt.includes(p.label))}
+          grades={partGradeMap}
+          onGrade={setPartGrade}
+          isOnlyPart={(currentQuestion.parts ?? []).length === 1}
+          continueLabel={isLastQuestion ? `Finish ${mode === 'mock-exam' ? 'Exam' : 'Quiz'}` : 'Next Question'}
+          onContinue={() => {
+            setGradePrompt(null)
+            moveOn()
+          }}
+          onCancel={() => setGradePrompt(null)}
+        />
+      )}
+
       {showShortcutsHelp && (
         <KeyboardShortcutsHelp
           context="quiz"
@@ -763,7 +802,7 @@ export default function Quiz() {
                 </Button>
                 {isLastQuestion ? (
                   <Button
-                    onClick={handleFinish}
+                    onClick={handleNextFromAnswer}
                     size="lg"
                     disabled={isSubmitting}
                     className="bg-foreground text-background hover:bg-foreground/90"
@@ -773,7 +812,7 @@ export default function Quiz() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={nextQuestion}
+                    onClick={handleNextFromAnswer}
                     size="lg"
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >

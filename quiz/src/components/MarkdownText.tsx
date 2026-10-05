@@ -29,13 +29,23 @@ export const MARKDOWN_LIST_CLASS =
 // answer, an examiner's report: paragraphs, lists, and the bordered tables the
 // data-heavy answers (development triangles, …) need. The block's own first
 // and last elements lose their outer margin so a heading above sits snug.
-export const QUESTION_MD_CLASS =
-  'text-sm text-foreground leading-relaxed ' +
+const QUESTION_MD_BLOCKS =
   '[&_p]:my-2 [&>:first-child]:mt-0 [&>:last-child]:mb-0 ' +
-  '[&_table]:text-xs [&_table]:border-collapse [&_th]:text-left [&_td]:pr-4 ' +
+  '[&_table]:border-collapse [&_th]:text-left [&_td]:pr-4 ' +
   '[&_th]:border [&_td]:border [&_th]:border-current/20 [&_td]:border-current/20 ' +
   '[&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ' +
   MARKDOWN_LIST_CLASS
+
+export const QUESTION_MD_CLASS =
+  'text-sm text-foreground leading-relaxed [&_table]:text-xs ' + QUESTION_MD_BLOCKS
+
+// The same blocks a size up, for what a reader settles in to *read* on a
+// written part — the part itself, their own response, the sample answers and
+// the examiner's report. These run to paragraphs, and are read on a phone
+// beside the reader's own answer, so they get body-copy size rather than the
+// caption-ish `text-sm` the shorter quiz text uses.
+export const READING_MD_CLASS =
+  'text-base text-foreground leading-relaxed [&_table]:text-sm ' + QUESTION_MD_BLOCKS
 
 const scrollableTable: Components['table'] = ({ children, ...props }) => (
   <div className="overflow-x-auto w-full my-2">

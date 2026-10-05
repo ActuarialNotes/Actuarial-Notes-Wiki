@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9764ae4c4172b63de194b63adddf12cf7019b3b64be146f956aa75dc8a199d92
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Chi-Square Goodness-of-Fit Test.md
+---
+
 The **Chi-Square Goodness-of-Fit Test** checks whether a sample came from a hypothesized distribution by sorting the observations into $k$ cells and comparing each cell's observed count $O_j$ with the count $E_j$ the model predicts. Large discrepancies give a large statistic $Q$ and lead to rejecting the model, so it is a right-tailed [[Hypothesis Testing|hypothesis test]].
 
 > $$Q = \sum_{j=1}^{k} \frac{(O_j - E_j)^2}{E_j}$$

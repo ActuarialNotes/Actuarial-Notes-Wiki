@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dd349c309ca95e78c44aa2c22e0ed836c0b6de084961e719d341ea76d2feea84
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Neyman-Pearson Lemma.md
+---
+
 The **Neyman-Pearson Lemma** says how to build the **most powerful test** of a simple null hypothesis $H_0: f = f_0$ against a simple alternative $H_1: f = f_1$: reject $H_0$ where the likelihood ratio $L(\mathbf{x}) = f_0(\mathbf{x})/f_1(\mathbf{x})$ is small. Among all tests whose [[Type I Error|Type I error]] probability is at most $\alpha$, this **best critical region** has the greatest [[Power of a Test|power]].
 
 > $$C = \left\{\mathbf{x} : \frac{f_0(\mathbf{x})}{f_1(\mathbf{x})} \le k\right\}$$

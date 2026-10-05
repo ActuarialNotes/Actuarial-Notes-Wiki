@@ -1,6 +1,6 @@
 # The Store
 
-The **Store** (`/store`, in the sidebar after Projects) gathers the real products an
+The **Store** (`/store`, in the sidebar after Projects, where it reads **Shop** — the name on screen) gathers the real products an
 actuarial candidate buys — **exam registration**, **study materials**, the
 **calculators** the exams allow and the syllabus **textbooks** — and sends the reader to
 the page where each is sold. **Nothing is sold on Actuarial Notes.** Every product opens
@@ -11,6 +11,9 @@ The **Gem Shop** (`/store/gems`) is a corner of it: the characters, skins, banne
 Actuaria ships bought with the gems earned for correct answers. It is the one place in
 the Store where anything is bought in the app. Before the Store existed it *was* `/store`;
 the old `?tab=` links (`/store?tab=ships`, the Hangar's) are sent on to it.
+
+**Pro** is listed beside it, in the panel at the foot of the shelf: one row to `/upgrade`,
+where the subscription is taken through Stripe. It reads *Active* for a reader who has it.
 
 ## The rules
 
@@ -167,7 +170,7 @@ online free wears a **Free online** sticker.
 
 | File | What |
 |---|---|
-| `quiz/src/pages/Store.tsx` | The page: header, exam strip, aisle pills, shelves, Gem Shop row (lazy route) |
+| `quiz/src/pages/Store.tsx` | The page: header, exam strip, aisle pills, shelves, Pro and Gem Shop rows (lazy route) |
 | `quiz/src/pages/GemShop.tsx` | The gem cosmetics shop, `/store/gems` |
 | `quiz/src/components/store/StoreCards.tsx` | Ticket, product card, book card, the exam chips and price |
 | `quiz/src/components/store/ProductSheet.tsx` | The product sheet, per aisle — with its reviews and disclaimer |

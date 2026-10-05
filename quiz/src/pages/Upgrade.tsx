@@ -9,39 +9,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { CoworkArt, ListenArt, ProgressArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { ProgressArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
-// today. Keep this list honest: a benefit belongs here only once a surface
-// checks for it.
+// today, told as what it does for the reader. Keep this list honest: a
+// benefit belongs here only once a surface checks for it (natural-voice
+// Listen and Cowork are off it until they ship).
 const HEADLINE_BENEFITS = [
-  'A daily study plan paced to your exam date',
-  'Choose how your plan orders the syllabus',
-  'Full learning history for every concept',
-  'Natural-voice Listen for every page',
+  'Walk into the exam knowing you\'ve covered it all',
+  'A plan for every day, paced to your exam date',
+  'Study in the order that works for you',
+  'Watch every concept go from new to mastered',
 ]
 
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] = [
   {
-    title: 'Your plan for today, every day',
-    body: 'Set your exam date and get the day\'s concepts laid out — sized to your pace, and re-planned as you learn and forget.',
+    title: 'Open the app, know what\'s next',
+    body: 'No more staring at a syllabus wondering where to start. Set your exam date and each day\'s concepts are waiting — sized to your pace, and re-planned as you learn and forget.',
     Art: StudyPlanArt,
   },
   {
-    title: 'Study your way',
-    body: 'Work through the syllabus in order, or start with the topics the exam weights most.',
+    title: 'Learn the way that suits you',
+    body: 'Build up from the first chapter, or bank the topics the exam weights most first. Either way, every day moves you closer.',
     Art: StrategyArt,
   },
   {
-    title: 'See how each concept is sticking',
-    body: 'A concept\'s full history — every level gained, every slip to Forgotten, and the questions behind each one.',
+    title: 'Feel your progress',
+    body: 'Watch each concept climb from New to mastered — every level gained, every slip caught before it costs you marks, and the questions behind each one.',
     Art: ProgressArt,
-  },
-  {
-    title: 'Listen with a natural voice',
-    body: 'Have any page read aloud in a natural, human-sounding voice, with each passage highlighted as it\'s spoken.',
-    Art: ListenArt,
   },
 ]
 
@@ -171,11 +167,11 @@ export default function Upgrade() {
           <ProBadge size="md" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
-          Know exactly what to study today.
+          Pass exams and have fun doing it.
         </h1>
         <p className="mx-auto max-w-md text-muted-foreground text-balance">
-          Pro turns your syllabus into a daily plan paced to your exam date — and gives you
-          the tools to see it through.
+          Pro turns the syllabus into a little progress every day, so you walk into the
+          exam room confident you know it.
         </p>
       </div>
 
@@ -205,8 +201,10 @@ export default function Upgrade() {
       <section className="space-y-4">
         <h2 className="text-center text-xl font-semibold">Everything in Pro</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {BENEFITS.map(({ title, body, Art }) => (
-            <Card key={title} className="overflow-hidden">
+          {BENEFITS.map(({ title, body, Art }, i) => (
+            // Three cards in two columns: the last spans both rather than
+            // leaving a hole beside it.
+            <Card key={title} className={i === BENEFITS.length - 1 ? 'overflow-hidden sm:col-span-2' : 'overflow-hidden'}>
               <CardContent className="p-4 space-y-3">
                 <Art />
                 <div className="space-y-1">
@@ -217,25 +215,6 @@ export default function Upgrade() {
             </Card>
           ))}
         </div>
-
-        <Card className="overflow-hidden ring-1 ring-violet-500/20">
-          <CardContent className="p-4 grid gap-4 sm:grid-cols-2 sm:items-center">
-            <div className="space-y-1 sm:order-2">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold">Cowork</h3>
-                <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                  Coming soon
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                A second workspace for the job itself: follow the regulators and publishers you
-                work from, build analyses and reports on their documents, and export them to
-                Excel. Included with Pro when it launches.
-              </p>
-            </div>
-            <CoworkArt />
-          </CardContent>
-        </Card>
 
         <ul className="grid gap-2 text-sm sm:grid-cols-2">
           {EXTRAS.map(({ text, Icon }) => (
@@ -251,7 +230,7 @@ export default function Upgrade() {
         <Card className="mx-auto max-w-md ring-1 ring-primary/10 shadow-sm">
           <CardContent className="p-6 space-y-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-semibold">Start today's plan in a minute.</p>
+              <p className="text-lg font-semibold">Start studying with confidence today.</p>
               <p className="text-sm text-muted-foreground">$10 / month. Cancel anytime.</p>
             </div>
             {cta}

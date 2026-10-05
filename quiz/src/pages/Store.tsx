@@ -14,6 +14,8 @@ import { CALCULATORS, STUDY_PRODUCTS } from '@/data/storeCatalog'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
+import { useSubscription } from '@/hooks/useSubscription'
+import { ProBadge } from '@/components/ProBadge'
 import { usePageHead } from '@/hooks/usePageHead'
 import { STORE_HEAD } from '@/lib/seo'
 import { examAccentStyle } from '@/lib/examColors'
@@ -85,6 +87,7 @@ export default function Store() {
   const shelfTop = useRef<HTMLDivElement>(null)
   const { user } = useAuth()
   const { balance } = useGems()
+  const { isPro } = useSubscription()
   const { progress } = useExamProgress()
 
   const items = useMemo(() => buildStoreItems({ study: STUDY_PRODUCTS, calculators: CALCULATORS }, booksBundle), [])
@@ -164,7 +167,7 @@ export default function Store() {
     <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header className="space-y-1">
         <div className="flex items-center gap-3">
-          <h1 className="min-w-0 flex-1 text-2xl font-bold tracking-tight">Store</h1>
+          <h1 className="min-w-0 flex-1 text-2xl font-bold tracking-tight">Shop</h1>
           <Link
             to="/store/gems"
             className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300"
@@ -306,7 +309,24 @@ export default function Store() {
         </div>
       )}
 
+      {/* The two things Actuarial Notes itself offers, after everything sold
+          elsewhere: Pro, and the gems the reader earns. */}
       <ListPanel>
+        <ListRow
+          to="/upgrade"
+          leading={
+            <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
+              <ProBadge size="md" className="bg-background text-foreground" />
+            </LogoTile>
+          }
+          title="Actuarial Notes Pro"
+          subtitle="A daily study plan paced to your exam date, so you walk in confident"
+          trailing={
+            isPro
+              ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
+              : <span className="text-sm font-semibold tabular-nums">$10 / month</span>
+          }
+        />
         <ListRow
           to="/store/gems"
           leading={
@@ -554,7 +574,7 @@ function EmptyAisle({ examName, aisle, refined, onReset }: { examName: string | 
         <ShoppingBag className="h-6 w-6" />
       </LogoTile>
       <p className="text-sm font-medium">
-        Nothing in {aisle ? AISLE_LABEL[aisle].toLowerCase() : 'the Store'}
+        Nothing in {aisle ? AISLE_LABEL[aisle].toLowerCase() : 'the Shop'}
         {examName ? ` for ${examName}` : ''}
         {refined ? ' matches these filters.' : ' yet.'}
       </p>

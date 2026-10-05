@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2a0e8f61d7e7d241b73211857345f9244e1ef97b931902ccf4a34cafe5375973
+  content_hash: sha256:9cc64b2ac32cf9839b052ab426283bd301480425297b3b3ec1350382637587d8
   sources:
     - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists, file dated 2012-09-06): Ex. 4.7 Bonus Malus system, s_i(k) and a_k notation, P_ij = sum over k with s_i(k)=j of e^-lambda lambda^k/k!, pp.188-189; Proposition 4.3 and Ex. 4.23 average annual premium = sum pi_j x premium_j, pp.215-216, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
     - "Lemaire & Zi, 'A Comparative Analysis of 30 Bonus-Malus Systems', ASTIN Bulletin 24(2), 1994 (CAS-hosted): Introduction (BMS surcharge/discount by claims; a priori classification vs. need for BMS) pp.287-288; Tool #3 efficiency = elasticity of the mean stationary premium w.r.t. claim frequency, typically far below 1 (Table 4) p.294; Tool #4 'hunger for bonus', paying small claims to avoid surcharges, pp.294-296, sha256:44976cd13085959f1c41c738cc06163b0999de01beb4411b2f6d5b33859ec181 - https://www.casact.org/sites/default/files/database/astin_vol24no2_287.pdf"

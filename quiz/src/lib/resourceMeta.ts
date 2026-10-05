@@ -38,20 +38,39 @@ export interface CopySource {
  * Each place's own icon, copied from its site into `quiz/public/copy-sources/`
  * rather than hotlinked the way a Cowork publisher's logo is. There are only
  * three and they never change, and a hotlink would make merely *opening* the
- * menu send a request to each of them — a shop and a shadow library included,
- * the latter on a domain many networks block, which would leave a broken image
- * in the row. An approximation of a mark would be an invented brand
- * (`components/cowork/EntityLogo.tsx`), so these are the files the sites serve:
+ * menu send a request to each of them. An approximation of a mark would be an
+ * invented brand (`components/cowork/EntityLogo.tsx`), so these are the files
+ * the sites serve:
  *
  *   WorldCat — search.worldcat.org/favicons/android-chrome-192x192.png, at 64px
  *   Amazon — www.amazon.com/favicon.ico, its 48px frame
- *   Library Genesis — libgen.li/apple-touch-icon.png, centred on a square
+ *   The Actuarial Bookstore — the emblem from its wordmark, as the Store's
+ *     seller logo (`quiz/public/store-sellers/actuarial-bookstore.png`)
  */
 const COPY_SOURCE_LOGOS = {
   worldcat: '/copy-sources/worldcat.png',
+  'actuarial-bookstore': '/copy-sources/actuarial-bookstore.png',
   amazon: '/copy-sources/amazon.png',
-  libgen: '/copy-sources/library-genesis.png',
 } as const
+
+/**
+ * The books The Actuarial Bookstore stocks, keyed by ISBN digits → the id of the
+ * product's page (`/order_selection.aspx?id=…`). The bookstore's search is a
+ * form post with no address of its own, so a link has to be to a product page,
+ * and a product page is only worth linking when the bookstore has the book —
+ * which is why this is a table read off the site, not a rule ("ACTEX books are
+ * sold there"). A book is added once its ISBN turns up in a search of the
+ * bookstore (the ISBN may be any edition's: the page offers print and digital
+ * together); one it doesn't list gets no row.
+ *
+ * Last read 2026-10-05.
+ */
+const ACTUARIAL_BOOKSTORE_PRODUCTS: Readonly<Record<string, string>> = {
+  '9781647563165': '453151265', // R for Actuaries and Data Scientists (Fannin)
+  '9781647563226': '453151403', // Probability for Risk Management (Hassett)
+  '9781625424723': '453151268', // Probability and Statistics with Applications (Asimow)
+  '9798890161871': '453151387', // Financial Mathematics: Theory and Practice (Brown & Kopp)
+}
 
 function extractUrl(value: string): string | undefined {
   const m = value.match(/\(([^)]+)\)/)
@@ -90,16 +109,19 @@ export function isbnDigits(isbn?: string): string | undefined {
 
 /**
  * Every place the "Get a copy" menu offers for a book, library first — the
- * same ISBN search `librarySearchUrl` returns leads the list, then a shop and a
- * shadow library. Each is a *search* on the ISBN, never a record id, for the
- * reason `librarySearchUrl` gives: a search derived from the book's own number
- * can't point at the wrong edition or a page that doesn't exist.
+ * same ISBN search `librarySearchUrl` returns leads the list, then The Actuarial
+ * Bookstore (only for a book it stocks) and Amazon. WorldCat and Amazon are a
+ * *search* on the ISBN, never a record id, for the reason `librarySearchUrl`
+ * gives: a search derived from the book's own number can't point at the wrong
+ * edition or a page that doesn't exist. The bookstore has no search address, so
+ * its row is the product page from `ACTUARIAL_BOOKSTORE_PRODUCTS`.
  *
  * Empty unless the ISBN is well formed.
  */
 export function copySources(isbn?: string): CopySource[] {
   const digits = isbnDigits(isbn)
   if (!digits) return []
+  const bookstoreId = ACTUARIAL_BOOKSTORE_PRODUCTS[digits]
   return [
     {
       id: 'worldcat',
@@ -107,17 +129,19 @@ export function copySources(isbn?: string): CopySource[] {
       url: `https://search.worldcat.org/search?q=bn%3A${digits}`,
       logo: COPY_SOURCE_LOGOS.worldcat,
     },
+    ...(bookstoreId
+      ? [{
+          id: 'actuarial-bookstore' as const,
+          label: 'Actuarial Bookstore',
+          url: `https://www.actuarialbookstore.com/order_selection.aspx?id=${bookstoreId}`,
+          logo: COPY_SOURCE_LOGOS['actuarial-bookstore'],
+        }]
+      : []),
     {
       id: 'amazon',
       label: 'Amazon',
       url: `https://www.amazon.com/s?k=${digits}&i=stripbooks`,
       logo: COPY_SOURCE_LOGOS.amazon,
-    },
-    {
-      id: 'libgen',
-      label: 'Library Genesis',
-      url: `https://libgen.li/index.php?req=${digits}`,
-      logo: COPY_SOURCE_LOGOS.libgen,
     },
   ]
 }

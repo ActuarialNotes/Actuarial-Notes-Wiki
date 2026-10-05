@@ -121,6 +121,8 @@ describe('contentGroup', () => {
     ['/wiki/resources', 'Resources'],
     ['/wiki/resource/Basic+Ratemaking', 'Resources'],
     ['/store', 'Store'],
+    ['/craft', 'Concept Craft'],
+    ['/craft/exam-5-reserving-methods', 'Concept Craft'],
     ['/store/gems', 'Gem Shop'],
     ['/project/pcpa/p-abc', 'Projects'],
     ['/cowork/sources/osfi', 'Cowork'],

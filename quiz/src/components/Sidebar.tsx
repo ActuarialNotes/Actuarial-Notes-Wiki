@@ -752,8 +752,8 @@ export default function Sidebar() {
             }
             collapsed={collapsed}
             end
-            // Quiz Battle is a way of quizzing, opened from this tab.
-            forceActive={location.pathname === '/battle'}
+            // Quiz Battle and Concept Craft are ways of quizzing, opened from this tab.
+            forceActive={location.pathname === '/battle' || location.pathname === '/craft' || location.pathname.startsWith('/craft/')}
             onNavigate={closeMobile}
             badge={quizBadge}
             dataTour="nav-quiz"

@@ -20,6 +20,13 @@ interface TileLook {
   collected: boolean
   /** Picked: the green wash and the tick. */
   selected?: boolean
+  /**
+   * Draw the padlock on an uncollected card. On by default — it is what says
+   * "not collected yet" on the flashcard shelves. Concept Craft's deck turns it
+   * off: there every card in hand can be played, and a padlock would read as
+   * one that can't.
+   */
+  showLock?: boolean
 }
 
 // Colour is state only: the green wash and tick are "picked", and the padlock
@@ -40,7 +47,7 @@ function tileClass({ state, collected, selected }: TileLook): string {
   )
 }
 
-function TileFace({ name, collected, selected }: TileLook) {
+function TileFace({ name, collected, selected, showLock = true }: TileLook) {
   return (
     <>
       <span
@@ -52,7 +59,7 @@ function TileFace({ name, collected, selected }: TileLook) {
         {name}
       </span>
       {selected && <CheckMark className="absolute right-1 top-1 h-3.5 w-3.5" />}
-      {!collected && <Lock className="absolute left-1 top-1 h-2.5 w-2.5 text-muted-foreground/70" aria-hidden="true" />}
+      {!collected && showLock && <Lock className="absolute left-1 top-1 h-2.5 w-2.5 text-muted-foreground/70" aria-hidden="true" />}
     </>
   )
 }
@@ -68,6 +75,7 @@ export function ConceptTile({
   state,
   collected,
   selected = false,
+  showLock = true,
   className,
   ...button
 }: TileLook & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'name'>) {
@@ -82,7 +90,7 @@ export function ConceptTile({
         className,
       )}
     >
-      <TileFace name={name} state={state} collected={collected} selected={selected} />
+      <TileFace name={name} state={state} collected={collected} selected={selected} showLock={showLock} />
     </button>
   )
 }

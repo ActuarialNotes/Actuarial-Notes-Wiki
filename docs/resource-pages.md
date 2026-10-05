@@ -123,7 +123,7 @@ reference sheet) is exempt from `Year`/`date`.
 Two consequences worth stating:
 
 - **A book you buy has no `Available from`.** It carries its `ISBN`, and the card
-  builds the *Get a copy* menu (WorldCat, then shops) from it (`copySources` in
+  builds the *Get a copy* menu (WorldCat, then shops — The Actuarial Bookstore only for a book it stocks, from a table in the same file) from it (`copySources` in
   `quiz/src/lib/resourceMeta.ts`), each row led by that place's own logo, served
   from `quiz/public/copy-sources/` rather than hotlinked. The Amazon row also carries
   Amazon's price when the deployment has Creators API credentials

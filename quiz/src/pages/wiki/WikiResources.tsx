@@ -68,9 +68,9 @@ function ChangePill({ change, edition }: { change: VintageChange; edition: strin
  * One syllabus reading on the shelf: its cover, its title, and the pills —
  * the exams it is a reading for first, since that is what the shelf is
  * scanned for, then whether it can be read here, then its bibliographic facts.
- * While a vintage's changes are highlighted, a changed reading leads its pills
- * with the change, and a dropped one is struck through and dimmed: it is on
- * the shelf to be seen, not because the edition assigns it.
+ * On a vintage's shelf, a reading the edition added leads its pills with that,
+ * and — while dropped readings are shown — a dropped one is struck through and
+ * dimmed: it is on the shelf to be seen, not because the edition assigns it.
  */
 function ResourceShelfCard({
   book,
@@ -145,22 +145,42 @@ function ResourceShelfCard({
 }
 
 /**
- * A highlight toggle on the changes row: what an edition added, or what it
- * dropped, with how many. Pressed, it wears that change's colour — the same
- * one the cards it marks wear.
+ * What an edition added, with how many — a fact about the edition, not a
+ * switch: the added readings are on its shelf and marked either way, so it
+ * wears the green its cards wear and can't be pressed. (It was a toggle; turning
+ * it off left the additions leading the grid with nothing saying why.)
  */
-function ChangeToggle({
-  change,
+function AddedCount({ count }: { count: number }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium',
+        count > 0
+          ? 'border-green-500/40 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
+          : 'bg-card opacity-40',
+      )}
+    >
+      <Plus className="h-3.5 w-3.5 shrink-0" aria-hidden />
+      Added
+      <span className="text-xs tabular-nums opacity-70">{count}</span>
+    </span>
+  )
+}
+
+/**
+ * The changes row's one toggle: put what the edition dropped back on the
+ * shelf, struck through, with how many. Pressed, it wears the red the cards
+ * it brings back wear.
+ */
+function DroppedToggle({
   count,
   active,
   onToggle,
 }: {
-  change: VintageChange
   count: number
   active: boolean
   onToggle: () => void
 }) {
-  const Icon = change === 'added' ? Plus : Minus
   return (
     <button
       type="button"
@@ -171,13 +191,13 @@ function ChangeToggle({
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40',
-        !active && 'bg-card enabled:hover:bg-accent',
-        active && change === 'added' && 'border-green-500/40 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100',
-        active && change === 'dropped' && 'border-red-500/40 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
+        active
+          ? 'border-red-500/40 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100'
+          : 'bg-card enabled:hover:bg-accent',
       )}
     >
-      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
-      {change === 'added' ? 'Added' : 'Dropped'}
+      <Minus className="h-3.5 w-3.5 shrink-0" aria-hidden />
+      Dropped
       <span className="text-xs tabular-nums opacity-70">{count}</span>
     </button>
   )
@@ -188,7 +208,7 @@ function ChangeToggle({
  * `Resources/Books` page — the syllabus readings and the documents beside
  * them — as one shelf, filtered by Exam, Publisher and Year
  * (`lib/resourceFilters.ts`), and by **Vintage** — which edition of one exam's
- * syllabus — with what that edition added and dropped highlighted on request
+ * syllabus — with what that edition added marked, and what it dropped on request
  * (`lib/resourceVintages.ts`). It used to be a section at the foot of the exam
  * ladder; it is a page of its own, listed under Study Guides in the sidebar
  * the way an open project's views are listed under Projects.
@@ -226,7 +246,7 @@ export default function WikiResources() {
   )
   const examCount = useMemo(() => index.filter(i => i.category === 'exam').length, [index])
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
-  const { label: vintageLabel, highlight } = useMemo(() => vintageFromParams(searchParams), [searchParams])
+  const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
   // reading list, and the Exam filter's work is done by that list.
   const vintage = useMemo(
@@ -235,9 +255,9 @@ export default function WikiResources() {
   )
   const entries = useMemo<VintageShelfEntry[]>(
     () => vintage
-      ? vintageShelf(books, vintage, highlight)
+      ? vintageShelf(books, vintage, showDropped)
       : books.map(item => ({ item, change: null, stub: false })),
-    [books, vintage, highlight],
+    [books, vintage, showDropped],
   )
   const pool = useMemo(() => entries.map(e => e.item), [entries])
   const facetSelection = useMemo(
@@ -248,7 +268,7 @@ export default function WikiResources() {
     const kept = new Set(filterResources(pool, facetSelection))
     return entries.filter(e => kept.has(e.item))
   }, [entries, pool, facetSelection])
-  const filtering = hasResourceFilters(selection) || vintageLabel !== null || highlight.size > 0
+  const filtering = hasResourceFilters(selection) || vintageLabel !== null || showDropped
   const options = useMemo(
     () => Object.fromEntries(RESOURCE_FACETS.map(facet => [
       facet,
@@ -282,26 +302,23 @@ export default function WikiResources() {
   function toggle(facet: ResourceFacet, value: string) {
     let next = resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams)
     // A vintage is an edition of one exam's syllabus; another exam starts at its own newest.
-    if (facet === 'exam') next = vintageToParams(null, highlight, next)
+    if (facet === 'exam') next = vintageToParams(null, showDropped, next)
     setSearchParams(next, { replace: true })
   }
 
   function chooseVintage(label: string) {
     // The newest edition is the default, so it leaves the URL clean.
     const value = vintage?.editions[0]?.label === label ? null : label
-    setSearchParams(vintageToParams(value, highlight, searchParams), { replace: true })
+    setSearchParams(vintageToParams(value, showDropped, searchParams), { replace: true })
   }
 
-  function toggleChange(change: VintageChange) {
-    const next = new Set(highlight)
-    if (next.has(change)) next.delete(change)
-    else next.add(change)
-    setSearchParams(vintageToParams(vintageLabel, next, searchParams), { replace: true })
+  function toggleDropped() {
+    setSearchParams(vintageToParams(vintageLabel, !showDropped, searchParams), { replace: true })
   }
 
   function clearFilters() {
     setSearchParams(
-      vintageToParams(null, new Set(), resourceFacetsToParams(emptyResourceFacets(), searchParams)),
+      vintageToParams(null, false, resourceFacetsToParams(emptyResourceFacets(), searchParams)),
       { replace: true },
     )
   }
@@ -367,17 +384,11 @@ export default function WikiResources() {
           <span className="text-sm text-muted-foreground">
             Since {vintage.previous.label}
           </span>
-          <ChangeToggle
-            change="added"
-            count={vintage.added.length}
-            active={highlight.has('added')}
-            onToggle={() => toggleChange('added')}
-          />
-          <ChangeToggle
-            change="dropped"
+          <AddedCount count={vintage.added.length} />
+          <DroppedToggle
             count={vintage.dropped.length}
-            active={highlight.has('dropped')}
-            onToggle={() => toggleChange('dropped')}
+            active={showDropped}
+            onToggle={toggleDropped}
           />
         </div>
       )}

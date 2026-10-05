@@ -1,0 +1,439 @@
+{
+  "wiki_id": "gi-302",
+  "body": "SOA",
+  "title": "GI 302 –General Insurance in the U.S.",
+  "sitting": "Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf",
+  "source_sha256": "4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "U.S. General Insurance Products and Coverages",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand the different types of general insurance products and coverages offered in the United States.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the contents of the ISO Personal Auto Policy (PAP) and the ISO Homeowners (HO) policies and the coverages they provide.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain how insurable interest, policy provisions for valuing losses, and insurance to value affect a loss payment amount under property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe commercial property insurance in terms of categories of loss exposures.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe the contents of the ISO commercial property (CP) and general liability (CGL) policies, and types of coverage they provide.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Identify the factors that affect commercial insurance premiums and how premium is determined.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe commercial auto insurance in terms of the loss exposures.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Describe the contents of the ISO Commercial Automobile policies and the coverages they provide.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Describe the workers compensation (WC) system.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Explain why employers liability insurance is needed and how the ISO WC and Employers Liability Insurance Policy address this need.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Explain how premium bases, classifications, and premium adjustments affect WC insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Describe various specialty insurance coverages (including excess liability, umbrella liability, professional liability, cyber risk, surety and terrorism).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "General Insurance: U.S. Policies and Coverages, SOA, May 2025",
+          "codes": "1a, 1d, 1g, 1i, 1k",
+          "parts": [
+            {
+              "text": "Section 1",
+              "codes": ""
+            },
+            {
+              "text": "Section 2-4",
+              "codes": ""
+            },
+            {
+              "text": "Section 5 - 7",
+              "codes": ""
+            },
+            {
+              "text": "Section 8",
+              "codes": ""
+            },
+            {
+              "text": "Section 9",
+              "codes": ""
+            },
+            {
+              "text": "Section 10",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "U.S. General Insurance Regulation",
+      "weight_raw": "5%-20%",
+      "weight": [
+        5,
+        20
+      ],
+      "objective": "The candidate will understand the development and structure of insurance regulations in the United States.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the functions of key regulatory bodies in the U.S. including the NAIC and SEC.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the historical development of general insurance regulations in the United States.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe and interpret the current state of general insurance regulations in the United States.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Summarize the regulatory activities of state insurance departments, including insurance commissioners’ duties.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe the licensing requirements for insurers and insurance personnel in the United States.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe the methods that U.S. regulators use to maintain the solvency of insurers.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Insurance Regulation, Porter, K., The Institutes, 2008",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 2: Development of Insurance Regulation (pp. 2.3-2.18)",
+              "codes": "2a-c"
+            },
+            {
+              "text": "Ch. 3: Federal and Other Influences on Insurance Regulation (pp. 3.3-3.18)",
+              "codes": "2a-c"
+            },
+            {
+              "text": "Ch. 4: Roles of State Regulators and the NAIC in Insurance Regulation (excluding Exhibits 4-2 & 4-3)",
+              "codes": "2a-c"
+            },
+            {
+              "text": "Ch. 5: State Department of Insurance Operations (pp. 5.3-5.7 & 5.10-5.11)",
+              "codes": "2d, 2e"
+            },
+            {
+              "text": "Ch. 6: Insurer Formation, Licensing, and Marketing Regulation (pp. 6.3-6.5, 6.11-6.12 & 6.14-6.17, ending at “Licensing Priority and Process” on pg. 6.17)",
+              "codes": "2d, 2e"
+            },
+            {
+              "text": "Ch. 11: Solvency Regulation (pp. 11.3-11.10, 11.22-11.23 (starting at “Priority Examination Scheduling” on pg. 11.22 and ending at “Association Examinations” on pg. 11.23) & 11.25-11.26 (ending at “Risk-Based Capital” on pg. 11.26))",
+              "codes": "2f"
+            },
+            {
+              "text": "Ch. 12: Insolvency Regulation (pp. 12.5-12.17 (starting at “Regulatory Control After Insolvency” on pg. 12.5 and ending at “Interstate Insolvency Remedies” on pg. 12.17))",
+              "codes": "2f"
+            }
+          ]
+        },
+        {
+          "citation": "The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative, NAIC White Paper, Aug 2013 (sections 2, 3 & 5; excluding Section 2 paragraphs 27-28, 33-34 & Appendices, Section 3 paragraphs 13-15, 20-21, 23-32, 38-39 & Section 5 paragraphs 9, 20-45, 48-50, 61-86, 90, 92 & 95-104)",
+          "codes": "2a-d, 2f",
+          "parts": []
+        },
+        {
+          "citation": "The Economic Crisis and Lessons from (and for) U.S. Insurance Regulation, Journal of Insurance Regulation, National Association of Insurance Commissioners, 2009, pp. 6-13 (ending at “Lessons from State Insurance Regulation” on pg. 13)",
+          "codes": "2a-d, 2f",
+          "parts": []
+        },
+        {
+          "citation": "The Dodd-Frank Wall Street Reform and Consumer Protection Act: Insurance Provisions, Congressional Research Service, CRS Report R41372, Aug 2010",
+          "codes": "2a-d, 2f",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "U.S. GI Financial Reporting and Financial Health Measurement",
+      "weight_raw": "35%-50%",
+      "weight": [
+        35,
+        50
+      ],
+      "objective": "The candidate will understand the different reporting standards for U.S. general insurance companies and use statutory financial statement information to measure insurer financial health.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate knowledge of U.S. GAAP, U.S. statutory accounting and U.S. tax accounting for general insurance companies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the elements of the NAIC Annual Statement.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Complete and interpret NAIC Annual Statement pages/schedules (as referenced in the resources).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate the financial health of a U.S. general insurer using the Annual Statement (e.g., NAIC RBC and IRIS Ratios).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "FRE-802-19: National Association of Insurance Commissioners (NAIC), Accounting Practices and Procedures Manual, 2018 Preamble",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, SOA, 5th Edition, 2021",
+          "codes": "3a-c",
+          "parts": [
+            {
+              "text": "Part 1: Insurance Accounting (sections 2.3, 2.5-2.8, 3.4, 4.4-4.6 & 4.8.3-4.9)",
+              "codes": ""
+            },
+            {
+              "text": "Part 2: U.S. Statutory Accounting (chapters 5 to 9)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 15: Federal Income Taxes for General Insurers (sections 15.2-15.10, excluding the Canadian specific reference on pp. 443)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Risk Transfer Practice Note, AAA, 2022, Section 6",
+          "codes": "3a-c",
+          "parts": []
+        },
+        {
+          "citation": "National Association of Insurance Commissioners, Official NAIC Annual Statement Blank, Property / Casualty, for the 2025 reporting year [pp. 2-19, 20-29 (Schedule F) & 33-93 (Schedule P)]",
+          "codes": "3a-c",
+          "parts": []
+        },
+        {
+          "citation": "NAIC, Accounting Practices and Procedures Manual, Statements of Statutory Accounting Principles (SSAP)",
+          "codes": "3a-c",
+          "parts": [
+            {
+              "text": "SSAP 5, Liabilities, Contingencies and Impairment of Assets, paragraphs 1-13, 31-33",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 9, Subsequent Events, paragraphs 1-13",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 29, Prepaid Expenses, paragraphs 1-4",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 53, Property Casualty Contracts-Premiums, paragraphs 1-19",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 55, Unpaid Claims, Loss and Loss Adjustment Expenses, paragraphs 1-6 & 11-18",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 62, Property and Casualty Reinsurance, paragraphs 1-78, 84-97, 102-124, and Q&A Applicability paragraphs 7-19, 21-33 plus Exhibits B-C",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 63, Underwriting Pools and Associations Including Intercompany Pools, paragraphs 1-11",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 65, Property and Casualty Contracts, paragraphs 1-47",
+              "codes": ""
+            },
+            {
+              "text": "SSAP 66, Retrospectively Rated Contracts, paragraphs 1-14 (excluding 7.b, 9.b, 9.c) These are included in Appendix IV of Statements of Actuarial Opinion on Property and Casualty Reserves, 2025",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, SOA, 5th Edition, SOA, 2021",
+          "codes": "3d",
+          "parts": [
+            {
+              "text": "Part 3: General Insurance Financial Health Topics (sections 10.4.3, 10.8.3, 11.8, 11.10-11.11, 12.9, 12.10.2 & 12.11)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Responsibilities of a U.S. Signing General Insurance Actuary",
+      "weight_raw": "30%-45%",
+      "weight": [
+        30,
+        45
+      ],
+      "objective": "The candidate will be able to use applicable standards of practice to carry out the responsibilities of a U.S. signing general insurance actuary as defined by regulators and the American Academy of Actuaries.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and apply the concept of materiality.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, interpret and apply the applicable U.S. Standards of Practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe, interpret and apply the responsibilities of a signing actuary with respect to the U.S. Statement of Actuarial Opinion and the Actuarial Report.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8 (pp. 1-8, 13-17 & 19-20)",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries (excluding Appendices for all the ASOPs listed below)",
+          "codes": "4b",
+          "parts": [
+            {
+              "text": "No. 1: Introductory Actuarial Standard of Practice",
+              "codes": ""
+            },
+            {
+              "text": "No. 20: Discounting of Property/Casualty Claim Estimates",
+              "codes": ""
+            },
+            {
+              "text": "No. 21: Responding to or Assisting Auditors or Examiners in Connection with Financial Audits, Financial Reviews, and Financial Examinations",
+              "codes": ""
+            },
+            {
+              "text": "No. 23: Data Quality",
+              "codes": ""
+            },
+            {
+              "text": "No. 36: Statements of Actuarial Opinion Regarding Property/Casualty Loss, Loss Adjustment Expense, or Other Reserves",
+              "codes": ""
+            },
+            {
+              "text": "No. 38: Catastrophe Modeling (for All Practice Areas)",
+              "codes": ""
+            },
+            {
+              "text": "No. 41: Actuarial Communications",
+              "codes": ""
+            },
+            {
+              "text": "No. 43: Property/Casualty Unpaid Claim Estimates",
+              "codes": ""
+            },
+            {
+              "text": "No. 56: Modeling",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Statements of Actuarial Opinion on Property and Casualty Loss Reserves, Practice Note, AAA, Committee on Property and Liability Financial Reporting, 2025 (excluding Appendix I‒Section I.3, Appendix II‒Section IV, and Appendix IV)",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, SOA, 5th Edition, SOA, 2021",
+          "codes": "4c",
+          "parts": [
+            {
+              "text": "Ch. 14: The General Insurance Actuarial Opinion [(sections 14.2.2-14.4.1, 14.6 & 14.8 (excluding 14.2.6.3 and all other Canadian specific references)]",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

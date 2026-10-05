@@ -1,0 +1,587 @@
+{
+  "wiki_id": "gi-301",
+  "body": "SOA",
+  "title": "GI 301 – Further Topics in General Insurance",
+  "sitting": "Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf",
+  "source_sha256": "491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Stochastic Reserving",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to use stochastic loss development models to estimate reserve variability.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the assumptions underlying the chain ladder estimation method.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Test for the validity of these assumptions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Identify alternative models that should be considered depending on the results of the tests.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Estimate the standard deviation of a chain ladder estimator of unpaid claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply a parametric model of loss development.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Estimate the standard deviation of a parametric estimator of unpaid claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Assess whether a fitted model is acceptable given the data being modeled.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Outstanding Claims Reserves (Version 1.3a), SOA, 2022, Ch. 3-5 (excluding sections 3.4 & 4.3)",
+          "codes": "1a-d",
+          "parts": []
+        },
+        {
+          "citation": "Considerations Regarding the Chain Ladder Model, SOA, May 2025 (excluding section 3)",
+          "codes": "1a-d",
+          "parts": []
+        },
+        {
+          "citation": "Testing the Assumptions of Age-to-Age Factors, Venter G.G., Proceedings of the Casualty Actuarial Society LXXXV, 1998, pp. 812-838 This article may be accessed at www.casact.org through the following navigation:",
+          "codes": "1a-d",
+          "parts": [
+            {
+              "text": "Publications & Research",
+              "codes": ""
+            },
+            {
+              "text": "Browse research -> [Author Last Name = Venter, Year Published = 1998] -> Search",
+              "codes": ""
+            },
+            {
+              "text": "Result: Testing the Assumptions of Age-to-Age Factors",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Stochastic Loss Reserving Using Generalized Linear Models, CAS Monograph Series Number 3, 2016",
+          "codes": "1b-d",
+          "parts": [
+            {
+              "text": "Ch. 5: The Bootstrap, section 5.3, pp. 47-51 (start at the paragraph “The bootstrap is…” pp.47)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 6: Model Validation (excluding section 6.7 and the portion of section 6.4 on pp. 64)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "LDF Curve Fitting and Stochastic Reserving: A Maximum Likelihood Approach, Clark, D.R., Casualty Actuarial Society Forum, Fall 2003 This article may be accessed at www.casact.org through the following navigation:",
+          "codes": "1e-g",
+          "parts": [
+            {
+              "text": "Publications & Research",
+              "codes": ""
+            },
+            {
+              "text": "Browse research -> [Author Last Name = Clark, Year Published = 2003] -> Search",
+              "codes": ""
+            },
+            {
+              "text": "Result: LDF Curve-Fitting and Stochastic Reserving: A Maximum Likelihood Approach",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Development Analysis for Excess Limits and Layers",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand the considerations in the development of losses for excess limits and layers.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Estimate ultimate claims for excess limits and layers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the differences in development patterns and trends for excess limits and layers.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "2a, 2b",
+          "parts": [
+            {
+              "text": "Appendix G: Development Analysis for Excess Limits and Layers",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Premium Liabilities",
+      "weight_raw": "0%-5%",
+      "weight": [
+        0,
+        5
+      ],
+      "objective": "The candidate will understand the procedure for estimating premium liabilities.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the purpose of general insurance premium liabilities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the premium liabilities for a general insurance company.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "3a, 3b",
+          "parts": [
+            {
+              "text": "Ch. 25: Premium Liabilities",
+              "codes": ""
+            },
+            {
+              "text": "Appendix A: Dentist Insurer, section A.3.6",
+              "codes": ""
+            },
+            {
+              "text": "Appendix D: ABC Manufacturing Company/ABCMC Captive, section D.6",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Risk Margins for Unpaid Claims",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand the considerations in selecting a risk margin for unpaid claims.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe a risk margin analysis framework.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify the sources of uncertainty underlying an estimate of unpaid claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe methods to assess this uncertainty.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "A Framework for Assessing Risk Margins, Marshall, K., Collings, S., Hodson, M., and O’Dowd, C., Institute of Actuaries of Australia 16th General Insurance Seminar, Nov 2008",
+          "codes": "4a-c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Monitoring Results",
+      "weight_raw": "0%-10%",
+      "weight": [
+        0,
+        10
+      ],
+      "objective": "The candidate will understand the methods to monitor actual versus expected experience.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify and describe approaches for monitoring results.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Prepare a comparison of actual to expected claims.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "5a, 5b",
+          "parts": [
+            {
+              "text": "Ch. 37: Monitoring Results",
+              "codes": ""
+            },
+            {
+              "text": "Appendix E: Public Entity Self-Insurance Pool, sections E.3.1 & E.3.2",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Specialized Ratemaking Topics",
+      "weight_raw": "25%-35%",
+      "weight": [
+        25,
+        35
+      ],
+      "objective": "The candidate will understand and be able to apply ratemaking techniques for the following situations: classification ratemaking, deductible options, increased limit options, claims-made policies and individual risk rating.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand and apply classification ratemaking methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain the issues and considerations regarding classification ratemaking.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Price for deductible options and increased limits.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Develop rates for claims-made contracts.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand and apply techniques for individual risk rating.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Estimate the premium asset for retrospectively rated policies.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "6a, 6b",
+          "parts": [
+            {
+              "text": "Ch. 33: Basic Risk Classification",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Classification Ratemaking, Minimum Bias and GLMs, SOA, May 2025, section 4",
+          "codes": "6a",
+          "parts": []
+        },
+        {
+          "citation": "Actuarial Standards of Practice, No. 12, Risk Classification (for All Practice Areas), Actuarial Standards Board of the American Academy of Actuaries, Last Revised 2011 (excluding Appendix 2)",
+          "codes": "6b",
+          "parts": []
+        },
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 34: Actuarial Pricing for Deductibles and Increased Limits",
+              "codes": "6c"
+            },
+            {
+              "text": "Appendix D: ABC Manufacturing Company/ABCMC Captive, section D.4",
+              "codes": "6c"
+            },
+            {
+              "text": "Appendix E: Public Entity Self-Insurance Pool, sections E.3.4 & E.3.5",
+              "codes": "6c"
+            },
+            {
+              "text": "Ch. 35: Claims-Made Ratemaking",
+              "codes": "6d"
+            },
+            {
+              "text": "Ch. 36: Individual Risk Rating and Funding Allocation for Self-Insurers (excluding section 36.7)",
+              "codes": "6e"
+            }
+          ]
+        },
+        {
+          "citation": "Estimating the Premium Asset on Retrospectively Rated Policies, Teng, M. and Perkins, M., Casualty Actuarial Society, 1996 Proceedings, Vol. LXXXIII, pp. 611-647 (excluding section 5)",
+          "codes": "6f",
+          "parts": []
+        },
+        {
+          "citation": "This article may be accessed at www.casact.org through the following navigation:",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Publications & Research",
+              "codes": ""
+            },
+            {
+              "text": "Browse research -> [Author Last Name = Teng, Year Published = 1996] -> Search",
+              "codes": ""
+            },
+            {
+              "text": "Result: Estimating the Premium Asset on Retrospectively Rated Policies",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "title": "Reinsurance",
+      "weight_raw": "15%-20%",
+      "weight": [
+        15,
+        20
+      ],
+      "objective": "The candidate will understand the fundamentals of reinsurance and demonstrate knowledge of reinsurance reserving, the fundamental techniques of reinsurance pricing and risk transfer testing of reinsurance contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the types of reinsurance and key reinsurance terms.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain the principal functions of reinsurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Analyze and describe the various types of reinsurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand the issues encountered when applying loss development methods to reinsurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate the price of a reinsurance contract.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Apply an aggregate distribution model to a reinsurance pricing scenario.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Describe considerations involved in pricing property catastrophe covers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Understand the application of a reinstatement premium.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Test for risk transfer in reinsurance contracts.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022",
+          "codes": "7a-c",
+          "parts": [
+            {
+              "text": "Ch. 10: A Reinsurance Primer Including: Errata for Chapter 10 of Fundamentals of General Insurance Actuarial Analysis",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "General Insurance: Considerations in Reinsurance Reserving, SOA, May 2025",
+          "codes": "7d",
+          "parts": []
+        },
+        {
+          "citation": "Basics of Reinsurance Pricing, Clark, D.R., Actuarial Study Note, 2014",
+          "codes": "7e-h",
+          "parts": []
+        },
+        {
+          "citation": "Risk Transfer Testing of Reinsurance Contracts, Brehm, P. and Ruhm, D., Variance, 2007, Volume 01, Issue 01, CAS, sections 2-5, pp. 11-17 (begin with first complete paragraph on pg. 11) This article may be accessed at www.casact.org through the following navigation:",
+          "codes": "7i",
+          "parts": [
+            {
+              "text": "Publications & Research",
+              "codes": ""
+            },
+            {
+              "text": "Browse research -> [Author Last Name = Brehm, Year Published = 2007] -> Search",
+              "codes": ""
+            },
+            {
+              "text": "Result: Risk Transfer Testing of Reinsurance Contracts",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Insurance Risk Transfer and Categorization of Reinsurance Contracts, Gurenko, E., Itigin, A. and Wiechert, R., Policy Research Working Paper No. 6299, World Bank, Dec 2012, pp. 3-21 (end with section III on pp. 21)",
+          "codes": "7i",
+          "parts": []
+        },
+        {
+          "citation": "Risk Transfer Practice Note, AAA, Nov 2022, section 4",
+          "codes": "7i",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 8,
+      "title": "Catastrophe Models and Risk Loads",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand catastrophe modeling output and the allocation of catastrophe risk loads among accounts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the purpose and development of catastrophe models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the type of output produced by catastrophe models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand how catastrophe model output can be used in actuarial tasks.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Allocate a property catastrophe risk load among different accounts.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Uses of Catastrophe Model Output, AAA, Jul 2018 (excluding “Florida Commission on Hurricane Loss Projection Methodology” section on pp. 6, 7, 29-30, 35 & all Appendices)",
+          "codes": "8a-c",
+          "parts": []
+        },
+        {
+          "citation": "An Overview of Catastrophe Modeling Output, SOA, May 2025",
+          "codes": "8b, 8c",
+          "parts": []
+        },
+        {
+          "citation": "An Application of Game Theory: Property Catastrophe Risk Load, Mango, D.F., PCAS LXXXV, 1998, CAS This article may be accessed at www.casact.org through the following navigation:",
+          "codes": "8d",
+          "parts": [
+            {
+              "text": "Publications & Research",
+              "codes": ""
+            },
+            {
+              "text": "Browse research -> [Author Last Name = Mango, Year Published = 1998] -> Search",
+              "codes": ""
+            },
+            {
+              "text": "Result: An Application of Game Theory: Property Catastrophe Risk Load",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

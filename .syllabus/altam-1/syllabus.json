@@ -1,0 +1,395 @@
+{
+  "wiki_id": "altam-1",
+  "body": "SOA",
+  "title": "Advanced Long-Term Actuarial Mathematics Exam",
+  "sitting": "OCTOBER 2026",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf",
+  "source_sha256": "44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The ALTAM Exam is a three-hour exam consisting of six questions, worth a total of 60 points.",
+    "The exam will be taken at Prometric testing centers. The questions will be displayed on the computer. Candidates will also be provided with an Excel Workbook. The Excel Workbook will contain one question. It will also contain tables and formulas that may be used for any of the six questions.",
+    "Five of the questions are to be answered in pen in exam answer booklets provided by Prometric. For these questions candidates may use the Excel Tables, and may use Excel for calculations, but only the answers provided in the exam answer booklet will be graded.",
+    "One of the questions will be answered in the Excel Workbook. For this question, only the information provided in the Excel Workbook will be graded. Candidates may use the scratch paper booklet for rough notes, but nothing written on the scratch paper will be graded.",
+    "At the end of the exam candidates will upload their Excel Workbook for grading the Excel question and will submit their exam answer booklets to Prometric to forward to the SOA for grading the questions answered in the answer booklets.",
+    "Knowledge of the FM, P, and FAM exams, and the Mathematical Statistics VEE material is assumed for the ALTAM Exam.",
+    "Exam Registration Candidates may register online or with an application.",
+    "Introductory Study Note The Introductory Study Note has a complete listing of all study notes as well as errata and other important information.",
+    "Past Exams Past LTAM Exams from October 2018 through 2022 and past ALTAM Exams from Spring 2023 through present are available on the SOA website.",
+    "Updates Candidates should be sure to check the Updates page on the exam home page periodically for additional corrections or notices."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Survival Models for Contingent Cash Flows",
+      "weight_raw": "10-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The Candidate will understand key concepts concerning multiple state mortality/morbidity and individual/joint life mortality models for insurance and annuity contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand and explain features of typical mortality curves and heterogeneities in mortality.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply Markov multiple state models to state-contingent life and long-term health insurance benefits, and Continuing Care Retirement Communities (CCRCs).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand and critique the assumptions underlying Markov multiple state models for long-term insurance benefits.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Derive and apply Kolmogorov’s forward equations for continuous time Markov multiple state models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate state-dependent probabilities for continuous time Markov models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Apply the Chapman-Kolmogorov equations to calculate discrete time transition probabilities in the Markov model.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Construct and deconstruct multiple decrement tables using the associated single decrement models and appropriate fractional age assumptions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Calculate maximum likelihood estimates of transition intensities and probabilities for multiple state and multiple decrement models, assuming piecewise constant transition intensities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Calculate approximate confidence intervals for the estimators in Topic 1(h), using asymptotic properties of the maximum likelihood estimators.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Premium and Policy Valuation for Long-Term State-Dependent Coverages",
+      "weight_raw": "12-20%",
+      "weight": [
+        12,
+        20
+      ],
+      "objective": "The Candidate will be able to perform calculations on the present value random variables associated with benefits and expenses for single life, joint life, CCRCs, or other state-dependent insurance and annuity contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define and interpret state-dependent insurance and annuity present value random variables and identify and calculate their expected values.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Derive and apply two-term and three-term Woolhouse approximations for calculating expected present values of state-dependent cash flows.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate premiums for state-dependent life insurance, long-term health insurance, and CCRCs using the equivalence principle.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate policy values for state-dependent life insurance, long-term health insurance, and CCRCs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Identify and apply Thiele’s differential equation in a single life or multiple state setting.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Joint Life Insurance and Annuities",
+      "weight_raw": "8-16%",
+      "weight": [
+        8,
+        16
+      ],
+      "objective": "The Candidate will understand key concepts concerning estimation and construction of multiple state and joint life models for insurance and annuity contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand how joint-life mortality can be modelled using (i) a time-to-status-failure random variable, and (ii) a multiple state model.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the implications of independence or dependence of future lifetimes in both versions of the joint life model from 3(a). Identify sources of dependence and understand how they are accommodated in the models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate premiums for insurance and annuities on joint lives using the equivalence principle.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate policy values for insurance and annuities on joint lives.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Profit Analysis",
+      "weight_raw": "10-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The Candidate will be able to analyze emerging surplus, and to set premiums and reserves, using profit testing.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Calculate and interpret expected profit and actual profit,",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Analyze and interpret gains by source.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and interpret profit signature, profit vector, net present value, internal rate of return, profit margin, and discounted payback period for long-term life and health insurance, and annuity contracts.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate premiums for long-term life and health insurance and annuity contracts based on a specified profit objective.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate reserves for long-term life and health insurance and annuity contracts using profit testing.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Pension Plans and Retirement Benefits",
+      "weight_raw": "10-18%",
+      "weight": [
+        10,
+        18
+      ],
+      "objective": "The Candidate will understand how retirement benefits are accrued, valued, and funded.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Calculate replacement ratios for Defined Contribution (DC), and Defined Benefit (DB) plans, including final average salary (FAS), career average earnings (CAE), and career average revalued earnings (CARE) plans.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the required contribution rate to meet a target replacement ratio for a DC plan participant, using a deterministic approach.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Identify, interpret, and apply service table and salary scale functions for pension plan valuation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "For a DB plan, calculate and interpret accrued benefits, including benefits on early exit from the plan.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "For a DB plan, calculate and interpret the actuarial accrued liability and the normal cost for benefits payable on age retirement or early exit using the projected unit credit (PUC) and traditional unit credit (TUC) valuation methods.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Universal Life Insurance",
+      "weight_raw": "10-18%",
+      "weight": [
+        10,
+        18
+      ],
+      "objective": "The Candidate will understand the policy design and benefits payable under Type A and Type B Universal Life contracts and be able to assess and quantify account values, premiums, and reserves.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the cashflows and calculate account values and benefits under Type A and Type B Universal Life policies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate reserves for no-lapse guarantees.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Use deterministic profit testing to calculate premiums or reserves, and assess emerging surplus for Universal Life insurance, including profit signature, profit vector, net present value, internal rate of return, profit margin, and discounted payback periods, under best estimate or stress test assumptions.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Embedded Options in Life Insurance and Annuity Products",
+      "weight_raw": "10-18%",
+      "weight": [
+        10,
+        18
+      ],
+      "objective": "The Candidate will understand various types of equity-linked life insurance guarantees, options that are embedded in life insurance and annuity contracts and be able to price, reserve, and hedge the risk inherent in these options.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define and calculate payoffs under each of the following options embedded in insurance and annuity contracts:",
+          "bullets": [
+            "Guaranteed minimum death benefit",
+            "Guaranteed minimum maturity benefit",
+            "Guaranteed minimum income benefit",
+            "Guaranteed minimum withdrawal benefit"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Value the following options embedded in insurance and annuity contracts, using the Black-Scholes model:",
+          "bullets": [
+            "Guaranteed minimum death benefit",
+            "Guaranteed minimum accumulation/maturity benefit"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Construct a replicating portfolio for the options in 7(b) using delta-hedging",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand and evaluate the costs associated with discrete-time rebalancing.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Use deterministic profit testing to assess emerging surplus for equity-linked life insurance cash flows, including profit signature, profit vector, net present value, internal rate of return, profit margin, and discounted payback periods, under best estimate or stress test assumptions.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, Third Edition Dickson, C.M.D., Hardy, M.R., Waters, H.R. (2020), Cambridge University Press ISBN: 978-1-108-47808-3. Exercises are considered part of the required readings.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 3 (Sections 4 and 10)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 7 (Sections 2.4 and 4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 8",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 9",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 10",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 11 (except section 12)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 13 (except section 8)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 14",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 15 (sections 1-3)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 17",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 18 (Sections 5 and 6) [Note: sections 1 through 3 are background only]",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "ALTAM-21-23: Variable Annuity Guarantees",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

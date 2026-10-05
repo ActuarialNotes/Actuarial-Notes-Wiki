@@ -1,0 +1,377 @@
+{
+  "wiki_id": "gh-101",
+  "body": "SOA",
+  "title": "GH 101 – Benefits and Pricing",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf",
+  "source_sha256": "fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Plan and Product Provisions",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will understand how to describe plan provisions typically offered under short duration contracts (medical, dental, vision, prescription drug, group life).",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe typical organizations offering these contracts",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe each of the contracts listed above",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate the potential moral hazard and financial and legal risks associated with each type of contract",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe the product development process including risks and opportunities to be considered during the process",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: The Variety of Short-Term Health and Group Benefits",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Video: Plan Sponsor Perspective",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Video: Actuarial Roles in Health",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 3: Product Development",
+              "codes": "1d"
+            },
+            {
+              "text": "Ch. 5: Medical Benefits in the United States",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 6: Dental Benefits in the United States",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 7: Pharmacy Benefits in the United States",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 11: Group Life Insurance Benefits",
+              "codes": "1a, 1b, 1c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Manual Rates",
+      "weight_raw": "25%-40%",
+      "weight": [
+        25,
+        40
+      ],
+      "objective": "The candidate will understand how to calculate and recommend a manual rate for each of the contracts described in Learning Objective 1.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify and evaluate sources of data needed for pricing, including the quality, appropriateness, and limitations of each data source",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Develop a medical cost trend experience analysis",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and recommend assumptions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate and recommend a manual rate (includes developing a base rate and applying a rating manual)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Identify critical metrics to evaluate actual vs. expected results",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Apply actuarial best practices in evaluating and projecting claim data",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 20: Pricing of Group Insurance",
+              "codes": "2a, 2c"
+            },
+            {
+              "text": "Ch. 21: Estimating Medical Claim Costs (exclude Appendix: Data Sources)",
+              "codes": "2a, 2d"
+            },
+            {
+              "text": "Ch. 22: Estimating Dental Claim Costs",
+              "codes": "2a, 2c, 2d"
+            },
+            {
+              "text": "Ch. 23: Estimating Pharmacy Claim Costs",
+              "codes": "2a, 2c, 2d"
+            },
+            {
+              "text": "Ch. 35: Medical Claim Cost Trend Analysis",
+              "codes": "2a, 2b, 2c"
+            }
+          ]
+        },
+        {
+          "citation": "GH101-100-26: Chapter 5 of Individual Health Insurance, Leida, Hans, 3rd Edition, 2026",
+          "codes": "2b, 2c, 2d",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "2a, 2c- 2e",
+          "parts": [
+            {
+              "text": "Ch. 24: Estimating Life Claim Costs",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Closing the Analytical Loop: Technology Assessments and Actuarial Methods, SOA Research Institute, Jan 2025",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 12: Risk Classification (excluding Appendices)",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 23: Data Quality (excluding Appendices)",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 25: Credibility Procedures (excluding Appendices)",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 41: Actuarial Communications (excluding Appendices)",
+          "codes": "2f",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Underwriting and Funding",
+      "weight_raw": "25%-40%",
+      "weight": [
+        25,
+        40
+      ],
+      "objective": "The candidate will understand how to apply principles of pricing, risk assessment, and funding to an underwriting situation.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the risks and opportunities associated with a given contract, eligibility requirement, or funding mechanism",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand, evaluate, and apply risk assessment mechanisms",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recommend strategies for appropriately pricing, underwriting, and funding case-specific risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe and apply approaches to claim credibility and pooling",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply Total Risk Analysis (TRA) strategies to case-specific pricing",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "3d",
+          "parts": [
+            {
+              "text": "Ch. 26: Experience Rating and Funding Methods",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "GH101-102-25: Types of COB and Impact on Medical Claim Data",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "GH101-101-25: Illustrative Examples on Experience Rating and Funding Methods",
+          "codes": "3a, 3c",
+          "parts": []
+        },
+        {
+          "citation": "The Role of the Actuary in Self-Insurance, May 2018, Sections 4, 5 & Appendices (excluding 4.1.1-4.1.5, 4.4, 4.6.1-4.6.3 & Appendix D)",
+          "codes": "3a, 3d",
+          "parts": []
+        },
+        {
+          "citation": "Level Funding: An Alternative to ACA for Small Groups, Health Watch, May 2016",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 29: Group Insurance Underwriting",
+              "codes": "3a"
+            },
+            {
+              "text": "Ch. 30: Managing Selection in a Multiple-Choice Environment",
+              "codes": "3c"
+            }
+          ]
+        },
+        {
+          "citation": "Modeling Effects of Enrollee Choice, SOA, Jan 2021",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "3b",
+          "parts": [
+            {
+              "text": "Ch. 34: Health Risk Adjustment (pp. 579-585)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Calculated Risk: Driving Decisions Using the 5/50 Research, SOA Research, Jan 2025, Sections 1 (background only), 2 & 3",
+          "codes": "3e",
+          "parts": [
+            {
+              "text": "Excel Model: Calculated Risk",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Employee Benefits",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to evaluate and recommend an employee benefit strategy.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the structure of employee benefit plans and products offered, and the rationale for offering these structures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Recommend an employee benefit strategy in light of an employer’s objectives",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "GH101-103-25: Health Plan Payroll Contribution Strategies and Development for Employers",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "GH101-106-25: Ch. 2 & Ch. 24 of The Handbook of Employee Benefits, Rosenbloom, 7th Edition, 2011",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "GH101-104-25: Recommend an Employee Benefits Strategy",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "Consumers to the Rescue? A Primer on HDHPs and HSAs, Health Watch, Feb 2019",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "A Practical Guide to Private Exchanges, Health Watch, May 2015",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "GH101-105-25: Ch. 7 (sections 7.1-7.3, 7.5-7.7) of Canadian Handbook of Flexible Benefits, McKay, 3rd Edition, 2007",
+          "codes": "4a",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

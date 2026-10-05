@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fcce942073cad999b2ede8424e9df9eb792369d3104463384ab19e5fe31c7d2c
+  content_hash: sha256:e9e75ea1bb9525f6506605d3c150552a84c5367c46a94bf642ce2e302f3b84e1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ Gary Venter's paper introduces tests of the assumptions under which age-to-age f
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objectives A2, A6 and A12; the whole paper, including errata and updated errata.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Publications & Research (1a-d); Browse research -> [Author Last Name = Venter, Year Published = 1998] -> Search (1a-d); Result: Testing the Assumptions of Age-to-Age Factors (1a-d).
 
 ## Introduction
 - In "Measuring the Variability of Chain Ladder Reserve Estimates" Thomas Mack presented the assumptions needed for the typical age-to-age factor method of loss development, the [[Chain Ladder Method|chain ladder]], to be least-squares optimal, and introduced several tests of them; this paper summarizes his results, introduces other tests, and addresses what to do when the assumptions fail.

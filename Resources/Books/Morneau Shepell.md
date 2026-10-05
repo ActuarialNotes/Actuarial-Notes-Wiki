@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:85d7d8739373fe8a63cab54167d72c170a4bb6fab775bff0ce96800b21c7c18b
+  content_hash: sha256:555317f329937363f381b0828da5eebe8f5a2022413cffa12bfeb8f5cadec6f0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,11 @@ A handbook to the essential elements of Canadian public and private pension and 
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; Chapters 17–19, not responsible for specific values and figures included in the text; in the study kit.
+> - [[Exam CP-321 (SOA)|Exam CP-321]] — Outcomes 6a, 6b, 6d, 6f, 6g.
+> - [[Exam GH-201C (SOA)|Exam GH-201C]] — Ch. 19: Employment Insurance (4a, 4b); Ch. 2: Government Pension Programs (pp. 44-64, Canada & Quebec Pension Plans) (4a, 4b); Ch. 18: Workers’ Compensation (4a, 4b); Ch. 17: Provincial Hospital and Medical Insurance Plans (4a, 4b).
+> - [[Exam RET-101 (SOA)|Exam RET-101]] — Ch. 1: Overview of Retirement Income Arrangements (1a, 1b, 1c); Ch. 3: Employer Pension Plans: Terms and Conditions (1a, 1b); Ch. 7: Pension Fund Investment Management (1c).
+> - [[Exam RET-201 (SOA)|Exam RET-201]] — Ch. 6: Financial Management of Pension Plans (1a); Ch. 6: Financial Management of Pension Plans (3b); Ch. 6: Financial Management of Pension Plans (5a, 5b).
+> - [[Exam RET-301 (SOA)|Exam RET-301]] — Ch. 5: Design, Registration, and Administration of Pension Plans (Background); Ch. 8: Registration of Pension Plans Under the Income Tax Act and Taxation of Retirement Savings (3a, 3b); Ch. 13: Supplementary Pension Arrangements (3a, 3b); Ch. 14: Other Retirement Income, Savings, and Deferred Compensation Arrangements (3a, 3b); Ch. 13: Supplementary Pension Arrangements (4a, 4b); Ch. 14: Other Retirement Income, Savings, and Deferred Compensation Arrangements (4a, 4b).
 
 ## Preface
 

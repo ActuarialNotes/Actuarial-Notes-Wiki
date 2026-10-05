@@ -24,12 +24,19 @@ export interface ExamPageSource {
 /** Resource page name (lowercased) → exam labels, in syllabus order. */
 export type ResourceExamMap = Record<string, string[]>
 
-// Preliminary exams, then the CAS upper exams in sitting order. A label that
+// Preliminary exams, the SOA's ASA exams, then the CAS exams in sitting order.
+// (The SOA's fellowship exams sort after them, alphabetically.) A label that
 // isn't listed (a new exam page) sorts after these, alphabetically, rather than
 // being dropped.
 const EXAM_ORDER = [
   'Exam P-1',
   'Exam FM-2',
+  'Exam FAM',
+  'Exam SRM',
+  'Exam PA',
+  'Exam ALTAM',
+  'Exam ASTAM',
+  'Exam ATPA',
   'Exam MAS-I',
   'Exam MAS-II',
   'Exam DISC-DA',

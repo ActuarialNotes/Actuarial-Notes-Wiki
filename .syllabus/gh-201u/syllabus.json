@@ -1,0 +1,435 @@
+{
+  "wiki_id": "gh-201u",
+  "body": "SOA",
+  "title": "GH 201-U – Valuation and Regulation, U.S.",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf",
+  "source_sha256": "dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Reserving",
+      "weight_raw": "30%-40%",
+      "weight": [
+        30,
+        40
+      ],
+      "objective": "The candidate will understand how to apply valuation principles for short duration group and health insurance contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the types of claim reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain the limitations and biases of the traditional valuation methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate appropriate claim reserves given data",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe, calculate, and evaluate the impact of environmental factors on reserve calculations (trend, seasonality, claims processing changes, etc.)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Evaluate data resources and appropriateness for calculating reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe, calculate, and evaluate non-IBNR types of reserves and explain when each is required",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Apply applicable best practices related to reserving",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Valuation at the Heart of Health Insurance",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Video: Health Valuation and Stakeholder Views",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "1a-1e, 1g",
+          "parts": [
+            {
+              "text": "Ch. 39: Claim Reserves for Short-Term Benefits",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "GH201-100-25: Health Reserves",
+          "codes": "1a-1g",
+          "parts": []
+        },
+        {
+          "citation": "Premium Deficiency Reserves Discussion Paper, AAA, Mar 2007",
+          "codes": "1f",
+          "parts": []
+        },
+        {
+          "citation": "GH201-407-26: Supplement to PDR Paper",
+          "codes": "1f",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 5: Incurred Health and Disability Claims (excluding Appendices)",
+          "codes": "1g",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 7: Life or Health Cash Flow Analysis (excluding Appendices)",
+          "codes": "1g",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 23: Data Quality (excluding Appendices)",
+          "codes": "1g",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 41: Actuarial Communications (excluding Appendices)",
+          "codes": "1g",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 42: Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims (excluding Appendices)",
+          "codes": "1g",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Financial Statements",
+      "weight_raw": "25%-35%",
+      "weight": [
+        25,
+        35
+      ],
+      "objective": "The candidate will understand how to prepare and interpret insurance company financial statements in accordance with Statutory Accounting Standards and GAAP.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Prepare a financial statement in accordance with Generally Accepted Accounting Principles (GAAP)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Interpret the results of both statutory and GAAP statements from the viewpoint of stakeholders, including regulators, senior management, and investors",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Project financial outcomes and recommend strategy",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate capital needs using RBC and the use of reinsurance to mitigate capital strain",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply applicable best practices related to financial statements",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Read. Think. Write., Health Section News, Oct 2004",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "GH201-400-25: Health Insurance Accounting Basics for Actuaries (excluding Ch. 1 & section 2.2 & Ch. 7)",
+          "codes": "2a, 2b",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 21: Responding to or Assisting Auditors or Examiners in Connection with Financial Audits, Financial Reviews, and Financial Examinations (excluding Appendices)",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 43: Analysis of Financial and Operational Performance",
+              "codes": "2b, 2c"
+            },
+            {
+              "text": "Ch. 41: Risk-Based Capital Formulas",
+              "codes": "2d"
+            }
+          ]
+        },
+        {
+          "citation": "GH201-101-25: Group and Health Reinsurance – A Primer for Actuaries",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "GH201-402-25: RBC Calculation Examples",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "GH201-401-25: Structured Reinsurance: Impact on Health Product Pricing",
+          "codes": "2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Regulation",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to evaluate the impact of regulation on insurance companies and plan sponsors in the United States.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the regulatory and policy making process in the United States",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the major applicable laws and regulations and evaluate their impact",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 4: Health Policy and Group Insurance",
+              "codes": "3a"
+            },
+            {
+              "text": "Ch. 15: Principles of Health Insurance Regulation",
+              "codes": "3a"
+            },
+            {
+              "text": "Ch. 16: State Regulation in the United States",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 17: Federal Regulation in the United States",
+              "codes": "3a, 3b"
+            }
+          ]
+        },
+        {
+          "citation": "Pharmaceutical Patent Regulation in the United States, The Actuary, Feb 2021",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "Potential Abuses Within U.S. Pharmaceutical Patent Regulation, The Actuary, Feb 2021",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "Federal Regulation of Prescription Drugs in the United States, The Actuary, Feb 2021",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "State Regulation of Prescription Drugs in the United States, The Actuary, Feb 2021",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "GH201-408-26: A Tale of Two Systems: How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe’s",
+          "codes": "3b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Government Programs",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will understand how to describe government programs providing health benefits in the United States.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe Medicare benefits and evaluate pricing and filing requirements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe Medicaid program structure and benefits, and evaluate pricing and filing requirements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the Affordable Care Act and evaluate impacts on pricing and filing",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "4a, 4b",
+          "parts": [
+            {
+              "text": "Ch. 9: Government Health Plans in the United States, pp. 133-149",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Medicare Advantage Expanded Supplemental Benefits Over the Years, Health Watch, Special Edition, Mar 2021",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "Medicare Advantage Experience Data: Pitfalls and Concerns Beyond ASOP #23, Health Watch, Feb 2019",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "GH201-404-25: Medicare Advantage: Eight Critical Considerations for Every Organization as ESRD Eligibility Expands in 2021",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "GH201-403-25: Medicare Part D Prescription Drug Benefits",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "GH201-406-25: Attempting to Boil the Ocean: A High-Level Overview of Medicaid and its Risk-Based Managed Care Programs",
+          "codes": "4b",
+          "parts": [
+            {
+              "text": "Companion Excel: Medicaid Tables",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ASOP 49: Medicaid Managed Care Capitation Rate Development and Certification, pp. 1-",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "4c",
+          "parts": [
+            {
+              "text": "Ch. 19: The Affordable Care Act",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "GH201-405-25: A Hard Pill to Swallow: Appreciating the Mathematical Dynamics of the Affordable Care Act",
+          "codes": "4c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Flow of Funds",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand how to describe the flow of funds in the health care system and the role of providers in the system.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Establish a framework of how funds flow through the health care system",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the role physicians play and their influence on the flow of funds",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the market power of hospitals and how provider systems compete for patients, physicians, and contracts",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe the flow of funds in the Canadian healthcare system and the roles of the provider and government",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "GH201-102-25: Flow of Funds in Healthcare System and the Role of Providers",
+          "codes": "5a-5d",
+          "parts": []
+        },
+        {
+          "citation": "GH201-103-25: Health Economics and Financing, Getzen, Thomas and Kobernick, Michael, 6th Edition, 2022: Sections 5.4 - 5.6, 6.2 - 6.3, 7.4 - 7.5, 8.4 - 8.5, 13.2 - 13.3",
+          "codes": "5a, 5c",
+          "parts": []
+        },
+        {
+          "citation": "Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer, SOA/CIA, Sep 2013, pp. 1-3, 51-54, 82",
+          "codes": "5d",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

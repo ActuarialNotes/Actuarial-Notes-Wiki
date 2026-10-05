@@ -21,10 +21,10 @@ import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 
 export function parseSectionWeight(weight?: string): number {
   if (!weight) return 1
-  const range = weight.match(/(\d+)\s*[-–]\s*(\d+)%/)
-  if (range) return (parseInt(range[1]) + parseInt(range[2])) / 2
-  const single = weight.match(/(\d+)%/)
-  return single ? parseInt(single[1]) : 1
+  const range = weight.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)%/)
+  if (range) return (parseFloat(range[1]) + parseFloat(range[2])) / 2
+  const single = weight.match(/(\d+(?:\.\d+)?)%/)
+  return single ? parseFloat(single[1]) : 1
 }
 
 export interface SectionReadiness {

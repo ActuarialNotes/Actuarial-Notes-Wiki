@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0c156fcf92c7cc9fac1acf69264b25ecc1ef2d902c9a0e10ebb351b987b88246
+  content_hash: sha256:ce337ea018726a44c1d236fc145a97db7cb508748924a207458ab5847c4a5f1c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A paper presenting a method for estimating the premium asset on retrospectively 
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objective A5; PCAS LXXXIII, 1996, pp. 611-647, excluding Section 5, including the discussion by Sholom Feldblum (PCAS LXXXV, 1998, pp. 274-315), Sections 1 and 2 only (its Sections 3 and 4 appear below as bare headings); candidates are not held responsible for specific Annual Statement notation but are responsible for the concepts presented.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Outcomes 6f.
 
 ## 1 Introduction
 - The [[Retrospective Premium Reserve|premium asset]] is the premium the insurer expects to collect on retro rated policies based on expected ultimate loss experience, less the premium already booked; many insurers call it earned but not reported premium, and its admitted portion appears on the balance sheet as the "Asset for Accrued Retrospective Premiums."

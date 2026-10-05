@@ -41,7 +41,7 @@ import vault_links
 CALLOUT_RE = re.compile(r"^>\s*\[!(\w+)\][-+]?\s*(.*?)\s*$")
 # The canonical title line: one space after the marker, one before the weight,
 # an en-dash range (or a single figure), nothing after.
-CANONICAL_TITLE_RE = re.compile(r"^> \[!example\]- (\S(?:.*\S)?) \{(\d+)(?:–(\d+))?%\}$")
+CANONICAL_TITLE_RE = re.compile(r"^> \[!example\]- (\S(?:.*\S)?) \{(\d+(?:\.\d+)?)(?:–(\d+(?:\.\d+)?))?%\}$")
 # …and on a page whose outline publishes no weights (`"weighted": false` in
 # scripts/exam_catalog.json), the same line with no weight tag.
 UNWEIGHTED_TITLE_RE = re.compile(r"^> \[!example\]- (\S(?:.*\S)?)$")
@@ -62,15 +62,16 @@ def split_frontmatter(text: str) -> tuple[str, str]:
     return "", text
 
 
-def parse_weight(raw: str | None) -> tuple[int, int] | None:
-    """`45–55%` / `23-30%` / `100%` → (lo, hi)."""
+def parse_weight(raw: str | None) -> tuple[float, float] | None:
+    """`45–55%` / `23-30%` / `12.5–17.5%` / `100%` → (lo, hi)."""
     if not raw:
         return None
-    m = re.fullmatch(r"\s*(\d+)\s*(?:[-–—]\s*(\d+))?\s*%\s*", raw)
+    m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*(?:[-–—]\s*(\d+(?:\.\d+)?))?\s*%\s*", raw)
     if not m:
         return None
-    lo = int(m.group(1))
-    return lo, int(m.group(2)) if m.group(2) else lo
+    num = lambda x: int(x) if float(x).is_integer() else float(x)   # FAM weighs 12.5–17.5%
+    lo = num(m.group(1))
+    return lo, num(m.group(2)) if m.group(2) else lo
 
 
 def format_weight(lo: int, hi: int) -> str:
@@ -262,6 +263,8 @@ generating quantitatively necessary realistic historical
 and/or concerning along out up due behind below above following notably typically generally
 exactly appropriately alternative similar out-of
 unique selected
+typical possible potential commonly effectively specifically especially optimally respective hypothetical
+significant additional relevant
 """.split())
 
 VERBS = frozenset("""
@@ -279,6 +282,13 @@ measured identified check smooth control sit gather import manipulate refine run
 provided present relates stripping indicated
 harnessing working addressing planning creating selecting maximizing identifying analyzing
 examining modifying classifying
+offered offering considered considering developing validate comply mitigate translate advise prioritize
+calibrate analyzed faced accommodated created conducting applied measuring checking deciding encountered
+achieving extracting adding intended predicting quantifying constructing solving determined referenced
+supporting conducted raising resulting attributing targeting recognizing utilizing enhancing performing
+taking assessing needed cited accepted projecting managing valuing selecting assuming proposed
+recommend propose examine detect explore interpret formulate quantify differentiate synthesize prepare
+outline contrast critique appraise review reconcile mitigating evaluating describing demonstrating
 """.split())
 
 # Abstract nouns that name no concept of their own — "the *role* of…", "the
@@ -303,7 +313,7 @@ criteria second semester two-semester undergraduate sequence behavior behaviour 
 parts starting models assumption assumptions specification specifications mechanics strengths weaknesses procedure
 procedures task tasks hand improvements computations measure measures relationships limiting actuarial available
 relevance findings details methodologies decisions emphasis sources
-overview keys steps reasons evolution characteristics cooperation functions
+overview keys steps reasons evolution characteristics cooperation functions topic topics
 """.split())
 
 WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")

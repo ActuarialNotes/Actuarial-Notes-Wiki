@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5d23a7ee28968c8e63de4fa219ea45290f7714f51d1229a6a7024ede6c71cfff
+  content_hash: sha256:48a6dcdeeaaf76da46116d8bbc9486cd39c91f2a840a2ec9d3c893d305b18fda
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,7 @@ The Actuarial Standards Board's guidance for actuaries designing, reviewing, or 
 > [!info] On the syllabus
 > - [[Exam 5 (CAS)|Exam 5]] — objectives A4–A5; the standard as revised in 2005 and updated for deviation language in 2011.
 > - [[Exam 8 (CAS)|Exam 8]] — objective A2.
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f.
 
 ## Transmittal Memorandum
 

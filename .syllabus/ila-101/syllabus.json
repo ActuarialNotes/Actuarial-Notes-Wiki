@@ -1,0 +1,483 @@
+{
+  "wiki_id": "ila-101",
+  "body": "SOA",
+  "title": "ILA 101 – Pricing and Introduction to Valuation and Risk Management",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf",
+  "source_sha256": "6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Individual Life and Annuity Product Design and Pricing",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand the designs of the common Life and Annuity products and their associated features and inherent risks, and the methods to design and price these products.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and compare various life insurance and annuity product designs",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate and apply pricing practices for life and annuity products",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe and apply the common profit metrics (IRR, Value of New Business, Embedded Value, ROE) used in pricing insurance products",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain and apply nonforfeiture calculation techniques",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA101-100-25: Life Products and Features",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-101-25: Annuity Products and Features",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Structured Settlement Annuities, SOA Research Institute, Mar 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Pension Risk Transfer in Canada and the U.S., SOA Research Institute, Feb 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Registered Index-Linked Annuities, SOA Research Institute, Aug 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Life Insurance Acceleration Riders, SOA Reinsurance News, Jul 2013, pp. 35-38",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-102-25: Understanding Profitability in Life Insurance",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-103-25: Ch. 9 of Life Insurance Products and Finance, Atkinson and Dallas",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-104-25: Ch. 11, pp. 499-512 of Life Insurance Products and Finance, Atkinson and Dallas",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-105-25: Life Insurance and Annuity Non-forfeiture Practices",
+          "codes": "1d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Assumption Development and Experience Studies",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand different types of actuarial assumptions and how experience studies are designed and used for evaluating past experience and for setting assumptions.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe types of actuarial assumptions commonly used for life insurance and annuity actuarial functions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and evaluate mortality, lapse, premium persistency, term conversions and utilization assumptions used for various purposes, and apply methods and techniques for their development",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain and apply actuarial credibility methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe and apply the framework, process, and significant considerations for creating modern mortality tables used by life insurance companies",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe the process and apply techniques for experience studies",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA101-106-25: Experience Assumptions for Individual Life Insurance and Annuities",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-107-25: Lapse Supported Insurance Analysis",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Educational Note Supplement: Selective Lapsation for Renewable Term Insurance Products, CIA, Feb 2017",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Report on Premium Persistency Assumptions Study of Flexible Premium Universal Life Products, May 2012, pp. 9-15",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Variable Annuity Guaranteed Living Benefits Utilization, SOA LIMRA Research, 2018, Executive Summary only (pp. 19-32)",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Term Conversions: Pricing and Reserves, Product Matters, Mar 2017",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Predictive Models on Conversion Studies for the Level Premium Term Plans, SOA, Mar 2017",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Credibility Methods Applied to Life, Health, and Pensions, SOA, Feb 2019 (pp. 1-25 only)",
+          "codes": "2c",
+          "parts": [
+            {
+              "text": "Credibility Methods Companion Excel Files",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Table Development, Feb 2018 (excluding Appendices C, D, F, G & H)",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Experience Study Calculations, SOA, Oct 2016 (revised Mar 2024), sections 2-4, 11, 12, 15, 17 & 18 (excluding 18.2, 18.8 & 18.9)",
+          "codes": "2e",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Product Management",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand common issues and practices related to Product Management.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and assess insurance and annuity distribution approaches and underwriting approaches",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and apply the significant US and Canadian tax regulations relating to the taxation of individual life and annuity insurance products",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recommend and justify changes to non-guaranteed elements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe and evaluate the challenges insurers face in a rising interest rate environment",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Life Insurance for the Digital Age: An End-to-End View, Product Matters, Nov 2017",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "The Art and Science of Life Insurance Distribution, Bennett, Douglas J., and Zultowski, Walter H., 2014",
+          "codes": "3a",
+          "parts": [
+            {
+              "text": "Ch. 3: The Primary Life Insurance Distribution Channels",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: The Functions of Distribution in the Life Insurance Business",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 6: Distribution Compensation",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: The Economics of Life Insurance Distribution",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 10: The Future of Life Insurance Distribution",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA101-108-25: Chapters 1 and 2 of Life Insurance and Modified Endowments Under IRC §7702 and §7702A, Desrochers, 2nd Edition",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-116-25: Ch. 10, The Taxation of Life Insurance Policies of Canadian Insurance Taxation, Swales, et. al.",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "Overview of Nonguaranteed Elements (NGEs), SOA Research Institute, Nov 2022",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "Market Trends and Product Designs: Considerations When Interest Rates are Rising, Product Matters, Nov 2021",
+          "codes": "3d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Introduction to Life and Annuity Valuation Concepts",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand common valuation and capital techniques used in US, Canadian, and international regulatory frameworks.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the US statutory actuarial framework, including the principles-based reserves and calculate basic life insurance reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the US GAAP actuarial framework and calculate term insurance reserves and deferred acquisition cost",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the IFRS actuarial framework, including the basic calculation of reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain and apply methods in capital management across various jurisdictions",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Statutory Valuation of Individual Life and Annuity Contracts, Volume I, Claire, D., Lombardi, L. and Summers, S., 5th Edition, 2018",
+          "codes": "4a",
+          "parts": [
+            {
+              "text": "Chapter 1: Overview of Valuation Concepts (excluding 1.1-1.9)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 11: Valuation Methodologies (excluding 11.3.9-11.3.11)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA101-110-25: Fundamentals of the Principle-Based Approach to Statutory Reserves for Life Insurance",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-118-26: Chapter 1 of US GAAP for Insurers, Freedman, M., and Frasca, R., 3rd Edition, 2024",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-119-26: Chapter 5 of US GAAP for Insurers, Freedman, M., and Frasca, R., 3rd Edition, 2024",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-111-25: Insurance Contracts First Impressions: 2020 Edition IFRS 17, (only Sections 1.1-1.2, 3.1, 5.1-5.3, 6.1-6.4, 14.1-14.2, 15.1-15.2, 17.1-17.3, 20.1)",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023",
+          "codes": "4d",
+          "parts": [
+            {
+              "text": "Companion Excel Spreadsheet: Comparison of Jurisdictions Tool",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Introduction to Assets and Risk Management",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand various techniques for addressing the mitigation of risk within a life insurance and annuity context.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and evaluate approaches for integrating ALM into an enterprise's risk and financial management framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and apply the basic concepts of cash flow matching, immunization, duration/convexity matching, segmentation",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe how common insurance guarantees generate embedded options and calculate the value of these options",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain the function and attributes of common assets used to support life insurance and annuity liabilities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe basic terms, concepts, and types of life insurance reinsurance arrangements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Explain various methods and perform financial statement calculations of reinsurance transactions, including yearly renewable term, coinsurance, modified coinsurance, and funds withheld arrangements",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA101-112-25: Revisiting the Role of Insurance Company ALM within a Risk Management Framework",
+          "codes": "5a",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-113-25: Ch. 7 (sections 7.2-7.5 & 7A) of Derivatives Markets, McDonald, 3rd Edition",
+          "codes": "5b",
+          "parts": []
+        },
+        {
+          "citation": "ILA101-114-25: Ch. 16 of ALM Management of Financial Institutions, Tilman, 2003",
+          "codes": "5c",
+          "parts": []
+        },
+        {
+          "citation": "An Introduction to Computational Risk Management of Equity-Linked Insurance, Feng, Runhuan, 2018",
+          "codes": "5c",
+          "parts": [
+            {
+              "text": "Ch. 1: Modeling of Equity-linked Insurance",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Pricing and Valuation (excluding Section 4.7)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA101-115-25: Simulation of a Guaranteed Minimum Annuity Benefit, Freedman, 2019",
+          "codes": "5c",
+          "parts": [
+            {
+              "text": "Excel Model - Stochastic Simulation of a GMAB Option (Accompanies Simulation of a GMAB)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA-117-25: Ch. 10, pp. 235-262, excluding exhibits 10-1 & 10-2, and Ch. 21 of Handbook of Fixed Income Securities, Fabozzi, F.J.",
+          "codes": "5d",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "5e",
+          "parts": [
+            {
+              "text": "Ch. 1: Basic Terms and Concepts (pp. 3-16 & 22)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Basic Methods of Reinsurance",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 5: Advanced Methods and Structures of Reinsurance",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

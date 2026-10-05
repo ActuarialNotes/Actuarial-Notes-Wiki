@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:53bd1e215072609a67dd2d2ca6deb96c5f7296d3a6c799ddc936654edbe4985d
+  content_hash: sha256:497101cb9fd1c5b5a67773334d37e25949dd04ae2a6fc58d43867289a66d781f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ The actuarial standard of practice for actuaries designing, developing, selectin
 
 > [!info] On the syllabus
 > - [[Exam PCPA (CAS)|Exam PCPA]] — objectives A1–A4 (Domain A, Dealing with Data); the outline cites the whole standard, as an online publication (OP).
+> - [[Exam CP-312 (SOA)|Exam CP-312]] — Outcomes 3a.
 
 ## Transmittal Memorandum
 - ASB work on a modeling standard began in the late 1990s and produced ASOP No. 38; in December 2012 the ASB created a general Modeling Task Force to develop an ASOP for modeling in all practice areas.

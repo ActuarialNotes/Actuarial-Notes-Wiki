@@ -1,0 +1,653 @@
+{
+  "wiki_id": "gi-201",
+  "body": "SOA",
+  "title": "GI 201 – Operational, Financial, Regulatory and Legal",
+  "sitting": "Nov 2026/Mar 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf",
+  "source_sha256": "4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "General Insurance Company Operations",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand the structure and functions of a general insurance company.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the various core and supporting functions of a general insurance company.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Differentiate among the various classifications of insurers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the marketing and distribution of general insurance products.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand the processes for underwriting and pricing general insurance policies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe the activities and challenges in the claim handling process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe the goals of insurer risk control activities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Explain why premium audits are conducted.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Demonstrate knowledge of general insurance risks, perils, product characteristics / issues, and contracts.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Describe and compare the different types of reinsurance and risk mitigation instruments.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Demonstrate knowledge of the issues regarding international business for insurance companies.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "General Insurance Company Operations, SOA, May 2025",
+          "codes": "1a-g",
+          "parts": []
+        },
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, 2022",
+          "codes": "1d",
+          "parts": [
+            {
+              "text": "Ch. 29: Manual Ratemaking",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "IAA Risk Book: Non-Life Perils and Coverages, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 3-7, and 8.1-8.2",
+          "codes": "1h",
+          "parts": []
+        },
+        {
+          "citation": "IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 2-4, 7 and 11",
+          "codes": "1i",
+          "parts": []
+        },
+        {
+          "citation": "Excerpts from Business Law for Insurance Professionals, Assignment 3, pp. 3.29-3.39 (begin on pp. 3.29 with “Financial Considerations in International Business”)",
+          "codes": "1j",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Regulatory Environment",
+      "weight_raw": "20%-32%",
+      "weight": [
+        20,
+        32
+      ],
+      "objective": "The candidate will understand the regulatory environment for general insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the functions and goals of the different forms of insurance regulation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the protections provided by solvency and insolvency regulation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand the issue of discrimination and insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Discuss the issues regarding usage-based insurance and telematics in automobile insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe the development of general insurance programs controlled by government or collective insurance industry organizations and their mechanisms of operation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Discuss the issues with the use of credit scores by insurers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Understand the function and regulation of price optimization.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Outline the function and regulation of captives.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Understand the functions and regulatory environment for reinsurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "The General Insurance Regulatory Environment, SOA, May 2025",
+          "codes": "2a-b",
+          "parts": []
+        },
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, 2022",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Ch. 28: Rate Regulation",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "IAA Risk Book: Non-Life Perils and Coverages, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 8.5-8.7",
+          "codes": "2a, 2c",
+          "parts": []
+        },
+        {
+          "citation": "Insurance and the Discrimination Laws: Motor and Travel Insurance, Edmunds, T., House of Commons Library Standard Note SN04601, Mar 2013 (report dated Oct 2015), pp. 4-",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "Usage Based Insurance and Telematics, SOA, May 2025",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "IAA Risk Book: Non-Life Perils and Coverages, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 8.3-8.4",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Government Provision of General Insurance, SOA, May 2025, sections 1-3, 5, 6, and 9",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Private Flood Insurance and the National Flood Insurance Program, CRS Report R45242, Congressional Research Service, Updated Jan 2023, pp. 1-21 (excluding the section “NFIP Reauthorization and Legislation” on pp. 5-6, and Table 1 on pp. 9)",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Issues Paper: Use of Credit Scores by Insurers Canadian Council of Insurance Regulators, Credit Scoring Working Group, Jun 2011, pp. 5-16",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "Price Optimization White Paper, Casualty Actuarial and Statistical (C) Task Force, National Association of Insurance Commissioners, Nov 2015, pp. 6-16 (paragraphs 15-49)",
+          "codes": "2g",
+          "parts": []
+        },
+        {
+          "citation": "Captive Insurance, SOA, May 2025",
+          "codes": "2h",
+          "parts": []
+        },
+        {
+          "citation": "IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, section 10",
+          "codes": "2i",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Legal Environment",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand tort law and insurance law with respect to general insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and interpret the key elements of tort law and the underlying principles of insurance law.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Discuss the issues of tort trends and tort reform as it applies to the general insurance industry.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand the effects of transnational tort litigation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand mass torts/class action suits and discuss their effect on the general insurance industry.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand the use of no-fault insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Understand the international legal environment as it relates to general insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Discuss the influence of the U.S. tort law environment in other countries.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Discuss the issue of social inflation and its effect on general insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Describe and interpret legal cases/issues included in the syllabus resources.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Excerpts from Business Law for Insurance Professionals, Assignments 1 & 2",
+          "codes": "3a, 3i",
+          "parts": []
+        },
+        {
+          "citation": "IAA Risk Book: Non-Life Perils and Coverages, Insurance Regulation Committee, International Actuarial Association, May 2023, section 8.10",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Tort Law – Topics for General Insurance Actuaries, SOA, May 2025, sections 1-5 (excluding 5.1 & 5.5) Note: Regarding the table in 5.4 (pp. 35-37), candidates are only expected to be familiar with the cases BMW of North America v. Gore and State Farm Mutual Auto. v. Campbell.",
+          "codes": "3b-d, 3i",
+          "parts": []
+        },
+        {
+          "citation": "Government Provision of General Insurance, SOA, Section 10, Appendix – No-Fault Insurance",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "Excerpts from Business Law for Insurance Professionals, Assignment 3, 3.11-3.29 (begin on pp. 3.11 with “Legal Systems”, end before “Financial Considerations…” on pp. 3.29)",
+          "codes": "3f",
+          "parts": []
+        },
+        {
+          "citation": "Tort Law – Topics for General Insurance Actuaries, SOA, May 2025, section 6 (excluding 6.2.1-6.2.9)",
+          "codes": "3i",
+          "parts": []
+        },
+        {
+          "citation": "Social Inflation: Navigating the Evolving Claims Environment, The Geneva Association, Dec 2020 (pp. 6-17, 19-34 & 36-38)",
+          "codes": "3h-i",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Financial Economics",
+      "weight_raw": "5%-8%",
+      "weight": [
+        5,
+        8
+      ],
+      "objective": "The candidate will understand elements of financial economics relevant to general insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate knowledge of behavioral finance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate knowledge of asset liability management strategies for general insurance companies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate an underwriting profit margin using different models under a financial economics approach.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Behavioral Finance, J. Ritter, Pacific-Basin Finance Journal, Volume 11, Issue 4, Sep 2003, sections 1-3 (pp. 429-434)",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "ALM Strategies for General Insurers, SOA, May 2025",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "Ratemaking: A Financial Economics Approach, D’Arcy, S. and Dyer, M., 1997 Proceedings of the Casualty Actuarial Society, Volume LXXXIV, sections 1, 2, 4 & 6 Note: Sections 3 and 5 are not required reading but may be beneficial as background reading.",
+          "codes": "4c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Financial Reporting",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will understand elements of financial reporting for general insurance companies.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate knowledge of the different types of general insurance liabilities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand and apply the concepts of insurance/reinsurance accounting.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand the different financial reporting standards for general insurers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand key terms and considerations related to claim liabilities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand the reporting of financial instruments.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "IAA Risk Book: Liabilities for General Insurance, Insurance Regulation Committee, International Actuarial Association, May 2023 (pp. 2-22)",
+          "codes": "5a",
+          "parts": []
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:",
+          "codes": "5b-c",
+          "parts": [
+            {
+              "text": "Ch. 1: Accounting Concepts for General Insurance",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 2: Accounting for Insurance Contracts (excluding 2.3.3-2.3.4, 2.5.1-2.5.2.1, 2.7.2-2.7.4 & 2.8 after the Insight box on pp. 36)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Accounting for Reinsurance Contracts (excluding 4.4.2, 4.6.3-4.6.5, 4.8.3 & 4.9)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, 2022",
+          "codes": "5d",
+          "parts": [
+            {
+              "text": "Ch. 24: Claim Liabilities",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:",
+          "codes": "5e",
+          "parts": [
+            {
+              "text": "Ch. 3: Accounting for Financial Instruments (excluding 3.4.3)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Financial Health Measurement",
+      "weight_raw": "15%-20%",
+      "weight": [
+        15,
+        20
+      ],
+      "objective": "The candidate will understand the analysis of a general insurer’s financial health.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the various considerations for performance measurement of a general insurer.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand and apply financial health ratios.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate knowledge of solvency monitoring for general insurance companies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand and apply the EU Solvency II capital requirement.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Demonstrate knowledge of ORSA.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Discuss the function of credit rating agencies and their influence on general insurers.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 10: Performance Measurement for General Insurers (excluding 10.4.3, and 10.8.3.1-10.9.1)",
+              "codes": "6a"
+            },
+            {
+              "text": "Ch. 11: Financial Ratios for Insurers (excluding 11.6.2, 11.7.1, 11.8, and 11.10-11.11)",
+              "codes": "6a-b"
+            },
+            {
+              "text": "Ch. 12: Solvency Monitoring (excluding 12.5.3, 12.9.2-12.9.3, 12.10.2, 12.11 and 12.13)",
+              "codes": "6c-e"
+            }
+          ]
+        },
+        {
+          "citation": "IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial 6a, c-d, f Association, May 2023, section 9",
+          "codes": "",
+          "parts": []
+        },
+        {
+          "citation": "IAA Risk Book: Own Risk Solvency Assessment, Insurance Regulation Committee, International Actuarial Association, May 2023, pp. 3-19 (excluding sections 10.1 & 11)",
+          "codes": "6e",
+          "parts": []
+        },
+        {
+          "citation": "NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual, NAIC, as of Dec 2022, pp. 1-5 & 7-16",
+          "codes": "6e",
+          "parts": []
+        },
+        {
+          "citation": "Deriving Value from ORSA: Board Perspective, International Actuarial Association, Apr 2015, pp. 1-8",
+          "codes": "6e",
+          "parts": []
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:",
+          "codes": "6f",
+          "parts": [
+            {
+              "text": "Ch. 13: General Insurance Financial Ratings (excluding sections 13.4.3-13.4.6.4, 13.5.2 and the first paragraph on page 376 after the Insight box)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "title": "Responsibilities of the Actuary",
+      "weight_raw": "5%-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The candidate will understand the standards of practice and professionalism required of the actuary.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe, interpret and apply professionalism principles as defined by the International Actuarial Association (IAA).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, interpret and apply Standards of Practice as defined by the IAA.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate knowledge of the general insurance actuarial opinion and the role of the appointed actuary.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe and apply the concept of materiality.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "IAA Risk Book: Professional Standards, Insurance Regulation Committee, IAA, May 2023, pp. 2-7",
+          "codes": "7a",
+          "parts": []
+        },
+        {
+          "citation": "International Standard of Actuarial Practice 1, General Actuarial Practice, IAA, Revision adopted Dec 2018",
+          "codes": "7b",
+          "parts": []
+        },
+        {
+          "citation": "International Standard of Actuarial Practice 4, IFRS 17 Insurance Contracts, IAA, Nov 2019, pp. 1-9 (excluding sections 2.8 and 2.10)",
+          "codes": "7c",
+          "parts": []
+        },
+        {
+          "citation": "General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021",
+          "codes": "7c",
+          "parts": [
+            {
+              "text": "Ch. 14: The General Insurance Actuarial Opinion (excluding 14.2.6.1-14.3.6, 14.4 & 14.6-14.8)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "IAA Risk Book: Materiality, Proportionality and Similar Terms, Insurance Regulation Committee, IAA, Apr 2023, pp. 2-10",
+          "codes": "7d",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

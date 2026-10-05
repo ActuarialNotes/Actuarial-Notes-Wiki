@@ -372,6 +372,128 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: 'Syllabus',
   },
 
+  // The SOA exams past FM, for the next sitting each serves (read off the
+  // SOA's exam pages on 2026-10-05). These are also the PDFs
+  // scripts/syllabus_extract.py transcribed the exam pages from, and
+  // lib/examCatalog.test.ts holds the two together. ATPA's is its 2022
+  // learning-objectives document, the one its page links.
+  'fam-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf',
+    label: 'Syllabus',
+  }, // October 2026
+  'srm-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf',
+    label: 'Syllabus',
+  }, // January 2027
+  'pa-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf',
+    label: 'Syllabus',
+  }, // October 2026
+  'altam-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf',
+    label: 'Syllabus',
+  }, // OCTOBER 2026
+  'astam-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf',
+    label: 'Syllabus',
+  }, // OCTOBER 2026
+  'atpa-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf',
+    label: 'Syllabus',
+  },
+  'cfe-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'cfe-201': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Mar 2027/Jul 2027
+  'cp-311': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027
+  'cp-312': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027
+  'cp-321': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Jul 2027
+  'cp-341': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Mar 2027/Jul 2027
+  'cp-351': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gh-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gh-201c': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gh-201u': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gh-301': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gi-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'gi-201': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027
+  'gi-301': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Mar 2027/Jul 2027
+  'gi-302': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Jul 2027
+  'ila-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'ila-201i': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'ila-201u': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'inv-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'inv-201': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'ret-101': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Mar 2027/Jul 2027
+  'ret-201': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Mar 2027/Jul 2027
+  'ret-301': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf',
+    label: 'Syllabus',
+  }, // Nov 2026/Jul 2027
+
   // ── CAS ───────────────────────────────────────────────────────────────────
   '5-1': {
     url: 'https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf',

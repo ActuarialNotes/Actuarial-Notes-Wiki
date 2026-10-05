@@ -1,0 +1,328 @@
+{
+  "wiki_id": "cfe-201",
+  "body": "SOA",
+  "title": "CFE 201 – Corporate Finance",
+  "sitting": "Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf",
+  "source_sha256": "512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Corporate Finance",
+      "weight_raw": "15-29%",
+      "weight": [
+        15,
+        29
+      ],
+      "objective": "The candidate will understand how an organization optimizes its corporate finance decisions based on its business objectives.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Recommend an optimal capital structure for given business objectives and the competitive environment",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate and apply the methods to determine the value of a business or project, including the impact of financial and non-financial factors on capital budgeting and allocation decisions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Assess the impact on value creation from business strategies such as acquisitions, divestitures, or reinsurance",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Introduction to CFE 201",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Valuation, Measuring and Managing the Value of Companies, Tim Koller, Marc Goedhart, David Wessels, 8th Edition, 2025",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 10: Framework for Valuation (excluding “Problematic Modifications to Discounted Cash Flow” and “Alternatives to Discounted Cash Flow” sections)",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 27: Cross Border Valuation (excluding “Using Translated Foreign-Currency Financial Statements” section)",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 35: Capital Structure, Dividends, and Share Repurchases, “Setting a Target Capital Structure” section only (pp 679-688)",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 31: Mergers and Acquisitions",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 22: Leases • Ch. 40: Flexibility",
+              "codes": "1a, 1b 1a, 1b"
+            }
+          ]
+        },
+        {
+          "citation": "CFE201-100-23: Hurdle Rate Definition",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "International Reinsurance Landscape Overview for United States Life and Annuities, SOA Research Institute, Section 2 only",
+          "codes": "1a, 1c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-111-27: Life & Annuity Reinsurance Sidecars: From Sidebar to Headline Topic",
+          "codes": "1a, 1c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-112-27: Private Capital in Insurance 2.0: Building a Flywheel",
+          "codes": "1a, 1c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla",
+          "codes": "1c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Financial Statement Analysis",
+      "weight_raw": "21%-35%",
+      "weight": [
+        21,
+        35
+      ],
+      "objective": "The candidate will understand how to gauge an organization’s performance through an evaluation of its financial reports.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Analyze the reported financial statements and the interrelationships among them, in order to measure financial performance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify unusual or questionable accounting practices and analyze their impact on the quality of key financial metrics",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Analyze the impact of accounting policies related to taxes and foreign exchange rates on financial statements",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "International Financial Statement Analysis, Robinson et al, 4th Edition, 2020",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 6: Financial Analysis Techniques",
+              "codes": "2a"
+            },
+            {
+              "text": "Ch. 9: Income Taxes",
+              "codes": "2c"
+            },
+            {
+              "text": "Ch. 11: Financial Reporting Quality",
+              "codes": "2a, 2b"
+            },
+            {
+              "text": "Ch. 15: Multinational Operations",
+              "codes": "2c"
+            }
+          ]
+        },
+        {
+          "citation": "CFE201-103-25: Bank Profitability",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla",
+          "codes": "2a",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Managerial Accounting and Operational Excellence",
+      "weight_raw": "9%-20%",
+      "weight": [
+        9,
+        20
+      ],
+      "objective": "The candidate will understand how managerial accounting and operational processes impact an organization’s performance evaluation and decision making.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Assess how managerial accounting can drive decision making and impact behavior and performance evaluation",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Assess and recommend methods used to allocate costs and how these methods can distort perceived performance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recommend best practices in business processes to achieve operational excellence",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Accounting for Decision Making and Control, Zimmerman, Jerold, 10th Edition, 2020",
+          "codes": "3a, 3b",
+          "parts": [
+            {
+              "text": "Ch. 5: Responsibility Accounting and Transfer Pricing",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Cost Allocation: Theory",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 9: Absorption Cost Systems",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CFE201-106-25: Procurement, Early Warning Systems, and the Next Disruption",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-107-25: Financial Institutions and Nonfinancial Risk: How Corporates Build Resilience",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-108-25: When Nothing is Normal Managing in Extreme Uncertainty",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-114-27: Managing Allocations Effectively in the Insurance Sector",
+          "codes": "3b, 3c",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-115-27: Reorganizing to Capture Maximum Value Quickly",
+          "codes": "3c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Evolving Quantitative Methods and Technologies",
+      "weight_raw": "25%-45%",
+      "weight": [
+        25,
+        45
+      ],
+      "objective": "The candidate will understand the appropriate application of evolving quantitative methods and technologies that help to manage the business.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate the appropriateness of applying evolving methods and technologies to manage specific business issues",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply evolving methods and technologies for quantifying and managing business risks and opportunities",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of Machine Learning for Predictive Data Analytics, Kelleher, John D., Mac Namee, Brian and D’Arcy, Aoife, 2nd Edition, 2020",
+          "codes": "4a, 4b",
+          "parts": [
+            {
+              "text": "Ch. 2: Data to Insights to Decisions",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 9: Evaluation",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 12: Case Study: Customer Churn",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 14: The Art of Machine Learning for Predictive Data Analytics",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Decentralized Finance for Actuaries, SOA Research Institute, Mar 2022",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "Decentralized Insurance Alternatives: Market Landscape, Opportunities and Challenges, SOA Research Institute, Sep 2022, pp. 9-26",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "Peer-to-Peer Insurance: Blockchain Implications, SOA, Mar 2021",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-116-27: A Method for Estimating the Price of Stablecoin Insurance",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-117-27: AI Agents vs. Agentic AI: A Conceptual Taxonomy, Applications and Challenges, Section IV, V (pp. 16-30)",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-118-27: Seizing the Agentic AI Advantage",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-119-27: How Insurers Can Supercharge Their Strategy with AI",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CFE201-120-27: How AI Could Reshape the Economics of the Asset Management Industry",
+          "codes": "4a, 4b",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

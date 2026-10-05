@@ -1,0 +1,548 @@
+{
+  "wiki_id": "gi-101",
+  "body": "SOA",
+  "title": "GI 101 – Ratemaking and Reserving",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf",
+  "source_sha256": "deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction and Key Considerations",
+      "weight_raw": "0%-6%",
+      "weight": [
+        0,
+        6
+      ],
+      "objective": "The candidate will understand the key considerations for and key concepts underlying general insurance actuarial work.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify sources of professionalism requirements and good practice",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate knowledge of good practice related to actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Use the actuarial control cycle to frame actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand the components of ultimate values",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Explain how estimates of ultimate values are used",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Demonstrate the importance of understanding key terminology and interrelationships",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Identify different types of data used for actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Explain the responsibilities of the actuary related to data",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Describe how and why data are segregated and aggregated",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Describe qualitative information required for actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Understand the sources of data and information for actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "l",
+          "text": "Understand credibility as used for actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "m",
+          "text": "Explain the application of trend adjustments in actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "n",
+          "text": "Illustrate the types of trend that influence the future cost of claims, expenses, and premiums",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "o",
+          "text": "Identify the actuary’s responsibilities with regards to documentation for actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "p",
+          "text": "Describe the role of professional judgment in actuarial work",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "1a-p",
+          "parts": [
+            {
+              "text": "Chapter 2",
+              "codes": ""
+            },
+            {
+              "text": "Part 2: Key Concepts (excluding Chapter 10)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries, No. 25, Credibility Procedures, 2013",
+          "codes": "1l",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Preparing Claims and Exposure Data for Actuarial Work",
+      "weight_raw": "8%-18%",
+      "weight": [
+        8,
+        18
+      ],
+      "objective": "The candidate will demonstrate the ability to prepare claims and exposure data for general insurance actuarial work.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Create development triangles of claims and counts from detailed claim transaction data",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the different types of exposures used for conducting actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate written, earned, in-force and unearned premiums for portfolios of policies with various policy terms and earnings patterns",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Adjust historical earned premiums to current rate levels",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand types of changes influencing average premium levels",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe adjustments needed to estimate ultimate premiums",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "2a-f",
+          "parts": [
+            {
+              "text": "Part 3: Preparing the Data (excluding 12.6.4 and 12.6.6)",
+              "codes": ""
+            },
+            {
+              "text": "Appendices A through C and F (excluding Sections A.3.6, A.5)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Projecting Ultimate Claims",
+      "weight_raw": "42%-56%",
+      "weight": [
+        42,
+        56
+      ],
+      "objective": "The candidate will know how to calculate and evaluate projected ultimate values.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify considerations for selecting methods for estimating ultimate claims",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify and describe good practice related to projecting ultimate claims with regard to required data, large claims, and comparison of current to prior actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Identify the types of development triangles that can be used for investigative testing",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Analyze development triangles for investigative testing",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe the key assumptions underlying the following projection methods: development method, development-based frequency-severity method, expected method, Bornhuetter Ferguson method, Benktander method, Cape Cod method, and Generalized Cape Cod method",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Demonstrate knowledge of good practice related to projecting ultimate values",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Estimate ultimate values using the methods cited in (e)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Describe the Berquist-Sherman data adjustments and their key assumptions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Adjust data triangles for changes in the adequacy of case estimates or changes in the rate of claim settlement using a Berquist-Sherman data adjustment",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Estimate ultimate claims using the appropriate Berquist-Sherman data adjustments",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Explain the effect of changing conditions on the projection methods cited in (e)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "l",
+          "text": "Assess the appropriateness of the projection methods cited in (e) in varying circumstances",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "m",
+          "text": "Evaluate and justify selections of ultimate values based on the methods cited in (e)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "3a-m",
+          "parts": [
+            {
+              "text": "Part 4: Basic Methods for Estimating Ultimate Claims (excluding 15.8, 16.6, 16.7, 17.8, 18.8, 19.6, 20.6, 21.3.5, and 21.3.6)",
+              "codes": ""
+            },
+            {
+              "text": "Appendices A through C and F (excluding A.3.6 and A.5)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Financial Reporting",
+      "weight_raw": "4%-12%",
+      "weight": [
+        4,
+        12
+      ],
+      "objective": "The candidate will understand financial reporting of claim liabilities with respect to unpaid unallocated loss adjustment expenses.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the key assumptions underlying ratio and count-based methods for estimating unpaid unallocated loss adjustment expenses",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Estimate unpaid unallocated loss adjustment expenses using ratio and count-based methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate and justify selections of unpaid unallocated loss adjustment expenses based on ratio and count-based methods",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "4a-c",
+          "parts": [
+            {
+              "text": "Chapter 23 (excluding section 23.4)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Trending",
+      "weight_raw": "6%-16%",
+      "weight": [
+        6,
+        16
+      ],
+      "objective": "The candidate will understand trending procedures as applied to ultimate claims, exposures and premiums.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify and describe the influences of portfolio changes on claim frequency and severity",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify the time periods associated with trending procedures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Analyze and evaluate trend for claims (including frequency, severity, and pure premium) and exposures (including inflation-sensitive exposures and premiums)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Choose trend rates for claims (frequency, severity, and pure premium) and exposures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate trend factors for claims and exposures",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "5a-e",
+          "parts": [
+            {
+              "text": "Part 6: Trending Procedures",
+              "codes": ""
+            },
+            {
+              "text": "Appendices A through C, and F (excluding A.3.6, A.5)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Ratemaking",
+      "weight_raw": "10%-22%",
+      "weight": [
+        10,
+        22
+      ],
+      "objective": "The candidate will understand how to apply the fundamental ratemaking techniques of general insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Quantify different types of expenses required for ratemaking including expense trending procedures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Incorporate underwriting profit and contingency margins in ratemaking",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain the requirements for loadings for catastrophes and large claims in ratemaking",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate loadings for catastrophes and large claims",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply loadings for catastrophes and large claims in ratemaking",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe the claim ratio and pure premium methods of ratemaking",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Calculate indicated rates and rate changes using the claim ratio and pure premium methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Demonstrate the use of credibility in ratemaking",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "6a-h",
+          "parts": [
+            {
+              "text": "Part 7: Ratemaking (Chapters 30 through 32)",
+              "codes": ""
+            },
+            {
+              "text": "Appendices A through C, and F (excluding A.3.6, A.5)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "title": "Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6)",
+      "weight_raw": "Included in Topics 2, 3, 5 & 6",
+      "weight": [
+        0,
+        0
+      ],
+      "objective": "The candidate will be able to define an approach for actuarial analyses supporting financial reporting and ratemaking analyses under various real-life scenarios. The candidates will be able to define funding requirements for self-insurers.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify data and information requirements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Conduct investigative testing",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Choose projection methods to estimate ultimate values",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Estimate ultimate values",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Justify selections of ultimate values",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Develop reserves for financial reporting",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022",
+          "codes": "7a-f",
+          "parts": [
+            {
+              "text": "Appendices A through C, and F (excluding A.3.6, A.5)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

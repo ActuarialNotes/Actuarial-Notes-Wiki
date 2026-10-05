@@ -1,0 +1,488 @@
+{
+  "wiki_id": "gh-301",
+  "body": "SOA",
+  "title": "GH 301 – Health Analytics Management",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf",
+  "source_sha256": "2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Provider Contracting and Reimbursement",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to evaluate the effectiveness of provider reimbursement methods from both a cost and quality viewpoint.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe contracts between payers and providers",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate provider payments under various reimbursement methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate standard contracting methods from a cost-effective and quality perspective",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate accountable care organizations (ACO) and their impact on quality, utilization, and cost",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Challenges of Provider Reimbursement",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "Video: Today’s Provider Reimbursement Landscape",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "GH301-105-25: Chapter 45 of Group Insurance, Skwire, Daniel, 8th Edition, 2021",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Provider Payment Arrangements, Provider Risk, and Their Relationship with Cost of Healthcare, Oct 2015 (excluding Appendices)",
+          "codes": "1b, 1c, 1d",
+          "parts": []
+        },
+        {
+          "citation": "Value-Based Care Framework, The Actuary, Apr 2020",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "The Cost of Value-Based Care, The Actuary, Apr 2020",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "GH301-100-25: Evaluating Bundled Payment Contracting",
+          "codes": "1b, 1c",
+          "parts": []
+        },
+        {
+          "citation": "GH301-112-26: PY2025 ACO REACH RTA Tailwind",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "GH301-113-26: ACO REACH PY2026 Explained: What is Changing and Why it Matters",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "GH301-102-25: Episode-Based Physician Profiling: A Guide to the Perplexing",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "GH301-103-25: Physician Cost Profiling – Reliability and Risk of Misclassification",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "GH301-104-25: The Application of Tiering in Healthcare",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Surprises in the No Surprises Act: An Interview with Greg Fann, Health Watch, Sep 2024",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Surprises in the No Surprises Act: An Interview with Greg Fann (Part 2), Health Watch, Nov 2024",
+          "codes": "1a, 1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Disease Management",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to evaluate healthcare intervention programs.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe, compare, and evaluate programs",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Estimate savings, utilization rate changes, and return on investment",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply the actuarially adjusted historical control methodology",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate chronic and non-chronic trends in a manner that reflects patient risk",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Managing and Evaluating Healthcare Intervention Programs, Duncan, Ian G., 2nd Edition, 2014",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 3: Care Management Programs and Interventions",
+              "codes": "2a"
+            },
+            {
+              "text": "Ch. 8: Understanding the Economics of Care Management Programs",
+              "codes": "2b"
+            },
+            {
+              "text": "Ch. 9: Applying the Economic Model: The Example of Opportunity Analysis",
+              "codes": "2b"
+            },
+            {
+              "text": "Ch. 11: The Use of Propensity Scoring in Program Evaluation",
+              "codes": "2b"
+            },
+            {
+              "text": "Ch. 12: An Actuarial Method for Evaluating Care Management Outcomes (excluding Appendix 12.2-12.3)",
+              "codes": "2c"
+            },
+            {
+              "text": "Ch. 13: Understanding Patient Risk and Its Impact on Chronic and Non-Chronic Member Trends",
+              "codes": "2d"
+            },
+            {
+              "text": "Ch. 16: Testing Actuarial Methods for Evaluating Disease Management Savings Outcomes (excluding Appendices)",
+              "codes": "2b"
+            }
+          ]
+        },
+        {
+          "citation": "GH301-106-25: End-of-Life Outcomes with or without Early Palliative Care: A Propensity Score Matched, Population-Based Cancer Cohort Study",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Reimagining Pharmacy Financing, SOA Research Institute, Mar 2024, Sections 2 (background) & 3",
+          "codes": "2b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Healthcare Risk Adjustment1",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to apply risk adjustment in actuarial work.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Apply risk adjustment to underwriting, pricing, claims, and care management situations (applications include Medicare, Medicaid, and ACA products)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply risk adjustment concepts to normalize population claims experience",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply applicable best practices in risk adjustment",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Healthcare Risk Adjustment and Predictive Modeling, Duncan, Ian G., 2nd Edition, 2018",
+          "codes": "3a, 3b",
+          "parts": [
+            {
+              "text": "Ch. 13: Medicaid Risk Adjustment",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Risk Adjustment in State Medicaid Programs, Health Watch, Jan 2008",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "Healthcare Risk Adjustment and Predictive Modeling, Duncan, Ian G., 2nd Edition, 2018",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 14: Risk Adjustment in Medicare (excluding Appendix 14.1 & 14.2)",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 21: Risk Adjustment on the ACA Exchanges",
+              "codes": "3a"
+            }
+          ]
+        },
+        {
+          "citation": "Creating Stability in Unstable Times – A Look at Risk Adjustment and Market Stabilization, The Actuary, Dec 2017",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "Changing with the Times: The Past and the Future of ACA Risk Adjustment, Health Watch, Jun 2020",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "GH301-107-25: HHS-Operated Risk Adjustment Technical Paper on Possible Model Changes, Oct 2021 (Ch. 1, 5 & Appendix A)",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Restoring the Indifference Ideal: If It’s Not Adjusting for “Risk,” It’s Not “Risk Adjustment”, Health Watch, Jun 2022",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 23: Data Quality (excluding Appendices)",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 41: Actuarial Communications (excluding Appendices)",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 45: The Use of Health Status Based Risk Adjustment Methodologies (excluding Appendices)",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "1 Risk Adjustment in this course refers to adjusting revenue or capitation rates as applicable to the US health insurance market. This is distinct from the IFRS concept of risk adjustment.",
+          "codes": "",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Medical Data",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will understand how to describe medical coding, sources of data, and data quality.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify various medical terms, diseases, and treatment options relevant to health actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify and explain the use of coding sets used in health practice (CPT, ICD-10, DRG, Revenue Codes)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe how coding sets change over time and evaluate the potential impact on actuarial analysis",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate impacts of changes in coding structures on provider reimbursement",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe and interpret clinical policy bulletins",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Distinguish between public and private data",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Evaluate types of study methods and identify the method used for a given study",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Research a question using multiple data sources",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "eLearning Module: FSA: Terminology and Analytical Use of Data for Healthcare Actuaries",
+          "codes": "4a-4h",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Social Determinants of Health",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand how to explain the social determinants of health (SDOH) and their impact on health care costs and policy.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain the social determinants of health and how they impact the cost of healthcare",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe program design and economic techniques used to measure program performance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the current use of SDOH in traditional actuarial practices",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate applications of SDOH derived statistics in actuarial models",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "GH301-108-25: Social Determinants of Health in the Work of Health Actuaries",
+          "codes": "5a-5d",
+          "parts": []
+        },
+        {
+          "citation": "GH301-109-25: Health in Housing: Exploring the Intersection Between Housing & Health Care (excluding Appendices)",
+          "codes": "5b",
+          "parts": []
+        },
+        {
+          "citation": "GH301-110-25: UMass Risk Adjustment Project for MassHealth Payment and Care Delivery Reform: Describing the 2017 Payment Model, pp. 3-9 & Table 2",
+          "codes": "5d",
+          "parts": []
+        },
+        {
+          "citation": "GH301-111-25: MassHealth Social Determinants of Health Risk Adjustment Model: Version 4.0, pp. 1-9",
+          "codes": "5d",
+          "parts": []
+        },
+        {
+          "citation": "How Does Where You Live Impact Your Health?, SOA Research Institute, Mar 2022, Sections 3 & 5",
+          "codes": "5d",
+          "parts": []
+        },
+        {
+          "citation": "Social, Physical and Cultural Determinants of Health: Their Incorporation into Actuarial Data and Workstreams, SOA Research Institute, Apr 2023, Sections 3-6",
+          "codes": "5b, 5c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Predictive Analytics",
+      "weight_raw": "0%-10%",
+      "weight": [
+        0,
+        10
+      ],
+      "objective": "The candidate will understand how to apply the framework of predictive analytics to healthcare data and business applications.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe common applications of predictive analytics in health care",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Differentiate between types of risk score models",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe common healthcare data sources for predictive modelling",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Identify challenges specific to the use of healthcare claims in model development",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe ethical considerations for actuaries in developing predictive models",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "eLearning Module: FSA: Predictive Modeling for Healthcare Actuaries",
+          "codes": "6a-6e",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

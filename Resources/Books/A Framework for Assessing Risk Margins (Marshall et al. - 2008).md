@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:26ac235635e451d7fff78e7ae5e4bb072136273220a3f0d92eabc3f44e1eeea1
+  content_hash: sha256:54c705acf6ae88707f56b0b4e682b9ca74d6c753c8bc0a8ec2d2901185796f01
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A framework for assessing insurance liability risk margins, with practical advic
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objective A14; the whole paper.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Outcomes 4a-c.
 
 ## 1 Introduction
 - 1.1 Preamble

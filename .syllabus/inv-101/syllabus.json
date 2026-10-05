@@ -1,0 +1,408 @@
+{
+  "wiki_id": "inv-101",
+  "body": "SOA",
+  "title": "INV 101 – Portfolio Management",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf",
+  "source_sha256": "cd1c4219dd85ad017d63963b38a538c9b7271071f465ad2fd26449a11c940d74",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Asset Classes",
+      "weight_raw": "25%-40%",
+      "weight": [
+        25,
+        40
+      ],
+      "objective": "The candidate will understand the nature and the variety of asset classes that can be used in constructing a portfolio.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate an understanding of cash flow characteristics, underlying risks and roles in investment portfolios of various fixed income investments, including:",
+          "bullets": [
+            "Government and corporate bonds",
+            "Leveraged loans",
+            "Commercial and residential mortgages",
+            "Mortgage-backed securities",
+            "Structured credit products",
+            "Private debt"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate an understanding of the distinguishing investment characteristics and potential contributions to investment portfolios of various types of equity and alternative investments, including:",
+          "bullets": [
+            "Public Equity",
+            "Private Equity",
+            "Real Estate",
+            "Hedge Funds"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Handbook of Fixed Income Securities, Fabozzi, F.J., 9th Edition, 2021",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Ch. 1: Overview of the Types and Features of Fixed Income Securities (background only)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 2: Risks Associated with Investing in Fixed Income Securities (background only)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: U.S. Treasury Securities (background only)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 10: Corporate Bonds",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 11: Leveraged Loans",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 21: An Overview of Mortgages and the Mortgage Market",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 22: Agency Mortgage Passthrough (pp. 471-491 before Anatomy of the Agency Passthrough Market section)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 23: Agency Collateralized Mortgage Obligations (pp. 499-520 before Exotics section)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 60: Financing Positions in the Bond Market",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Commercial Real Estate Analysis and Investments, Geltner, David, and Miller, Norman, et al, 4th Edition, 2026",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Section VI Introduction (background only)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 19: Mortgage Basics I: An Introduction and Overview",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV101-102-25: High-Yield Bond Primer",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "INV101-101-25: Overview of Investing in Private Corporate Debt - Fabozzi in JPM",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "The Handbook of Traditional and Alternative Investment Vehicles, Anson, M. J. P., Fabozzi, F. J., & Jones, F. J., 2011",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Ch. 10: Structured Credit Products",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV101-106-26: Collateralized Loan Obligations: A Primer",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Portfolio Management in Practice Volume 1: Investment Management, CFA Institute, 2021",
+          "codes": "1b",
+          "parts": [
+            {
+              "text": "Ch. 11: Overview of Equity Portfolio Management (sections 1-2 only)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "The Handbook of Traditional and Alternative Investment Vehicles, Anson, M. J. P., Fabozzi, F. J., & Jones, F. J., 2011",
+          "codes": "1b",
+          "parts": [
+            {
+              "text": "Ch. 18: Investing in Capital Venture Funds",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 19: Investing in Leveraged Buyouts",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Commercial Real Estate Analysis and Investments, Geltner, David, and Miller, Norman, et al, 4th Edition, 2026",
+          "codes": "1b",
+          "parts": [
+            {
+              "text": "Ch. 13: After-Tax Real Estate Investment Analysis",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 14: Advanced Topics I: Investment Value in Property Investment and Debt Financing",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 26: Real Estate Investment Trusts (REISTS) (section 26.2 only)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV101-100-25: Chapters 3 and 4 of Alternative Investments: A Primer for Investment Professionals, CFA Institute",
+          "codes": "1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Portfolio Construction, Management, and Assessment",
+      "weight_raw": "35%-50%",
+      "weight": [
+        35,
+        50
+      ],
+      "objective": "The candidate will understand portfolio construction, management, and assessment.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the portfolio management process and recommend investment governance structure",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Develop an investment policy statement (IPS) for an institutional investor",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate an understanding of portfolio construction approaches and techniques for asset allocation, passive/active management and rebalancing",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Recommend and justify an optimal portfolio allocation in a risk-return framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Demonstrate an understanding of common techniques to enhance yield and manage liquidity in fixed income portfolios",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Construct and manage portfolios of fixed income investments under various strategies, including indexing and target return",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Construct and manage portfolios of equity under various passive strategies",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Construct and manage portfolios of equity under various active strategies",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Apply performance measurement methodologies to various asset portfolios",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Describe and assess techniques to select or build an asset benchmark for a given investment objective",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Assess and interpret performance attribution metrics for a given asset or portfolio",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "l",
+          "text": "Understand how behavior bias can impact portfolio management",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Portfolio Management in Practice Volume 1: Investment Management, CFA Institute, 2021",
+          "codes": "2a, 2c",
+          "parts": [
+            {
+              "text": "Ch. 5: Overview of Asset Allocation (sections 2-8, excl. subsection 6.3)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV101-103-25: Elements of an Investment Policy Statement for Institutional Investors, CFA Institute",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Portfolio Management in Practice Volume 1: Investment Management, CFA Institute, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 6: Principles of Asset Allocation (sections 2-3 & 5-7)",
+              "codes": "2d"
+            },
+            {
+              "text": "Ch. 9: Overview of Fixed-Income Portfolio Management",
+              "codes": "2e"
+            },
+            {
+              "text": "Ch. 10: Liability-Driven and Index-Based Strategies (sections 7-9)",
+              "codes": "2f"
+            },
+            {
+              "text": "Ch. 11: Overview of Equity Portfolio Management (background only)",
+              "codes": "2g"
+            },
+            {
+              "text": "Ch. 12: Passive Equity Investing",
+              "codes": "2g"
+            }
+          ]
+        },
+        {
+          "citation": "INV101-104-25: The Hidden Dangers of Passive Investing",
+          "codes": "2g",
+          "parts": []
+        },
+        {
+          "citation": "Portfolio Management in Practice Volume 1: Investment Management, CFA Institute, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 13: Active Equity Investing: Strategies",
+              "codes": "2h"
+            },
+            {
+              "text": "Ch. 19: Portfolio Performance Evaluation",
+              "codes": "2i, 2j, 2k"
+            }
+          ]
+        },
+        {
+          "citation": "INV101-105-25: Addressing Built-in Biases in Real Estate Investment (including Appendix)",
+          "codes": "2l",
+          "parts": []
+        },
+        {
+          "citation": "Portfolio Management in Practice Volume 1: Investment Management, CFA Institute, 2021",
+          "codes": "2l",
+          "parts": [
+            {
+              "text": "Ch. 7: Asset Allocation with Real-World Constraints (section 6 only)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Credit Risk Management",
+      "weight_raw": "20%-35%",
+      "weight": [
+        20,
+        35
+      ],
+      "objective": "The candidate will understand the best practices of credit risk management.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate an understanding of credit risk analysis including at the portfolio level",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate an understanding of and the ability to apply both the concepts and techniques used in the measurement of default risk of individual securities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand, evaluate, and apply credit risk modeling techniques.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "The Handbook of Credit Risk Management, Bouteille, Sylvain, and Coogan-Pushner, Diane, 2nd Edition, 2022",
+          "codes": "3a, 3b",
+          "parts": [
+            {
+              "text": "Ch. 1: Fundamentals of Credit Risk (background only)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Measurement of Credit Risk",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 6: Fundamental Credit Analysis",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Alternative Estimations of Credit Quality",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 13: Credit Portfolio Management",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV101-107-26: Chapter 12 of Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "INV101-108-26: Chapters 3 and 5 of Credit Risk, Darrell Duffie and Kenneth J. Singleton, 2003",
+          "codes": "3c",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

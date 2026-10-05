@@ -1,0 +1,555 @@
+{
+  "wiki_id": "fam-1",
+  "body": "SOA",
+  "title": "Fundamentals of Actuarial Mathematics Exam",
+  "sitting": "October 2026",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf",
+  "source_sha256": "90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam that consists of 34 multiple-choice questions and is administered as a computer-based test (CBT). For additional details on CBT, please refer to Exam Rules.",
+    "The Fundamentals of Actuarial Mathematics Exam assumes knowledge of probability, mathematical statistics, and financial mathematics as covered in Exam P, VEE Mathematical Statistics, and Exam FM.",
+    "A variety of tables are available below for candidate use and will be provided to the candidate at the examination. These include values for the abridged inventories of discrete and continuous probability distributions, and life and decrement tables. This information will be available as a pdf for the CBT exam candidates found under an Exhibit button during the exam. The CBT environment will also include a normal distribution calculator. Paper/pencil exam candidates will receive a hard copy of the tables. Since the tables will be included with the examination no matter which format is taken, candidates will not be allowed to bring copies of the tables into the examination room.",
+    "Check the Updates section on this exam's home page for any changes to the exam or syllabus.",
+    "In the learning outcomes, weights have been provided to indicate the relative emphasis on different sections. The ranges of weights shown are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that some questions may cover multiple learning outcomes.",
+    "Each multiple-choice problem includes five answer choices identified by the letters A, B, C, D, and E, only one of which is correct. Answers for some questions have been rounded.",
+    "As part of the computer-based testing process, a few pilot questions will be randomly placed in the exam (both paper and pencil and computer-based forms). These pilot questions are included to judge their effectiveness for future exams, but they will NOT be used in the scoring of this exam. All other questions will be considered in the scoring. All unanswered questions are scored incorrect. Therefore, candidates should answer every question on the exam. There is no set requirement for the distribution of correct answers for the multiple-choice preliminary examinations. It is possible that a particular answer choice could appear many times on an examination or not at all. Candidates are advised to answer each question to the best of their ability, independently from how they have answered other questions on the examination.",
+    "Since the CBT exam will be offered over a period of a few days, each candidate will receive a test form composed of questions selected from a pool of questions. Statistical scaling methods are used to ensure within reasonable and practical limits that, during the same testing period of a few days, all forms of the test are comparable in content and passing criteria. The methodology that has been adopted is used by many credentialing programs that give multiple forms of an exam. Unofficial pass/fail results will be sent within one hour to the email address you used to schedule your appointment."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Short-Term Insurance and Reinsurance Coverages",
+      "weight_raw": "5-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The Candidate will understand and be able to apply the key features of insurance and reinsurance coverages.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the types of coverage modifications for short-term insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Perform calculations assessing the impact of coverage modifications.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Perform calculations of the loss elimination ratio and the effect of inflation on losses.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Identify the operation of basic forms of proportional and excess of loss reinsurance and understand their impact on reserving and pricing.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Determine the allocation of claim amounts paid by the insurer and reinsurer under various forms of reinsurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Severity, Frequency, and Aggregate Models",
+      "weight_raw": "12.5-17.5%",
+      "weight": [
+        12.5,
+        17.5
+      ],
+      "objective": "The Candidate will understand the characteristics of and uses for commonly used severity, frequency, and aggregate models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Calculate moments and percentiles.",
+          "bullets": [],
+          "group": "The Candidate will be able to, for severity models:"
+        },
+        {
+          "letter": "b",
+          "text": "Identify the role of scale and shape parameters in continuous models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recognize classes of distributions and their relationships.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Characterize distributions by existence of moments.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Identify the role of parameters for the (a,b,0) and (a,b,1) classes of distributions.",
+          "bullets": [],
+          "group": "The Candidate will be able to, for frequency models:"
+        },
+        {
+          "letter": "f",
+          "text": "Recognize the (a,b,0) and (a,b,1) classes of distributions and their relationships.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Perform calculations for the (a,b,0) and (a,b,1) classes of distributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Identify appropriate distributions for a given application.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Define collective and individual risk models and calculate their mean and variance.",
+          "bullets": [],
+          "group": "The Candidate will be able to, for aggregate risk models:"
+        },
+        {
+          "letter": "j",
+          "text": "Use the log-normal or normal approximation to approximate the aggregate distribution.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Calculate probabilities using the convolution method.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "l",
+          "text": "Calculate the expected payment for stop-loss insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "m",
+          "text": "Calculate Value at Risk and Tail Value at Risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "n",
+          "text": "Determine whether a given risk measure has certain desirable properties.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Parametric Estimation",
+      "weight_raw": "2.5-7.5%",
+      "weight": [
+        2.5,
+        7.5
+      ],
+      "objective": "The Candidate will understand and be able to estimate parameters for parametric models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Estimate the parameters for severity and frequency distributions using Maximum Likelihood Estimation for:",
+          "bullets": [
+            "Complete, individual data",
+            "Complete, grouped data",
+            "Truncated or censored data"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Introduction to Credibility",
+      "weight_raw": "2.5-5%",
+      "weight": [
+        2.5,
+        5
+      ],
+      "objective": "The Candidate will understand the concepts of credibility and be able to apply certain types of credibility in some practical settings.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the concept of credibility.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Perform calculations using limited fluctuation (classical) credibility.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Pricing and Reserving for Short-Term Insurance Coverages",
+      "weight_raw": "10-15%",
+      "weight": [
+        10,
+        15
+      ],
+      "objective": "The Candidate will be able to use basic methods to calculate premiums and reserves for short-term insurance coverages.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and apply techniques for estimating outstanding claims, using the following methods:",
+          "bullets": [
+            "Expected Loss Ratio",
+            "Chain-Ladder",
+            "Bornhuetter-Ferguson"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the objectives of ratemaking and the data used for ratemaking.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate the adjustments to ratemaking data, including development, trend and adjusting premium to current rate levels.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand how expenses and the profit and contingencies loading are used in ratemaking.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate overall average rates and rate changes using the loss cost and loss ratio methods.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Option Pricing Fundamentals",
+      "weight_raw": "2.5-7.5%",
+      "weight": [
+        2.5,
+        7.5
+      ],
+      "objective": "The Candidate will be able to value simple options and derivatives using risk neutral expected present values, under the binomial and Black-Scholes models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the cash flows and characteristics of puts and calls.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply the binomial option pricing model to calculate the price of a simple European-style derivative on a single non-dividend paying asset.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply the Black-Scholes formula to calculate the price and delta hedge of a simple European-style derivative on a single non-dividend paying asset.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Apply put-call parity.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Long-Term Insurance Coverages and Retirement Financial Security Programs",
+      "weight_raw": "2.5-5%",
+      "weight": [
+        2.5,
+        5
+      ],
+      "objective": "The Candidate will understand the key features of insurance coverages and retirement financial security programs.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define and apply the concept of insurable interest.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify the long-term insurance coverages (life, health), annuities, and defined benefit and defined contribution pension plans.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Mortality Models",
+      "weight_raw": "10-15%",
+      "weight": [
+        10,
+        15
+      ],
+      "objective": "The Candidate will understand key concepts concerning parametric and non-parametric mortality models for individual lives.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand parametric survival models, life tables, and the relationships between them.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Given a parametric survival model, calculate survival and mortality probabilities, the force of mortality function, and moments of the curtate and complete future lifetime random variable.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Identify and apply standard actuarial notation for future lifetime distributions and moments, including select and ultimate functions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Given a life table, calculate survival and mortality probabilities, the force of mortality function, and moments of the curtate and complete future lifetime random variable, using appropriate fractional age assumptions where necessary.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand and apply select life tables.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Present Value Random Variables for Long-Term Insurance Coverages",
+      "weight_raw": "12.5-20%",
+      "weight": [
+        12.5,
+        20
+      ],
+      "objective": "The Candidate will be able to perform calculations on the present value random variables associated with benefits and expenses for long term insurance coverages.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the present value random variables associated with life insurance, endowment, and annuity payments for single lives, based on annual, 1/m-thly and continuous payment frequency.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate probabilities, means, variances and covariances for the random variables in Topic 9(a), using fractional age or claims acceleration approximations where appropriate.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand the relationships between the insurance, endowment, and annuity present value random variables in Topic 9(a), and between their expected values.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the effect of changes in underlying assumptions (e.g., mortality and interest).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Identify and apply standard actuarial notation for the expected values of the random variables in Topic 9(a).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 10,
+      "title": "Premium and Policy Value Calculation for Long-Term Insurance Coverages",
+      "weight_raw": "15-22.5%",
+      "weight": [
+        15,
+        22.5
+      ],
+      "objective": "The Candidate will be able to use and explain the premium and policy value calculation processes for long-term insurance coverages.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the future loss random variables associated with whole life, term life, and endowment insurance, and with term and whole life annuities, on single lives.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate premiums based on the equivalence principle, the portfolio percentile principle, and for a given expected present value of profit, for the policies in Topic 10(a).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and interpret gross premium, net premium and modified net premium policy values for the policies in Topic 10(a).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the effect of changes in underlying assumptions (e.g., mortality and interest).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply the following methods for modelling extra risk: age rating; constant addition to the force of mortality, constant multiple of the rate of mortality.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Loss Models: From Data to Decisions, (Fifth Edition), 2019, by Klugman, S.A., Panjer, H.H. and Willmot, G.E., Wiley, ISBN: 978-1-119-52378-9 Corrections and Comments for Loss Models, Fifth Edition",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 3 (Sections 1, 2, 4.1, 5)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 (Sections 3, 4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 8 (Sections 1-5)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 9 (Sections 1, 2, 3.1, 3.2, 7, 8.1, 8.2)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 11 (Sections 1-4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 12 (Sections 1-3)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 16",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Fifth Edition), 2022 by Brown and Lennox, ACTEX, ISBN: 978-1-64756-787-3 Errata for the 5th Edition",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 1 (background only)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 2 (background only)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 3 (Sections 1-6.4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 4 (Sections 1-8.1)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 (Section 3 (background reading only), Section 5)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, Third Edition Dickson, C.M.D., Hardy, M.R., Waters, H.R. (2020), Cambridge University Press ISBN: 978-1-108-47808-3. Exercises are considered part of the required readings.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 1",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 2",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 3 (except Sections 4, 10, 11, 12)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 7 (Sections 1-3 [except 2.4, 2.5], 7, 8)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 16",
+          "codes": ""
+        }
+      ]
+    }
+  ]
+}

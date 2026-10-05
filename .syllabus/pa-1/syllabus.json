@@ -1,0 +1,289 @@
+{
+  "wiki_id": "pa-1",
+  "body": "SOA",
+  "title": "Predictive Analytics Exam",
+  "sitting": "October 2026",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf",
+  "source_sha256": "1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The Predictive Analytics exam is administered as a three hour and thirty-minute exam requiring analysis of data in the context of a business problem and submission of written responses to specified tasks. There is no scheduled break for candidates. Candidates will have access to a computer equipped with Microsoft Word and Microsoft Excel.1 Note that starting with the April 2023 administration, R and RStudio will NOT be available. Written responses will be submitted electronically via Microsoft Word. For additional details, please refer to the Exam PA home page.",
+    "Exam PA assumes knowledge of probability, mathematical statistics, and selected analytical techniques as covered in Exam P (Probability), VEE Mathematical Statistics, and Exam SRM (Statistics for Risk Modeling).",
+    "Please check the Updates section on this exam's home page for any changes to the exam or syllabus.",
+    "The learning objectives and outcomes provided on the following pages follow the five modules of the e-Learning support provided. There is an additional module that is an Introduction to R. That knowledge is not part of the learning objectives for the course, but is needed to be able to work with the material in the other modules. The ranges of weights shown in the Learning Objectives below are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that tasks often cover multiple learning objectives, including some weight for communication in most tasks.",
+    "1 The Prometric computers will have the 2016 versions of Microsoft Word and Excel."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Predictive Analytics Problem Definition",
+      "weight_raw": "10-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The Candidate will be able to identify the business problem, how the available data relates to possible analyses, and use the information to propose an appropriate modeling approach.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Assess whether descriptive, predictive, and prescriptive analytics applies to a business problem.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the characteristics of predictive modeling problems.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain the concepts of bias, variance, model complexity, and the bias-variance trade-off.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Translate a vague question into one that can be analyzed with statistics and predictive analytics to solve a business problem.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Consider factors such as available data and technology, significance of business impact, and implementation challenges to define the problem.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Assess what additional information or next steps would improve the ability to apply predictive analytics to a business problem.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Data Exploration and Visualization",
+      "weight_raw": "20-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The Candidate will be able to work with various data types, understand principles of data design, and construct a variety of common visualizations for exploring data.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify structured and unstructured data types.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify the types of variables and terminology used in predictive modeling.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate effective data design with respect to time frame, sampling, and granularity.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Apply the key principles of constructing graphs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply univariate data exploration techniques.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Apply bivariate data exploration techniques.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Data Transformations and Unsupervised Learning Techniques",
+      "weight_raw": "10-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The Candidate will be able to transform data, including application of unsupervised learning techniques, to improve predictive modeling outcomes.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Create features from existing data that may add value.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply principal components analysis to transform data.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply K-means and hierarchical clustering to transform data.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Generalized Linear Models",
+      "weight_raw": "25-35%",
+      "weight": [
+        25,
+        35
+      ],
+      "objective": "The Candidate will be able to select and validate a generalized linear model (GLM) and apply related modeling concepts as appropriate for a given business problem.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Select and validate a GLM as appropriate for a business problem.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply offsets and weights as appropriate.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Interpret model coefficients, including interaction terms.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Select appropriate hyperparameters for regularized regression.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Tree-Based Models",
+      "weight_raw": "10-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The Candidate will be able to apply tree-based models as appropriate for a business problem.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Construct, prune, and validate regression and classification trees.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply bagging and random forests as appropriate.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply boosting as appropriate.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Regression Modeling with Actuarial and Financial Applications, Edward W. Frees, 2010, New York: Cambridge. ISBN: 978-0-521-13596-2. Note that while Chapters 7-9 are covered in Exam SRM, these models will not be covered in this exam.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 1 – Background only",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 2 – Sections 1-8",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 3 – Sections 1-5",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 – Sections 1-7",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 6 – Sections 1-3",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 11 – Sections 1-6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 12 – Sections 1-4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 13 – Sections 1-6",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, James, Witten, Hastie, Tibshirani, 2013, New York: Springer. There is now a second edition, 2021. PDFs of both editions can be obtained via links found here: https://www.statlearning.com. The material used on this exam is virtually unchanged and so either version may be used. The following table indicates the relevant sections from the two editions.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "First Edition: Chapter 2 – Sections 1-3; Chapter 3 – Sections 1-6; Chapter 4 – Sections 1-3 and parts of 6 (referenced in Module 6, not on SRM); Chapter 5 – Sections 1 and 3 (excluding 5.3.4); Chapter 6 – Sections 1-7; Chapter 8 – Sections 1-3; Chapter 10 – Sections 1-6",
+          "codes": ""
+        },
+        {
+          "text": "Second Edition: Chapter 2 – Sections 1-3; Chapter 3 – Sections 1-6; Chapter 4 – Sections 1-3 and parts of 6 (referenced in Module 6, not on SRM); Chapter 5 – Sections 1 and 3 (excluding 5.3.4); Chapter 6 – Sections 1-5; Chapter 8 – Sections 1-3 (excluding 8.2.4, 8.2.5, and 8.3.5; Chapter 12 – Sections 1-2, 4-5 (excluding 12.5.2)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "R for Everyone, 2nd ed. Lander, 2017, Boston: Addison-Wesley, ISBN 978-0-13-454692-6.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapters 1-10, 14, 26 and 28",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Data Visualization: A Practical Introduction, Healy, 2018, Princeton University Press, ISBN 978-0-691-18162-2. This book may be available as web pages at http://socviz.co/. Note that this version can be viewed only on the web, there is no PDF version to download. The author has indicated that at some point the web version may be discontinued",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapters 1-4",
+          "codes": ""
+        }
+      ]
+    }
+  ]
+}

@@ -17,6 +17,33 @@
 import { extractSourceMaterial } from './sourceMaterial'
 import { compareExamLabels, examPillLabel, type ExamPageSource } from './resourceExams'
 
+/**
+ * The exam a reading-list label names — the labels `lib/resourceExams.ts`
+ * prints on a resource's pills ("Exam P-1", "Exam 6C") — or undefined for an
+ * exam the Store doesn't carry (the SOA exams past FM), whose readings stay off
+ * its shelf.
+ */
+const READING_LABEL_KEYS: Readonly<Record<string, string>> = {
+  'Exam P-1': 'P',
+  'Exam FM-2': 'FM',
+  'Exam MAS-I': 'MAS-I',
+  'Exam MAS-II': 'MAS-II',
+  'Exam DISC-IA': 'CAS-IA',
+  'Exam DISC-DA': 'CAS-DA',
+  'Exam DISC-RM': 'CAS-RM',
+  'Exam 5': 'CAS-5',
+  'Exam PCPA': 'CAS-PCPA',
+  'Exam 6C': 'CAS-6',
+  'Exam 6U': 'CAS-6',
+  'Exam 7': 'CAS-7',
+  'Exam 8': 'CAS-8',
+  'Exam 9': 'CAS-9',
+}
+
+export function readingExamKey(label: string): string | undefined {
+  return READING_LABEL_KEYS[label]
+}
+
 /** One exam's assignment of the book. */
 export interface StoreBookReading {
   /** The exam's label, as a resource pill prints it — "Exam P-1", "Exam 6C". */
@@ -75,6 +102,7 @@ export function buildStoreBooks(examPages: ExamPageSource[], books: BookPageSour
   const readings = new Map<string, StoreBookReading[]>()
   for (const page of examPages) {
     const exam = examPillLabel(page.name)
+    if (!readingExamKey(exam)) continue
     for (const entry of extractSourceMaterial(page.markdown).entries) {
       const key = entry.name.toLowerCase()
       const list = readings.get(key) ?? []

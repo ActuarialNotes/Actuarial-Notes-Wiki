@@ -13,7 +13,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b9d3fb02a99763e72ac210f8de588a5fb057151391cf9e1366cbff5ba0393d9a
+  content_hash: sha256:9cbc1abd65655e59ddc6555327e1db934abecb2016e6f1dbeff06cf2f8c8e420
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,7 @@ A CAS monograph that formulates the chain ladder, and the statistical distributi
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objectives A9–A12; Chapters 1–6, including errata.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Ch. 5: The Bootstrap, section 5.3, pp. 47-51 (start at the paragraph “The bootstrap is…” pp.47) (1b-d); Ch. 6: Model Validation (excluding section 6.7 and the portion of section 6.4 on pp. 64) (1b-d).
 
 ## Foreword
 

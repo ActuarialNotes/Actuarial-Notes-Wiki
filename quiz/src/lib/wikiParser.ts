@@ -38,6 +38,11 @@ export function wikiExamIdToProgressKey(examId: string): string {
   // (`CAS-DA`, `CAS-RM`, `CAS-IA`).
   const disc = examId.match(/^DISC-([A-Z]+)$/)
   if (disc) return `CAS-${disc[1]}`
+  // The SOA's fellowship (FSA) exams: `GH-101`, `GH-201C`, `ILA-201U`. The
+  // tracks key them `FSA-GH101`, one key for a course's regional variants (the
+  // way Exam 6's variants share `CAS-6`) — so the `-C`/`-U` letter is dropped.
+  const fsa = examId.match(/^(CFE|CP|GH|GI|ILA|INV|RET)-(\d{3})[A-Z]?$/)
+  if (fsa) return `FSA-${fsa[1]}${fsa[2]}`
   if (/^[A-Z]+-\d+$/.test(examId)) return examId.replace(/-\d+$/, '')
   if (/^[A-Z]+$/.test(examId)) return examId
   return 'CAS-' + examId.replace(/[A-Z]+$/, '')

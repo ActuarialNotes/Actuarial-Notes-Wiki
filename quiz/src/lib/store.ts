@@ -21,7 +21,7 @@ import { getSittingsForExam, type ExamSitting } from '../data/examSittings'
 import { EXAM_ABOUT, sittingDetailsFor } from '../data/examSittingDetails'
 import { daysBetween } from './sittingTimeline'
 import { examAccentStyle } from './examColors'
-import type { StoreBook } from './storeBooks'
+import { readingExamKey, type StoreBook } from './storeBooks'
 import { STORE_SELLERS } from '../data/storeCatalog'
 
 // ── Aisles ────────────────────────────────────────────────────────────────────
@@ -92,30 +92,9 @@ function examRank(key: string): number {
   return i === -1 ? STORE_EXAMS.length : i
 }
 
-/**
- * The exam a reading-list label names — the labels `lib/resourceExams.ts`
- * prints on a resource's pills ("Exam P-1", "Exam 6C") — or undefined.
- */
-const READING_LABEL_KEYS: Readonly<Record<string, string>> = {
-  'Exam P-1': 'P',
-  'Exam FM-2': 'FM',
-  'Exam MAS-I': 'MAS-I',
-  'Exam MAS-II': 'MAS-II',
-  'Exam DISC-IA': 'CAS-IA',
-  'Exam DISC-DA': 'CAS-DA',
-  'Exam DISC-RM': 'CAS-RM',
-  'Exam 5': 'CAS-5',
-  'Exam PCPA': 'CAS-PCPA',
-  'Exam 6C': 'CAS-6',
-  'Exam 6U': 'CAS-6',
-  'Exam 7': 'CAS-7',
-  'Exam 8': 'CAS-8',
-  'Exam 9': 'CAS-9',
-}
-
-export function readingExamKey(label: string): string | undefined {
-  return READING_LABEL_KEYS[label]
-}
+// The exam a reading-list label names lives beside the book shelf it filters
+// (`lib/storeBooks.ts`), which runs at bundle time.
+export { readingExamKey }
 
 // ── Prices ────────────────────────────────────────────────────────────────────
 

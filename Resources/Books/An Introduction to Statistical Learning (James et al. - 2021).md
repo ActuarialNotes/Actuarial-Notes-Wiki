@@ -9,11 +9,11 @@ Type: "Textbook"
 ISBN: "978-1-0716-1417-4"
 Available from: "[statlearning.com](https://www.statlearning.com/)"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b499bb5371c870e13ffe59c2fbe36f810a0f31bd90e8598e9ae3e2da3069cfa2
+  content_hash: sha256:2ff5d1bafaa1e4a26a9024a12d1a3ef882cb378ab809c604f9056a845c5f4b6d
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer, first printing Aug 4 2021) — title page, Preface pp.vii-viii, printed Contents pp.ix-xv and the PDF bookmark outline, CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.5-6 (Domain C readings; James citation, chapter/section scope, C1-C9, OP), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -31,6 +31,8 @@ An introduction to statistical learning, the tools for making sense of complex d
 > [!info] On the syllabus
 > - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives C1–C9; Chapters 1, 2 (excluding Section 2.2.3), 3 (Sections 3.1 through 3.3, and the 3.6 labs on Sections 3.1 through 3.3), 4 (Sections 4.1 through 4.4; the Linear Discrimination Analysis portion of Section 4.4 will not be tested), 5, 6 and 7.
 > - [[Exam MAS-II (CAS)|Exam MAS-II]] — objectives C1–C9; Chapters 1 (background reading only; no exam questions are sourced directly from it), 2.2, 4.4.2 (confusion matrix only), 8, 10 and 12.
+> - [[Exam PA (SOA)|Exam PA]] — First Edition: Chapter 2 – Sections 1-3; Chapter 3 – Sections 1-6; Chapter 4 – Sections 1-3 and parts of 6 (referenced in Module 6, not on SRM); Chapter 5 – Sections 1 and 3 (excluding 5.3.4); Chapter 6 – Sections 1-7; Chapter 8 – Sections 1-3; Chapter 10 – Sections 1-6; Second Edition: Chapter 2 – Sections 1-3; Chapter 3 – Sections 1-6; Chapter 4 – Sections 1-3 and parts of 6 (referenced in Module 6, not on SRM); Chapter 5 – Sections 1 and 3 (excluding 5.3.4); Chapter 6 – Sections 1-5; Chapter 8 – Sections 1-3 (excluding 8.2.4, 8.2.5, and 8.3.5; Chapter 12 – Sections 1-2, 4-5 (excluding 12.5.2).
+> - [[Exam SRM (SOA)|Exam SRM]] — Chapter 2 – Sections 1-3; Chapter 3 – Sections 1-6; Chapter 5 – Sections 1 and 3 (excluding 5.3.4); Chapter 6 – Sections 1-5; Chapter 8 – Sections 1-3 (excluding 8.2.4, 8.2.5, and 8.3.5); Chapter 12 – Sections 1-2, 4-5 (excluding 12.5.2).
 
 ## 1 Introduction
 

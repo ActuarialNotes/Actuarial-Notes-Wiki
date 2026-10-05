@@ -236,9 +236,12 @@ export function normalizeTerm(value: string): string {
     .trim()
 }
 
-/** `P-1` → `P`, `FM-2` → `FM`; every other exam id is already its key. */
+/**
+ * `P-1` → `P`, `FM-2` → `FM`; every other exam id is already its key — the
+ * SOA's fellowship exams included (`GH-101`, whose number names the exam).
+ */
 export function examKeyFromExamId(examId: string): string {
-  return /^[A-Z]+-\d+$/.test(examId) ? examId.replace(/-\d+$/, '') : examId
+  return /^[A-Z]+-\d$/.test(examId) ? examId.replace(/-\d$/, '') : examId
 }
 
 /**

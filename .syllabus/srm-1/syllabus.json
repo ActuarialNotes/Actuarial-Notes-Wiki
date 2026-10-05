@@ -1,0 +1,330 @@
+{
+  "wiki_id": "srm-1",
+  "body": "SOA",
+  "title": "Statistics for Risk Modeling Exam",
+  "sitting": "January 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf",
+  "source_sha256": "2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The Statistics for Risk Modeling exam is a three and one-half hour exam that consists of 35 multiple-choice questions and is administered as a computer-based test (CBT). For additional details, please refer to Exam Rules.",
+    "The goal of the syllabus for this examination is to provide an understanding of the basics of several important analytic methods. This exam is a prerequisite for the Predictive Analytics exam, which will go deeper into each of the covered techniques.",
+    "A thorough knowledge of calculus, probability (as covered in the P Exam) and mathematical statistics (as covered in the VEE Mathematical Statistics) is assumed.",
+    "The following learning objectives are presented with the understanding that candidates are allowed to use specified calculators on the exam.",
+    "A variety of tables is available below for the candidate and will be provided to the candidate at the examination. These include values for the standard normal distribution, t distribution and chi-square distribution. This information will be available as a pdf for the CBT exam candidates found under an Exhibit button during the exam. Paper/pencil candidates will receive a hard copy of the table(s). Since the table(s) will be included with the examination no matter which format is taken, candidates will not be allowed to bring copies of the tables into the examination room.",
+    "Please check the Updates section on this exam's home page for any changes to the exam or syllabus.",
+    "In the learning outcomes, weights have been provided to indicate the relative emphasis on different sections. The ranges of weights shown are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that some questions may cover multiple learning outcomes.",
+    "For this exam, ability to solve problems using the R programming language will not be assumed. However, questions may present R output for interpretation.",
+    "Each multiple-choice problem includes five answer choices identified by the letters A, B, C, D, and E, only one of which is correct. Answers for some questions have been rounded.",
+    "As part of the computer-based testing process, a few pilot questions will be randomly placed in the exam (both paper and pencil and computer-based forms). These pilot questions are included to judge their effectiveness for future exams, but they will NOT be used in the scoring of this exam. All other questions will be considered in the scoring. All unanswered questions are scored incorrect. Therefore, candidates should answer every question on the exam. There is no set requirement for the distribution of correct answers for the multiple-choice preliminary examinations. It is possible that a particular answer choice could appear many times on an examination or not at all. Candidates are advised to answer each question to the best of their ability, independently from how they have answered other questions on the exam.",
+    "Since the CBT exam will be offered over a period of a few days, each candidate will receive a test form composed of questions selected from a pool of questions. Statistical scaling methods are used to ensure within reasonable and practical limits that, during the same testing period of a few days, all forms of the test",
+    "are comparable in content and passing criteria. The methodology that has been adopted is used by many credentialing programs that give multiple forms of an exam.",
+    "Unofficial pass/fail results will be sent within one hour to the email address you used to schedule your appointment."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Basics of Statistical Learning",
+      "weight_raw": "5-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The Candidate will understand key concepts of statistical learning.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define terms used to classify the types of modeling problems and methods, including supervised versus unsupervised learning and regression versus classification.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Compare the common methods of assessing model accuracy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand how the bias-variance tradeoff impacts the selection of statistical learning methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand resampling methods used for model validation, including",
+          "bullets": [
+            "Training set vs. test set approach",
+            "k-fold cross-validation",
+            "Leave-one-out cross-validation"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Linear Models",
+      "weight_raw": "40-50%",
+      "weight": [
+        40,
+        50
+      ],
+      "objective": "The Candidate will understand key concepts concerning generalized linear models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Compare model assumptions for ordinary least squares and generalized linear models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Identify the members of the exponential family of distributions and corresponding link functions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply the business context of a problem to interpret parameters.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Interpret diagnostic tests of model fit and assumption checking, using",
+          "bullets": [
+            "Graphical methods",
+            "Quantitative methods"
+          ],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Select an appropriate model, considering",
+          "bullets": [
+            "Distributions and link functions",
+            "Variable transformations and interactions",
+            "t and F tests",
+            "AIC and BIC",
+            "Likelihood ratio test"
+          ],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Calculate and interpret predicted values, and confidence and prediction intervals.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Understand how approaches may differ compared to using an ordinary least squares model, including",
+          "bullets": [
+            "Regularized regression (lasso, ridge regression)",
+            "K-nearest neighbors"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Time Series Models",
+      "weight_raw": "10-15%",
+      "weight": [
+        10,
+        15
+      ],
+      "objective": "The Candidate will understand key concepts concerning regression-based time series models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define the concepts and components of stochastic time series processes, including random walks, stationarity, and autocorrelation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe specific time series models, including, exponential smoothing, autoregressive, and autoregressive conditionally heteroskedastic models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and interpret predicted values and confidence intervals.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Decision Trees",
+      "weight_raw": "20-25%",
+      "weight": [
+        20,
+        25
+      ],
+      "objective": "The Candidate will understand key concepts concerning decision tree models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the construction of decision trees, including",
+          "bullets": [
+            "How they are optimally fit to training data",
+            "How they are pruned to mitigate overfitting"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Predict outcomes using",
+          "bullets": [
+            "Classification trees",
+            "Regression trees"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe bagging, boosting, and random forests and the hyperparameters used to control them.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Compare decision trees to linear models including uses and relative strengths.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Unsupervised Learning Techniques",
+      "weight_raw": "10-15%",
+      "weight": [
+        10,
+        15
+      ],
+      "objective": "The Candidate will understand key concepts concerning principal component and cluster analysis.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define principal components, including how they are calculated.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Interpret the results of a principal components analysis, considering loading factors and proportion of variance explained.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe and compare the algorithms for:",
+          "bullets": [
+            "K-means clustering",
+            "Hierarchical clustering"
+          ],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain methods for deciding the number of clusters.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Regression Modeling with Actuarial and Financial Applications, Edward W. Frees, 2010, New York: Cambridge. ISBN: 978-0521135962.",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 1 – Background only",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 2 – Sections 1-8",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 3 – Sections 1-5",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 – Sections 1-7",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 6 – Sections 1-3",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 7 – Sections 1-6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 8 – Sections 1-4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 9 – Sections 1-5",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 11 – Sections 1-6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 12 – Sections 1-4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 13 – Sections 1-6",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R Second Edition, James, Witten, Hastie, Tibshirani, New York: Springer. A PDF of the text can be obtained via the link found here: https://www.statlearning.com. Scroll to the bottom of the page and click on the box labeled “2nd Edition of ISLR with R.”",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 2 – Sections 1-3",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 3 – Sections 1-6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 – Sections 1 and 3 (excluding 5.3.4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 6 – Sections 1-5",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 8 – Sections 1-3 (excluding 8.2.4, 8.2.5, and 8.3.5)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 12 – Sections 1-2, 4-5 (excluding 12.5.2)",
+          "codes": ""
+        }
+      ]
+    }
+  ]
+}

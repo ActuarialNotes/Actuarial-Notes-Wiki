@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2a450bc676045585ab8b8d915131e3958556558cda7cb5eafc648c88676e6309
+  content_hash: sha256:359ff4c6f2338e259650a343477d227818030b85b5a840bf8381fa76596601d8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A paper applying maximum likelihood estimation to model the distribution of loss
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objectives A2–A3, A6–A8 and A11; the whole paper.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Publications & Research (1e-g); Browse research -> [Author Last Name = Clark, Year Published = 2003] -> Search (1e-g); Result: LDF Curve-Fitting and Stochastic Reserving: A Maximum Likelihood Approach (1e-g).
 
 ## Introduction
 - The paper focuses on one statistical model of the loss reserving process, using [[Maximum Likelihood Estimation|maximum likelihood estimation]] with the common Loss Development Factor and [[Cape Cod Method|Cape Cod]] techniques; most of it is a practical example of using the techniques and interpreting the output.

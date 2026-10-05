@@ -1,0 +1,345 @@
+{
+  "wiki_id": "astam-1",
+  "body": "SOA",
+  "title": "Advanced Short-Term Actuarial Mathematics Exam",
+  "sitting": "OCTOBER 2026",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf",
+  "source_sha256": "6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The ASTAM Exam is a three-hour exam consisting of six questions, worth a total of 60 points.",
+    "The exam will be taken at Prometric testing centers. The questions will be displayed on the computer. Candidates will also be provided with an Excel Workbook. The Excel Workbook will contain one question.",
+    "Five of the questions are to be answered in pen in exam answer booklets provided by Prometric. For these questions candidates may use Excel for calculations, but only the answers provided in the exam answer booklet will be graded.",
+    "One of the questions will be answered in the Excel Workbook. For this question, only the information provided in the Excel Workbook will be graded. Candidates may use the scratch paper booklet for rough notes, but nothing written on the scratch paper will be graded.",
+    "At the end of the exam candidates will upload their Excel Workbook for grading the Excel question and will submit their exam answer booklets to Prometric to forward to the SOA for grading the questions answered in the answer booklets.",
+    "Knowledge of the FM, P, and FAM exams, and the Mathematical Statistics VEE material is assumed for the ASTAM Exam.",
+    "Exam Registration Candidates may register online or with an application.",
+    "Introductory Study Note The Introductory Study Note has a complete listing of all study notes as well as errata and other important information.",
+    "Past Exams Past STAM and past ASTAM Exams from Spring 2023 through present are available on the SOA website.",
+    "Updates Candidates should be sure to check the Updates page on the exam home page periodically for additional corrections or notices."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Severity Models",
+      "weight_raw": "8-18%",
+      "weight": [
+        8,
+        18
+      ],
+      "objective": "The Candidate will understand, interpret, and be able to perform calculations with commonly used severity distributions, including extreme value distributions.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe how changes in the parameters affect the distributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Create new distributions by multiplication by a constant, raising to a power, exponentiation, mixing and splicing.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand and interpret the characteristics of severity distributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Compare two distributions based on various characteristics of their tails, including moments, ratios of moments, limiting tail behavior, hazard rate functions, and mean excess functions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand the derivation and characteristics of the Generalized Extreme Value and the Generalized Pareto distributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Apply the Generalized Extreme Value and the Generalized Pareto distributions to the estimation of tail risk measures and probabilities.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Aggregate Models",
+      "weight_raw": "12-22%",
+      "weight": [
+        12,
+        22
+      ],
+      "objective": "The Candidate will understand, interpret, and be able to perform calculations with aggregate models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Use convolution and recursive formulas to derive probability and distribution functions for aggregate claims distributions with (a,b,0) or (a,b,1) frequency, and with discrete severity distributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Derive the discretized version of a continuous distribution using the method of rounding and local moment matching.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Perform calculations for sums of compound Poisson models.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Coverage Modifications",
+      "weight_raw": "8-18%",
+      "weight": [
+        8,
+        18
+      ],
+      "objective": "The Candidate will understand, interpret, and be able to perform calculations with respect to coverage modifications.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate the effects of the following coverage modifications: deductibles, policy limits, maximum covered loss, coinsurance, and stop loss reinsurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate and interpret loss elimination ratios, increased limits factors, and deductible factors.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate and interpret the effects of inflation on losses.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Construction and Selection of Parametric Models",
+      "weight_raw": "14-24%",
+      "weight": [
+        14,
+        24
+      ],
+      "objective": "The Candidate will understand and be able to construct and estimate parameters for parametric models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Estimate the parameters for frequency and severity distributions by maximum likelihood.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Estimate the variance of the estimators and construct normal and non-normal confidence intervals.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Use the delta method to estimate the variance of the maximum likelihood estimator of a function of the parameter(s).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Estimate the parameters for severity, frequency, and aggregate distributions using Bayesian Estimation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Perform model selection using:",
+          "bullets": [
+            "Graphical procedures.",
+            "Hypothesis tests, including Kolmogorov-Smirnov, Chi-square goodness-of-fit, and Likelihood ratio (LRT) tests.",
+            "Score-based approaches, including Schwarz Bayesian Criterion (SBC), Bayesian Information Criterion (BIC), and Akaike Information Criterion (AIC)."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Credibility",
+      "weight_raw": "12-20%",
+      "weight": [
+        12,
+        20
+      ],
+      "objective": "The Candidate will understand and be able to estimate losses using credibility procedures.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain and apply Bayesian (greatest accuracy) credibility.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply Bühlmann and Bühlmann-Straub models and understand their relationship to Bayesian models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain and apply empirical Bayesian estimation in the nonparametric and semiparametric cases.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Reserving and Pricing for Short-Term Insurance Coverages",
+      "weight_raw": "15-29%",
+      "weight": [
+        15,
+        29
+      ],
+      "objective": "The Candidate will be able to calculate reserves for short-term insurance coverages.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand, interpret, and apply techniques for estimating outstanding claims, using the following methods:",
+          "bullets": [
+            "Expected Loss Ratio",
+            "Chain-Ladder",
+            "Bornhuetter-Ferguson",
+            "Bayesian",
+            "Frequency and Severity"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand, interpret, and apply the following statistical models and assumptions used for outstanding claims reserves:",
+          "bullets": [
+            "Mack’s model",
+            "Poisson model",
+            "Overdispersed Poisson model"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate projected losses using trend analysis.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate overall average rates and rate changes using the loss cost and loss ratio methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Calculate risk classification differential changes, including balancing back.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Loss Models: From Data to Decisions, (Fifth Edition), 2019, by Klugman, S.A., Panjer, H.H. and Willmot, G.E., Wiley, ISBN: 978-1-119-52378-9",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 3: Sections 3.3, 3.4.2-3.4.6",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5: Sections 5.1, 5.2",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 7: Sections 7.1, 7.2",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 8",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 9: Sections 9.3.1, 9.3.2, 9.4 (Theorem 9.7 & Example 9.9 only), 9.5, 9.6 (except 9.6.1), 9.7",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 11: Sections 11.5-11.7",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 12: Section 12.4",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 13",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 15 (except Section 15.4.2)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 17",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 18",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Fifth Edition), 2022, by Brown and Lennox, ACTEX, ISBN: 978-1-64756-787-3 [Candidates may also use Fourth Edition, 2015, (same chapters) ACTEX, ISBN: 978-1625424747]",
+      "codes": "",
+      "parts": [
+        {
+          "text": "Chapter 1 (Sections 1.2, 1.4)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 4 (Section 4.8)",
+          "codes": ""
+        },
+        {
+          "text": "Chapter 5 (Sections 5.3, 5.4)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "ASTAM-21-26: Outstanding Claims Reserves, Version 1.4, 2022, Hardy, M.R. (Excluding Appendix)",
+      "codes": "",
+      "parts": []
+    },
+    {
+      "citation": "ASTAM-22-23: Chapter 5 of Quantitative Enterprise Risk Management, 2022, by Hardy, M.R. and Saunders, D. Cambridge University Press, ISBN: 978-1009098465",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

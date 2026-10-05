@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e5975b39049ab8914b7e196f925a82403ee5740d4ddd44dff0430a9f29e533a7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Quasi-Likelihood.md
+---
+
 **Quasi-Likelihood** is a way of estimating the parameters of a [[Generalized Linear Model]] when the full distribution of the response is not known or not trusted. The analyst specifies only how the mean depends on the predictors and how the variance depends on the mean, up to a constant of proportionality $\phi$. Its estimating equations are a variation on the likelihood (score) equations, hence the name.
 
 > $$g(\mu_i) = \mathbf{x}_i^\top\boldsymbol\beta$$

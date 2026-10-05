@@ -20,14 +20,14 @@ verification:
 >
 > $$\begin{aligned} E\!\left[\left(y_0 - \hat{f}(x_0)\right)^{2}\right] &= \mathrm{Var}(\hat{f}(x_0)) \\ &\quad + \left[\mathrm{Bias}(\hat{f}(x_0))\right]^{2} \\ &\quad + \mathrm{Var}(\varepsilon) \end{aligned}$$
 
-- The averages run over test observations $(x_0, y_0)$. The [[Mean Square Error|MSE]] suits a numeric response and the error rate a classifier (see [[Confusion Matrix]]); a GLM uses holdout [[Deviance|deviance]].
+- The averages run over test observations $(x_0, y_0)$. The [[Mean Square Error|MSE]] suits a numeric response and the error rate a classifier (see [[Confusion Matrix]]).
 - **Its shape.** By the [[Bias-Variance Tradeoff|bias-variance tradeoff]], test error is U-shaped in flexibility: bias falls, variance rises. It can never fall below $\mathrm{Var}(\varepsilon)$. A growing gap between low training error and high test error is overfitting.
 - **Estimating it without new data.** Four approaches:
   - **Validation set:** fit on one part and score on the rest. Simple, but the estimate is variable and overstates the error, because the fit used fewer observations.
   - **Leave-one-out (LOOCV):** $\text{CV}_{(n)} = \frac{1}{n}\sum \text{MSE}_i$. For least squares it needs only one fit: $\frac{1}{n}\sum\left[(y_i - \hat{y}_i)/(1 - h_i)\right]^2$, where $h_i$ is the leverage.
   - **$k$-fold:** $\text{CV}_{(k)} = \frac{1}{k}\sum \text{MSE}_j$, with $k = 5$ or $10$. It is slightly more biased than LOOCV but less variable, since LOOCV's $n$ fits are nearly identical and their errors highly correlated. See [[Cross-Validation]].
   - For bagged ensembles, [[Out-of-Bag Error|out-of-bag error]] estimates test error at no extra cost. [[AIC]] and [[BIC]] instead adjust training error for complexity.
-- **Not the bootstrap's job.** The [[Bootstrap|bootstrap]] measures how variable an *estimate* is: its standard error is the [[Standard Deviation|standard deviation]] of the resampled estimates. Cross-validation measures how well a *model* predicts. Each bootstrap resample overlaps the original data (about $63\%$ of distinct observations), so a model scored on it looks optimistic.
+- **Not the bootstrap's job.** The [[Bootstrap|bootstrap]] measures how variable an *estimate* is: its standard error is the [[Standard Deviation|standard deviation]] of the resampled estimates. Cross-validation measures how well a *model* predicts.
 
 > [!example]- Choosing a Severity Model by 5-Fold CV {Example}
 > Two severity models are compared by 5-fold cross-validation. Model A (a GLM with five rating variables) has training MSE $380$ and fold MSEs $412, 398, 455, 430, 405$. Model B (a deep tree) has training MSE $310$ and fold MSEs $470, 380, 520, 445, 435$. Which should be used?

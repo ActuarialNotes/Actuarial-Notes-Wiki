@@ -16,9 +16,8 @@ import {
 
 /**
  * The resource card's "Get a copy" button for a book the vault has no link
- * for: one control that opens the places to look for it (a library, a shop, a
- * shadow library), each a search on the book's ISBN, led by the place's own
- * logo.
+ * for: one control that opens the places to look for it (a library, a shop),
+ * each led by the place's own logo.
  *
  * The Amazon row also carries Amazon's price, read when the menu opens
  * (`lib/amazonPrice.ts`). When there is one the row links to the detail page

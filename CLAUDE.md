@@ -638,7 +638,7 @@ Other important `lib/` modules:
   holds the table to the vault. Rides the URL as `?vintage=…&changes=dropped`.
   Pure and tested.
 - `amazonPrice.ts` — the **Amazon price** on a resource card's *Get a copy* menu
-  (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, Amazon, Library Genesis — each
+  (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, The Actuarial Bookstore (only for a book it stocks), Amazon — each
   lead with the place's own logo from `quiz/public/copy-sources/`). The price comes from
   `quiz/api/amazon-price.js`, which asks Amazon's **Creators API** with an Associates account's
   credentials (Vercel env: `AMAZON_CREATORS_CREDENTIAL_ID` / `_SECRET` / `_VERSION`,

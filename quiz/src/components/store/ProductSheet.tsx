@@ -694,9 +694,8 @@ function BookContent({ item, amazon }: { item: Extract<StoreItem, { type: 'book'
     { label: 'ISBN', value: book.isbn },
   ].filter((f): f is { label: string; value: string } => !!f)
 
-  // A library and a shop — never the shadow library the resource page's menu
-  // also lists: the Store sends readers to places that sell or lend the book.
-  const places = copySources(book.isbn).filter(s => s.id !== 'libgen')
+  // Places that sell or lend the book.
+  const places = copySources(book.isbn)
 
   return (
     <>
@@ -757,7 +756,7 @@ function BookContent({ item, amazon }: { item: Extract<StoreItem, { type: 'book'
                     {seller && <SellerLogo seller={seller} size="sm" />}
                     <span className="min-w-0 flex-1">
                       <span className="block font-medium">{place.id === 'worldcat' ? 'Borrow from a library' : `Buy at ${place.label}`}</span>
-                      <span className="block text-[11px] text-muted-foreground">{place.id === 'worldcat' ? 'WorldCat, by ISBN' : 'A search on the ISBN'}</span>
+                      <span className="block text-[11px] text-muted-foreground">{place.id === 'worldcat' ? 'WorldCat, by ISBN' : place.id === 'actuarial-bookstore' ? 'Its page at the bookstore' : 'A search on the ISBN'}</span>
                     </span>
                     {priced && <span className="font-semibold tabular-nums">{priced.display}</span>}
                     <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />

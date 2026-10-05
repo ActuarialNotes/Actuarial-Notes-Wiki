@@ -159,8 +159,8 @@ CAS embeds a digital TI-30XS MultiView in its exams) are kept in their words.
 Textbook or Casebook with an ISBN that at least one exam's `Source Material` lists, with
 each exam's assigned chapters. It is the study guides' own reading list, so a book added
 to an exam's sources is on the shelf at the next build. A book's sheet offers a library
-(WorldCat) and Amazon — never the shadow library the resource page's "Get a copy" menu
-also lists — and links back to its page in the study guide. A book the publisher puts
+(WorldCat), The Actuarial Bookstore (for a book it stocks) and Amazon — the same places as
+the resource page's "Get a copy" menu — and links back to its page in the study guide. A book the publisher puts
 online free wears a **Free online** sticker.
 
 ## Files

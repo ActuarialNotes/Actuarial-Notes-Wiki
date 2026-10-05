@@ -135,7 +135,11 @@ export interface FloatingSearchStripProps {
   icon?: ReactNode
   /** The way back out, at the head of the strip. */
   backLink?: ReactNode
-  /** Controls that belong to the subject, at the tail. */
+  /**
+   * Controls that belong to the subject. With an `icon` they sit straight after
+   * it, on the left; with a text title they stay at the tail, since the title
+   * takes the room between.
+   */
   children?: ReactNode
 }
 
@@ -144,14 +148,19 @@ export function FloatingSearchStrip({ title, icon, backLink, children }: Floatin
     <div className="flex h-[calc(3.5rem-1px)] items-center gap-2.5">
       {backLink}
       {icon ? (
-        <span className="flex min-w-0 flex-1 items-center">
-          {icon}
-          <span className="sr-only">{title}</span>
-        </span>
+        <>
+          <span className="flex min-w-0 shrink-0 items-center">
+            {icon}
+            <span className="sr-only">{title}</span>
+          </span>
+          {children}
+        </>
       ) : (
-        <span className="min-w-0 flex-1 truncate text-sm font-semibold">{title}</span>
+        <>
+          <span className="min-w-0 flex-1 truncate text-sm font-semibold">{title}</span>
+          {children}
+        </>
       )}
-      {children}
     </div>
   )
 }

@@ -625,15 +625,17 @@ Other important `lib/` modules:
 - `resourceVintages.ts` — the Resources page's **Vintage** filter: with exactly one exam
   chosen, which *edition* of its syllabus the shelf shows (the newest by default, so a
   retired reading an exam page keeps for the record is off it), and what that edition
-  **added** and **dropped** against the one before — two toggles under the filter row
-  highlight each (green ring / red ring, struck title, a dropped reading put back on the
-  shelf to be seen), the changes leading the grid. The editions are
+  **added** and **dropped** against the one before. Additions are **always** marked (green
+  ring, a fixed *Added N* count under the filter row — not a toggle: switching it off left
+  the additions leading the grid with nothing saying why); **Dropped** is the one toggle,
+  putting the dropped readings back on the shelf (red ring, struck title) to be seen. The
+  changes lead the grid. The editions are
   `data/syllabusVintages.ts`: per exam, newest first, each edition's document (URL and the
   version line it prints — CAS overwrites outline files in place) and its diff; the newest
   edition's list is the exam page's Source Material and every earlier one is walked back
   through the diffs. **Transcribed, never constructed** — an edition is listed once its PDF
   has been read, and one that's no longer published is absent. `syllabusVintages.test.ts`
-  holds the table to the vault. Rides the URL as `?vintage=…&changes=added&changes=dropped`.
+  holds the table to the vault. Rides the URL as `?vintage=…&changes=dropped`.
   Pure and tested.
 - `amazonPrice.ts` — the **Amazon price** on a resource card's *Get a copy* menu
   (`components/wiki/GetCopyMenu.tsx`, whose rows — WorldCat, Amazon, Library Genesis — each

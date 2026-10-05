@@ -8,7 +8,6 @@ import {
   vintageToParams,
   vintageView,
   withCurrentExams,
-  type VintageChange,
 } from './resourceVintages'
 
 function doc(name: string, exams: string[] = []): WikiIndexItem {
@@ -87,23 +86,25 @@ describe('vintageView', () => {
 
 describe('vintageShelf', () => {
   const view = (label: string | null) => vintageView(SHELF, new Set(['Exam 6C']), label, editionsFor)!
-  const shelf = (label: string | null, highlight: VintageChange[]) =>
-    vintageShelf(SHELF, view(label), new Set(highlight)).map(e => `${e.item.name}${e.change ? `:${e.change}` : ''}${e.stub ? '*' : ''}`)
+  const shelf = (label: string | null, showDropped = false) =>
+    vintageShelf(SHELF, view(label), showDropped).map(e => `${e.item.name}${e.change ? `:${e.change}` : ''}${e.stub ? '*' : ''}`)
 
-  it('shows the edition’s readings, retired ones off it, nothing marked', () => {
-    expect(shelf(null, [])).toEqual(['A', 'B'])
-    expect(shelf('Fall 2025', [])).toEqual(['A', 'C'])
-    expect(shelf('Fall 2024', [])).toEqual(['A', 'D'])
+  it('shows the edition’s readings, retired ones off it', () => {
+    expect(shelf('Fall 2024')).toEqual(['A', 'D'])
   })
 
-  it('leads with the additions, a reading with no page drawn as a stub', () => {
-    expect(shelf(null, ['added'])).toEqual(['B:added', 'E:added*', 'A'])
+  it('always marks the additions and leads with them, a reading with no page drawn as a stub', () => {
+    expect(shelf(null)).toEqual(['B:added', 'E:added*', 'A'])
+    expect(shelf('Fall 2025')).toEqual(['C:added', 'A'])
   })
 
-  it('puts the dropped readings back on the shelf, after the additions', () => {
-    expect(shelf(null, ['dropped'])).toEqual(['C:dropped', 'A', 'B'])
-    expect(shelf(null, ['added', 'dropped'])).toEqual(['B:added', 'E:added*', 'C:dropped', 'A'])
-    expect(shelf('Fall 2025', ['added', 'dropped'])).toEqual(['C:added', 'D:dropped', 'A'])
+  it('puts the dropped readings back on the shelf only on request, after the additions', () => {
+    expect(shelf(null, true)).toEqual(['B:added', 'E:added*', 'C:dropped', 'A'])
+    expect(shelf('Fall 2025', true)).toEqual(['C:added', 'D:dropped', 'A'])
+  })
+
+  it('marks nothing on the oldest edition on file, which has nothing to compare with', () => {
+    expect(shelf('Fall 2024', true)).toEqual(['A', 'D'])
   })
 })
 
@@ -111,7 +112,7 @@ describe('vintageShelf, tagging', () => {
   it('tags a reading with the exam on an edition that assigned it, even once retired', () => {
     const books = withCurrentExams(SHELF, editionsFor)
     const view = vintageView(books, new Set(['Exam 6C']), 'Fall 2025', editionsFor)!
-    const c = vintageShelf(books, view, new Set()).find(e => e.item.name === 'C')!
+    const c = vintageShelf(books, view, false).find(e => e.item.name === 'C')!
     expect(c.item.exams).toEqual(['Exam 5', 'Exam 6C'])
   })
 
@@ -121,23 +122,22 @@ describe('vintageShelf, tagging', () => {
       ...EDITIONS.slice(1),
     ]
     const view = vintageView(SHELF, new Set(['Exam 6C']), null, () => titled)!
-    const e = vintageShelf(SHELF, view, new Set(['added'])).find(entry => entry.item.name === 'E')!
+    const e = vintageShelf(SHELF, view, false).find(entry => entry.item.name === 'E')!
     expect(e.stub).toBe(true)
     expect(e.item.title).toBe('The E Manual')
   })
 })
 
 describe('vintage params', () => {
-  it('round-trips the vintage and the highlights, keeping other parameters', () => {
-    const params = vintageToParams('Fall 2025', new Set<VintageChange>(['dropped', 'added']), new URLSearchParams('exam=Exam+6C'))
-    expect(params.toString()).toBe('exam=Exam+6C&vintage=Fall+2025&changes=added&changes=dropped')
-    const read = vintageFromParams(params)
-    expect(read.label).toBe('Fall 2025')
-    expect([...read.highlight].sort()).toEqual(['added', 'dropped'])
+  it('round-trips the vintage and the dropped-readings choice, keeping other parameters', () => {
+    const params = vintageToParams('Fall 2025', true, new URLSearchParams('exam=Exam+6C'))
+    expect(params.toString()).toBe('exam=Exam+6C&vintage=Fall+2025&changes=dropped')
+    expect(vintageFromParams(params)).toEqual({ label: 'Fall 2025', showDropped: true })
   })
 
-  it('ignores a highlight it doesn’t know and clears what it is given empty', () => {
-    expect([...vintageFromParams(new URLSearchParams('changes=renamed')).highlight]).toEqual([])
-    expect(vintageToParams(null, new Set(), new URLSearchParams('vintage=Fall+2025&changes=added&q=1')).toString()).toBe('q=1')
+  it('reads an older link’s changes=added as nothing, and clears what it is given empty', () => {
+    expect(vintageFromParams(new URLSearchParams('changes=added'))).toEqual({ label: null, showDropped: false })
+    expect(vintageFromParams(new URLSearchParams('changes=added&changes=dropped')).showDropped).toBe(true)
+    expect(vintageToParams(null, false, new URLSearchParams('vintage=Fall+2025&changes=added&q=1')).toString()).toBe('q=1')
   })
 })

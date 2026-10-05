@@ -4,8 +4,9 @@ import { compareExamLabels } from './resourceExams'
 
 // The Resources page's **Vintage** filter: which edition of an exam's syllabus
 // the shelf shows, and — the reason it exists — what changed between that
-// edition and the one before it, highlighted on the cards (`added` in green,
-// `dropped` in red and kept on the shelf so it can be seen at all).
+// edition and the one before it, marked on the cards. What an edition added
+// is always marked, in green; what it dropped is off its shelf, so it is put
+// back — in red — only on request.
 //
 // The editions are `data/syllabusVintages.ts`, transcribed from the examining
 // body's documents. The newest edition's reading list is the exam page's own
@@ -18,8 +19,6 @@ import { compareExamLabels } from './resourceExams'
 // `lib/questionFilters.ts` keeps for a sitting, which means one exam's paper.
 
 export type VintageChange = 'added' | 'dropped'
-
-export const VINTAGE_CHANGES: readonly VintageChange[] = ['added', 'dropped']
 
 const key = (name: string) => name.trim().toLowerCase()
 
@@ -120,29 +119,30 @@ export function vintageView(
 
 export interface VintageShelfEntry {
   item: WikiIndexItem
-  /** Set only while that kind of change is being highlighted. */
+  /** `added` whenever the edition added it; `dropped` only while dropped readings are shown. */
   change: VintageChange | null
   /** A reading the vault has no page for — drawn, but nothing to open. */
   stub: boolean
 }
 
 /**
- * The shelf for a vintage: its readings, and — while dropped readings are
- * highlighted — the ones it dropped, which are otherwise off it. A highlighted
- * change leads the shelf (added, then dropped, each in shelf order), so the
- * difference is the first thing on screen rather than scattered down a grid
- * of sixty cards. A changed reading the vault has no page for is drawn as a
- * stub under the name the outline gives it.
+ * The shelf for a vintage: its readings, each one the edition added marked as
+ * such, and — while `showDropped` — the ones it dropped, which are otherwise
+ * off it. The changes lead the shelf (added, then dropped, each in shelf
+ * order), so the difference is the first thing on screen rather than
+ * scattered down a grid of sixty cards. A changed reading the vault has no
+ * page for is drawn as a stub under the name the outline gives it.
+ *
+ * Additions can't be switched off: an added reading is on the edition's shelf
+ * either way, so unmarking it only hid *why* it leads the grid.
  */
 export function vintageShelf(
   books: readonly WikiIndexItem[],
   view: VintageView,
-  highlight: ReadonlySet<VintageChange>,
+  showDropped: boolean,
 ): VintageShelfEntry[] {
   const added = new Set(view.added.map(key))
   const dropped = new Set(view.dropped.map(key))
-  const showAdded = highlight.has('added')
-  const showDropped = highlight.has('dropped')
 
   const entries: VintageShelfEntry[] = []
   const seen = new Set<string>()
@@ -151,7 +151,7 @@ export function vintageShelf(
     const on = view.readings.has(k)
     if (!on && !(showDropped && dropped.has(k))) continue
     seen.add(k)
-    const change = showAdded && added.has(k) ? 'added' : showDropped && dropped.has(k) ? 'dropped' : null
+    const change = added.has(k) ? 'added' : showDropped && dropped.has(k) ? 'dropped' : null
     // A reading on an older edition is that exam's reading there, even if the
     // exam has since retired it.
     const tagged = on && !item.exams?.includes(view.exam)
@@ -169,7 +169,7 @@ export function vintageShelf(
       entries.push({ item, change, stub: true })
     }
   }
-  if (showAdded) stubs(view.added, 'added')
+  stubs(view.added, 'added')
   if (showDropped) stubs(view.dropped, 'dropped')
 
   const rank = (entry: VintageShelfEntry) => (entry.change === 'added' ? 0 : entry.change === 'dropped' ? 1 : 2)
@@ -179,25 +179,26 @@ export function vintageShelf(
     .map(({ entry }) => entry)
 }
 
-/** The vintage and the highlighted changes a URL carries — `?vintage=Fall+2025&changes=added`. */
-export function vintageFromParams(params: URLSearchParams): { label: string | null; highlight: Set<VintageChange> } {
+/**
+ * The vintage, and whether dropped readings are shown, as a URL carries them —
+ * `?vintage=Fall+2025&changes=dropped`. A `changes=added` from an older link
+ * is ignored: additions are always marked.
+ */
+export function vintageFromParams(params: URLSearchParams): { label: string | null; showDropped: boolean } {
   const label = params.get('vintage')?.trim() || null
-  const highlight = new Set(
-    params.getAll('changes').filter((v): v is VintageChange => (VINTAGE_CHANGES as readonly string[]).includes(v)),
-  )
-  return { label, highlight }
+  return { label, showDropped: params.getAll('changes').includes('dropped') }
 }
 
-/** `params` with the vintage and highlights replaced, everything else kept. */
+/** `params` with the vintage and the dropped-readings choice replaced, everything else kept. */
 export function vintageToParams(
   label: string | null,
-  highlight: ReadonlySet<VintageChange>,
+  showDropped: boolean,
   params = new URLSearchParams(),
 ): URLSearchParams {
   const next = new URLSearchParams(params)
   next.delete('vintage')
   next.delete('changes')
   if (label) next.set('vintage', label)
-  for (const change of VINTAGE_CHANGES) if (highlight.has(change)) next.append('changes', change)
+  if (showDropped) next.set('changes', 'dropped')
   return next
 }

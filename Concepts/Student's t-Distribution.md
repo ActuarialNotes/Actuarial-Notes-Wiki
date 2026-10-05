@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a78bb1d48c848b981ef1de03af5f816f1f7c135c72651ca67045af156dfd039c
-  sources: []
+  sources:
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.3 t-distribution eq. (1.6) T = Z/(X^2/n)^(1/2) with Z ~ N(0,1), X^2 ~ chi-squared(n) independent; §1.4.4 item 2 eq. (1.8) T^2 ~ F(1, n), printed pp.10-11 (PDF pp.27-28), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
+    - "CAS Exam MAS-I Tables, 'Tail areas (two-sided) for t-distributions', columns 0.20, 0.10, 0.05, 0.02, 0.01; df 1-30, 35-60 by 5, 70, 80, 90, 100, 120, 400, Inf (df 15: 1.753, 2.947; df 18: 2.101, 2.552, 2.878), PDF p.16, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021, CAS-hosted copy), §3.1.2: 95% interval uses the 97.5% quantile of a t-distribution with n-2 df (footnote 3) and t = beta1-hat/SE has a t-distribution with n-2 df under beta1 = 0, printed pp.66-67 (PDF pp.76-77); §3.2.2 footnote 7 'The square of each t-statistic is the corresponding F-statistic' (q = 1 in (3.24)), printed p.77 (PDF p.87), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §4 Special Distributions, 'Student' page: pdf Gamma((n+1)/2)/(sqrt(n pi) Gamma(n/2)) (1 + t^2/n)^(-(n+1)/2); symmetric about 0; E(T) = 0 for n > 1; var n/(n-2) for n > 2; 1 df = Cauchy; f_n(t) -> standard normal density as n -> inf, sha256:6ff2ac51f78d5041cdf14dc24203650bbb08a608351a120f40e498876fd660c7 — https://www.randomservices.org/random/special/Student.html"
+    - "Siegrist, Random, §6 Random Samples, 'Special Properties of Normal Samples' page: T = (M - mu)/(S/sqrt n) has the student t distribution with n-1 degrees of freedom, sha256:d9a62017ae3a8488aedac3eceedb15d8b68243ae60894104ab88564ace25ff79 — https://www.randomservices.org/random/sample/Normal.html"
   open_findings: 0
   open_critical: 0
   log: ".verify/Concepts/Student's t-Distribution.md"

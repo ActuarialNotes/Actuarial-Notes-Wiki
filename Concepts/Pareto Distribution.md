@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:12ab1259c9f49b2a0b55fd076a4cdb2dcd0db4a1b0c8c23430d4d484e8db40be
-  sources: []
+  sources:
+    - "CAS Exam MAS-I Tables, Appendix A.2.4.1 Pareto (alpha, theta): f(x) = alpha theta^alpha/(x+theta)^(alpha+1), F(x) = 1 - (theta/(x+theta))^alpha, E[X^k] general (-1<k<alpha) and integer-k forms, E[X^x] = theta/(alpha-1)[1 - (theta/(x+theta))^(alpha-1)] for alpha != 1 and -theta ln(theta/(x+theta)) for alpha = 1, mode 0, PDF p.10, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "Frees et al., Loss Data Analytics (open text), Ch 3 'Modeling Loss Severity': §3.2.2 Pareto Distribution (pdf eq. 3.1, CDF, k-th moment exists iff alpha > k, integer-k moment, mean theta/(alpha-1) for alpha>1, variance alpha theta^2/((alpha-1)^2(alpha-2)) for alpha>2, decreasing hazard) and §3.4.1 Policy Deductibles (if X is Pareto(alpha, theta) then Y^P is Pareto(alpha, theta + d)), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview, printed Contents p.viii (PDF p.10): §2.2 Some continuous distributions for claim severity, §2.2.4 Pareto distribution p.51, sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A task 3 'Calculate limited expected value' (PDF p.3); Tse Sections 2.2-2.5 assigned (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Pareto Distribution.md

@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3a81f4e3a3689c91292f94eb0dbd9b4c43fdb4d7baf96ac80edb7589253ff043
-  sources: []
+  sources:
+    - "Sigman, 'Acceptance-Rejection Method', Columbia IEOR 4703 notes (2007), PDF pp.1-2: algorithm (generate Y ~ g, U independent, accept if U <= f(Y)/(c g(Y))), sup f/g <= c, number of iterations N geometric with p = 1/c and E(N) = c, proof that an accepted value has distribution F, c should be minimal and close to 1; PDF p.4: uniform g gives c = sup f (beta example), gamma by exponential g with 1/lambda the gamma mean, discrete case accept if U <= p(Y)/(c q(Y)) with sup p(k)/q(k) <= c, sha256:0943071ab4e8a4db52e39cddce042690a2cb2944ad862423a39aa81e68000648 — http://www.columbia.edu/~ks20/4703-Sigman/4703-07-Notes-ARM.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Ross Sections 11.1, 11.2.1 and 11.2.2 assigned (Domain A), PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Rejection Method.md

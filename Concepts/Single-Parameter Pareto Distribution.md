@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8d50e7f823d5461e8f7b2ab871711fad1f5f21266ad8daa3ede4baf0172a8869
-  sources: []
+  sources:
+    - "CAS Exam MAS-I Tables, Appendix A.4.1.4 Single-parameter Pareto (alpha, theta): f(x) = alpha theta^alpha/x^(alpha+1), x > theta; F(x) = 1 - (theta/x)^alpha; E[X^k] = alpha theta^k/(alpha-k), k < alpha; E[(X^x)^k] = alpha theta^k/(alpha-k) - k theta^alpha/((alpha-k) x^(alpha-k)); mode theta; note 'only alpha is a true parameter. The value of theta must be set in advance', PDF p.14; and A.2.4.1 Pareto F(x) = 1 - (theta/(x+theta))^alpha, PDF p.10, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §4 Special Distributions, 'Pareto' page: basic Pareto: if Z has the basic Pareto distribution with shape a then T = ln Z is exponential with rate a; pdf a b^a/x^(a+1) on [b, inf) for the scale-b family, sha256:2a199f9981591509d4e19a3350cf139c0dcfd448adbb65bcce0058b7c25a4d8b — https://www.randomservices.org/random/special/Pareto.html"
+    - "Siegrist, Random, §7 Point Estimation, 'Maximum Likelihood' page, Pareto distribution with known scale b: MLE of a = n / sum(ln X_i - ln b), log-likelihood n ln a + n a ln b - (a+1) sum ln x_i, sha256:f8c94e3de84f7a025fd32395169938f37e7fd7958d5a8be9d56b54ed307d6ffd — https://www.randomservices.org/random/point/Likelihood.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Single-Parameter Pareto Distribution.md

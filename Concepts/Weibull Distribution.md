@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e23b42c1929d7e03ab90df566c9cc8c337c44bd95cdc54058baef71a83ba7b3b
-  sources: []
+  sources:
+    - "CAS Exam MAS-I Tables, Appendix A.3.2.3 Weibull (theta, tau): f(x) = tau (x/theta)^tau e^-(x/theta)^tau / x, F(x) = 1 - e^-(x/theta)^tau, E[X^k] = theta^k Gamma(1 + k/tau) for k > -tau, E[(X^x)^k] = theta^k Gamma(1+k/tau) Gamma[1+k/tau; (x/theta)^tau] + x^k e^-(x/theta)^tau, mode theta((tau-1)/tau)^(1/tau) for tau > 1 else 0, PDF p.12; A.1 incomplete gamma Gamma(alpha; x) = (1/Gamma(alpha)) int_0^x t^(alpha-1) e^-t dt, PDF p.8, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), §4 Special Distributions, 'Weibull' page: quantile F^-1(p) = b[-ln(1-p)]^(1/k); failure rate R(t) = k t^(k-1)/b^k, decreasing for k<1, constant for k=1, increasing for k>1; shape 1 = exponential with scale b; Z^k standard exponential; minimum of n iid Weibull(k, b) is Weibull(k, b/n^(1/k)), sha256:d673ebeb4242d5daa56d213fd6245374f7ead872173ad01ad58e5e74ee4bc57f — https://www.randomservices.org/random/special/Weibull.html"
+    - "Frees et al., Loss Data Analytics (open text), Ch 3 'Modeling Loss Severity': §3.2.3 Weibull Distribution (hazard decreasing for shape < 1, constant for 1, increasing for > 1), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview, printed Contents p.viii (PDF p.10): §2.2.3 Weibull distribution p.51, sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Weibull Distribution.md

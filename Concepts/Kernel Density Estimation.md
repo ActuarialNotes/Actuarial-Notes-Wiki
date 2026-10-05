@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:61a489fba7e3716a8ccef8efc1d91121ef56bb28bfbbf47008ddcb2fe2e11de8
-  sources: []
+  sources:
+    - "Frees et al., Loss Data Analytics (open text), Ch 4 'Model Selection and Estimation', §4.1.1.4 Density Estimators: eq. (4.2) f_n(x) = (1/2nb) sum I(x-b < X_i <= x+b), eq. (4.3) f_n(x) = (1/nb) sum w((x-X_i)/b), Table 4.1 kernels (uniform 1/2 I(-1<x<=1), triangle (1-|x|) I(|x|<=1), Gaussian phi), kernel CDF estimator F~_n(x) = (1/n) sum W((x-X_i)/b) with uniform W(y) = (y+1)/2 on [-1,1), bandwidth trade-off (smaller b more volatile, larger b smoother), Example 4.1.5 triangular kernel, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "CAS Exam MAS-I Spring 2019, Q20 — official exam paper (scan), PDF p.24; Final Answer Key PDF p.50 (Q20 = D), sha256:02debe7c986ee38d3f484b277d0dc4a08ec424d0bb3b868b4890e4edb9312274 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-19.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview, printed Contents p.x (PDF p.12): §11.1.2 Kernel estimation of probability density function p.306, sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Tse Section 11.1 assigned (Domain B), PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Kernel Density Estimation.md

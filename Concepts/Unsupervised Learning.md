@@ -18,10 +18,10 @@ verification:
 
 > $$\text{given } X_1, \dots, X_n \in \mathbb{R}^{p}, \text{ find structure — no } Y$$
 
-- The two syllabus methods: [[Principal Components Analysis]] (find a few directions that carry most of the variance) and [[Clustering]] (find groups of similar observations)
+- The two MAS-II syllabus methods: [[Principal Components Analysis]] (find a few directions that carry most of the variance) and [[Clustering]] (find groups of similar observations)
 - **No objective scorecard.** There is no held-out label, so [[Cross-Validation]] cannot arbitrate — a [[Scree Plot]] elbow or a [[Dendrogram]] cut is a judgement call
 - Results are **scale-sensitive**: both PCA and distance-based clustering must have their variables standardized when units differ
-- Common actuarial uses: reducing correlated rating variables to a handful of components, grouping territories or classes, and exploratory data analysis before a [[Generalized Linear Model]]
+- Common actuarial uses: grouping territories or classes, and exploratory data analysis before a [[Generalized Linear Model]]
 - Often a **preprocessing step** — principal components fed into a supervised model as predictors
 
 ![[Media/Figures/Unsupervised_Learning.svg|340]]

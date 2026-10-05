@@ -100,24 +100,36 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Sample Mean]] and [[Sample Variance]], and the [[Standard Deviation]]
 > - [[Covariance]] between two [[Random Variable|variables]]
 > - [[Order Statistics]] and [[Percentile|percentiles]]
-> - [[Cumulative Distribution Function (CDF)]] — including its use to simulate a [[Inversion Method|draw by inversion]]
+> - [[Cumulative Distribution Function (CDF)]]
 > - [[Sampling Distribution]] and the [[Central Limit Theorem]]
 > 
+> ### Distribution Theory
+> - [[Transformations of Random Variables]] — of one [[Random Variable|random variable]] and [[Transformations of Random Variables|transformations for several random variables]]
+> - [[Linear Combinations of Random Variables]]
+> - [[Mixture Distribution]]s, including [[Mixture Distribution|mixtures of discrete and continuous type distributions]]
+> - [[Convergence in Probability]]
+> 
 > ### Estimation
-> - [[Maximum Likelihood Estimation]] and the [[Method of Moments]]
+> - [[Maximum Likelihood Estimation]], the [[Method of Moments]], and [[Percentile Matching]]
 > - [[Sufficient Statistic]] and [[Sufficiency]]
+> - [[Rao-Blackwell Theorem]] — the [[Sufficient Statistic|properties of a sufficient statistic]]
 > - [[Fisher Information]] and the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]]
 > - [[Sampling Distribution|Sampling models]] the [[Parameter Estimation|estimators]] are built on, notably the [[Normal Distribution]]
 > - Criteria: [[Unbiasedness]], [[Bias]], [[Consistency]], [[Efficiency]], [[Minimum Variance]], [[Mean Square Error]]
+> - [[Empirical Distribution]] and [[Kernel Density Estimation|kernel estimation of the probability density function]]
 > - [[Incomplete Data|Incomplete data]]: [[Censoring]] and [[Truncation]]
 > 
 > ### Testing
 > - [[Hypothesis Testing]], [[Type I Error]], [[Type II Error]], and the [[Power of a Test]]
 > - [[p-Value]] and the [[Confidence Interval]]
+> - [[Neyman-Pearson Lemma]] — [[Neyman-Pearson Lemma|most powerful tests]] and [[Neyman-Pearson Lemma|uniformly most powerful tests]]
 > - [[Likelihood Ratio Test]]
+> - [[Chi-Square Goodness-of-Fit Test]] and the [[Kolmogorov-Smirnov Test]]
 > 
 > ### Loss Models
 > - [[Frequency]] and [[Severity]]
+> - [[Severity Distribution|Claim-severity distributions]]: [[Exponential Distribution]], [[Gamma]], [[Weibull Distribution]], and [[Pareto Distribution]]
+> - [[Tail Weight]] — the [[Tail Weight|tail properties of claim severity]]
 > - [[Aggregate Loss Model]]s
 > - [[Coverage Modifications|Coverage modifications]], notably the [[Deductible]]
 > 
@@ -128,7 +140,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > Candidates should be able to solve problems using [[Extended Linear Model|extended linear models]] and determine when these [[Extended Linear Model|models]] are appropriate to use.
 > 
 > 1. Select the [[Model Selection|appropriate model]] for an [[Extended Linear Model|extended linear model]]
-> 2. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Tidy Data|data set to be modeled]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model]])
+> 2. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Data Types|data set to be modeled]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model]])
 > 3. Evaluate [[Model Selection|models]] developed using an [[Extended Linear Model|extended linear model]] approach
 > 4. Interpret the [[Extended Linear Model|extended linear model]] [[Model Output|output]] from [[Statistical Software|statistical software]], such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA|ANOVA tables]]
 > 5. Distinguish among [[Categorical Predictor|categorical, ordinal, and continuous predictors]] and their [[Interaction|interactions]], and how these relate to their usage in an [[Extended Linear Model|extended linear model]]
@@ -142,9 +154,18 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Linear Algebra]] — the [[Design Matrix|design matrix]], the [[Hat Matrix|hat matrix]] $H = X(X^TX)^{-1}X^T$, and [[Fitted Values|fitted values]]
 > - [[Generalized Linear Model]] and the [[Exponential Family]]
 > - [[Logistic Regression]] for a [[Response Variable|binary response]]
+> - [[Multinomial Logistic Regression|Nominal (multinomial) logistic regression]] and [[Ordinal Logistic Regression|ordinal logistic regression]]
 > - [[Poisson Regression]] for [[Frequency|claim counts]]
+> - [[Log-Linear Model]]s for [[Log-Linear Model|contingency tables]]
 > - [[Tweedie Distribution]] for [[Pure Premium|pure premium]]
-> - [[Linear Mixed Model]] for [[Clustered Data|grouped or repeated data]]
+> - [[Quasi-Likelihood]] for [[Quasi-Likelihood|overdispersion]]
+> - [[Naive Bayes]] and [[Quadratic Discriminant Analysis]] — [[Naive Bayes|generative models for classification]]
+> 
+> ### Moving Beyond Linearity
+> - [[Polynomial Regression]] and [[Step Function]]s
+> - [[Regression Spline]]s and [[Smoothing Spline]]s
+> - [[Local Regression]]
+> - [[Generalized Additive Model]]s
 > 
 > ### Specifying the Model
 > - [[Model Structure]], [[Categorical Predictor|predictor types]], and [[Interaction|interactions]]
@@ -156,7 +177,15 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Deviance]], [[R-Squared]], and the [[Residual Sum of Squares]]
 > - [[AIC]] and [[BIC]]
 > - [[ANOVA]] and [[Parameter Estimate Tables]]
+> - [[Chi-Squared Distribution]], [[Student's t-Distribution]], and [[F-Distribution]] — [[Normal Distribution|distributions related to the Normal distribution]]
+> - [[Supervised Learning]] and the [[Test Error]]
 > - [[Variable Selection]], [[Cross-Validation]], and the [[Bias-Variance Tradeoff]]
+> - [[Bootstrap]]
+> 
+> ### Shrinkage and Dimension Reduction
+> - [[Regularization]] — [[Regularization|ridge regression]] and the [[Regularization|lasso]]
+> - [[Principal Components Regression]] and [[Partial Least Squares]]
+> - [[High-Dimensional Data]]
 > 
 > ### Diagnostic Plots
 > - [[Residual Plot]]

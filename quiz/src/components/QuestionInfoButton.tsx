@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ChevronRight, ExternalLink, Info, X } from 'lucide-react'
+import { ChevronRight, ExternalLink, FileText, Info, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { githubBlobUrl } from '@/lib/github'
+import { conceptLabel } from '@/lib/questionFilters'
+import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { questionSource } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
@@ -191,6 +194,8 @@ export function QuestionInfoDialog({
             </button>
           )}
 
+          <QuestionConcepts links={question.wiki_link} onOpen={onClose} />
+
           <dl className="space-y-2 text-sm">
             <InfoRow label="Question ID" value={question.id} mono />
             <InfoRow
@@ -243,6 +248,55 @@ export function QuestionInfoDialog({
         </div>
       </div>
     </OverlayPortal>
+  )
+}
+
+/**
+ * The concepts the question is tagged with (`wiki_link`), folded shut. Closed
+ * by default for the reason the study metadata waits for the answer: a list of
+ * concepts narrows a question down. Opening it is the reader's choice. Each
+ * row goes to the concept's page — the quiz outlives the page
+ * (`lib/quizResume.ts`), so the Return pill brings the reader back to it.
+ */
+function QuestionConcepts({ links, onOpen }: { links: string[]; onOpen: () => void }) {
+  const [open, setOpen] = useState(false)
+  if (links.length === 0) return null
+  return (
+    <section className="rounded-lg border border-border">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        aria-expanded={open}
+        data-sound="tap"
+        className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <ChevronRight
+          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-90')}
+          aria-hidden
+        />
+        <span className="flex-1">Concepts</span>
+        <span className="text-xs text-muted-foreground">{links.length}</span>
+      </button>
+      {open && (
+        <ul className="space-y-0.5 border-t px-1.5 py-1.5">
+          {links.map(link => {
+            const name = conceptLabel(link)
+            return (
+              <li key={link}>
+                <Link
+                  to={wikiRoute(hrefToEntryRef(link) ?? { kind: 'concept', name })}
+                  onClick={onOpen}
+                  className="flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent"
+                >
+                  <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden />
+                  <span className="min-w-0 flex-1 truncate">{name}</span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </section>
   )
 }
 

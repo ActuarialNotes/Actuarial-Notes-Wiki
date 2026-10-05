@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a81f4e3a3689c91292f94eb0dbd9b4c43fdb4d7baf96ac80edb7589253ff043
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Rejection Method.md
+---
+
 The **Rejection Method** (acceptance–rejection method) simulates a draw from a density $f$ that is hard to invert by drawing candidates $Y$ from an easier density $g$ and accepting each candidate with probability $f(Y)/\bigl(c\,g(Y)\bigr)$, where the constant $c$ bounds the ratio $f/g$.
 
 > $$c \geq \max_x \frac{f(x)}{g(x)}$$

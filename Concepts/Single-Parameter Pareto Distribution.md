@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d50e7f823d5461e8f7b2ab871711fad1f5f21266ad8daa3ede4baf0172a8869
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Single-Parameter Pareto Distribution.md
+---
+
 The **Single-Parameter Pareto Distribution** with shape $\alpha > 0$ and a known lower bound $\theta > 0$ is a continuous distribution on $(\theta, \infty)$, used for losses observed only above a fixed threshold. Only $\alpha$ is a true parameter: $\theta$ is set in advance.
 
 > $$f(x) = \frac{\alpha\,\theta^{\alpha}}{x^{\alpha + 1}}, \quad x > \theta$$

@@ -42,4 +42,4 @@ The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, 
 > > [!answer]-
 > > $\bar{y}_L = 6$; RSS$_L = (5-6)^2+(7-6)^2+(6-6)^2 = 1+1+0 = 2$.
 > > $\bar{y}_R = 15$; RSS$_R = (15-15)^2+(14-15)^2+(16-15)^2 = 0+1+1 = 2$.
-> > Total RSS $= 2 + 2 = 4$. A split is accepted if no other partition gives a lower total RSS.
+> > Total RSS $= 2 + 2 = 4$. The tree does not search every possible partition of the observations: recursive binary splitting compares only splits of the form $X_j < s$ versus $X_j \geq s$, and makes the one, over every predictor $X_j$ and cutpoint $s$, with the lowest total RSS. This split is chosen if no such candidate gives less than $4$.

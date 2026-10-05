@@ -2,11 +2,11 @@
 
 > $$\mathbf{X} \mid Y = k \;\sim\; N(\boldsymbol\mu_k,\ \boldsymbol\Sigma_k)$$
 
-> $$\delta_k(\mathbf{x}) = -\tfrac{1}{2}(\mathbf{x} - \boldsymbol\mu_k)^\top \boldsymbol\Sigma_k^{-1} (\mathbf{x} - \boldsymbol\mu_k) - \tfrac{1}{2}\ln|\boldsymbol\Sigma_k| + \ln \pi_k$$
+> $$\begin{aligned} \delta_k(\mathbf{x}) = &-\tfrac{1}{2}(\mathbf{x} - \boldsymbol\mu_k)^\top \boldsymbol\Sigma_k^{-1} (\mathbf{x} - \boldsymbol\mu_k) \\ &- \tfrac{1}{2}\ln|\boldsymbol\Sigma_k| + \ln \pi_k \end{aligned}$$
 
-> $$\delta_k(x) = -\frac{(x - \mu_k)^2}{2\sigma_k^2} - \ln\sigma_k + \ln\pi_k \quad (p = 1)$$
+> $$\delta_k(x) = -\frac{(x - \mu_k)^2}{2\sigma_k^2} - \ln\sigma_k + \ln\pi_k$$
 
-- $\pi_k$ is the prior probability of class $k$, $|\boldsymbol\Sigma_k|$ is the determinant of its covariance matrix, and $p$ is the number of predictors. In practice $\boldsymbol\mu_k$, $\boldsymbol\Sigma_k$ and $\pi_k$ are replaced by training-data estimates.
+- $\pi_k$ is the prior probability of class $k$, $|\boldsymbol\Sigma_k|$ is the determinant of its covariance matrix, and $p$ is the number of predictors. The third block is the one-predictor case ($p = 1$), with class variance $\sigma_k^2$. In practice $\boldsymbol\mu_k$, $\boldsymbol\Sigma_k$ and $\pi_k$ are replaced by training-data estimates.
 - $\mathbf{x}$ enters $\delta_k$ **quadratically**, hence the name, so the boundary between two classes is a quadratic curve or surface. When $p = 1$ it can cut the line at two points, so a class with a larger variance can claim *both* tails.
 - **Bias–variance.** Each class needs its own $p(p+1)/2$ covariance parameters, or $Kp(p+1)/2$ in all. A model with one covariance matrix shared by every class (linear discriminant analysis, LDA) has a linear boundary and far lower variance. QDA is preferred when the training set is large or a common covariance is clearly untenable; with few observations the shared-covariance model is usually the better bet ([[Bias-Variance Tradeoff]]).
 - [[Naive Bayes]] with normal predictors is QDA with each $\boldsymbol\Sigma_k$ restricted to be **diagonal** (predictors independent within a class).
@@ -49,9 +49,11 @@
 > > $$
 > > \begin{align*}
 > > \text{One matrix} &= \frac{p(p+1)}{2} \\
-> > &= \frac{10(11)}{2} = 55 \\[4pt]
+> > &= \frac{10(11)}{2} \\
+> > &= 55 \\[4pt]
 > > \text{QDA} &= K\,\frac{p(p+1)}{2} \\
-> > &= 3(55) = 165
+> > &= 3(55) \\
+> > &= 165
 > > \end{align*}
 > > $$
 > >

@@ -4,7 +4,9 @@
 
 > $$\text{Var}(Y_i) = \phi\,V(\mu_i)$$
 
-> $$\hat\phi = \frac{X^2}{n-p} = \frac{1}{n-p}\sum_{i=1}^{n}\frac{(y_i - \hat\mu_i)^2}{V(\hat\mu_i)}$$
+> $$\hat\phi = \frac{X^2}{n-p}$$
+
+> $$X^2 = \sum_{i=1}^{n}\frac{(y_i - \hat\mu_i)^2}{V(\hat\mu_i)}$$
 
 - $g$ is the [[Link Function]], $V(\mu)$ the [[Variance Function]], $\phi$ the [[Dispersion Parameter]], $X^2$ Pearson's chi-square statistic, $n$ the number of observations and $p$ the number of parameters. No [[Exponential Family]] distribution has to be assumed.
 - **Why it works.** The iteratively reweighted least squares algorithm that fits a GLM uses only the mean and the variance of the observations. Applying it with just a mean–variance relationship gives the maximum quasi-likelihood estimates, which share many of the optimality properties of maximum likelihood estimates.
@@ -19,7 +21,8 @@
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \hat\phi &= \frac{1{,}450}{500} = 2.90 \\[4pt]
+> > \hat\phi &= \frac{1{,}450}{500} \\
+> > &= 2.90 \\[4pt]
 > > SE_Q &= 0.08\sqrt{2.90} \\
 > > &= 0.08(1.703) \\
 > > &= 0.136

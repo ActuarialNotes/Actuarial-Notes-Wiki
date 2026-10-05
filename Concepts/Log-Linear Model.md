@@ -29,7 +29,8 @@ A **Log-Linear Model** for a contingency table treats each cell count as Poisson
 > >
 > > $$
 > > \begin{align*}
-> > D &= 2\Big[24\ln\tfrac{24}{15} + 76\ln\tfrac{76}{85} + 66\ln\tfrac{66}{75} + 434\ln\tfrac{434}{425}\Big] \\
+> > D &= 2\Big[24\ln\tfrac{24}{15} + 76\ln\tfrac{76}{85} \\
+> > &\qquad + 66\ln\tfrac{66}{75} + 434\ln\tfrac{434}{425}\Big] \\
 > > &= 2\,[11.280 - 8.506 - 8.437 + 9.095] \\
 > > &= 6.86
 > > \end{align*}
@@ -53,9 +54,13 @@ A **Log-Linear Model** for a contingency table treats each cell count as Poisson
 > >
 > > $$
 > > \begin{align*}
-> > \eta &= \ln\frac{500 \times 510}{600} = \ln 425 = 6.052 \\[4pt]
-> > \alpha_{\text{lit}} &= \ln\frac{100}{500} = -1.609 \\[4pt]
-> > \beta_{\text{large}} &= \ln\frac{90}{510} = -1.735
+> > \eta &= \ln\frac{500 \times 510}{600} \\
+> > &= \ln 425 \\
+> > &= 6.052 \\[4pt]
+> > \alpha_{\text{lit}} &= \ln\frac{100}{500} \\
+> > &= -1.609 \\[4pt]
+> > \beta_{\text{large}} &= \ln\frac{90}{510} \\
+> > &= -1.735
 > > \end{align*}
 > > $$
 > >

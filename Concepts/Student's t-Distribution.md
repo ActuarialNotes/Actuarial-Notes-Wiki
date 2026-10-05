@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a78bb1d48c848b981ef1de03af5f816f1f7c135c72651ca67045af156dfd039c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Concepts/Student's t-Distribution.md"
+---
+
 **Student's t-Distribution** $t(n)$ with $n$ degrees of freedom is the distribution of a standard [[Normal Distribution|normal]] variable divided by the square root of an independent [[Chi-Squared Distribution|chi-squared]] variable over its degrees of freedom. It is the [[Sampling Distribution|sampling distribution]] of a mean or a regression coefficient standardised by an *estimated* standard error.
 
 > $$T = \frac{Z}{\sqrt{V/n}} \sim t(n), \quad Z \sim N(0,1),\ V \sim \chi^2(n)$$

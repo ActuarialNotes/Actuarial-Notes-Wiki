@@ -17,15 +17,16 @@ verification:
 
 **Deviance** is a goodness-of-fit measure for [[Generalized Linear Model]]s based on the log-likelihood. It compares the fitted model to the **saturated model** (a model with one parameter per observation, achieving perfect fit).
 
-> $$D = -2\left[\ell(\hat{\boldsymbol{\beta}}) - \ell_{\text{sat}}\right]$$
+> $$D^* = 2\left[\ell_{\text{sat}} - \ell(\hat{\boldsymbol{\beta}})\right] = 2\left[\ell(\text{saturated model}) - \ell(\text{fitted model})\right]$$
 
-> $$= -2\left[\ell(\text{fitted model}) - \ell(\text{saturated model})\right]$$
+> $$D = \phi\, D^*, \qquad D^* = \frac{D}{\phi}$$
 
-- Deviance is always **non-negative**; $D = 0$ means a perfect fit
-- For a Normal linear model, deviance equals the **residual sum of squares** $\text{RSS} = \sum(y_i - \hat{y}_i)^2$
-- For Poisson regression: $D = 2\sum_i \left[y_i\ln\!\frac{y_i}{\hat{\mu}_i} - (y_i - \hat{\mu}_i)\right]$
-- **Scaled deviance**: $D^* = D/\phi$ where $\phi$ is the dispersion parameter; under $H_0$ (model is correct), $D^* \approx \chi^2_{n-p}$
-- **Analysis of Deviance**: the difference in deviance between two nested models, $\Delta D = D_{\text{reduced}} - D_{\text{full}} \sim \chi^2_{\Delta p}$, is used to test whether additional predictors significantly improve fit
+- $D^*$ is the **scaled deviance** and $D$, the scaled deviance multiplied by the [[Dispersion Parameter]] $\phi$, the **unscaled deviance**. $D$ does not depend on $\phi$, which makes it the one to compare models with different dispersion estimates. For Poisson and binomial models $\phi = 1$ and the two coincide
+- The names are not standard: these follow McCullagh & Nelder and CAS Monograph 5, while Dobson & Barnett call $2[\ell_{\text{sat}} - \ell]$ the "deviance" and its product with $\hat\phi$ the "scaled deviance" — the reverse. ISLR calls $-2\ell(\hat{\boldsymbol{\beta}})$ itself the deviance. Read which one a question means
+- Deviance is always **non-negative**; the saturated model has deviance $0$ (a perfect fit)
+- For a Normal linear model the unscaled deviance is the **residual sum of squares**, $D = \text{RSS} = \sum(y_i - \hat{y}_i)^2$, so $D^* = \text{RSS}/\sigma^2$
+- For Poisson regression ($\phi = 1$): $D = 2\sum_i \left[y_i\ln\!\frac{y_i}{\hat{\mu}_i} - (y_i - \hat{\mu}_i)\right]$; in large samples a model that fits has $D \approx \chi^2_{n-p}$
+- **Analysis of Deviance**: for nested models, $\dfrac{D_{\text{reduced}} - D_{\text{full}}}{\phi} \approx \chi^2_{\Delta p}$ when $\phi$ is known (large samples). When $\phi$ is estimated, use $F = \dfrac{D_{\text{reduced}} - D_{\text{full}}}{\Delta p\,\hat\phi_{\text{full}}}$ on $(\Delta p,\ n - p_{\text{full}})$ degrees of freedom
 
 ![[Media/Figures/Deviance.svg|340]]
 

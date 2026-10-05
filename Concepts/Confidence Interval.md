@@ -1,20 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:ee4e19a034aab1f4d48e2588aa8eb5e93ad1a455e763794ae66aec2d243eea10
   sources:
-    - "Siegrist, Random (randomservices.org), ch.7 Set Estimation §1 Introduction: confidence level, 'the true value of theta is either in this set, or is not', long-run proportion of sets containing theta converges to 1 - alpha, sha256:e5e6cb402c737c1d63a58ef4509975633f9cfa483f8f0afa8860ff9b6dbb4ee3 — https://www.randomservices.org/random/interval/Introduction.html"
-    - "Siegrist, Random, ch.7 §2 Estimation in the Normal Model: for a normal random sample, M +/- z(1 - alpha/2) sigma/sqrt(n), M +/- t_{n-1}(1 - alpha/2) S/sqrt(n), [(n-1)S^2/chi^2_{n-1}(1 - alpha/2), (n-1)S^2/chi^2_{n-1}(alpha/2)] (not symmetric about S^2); length L = 2 z sigma/sqrt(n), sha256:21c59dd27f38c17148de5af35d53d94a01c51cd4f230c81d75e91173a9917586 — https://www.randomservices.org/random/interval/Normal.html"
-    - "Siegrist, Random, ch.8 §1 Introduction, 'Equivalence Between Hypothesis Test and Confidence Sets': reject H0: theta = theta0 at level alpha iff theta0 is outside the 1 - alpha confidence set, sha256:fb05a9d71b55ba113e2f71afa052bc059b35f2c5b6946012c19ecbc693faab1a — https://www.randomservices.org/random/hypothesis/Introduction.html"
-    - "James, Witten, Hastie & Tibshirani, ISLR 2nd ed., §3.1.2 p.66 (PDF p.76): 95% confidence interval definition and repeated-sampling meaning, beta-hat_1 +/- 2 SE with the exact multiplier the t_{n-2} 97.5% quantile under Gaussian errors (footnote 3), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Penn State STAT 415 (2026 notes), Lesson 7 §7.2 asymptotic CI theta-hat +/- 1.96 sqrt(1/I(theta-hat)) with I the full-sample information, sha256:0c6afc848ae41251fc702348e0e8c603c5725f1f03c20b4731d789a61babbe0b — https://online.stat.psu.edu/stat415/Lesson07.html"
-    - "Penn State STAT 415 (2026 notes), Lesson 10 §10.2 Linking Confidence Intervals to Hypothesis Tests (xbar +/- t_{0.025,99} s/sqrt(n); 120 outside the interval <=> rejected), sha256:4277fd734c4d2b8b297124d4f9378d1fe638d9a4c4547b2689e24a9dfa1daf96 — https://online.stat.psu.edu/stat415/Lesson10.html"
-    - "Rodriguez, Generalized Linear Models (Princeton lecture notes), ch.3 §3.2.3 p.12: Wald interval beta_j +/- z_{1-alpha/2} sqrt(var(beta_j)), CIs in the link scale translated by exponentiating the boundaries, sha256:2243f2c49c0e15545740a0b4fb8d98ad8a5b3e37653c13feee545195801efedc — https://grodri.github.io/glms/notes/c3.pdf"
-    - "Rodriguez, Generalized Linear Models, ch.4 §4.1.3 p.5: with the log link exp(beta_j) is a multiplicative effect on the mean, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
-    - "CAS Exam MAS-I Tables (version 01/15/2018): t table p.16 (df 15 two-sided 0.05: 2.131; Inf row 1.960, 2.576), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "Siegrist, Random (randomservices.org), ch.7 §2 Estimation in the Normal Model: assumption 'random sample from the normal distribution'; T = (M - mu)/(S/sqrt n) ~ t_{n-1}, V = (n-1)S^2/sigma^2 ~ chi^2_{n-1}; M +/- z(1-alpha/2) sigma/sqrt n, M +/- t_{n-1}(1-alpha/2) S/sqrt n, [(n-1)S^2/chi^2_{n-1}(1-alpha/2), (n-1)S^2/chi^2_{n-1}(alpha/2)] with chi^2_k(p) the quantile of order p; 'Robustness': mean intervals approximately valid for large n by the CLT, variance intervals not robust, sha256:21c59dd27f38c17148de5af35d53d94a01c51cd4f230c81d75e91173a9917586 — https://www.randomservices.org/random/interval/Normal.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods §1.3.5.8 Chi-Square Test for the Variance: T = (N-1)(s/sigma0)^2, critical values chi^2_{1-alpha,N-1} / chi^2_{1-alpha/2,N-1} (lower-tail quantile notation), interval for the variance, sha256:479a6c6d7f68671d8a61d0daa073e5884a428b477d7b0308c50863c7f164d467 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda358.htm"
+    - "CAS Exam MAS-I Tables (version 01/15/2018): t table 'Tail areas (two-sided)' p.16 (df 15, 0.05 column: 2.131; Inf row 1.960, 2.576); 'Lower-tail areas for Chi-square distributions' p.20 (df 15: 0.025 column 6.26, 0.975 column 27.49), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Confidence Interval.md

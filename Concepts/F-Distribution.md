@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:fb68734ce1ca795682ae05a3e1a5bbb922fae67f9ccdea62db89284d52116f14

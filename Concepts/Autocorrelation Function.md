@@ -23,6 +23,7 @@ The **autocorrelation function (ACF)** gives the correlation between a [[Time Se
 - Slow, near-linear decay signals non-stationarity and calls for [[Differencing]]; a spike at lag $s$ and its multiples signals [[Seasonality]]
 - On residuals it is the [[White Noise]] check: all spikes inside the bands means the model has extracted the structure
 - The companion [[Partial Autocorrelation Function]] does the reverse job, cutting off for AR and tailing off for MA
+- For two series, the [[Cross-Correlation]] function correlates one with the other shifted by $k$ periods; with the same series twice it is the ACF
 
 ![[Media/Figures/Autocorrelation_Function.svg|340]]
 

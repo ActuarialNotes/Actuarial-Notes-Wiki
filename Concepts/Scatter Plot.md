@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5bdba8014c70d4126c942d8206702ebee41225507fd40142e1a8c208463cc8e7
+  content_hash: sha256:618a0ccab4b0c191153d6162f2e172bd4383c17b92906f0194af1b90dcf5aea1
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26 'Scatter Plot', sha256:3232379f988c0b0a21dc0591503b480263e3ff7eb0190c9c2a622ddb09a4b9f9 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatterp.htm"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.26.11 'Scatter Plot Matrix', sha256:8cc21d8e7eb4a8c19340d0358089efb945b82986dd29910a3c2e981aacd3c241 — https://www.itl.nist.gov/div898/handbook/eda/section3/scatplma.htm"

@@ -10,3 +10,4 @@ blob-report/
 __pycache__/
 *.pyc
 questions/exam-p-backup/
+.syllabus/*/source.pdf

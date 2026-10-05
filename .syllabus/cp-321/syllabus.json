@@ -1,0 +1,547 @@
+{
+  "wiki_id": "cp-321",
+  "body": "SOA",
+  "title": "CP 321 - Disability, Long-Term Care, and Long-Duration Health Contracts",
+  "sitting": "Nov 2026/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf",
+  "source_sha256": "36804e53afb3a76a5987d8be2aaa263a3da3b595c7ec0b07960c335ab4cf5048",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Plan and Product Provisions",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand how to describe benefits typically offered under long duration contracts (disability income, long term care, critical illness, Medicare Supplement).",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe typical organizations offering these contracts and their motivation for offering each type",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe each type of contract listed above",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate the potential moral hazards and financial and legal risks associated with each contract",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe Social Security disability income benefits in the United States",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Individual Health Insurance, Leida, Hans, 3rd Edition, 2026",
+          "codes": "1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 2: The Products (Sections 2.7-2.9)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 9: Government Health Plans in the United States, pp. 149 - 153",
+              "codes": "1d"
+            },
+            {
+              "text": "Ch. 12: Group Disability Income Benefits",
+              "codes": "1a-1c"
+            }
+          ]
+        },
+        {
+          "citation": "Insuring Long-Term Care, Eaton, Robert, et. al., 2nd Edition, 2024",
+          "codes": "1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 2: History of Long-Term Care Products",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Hybrid Life and Long-Term Care Products",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Critical Illness Turns 40!, Health Watch, Sep 2023",
+          "codes": "1a-1c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Manual Rates",
+      "weight_raw": "25%-35%",
+      "weight": [
+        25,
+        35
+      ],
+      "objective": "The candidate will understand how to calculate rates for each of the contracts described in Learning Objective 1.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify and evaluate sources of data needed for pricing, including the quality, appropriateness, and limitations of each data source",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Calculate and recommend assumptions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and recommend a manual rate (includes base rate development and applying a rating manual) and describe the role of data credibility used to calculate the rate",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Identify critical metrics to evaluate actual vs. expected results",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Recommend strategies for properly modelling, pricing, underwriting, and funding case-specific risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe the purpose and objectives of Guaranty Associations and the multi-state framework for long term care rate increases",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Apply actuarial best practices in evaluating and projecting cash flows (premiums, claims, investment income, expenses, commissions), liabilities, and required capital",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 25: Estimating Disability Claim Costs",
+              "codes": "2a-2d"
+            },
+            {
+              "text": "Ch. 29: Group Insurance Underwriting, pp. 509 - 510",
+              "codes": "2e"
+            }
+          ]
+        },
+        {
+          "citation": "CP321-100-25: Issues to Consider in Self-Funding Long-Term Disability Insurance",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "CP321-102-25: Short Term Disability Example",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Issues In Applying Credibility to Group Long-Term Disability Insurance, 2013, pp. 5-15",
+          "codes": "2e",
+          "parts": []
+        },
+        {
+          "citation": "Group Life Waiver Study Based on 2009-2015 Canadian Group LTD Termination Experience Report, CIA Study, Jan 2020, pp. 4-25, Appendix G (background only)",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Best Estimate Assumption for Expenses, CIA Educational Note, Nov 2006, pp. 19-39",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "Insuring Long-Term Care, Eaton, Robert, et. al., 2nd Edition, 2024",
+          "codes": "2b-2d",
+          "parts": [
+            {
+              "text": "Ch. 9: Long-Term Care Insurance Experience Monitoring",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 10: Long-Term Care Insurance Premium Rate Increases",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ASOP 18: Long-Term Care (excluding Appendices)",
+          "codes": "2g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-103-26: Long-Term Care Insurance Multistate Rate Review Framework, NAIC, Dec 2025, Sections V-VI",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "CP321-101-25: Pricing Medicare Supplement Benefits, 2020, sections II, IV, V & Appendix",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Individual Health Insurance, Leida, Hans, 3rd Edition, 2026",
+          "codes": "2e",
+          "parts": [
+            {
+              "text": "Ch. 4: Managing Antiselection (Sections 4.1-4.5)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ASOP 23: Data Quality (excluding Appendices)",
+          "codes": "2a, 2g",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 41: Actuarial Communications (excluding Appendices)",
+          "codes": "2g",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Reserving",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to apply valuation principles for long-duration contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and calculate types of non-claim reserves held for long duration health contracts: policy reserves, unearned premium reserves, and premium deficiency reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and calculate types of claim reserves held for long duration health contracts: PVANYD (present value of amounts not yet due), ICOS (in course of settlement), and IBNR (incurred but not reported)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain the limitations and biases of traditional valuation methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Calculate appropriate claim reserves given data",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe, calculate, and evaluate the impact of environmental factors on reserve calculations (trend, seasonality, claim processing changes, etc.)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Evaluate data resources and appropriateness for calculating reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Apply appliable best practices related to reserving",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Group Insurance, Skwire, Daniel D., 8th Edition, 2021",
+          "codes": "3a-3e, 3g",
+          "parts": [
+            {
+              "text": "Ch. 40: Claim Reserves for Long-Term Benefits",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Individual Health Insurance, Leida, Hans, 3rd Edition, 2026",
+          "codes": "3a-3g",
+          "parts": [
+            {
+              "text": "Ch. 6: Reserves and Liabilities",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Insuring Long-Term Care, Eaton, Robert, et. al., 2nd Edition, 2024",
+          "codes": "3a, 3b",
+          "parts": [
+            {
+              "text": "Ch. 8: Long-Term Care Insurance Valuation",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP321-104-25: Practices for Preparing Health Contract Reserves",
+          "codes": "3a, 3g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-105-25: Supplemental Comments (March 2022) for CP321-104-25",
+          "codes": "3a, 3g",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Insurer Financial Statements",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand how to prepare and interpret insurance company financial statements for long duration contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Compare valuation standards under IFRS 17, US GAAP, and Statutory Accounting",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Prepare financial statements in accordance with Generally Accepted Accounting Principles (GAAP) and IFRS 17",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Interpret the results of both statutory and GAAP statements from the viewpoint of stakeholders, including regulators, senior management, and investors",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Project financial outcomes and recommend a strategy",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply applicable best practices",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP321-107-25: Health Insurance Accounting Basics for Actuaries, Sections 4-7",
+          "codes": "4a-4d",
+          "parts": []
+        },
+        {
+          "citation": "CP321-106-25: Excerpt from AAA Application of ASU 2018-12 to the Accounting for Long-Duration Contracts under U.S. GAAP (Section IV only)",
+          "codes": "4b, 4e",
+          "parts": []
+        },
+        {
+          "citation": "IFRS 17 Insurance Contract Examples",
+          "codes": "4b, 4d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Asset Adequacy",
+      "weight_raw": "0%-10%",
+      "weight": [
+        0,
+        10
+      ],
+      "objective": "The candidate will understand how to evaluate asset matching and asset adequacy standards for long duration contracts.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the principles of Asset-Liability Management (ALM)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate techniques for addressing mismatched assets and liabilities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe asset adequacy approaches commonly applied to long-duration health contracts",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe cash flow projections and interactions between asset and liability cash flows",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP321-108-25: ALM for Life, Annuities, and Pensions, Sections 2, 5 & 6",
+          "codes": "5a, 5b",
+          "parts": []
+        },
+        {
+          "citation": "CP321-109-25: Chapter 3 of Modelling in Life Insurance – A Management Perspective, 2016",
+          "codes": "5d",
+          "parts": []
+        },
+        {
+          "citation": "ASOP 22: Statements of Actuarial Opinion Based on Asset Adequacy Analysis for Life Insurance, Annuity, or Health Insurance Reserves and Other Liabilities (excluding Appendices)",
+          "codes": "5c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Retiree Group Benefits",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to design and perform valuations of retiree group benefits.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe why employers offer retiree group benefits",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Determine appropriate demographic, economic, and benefit assumptions and apply to a retiree health valuation",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Determine employer liabilities, service cost, and expense for post-retirement and post-employment benefits and prepare disclosure information for financial reporting purposes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe current issues faced by governments, employers, and employees related to post-retirement and post-employment benefits",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Apply actuarial best practices to post-retirement and post-employment benefit plans",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Propose ways to manage the range of risks faced by plan participants and retirees through retiree health and life plan designs",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Advise a plan sponsor regarding the choice of design elements for their retiree health program given situational context",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP321-110-25: Chapter 24 of Morneau Shepell Handbook of Canadian Pension & Benefit Plans, 17th Edition, 2020",
+          "codes": "6a, 6b, 6d, 6f, 6g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-113-25: IAS 19: A Primer on Non-Pension Benefit Accounting for Valuation Actuaries",
+          "codes": "6a-6g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-111-25: IAS19",
+          "codes": "6b, 6c",
+          "parts": []
+        },
+        {
+          "citation": "Health Care Trend Rate, CIA Educational Note, May 2012, pp. 4-17 only",
+          "codes": "6b, 6e, 6g",
+          "parts": []
+        },
+        {
+          "citation": "Setting the Accounting Discount Rate Assumption for Pension and Post-Employment Benefit Plans, CIA Educational Note, Dec 2020",
+          "codes": "6b, 6e, 6g",
+          "parts": []
+        },
+        {
+          "citation": "Practice-Specific Standards for Non-Pension Employee Future Benefit Plans (Effective February 1, 2024), CIA Standards of Practice, Dec 2023",
+          "codes": "6b, 6c, 6e, 6f",
+          "parts": []
+        },
+        {
+          "citation": "CP321-114-25: New Approaches Needed to Save Retiree Benefits",
+          "codes": "6d-6g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-115-25: Mercer Quick Poll: 2022 Post-Retirement Benefit Trends - Supporting a Challenging Labour Environment",
+          "codes": "6d-6g",
+          "parts": []
+        },
+        {
+          "citation": "CP321-116-25: Retiree Health Benefits: Going, Going, Nearly Gone?",
+          "codes": "6d-6g",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

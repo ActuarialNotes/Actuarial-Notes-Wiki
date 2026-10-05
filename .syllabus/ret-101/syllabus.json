@@ -1,0 +1,651 @@
+{
+  "wiki_id": "ret-101",
+  "body": "SOA",
+  "title": "RET 101 – Retirement Plan Design",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf",
+  "source_sha256": "d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Benefit Plan Structure, Features and Investments",
+      "weight_raw": "30%-50%",
+      "weight": [
+        30,
+        50
+      ],
+      "objective": "The candidate will understand how to analyze different types of designs for retirement plans and retirement plan investments.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the structure of the following plans:",
+          "bullets": [
+            "Traditional defined benefit plans",
+            "Defined contribution and savings plans",
+            "Hybrid plans",
+            "Other alternative retirement plans such as executive retirement plans, shared risk plans, target benefit plans, etc."
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Given a plan type, explain the relevance and range of plan features including the following:",
+          "bullets": [
+            "Plan eligibility requirements",
+            "Benefit eligibility requirements, accrual, vesting",
+            "Benefit / contribution formula, including methods of integration with benefits provided by social insurance",
+            "Payment options and associated adjustments to the amount of benefit",
+            "Ancillary benefits",
+            "Benefit subsidies and their value, vested or non-vested",
+            "Participant investment options",
+            "Required and optional employee contributions",
+            "Early and late retirement options",
+            "Indexing"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Discuss investment of retirement plan assets",
+          "bullets": [
+            "Assess the different types and combinations of investment vehicles typically used for providing retirement benefits.",
+            "Distinguish the various strategies, approaches and techniques used to manage retirement fund assets"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Retirement Plans - 401(k)s, IRAs and Other Deferred Compensation Approaches, Allen et al., 12th Edition, 2018 (details of the U.S. regulatory environment will not be tested)",
+          "codes": "1a, 1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 2: Strategic Plan Design",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010",
+          "codes": "1a, 1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 5: Human-Resource Incentives (excluding pp. 154-156)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Morneau Shepell, Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020 (details of the Canadian regulatory environment will not be tested)",
+          "codes": "1a, 1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 1: Overview of Retirement Income Arrangements",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "RET101-110-25: Social Security Programs Throughout the World: Europe, 2018",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Retirement Plans - 401(k)s, IRAs and Other Deferred Compensation Approaches, Allen et al., 12th Edition, 2018 (details of the U.S. regulatory environment will not be tested)",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 3: Defined Contribution versus Defined Benefit Plans (pp. 50-54)",
+              "codes": "1a"
+            },
+            {
+              "text": "Ch. 17: Defined Benefit Plan Features",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 8: Cash or Deferred Arrangements (CODAs) under Section 401(k) (pp. 125-128)",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 11: Behavioral Finance Impacts on Defined Contribution Plan Designs (excluding pp. 198-200)",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 14: Executive Retirement Arrangements (pp. 250-263)",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 21: Cash Balance and Other Hybrid Retirement Plans",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 29: Facilitating Investment of Defined Contribution Plan Assets (pp. 555-561)",
+              "codes": "1a, 1c"
+            }
+          ]
+        },
+        {
+          "citation": "Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 10: Defined Benefit Design",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 28: Investing and Defined Contribution Plans",
+              "codes": "1a, 1c"
+            }
+          ]
+        },
+        {
+          "citation": "Morneau Shepell, Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020 (details of the Canadian regulatory environment will not be tested)",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 3: Employer Pension Plans: Terms and Conditions",
+              "codes": "1a, 1b"
+            },
+            {
+              "text": "Ch. 7: Pension Fund Investment Management",
+              "codes": "1c"
+            }
+          ]
+        },
+        {
+          "citation": "RET101-102-25: Defined Contribution Plan Success Factors",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-100-25: Framework for Future Defined Contribution Design",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-123-26: CAPSA Guideline No. 3: Guidelines for Capital Accumulation Plans",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-109-25: Designing the Future of Target-Date Funds",
+          "codes": "1a, 1c",
+          "parts": []
+        },
+        {
+          "citation": "RET101-124-26: The Future of DC Plans: Key Trends for 2025 and Beyond",
+          "codes": "1a, 1c",
+          "parts": []
+        },
+        {
+          "citation": "The Next Evolution in Defined Contribution Retirement Plan Design: A Guide for DC Plan Sponsors to Implementing Retirement Income Programs, SOA, Sep 2013 (pp. 61-88 background only)",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-104-25: The Hybrid Handbook: Not All Hybrids are Created Equal",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-106-25: Multi-Employer Plans",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-107-26: Introduction and Overview of Retirement Plan Investments",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "RET101-108-25: CAPSA, Guideline No. 6, Pension Plan Prudent Investment Practices Guideline",
+          "codes": "1c",
+          "parts": []
+        },
+        {
+          "citation": "Report of the Task Force on Target Benefit Plans, CIA, Jun 2015, (excluding sections 4, 5, & Appendices)",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Analysis of Target Benefit Plan Design Options, SOA, Feb 2016, pp. 12-16",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "RET101-101-25: Integration with Social Security",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-103-25: Phased Retirement: An Important Part of the Evolving Retirement Scene",
+          "codes": "1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Participant Risks",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to analyze the risks faced by retirees and the participants of retirement plans.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify risks faced by retirees and the elderly",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and contrast the risks faced by participants of various sponsored plans, such as:",
+          "bullets": [
+            "Retirement plans sponsored by public sector employers",
+            "Single employer sponsored retirement plans",
+            "Retirement plans involving more than one employer, and",
+            "Social insurance plans"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate benefit adequacy and measure replacement income for members of a particular plan given other sources of retirement income",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe ways in which retirement plan design can manage the range of risks faced by plan participants and retirees",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 5: Human-Resource Incentives (excluding pp. 154-156)",
+              "codes": "2b"
+            },
+            {
+              "text": "Ch. 9: Risks of Outliving Resources (pp. 270-289 only)",
+              "codes": "2a, 2d"
+            }
+          ]
+        },
+        {
+          "citation": "Managing Post-Retirement Risks: Strategies for a Secure Retirement, SOA, 2025",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "RET101-114-25: How Accurately does 70% Final Employment Earnings Replacement Measure Retirement Income (In)Adequacy? Introducing the Living Standards Replacement Rate (LSRR): (sections 3.1, 3.2, 3.4, 4 & 5 and Appendices background only)",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "RET101-110-25: Social Security Programs Throughout the World: Europe, 2018",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Retirement Plans - 401(k)s, IRAs and Other Deferred Compensation Approaches, Allen et al., 12th Edition, 2018",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 17: Defined Benefit Plan Features",
+              "codes": "2b, 2d"
+            },
+            {
+              "text": "Ch. 11: Behavioral Finance Impacts on Defined Contribution Plan Designs (excluding 198-200)",
+              "codes": "2a, 2d"
+            },
+            {
+              "text": "Ch. 21: Cash Balance and Other Hybrid Retirement Plans",
+              "codes": "2d"
+            },
+            {
+              "text": "Ch. 14: Executive Retirement Arrangements (pp. 250-263)",
+              "codes": "2d"
+            }
+          ]
+        },
+        {
+          "citation": "The Next Evolution in Defined Contribution Retirement Plan Design: A Guide for DC Plan Sponsors to Implementing Retirement Income Programs, SOA, Sep 2013 (pp. 61-88 background only)",
+          "codes": "2a, 2d",
+          "parts": []
+        },
+        {
+          "citation": "RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices B and C only (remainder is background)",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Primer on Retirement Income Strategy Design and Evaluation, SOA Research, Jan 2023, Executive Summary, Sections 1, 2, 5, 6 & Appendix A",
+          "codes": "2a, 2d",
+          "parts": []
+        },
+        {
+          "citation": "RET101-112-25: Private Pensions: Alternative Approaches Could Address Retirement Risks Faced by Workers but Pose Tradeoffs, pp.1-35",
+          "codes": "2a, 2d",
+          "parts": []
+        },
+        {
+          "citation": "RET101-113-25: The Promise of Defined Ambition Plans: Lessons for the United States",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "RET101-115-25: An Improved Application of the Variable Annuity",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "RET101-116-25: The Case for Collective DC (sections 1-7 only)",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Report of the Task Force on Target Benefit Plans, CIA, Jun 2015 (excluding sections 4, 5 & Appendices)",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Educational Note: Financial Risks Inherent in Multi-Employer Pension Plans and Target Benefit Pension Plans, CIA, May 2011",
+          "codes": "2b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Sponsor Risks",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to analyze the risks faced by sponsors of retirement plans.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify how plan features, temporary or permanent, can adversely affect the plan sponsor",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Assess the sponsor risk from options offered, including:",
+          "bullets": [
+            "Postponed retirement",
+            "Early retirement",
+            "Optional forms of payment factors",
+            "Embedded options",
+            "Portability options",
+            "Investment options",
+            "Decumulation features"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe ways to mitigate the risks identified with a particular plan feature",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "RET101-104-25: The Hybrid Handbook: Not All Hybrids are Created Equal",
+          "codes": "3a, 3b, 3c",
+          "parts": []
+        },
+        {
+          "citation": "Report of the Task Force on Target Benefit Plans, CIA, Jun 2015 (excluding sections 4, 5 & Appendices)",
+          "codes": "3a, 3b, 3c",
+          "parts": []
+        },
+        {
+          "citation": "The Next Evolution in Defined Contribution Retirement Plan Design: A Guide for DC Plan Sponsors to Implementing Retirement Income Programs, SOA, Sep 2013 (pp. 61-88 background only)",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices A-C only (remainder is background)",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (pp. 8-19 only)",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "Primer on Retirement Income Strategy Design and Evaluation, SOA Research, Jan 2023, Executive Summary, Sections 1, 2, 5, 6 & Appendix A",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-117-25: Implementing Early Retirement Incentive Programs: A Step-by-Step Guide",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "RET101-118-25: Pension Issues in Mergers and Acquisitions",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Embedded Options in Pension Plans: Catalogue of Embedded Options Survey of Prevalence of Embedded Options, SOA, Aug 2011, pp. 1-17",
+          "codes": "3b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Benefit Plan Design Recommendation",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to evaluate sponsors’ goals for the retirement plan, evaluate alternative plan types and features, and recommend a plan design appropriate to address those goals.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe ways to identify and prioritize the sponsor’s goals related to the design of the retirement plan",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Assess the tradeoffs between different goals",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Assess the feasibility of achieving the sponsor’s goals for their retirement plan",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "State relationships or recognize contradictions between a sponsor’s plan design goals and retirement risks faced by retirees",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "State relationship or recognize contradictions between sponsor’s goals and taxpayers’ perspective when evaluating benefit plan design",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Identify the ways that regulation impacts the sponsor’s plan design goals",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Design retirement programs that manage retirement risk, are consistent with sponsor’s objectives and promote employee behavior consistent with sponsor’s objectives.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Evaluate the pros and cons from both a sponsor and employee perspective of introducing options that impact the labor force demographics",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Recommend a method to integrate benefits provided by social insurance with retirement plan designs in order to meet the plan sponsor’s particular goals and defend the recommendation",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Recommend an appropriate plan type and plan design features for providing retirement benefits and defend the recommendations",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "text": "Assess the potential effects, including tax implications, of various investments and investment policies on all of the stakeholders",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "l",
+          "text": "Identify and assess the sources of investment risk applicable to retirement fund assets",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "m",
+          "text": "Explain and apply restrictions on plan design features to a proposed plan design, taking into accounting the use of tax incentives and understanding conflicts between regulations and design objectives",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "n",
+          "text": "Identify changes that could reduce sponsor risk.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Retirement Plans - 401(k)s, IRAs and Other Deferred Compensation Approaches, Allen et al., 12th Edition, 2018",
+          "codes": "4a-4n",
+          "parts": [
+            {
+              "text": "Ch. 2: Strategic Plan Design",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 3: Defined Contribution versus Defined Benefit Plans (pp. 50-54)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 29: Facilitating Investment of Defined Contribution Plan Assets (pp. 555-561)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010",
+          "codes": "4a-4n",
+          "parts": [
+            {
+              "text": "Ch. 5: Human-Resource Incentives (excluding pp. 154-156)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "RET101-102-25: Defined Contribution Plan Success Factors",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-123-26: CAPSA Guideline No. 3: Guidelines for Capital Accumulation Plans",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-104-25: The Hybrid Handbook: Not All Hybrids are Created Equal",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-121-25: The Big Chill",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-120-25: Design Matters: Plan Distribution Options",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-113-25: The Promise of Defined Ambition Plans: Lessons for the United States",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-115-25: An Improved Application of the Variable Annuity",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-122-25: Innovations in the Canadian Retirement Landscape: CAAT Pension Plan",
+          "codes": "4a-4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-119-25: Ch. 1 (pp. 4-11) and Ch. 5 of Pension Policy: The Search for Better Solutions",
+          "codes": "4e, 4f",
+          "parts": []
+        },
+        {
+          "citation": "Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (pp. 8-19 only)",
+          "codes": "4n",
+          "parts": []
+        },
+        {
+          "citation": "RET101-103-25: Phased Retirement: An Important Part of the Evolving Retirement Scene",
+          "codes": "4h",
+          "parts": []
+        },
+        {
+          "citation": "RET101-109-25: Designing the Future of Target-Date Funds",
+          "codes": "4l",
+          "parts": []
+        },
+        {
+          "citation": "RET101-107-26: Introduction and Overview of Retirement Plan Investments",
+          "codes": "4l",
+          "parts": []
+        },
+        {
+          "citation": "RET101-124-26: The Future of DC Plans: Key Trends for 2025 and Beyond",
+          "codes": "4l",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

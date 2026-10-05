@@ -94,6 +94,8 @@ describe('normalizeTerm / examKeyFromExamId', () => {
     expect(examKeyFromExamId('MAS-I')).toBe('MAS-I')
     expect(examKeyFromExamId('5')).toBe('5')
     expect(examKeyFromExamId('6C')).toBe('6C')
+    expect(examKeyFromExamId('GH-101')).toBe('GH-101')
+    expect(examKeyFromExamId('FAM')).toBe('FAM')
   })
 })
 

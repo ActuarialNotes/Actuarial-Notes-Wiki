@@ -36,6 +36,7 @@ the repo root is the "database" the app is built on top of.
 
 ```
 Exam *.md, Concepts/*.md                          — wiki content (Obsidian [[wiki-links]])
+.syllabus/<wiki id>/syllabus.json                 — a syllabus PDF, extracted (docs/syllabus-pipeline.md)
 Resources/Books/*.md                              — resource pages: one real document each, written to
                                                     the standard in docs/resource-pages.md
 Resources/{Regulation,Events,Benchmarks,Data}/*.md
@@ -169,6 +170,14 @@ before touching that area**:
   exhibits, options, answer keys, point values and publisher solutions are extracted
   mechanically, and a model is asked only for what is genuinely a judgment. Read before
   changing any of those scripts, the skills, or `scripts/mdmath.py`.
+- `docs/syllabus-pipeline.md` — the **syllabus PDF → exam page** pipeline:
+  `scripts/syllabus_extract.py` reads the examining body's syllabus into
+  `.syllabus/<wiki id>/syllabus.json` (verbatim, hashed, no model), `scripts/syllabus_write.py`
+  renders the page — every noun phrase of an objective linked to its concept page, or to the
+  page that should exist — and `syllabus_lint.py` holds a page with a `syllabus:` block to its
+  JSON word for word. It wrote the study guides of every SOA exam past FM (FAM, SRM, PA, ALTAM,
+  ASTAM, ATPA and the 23 FSA exams, all `development`); P and FM keep hand-made pages. Read
+  before touching `scripts/syllabus_*.py` or regenerating a page for a new sitting.
 - `docs/validation-agent.md` — the VALIDATE agent (`.claude/agents/validate.md`, `/validate`):
   how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
   compounding mechanism), and the line between what it may auto-fix and what it must only
@@ -444,8 +453,9 @@ Other important `lib/` modules:
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (P, FM), `beta` (MAS-I, MAS-II, Exams 5, 6C, 7, 8 and 9, and PCPA) or
-  `development` (the three DISCs and Exam 6U — a syllabus outline with no question bank
-  yet; the DISCs have none because The Institutes sells their sample questions and
+  `development` (the three DISCs, Exam 6U and the SOA exams past FM — FAM, SRM, PA, ALTAM,
+  ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — a syllabus outline with no
+  question bank yet; the DISCs have none because The Institutes sells their sample questions and
   publishes none). PCPA is beta with no bank — CAS releases no PCPA paper or sample
   questions to convert — because its page and the Projects tab's simulator are material
   to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows

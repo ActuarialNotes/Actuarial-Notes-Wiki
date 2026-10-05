@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5df3e38831e16bd1b57ff13f0a03adfb6568a31acdd02e9f059efb623703eced
+  content_hash: sha256:20097cf1e3d4949b74c7a4ff664f56d1120f4c411097a222580cf81f70c70d52
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,10 @@ The U.S. actuarial standard of practice that guides actuaries when selecting dat
 
 > [!info] On the syllabus
 > - [[Exam PCPA (CAS)|Exam PCPA]] — objectives A1–A4 (Domain A, Dealing with Data); the outline cites the whole standard, as an online publication (OP).
+> - [[Exam CP-321 (SOA)|Exam CP-321]] — Outcomes 2a, 2g.
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f.
+> - [[Exam GH-201U (SOA)|Exam GH-201U]] — Outcomes 1g.
+> - [[Exam GH-301 (SOA)|Exam GH-301]] — Outcomes 3c.
 
 ## Transmittal Memorandum
 - The ASB first adopted ASOP No. 23 in 1993 and revised it in 2004; this revision, begun in 2014, updates its language to keep pace with practice changes such as non-traditional data sources for predictive models and legislatively mandated data submissions.

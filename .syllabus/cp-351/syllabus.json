@@ -1,0 +1,402 @@
+{
+  "wiki_id": "cp-351",
+  "body": "SOA",
+  "title": "CP 351 – Asset Liability Management",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf",
+  "source_sha256": "1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Objectives of Asset Liability Management",
+      "weight_raw": "5%-20%",
+      "weight": [
+        5,
+        20
+      ],
+      "objective": "The candidate will understand the objectives of Asset Liability Management (ALM).",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain the principles of Asset Liability Management",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the lessons learned from ALM failures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate an understanding of various ALM risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe how different pension and insurance contracts generate embedded options",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP351-100-26: IAA Risk Book - Asset Liability Management",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "CP351-101-25: ALM for Life, Annuities, and Pensions (sections 1-2)",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "CP351-102-25: Case Study on General American Life Insurance Company",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, P., 2nd Edition, 2017",
+          "codes": "1b",
+          "parts": [
+            {
+              "text": "Ch. 20: Case Studies (sections 1, 2, 4 & 6)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "What Can Insurers and Pension Funds Learn from Bank Failures",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "CP351-115-26: IAA Risk Book - ERM Insights from Failures and Near Failures (sections 3.2, 3.3, 3.4 & 3.10 only)",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, P., 2nd Edition, 2017",
+          "codes": "1c",
+          "parts": [
+            {
+              "text": "Ch. 8: Risk Identification",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "1c",
+          "parts": [
+            {
+              "text": "Ch. 2: Risk Taxonomy",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP351-104-25: Life Insurance Risk, Capital, and ALM in the Age of Uncertainty - Paper 1",
+          "codes": "1c",
+          "parts": [
+            {
+              "text": "Risk Inventory, Taxonomy, Calibration",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP351-101-25: ALM for Life, Annuities, and Pensions (section 3)",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "CP351-105-25: Chapter 16 of Asset/Liability Management of Financial Institutions, Tilman 2003",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "CP351-106-25: Liability Driven Investment Explained Chapters 1-2",
+          "codes": "1d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Measuring Risks from Assets and Liabilities",
+      "weight_raw": "25%-45%",
+      "weight": [
+        25,
+        45
+      ],
+      "objective": "The candidate will understand how to measure risks from assets and liabilities.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Demonstrate an understanding of various risk identification tools",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate a company’s or a portfolio’s exposures to various risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand measures of regulatory capital adequacy for life insurance companies in various jurisdictions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate the difficulties of investing for long-tail liabilities (i.e. beyond 30 years) such as inflation and longevity",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP351-101-25: ALM for Life, Annuities, and Pensions (section 4)",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP351-107-25: Key Rate Durations: Measures of Interest Rate Risk",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "Fixed Income Securities: Tools for Today’s Markets, Tuckman, Bruce and Serrat, Angel, 4th Edition, 2022",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Ch. 4: DV01, Duration, and Convexity",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 5: Key-Rate, Partial, and Forward-Bucket ‘01s and Durations",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Understanding the Connection Between Real-World and Risk-Neutral Generators, SOA Research, Aug 2022, sections 1-5",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Companion Excel-based Tool",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP351-108-25: Life Insurance Risk, Capital, and Asset-Liability Management in the Age of Uncertainty - Paper 2 – Risk Models and Monitoring, and Management Implications",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Liquidity Risk, AAA, Feb 2024 (excluding Appendix I)",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "2b",
+          "parts": [
+            {
+              "text": "Ch. 8: Market Risk Models",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Fixed Income Securities: Tools for Today’s Markets, Tuckman, Bruce and Serrat, Angel, 4th Edition, 2022",
+          "codes": "2b",
+          "parts": [
+            {
+              "text": "Ch. 6: Regression Hedging and Principal Component Analysis",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Regulatory Capital Adequacy for Life Insurance Companies, SOA Research, Jul 2023",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "CP351-110-25: New Frontiers: Backing Long-term Insurance Liabilities with Non-fixed-income Assets",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "CP351-101-25: ALM for Life, Annuities, and Pensions (section 6)",
+          "codes": "2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Tools and Strategies to Manage ALM Risks",
+      "weight_raw": "40%-60%",
+      "weight": [
+        40,
+        60
+      ],
+      "objective": "The candidate will understand tools and strategies to manage ALM risks.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Develop and critique asset allocation strategies appropriate to underlying liability profiles such as pension plans and long-tail insurance liabilities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate an understanding of and apply tools and techniques for measuring and managing interest rate risk in an ALM context",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply stress testing and scenario analysis to assess extreme ALM events",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand and evaluate model and parameter risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Explain and implement techniques used to mitigate market risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Understand interest rate derivatives and use them to mitigate interest rate risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Explain different methods available for transferring risk",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP351-101-25: ALM for Life, Annuities, and Pensions (section 5)",
+          "codes": "3a, 3e, 3f",
+          "parts": []
+        },
+        {
+          "citation": "CP351-106-25: Liability Driven Investment Explained, Ch. 3-7",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Handbook of Asset and Liability Management, Volume 2, Zenios, Stavros, and Ziemba, William, 2007",
+          "codes": "3b",
+          "parts": [
+            {
+              "text": "Ch. 13: Stochastic Programming Models for Strategic and Tactical Asset Allocation - A Study from Norwegian Life Insurance",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3b",
+          "parts": [
+            {
+              "text": "Ch. 6: Copulas",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP351-112-25: The Devil is in the Tails: Actuarial Mathematics and the Subprime Mortgage Crisis",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "CP351-113-25: Chapter 4 of ALM for Banks and Insurance Companies, Habart (excluding 4.3.6)",
+          "codes": "3b, 3c, 3d",
+          "parts": []
+        },
+        {
+          "citation": "Handbook of Asset and Liability Management, Volume 2, Zenios, Stavros, and Ziemba, William, 2007",
+          "codes": "3b",
+          "parts": [
+            {
+              "text": "Ch. 18: A Scenario Approach to ALM",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3c",
+          "parts": [
+            {
+              "text": "Ch. 7: Stress Testing",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 14: Model Risk and Governance",
+              "codes": "3d"
+            },
+            {
+              "text": "Ch. 15: Risk mitigation using options and derivatives",
+              "codes": "3e"
+            }
+          ]
+        },
+        {
+          "citation": "Fixed Income Securities, Veronesi, P., 2010",
+          "codes": "3f",
+          "parts": [
+            {
+              "text": "Ch. 5: Forwards and Swaps",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 6: Futures and Options",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3g",
+          "parts": [
+            {
+              "text": "Ch. 16: Risk Transfer",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

@@ -1,0 +1,668 @@
+{
+  "wiki_id": "cfe-101",
+  "body": "SOA",
+  "title": "CFE 101 – Enterprise Risk Management",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf",
+  "source_sha256": "a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Enterprise Risk Management Foundations",
+      "weight_raw": "24-40%",
+      "weight": [
+        24,
+        40
+      ],
+      "objective": "The candidate will understand the foundations of ERM and be able to apply them to organizations.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the concept of ERM, the drivers behind it and the resulting value to organizations",
+          "bullets": [],
+          "group": "1. Fundamentals of ERM"
+        },
+        {
+          "letter": "a",
+          "text": "Recommend an appropriate enterprise risk management framework for an organization",
+          "bullets": [],
+          "group": "2. The Internal Environment"
+        },
+        {
+          "letter": "b",
+          "text": "Analyze the ERM roles and responsibilities of the people within an organization and how the different groups can collaborate effectively",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate an understanding of governance issues, such as agency, compliance and legal risks and the need for audit and market conduct compliance activities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate the elements and structure of a successful risk management function",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "a",
+          "text": "Examine the impact of the external environment on an organization’s ability to achieve its objectives",
+          "bullets": [],
+          "group": "3. The External Environment"
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Introduction to CFE 101",
+          "codes": "Background",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-100-25: Placing a Value on Enterprise Risk",
+          "codes": "1.1a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-101-25: IAA Note on ERM for Capital and Solvency Purposes in the Insurance Industry, section 1.5, 2, 3 & 5",
+          "codes": "1.1a, 1.2a, 1.2b, 1.2d, 1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-102-25: Leveraging COSO Across the Three Lines of Defenses",
+          "codes": "1.2a-1.2d, 1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-103-25: ORSA and the Regulator",
+          "codes": "1.2a, 1.2d, 1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-122-26: The Changing Nature of Conduct Risk (slides 1-10)",
+          "codes": "1.2c",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-105-25: Agency Theory and Asymmetric Information",
+          "codes": "1.2c",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, Paul, 2nd Edition, 2017",
+          "codes": "1.3a",
+          "parts": [
+            {
+              "text": "Ch. 14: Quantifying Particular Risks",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CFE101-123-26: The Complete Guide to Strategic Risk Management",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CIA Practice Resource Document: Risk Appetite, Nov 2021",
+          "codes": "1.1a, 1.2a, 1.2b, 1.2d",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-124-26: Design, Calibration & Reporting of Effective Key Risk Indicators",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices)",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, Paul, 2nd Edition, 2017",
+          "codes": "1.3a",
+          "parts": [
+            {
+              "text": "Ch. 8: Risk Identification",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "1.3a",
+          "parts": [
+            {
+              "text": "Ch. 13: Liquidity Risk",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Regulatory Risk and North American Insurance Organizations, sections 6.1-6.14 & 7",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-108-25: Managing Environmental, Social and Governance Risks in Life & Health Insurance Business",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-125-26: How to Strategize in an Out-of-Control World",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-110-25: IAA Paper: Importance of Climate-Related Risks for Actuaries, pp. 2-14",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-126-26: Cyber Risk Management: Theories, Frameworks, Models, and Practices (excluding tables 5 & 6)",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-127-26: Artificial Intelligence Risk & Governance",
+          "codes": "1.2c",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "1.2c",
+          "parts": [
+            {
+              "text": "Ch. 2 Risk Taxonomy",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CFE101-111-25: IAA Risk Book, Appropriate Applications of Stress and Scenario Testing",
+          "codes": "1.3a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-112-25: Internal Controls Toolkit, Doxey, Ch. 1, pp. 11-17 & 27-35",
+          "codes": "1.2c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Risk Analysis and Evaluation",
+      "weight_raw": "23% - 39%",
+      "weight": [
+        23,
+        39
+      ],
+      "objective": "The candidate will understand the types of risks faced by an entity and be able to identify and assess these risks.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify specific risks faced by an organization",
+          "bullets": [],
+          "group": "1. Risk Identification"
+        },
+        {
+          "letter": "b",
+          "text": "Detect emerging risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Determine an appropriate monitoring mechanism for emerging risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "a",
+          "text": "Determine the implication of risks on the balance sheet and income statement",
+          "bullets": [],
+          "group": "2. Risk Assessment"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the properties and limitations of common risk measures (e.g., VaR and TVaR)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate risk aggregation techniques that illustrate the concept of risk diversification",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Demonstrate the use of scenario analysis and stress testing in the measurement of risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Demonstrate the use of techniques to assess risk accumulations and compounding risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Demonstrate an understanding of model risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Propose an appropriate modelling technique that meets organizational needs to analyze risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Analyze risks that are not easily quantifiable, such as operational, environmental and contagion-related risks",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CFE101-103-25: ORSA and the Regulator",
+          "codes": "2.1a, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-122-26: The Changing Nature of Conduct Risk (slides 1-10)",
+          "codes": "2.1a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-123-26: The Complete Guide to Strategic Risk Management",
+          "codes": "2.1a, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CIA Practice Resource Document: Risk Appetite, Nov 2021",
+          "codes": "2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-124-26: Design, Calibration & Reporting of Key Risk Indicators",
+          "codes": "2.1c, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices)",
+          "codes": "2.2c",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, Paul, 2nd Edition, 2017",
+          "codes": "2.1a, 2.1b",
+          "parts": [
+            {
+              "text": "Ch. 8: Risk Identification",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "2.1a, 2.2h",
+          "parts": [
+            {
+              "text": "Ch. 13: Liquidity Risk",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Regulatory Risk and North American Insurance Organizations, sections 6.1-6.14 & 7",
+          "codes": "2.1a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-108-25: Managing Environmental, Social and Governance Risks in Life & Health Insurance Business",
+          "codes": "2.1a, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-125-26: How to Strategize in an Out-of-Control World",
+          "codes": "2.1a, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-110-25: IAA Paper: Importance of Climate-Related Risks for Actuaries, pp. 2-14",
+          "codes": "2.1a, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-126-26: Cyber Risk Management: Theories, Frameworks, Models, and Practice (excluding tables 5 & 6)",
+          "codes": "2.1a, 2.1b, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-127-26: Artificial Intelligence Risk and Governance",
+          "codes": "2.1a -2.1c, 2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-113-25: Identifying and Evaluating Emerging Risks",
+          "codes": "2.1a -2.1c",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 2 Risk Taxonomy",
+              "codes": "2.1a"
+            },
+            {
+              "text": "Ch. 14: Model Risk and Governance",
+              "codes": "2.1a, 2.2f, 2.2g"
+            },
+            {
+              "text": "Ch. 3: Risk Measures",
+              "codes": "2.2b"
+            }
+          ]
+        },
+        {
+          "citation": "CFE101-111-25: IAA Risk Book, Appropriate Applications of Stress and Scenario Testing",
+          "codes": "2.2d",
+          "parts": []
+        },
+        {
+          "citation": "A New Approach for Managing Operational Risk, Ch. 8",
+          "codes": "2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-114-25: Measurement and Modeling of Dependencies in Economic Capital, Ch. 4 & 7",
+          "codes": "2.2c, 2.2e, 2.2g",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-115-25: How CEOs Can Mitigate Compounding Risks",
+          "codes": "2.2e",
+          "parts": []
+        },
+        {
+          "citation": "Reviewing Systemic Risk within the Insurance Industry, SOA, Feb 2017 (excluding pp. 27-29)",
+          "codes": "2.2h",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-116-25: Western Australian Public Sector Financial Statements – Better Practice Guide - Tool 1 Example: Risk Analysis for Financial Statements",
+          "codes": "2.2a",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-117-26: Economic Capital Modeling-Practical Considerations",
+          "codes": "2.2b, 2.2c, 2.2g",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "2.2g",
+          "parts": [
+            {
+              "text": "Ch. 10: Economic Scenario Generators",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research, 2025 (excluding Appendices)",
+          "codes": "2.2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Embedding ERM into Decision-Making",
+      "weight_raw": "28% - 46%",
+      "weight": [
+        28,
+        46
+      ],
+      "objective": "The candidate will understand how an organization can articulate its approach to risk and how to assess risk and return trade-offs. The candidate will understand the approaches for managing risk. The candidate will understand different concepts of risk capital, risk measures in capital assessment and techniques to allocate risk capital once aggregated.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe how an organization can articulate its approach to risk using risk appetite and risk limits",
+          "bullets": [],
+          "group": "1. Making Decisions"
+        },
+        {
+          "letter": "b",
+          "text": "Assess the risk and return trade-offs for decisions (e.g. those targeting changes in the organization’s risk profiles)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "a",
+          "text": "Demonstrate application of the following responses to risk, including consideration of their costs and benefits: avoidance, acceptance, reduction without transfer, and transfer to a third party",
+          "bullets": [],
+          "group": "2. Responding to Risks"
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate the use of controls in an organizational process",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate how derivatives or similar methods may be used to manage or reduce risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Demonstrate how reinsurance or similar methods may be used to manage or reduce risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Analyze how ALM and similar risk strategies can be used to manage or reduce risk in an organization",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Demonstrate possible techniques for managing non-financial risks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "a",
+          "text": "Explain how to develop a capital model for a hypothetical organization",
+          "bullets": [],
+          "group": "3. Risk Capital"
+        },
+        {
+          "letter": "b",
+          "text": "Demonstrate a conceptual understanding of economic measures of value and capital requirements (e.g., EVA, embedded value, economic capital, regulatory measures, and accounting measures) and their uses in decision-making processes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply risk measures (such as VaR and TVaR) and demonstrate how to use them in value and capital assessment",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Demonstrate the use of techniques to allocate risk once aggregated",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Propose techniques of attributing the “cost” of risk/capital strategies to business units in order to gauge performance (e.g. returns on marginal capital)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CFE101-103-25: ORSA and the Regulator",
+          "codes": "3.1a, 3.3b, 3.3c",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-123-26: The Complete Guide to Strategic Risk Management",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CIA Practice Resource Document: Risk Appetite, Nov 2021",
+          "codes": "3.1a, 3.1b, 3.3c",
+          "parts": []
+        },
+        {
+          "citation": "Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices)",
+          "codes": "3.3b",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3.1a",
+          "parts": [
+            {
+              "text": "Ch. 13: Liquidity Risk",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Regulatory Risk and North American Insurance Organizations, sections 6.1-6.14 & 7",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-125-26: How to Strategize in an Out-of-Control World",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-110-25: IAA Paper: Importance of Climate-Related Risks for Actuaries, pp. 2-14",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-126-26: Cyber Risk Management: Theories, Frameworks, Models, and Practices (excluding tables 5 & 6)",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-127-26: Artificial Intelligence Risk & Governance",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3.3c",
+          "parts": [
+            {
+              "text": "Ch. 3: Risk Measures",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "A New Approach for Managing Operational Risk, SOA, Jul 2010 (section 8)",
+          "codes": "3.2f",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-114-25: Measurement and Modeling of Dependencies in Economic Capital, Ch. 4",
+          "codes": "3.3a, 3.3b",
+          "parts": []
+        },
+        {
+          "citation": "Financial Enterprise Risk Management, Sweeting, Paul, 2nd Edition, 2017",
+          "codes": "3.1b, 3.2a, 3.2c",
+          "parts": [
+            {
+              "text": "Ch. 16: Responses to Risk",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CFE101-112-25: Internal Controls Toolkit, Doxey, Ch. 1, pp. 11-17 & 27-35",
+          "codes": "3.2b, 3.2f",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3.2a, 3.2c",
+          "parts": [
+            {
+              "text": "Ch. 15: Risk Mitigation Using Options and Derivatives",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CFE101-118-25: What is Basis Risk? Definition and Types of Basis Risk, Examples",
+          "codes": "3.2c",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-119-25: IAA Risk Book, Reinsurance",
+          "codes": "3.2a, 3.2d",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-120-25: IAA Risk Book, Asset Liability Management",
+          "codes": "3.2e",
+          "parts": []
+        },
+        {
+          "citation": "CFE101-117-26: Economic Capital Modeling-Practical Considerations",
+          "codes": "3.3a-3.3c",
+          "parts": []
+        },
+        {
+          "citation": "Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research, 2025 (excluding Appendices)",
+          "codes": "3.3b, 3.3c",
+          "parts": []
+        },
+        {
+          "citation": "Corporate Pension Risk Management and Corporate Finance: Bridging the Gap between Theory and Practice in Pension Risk Management, SOA Pension Section Risk Committee, Aug 2015 (Introduction, sections 1 & 2)",
+          "codes": "3.3b, 3.3c",
+          "parts": []
+        },
+        {
+          "citation": "Embedded Value Calculation for a Life Insurance Company, Actuarial Practice Forum, 2006",
+          "codes": "3.3b",
+          "parts": []
+        },
+        {
+          "citation": "Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022",
+          "codes": "3.3b-3.3e",
+          "parts": [
+            {
+              "text": "Ch. 18: Risk-Adjusted Measures of Profit and Capital Allocation (excluding section 18.6) (Note: The candidate will not be responsible for demonstrating whether or how the fair allocation criteria are met for any of the capital allocation methods in section 18.4.)",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

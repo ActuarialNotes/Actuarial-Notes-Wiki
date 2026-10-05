@@ -1,0 +1,356 @@
+{
+  "wiki_id": "cp-312",
+  "body": "SOA",
+  "title": "CP 312 – Model Development and Governance",
+  "sitting": "Nov 2026/Mar 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf",
+  "source_sha256": "7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Cash Flow Models for Long-Term Insurance Business",
+      "weight_raw": "35%-50%",
+      "weight": [
+        35,
+        50
+      ],
+      "objective": "The candidate will understand, develop, apply, and evaluate cash flow models for various types of long-term insurance business. The candidate will demonstrate an understanding of underlying modeling methodologies: their strengths, limitations, and applications.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Models and their outputs for insurance products including those with complex components such as:",
+          "bullets": [
+            "dynamic policyholder assumptions",
+            "multi-states",
+            "equity-linked guarantees",
+            "index-linked credits"
+          ],
+          "group": "The Candidate will be able to describe, develop, apply, and evaluate:"
+        },
+        {
+          "letter": "b",
+          "text": "Nested models and their outputs",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Model validation techniques",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Model efficiency techniques",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Model Risk, SOA, 2024",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Model Risk Companion Notes",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP312-100-25: Chapter 3 of Modelling in Life Insurance - A Management Perspective, Laurent, Jean-Paul, Norberg, Ragnar, Planchet, Frederic, 2016",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Long-Term Actuarial Models Part II, Cardinal, Timothy, Cardinalis 1 LLC, 2024",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Ch. 1: Introduction to Modeling (excluding search online exercises in section 1.5)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP312-101-25: Stochastic Modeling, Theory and Reality from an Actuarial Perspective, sections I.A, I.B-1.B.3.a, I.B.4, and III",
+          "codes": "1a, 1d",
+          "parts": []
+        },
+        {
+          "citation": "Long-Term Actuarial Models Part II, Cardinal, Timothy, Cardinalis 1 LLC, 2024",
+          "codes": "1a, 1b",
+          "parts": [
+            {
+              "text": "Ch. 3: Principle-Based Projections and Nested Methods: (Sections 3.1 to 3.2), including workbooks",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Predictive Analytics and Machine Learning - Practical Applications for Actuarial Modeling (Nested Stochastic), SOA Research Institute, May 2023, Sections 1.2-1.3, 3-6",
+          "codes": "1b-1d",
+          "parts": []
+        },
+        {
+          "citation": "Considerations Regarding Dynamic Lapses in Actuarial Modeling, American Academy of Actuaries, Dec 2023",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Long-Term Actuarial Models Part II, Cardinal, Timothy, Cardinalis 1 LLC, 2024",
+          "codes": "1a, 1b",
+          "parts": [
+            {
+              "text": "Ch. 6: Secondary Guarantee Universal Life, including workbooks",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 9 Fixed and Fixed Indexed Annuities, including workbooks",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 11: Long Term Health Products (Sections 11.1 - 11.5), including IDI workbooks",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP312-102-25: Heavy Models, Light Models and Proxy Models, Chapters 1-5",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "Metamodeling for Variable Annuities, Valdez, Emiliano and Gan, Guojun",
+          "codes": "1d",
+          "parts": [
+            {
+              "text": "Chapters 1-3, 6",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Other types of Models for Financial Business",
+      "weight_raw": "30%-45%",
+      "weight": [
+        30,
+        45
+      ],
+      "objective": "The candidate will understand, apply, and evaluate other types of models for various types of financial business. The candidate will demonstrate an understanding of underlying methodologies: their strengths, limitations, and applications.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe, apply, and assess types of models such as the following and evaluate the appropriateness of their usage:",
+          "bullets": [
+            "Economic Scenario Generators (ESGs)",
+            "Market Risk Models",
+            "Other statistical models"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, apply, and evaluate model validation techniques",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe, apply, and evaluate model efficiency techniques",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Video: Model Risk, SOA, 2024",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Model Risk Companion Notes",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8",
+          "codes": "",
+          "parts": []
+        },
+        {
+          "citation": "Economic Scenario Generators – three-part series, SOA:",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Part I –Motivation for Stochastic Modeling, The Modeling Platform, Nov 2019",
+              "codes": "2a"
+            },
+            {
+              "text": "Part II – Understanding Economic Scenario Generators, The Modeling Platform, Aug 2020",
+              "codes": "2a"
+            },
+            {
+              "text": "Part III – In-depth ESG Case Study – Academy Interest Rate Generator, The Modeling Platform, Jul 2021",
+              "codes": "2a"
+            }
+          ]
+        },
+        {
+          "citation": "CP312-112-26: Here it “GOES” Again: Reviewing the NAIC’s Second Industry Field Test of the Generator of Economic Scenarios",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP312-103-25: Chapter 8 of Quantitative Enterprise Risk Management, Hardy, Mary and Saunders, David, 2022 (8.1-8.6)",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP312-104-25: Chapter 7 of Derivatives Theory and Practice, Witzany, 2020",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP312-105-25: Chapter 9 of Asset/Liability Management of Financial Institutions, Tilman, 2003",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP312-101-25: Stochastic Modeling, Theory and Reality from an Actuarial Perspective, sections I.A, I.B-B.2, I.B.3.a, II.B-B.1.d",
+          "codes": "2a, 2c",
+          "parts": []
+        },
+        {
+          "citation": "CP312-106-25: Catastrophe Modelling: Guidance for Non-Catastrophe Modelers",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "CP312-113-26: Importance of Climate-Related Risks for Actuaries",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "A Primer on Generative AI for Actuaries, Feb 2024 (Sections 1- 5)",
+          "codes": "2a, 2b, 2c",
+          "parts": []
+        },
+        {
+          "citation": "Predictive Analytics and Machine Learning - Practical Applications for Actuarial Modeling (Nested Stochastic), SOA Research Institute, May 2023, Sections 3, 5 & 6 (Sections 1.2-1.3 background only)",
+          "codes": "2a, 2c",
+          "parts": []
+        },
+        {
+          "citation": "CP312-114-26: Rise of the Machines: Application of Machine Learning to Mortgage Pre-Payment Modeling",
+          "codes": "2a, 2b",
+          "parts": []
+        },
+        {
+          "citation": "CP312-107-25: A Financially Justifiable and Practically Implementable Approach to Coherent Stress Testing",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "CP312-109-25: Chapter 7 (Sec. 7.2 only) of Modelling in Life Insurance - A Management Perspective, Laurent, Norbert, Planchet editors",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "CP312-102-25: Heavy Models, Light Models and Proxy Models, Ch. 1-5",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "Metamodeling for Variable Annuities, Valdez, Emiliano and Gan, Guojun",
+          "codes": "2c",
+          "parts": [
+            {
+              "text": "Chapters 1-3, 6",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Model Governance",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand and be able to apply appropriate model governance to assess and address issues common to the development and management of models.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and apply model governance best practices such as:",
+          "bullets": [
+            "Determining fit for purpose",
+            "Model design and development",
+            "Model risk management",
+            "Model validation",
+            "Model maintenance and change management",
+            "Model and model governance documentation and disclosures"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, compare and evaluate organizational structures for model governance, including controls, roles, and responsibilities",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ASOP 56: Modeling, Dec 2019, pp. 1-9",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: Use of Models, Jan 2017",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "CP312-115-26: Guideline E23 – Model Risk Management",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "Model Validation for Insurance Enterprise Risk and Capital Models, CAS/CIA/SOA, Apr 2014 (excluding Appendices)",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Adding Value with Model Validation, The Modeling Platform, Nov 2017",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "CP312-111-25: Machine Decisions: Governance of AI and Big Data Analytics",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "The Importance of Centralization of Actuarial Modeling Functions, Part 1: Focus on Modularization and Reuse, The Modeling Platform, Nov 2019",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "The Importance of Centralization of Actuarial Modeling Functions, Part 2: DevOps – The Path to Actuarial Modernization and Consolidation, The Modeling Platform, Apr 2020, pp. 6-9",
+          "codes": "3a, 3b",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

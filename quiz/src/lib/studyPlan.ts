@@ -170,10 +170,10 @@ export function saveCachedStudyPlan(plan: StudyPlan): void {
 // ── Plan generation ───────────────────────────────────────────────────────────
 
 function parseTopicWeight(weight: string): number {
-  const rangeMatch = weight.match(/(\d+)\s*[-–]\s*(\d+)%/)
-  if (rangeMatch) return (parseInt(rangeMatch[1]) + parseInt(rangeMatch[2])) / 2
-  const singleMatch = weight.match(/(\d+)%/)
-  if (singleMatch) return parseInt(singleMatch[1])
+  const rangeMatch = weight.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)%/)
+  if (rangeMatch) return (parseFloat(rangeMatch[1]) + parseFloat(rangeMatch[2])) / 2
+  const singleMatch = weight.match(/(\d+(?:\.\d+)?)%/)
+  if (singleMatch) return parseFloat(singleMatch[1])
   return 1
 }
 

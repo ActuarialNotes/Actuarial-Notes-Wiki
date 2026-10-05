@@ -1,0 +1,453 @@
+{
+  "wiki_id": "cp-341",
+  "body": "SOA",
+  "title": "CP 341 – Advanced Life Reinsurance",
+  "sitting": "Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf",
+  "source_sha256": "a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Types of Reinsurance Arrangements and Methods",
+      "weight_raw": "30%-40%",
+      "weight": [
+        30,
+        40
+      ],
+      "objective": "The candidate will understand different types of traditional and advanced reinsurance transactions for life insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe basic terms and concepts related to reinsurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the key aspects of automatic and facultative reinsurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain various methods and perform financial statement calculations of reinsurance transactions, including yearly renewable term, coinsurance, modified coinsurance, and funds withheld arrangements",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain reasons for using inforce reinsurance, approaches used for inforce reinsurance, and advantages and disadvantages of each approach",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Demonstrate knowledge of different forms of reinsurance for different products; specifically, PRTs/longevity swaps, annuity coinsurance, and life insurance yearly renewable term",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Describe and evaluate types of non-proportional reinsurance transactions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Describe and evaluate types of reinsurance transactions for annuity contracts",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Understand the role of private equity involvement in the global reinsurance market and the use of offshore reinsurance",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP341-100-25: The Essential Guide to Reinsurance (background only)",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 1: Basic Terms and Concepts",
+              "codes": "1a"
+            },
+            {
+              "text": "Ch. 2: Automatic Reinsurance",
+              "codes": "1b, 1c"
+            },
+            {
+              "text": "Ch. 3: Facultative Reinsurance",
+              "codes": "1b, 1c"
+            },
+            {
+              "text": "Ch. 4: Basic Methods of Reinsurance",
+              "codes": "1b, 1c"
+            },
+            {
+              "text": "Ch. 5: Advanced Methods of Structures of Reinsurance",
+              "codes": "1b, 1c"
+            }
+          ]
+        },
+        {
+          "citation": "Pension Risk Transfer in Canada and the U.S., SOA Research Institute, Feb 2022",
+          "codes": "1d-1g",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "1d-1g",
+          "parts": [
+            {
+              "text": "Ch. 7: Reinsurance of Inforce Risks",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 17: Nonproportional Reinsurance",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 19: Annuity Reinsurance",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP341-101-25: Capital Markets Bureau Primer - Private Equity",
+          "codes": "1h",
+          "parts": []
+        },
+        {
+          "citation": "CP341-102-25: Number of Private Equity-Owned U.S. Insurers Remains Constant, But Total Investments Increase by Double Digits in 2023, NAIC Capital Markets Special Report",
+          "codes": "1h",
+          "parts": []
+        },
+        {
+          "citation": "CP341-103-25: The Rising Tide of Offshore Life Reinsurance Raises Yellow Caution Flag",
+          "codes": "1h",
+          "parts": []
+        },
+        {
+          "citation": "CP341-104-25: Private Equity and Life Insurers",
+          "codes": "1h",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Transferring Risk",
+      "weight_raw": "20%-35%",
+      "weight": [
+        20,
+        35
+      ],
+      "objective": "The candidate will understand the fundamentals of risk transfer between two counterparties.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the elements within reinsurance treaties",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the elements and considerations of risk transfer between counterparties, and evaluate their impact on reinsurance agreement provisions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain the considerations and process of managing insolvency of the ceding and assuming parties within a reinsurance transaction",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain the types, uses, and functions of captive reinsurance transactions",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Ch. 8: The Reinsurance Treaty",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Life Reinsurance Treaty Recapture Provisions, SOA, Jun 2020",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "2b",
+          "parts": [
+            {
+              "text": "Ch. 9: Risk Transfer Considerations",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Risk Transfer Practice Note, AAA November 2022",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "CP341-105-25: Lapse Risk and Capital Management Strategies: Back in the Spotlight, pp. 8-12",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "2c, 2d",
+          "parts": [
+            {
+              "text": "Ch. 10: Insolvency and Reinsurance",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 20: Captives",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP341-106-25: Life and Annuity Reinsurance Sidecars: From Sidebar to Headline Topic",
+          "codes": "2c, 2d",
+          "parts": []
+        },
+        {
+          "citation": "The Impact of BEAT on US Foreign Affiliated Reinsurance, Taxing Times, Dec 2020",
+          "codes": "2c, 2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Key Accounting and Regulatory Considerations",
+      "weight_raw": "25%-40%",
+      "weight": [
+        25,
+        40
+      ],
+      "objective": "The candidate will understand regulatory frameworks for reinsurance transactions across US, Canadian, and global jurisdictions.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and evaluate elements of reinsurance requirements within the US regulatory framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and evaluate elements of reinsurance requirements within the Canadian regulatory framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand US GAAP and US Stat requirements related to reinsurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand IFRS and OSFI requirements related to reinsurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand key international reinsurance regulatory frameworks, especially as they relate to the use of offshore reinsurance and private equity backed reinsurers.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 11: U. S. Regulation of Reinsurance",
+              "codes": "3a"
+            },
+            {
+              "text": "Ch. 12: Canadian Regulation of Reinsurance",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 13: U.S. Statutory Accounting",
+              "codes": "3c"
+            },
+            {
+              "text": "Ch. 14: U.S. GAAP Accounting",
+              "codes": "3c"
+            },
+            {
+              "text": "Ch. 15: U.S. Tax Considerations",
+              "codes": "3c"
+            }
+          ]
+        },
+        {
+          "citation": "CP341-107-25: NAIC Model Laws: Credit for Reinsurance Model Law",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "Impacts of AG48, Reinsurance News, November 2015",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CP341-109-25: Guide to Reciprocal Jurisdiction, Certified and Authorized Reinsurers, pp. 3-4 only",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CP341-110-25: LICAT Guideline 2025, Chapter 10: Credit for Reinsurance",
+          "codes": "3d",
+          "parts": []
+        },
+        {
+          "citation": "CP341-111-25: OSFI Guideline B3, Sound Reinsurance Practices and Procedures",
+          "codes": "3d",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "3d",
+          "parts": [
+            {
+              "text": "Ch. 16: Canadian Accounting and Tax Considerations",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP341-112-25: IFRS 17 Pocket Guide on Reinsurance Contracts Held",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "Fully Reinsured Business: Are the Financial Implications Neutralized, or Not?, The Financial Reporter, Nov 2024",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "CP341-113-25: Supervision and Regulation of PE Insurers in Bermuda",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "CP341-114-25: The Bermuda Monetary Authority’s Approach to Private Equity-Owned (Re)insurers",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "CP341-115-25: Solvency II Equivalence FAQs",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "Asset-Intensive Reinsurance Ceded Offshore from U.S. Life Insurers (With Focus on Bermuda), AAA, Feb 2024",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "CP341-108-25: The Heat is on for US Asset-Intensive Reinsurance Regulations",
+          "codes": "3e",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Reinsurance Administration and Management",
+      "weight_raw": "0%-10%",
+      "weight": [
+        0,
+        10
+      ],
+      "objective": "The candidate will understand and be able to explain practices for administering and managing reinsurance arrangements.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe features and considerations related to reinsurance administration",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and evaluate concepts related to the management of reinsurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the concept of reinsurance counterparty credit risk and evaluate methods to reduce such risks.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "4a",
+          "parts": [
+            {
+              "text": "Ch. 23: Reinsurance Administration",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP341-116-25: Modernizing Reinsurance Administration",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015",
+          "codes": "4b",
+          "parts": [
+            {
+              "text": "Ch. 24: Managing Reinsurance",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP341-117-25: Collateral Structures in the Bermuda Long-term Insurance Market",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "CP341-118-25: Management of Collateralised Reinsurance",
+          "codes": "4c",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

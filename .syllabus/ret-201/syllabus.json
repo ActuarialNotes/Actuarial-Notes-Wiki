@@ -1,0 +1,495 @@
+{
+  "wiki_id": "ret-201",
+  "body": "SOA",
+  "title": "RET 201 – Retirement Plan Valuation",
+  "sitting": "Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf",
+  "source_sha256": "794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Methods",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will understand how to apply/synthesize the methods and models used to value pension benefits for various purposes.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Differentiate between the various purposes for valuing pension plans",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Perform periodic valuations of ongoing plans, calculating normal cost and actuarial accrued liability, using a variety of cost methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Analyze and communicate the pattern of cost recognition that arises under a variety of cost methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Analyze and communicate the impact on cost stability of a variety of asset valuation methods",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "RET201-100-25: Chapter 15 (Sections 1500 through 1515) of Canadian Pensions and Retirement Income Planning (remaining material is background only; legislative requirements will not be tested)",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "Morneau Shepell Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Ch. 6: Financial Management of Pension Plans",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ASOP 4: Measuring Pension Obligations and Determining Pension Plan Costs or Contributions",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Pension Mathematics for Actuaries, Anderson, Arthur W., 3rd Edition, 2006",
+          "codes": "1b, 1c",
+          "parts": [
+            {
+              "text": "Ch. 1: Introduction",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 2: Actuarial Cost Methods",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 3: Contributory Plans",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Ancillary Benefits",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Cost Methods in Current Actuarial Practice",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Asset Valuation Methods under ERISA, Pension Forum, Sep 2002, Ch. 1, 3, 4 & 5 (regulations background only)",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "Educational Note: Guidance on Asset Valuation Methods, CIA, Feb 2024",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "Survey of Asset Valuation Methods for Defined Benefit Pension Plans, SOA, pp. 5-6 only",
+          "codes": "1d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-102-25: Pension Funding Exercises (background only)",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-101-25: A Problem-Solving Approach to Pension Funding and Valuations, 2nd Ed., Ch. 5 (background only)",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-103-25: Actuarial Equivalence Calculations (excluding Sections 3.4 & 5)",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Embedded Options in Pension Plans: Valuation of Guarantees in Cash Balance Plans, SOA, Jan 2014, sections 1, 2, 3, 4, 6, 7 & Appendix II",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "e-Learning Module: Pension Projection (background only)",
+          "codes": "1a, 1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Actuarial Assumptions",
+      "weight_raw": "15%-25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in pension valuations Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate appropriateness of current assumptions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and explain the different perspectives on the selection and development of assumptions, including financial economics",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recommend appropriate assumptions and defend the selection",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate actual experience, including comparisons to assumptions",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Selecting and Documenting Pension Assumptions Other Than Discount Rate and Investment Return, AAA, Jun 2025",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Educational Note – Second Revision: Selection of Mortality Assumptions for Pension Plan Actuarial Valuations, CIA, Dec 2017",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Forecasting Investment Returns and Expected Return Assumptions for Pension Actuaries, AAA, Feb 2019",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Duration and Convexity for Pension Liabilities, Pension Section News, Sep 2013",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Selecting Investment Return Assumptions: Considerations When Using Arithmetic and Geometric Averages, AAA, Jul 2019",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Pension Actuary’s Guide to Financial Economics and Pension Arbitrage Example, SOA/AAA, 2006",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-104-25: Use of Financial Economics in Pension Actuarial and Investment Practice",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Credibility Educational Resource for Pension Actuaries, SOA, Aug 2017",
+          "codes": "2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Accounting Standards",
+      "weight_raw": "35%-45%",
+      "weight": [
+        35,
+        45
+      ],
+      "objective": "The candidate will understand how to perform valuations and prepare disclosure information for retirement income plans under applicable accounting standards.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Perform calculations in accordance with applicable accounting standards, including:",
+          "bullets": [
+            "Annual accounting valuations",
+            "Plan curtailment and termination/windup",
+            "Plan mergers, acquisitions and spinoffs"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Advise plan sponsors on common accounting methods, costs and disclosures for retirement plans under various standards and interpretations",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate the sensitivity of financial measures to given changes in plan design",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Perform and interpret the results of projections for short-term planning including the effect of proposed plan changes",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ASOP 4: Measuring Pension Obligations and Determining Pension Plan Costs or Contributions",
+          "codes": "3a-3d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-105-25: IFRS and US GAAP: Similarities and Differences, Ch. 5 only",
+          "codes": "3a-3d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-107-25: Introduction (A58), IFRS1 (paragraphs 1-40 & Appendix A), IAS19, IFRIC14",
+          "codes": "3a-3d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-111-25: FASB Accounting Standards Codification Topic 715 (excluding all subsections ending in 00, 20, 60 & 65, and 20-S00, 20-S50, 20-S55, 20-S99, 30-55, 60-55, 70-55 & 80-55)",
+          "codes": "3a-3d",
+          "parts": []
+        },
+        {
+          "citation": "Corporate Pension Risk Management and Corporate Finance, SOA, Aug 2015",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "Morneau Shepell, Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020",
+          "codes": "3b",
+          "parts": [
+            {
+              "text": "Ch. 6: Financial Management of Pension Plans",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Pension Mathematics for Actuaries, Anderson, Arthur W., 3rd Edition, 2006",
+          "codes": "3d",
+          "parts": [
+            {
+              "text": "Ch. 2: Actuarial Cost Methods",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Duration and Convexity for Pension Liabilities, Pension Section News, Sep 2013",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "RET201-106-25: Accounting for Buy-ins",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Alternatives for Pension Cost Recognition—Implementation Approaches Using Bond Models, AAA, Dec 2016",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "RET201-108-25: Alternative Approaches to Calculating Service and Interest Cost under FASB ASC Topic 715, KPMG",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "RET201-109-25: Plan Curtailments & Settlements Under FASB ASC Topic 715 Relating to Plan Terminations, Part 1",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "RET201-110-25: Plan Curtailments & Settlements Under FASB ASC Topic 715 Relating to Plan Terminations, Part 2",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "RET201-112-25: Accounting for Plan Splits & Plan Mergers Under U.S. GAAP",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (excluding Appendices)",
+          "codes": "3a",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Retirement Plan Investment and Risk Management",
+      "weight_raw": "10%-20%",
+      "weight": [
+        10,
+        20
+      ],
+      "objective": "The candidate will recognize and appropriately reflect the role of retirement plan investments in managing plan sponsor risk and make recommendations.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate the interaction of plan investments with various valuation methods and assumptions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate how factors including cash flow requirements, various plan designs and various economic environments affect setting investment strategy",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe strategies and techniques for asset/liability management",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Provide advice and analysis to plan sponsors regarding the mitigation of investment risks",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Fundamentals of Private Pensions, McGill, Dan, 9th Edition, 2010,",
+          "codes": "4a-4d",
+          "parts": [
+            {
+              "text": "Ch. 27: Investing for Defined Benefit Plans",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "RET201-113-25: Pensions in the Public Sector, Ch. 9",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "RET201-114-25: Liability-Responsive Asset Allocation, Russell Research",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-115-25: Charting the Course: A Framework to Evaluate Pension De-Risking Strategies (excluding Appendices)",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-116-25: Practical De-Risking Solutions: Asset Duration and Interest Rate Risk",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "RET201-117-25: Pension Plan Immunization Strategies: How Close Can You Get?",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (excluding appendices)",
+          "codes": "4c, 4d",
+          "parts": []
+        },
+        {
+          "citation": "New Solutions to an Age-Old Problem: Innovative Strategies for Managing Pension and Longevity Risk, NAAJ, Nov 2019",
+          "codes": "4d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Valuations for the Purpose of Funding",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand the general principles applicable to the funding of retirement income plans and recommend a funding policy.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the options available to plan sponsors for funding their retirement plans",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Given a context, such as regulatory environment, plan asset composition, stakeholders’ interests, sponsor goals, the candidate will be able to analyze and defend an appropriate funding policy for various types of retirement income plans, including:",
+          "bullets": [
+            "Single-employer plans",
+            "Multi-employer plans",
+            "Government-sponsored plans"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "RET201-121-27: Introduction to Retirement Plan Funding",
+          "codes": "5a, 5b",
+          "parts": []
+        },
+        {
+          "citation": "Morneau Shepell, Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020",
+          "codes": "5a, 5b",
+          "parts": [
+            {
+              "text": "Ch. 6: Financial Management of Pension Plans",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, Jun 2021 (excluding Appendices)",
+          "codes": "5a, 5b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-119-25: Benefit Security Pension Fund Guarantee Schemes (pp. 4-13)",
+          "codes": "5a",
+          "parts": []
+        },
+        {
+          "citation": "Risk Management and Public Plan Retirement Systems, AAA (Appendices only; pp. 1-33 background)",
+          "codes": "5b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-118-25: CAPSA, Guideline No. 7, Pension Plan Funding Policy Guideline",
+          "codes": "5b",
+          "parts": []
+        },
+        {
+          "citation": "RET201-120-25: Funding Policy for the Public Sector Pension Plans",
+          "codes": "5b",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

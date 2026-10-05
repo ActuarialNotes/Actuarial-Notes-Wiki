@@ -11,7 +11,7 @@ import type { ItemStatus } from '@/data/tracks'
 //                   papers — and PCPA, which has no paper to convert)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
-//                   study from yet (the DISCs, Exam 6U).
+//                   study from yet (the DISCs, Exam 6U, the SOA exams past FM).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // exam rows on the Study Guides and Quiz tabs (`components/ExamRow.tsx`, its
@@ -32,7 +32,21 @@ const READY_EXAMS = new Set(['P', 'FM'])
 // transcribe the course syllabi. (PCPA has none either — CAS releases no PCPA
 // paper or sample questions to convert — but it is beta: its page and the
 // Projects tab's simulator are material to study from.)
-const IN_DEVELOPMENT_EXAMS = new Set(['CAS-DA', 'CAS-RM', 'CAS-IA'])
+// The SOA exams past FM — FAM, SRM, PA, ALTAM, ASTAM, the ATPA assessment and
+// the FSA pathway's fellowship exams — have pages transcribed from their
+// syllabi by the syllabus pipeline (docs/syllabus-pipeline.md), and nothing else
+// yet: no question bank, concept pages mostly unwritten.
+const IN_DEVELOPMENT_EXAMS = new Set([
+  'CAS-DA', 'CAS-RM', 'CAS-IA',
+  'FAM', 'SRM', 'PA', 'ALTAM', 'ASTAM', 'ATPA',
+  'FSA-CFE101', 'FSA-CFE201',
+  'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351',
+  'FSA-GH101', 'FSA-GH201', 'FSA-GH301',
+  'FSA-GI101', 'FSA-GI201', 'FSA-GI301', 'FSA-GI302',
+  'FSA-ILA101', 'FSA-ILA201',
+  'FSA-INV101', 'FSA-INV201',
+  'FSA-RET101', 'FSA-RET201', 'FSA-RET301',
+])
 
 /**
  * Variants of a shared progress key whose material lags the rest of the key.

@@ -1,0 +1,347 @@
+{
+  "wiki_id": "ila-201u",
+  "body": "SOA",
+  "title": "ILA 201-U – Valuation and Advanced Product and Risk Management, U.S.",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf",
+  "source_sha256": "daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "U.S. Financial Reporting Requirements",
+      "weight_raw": "50%- 60%",
+      "weight": [
+        50,
+        60
+      ],
+      "objective": "The candidate will understand and apply U.S. valuation principles and methods applicable to individual life insurance and annuity products issued by U.S. life insurance companies.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe, apply and evaluate the appropriate valuation methods, requirements, and techniques and related under the US statutory framework, including the calculation of principles-based reserves and formulaic reserves",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, apply and evaluate the appropriate valuation methods, requirements, and techniques and related under the US GAAP framework, including the calculation of reserves and related items (e.g., DAC)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Statutory Valuation of Individual Life and Annuity Contracts, Volumes I and II, Claire, D., Lombardi, L. and Summers, S., 5th Edition, 2018",
+          "codes": "1a",
+          "parts": [
+            {
+              "text": "Chapter 1: Overview of Valuation Concepts (excluding 1.1-1.9)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 2: Product Classifications (2.2 only)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 3: NAIC Annual Statement",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 5: The Valuation Manual (excluding 5.4)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 10: Valuation Assumptions (excluding 10.1.3 & 10.3.8)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 11: Valuation Methodologies (excluding 11.3.9-11.3.11)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 12: Whole Life",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 13: Term Life Insurance",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 14: Universal Life (excluding 14.4.8, 14.4.9, 14.5.0 & 14.6.2-14.6.6)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 16: Indexed Universal Life (excluding 16.4.2-16.4.3)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 18: Fixed Deferred Annuities (excluding 18.7.4 & 18.8)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 20: Indexed Deferred Annuities",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 21: Immediate Annuities",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 23: VM-20: PBR for Life Products (excluding 23.1)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 24: VM 21: PBR for Variable Annuities",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 25: Principle-Based Reserve Report",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Interactive Principle-Based Reserves Model",
+          "codes": "1a",
+          "parts": []
+        },
+        {
+          "citation": "US GAAP for Insurers, Freedman, M., and Frasca, R., 3rd Edition, 2024",
+          "codes": "1b",
+          "parts": [
+            {
+              "text": "Chapter 1: US GAAP Objectives and their Implications to Insurers",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 3: Product Classification and Measurement",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 4: Expenses",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 5: Nonparticipating Traditional Life Insurance",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 7: Universal Life Insurance (only sections 1, 2, 5-7)",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 11: Deferred Annuities",
+              "codes": ""
+            },
+            {
+              "text": "Chapter 12: Payout Annuities",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Implementation Considerations for VA Market Risk Benefits, The Financial Reporter, Sep 2019",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "Targeted Improvements Interactive Model",
+          "codes": "1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Capital Management",
+      "weight_raw": "5%-20%",
+      "weight": [
+        5,
+        20
+      ],
+      "objective": "The candidate will understand how to explain and apply the methods, approaches and tools of financial capital management for life insurance company under a US regulatory framework.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain and calculate required capital under a US regulatory framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe the purpose and application of economic capital",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain and evaluate the respective perspectives of regulators, investors, policyholders and insurance company management regarding the role and determination of capital",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain and apply methods in capital management",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Statutory Valuation of Individual Life and Annuity Contracts, Volume II, Claire, D., Lombardi, L. and Summers, S., 5th Edition, 2018",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Ch. 29: Risk-Based Capital",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Economic Capital for Life Insurance Companies, SOA Research Paper, Oct 2016 (Sections 2 & 6)",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "A Multi-Stakeholder Approach to Capital Adequacy, Conning Research, Actuarial Practice Forum",
+          "codes": "2c",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-800-25: Theory of Risk Capital in Financial Firms",
+          "codes": "2d",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Management and Evaluation of Life Insurance Risks",
+      "weight_raw": "5%-20%",
+      "weight": [
+        5,
+        20
+      ],
+      "objective": "The candidate will understand types of life insurance risks, the impacts of diversification, crediting rating agency frameworks, and the assessment of risk management.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Analyze the impact of risk diversification, including considerations for modeling and offsets between mortality and longevity risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the role and framework used by credit rating agencies for evaluating life insurance companies",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain and understand the use and application of the Own Risk Solvency Assessment (ORSA) report",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA201-801-25: Diversification of Longevity and Mortality Risk",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-100-25: Diversification: Consideration on Modelling Aspects & Related Fungibility and Transferability, CRO, Oct 2013, pp. 1-18",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "Rating Agency Perspectives on Insurance Company Capital, SOA Research Institute, Aug 2023 (excluding Appendices)",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-802-25: NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual, National Association of Insurance Commissioners, Dec 2017",
+          "codes": "3c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Advanced Product Management",
+      "weight_raw": "15%- 25%",
+      "weight": [
+        15,
+        25
+      ],
+      "objective": "The candidate will understand the fundamentals of value creation and inforce management techniques for life and annuity products.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and evaluate fundamental strategies for enhancing value and profitability through active in-force and operational management",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Recommend and justify changes to non-guaranteed elements and policyholder dividends",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe, evaluate, and apply the economic value creation framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Describe and apply the methods and principles of embedded value for an insurance enterprise",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe and calculate reserves under US Company Tax rules",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Evolving Strategies to Improve Inforce Post-Level Term Profitability, Product Matters, Feb 2015, pp. 23-28",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-101-25: Life in-force Management: Improving Consumer Value and Long-Term Profitability",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "Mechanics of Dividends, SOA Research Institute, Mar 2022",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-102-25: Economics of Insurance: How Insurers Create Value for Shareholders, pp. 4-31",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "Embedded Value: Practice and Theory, Actuarial Practice Forum, Mar 2009",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "FAQ on Certain Insurance Reserves Held by Insurance Companies for the Purpose of Determining U.S. Taxable Income after the Passage of the Tax Cuts and Jobs Act of 2017, AAA, Dec 2021",
+          "codes": "4e",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

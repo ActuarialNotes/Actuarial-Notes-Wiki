@@ -1,0 +1,506 @@
+{
+  "wiki_id": "inv-201",
+  "body": "SOA",
+  "title": "INV 201 – Quantitative Finance",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf",
+  "source_sha256": "8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Key Types of Derivatives",
+      "weight_raw": "5%-15%",
+      "weight": [
+        5,
+        15
+      ],
+      "objective": "The candidate will understand key types of derivatives.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the payoffs of basic derivative instruments including:",
+          "bullets": [
+            "Forwards",
+            "Futures",
+            "Swaps",
+            "Calls",
+            "Puts",
+            "Caps",
+            "Floors",
+            "Swaption",
+            "Currency",
+            "Credit"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Be able to identify the key differences between forwards and futures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Be able to compare European, American, Bermudan, Asian options, and various exotic options",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand the mechanics of derivatives trading including:",
+          "bullets": [
+            "Exchange traded vs OTC",
+            "Central Clearing",
+            "Daily margin variation and daily settle"
+          ],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand basic derivatives strategies including:",
+          "bullets": [
+            "Call spreads",
+            "Put spreads",
+            "Collars",
+            "Covered calls",
+            "Butterfly spreads",
+            "Straddles and strangles"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 1: Introduction (Sections 1.1-1.5)",
+              "codes": "1a, 1c, 1d"
+            },
+            {
+              "text": "Ch. 2: Futures Markets and Central Counterparties (Sections 2.1-2.8 & 2.11)",
+              "codes": "1b, 1d"
+            },
+            {
+              "text": "Ch. 7: Swaps (Sections 7.1-7.5 & 7.8-7.13)",
+              "codes": "1a, 1d"
+            },
+            {
+              "text": "Ch. 12: Trading Strategies Involving Options (Sections 12.1-12.5)",
+              "codes": "1e"
+            },
+            {
+              "text": "Ch. 17: Options on Stock Indices and Currencies (Sections 17.2)",
+              "codes": "1a, 1b, 1c"
+            },
+            {
+              "text": "Ch. 26: Exotic Options (Sections 26.3, 26.8-26.11, 26.13 & 26.16)",
+              "codes": "1c"
+            },
+            {
+              "text": "Ch. 29: Interest Rate Derivatives: The Standard Market Models (Sections 29.2-29.3)",
+              "codes": "1a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Valuation of Derivatives",
+      "weight_raw": "40%-60%",
+      "weight": [
+        40,
+        60
+      ],
+      "objective": "The candidate will understand the principles and techniques for the valuation of derivatives.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the principles of no-arbitrage and replication in asset pricing.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand Arrow-Debreau security and the distinction between complete and incomplete markets",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand put-call parity and price bounds",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand Stochastic Calculus theory and technique used in pricing derivatives including:",
+          "bullets": [
+            "Stochastic differential equations",
+            "Itō integral",
+            "Itō's Lemma",
+            "Itō Isometry",
+            "Martingales,",
+            "Change of numeraire",
+            "Girsanov's theorem"
+          ],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand and apply the concepts of risk-neutral measure, forward measure, normalization, and the market price of risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Understand option pricing techniques including:",
+          "bullets": [
+            "Calculating an expectation",
+            "By solving an PDE"
+          ],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Understand the limitations of the Black-Scholes-Merton model",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Understand and apply numerical discretization methods to price options including Euler-Maruyama discretization and transition density methods",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Calibrate a model to observed prices of traded securities including fitting to a given yield curve",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Define and explain the concept of volatility smiles and describe several approaches for modeling smiles, including stochastic volatility, local- volatility, jump-diffusions.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "2a, 2b",
+          "parts": [
+            {
+              "text": "Ch. 5: Determination of Forward and Futures Prices (Sections 5.1-5.14)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Swaps (Sections 7.6-7.7)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 13: Binomial Trees (Sections 13.1-13.3)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV201-100-25: Chapter 5 of Financial Mathematics – A Comprehensive Treatment, Campolieti",
+          "codes": "2a, 2b",
+          "parts": []
+        },
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 11: Properties of Stock Options (Sections 11.1-11.7)",
+              "codes": "2c"
+            },
+            {
+              "text": "Ch. 14: Wiener Processes and Ito’s Lemma (Sections 14.1-14.8)",
+              "codes": "2d, 2e"
+            },
+            {
+              "text": "Ch. 28: Martingales and Measures (Sections 28.1-28.4 & 28.7-28.8)",
+              "codes": "2d, 2e"
+            },
+            {
+              "text": "Ch. 31: Equilibrium Models of the Short Rate (Section 31.3)",
+              "codes": "2d, 2e"
+            }
+          ]
+        },
+        {
+          "citation": "Understanding the Connection Between Real-World and Risk-Neutral Generators, SOA Research, Aug 2022, Sections 1-5, and Appendices A & D",
+          "codes": "2d, 2e",
+          "parts": [
+            {
+              "text": "Companion Excel Tool",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "2e, 2f",
+          "parts": [
+            {
+              "text": "Ch. 15: The Black-Scholes-Merton Model (Sections 15.1-15.12)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV201-101-25: Chapter 6 of Introduction to Stochastic Finance with Market Examples by Privault (Sections 6.1-6.4)",
+          "codes": "2f",
+          "parts": []
+        },
+        {
+          "citation": "INV201-102-25: How to Use the Holes in Black-Scholes",
+          "codes": "2g",
+          "parts": []
+        },
+        {
+          "citation": "Calibrating Interest Rate Models, SOA Research, Oct 2023, Section 1.1-4.3 (excluding 4.1.2)",
+          "codes": "2g-2i",
+          "parts": []
+        },
+        {
+          "citation": "The Volatility Smile, Derman, Emanuel and Miller, Michael, 2016",
+          "codes": "2j",
+          "parts": [
+            {
+              "text": "Ch. 8: The Smile: Stylized Facts and Their Interpretation",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 10: A Survey of Smile Models",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "2j",
+          "parts": [
+            {
+              "text": "Ch. 20: Volatility Smiles and Volatility Surfaces (Sections 20.1-20.8)",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 27: More on Models and Numerical Procedures (Sections 27.1-27.3)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Problems and Solutions in Mathematical Finance: Stochastic Calculus, Chin, Eric, Nel, Dian and Olafsson, Sverrir, 2014",
+          "codes": "2a, 2b, 2d, 2f",
+          "parts": [
+            {
+              "text": "Pg. 52: Definitions 2.1 & 2.2; Theorems 2.3 & 2.4",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 57-58: Question 4",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 72-73: Question 3",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 97-98: Theorems 3.3",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 113-114: Itō Isometry",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 128-130: Questions 6 & 7",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 132-137: Questions 10-12",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 146-147: Question 19",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 186-188: Definition 4.1(b), Definition 4.1(f) and Theorem 4.2",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 221-227: Questions 1-5",
+              "codes": ""
+            },
+            {
+              "text": "Pp. 233-242: Questions 12-17",
+              "codes": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Applications and Risks of Derivatives",
+      "weight_raw": "30%-50%",
+      "weight": [
+        30,
+        50
+      ],
+      "objective": "The candidate will understand various applications and risks of derivatives.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the Greeks of derivatives",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand static and dynamic hedging",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Understand delta hedging, and the interplay between hedging assumptions and hedging outcomes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand the concepts of realized versus implied volatility",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Understand how hedge strategies may fail",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Identify and evaluate embedded options in liabilities (e.g., indexed annuity, structured product based variable annuity, and variable annuity guarantee riders including GMxB, etc.)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Demonstrate an understanding of hedging for embedded option in liabilities with:",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "text": "Risks that can be hedged, including those of equity, interest rate, volatility, and cross Greeks,",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "text": "Risks that can only be partially hedged or cannot be hedged, including those of policyholder behavior, mortality, basis, counterparty, correlation, and operational failures",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "text": "Demonstrate an understanding of target volatility funds and their effect on fund performance, guarantee cost, and risk control",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 19: The Greek Letters (Sections 19.1-19.9 & 19.13)",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 26: Exotic Options (Section 26.17)",
+              "codes": "3b"
+            }
+          ]
+        },
+        {
+          "citation": "The Volatility Smile, Derman, Emanuel and Miller, Michael, 2016",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 3: Static and Dynamic Replication",
+              "codes": "3c, 3e"
+            },
+            {
+              "text": "Ch. 5: The P&L of Hedged Option Strategies in a Black-Scholes-Merton World",
+              "codes": "3c, 3d"
+            },
+            {
+              "text": "Ch. 6: The Effect of Discrete Hedging on P&L",
+              "codes": "3c, 3e"
+            },
+            {
+              "text": "Ch. 7: The Effect of Transaction Costs on P&L",
+              "codes": "3c, 3e"
+            }
+          ]
+        },
+        {
+          "citation": "INV201-104-25: Which Free Lunch Would You Like Today, Sir?",
+          "codes": "3e",
+          "parts": []
+        },
+        {
+          "citation": "Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021",
+          "codes": "3e",
+          "parts": [
+            {
+              "text": "Ch. 37: Derivatives Mishaps and What We Can Learn from Them (Sections 37.1-37.3)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "INV201-105-25: An Introduction to Computational Risk Management of Equity-Linked Insurance, Feng, 2018 (sections 1.2-1.3, 4.7 & 6.2-6.3)",
+          "codes": "3f, 3g",
+          "parts": []
+        },
+        {
+          "citation": "INV201-106-25: Variable Annuity Volatility Management: An Era of Risk-Control",
+          "codes": "3f, 3g",
+          "parts": []
+        },
+        {
+          "citation": "INV201-108-25: Mitigating Interest Rate Risk in Variable Annuities: An Analysis of Hedging Effectiveness under Model Risk",
+          "codes": "3f, 3g",
+          "parts": []
+        },
+        {
+          "citation": "INV201-107-25: It's RILA time: An introduction to registered index-linked annuities (excluding Appendices)",
+          "codes": "3g",
+          "parts": []
+        },
+        {
+          "citation": "INV201-109-25: Investment Instruments with Volatility Target Mechanism",
+          "codes": "3h",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

@@ -24,10 +24,10 @@ this lint, nothing checked one. It fails a page for:
   questions   every `learning_objective` in the exam's bank names one of its
               sections (`objective_key`: the CAS `A. ` prefix and case ignored)
   fidelity    on a page generated from a syllabus PDF (it carries a `syllabus:`
-              frontmatter block), the objectives with their links stripped are the
-              extracted text, word for word, and the page is what
-              `syllabus_write.py` renders from `.syllabus/<id>/` — see
-              docs/syllabus-pipeline.md
+              frontmatter block), every topic title, weight, objective and outcome
+              of `.syllabus/<id>/syllabus.json` is on the page, in order, word for
+              word once its links are stripped (`syllabus_write.fidelity_problems`)
+              — see docs/syllabus-pipeline.md
 
 Severity follows the exam's status (scripts/exam_catalog.json, mirroring
 quiz/src/lib/examStatus.ts): unresolved links and unlinked objectives are errors

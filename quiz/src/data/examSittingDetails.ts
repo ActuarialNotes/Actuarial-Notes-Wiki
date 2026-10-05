@@ -246,11 +246,191 @@ export const EXAM_ABOUT: Record<string, ExamAbout> = {
   'CAS-RM': DISC,
 }
 
+const SOA_NO_SITTINGS = 'This exam’s sitting dates aren’t transcribed yet; its page on the SOA site has the schedule.'
+
 /**
  * For an exam key shared by several study guides (Exam 6's Canada and US
  * syllabi), the publisher page for each guide — by wiki exam id (`6c-1`).
  */
 const GUIDE_ABOUT: Record<string, ExamAbout> = {
+  // The SOA exams past FM. The facts are transcribed from each exam's syllabus
+  // (the PDF its study guide was converted from — data/examPdfLinks.ts); a
+  // fellowship syllabus states no length or format, so those show none.
+  // No sittings table holds them yet, so the panel says so.
+  'fam-1': {
+    facts: [{ label: 'Length', value: '3.5 hours' }, { label: 'Questions', value: '34 multiple choice' }, SOA_DELIVERY, SOA_UNOFFICIAL],
+    source: { label: 'SOA — Exam FAM', url: `${SOA_EXAM}edu-exam-fam/` },
+    factSources: [{ label: 'SOA — Exam FAM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'srm-1': {
+    facts: [{ label: 'Length', value: '3.5 hours' }, { label: 'Questions', value: '35 multiple choice' }, SOA_DELIVERY, SOA_UNOFFICIAL],
+    source: { label: 'SOA — Exam SRM', url: `${SOA_EXAM}edu-exam-srm-detail/` },
+    factSources: [{ label: 'SOA — Exam SRM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'pa-1': {
+    facts: [{ label: 'Length', value: '3.5 hours, no scheduled break' }, { label: 'Format', value: 'Written responses to tasks on a business problem, in Microsoft Word' }],
+    source: { label: 'SOA — Exam PA', url: `${SOA_EXAM}edu-exam-pa-detail/` },
+    factSources: [{ label: 'SOA — Exam PA syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'altam-1': {
+    facts: [{ label: 'Length', value: '3 hours' }, { label: 'Questions', value: 'Six questions, 60 points; one in an Excel workbook' }, { label: 'Delivery', value: 'Prometric test centre' }],
+    source: { label: 'SOA — Exam ALTAM', url: `${SOA_EXAM}edu-exam-altam/` },
+    factSources: [{ label: 'SOA — Exam ALTAM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'astam-1': {
+    facts: [{ label: 'Length', value: '3 hours' }, { label: 'Questions', value: 'Six questions, 60 points; one in an Excel workbook' }, { label: 'Delivery', value: 'Prometric test centre' }],
+    source: { label: 'SOA — Exam ASTAM', url: `${SOA_EXAM}edu-exam-astam/` },
+    factSources: [{ label: 'SOA — Exam ASTAM syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'atpa-1': {
+    facts: [{ label: 'Format', value: 'Take-home assessment: a report analysing a data set' }],
+    source: { label: 'SOA — ATPA', url: `${SOA_EXAM}edu-exam-atpa/` },
+    factSources: [{ label: 'SOA — ATPA syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cfe-101': {
+    facts: [],
+    source: { label: 'SOA — CFE 101', url: `${SOA_EXAM}fsa2025/cfe-101/` },
+    factSources: [{ label: 'SOA — CFE 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cfe-201': {
+    facts: [],
+    source: { label: 'SOA — CFE 201', url: `${SOA_EXAM}fsa2025/cfe-201/` },
+    factSources: [{ label: 'SOA — CFE 201 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cp-311': {
+    facts: [],
+    source: { label: 'SOA — CP 311', url: `${SOA_EXAM}fsa2025/cp-311/` },
+    factSources: [{ label: 'SOA — CP 311 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cp-312': {
+    facts: [],
+    source: { label: 'SOA — CP 312', url: `${SOA_EXAM}fsa2025/cp-312/` },
+    factSources: [{ label: 'SOA — CP 312 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cp-321': {
+    facts: [],
+    source: { label: 'SOA — CP 321', url: `${SOA_EXAM}fsa2025/cp-321/` },
+    factSources: [{ label: 'SOA — CP 321 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cp-341': {
+    facts: [],
+    source: { label: 'SOA — CP 341', url: `${SOA_EXAM}fsa2025/cp-341/` },
+    factSources: [{ label: 'SOA — CP 341 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'cp-351': {
+    facts: [],
+    source: { label: 'SOA — CP 351', url: `${SOA_EXAM}fsa2025/cp-351/` },
+    factSources: [{ label: 'SOA — CP 351 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gh-101': {
+    facts: [],
+    source: { label: 'SOA — GH 101', url: `${SOA_EXAM}fsa2025/gh-101/` },
+    factSources: [{ label: 'SOA — GH 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gh-201c': {
+    facts: [],
+    source: { label: 'SOA — GH 201-C', url: `${SOA_EXAM}fsa2025/gh-201c/` },
+    factSources: [{ label: 'SOA — GH 201-C syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gh-201u': {
+    facts: [],
+    source: { label: 'SOA — GH 201-U', url: `${SOA_EXAM}fsa2025/gh-201u/` },
+    factSources: [{ label: 'SOA — GH 201-U syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gh-301': {
+    facts: [],
+    source: { label: 'SOA — GH 301', url: `${SOA_EXAM}fsa2025/gh-301/` },
+    factSources: [{ label: 'SOA — GH 301 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gi-101': {
+    facts: [],
+    source: { label: 'SOA — GI 101', url: `${SOA_EXAM}fsa2025/gi-101/` },
+    factSources: [{ label: 'SOA — GI 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gi-201': {
+    facts: [],
+    source: { label: 'SOA — GI 201', url: `${SOA_EXAM}fsa2025/gi-201/` },
+    factSources: [{ label: 'SOA — GI 201 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gi-301': {
+    facts: [],
+    source: { label: 'SOA — GI 301', url: `${SOA_EXAM}fsa2025/gi-301/` },
+    factSources: [{ label: 'SOA — GI 301 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'gi-302': {
+    facts: [],
+    source: { label: 'SOA — GI 302', url: `${SOA_EXAM}fsa2025/gi-302/` },
+    factSources: [{ label: 'SOA — GI 302 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ila-101': {
+    facts: [],
+    source: { label: 'SOA — ILA 101', url: `${SOA_EXAM}fsa2025/ila-101/` },
+    factSources: [{ label: 'SOA — ILA 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ila-201i': {
+    facts: [],
+    source: { label: 'SOA — ILA 201-I', url: `${SOA_EXAM}fsa2025/ila-201i/` },
+    factSources: [{ label: 'SOA — ILA 201-I syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ila-201u': {
+    facts: [],
+    source: { label: 'SOA — ILA 201-U', url: `${SOA_EXAM}fsa2025/ila-201u/` },
+    factSources: [{ label: 'SOA — ILA 201-U syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'inv-101': {
+    facts: [],
+    source: { label: 'SOA — INV 101', url: `${SOA_EXAM}fsa2025/inv-101/` },
+    factSources: [{ label: 'SOA — INV 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'inv-201': {
+    facts: [],
+    source: { label: 'SOA — INV 201', url: `${SOA_EXAM}fsa2025/inv-201/` },
+    factSources: [{ label: 'SOA — INV 201 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ret-101': {
+    facts: [],
+    source: { label: 'SOA — RET 101', url: `${SOA_EXAM}fsa2025/ret-101/` },
+    factSources: [{ label: 'SOA — RET 101 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ret-201': {
+    facts: [],
+    source: { label: 'SOA — RET 201', url: `${SOA_EXAM}fsa2025/ret-201/` },
+    factSources: [{ label: 'SOA — RET 201 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
+  'ret-301': {
+    facts: [],
+    source: { label: 'SOA — RET 301', url: `${SOA_EXAM}fsa2025/ret-301/` },
+    factSources: [{ label: 'SOA — RET 301 syllabus', url: 'https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf' }],
+    noSittings: SOA_NO_SITTINGS,
+  },
   '6c-1': {
     facts: [CAS_LENGTH, CAS_DELIVERY, CAS_UPPER_ITEMS, CAS_UPPER_FEE],
     source: { label: 'CAS — Exam 6 Canada', url: `${CAS_EXAM}exam-6c-regulation-and-financial-reporting-canada` },

@@ -1,0 +1,321 @@
+{
+  "wiki_id": "ila-201i",
+  "body": "SOA",
+  "title": "ILA 201-I Valuation and Advanced Product and Risk Management, International",
+  "sitting": "Nov 2026/Mar 2027/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf",
+  "source_sha256": "3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "International Financial Reporting Requirements",
+      "weight_raw": "40%-50%",
+      "weight": [
+        40,
+        50
+      ],
+      "objective": "The candidate will understand and apply valuation principles to individual life insurance and annuity products issued by international life insurance companies.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the appropriate IFRS 17 accounting and valuation standards for life insurance and annuity products",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate the appropriate IFRS 17 accounting and valuation standards for life insurance and annuity products",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA201-600-25: International Actuarial Note 100: Application of IFRS 17 (Ch. 1, section A – Introduction to GMM only, Ch. 5, 7-9 & 16)",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 Risk Adjustment for Non-Financial Risk for Life and Health Insurance Contracts, Jun 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-601-25: The IFRS 17 Contractual Service Margin: A Life Insurance Perspective (Sections 2-4.8)",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 Coverage Units for Life and Health Insurance Contracts, Dec 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 Estimates of Future Cash Flows for Life and Health Insurance Contracts, Jun 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 Discount Rates for Life and Health Insurance Contracts, Jun 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "IFRS 17: Reinsurance Contracts Held and Loss-Recovery Component, SOA Reinsurance News, Feb 2021",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "IFRS 17 Spreadsheet Model",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 Market Consistent Valuation of Financial Guarantees for Life and Health Insurance Contracts, Jun 2022",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: IFRS 17 – Fair Value of Insurance Contracts, Jun 2022",
+          "codes": "1a, 1b",
+          "parts": [
+            {
+              "text": "Companion Excel Spreadsheet: Educational Note: IFRS 17 – Fair Value of Insurance Contracts",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA201-602-25: OSFI B-3 Sound Reinsurance Practices and Procedures",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023",
+          "codes": "1a, 1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Capital Management",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand international capital requirements, the approaches and tools of financial capital management for international life insurance companies.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain and calculate regulatory capital using various international frameworks",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain and evaluate the respective perspectives of regulators, investors, policyholders and insurance company management regarding the role and determination of capital",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Describe the purpose and application of economic capital",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023",
+          "codes": "2a",
+          "parts": [
+            {
+              "text": "Companion Excel Spreadsheet: Comparison of Jurisdictions Tool",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA201-604-25: OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT), November 2024, Ch. 1-6 (excluding Sections 4.2-4.4)",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-605-25: OSFI Guideline A-4 Internal Target Capital Ratio for Insurance Companies, Dec 2017",
+          "codes": "2a",
+          "parts": []
+        },
+        {
+          "citation": "A Multi-Stakeholder Approach to Capital Adequacy, Conning Research, Actuarial Practice Forum",
+          "codes": "2b",
+          "parts": []
+        },
+        {
+          "citation": "Economic Capital for Life Insurance Companies, SOA Research Paper, Oct 2016 (only sections 2 & 6)",
+          "codes": "2c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Management and Evaluation of Life Insurance Risks",
+      "weight_raw": "10%-15%",
+      "weight": [
+        10,
+        15
+      ],
+      "objective": "The candidate will understand various approaches to manage and evaluate life insurance risks.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Analyze the impact of risk diversification, including considerations for modeling and offsets between mortality and longevity risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Understand the role and framework used by regulators and credit rating agencies for evaluating life insurance companies",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain and understand the use and application of the Own Risk Solvency Assessment (ORSA) report",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA201-100-25: Diversification: Consideration on Modelling Aspects & Related Fungibility and Transferability, CRO Forum, Oct 2013 (pp. 1-18)",
+          "codes": "3a",
+          "parts": []
+        },
+        {
+          "citation": "CIA Educational Note: Financial Condition Testing, Jan 2023 (Appendix A only)",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "Rating Agency Perspectives on Insurance Company Capital, SOA Research Institute, Aug 2023 (excluding Appendices)",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19)",
+          "codes": "3c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Advanced Product Management",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand value creation and inforce management techniques for life and annuity products.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and evaluate fundamental strategies for enhancing value and profitability through active in-force and operational management",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe, evaluate, and apply the economic value creation framework",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Recommend and justify changes to policyholder dividends",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Understand corporate taxation, policyholder taxation and calculate investment income tax",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Describe and apply the methods and principles of embedded value for an insurance enterprise",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "ILA201-101-25: Life in-force Management: Improving Consumer Value and Long-Term Profitability",
+          "codes": "4a",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-102-25: Economics of Insurance: How Insurers Create Value for Shareholders, pp. 4-31",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "Mechanics of Dividends, SOA Research Institute, Mar 2022",
+          "codes": "4c",
+          "parts": []
+        },
+        {
+          "citation": "Canadian Insurance Taxation, Swales, et. al., 4th Edition, 2015",
+          "codes": "4d",
+          "parts": [
+            {
+              "text": "Ch. 4: Income for Tax Purposes – General Rules",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 5: Investment Income",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "ILA201-607-25: IFRS 17 and Navigating Financial Condition Testing",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-608-25: IFRS 17: Tax and the Contractual Service Margin",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "ILA201-609-25: Impact of 2017 Tax Changes on Life Insurance",
+          "codes": "4d",
+          "parts": []
+        },
+        {
+          "citation": "Canadian Insurance Taxation, Swales, et. al., 4th Edition, 2015",
+          "codes": "4d",
+          "parts": [
+            {
+              "text": "Ch. 9: Investment Income Tax",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Embedded Value: Practice and Theory, Actuarial Practice Forum, Mar 2009",
+          "codes": "4e",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

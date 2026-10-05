@@ -1,0 +1,365 @@
+{
+  "wiki_id": "cp-311",
+  "body": "SOA",
+  "title": "CP 311 – Strategic Management",
+  "sitting": "Nov 2026/Mar 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf",
+  "source_sha256": "7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction to Strategic Management",
+      "weight_raw": "26%-43%",
+      "weight": [
+        26,
+        43
+      ],
+      "objective": "The candidate will understand and apply strategic management concepts and frameworks to develop an organization’s business strategies and solutions.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate and apply strategic management concepts, recognizing factors that affect development and implementation of strategies:",
+          "bullets": [
+            "Describe and apply strategic management models including Porter's five forces model and value chain analysis",
+            "Assess and recommend an appropriate business-level strategy for a given situation",
+            "Assess and recommend an appropriate corporate-level strategy for a given situation",
+            "Explain the impact of competitive dynamics on strategic management"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate commonly used business strategies and their application under different economic, risk and business environments:",
+          "bullets": [
+            "Critique and evaluate internal/organic and external/inorganic growth strategies",
+            "Assess and recommend business strategies under different business situations and market opportunities, utilizing the applicable strategic or change management models"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Strategic Management: Concepts and Cases: Competitiveness and Globalization, Concepts, Hitt, Michael, Ireland, Duane, and Hoskisson, Robert, 14th Edition, 2023",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch 1: Strategic Management and Strategic Competitiveness (Section 1-2 through 1-5)",
+              "codes": "1a"
+            },
+            {
+              "text": "Ch 4: Business-Level Strategy",
+              "codes": "1a"
+            },
+            {
+              "text": "Ch 6: Corporate-Level Strategy",
+              "codes": "1a"
+            },
+            {
+              "text": "Ch. 7: Merger and Acquisition Strategies and Restructuring (sections 7-1 through 7-4)",
+              "codes": "1b"
+            },
+            {
+              "text": "Ch. 9: Cooperative Strategy",
+              "codes": "1b"
+            }
+          ]
+        },
+        {
+          "citation": "Understanding Michael Porter, The Essential Guide to Competition and Strategy, Harvard Business Review Press, Magretta, Joan, 2012",
+          "codes": "1a, 1b",
+          "parts": [
+            {
+              "text": "Ch. 1: Competition: The Right Mind-Set",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 2: The Five Forces: Competing for Profits",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 3: Competitive Advantage: The Value Chain and Your P&L",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 4: Creating Value: The Core",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 5: Trade-Offs: The Linchpin",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 6: Fit: The Amplifier",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Continuity: The Enabler",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP311-101-25: The Hard Side of Change Management",
+          "codes": "1b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-107-26: A New Operating Model for a New World",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-108-26: Tying Short Term Decisions to Long Term Strategy",
+          "codes": "1a, 1b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Strategic Budgeting, Forecasting, and Value Measures",
+      "weight_raw": "28%-47%",
+      "weight": [
+        28,
+        47
+      ],
+      "objective": "The candidate will understand how sustainable growth and value can be created through strategic budgeting and forecasting. The candidate will also understand measures of an organization’s value and their uses in decision making.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain how strategic budgeting and forecasting can create value and sustainable growth",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Assess how effective strategic budgeting and forecasting are in tracking progress of an organization’s initiatives",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Demonstrate how an organization’s strategic goals can be effectively incorporated into the financial budgeting and forecasting decision making process",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Evaluate and recommend appropriate value measures for an organization",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Assess the impact of performance measures and incentives on key business decisions and stakeholder value",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Assess an organization’s ability to create value and recommend actions to improve value creation",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Handbook of Budgeting, Lalli, W.R., 6th Edition, 2012",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 2: Strategic Balanced Scorecard-based Budgeting & Performance Management",
+              "codes": "2a, 2b"
+            },
+            {
+              "text": "Ch. 29: Budgeting: Key to Corporate Performance Management (excluding pp. 667-676)",
+              "codes": "2a-2c, 2e"
+            },
+            {
+              "text": "Ch. 30: Zero-Based Budgeting",
+              "codes": "2a-2c, 2e"
+            }
+          ]
+        },
+        {
+          "citation": "Valuation: Measuring and Managing the Value of Companies, Koller, Tim, Goedhart, Marc, Wessels, David, 8th Edition, 2025 Ch 13: Forecasting Performance (excluding pp. 259-278, \"Mechanics of Forecasting\")",
+          "codes": "2a, 2b, 2c",
+          "parts": []
+        },
+        {
+          "citation": "CP311-109-26: Advanced FP&A Practices for a Volatile Macroeconomic and Business Environment",
+          "codes": "2a, 2b, 2c",
+          "parts": []
+        },
+        {
+          "citation": "Damodaran on Valuation, Damodaran, Aswath, 2nd Edition, 2006",
+          "codes": "2d, 2f",
+          "parts": [
+            {
+              "text": "Ch. 13: The Value of Control",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 15: The Value of Synergy",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP311-110-26: Financial Valuation – Hitchner 5th Ed, Ch. 10, pp. 507-545",
+          "codes": "2d, 2f",
+          "parts": []
+        },
+        {
+          "citation": "Valuation: Measuring and Managing the Value of Companies, Koller, Tim, Goedhart, Marc, Wessels, David, 8th Edition, 2025",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch 3: Fundamental Principles of Value Creation",
+              "codes": "2d, 2f"
+            },
+            {
+              "text": "Ch 16: Moving from Enterprise Value to Value per Share (excluding pp. 341-353, starting from Valuing Interest-Bearing Debt section)",
+              "codes": "2d"
+            },
+            {
+              "text": "Ch 18: Using Multiples",
+              "codes": "2d"
+            },
+            {
+              "text": "Ch 32: Divestitures",
+              "codes": "2d, 2f"
+            },
+            {
+              "text": "Ch 43: Banks",
+              "codes": "2d, 2f"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Decision Modeling and Optimization",
+      "weight_raw": "13%-22%",
+      "weight": [
+        13,
+        22
+      ],
+      "objective": "The candidate will understand how to apply decision making models to general managerial decisions within specified constraints.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Apply fundamental techniques and frameworks of management science to make informed business decisions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Apply statistical and quantification methods to analyze managerial decisions with uncertain conditions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate business decisions using quantitative and statistical methods",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Data, Models and Decisions: The Fundamentals of Management Science, Bertsimas, Dimitris and Freund, Robert, 2004",
+          "codes": "3a-3c",
+          "parts": [
+            {
+              "text": "Ch. 5: Simulation Modeling: Concepts and Practice",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 7: Linear Optimization",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 8: Nonlinear Optimization",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 9: Discrete Optimization",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "CP311-101-25: The Hard Side of Change Management",
+          "codes": "3c",
+          "parts": []
+        },
+        {
+          "citation": "CP311-111-26: Deciding How to Decide",
+          "codes": "3a",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Organizational Behavior",
+      "weight_raw": "8%-13%",
+      "weight": [
+        8,
+        13
+      ],
+      "objective": "The candidate will understand the role organizational behavior plays in organizational decision-making and efficacy.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate the impact of human behavior factors on the effectiveness of decision-making processes within organizations",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain the role of cognitive biases on making suboptimal individual decisions",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "CP311-112-26: How Behaviors Impact Your Corporate Decision-Making",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-108-26: Tying Short Term Decisions to Long Term Strategy",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-113-26: Bazerman & Moore, Chapter 12 of Judgement in Managerial Decision Making",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-105-25: Capital Bias",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-106-25: Chapter 19 (Sections 19.1 – 19.4) of Quantitative Enterprise Risk Management, Hardy and Saunders, 2022",
+          "codes": "4b",
+          "parts": []
+        },
+        {
+          "citation": "CP311-111-26: Deciding How to Decide",
+          "codes": "4b",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

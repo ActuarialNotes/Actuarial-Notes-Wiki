@@ -1,0 +1,456 @@
+{
+  "wiki_id": "ret-301",
+  "body": "SOA",
+  "title": "RET 301 – Actuarial Topics for Canadian Retirement Plans",
+  "sitting": "Nov 2026/Jul 2027",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf",
+  "source_sha256": "fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2",
+  "extracted_at": "2026-10-05",
+  "intro": [],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Assumptions",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions for funding purposes of retirement plans under Canadian pension legislation, regulatory policies, tax legislation, and actuarial standards of practice.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe and apply appropriate techniques used in the development of assumptions for funding purposes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate and recommend appropriate assumptions for funding purposes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate actual experience, including comparisons to assumptions",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "RET301-101-25: A Problem-Solving Approach to Pension Funding and Valuation, 2nd Ed., Ch. 5 (background only)",
+          "codes": "1a, 1b, 1c",
+          "parts": []
+        },
+        {
+          "citation": "Selection of Mortality Assumptions for Pension Plan Actuarial Valuations, CIA Educational Note, Apr 2026",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Mortality Improvements Research, CIA Report, Apr 2024",
+          "codes": "1a, 1b, 1c",
+          "parts": []
+        },
+        {
+          "citation": "2024 Canadian Pensioner Mortality Research Project, CIA Report, Mar 2026 (Sections 1 and 8 only)",
+          "codes": "1a, 1b, 1c",
+          "parts": []
+        },
+        {
+          "citation": "Mortality Improvements Research, CIA Educational Note Supplement, May 2024",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Determination of Best Estimate Discount Rates for Going Concern Funding Valuations, CIA Educational Note, Apr 2023",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Expenses in Funding Valuations for Pension Plans, CIA Revised Educational Note, Jun 2023",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Reflecting Increasing Maximum Pensions Under the Income Tax Act in Solvency, Hypothetical Wind-up and Wind-up Valuations, CIA Revised Educational Note, Dec 2023",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "Assumptions for Hypothetical Wind-Up and Solvency Valuations with Effective Dates on or after June 30, 2025, and no later than June 29, 2026, CIA Educational Note, Sep 2025",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-102-25: CAPSA Guidance Solvency or Hypothetical Wind-up Liabilities Based on Actual Life Insurance Company Annuity Quotation",
+          "codes": "1a, 1b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-100-25: Financial Services Commission of Ontario: Actuarial Guidance Note: Determination of the Solvency Liability Adjustment",
+          "codes": "1a",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "Methods",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to prepare valuation results, including required contributions, for various purposes under Canadian pension legislation, regulatory policies, tax legislation, and actuarial standards of practice.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Differentiate between various purposes for valuing pension plans, including:",
+          "bullets": [
+            "Going concern funding",
+            "Solvency and hypothetical wind-up",
+            "Termination/wind-up"
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Analyze a variety of asset valuation methods appropriate for regulatory purposes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Prepare valuation results for ongoing plans appropriate for regulatory purposes",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Prepare valuation results for special purposes, including plan terminations, plan mergers or spin-off, actuarial equivalence calculations and asset transfers",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Part 1000 of the CIA Standards of Practice - General, CIA, Jan 2026, sections 1000-1700",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Standards of Practice - Pensions, CIA, Jan 2026, sections 3100-3500",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Guidance on Events Occurring After the Calculation Date of an Actuarial Opinion for a Pension Plan, CIA Revised Educational Note, May 2024",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Guidance on Selection and Disclosure of Plausible Adverse Scenarios, CIA Educational Note, Apr 2023",
+          "codes": "2a-2d",
+          "parts": []
+        },
+        {
+          "citation": "Section 3500 of the Practice-Specific Standards for Pension Plans: Pension Commuted Values (Subsection 3570), CIA Educational Note, May 2023",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Section 3500 of the Practice-Specific Standards for Pension Plans: Pension Commuted Values (other than Subsection 3570), CIA Educational Note, May 2023",
+          "codes": "2d",
+          "parts": []
+        },
+        {
+          "citation": "Calculation of Incremental Cost on a Hypothetical Wind-Up or Solvency Basis, CIA Educational Note, Apr 2023",
+          "codes": "2a, 2c",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "Regulations: Evaluation and Application",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to evaluate and apply Canadian pension legislation, regulatory policies, and tax legislation for registered retirement plans.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe sources and framework of government regulation",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Describe and apply Canadian pension legislation, regulatory policies and tax regulation pertaining to:",
+          "bullets": [
+            "Plan design",
+            "Plan establishment",
+            "Members’ rights",
+            "Contributions and benefits",
+            "Plan amendment",
+            "Plan termination/wind-up",
+            "Plan merger or spin-off",
+            "Reporting requirements",
+            "Individual savings plans"
+          ],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Morneau Shepell Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 5: Design, Registration, and Administration of Pension Plans",
+              "codes": "Background"
+            },
+            {
+              "text": "Ch. 8: Registration of Pension Plans Under the Income Tax Act and Taxation of Retirement Savings",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 13: Supplementary Pension Arrangements",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 14: Other Retirement Income, Savings, and Deferred Compensation Arrangements",
+              "codes": "3a, 3b"
+            }
+          ]
+        },
+        {
+          "citation": "Canadian Pensions and Retirement Income Planning, Willis Towers Watson, 6th Edition, 2017",
+          "codes": "",
+          "parts": [
+            {
+              "text": "Ch. 1: Overview (section 105, sections 120-145)",
+              "codes": "3a"
+            },
+            {
+              "text": "Ch. 2: Definitions",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 3: Conceptual Overview of RRSP Contribution Rules",
+              "codes": "3a, 3b"
+            },
+            {
+              "text": "Ch. 5: Introduction to Pension Adjustments and General PA Rules",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 6: Pension Adjustments for Defined Contribution RPPs and DPSPs",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 7: Pension Adjustments for Defined Benefit Plans",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 8: Pension Adjustments for Combination Plans and Hybrids",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 9: Pension Adjustments for Plans with Several Participating Employers",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 10: Past Service Pension Adjustments",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 11: Pension Adjustment Reversals",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 12: PSPA and PAR for Multi-Employer Plans",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 14: Tax-Sheltered Retirement Savings Vehicle",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 16: Registration Rules for Money Purchase Plans",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 17: Registration Rules for Defined Benefit RPPS: Permissible Benefits",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 18: Registration Rules for Defined Benefit RPPs: Eligible Contributions",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 19: Registration Rules for DPSPs",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 20: Registration Rules for Combination Plans and Hybrids",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 21: Registration Rules for Multi-Employer Plans",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 22: Filing Requirements for RPPs",
+              "codes": "3b"
+            },
+            {
+              "text": "Ch. 23: Pensions for the Highly Paid",
+              "codes": "3b"
+            }
+          ]
+        },
+        {
+          "citation": "RET301-103-26: R.R.O. 1990, Reg 909: General Regulations under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-104-26: R.S.O. 1990, Ch. P.8 under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-105-26: Regulation 310/13 Asset Transfers under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP is background only)",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-106-25: Pension Asset Transfers made easier, Pension Benefits and Executive Compensation, February 2014",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-108-25: FSRA - Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans)",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-109-25: Regulation 193/18 Purchase of Pension Benefits from an Insurance Company under Ontario Pension Benefits Act",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-112-25: FSRA Guidance - Application by Employer for Payment of Surplus on Full Wind Up of a Pension Plan",
+          "codes": "3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-107-25: CAPSA: Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-113-25: Canadian Association of Pension Supervisory Authorities (CAPSA) Communique Spring 2023",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-114-25: FSRA: Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans",
+          "codes": "3a, 3b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-115-26: Q&A: Answering Your Tax Questions on RRSPs, TFSAs, and the New First-Home Savings Account (FHSA)",
+          "codes": "3b",
+          "parts": []
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Regulations: Plan Funding",
+      "weight_raw": "20%-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The candidate will understand how to apply the Canadian pension legislation, regulatory policies, and tax legislation in the context of pension plan funding.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Evaluate retirement funding alternatives for the plan sponsor, shareholders and participants",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate funding restrictions imposed by regulations",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": [
+        {
+          "citation": "Canadian Pensions and Retirement Income Planning, Willis Towers Watson, 6th Edition, 2017",
+          "codes": "4a, 4b",
+          "parts": [
+            {
+              "text": "Ch. 15: Pension Plan Valuation Concepts (excluding Section 1525)",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "Morneau Shepell Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020",
+          "codes": "4a, 4b",
+          "parts": [
+            {
+              "text": "Ch. 13: Supplementary Pension Arrangements",
+              "codes": ""
+            },
+            {
+              "text": "Ch. 14: Other Retirement Income, Savings, and Deferred Compensation Arrangements",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "RET301-110-26: OSFI – Instruction Guide: Preparation of Actuarial Reports for Defined Benefit Pension Plans (sections 2.8 & 2.10 only)",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-103-26: R.R.O. 1990, Reg 909: General Regulations under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "RET301-104-26: R.S.O. 1990, Ch. P.8 under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)",
+          "codes": "4a, 4b",
+          "parts": []
+        },
+        {
+          "citation": "Canadian Pensions and Retirement Income Planning, Willis Towers Watson, 6th Edition, 2017",
+          "codes": "4a, 4b",
+          "parts": [
+            {
+              "text": "Ch. 23: Pensions for the Highly Paid",
+              "codes": ""
+            }
+          ]
+        },
+        {
+          "citation": "RET301-111-25: Personal Tax Planning: A Fresh Look at Retirement Compensation Arrangements: A Flexible Vehicle for Retirement Planning",
+          "codes": "4a, 4b",
+          "parts": []
+        }
+      ]
+    }
+  ],
+  "readings": []
+}

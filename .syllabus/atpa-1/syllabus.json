@@ -1,0 +1,245 @@
+{
+  "wiki_id": "atpa-1",
+  "body": "SOA",
+  "title": "Advanced Topics in Predictive Analytics Syllabus",
+  "sitting": "",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf",
+  "source_sha256": "16d5e74841e90fdb61402248cb585dc8d7a3ceedbf678341478145a9e2fb4410",
+  "extracted_at": "2026-10-05",
+  "intro": [
+    "The Advanced Topics in Predictive Analytics course provides candidates with the ability to employ selected analytics techniques to solve business problems and effectively communicate the solution. After learning this material from e-Learning modules, candidates are given a take-home assessment requiring analysis of a data set in the context of a business problem and submission of a report. The report/assessment will be graded on a pre-set schedule.",
+    "A thorough knowledge of probability (as covered in Exam P), mathematical statistics (as covered in VEE Mathematical Statistics), and selected models and methods for analyzing data (as covered in Exams SRM and PA) is assumed.",
+    "The learning objectives and outcomes provided on the following pages follow the four modules of the e-Learning support provided. The ranges of weights shown in the Learning Objectives below are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that tasks often cover multiple learning objectives, including some weight for communication and ethics in many tasks."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Ethical Foundations",
+      "weight_raw": "5-10%",
+      "weight": [
+        5,
+        10
+      ],
+      "objective": "The Candidate will be able to work with data and models in an ethical and responsible manner.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Apply a general ethical framework for working with data and models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Discuss and comply with relevant standards of practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Discuss and comply with relevant regulations that apply to working with data and models.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Working with Data",
+      "weight_raw": "20-30%",
+      "weight": [
+        20,
+        30
+      ],
+      "objective": "The Candidate will be able to understand basic database calculations and manipulations and prepare data for predictive modeling applications.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand the basic structure of a data pipeline, including being able to perform the following tasks:",
+          "bullets": [
+            "Evaluate the quality of appropriate data sources for a problem",
+            "Explain the difference between a database, data lake, and data warehouse",
+            "Describe how different data structures can be used in different analytical tasks."
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain the basics concepts of database management, in particular, extract, transform, and load (ETL) operations. Demonstrate these skills by performing the following:",
+          "bullets": [
+            "Extract data from various file structures",
+            "Subset, aggregate, summarize, and otherwise modify data for specific exploratory or modeling purposes",
+            "Create data sets as a final product of extracting and transforming data that can be used in a predictive model."
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Assess the accuracy and quality of data.",
+          "bullets": [
+            "Describe how data collection practices and assumptions affect data quality.",
+            "Validate the data for internal consistency."
+          ],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Explain the terminology and structure of relational databases and be able to use common keys between collections of data to merge information from multiple sources.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Clean and organize data by performing each of the following:",
+          "bullets": [
+            "Check for outliers, both univariate and multivariate",
+            "Handle missing data (including understanding the types of missing data) by selecting the appropriate action from deletion of the record, imputation, and adding a missing value flag."
+          ],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Detect possible biases introduced when preparing data for a predictive model.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Advanced Predictive Analytics Models",
+      "weight_raw": "30-45%",
+      "weight": [
+        30,
+        45
+      ],
+      "objective": "The Candidate will fit a variety of models and select one appropriate to the circumstances and intended use.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain the importance of model accuracy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Explain, fit, evaluate, and make predictions with each of the following models:",
+          "bullets": [
+            "Additive models",
+            "Linear mixed models",
+            "Neural networks."
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Apply Bayesian techniques to predictive models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Compare model results with those from linear and tree-based methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Explain the benefits of and demonstrate the combination of multiple models via stacking and blending.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Select and justify a modeling approach based on accuracy, explainability, stability, analytical effort, computational efficiency, and table importability, taking into account the business context of the problem.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "text": "Recognize and mitigate the effect of:",
+          "bullets": [
+            "Starting with too many variables",
+            "Repeated use of train/test/validate sets",
+            "Model bias, including fairness concepts and proxy discrimination."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Model Explainability and Communication",
+      "weight_raw": "25-35%",
+      "weight": [
+        25,
+        35
+      ],
+      "objective": "The Candidate will be able to effectively communicate the results of applying predictive analytics, including the relationship between model input and output, to solve a business problem.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand aspects of explainability, in particular:",
+          "bullets": [
+            "The connection between ethics and explainability",
+            "Suitability, decomposability, algorithmic transparency, and post-hoc interpretability",
+            "The difference between explainability and interpretability",
+            "When a lack of explainability may be acceptable."
+          ],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "text": "Communicate and justify a recommended analytics solution, including use as appropriate of:",
+          "bullets": [
+            "Variable importance plots",
+            "Partial dependence plots",
+            "Individual conditional expectation plots",
+            "Shapley values",
+            "Lift and gain charts."
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "text": "Explain why a model is predicting certain values for certain records.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "text": "Perform data and model governance and develop model documentation in an ethical context.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "text": "Communicate in a clear and straightforward manner using common language that is appropriate for the intended audience.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "text": "Structure a report in an effective manner while following standards of practice for actuarial communication.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "e-Learning Modules",
+      "codes": "",
+      "parts": [
+        {
+          "text": "All required resources are embedded in the e-Learning modules.",
+          "codes": ""
+        }
+      ]
+    }
+  ]
+}

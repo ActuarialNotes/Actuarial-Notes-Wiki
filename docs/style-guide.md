@@ -330,6 +330,7 @@ so a colour always means the same thing.
 | **Incorrect / error / destructive** | `red` (→ `--destructive` for actions) | Wrong answers, delete actions, error text |
 | **Warning / caution / "at risk"** | `amber` (with `yellow`/`orange` siblings) | Forgotten/decaying concepts, cautions, "due" nudges |
 | **Info / neutral highlight** | `blue` | Informational callouts, neutral tips |
+| **A diff: added / dropped** | `green` / `red`, the correct/incorrect pairings (§4.2) | The Resources shelf's Vintage changes: a reading an edition added (ring + *New in* pill) or dropped (ring, struck title, *Dropped in* pill) |
 | **Reward / rare** | `amber`/gold + the rainbow **foil** gradient | Gems, L3 mastery, collected cards |
 | **Pro (the paid tier)** | monochrome — `bg-foreground` / `text-background` | The **Pro** label, wherever the tier is named (`components/ProBadge.tsx`) |
 | **Streak / energy** | `orange` (flame) | Streak flame & celebrations |

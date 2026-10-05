@@ -2,165 +2,190 @@ import { describe, expect, it } from 'vitest'
 import { buildConceptGraph } from './conceptGraph'
 import {
   EMPTY_PROGRESS,
+  MAKING,
   MIN_TOPIC_CONCEPTS,
-  bridgePlan,
-  challengeOrder,
+  boardState,
   combine,
   commonNeighbours,
-  conceptConnections,
   craftTopics,
-  dailyChallenge,
-  foundConnections,
-  isBridged,
-  isPlaced,
+  madeBy,
   objectiveBlocks,
   objectiveTitle,
-  pairKey,
-  placedConcepts,
+  practiceQuestions,
+  PRACTICE_FALLBACK,
+  seedConcepts,
   topicTally,
   withConnection,
-  withPlaced,
   type CraftProgress,
 } from './conceptCraft'
 
-// A chain A — B — C — D, a spur A — E, and F on its own: every page links
-// the next, so each connection is one link (strength 40).
+// Six concepts whose pages link the ones after them, so every connection is
+// one link (strength 40), and W, tied to P and Q only by one two-concept
+// question each (strength 20 — connected, but too faintly to be made).
+//
+//   P — Q, R, S        Q — R, S, T        R — T, U        S — T        T — U
+//
+// Finding P–Q makes R and S (connected to both); Q–R then makes T, and R–T
+// makes U — so P and Q are all a reader needs to make the rest.
 const PAGES: Record<string, string> = {
-  A: 'A leads to [[B]] and to [[E]].',
-  B: 'B leads to [[C]].',
-  C: 'C leads to [[D]].',
-  D: 'D is the end.',
-  E: 'E hangs off the first.',
-  F: 'F stands alone.',
+  P: 'Leads to [[Q]], [[R]] and [[S]].',
+  Q: 'Leads to [[R]], [[S]] and [[T]].',
+  R: 'Leads to [[T]] and [[U]].',
+  S: 'Leads to [[T]].',
+  T: 'Leads to [[U]].',
+  U: 'The end.',
+  W: 'Faint.',
 }
 const GRAPH = buildConceptGraph({
-  concepts: ['A', 'B', 'C', 'D', 'E', 'F'],
+  concepts: ['P', 'Q', 'R', 'S', 'T', 'U', 'W'],
   page: name => PAGES[name],
-  questions: [],
+  questions: [
+    { id: 'q1', links: ['Concepts/P', 'Concepts/W'] },
+    { id: 'q2', links: ['Concepts/Q', 'Concepts/W'] },
+  ],
   lines: [],
 })
+const SEEDS = seedConcepts(GRAPH)
 
 function found(...pairs: [string, string][]): CraftProgress {
   return pairs.reduce<CraftProgress>((p, [a, b]) => withConnection(p, { a, b }), EMPTY_PROGRESS)
 }
 
 describe('the graph the tests play on', () => {
-  it('has the five connections the pages make', () => {
-    expect(GRAPH.connections.map(c => c.key).sort()).toEqual(['a|b', 'a|e', 'b|c', 'c|d'])
+  it('has the connections the pages and questions make', () => {
+    expect(GRAPH.connections.map(c => `${c.key} ${c.strength}`).sort()).toEqual([
+      'p|q 40', 'p|r 40', 'p|s 40', 'p|w 20', 'q|r 40', 'q|s 40', 'q|t 40', 'q|w 20', 'r|t 40', 'r|u 40', 's|t 40', 't|u 40',
+    ])
+  })
+})
+
+describe('making concepts', () => {
+  it('finds what lies between two concepts, most strongly tied first', () => {
+    expect(commonNeighbours(GRAPH, 'P', 'Q')).toEqual([
+      { concept: 'R', tie: 40 },
+      { concept: 'S', tie: 40 },
+      { concept: 'W', tie: 20 },
+    ])
+  })
+
+  it('makes the concepts tied to both ends, strongly enough, and only from a connection', () => {
+    expect(madeBy(GRAPH, 'P', 'Q')).toEqual(['R', 'S'])
+    expect(madeBy(GRAPH, 'q', 'r')).toEqual(['P', 'T'])
+    // P and T aren't connected, so they make nothing, whatever lies between them.
+    expect(madeBy(GRAPH, 'P', 'T')).toEqual([])
+  })
+
+  it('makes at most three', () => {
+    const hub = buildConceptGraph({
+      concepts: ['A', 'B', 'C1', 'C2', 'C3', 'C4'],
+      page: name => ({ A: '[[B]] [[C1]] [[C2]] [[C3]] [[C4]]', B: '[[C1]] [[C2]] [[C3]] [[C4]]' } as Record<string, string>)[name],
+      questions: [],
+      lines: [],
+    })
+    expect(commonNeighbours(hub, 'A', 'B')).toHaveLength(4)
+    expect(madeBy(hub, 'A', 'B')).toHaveLength(MAKING.most)
+  })
+})
+
+describe('seedConcepts', () => {
+  it('deals the fewest concepts that make all the rest, earliest in the syllabus', () => {
+    // W can't be made — its ties are too faint — so it is dealt too.
+    expect(SEEDS).toEqual(['P', 'Q', 'W'])
+  })
+
+  it('deals every concept when nothing connects', () => {
+    const none = buildConceptGraph({ concepts: ['X', 'Y'], page: () => 'Nothing.', questions: [], lines: [] })
+    expect(seedConcepts(none)).toEqual(['X', 'Y'])
+    expect(seedConcepts(buildConceptGraph({ concepts: [], page: () => undefined, questions: [], lines: [] }))).toEqual([])
+  })
+})
+
+describe('the board', () => {
+  it('starts with the seeds', () => {
+    const state = boardState(GRAPH, SEEDS, EMPTY_PROGRESS)
+    expect(state.held).toEqual(['P', 'Q', 'W'])
+    expect(state.found).toEqual([])
+    expect(state.fresh.size).toBe(0)
+  })
+
+  it('takes what each connection found made, and marks it new until it is used', () => {
+    const one = boardState(GRAPH, SEEDS, found(['P', 'Q']))
+    expect(one.held).toEqual(['P', 'Q', 'W', 'R', 'S'])
+    expect(one.madeFrom.get('r')?.key).toBe('p|q')
+    expect([...one.fresh]).toEqual(['r', 's'])
+
+    const two = boardState(GRAPH, SEEDS, found(['P', 'Q'], ['Q', 'R']))
+    expect(two.held).toEqual(['P', 'Q', 'W', 'R', 'S', 'T'])
+    // R has been played with; S and T haven't.
+    expect([...two.fresh].sort()).toEqual(['s', 't'])
+  })
+
+  it('drops a connection whose ends were never in hand, or that the graph no longer has', () => {
+    const stale: CraftProgress = { found: ['t|u', 'p|q', 'p|gone', 'p|q'] }
+    const state = boardState(GRAPH, SEEDS, stale)
+    expect(state.found.map(c => c.key)).toEqual(['p|q'])
+    expect(state.held).not.toContain('U')
+  })
+
+  it('records each connection once', () => {
+    expect(found(['P', 'Q'], ['Q', 'P']).found).toEqual(['p|q'])
   })
 })
 
 describe('combine', () => {
-  it('finds a connection the vault makes, whichever way round', () => {
-    const outcome = combine(GRAPH, EMPTY_PROGRESS, 'C', 'b')
-    expect(outcome.kind).toBe('new')
-    if (outcome.kind === 'new') expect(outcome.connection.key).toBe('b|c')
+  const start = boardState(GRAPH, SEEDS, EMPTY_PROGRESS)
+  const one = boardState(GRAPH, SEEDS, found(['P', 'Q']))
+
+  it('finds a connection and says what it makes that isn’t in hand', () => {
+    expect(combine(GRAPH, start, 'Q', 'p')).toMatchObject({ kind: 'new', made: ['R', 'S'] })
+    // From Q and R: P is in hand already, so only T is new.
+    expect(combine(GRAPH, one, 'Q', 'R')).toMatchObject({ kind: 'new', made: ['T'] })
   })
 
   it('knows a connection found before', () => {
-    expect(combine(GRAPH, found(['B', 'C']), 'B', 'C').kind).toBe('known')
+    expect(combine(GRAPH, one, 'P', 'Q').kind).toBe('known')
   })
 
   it('finds nothing between unconnected concepts, or a concept and itself', () => {
-    expect(combine(GRAPH, EMPTY_PROGRESS, 'A', 'D').kind).toBe('none')
-    expect(combine(GRAPH, EMPTY_PROGRESS, 'A', 'a').kind).toBe('none')
-    expect(combine(GRAPH, EMPTY_PROGRESS, 'A', 'Nowhere').kind).toBe('none')
+    expect(combine(GRAPH, one, 'R', 'S').kind).toBe('none')
+    expect(combine(GRAPH, one, 'P', 'p').kind).toBe('none')
   })
 })
 
-describe('progress', () => {
-  it('puts concepts on the board once each, in the order placed', () => {
-    const p = withPlaced(withPlaced(EMPTY_PROGRESS, 'C', 'A'), 'a', 'F')
-    expect(p.placed).toEqual(['c', 'a', 'f'])
-    expect(placedConcepts(GRAPH, p)).toEqual(['C', 'A', 'F'])
-    expect(isPlaced(p, 'F')).toBe(true)
-    expect(withPlaced(p, 'A')).toBe(p)
-  })
-
-  it('places both ends of a connection found, and records it once', () => {
-    const p = found(['B', 'C'], ['C', 'B'])
-    expect(p.found).toEqual(['b|c'])
-    expect(p.placed).toEqual(['b', 'c'])
-  })
-
-  it('drops what the graph no longer has', () => {
-    const stale: CraftProgress = { placed: ['a', 'gone'], found: ['a|b', 'a|gone'] }
-    expect(placedConcepts(GRAPH, stale)).toEqual(['A'])
-    expect(foundConnections(GRAPH, stale).map(c => c.key)).toEqual(['a|b'])
-  })
-
-  it('tallies the board and each concept on it', () => {
-    const p = withPlaced(found(['A', 'B'], ['A', 'E']), 'F')
-    expect(topicTally(GRAPH, p)).toEqual({ placed: 4, concepts: 6, found: 2, connections: 4, complete: false })
-    expect(topicTally(GRAPH, found(['A', 'B'], ['A', 'E'], ['B', 'C'], ['C', 'D'])).complete).toBe(true)
-    const a = conceptConnections(GRAPH, p, 'A')
-    expect(a.total).toBe(2)
-    expect(a.found.map(c => c.key)).toEqual(['a|b', 'a|e'])
-    expect(conceptConnections(GRAPH, p, 'F')).toEqual({ found: [], total: 0 })
-  })
-})
-
-describe('what connects two concepts', () => {
-  it('finds the concepts connected to both', () => {
-    expect(commonNeighbours(GRAPH, 'A', 'C').map(n => n.concept)).toEqual(['B'])
-    expect(commonNeighbours(GRAPH, 'b', 'e').map(n => n.concept)).toEqual(['A'])
-    expect(commonNeighbours(GRAPH, 'A', 'D')).toEqual([])
-  })
-
-  it('bridges two concepts only through connections found to both', () => {
-    expect(isBridged(GRAPH, found(['A', 'B']), 'A', 'C')).toBe(false)
-    expect(isBridged(GRAPH, found(['A', 'B'], ['B', 'C']), 'A', 'C')).toBe(true)
-  })
-
-  it('plans the connections still to find, by way of the bridge', () => {
-    expect(bridgePlan(GRAPH, EMPTY_PROGRESS, 'A', 'C')).toEqual({
-      concept: 'B',
-      missing: [GRAPH.byKey.get('a|b'), GRAPH.byKey.get('b|c')],
+describe('topicTally', () => {
+  it('counts what is in hand and what is found', () => {
+    expect(topicTally(GRAPH, boardState(GRAPH, SEEDS, found(['P', 'Q'])))).toEqual({
+      held: 5, concepts: 7, found: 1, connections: 12, complete: false,
     })
-    expect(bridgePlan(GRAPH, found(['B', 'C']), 'A', 'C')?.missing.map(c => c.key)).toEqual(['a|b'])
-    expect(bridgePlan(GRAPH, found(['A', 'B'], ['B', 'C']), 'A', 'C')?.missing).toEqual([])
   })
 
-  it('has no plan where nothing lies between', () => {
-    expect(bridgePlan(GRAPH, EMPTY_PROGRESS, 'A', 'F')).toBeNull()
+  it('is complete once every connection is found', () => {
+    // Played in an order that keeps every connection's ends in hand.
+    const all = found(
+      ['P', 'Q'], ['Q', 'R'], ['R', 'T'], ['P', 'R'], ['P', 'S'], ['Q', 'S'], ['Q', 'T'], ['R', 'U'], ['S', 'T'], ['T', 'U'], ['P', 'W'], ['Q', 'W'],
+    )
+    const state = boardState(GRAPH, SEEDS, all)
+    expect(state.held).toHaveLength(7)
+    expect(topicTally(GRAPH, state).complete).toBe(true)
   })
 })
 
-describe('the daily challenge', () => {
-  const order = challengeOrder(GRAPH, 'topic', '2026-10-05')
+describe('practiceQuestions', () => {
+  const pool = [
+    { id: 'wide', links: ['Concepts/P', 'Concepts/X', 'Concepts/Y'] },
+    { id: 'narrow', links: ['Concepts/Q'] },
+    { id: 'other', links: ['Concepts/Z'] },
+  ]
 
-  it('draws pairs with something between them, never neighbours or strangers', () => {
-    const keys = order.map(p => pairKey(p.a, p.b)).sort()
-    expect(keys).toEqual(['a|c', 'b|d', 'b|e'])
+  it('practises the questions that test the two together', () => {
+    expect(practiceQuestions({ a: 'P', b: 'Q', questions: ['q1', 'q2'] }, pool)).toEqual(['q1', 'q2'])
   })
 
-  it('is the same all day and different another day', () => {
-    expect(challengeOrder(GRAPH, 'topic', '2026-10-05')).toEqual(order)
-    const days = ['2026-10-06', '2026-10-07', '2026-10-08'].map(d => challengeOrder(GRAPH, 'topic', d))
-    expect(days.some(d => JSON.stringify(d) !== JSON.stringify(order))).toBe(true)
-  })
-
-  it('moves on once its pair is bridged, and only then', () => {
-    const first = dailyChallenge(GRAPH, EMPTY_PROGRESS, order)!
-    expect(first).toEqual(order[0])
-    const plan = bridgePlan(GRAPH, EMPTY_PROGRESS, first.a, first.b)!
-    // One connection of the way found: still the same challenge.
-    const partway = withConnection(EMPTY_PROGRESS, plan.missing[0])
-    expect(dailyChallenge(GRAPH, partway, order)).toEqual(first)
-    // Both: the next one.
-    const done = plan.missing.reduce(withConnection, EMPTY_PROGRESS)
-    expect(isBridged(GRAPH, done, first.a, first.b)).toBe(true)
-    expect(dailyChallenge(GRAPH, done, order)).not.toEqual(first)
-  })
-
-  it('skips ahead for another challenge, stopping at the last', () => {
-    expect(dailyChallenge(GRAPH, EMPTY_PROGRESS, order, 1)).toEqual(order[1])
-    expect(dailyChallenge(GRAPH, EMPTY_PROGRESS, order, 99)).toEqual(order[order.length - 1])
-  })
-
-  it('has nothing left once every pair is bridged', () => {
-    const all = found(['A', 'B'], ['A', 'E'], ['B', 'C'], ['C', 'D'])
-    expect(dailyChallenge(GRAPH, all, order)).toBeNull()
+  it('falls back on either concept’s questions, the most focused first', () => {
+    expect(practiceQuestions({ a: 'P', b: 'Q', questions: [] }, pool)).toEqual(['narrow', 'wide'])
+    const many = Array.from({ length: 30 }, (_, i) => ({ id: `m${i}`, links: ['Concepts/P'] }))
+    expect(practiceQuestions({ a: 'P', b: 'Q', questions: [] }, many)).toHaveLength(PRACTICE_FALLBACK)
+    expect(practiceQuestions({ a: 'R', b: 'S', questions: [] }, pool)).toEqual([])
   })
 })
 

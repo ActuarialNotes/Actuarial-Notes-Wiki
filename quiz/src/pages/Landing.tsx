@@ -1378,7 +1378,7 @@ export default function Landing() {
                 data-testid="concept-craft-entry"
                 leading={<CraftLogo size="lg" />}
                 title="Concept Craft"
-                subtitle="Find how a topic’s concepts connect"
+                subtitle="Connect concepts to make new ones"
               />
             </ListPanel>
           </div>

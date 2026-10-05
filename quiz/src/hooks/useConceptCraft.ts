@@ -3,40 +3,39 @@ import { EMPTY_PROGRESS, pairKey, type CraftProgress } from '@/lib/conceptCraft'
 
 /**
  * A reader's **Concept Craft** boards (docs/concept-craft.md): per topic, the
- * concepts put on the board, the connections found, where each concept was
- * left, and the days the daily challenge was met — plus which connections the
- * board shows (`filter`).
+ * connections found and where each concept was left — plus which connections
+ * the board shows (`filter`). Everything else on a board, the concepts in hand
+ * among it, is made from the connections found (`boardState`).
  *
  * localStorage only, the way Cowork's stores are (`hooks/useCoworkLibrary.ts`):
- * the record is small, it is names and pair keys rather than content, and a
- * board is a study aid whose loss on a new device costs a few minutes of
- * play — not worth a server table. Synchronous for the same reason every
- * local-first store here is: a connection lands on the board in the same
- * render it was found.
+ * the record is small, it is pair keys rather than content, and a board is a
+ * study aid whose loss on a new device costs a few minutes of play — not worth
+ * a server table. Synchronous for the same reason every local-first store here
+ * is: a connection lands on the board in the same render it was found.
  *
  * It holds no graph. The page passes connections in where one is needed, so
  * nothing that imports the store pulls the vault into a chunk.
  */
 
-const STORAGE_KEY = 'craft.v2'
-/** The first version's save: recipes from an authored book that no longer exists. */
-const RETIRED_KEYS = ['craft.v1']
+const STORAGE_KEY = 'craft.v3'
+/**
+ * Earlier saves: the first version's recipes from an authored book, and the
+ * second's concepts placed by hand. Neither means anything to a board whose
+ * concepts are made, so they are cleared rather than read.
+ */
+const RETIRED_KEYS = ['craft.v1', 'craft.v2']
 
 /** Which connections the board draws: all of them, or only the moderate and strong, or only the strong. */
 export type StrengthFilter = 'all' | 'moderate' | 'strong'
 
 export interface CraftBoardSave {
-  /** Concepts on the board, lower-cased, in the order placed. */
-  placed: string[]
   /** Connections found (`pairKey`), in the order found. */
   found: string[]
   /** Where each concept was left, keyed by lower-cased name, rounded to the pixel. */
   positions: Record<string, [number, number]>
-  /** Local dates (YYYY-MM-DD) on which the daily challenge was met. */
-  challenges: string[]
 }
 
-const EMPTY_BOARD: CraftBoardSave = { placed: [], found: [], positions: {}, challenges: [] }
+const EMPTY_BOARD: CraftBoardSave = { found: [], positions: {} }
 
 interface Saved {
   filter: StrengthFilter
@@ -61,10 +60,8 @@ function cleanBoard(raw: unknown): CraftBoardSave {
     }
   }
   return {
-    placed: [...new Set(strings(r.placed).map(s => s.toLowerCase()))],
     found: [...new Set(strings(r.found).filter(s => s.includes('|')))],
     positions,
-    challenges: [...new Set(strings(r.challenges))].slice(-60),
   }
 }
 
@@ -103,13 +100,10 @@ function persist(saved: Saved) {
 
 interface ConceptCraftState extends Saved {
   setFilter: (filter: StrengthFilter) => void
-  /** Put concepts on a topic's board. Idempotent. */
-  place: (topicId: string, names: readonly string[]) => void
-  /** Record a connection found — both its ends go on the board with it. Idempotent. */
+  /** Record a connection found. Idempotent. */
   addConnection: (topicId: string, connection: { a: string; b: string }) => void
   /** Remember where the concepts lie. Replaces the topic's positions wholesale. */
   savePositions: (topicId: string, positions: Record<string, [number, number]>) => void
-  completeChallenge: (topicId: string, date: string) => void
   /** Clear a topic's board. */
   resetBoard: (topicId: string) => void
 }
@@ -127,24 +121,15 @@ export const useConceptCraft = create<ConceptCraftState>((set, get) => {
     if (next === board) return
     commit({ ...current, boards: { ...current.boards, [topicId]: next } })
   }
-  const withNames = (board: CraftBoardSave, names: readonly string[]): CraftBoardSave => {
-    const add = [...new Set(names.map(n => n.toLowerCase()))].filter(n => n && !board.placed.includes(n))
-    return add.length ? { ...board, placed: [...board.placed, ...add] } : board
-  }
 
   return {
     ...load(),
     setFilter: filter => commit({ ...saved(), filter }),
-    place: (topicId, names) => updateBoard(topicId, board => withNames(board, names)),
     addConnection: (topicId, { a, b }) => updateBoard(topicId, board => {
-      const placed = withNames(board, [a, b])
       const key = pairKey(a, b)
-      return placed.found.includes(key) ? placed : { ...placed, found: [...placed.found, key] }
+      return board.found.includes(key) ? board : { ...board, found: [...board.found, key] }
     }),
     savePositions: (topicId, positions) => updateBoard(topicId, board => ({ ...board, positions })),
-    completeChallenge: (topicId, date) => updateBoard(topicId, board =>
-      board.challenges.includes(date) ? board : { ...board, challenges: [...board.challenges, date].slice(-60) },
-    ),
     resetBoard: topicId => {
       const current = saved()
       const boards = { ...current.boards }
@@ -159,7 +144,7 @@ export function boardFor(boards: Record<string, CraftBoardSave>, topicId: string
   return boards[topicId] ?? EMPTY_BOARD
 }
 
-/** The game's view of a board: what is on it and what has been found. */
+/** The game's view of a board: the connections found. */
 export function progressOf(board: CraftBoardSave): CraftProgress {
-  return board.placed.length || board.found.length ? { placed: board.placed, found: board.found } : EMPTY_PROGRESS
+  return board.found.length ? { found: board.found } : EMPTY_PROGRESS
 }

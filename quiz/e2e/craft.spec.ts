@@ -1,13 +1,15 @@
 import { test, expect, type Page } from '@playwright/test'
 
 // Concept Craft (docs/concept-craft.md): the way in from the Quiz tab, a
-// connection found by dropping one concept on another — and nothing to close
-// afterwards — a pair nothing connects going back, the tap-then-tap way in,
-// the app's concept popup a card opens, and a connection's own card. Every
-// flow is signed out, so the board lives in localStorage alone, which is also
-// what it does for a reader. The day's challenge puts two concepts on a fresh
-// board and which two depends on the date, so nothing here assumes what is on
-// the board before the test put it there.
+// connection found by dropping one concept on another — new concepts made,
+// and nothing to close afterwards — a pair nothing connects going back, the
+// tap-then-tap way in, the app's concept popup a card opens, and a
+// connection's own card down to its quiz. Every flow is signed out, so the
+// board lives in localStorage alone, which is also what it does for a reader.
+//
+// The cards a topic starts with are read off the vault (`seedConcepts`), so
+// nothing here names them: the deck deals them in order, and the first two are
+// always a connected pair — the one that makes the most.
 
 const TOPIC = '/craft/exam-p-general-probability'
 
@@ -27,10 +29,7 @@ async function restingBox(page: Page, name: string) {
   return last
 }
 
-function deckTile(page: Page, name: string) {
-  const exactly = new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
-  return page.getByTestId('craft-deck-tile').filter({ hasText: exactly })
-}
+const centre = (box: { x: number; y: number; width: number; height: number }): Point => ({ x: box.x + box.width / 2, y: box.y + box.height / 2 })
 
 /** Press, travel and let go, the way a hand does. */
 async function dragBetween(page: Page, from: Point, to: Point) {
@@ -40,41 +39,25 @@ async function dragBetween(page: Page, from: Point, to: Point) {
   await page.mouse.up()
 }
 
-const centre = (box: { x: number; y: number; width: number; height: number }): Point => ({ x: box.x + box.width / 2, y: box.y + box.height / 2 })
-
-/** A point on the board with no card under it. */
-async function emptySpot(page: Page): Promise<Point> {
-  const board = await page.getByTestId('craft-board').boundingBox()
-  if (!board) throw new Error('no board')
-  for (const [fx, fy] of [[0.85, 0.3], [0.85, 0.6], [0.6, 0.25], [0.6, 0.75]]) {
-    const p = { x: board.x + board.width * fx, y: board.y + board.height * fy }
-    const free = await page.evaluate(({ x, y }) => !document.elementFromPoint(x, y)?.closest('[data-craft-node], [data-testid="craft-strength"]'), p)
-    if (free) return p
-  }
-  throw new Error('no empty spot on the board')
+/** Drag one card on the board onto another. */
+async function drop(page: Page, from: string, onto: string) {
+  const a = await restingBox(page, from)
+  const b = await restingBox(page, onto)
+  if (!a || !b) throw new Error(`${from} or ${onto} is not on the board`)
+  await dragBetween(page, centre(a), centre(b))
 }
 
-/** Put a concept from the deck down on empty board. */
-async function putDown(page: Page, name: string) {
-  const tile = deckTile(page, name)
-  await tile.scrollIntoViewIfNeeded()
-  const from = await tile.boundingBox()
-  if (!from) throw new Error(`${name} is not in the deck`)
-  await dragBetween(page, centre(from), await emptySpot(page))
-  await restingBox(page, name)
+/** The cards on the board, in the order they came into hand (the deck's order). */
+async function inHand(page: Page) {
+  await expect(page.getByTestId('craft-deck-tile').first()).toBeVisible()
+  return page.getByTestId('craft-deck-tile').evaluateAll(tiles => tiles.map(t => t.textContent?.trim() ?? ''))
 }
 
-/** Drop a concept from the deck on a card on the board. */
-async function dropOn(page: Page, name: string, onto: string) {
-  const tile = deckTile(page, name)
-  await tile.scrollIntoViewIfNeeded()
-  const from = await tile.boundingBox()
-  const to = await restingBox(page, onto)
-  if (!from || !to) throw new Error(`${name} or ${onto} is missing`)
-  await dragBetween(page, centre(from), centre(to))
+/** The strength on the line between two cards — named in the graph's order, which is by name. */
+function strength(page: Page, x: string, y: string) {
+  const [a, b] = [x, y].sort((p, q) => (p.toLowerCase() < q.toLowerCase() ? -1 : 1))
+  return page.locator(`[data-testid="craft-strength"][aria-label^="${a} and ${b}:"]`)
 }
-
-const strength = (page: Page, a: string, b: string) => page.locator(`[data-testid="craft-strength"][aria-label^="${a} and ${b}:"]`)
 
 test.describe('concept craft', () => {
   test('opens from the Quiz tab onto the topic picker', async ({ page }) => {
@@ -83,67 +66,84 @@ test.describe('concept craft', () => {
     await expect(page).toHaveURL(/\/craft$/)
     await page.getByTestId('craft-topic').filter({ hasText: 'General Probability' }).click()
     await expect(page).toHaveURL(new RegExp(`${TOPIC}$`))
-    await expect(page.getByTestId('craft-tally')).toHaveText(/^0 of \d+ connections/)
-    // The day's challenge sets its two concepts on the board.
-    await expect(page.getByTestId('craft-challenge')).toContainText('What connects')
-    await expect(page.locator('[data-craft-node]')).toHaveCount(2)
+    await expect(page.getByTestId('craft-tally')).toContainText(/^\d+ of \d+ concepts · 0 of \d+ connections$/)
+    // A hand, not the deck: a few cards to make the rest from.
+    const cards = await inHand(page)
+    expect(cards.length).toBeGreaterThanOrEqual(2)
+    await expect(page.locator('[data-craft-node]')).toHaveCount(cards.length)
   })
 
-  test('finds a connection by dropping one concept on another, with nothing to close, and keeps it', async ({ page }) => {
+  test('makes new concepts from a connection, with nothing to close, and keeps them', async ({ page }) => {
     await page.goto(TOPIC)
-    await putDown(page, 'Bayes Theorem')
-    await dropOn(page, 'The Law of Total Probability', 'Bayes Theorem')
+    const [a, b] = await inHand(page)
+    const before = await page.locator('[data-craft-node]').count()
+    await drop(page, a, b)
 
-    await expect(strength(page, 'Bayes Theorem', 'The Law of Total Probability')).toHaveText(/^\d+$/)
-    await expect(page.getByTestId('craft-tally')).toHaveText(/^1 of \d+ connections/)
+    await expect(strength(page, a, b)).toHaveText(/^\d+$/)
+    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ connections$/)
+    // What the pair made lands on the board, in the exam's colour.
+    await expect.poll(() => page.locator('[data-craft-node]').count()).toBeGreaterThan(before)
+    await expect(page.locator('[data-craft-node][data-new]').first()).toBeVisible()
     // The map is the answer: no card, no popup.
     await expect(page.getByTestId('craft-connection')).toHaveCount(0)
     await expect(page.getByRole('complementary', { name: /^Concept:/ })).toHaveCount(0)
 
+    const made = await page.locator('[data-craft-node]').count()
     await page.reload()
-    await expect(page.getByTestId('craft-tally')).toHaveText(/^1 of \d+ connections/)
-    await expect(strength(page, 'Bayes Theorem', 'The Law of Total Probability')).toBeVisible()
+    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ connections$/)
+    await expect(page.locator('[data-craft-node]')).toHaveCount(made)
+    await expect(strength(page, a, b)).toBeVisible()
   })
 
   test('sends back a pair nothing connects', async ({ page }) => {
-    await page.goto(TOPIC)
-    await putDown(page, 'Bayes Theorem')
-    await dropOn(page, 'Discrete Mathematics', 'Bayes Theorem')
-    await expect(page.getByTestId('craft-notice')).toHaveText('No connection between these two')
-    await expect(page.getByTestId('craft-tally')).toHaveText(/^0 of \d+ connections/)
+    // PCPA's *Dealing with Data* is loosely knit, so its starting hand holds
+    // pairs nothing connects; try them until one goes back.
+    await page.goto('/craft/exam-pcpa-dealing-with-data')
+    const cards = await inHand(page)
+    let sentBack = false
+    for (let i = 0; i < cards.length && !sentBack; i++) {
+      for (let j = i + 1; j < cards.length && !sentBack; j++) {
+        if (await strength(page, cards[i], cards[j]).count()) continue
+        await drop(page, cards[i], cards[j])
+        sentBack = await page.getByTestId('craft-notice').filter({ hasText: 'No connection between these two' }).isVisible()
+          .catch(() => false)
+        if (!sentBack) await page.waitForTimeout(300)
+      }
+    }
+    expect(sentBack).toBe(true)
   })
 
   test('connects by tapping a deck card, then a card on the board', async ({ page }) => {
     await page.goto(TOPIC)
-    await putDown(page, 'Bayes Theorem')
-    await deckTile(page, 'Conditional Probability').click()
-    await expect(deckTile(page, 'Conditional Probability')).toHaveAttribute('aria-pressed', 'true')
-    await page.locator('[data-craft-node="Bayes Theorem"]').click()
-    await expect(strength(page, 'Bayes Theorem', 'Conditional Probability')).toBeVisible()
+    const [a, b] = await inHand(page)
+    const tile = page.getByTestId('craft-deck-tile').first()
+    await tile.click()
+    await expect(tile).toHaveAttribute('aria-pressed', 'true')
+    await page.locator(`[data-craft-node="${b}"]`).click()
+    await expect(strength(page, a, b)).toBeVisible()
   })
 
   test('reads a concept on the board in the app’s concept popup', async ({ page }) => {
     await page.goto(TOPIC)
-    await putDown(page, 'Bayes Theorem')
-    await page.locator('[data-craft-node="Bayes Theorem"]').click()
-    await expect(page.getByRole('complementary', { name: 'Concept: Bayes Theorem' })).toBeVisible()
-    await expect(page.locator('[data-craft-node="Bayes Theorem"]')).toHaveAttribute('aria-current', 'true')
+    const [a] = await inHand(page)
+    await page.locator(`[data-craft-node="${a}"]`).click()
+    await expect(page.getByRole('complementary', { name: `Concept: ${a}` })).toBeVisible()
+    await expect(page.locator(`[data-craft-node="${a}"]`)).toHaveAttribute('aria-current', 'true')
   })
 
-  test('opens a connection: its strength, what the pages say, and a quiz on its questions', async ({ page }) => {
+  test('opens a connection: its strength, and a quiz on its questions', async ({ page }) => {
     await page.goto(TOPIC)
-    await putDown(page, 'Bayes Theorem')
-    await dropOn(page, 'The Law of Total Probability', 'Bayes Theorem')
+    const [a, b] = await inHand(page)
+    await drop(page, a, b)
     // Off the cards, so nothing is lit and every strength shows.
     await page.mouse.move(5, 5)
-    await strength(page, 'Bayes Theorem', 'The Law of Total Probability').click()
+    await strength(page, a, b).click()
 
     const card = page.getByTestId('craft-connection')
     await expect(card).toBeVisible()
     await expect(card.getByTestId('craft-connection-strength')).toHaveText(/^\d+$/)
-    await expect(card).toContainText('What the pages say')
     const practice = card.getByRole('button', { name: /^Practice \d+ questions?$/ })
-    await expect(practice).toBeVisible({ timeout: 15_000 })
+    await expect(practice).toBeVisible()
     await practice.click()
     await expect(page).toHaveURL(/\/quiz\?selection=stored/)
   })

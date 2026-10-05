@@ -119,7 +119,7 @@ limits (`fitParams`: 100 characters; page params longer).
 |--------|--------|
 | Pages & people | `page_view`, `first_interaction` |
 | Reading — no URL of their own | `content_view` (`content_type`, `content_name`, `surface`: `popup` for the concept popup's open page, `reader` for the PDF reader), `search` (GA4's recommended event: `search_term`, `search_scope`) |
-| Studying | `quiz_started`, `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome` and the connection's `strength`) and `craft_topic_completed` (docs/concept-craft.md) |
+| Studying | `quiz_started`, `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome`, the connection's `strength` and how many concepts a new one `made`) and `craft_topic_completed` (docs/concept-craft.md) |
 | Gamification | `streak_extended`, `xp_earned`, `daily_goal_met`, `quest_completed`, `quest_claimed`, `daily_quests_cleared`, `league_joined`, `league_left` |
 | Money & accounts | `upgrade_clicked`, `store_outbound_clicked` (product, seller, aisle — docs/store.md), `login`, `sign_up` |
 | Reliability | `exception` (from `errorMonitoring.ts`) |

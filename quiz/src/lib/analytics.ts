@@ -75,9 +75,10 @@ export interface AnalyticsEventMap {
    * Two concepts dropped together on a Concept Craft board (docs/concept-craft.md).
    * `outcome` is what the drop did — `new` (a connection found), `known` (one
    * found before) or `none` (nothing connects them); `strength` is the
-   * connection's, 0–100, when there is one.
+   * connection's, 0–100, when there is one, and `made` how many new concepts a
+   * new one brought.
    */
-  craft_combined: { exam: string; topic: string; outcome: string; strength?: number }
+  craft_combined: { exam: string; topic: string; outcome: string; strength?: number; made?: number }
   /** Every connection in a Concept Craft topic found. */
   craft_topic_completed: { exam: string; topic: string }
   upgrade_clicked: Record<string, never>

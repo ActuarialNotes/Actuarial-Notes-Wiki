@@ -244,22 +244,27 @@ before touching that area**:
   `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
 - `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle at the top of
-  the Quiz tab): how a topic's concepts connect, found by hand on a dark, zoomable board —
-  drop one card on another and, where the vault ties them together, a line joins them
-  carrying the connection's **strength**, 0–100; where nothing does, the card goes back.
-  Nothing opens on a find: the map is the answer. Nothing is authored either — a topic is
-  an exam page's learning objective (`craftTopics`, thirty boards), and every connection is
+  the Quiz tab): a topic crafted out of a few of its concepts on a dark, zoomable board. It
+  starts with the **seeds** — the fewest concepts from which every other can be made
+  (`seedConcepts`, two to eight cards) — and the reader drops one card on another: where the
+  vault ties them together, a line joins them carrying the connection's **strength**, 0–100,
+  and the connection **makes** what lies between them — up to three concepts tied to both,
+  each tie at least 25 (`MAKING`, `madeBy`) — landing beside the pair filled with the exam's
+  accent until they are connected to something; where nothing ties them, the card goes back.
+  Nothing opens on a find (the map is the answer), and there is no prompt or challenge: the
+  reader builds and discovers on their own. Nothing is authored either — a topic is an exam
+  page's learning objective (`craftTopics`, thirty boards), and every connection is
   **derived** (`lib/conceptGraph.ts`) from what the pages say about each other (links, and
   names written out — a common name discounted by how many of the topic's pages write it),
   which concepts the quiz pool tests together, and which the syllabus names on one line,
   combined as a noisy-OR; the sentences are kept as the connection's evidence. A card on the
   board opens in the app's **concept popup** (no board-side concept card); a line's strength
-  opens the connection's card — strength, what it is measured on, the pages' words, its
-  questions with **Practice**, the syllabus line. The daily challenge is "what connects A and
-  B?" (two concepts joined only through a third). The measure is how much the *vault* says
-  about a pair, so a weak pair that should be strong is a page to fix, not a weight to tune.
-  localStorage only; feeds no mastery or XP. Read before touching anything named `craft*`,
-  `conceptCraft` or `conceptGraph`.
+  opens the connection's card — the strength, one big **Practice** button (the pair's
+  questions, or either concept's — `practiceQuestions`) and the pages' words. The measure is
+  how much the *vault* says about a pair, so a weak pair that should be strong is a page to
+  fix, not a weight to tune. localStorage only, and only the connections found — the hand is
+  re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
+  named `craft*`, `conceptCraft` or `conceptGraph`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
@@ -976,15 +981,19 @@ Other important `lib/` modules:
   `connectionStrength` (the noisy-OR over pages, questions and syllabus lines, weights in
   `STRENGTH_WEIGHTS`, cut-off `MIN_STRENGTH`, bands `STRENGTH_TIERS`) and `buildConceptGraph`.
   `conceptCraft.ts` is the game: topics read off the exam pages (`objectiveBlocks`,
-  `craftTopics` — studiable exams, objectives with six or more concept pages), a board as two
-  lists, placed concepts and found pair keys (`combine`, `withPlaced`, `withConnection`,
-  `topicTally` — all that `hooks/useConceptCraft.ts` stores), and the challenge
-  (`challengeOrder`, `dailyChallenge`, `bridgePlan`, `isBridged`). `craftLayout.ts` is the
-  board's physics and camera: bodies, springs sized by strength (`connectionSpring`),
-  collision, seeding (`spawnNear`, `seedPositions`), a dragged card as a **ghost** (no force
-  reaches it — or collision would shove the target out from under the drop), `fitView` with
-  insets for the panels. All pure and tested; `conceptCraftVault.test.ts` runs the first two
-  over the real vault.
+  `craftTopics` — studiable exams, objectives with six or more concept pages), what a
+  connection makes (`commonNeighbours`, `madeBy`, capped and floored by `MAKING`), the starting
+  hand (`seedConcepts` — greedy: the connected pair reaching the most, earliest in the
+  syllabus, then whatever brings the most within reach), a board as one list of found pair
+  keys (all that `hooks/useConceptCraft.ts` stores) read back into the hand, what made each
+  card and which are new (`boardState`), `combine`, `withConnection`, `topicTally`, and a
+  connection's practice (`practiceQuestions`). `craftLayout.ts` is the board's physics and
+  camera: bodies, springs sized by strength (`connectionSpring`), collision, seeding
+  (`spawnBeside` for what a find made, `spawnNear`, `seedPositions`), a dragged card as a
+  **ghost** (no force reaches it — or collision would shove the target out from under the
+  drop), `fitView` with insets for the panels. All pure and tested;
+  `conceptCraftVault.test.ts` runs the first two over the real vault, playing every topic
+  out from its seeds to every concept and connection.
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
   approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
@@ -1086,7 +1095,7 @@ Other important `lib/` modules:
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **196 test files /
-~3175 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~3180 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

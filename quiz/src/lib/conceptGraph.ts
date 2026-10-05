@@ -392,7 +392,7 @@ export interface ConceptGraph {
  * concept name it means — the same reading `filterQuestions` gives it, so a
  * question counted here is one the concept's own question list shows.
  */
-function tagName(link: string): string {
+export function tagName(link: string): string {
   return linkTargetName(link.replace(/\+/g, ' ')).toLowerCase()
 }
 

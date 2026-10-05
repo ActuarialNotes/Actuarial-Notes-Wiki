@@ -6,17 +6,22 @@
  * `[!example]` callouts — and the concept pages it names. Any two of them may be
  * connected, and how strongly is the concept graph's business
  * (`lib/conceptGraph.ts`): read off the pages, the questions and the syllabus,
- * never authored. The game is finding those connections: put concepts on the
- * board, drop one on another, and where the vault ties them together a line is
- * drawn between them carrying its strength.
+ * never authored.
  *
- * A reader's progress in a topic is two lists — the concepts put on the board,
- * and the connections found — as names and pair keys, re-read against the graph
- * every time. A vault edit that removes a connection takes it off the board
+ * The game is crafting the topic out of a few of its concepts. A reader starts
+ * with the **seeds** — the fewest concepts from which every other can be made
+ * (`seedConcepts`) — and drops one concept on another. Where the vault connects
+ * the two, a line is drawn between them carrying its strength, and the
+ * connection **makes** what lies between them: up to three concepts tied to both
+ * (`madeBy`). Play on with what was made, and the whole topic follows.
+ *
+ * A reader's progress is one list — the connections found, in order — and
+ * everything else is re-read from it against the graph every time: which
+ * concepts are in hand, which connection made each, which are new
+ * (`boardState`). A vault edit that removes a connection takes it off the board
  * rather than breaking it.
  *
- * Nothing here touches the DOM, storage or the clock: the date is passed in,
- * so the daily challenge is reproducible in a test.
+ * Nothing here touches the DOM, storage or the clock.
  */
 
 import {
@@ -24,6 +29,7 @@ import {
   linkTargetName,
   flattenLine,
   pairKey,
+  tagName,
   type ConceptGraph,
   type Connection,
   type GraphQuestion,
@@ -32,7 +38,6 @@ import {
 import { examHue } from './examColors'
 import { examPageIdFromFile } from './examMenu'
 import { examStatus } from './examStatus'
-import { hashString } from './quests'
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 export { pairKey }
@@ -163,50 +168,174 @@ export function topicGraph(
   return buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines })
 }
 
+// ─── Making concepts ─────────────────────────────────────────────────────────
+
+/**
+ * What a connection found makes: the concepts most strongly tied to *both* its
+ * ends — at most `most` of them, and each tie at least `floor`, so what appears
+ * is something the two concepts share rather than everything either touches.
+ */
+export const MAKING = { most: 3, floor: 25 } as const
+
+const norm = (name: string) => name.trim().toLowerCase()
+const otherEnd = (c: Connection, name: string) => (norm(c.a) === name ? norm(c.b) : norm(c.a))
+
+/**
+ * The concepts connected to both `a` and `b`, by name, most strongly tied first
+ * (by the weaker of the two ties) — what lies between two concepts.
+ */
+export function commonNeighbours(graph: ConceptGraph, a: string, b: string): { concept: string; tie: number }[] {
+  const x = norm(a)
+  const y = norm(b)
+  const fromB = new Map((graph.neighbours.get(y) ?? []).map(c => [otherEnd(c, y), c]))
+  const out: { concept: string; tie: number }[] = []
+  for (const c of graph.neighbours.get(x) ?? []) {
+    const n = otherEnd(c, x)
+    const d = fromB.get(n)
+    if (!d || n === y) continue
+    out.push({ concept: norm(c.a) === n ? c.a : c.b, tie: Math.min(c.strength, d.strength) })
+  }
+  return out.sort((p, q) => q.tie - p.tie || p.concept.localeCompare(q.concept))
+}
+
+/** What finding the connection between `a` and `b` makes — whether or not it is already in hand. */
+export function madeBy(graph: ConceptGraph, a: string, b: string): string[] {
+  if (!graph.byKey.has(pairKey(a, b))) return []
+  return commonNeighbours(graph, a, b)
+    .filter(n => n.tie >= MAKING.floor)
+    .slice(0, MAKING.most)
+    .map(n => n.concept)
+}
+
+/**
+ * Everything that can be made from `held`, by finding every connection
+ * between concepts in hand and taking what each makes, until nothing more
+ * comes — the most a reader holding `held` could ever reach. Lower-cased; grows
+ * `held` in place, starting from the concepts in `from`.
+ */
+function reach(graph: ConceptGraph, held: Set<string>, from: Iterable<string>): Set<string> {
+  const queue = [...from]
+  while (queue.length) {
+    const y = queue.shift() as string
+    for (const c of graph.neighbours.get(y) ?? []) {
+      if (!held.has(otherEnd(c, y))) continue
+      for (const made of madeBy(graph, c.a, c.b)) {
+        const m = norm(made)
+        if (held.has(m)) continue
+        held.add(m)
+        queue.push(m)
+      }
+    }
+  }
+  return held
+}
+
+/** How many connections, earliest in the syllabus first, are tried as the opening pair. */
+const OPENING_TRIES = 150
+
+/**
+ * **The seeds** — the fewest concepts a reader needs in hand to make every
+ * other concept in the topic, in the order they are dealt.
+ *
+ * Found greedily, which on graphs this size is the minimum or near it: first
+ * the connected pair that reaches the most (`reach`), preferring the pair
+ * earliest in the syllabus — the first one that reaches everything wins —
+ * then, while anything is still out of reach, the concept that brings the most
+ * of it within reach, again earliest first. A concept nothing can make (one
+ * with no connection, or none it shares strongly enough) is always a seed.
+ */
+export function seedConcepts(graph: ConceptGraph): string[] {
+  const order = graph.concepts
+  if (order.length === 0) return []
+  const index = new Map(order.map((n, i) => [norm(n), i]))
+  const at = (n: string) => index.get(norm(n)) ?? order.length
+  const pairs = [...graph.connections].sort((x, y) =>
+    Math.max(at(x.a), at(x.b)) - Math.max(at(y.a), at(y.b)) || Math.min(at(x.a), at(x.b)) - Math.min(at(y.a), at(y.b)))
+
+  let best: { pair: string[]; held: Set<string> } | null = null
+  for (const c of pairs.slice(0, OPENING_TRIES)) {
+    const pair = [c.a, c.b].sort((p, q) => at(p) - at(q))
+    const held = reach(graph, new Set(pair.map(norm)), pair.map(norm))
+    if (!best || held.size > best.held.size) best = { pair, held }
+    if (held.size === order.length) break
+  }
+  // No connection at all: there is nothing to make, so every concept is a seed.
+  if (!best) return [...order]
+
+  const seeds = [...best.pair]
+  let held = best.held
+  while (held.size < order.length) {
+    let pick: { name: string; held: Set<string> } | null = null
+    for (const name of order) {
+      if (held.has(norm(name))) continue
+      const next = reach(graph, new Set([...held, norm(name)]), [norm(name)])
+      if (!pick || next.size > pick.held.size) pick = { name, held: next }
+    }
+    if (!pick) break
+    seeds.push(pick.name)
+    held = pick.held
+  }
+  return seeds
+}
+
 // ─── A reader's board ────────────────────────────────────────────────────────
 
-/** A reader's place in one topic. */
+/** A reader's place in one topic: the connections found (`pairKey`), in the order found. */
 export interface CraftProgress {
-  /** The concepts on the board, lower-cased, in the order they were put there. */
-  placed: string[]
-  /** The connections found (`pairKey`), in the order found. */
   found: string[]
 }
 
-export const EMPTY_PROGRESS: CraftProgress = { placed: [], found: [] }
+export const EMPTY_PROGRESS: CraftProgress = { found: [] }
 
-const norm = (name: string) => name.trim().toLowerCase()
-
-function canonicalNames(graph: ConceptGraph): Map<string, string> {
-  return new Map(graph.concepts.map(c => [norm(c), c]))
+/** A board, as the reader's progress makes it. Names as the graph spells them. */
+export interface BoardState {
+  /** The concepts in hand, in the order they came: the seeds, then what each find made. */
+  held: string[]
+  /** The connections found that still hold, in the order found. */
+  found: Connection[]
+  /** The connection that made each concept that isn't a seed, by lower-cased name. */
+  madeFrom: Map<string, Connection>
+  /** Concepts made but not yet in any connection found — the new cards. Lower-cased. */
+  fresh: Set<string>
 }
 
-/** The concepts on the board, as the graph names them — any the topic no longer has drop out. */
-export function placedConcepts(graph: ConceptGraph, progress: CraftProgress): string[] {
-  const names = canonicalNames(graph)
-  return [...new Set(progress.placed.map(norm))].map(n => names.get(n)).filter((n): n is string => !!n)
+/**
+ * The board a reader's progress makes: start from the seeds, and take each
+ * connection found in order — kept only while both its ends are in hand, as
+ * they were when it was found — adding what it made.
+ */
+export function boardState(graph: ConceptGraph, seeds: readonly string[], progress: CraftProgress): BoardState {
+  const names = new Map(graph.concepts.map(c => [norm(c), c]))
+  const held: string[] = []
+  const inHand = new Set<string>()
+  const take = (name: string) => {
+    const key = norm(name)
+    const canon = names.get(key)
+    if (!canon || inHand.has(key)) return false
+    inHand.add(key)
+    held.push(canon)
+    return true
+  }
+  seeds.forEach(take)
+  const found: Connection[] = []
+  const madeFrom = new Map<string, Connection>()
+  const seen = new Set<string>()
+  for (const key of progress.found) {
+    const c = graph.byKey.get(key)
+    if (!c || seen.has(key) || !inHand.has(norm(c.a)) || !inHand.has(norm(c.b))) continue
+    seen.add(key)
+    found.push(c)
+    for (const made of madeBy(graph, c.a, c.b)) if (take(made)) madeFrom.set(norm(made), c)
+  }
+  const touched = new Set(found.flatMap(c => [norm(c.a), norm(c.b)]))
+  const fresh = new Set([...madeFrom.keys()].filter(n => !touched.has(n)))
+  return { held, found, madeFrom, fresh }
 }
 
-/** The connections found that the graph still has, in the order found. */
-export function foundConnections(graph: ConceptGraph, progress: CraftProgress): Connection[] {
-  return [...new Set(progress.found)].map(k => graph.byKey.get(k)).filter((c): c is Connection => !!c)
-}
-
-export function isPlaced(progress: CraftProgress, name: string): boolean {
-  return progress.placed.includes(norm(name))
-}
-
-/** Progress with these concepts on the board too. Idempotent. */
-export function withPlaced(progress: CraftProgress, ...names: string[]): CraftProgress {
-  const add = [...new Set(names.map(norm))].filter(n => n && !progress.placed.includes(n))
-  return add.length ? { ...progress, placed: [...progress.placed, ...add] } : progress
-}
-
-/** Progress with one more connection found — and both its ends on the board. Idempotent. */
+/** Progress with one more connection found. Idempotent. */
 export function withConnection(progress: CraftProgress, connection: Pick<Connection, 'a' | 'b'>): CraftProgress {
-  const placed = withPlaced(progress, connection.a, connection.b)
   const key = pairKey(connection.a, connection.b)
-  return placed.found.includes(key) ? placed : { ...placed, found: [...placed.found, key] }
+  return progress.found.includes(key) ? progress : { found: [...progress.found, key] }
 }
 
 /** What happens when `a` is dropped on `b`. */
@@ -215,17 +344,20 @@ export type CombineOutcome =
   | { kind: 'none' }
   /** Found before: the line between them lights up. */
   | { kind: 'known'; connection: Connection }
-  | { kind: 'new'; connection: Connection }
+  /** A new connection, and the concepts it makes that weren't in hand. */
+  | { kind: 'new'; connection: Connection; made: string[] }
 
-export function combine(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): CombineOutcome {
+export function combine(graph: ConceptGraph, state: BoardState, a: string, b: string): CombineOutcome {
   if (norm(a) === norm(b)) return { kind: 'none' }
   const connection = graph.byKey.get(pairKey(a, b))
   if (!connection) return { kind: 'none' }
-  return progress.found.includes(connection.key) ? { kind: 'known', connection } : { kind: 'new', connection }
+  if (state.found.some(c => c.key === connection.key)) return { kind: 'known', connection }
+  const inHand = new Set(state.held.map(norm))
+  return { kind: 'new', connection, made: madeBy(graph, a, b).filter(n => !inHand.has(norm(n))) }
 }
 
 export interface TopicTally {
-  placed: number
+  held: number
   concepts: number
   found: number
   connections: number
@@ -233,119 +365,35 @@ export interface TopicTally {
   complete: boolean
 }
 
-export function topicTally(graph: ConceptGraph, progress: CraftProgress): TopicTally {
-  const found = foundConnections(graph, progress).length
+export function topicTally(graph: ConceptGraph, state: BoardState): TopicTally {
   return {
-    placed: placedConcepts(graph, progress).length,
+    held: state.held.length,
     concepts: graph.concepts.length,
-    found,
+    found: state.found.length,
     connections: graph.connections.length,
-    complete: graph.connections.length > 0 && found === graph.connections.length,
+    complete: graph.connections.length > 0 && state.found.length === graph.connections.length,
   }
 }
 
-/** One concept's connections: those found, and how many it has in all. */
-export function conceptConnections(graph: ConceptGraph, progress: CraftProgress, name: string): { found: Connection[]; total: number } {
-  const all = graph.neighbours.get(norm(name)) ?? []
-  const found = new Set(progress.found)
-  return { found: all.filter(c => found.has(c.key)), total: all.length }
-}
+// ─── Practice ────────────────────────────────────────────────────────────────
 
-// ─── The daily challenge: what connects two concepts ─────────────────────────
-
-const neighbourOf = (c: Connection, name: string) => (norm(c.a) === name ? norm(c.b) : norm(c.a))
+/** The most questions a connection's practice draws when it falls back on either concept's. */
+export const PRACTICE_FALLBACK = 10
 
 /**
- * The concepts the graph connects to both `a` and `b` — what lies between two
- * concepts it doesn't connect directly — strongest pairing first.
+ * The questions a connection's **Practice** starts a quiz on: those that test
+ * the two concepts together — the connection's own — or, for a connection no
+ * question tests, those on either concept, the most focused first (fewest
+ * concepts tagged), up to `PRACTICE_FALLBACK`. `pool` is the quiz pool, so
+ * nothing a quiz wouldn't serve is offered.
  */
-export function commonNeighbours(graph: ConceptGraph, a: string, b: string): { concept: string; via: [Connection, Connection] }[] {
-  const x = norm(a)
-  const y = norm(b)
-  const fromB = new Map((graph.neighbours.get(y) ?? []).map(c => [neighbourOf(c, y), c]))
-  const out: { concept: string; via: [Connection, Connection] }[] = []
-  for (const c of graph.neighbours.get(x) ?? []) {
-    const n = neighbourOf(c, x)
-    const d = fromB.get(n)
-    if (!d || n === y) continue
-    out.push({ concept: norm(c.a) === n ? c.a : c.b, via: [c, d] })
-  }
-  return out.sort((p, q) => Math.min(q.via[0].strength, q.via[1].strength) - Math.min(p.via[0].strength, p.via[1].strength))
-}
-
-/** Whether the connections found already join `a` and `b` through a concept connected to both. */
-export function isBridged(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): boolean {
-  const found = new Set(progress.found)
-  return commonNeighbours(graph, a, b).some(({ via }) => found.has(via[0].key) && found.has(via[1].key))
-}
-
-/**
- * The connections still to find to join `a` and `b` through a concept
- * connected to both, in order from `a`: by way of the concept that needs the
- * fewest new finds, and among those the most strongly connected — so the hint
- * points at a bridge the pages make plainly. Empty once the two are bridged;
- * null when no concept connects to both.
- */
-export function bridgePlan(graph: ConceptGraph, progress: CraftProgress, a: string, b: string): { concept: string; missing: Connection[] } | null {
-  const found = new Set(progress.found)
-  let best: { concept: string; missing: Connection[] } | null = null
-  for (const { concept, via } of commonNeighbours(graph, a, b)) {
-    const missing = via.filter(c => !found.has(c.key))
-    if (!best || missing.length < best.missing.length) best = { concept, missing }
-    if (missing.length === 0) break
-  }
-  return best
-}
-
-export interface ChallengePair {
-  a: string
-  b: string
-}
-
-/**
- * The pairs the day's challenges are drawn from: two concepts the vault does
- * not connect directly but does through a third — "what connects these
- * two?" Shuffled by the date and the topic, so it is the same list all day on
- * every device and a different one tomorrow.
- */
-export function challengeOrder(graph: ConceptGraph, topicId: string, date: string): ChallengePair[] {
-  const pairs: ChallengePair[] = []
-  const names = graph.concepts
-  const adjacent = (x: string, y: string) => graph.byKey.has(pairKey(x, y))
-  for (let i = 0; i < names.length; i++) {
-    const near = new Set((graph.neighbours.get(norm(names[i])) ?? []).map(c => neighbourOf(c, norm(names[i]))))
-    if (near.size === 0) continue
-    for (let j = i + 1; j < names.length; j++) {
-      if (adjacent(names[i], names[j])) continue
-      const theirs = graph.neighbours.get(norm(names[j])) ?? []
-      if (theirs.some(c => near.has(neighbourOf(c, norm(names[j]))))) pairs.push({ a: names[i], b: names[j] })
-    }
-  }
-  const rank = (p: ChallengePair) => hashString(`${date}|${topicId}|${pairKey(p.a, p.b)}`)
-  return pairs
-    .map(p => ({ p, r: rank(p) }))
-    .sort((x, y) => x.r - y.r)
-    .map(({ p }) => p)
-}
-
-/**
- * Today's challenge: the first pair in the day's order the reader hasn't
- * bridged yet (`skip` passes over that many more — "another challenge"). Null
- * once every pair is bridged. The order is fixed for the day and progress only
- * grows, so finding connections that don't bridge the pair never moves it.
- */
-export function dailyChallenge(
-  graph: ConceptGraph,
-  progress: CraftProgress,
-  order: readonly ChallengePair[],
-  skip = 0,
-): ChallengePair | null {
-  let left = skip
-  let last: ChallengePair | null = null
-  for (const pair of order) {
-    if (isBridged(graph, progress, pair.a, pair.b)) continue
-    last = pair
-    if (left-- <= 0) return pair
-  }
-  return last
+export function practiceQuestions(connection: Pick<Connection, 'a' | 'b' | 'questions'>, pool: readonly GraphQuestion[]): string[] {
+  if (connection.questions.length > 0) return [...connection.questions]
+  const ends = new Set([norm(connection.a), norm(connection.b)])
+  return pool
+    .map((q, i) => ({ q, i, tags: new Set(q.links.map(tagName)) }))
+    .filter(({ tags }) => [...tags].some(t => ends.has(t)))
+    .sort((x, y) => x.tags.size - y.tags.size || x.i - y.i)
+    .slice(0, PRACTICE_FALLBACK)
+    .map(({ q }) => q.id)
 }

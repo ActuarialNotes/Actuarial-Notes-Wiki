@@ -3,12 +3,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
   Check,
   ChevronLeft,
-  Lightbulb,
   Maximize,
   MoreHorizontal,
   RotateCcw,
-  Shuffle,
-  Target,
   Wand2,
   ZoomIn,
   ZoomOut,
@@ -32,13 +29,11 @@ import { useIsMobile } from '@/hooks/useIsMobile'
 import { usePageHead } from '@/hooks/usePageHead'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import {
-  bridgePlan,
-  challengeOrder,
+  boardState,
   combine,
   craftTopics,
-  dailyChallenge,
-  isBridged,
-  isPlaced,
+  practiceQuestions,
+  seedConcepts,
   topicGraph,
   topicTally,
   withConnection,
@@ -46,13 +41,12 @@ import {
   type CraftTopic,
   type TopicTally,
 } from '@/lib/conceptCraft'
-import { STRENGTH_TIERS, type ConceptGraph, type Connection } from '@/lib/conceptGraph'
+import { STRENGTH_TIERS, type ConceptGraph, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
 import { examAccentStyle } from '@/lib/examColors'
 import { setWikiContentLookup } from '@/lib/github'
-import { filterQuestions, type Question } from '@/lib/parser'
+import { filterQuestions } from '@/lib/parser'
 import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
-import { todayISO } from '@/lib/studyPlan'
 import { trackCraftCombined, trackCraftTopicCompleted } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
@@ -84,6 +78,22 @@ function allTopics(): CraftTopic[] {
   return topicsRead
 }
 
+/**
+ * A topic's graph and seeds, built once a visit: both are read off the bundled
+ * vault and the quiz pool, neither of which changes while the app is open, and
+ * the largest topic takes a tenth of a second or so to read.
+ */
+const prepared = new Map<string, { graph: ConceptGraph; seeds: string[] }>()
+function prepare(topic: CraftTopic, pool: readonly GraphQuestion[]) {
+  let entry = prepared.get(topic.id)
+  if (!entry) {
+    const graph = topicGraph(topic, conceptMarkdown, pool)
+    entry = { graph, seeds: seedConcepts(graph) }
+    prepared.set(topic.id, entry)
+  }
+  return entry
+}
+
 const MIN_STRENGTH_SHOWN: Record<StrengthFilter, number> = {
   all: 0,
   moderate: STRENGTH_TIERS.moderate,
@@ -93,7 +103,8 @@ const MIN_STRENGTH_SHOWN: Record<StrengthFilter, number> = {
 /**
  * **Concept Craft** (docs/concept-craft.md) — `/craft` is the topic picker,
  * `/craft/:topicId` one topic's board. Opened from the Quiz tab, beside Quiz
- * Battle: a way of studying a syllabus by finding how its concepts connect.
+ * Battle: a way of studying a syllabus by crafting it out of a few of its
+ * concepts, finding how they connect.
  */
 export default function Craft() {
   const { topicId } = useParams()
@@ -148,8 +159,9 @@ function CraftPicker() {
       <div className="flex items-center gap-3 rounded-xl bg-card p-5">
         <CraftLogo size="lg" />
         <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">Find how a topic’s concepts connect.</span>{' '}
-          Drop one concept on another: wherever the notes tie them together, a line joins them with its strength.
+          <span className="font-medium text-foreground">Craft a topic out of a few of its concepts.</span>{' '}
+          Drop one concept on another: where the notes connect them, a line joins them with its strength, and
+          what lies between them appears.
         </p>
       </div>
       {groups.map(group => (
@@ -193,17 +205,17 @@ function CraftPicker() {
 function CraftScreen({ topic }: { topic: CraftTopic }) {
   const { questions, loading } = useAllQuestions()
 
-  // The quiz pool: what a quiz can serve, which is also what the graph counts.
-  const pool = useMemo(() => (loading ? null : filterQuestions(questions, {})), [questions, loading])
-  const graph = useMemo(
-    () => (pool ? topicGraph(topic, conceptMarkdown, pool.map(q => ({ id: q.id, links: q.wiki_link }))) : null),
-    [topic, pool],
+  // The quiz pool: what a quiz can serve, which is also what the graph counts
+  // and what a connection's Practice draws from.
+  const pool = useMemo(
+    () => (loading ? null : filterQuestions(questions, {}).map(q => ({ id: q.id, links: q.wiki_link }))),
+    [questions, loading],
   )
-  const byId = useMemo(() => (pool ? new Map(pool.map(q => [q.id, q])) : null), [pool])
+  const ready = useMemo(() => (pool ? prepare(topic, pool) : null), [topic, pool])
 
   const head = useMemo(() => ({
     title: `${topic.title} — Concept Craft | Actuarial Notes`,
-    description: `${examName(topic)}: how the concepts of ${topic.title.toLowerCase()} connect.`,
+    description: `${examName(topic)}: craft ${topic.title.toLowerCase()} out of a few of its concepts.`,
     noindex: true,
   }), [topic])
   usePageHead(head)
@@ -216,14 +228,15 @@ function CraftScreen({ topic }: { topic: CraftTopic }) {
     // Always dark: the board is a canvas the concepts are laid out on
     // (docs/concept-craft.md). Scoped to the route like Actuaria's (style guide
     // §2.6) — the sidebar and anything portalled to the body keep the reader's
-    // own theme. It gives up the bottom of the screen to the concept popup
-    // while that is open, so the board is never under it.
+    // own theme. It wears the exam's colour (`examAccentStyle`) for what is new
+    // and what is being looked at, and gives up the bottom of the screen to the
+    // concept popup while that is open, so the board is never under it.
     <div
       className="dark relative flex flex-col overflow-hidden bg-background text-foreground"
-      style={{ colorScheme: 'dark', height: 'calc(100dvh - var(--concept-split-height, 0px))' }}
+      style={{ ...examAccentStyle(topic.exam), colorScheme: 'dark', height: 'calc(100dvh - var(--concept-split-height, 0px))' }}
     >
-      {graph && byId ? (
-        <CraftPlay topic={topic} graph={graph} questions={byId} />
+      {ready && pool ? (
+        <CraftPlay topic={topic} graph={ready.graph} seeds={ready.seeds} pool={pool} />
       ) : (
         <>
           <BoardHeader topic={topic} tally={null} onMenu={null} />
@@ -244,7 +257,17 @@ interface Ghost {
   over: string | null
 }
 
-function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: ConceptGraph; questions: ReadonlyMap<string, Question> }) {
+function CraftPlay({
+  topic,
+  graph,
+  seeds,
+  pool,
+}: {
+  topic: CraftTopic
+  graph: ConceptGraph
+  seeds: readonly string[]
+  pool: readonly GraphQuestion[]
+}) {
   const navigate = useNavigate()
   const isPhone = useIsMobile(1023)
   const { play, resetCombo } = useSoundEffects()
@@ -253,28 +276,24 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
   const board = useConceptCraft(s => boardFor(s.boards, topic.id))
   const filter = useConceptCraft(s => s.filter)
   const setFilter = useConceptCraft(s => s.setFilter)
-  const place = useConceptCraft(s => s.place)
   const addConnection = useConceptCraft(s => s.addConnection)
   const savePositions = useConceptCraft(s => s.savePositions)
-  const completeChallenge = useConceptCraft(s => s.completeChallenge)
   const resetBoard = useConceptCraft(s => s.resetBoard)
 
-  // Keyed on the two lists, not the board: saving where the cards settled
-  // must not read as a move in the game.
-  const progress = useMemo<CraftProgress>(() => progressOf(board), [board.placed, board.found]) // eslint-disable-line react-hooks/exhaustive-deps
-  const tally = useMemo(() => topicTally(graph, progress), [graph, progress])
-  const placedSet = useMemo(() => new Set(progress.placed), [progress])
+  // Keyed on the list, not the board: saving where the cards settled must not
+  // read as a move in the game.
+  const progress = useMemo<CraftProgress>(() => progressOf(board), [board.found]) // eslint-disable-line react-hooks/exhaustive-deps
+  const state = useMemo(() => boardState(graph, seeds, progress), [graph, seeds, progress])
+  const tally = useMemo(() => topicTally(graph, state), [graph, state])
 
   const boardRef = useRef<BoardCommands>(null)
   const [held, setHeld] = useState<string | null>(null)
   const [ghost, setGhost] = useState<Ghost | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [announce, setAnnounce] = useState('')
-  const [fresh, setFresh] = useState<{ node: string | null; connection: string | null }>({ node: null, connection: null })
+  const [fresh, setFresh] = useState<{ made: string[]; connection: string | null }>({ made: [], connection: null })
   const [flash, setFlash] = useState<string | null>(null)
   const [openKey, setOpenKey] = useState<string | null>(null)
-  const [hintLevel, setHintLevel] = useState(0)
-  const [skip, setSkip] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
 
   // The concept the popup is showing, while it is open — lit on the board.
@@ -284,37 +303,6 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
     return page && page.kind === 'concept' ? page.name : null
   })
   const popupOpen = useConceptPopup(s => s.open)
-
-  // ── The day's challenge ──────────────────────────────────────────────────
-  const today = todayISO()
-  const order = useMemo(() => challengeOrder(graph, topic.id, today), [graph, topic.id, today])
-  const doneToday = board.challenges.includes(today)
-  // Memoized: the page re-renders on every move of a card dragged from the deck.
-  const target = useMemo(() => dailyChallenge(graph, progress, order, skip), [graph, progress, order, skip])
-  const canSkip = useMemo(
-    () => !!target && (skip > 0 || dailyChallenge(graph, progress, order, skip + 1) !== target),
-    [graph, progress, order, skip, target],
-  )
-  const bridge = useMemo(() => (target ? bridgePlan(graph, progress, target.a, target.b) : null), [graph, progress, target])
-  const next = bridge?.missing[0] ?? null
-  // The hint names what lies between the two first, then the drop to make.
-  const hint = useMemo<Hint | null>(() => {
-    if (!bridge || !next || hintLevel === 0) return null
-    if (hintLevel === 1) return { try: bridge.concept }
-    const other = next.a.toLowerCase() === bridge.concept.toLowerCase() ? next.b : next.a
-    return { drop: [bridge.concept, other] }
-  }, [bridge, next, hintLevel])
-  const hinted = useMemo(() => (!hint ? [] : 'try' in hint ? [hint.try] : hint.drop), [hint])
-  // A new target, or a connection found, takes the hint back — putting the
-  // hinted card down doesn't, or the hint would vanish as it was followed.
-  useEffect(() => { setHintLevel(0) }, [target?.a, target?.b, progress.found])
-
-  // The challenge's two ends go on the board, so it is never set on concepts
-  // the reader can't see.
-  useEffect(() => {
-    if (!target) return
-    if (!isPlaced(progress, target.a) || !isPlaced(progress, target.b)) place(topic.id, [target.a, target.b])
-  }, [target, progress, place, topic.id])
 
   // ── Transient feedback ───────────────────────────────────────────────────
   useEffect(() => {
@@ -327,50 +315,47 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
     const t = window.setTimeout(() => setFlash(null), 1400)
     return () => window.clearTimeout(t)
   }, [flash])
-  // The pop and the line drawing in are one-off; after them the board draws
-  // the connection as it draws every other.
+  // The pops and the line drawing in are one-off; after them the board draws
+  // the cards and the connection as it draws every other.
   useEffect(() => {
-    if (!fresh.node && !fresh.connection) return
-    const t = window.setTimeout(() => setFresh({ node: null, connection: null }), 1200)
+    if (fresh.made.length === 0 && !fresh.connection) return
+    const t = window.setTimeout(() => setFresh({ made: [], connection: null }), 1200)
     return () => window.clearTimeout(t)
   }, [fresh])
-  // A card that arrived where the reader can't see it — beside one at the
-  // edge of the view — is brought into sight once it has landed.
+  // What a find made lands off its pair; if that is at the edge of the view,
+  // bring it into sight once it has landed.
   useEffect(() => {
-    if (!fresh.node) return
-    const name = fresh.node
-    const t = window.setTimeout(() => boardRef.current?.reveal(name), 450)
+    const first = fresh.made[0]
+    if (!first) return
+    const t = window.setTimeout(() => boardRef.current?.reveal(first), 450)
     return () => window.clearTimeout(t)
-  }, [fresh.node])
+  }, [fresh.made])
 
   // ── Finding connections ──────────────────────────────────────────────────
-  const commit = useCallback((connection: Connection, arriving: string | null) => {
-    const after = withConnection(progress, connection)
+  const commit = useCallback((connection: Connection, made: string[]) => {
+    const after = boardState(graph, seeds, withConnection(progress, connection))
     addConnection(topic.id, connection)
-    setFresh({ node: arriving, connection: connection.key })
+    setFresh({ made, connection: connection.key })
     const completed = topicTally(graph, after).complete && !tally.complete
-    const met = !!target && !isBridged(graph, progress, target.a, target.b) && isBridged(graph, after, target.a, target.b)
     if (completed) {
       play('complete')
       trackCraftTopicCompleted({ exam: topic.exam, topic: topic.id })
-    } else if (met) {
-      play('levelUp')
     } else {
-      play(connection.strength >= STRENGTH_TIERS.strong ? 'collect' : 'correct')
-    }
-    if (met) {
-      if (!doneToday) completeChallenge(topic.id, today)
-      setSkip(0)
+      // A card landing is `collect`; a line alone, a right answer.
+      play(made.length > 0 ? 'collect' : 'correct')
     }
     // No card, no toast: the map is the answer. Assistive tech is told what changed.
-    setAnnounce(`Connected ${connection.a} and ${connection.b}, strength ${connection.strength}.${met ? ' Challenge met.' : ''}`)
-    trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'new', strength: connection.strength })
-  }, [progress, addConnection, topic, graph, tally.complete, target, play, doneToday, completeChallenge, today])
+    setAnnounce(
+      `Connected ${connection.a} and ${connection.b}, strength ${connection.strength}.`
+      + (made.length > 0 ? ` New: ${made.join(', ')}.` : ''),
+    )
+    trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'new', strength: connection.strength, made: made.length })
+  }, [graph, seeds, progress, addConnection, topic, tally.complete, play])
 
   const onCombine = useCallback((a: string, b: string): DropVerdict => {
     setHeld(null)
     if (a.toLowerCase() === b.toLowerCase()) return 'bounce'
-    const outcome = combine(graph, progress, a, b)
+    const outcome = combine(graph, state, a, b)
     if (outcome.kind === 'known') {
       setFlash(outcome.connection.key)
       trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'known', strength: outcome.connection.strength })
@@ -384,10 +369,9 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
       trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'none' })
       return 'bounce'
     }
-    const arriving = [a, b].find(n => !isPlaced(progress, n)) ?? null
-    commit(outcome.connection, arriving)
+    commit(outcome.connection, outcome.made)
     return 'stay'
-  }, [graph, progress, topic, commit, resetCombo])
+  }, [graph, state, topic, commit, resetCombo])
 
   // ── The deck's hands ─────────────────────────────────────────────────────
   const tapDeck = useCallback((name: string) => {
@@ -413,17 +397,10 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
     const commands = boardRef.current
     if (!commands || !commands.contains(x, y)) return
     const over = commands.conceptAt(x, y)
-    if (over && over.toLowerCase() !== name.toLowerCase()) {
-      onCombine(name, over)
-      return
-    }
-    // Empty board: put it down there.
-    commands.placeAt(name, x, y)
-    if (!isPlaced(progress, name)) {
-      place(topic.id, [name])
-      setFresh({ node: name, connection: null })
-    }
-  }, [onCombine, progress, place, topic.id])
+    // On another card: try the pair. On empty board: move the card there.
+    if (over && over.toLowerCase() !== name.toLowerCase()) onCombine(name, over)
+    else if (!over) commands.placeAt(name, x, y)
+  }, [onCombine])
 
   // ── Reading ──────────────────────────────────────────────────────────────
   const read = useCallback((name: string) => {
@@ -431,12 +408,12 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
     setMenuOpen(false)
     // A sheet and the popup would share the bottom of a phone; the popup wins.
     if (isPhone) setOpenKey(null)
-    const list = topic.concepts.map(n => ({ kind: 'concept' as const, name: n }))
-    const index = Math.max(0, topic.concepts.findIndex(n => n.toLowerCase() === name.toLowerCase()))
-    // A walk of the topic's concepts, not a slice of a syllabus page: `corpus`
-    // drops the popup's syllabus-filter picker, which has nothing to re-slice.
+    // A walk of the cards in hand — never of a concept not yet made.
+    const list = state.held.map(n => ({ kind: 'concept' as const, name: n }))
+    const index = Math.max(0, state.held.findIndex(n => n.toLowerCase() === name.toLowerCase()))
+    // `corpus` drops the popup's syllabus-filter picker, which has nothing to re-slice.
     useConceptPopup.getState().openAt(list, index, null, null, null, { walk: 'corpus' })
-  }, [topic.concepts, isPhone])
+  }, [state.held, isPhone])
 
   const showConnection = useCallback((connection: Connection) => {
     setOpenKey(key => (key === connection.key ? null : connection.key))
@@ -472,28 +449,28 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
     resetBoard(topic.id)
     setHeld(null)
     setOpenKey(null)
-    setSkip(0)
     setMenuOpen(false)
   }
 
   const open = openKey ? graph.byKey.get(openKey) ?? null : null
+  const practiceIds = useMemo(() => (open ? practiceQuestions(open, pool) : []), [open, pool])
   // What the board's panels cover, so "fit" frames the map in the room left:
-  // the challenge across the top, the deck down the left of a wide board, the
-  // map controls (or a connection's card) down the right.
+  // the deck down the left of a wide board, the map controls (or a
+  // connection's card) down the right.
   const boardInsets = useMemo(
     () => (isPhone
-      ? { top: 56, right: 56, bottom: 8, left: 0 }
-      : { top: 56, right: open ? 376 : 64, bottom: 8, left: 316 }),
+      ? { top: 16, right: 56, bottom: 8, left: 0 }
+      : { top: 16, right: open ? 376 : 64, bottom: 8, left: 316 }),
     [isPhone, open],
   )
 
   const deck = (layout: 'panel' | 'strip') => (
     <CraftDeck
-      concepts={topic.concepts}
-      placed={placedSet}
+      concepts={state.held}
+      total={tally.concepts}
+      fresh={state.fresh}
       levels={levels}
       held={held}
-      hinted={hinted}
       layout={layout}
       showHow={tally.found === 0}
       onTap={tapDeck}
@@ -537,17 +514,15 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
       <div className="relative min-h-0 flex-1">
         <CraftBoard
           ref={boardRef}
-          graph={graph}
-          progress={progress}
+          state={state}
           saved={board.positions}
           levels={levels}
           selected={popupOpen ? reading : null}
           held={held}
-          hinted={hinted}
           hover={ghost?.over ?? null}
           insets={boardInsets}
           minStrength={MIN_STRENGTH_SHOWN[filter]}
-          freshNode={fresh.node}
+          justMade={fresh.made}
           freshConnection={fresh.connection}
           flashConnection={flash}
           openConnection={openKey}
@@ -557,28 +532,17 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
           onSettle={onSettle}
         />
 
-        {/* The challenge, over the top of the board — centred in the room
-            the deck and a connection's card leave. */}
-        <div
-          className="pointer-events-none absolute top-3 z-20 flex justify-center px-3 transition-[right] duration-200"
-          style={{ left: isPhone ? 0 : boardInsets.left, right: isPhone ? 0 : open ? boardInsets.right : 0 }}
-        >
-          <ChallengeBar
-            none={order.length === 0}
-            complete={tally.complete}
-            target={target}
-            steps={bridge ? bridge.missing.length : null}
-            doneToday={doneToday}
-            hint={hint}
-            canHint={!!next && hintLevel < 2}
-            canSkip={canSkip}
-            onHint={() => setHintLevel(l => Math.min(2, l + 1))}
-            onSkip={() => setSkip(s => s + 1)}
-          />
-        </div>
+        {tally.complete && (
+          <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-3">
+            <p className="pointer-events-auto flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm shadow-[var(--shadow-card)]">
+              <CheckMark className="h-4 w-4" />
+              Every connection found
+            </p>
+          </div>
+        )}
 
         {!isPhone && (
-          <div className="pointer-events-none absolute bottom-3 left-3 top-16 z-20 flex flex-col justify-start">
+          <div className="pointer-events-none absolute bottom-3 left-3 top-3 z-20 flex flex-col justify-start">
             <div className="pointer-events-auto flex max-h-full">{deck('panel')}</div>
           </div>
         )}
@@ -603,7 +567,7 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
             </p>
           ) : tally.found === 0 ? (
             <p className="rounded-full bg-card/80 px-4 py-2 text-center text-sm text-muted-foreground">
-              Drop one concept on another to see if they connect.
+              Drop one concept on another to see what they make.
             </p>
           ) : null}
         </div>
@@ -614,7 +578,7 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
             <CraftConnection
               key={open.key}
               connection={open}
-              questions={questions}
+              practice={practiceIds}
               layout="drawer"
               onClose={() => setOpenKey(null)}
               onRead={read}
@@ -632,7 +596,7 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
           <CraftConnection
             key={open.key}
             connection={open}
-            questions={questions}
+            practice={practiceIds}
             layout="sheet"
             onClose={() => setOpenKey(null)}
             onRead={read}
@@ -657,7 +621,7 @@ function CraftPlay({ topic, graph, questions }: { topic: CraftTopic; graph: Conc
 function BoardHeader({ topic, tally, onMenu }: { topic: CraftTopic; tally: TopicTally | null; onMenu: ReactNode }) {
   const navigate = useNavigate()
   return (
-    <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3" style={examAccentStyle(topic.exam)}>
+    <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
       <MobileNavButton className="lg:hidden" />
       <button
         type="button"
@@ -673,8 +637,8 @@ function BoardHeader({ topic, tally, onMenu }: { topic: CraftTopic; tally: Topic
         <h1 className="truncate text-sm font-semibold leading-tight sm:text-base">{topic.title}</h1>
         {tally && (
           <p className="truncate text-xs tabular-nums text-muted-foreground" data-testid="craft-tally">
-            {tally.found} of {tally.connections} connections
-            <span className="hidden sm:inline"> · {tally.placed} of {tally.concepts} concepts on the board</span>
+            {tally.held} of {tally.concepts} concepts
+            <span className="hidden sm:inline"> · {tally.found} of {tally.connections} connections</span>
           </p>
         )}
       </div>
@@ -763,100 +727,6 @@ function BoardMenu({
         <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
         {confirming ? 'Tap again to clear the board' : 'Start this topic over'}
       </button>
-    </div>
-  )
-}
-
-type Hint = { try: string } | { drop: [string, string] }
-
-function ChallengeBar({
-  none,
-  complete,
-  target,
-  steps,
-  doneToday,
-  hint,
-  canHint,
-  canSkip,
-  onHint,
-  onSkip,
-}: {
-  /** The topic is too tightly knit to set one: every two concepts are neighbours. */
-  none: boolean
-  complete: boolean
-  target: { a: string; b: string } | null
-  steps: number | null
-  doneToday: boolean
-  hint: Hint | null
-  canHint: boolean
-  canSkip: boolean
-  onHint: () => void
-  onSkip: () => void
-}) {
-  if (none && !complete) return null
-  if (complete || !target) {
-    return (
-      <p className="pointer-events-auto flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm shadow-[var(--shadow-card)]">
-        <CheckMark className="h-4 w-4" />
-        {complete ? 'Every connection found' : 'Every challenge met'}
-      </p>
-    )
-  }
-  return (
-    <div className="flex max-w-full flex-col items-center gap-1.5">
-      <div
-        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-[1.25rem] bg-card py-1 pl-3.5 pr-1 text-sm shadow-[var(--shadow-card)]"
-        data-testid="craft-challenge"
-      >
-        {doneToday ? <CheckMark className="h-4 w-4 shrink-0" label="Today’s challenge met" /> : <Target className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />}
-        {/* Both names matter, so a narrow bar wraps rather than cutting the second off. */}
-        <span className="line-clamp-3 min-w-0 py-0.5 pl-1 leading-snug">
-          <span className="text-muted-foreground">{doneToday ? 'Next: what connects ' : 'What connects '}</span>
-          <span className="font-medium">{target.a}</span>
-          <span className="text-muted-foreground"> and </span>
-          <span className="font-medium">{target.b}</span>
-          <span className="text-muted-foreground">?</span>
-        </span>
-        {steps !== null && steps > 0 && (
-          <span className="shrink-0 whitespace-nowrap pl-1.5 text-xs tabular-nums text-muted-foreground" title="Connections still to find to join them through a third concept">
-            {steps} to find
-          </span>
-        )}
-        {canHint && (
-          <button
-            type="button"
-            onClick={onHint}
-            aria-label="Hint"
-            title="Hint"
-            className="ml-1 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Lightbulb className="h-4 w-4" />
-          </button>
-        )}
-        {canSkip && (
-          <button
-            type="button"
-            onClick={onSkip}
-            aria-label="Another challenge"
-            title="Another challenge"
-            className="rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <Shuffle className="h-4 w-4" />
-          </button>
-        )}
-      </div>
-      {hint && (
-        <p className="pointer-events-auto max-w-full truncate rounded-full bg-card/90 px-3 py-1 text-xs shadow-[var(--shadow-card)]" data-testid="craft-hint">
-          {'try' in hint ? (
-            <><span className="text-muted-foreground">Try </span><span className="font-medium">{hint.try}</span></>
-          ) : (
-            <>
-              <span className="text-muted-foreground">Drop </span><span className="font-medium">{hint.drop[0]}</span>
-              <span className="text-muted-foreground"> on </span><span className="font-medium">{hint.drop[1]}</span>
-            </>
-          )}
-        </p>
-      )}
     </div>
   )
 }

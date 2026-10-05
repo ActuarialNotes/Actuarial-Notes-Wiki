@@ -234,6 +234,38 @@ export function spawnNear(anchor: Point, centre: Point, turn = 0): Point {
 }
 
 /**
+ * Where the `i`-th of `n` concepts a connection made appears: off the middle of
+ * the line between the two cards that made it, on the side away from the
+ * middle of the board, the `n` fanned out along the line — so what a pair made
+ * hangs off that pair, the way a result hangs under the terms that make it.
+ */
+export function spawnBeside(a: Point, b: Point, centre: Point, i = 0, n = 1): Point {
+  const mx = (a.x + b.x) / 2
+  const my = (a.y + b.y) / 2
+  let ux = b.x - a.x
+  let uy = b.y - a.y
+  const len = Math.hypot(ux, uy)
+  if (len < 1e-3) {
+    ux = 1
+    uy = 0
+  } else {
+    ux /= len
+    uy /= len
+  }
+  // The normal, turned to point away from the middle of the board (or down,
+  // when the pair sits on it).
+  let nx = -uy
+  let ny = ux
+  const away = (mx - centre.x) * nx + (my - centre.y) * ny
+  if (away < 0 || (Math.abs(away) < 1e-3 && ny < 0)) {
+    nx = -nx
+    ny = -ny
+  }
+  const along = (i - (n - 1) / 2) * 190
+  return { x: mx + nx * 150 + ux * along, y: my + ny * 150 + uy * along }
+}
+
+/**
  * Concepts arriving with nowhere else to go. A few go side by side across the
  * middle of the board; more are laid out in a sunflower spiral around it, so a
  * whole board restored at once starts as a disc the forces can settle, not a

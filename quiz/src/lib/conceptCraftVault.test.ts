@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { challengeOrder, craftTopics, topicGraph } from './conceptCraft'
+import { EMPTY_PROGRESS, boardState, craftTopics, seedConcepts, topicGraph, withConnection, type CraftProgress } from './conceptCraft'
+import type { ConceptGraph } from './conceptGraph'
 import { pageMentions } from './conceptGraph'
 import { filterQuestions, parseQuestion, type Question } from './parser'
 import { examPageIdFromFile } from './examMenu'
@@ -33,6 +34,23 @@ const questions = filterQuestions(bank, {}).map(q => ({ id: q.id, links: q.wiki_
 const topics = craftTopics(examPages, name => pages.get(name.toLowerCase())?.name)
 const graphs = topics.map(t => [t, topicGraph(t, name => pages.get(name.toLowerCase())?.markdown, questions)] as const)
 
+/** Find every connection there is to find, as a reader who tried every pair would. */
+function playEverything(graph: ConceptGraph, seeds: string[]) {
+  let progress: CraftProgress = EMPTY_PROGRESS
+  let state = boardState(graph, seeds, progress)
+  for (let grew = true; grew; ) {
+    grew = false
+    const inHand = new Set(state.held.map(n => n.toLowerCase()))
+    for (const c of graph.connections) {
+      if (progress.found.includes(c.key) || !inHand.has(c.a.toLowerCase()) || !inHand.has(c.b.toLowerCase())) continue
+      progress = withConnection(progress, c)
+      grew = true
+    }
+    state = boardState(graph, seeds, progress)
+  }
+  return state
+}
+
 /**
  * Concept Craft's topics and graphs, read off the real vault — the same
  * functions the board calls, over the pages it will be given.
@@ -51,11 +69,20 @@ describe('Concept Craft over the vault', () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
   })
 
-  it.each(graphs.map(([t, g]) => [t.id, t, g] as const))('%s connects nearly every concept, and can set a challenge', (_, topic, graph) => {
+  it.each(graphs.map(([t, g]) => [t.id, t, g] as const))('%s connects nearly every concept, and can be made in full from a few', (_, topic, graph) => {
     const unconnected = topic.concepts.filter(c => !graph.neighbours.has(c.toLowerCase()))
     expect(unconnected.length, unconnected.join(', ')).toBeLessThanOrEqual(Math.ceil(topic.concepts.length / 10))
     expect(graph.connections.length).toBeGreaterThanOrEqual(topic.concepts.length)
-    expect(challengeOrder(graph, topic.id, '2026-10-05').length).toBeGreaterThan(0)
+    const seeds = seedConcepts(graph)
+    // A hand, not the deck: never more than ten, and no more than a fifth of
+    // the topic past the five a small, loosely knit topic can need (PCPA's
+    // *Dealing with Data* makes four of its nine).
+    expect(seeds.length, seeds.join(', ')).toBeLessThanOrEqual(Math.min(10, Math.max(5, Math.ceil(topic.concepts.length / 5))))
+    // Finding every connection within reach, over and over, brings every
+    // concept into hand and finds every connection.
+    const state = playEverything(graph, seeds)
+    expect(state.held.length).toBe(topic.concepts.length)
+    expect(state.found.length).toBe(graph.connections.length)
   })
 
   it('never cuts a formula in half when it quotes a page', () => {

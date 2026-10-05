@@ -26,7 +26,7 @@ A **Scatter Plot** is an [[Exploratory Data Analysis]] display of two variables 
 - Systematic curvature says the predictor needs a transformation ($\ln x$, $x^2$, or banding) in the [[Model Structure]]; a fan that widens to the right says the variance grows with the mean, which is an argument for a [[Generalized Linear Model]] rather than [[Linear Regression]]
 - A point far out in $x$ has **high leverage** — on its own it can bend the fitted line, so it deserves a look before it is left in
 - With many overlapping points, plot on a log scale, add transparency, or bin the $x$-axis and plot group means; a solid black blob shows nothing
-- A **scatter plot matrix** (all pairs of predictors) is the fastest screen for [[Multicollinearity]]
+- A **scatter plot matrix** (all pairs of predictors) screens for *pairwise* collinearity, as the correlation matrix does — but it can miss [[Multicollinearity]], collinearity among three or more predictors when no pair is highly correlated; ISLR assesses that with the **variance inflation factor**, $\text{VIF}(\hat\beta_j) = 1/(1 - R^2_{X_j \mid X_{-j}})$, from regressing each predictor on all the others
 
 ![[Media/Figures/Scatter_Plot.svg|340]]
 

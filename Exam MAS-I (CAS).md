@@ -31,12 +31,14 @@ verification:
 
 # Exam MAS-I
 
-The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam covering [[Stochastic Processes]], [[Survival Model|Survival Models]], [[Statistics]], and [[Generalized Linear Model|Generalized Linear Models]] as part of the ACAS credentialing pathway.
+The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam covering [[Stochastic Processes]], [[Survival Model|Survival Models]], [[Statistics]], and [[Extended Linear Model|Extended Linear Models]] as part of the ACAS credentialing pathway.
 
 > [!question]- Prerequisite knowledge
 >
-> - [[Calculus]], including integration, differentiation, and infinite series
-> - The Exam P toolkit: [[Probability]], [[Random Variable|Random Variables]], [[Expected Value]], [[Variance]], [[Conditional Probability]], and the named [[Probability Distributions|distributions]]
+> The CAS Syllabus of Basic Education says MAS-I assumes prior knowledge from Exams 1 and 2, which the CAS waives for the SOA's Exams P and FM:
+>
+> - [[Exam P-1 (SOA)|Exam 1 (Probability)]] — [[Probability]], [[Random Variable|Random Variables]], [[Expected Value]], [[Variance]], [[Conditional Probability]], and the named [[Probability Distributions|distributions]]
+> - [[Exam FM-2 (SOA)|Exam 2 (Financial Mathematics)]] — [[Interest]] and [[Present Value]], which Struppeck's note uses to discount [[Whole Life Insurance|insurance]] and [[Life Annuity|annuity]] payments
 
 ## Learning Objectives
 

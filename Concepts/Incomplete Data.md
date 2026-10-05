@@ -22,7 +22,7 @@ verification:
 
 - $\delta_i = 1$ if $x_i$ is an exact value and $0$ if it is right-censored at $x_i$ (the loss is known only to be at least $x_i$). $d_i$ is the left-truncation point, such as the deductible; with no truncation $S(d_i) = S(0) = 1$. $S = 1 - F$ is the survival function.
 - **Right censoring.** A loss at or above the maximum covered loss is recorded only as "at least $u$", so it contributes $S(u)$. Treating it as exactly $u$ biases severity estimates *down*.
-- **Left truncation.** Losses below a deductible $d$ are never reported, so each reported loss is drawn from $X \mid X > d$ and contributes $f(x)/S(d)$. Ignoring this biases estimates *up* — only the larger losses are seen.
+- **Left truncation.** Losses below a deductible $d$ are never reported, so each reported loss is drawn from $X \mid X > d$ and contributes $f(x)/S(d)$. Ignoring this biases the average of the reported losses *up*, since it estimates $E[X \mid X > d]$ rather than $E[X]$ (only the larger losses are seen). A distribution fitted without the adjustment can err in either direction ([[Truncation]]).
 - **Grouped (interval) data** are censored on both sides: a value known only to lie in $(a, b]$ contributes $F(b) - F(a)$.
 - **Exponential shortcut.** For an [[Exponential Distribution|exponential]] model with any mix of truncation and right censoring, $\hat\theta = \dfrac{\sum_i (x_i - d_i)}{\text{number of exact observations}}$, summing over *all* observations, censored ones included.
 - The same adjustments carry over to non-parametric estimates of the survival function, such as the Kaplan–Meier product-limit estimator. They matter again when fitting the [[Severity|severity]] distribution behind [[Coverage Modifications|coverage modifications]].

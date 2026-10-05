@@ -25,7 +25,7 @@ verification:
 > $$x > d$$
 
 - Under left-truncation at $d$, the effective distribution is the **conditional** distribution $X \mid X > d$
-- Failing to adjust for truncation leads to **upward bias** in estimated means (only the larger claims are seen)
+- Failing to adjust for truncation biases the estimates. The average of the reported claims estimates $E[X \mid X > d]$, not $E[X]$, so it is biased **upward** (only the larger claims are seen). A distribution fitted without the adjustment can err in either direction: a lognormal fitted naively to truncated data overestimates $\mu$, yet can under-predict the high quantiles
 - **Right-truncation**: only values below some upper limit are recorded (less common in insurance)
 - Truncation differs from censoring: with truncation, you do not even know an observation exists; with censoring, you know there is an observation but not its exact value
 

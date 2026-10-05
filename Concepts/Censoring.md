@@ -28,7 +28,7 @@ verification:
 - **Right-censoring**: true value exceeds $c$ (e.g., policy limit reached, study ends before claim settles)
 - **Left-censoring**: true value is below a detection threshold
 - **Interval censoring**: the value is known only to lie within an interval $(a, b)$
-- Censoring must be accounted for in [[Maximum Likelihood Estimation]] to avoid **downward bias** in estimated means or survival times
+- Right-censoring must be accounted for in [[Maximum Likelihood Estimation]]: a right-censored record is $\min(X, c) \le X$, so treating it as an exact value causes **downward bias** in estimated means or survival times
 - An observation that is **not** censored (the exact value is known) contributes $f(x|\theta)$ to the likelihood
 
 ![[Media/Figures/Censoring.svg|340]]

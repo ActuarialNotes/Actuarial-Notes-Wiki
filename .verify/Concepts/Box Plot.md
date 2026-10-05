@@ -52,3 +52,23 @@ created: 2026-10-04
 - resolves: F-001
 - status: resolved
 - note: Corrected in this pass: the summary now reads (2, 4, 7, 11, 40), matching Siegrist's (x_(1), q1, q2, q3, x_(n)) and R's fivenum; the preceding sentence still gives the whisker end of 14.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Named the convention. Formula label now 'potential outlier' (Siegrist §6.6's term for a value beyond the 1.5-IQR fences). New bullet 'The convention varies': the 1.5 IQR limits are the inner fences; NIST calls a point beyond one a mild outlier and beyond an outer fence (Q1 - 3 IQR, Q3 + 3 IQR) an extreme one, and NIST's basic box plot runs the whiskers to the min and max (NIST §1.3.3.7 'Box plots with fences'; §7.1.6 'Outlier detection criteria'); quartiles have several definitions (Siegrist §6.6 'Alternate Definitions'): the page's medians-of-halves matches NIST's (n+1)p rule on the example, R's boxplot uses Tukey's hinges (boxplot.stats Details). Example now adds: 40 is beyond the outer fence 11 + 3(7) = 32, so extreme by NIST; R's hinges give Q1 = 4.5, Q3 = 10, fences -3.75 / 18.25, same outlier and whisker (recomputed in numpy: method='weibull' (n+1)p -> 4, 11, fences -6.5/21.5/outer 32; method='linear' = R type 7 = hinges for odd n -> 4.5, 10, fences -3.75/18.25). Also 'two clusters and one broad spread give the same five numbers' -> 'can give' (only some samples coincide).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: Every edit re-read against its source: inner/outer fences and mild/extreme names = NIST §7.1.6; basic box plot whiskers to min/max and fenced variation = NIST §1.3.3.7; 'potential outliers' and alternative quantile definitions = Siegrist §6.6; hinges vs quartiles = R boxplot.stats; five-number summary (2,4,7,11,40) = Siegrist/fivenum definition. Example recomputed in python under (n+1)p (4, 11, IQR 7, fences -6.5/21.5, outer 32) and type-7/hinges (4.5, 10, IQR 5.5, fences -3.75/18.25): 40 outlier, whisker 14 under both. Unchanged claims (box = middle 50%, median line, side-by-side boxes by factor level = NIST 'check the significance of a factor') re-read. Links and figure embed resolve. F-001 and F-002 closed; no open findings.
+- sources_checked: NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (basic box plot to min/max; 'Box plots with fences' L1/U1 = 1.5 IQ, L2/U2 = 3.0 IQ), fetched 2026-10-05 (page carries a per-request Cloudflare token, so its hash differs per fetch), sha256:67a9ab2a3aa2c1cb4abee07ce91609e67053ef2b835dd70ffae07e513305bbdd — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm; NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?' (inner/outer fences; mild/extreme outliers; quartiles at the .25(N+1)th/.75(N+1)th ordered points), fetched 2026-10-05, sha256:9e80560e583c4042385b7fd9ce0dff91b8b4903487d3f65db517e5e231bd66b4 — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §6 'Order Statistics' (fences q1 - 1.5 IQR / q3 + 1.5 IQR mark 'potential outliers'; five-number summary (x_(1), q1, q2, q3, x_(n)); 'lots of alternatives' to the sample-quantile definition), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html; R Documentation, grDevices::boxplot.stats (coef = 1.5 whiskers; hinges equal the quartiles for odd n), sha256:202dc113fa952aae23b87aef26e3eb28b384ae53bfa717dc3b86ef46949b78c3 — https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/boxplot.stats.html; R Documentation, stats::fivenum 'Tukey Five-Number Summaries' (minimum, lower-hinge, median, upper-hinge, maximum), sha256:4d4c9ba1a26a23b9793e1bcadf996ed096e7eb84bdca2c78d45b78ed44667719 — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/fivenum.html
+- note: Medium: rank-3 references; Hogg §4.4's own quartile convention (the syllabus reading) is not freely available.

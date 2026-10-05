@@ -52,4 +52,4 @@ A **Univariate Plot** displays the distribution of **one** variable at a time �
 > A box plot of a variable looks symmetric with no outliers, but the histogram shows two clear humps. Which is telling the truth?
 >
 > > [!answer]-
-> > Both — they measure different things. The five numbers behind a box plot ($\min, Q_1, Q_2, Q_3, \max$) are identical for a symmetric unimodal sample and a symmetric **bimodal** one, so a box plot simply cannot show two humps. The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out.
+> > Both — they measure different things. The five numbers behind a box plot ($\min, Q_1, Q_2, Q_3, \max$) can be identical for a symmetric unimodal sample and a symmetric **bimodal** one, and the box draws nothing between them, so a box plot cannot show two humps. The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out.

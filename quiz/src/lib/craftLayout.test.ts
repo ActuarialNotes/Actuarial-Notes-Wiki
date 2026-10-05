@@ -14,6 +14,7 @@ import {
   makeBody,
   seedPositions,
   separate,
+  spawnBeside,
   spawnNear,
   step,
   toScreen,
@@ -140,6 +141,23 @@ describe('cool', () => {
   it('decays and then stops', () => {
     expect(cool(1)).toBeLessThan(1)
     expect(cool(ALPHA_MIN)).toBe(0)
+  })
+})
+
+describe('spawnBeside', () => {
+  it('hangs what a pair made off the middle of the pair, away from the middle of the board', () => {
+    const p = spawnBeside({ x: -100, y: 300 }, { x: 100, y: 300 }, { x: 0, y: 0 })
+    expect(p.x).toBeCloseTo(0)
+    expect(p.y).toBeCloseTo(450)
+    // The other way round, or above the middle: still away from it.
+    expect(spawnBeside({ x: 100, y: 300 }, { x: -100, y: 300 }, { x: 0, y: 0 }).y).toBeCloseTo(450)
+    expect(spawnBeside({ x: -100, y: -300 }, { x: 100, y: -300 }, { x: 0, y: 0 }).y).toBeCloseTo(-450)
+  })
+
+  it('fans several out along the pair, and copes with a pair on one spot', () => {
+    const made = [0, 1, 2].map(i => spawnBeside({ x: -100, y: 300 }, { x: 100, y: 300 }, { x: 0, y: 0 }, i, 3))
+    expect(made.map(p => Math.round(p.x))).toEqual([-190, 0, 190])
+    expect(spawnBeside({ x: 5, y: 5 }, { x: 5, y: 5 }, { x: 5, y: 5 })).toEqual({ x: 5, y: 155 })
   })
 })
 

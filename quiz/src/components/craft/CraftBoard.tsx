@@ -8,8 +8,8 @@ import {
   useRef,
   useState,
 } from 'react'
-import { foundConnections, placedConcepts, type CraftProgress } from '@/lib/conceptCraft'
-import { strengthTier, type ConceptGraph, type Connection } from '@/lib/conceptGraph'
+import type { BoardState } from '@/lib/conceptCraft'
+import { strengthTier, type Connection } from '@/lib/conceptGraph'
 import {
   ALPHA_MIN,
   bodyAt,
@@ -20,6 +20,7 @@ import {
   lineLabelPoint,
   makeBody,
   seedPositions,
+  spawnBeside,
   spawnNear,
   step,
   toScreen,
@@ -38,11 +39,12 @@ import { cn } from '@/lib/utils'
 
 /**
  * **The Concept Craft board** — an infinite, zoomable canvas with every
- * concept the reader has put on it as a card, every connection they have found
- * as a line between two cards carrying its strength, and a small force
- * simulation (`lib/craftLayout.ts`) keeping the lot apart — the stronger a
- * connection, the shorter and stiffer its spring, so the map's shape says what
- * its numbers say.
+ * concept the reader holds as a card, every connection they have found as a
+ * line between two cards carrying its strength, and a small force simulation
+ * (`lib/craftLayout.ts`) keeping the lot apart — the stronger a connection, the
+ * shorter and stiffer its spring, so the map's shape says what its numbers
+ * say. What a connection made lands off the middle of its line, and a card no
+ * connection found has touched yet wears the exam's colour.
  *
  * What it does with the reader's hands:
  * - drag a card onto another → `onCombine`, which answers whether the card
@@ -69,19 +71,15 @@ export interface BoardCommands {
   conceptAt: (clientX: number, clientY: number) => string | null
   /** Whether a screen point is over the board at all. */
   contains: (clientX: number, clientY: number) => boolean
-  /**
-   * Where a concept should land — a deck card dropped on empty board. Moves
-   * it there if it is on the board; otherwise it arrives there when it is put
-   * on it.
-   */
+  /** Move a card to a screen point — a deck card dropped on empty board. */
   placeAt: (name: string, clientX: number, clientY: number) => void
 }
 
 export type DropVerdict = 'bounce' | 'stay'
 
 export interface CraftBoardProps {
-  graph: ConceptGraph
-  progress: CraftProgress
+  /** What the reader holds and has found (`boardState`). */
+  state: BoardState
   /** Where the concepts were left last time, by lower-cased name. */
   saved: Record<string, [number, number]>
   levels: ConceptLevels
@@ -89,16 +87,14 @@ export interface CraftBoardProps {
   selected: string | null
   /** A deck card picked up by a tap, waiting for a second concept. */
   held: string | null
-  /** Concepts the challenge's hint is pointing at. */
-  hinted: readonly string[]
   /** The concept a card dragged in from the deck is over. */
   hover: string | null
   /** Room the page's panels cover at the board's edges — what "fit" frames around. */
   insets: Insets
   /** Connections weaker than this are not drawn. */
   minStrength: number
-  /** The concept and connection just found — the pop and the line drawing in. */
-  freshNode: string | null
+  /** What was just made, and the connection just found — the pops and the line drawing in. */
+  justMade: readonly string[]
   freshConnection: string | null
   /** A connection to light up — a pair dropped together again. */
   flashConnection: string | null
@@ -143,10 +139,19 @@ function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3)
 }
 
+/**
+ * The exam's colour (`examAccentStyle`, set on the page) — what is new and what
+ * is being looked at wear it — and the vivid fill for a shape carrying white
+ * text. Each falls back to the app's primary off an exam.
+ */
+const ACCENT = 'var(--exam-accent, hsl(var(--primary)))'
+const ACCENT_FILL = 'var(--exam-accent-vivid, hsl(var(--primary)))'
+const ACCENT_HALO = 'var(--exam-accent-soft, hsl(var(--primary) / 0.15))'
+
 /** A line's weight and ink, from its connection's strength. */
 function edgeStyle(strength: number, lit: boolean): { width: number; color: string } {
   const s = strength / 100
-  if (lit) return { width: 1.5 + 2.5 * s, color: 'hsl(var(--primary))' }
+  if (lit) return { width: 1.5 + 2.5 * s, color: ACCENT }
   const tier = strengthTier(strength)
   const alpha = tier === 'strong' ? 0.85 : tier === 'moderate' ? 0.55 : 0.3
   return { width: 0.75 + 2.75 * s, color: `hsl(var(--foreground) / ${alpha})` }
@@ -154,17 +159,15 @@ function edgeStyle(strength: number, lit: boolean): { width: number; color: stri
 
 export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function CraftBoard(
   {
-    graph,
-    progress,
+    state,
     saved,
     levels,
     selected,
     held,
-    hinted,
     hover,
     insets,
     minStrength,
-    freshNode,
+    justMade,
     freshConnection,
     flashConnection,
     openConnection,
@@ -196,8 +199,8 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   const latest = useRef({ onSettle, onCombine, onOpen, held, insets })
   latest.current = { onSettle, onCombine, onOpen, held, insets }
 
-  const placed = useMemo(() => placedConcepts(graph, progress), [graph, progress])
-  const connections = useMemo(() => foundConnections(graph, progress), [graph, progress])
+  const placed = state.held
+  const connections = state.found
 
   const springs = useMemo<Spring[]>(
     () => connections.map(c => connectionSpring(
@@ -316,7 +319,8 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
 
   const fit = useCallback((animate = true) => {
     const list = conceptKeysRef.current.map(k => bodies.current[k]).filter(Boolean)
-    const to = fitView(list, size.current.w, size.current.h, 40, latest.current.insets)
+    // Less margin on a narrow board: on a phone every pixel of width is zoom.
+    const to = fitView(list, size.current.w, size.current.h, Math.min(40, size.current.w * 0.04), latest.current.insets)
     if (animate) moveView(to)
     else {
       view.current = to
@@ -362,7 +366,12 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     let seeded = 0
     let added = 0
 
-    // In the order they were placed, so each can arrive beside one before it.
+    // What each connection made, in order, so the cards one pair made can be
+    // fanned out along it.
+    const batch = new Map<string, string[]>()
+    for (const [made, from] of state.madeFrom) batch.set(from.key, [...(batch.get(from.key) ?? []), made])
+
+    // In the order they came into hand, so each can arrive beside one before it.
     placed.forEach(name => {
       const key = conceptKey(name)
       wanted.add(key)
@@ -371,6 +380,14 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
       const asked = pending.current.get(name.toLowerCase())
       pending.current.delete(name.toLowerCase())
       let at: Point | null = asked ?? (remembered ? { x: remembered[0], y: remembered[1] } : null)
+      const from = state.madeFrom.get(name.toLowerCase())
+      const a = from && all[conceptKey(from.a)]
+      const b = from && all[conceptKey(from.b)]
+      if (!at && from && a && b) {
+        // Off the middle of the line between the two cards that made it.
+        const siblings = batch.get(from.key) ?? [name.toLowerCase()]
+        at = spawnBeside(a, b, centre, siblings.indexOf(name.toLowerCase()), siblings.length)
+      }
       if (!at) {
         // Beside a card it is connected to, on the outside of the map.
         const link = connections.find(c => {
@@ -421,7 +438,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     // one already there — the store echoing back where things settled must
     // not restart the simulation.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placed, connections, kick, fit])
+  }, [placed, connections, state.madeFrom, kick, fit])
 
   // Wheel zoom: a native listener, because React's is passive and the page
   // must not scroll under the board.
@@ -648,7 +665,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   const g = gesture.current
   const dragging = g?.kind === 'node' && g.moved ? g.key : null
   const targetKey = dragging ? dropTarget.current : null
-  const hintSet = new Set(hinted.map(h => h.toLowerCase()))
+  const pop = new Set(justMade.map(n => n.toLowerCase()))
   // What the reader is looking at: the concept being read, the one under the
   // pointer, or one connection's card. Everything else steps back.
   const focus = (dragging ? null : pointing) ?? selected?.toLowerCase() ?? null
@@ -656,7 +673,10 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   const isLit = (c: Connection) => c.key === openConnection || c.key === flashConnection || (!!focus && touches(c, focus))
   const anyLit = !!focus || !!openConnection
   const visible = connections.filter(c => c.strength >= minStrength || isLit(c))
-  const badges = v.k >= BADGE_ZOOM
+  const zoomedIn = v.k >= BADGE_ZOOM
+  // Zoomed out, only what is lit carries its strength — drawn at a size that
+  // can still be read and tapped on screen.
+  const badgeScale = zoomedIn ? 1 : Math.min(3, 0.8 / v.k)
 
   return (
     <div
@@ -704,13 +724,16 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
           })}
         </svg>
 
-        {badges && visible.map(c => {
+        {visible.map(c => {
           const a = all[conceptKey(c.a)]
           const b = all[conceptKey(c.b)]
           if (!a || !b) return null
           const lit = isLit(c)
-          // A busy board shows only the numbers of what is being looked at.
-          if (anyLit && !lit) return null
+          // A busy board, or one zoomed out, shows only the numbers of what is being looked at.
+          if ((anyLit || !zoomedIn) && !lit) return null
+          const scale = lit ? badgeScale : 1
+          const w = BADGE.w * scale
+          const h = BADGE.h * scale
           const { x, y } = lineLabelPoint(a, b)
           const tier = strengthTier(c.strength)
           return (
@@ -726,13 +749,19 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
                 lit ? 'z-[15]' : 'z-[5]',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 lit
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'text-white'
                   : tier === 'strong'
-                    ? 'bg-foreground text-background hover:bg-primary hover:text-primary-foreground'
+                    ? 'bg-foreground text-background hover:opacity-90'
                     : 'bg-muted text-muted-foreground ring-1 ring-border hover:text-foreground',
                 freshConnection === c.key && 'craft-node-pop',
               )}
-              style={{ width: BADGE.w, height: BADGE.h, transform: `translate(${x - BADGE.w / 2}px, ${y - BADGE.h / 2}px)` }}
+              style={{
+                width: w,
+                height: h,
+                fontSize: 10 * scale,
+                transform: `translate(${x - w / 2}px, ${y - h / 2}px)`,
+                background: lit ? ACCENT_FILL : undefined,
+              }}
               title={`${c.a} and ${c.b}: ${tier} connection, ${c.strength} of 100`}
               aria-label={`${c.a} and ${c.b}: ${tier} connection, strength ${c.strength}`}
               data-testid="craft-strength"
@@ -751,15 +780,14 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
           const isHeld = held?.toLowerCase() === lower
           const isTarget = targetKey === key || hover?.toLowerCase() === lower
           const isDragging = dragging === key
+          // Made and not yet played with: the exam's colour, until it is.
+          const isNew = state.fresh.has(lower)
           return (
             <div
               key={key}
               className={cn('absolute left-0 top-0', isDragging ? 'z-20' : 'z-10')}
               style={{ width: b.w, height: b.h, transform: `translate(${b.x - b.w / 2}px, ${b.y - b.h / 2}px)` }}
             >
-              {hintSet.has(lower) && (
-                <span aria-hidden className="tap-pulse pointer-events-none absolute -inset-2 rounded-xl border-2 border-primary" />
-              )}
               <button
                 type="button"
                 data-sound="none"
@@ -776,17 +804,25 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
                   else onOpen(name)
                 }}
                 aria-current={isSelected ? 'true' : undefined}
+                aria-label={isNew ? `${name}, new` : undefined}
+                data-new={isNew || undefined}
                 className={cn(
-                  'relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-card px-2.5 text-center text-card-foreground',
-                  'text-[13px] font-medium leading-tight shadow-[var(--shadow-card)] transition-transform duration-150',
+                  'relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg px-2.5 text-center',
+                  'text-[13px] font-medium leading-tight shadow-[var(--shadow-card)] transition-[transform,background-color,color] duration-200',
                   'cursor-grab focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                  isNew ? 'text-white' : 'bg-card text-card-foreground',
                   flashcardFoilClass(levels.isCollected(name), levels.levelOf(name), { tile: true }),
-                  isSelected && 'outline outline-2 outline-offset-2 outline-primary',
-                  isHeld && 'outline-dashed outline-2 outline-offset-2 outline-primary',
-                  isTarget && 'scale-105 outline outline-2 outline-offset-2 outline-primary/70',
+                  (isSelected || isTarget) && 'outline outline-2 outline-offset-2',
+                  isHeld && 'outline-dashed outline-2 outline-offset-2',
+                  isTarget && 'scale-105',
                   isDragging && 'cursor-grabbing shadow-lg',
-                  freshNode?.toLowerCase() === lower && 'craft-node-pop',
+                  pop.has(lower) && 'craft-node-pop',
                 )}
+                style={{
+                  background: isNew ? ACCENT_FILL : undefined,
+                  boxShadow: isNew ? `0 0 0 4px ${ACCENT_HALO}, var(--shadow-card)` : undefined,
+                  outlineColor: isSelected || isHeld || isTarget ? ACCENT : undefined,
+                }}
               >
                 <span className="line-clamp-2">{name}</span>
               </button>

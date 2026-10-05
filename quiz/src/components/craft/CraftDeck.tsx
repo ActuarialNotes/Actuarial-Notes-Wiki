@@ -5,17 +5,18 @@ import type { ConceptLevels } from '@/hooks/useConceptLevels'
 import { cn } from '@/lib/utils'
 
 /**
- * **The Concept Deck** — every concept in the topic, as the app's concept tile
- * (`components/ConceptTile.tsx`, the same card the flashcard picker and Quiz
- * Battle's topic pick draw), so a concept is one card wherever it is shown,
- * its foil edge its level. Those still to place come first, then those already
- * on the board.
+ * **The Concept Deck** — every concept the reader holds, in the order they came
+ * into hand, as the app's concept tile (`components/ConceptTile.tsx`, the same
+ * card the flashcard picker and Quiz Battle's topic pick draw), so a concept is
+ * one card wherever it is shown, its foil edge its level. A card made and not
+ * yet played with is ringed in the exam's colour, as it is on the board.
  *
- * A card is dragged out onto the board — dropped on empty board it is put down
- * there; dropped on another concept it is tried against that one. Or it is
+ * Every card in the deck is also on the board; the deck is the way to find one
+ * by name and to play without a drag. A card dragged onto another card on the
+ * board is tried against it; onto empty board, it is moved there. Or a card is
  * tapped to *hold* it, and the next card tapped, here or on the board, is tried
- * against it (the way in without a drag: a keyboard, a switch, a hand that
- * can't hold a drag). Tapping a held card puts it back.
+ * against it (a keyboard, a switch, a hand that can't hold a drag). Tapping a
+ * held card puts it back.
  *
  * Two shapes: a panel down the side of a wide board, and a strip along the
  * bottom of a phone's. The drag reads its axis from the shape — across the
@@ -24,14 +25,14 @@ import { cn } from '@/lib/utils'
  * any movement is a drag.
  */
 export interface CraftDeckProps {
-  /** Every concept in the topic, in the order the syllabus names them. */
+  /** The concepts in hand, in the order they came. */
   concepts: readonly string[]
-  /** Those on the board, lower-cased. */
-  placed: ReadonlySet<string>
+  /** How many concepts the topic has in all. */
+  total: number
+  /** Made and not yet played with, lower-cased. */
+  fresh: ReadonlySet<string>
   levels: ConceptLevels
   held: string | null
-  /** Concepts the challenge's hint is pointing at. */
-  hinted: readonly string[]
   layout: 'panel' | 'strip'
   /** Say how to play — only until the first connection is found; after that the board shows it. */
   showHow: boolean
@@ -54,20 +55,15 @@ interface Press {
   dragging: boolean
 }
 
-export function CraftDeck({ concepts, placed, levels, held, hinted, layout, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
+export function CraftDeck({ concepts, total, fresh, levels, held, layout, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(false)
   const press = useRef<Press | null>(null)
 
-  const { toPlace, onBoard } = useMemo(() => {
+  const shown = useMemo(() => {
     const q = query.trim().toLowerCase()
-    const shown = q ? concepts.filter(n => n.toLowerCase().includes(q)) : concepts
-    return {
-      toPlace: shown.filter(n => !placed.has(n.toLowerCase())),
-      onBoard: shown.filter(n => placed.has(n.toLowerCase())),
-    }
-  }, [concepts, placed, query])
-  const left = concepts.length - concepts.filter(n => placed.has(n.toLowerCase())).length
+    return q ? concepts.filter(n => n.toLowerCase().includes(q)) : concepts
+  }, [concepts, query])
 
   const tileHandlers = (name: string) => ({
     onPointerDown: (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -116,11 +112,14 @@ export function CraftDeck({ concepts, placed, levels, held, hinted, layout, show
 
   const tile = (name: string, className?: string) => {
     const isHeld = held?.toLowerCase() === name.toLowerCase()
-    const down = placed.has(name.toLowerCase())
-    const hint = hinted.some(h => h.toLowerCase() === name.toLowerCase())
+    const isNew = fresh.has(name.toLowerCase())
     return (
-      <div key={name} className={cn('relative', className)}>
-        {hint && <span aria-hidden className="tap-pulse pointer-events-none absolute -inset-1 rounded-lg border-2 border-primary" />}
+      <div
+        key={name}
+        className={cn('rounded-md', isNew && 'ring-2 ring-offset-2 ring-offset-background', className)}
+        // The exam's colour, as the card wears it on the board.
+        style={isNew ? ({ '--tw-ring-color': 'var(--exam-accent-vivid, hsl(var(--primary)))' } as React.CSSProperties) : undefined}
+      >
         <ConceptTile
           name={name}
           state={levels.levelOf(name)}
@@ -128,10 +127,9 @@ export function CraftDeck({ concepts, placed, levels, held, hinted, layout, show
           selected={isHeld}
           showLock={false}
           aria-pressed={isHeld}
-          aria-label={`${name}${down ? ', on the board' : ''}${isHeld ? ' — held' : ''}`}
+          aria-label={`${name}${isNew ? ', new' : ''}${isHeld ? ' — held' : ''}`}
           data-sound="none"
           data-testid="craft-deck-tile"
-          data-placed={down || undefined}
           className={cn('w-full', layout === 'strip' ? 'touch-pan-x' : 'touch-pan-y', 'cursor-grab')}
           {...tileHandlers(name)}
         />
@@ -145,13 +143,11 @@ export function CraftDeck({ concepts, placed, levels, held, hinted, layout, show
         <p className="flex items-center gap-1.5 whitespace-nowrap px-4 pb-1.5 text-xs text-muted-foreground">
           <Layers className="h-3.5 w-3.5 shrink-0" aria-hidden />
           <span className="font-medium text-foreground">Concept deck</span>
-          <span className="tabular-nums">{left} to place</span>
+          <span className="tabular-nums">{concepts.length} of {total}</span>
           {showHow && <span className="ml-auto truncate">Drag a card up</span>}
         </p>
-        <div className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {toPlace.map(name => tile(name, 'w-[68px] shrink-0'))}
-          {toPlace.length > 0 && onBoard.length > 0 && <span aria-hidden className="mx-1 w-px shrink-0 self-stretch bg-border" />}
-          {onBoard.map(name => tile(name, 'w-[68px] shrink-0 opacity-60'))}
+        <div className="flex gap-2 overflow-x-auto px-4 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {concepts.map(name => tile(name, 'w-[68px] shrink-0'))}
         </div>
       </section>
     )
@@ -167,25 +163,17 @@ export function CraftDeck({ concepts, placed, levels, held, hinted, layout, show
       >
         <Layers className="h-4 w-4" aria-hidden />
         Concept deck
-        <span className="tabular-nums text-muted-foreground">{left}</span>
+        <span className="tabular-nums text-muted-foreground">{concepts.length} of {total}</span>
       </button>
     )
   }
-
-  const group = (label: string, names: string[]) => names.length > 0 && (
-    <div className="space-y-2">
-      <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {label} <span className="tabular-nums">{names.length}</span>
-      </h3>
-      <div className="grid grid-cols-3 gap-2">{names.map(name => tile(name))}</div>
-    </div>
-  )
 
   return (
     <section aria-label="Concept deck" className="flex max-h-full w-72 flex-col overflow-hidden rounded-xl bg-background/95 shadow-xl ring-1 ring-border backdrop-blur-sm">
       <div className="flex items-center gap-2 px-3 pb-2 pt-3">
         <Layers className="h-4 w-4 text-muted-foreground" aria-hidden />
         <h2 className="flex-1 text-sm font-semibold">Concept deck</h2>
+        <span className="text-xs tabular-nums text-muted-foreground">{concepts.length} of {total}</span>
         <button
           type="button"
           onClick={() => setCollapsed(true)}
@@ -209,14 +197,11 @@ export function CraftDeck({ concepts, placed, levels, held, hinted, layout, show
           />
         </label>
       )}
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-3 pb-3 [scrollbar-width:thin]">
-        {toPlace.length + onBoard.length === 0 ? (
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3 pt-1 [scrollbar-width:thin]">
+        {shown.length === 0 ? (
           <p className="py-6 text-center text-xs text-muted-foreground">No concept in the deck matches.</p>
         ) : (
-          <>
-            {group('To place', toPlace)}
-            {group('On the board', onBoard)}
-          </>
+          <div className="grid grid-cols-3 gap-2">{shown.map(name => tile(name))}</div>
         )}
       </div>
       {showHow && (

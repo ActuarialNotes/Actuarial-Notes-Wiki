@@ -35,7 +35,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 
 > [!question]- Prerequisite knowledge
 >
-> The CAS Syllabus of Basic Education says MAS-I assumes prior knowledge from Exams 1 and 2, which the CAS waives for the SOA's Exams P and FM:
+> The CAS Syllabus of Basic Education says MAS-I assumes prior knowledge from Exams 1 and 2. The CAS credits both through another actuarial society's equivalent exam, such as the SOA's Exams P and FM:
 >
 > - [[Exam P-1 (SOA)|Exam 1 (Probability)]] — [[Probability]], [[Random Variable|Random Variables]], [[Expected Value]], [[Variance]], [[Conditional Probability]], and the named [[Probability Distributions|distributions]]
 > - [[Exam FM-2 (SOA)|Exam 2 (Financial Mathematics)]] — [[Interest]] and [[Present Value]], which Struppeck's note uses to discount [[Whole Life Insurance|insurance]] and [[Life Annuity|annuity]] payments
@@ -61,11 +61,11 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Probability Distributions|Distributions]] that arise: [[Poisson Distribution]], [[Exponential Distribution]], [[Gamma]], [[Negative Binomial Distribution]], [[Uniform Continuous Distribution]]
 > 
 > ### Markov Chains
-> - [[Markov Chain]] — the [[Transition Probability Matrix|transition probability matrix]], $n$-step [[Chapman-Kolmogorov Equations|transitions]], and the [[Stationary Distribution|stationary distribution]]
-> - Actuarial uses: [[Bonus-Malus System|bonus-malus systems]], [[Multi-State Model|multi-state disability/mortality models]], [[Credit Rating Migration|credit-rating migration]]
+> - [[Markov Chain]] — the [[Transition Probability Matrix|transition probability matrix]], $n$-step [[Chapman-Kolmogorov Equations|transitions]], and the [[Stationary Distribution|stationary distribution]] ([[Stationary Distribution|long-run proportions and limiting probabilities]])
+> - Actuarial use: [[Bonus-Malus System|bonus-malus systems]]
 > 
 > ### Reliability Theory
-> - [[System Reliability]] — [[System Reliability|structure functions]], [[System Reliability|minimal path and minimal cut sets]], [[System Reliability|systems of independent components]], and the [[System Reliability|expected system lifetime]]
+> - [[System Reliability]] — [[System Reliability|structure functions]], [[System Reliability|minimal path and minimal cut sets]], [[System Reliability|systems of independent components]], [[System Reliability|system life as a function of component lives]], and the [[System Reliability|expected system lifetime]]
 > - [[Inclusion-Exclusion Principle]] — [[System Reliability|bounds on the reliability function]]
 > - [[Combinatorics]] — counting the [[System Reliability|path and cut sets]] of a $k$-out-of-$n$ [[System Reliability|system]]
 > 
@@ -112,7 +112,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > ### Estimation
 > - [[Maximum Likelihood Estimation]], the [[Method of Moments]], and [[Percentile Matching]]
 > - [[Sufficient Statistic]] and [[Sufficiency]]
-> - [[Rao-Blackwell Theorem]] — the [[Sufficient Statistic|properties of a sufficient statistic]]
+> - [[Rao-Blackwell Theorem]] — the [[Sufficient Statistic|properties of a sufficient statistic]], and [[Rao-Blackwell Theorem|completeness and uniqueness]]
 > - [[Fisher Information]] and the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]]
 > - [[Sampling Distribution|Sampling models]] the [[Parameter Estimation|estimators]] are built on, notably the [[Normal Distribution]]
 > - Criteria: [[Unbiasedness]], [[Bias]], [[Consistency]], [[Efficiency]], [[Minimum Variance]], [[Mean Square Error]]

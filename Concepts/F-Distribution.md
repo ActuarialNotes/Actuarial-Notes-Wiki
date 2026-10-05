@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d8b4e228ab841f48173102c5877f1d1acb2f0406ff27cdf47f5a01b3350ac201
+  content_hash: sha256:fb68734ce1ca795682ae05a3e1a5bbb922fae67f9ccdea62db89284d52116f14
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.4 F-distribution eq. (1.7) F = (X1^2/n)/(X2^2/m) with independent chi-squared(n), chi-squared(m), and eq. (1.8) T^2 ~ F(1, n), printed pp.10-11 (PDF pp.27-28), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Tables, 'Selected Upper-tail areas for F-distributions', areas 0.20, 0.10, 0.05, 0.02, 0.01; numerator df 1-12, 14, 16, 20, 24, 30, 40, 50, 75, 100, 200, 500, Inf; denominator df 1-26 (den 24, num 2: 0.05 = 3.403, 0.10 = 2.538; den 8, num 10: 0.05 = 3.347; den 10, num 8: 0.05 = 3.072), PDF pp.17-19, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"

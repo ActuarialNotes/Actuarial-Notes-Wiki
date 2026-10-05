@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6843fb9810b14daa489c0f49e0599c11ba676db62e477f2e7cef576282adacdf
+  content_hash: sha256:6eeb1cbb072e02302c7fed1671b4e8c7e40044be4382e6d7f9e608b95bdf0b9e
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018), publisher eBook preview, §1.4.2 Chi-squared distribution items 1-2 and 7 (sum of squares of n independent N(0,1) is chi-squared(n); E = n, var = 2n; reproductive property), printed pp.9-10 (PDF pp.26-27); §1.4.3-1.4.4 t and F defined from chi-squared, PDF pp.27-28, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Tables, 'Lower-tail areas for Chi-square distributions', df 1-50, columns 0.005, 0.010, 0.025, 0.050, 0.950, 0.975, 0.990, 0.995 (df 9: 2.70 and 19.02; df 3: 7.81, 9.35, 11.34), PDF p.20, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"

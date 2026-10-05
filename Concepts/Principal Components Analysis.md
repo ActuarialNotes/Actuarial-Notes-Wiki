@@ -1,15 +1,15 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fa51c33edc6645768c9e7357bd676fb6ce0a3d736d77bb67b543b35e4d7fe95a
+  content_hash: sha256:599c32925d805e95dd189fbb83027d2b47a4de0f94116e9117e7ca505689a5d2
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3.1 PCR (PDF p.261), §12.2.1-12.2.4 eqs. 12.1-12.10, footnote 2, scaling, sign, scree plot/elbow (PDF pp.505-516), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026, Domain C tasks 5-6 (PDF p.3), James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Principal Components Analysis.md
 ---

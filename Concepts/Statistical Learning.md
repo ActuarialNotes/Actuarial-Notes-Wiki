@@ -33,7 +33,19 @@ verification:
 - **High variance** (overfitting): model too flexible, fits noise
 - Optimal model complexity minimizes total expected prediction error
 
-**Key methods covered in MAS-II:**
+**Methods by exam** (CAS 2026 content outlines; both exams read James et al., *An Introduction to Statistical Learning*):
+
+*MAS-I* — James Ch 1, 2 (excluding §2.2.3), 3 (§§3.1–3.3), 4 (§§4.1–4.4), 5, 6 and 7:
+
+| Method | James chapter | Task |
+| :--- | :--- | :--- |
+| [[Linear Regression]] | 3 Linear Regression | Regression |
+| [[Logistic Regression]] | 4 Classification | Classification |
+| [[Cross-Validation]], [[Bootstrap]] | 5 Resampling Methods | Estimating test error and standard errors |
+| [[Variable Selection]] (subset selection), [[Regularization]] (ridge, lasso), [[Principal Components Regression]], [[Partial Least Squares]], [[High-Dimensional Data]] | 6 Linear Model Selection and Regularization | Regression |
+| [[Polynomial Regression]], [[Step Function]], [[Regression Spline]], [[Smoothing Spline]], [[Local Regression]], [[Generalized Additive Model]] | 7 Moving Beyond Linearity | Regression (GAMs also classification) |
+
+*MAS-II* — James Ch 1, §2.2, §4.4.2 (confusion matrix), Ch 8, 10 and 12:
 
 | Method | Type | Task |
 | :--- | :--- | :--- |
@@ -41,12 +53,19 @@ verification:
 | [[Decision Tree]] | Tree-based | Classification/Regression |
 | [[Tree Ensemble]] | Ensemble | Classification/Regression |
 | [[Principal Components Analysis]] | Dimensionality reduction | Unsupervised |
-| [[Clustering]] | Density-based | Unsupervised |
+| [[Clustering]] | K-means / hierarchical | Unsupervised |
 | [[Neural Network]] | Deep learning | Classification/Regression |
 
 ![[Media/Figures/Statistical_Learning.svg|340]]
 
-> [!example]- Bias-Variance Trade-off for KNN {Example}
+> [!example]- Bias-Variance Trade-off for a Smoothing Spline (MAS-I) {Example}
+> A smoothing spline is fitted to the same data once with tuning parameter $\lambda = 0$ and once with $\lambda \to \infty$. Which fit has higher bias? Higher variance?
+>
+> > [!answer]-
+> > **$\lambda = 0$**: the roughness penalty has no effect, so the curve is very jumpy and interpolates every training observation — very flexible, low bias, high variance.
+> > **$\lambda \to \infty$**: the curve is forced to be perfectly smooth, which makes it the least squares straight line — rigid, high bias, low variance. In between, $\lambda$ sets the trade-off and is chosen by [[Cross-Validation]].
+
+> [!example]- Bias-Variance Trade-off for KNN (MAS-II) {Example}
 > A KNN model is fitted with $K=1$ and separately with $K=100$ for a classification problem. Which has higher bias? Higher variance?
 >
 > > [!answer]-

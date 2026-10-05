@@ -22,7 +22,7 @@ A **Bonus-Malus System** (BMS) is a merit-rating scheme, most common in motor in
 > $$\text{Long-run average premium} = \sum_j \pi_j\, b_j$$
 
 - $s_i(k)$ is the level reached from level $i$ after a year with $k$ claims, $a_k$ the probability of $k$ claims (for a Poisson rate $\lambda$, $a_k = e^{-\lambda}\lambda^k/k!$), $b_j$ the premium at level $j$ and $\pi_j$ the [[Stationary Distribution|stationary probability]] of level $j$. The rules and the claim distribution together fix the [[Transition Probability Matrix]].
-- A BMS is a coarse form of [[Experience Rating]]: it reacts to claim **counts**, not amounts, and is justified by heterogeneity in $\lambda$ across drivers — a [[Mixing Distribution]]. For one driver with a fixed $\lambda$ the level is Markov; for a randomly chosen driver it is not, because the level history carries information about $\lambda$.
+- A BMS is a coarse form of [[Experience Rating]]: it reacts to claim **counts**, not amounts, and is justified by heterogeneity in $\lambda$ across drivers — a [[Mixing Distribution]]. For one driver with a fixed $\lambda$ and independent yearly claim counts, the level is a homogeneous Markov chain.
 - **Hunger for bonus:** a reported claim costs future discounts, so policyholders rationally pay small losses themselves. The insurer's data then under-count small claims, which the pricing actuary has to allow for.
 - **Separation can be weak.** Because levels respond only to counts and reset quickly, long-run premiums differ far less than claim frequencies do — see the first example.
 

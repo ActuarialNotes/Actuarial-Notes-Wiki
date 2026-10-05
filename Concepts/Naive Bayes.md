@@ -55,7 +55,7 @@ verification:
 > > At a $0.5$ threshold the claim is classed as legitimate. Its fraud probability is still about six times the $4\%$ prior, so a lower referral threshold would send it to the special investigations unit.
 
 > [!example]- Mixing a Quantitative and a Qualitative Predictor {Example}
-> Replace the late-report flag with the report lag in days, modelled as normal within each class: $N(40, 15^2)$ for fraud and $N(10, 8^2)$ for legitimate claims. Keep the soft-tissue rates ($0.60$ and $0.25$) and the $4\%$ prior. Find the fraud probability for a soft-tissue claim reported after $25$ days.
+> Replace the late-report flag with the report lag in days, modelled as normal within each class: $N(40, 15^2)$ for fraud and $N(10, 8^2)$ for legitimate claims. Keep the soft-tissue rates ($0.60$ and $0.25$) and the $4\%$ prior, and leave the attorney flag out, so the model now has two predictors: report lag and soft-tissue. Find the fraud probability for a soft-tissue claim reported after $25$ days.
 >
 > > [!answer]-
 > > $$
@@ -77,3 +77,5 @@ verification:
 > > $$
 > >
 > > A density, not a probability, is used for the quantitative predictor. The common $dx$ cancels between numerator and denominator.
+> >
+> > The answer depends on which predictors are in the model, because every $f_{kj}$ multiplies in. Had the attorney flag stayed in, for a claim again with no early attorney, the products would pick up $0.70$ and $0.95$, giving $0.000271 / (0.000271 + 0.001960) = 0.121$.

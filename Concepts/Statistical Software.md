@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:90366829fe90a906c15f303081a231ff438215945b297539df9dfba4dc785952
+  content_hash: sha256:dc384f6abfdf5566355c60b1cca390f3bdfa588ad4ed7a7a9276f2ad6d7c121c
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C task 4 (PDF p.5) and 'Parameter and Diagnostic Tables' note (PDF p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS PCPA Exam & Project Content Outline v.8 (updated 9.9.2026), Domain A task 2 and code submission (PDF p.3), language note (PDF p.4), sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"
@@ -14,7 +14,7 @@ verification:
     - "Grolemund & Wickham, R for Data Science (1st ed.), ch. 5 Data transformation sha256:38e6d881a581b48ec73c3a4a1e9a6a7cba54b2df4ab8bffff85ec0d85521ed8d — https://r4ds.had.co.nz/transform.html; ch. 12 Tidy data sha256:11cbff74baa595633b2d8bf8b99f41605a1c7c67e30887714e6e3873901e93af — https://r4ds.had.co.nz/tidy-data.html; ch. 13 Relational data sha256:ed1995e7d56b77b965aade7b47fe8ab809c05da8aee2240e8af91c89b5e0f394 — https://r4ds.had.co.nz/relational-data.html"
     - "McKinney, Python for Data Analysis 3rd ed. (open web edition), ch. 6 sha256:53aa006e044960aa45436692074bdf75669513bb7a88a5f256c33c4d35cd2020 — https://wesmckinney.com/book/accessing-data.html; ch. 7 sha256:c5791e05af4cfd2ad93cc40bc3e23df7ed169d2e7a80bf94ebf03bebfbc45449 — https://wesmckinney.com/book/data-cleaning.html; ch. 8 sha256:82e08312c6b091636e4fb62af050fdb40dfd4e0a4a9f77a6c742937295dcabdc — https://wesmckinney.com/book/data-wrangling.html; ch. 10 sha256:51a4e5cf1971ab5dd34dde5532e4a14c28afc27f5d16fd3255b0fbece2cc48ec — https://wesmckinney.com/book/data-aggregation.html"
     - "pandas User Guide, 'Group by: split-apply-combine', Named aggregation, sha256:e11ddc76b18db18328f0dc59b49d0dbf474ced9c85d3a4d8f8bae2b34f15788a — https://pandas.pydata.org/docs/user_guide/groupby.html; statsmodels, 'Fitting models using R-style formulas' (smf.ols, C()), sha256:379edd9acc4c452e3e0e4e6aa6b7c867cbf2c071bb1d9314dd410ecaeb72284e — https://www.statsmodels.org/stable/example_formulas.html"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Statistical Software.md
 ---

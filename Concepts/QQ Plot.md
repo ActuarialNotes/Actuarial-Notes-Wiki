@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e9b9a1cef8c2dfe5dd2cdd02a69e78320da8a7e7314e6334abbcac35596d751f
+  content_hash: sha256:d9c6021e07b6bf6e64784be705937f59f79b30fca951a553a39e2c188740b44b
   sources:
     - "NIST/SEMATECH e-Handbook §1.3.3.24 'Quantile-Quantile Plot' (quantiles of one data set against another; 45-degree reference line; shifts in location/scale, symmetry, tails), sha256:48fc9a7ae492519938004302aff61ba8a909b70601999f3cf244690bcb6db9dc — https://www.itl.nist.gov/div898/handbook/eda/section3/qqplot.htm"
     - "NIST/SEMATECH e-Handbook §1.3.3.21 'Normal Probability Plot' (ordered response values vertical vs normal order statistic medians horizontal; fitted reference line whose intercept and slope estimate location and scale; used on model residuals), sha256:bdb6715e4dad4cf3d99e06540b85c460d925bb54af4d94d07e35e04dac6e0749 — https://www.itl.nist.gov/div898/handbook/eda/section3/normprpl.htm"
@@ -15,7 +15,7 @@ verification:
     - "Larsen, 'Generalized Linear Models' (CAS Study Note, rev. 6/29/2016), 'QQ and Box Plots to test distribution assumptions' pp.1-2 (Dobson's normal probability plot of the residuals is a QQ plot built from order statistics) and 'Tweedie Distributions' p.2 (gamma: variance power p = 2), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5): §2.4.1 logging continuous variables pp.11-12 (PDF 21-22); §2.4.3 base level p.15; §6.1.2 scaled deviance D* = 2(ll_sat - ll_model) p.63 (PDF 73); §6.2 F-test, AIC, BIC pp.64-67; §6.3.1 deviance residuals, q-q plot, discrete-distribution caveat pp.67-69 (PDF 77-79); §6.3.2 binned working residuals pp.70-73; §6.4 Cook's distance, CV, bootstrap p.74; §7.1 actual vs predicted on holdout pp.75-76; §7.2.1 quantile plots p.77, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 3
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/QQ Plot.md
 ---

@@ -1,7 +1,11 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, ChevronDown, ChevronLeft, Circle, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, ChevronDown, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
+import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
+import { ExamStatusBanner, FloatingSearchBack } from '@/components/FloatingSearchBar'
+import { ExamLogo } from '@/components/ExamLogo'
+import { examAccentStyle } from '@/lib/examColors'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { QuizSettingsMenu } from '@/components/QuizSettingsMenu'
 import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
@@ -156,12 +160,14 @@ function GroupSection({
         {/* Share of the exam, drawn as the row itself: the fill reaches the
             group's percentage while collapsed and runs the full width when
             expanded — the same background the study guide's learning
-            objectives use. The selection tints below are translucent and sit
-            on top, so a picked group still shows its weight. */}
+            objectives use, in the exam's own colour (`--exam-accent-muted`,
+            scoped by the builder; card grey where no exam is in scope). The
+            selection tints below are translucent and sit on top, so a picked
+            group still shows its weight. */}
         {examPercentage !== null && (
           <div
             aria-hidden
-            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
+            className="absolute inset-y-0 left-0 bg-[color:var(--exam-accent-muted,hsl(var(--card)))] transition-all duration-300"
             style={{ width: open ? '100%' : `${Math.min(100, examPercentage)}%` }}
           />
         )}
@@ -1134,6 +1140,33 @@ export default function Landing() {
   function closeExam() {
     moveScreen('pop', () => setTopic(''))
   }
+
+  // The exam being configured, and the strip that names it in the search bar —
+  // the study guide's strip (WikiExam), less what is about a sitting rather
+  // than a quiz: no version menu, no syllabus. Its info button describes the
+  // bank instead (QuizExamInfoButton).
+  const currentExam = EXAMS.find(e => e.value === topic)
+  const examBank = useMemo(
+    () => (topic ? filterQuestions(allQuestions, { exam: topic, includeOffSyllabus: true }) : []),
+    [allQuestions, topic],
+  )
+  const examStrip = currentExam
+    ? {
+        title: examLabel,
+        icon: <ExamLogo examKey={currentExam.progressKey} size="md" />,
+        backLink: <FloatingSearchBack label="Change exam" onClick={closeExam} />,
+        actions: (
+          <QuizExamInfoButton
+            exam={currentExam.value}
+            examLabel={examLabel}
+            progressKey={currentExam.progressKey}
+            // The study guide's id, for Exam 6's variants (`6c-1`).
+            wikiExamId={currentExam.examId ? `${currentExam.examId.toLowerCase()}-1` : undefined}
+            questions={examBank}
+          />
+        ),
+      }
+    : undefined
   const shownHasTopic = useRef(hasTopic)
   useLayoutEffect(() => {
     if (shownHasTopic.current === hasTopic) return
@@ -1235,7 +1268,12 @@ export default function Landing() {
 
   return (
     <>
-    <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
+    <QuizFloatingSearch
+      filter={searchFilter}
+      filterPills={filterPills}
+      strip={examStrip}
+      banner={hasTopic ? <ExamStatusBanner status={examStatus(currentExam?.progressKey, currentExam?.examId)} /> : undefined}
+    />
     {/* The exam list is the Study Guides home page's shell, to the pixel:
         the same container (`px-4 sm:px-6 py-8 max-w-4xl`), the same `space-y-8`
         and the same title row. The two tabs open on the same thing — a ladder
@@ -1250,54 +1288,37 @@ export default function Landing() {
     <div
       className={cn(
         'max-w-4xl mx-auto w-full px-4 sm:px-6',
-        hasTopic ? 'pt-0 space-y-6' : 'py-8 space-y-8',
+        hasTopic ? 'pt-6 space-y-6' : 'py-8 space-y-8',
       )}
-      style={hasSelection
-        ? { paddingBottom: 'calc(var(--action-bar-height, 16rem) + 1.5rem)' }
-        : undefined}
+      // Inside an exam the builder is scoped to its colour, which the learning
+      // objectives' weight bars fill in — as on the exam's study guide.
+      style={{
+        ...(hasTopic ? examAccentStyle(currentExam?.progressKey ?? '') : undefined),
+        ...(hasSelection ? { paddingBottom: 'calc(var(--action-bar-height, 16rem) + 1.5rem)' } : undefined),
+      }}
     >
-      {/* One compact row: back out of the exam, and the exam's name. This was a
-          three-row block ~155px tall on a phone, on a screen where fixed chrome
-          already took two-thirds of the viewport.
-
-          Inside an exam it pins to the top — the name of the exam being
-          configured has to stay in sight while the concept list scrolls. On the
-          exam list there is nothing to keep in sight and the row is the Study
-          Guides page's plain title row instead, so the two tabs' titles sit on
-          the same line. Same treatment as the Dashboard's sticky header when it
-          does pin: a translucent blurred background rather than a rule, which
-          would stop at this container's edge rather than spanning the
-          viewport. */}
-      <div className={cn(
-        hasTopic && 'sticky top-14 z-20 -mx-4 sm:-mx-6 space-y-2 bg-background/95 px-4 sm:px-6 py-2.5 backdrop-blur-sm',
-      )}>
-        <div className="flex items-center gap-2">
-          {hasTopic && (
-            <button
-              type="button"
-              onClick={closeExam}
-              aria-label="Change exam"
-              className="-ml-1.5 shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-          )}
-          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">
-            {hasTopic ? examLabel : 'Quiz'}
-          </h1>
-          {!user && (
-            <Link
-              to="/auth"
-              className="shrink-0 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="text-primary underline-offset-2 hover:underline">Sign in</span>
-              <span className="hidden sm:inline"> to save progress</span>
-            </Link>
-          )}
-          {/* The body picker rides the title row, the shape the Study Guides
-              tab opens on — it governs the whole exam list below, so it sits
-              with the title rather than in a label row of its own. */}
-          {!hasTopic && (
+      {/* The page's title row. On the exam list it is the Study Guides page's
+          plain title row, so the two tabs' titles sit on the same line. Inside
+          an exam it is the exam's name, the way a study guide opens with its
+          own: the way back and the exam's logo ride the search bar's strip
+          (`examStrip`, above), which is what stays in sight as the concept list
+          scrolls. */}
+      <div className={cn(hasTopic && 'space-y-2')}>
+        {!hasTopic && (
+          <div className="flex items-center gap-2">
+            <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Quiz</h1>
+            {!user && (
+              <Link
+                to="/auth"
+                className="shrink-0 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="text-primary underline-offset-2 hover:underline">Sign in</span>
+                <span className="hidden sm:inline"> to save progress</span>
+              </Link>
+            )}
+            {/* The body picker rides the title row, the shape the Study Guides
+                tab opens on — it governs the whole exam list below, so it sits
+                with the title rather than in a label row of its own. */}
             <SegmentedControl
               label="Examining body"
               size="lg"
@@ -1310,8 +1331,8 @@ export default function Landing() {
               ]}
               className="shrink-0"
             />
-          )}
-        </div>
+          </div>
+        )}
 
         {selectedConcept && (
           <div className="flex items-center gap-2">
@@ -1457,18 +1478,6 @@ export default function Landing() {
                       <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
                     ) : (
                       <>
-                        {selectedConcepts.length > 0 && (
-                          <p className="px-1 text-xs text-muted-foreground">
-                            {selectedConcepts.length} topic{selectedConcepts.length === 1 ? '' : 's'} selected.
-                            <button
-                              type="button"
-                              onClick={() => setSelectedConcepts([])}
-                              className="ml-1.5 rounded underline underline-offset-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                            >
-                              Clear
-                            </button>
-                          </p>
-                        )}
                         {groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}

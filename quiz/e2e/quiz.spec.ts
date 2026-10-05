@@ -67,6 +67,9 @@ test.describe('open-answer carryover', () => {
     await expect(fullCredit).toHaveAttribute('aria-pressed', 'true')
 
     await page.getByRole('button', { name: 'Next Question →' }).click()
+    // Both questions have written parts still ungraded, so moving on asks for
+    // their grades first — skip them; this test is about what carries over.
+    await page.getByRole('dialog').getByRole('button', { name: 'Skip grading' }).click()
 
     // Next question: empty box, and no grade carried over (the buttons only
     // appear once an answer is locked in, so none should be on screen at all).
@@ -85,5 +88,49 @@ test.describe('open-answer carryover', () => {
     await expect(nextFullCredit).toBeVisible()
     await expect(nextFullCredit).toHaveAttribute('aria-pressed', 'false')
     await expect(page.getByText('✓ Correct')).toHaveCount(0)
+  })
+})
+
+// A written answer is graded by the reader against the sample answer. Moving on
+// without grading asks for the grade in a popup, which takes it there and then.
+test.describe('written-answer grading', () => {
+  test('shows each sample as its own card and asks for the grade before moving on', async ({ page }) => {
+    // cas6c-2014s-q10: one written part, two sample answers ("Alternatively:").
+    await page.goto('/quiz?ids=cas6c-2014s-q10')
+
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const response = page.getByPlaceholder('Write your response here…')
+    await expect(startQuiz.or(response).first()).toBeVisible()
+    if (await startQuiz.isVisible()) {
+      await startQuiz.click()
+    }
+
+    await response.fill('More competition lowers rates.')
+    await page.getByRole('button', { name: 'Confirm Answer' }).click()
+
+    // The sample answer is one panel holding a card per sample; the
+    // examiner's report is a card of its own.
+    const samples = page.getByRole('region', { name: 'Sample answer' })
+    await expect(samples.getByRole('listitem', { name: /^Sample \d+ of \d+$/ })).toHaveCount(2)
+    await expect(samples.getByRole('listitem', { name: 'Sample 2 of 2' })).toContainText('Foreign parent failure')
+    await expect(page.getByRole('region', { name: "Examiner's report" })).toContainText('open ended nature')
+
+    // Finishing without a grade: the popup holds the move until one is given.
+    const finish = page.getByRole('button', { name: 'Finish Quiz' })
+    await finish.click()
+    const dialog = page.getByRole('dialog', { name: 'Grade your answer' })
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByRole('button', { name: 'Finish Quiz' })).toBeDisabled()
+    await dialog.getByRole('button', { name: /Partial/ }).click()
+    await expect(dialog.getByRole('button', { name: 'Finish Quiz' })).toBeEnabled()
+
+    // Back to the answer: the grade given in the popup is the question's own…
+    await page.keyboard.press('Escape')
+    await expect(dialog).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /Partial/ })).toHaveAttribute('aria-pressed', 'true')
+
+    // …so finishing now doesn't ask again.
+    await finish.click()
+    await expect(page).toHaveURL(/\/review/)
   })
 })

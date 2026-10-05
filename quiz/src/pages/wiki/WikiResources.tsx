@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { X } from 'lucide-react'
+import { Minus, Plus, X } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
+import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -21,6 +22,17 @@ import {
   toggleResourceFacet,
   type ResourceFacet,
 } from '@/lib/resourceFilters'
+import {
+  vintageFromParams,
+  vintageShelf,
+  vintageToParams,
+  vintageView,
+  withCurrentExams,
+  type VintageChange,
+  type VintageShelfEntry,
+} from '@/lib/resourceVintages'
+import { syllabusEditions } from '@/data/syllabusVintages'
+import { cn } from '@/lib/utils'
 
 const EMPTY_TITLE: Record<ResourceFacet, string> = {
   exam: 'None of these resources is a syllabus reading',
@@ -28,49 +40,145 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
   year: 'None of these resources names its year',
 }
 
+// A changed reading wears the diff's own colours (docs/style-guide.md §4.1):
+// green for what an edition added, red for what it dropped.
+const CHANGE_RING: Record<VintageChange, string> = {
+  added: 'ring-2 ring-green-500/60',
+  dropped: 'ring-2 ring-red-500/50',
+}
+
+function ChangePill({ change, edition }: { change: VintageChange; edition: string }) {
+  const Icon = change === 'added' ? Plus : Minus
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
+        change === 'added'
+          ? 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
+          : 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
+      )}
+    >
+      <Icon className="h-3 w-3 shrink-0" aria-hidden />
+      {change === 'added' ? `New in ${edition}` : `Dropped in ${edition}`}
+    </span>
+  )
+}
+
 /**
  * One syllabus reading on the shelf: its cover, its title, and the pills —
  * the exams it is a reading for first, since that is what the shelf is
  * scanned for, then whether it can be read here, then its bibliographic facts.
+ * While a vintage's changes are highlighted, a changed reading leads its pills
+ * with the change, and a dropped one is struck through and dimmed: it is on
+ * the shelf to be seen, not because the edition assigns it.
  */
-function ResourceShelfCard({ book, onOpen }: { book: WikiIndexItem; onOpen: () => void }) {
-  return (
-    <button type="button" onClick={onOpen} className="w-full text-left appearance-none bg-transparent p-0">
-      <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
-        {book.coverImage && (
-          <div className="flex-shrink-0 p-2 pt-4 flex items-start">
-            <img
-              src={book.coverImage}
-              alt={book.title ?? book.name}
-              className="w-16 sm:w-20 rounded-md object-contain max-h-28 bg-muted/20"
-              loading="lazy"
-              onError={(e) => {
-                const p = e.currentTarget.parentElement
-                if (p) p.style.display = 'none'
-              }}
-            />
+function ResourceShelfCard({
+  book,
+  change,
+  edition,
+  onOpen,
+}: {
+  book: WikiIndexItem
+  change: VintageChange | null
+  edition: string | null
+  /** Absent for a reading the vault has no page for. */
+  onOpen?: () => void
+}) {
+  const dropped = change === 'dropped'
+  const card = (
+    <Card
+      className={cn(
+        'h-full overflow-hidden flex flex-row items-stretch transition-all duration-150',
+        onOpen && 'hover:bg-accent/40',
+        change && CHANGE_RING[change],
+      )}
+    >
+      {book.coverImage && (
+        <div className={cn('flex-shrink-0 p-2 pt-4 flex items-start', dropped && 'opacity-50')}>
+          <img
+            src={book.coverImage}
+            alt={book.title ?? book.name}
+            className="w-16 sm:w-20 rounded-md object-contain max-h-28 bg-muted/20"
+            loading="lazy"
+            onError={(e) => {
+              const p = e.currentTarget.parentElement
+              if (p) p.style.display = 'none'
+            }}
+          />
+        </div>
+      )}
+      <div className="p-4 flex flex-col gap-2 flex-1">
+        <p
+          className={cn(
+            'text-sm font-semibold leading-snug',
+            dropped && 'text-muted-foreground line-through decoration-red-500/60',
+          )}
+        >
+          {book.title ?? book.name}
+        </p>
+        {(change || book.exams?.length || book.pdf || book.author || book.year || book.edition || book.publisher) && (
+          <div className="flex flex-wrap gap-1">
+            {change && edition && <ChangePill change={change} edition={edition} />}
+            {book.exams?.map(exam => (
+              <ExamPill key={`exam-${exam}`}>{exam}</ExamPill>
+            ))}
+            {book.pdf && <PdfPill />}
+            {splitAuthors(book.author).map((author, i) => (
+              <MetaPill key={`author-${i}`}>{author}</MetaPill>
+            ))}
+            {book.year && <MetaPill>{book.year}</MetaPill>}
+            {book.edition && <MetaPill>{book.edition} ed.</MetaPill>}
+            {book.publisher && book.publisher !== book.author && (
+              <MetaPill>{book.publisher}</MetaPill>
+            )}
           </div>
         )}
-        <div className="p-4 flex flex-col gap-2 flex-1">
-          <p className="text-sm font-semibold leading-snug">{book.title ?? book.name}</p>
-          {(book.exams?.length || book.pdf || book.author || book.year || book.edition || book.publisher) && (
-            <div className="flex flex-wrap gap-1">
-              {book.exams?.map(exam => (
-                <ExamPill key={`exam-${exam}`}>{exam}</ExamPill>
-              ))}
-              {book.pdf && <PdfPill />}
-              {splitAuthors(book.author).map((author, i) => (
-                <MetaPill key={`author-${i}`}>{author}</MetaPill>
-              ))}
-              {book.year && <MetaPill>{book.year}</MetaPill>}
-              {book.edition && <MetaPill>{book.edition} ed.</MetaPill>}
-              {book.publisher && book.publisher !== book.author && (
-                <MetaPill>{book.publisher}</MetaPill>
-              )}
-            </div>
-          )}
-        </div>
-      </Card>
+      </div>
+    </Card>
+  )
+  if (!onOpen) return <div className="h-full">{card}</div>
+  return (
+    <button type="button" onClick={onOpen} className="w-full text-left appearance-none bg-transparent p-0">
+      {card}
+    </button>
+  )
+}
+
+/**
+ * A highlight toggle on the changes row: what an edition added, or what it
+ * dropped, with how many. Pressed, it wears that change's colour — the same
+ * one the cards it marks wear.
+ */
+function ChangeToggle({
+  change,
+  count,
+  active,
+  onToggle,
+}: {
+  change: VintageChange
+  count: number
+  active: boolean
+  onToggle: () => void
+}) {
+  const Icon = change === 'added' ? Plus : Minus
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onToggle}
+      disabled={count === 0}
+      data-sound="select"
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40',
+        !active && 'bg-card enabled:hover:bg-accent',
+        active && change === 'added' && 'border-green-500/40 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100',
+        active && change === 'dropped' && 'border-red-500/40 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
+      )}
+    >
+      <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+      {change === 'added' ? 'Added' : 'Dropped'}
+      <span className="text-xs tabular-nums opacity-70">{count}</span>
     </button>
   )
 }
@@ -79,7 +187,9 @@ function ResourceShelfCard({ book, onOpen }: { book: WikiIndexItem; onOpen: () =
  * The Study Guides tab's **Resources** page (`/wiki/resources`): every
  * `Resources/Books` page — the syllabus readings and the documents beside
  * them — as one shelf, filtered by Exam, Publisher and Year
- * (`lib/resourceFilters.ts`). It used to be a section at the foot of the exam
+ * (`lib/resourceFilters.ts`), and by **Vintage** — which edition of one exam's
+ * syllabus — with what that edition added and dropped highlighted on request
+ * (`lib/resourceVintages.ts`). It used to be a section at the foot of the exam
  * ladder; it is a page of its own, listed under Study Guides in the sidebar
  * the way an open project's views are listed under Projects.
  *
@@ -108,29 +218,92 @@ export default function WikiResources() {
   // Where the shelf was left is kept by the router (lib/routeScrollMemory.ts),
   // which brings a resource page's "All resources" link and Back here to it.
 
-  const books = useMemo(() => index.filter(i => i.category === 'document'), [index])
+  // A retired reading an exam page keeps for the record is no longer that
+  // exam's reading, so its card isn't tagged or counted as one.
+  const books = useMemo(
+    () => withCurrentExams(index.filter(i => i.category === 'document'), syllabusEditions),
+    [index],
+  )
+  const examCount = useMemo(() => index.filter(i => i.category === 'exam').length, [index])
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
-  const filtered = useMemo(() => filterResources(books, selection), [books, selection])
-  const filtering = hasResourceFilters(selection)
+  const { label: vintageLabel, highlight } = useMemo(() => vintageFromParams(searchParams), [searchParams])
+  // One exam with its syllabus editions on file: the shelf is one edition's
+  // reading list, and the Exam filter's work is done by that list.
+  const vintage = useMemo(
+    () => vintageView(books, selection.exam, vintageLabel, syllabusEditions),
+    [books, selection.exam, vintageLabel],
+  )
+  const entries = useMemo<VintageShelfEntry[]>(
+    () => vintage
+      ? vintageShelf(books, vintage, highlight)
+      : books.map(item => ({ item, change: null, stub: false })),
+    [books, vintage, highlight],
+  )
+  const pool = useMemo(() => entries.map(e => e.item), [entries])
+  const facetSelection = useMemo(
+    () => (vintage ? { ...selection, exam: new Set<string>() } : selection),
+    [vintage, selection],
+  )
+  const filtered = useMemo(() => {
+    const kept = new Set(filterResources(pool, facetSelection))
+    return entries.filter(e => kept.has(e.item))
+  }, [entries, pool, facetSelection])
+  const filtering = hasResourceFilters(selection) || vintageLabel !== null || highlight.size > 0
   const options = useMemo(
-    () => Object.fromEntries(RESOURCE_FACETS.map(facet => [facet, resourceFacetOptions(books, facet, selection)])),
-    [books, selection],
+    () => Object.fromEntries(RESOURCE_FACETS.map(facet => [
+      facet,
+      // The Exam filter always counts the whole shelf; the others count what
+      // the vintage leaves.
+      facet === 'exam' ? resourceFacetOptions(books, facet, selection) : resourceFacetOptions(pool, facet, facetSelection),
+    ])),
+    [books, pool, selection, facetSelection],
   ) as Record<ResourceFacet, ReturnType<typeof resourceFacetOptions>>
 
-  // The popup walks what is on screen — the shelf as filtered.
+  const vintageOptions = useMemo(
+    () => (vintage?.editions ?? []).map((edition, i) => ({
+      value: edition.label,
+      label: edition.label,
+      hint: edition.source.title,
+      count: vintage!.counts[i],
+    })),
+    [vintage],
+  )
+
+  // The popup walks what is on screen — the shelf as filtered, less the
+  // readings the vault has no page for.
+  const opened = useMemo(() => filtered.filter(e => !e.stub), [filtered])
   const refs = useMemo<WikiEntryRef[]>(
-    () => filtered.map(book => ({ kind: 'resource', name: book.name })),
-    [filtered],
+    () => opened.map(e => ({ kind: 'resource', name: e.item.name })),
+    [opened],
   )
 
   // A filter is the same page showing something else, so it replaces the
   // history entry rather than stacking one per tick.
   function toggle(facet: ResourceFacet, value: string) {
-    setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
+    let next = resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams)
+    // A vintage is an edition of one exam's syllabus; another exam starts at its own newest.
+    if (facet === 'exam') next = vintageToParams(null, highlight, next)
+    setSearchParams(next, { replace: true })
+  }
+
+  function chooseVintage(label: string) {
+    // The newest edition is the default, so it leaves the URL clean.
+    const value = vintage?.editions[0]?.label === label ? null : label
+    setSearchParams(vintageToParams(value, highlight, searchParams), { replace: true })
+  }
+
+  function toggleChange(change: VintageChange) {
+    const next = new Set(highlight)
+    if (next.has(change)) next.delete(change)
+    else next.add(change)
+    setSearchParams(vintageToParams(vintageLabel, next, searchParams), { replace: true })
   }
 
   function clearFilters() {
-    setSearchParams(resourceFacetsToParams(emptyResourceFacets(), searchParams), { replace: true })
+    setSearchParams(
+      vintageToParams(null, new Set(), resourceFacetsToParams(emptyResourceFacets(), searchParams)),
+      { replace: true },
+    )
   }
 
   return (
@@ -138,6 +311,13 @@ export default function WikiResources() {
       <header>
         <h1 className="min-w-0 truncate text-2xl font-bold tracking-tight">Resources</h1>
       </header>
+
+      {/* The way back across to the tab's other page, the exam ladder — the
+          row the ladder carries to here, pointing the other way. Half the
+          width from sm up, as it is in the ladder's guide row. */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <StudyGuidesPageRow page="exams" count={examCount} />
+      </div>
 
       <div className="flex flex-wrap items-center gap-2">
         {RESOURCE_FACETS.map(facet => {
@@ -156,6 +336,20 @@ export default function WikiResources() {
             />
           )
         })}
+        <MultiSelectDropdown
+          label="Vintage"
+          options={vintageOptions}
+          selected={new Set(vintage ? [vintage.edition.label] : [])}
+          onToggle={chooseVintage}
+          getCount={value => vintageOptions.find(o => o.value === value)?.count ?? 0}
+          emptyTitle={
+            selection.exam.size === 1
+              ? 'No earlier edition of this exam’s syllabus is on file'
+              : 'Choose one exam to see its syllabus by edition'
+          }
+          surface="card"
+          single
+        />
         {filtering && (
           <button
             type="button"
@@ -167,6 +361,26 @@ export default function WikiResources() {
           </button>
         )}
       </div>
+
+      {vintage?.previous && (
+        <div className="-mt-3 flex flex-wrap items-center gap-2" data-testid="vintage-changes">
+          <span className="text-sm text-muted-foreground">
+            Since {vintage.previous.label}
+          </span>
+          <ChangeToggle
+            change="added"
+            count={vintage.added.length}
+            active={highlight.has('added')}
+            onToggle={() => toggleChange('added')}
+          />
+          <ChangeToggle
+            change="dropped"
+            count={vintage.dropped.length}
+            active={highlight.has('dropped')}
+            onToggle={() => toggleChange('dropped')}
+          />
+        </div>
+      )}
 
       {books.length === 0 ? (
         <p className="text-sm text-muted-foreground">Loading resources…</p>
@@ -183,9 +397,18 @@ export default function WikiResources() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((book, i) => (
-            <ResourceShelfCard key={book.path} book={book} onOpen={() => openAt(refs, i, RESOURCES_ROUTE)} />
-          ))}
+          {filtered.map(entry => {
+            const at = opened.indexOf(entry)
+            return (
+              <ResourceShelfCard
+                key={entry.stub ? `stub:${entry.item.name}` : entry.item.path}
+                book={entry.item}
+                change={entry.change}
+                edition={vintage?.edition.label ?? null}
+                onOpen={entry.stub ? undefined : () => openAt(refs, at, RESOURCES_ROUTE)}
+              />
+            )
+          })}
         </div>
       )}
     </div>

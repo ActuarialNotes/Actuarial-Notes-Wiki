@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Play } from 'lucide-react'
 import {
+  ExamStatusBanner,
   FloatingSearchBar,
   FloatingSearchInput,
   FloatingSearchStrip,
@@ -201,19 +202,10 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageIcon, pageTitleBad
       <FloatingSearchBar
         ref={containerRef}
         banner={
-          <>
-            {/* Status banner — thin, full-width, hidden while a dropdown is open */}
-            {pageTitle && isInDevelopment && !isExpanded && (
-              <div className="bg-amber-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-amber-600 dark:text-amber-400">
-                In Development — syllabus outline only, not yet available to study
-              </div>
-            )}
-            {pageTitle && isBeta && !isExpanded && (
-              <div className="bg-emerald-500/10 py-1.5 text-center text-[11px] font-medium tracking-wide text-emerald-600 dark:text-emerald-400">
-                Beta
-              </div>
-            )}
-          </>
+          // Status banner — thin, full-width, hidden while a dropdown is open
+          pageTitle && !isExpanded
+            ? <ExamStatusBanner status={isInDevelopment ? 'development' : isBeta ? 'beta' : 'ready'} />
+            : null
         }
       >
         <>

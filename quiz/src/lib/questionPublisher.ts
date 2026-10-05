@@ -9,8 +9,10 @@ import type { Question } from './parser'
 // three things, and the bank already says which:
 //
 //  - **A past paper's question** — the CAS banks, every file of which names
-//    its sitting. A paper is its examining body's, so the publisher is the body
-//    that sets the exam the paper was sat as: `originally_exam` when the
+//    its sitting but for the few sample questions the CAS published undated
+//    (`masi-sample-*`), which are the CAS's all the same. A paper is its
+//    examining body's, so the publisher is the body that sets the exam the
+//    paper was sat as: `originally_exam` when the
 //    syllabus has since moved the material (an Exam 7 paper's ERM question is
 //    still the CAS's, whatever exam it counts towards now).
 //  - **A published sample question** — the Exam P and FM banks, which are the

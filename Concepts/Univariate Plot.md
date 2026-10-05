@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:01fbf9d2198b0fc9e0e0a7c29b9c65f3ee370abca000a806708a12b2de61c47d
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:84e97ecbec51e4504584f47403fde1bf3a55d3296c0c134541e843a89a1718d0
+  sources:
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §6 'Order Statistics' (five-number summary (x_(1), q1, q2, q3, x_(n)); boxplot draws the five numbers and the outliers; empirical CDF), sha256:19ff485c600d4294e888c1b3d05ff7eb9196449f958d3325fd72b416aca56d63 — https://www.randomservices.org/random/sample/OrderStatistics.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.14 'Histogram' (centre, spread, skewness, outliers, multiple modes), fetched 2026-10-05 (per-request Cloudflare token makes the hash fetch-specific), sha256:65e6e5992ec7900eee386aaa75a674f05da4dfd19a964974182b18d10e39e7ad — https://www.itl.nist.gov/div898/handbook/eda/section3/histogra.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot', fetched 2026-10-05, sha256:67a9ab2a3aa2c1cb4abee07ce91609e67053ef2b835dd70ffae07e513305bbdd — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Univariate Plot.md
@@ -44,4 +47,4 @@ A **Univariate Plot** displays the distribution of **one** variable at a time �
 > A box plot of a variable looks symmetric with no outliers, but the histogram shows two clear humps. Which is telling the truth?
 >
 > > [!answer]-
-> > Both — they measure different things. The five numbers behind a box plot ($\min, Q_1, Q_2, Q_3, \max$) are identical for a symmetric unimodal sample and a symmetric **bimodal** one, so a box plot simply cannot show two humps. The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out.
+> > Both — they measure different things. The five numbers behind a box plot ($\min, Q_1, Q_2, Q_3, \max$) can be identical for a symmetric unimodal sample and a symmetric **bimodal** one, and the box draws nothing between them, so a box plot cannot show two humps. The histogram is right about the shape, and the two modes usually mean a missing [[Categorical Predictor|categorical variable]] (two classes of risk mixed in one column) that should be split out.

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a4dcc4534bf1f49f404b7a7cfb21dc379d27db7dc4848e9acafd6116e1e9ef15
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9b1bfed525264c281942c0b6e27f31fc09a58099d5c379ade946ddb0e175cd3d
+  sources:
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.38-44 (force of mortality as limiting death rate; also failure rate / hazard intensity; μ = f/S = -d/dx ln S; S = exp(-∫μ); exponential = constant force; Weibull γ>1 increasing, 0<γ<1 decreasing; increasing = aging, decreasing = burn-in; Gompertz-Makeham A + Bc^x, Gompertz A = 0, increasing for c > 1, convex for B > 0), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.10-11 and footnote 3 (hazard rate for mortality = force of mortality; λ(t); cumulative hazard), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hazard Rate.md
@@ -42,4 +45,4 @@ $$\mu_x = A + Bc^x, \quad A \geq 0,\, B > 0,\, c > 1$$
 >
 > > [!answer]-
 > > $$H(5) = \int_0^5 (0.02 + 0.001t)\,dt = \left[0.02t + 0.0005t^2\right]_0^5 = 0.10 + 0.0125 = 0.1125$$
-> > $$S(5) = e^{-0.1125} \approx 0.8935$$
+> > $$S(5) = e^{-0.1125} \approx 0.8936$$

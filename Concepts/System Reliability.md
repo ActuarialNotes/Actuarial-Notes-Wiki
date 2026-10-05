@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b133aea359a50dfad97df9c4c561270134c48a2151a36005be22da29021fec17
-  sources: []
+  sources:
+    - "Jensen & Bard, Operations Research Models and Methods (Univ. of Texas at Austin ORMM supplement), Ch. 26 'Reliability' (5/28/02): structure function and R = P{phi(X)=1} = E[phi(X)] with independent components PDF p.2; series and parallel structure functions and reliabilities eqs (2)-(5) PDF pp.3-4; k-out-of-n eq. (6) and binomial reliability eq. (7), 2-of-3 with p = 0.9 -> 0.972 PDF pp.4-5; minimal paths/cuts and structure functions from them eqs (9)-(11) PDF pp.8-9; bounds R_U = 1 - prod_j(1 - prod_{i in P_j} p_i), R_L = prod_j(1 - prod_{i in C_j} q_i), Example 4 (2-of-3 minimal paths and cuts are the three pairs) and 'lower bound better when reliabilities are high' PDF pp.15-16, sha256:4dc0c5592ed88249e31a90b2dedc12b9bfc355cba4262dc36ee757daa4d67a3d - https://utw11041.utweb.utexas.edu/ORMM/supplements/units/reliability/reliability.pdf"
+    - "Rausand, System Reliability Theory (Wiley 2004) course slides, NTNU RAMS Group, Ch. 3 'Structure Analysis': k-out-of-n structure, noon = series, 1oon = parallel PDF pp.8-9; minimal path and cut sets of the bridge {1,4},{2,5},{1,3,5},{2,3,4} / {1,2},{4,5},{1,3,5},{2,3,4} PDF pp.14-17; pivotal decomposition phi(x) = x_i phi(1_i,x) + (1-x_i) phi(0_i,x) PDF p.25, sha256:e7e0e27e5ba2e4647b0280b7650cc6f8ce06f5a1cad591bc036ce9a818adc624 - https://www.ntnu.edu/documents/624876/1277590549/chapt03-structure.pdf/ce525e3b-3f22-43c8-9ed3-d1dcba174742"
+    - "Rausand, System Reliability Theory course slides, NTNU, Ch. 4 'System of Independent Components': koon reliability as a binomial tail PDF p.12; 2oo3 of identical exponential components R_S(t) = 3e^{-2 lambda t} - 2e^{-3 lambda t}, MTTF = integral of R_S = 5/(6 lambda), 'less than the MTTF of a single component' PDF p.29, sha256:5acd59f70a27bd39e8c7514208db1e8ef55f6e640350d023b2278a13385227c6 - https://www.ntnu.edu/documents/624876/1277590549/chapt04-1.pdf"
+    - "Struppeck, 'Life Contingencies', CAS Study Note (Oct 2014, rev. Sept 2015) - MAS-I syllabus reading: joint-life annuity pays until the first death, last-survivor until both have died, PDF p.11, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 - https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06): Ross, Introduction to Probability Models, Sections 9.1-9.6 assigned to Domain A, PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed - https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/System Reliability.md

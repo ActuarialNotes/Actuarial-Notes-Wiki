@@ -8,12 +8,15 @@ Edition: "12th"
 Type: "Textbook"
 ISBN: "978-0-12-814346-9"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5e63f95e7d8af72dda368949b2bb8178a7a9485427acbcd6c92b3855d89e09be
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8085c20c51965f70cc3c52034e37826b7942f9f323b1eca3c613647c83b67400
+  sources:
+    - "Ross, Introduction to Probability Models, Twelfth Edition (Academic Press, 2019), title page and printed Contents pp. v-x, library scan (TU Ilmenau via K10plus), re-fetched 2026-10-05, sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"
+    - "Google Books record for ISBN 9780128143469: publisher description, Twelfth Edition, Academic Press 2019, fetched 2026-10-05, sha256:9ee0a9dcaa73134607d9b364b22944e733e2fda14cb2f01dd6896383d695ff21 — https://books.google.com/books?vid=ISBN9780128143469"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Probability Models (Ross - 2019).md
@@ -23,7 +26,7 @@ verification:
 A textbook introducing elementary probability modelling and stochastic processes, and how probability theory can be applied. In the publisher's description those applications run through engineering, computer science, management science, the physical and social sciences and operations research; the twelfth edition keeps the text's hallmark features — its writing style, and exercises and examples across a wide breadth of probability topics — and includes many real-world applications in engineering, science, business and economics.
 
 > [!info] On the syllabus
-> - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives A1–A6; Sections 4.1–4.8, 5.2.1–5.2.4, 5.3, 5.4.1, 5.4.2, 9.1–9.6, 11.1, 11.2.1 and 11.2.2 (of the 11th or 12th edition).
+> - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives A1–A6; Sections 4.1–4.8, 5.2.1–5.2.4, 5.3, 5.4.1, 5.4.2, 9.1–9.6, 11.1, 11.2.1 and 11.2.2 (of the 11th, 12th or 13th edition).
 
 ## Preface
 
@@ -277,4 +280,4 @@ A textbook introducing elementary probability modelling and stochastic processes
 - [Introduction to Probability Models, Twelfth Edition — title and contents pages (Academic Press, 2019)](https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF) — a library scan (TU Ilmenau, linked from the GBV/K10plus catalogue record) of the title page and contents pp. v–x: every chapter, section and subsection title
 - [Introduction to Probability Models (Google Books)](https://books.google.com/books?vid=ISBN9780128143469) — the publisher's description, the edition (12) and the ISBN
 - [Introduction to probability models, twelfth edition — catalogue record (K10plus)](https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9780128143469&maximumRecords=10&recordSchema=marcxml) — the imprint (Elsevier, Academic Press, © 2019), xv, 826 pages, and the ISBN
-- [CAS Exam MAS-I Content Outline](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (11th or 12th edition, Academic Press, 2014/2019) and the assigned sections
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (11th, 12th or 13th edition, Academic Press, 2014/2019/2023) and the assigned sections

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2995f0626d520ad8d6a50f349d52e60ceed64e5c4123e1ce74bf851cf91dbb4a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f5ed408f5df282533606b79653b0564d4b209db349ad9b9978495fb0297dc762
+  sources:
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C task 5 'Distinguish among categorical, ordinal, and continuous predictors and their interactions…', PDF p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §2.1.5 'Regression Versus Classification Problems' (quantitative vs qualitative, also known as categorical), printed p.28 (PDF p.39), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random Services), Ch.6 §1 'Introduction' (levels of measurement: qualitative variables are nominal; ordinal = only order meaningful; continuous vs discrete), sha256:0af72fbf0202413525cae99e696cfa70014a803d6c5ac7a7dcafd1577742414f — https://www.randomservices.org/random/sample/Introduction.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Data Types.md
@@ -18,6 +21,7 @@ verification:
 - **Continuous** — any value in an interval: claim severity, amount of insurance, vehicle value. Plot with a [[Histogram]] for shape, a [[Box Plot]] for spread and outliers, and a [[QQ Plot]] for the tails. Insurance amounts are usually right-skewed, so a log scale is often the readable one
 - **Discrete (count)** — non-negative integers: claim counts, vehicles per policy. A histogram of a variable that is $90\%$ zeros is one tall bar; a bar chart of how often $0, 1, 2, \ldots$ occur is the right [[Univariate Plot|univariate plot]]
 - **Nominal** — unordered labels: territory, vehicle make, distribution channel. **Ordinal** — ordered labels whose spacing means nothing: credit tier, construction class, limit band. **Binary** — two levels: claim or no claim, renewed or lapsed. Plot each with a bar chart of counts or exposure by level; that is how thin levels are found before they destabilize a coefficient
+- **The MAS-I outline counts differently.** Its task C5 asks candidates to distinguish *categorical, ordinal, and continuous* predictors — three kinds, so there *categorical* means unordered (nominal) levels. This page uses the wider sense, in which nominal and ordinal are both levels of measurement of a qualitative (categorical) variable
 - **Two variables at once**: numeric against numeric is a [[Scatter Plot]]; categorical against numeric is a row of side-by-side box plots, one per level; categorical against categorical is a two-way table of counts or exposure
 - **Storage type is not statistical type.** A territory stored as the integers $1$–$12$ is nominal, and a ZIP code is a label. Software reads what the file holds, so categorical variables must be declared — a `factor` in R, a `category` in pandas ([[Statistical Software]]) — or the model fits them as a single slope
 - Type also points to the model: counts to [[Poisson Regression]], positive skewed amounts to a [[Gamma]] response, a binary outcome to [[Logistic Regression]], and a spike at zero plus a skewed tail (pure premium) to the [[Tweedie Distribution]]. A nominal predictor enters as $k - 1$ indicator columns ([[Categorical Predictor]])

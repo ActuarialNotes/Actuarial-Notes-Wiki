@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>Variances of four competing unbiased estimators, with the sample mean's the smallest</title>
+  <title>Variances of four unbiased estimators of a normal mean from a sample of five with σ = 1, the sample mean's the smallest</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -52,22 +52,23 @@ text {
     <line x1="46" y1="356" x2="50" y2="356" class="tick"/>
     <text x="42" y="359.6" text-anchor="end" class="sm dim">0</text>
     <line x1="46" y1="242.96" x2="50" y2="242.96" class="tick"/>
-    <text x="42" y="246.56" text-anchor="end" class="sm dim">2</text>
+    <text x="42" y="246.56" text-anchor="end" class="sm dim">0.5</text>
     <line x1="46" y1="129.91" x2="50" y2="129.91" class="tick"/>
-    <text x="42" y="133.51" text-anchor="end" class="sm dim">4</text>
+    <text x="42" y="133.51" text-anchor="end" class="sm dim">1</text>
     <text x="46" y="82" text-anchor="start" class="sm dim">Var(θ̂)</text>
-    <rect x="70.91" y="299.48" width="46" height="56.52" rx="1.5" fill="#059669" fill-opacity="0.7"/>
+    <rect x="70.91" y="310.78" width="46" height="45.22" rx="1.5" fill="#059669" fill-opacity="0.7"/>
     <text x="93.91" y="374" text-anchor="middle" class="sm">X̄</text>
-    <text x="93.91" y="291.48" text-anchor="middle" class="sm">1.00</text>
-    <rect x="133.64" y="267.26" width="46" height="88.74" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
-    <text x="156.64" y="374" text-anchor="middle" class="sm">median</text>
-    <text x="156.64" y="259.26" text-anchor="middle" class="sm">1.57</text>
-    <rect x="196.36" y="226" width="46" height="130" rx="1.5" fill="#d97706" fill-opacity="0.7"/>
-    <text x="219.36" y="374" text-anchor="middle" class="sm">midrange</text>
-    <text x="219.36" y="218" text-anchor="middle" class="sm">2.30</text>
+    <text x="93.91" y="302.78" text-anchor="middle" class="sm">0.20</text>
+    <rect x="133.64" y="297.02" width="46" height="58.98" rx="1.5" fill="#d97706" fill-opacity="0.7"/>
+    <text x="156.64" y="374" text-anchor="middle" class="sm">midrange</text>
+    <text x="156.64" y="289.02" text-anchor="middle" class="sm">0.26</text>
+    <rect x="196.36" y="291.15" width="46" height="64.85" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+    <text x="219.36" y="374" text-anchor="middle" class="sm">median</text>
+    <text x="219.36" y="283.15" text-anchor="middle" class="sm">0.29</text>
     <rect x="259.09" y="129.91" width="46" height="226.09" rx="1.5" fill="#e11d48" fill-opacity="0.7"/>
     <text x="282.09" y="374" text-anchor="middle" class="sm">X₁</text>
-    <text x="282.09" y="121.91" text-anchor="middle" class="sm">4.00</text>
-    <line x1="50" y1="299.48" x2="319.73" y2="299.48" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+    <text x="282.09" y="121.91" text-anchor="middle" class="sm">1.00</text>
+    <line x1="50" y1="310.78" x2="319.73" y2="310.78" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+    <text x="125.27" y="163.83" text-anchor="middle" class="sm dim">n = 5</text>
   </g>
 </svg>

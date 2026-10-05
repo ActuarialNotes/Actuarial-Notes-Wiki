@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
-> Generated 2026-10-02 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **707 of 1015 syllabus concept entries (70%)** have at least one question in their exam's own bank.
+> Generated 2026-10-05 by `scripts/generate_coverage_report.py` — edit the script, not this page.
+> **727 of 1058 syllabus concept entries (69%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -11,8 +11,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 |---|---|---|---|---|
 | [[Exam P-1 (SOA)]] | `exam-p` (707) | 65 / 72 | 90% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
-| [[Exam MAS-I (CAS)]] | `exam-mas-i` (134) | 92 / 135 | 68% | 0 / 3 |
-| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (172) | 85 / 109 | 78% | 0 / 4 |
+| [[Exam MAS-I (CAS)]] | `exam-mas-i` (164) | 118 / 178 | 66% | 0 / 3 |
+| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (146) | 79 / 109 | 72% | 0 / 4 |
 | [[Exam DISC-DA (CAS)]] | none | 0 / 21 | 0% | 10 / 10 |
 | [[Exam DISC-RM (CAS)]] | none | 0 / 21 | 0% | 13 / 13 |
 | [[Exam DISC-IA (CAS)]] | none | 0 / 27 | 0% | 9 / 9 |
@@ -23,9 +23,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (118) | 20 / 30 | 67% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (132) | 32 / 38 | 84% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **707 / 1015** | **70%** | |
+| **Total** | | **727 / 1058** | **69%** | |
 
-117 concept pages are linked from no exam's learning objectives and are not counted.
+121 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
 
@@ -61,11 +61,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam MAS-I (CAS)
 
-*43 of 135 syllabus concepts have no question in `questions/exam-mas-i/`.*
+*60 of 178 syllabus concepts have no question in `questions/exam-mas-i/`.*
 
 ### A. Probability Models (Stochastic Processes and Survival Models) {20–30%}
 
-*12 of 42 uncovered*
+*12 of 48 uncovered*
 
 - [[Probability Distributions]]
 - [[Frequency]] — tagged in another bank (15)
@@ -76,13 +76,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Mixing Distribution]]
 - [[Insurance Portfolio]] — tagged in another bank (1)
 - [[Negative Binomial Distribution]] — tagged in another bank (11)
+- [[Mean Time Spent in Transient States]]
+- [[Time-Reversible Markov Chain]]
 - [[Bonus-Malus System]] — tagged in another bank (1)
-- [[Multi-State Model]]
-- [[Credit Rating Migration]]
 
 ### B. Statistics {20–30%}
 
-*11 of 46 uncovered*
+*20 of 62 uncovered*
 
 - [[Random Sample]]
 - [[Probability Distributions]]
@@ -93,20 +93,26 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Efficiency]]
 - [[Covariance]] — tagged in another bank (18)
 - [[Random Variable]]
+- [[Mixture Distribution]]
+- [[Convergence in Probability]]
+- [[Percentile Matching]]
+- [[Rao-Blackwell Theorem]]
 - [[Cramér-Rao Lower Bound]]
+- [[Empirical Distribution]]
+- [[Kolmogorov-Smirnov Test]]
+- [[Severity Distribution]] — tagged in another bank (14)
+- [[Pareto Distribution]]
+- [[Tail Weight]]
 - [[Coverage Modifications]]
 
 ### C. Extended Linear Models {45–55%}
 
-*26 of 54 uncovered*
+*34 of 80 uncovered*
 
 - [[Extended Linear Model]]
-- [[Linear Mixed Model]] — tagged in another bank (32)
 - [[Model Structure]] — tagged in another bank (4)
-- [[Tidy Data]]
+- [[Data Types]]
 - [[Probability Distributions]]
-- [[Cross-Validation]] — tagged in another bank (9)
-- [[Bias-Variance Tradeoff]] — tagged in another bank (14)
 - [[Statistical Software]]
 - [[Control Variable]]
 - [[Offset Variable]] — tagged in another bank (3)
@@ -115,21 +121,32 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Added Variable Plot]]
 - [[Model Fit]] — tagged in another bank (2)
 - [[Exploratory Data Analysis]]
-- [[Data Types]]
 - [[Box Plot]]
 - [[Univariate Plot]] — tagged in another bank (1)
 - [[Histogram]]
+- [[Analysis of Covariance]]
+- [[Ordinal Logistic Regression]]
 - [[Frequency]] — tagged in another bank (15)
-- [[Pure Premium]] — tagged in another bank (13)
-- [[Clustered Data]] — tagged in another bank (1)
+- [[Log-Linear Model]]
+- [[Quasi-Likelihood]]
+- [[Naive Bayes]]
+- [[Quadratic Discriminant Analysis]]
+- [[Polynomial Regression]]
+- [[Step Function]]
 - [[Dispersion Parameter]] — tagged in another bank (3)
 - [[Predictor Variable]]
+- [[Regression Through the Origin]]
+- [[Multiple Comparisons]]
+- [[Chi-Squared Distribution]]
+- [[Student's t-Distribution]]
+- [[Noncentral Chi-Squared Distribution]]
+- [[High-Dimensional Data]]
 - [[Scatter Plot]] — tagged in another bank (2)
 - [[Correlation]] — tagged in another bank (37)
 
 ## Exam MAS-II (CAS)
 
-*24 of 109 syllabus concepts have no question in `questions/exam-mas-ii/`.*
+*30 of 109 syllabus concepts have no question in `questions/exam-mas-ii/`.*
 
 ### A. Introduction to Credibility {15–25%}
 
@@ -142,18 +159,22 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### B. Linear Mixed Models {10–20%}
 
-*4 of 27 uncovered*
+*5 of 27 uncovered*
 
+- [[Variance]] — tagged in another bank (60)
 - [[Expected Value]] — tagged in another bank (99)
-- [[Residual]]
+- [[Residual]] — tagged in another bank (2)
 - [[BIC]] — tagged in another bank (3)
 - [[Summary Statistics]]
 
 ### C. Statistical Learning {40–50%}
 
-*14 of 46 uncovered*
+*19 of 46 uncovered*
 
+- [[Statistical Learning]] — tagged in another bank (3)
 - [[Sampling Distribution]] — tagged in another bank (1)
+- [[Bootstrap]] — tagged in another bank (17)
+- [[Residual Sum of Squares]] — tagged in another bank (8)
 - [[Out-of-Bag Error]]
 - [[Variable Importance]]
 - [[Neural Network]] — tagged in another bank (1)
@@ -167,13 +188,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Confusion Matrix]] — tagged in another bank (2)
 - [[Double Lift Chart]] — tagged in another bank (1)
 - [[Quantile Plot]] — tagged in another bank (2)
+- [[Mean Square Error]] — tagged in another bank (8)
+- [[Standard Deviation]] — tagged in another bank (19)
 
 ### D. Time Series with Constant Variance {15–25%}
 
 *3 of 21 uncovered*
 
 - [[Partial Autocorrelation Function]]
-- [[Residual]]
+- [[Residual]] — tagged in another bank (2)
 - [[Exponential Smoothing]]
 
 ## Exam DISC-DA (CAS)

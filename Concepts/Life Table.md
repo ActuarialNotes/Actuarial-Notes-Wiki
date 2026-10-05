@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:102117df3cdcd49bca010274fa8525798e56da43712c3d90c5994ea658109f24
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7acf71268e60d4e7b19a773011a7efa4588a2777c1698e5a34467e12be62b3a2
+  sources:
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.1-2 pp.3-5 (l_x, d_x = l_x - l_{x+1}, q_x = d_x/l_x, p_x = l_{x+1}/l_x, radix, npx = l_{x+n}/l_x = p_x p_{x+1}...p_{x+n-1}, nqx = 1 - npx), ch.6 p.10 (linear / exponential / hyperbolic interpolation), ch.7 p.12 (curtate expectation = Σ_{n>=1} npx; complete = curtate + 0.5 under uniform deaths), appendix p.13 (Ex.2, 10p50 × q60), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.1 pp.1-2 (S(x) = l_x/l_0), §2.2 pp.38-42 (f = -S', μ = -d/dx ln S), §4.2 p.110 cases (a) uniform failures and (b) constant force within integer ages, eq.(4.31) complete = curtate + 1/2 exactly under (a), approximately under (b), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Table.md
@@ -20,7 +24,7 @@ A **Life Table** is the tabular form of a [[Survival Model]]: starting from a ra
 - $_{t}p_x$ is the probability a life aged $x$ survives $t$ more years; $_{t|}q_x = {}_{t}p_x \cdot q_{x+t}$ is the probability of dying in the year *after* surviving $t$ years (a deferred death probability)
 - Survival probabilities **multiply** across periods: $_{s+t}p_x = {}_{s}p_x \cdot {}_{t}p_{x+s}$, which is why $\ell_x$ alone is enough to answer any question
 - The table is the discrete counterpart of the continuous survival function: $\ell_x = \ell_0\, S(x)$, and the [[Hazard Rate]] (force of mortality) is $\mu_x = -\frac{d}{dx}\ln \ell_x$
-- The **curtate expectation** $e_x$ counts complete years survived; the complete expectation is approximately $\mathring{e}_x \approx e_x + \tfrac12$ under a uniform-deaths assumption
+- The **curtate expectation** $e_x$ counts complete years survived; if deaths are uniformly distributed within each year of age, the complete expectation is exactly $\mathring{e}_x = e_x + \tfrac12$ (under a constant force it is only an approximation, close when death rates are small)
 - Fractional-age assumptions fill in between integer ages — **UDD** gives $_{s}q_x = s\,q_x$, a **constant force** gives $_{s}p_x = (p_x)^s$
 - Life-table probabilities feed straight into [[Whole Life Insurance]] and [[Life Annuity]] values, and into [[Joint Life]] statuses when two independent lives are combined by multiplying their survival probabilities
 
@@ -39,4 +43,4 @@ A **Life Table** is the tabular form of a [[Survival Model]]: starting from a ra
 >
 > > [!answer]-
 > > $$e_{60} = \frac{\ell_{61} + \ell_{62} + \ell_{63}}{\ell_{60}} = \frac{7{,}840 + 7{,}650 + 0}{8{,}000} = 1.936 \text{ years}$$
-> > A life aged $60$ completes on average $1.936$ further whole years; the complete expectation of life is roughly $1.936 + 0.5 = 2.44$ years.
+> > A life aged $60$ completes on average $1.936$ further whole years; if deaths are uniform within each year, the complete expectation of life is $1.936 + 0.5 = 2.436$ years.

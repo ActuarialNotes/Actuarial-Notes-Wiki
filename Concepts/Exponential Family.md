@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9c09c57fd6d7250f4f84381ab8d309661ddfe40119015385084d5558eb9ebf7d
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2c3d163d768372cc5981af67eb8ebee765319eeb9c98b47282947e08077d517e
+  sources:
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), pp.1-3 (quasi-likelihood; Tweedie power-variance list; canonical links and exponential-family table), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Rodriguez, GLM lecture notes, Models for Count Data With Overdispersion, sec.1 (PDF pp.1-2), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.1.3 fn.1 (PDF p.16), sec.2.7.1 (PDF p.29), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "statmod reference manual (G. Smyth), tweedie() help page: canonical link power = 1 - var.power, sha256:108779ab82400727c502d80a56cecb547895e7fc6dc51acbe105183e529d191a — https://search.r-project.org/CRAN/refmans/statmod/html/tweedie.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exponential Family.md
@@ -27,10 +32,10 @@ The **Exponential Family** is the class of distributions whose density can be wr
 | Binomial | $\mu(1-\mu)$ | $\ln\frac{\mu}{1-\mu}$ | Retention, large-claim indicator |
 | Gamma | $\mu^2$ | $-1/\mu$ (log in practice) | Claim severity |
 | Inverse Gaussian | $\mu^3$ | $-1/(2\mu^2)$ | Heavy-tailed severity |
-| Tweedie ($1<p<2$) | $\mu^{p}$ | $\ln\mu$ | Pure premium |
+| Tweedie ($1<p<2$) | $\mu^{p}$ | $\mu^{1-p}/(1-p)$ (log in practice) | Pure premium |
 
-- The **canonical [[Link Function]]** is the one with $g(\mu) = \theta$; it makes $\sum x_{ij}y_i$ a [[Sufficient Statistic]] and the likelihood well behaved, but any link that maps the mean range onto the whole line is allowed — the log link is standard for insurance because it makes rating factors multiplicative
-- Membership is what guarantees the GLM machinery works: iteratively reweighted least squares converges, the [[Deviance]] has its $\chi^2$ theory, and the [[Fisher Information]] has a closed form
+- The **canonical [[Link Function]]** is the one with $g(\mu) = \theta$; it makes $\sum x_{ij}y_i$ a [[Sufficient Statistic]] and the likelihood well behaved, but any one-to-one, differentiable link may be used — the log link is standard for insurance because it makes rating factors multiplicative
+- Membership is what lets every GLM be fitted by the same algorithm — iteratively reweighted least squares, equivalent to Fisher scoring — with [[Fisher Information]] $X^\top W X/\phi$; the [[Deviance]]'s $\chi^2$ distribution is a large-sample approximation. Quasi-likelihood runs the same algorithm from the mean–variance relationship alone, when a full exponential-family distribution is not assumed
 - Fixing $\phi$ at $1$ gives the "pure" one-parameter family; estimating it accommodates over- or under-dispersion without leaving the framework
 
 ![[Media/Figures/Exponential_Family.svg|340]]

@@ -69,11 +69,13 @@ describe('the question bank, by publisher', () => {
   })
 
   it('leaves no question of the vault’s own filed as the SOA’s', () => {
-    // An undated question not listed above is read as the SOA sample question
-    // its id numbers. Once fact checked, its record says whether it is.
+    // An undated question in an SOA bank not listed above is read as the SOA
+    // sample question its id numbers (the CAS's undated sample questions are
+    // the CAS's, and cite their own set). Once fact checked, its record says
+    // whether it is.
     const misfiled = questions.filter(x =>
       !x.year
-      && !VAULT_QUESTION_IDS.has(x.id)
+      && questionPublisher(x) === 'SOA'
       && (x.verification?.sources.length ?? 0) > 0
       && !citedSampleNumbers(x).includes(idNumber(x)),
     )

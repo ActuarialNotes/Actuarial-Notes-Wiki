@@ -1181,9 +1181,11 @@ def loading_vector() -> Fig:
     f = vcard()
 
     vars_ = ["braking", "cornering", "night", "mileage"]
-    pcs = [([0.52, 0.51, 0.49, 0.48], BLUE, "φ₁", -0.19),
-           ([0.61, 0.55, -0.42, -0.39], VIOLET, "φ₂", 0.19)]
-    ax = vaxes(f, 0.4, 4.6, -0.55, 0.75, left=40, right=12, top=24, bottom=40)
+    # The page's worked example: the first two eigenvectors (2 dp) of a 4x4
+    # correlation matrix, so the pair is orthogonal - phi1 . phi2 = 0.
+    pcs = [([0.52, 0.50, 0.50, 0.48], BLUE, "φ₁", -0.19),
+           ([0.42, 0.55, -0.43, -0.58], VIOLET, "φ₂", 0.19)]
+    ax = vaxes(f, 0.4, 4.6, -0.7, 0.75, left=40, right=12, top=24, bottom=40)
     ax.frame(yticks=[-0.5, 0, 0.5], grid=True, arrows=False)
     for load, colour, name, off in pcs:
         for j, v in enumerate(load):

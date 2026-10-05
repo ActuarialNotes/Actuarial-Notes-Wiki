@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7ad2ea6ddb900e0fe23e07ad8747bc75b5854380a9aedb7b7d40115d0ec81e04
-  sources: []
+  sources:
+    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 11 §11.2 yhat = Xb = Hy, yhat_i = h_i1 y_1 + ... + h_in y_n, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11.html"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.2.1 normal equations X'X b = X'y; §2.9.1 fitted values and residuals, PDF pp.6, 49, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.4 'Poisson Models for Count Data', §4.2.1 estimating equations X'y = X'mu-hat for canonical links (Poisson log, binomial logit, normal identity) reproduce totals and factor margins; §4.3.2 offset = log exposure in the linear predictor, PDF pp.6-7, 10, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.2 mu-hat = g^-1(eta-hat), PDF p.4, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (rev. June 2016), 'Canonical Link Function' pp.2-3, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.2.2 'Three: Model Fit' R² = Cor(Y, Yhat)², printed p.79 (PDF p.89); §2.2.1 and §6.1.1 training vs test error, printed pp.29-33, 227; §4.6/4.7 lab predict(type = \"response\") vs the logit, printed p.173 (PDF p.183), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Bates, Mächler, Bolker & Walker, 'Fitting Linear Mixed-Effects Models Using lme4' (lme4 vignette, J. Stat. Softw. 2015), eqs (1)-(2) pp.2-3 and predict() re.form, sha256:60474d07bdb3a511f804a6cd2e73494fd8eb5713f532e2382f69c5dea2e8782e — https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fitted Values.md

@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:114bcb3ff73956b046592ee40215dc2bf9257da5896b38a069b2d4cf040f0d0a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:53bbed5ea56c511bf59a238fb4713b3714665ca5b7a908ca20e2914845b36538
+  sources:
+    - "American Academy of Actuaries, Extreme Events and Property Lines Committee, Uses of Catastrophe Model Output (July 2018), pp.11, 13, 20, 23, 26 (PDF pp.15, 17, 24, 27, 30: entire book of business; how a property's loss potential interacts with existing policies; AAL = expected loss per year; PML / return period loss; 1,000 homes around Florida vs coastal Miami-Dade; premiums commensurate with risk, risk selection; adding a property changes the book's PML; many claims in close geographic proximity all at once, transferred to reinsurers), sha256:66a8390a3fa24c93d203b0dec3227811a8dcd15c3cf9c8a49459bf9265260bd6 — https://www.actuary.org/sites/default/files/files/publications/Catastrophe_Modeling_Monograph_07.25.2018.pdf"
+    - "Mango, 'An Application of Game Theory: Property Catastrophe Risk Load', Proceedings of the CAS LXXXV (1998), pp.157-158 and §§2, 4 (marginal methods use the change in portfolio variance / standard deviation from adding a new account; Var(L + n) = Var(L) + Var(n) + 2Cov(L, n), eq.(2.4); MV risk load λ[Var(n) + 2Cov(L, n)], eq.(4.1)), sha256:29233156c3360784643452285edd2f4037c82de544f441a07976766f01a6ddc2 — https://www.casact.org/sites/default/files/database/proceed_proceed98_980157.pdf"
+    - "CAS Exam 9 Content Outline, October 2026 sitting (Exam_9_CO_2026_Fall), Domain A statement ('manage the total exposure from catastrophic events within an insurance portfolio'; catastrophe expected loss cost), PDF p.3, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "Frees et al., Loss Data Analytics (open text, arXiv:1808.06718v1, 2018), §1.2.3, PDF pp.20-21 ('the portfolio, or collection, of risks that an insurer has acquired'; insurers buy reinsurance on that portfolio), sha256:1df1831e7d67a072712a2945645b788f5974748143da267bb471b9a7bc3baf33 — https://arxiv.org/pdf/1808.06718v1"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), ch.3 §5 Covariance and Correlation, 'The Variance of a Sum' (var of a sum = sum of variances + covariance terms; uncorrelated case), sha256:23ef4758146296b9865ca3f82f0e849934a667dcc8643afaa28147ad146feef7 — https://www.randomservices.org/random/expect/Covariance.html"
+    - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, §1.3.3 pp.11-12 (Poisson-Gamma mixture is Negative Binomial; an insurer models each insured's claims as Poisson with λ varying randomly among insureds), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "Mahler & Dean, 'Credibility', ch.8 of Foundations of Casualty Actuarial Science (SOA study note C-21-01), exercise 5.2.1 PDF pp.98-99 (insurance portfolio, policyholders' λ Gamma), §5.3 PDF pp.100-101 (a policyholder's observed claims update its expected frequency, Ex. 5.3.1), sha256:bccdb7968ae276e041bf7f6eb5aea3aea473f1dc7739bc64352419c8a6a0f3c5 — https://www.soa.org/globalassets/assets/files/edu/C-21-01.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Portfolio.md
@@ -18,9 +25,9 @@ verification:
 > $$\text{Var}(S) = \sum_{j} \text{Var}(S_j) + \sum_{j \neq k} \text{Cov}(S_j, S_k)$$
 
 - $S_j$ is policy $j$'s loss for the period. When policies are independent, the covariance terms vanish and the [[Coefficient of Variation|coefficient of variation]] of $S$ falls like $1/\sqrt{n}$. That is the pooling insurance depends on, and it breaks down when policies are correlated.
-- **Catastrophe accumulation (Exam 9).** A hurricane or earthquake hits every policy in its footprint at once, so the covariance terms dominate. Writing more in a concentrated area then adds risk almost one for one. Cat exposure is therefore managed across the whole portfolio. [[Catastrophe Modelling|Cat models]] produce the [[Catastrophe Expected Loss Cost|expected loss cost]] and zone-by-zone [[Probable Maximum Loss|PMLs]]. The insurer controls [[Concentration Risk|concentrations]] with underwriting limits, pricing and [[Reinsurance|reinsurance]] ([[Catastrophe Exposure Management]]).
+- **Catastrophe accumulation (Exam 9).** A hurricane or earthquake causes many claims close together all at once, so policies in its footprint are correlated and the covariance terms do not vanish. Insuring 1,000 homes spread around a state may be acceptable where 1,000 homes on one stretch of coast are not. Cat exposure is therefore managed across the whole book. [[Catastrophe Modelling|Cat models]] produce the [[Catastrophe Expected Loss Cost|expected loss cost]] (the average annual loss) and [[Probable Maximum Loss|PMLs]] at chosen return periods, including how much one more location adds to the book's PML. The insurer controls [[Concentration Risk|concentrations]] through risk selection, premiums commensurate with the risk, and [[Reinsurance|reinsurance]] ([[Catastrophe Exposure Management]]).
 - **Heterogeneity (MAS-I).** Policies differ in their underlying claim rates. A [[Mixed Poisson Process|mixed Poisson]] model treats a policy's rate $\Lambda$ as a draw from a [[Mixing Distribution|mixing distribution]] across the portfolio. A gamma mix gives [[Negative Binomial Distribution|negative binomial]] counts. A policy's own claims then tell you something about its $\Lambda$, which is the basis of [[Experience Rating|experience rating]] and [[Bayesian Credibility|credibility]].
-- **Marginal view.** Under [[Risk-Adjusted Pricing|risk-adjusted pricing]], a policy's [[Risk Loads|risk load]] depends on what it adds to portfolio risk, through its covariance with $S$. Its standalone variance is not the measure.
+- **Marginal view.** In [[Risk-Adjusted Pricing|risk-adjusted pricing]], what a new policy adds to the book depends on how its losses interact with the existing policies. Marginal methods set its [[Risk Loads|risk load]] from the change in portfolio variance or standard deviation. Adding account $n$ to portfolio $L$ changes the variance by $\text{Var}(n) + 2\,\text{Cov}(L, n)$, so its covariance with the book counts, not just its standalone variance.
 - This is not the [[Portfolio]] page, which covers an Exam FM investment portfolio on the asset side of the balance sheet. An insurance portfolio is on the liability side.
 
 > [!example]- Where Diversification Stops {Example}
@@ -48,7 +55,7 @@ verification:
 > > - $n = 1{,}000$: $\text{CV} = 10\sqrt{10.99/1{,}000} = 1.048$
 > > - $n = 10{,}000$: $\text{CV} = 10\sqrt{100.99/10{,}000} = 1.005$
 > >
-> > Independent risks diversify steadily. A correlation of just $0.01$ sets a floor of $\frac{\sigma}{\mu}\sqrt{\rho} = 1.0$ that growth can't get below. Adding 9,000 homes in the same footprint barely changes the relative risk. Beyond that point, the only ways to reduce it are writing elsewhere or ceding.
+> > Independent risks diversify steadily. A correlation of just $0.01$ sets a floor of $\frac{\sigma}{\mu}\sqrt{\rho} = 1.0$ that growth can't get below. Adding 9,000 homes in the same footprint barely changes the relative risk. Reducing it further takes writing elsewhere or ceding risk to reinsurers.
 
 > [!example]- What One Claim Says About a Policy {Example}
 > A portfolio is $70\%$ low-risk policies with Poisson rate $0.05$ and $30\%$ high-risk policies with rate $0.20$. The insurer can't tell them apart at underwriting. A policy has exactly one claim this year.

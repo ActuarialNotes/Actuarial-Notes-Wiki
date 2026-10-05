@@ -9,12 +9,17 @@ Type: "Textbook"
 ISBN: "978-1-0716-1417-4"
 Available from: "[statlearning.com](https://www.statlearning.com/)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2a928f0340edf13f44dd254cbb25e64939fdd6cf204f972399328ac14f4d433d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b499bb5371c870e13ffe59c2fbe36f810a0f31bd90e8598e9ae3e2da3069cfa2
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer, first printing Aug 4 2021) — title page, Preface pp.vii-viii, printed Contents pp.ix-xv and the PDF bookmark outline, CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.5-6 (Domain C readings; James citation, chapter/section scope, C1-C9, OP), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), pp.3-4 (Domain C readings; James scope, C1-C9, OP), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "Crossref record for doi:10.1007/978-1-0716-1418-1 (title, subtitle with Applications in R, authors, Springer US, Springer Texts in Statistics, print ISBN 9781071614174), sha256:5782b3e6bc217981cd73db1f9a03fb1ed6dac5dbbb0663e509b592fb876a4a0a — https://api.crossref.org/works/10.1007/978-1-0716-1418-1"
+    - "An Introduction to Statistical Learning, authors' site (offers the 2nd-edition PDF free: Download the PDFs here — 2nd Edition of ISL with R), html sha256:2312bb72cb8d25954719aca8f9a1614dacde351d444a6f1fae5335e9a7ec8b18 — https://www.statlearning.com/"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Statistical Learning (James et al. - 2021).md
@@ -315,6 +320,6 @@ An introduction to statistical learning, the tools for making sense of complex d
 ## Sources
 - [An Introduction to Statistical Learning with Applications in R, Second Edition (Springer, 2021)](https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf) — the document, in the copy the content outlines link (first printing, August 4, 2021): title page, preface, and the printed contents checked against the PDF's bookmarks
 - [An Introduction to Statistical Learning (statlearning.com)](https://www.statlearning.com/) — the authors' site, which offers the second edition's PDF free
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (2nd edition, Springer, 2021) and the MAS-I assignment
-- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the MAS-II assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (2nd edition, Springer, 2021) and the MAS-I assignment
+- [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the MAS-II assignment
 - [Crossref record for doi:10.1007/978-1-0716-1418-1](https://api.crossref.org/works/10.1007/978-1-0716-1418-1) — the print ISBN, the authors and the series (Springer Texts in Statistics)

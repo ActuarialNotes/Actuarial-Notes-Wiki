@@ -1,0 +1,15 @@
+---
+target: Concepts/Survival Model.md
+created: 2026-10-04
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: Every formula and property checked: S = P(T > t) = 1 - F, f = -S' = F' (Siegrist reliability function F^c = 1 - F; Slud p.2, p.38); S(0) = 1, non-increasing, S(t) -> 0 as t -> ∞ (Siegrist: F^c decreasing, F^c(t) -> 0; Slud p.2); tpx = S(x+t)/S(x), tqx = 1 - tpx (Slud p.38, p.59; Struppeck p.4-5 in life-table form); f = μS and S = exp(-∫_0^t μ) (Slud p.39-42; Siegrist). Both worked examples recomputed from scratch in Python and then compared with the page: 5p70 = e^{-0.1} = 0.904837 (page 0.9048); f(t) = (2/100)(1 - t/100), checked against a numerical derivative of S at t = 30 (0.014). Figure (generated, survival_model in scripts/figures_exam_mas_i.py) is a falling S(t) with S(60) marked as P(T > 60) — consistent. Links resolve ([[Hazard Rate]], figure embed). Exam usage: linked only by Exam MAS-I (CAS) (A4, the section intro, Survival Models list); no other exam's sense to reconcile.
+- sources_checked: Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.1 pp.1-2 (S(x) = l_x/l_0, non-increasing, S(0) = 1, f = -S'), §2.2 pp.37-42 (tpx = S(x+t)/S(x), tqx = 1 - tpx, μ = f/S, S = exp(-∫μ), exponential S = e^{-μx}) and §2.5 p.59, sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), 'Distribution and Quantile Functions', Reliability section, html sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html; Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.4-5 (npx = l_{x+n}/l_x, nqx = 1 - npx), pp.10-11 (hazard rate for mortality = force of mortality; continuous survival functions covered elsewhere in the syllabus), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Medium: the A4 reading for continuous survival models is Ross, Introduction to Probability Models (2026 outline), not freely available and not read; Struppeck (pp.10-11) explicitly defers survival functions and hazard rates to it. Claims confirmed by rank-3 sources (Slud, Siegrist). Notation: Struppeck writes nPx / nqx and l_x exactly as the page; Siegrist writes the survival function F^c and the hazard h(t); Slud writes P(T ≥ x) where the page writes P(T > t) — identical for a continuous lifetime. No findings.

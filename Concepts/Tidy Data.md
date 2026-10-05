@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:15bab38948577a71881043ca990c0ea5ca6934b6a0abd424f33d9dc0a5df7f7b
-  sources: []
+  sources:
+    - "Wickham & Grolemund, R for Data Science (1st ed., online), Ch.12 'Tidy data' §12.2 (three rules), §12.3 pivot_longer, §12.4.1 separate, sha256:11cbff74baa595633b2d8bf8b99f41605a1c7c67e30887714e6e3873901e93af — https://r4ds.had.co.nz/tidy-data.html"
+    - "Wickham, 'Tidy Data', Journal of Statistical Software 59(10), Aug 2014, §2.2-2.3 pp.3-4, §3 p.5, §3.1-3.5 pp.5-12, §4.1 p.13, §4.3 p.14, sha256:cf1034a2675caff9d9d5bdefa80b351b3ceb8a33649799ac3966b02729a571c6 — https://www.jstatsoft.org/index.php/jss/article/view/v059i10/772"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), Ch.1 'Notation and Simple Matrix Algebra' (x_ij = value of the jth variable for the ith observation; X an n x p matrix), printed p.10 (PDF p.21), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Tidy Data.md

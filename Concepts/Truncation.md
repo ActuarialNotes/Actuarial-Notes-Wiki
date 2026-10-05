@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e53fbadd495533b2999b3146e526ca8bc2ff2818f7a1c53759fdf35e7810dc94
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:fd9f0ccba2b73f652bb6b44e224b850b6c0a58615fbb63b5c9958222479506b2
+  sources:
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (open textbook), Ch.4 §4.3.1.3 truncated data (left truncation at a deductible; right truncation; truncated outcomes are not observed at all, censored ones are recorded in limited form; Fig. 4.12), §4.3.1.4 contribution f(x)/(1 - F(C_L)) and exponential special case, HTML fetched 2026-10-05, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.3 MLE for truncated data (L = Π f(x_i)/S(d); 'we would not have been aware of the existence of these values had they not exceeded d'), HTML fetched 2026-10-05, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Luo, Shevchenko & Donnelly, 'Addressing the Impact of Data Truncation and Parameter Uncertainty on Operational Risk Estimates', J. Operational Risk 2(4), 2007 (arXiv:0904.2910 preprint), abstract PDF p.2, §5.1 PDF pp.12-14 (naive lognormal fit to truncated data always overestimates μ and underestimates σ; underestimates Q_0.99 for truncation below 66%, Q_0.999 below 92%), §5.2 PDF p.14, sha256:a91ad1b0e1bc8a2ec69e9c7f614faf8db2e6f4ca02e879a2ef3a598ecd39cf9b — https://arxiv.org/pdf/0904.2910"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 8-9 (MLE accounting for censoring and truncation; missing data values including censoring and truncation), PDF p.4, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Truncation.md
@@ -21,7 +25,7 @@ verification:
 > $$x > d$$
 
 - Under left-truncation at $d$, the effective distribution is the **conditional** distribution $X \mid X > d$
-- Failing to adjust for truncation leads to **upward bias** in estimated means (only the larger claims are seen)
+- Failing to adjust for truncation biases the estimates. The average of the reported claims estimates $E[X \mid X > d]$, not $E[X]$, so it is biased **upward** (only the larger claims are seen). A distribution fitted without the adjustment can err in either direction: a lognormal fitted naively to truncated data overestimates $\mu$, yet can under-predict the high quantiles
 - **Right-truncation**: only values below some upper limit are recorded (less common in insurance)
 - Truncation differs from censoring: with truncation, you do not even know an observation exists; with censoring, you know there is an observation but not its exact value
 

@@ -75,10 +75,14 @@ EXAM_PAGE_BY_BANK = {
 }
 
 # Banks a paper's questions may be *filed* in besides its own. The CAS moved
-# Time Series and Statistical Learning (PCA included) from MAS-I to MAS-II, so
-# a MAS-I paper's question on either now belongs to MAS-II — filed there with
-# `originally_exam`, the way the 23 MAS-I 2018 questions already are. One way
-# only: nothing moved back, and no MAS-II question has ever been refiled.
+# Time Series and part of Statistical Learning — KNN, trees and ensembles,
+# unsupervised PCA and clustering (ISLR §2.2, Ch 8, 10, 12) — from MAS-I to
+# MAS-II, so a MAS-I paper's question on those now belongs to MAS-II, filed
+# there with `originally_exam`, the way the 20 time-series questions (Q41–45 of
+# each 2018–2019 paper) are. ISLR Ch 5–7 (resampling, regularization, PCR/PLS,
+# splines, GAMs) stayed on MAS-I under the 2026 outline, and their questions
+# are in the MAS-I bank, so the neighbour vote keeps them there. One way only:
+# no MAS-II question has ever been refiled.
 FILED_ELSEWHERE = {"exam-mas-i": ("exam-mas-ii",)}
 
 # A phrase shorter than this matches too much to identify anything.

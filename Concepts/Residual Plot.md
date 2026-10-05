@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d4355f33351e2b3c95da4a0c3eb78c32c1076c0ebf2779000b21089ffc5d42f0
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9dd043afa477cab8192398f50d83c82dac31ab2b515c055f694769faed9f25f4
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.3.3 pp.92-99 (PDF 102-109): residual plot e_i = y_i - y-hat_i vs fitted values; U-shape = non-linearity, quadratic term (Fig 3.9); funnel = heteroscedasticity, log Y or sqrt Y remedy (Fig 3.11); outlier vs high leverage (Figs 3.12-3.13), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy), §9.1.5 Fig 9.2 (null plot; megaphones = nonconstant variance; curvature = non-linearity), sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf"
+    - "Penn State STAT 501, Lesson 11 'Influential Points', §11.3 internally studentized residual (Minitab: standardized), §11.5 Cook's D_i depends on both e_i and h_ii, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §6.3.1 pp.67-69 (PDF 77-79: deviance residuals), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "statsmodels, GLMResults.resid_pearson documentation: Pearson residuals = (endog - mu)/sqrt(VAR(mu)), VAR the family's variance function, sha256:a88ec9a98794d3c906c89c6c4b33107e34c78c23e4dc287d3caba054520a9882 — https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLMResults.resid_pearson.html"
+    - "Larsen, 'Generalized Linear Models' (CAS Study Note, rev. 6/29/2016; MAS-I reading), 'QQ and Box Plots to test distribution assumptions' pp.1-2 (Dobson's normal probability plot of the residuals is a QQ plot built from order statistics) and 'Tweedie Distributions' p.2 (Var[Y] = a E(Y)^p, gamma p = 2), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "NIST/SEMATECH e-Handbook §1.3.3.21 'Normal Probability Plot' (vertical axis: ordered response values; horizontal: normal order statistic medians; fitted reference line; used on model residuals), sha256:bdb6715e4dad4cf3d99e06540b85c460d925bb54af4d94d07e35e04dac6e0749 — https://www.itl.nist.gov/div898/handbook/eda/section3/normprpl.htm"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Residual Plot.md
@@ -25,7 +33,7 @@ A **Residual Plot** is a diagnostic graph used to assess model fit by plotting *
 | Fan shape (spread increases) | **Heteroscedasticity** — variance is not constant |
 | Curved pattern | **Non-linearity** — a transform or polynomial term is needed |
 | Systematic trend | A predictor is missing or improperly specified |
-| Outliers | Influential observations; investigate further |
+| Isolated points far from zero | **Outliers**; whether one is influential depends on its leverage $h_{ii}$, which a residual plot does not show — check $h_{ii}$ or Cook's distance |
 
 - For [[Generalized Linear Model]]s, **Pearson residuals** $r_i^P = (y_i - \hat{\mu}_i)/\sqrt{V(\hat{\mu}_i)}$ and **deviance residuals** are used instead of raw residuals
 - **Residuals vs. fitted**: checks for non-linearity and heteroscedasticity

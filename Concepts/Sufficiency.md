@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:0a3e2c8a1a22b0041661473e89df57b08fa28028b7852bc8464117688a941d1e
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6f30ad0a48bdfc415a9602f453d27d904be9d681f238e1c4f20979d434575a2b
+  sources:
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Siegrist, Random, §6.3 Maximum Likelihood (likelihood = pdf with roles reversed; log-likelihood; interior vs boundary maxima; invariance; Bernoulli/Poisson/normal/gamma MLEs; Uniform[0,h]: MLE X_(n), mse 2h²/((n+1)(n+2)), (n+1)X_(n)/n unbiased with var h²/(n(n+2)); Uniform[a,a+1]: MLE not unique), sha256:f8c94e3de84f7a025fd32395169938f37e7fd7958d5a8be9d56b54ed307d6ffd — https://www.randomservices.org/random/point/Likelihood.html"
+    - "Siegrist, Random, §6.6 Sufficient, Complete and Ancillary Statistics (definition via the conditional distribution; Fisher–Neyman factorization; MLE vs sufficient statistic; Rao–Blackwell; Lehmann–Scheffé; Bernoulli, Poisson (UMVUE ((n−1)/n)^Y of e^{−θ}), normal, gamma, uniform; exponential family natural statistic minimally sufficient and complete), sha256:4d7402f2a960ea2b4232e57e4ee5992ac29801b9269f300f17f8e83074d5a0e4 — https://www.randomservices.org/random/point/Sufficient.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Sufficiency.md
@@ -21,7 +24,7 @@ verification:
 > $$f(x_1, \ldots, x_n \mid \theta) = g\big(T(x_1,\ldots,x_n),\, \theta\big) \cdot h(x_1, \ldots, x_n)$$
 
 - An estimator should be a function of a sufficient statistic; by **Rao–Blackwell**, conditioning any [[Unbiasedness|unbiased]] estimator on $T$ never increases its variance, pushing toward [[Minimum Variance]]
-- A [[Maximum Likelihood Estimation|MLE]] is always a function of a sufficient statistic, so it automatically satisfies the sufficiency criterion
+- If a [[Maximum Likelihood Estimation|MLE]] exists, one can always be chosen that is a function of the sufficient statistic, and a **unique** MLE always is one — so it satisfies the sufficiency criterion. Without uniqueness only that choice is guaranteed: for $\text{Uniform}[a, a+1]$, any statistic in $[X_{(n)} - 1,\ X_{(1)}]$ is an MLE of $a$
 - An unbiased function of a **complete** sufficient statistic is the UMVUE (Lehmann–Scheffé)
 
 ![[Media/Figures/Sufficiency.svg|340]]

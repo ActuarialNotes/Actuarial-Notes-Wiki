@@ -1,0 +1,15 @@
+---
+target: Concepts/Linear Algebra.md
+created: 2026-10-04
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: both examples recomputed before comparison (X'y = 8, X'X = 5, b = 1.6; eigenvalues of [[1,.6],[.6,1]] = 1.6, 0.4, 80% explained) - agree; invertibility/determinant/2x2 formula, transpose/inverse definitions, normal-equation estimator and IRLS link, eigen definitions, characteristic equation, PCA eigenvalue = component variance checked; links and embed resolve; MAS-I and MAS-II usage consistent
+- sources_checked: Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §3.5 'Matrix Inverses': det of a 2x2 matrix = ad - bc; invertible iff det != 0, sha256:3f21c6a9af68bf9b0e8d4ad7751a264e7777340451dc48284db01f019c0f0a4b — https://textbooks.math.gatech.edu/ila/matrix-inverses.html; Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §4.1 invertibility property: square A invertible iff det(A) != 0; 2x2 formula, sha256:00e719a0b116a6335b4f77553e51006ef6e8b22fd9fdbd8e60da57d1d7a7cb92 — https://textbooks.math.gatech.edu/ila/determinants-definitions-properties.html; Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §5.1 definition of eigenvector/eigenvalue (nonzero v, Av = lambda v); invertible matrix theorem (Ax = b unique solution), sha256:b7899f71f7f7e69a33669e66740ddfe94cfe3c7bc45374366ebccd0c746d4c14 — https://textbooks.math.gatech.edu/ila/eigenvectors.html; Margalit & Rabinoff, Interactive Linear Algebra (Georgia Tech), §5.2 characteristic polynomial det(A - lambda I), sha256:41e36c3fc7ce21f84faeeb3d7c091b402d0151bd510f1856e694ac6b7efed446 — https://textbooks.math.gatech.edu/ila/characteristic-polynomial.html; Penn State STAT 501 Regression Methods (online course notes), Lesson 5 §5.4 transpose, identity, inverse, least squares estimates (X'X)^-1 X'Y, linear dependence, sha256:c7eb1ac675fffa3493ca7644a47f8a36e96fa53d301d2f8191c7ac4ca82edec6 — https://online.stat.psu.edu/stat501/Lesson05.html; Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.2 iteratively re-weighted least squares (X'WX)^-1 X'Wz, PDF pp.4-5, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; Penn State STAT 505 Applied Multivariate Statistical Analysis, Lesson 11 'Principal Components Analysis' §11.1-11.2, sha256:d22a772c700092d6dc59747e12ccab12ce7c3bc2a858aabc0b60a85b7554e55a — https://online.stat.psu.edu/stat505/Lesson11.html; CAS Exam MAS-II Content Outline 2026, 'Assumed Knowledge' (linear algebra at the level of an undergraduate regression prerequisite), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: No findings. All claims are standard results confirmed in rank-3 open texts (no syllabus reading covers the linear algebra), hence medium.

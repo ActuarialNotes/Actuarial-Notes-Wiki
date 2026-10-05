@@ -1,0 +1,73 @@
+---
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5f3c6c8c0ae493d1bfd42287c91f4e13b4c82ae54ec32b7b56c0cc4e6910ff17
+  sources:
+    - "Loss Data Analytics (Frees et al., open textbook), ch.4 §4.1.1.1-4.1.1.2: sample moment estimators (central moment divides by n; s^2 divides by n - 1 and is unbiased); E[g(X)] estimated by n^-1 sum g(X_i); F_n(x) = n^-1 sum I(X_i <= x), I(X <= x) Bernoulli; probability 1/n on each observation; discrete and right-continuous; kernel density estimators; product-limit (Kaplan-Meier) estimator for censored data, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Siegrist, Random, ch.6 §1 Estimators: for fixed y the empirical distribution function F_n(y) is the sample mean of 1(Y <= y), unbiased for F(y) and consistent; mean-square consistency implies consistency, sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
+    - "Loss Data Analytics, ch.3 Modeling Loss Severity, §3.4.1 Policy Deductibles: LER = (E(X) - E(Y^L))/E(X), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Tse §11.1, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed contents PDF pp.10-13: §11.1.1 'Empirical distribution' (contents only; body not freely available), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Empirical Distribution.md
+---
+
+The **Empirical Distribution** of a sample $x_1, \ldots, x_n$ is the discrete distribution that puts probability $1/n$ on each observation. Its CDF, the **empirical distribution function** $F_n$, is the proportion of the sample at or below $x$ — the basic nonparametric estimate of an unknown [[Cumulative Distribution Function (CDF)|CDF]] $F$ from complete individual data.
+
+> $$F_n(x) = \frac{1}{n}\sum_{i=1}^{n} \mathbf{1}\{x_i \le x\}$$
+
+> $$= \frac{\#\{x_i \le x\}}{n}$$
+
+- $F_n$ is a right-continuous step function that jumps by $1/n$ at each observation (by $m/n$ at a value observed $m$ times), with $F_n = 0$ below $x_{(1)}$ and $F_n = 1$ from $x_{(n)}$ on.
+- At each fixed $x$, $n F_n(x)$ is [[Binomial Distribution|binomial]] with parameters $n$ and $F(x)$, so $F_n(x)$ is unbiased with $\text{Var}(F_n(x)) = F(x)\,[1 - F(x)]/n$, estimated by $F_n(x)[1 - F_n(x)]/n$. By the weak law of large numbers it is consistent: $F_n(x) \to F(x)$ [[Convergence in Probability|in probability]].
+- **Empirical moments.** The empirical distribution's mean is the [[Sample Mean|sample mean]] $\bar{x}$; its variance divides by $n$, $\frac{1}{n}\sum (x_i - \bar{x})^2$, not by $n-1$ as the unbiased [[Sample Variance|sample variance]] does.
+- **Plug-in estimates.** Any quantity defined from $F$ can be estimated by computing it under $F_n$: $E[g(X)] \approx \frac{1}{n}\sum g(x_i)$, such as a [[Limited Expected Value|limited expected value]] or a [[Loss Elimination Ratio|loss elimination ratio]]. Its percentiles feed [[Percentile Matching]], and it is the yardstick in the [[Kolmogorov-Smirnov Test]].
+- $F_n$ needs **complete** data: with [[Censoring|censored]] or [[Truncation|truncated]] observations the proportion at or below $x$ is unknown, and product-limit (Kaplan–Meier) methods replace it. [[Kernel Density Estimation]] smooths the empirical distribution into a continuous density.
+
+> [!example]- Empirical CDF and Moments of a Claim Sample {Example}
+> Ten claims are reported: $200, 350, 350, 500, 500, 500, 800, 1{,}200, 1{,}200, 3{,}000$. Find $F_{10}(350)$, $F_{10}(499)$, $F_{10}(500)$ and $F_{10}(1{,}000)$, and the mean and variance of the empirical distribution.
+>
+> > [!answer]-
+> > Count the claims at or below each point: $F_{10}(350) = 3/10 = 0.3$; $F_{10}(499) = 0.3$ (flat between data points); $F_{10}(500) = 6/10 = 0.6$ (a jump of $3/10$ for the three tied claims); $F_{10}(1{,}000) = 0.7$.
+> >
+> > $$
+> > \begin{align*}
+> > \bar{x} &= \frac{8{,}600}{10} \\
+> >   &= 860 \\
+> > \text{Var} &= \frac{1}{10}\sum_{i=1}^{10}(x_i - 860)^2 \\
+> >   &= \frac{6{,}159{,}000}{10} \\
+> >   &= 615{,}900
+> > \end{align*}
+> > $$
+> >
+> > The empirical standard deviation is $\sqrt{615{,}900} = 784.8$. (The unbiased sample variance would divide by $9$ instead: $684{,}333$.)
+
+> [!example]- Plug-In Loss Elimination Ratio and a Standard Error {Example}
+> Using the same ten claims, estimate the loss elimination ratio of a \$500 deductible, and the standard error of $F_{10}(500)$ as an estimate of $F(500)$.
+>
+> > [!answer]-
+> > Under the empirical distribution, $E[X \wedge 500]$ is the average of the claims capped at 500:
+> >
+> > $$
+> > \begin{align*}
+> > \widehat{E}[X \wedge 500] &= \frac{200 + 350 + 350 + 500 \times 7}{10} \\
+> >   &= 440 \\
+> > \widehat{\text{LER}}(500) &= \frac{440}{860} \\
+> >   &= 0.512
+> > \end{align*}
+> > $$
+> >
+> > So the deductible would eliminate about 51% of losses. For the standard error, $F_{10}(500) = 0.6$:
+> >
+> > $$
+> > \begin{align*}
+> > \widehat{\text{Var}}\big(F_{10}(500)\big) &= \frac{0.6 \times 0.4}{10} \\
+> >   &= 0.024
+> > \end{align*}
+> > $$
+> >
+> > giving a standard error of $\sqrt{0.024} = 0.155$ — ten claims pin down $F(500)$ only roughly.

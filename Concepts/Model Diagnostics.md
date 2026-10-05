@@ -1,11 +1,23 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:26da3f7f49c7901ab8e350ea1a8d7013d044a69266b7f68866ffaf4c41a0369c
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2b041d91fa93c3e522b4abdda65c507ca444a942beb14eabc65e93f8bf7b946b
+  sources:
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.3.3 'Potential Problems' pp.92-99 (PDF 102-109): residual plots, U-shape = non-linearity (Fig 3.9); funnel = heteroscedasticity, log Y remedy (Fig 3.11); outlier with ordinary x has little effect; outlier + high leverage the dangerous combination, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Penn State STAT 501, Lesson 11 'Influential Points', §11.2-11.5: leverage flags, studentized residuals, Cook's D_i depends on both e_i and h_ii and summarises how much all fitted values change when i is deleted, sha256:6229ca1803f9d152028893131b323ac3ebdff7b49733518cc14a77a87200dbb9 — https://online.stat.psu.edu/stat501/Lesson11"
+    - "UCLA OARC, Regression with Stata, Chapter 2 'Regression Diagnostics': leverage > (2k+2)/n (k predictors); Cook's D conventional cut-off 4/n; avplot used to spot influential points, sha256:de14fccf40c9e9eed21b92e1a9ed432a00abd13f6cb086b80b5af26900cdb30c — https://stats.oarc.ucla.edu/stata/webbooks/reg/chapter2/stata-webbooksregressionwith-statachapter-2-regression-diagnostics/"
+    - "Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy), §9.1.5 residual-plot shapes (Fig 9.2: megaphone = nonconstant variance, curvature = non-linearity); §9.5.4 p.224 AV plots and influence, sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §2.4.1 p.12 (PDF 22: logged vs unlogged predictor shapes under a log link); §5.4.1-5.4.4 pp.48-55 (PDF 58-65: partial residual plots; binning, polynomial terms, hinge functions); §6.3.1-6.3.2 pp.67-70 (PDF 77-80: deviance residuals, q-q plot, discrete-distribution caveat, binned working residuals), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "R Core, stats::summary.glm documentation (R-devel): third column labelled t ratio if the dispersion is estimated, z ratio if known or fixed by the family; dispersion 1 for binomial and Poisson, otherwise the residual Chi-squared statistic divided by the residual df; cov.scaled = covariance scaled by dispersion, sha256:c7cf5a73225bd54cad2584cf31b1155884c4d359a14de4048b6e11a7acfe9e2d — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/summary.glm.html"
+    - "NIST/SEMATECH e-Handbook §6.4.4.8 'Box-Jenkins Model Diagnostics': residuals should be white noise; autocorrelation plot of the residuals; Box-Ljung statistic, sha256:39f5d095ce90f5690064a9f92b68950fc1eda2f2dc623b0e058e8d1d6ff98945 — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc448.htm"
+    - "Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps pp.89-91 (smooth of the data vs smooth of the fitted values; GLM smoother a GAM with the model's family, link and weights); avPlots p.14, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf"
+    - "Pinheiro, Bates et al., R package 'nlme' 3.1-171 reference manual (2026): plot.lme examples (standardized residuals vs fitted; 'box-plots of residuals by Subject'); qqnorm.lme examples ('normal plots of random effects', qqnorm(fm1, ~ranef(.))); varIdent (different variances by the levels of a classification factor), sha256:0194d826259d6ef5dfa3d32badccedb7bc6e60c0b5c5d8aec1783ee88f650899 — https://cran.r-project.org/web/packages/nlme/nlme.pdf"
+    - "Bates et al., R package 'lme4' 2.0-6 reference manual (2026), anova.merMod argument 'refit': REML-fitted models with different fixed effects have likelihoods that are not directly comparable, sha256:4e4faf83522214402c69a6ed3cfa2b6c8ee96e034fddbce079b2513672a1985c — https://cran.r-project.org/web/packages/lme4/lme4.pdf"
+    - "CAS Exam MAS-II Content Outline 2026, Domain B task 4 (interpret linear mixed model diagnostics and summary statistics to evaluate the model structure and variable selection), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Diagnostics.md
@@ -55,7 +67,7 @@ Here $r_i$ is the standardized residual and $p + 1$ the number of coefficients. 
 >
 > > [!answer]-
 > > 1. **Mean structure**: vehicle age enters linearly but its effect is curved. Band it, or add a quadratic term
-> > 2. **Mean structure**: the model under-predicts large risks. Try $\ln(\text{insured value})$ in place of the raw value, or an interaction with the variable that separates the large risks
+> > 2. **Mean structure**: the model under-predicts large risks, so insured value's fitted curve rises too slowly at the top of its range. Give it more flexibility there — a band for the largest values, a polynomial term, or a hinge that lets the slope steepen past a break point — or add an interaction with the variable that separates the large risks. (Logging insured value would trade the raw term's exponential growth for a power curve that rises at a decreasing or only mildly increasing rate — the opposite of what is needed)
 > > 3. **Distribution**: the largest claims are more extreme than a Gamma allows. Check them for data errors, then consider a heavier-tailed response or capping large losses and loading for the excess
 > > 4. **Variance**: Pearson residuals divide by $\sqrt{V(\hat\mu)} = \hat\mu$. If they shrink as $\hat\mu$ grows, the true variance grows *more slowly* than $\mu^2$, so the variance function is too steep for these data
 

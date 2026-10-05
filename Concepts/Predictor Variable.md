@@ -1,17 +1,21 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:02aa52a73258a152ed196b20418d58cee27c09e42d937106d34b6d284c2e8eda
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6f3be4ed654e6e7caf821695b044c9f4a57b3cbb3dcbf9d424c98535fa597703
+  sources:
+    - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC 2018) — publisher eBook preview, §1.2 Scope, printed pp.2-3 (PDF pp.19-20), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021), §3.3.1 printed p.86 (PDF p.96); §3.3.3 Collinearity printed pp.101-103 (PDF pp.111-113); §6.1.1-6.1.3 printed pp.227-234 (PDF pp.235-242), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §2.6 Offsets PDF pp.27-28; §5 control variables PDF p.56; §1.2 log-link relativities PDF p.21, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C description and tasks 1-9, PDF p.5; reading list PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Predictor Variable.md
 ---
 
-A **predictor variable** — also called an explanatory or independent variable, a covariate, a feature, or in ratemaking a [[Rating Variable|rating variable]] — is an input $x_j$ used to explain or predict the [[Response Variable|response]]. Each predictor fills one or more columns of the [[Design Matrix|design matrix]] and receives its own coefficient.
+A **predictor variable** — also called an explanatory or independent variable, a covariate, a feature, or in ratemaking a [[Rating Variable|rating variable]] — is an input $x_j$ used to explain or predict the [[Response Variable|response]]. Each predictor fills one or more columns of the [[Design Matrix|design matrix]] and receives its own coefficient. Usage of *covariate* varies: Dobson & Barnett reserve it for a quantitative explanatory variable and call a qualitative one a **factor**.
 
 > $$g(\mu_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}$$
 
@@ -46,4 +50,4 @@ A **predictor variable** — also called an explanatory or independent variable,
 > > &= 0.10
 > > \end{align*}
 > > $$
-> > The $t$-statistic falls from $0.15/0.04 = 3.75$ to $0.15/0.10 = 1.50$. The effect may be entirely real, but the data cannot separate it from the correlated predictors, so vehicle value looks insignificant. Dropping it on that basis is a mistake; combining the correlated variables or accepting the joint effect is the better response.
+> > The $t$-statistic falls from $0.15/0.04 = 3.75$ to $0.15/0.10 = 1.50$. The effect may be entirely real, but the data cannot separate it from the correlated predictors, so vehicle value looks insignificant. The low $t$-statistic does not show that the effect is absent. The two standard remedies are to drop one of the collinear predictors, usually at little cost to the fit since the information it carries is largely redundant, or to combine them into a single predictor.

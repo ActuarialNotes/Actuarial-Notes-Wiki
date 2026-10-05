@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8ce8d9780795d7438eeca17de923c5875d7fbb8b800adcbffb225789bd4074ae
+  content_hash: sha256:255ab464fdedcbe6e2b5662bacb8d17377a661c47a77b296d6ea0653b2c2e930
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,6 +28,7 @@ verification:
 - **Residual check.** After fitting, the correlogram of the [[Residual|residuals]] should look like white noise. If it does not, the lag of the surviving spike says what is missing. A spike at lag $1$ or $2$ suggests an extra AR or MA term. One at lag $12$ (monthly) or $4$ (quarterly) suggests a seasonal term. Read the residual PACF the same way.
 - **Chance breaches.** The bounds are pointwise $95\%$ limits, so about $1$ lag in $20$ crosses them by chance. A marginal breach at an unremarkable lag is weak evidence. A clear breach at lag $1$ or at a seasonal lag is not.
 - The bounds assume stationarity. On a trending series nearly every bar is significant, and the plot says nothing about the ARMA orders until the trend is removed. See [[Deterministic and Stochastic Trend]].
+- The [[Cross-Correlation|cross-correlation]] of two series is plotted the same way, but over negative as well as positive lags.
 
 > [!example]- Reading the Raw Correlogram of Monthly Claim Counts {Example}
 > A series of $n = 96$ monthly reported claim counts has $r_1 = 0.91$. The autocorrelations decline slowly to $0.55$ at lag $24$, with local peaks at lags $12$ and $24$. What does the correlogram show, and what should be done next?

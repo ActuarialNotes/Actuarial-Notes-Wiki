@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6ca41c8928c94554e7d147e613340e640fe07455385180cafa1126157706d7f1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:815c1b3e340505ba1775d5c9b2ff3d11a80ef2d96363c9923754559d5dc9ade6
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.1.1 RSS (3.3) and least squares minimizes RSS, printed p.62 (PDF p.72); §3.2.2 TSS and RSS in the F-statistic (3.23) printed p.76 (PDF p.86), RSE with n-p-1 (3.25) printed p.80 (PDF p.90); §8.1.1 regression-tree RSS (8.1), recursive binary splitting (8.2)-(8.3), printed pp.330-331 (PDF pp.338-339), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 2 §2.6 ANOVA table: SSR, SSE, SSTO, df add up, MSR, MSE, F* = MSR/MSE, sha256:1e70ff328d0ed946e167ac2949a287f8b23c3ae7f407af884fe4c6e447a6be32 — https://online.stat.psu.edu/stat501/Lesson02.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C task 4 ('Interpret the extended linear model output from statistical software, such as parameter estimate tables and ANOVA tables') and task 7, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Residual Sum of Squares.md
@@ -39,4 +42,4 @@ The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, 
 > > [!answer]-
 > > $\bar{y}_L = 6$; RSS$_L = (5-6)^2+(7-6)^2+(6-6)^2 = 1+1+0 = 2$.
 > > $\bar{y}_R = 15$; RSS$_R = (15-15)^2+(14-15)^2+(16-15)^2 = 0+1+1 = 2$.
-> > Total RSS $= 2 + 2 = 4$. A split is accepted if no other partition gives a lower total RSS.
+> > Total RSS $= 2 + 2 = 4$. The tree does not search every possible partition of the observations: recursive binary splitting compares only splits of the form $X_j < s$ versus $X_j \geq s$, and makes the one, over every predictor $X_j$ and cutpoint $s$, with the lowest total RSS. This split is chosen if no such candidate gives less than $4$.

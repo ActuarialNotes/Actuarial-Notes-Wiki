@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7d63570934d53d913478a5ebcee2aa345c6adef76f847a2972973135a4d1baf6
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a6f7c21c390a84d4876c2019cd41e615f736125052e705950aeeb4f0c37b82dd
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, 2nd ed. (CAS Monograph 5; rank 3 for MAS-I), §6.1.2 eqs.15-16 p.63 (PDF 73: scaled deviance, saturated and null models); §6.2 pp.64-67 (F-test, AIC, BIC); §6.3.1 pp.67-69 (PDF 77-79: deviance residuals normal with constant variance; discrete-distribution caveat, randomized quantile and binned working residuals, aggregated data; q-q plot, right tail above the line = more skewed than gamma, inverse Gaussian); §5.4.1 p.48 (partial residual plots for non-linearity); §6.4 p.74 (Cook's distance, CV, bootstrap); §7.1 pp.75-76 (PDF 85-86: actual vs predicted on holdout, sorted by prediction and grouped into percentiles); §7.2.1 p.77 (quantile plots), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (PDF p.7: tables/plots 'of the type shown in the texts'; a language 'such as R'; 'candidates will not be asked to write or interpret R code'), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy; MAS-I reading), §3.3.3 pp.92-99 (residuals vs fitted: U-shape = non-linearity, funnel = heteroscedasticity), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026), mmps pp.89-91 (smooth of the data vs smooth of the fitted values, drawn versus each term and versus the fitted values), sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf"
+    - "StataCorp, Stata Base Reference Manual (release 19), [R] regress postestimation diagnostic plots, avplot Remarks p.5 (PDF p.5): an AV plot's regression has the same coefficient and SE as the full model; its coordinates 'cannot be used to identify functional form, or, at least, not well'; 'the relationship between y and x is forced to be linear', sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf"
+    - "Wikipedia, 'Partial regression plot' (citing Velleman & Welsch 1981), Properties 1-4 and the comparison with partial residual plots: LS fit has intercept 0 and slope beta_i; its residuals equal the full model's; mostly used for leverage and influential points; 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)', sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot"
+    - "Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy), §9.5.4 p.224 (AV plots and influence), sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Fit.md
@@ -16,14 +23,14 @@ verification:
 > $$D^* = 2\left[\ell_{\text{saturated}} - \ell_{\text{model}}\right]$$
 
 - $D^*$ is the **scaled deviance**. It measures the log-likelihood gap between the model and the saturated model, which has one parameter per record and fits perfectly ($D^* = 0$). The null model (intercept only) marks the other end, so a model's deviance lies between zero and the null deviance. Maximizing likelihood is the same as minimizing deviance.
-- The **deviance residual** $d_i$ is the signed square root of record $i$'s contribution to the deviance. If the assumed distribution is right, deviance residuals are roughly normal with constant variance.
+- The **deviance residual** $d_i$ is the signed square root of record $i$'s contribution to the deviance. If the assumed distribution is right, deviance residuals are roughly normal with constant variance — for a continuous response. For a discrete distribution (Poisson, negative binomial) or one with a point mass (Tweedie, at zero), the many records with the same target value cluster the residuals into tight groups, so they will likely not look normal even when the model is right; use binned working residuals (or randomized quantile residuals) instead. Highly aggregated count data behave more like a continuous response.
 - **Fit is not predictive power.** Adding any predictor lowers deviance. In-sample measures therefore compare models only through a test ([[Likelihood Ratio Test]] or $F$-test, for nested models) or a penalty ([[AIC]], [[BIC]]). Whether the fit holds on new data is a holdout question.
 - **Diagnostic plots (MAS-I).**
   - [[Residual Plot|Residuals against fitted values]]: a trend means the mean is misspecified (wrong link or a missing term), and a funnel means the wrong [[Variance Function|variance function]].
-  - A [[QQ Plot]] of deviance residuals should be close to a straight line; bent tails mean the data are more or less skewed than the assumed distribution.
+  - A [[QQ Plot]] of deviance residuals from a continuous response should be close to a straight line; bent tails mean the data are more or less skewed than the assumed distribution.
   - [[Marginal Model Plot|Marginal model plots]] compare a smooth of the data with a smooth of the fitted values against each predictor, and the two should coincide.
-  - [[Added Variable Plot|Added variable plots]] show one predictor's effect net of the others, exposing its functional form and any influential points.
-- **Rating-plan fit (Exam 8).** The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] tests fit where a rating plan needs it: actual against predicted on holdout data, by quantile of prediction and by level of each [[Rating Variable|rating variable]]. Influential records (high Cook's distance) and estimates that swing across cross-validation folds or bootstrap samples flag fit that won't survive new data. [[Model Benchmarking]] then asks whether the model fits better than the current plan.
+  - [[Added Variable Plot|Added variable plots]] show one predictor's effect net of the others, exposing any influential points. They are a weak guide to the predictor's functional form, since the plot forces the relationship to be linear; a partial residual plot is the tool for that.
+- **Rating-plan fit (Exam 8).** The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] tests fit where a rating plan needs it: actual against predicted on holdout data, grouped into quantiles of the prediction. Influential records (high Cook's distance) and estimates that swing across cross-validation folds or bootstrap samples flag fit that won't survive new data. [[Model Benchmarking]] then asks whether the model fits better than the current plan.
 
 > [!example]- A Significant Model That "Explains" Little {Example}
 > A Poisson frequency GLM on $20{,}000$ policies has null deviance $9{,}840$. With $11$ rating-variable parameters added, the deviance falls to $9{,}312$. Is the fit good?

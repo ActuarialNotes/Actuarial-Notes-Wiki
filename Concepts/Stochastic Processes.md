@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ce02893c5fe29566442730cdcd33d476caa36863e1dbe108ffada9f063b0472c
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d5067603971e8a8f1dace3bcc3836c4c7b8213be14572fb64bfca27bb422723b
+  sources:
+    - "Daniel, \"Poisson processes (and mixture distributions)\", CAS Study Note (June 2008) — MAS-I syllabus reading, ch.1 §1.1 p.3 (a stochastic process is a collection of random variables N(t) indexed by t; counting processes), Def. & Prop. 1.2 p.4 (counting process: N(0) = 0, non-decreasing, non-negative integers; independent increments; increment Poisson with mean ∫λ), §1.4.1 Fact 1.25 p.13 (homogeneous: increment Poisson with mean λh, stationary increments), sha256:e345451e9daae82b400aed77f2da0c96c361ed4fbdfd22456b8f711ca0d50888 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Daniel_1.pdf"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), ch.15 §1 Introduction to General Markov Processes (time set T = N discrete or [0,∞) continuous; state space; Markov property), sha256:69b4f54fd8c976d8a7093b3bfb9e0b3e836aa60794d1ad262e55c9b4b27f043c — https://www.randomservices.org/random/markov/General.html"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), ch.15 §3 Discrete-Time Markov Chains (Chapman-Kolmogorov; P_n = P^n), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 — https://www.randomservices.org/random/markov/Discrete.html"
+    - "Siegrist, Random (randomservices.org, HTML fetched 2026-10-05), ch.13 The Poisson Process, 'The Poisson Distribution' (stationary, independent increments), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.1 Definitions, Applications and Techniques (time series = an ordered sequence of values of a variable at equally spaced time intervals), HTML fetched 2026-10-05, sha256:e76d291b8e79f57b07668cfd26d9b4ab26eb2edc5312b191140a72825e8b9acc — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc41.htm"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain A tasks 1-2 and readings (p.3), text references (p.6: Daniel A1-5; Ross 4.1-4.8, 5.2.1-5.2.4, 5.3, 5.4.1, 5.4.2), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Stochastic Processes.md
@@ -15,9 +21,9 @@ A **Stochastic Process** $\{X(t) : t \in T\}$ is a collection of [[Random Variab
 
 > $$\{X(t) : t \in T\}$$
 
-- $T$ is the **index set**: a *discrete-time* process has $t = 0, 1, 2, \ldots$, while a *continuous-time* process has $t \geq 0$
+- $T$ is the **index set**: a *discrete-time* process has $t = 0, 1, 2, \ldots$, while a *continuous-time* process has $t \geq 0$. A [[Time Series]] — values of a variable recorded at equally spaced times — is a common discrete-time example
 - The set of values $X(t)$ can take is the **state space**, likewise discrete or continuous
-- A **counting process** $N(t)$ records the number of events by time $t$; the [[Poisson Process]] is the central continuous-time example, and a [[Time Series]] is a common discrete-time example
+- A **counting process** $N(t)$ records the number of events by time $t$; the [[Poisson Process]] is the central continuous-time example
 - A process has the **Markov property** when the future depends on the past only through the present state:
 
 > $$P\big(X(t_{n+1}) = j \mid X(t_n), \ldots, X(t_0)\big) = P\big(X(t_{n+1}) = j \mid X(t_n)\big)$$

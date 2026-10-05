@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3054c73bb70358ed3d5b9dbdb6153d7a6233a06dbb18dd5c5ddf89bf85d3b52a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4e2b686f0d8e635337c5f4d4fda257eeb04f536cfa54539bb9f47d16129f3742
+  sources:
+    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; an edition earlier than the 11th-13th the 2026 MAS-I outline lists - file dated 2012-09-06, Ch. 4 = pp.185-280): eq. (4.1) Markov property and row sums PDF p.1 (p.185); Ex. 4.7 Bonus Malus PDF p.4; Sec. 4.2 Chapman-Kolmogorov and P(n)=P^n PDF pp.5-6; Sec. 4.3 Classification of States PDF p.9; Sec. 4.4 Theorem 4.1 and Remarks PDF p.21; 4.5.1 The Gambler's Ruin Problem PDF p.33; 4.6 Mean Time Spent in Transient States PDF p.46; 4.7 Branching Processes PDF p.49; 4.8 Time Reversible Markov Chains PDF p.52, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Ross, Introduction to Probability Models, 12th ed. (Academic Press 2019), printed Contents, library scan (TU Ilmenau via GBV), PDF p.3 (Ch 4: 4.3 Classification of States, 4.5.1 The Gambler's Ruin Problem, 4.6 Mean Time Spent in Transient States, 4.7 Branching Processes, 4.8 Time Reversible Markov Chains), sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc - https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL), Ch. 11: Sec. 11.1 transition matrix and Thm 11.1 (n-step = P^n) PDF p.415; Thms 11.7-11.8 limiting matrix / fixed vector PDF pp.442-443, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e - https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random (randomservices.org), 'Discrete-Time Markov Chains' (Markov property, Chapman-Kolmogorov, P_n = P^n), sha256:808118b103e17cd5e31115b953663b0d8ff94da21f432e6fe7c104e9300380f0 - https://www.randomservices.org/random/markov/Discrete.html"
+    - "Siegrist, Random, 'Stationary and Limiting Distributions' (invariant distributions, positive recurrence, limiting distributions, 1/mu(y)), sha256:d4719c5e1cb9ad3be4fbf84c8dd849390f7d1ad15ced112f6312be83e5545680 - https://www.randomservices.org/random/markov/Limiting.html"
+    - "Daniel, 'Multi-state transition models with actuarial applications' (2004; reprinted by CAS and SOA), Sec. 1.1 Examples 1.4 disability and 1.5 driver ratings, PDF p.3, sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 - https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
+    - "CreditMetrics Technical Document (J.P. Morgan 1997; RiskMetrics 2007 reprint), Sec. 1.6.1 one-year rating transition matrix PDF p.36 and Sec. 6.4.1 'A transition matrix model is an example of a Markov Process' PDF p.88, sha256:b9e9cf7e01f8cc89dedd1ca1c1df377714c6ecefa99c587d1addbb130d7367c7 - https://www.msci.com/documents/10199/93396227-d449-4229-9143-24a94dab122f"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Markov Chain.md
@@ -23,6 +30,7 @@ A **Markov Chain** is a [[Stochastic Processes|stochastic process]] $\{X_n\}$ on
 > $$P\big(X_n = j \mid X_0 = i\big) = \big(P^n\big)_{ij}$$
 
 - A **stationary distribution** $\boldsymbol{\pi}$ satisfies $\boldsymbol{\pi}P = \boldsymbol{\pi}$ with $\sum_i \pi_i = 1$; for an irreducible aperiodic chain it is the long-run fraction of time spent in each state
+- Ross's Markov-chain chapter goes on to the [[Recurrent and Transient States|classification of states]] as recurrent or transient, the [[Gambler's Ruin Problem]], the [[Mean Time Spent in Transient States|mean time spent in transient states]], [[Branching Process|branching processes]] and [[Time-Reversible Markov Chain|time-reversible Markov chains]]
 - Common actuarial uses include no-claims-discount (bonus-malus) systems, multi-state disability/mortality models, and credit-rating migration
 
 > [!example]- Two-Year Risk-Class Transition {Example}

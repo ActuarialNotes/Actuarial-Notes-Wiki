@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:98dd81f805e47993b4903b7dd34a366f71795a3c9f1fcd44388f37ee6b2843e4
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9301b21c8231ccf123afe1c3c078b6da27f4f49fafc57109c33b7cae718ac8fc
+  sources:
+    - "Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1, B.2, B.3.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Rodriguez, GLM lecture notes, Models for Count Data With Overdispersion, sec.1 (Pearson phihat = chi2_p/(n-p); SEs x sqrt(phihat); beta unchanged) (PDF pp.1-2), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.2 (PDF p.31), sec.6.1.2 (PDF p.73), sec.6.2.1 eq.17 (PDF p.75), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "statsmodels documentation, GLM.fit, 'scale' argument (X2 = Pearson chi-square / df_resid, default; dev = deviance / df_resid), sha256:decbc81735f2541367b2d5a57dd8eca35a5e7fca79d4485150e84498f2be3f41 — https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLM.fit.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Dispersion Parameter.md
@@ -19,9 +23,9 @@ The **Dispersion Parameter** $\phi$ is the scale factor in an [[Exponential Fami
 
 - For the **Normal** response $\phi = \sigma^2$; for **Poisson** and **binomial** the theory fixes $\phi = 1$; for **[[Gamma]]** $\phi$ is the squared coefficient of variation
 - $\phi$ does **not** affect the fitted coefficients $\hat\beta$ — it scales their standard errors by $\sqrt{\hat\phi}$, and so changes every p-value and [[Confidence Interval]] in [[Parameter Estimate Tables]]
-- $\hat\phi > 1$ in a Poisson or binomial model is **overdispersion**: more spread than the distribution permits, usually from unmodelled heterogeneity, correlated observations, or a missing predictor
-- Two estimators are in common use — the Pearson $\chi^2$ statistic over degrees of freedom (above) and the residual [[Deviance]] over degrees of freedom. The Pearson version is generally preferred
-- The **scaled deviance** $D^* = D/\phi$ is what is compared against $\chi^2$; when $\phi$ has to be estimated, model comparisons use the $F$ statistic $\frac{\Delta D/r}{\hat\phi}$ instead
+- $\hat\phi > 1$ in a Poisson or binomial model is **overdispersion**: more spread than the distribution permits, usually from variation in risk level among policyholders that the model's predictors do not explain
+- Two estimators are in common use — the Pearson $\chi^2$ statistic over degrees of freedom (above) and the unscaled residual [[Deviance]] over degrees of freedom, $D/(n-p)$. The Pearson version is the standard approach
+- With $D$ the unscaled deviance, the **scaled deviance** $D^* = D/\phi$ is what is compared against $\chi^2$; when $\phi$ has to be estimated, comparing nested models that differ by $r$ parameters uses the $F$ statistic $\frac{\Delta D/r}{\hat\phi}$ instead, with $\hat\phi$ from the larger model
 - Prior weights $w_i$ (e.g. exposure or claim count) divide the variance: a group average built from many observations is more precisely known, which is how grouped data is fitted correctly
 
 ![[Media/Figures/Dispersion_Parameter.svg|340]]

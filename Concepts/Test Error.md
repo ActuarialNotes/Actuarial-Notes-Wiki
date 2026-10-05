@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:49f65726baf4f72048d6a09302c4f51eac3d225ee013de7396cb0f2db5ef3a2d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1d18f174494ec0f75a2e09c71bedb0b6d142f9cfad1ebea5fa01dac767cf7ce0
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.1 eq. 2.6 and training MSE vs flexibility (PDF pp.41-43), §2.2.2 eq. 2.7 and 'never lie below Var(e)' (PDF p.45), §2.2.3 eq. 2.9 (PDF p.48), Ch 5 intro (PDF p.206), §5.1.1-5.1.4 eqs. 5.1-5.3, leverage, k = 5 or 10, LOOCV correlation (PDF pp.207-215), §5.2 eq. 5.8 (PDF p.220), §6.1.3 indirect adjustment of training error (PDF p.240), §8.2.1 OOB (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list incl. Ch 2 (excl. §2.2.3) and Ch 5 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Test Error.md
@@ -19,14 +21,14 @@ verification:
 >
 > $$\begin{aligned} E\!\left[\left(y_0 - \hat{f}(x_0)\right)^{2}\right] &= \mathrm{Var}(\hat{f}(x_0)) \\ &\quad + \left[\mathrm{Bias}(\hat{f}(x_0))\right]^{2} \\ &\quad + \mathrm{Var}(\varepsilon) \end{aligned}$$
 
-- The averages run over test observations $(x_0, y_0)$. The [[Mean Square Error|MSE]] suits a numeric response and the error rate a classifier (see [[Confusion Matrix]]); a GLM uses holdout [[Deviance|deviance]].
+- The averages run over test observations $(x_0, y_0)$. The [[Mean Square Error|MSE]] suits a numeric response and the error rate a classifier (see [[Confusion Matrix]]).
 - **Its shape.** By the [[Bias-Variance Tradeoff|bias-variance tradeoff]], test error is U-shaped in flexibility: bias falls, variance rises. It can never fall below $\mathrm{Var}(\varepsilon)$. A growing gap between low training error and high test error is overfitting.
 - **Estimating it without new data.** Four approaches:
   - **Validation set:** fit on one part and score on the rest. Simple, but the estimate is variable and overstates the error, because the fit used fewer observations.
   - **Leave-one-out (LOOCV):** $\text{CV}_{(n)} = \frac{1}{n}\sum \text{MSE}_i$. For least squares it needs only one fit: $\frac{1}{n}\sum\left[(y_i - \hat{y}_i)/(1 - h_i)\right]^2$, where $h_i$ is the leverage.
   - **$k$-fold:** $\text{CV}_{(k)} = \frac{1}{k}\sum \text{MSE}_j$, with $k = 5$ or $10$. It is slightly more biased than LOOCV but less variable, since LOOCV's $n$ fits are nearly identical and their errors highly correlated. See [[Cross-Validation]].
   - For bagged ensembles, [[Out-of-Bag Error|out-of-bag error]] estimates test error at no extra cost. [[AIC]] and [[BIC]] instead adjust training error for complexity.
-- **Not the bootstrap's job.** The [[Bootstrap|bootstrap]] measures how variable an *estimate* is: its standard error is the [[Standard Deviation|standard deviation]] of the resampled estimates. Cross-validation measures how well a *model* predicts. Each bootstrap resample overlaps the original data (about $63\%$ of distinct observations), so a model scored on it looks optimistic.
+- **Not the bootstrap's job.** The [[Bootstrap|bootstrap]] measures how variable an *estimate* is: its standard error is the [[Standard Deviation|standard deviation]] of the resampled estimates. Cross-validation measures how well a *model* predicts.
 
 > [!example]- Choosing a Severity Model by 5-Fold CV {Example}
 > Two severity models are compared by 5-fold cross-validation. Model A (a GLM with five rating variables) has training MSE $380$ and fold MSEs $412, 398, 455, 430, 405$. Model B (a deep tree) has training MSE $310$ and fold MSEs $470, 380, 520, 445, 435$. Which should be used?

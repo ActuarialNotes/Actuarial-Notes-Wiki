@@ -44,6 +44,17 @@ def _poispmf(k, lam):
     return math.exp(-lam) * lam ** k / math.factorial(k)
 
 
+def _ncdf(x):
+    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+
+def _bin_mean(fn, a, b, k=60):
+    """The average of fn over [a, b] (composite Simpson, k even)."""
+    h = (b - a) / k
+    s = fn(a) + fn(b) + sum((4 if i % 2 else 2) * fn(a + i * h) for i in range(1, k))
+    return s * h / 3 / (b - a)
+
+
 def _rng(seed: int):
     """A tiny LCG — reproducible across Python builds, unlike `random`."""
     state = seed
@@ -167,8 +178,9 @@ def compound_poisson_process() -> Fig:
     ax.polyline(pts, colour=BLUE, width=2)
     running = 0.0
     for i, (t, size) in enumerate(jumps[:3]):
-        f.arrow(ax.px(t) - 13, ax.py(running + size / 2), ax.px(t) - 13,
-                ax.py(running), colour=AMBER, width=1.3)
+        # Each marker spans its whole jump: the step *is* the claim X_j.
+        f.arrow(ax.px(t) - 13, ax.py(running), ax.px(t) - 13,
+                ax.py(running + size), colour=AMBER, width=1.3)
         f.text(ax.px(t) - 17, ax.py(running + size / 2) - 2, f"X{'₁₂₃'[i]}", cls="sm",
                anchor="end", fill=AMBER)
         running += size
@@ -722,20 +734,45 @@ def efficiency() -> Fig:
     return f
 
 
-@figure("Minimum Variance", "Variances of four competing unbiased estimators, with the "
-        "sample mean's the smallest", width=WID)
+def _normal_median_midrange_var(n, h=0.02, lim=7.0):
+    """Var of the median and of the midrange of n (odd) draws from N(θ, 1).
+
+    Both are unbiased for θ by symmetry, so each variance is E[T²] at θ = 0,
+    integrated against the order-statistic densities: X₍ₘ₊₁₎ alone for the
+    median, the joint density of (X₍₁₎, X₍ₙ₎) for the midrange.
+    """
+    xs = [-lim + i * h for i in range(round(2 * lim / h) + 1)]
+    f = [_npdf(x) for x in xs]
+    F = [_ncdf(x) for x in xs]
+    m = (n - 1) // 2
+    c = math.factorial(n) / math.factorial(m) ** 2
+    med = h * c * sum(x * x * (Fx * (1 - Fx)) ** m * fx for x, fx, Fx in zip(xs, f, F))
+    mid = 0.0
+    for i, (x, fx, Fx) in enumerate(zip(xs, f, F)):
+        for y, fy, Fy in zip(xs[i + 1:], f[i + 1:], F[i + 1:]):
+            mid += (x + y) ** 2 / 4 * fx * fy * (Fy - Fx) ** (n - 2)
+    return med, mid * n * (n - 1) * h * h
+
+
+@figure("Minimum Variance", "Variances of four unbiased estimators of a normal mean "
+        "from a sample of five with σ = 1, the sample mean's the smallest", width=WID)
 def minimum_variance() -> Fig:
     f = vcard()
 
-    ests = [("X̄", 1.00, GREEN), ("median", 1.57, BLUE), ("midrange", 2.30, AMBER),
-            ("X₁", 4.00, ROSE)]
-    ax = vaxes(f, -0.7, 3.7, 0, 4.6, left=30, top=30, bottom=36)
-    ax.frame(xticks=[], yticks=[0, 2, 4], ylabel="Var(θ̂)")
+    # One population, one n: N(θ, 1), n = 5. Var(X̄) = 1/n = 0.20 is the
+    # Cramér–Rao bound; Var(X₁) = σ² = 1; median 0.287, midrange 0.261.
+    n = 5
+    med, mid = _normal_median_midrange_var(n)
+    ests = sorted([("X̄", 1 / n, GREEN), ("median", med, BLUE),
+                   ("midrange", mid, AMBER), ("X₁", 1.0, ROSE)], key=lambda e: e[1])
+    ax = vaxes(f, -0.7, 3.7, 0, 1.15, left=30, top=30, bottom=36)
+    ax.frame(xticks=[], yticks=[0, 0.5, 1], yfmt=lambda v: f"{v:g}", ylabel="Var(θ̂)")
     for i, (name, v, colour) in enumerate(ests):
         ax.bars([(i, v)], colour=colour, bw=46, opacity="0.7")
         ax.label(i, 0, name, cls="sm", dy=18)
         ax.label(i, v, f"{v:.2f}", cls="sm", dy=-8)
-    ax.hline(1.0, colour=GREEN, dash=True, x_to=3.6)
+    ax.hline(1 / n, colour=GREEN, dash=True, x_to=3.6)
+    ax.label(0.5, 0.85, f"n = {n}", cls="sm dim")
     return f
 
 
@@ -997,9 +1034,16 @@ def linear_regression() -> Fig:
     ax = vaxes(f, 0, 10, 0, 60, left=30, top=30, bottom=48)
     ax.frame(xlabel="predictor x", xticks=[0, 5, 10], yticks=[0, 30, 60],
              ylabel="response y")
-    fit = lambda x: 25.8 + 1.6 * x * 1.35
     pts = [(0.8, 33), (1.9, 27), (2.9, 36), (3.8, 30), (4.7, 41), (5.6, 38),
            (6.6, 49), (7.5, 43), (8.4, 53), (9.2, 48)]
+    # The line is the least-squares fit of these points, not a hand-picked one:
+    # b1 = Sxy / Sxx, b0 = ȳ − b1·x̄ (≈ 26.22 + 2.643x), so its residuals sum to 0.
+    xbar = sum(x for x, _ in pts) / len(pts)
+    ybar = sum(y for _, y in pts) / len(pts)
+    b1 = (sum((x - xbar) * (y - ybar) for x, y in pts)
+          / sum((x - xbar) ** 2 for x, _ in pts))
+    b0 = ybar - b1 * xbar
+    fit = lambda x: b0 + b1 * x
     for x, y in pts:
         f.line(ax.px(x), ax.py(y), ax.px(x), ax.py(fit(x)), cls="thin",
                stroke=ROSE, stroke_width="1.3")
@@ -1007,9 +1051,10 @@ def linear_regression() -> Fig:
     for x, y in pts:
         ax.point(x, y, colour=BLUE, r=3.6)
     ax.label(10, fit(10), "ŷ", cls="bold", dx=-4, dy=18)
-    ax.label(7.3, 24, "residual", cls="sm", anchor="start")
-    f.arrow(ax.px(7.9), ax.py(26), ax.px(7.5), ax.py(45), colour=ROSE, width=1.2,
-            dash=True)
+    # Point at the widest gap, (3.8, 30), from below and to its right.
+    ax.label(4.3, 15, "residual", cls="sm", anchor="start")
+    f.arrow(ax.px(4.6), ax.py(18.5), ax.px(3.8) + 5, ax.py((30 + fit(3.8)) / 2),
+            colour=ROSE, width=1.2, dash=True)
     return f
 
 
@@ -1695,12 +1740,14 @@ def histogram() -> Fig:
     ax.frame(xlabel="claim size (000s)", xticks=[0, 5, 10, 15, 20], yticks=[],
              ylabel="density")
     dens = lambda x: _gammapdf(x, 1.9, 3.1)
-    bars = [(1, 0.075), (3, 0.101), (5, 0.083), (7, 0.058), (9, 0.038),
-            (11, 0.024), (13, 0.015), (15, 0.009), (17, 0.005), (19, 0.003)]
+    # Density scale: each bar's height is the density's average over its bin, so
+    # the bars' area is the curve's mass on (0, 20) — 0.99, the 1% tail past 20
+    # being off the axis. A bar sits on the curve rather than under it.
+    bars = [(a + 1, _bin_mean(dens, a, a + 2)) for a in range(0, 20, 2)]
     ax.bars(bars, colour=BLUE, bw=ax.px(1.8) - ax.px(0), opacity="0.55")
     ax.curve(dens, colour=AMBER, width=2.4)
     ax.label(9.2, 0.062, "fitted density", cls="sm", anchor="start")
-    brace(f, ax.px(14), ax.px(16), ax.py(0.017), depth=6, colour="var(--dim)",
+    brace(f, ax.px(14), ax.px(16), ax.py(0.020), depth=6, colour="var(--dim)",
           label="bin width w", below=False, label_cls="sm dim")
     return f
 

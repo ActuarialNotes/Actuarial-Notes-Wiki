@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-04
+  last_checked_by: agent:validate-v1
   content_hash: sha256:783e6eea0d48915ecea03224a1e69b723d1d2854e2b1cc2afe614373b633f456
-  sources: []
+  sources:
+    - "Penn State STAT 510 Applied Time Series Analysis, Lesson 3 §3.3 Forecasting with ARIMA Models: psi-weight (MA infinity) form with psi_0 = 1; AR(1) psi_j = phi^j (Ex 3.5); MA psi-weights equal the coefficients and are 0 past the order; Var(x^n_{n+m} - x_{n+m}) = sigma_w^2 sum_{j=0}^{m-1} psi_j^2; 95% PI x^n_{n+m} +/- 1.96 sqrt(that) 'with the assumption of normally distributed errors'; for large m the variance approaches the variance of the series; Ex 3.6 AR(1) forecasts with SE 2 and 2 sqrt(1 + 0.6^2), sha256:6c42884601a4af7581fc2047d4b89f77ab0428abbf19fc42567869f308acaca8 — https://online.stat.psu.edu/stat510/Lesson03.html"
+    - "R Documentation, stats::predict.Arima (package stats 4.6.0): returns a list with components pred and se; 'The standard errors of prediction exclude the uncertainty in the estimation of the ARMA model', sha256:8c2d3e820dd8e2217dddb40d7bf182fb36025d7d62ccf3d174b3ec49d4663787 — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/predict.arima.html"
+    - "James, Witten, Hastie & Tibshirani, ISLR 2nd ed. (Springer 2021, CAS-hosted copy), §3.2.2 'Predictions' p.82 (PDF p.92) and §3.4 p.103 (PDF p.113): a confidence interval quantifies uncertainty about f(X) (the average response), a prediction interval about an individual Y; 'Prediction intervals are always wider than confidence intervals' because they add the irreducible error; the linear model is treated as correct (model bias ignored), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Penn State STAT 501 Regression Methods, Lesson 7 §7.1-7.2: se(y-hat_h) = sqrt(MSE X_h'(X'X)^{-1} X_h), PI y-hat_h +/- t_{1-alpha/2, n-p} sqrt(MSE + se(y-hat_h)^2) with p parameters including the intercept; the CI's standard error can approach 0 as n grows, the PI's cannot; the PI depends strongly on normal errors, sha256:09f3e2de7b3b61cea327370053b219eb5c6b2d0981e0aca094fdd92178c2c631 — https://online.stat.psu.edu/stat501/Lesson07.html"
+    - "CAS Exam MAS-I Tables (version 01/15/2018): lognormal entry p.13, F(x) = Phi((ln x - mu)/sigma) and E[X^k] = exp(k mu + k^2 sigma^2/2) (median e^mu, mean e^{mu + sigma^2/2}); Inf row of the t table p.16 (1.960), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Prediction Interval.md

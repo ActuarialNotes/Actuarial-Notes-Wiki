@@ -7,12 +7,14 @@ date: "2014"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f1b42224fa8bed62300db085f39c2455c1dba0fc0390380c9c4293c86a29ecce
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7226c0c31733378d64a9f1033def8c65a8d43fad557a24c09ed619bdf8703e4f
+  sources:
+    - "Tom Struppeck, Life Contingencies Study Note for CAS Exam S (Revised 9/19/2015) — Chapter 6 pp.11-12 (joint lives, the arbitrage identity) re-read; whole note pp.1-14 in run 8861, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Life Contingencies (Struppeck - 2014).md
@@ -62,7 +64,7 @@ A short CAS study note on life contingencies — survival models for human lives
 - In continuous time mortality is described by survival functions and hazard rates, covered elsewhere in the syllabus; a hazard rate describing mortality is called the force of mortality.
 - A workers' compensation claim in paying status faces competing forces — return to work, reaching 65, death — only one of which stops payment.
 - Increased mortality is applied, by custom, by multiplying the mortalities (a footnote notes that multiplying the hazard rate by $k$ turns $p_x$ into $p_x^{\,k}$).
-- A [[Joint Life|joint-life]] annuity pays until the first of two lives dies and a last-survivor annuity until both have died: $\ddot a_x + \ddot a_y = \ddot a_{xy} + \ddot a_{\overline{xy}}$.
+- An annuity can pay based on the survival of more than one person ([[Joint Life|joint lives]]): until one of the two dies, $\ddot a_{xy}$, or until both have died, $\ddot a_{\overline{xy}}$; an arbitrage argument relates them to annuities on single lives, $\ddot a_x + \ddot a_y = \ddot a_{xy} + \ddot a_{\overline{xy}}$.
 
 ## 7 Life expectancy
 - The curtate life expectancy, the expected number of full years, is $\sum_{n \ge 1} {}_np_x$ from the life table; the complete expectation of life adds 0.5 when deaths are uniformly distributed over the year.
@@ -77,4 +79,4 @@ A short CAS study note on life contingencies — survival models for human lives
 
 ## Sources
 - [Life Contingencies Study Note for CAS Exam S (CAS, revised 2015)](https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf) — the document, read in full: title, author, revision date, the introduction, Chapters 1–7 and the appendix of solutions
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (October 2014, revised September 2015), the link to the CAS copy and the assignment
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (October 2014, revised September 2015), the link to the CAS copy and the assignment

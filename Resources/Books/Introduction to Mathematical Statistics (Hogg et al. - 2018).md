@@ -8,12 +8,15 @@ Edition: "8th"
 Type: "Textbook"
 ISBN: "978-0-13-468699-8"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8f8264c8b9b817ae33531b0509eb29e8e5412164dfc993bdab96264c7520e62d
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:48c376ed2e64136718b50724ae01bb0a0dc3459b6cc7f92e61724406aaeeaff8
+  sources:
+    - "Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed., Global Edition, publisher eBook preview: title and copyright pages (PDF pp.2-3), Contents pp.5-9 (PDF pp.6-10), sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf"
+    - "Pearson product page, Introduction to Mathematical Statistics 8th ed.: Title overview and hardcover ISBN-13 9780134686998 'Published 2018 (2018 update)', fetched 2026-10-05, sha256:7e7698f26a8731ddc2ccabfac24e4341c39f052ebdad72883f22f6efae9f4492 — https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Mathematical Statistics (Hogg et al. - 2018).md
@@ -153,4 +156,4 @@ A comprehensive textbook of mathematical statistics that treats classical infere
 ## Sources
 - [Introduction to Mathematical Statistics, 8th edition (Pearson, 2018)](https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211) — the publisher's description, the table of contents (chapters, sections and appendices) and the hardcover ISBN 978-0-13-468699-8, published 2018
 - [Introduction to Mathematical Statistics, 8th edition, Global Edition — contents pages (Pearson, 2020)](https://www.gbv.de/dms/mpib-toc/1763045706.pdf) — a library scan of the printed contents pages, which agree section for section with the publisher's list; the appendix letters A–F and the titles of Appendices C–F are taken from it
-- [CAS Exam MAS-I Content Outline](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (8th edition, Prentice Hall, 2018) and the assigned sections by domain
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (8th edition, Prentice Hall, 2018) and the assigned sections by domain

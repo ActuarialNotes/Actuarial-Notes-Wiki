@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:153d69e414c2539ff5b3a37250e270073f3522af4bf9108f7035336bf8de14a9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Time-Reversible Markov Chain.md
+---
+
 A **Time-Reversible Markov Chain** is an ergodic [[Markov Chain]] that, once it is running in its long-run (stationary) regime, behaves the same backward in time as forward. Traced backward, the states $X_n, X_{n-1}, X_{n-2}, \ldots$ of a stationary ergodic chain with transition probabilities $P_{ij}$ and [[Stationary Distribution|stationary probabilities]] $\pi_i$ form a Markov chain with transition probabilities $Q_{ij}$; the chain is time reversible when $Q_{ij} = P_{ij}$ for all $i$ and $j$.
 
 > $$Q_{ij} = \frac{\pi_j P_{ji}}{\pi_i}$$

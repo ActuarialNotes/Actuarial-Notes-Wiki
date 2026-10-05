@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fddacb618e605446015fd9d5f2a49ca40c8574bb348d28fd5a668f51c065c084
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Recurrent and Transient States.md
+---
+
 **Recurrent and transient states** classify the states of a [[Markov Chain]] by whether the chain is sure to come back. Let $f_i$ be the probability that a chain started in state $i$ ever re-enters $i$: the state is **recurrent** if $f_i = 1$ and **transient** if $f_i < 1$.
 
 > $$f_i = P\big(X_n = i \text{ for some } n \geq 1 \mid X_0 = i\big)$$

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46205889e0cb0dfa3f13416b57731a648dc92e47d0317d39fa09edf449fd7319
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Mean Time Spent in Transient States.md
+---
+
 The **Mean Time Spent in Transient States** of a finite [[Markov Chain]] is the matrix $S$ of expected visits: with the [[Recurrent and Transient States|transient states]] numbered $T = \{1, \ldots, t\}$, $s_{ij}$ is the expected number of periods the chain spends in state $j$ given that it starts in state $i$ (the starting period counts when $i = j$). $S$ comes from inverting $I - P_T$, where $P_T$ holds the transition probabilities among the transient states only.
 
 > $$s_{ij} = \delta_{ij} + \sum_{k=1}^{t} P_{ik}\, s_{kj}$$

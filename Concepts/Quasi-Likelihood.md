@@ -14,7 +14,7 @@
 - Treating a large $X^2$ as dispersion assumes the systematic part of the model is right. A large $X^2$ can also mean a missing predictor or a wrong link. The fully specified alternative is a [[Negative Binomial Distribution|negative binomial]] model.
 
 > [!example]- Adjusting a Frequency Model's Standard Errors {Example}
-> A Poisson frequency GLM fitted to $n - p = 500$ degrees of freedom gives a sprinkler-credit coefficient $\hat\beta = 0.25$ with standard error $0.08$, and Pearson $X^2 = 1{,}450$. Refit as quasi-Poisson. Is the coefficient significant at the $5\%$ level?
+> A Poisson frequency GLM fitted to $n - p = 500$ degrees of freedom gives a vacant-building coefficient $\hat\beta = 0.25$ with standard error $0.08$, and Pearson $X^2 = 1{,}450$. Refit as quasi-Poisson. Is the coefficient significant at the $5\%$ level?
 >
 > > [!answer]-
 > > $$

@@ -32,10 +32,10 @@ The **Exponential Family** is the class of distributions whose density can be wr
 | Binomial | $\mu(1-\mu)$ | $\ln\frac{\mu}{1-\mu}$ | Retention, large-claim indicator |
 | Gamma | $\mu^2$ | $-1/\mu$ (log in practice) | Claim severity |
 | Inverse Gaussian | $\mu^3$ | $-1/(2\mu^2)$ | Heavy-tailed severity |
-| Tweedie ($1<p<2$) | $\mu^{p}$ | $\ln\mu$ | Pure premium |
+| Tweedie ($1<p<2$) | $\mu^{p}$ | $\mu^{1-p}/(1-p)$ (log in practice) | Pure premium |
 
-- The **canonical [[Link Function]]** is the one with $g(\mu) = \theta$; it makes $\sum x_{ij}y_i$ a [[Sufficient Statistic]] and the likelihood well behaved, but any link that maps the mean range onto the whole line is allowed — the log link is standard for insurance because it makes rating factors multiplicative
-- Membership is what guarantees the GLM machinery works: iteratively reweighted least squares converges, the [[Deviance]] has its $\chi^2$ theory, and the [[Fisher Information]] has a closed form
+- The **canonical [[Link Function]]** is the one with $g(\mu) = \theta$; it makes $\sum x_{ij}y_i$ a [[Sufficient Statistic]] and the likelihood well behaved, but any one-to-one, differentiable link may be used — the log link is standard for insurance because it makes rating factors multiplicative
+- Membership is what lets every GLM be fitted by the same algorithm — iteratively reweighted least squares, equivalent to Fisher scoring — with [[Fisher Information]] $X^\top W X/\phi$; the [[Deviance]]'s $\chi^2$ distribution is a large-sample approximation. Quasi-likelihood runs the same algorithm from the mean–variance relationship alone, when a full exponential-family distribution is not assumed
 - Fixing $\phi$ at $1$ gives the "pure" one-parameter family; estimating it accommodates over- or under-dispersion without leaving the framework
 
 ![[Media/Figures/Exponential_Family.svg|340]]

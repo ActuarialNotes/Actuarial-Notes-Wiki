@@ -43,3 +43,11 @@ created: 2026-10-05
 - checks_run: page read in full, no prior log; exam pages linking it: MAS-II (task 8, unsupervised methods list); z_im and unit-norm constraint diffed against ISLR 12.2-12.4; eigenvector statement against footnote 2 (ISLR: X^T X; page: covariance/correlation matrix - same eigenvectors, notation only); well-posedness against PDF p.506 ('arbitrarily large variance'); example recomputed (norms 1.001/1.003, z1 = 2.00, phi_1.phi_2 = 0.2047); link and figure embed resolve
 - sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.2.1 eqs. 12.1-12.4 and footnote 2 (PDF pp.505-507), §12.2.4 uniqueness up to sign (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-II Content Outline 2026, Domain C task 5 (PDF p.3), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
 - note: Definitions and formulas match ISLR Ch 12 (MAS-II sense; MAS-I reaches loadings only through PCR, ISLR §6.3.1). Confidence low because a major finding is open: the example's PC1/PC2 loadings are not orthogonal.
+
+## [C-002] F-001 also applies to the figure
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-05
+- locus: figure (Media/Figures/Loading_Vector.svg)
+- note: Re F-001: the generated figure draws the same non-orthogonal pair - scripts/figures_exam_mas_ii.py loading_vector(), lines 1184-1185, phi_1 = [0.52, 0.51, 0.49, 0.48], phi_2 = [0.61, 0.55, -0.42, -0.39] (dot product 0.2047). Fixing the example needs the builder changed and the figure regenerated (docs/concept-figures.md), not a hand edit of the SVG.

@@ -8,11 +8,11 @@ Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-138-74151-5"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9c207bcb7715011e2afc6af8d5bd982b417e9b089955f0aa7d36d7f0926fa51a
+  content_hash: sha256:f5a375f4e20e1f0620b2edc4bfdd1752d7c3a0f3882fad0adfd538aed539d9ba
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title page (PDF p.4), copyright page (PDF p.5), Contents pp. vii-xiii (PDF pp.8-14), Preface p. xv (PDF p.16), sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F, created 2026-06-29), Complete Text References p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf (Dobson & Barnett entry; Domain C readings p.5)"

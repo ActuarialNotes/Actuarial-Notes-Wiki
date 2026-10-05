@@ -7,11 +7,11 @@ date: "2014"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf)"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:14f6bd76d9050c1d3074d24cdf0b8b5d04d41200266713fca438d36c3cee335b
+  content_hash: sha256:7226c0c31733378d64a9f1033def8c65a8d43fad557a24c09ed619bdf8703e4f
   sources:
     - "Tom Struppeck, Life Contingencies Study Note for CAS Exam S (Revised 9/19/2015) — whole note pp.1-14 (Introduction, Chapters 1-7, Appendix), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.3 and 6 (Domain A readings; Struppeck citation, A5-6, OP, link), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"

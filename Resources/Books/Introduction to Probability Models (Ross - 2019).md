@@ -8,11 +8,11 @@ Edition: "12th"
 Type: "Textbook"
 ISBN: "978-0-12-814346-9"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5e63f95e7d8af72dda368949b2bb8178a7a9485427acbcd6c92b3855d89e09be
+  content_hash: sha256:8085c20c51965f70cc3c52034e37826b7942f9f323b1eca3c613647c83b67400
   sources:
     - "Ross, Introduction to Probability Models, Twelfth Edition (Academic Press, 2019), title page and printed Contents pp. v-x, library scan (TU Ilmenau via K10plus), sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F, created 2026-06-29), Complete Text References p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf (Ross entry; Domain A readings p.3)"

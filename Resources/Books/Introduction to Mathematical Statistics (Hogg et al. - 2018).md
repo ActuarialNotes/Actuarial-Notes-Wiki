@@ -8,11 +8,11 @@ Edition: "8th"
 Type: "Textbook"
 ISBN: "978-0-13-468699-8"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8f8264c8b9b817ae33531b0509eb29e8e5412164dfc993bdab96264c7520e62d
+  content_hash: sha256:48c376ed2e64136718b50724ae01bb0a0dc3459b6cc7f92e61724406aaeeaff8
   sources:
     - "Pearson product page, Introduction to Mathematical Statistics, 8th edition (Hogg, McKean, Craig): Title overview and Table of contents (sections and appendices), hardcover ISBN-13 9780134686998 'Published 2018', fetched 2026-10-04, sha256:0b390bfdae07c5509c079a5f2b7af46348cc2ab06e68b8c3b7597873a2096cf6 — https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211"
     - "Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed., Global Edition (Pearson, 2020), printed Contents pp.5-9 (library scan linked from K10plus), sha256:56616bd9053ab8a928850890dfe2c0ef47a374f3f914d9393179afb4db21350f — https://www.gbv.de/dms/mpib-toc/1763045706.pdf"

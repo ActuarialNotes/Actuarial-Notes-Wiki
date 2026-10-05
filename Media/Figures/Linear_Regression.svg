@@ -86,7 +86,7 @@ text {
     <circle cx="281.84" cy="124.93" r="3.6" fill="#3b82f6"/>
     <circle cx="303.92" cy="145.6" r="3.6" fill="#3b82f6"/>
     <text x="322" y="144.41" text-anchor="middle" class="bold">ŷ</text>
-    <text x="251.48" y="244.8" text-anchor="start" class="sm">residual</text>
-    <line x1="268.04" y1="236.53" x2="257" y2="159.99" class="thin dash" stroke="#e11d48" stroke-width="1.2" marker-end="url(#ahe11d48)"/>
+    <text x="168.68" y="282" text-anchor="start" class="sm">residual</text>
+    <line x1="176.96" y1="267.53" x2="159.88" y2="207.06" class="thin dash" stroke="#e11d48" stroke-width="1.2" marker-end="url(#ahe11d48)"/>
   </g>
 </svg>

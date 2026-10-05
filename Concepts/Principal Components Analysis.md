@@ -27,7 +27,8 @@ verification:
 - PCs are **orthogonal** — each successive PC captures the maximum remaining variance
 - **Scree plot**: plot of $\lambda_m$ vs. $m$; an "elbow" suggests how many PCs to retain
 - PCA requires **standardizing** predictors (subtract mean, divide by SD) when variables are on different scales
-- Used for **dimensionality reduction** before fitting models, and for **visualization** of high-dimensional data
+- Used for **visualization** of high-dimensional data, and to derive a few features for a supervised fit
+- **MAS-I sense — dimension reduction for regression.** [[Principal Components Regression]] fits $Y$ by least squares on the first $M$ score vectors instead of the $p$ predictors, with $M$ chosen by [[Cross-Validation]]. The directions are found without using $Y$, so nothing guarantees they are the best ones for predicting it; [[Partial Least Squares]] is the supervised alternative that uses $Y$ to choose them. PCA as an unsupervised method in its own right is MAS-II
 
 ![[Media/Figures/Principal_Components_Analysis.svg|340]]
 
@@ -37,4 +38,4 @@ verification:
 > > [!answer]-
 > > Total variance $= \lambda_1 + \lambda_2 = 1.6 + 0.4 = 2.0$ (sum of eigenvalues = trace of $\mathbf{S} = 1+1 = 2$).
 > > $$\text{PVE}_1 = \frac{1.6}{2.0} = 0.80$$
-> > The first principal component explains **80%** of the total variance. $z_{1i} = 0.707 x_{1i} + 0.707 x_{2i}$ is the average of the two standardized predictors.
+> > The first principal component explains **80%** of the total variance. $z_{1i} = 0.707 x_{1i} + 0.707 x_{2i} = \sqrt{2}\cdot\tfrac{x_{1i}+x_{2i}}{2}$ is proportional to ($\sqrt{2}$ times) the average of the two standardized predictors, not equal to it.

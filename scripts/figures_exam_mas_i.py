@@ -1051,9 +1051,10 @@ def linear_regression() -> Fig:
     for x, y in pts:
         ax.point(x, y, colour=BLUE, r=3.6)
     ax.label(10, fit(10), "ŷ", cls="bold", dx=-4, dy=18)
-    ax.label(7.3, 24, "residual", cls="sm", anchor="start")
-    f.arrow(ax.px(7.9), ax.py(26), ax.px(7.5), ax.py((43 + fit(7.5)) / 2), colour=ROSE,
-            width=1.2, dash=True)
+    # Point at the widest gap, (3.8, 30), from below and to its right.
+    ax.label(4.3, 15, "residual", cls="sm", anchor="start")
+    f.arrow(ax.px(4.6), ax.py(18.5), ax.px(3.8) + 5, ax.py((30 + fit(3.8)) / 2),
+            colour=ROSE, width=1.2, dash=True)
     return f
 
 
@@ -1746,7 +1747,7 @@ def histogram() -> Fig:
     ax.bars(bars, colour=BLUE, bw=ax.px(1.8) - ax.px(0), opacity="0.55")
     ax.curve(dens, colour=AMBER, width=2.4)
     ax.label(9.2, 0.062, "fitted density", cls="sm", anchor="start")
-    brace(f, ax.px(14), ax.px(16), ax.py(0.017), depth=6, colour="var(--dim)",
+    brace(f, ax.px(14), ax.px(16), ax.py(0.020), depth=6, colour="var(--dim)",
           label="bin width w", below=False, label_cls="sm dim")
     return f
 

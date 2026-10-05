@@ -206,18 +206,18 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > [!answer]- Source Material {8 Sources}
 > 
 > - [[Poisson Processes and Mixture Distributions (Daniel - 2008)]]
->      - A1–A5
+>      - A1–A5 — CAS Study Note, June 2008; the practice problems noted in its Foreword are on the CAS website
 > - [[An Introduction to Generalized Linear Models (Dobson - 2018)]]
->      - C1–C9
+>      - C1–C9 — 4th edition, Chapters 1–9, excluding 6.3.3, 6.7, 6.8 and 7.9
 > - [[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]
->      - B1–B8, C1–C9
+>      - B1–B8, C1–C9 — 8th edition. Domain B: Sections 1.7, 2.7, 2.8, 3.7, 4.1, 4.4, 4.5, 4.6, 4.7, 5.1, 6.1–6.5, 7.1–7.6 and 8.1–8.3. Domain C: Sections 4.4, 6.3, 6.5, 7.5 and 9.1–9.6
 > - [[An Introduction to Statistical Learning (James et al. - 2021)]]
->      - C1–C9
+>      - C1–C9 — 2nd edition, Chapters 1, 2 (excluding Section 2.2.3), 3 (Sections 3.1 through 3.3, and the 3.6 labs on Sections 3.1 through 3.3), 4 (Sections 4.1 through 4.4, though the Linear Discriminant Analysis portion of Section 4.4 will not be tested), 5, 6 and 7
 > - [[Generalized Linear Models (Larsen - 2015)]]
->      - C1–C9
+>      - C1–C9 — CAS Study Note, December 2015, revised June 2016
 > - [[Introduction to Probability Models (Ross - 2019)]]
->      - A1–A6
+>      - A1–A6 — 11th, 12th or 13th edition (2014, 2019 or 2023), Sections 4.1–4.8, 5.2.1–5.2.4, 5.3, 5.4.1, 5.4.2, 9.1–9.6, 11.1, 11.2.1 and 11.2.2
 > - [[Life Contingencies (Struppeck - 2014)]]
->      - A5–A6
+>      - A5–A6 — CAS Study Note, October 2014, revised September 2015
 > - [[Nonlife Actuarial Models (Tse - 2009)]]
->      - B1–B4, B7–B9
+>      - B1–B4, B7–B9 — Sections 1.1, 2.2, 2.3, 2.4, 2.5, 10.1, 10.2, 11.1, 12.1, 12.3 and 13.2

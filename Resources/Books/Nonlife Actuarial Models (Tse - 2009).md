@@ -30,6 +30,10 @@ A textbook for senior undergraduates on the theory, methods and empirical implem
 > - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives B1–B4 and B7–B9; Sections 1.1, 2.2, 2.3, 2.4, 2.5, 10.1, 10.2, 11.1, 12.1, 12.3 and 13.2.
 > - [[Exam MAS-II (CAS)|Exam MAS-II]] — objectives A1–A2; Chapters 6.1–6.3, 7.1–7.4, 8.1–8.2 and 9.1–9.2.
 
+## Preface
+
+## Notation and convention
+
 ## Part I Loss models
 
 ### 1 Claim-frequency distribution
@@ -55,50 +59,217 @@ A textbook for senior undergraduates on the theory, methods and empirical implem
     - 2.1.3 Expected value of function of random variable
     - 2.1.4 Distribution of function of random variable
 - 2.2 Some continuous distributions for claim severity
+    - 2.2.1 [[Exponential Distribution|Exponential distribution]]
+    - 2.2.2 [[Gamma|Gamma distribution]]
+    - 2.2.3 Weibull distribution
+    - 2.2.4 Pareto distribution
+- 2.3 Some methods for creating new distributions
+    - 2.3.1 [[Transformations of Random Variables|Transformation of random variable]]
+    - 2.3.2 Mixture distribution
+    - 2.3.3 Splicing
+- 2.4 Tail properties of claim severity
+- 2.5 Effects of coverage modifications
+    - 2.5.1 Deductible
+    - 2.5.2 Policy limit
+    - 2.5.3 Coinsurance
+    - 2.5.4 Effects of inflation
+    - 2.5.5 Effects of deductible on claim frequency
+- 2.6 Excel computation notes
+- 2.7 Summary and conclusions
+- Exercises
 
 ### 3 Aggregate-loss models
+- 3.1 Individual risk and collective risk models
+- 3.2 Individual risk model
+    - 3.2.1 Exact distribution using convolution
+    - 3.2.2 Exact distribution using the De Pril recursion
+    - 3.2.3 Approximations of the individual risk model
+- 3.3 Collective risk model
+    - 3.3.1 Properties of compound distributions
+    - 3.3.2 Panjer recursion
+    - 3.3.3 Approximations of the collective risk model
+    - 3.3.4 Compound Poisson distribution and individual risk model
+- 3.4 Coverage modifications and stop-loss reinsurance
+- 3.5 Summary and conclusions
+- Exercises
 
 ## Part II Risk and ruin
 
 ### 4 Risk measures
+- 4.1 Uses of risk measures
+- 4.2 Some premium-based risk measures
+- 4.3 Axioms of coherent risk measures
+- 4.4 Some capital-based risk measures
+    - 4.4.1 Value-at-Risk (VaR)
+    - 4.4.2 Conditional tail expectation and related measures
+- 4.5 More premium-based risk measures
+    - 4.5.1 Proportional hazard transform and risk-adjusted premium
+    - 4.5.2 Esscher transform and risk-adjusted premium
+- 4.6 Distortion-function approach
+- 4.7 Wang transform
+- 4.8 Summary and conclusions
+- Exercises
 
 ### 5 Ruin theory
+- 5.1 Discrete-time surplus and events of ruin
+- 5.2 Discrete-time ruin theory
+    - 5.2.1 Ultimate ruin in discrete time
+    - 5.2.2 Finite-time ruin in discrete time
+    - 5.2.3 Lundberg’s inequality in discrete time
+- 5.3 Continuous-time surplus function
+- 5.4 Continuous-time ruin theory
+    - 5.4.1 Lundberg’s inequality in continuous time
+    - 5.4.2 Distribution of deficit
+- 5.5 Summary and conclusions
+- Exercises
 
 ## Part III Credibility
 
 ### 6 Classical credibility
+- 6.1 Framework and notations
+- 6.2 Full credibility
+    - 6.2.1 Full credibility for claim frequency
+    - 6.2.2 Full credibility for claim severity
+    - 6.2.3 Full credibility for aggregate loss
+    - 6.2.4 Full credibility for pure premium
+- 6.3 [[Partial Credibility|Partial credibility]]
+- 6.4 Variation of assumptions
+- 6.5 Summary and discussions
+- Exercises
 
 ### 7 Bühlmann credibility
+- 7.1 Framework and notations
+- 7.2 Variance components
+- 7.3 [[Bühlmann Credibility|Bühlmann credibility]]
+- 7.4 [[Bühlmann-Straub Credibility|Bühlmann–Straub credibility]]
+- 7.5 Summary and discussions
+- Exercises
 
 ### 8 Bayesian approach
+- 8.1 Bayesian inference and estimation
+    - 8.1.1 Posterior distribution of parameter
+    - 8.1.2 Loss function and Bayesian estimation
+    - 8.1.3 Some examples of Bayesian credibility
+- 8.2 Conjugate distributions
+    - 8.2.1 The gamma–Poisson conjugate distribution
+    - 8.2.2 The beta–geometric conjugate distribution
+    - 8.2.3 The gamma–exponential conjugate distribution
+- 8.3 Bayesian versus Bühlmann credibility
+- 8.4 Linear exponential family and [[Exact Credibility|exact credibility]]
+- 8.5 Summary and discussions
+- Exercises
 
 ### 9 Empirical implementation of credibility
+- 9.1 [[Empirical Bayes Credibility|Empirical Bayes method]]
+- 9.2 Nonparametric estimation
+- 9.3 Semiparametric estimation
+- 9.4 Parametric estimation
+- 9.5 Summary and discussions
+- Exercises
 
 ## Part IV Model construction and evaluation
 
 ### 10 Model estimation and types of data
+- 10.1 Estimation
+    - 10.1.1 Parametric and nonparametric estimation
+    - 10.1.2 Point and interval estimation
+    - 10.1.3 Properties of estimators
+- 10.2 Types of data
+    - 10.2.1 Duration data and loss data
+    - 10.2.2 Complete individual data
+    - 10.2.3 Incomplete individual data
+    - 10.2.4 Grouped data
+- 10.3 Summary and discussions
+- Exercises
 
 ### 11 Nonparametric model estimation
+- 11.1 Estimation with complete individual data
+    - 11.1.1 Empirical distribution
+    - 11.1.2 Kernel estimation of probability density function
+- 11.2 Estimation with incomplete individual data
+    - 11.2.1 Kaplan–Meier (product-limit) estimator
+    - 11.2.2 Nelson–Aalen estimator
+- 11.3 Estimation with grouped data
+- 11.4 Excel computation notes
+- 11.5 Summary and discussions
+- Exercises
 
 ### 12 Parametric model estimation
+- 12.1 Methods of moments and percentile matching
+    - 12.1.1 [[Method of Moments|Method of moments]]
+    - 12.1.2 Method of percentile matching
+- 12.2 Bayesian estimation method
+- 12.3 [[Maximum Likelihood Estimation|Maximum likelihood estimation method]]
+    - 12.3.1 Complete individual data
+    - 12.3.2 Grouped and incomplete data
+- 12.4 Models with covariates
+    - 12.4.1 Proportional hazards model
+    - 12.4.2 [[Generalized Linear Model|Generalized linear model]]
+    - 12.4.3 Accelerated failure-time model
+- 12.5 Modeling joint distribution using copula
+- 12.6 Excel computation notes
+- 12.7 Summary and discussions
+- Exercises
 
 ### 13 Model evaluation and selection
+- 13.1 Graphical methods
+- 13.2 Misspecification tests and diagnostic checks
+    - 13.2.1 Kolmogorov–Smirnov test
+    - 13.2.2 Anderson–Darling test
+    - 13.2.3 Chi-square goodness-of-fit test
+    - 13.2.4 [[Likelihood Ratio Test|Likelihood ratio test]]
+- 13.3 Information criteria for model selection
+- 13.4 Summary and discussions
+- Exercises
 
 ### 14 Basic Monte Carlo methods
+- 14.1 Monte Carlo simulation
+- 14.2 Uniform random number generators
+- 14.3 General random number generators
+    - 14.3.1 [[Inversion Method|Inversion method]]
+    - 14.3.2 Acceptance–rejection method
+    - 14.3.3 Generation of correlated random variables
+- 14.4 Specific random number generators
+    - 14.4.1 Some continuous distributions
+    - 14.4.2 Some discrete distributions
+- 14.5 Accuracy and Monte Carlo sample size
+- 14.6 Variance reduction techniques
+    - 14.6.1 Antithetic variable
+    - 14.6.2 Control variable
+    - 14.6.3 Importance sampling
+- 14.7 Excel computation notes
+- 14.8 Summary and discussions
+- Exercises
 
 ### 15 Applications of Monte Carlo methods
+- 15.1 Monte Carlo simulation for hypothesis test
+    - 15.1.1 Kolmogorov–Smirnov test
+    - 15.1.2 Chi-square goodness-of-fit test
+- 15.2 Bootstrap estimation of p-value
+- 15.3 Bootstrap estimation of bias and mean squared error
+- 15.4 A general framework of bootstrap
+- 15.5 Monte Carlo simulation of asset prices
+    - 15.5.1 Wiener process and generalized Wiener process
+    - 15.5.2 Diffusion process and lognormal distribution
+    - 15.5.3 Jump–diffusion process
+- 15.6 Summary and discussions
+- Exercises
 
 ## Appendix: Review of statistics
 
 ## Answers to exercises
+
+## References
+
+## Index
 
 ## Related readings
 - [[Introduction to Mathematical Statistics (Hogg et al. - 2018)]] — assigned with it for Domain B (Statistics) of the MAS-I outline
 
 ## Sources
 - [Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge University Press, 2009)](https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271) — the publisher's record on Cambridge Core: title, author, series (International Series on Actuarial Science), hardback ISBN and publication date (17 September 2009), the book description, and the contents — parts, chapters, appendix and back matter
-- [Contents, page vii (Cambridge Core page image)](https://static.cambridge.org/content/id/urn%3Acambridge.org%3Aid%3Abook%3A9780511812156/resource/name/firstPage-9780511812156toc_pvii-xii_CBO.jpg) — the first page of the printed contents, giving the sections of Chapter 1 and of Chapter 2 as far as §2.2; the remaining contents pages (viii–xii) could not be fetched, so the other chapters are listed without their sections
+- [Nonlife Actuarial Models — publisher's eBook preview (Cambridge University Press, 2009)](https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf) — the book's opening pages: the copyright page (© 2009, hardback ISBN 978-0-521-76465-0) and the full printed contents, pp. vii–xii, from which every part, chapter, section, subsection and Exercises entry above, and the front and back matter, are transcribed
 - [Preface (Cambridge Core)](https://www.cambridge.org/core/books/nonlife-actuarial-models/preface/113E9D17410E3DAD5DB7C32CDD9EB567) — the preface's opening: the book's purpose, readership, Exam C coverage and four-part structure
 - [Nonlife Actuarial Models (Google Books)](https://books.google.com/books?vid=ISBN9780521764650) — corroborates the chapter list, publisher, year and ISBN
-- [CAS Exam MAS-I Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (Cambridge University Press, 2009) and the MAS-I sections
-- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the MAS-II sections
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (Cambridge University Press, 2009) and the MAS-I sections
+- [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the MAS-II sections

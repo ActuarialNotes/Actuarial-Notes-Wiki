@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2e562b6ed36518bc6dff5792c42239c3ecd497dce02573cfcaa67db85f3d03d9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Polynomial Regression.md
+---
+
 **Polynomial Regression** extends [[Linear Regression]] to a non-linear relationship by adding powers of the predictor as extra predictors. The model is a degree-$d$ polynomial in $x$. Its coefficients are still estimated by least squares, because it is a standard linear model in the predictors $x_i, x_i^2, \dots, x_i^d$.
 
 > $$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \cdots + \beta_d x_i^d + \epsilon_i$$

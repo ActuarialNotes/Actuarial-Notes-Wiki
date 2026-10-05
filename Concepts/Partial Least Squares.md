@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8c62a1ce38681aa4162a997a8a85536e3dee37ed8991541c6d67b150f3009344
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Partial Least Squares.md
+---
+
 **Partial Least Squares (PLS)** is a *supervised* dimension reduction method. Like [[Principal Components Regression]], it builds $M$ new features $Z_1, \dots, Z_M$ as linear combinations of the predictors and fits a least squares linear model to them. Unlike PCR, it uses the response $Y$ to choose those features, so they approximate the predictors and are also related to the response.
 
 > $$Z_m = \sum_{j=1}^{p} \phi_{jm} X_j$$

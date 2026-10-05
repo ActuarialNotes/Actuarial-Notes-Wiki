@@ -157,4 +157,4 @@ A comprehensive textbook of mathematical statistics that treats classical infere
 ## Sources
 - [Introduction to Mathematical Statistics, 8th edition (Pearson, 2018)](https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211) — the publisher's description, the table of contents (chapters, sections and appendices) and the hardcover ISBN 978-0-13-468699-8, published 2018
 - [Introduction to Mathematical Statistics, 8th edition, Global Edition — contents pages (Pearson, 2020)](https://www.gbv.de/dms/mpib-toc/1763045706.pdf) — a library scan of the printed contents pages, which agree section for section with the publisher's list; the appendix letters A–F and the titles of Appendices C–F are taken from it
-- [CAS Exam MAS-I Content Outline](https://www.casact.org/sites/default/files/2023-06/MASI_Content_Outline.pdf) — the citation (8th edition, Prentice Hall, 2018) and the assigned sections by domain
+- [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (8th edition, Prentice Hall, 2018) and the assigned sections by domain

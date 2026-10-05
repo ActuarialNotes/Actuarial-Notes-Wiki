@@ -64,7 +64,7 @@ A short CAS study note on life contingencies — survival models for human lives
 - In continuous time mortality is described by survival functions and hazard rates, covered elsewhere in the syllabus; a hazard rate describing mortality is called the force of mortality.
 - A workers' compensation claim in paying status faces competing forces — return to work, reaching 65, death — only one of which stops payment.
 - Increased mortality is applied, by custom, by multiplying the mortalities (a footnote notes that multiplying the hazard rate by $k$ turns $p_x$ into $p_x^{\,k}$).
-- A [[Joint Life|joint-life]] annuity pays until the first of two lives dies and a last-survivor annuity until both have died: $\ddot a_x + \ddot a_y = \ddot a_{xy} + \ddot a_{\overline{xy}}$.
+- An annuity can pay based on the survival of more than one person ([[Joint Life|joint lives]]): until one of the two dies, $\ddot a_{xy}$, or until both have died, $\ddot a_{\overline{xy}}$; an arbitrage argument relates them to annuities on single lives, $\ddot a_x + \ddot a_y = \ddot a_{xy} + \ddot a_{\overline{xy}}$.
 
 ## 7 Life expectancy
 - The curtate life expectancy, the expected number of full years, is $\sum_{n \ge 1} {}_np_x$ from the life table; the complete expectation of life adds 0.5 when deaths are uniformly distributed over the year.

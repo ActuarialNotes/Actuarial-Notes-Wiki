@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:40cd305733f046318c560435a6443a3259f8ece1ab77836b22336c71b46810b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Principal Components Regression.md
+---
+
 **Principal Components Regression (PCR)** is a dimension reduction method for [[Linear Regression]]. It replaces the $p$ predictors $X_1, \dots, X_p$ with the first $M < p$ principal components $Z_1, \dots, Z_M$, then fits a linear model to those components by least squares.
 
 > $$Z_m = \sum_{j=1}^{p} \phi_{jm} X_j$$

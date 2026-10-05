@@ -1,13 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: medium
+  confidence: high
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bd463bcc644fb40adfd0e1558dd07110f19bd8493fd3d731cf34a9fde3017e17
+  content_hash: sha256:ee1c0dfd57b13c364065a858f87ad7cfbe4c0f14d430c8f5a47ab77fd8cb035d
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.4.4.4 Naive Bayes, eqs 4.29-4.30, estimation options for f_kj, diagonal-covariance remark (printed pp.153-156, PDF pp.163-166); sec.4.4.2 threshold trade-off (printed p.150, PDF p.160); sec.4.4 Generative Models for Classification (printed p.141, PDF p.151)"
-  open_findings: 1
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), §4.4.4 Naive Bayes — eq (4.29) within-class independence, eq (4.30) posterior, options for f_kj (normal / histogram / kernel density / class proportions), 'n not large enough relative to p', QDA with a diagonal class-specific covariance matrix, printed pp.154-156 (PDF pp.164-166); §4.4 priors as training proportions (PDF p.151); §4.4.2 threshold trade-off (printed p.150, PDF p.160), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list (James et al. Chapter 4, §§4.1-4.4, assigned to Section C), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Naive Bayes.md
 ---

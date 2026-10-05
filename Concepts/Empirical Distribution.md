@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5f3c6c8c0ae493d1bfd42287c91f4e13b4c82ae54ec32b7b56c0cc4e6910ff17
-  sources: []
+  sources:
+    - "Loss Data Analytics (Frees et al., open textbook), ch.4 §4.1.1.1-4.1.1.2: sample moment estimators (central moment divides by n; s^2 divides by n - 1 and is unbiased); E[g(X)] estimated by n^-1 sum g(X_i); F_n(x) = n^-1 sum I(X_i <= x), I(X <= x) Bernoulli; probability 1/n on each observation; discrete and right-continuous; kernel density estimators; product-limit (Kaplan-Meier) estimator for censored data, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Siegrist, Random, ch.6 §1 Estimators: for fixed y the empirical distribution function F_n(y) is the sample mean of 1(Y <= y), unbiased for F(y) and consistent; mean-square consistency implies consistency, sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
+    - "Loss Data Analytics, ch.3 Modeling Loss Severity, §3.4.1 Policy Deductibles: LER = (E(X) - E(Y^L))/E(X), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Tse §11.1, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed contents PDF pp.10-13: §11.1.1 'Empirical distribution' (contents only; body not freely available), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Empirical Distribution.md

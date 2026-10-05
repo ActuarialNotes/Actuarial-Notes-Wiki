@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:68000054e50199a9bc2e096472630de8276497b5844785fe25dd529926f6defc
-  sources: []
+  sources:
+    - "Siegrist, Random, ch.1 §6 Convergence: definition P[d(X_n, X) > eps] -> 0 for each eps; convergence with probability 1 (strong) implies convergence in probability, sha256:749de69aba8c7b54e5944ddbe4b342fec8695b32ff46e34409f7b6040241e34f — https://www.randomservices.org/random/prob/Convergence.html"
+    - "Siegrist, Random, ch.2 §9 Convergence in Distribution: convergence in probability implies convergence in distribution; converse when the limit is a constant; continuous mapping for convergence in distribution, sha256:dc6a536ca3359f3952e1ae487a445377de1c1e73491bb56f3baa8862630dcc3d — https://www.randomservices.org/random/dist/Convergence.html"
+    - "Siegrist, Random, ch.5 §3 The Law of Large Numbers: var(M_n) = sigma^2/n -> 0 (mean square), weak law M_n -> mu in probability via Chebyshev's inequality; mean-square convergence implies convergence in probability, sha256:8662dfc55683fa40c79a5d453a450730e2ba151716a20eb61a2db307c33f5e85 — https://www.randomservices.org/random/sample/LLN.html"
+    - "Siegrist, Random, ch.6 §1 Estimators: consistency = convergence in probability; mean-square consistent implies consistent; sample mean and empirical distribution function at a fixed y are consistent, sha256:10914ffca9034209da0111918cfb534d60982bde0bba142a11d61d43114c6e2a — https://www.randomservices.org/random/point/Estimators.html"
+    - "Wikipedia, 'Convergence of random variables', oldid 1373605938, 'Properties': continuous mapping theorem for convergence in probability; convergence in distribution to a constant implies convergence in probability, sha256:96fe0fcda54159af45c3ad6095113531494959b0947024144741b342b9e494d5 — https://en.wikipedia.org/w/index.php?title=Convergence_of_random_variables&oldid=1373605938"
+    - "Wikipedia, 'Proofs of convergence of random variables', oldid 1377469039, 'Convergence of two sequences in probability implies joint convergence in probability' (bound by Pr(|X_n - X| >= eps/2) + Pr(|Y_n - Y| >= eps/2)), sha256:d0829e9607508a32203c650c823ea724a22e0930a900484176c6eec0871444a4 — https://en.wikipedia.org/w/index.php?title=Proofs_of_convergence_of_random_variables&oldid=1377469039"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Hogg Domain B §5.1, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Hogg, McKean & Craig, Introduction to Mathematical Statistics 8th ed. (Global Ed.), publisher preview, contents PDF pp.6-8: §5.1 'Convergence in Probability' (contents only), sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Convergence in Probability.md

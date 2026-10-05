@@ -83,3 +83,14 @@ created: 2026-10-05
 - proposed_action: Change loading_vector() in scripts/figures_exam_mas_ii.py to the new pair and regenerate the SVG (docs/concept-figures.md). Generated figure - not edited by the resolve agent.
 - applied: false
 - fingerprint: d75d8dc59bc6
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: whole log read; F-001/F-002 closed; every edit re-read; example recomputed in numpy (eigenvectors of the 4x4 correlation matrix in the F-001 note; rounded phi_1.phi_2 = 0, norms 1.0008/1.0002, z1 = 2.00); sign bullet against PDF p.515; z_im and unit norm against eqs. 12.2-12.4; link and figure embed resolve
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.2.1 eqs. 12.1-12.4, unit-norm constraint, orthogonality and footnote 2 (PDF pp.505-507), §12.2.4 uniqueness up to sign (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-II Content Outline 2026, Domain C tasks 5-8 (PDF p.3) and James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: Example now uses an orthogonal pair. One minor finding open (F-003): the generated figure still draws the old pair - a figure fix outside this file. Medium: the example is the vault's own and the figure disagrees with it until regenerated.

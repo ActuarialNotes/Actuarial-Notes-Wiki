@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:30b0c6b0e89d28f152a5ca117be7d7310c95e520a855a07c66f0ee23fdf034fb
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §5 intro (PDF p.206), §5.2 eqs. 5.6-5.8 and Fig. 5.11 (PDF pp.218-221), Ex. 5.4.2 (PDF pp.228-229), §8.2.1 bagging/OOB 'around two-thirds' (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Orloff & Bloom, MIT 18.05 Class 24 'Bootstrap confidence intervals' (prep-a), §§6-9 (PDF pp.3-6, 10), sha256:b3d7018c2214a25a7090228e8e0fa8e500922d6eb3fef4e52e5f08962e1dd948 — https://math.mit.edu/~dav/05.dir/class24-prep-a.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), Ch 5 intro (PDF p.206), §5.2 eq. 5.8 and Fig. 5.11 (PDF pp.218-221), §5.3.4 (PDF p.227), Ex. 5.4.2 (PDF p.228), §8.2.1 'around two-thirds of the observations' (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Shapland, Using the ODP Bootstrap Model: A Practitioner's Guide, CAS Monograph 4 (2016), §3.2 (PDF pp.19-20), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
+    - "Orloff & Bloom, MIT 18.05 Class 24 'Bootstrap confidence intervals' (prep-a), §§5-6 empirical bootstrap (PDF pp.3-4), sha256:b3d7018c2214a25a7090228e8e0fa8e500922d6eb3fef4e52e5f08962e1dd948 — https://math.mit.edu/~dav/05.dir/class24-prep-a.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bootstrap.md

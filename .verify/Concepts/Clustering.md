@@ -85,3 +85,14 @@ created: 2026-10-05
 - resolves: F-003
 - status: resolved
 - note: Deleted 'fraud detection' (no source found; ISLR's own fraud example, §4.1 PDF p.140, is a classification problem, not clustering). Kept the two sourced uses: segmentation (James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) §12.4 PDF p.522, 'market segmentation ... amounts to clustering the people in the data set', sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf) and territory grouping (Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch 11 'Clustering' (PDF p.203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf: units grouped into territories 'to minimize within group heterogeneity and maximize between group heterogeneity').
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: whole log read; F-001..F-003 closed; every edit re-read; linkage list (complete/single/average/centroid, inversions) diffed against Table 12.3; scaling condition against PDF p.535; uses against ISLR p.522 and W&M Ch 11; hierarchical algorithm against Algorithm 12.3; example (cut where the fusion-height gap is large) against PDF pp.530-531; links (3) and figure embed resolve
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4 intro market segmentation (PDF p.522), hierarchical algorithm and dendrogram cut (PDF pp.530-532), Table 12.3 linkage and inversions (PDF pp.531-532), §12.4.2 dissimilarity and scaling (PDF pp.534-535), §4.1 fraud as classification (PDF p.140), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch 11 'Clustering' (PDF p.203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; CAS Exam MAS-II Content Outline 2026, Domain C tasks 5-8 (PDF p.3) and James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: Correct in the MAS-II sense (ISLR Ch 12). Ward's replaced by centroid linkage; standardization made application-dependent; unsourced fraud-detection use removed. Medium: the worked example is the vault's own.

@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6e9212937d374039087a988ab2a62f29ddc5e3ffc5d71640ed6529986c87996d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Loss Data Analytics (Frees et al., open textbook), ch.10 §10.2.1 classification by moments (gamma and Weibull have all positive moments, light; Pareto heavier as alpha falls; lognormal has every moment but no MGF, so the methods can disagree), §10.2.2 Definition 10.2 limiting ratio (infinity heavier, constant proportionally equivalent, 0 lighter) and the density form by L'Hopital's rule, Pareto heavier than Weibull and gamma; eq. 10.7 and Example 10.3.9 (Pareto e(pi_q) = (pi_q + theta)/(alpha - 1)), sha256:0dcbdf4bb875807b9db33d06cff8a94770a74a940f660a89de13116ee829ed13 — https://openacttexts.github.io/Loss-Data-Analytics/ChapPortMgt.html"
+    - "Loss Data Analytics, ch.3 §3.2.2 Pareto: f, F, E[X^k] exists iff alpha > k, hazard decreasing (heavy-tail indication); §3.2.3 Weibull: hazard decreasing for shape < 1, constant at 1, increasing for shape > 1; §3.4.1 Policy Deductibles example: excess loss of an exponential is exponential with the same mean, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Tse §2.4, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed contents PDF pp.10-13: §2.4 'Tail properties of claim severity' (contents only; body not freely available), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Tail Weight.md
 ---

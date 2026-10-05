@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9764ae4c4172b63de194b63adddf12cf7019b3b64be146f956aa75dc8a199d92
-  sources: []
+  sources:
+    - "Siegrist, Random, ch.8 §6 Chi-Square Tests: statistic sum (O_j - e_j)^2/e_j, reject iff V > chi^2_(k-1)(1 - alpha), k - 1 df because the counts sum to n, rule of thumb e_j >= 5 and as many cells as possible subject to it, one df lost per estimated parameter, test of independence with E_ij = N_i M_j / n on (k-1)(m-1) df, sha256:379cf5939801c94b251884c0c82f0e6efc7ecce35cec11a645881d7ca9c7a6aa — https://www.randomservices.org/random/hypothesis/ChiSquare.html"
+    - "NIST/SEMATECH e-Handbook §1.3.5.15 Chi-Square Goodness-of-Fit Test: E_i = N(F(Y_u) - F(Y_l)); k - c df with c = estimated parameters + 1; value depends on the binning; applies to discrete distributions such as the binomial and Poisson while K-S and A-D are restricted to continuous ones, sha256:e0110e7f23ed6b65947c69d9970817744285553a943548b52d7a527794c88b13 — https://www.itl.nist.gov/div898/handbook/eda/section3/eda35f.htm"
+    - "SOA Exam C Sample Solutions (C-09-15), Question #222, PDF p.80: Poisson lambda estimated from the data, four cells, d.f. = 4 - 1 - 1 = 2, critical values 5.99 (5%), 7.38 (2.5%), sha256:de58b71716cce5fbbe82cd3b31d1533db67686a86cabe407844ae403534a9a4a — https://www.soa.org/globalassets/assets/files/edu/edu-exam-c-sample-sol.pdf"
+    - "CAS Exam MAS-I Tables (version 01/15/2018), p.20 chi-square 'Lower-tail areas': df 2 0.950 -> 5.99, 0.975 -> 7.38; df 3 0.950 -> 7.81, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Hogg Domain B §4.7; Tse §13.2, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed contents PDF pp.10-13: §13.2.3 'Chi-square goodness-of-fit test' (contents only; body not freely available), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Chi-Square Goodness-of-Fit Test.md

@@ -18,7 +18,7 @@ verification:
   log: .verify/Concepts/Fisher Information.md
 ---
 
-**Fisher Information** $I(\theta)$ measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood at $\theta$. It sets the **Cramér–Rao lower bound**, the smallest variance any [[Unbiasedness|unbiased]] estimator can achieve, and so defines what [[Efficiency|efficient]] means.
+**Fisher Information** $I(\theta)$ measures how sharply the likelihood identifies a parameter — the expected curvature of the log-likelihood at $\theta$. It sets the **Cramér–Rao lower bound**, a lower bound on the variance of any [[Unbiasedness|unbiased]] estimator — one that is not always attained — and so defines what [[Efficiency|efficient]] means.
 
 > $$I(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X\mid\theta)\right)^{2}\right] = -E\!\left[\frac{\partial^{2}}{\partial\theta^{2}}\ln f(X\mid\theta)\right]$$
 
@@ -27,7 +27,7 @@ verification:
 - Information is **additive** over independent observations: a sample of $n$ carries $I_n(\theta) = n\,I(\theta)$, so the bound falls like $1/n$
 - The two expressions above agree under the usual regularity conditions (the support does not depend on $\theta$) — which is why the bound does *not* apply to the $\text{Uniform}(0,\theta)$ problem
 - An estimator attaining the bound is called **efficient**; the ratio $\frac{1/(nI(\theta))}{\text{Var}(\hat\theta)}$ is its efficiency
-- The [[Maximum Likelihood Estimation|MLE]] is asymptotically Normal and asymptotically efficient:
+- Under regularity conditions — a support that does not depend on $\theta$, a true $\theta$ inside the parameter space, a differentiable log-likelihood — the [[Maximum Likelihood Estimation|MLE]] is asymptotically Normal and asymptotically efficient:
   $$\hat\theta_{\text{MLE}} \ \dot\sim\ N\!\left(\theta,\ \frac{1}{n I(\theta)}\right)$$
   which is where MLE standard errors — and the ones printed in [[Parameter Estimate Tables]] — come from
 - In practice the **observed information** $-\ell''(\hat\theta)$ evaluated at the estimate replaces the expectation; inverting it gives the covariance matrix in the multiparameter case

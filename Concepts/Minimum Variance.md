@@ -19,19 +19,21 @@ verification:
   log: .verify/Concepts/Minimum Variance.md
 ---
 
-**Minimum Variance** is a criterion for comparing estimators: among all estimators in a given class (typically unbiased), the one with the **smallest variance** is preferred, as it produces estimates closest to the true parameter on average.
+**Minimum Variance** is a criterion for comparing estimators: among the [[Unbiasedness|unbiased]] estimators of a parameter, the one with the **smallest variance** is preferred — for an unbiased estimator the variance is the [[Mean Square Error]], the expected squared distance from the true parameter.
 
-> **Cramér–Rao Lower Bound (CRLB):** For any unbiased estimator $\hat{\theta}$,
+> **[[Cramér-Rao Lower Bound|Cramér–Rao Lower Bound]] (CRLB):** Under regularity conditions (the support of $f(x \mid \theta)$ does not depend on $\theta$), for any unbiased estimator $\hat{\theta}$,
 > $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
 > $$= \frac{1}{n \cdot I_1(\theta)}$$
 
 > $$\text{where } I_1(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X \mid \theta)\right)^2\right] \text{ is the Fisher information}$$
 
+- $I_1(\theta)$ is the information in one observation and $I(\theta) = n\,I_1(\theta)$ the [[Fisher Information]] in a sample of size $n$
 - An unbiased estimator that **achieves** the CRLB is called **efficient**
+- The regularity conditions matter: for $\text{Uniform}(0,\theta)$ the support depends on $\theta$, and $\frac{n+1}{n}X_{(n)}$ is unbiased with variance $\frac{\theta^2}{n(n+2)}$ — below the $\theta^2/n$ the bound would give
 - The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) achieves minimum variance simultaneously for all $\theta$ within the class of unbiased estimators
 - By the Lehmann–Scheffé theorem, an unbiased function of a **complete sufficient statistic** is the UMVUE
-- [[Maximum Likelihood Estimation|MLEs]] are **asymptotically efficient**: their variance approaches the CRLB as $n \to \infty$
+- Under the same kind of regularity conditions (common support, a true $\theta$ inside the parameter space, a differentiable log-likelihood), [[Maximum Likelihood Estimation|MLEs]] are **asymptotically efficient**: their variance approaches the CRLB as $n \to \infty$
 
 ![[Media/Figures/Minimum_Variance.svg|340]]
 

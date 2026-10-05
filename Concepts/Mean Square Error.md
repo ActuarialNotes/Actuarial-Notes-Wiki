@@ -19,7 +19,7 @@ verification:
   log: .verify/Concepts/Mean Square Error.md
 ---
 
-The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **overall accuracy** by combining both variance (spread) and bias (systematic error):
+The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **overall accuracy** by combining both variance (spread) and bias (systematic error); the same name is used for the prediction error of a fitted model (see *MSE as prediction error* below):
 
 > $$\text{MSE}(\hat{\theta})$$
 
@@ -32,7 +32,7 @@ The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **ov
 - For an **[[Unbiasedness|unbiased]]** estimator, $\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta})$
 - **Bias–variance trade-off**: a slightly biased estimator can have lower MSE than an unbiased one if its variance is sufficiently reduced
 - The **root mean square error (RMSE)** $= \sqrt{\text{MSE}}$ is in the same units as $\theta$
-- In actuarial credibility, the [[Credibility Theory|credibility estimator]] is chosen to minimize MSE
+- In [[Bühlmann Credibility|Bühlmann (least-squares) credibility]], the credibility estimator is chosen to minimize MSE
 
 ![[Media/Figures/Mean_Square_Error.svg|340]]
 
@@ -45,3 +45,22 @@ The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **ov
 > > $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ so $\text{Bias}(\hat{\sigma}^2) = -\frac{\sigma^2}{n}$ and
 > > $$\text{MSE}(\hat{\sigma}^2) = \frac{2(n-1)\sigma^4}{n^2} + \frac{\sigma^4}{n^2} = \frac{(2n-1)\sigma^4}{n^2}$$
 > > For $n > 1$, $\text{MSE}(\hat{\sigma}^2) < \text{MSE}(S^2)$, so the biased MLE has smaller MSE despite being biased.
+
+## MSE as prediction error
+
+In statistical learning the target is a random response, not a fixed parameter. For a model $Y = f(X) + \varepsilon$ fitted as $\hat f$, the MSE on the $n$ observations used to fit it is the **training MSE**; the same average over unseen observations is the **test MSE** (see [[Test Error]]):
+
+> $$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}\big(y_i - \hat f(x_i)\big)^2$$
+
+The expected test MSE at a point $x_0$ has **three** parts, not two:
+
+> $$
+> \begin{aligned}
+> E\big[(y_0 - \hat f(x_0))^2\big] &= \text{Var}\big(\hat f(x_0)\big) \\
+> &\quad + \big[\text{Bias}\big(\hat f(x_0)\big)\big]^2 \\
+> &\quad + \text{Var}(\varepsilon)
+> \end{aligned}
+> $$
+
+- $\text{Var}(\varepsilon)$ is the **irreducible error**: the expected test MSE can never lie below it, however good $\hat f$ is (the [[Bias-Variance Tradeoff]] governs the other two terms)
+- Reserving uses the same split: Mack (1994) takes the MSE of a reserve forecast $\hat C_{iI}$ given the data $D$ observed so far, $E\big[(\hat C_{iI} - C_{iI})^2 \mid D\big]$, and splits it into $\text{Var}(C_{iI} \mid D)$, the future random (process) error, plus $\big(E[C_{iI} \mid D] - \hat C_{iI}\big)^2$, the estimation error — see [[Mack Chain Ladder Model]]

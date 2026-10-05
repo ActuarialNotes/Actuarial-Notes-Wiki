@@ -18,7 +18,7 @@ verification:
   log: ".verify/Concepts/Cramér-Rao Lower Bound.md"
 ---
 
-The **Cramér–Rao lower bound** (CRLB) is the smallest variance that any [[Unbiasedness|unbiased]] estimator of a parameter can have, under standard regularity conditions. For a [[Random Sample|random sample]] of size $n$ it is the reciprocal of the sample's [[Fisher Information|Fisher information]], $n I(\theta)$ — the benchmark against which [[Efficiency|efficiency]] is measured.
+The **Cramér–Rao lower bound** (CRLB) is a lower bound — not always attained — on the variance of any [[Unbiasedness|unbiased]] estimator of a parameter, under standard regularity conditions. For a [[Random Sample|random sample]] of size $n$ it is the reciprocal of the sample's [[Fisher Information|Fisher information]], $n I(\theta)$ — the benchmark against which [[Efficiency|efficiency]] is measured.
 
 > $$\text{Var}(\hat\theta) \ge \frac{1}{n\,I(\theta)}$$
 
@@ -29,7 +29,7 @@ The **Cramér–Rao lower bound** (CRLB) is the smallest variance that any [[Unb
 - $\hat\theta$ is any unbiased estimator of $\theta$, and $T$ any unbiased estimator of a function $g(\theta)$ — a probability, a mean or a percentile. $I(\theta)$ is the information in **one** observation; information adds over independent observations, hence the factor $n$. The same $I(\theta)$ equals $E\big[(\partial_\theta \ln f)^2\big]$.
 - **Regularity.** The bound needs the support of $f$ not to depend on $\theta$. It fails for $\text{Uniform}(0,\theta)$: there $\frac{n+1}{n}\max X_i$ is unbiased with variance $\frac{\theta^2}{n(n+2)}$, far below the $\theta^2/n$ a naive calculation would give.
 - **Attaining it.** An unbiased estimator whose variance equals the bound is **efficient**, and is then the [[Minimum Variance|minimum-variance]] unbiased estimator. The bound is reached only when the score $\partial_\theta \ln L$ is a linear function of the estimator, which essentially confines attainment to [[Exponential Family|exponential-family]] models. Often no unbiased estimator attains it, even the best one.
-- **Large samples.** The [[Maximum Likelihood Estimation|MLE]] attains the bound asymptotically, $\hat\theta \,\dot\sim\, N\big(\theta,\ 1/(nI(\theta))\big)$, which is where MLE standard errors come from.
+- **Large samples.** Under the same kind of regularity conditions (a support that does not depend on $\theta$, a true $\theta$ inside the parameter space, a differentiable log-likelihood), the [[Maximum Likelihood Estimation|MLE]] attains the bound asymptotically, $\hat\theta \,\dot\sim\, N\big(\theta,\ 1/(nI(\theta))\big)$, which is where MLE standard errors come from.
 - The bound restricts **unbiased** estimators only. A biased estimator can have smaller variance, and even smaller [[Mean Square Error]], than the CRLB.
 
 > [!example]- Bound for Estimating the No-Claim Probability {Example}

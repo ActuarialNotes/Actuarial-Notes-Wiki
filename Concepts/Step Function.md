@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:431b7a664ccb31ee4853797a4b353cf89915ea3117cdb7f1f069e79aab4edd78
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §7.2 'Step Functions', eqs (7.4)-(7.6) and footnote 2, printed pp.292-294 (PDF pp.300-302); §7.3 eq (7.7), printed p.294; §7.4.1 'piecewise polynomials of degree 0', printed p.295 (PDF p.303); §7.7.1 Fig 7.11 caption (education as a step function), printed p.308 (PDF p.316), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list p.6 (James et al. Chapters 5, 6 and 7 assigned to tasks C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Step Function.md

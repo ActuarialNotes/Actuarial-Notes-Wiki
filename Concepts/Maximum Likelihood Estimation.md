@@ -19,7 +19,7 @@ verification:
   log: .verify/Concepts/Maximum Likelihood Estimation.md
 ---
 
-**Maximum Likelihood Estimation (MLE)** is a method of parameter estimation that chooses the parameter value $\hat{\theta}$ that **maximizes the likelihood function** — the probability of observing the given data as a function of the parameter.
+**Maximum Likelihood Estimation (MLE)** is a method of parameter estimation that chooses the parameter value $\hat{\theta}$ that **maximizes the likelihood function** — the joint probability (discrete data) or joint density (continuous data) of the observed sample, read as a function of the parameter.
 
 > $$L(\theta) = \prod_{i=1}^n f(x_i \mid \theta)$$
 
@@ -28,8 +28,8 @@ verification:
 > $$\ell(\theta) = \ln L(\theta) = \sum_{i=1}^n \ln f(x_i \mid \theta)$$
 
 - Taking the log turns the product into a sum and simplifies maximization
-- The MLE is found by solving the **score equation**: $\ell'(\hat{\theta}) = 0$
-- MLEs are **consistent**, **asymptotically normal**, and **asymptotically efficient** (achieve the Cramér–Rao lower bound in large samples)
+- When the maximum is at an interior point and the log-likelihood is differentiable, the MLE solves the **score equation** $\ell'(\hat{\theta}) = 0$. The maximum can instead sit on a boundary: for $\text{Uniform}(0, \theta)$, $L(\theta) = \theta^{-n}$ on $\theta \ge \max x_i$ is decreasing, so $\hat{\theta} = \max X_i$, where $\ell'(\hat{\theta}) = -n/\hat{\theta} \ne 0$
+- Under regularity conditions — every $f(x \mid \theta)$ has the same support, the true $\theta$ is an interior point, the log-likelihood is differentiable, and the score equation has a unique root — MLEs are **consistent**, **asymptotically normal** with variance $1/[nI(\theta)]$ (see [[Fisher Information]]), and **asymptotically efficient** (achieve the [[Cramér-Rao Lower Bound]] in large samples). $\text{Uniform}(0, \theta)$, whose support depends on $\theta$, is the standard exception
 - **Invariance property**: if $\hat{\theta}$ is the MLE of $\theta$, then $g(\hat{\theta})$ is the MLE of $g(\theta)$
 
 **Adjustments for incomplete data:**

@@ -22,7 +22,7 @@ A **Sampling Distribution** is the probability distribution of a statistic (e.g.
 
 > $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1} \quad \text{(normal population)}$$
 
-**Key sampling distributions used in hypothesis testing:**
+**Key sampling distributions used in hypothesis testing** — each exact for a random sample from a Normal population; the $F$ row compares two *independent* Normal samples, of sizes $n_1$ and $n_2$:
 
 | Statistic | Distribution | Use |
 | :--- | :--- | :--- |

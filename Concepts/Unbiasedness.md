@@ -24,7 +24,7 @@ An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expec
 > $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta = 0$$
 
 - The **sample mean** $\bar{X} = \frac{1}{n}\sum X_i$ is an unbiased estimator of the population mean $\mu$
-- The **sample variance** $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$ is unbiased for $\sigma^2$; dividing by $n$ instead gives a biased (but lower MSE) estimator
+- The **sample variance** $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$ is unbiased for $\sigma^2$; dividing by $n$ instead gives a biased estimator. For a **normal** population the divisor-$n$ version has the lower MSE, but that does not hold for every population: for Bernoulli$(1/2)$ data with $n \geq 5$, $S^2$ has the lower MSE
 - Unbiasedness alone does not imply a good estimator — a large [[Variance]] is also undesirable; the **[[Mean Square Error]]** combines both: $\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta}) + \text{Bias}^2(\hat{\theta})$
 - The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) is the unbiased estimator with smallest variance for all $\theta$
 - **[[Maximum Likelihood Estimation|MLEs]]** are generally **asymptotically** unbiased but may be biased in small samples

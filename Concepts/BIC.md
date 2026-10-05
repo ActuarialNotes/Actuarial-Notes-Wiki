@@ -23,9 +23,9 @@ The **Bayesian Information Criterion (BIC)** (also called the **Schwarz criterio
 >
 > $$\text{where } \ell(\hat{\boldsymbol{\beta}}) \text{ is the maximized log-likelihood, } p \text{ is the number of parameters, and } n \text{ is the sample size}$$
 
-- **Lower BIC** indicates a better model; like [[AIC]], it does not require nested models
+- **Lower BIC** indicates a better model; like [[AIC]], it does not require nested models, but the models must be fitted by maximum likelihood to the **same data**: the same $n$ observations of the same, untransformed response (a model for $\ln Y$ cannot be compared with one for $Y$, nor a Poisson GLM with a Gamma GLM)
 - BIC tends to select **simpler models** than AIC for large $n$ since $\ln(n) > 2$ when $n > 7$
-- BIC is consistent: as $n \to \infty$, it selects the true model (if it is among the candidates); AIC is not consistent but is **asymptotically efficient**
+- When the true model is among the candidates, BIC is **consistent**: as $n \to \infty$ it selects the smallest true model with probability approaching 1; AIC is not consistent when a larger candidate also contains the true model. When the true model is not among the candidates, AIC is **asymptotically efficient**: its chosen model predicts asymptotically as well as the best candidate
 - In practice, if AIC and BIC disagree, BIC typically selects a more parsimonious model
 
 ![[Media/Figures/BIC.svg|340]]

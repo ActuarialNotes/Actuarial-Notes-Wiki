@@ -30,7 +30,7 @@ The **Sample Mean** $\bar{X}$ is the arithmetic average of a random sample and t
 - By the [[Central Limit Theorem]], $\bar{X}$ is approximately $N(\mu, \sigma^2/n)$ for large $n$ whatever the population shape — the fact behind almost every test and [[Confidence Interval]] in this section
 - For a Normal population the result is exact: $\bar{X} \sim N(\mu, \sigma^2/n)$, and $\bar{X}$ is independent of the [[Sample Variance]] $S^2$
 - $\bar{X}$ is the [[Maximum Likelihood Estimation|MLE]] of $\mu$ for Normal, Poisson, and exponential data, and is a function of the [[Sufficient Statistic]] $\sum X_i$ in each case
-- It is **not resistant**: one extreme claim shifts $\bar{X}$ without limit, which is why a [[Box Plot]]'s median is reported alongside it for skewed severity data
+- It is **not resistant**: one extreme claim shifts $\bar{X}$ without limit, while the median and the other quantiles a [[Box Plot]] is drawn from are relatively insensitive to changes in the data
 - With unequal exposures, the exposure-weighted mean $\sum w_i X_i / \sum w_i$ is the right estimator — the same idea that a GLM handles with an [[Offset Variable|offset]] or weights
 
 ![[Media/Figures/Sample_Mean.svg|340]]

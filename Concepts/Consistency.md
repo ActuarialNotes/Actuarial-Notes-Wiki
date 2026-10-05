@@ -24,7 +24,7 @@ An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in 
 > $$\text{i.e., } \lim_{n\to\infty} P\big(|\hat{\theta}_n - \theta| > \varepsilon\big) = 0 \quad \text{for every } \varepsilon > 0$$
 
 - A convenient **sufficient condition**: if $\text{Bias}(\hat{\theta}_n) \to 0$ and $\text{Var}(\hat{\theta}_n) \to 0$ as $n \to \infty$, then $\hat{\theta}_n$ is consistent (this follows from $\text{MSE}(\hat{\theta}_n) \to 0$ and Chebyshev's inequality, since [[Mean Square Error|MSE]] bounds the tail probability)
-- Consistency is a **large-sample (asymptotic)** property — it says nothing about how the estimator behaves at small $n$, unlike [[Unbiasedness]], which must hold for every $n$
+- Consistency is a **large-sample (asymptotic)** property — it says nothing about how the estimator behaves at small $n$, unlike [[Unbiasedness]], which is a property of the estimator at the sample size actually used (it must hold for every value of $\theta$)
 - An estimator can be **biased but still consistent** (e.g., the MLE of $\sigma^2$ divides by $n$ instead of $n-1$, but the bias vanishes as $n \to \infty$)
 - **[[Maximum Likelihood Estimation|MLEs]]** are consistent under standard regularity conditions, which is part of why MLE is the dominant estimation method in practice
 

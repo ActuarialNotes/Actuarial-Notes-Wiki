@@ -25,7 +25,7 @@ verification:
 
 > $$S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-- Dividing $S^2$ by $n-1$ (rather than $n$) makes it an [[Unbiasedness|unbiased]] estimator of $\sigma^2$
+- Dividing the sum of squared deviations by $n-1$ (rather than $n$) makes $S^2$ an [[Unbiasedness|unbiased]] estimator of $\sigma^2$
 - Every statistic has its own [[Sampling Distribution]], which quantifies how it varies from sample to sample
 - **Descriptive** statistics summarize data (mean, variance, quantiles); **inferential** statistics generalize to the population via estimation (e.g. [[Maximum Likelihood Estimation]]) and [[Hypothesis Testing]]
 - Statistics builds on [[Probability]]: a probability model for the data is assumed, then its parameters are estimated and tested

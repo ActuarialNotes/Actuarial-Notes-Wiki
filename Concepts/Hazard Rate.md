@@ -2,16 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-04
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a4dcc4534bf1f49f404b7a7cfb21dc379d27db7dc4848e9acafd6116e1e9ef15
+  content_hash: sha256:9b1bfed525264c281942c0b6e27f31fc09a58099d5c379ade946ddb0e175cd3d
   sources:
-    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.37-44 (force of mortality: definition as limiting death rate, μ = f/S = -d/dx ln S, S = exp(-∫μ), exponential = constant force, Weibull shape γ>1 increasing / 0<γ<1 decreasing, aging vs burn-in/infant mortality, bathtub shape, Gompertz-Makeham A + Bc^x with Gompertz A = 0) and §2.5 pp.59-60, sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
-    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), 'Distribution and Quantile Functions', Reliability section, html sha256:50c869a04cf2c1fdbb4816de5a7a594436951d2e00cadfa069d12a10d6bd7173 — https://www.randomservices.org/random/dist/CDF.html"
-    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.10-11 and footnote 3 ('hazard rate when used to describe mortality is called the force of mortality'; λ(t); cumulative hazard; P&C risks have decreasing hazard rates), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-    - "SOA, Notation and Terminology Used on Exam LTAM (version Aug 1, 2021), pp.1-2, sha256:ffcc9efd3c0a72edadf4b259703660e07515b313f6fd9ffa57e25d72b1d090f9 — https://www.soa.org/globalassets/assets/Files/Edu/2018/ltam-notation-note.pdf"
-  open_findings: 1
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.38-44 (force of mortality as limiting death rate; also failure rate / hazard intensity; μ = f/S = -d/dx ln S; S = exp(-∫μ); exponential = constant force; Weibull γ>1 increasing, 0<γ<1 decreasing; increasing = aging, decreasing = burn-in; Gompertz-Makeham A + Bc^x, Gompertz A = 0, increasing for c > 1, convex for B > 0), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.10-11 and footnote 3 (hazard rate for mortality = force of mortality; λ(t); cumulative hazard), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Hazard Rate.md
 ---

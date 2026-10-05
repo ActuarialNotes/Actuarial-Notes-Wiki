@@ -2,17 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-04
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a3adffc7e3c77240246781c4b2056fee6ef943ac0d48f99c059e85044afb37f2
+  content_hash: sha256:574de227ea38b525c8a93b5f99c666d6c8bffe3fecdbf96a0033f8f0786d409d
   sources:
-    - "Frees, Classic Joint Life Models (Univ. of Wisconsin-Madison course notes, 2013): '1. Joint Life Fundamentals' html sha256:a439240d8baac0131723263bf140fbb1610c5c5c2598fa6f7b0829f3b7950f45, 'Joint-Life Probability Functions' sha256:9c3b020b73d2de68ec2f4192628cef570cefe9c5f4a2e1a1d8dba9dc90a4a28d, 'Last-Survivor Probability Functions' sha256:e4c2c9b40e6db153a0c0baed2a029e7c782c646d13e46af046a938da00bda7f3, 'Relating Status Distributions' sha256:ae1e1765770d1a1bff6f7b6ad0ba1f683ac29d8667d55b3486e1aaaa1b7cb8b9, 'Lifetime Moments' sha256:9e6529ee30e580938858769871654ffb5c8492ce24ed4b9e12e1b46be5eda0c9 — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/1_joint_life_fundamentals.html"
-    - "SOA Exam MLC Sample Solutions (MLC-09-16, 2016), Q80 (p.46; PDF p.47), sha256:791e13b42b926bfe8abe54f489fa6767aa508c9c0419bfa2340a24e9a2ea37f7 — https://www.soa.org/globalassets/assets/files/edu/edu-2014-spring-mlc-sol.pdf"
-    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.11-12 (annuities on joint lives, a_xy and a_{xy-bar}, a_x + a_y = a_xy + a_{xy-bar}) and appendix p.14, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "Frees, Classic Joint Life Models (Univ. of Wisconsin-Madison course notes, 2013): '1. Joint Life Fundamentals' html sha256:a439240d8baac0131723263bf140fbb1610c5c5c2598fa6f7b0829f3b7950f45 — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/1_joint_life_fundamentals.html; 'Joint-Life Probability Functions' sha256:9c3b020b73d2de68ec2f4192628cef570cefe9c5f4a2e1a1d8dba9dc90a4a28d — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/jointlife_probability_functions.html; 'Last-Survivor Probability Functions' sha256:e4c2c9b40e6db153a0c0baed2a029e7c782c646d13e46af046a938da00bda7f3 — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/lastsurvivor_probability_functions.html; 'Relating Status Distributions' sha256:ae1e1765770d1a1bff6f7b6ad0ba1f683ac29d8667d55b3486e1aaaa1b7cb8b9 — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/relating_status_distributions.html; 'Lifetime Moments' sha256:9e6529ee30e580938858769871654ffb5c8492ce24ed4b9e12e1b46be5eda0c9 — https://media.wsb.wisc.edu/data/act_sci/Frees/ActMathII/JointLifeClassics/JointLifeClassic05May2013/lifetime_moments.html"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 p.6 (double dot = payments at the start of the year), ch.6 pp.11-12 (annuities on joint lives ä_xy until the first death and ä_{xy-bar} until both have died; arbitrage identity ä_x + ä_y = ä_xy + ä_{xy-bar}; exercise), appendix p.13 Ex.3 (independent lives: multiply probabilities) and p.14 (answer 15 + 13 - 20 = 8), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Fall 2018, Q13 — official exam paper (scan), PDF p.17, sha256:47ced888a314db1a5e29e28c0a52f989966b21a079b1c08634b73dc90e844296 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_fmasi-18.pdf"
-    - "SOA, Notation and Terminology Used on Exam LTAM (version Aug 1, 2021), pp.1-2, sha256:ffcc9efd3c0a72edadf4b259703660e07515b313f6fd9ffa57e25d72b1d090f9 — https://www.soa.org/globalassets/assets/Files/Edu/2018/ltam-notation-note.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 2
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Joint Life.md
 ---

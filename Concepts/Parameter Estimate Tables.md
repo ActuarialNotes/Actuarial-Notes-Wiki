@@ -27,9 +27,10 @@ verification:
 | **Estimate** ($\hat{\beta}$) | Maximum likelihood estimate of the coefficient |
 | **Std. Error** | Estimated standard deviation of $\hat{\beta}$ |
 | **z-value** or **t-value** | $\hat{\beta} / \text{SE}(\hat{\beta})$; test statistic for $H_0: \beta = 0$ |
-| **p-value** | $P(\lvert Z \rvert \geq \lvert z\text{-value}\rvert)$; significance of the predictor |
-| **95% CI** | $\hat{\beta} \pm 1.96 \cdot \text{SE}(\hat{\beta})$ |
+| **p-value** | Significance of the predictor: $P(\lvert T_{n-p-1} \rvert \geq \lvert t\text{-value}\rvert)$ for a t-value, $P(\lvert Z \rvert \geq \lvert z\text{-value}\rvert)$ for a z-value |
+| **95% CI** | $\hat{\beta} \pm t_{0.025,\, n-p-1} \cdot \text{SE}(\hat{\beta})$ for a t-value, $\hat{\beta} \pm 1.96 \cdot \text{SE}(\hat{\beta})$ for a z-value |
 
+- **Which distribution applies**: a [[Linear Regression|linear regression]] table reports **t-values** — $\sigma^2$ is estimated from the residuals, so under Normal errors $\hat\beta_j/\text{SE}(\hat\beta_j)$ follows a $t$ distribution with $n-p-1$ degrees of freedom ($p$ predictors plus an intercept). A GLM table such as Poisson or logistic regression reports **z-values**: Wald statistics referred to the standard Normal, because the maximum likelihood estimate is approximately Normal in large samples. The two agree as the degrees of freedom grow — the two-sided 5% critical value is $2.09$ at 20 df and $1.98$ at 100 df, against $1.96$ — but with few residual df the $t$ multiplier is much larger ($3.18$ at 3 df)
 - A small p-value (e.g., $< 0.05$) indicates the predictor is statistically significant
 - For a log-[[Link Function]] model (Poisson or Gamma GLM), $e^{\hat{\beta}}$ is the **multiplicative factor** on the mean per unit increase in the predictor
 - The **reference level** of a categorical predictor is absorbed into the intercept; other levels are interpreted relative to it

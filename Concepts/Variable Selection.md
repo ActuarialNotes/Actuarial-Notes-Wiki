@@ -20,11 +20,15 @@ verification:
 
 | Method | Description |
 | :--- | :--- |
-| Forward selection | Start with no predictors; add the most significant one at each step |
-| Backward elimination | Start with all predictors; remove the least significant one at each step |
-| Stepwise | Alternates forward and backward steps, re-evaluating at each step |
-| Criterion-based | Compare candidate models directly via [[AIC]], [[BIC]], or [[Deviance]] |
+| Best subset selection | Fit every combination of the $p$ predictors; keep the best model of each size (lowest RSS, or lowest [[Deviance]] for a GLM), then choose among the sizes as in the last row |
+| Forward stepwise | Start with no predictors; at each step add the one that most improves the fit; choose among the resulting sizes as in the last row |
+| Backward stepwise | Start with all predictors (needs $n > p$); at each step remove the least useful one; choose among the sizes as in the last row |
+| Hybrid stepwise | Add predictors as in forward stepwise, but after each addition remove any that no longer improve the fit |
+| Lasso ([[Regularization]]) | Fit all $p$ predictors with a penalty that sets some coefficients exactly to zero, so the selection happens within the fit; the penalty $\lambda$ is chosen by [[Cross-Validation]] |
+| Choosing among sizes | Compare models with different numbers of predictors via [[AIC]] (or $C_p$), [[BIC]], adjusted $R^2$ or [[Cross-Validation]] error — not by raw RSS, $R^2$ or deviance, which always improve as predictors are added |
 
+- **How many models are fitted.** Best subset selection fits all $2^p$ models; forward and backward stepwise each fit only $1 + p(p+1)/2$. With $p = 20$ that is $1{,}048{,}576$ models against $211$. The price is that stepwise selection is not guaranteed to find the best subset: if the best one-predictor model is $\{x_1\}$ but the best two-predictor model is $\{x_2, x_3\}$, forward stepwise cannot reach it, because every later model must keep $x_1$
+- Raw [[Deviance]] still has two uses: comparing models with the same number of parameters (best subset's choice within each size), and comparing nested models through a deviance (F or likelihood-ratio) test. Compared raw across sizes it gives an unfair advantage to the model with more parameters
 - Lower [[AIC]] or [[BIC]] indicates a better trade-off between fit and complexity; **BIC penalizes additional parameters more heavily** than AIC, so it tends to favor sparser models
 - In a [[Linear Mixed Model]], variable selection also requires deciding which effects are **fixed** versus **random**, not just which predictors to include
 - Variable selection should combine statistical significance (from the [[Parameter Estimate Tables|parameter estimate table]]) with business and actuarial judgment, e.g., regulatory restrictions on certain rating variables

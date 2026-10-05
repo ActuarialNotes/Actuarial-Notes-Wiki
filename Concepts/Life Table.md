@@ -2,15 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-04
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:102117df3cdcd49bca010274fa8525798e56da43712c3d90c5994ea658109f24
+  content_hash: sha256:7acf71268e60d4e7b19a773011a7efa4588a2777c1698e5a34467e12be62b3a2
   sources:
-    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.1-2 pp.1-5 (l_x, d_x = l_x - l_{x+1}, q_x = d_x/l_x, p_x, npx = l_{x+n}/l_x = p_x p_{x+1}...p_{x+n-1}, nqx = 1 - npx, radix), ch.6 p.10 (linear / exponential / hyperbolic interpolation), ch.7 p.12 (curtate expectation = sum of npx from n = 1; complete = curtate + 0.5 under uniform deaths), appendix p.13 (Ex.2: 10p50 x q60, a deferred death probability), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.1-2 pp.3-5 (l_x, d_x = l_x - l_{x+1}, q_x = d_x/l_x, p_x = l_{x+1}/l_x, radix, npx = l_{x+n}/l_x = p_x p_{x+1}...p_{x+n-1}, nqx = 1 - npx), ch.6 p.10 (linear / exponential / hyperbolic interpolation), ch.7 p.12 (curtate expectation = Σ_{n>=1} npx; complete = curtate + 0.5 under uniform deaths), appendix p.13 (Ex.2, 10p50 × q60), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
-    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.38-39 and §2.5 p.59 (S(x) = l_x/l_0, μ(x+t) = -(d/dt) ln l_{x+t}), §3.2 pp.62-65 (piecewise-uniform density: S(k+t) = S(k) - t f(k); piecewise-constant hazard: S(k+t) = S(k)e^{-tμ(k)}, p_k = e^{-μ(k)}), §4.2 p.110 eq.(4.31), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 1
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.1 pp.1-2 (S(x) = l_x/l_0), §2.2 pp.38-42 (f = -S', μ = -d/dx ln S), §4.2 p.110 cases (a) uniform failures and (b) constant force within integer ages, eq.(4.31) complete = curtate + 1/2 exactly under (a), approximately under (b), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Table.md
 ---

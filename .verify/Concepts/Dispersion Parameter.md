@@ -43,3 +43,32 @@ created: 2026-10-05
 - proposed_action: Replace the list with the Monograph's cause.
 - applied: true
 - fingerprint: 0ba54382a584
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Estimator bullet now 'the unscaled residual Deviance over degrees of freedom, D/(n-p)' and 'The Pearson version is the standard approach' (Rodriguez c4a sec.1 wording); test bullet now 'With D the unscaled deviance, the scaled deviance D* = D/phi is compared against chi^2; ... nested models that differ by r parameters use (Delta D/r)/phihat, with phihat from the larger model'. Consistent with Concepts/Deviance.md as fixed in this run (D unscaled, D* = D/phi). Sources: Monograph 5 sec.6.1.2 (PDF p.73) and eq.17 (PDF p.75), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; Rodriguez App. B sec.B.3.2 (PDF pp.6-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; deviance/df and Pearson/df as the two estimators, Pearson the default: statsmodels GLM.fit docs, 'X2 is Pearson's chi-square divided by df_resid ... dev is the deviance divided by df_resid', sha256:decbc81735f2541367b2d5a57dd8eca35a5e7fca79d4485150e84498f2be3f41 — https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLM.fit.html.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: Cause list replaced by the Monograph's: 'usually from variation in risk level among policyholders that the model's predictors do not explain' ('correlated observations' deleted as unsourced). Source: Monograph 5 sec.2.7.2 (PDF p.31), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: every edit re-read against its source (unscaled/scaled deviance and the F test vs Monograph sec.6.1.2/eq.17 and Rodriguez B.3.2; two estimators vs statsmodels and Rodriguez c4a; overdispersion cause vs Monograph sec.2.7.2); cross-checked against Concepts/Deviance.md as fixed in this run (same convention); Pearson estimator and SE scaling vs Rodriguez c4a; both examples recomputed (2.50, 0.237, Wald 2.67 -> 1.69; CV 0.80, alpha 1.5625); links resolve
+- sources_checked: Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1, B.2, B.3.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; Rodriguez, GLM lecture notes, Models for Count Data With Overdispersion, sec.1 (Pearson phihat = chi2_p/(n-p); SEs x sqrt(phihat); beta unchanged) (PDF pp.1-2), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.7.2 (PDF p.31), sec.6.1.2 (PDF p.73), sec.6.2.1 eq.17 (PDF p.75), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; statsmodels documentation, GLM.fit, 'scale' argument (X2 = Pearson chi-square / df_resid, default; dev = deviance / df_resid), sha256:decbc81735f2541367b2d5a57dd8eca35a5e7fca79d4485150e84498f2be3f41 — https://www.statsmodels.org/stable/generated/statsmodels.genmod.generalized_linear_model.GLM.fit.html
+- note: Resolve run: two applied minors (F-001 deviance convention made explicit to match the Deviance page; F-002 unsourced cause replaced) resolved.

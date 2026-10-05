@@ -24,7 +24,7 @@ verification:
 > $$f(x_1, \ldots, x_n \mid \theta) = g\big(T(x_1,\ldots,x_n),\, \theta\big) \cdot h(x_1, \ldots, x_n)$$
 
 - An estimator should be a function of a sufficient statistic; by **Rao–Blackwell**, conditioning any [[Unbiasedness|unbiased]] estimator on $T$ never increases its variance, pushing toward [[Minimum Variance]]
-- A [[Maximum Likelihood Estimation|MLE]] is always a function of a sufficient statistic, so it automatically satisfies the sufficiency criterion
+- If a [[Maximum Likelihood Estimation|MLE]] exists, one can always be chosen that is a function of the sufficient statistic, and a **unique** MLE always is one — so it satisfies the sufficiency criterion. Without uniqueness only that choice is guaranteed: for $\text{Uniform}[a, a+1]$, any statistic in $[X_{(n)} - 1,\ X_{(1)}]$ is an MLE of $a$
 - An unbiased function of a **complete** sufficient statistic is the UMVUE (Lehmann–Scheffé)
 
 ![[Media/Figures/Sufficiency.svg|340]]

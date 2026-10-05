@@ -18,15 +18,17 @@ verification:
   log: .verify/Concepts/Efficiency.md
 ---
 
-**Efficiency** compares estimators by their variance relative to the smallest variance achievable: an [[Unbiasedness|unbiased]] estimator is **efficient** if it attains the Cramér–Rao lower bound, and one estimator is **relatively more efficient** than another if it has smaller variance (equivalently, smaller [[Mean Square Error]]) for the same parameter.
+**Efficiency** compares [[Unbiasedness|unbiased]] estimators by their variance relative to the smallest variance achievable: an unbiased estimator is **efficient** if it attains the Cramér–Rao lower bound, and of two unbiased estimators of the same parameter, the one with smaller variance is **relatively more efficient** (for an unbiased estimator the variance is the [[Mean Square Error]]).
 
 > $$\text{Relative Efficiency}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$
 
-> $$\text{Efficiency}(\hat{\theta}) = \frac{1/I(\theta)}{\text{Var}(\hat{\theta})} \leq 1$$
+> $$\text{Efficiency}(\hat{\theta}) = \frac{1/\big(nI(\theta)\big)}{\text{Var}(\hat{\theta})} \leq 1$$
 
-- $I(\theta)$ is the Fisher information, so $1/I(\theta)$ is the [[Minimum Variance|Cramér–Rao lower bound]] (CRLB); an unbiased estimator with $\text{Efficiency}(\hat{\theta}) = 1$ attains the CRLB and is called **efficient**
+- $I(\theta)$ is the [[Fisher Information]] in a single observation, so $1/\big(nI(\theta)\big)$ is the [[Cramér-Rao Lower Bound|Cramér–Rao lower bound]] (CRLB) for a sample of size $n$; an unbiased estimator with $\text{Efficiency}(\hat{\theta}) = 1$ attains the CRLB and is called **efficient**
+- The bound, and with it $\text{Efficiency} \leq 1$, holds only under **regularity conditions** — in practice, the support of $f(x \mid \theta)$ must not depend on $\theta$. For $\text{Uniform}(0,\theta)$ it fails: $\frac{n+1}{n}X_{(n)}$ is unbiased with variance $\frac{\theta^2}{n(n+2)}$, below the $\theta^2/n$ the formula would give, an "efficiency" of $n+2 > 1$
 - If $\text{Var}(\hat{\theta}_2) > \text{Var}(\hat{\theta}_1)$, then $\hat{\theta}_1$ is **more efficient** — relative efficiency above $1$ favors $\hat{\theta}_1$
-- **[[Maximum Likelihood Estimation|MLEs]]** are **asymptotically efficient**: their variance converges to the CRLB as $n \to \infty$, even when no finite-sample estimator attains it exactly
+- Relative efficiency compares two **unbiased** estimators (asymptotic relative efficiency, two asymptotically unbiased ones). If either is biased, compare their [[Mean Square Error|MSEs]] instead: $\text{MSE} = \text{Var} + \text{Bias}^2$, so the smaller variance need not mean the smaller MSE
+- Under regularity conditions (a support that does not depend on $\theta$, a true $\theta$ inside the parameter space, a differentiable log-likelihood), **[[Maximum Likelihood Estimation|MLEs]]** are **asymptotically efficient**: their variance converges to the CRLB as $n \to \infty$, even when no finite-sample estimator attains it exactly
 - Efficiency is distinct from [[Consistency]] and [[Unbiasedness]]: an estimator can be consistent and unbiased yet inefficient if a lower-variance unbiased alternative exists
 
 ![[Media/Figures/Efficiency.svg|340]]

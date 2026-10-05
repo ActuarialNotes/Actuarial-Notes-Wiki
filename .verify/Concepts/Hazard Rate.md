@@ -36,3 +36,23 @@ created: 2026-10-04
 - date: 2026-10-04
 - locus: F-001 evidence; validation pass checks
 - note: F-001's evidence ('Recomputed before reading the page's value') and the pass's checks ('recomputed from scratch in Python before reading the stated answers') overstate the P5 ordering. The page, including both examples' stated answers, was read in full in the context bundle first; the recomputation was then done from scratch in Python and compared. The numbers are unaffected: H(5) = 0.1125, e^{-0.1125} = 0.8935973 (0.8936), μ(t) = 0.10t.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-001
+- status: resolved
+- note: Example 'Recovering the Survival Function from a Hazard Rate': last line changed from S(5) = e^{-0.1125} ≈ 0.8935 to ≈ 0.8936. Recomputed in Python this session: H(5) = ∫_0^5 (0.02 + 0.001t) dt = 0.1125 (closed form and Simpson quadrature), e^{-0.1125} = 0.8935973, i.e. 0.8936. Method S(t) = exp(-∫_0^t μ(s) ds) as in Slud §2.2 p.42 (sha256:dccaca6b…), re-read this session.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: Re-read the edit (example 2's last line, now 0.8936) and the whole page. Both worked examples recomputed in Python: μ(t) = -d/dt ln e^{-0.05t^2} = 0.10t; H(5) = 0.1125 (closed form and Simpson quadrature), S(5) = e^{-0.1125} = 0.8935973 -> 0.8936. Every formula and named result re-checked against Slud §2.2 pp.38-44 and Struppeck pp.10-11 read this session. Links ([[Exponential Distribution]], figure embed Media/Figures/Hazard_Rate.svg) resolve. Figure is generated and unchanged; not re-reviewed.
+- sources_checked: Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §2.2 pp.38-44 (force of mortality as limiting death rate; also failure rate / hazard intensity; μ = f/S = -d/dx ln S; S = exp(-∫μ); exponential = constant force; Weibull γ>1 increasing, 0<γ<1 decreasing; increasing = aging, decreasing = burn-in; Gompertz-Makeham A + Bc^x, Gompertz A = 0, increasing for c > 1, convex for B > 0), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf; Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), pp.10-11 and footnote 3 (hazard rate for mortality = force of mortality; λ(t); cumulative hazard), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Resolve run: F-001 closed. Medium, not high: task A4's reading is Ross (outline p.6 assigns Struppeck to A5-6 only), not freely available and not read; the page's claims rest on Slud (rank 3) and Struppeck's remarks. No open findings.

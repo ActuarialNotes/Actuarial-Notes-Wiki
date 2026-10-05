@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2478a671f9301b5fba77daba338ffc549bf770d40dff82d41eb6fc384309067d
-  sources: []
-  open_findings: 0
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §7.7 'Generalized Additive Models', eqs (7.15)-(7.19), footnote 6 and Figs 7.11-7.13, printed pp.306-311 (PDF pp.314-319), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Tibshirani, R., 'Additive Models' lecture notes, Advanced Methods for Data Analysis (CMU 36-402/36-608, Spring 2014), §2.1-2.2 pp.2-3 (additive model, identifiability E[rj(Xj)] = 0, backfitting with beta0-hat = ybar and partial residual y - beta0-hat - sum over l != j of rl-hat), sha256:008ff298d9d3c5103b58a5a417499e745348c6ead70fe96cdfa601f9ebf10d18 — https://www.stat.cmu.edu/~ryantibs/advmethods/notes/addmodels.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list p.6 (James et al. Chapters 5, 6 and 7 assigned to tasks C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Generalized Additive Model.md
 ---

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a04f362affd6229e0780cc53408f4b76ab5d312d7fc39f6466d025c3f0b1f956
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R (2nd ed., Springer 2021), §7.5 'Smoothing Splines', eqs (7.11)-(7.13), the LOOCV formula and Fig 7.8, printed pp.301-304 (PDF pp.309-312); eq (5.2), printed p.202 (PDF p.211); §7.6 span vs lambda, printed p.305 (PDF p.313); §7.7.1 backfitting, printed p.309 (PDF p.317), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Tibshirani, R., 'Splines' lecture notes, Advanced Methods for Data Analysis (CMU 36-402/36-608, Spring 2014), §1.1-1.4 pp.1-3 (kth-order spline with m knots: truncated power basis g1..g_{m+k+1}; natural spline of order k with knots t1..tm spanned by m basis functions; smoothing spline = penalised regression on the natural-spline basis with knots at every xi), sha256:c13ed5ee6e5dd83ac887822c8d3382780013343effeaacf09ccdebf620b6958b — https://www.stat.cmu.edu/~ryantibs/advmethods/notes/smoothspline.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list p.6 (James et al. Chapters 5, 6 and 7 assigned to tasks C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Smoothing Spline.md

@@ -21,7 +21,8 @@ An **Interaction** between two predictors in a [[Generalized Linear Model]] exis
 - $\beta_3$ is the interaction coefficient: it measures how much the effect of $x_1$ on $\eta$ changes per unit increase in $x_2$ (and symmetrically for $x_2$ given $x_1$)
 - If $\beta_3 = 0$, the two predictors act **additively** on the link scale — no interaction
 - Interactions can occur between two [[Categorical Predictor|categorical predictors]] (the effect differs by combination of levels), a categorical and a continuous predictor (the slope differs by group), or two continuous predictors
-- Interaction terms add to the [[Model Structure]] and are tested for significance via the [[Parameter Estimate Tables|parameter estimate table]] or a nested-model [[ANOVA]] (likelihood-ratio) test; unnecessary interactions increase the risk of overfitting
+- Interaction terms add to the [[Model Structure]] and are tested for significance via the [[Parameter Estimate Tables|parameter estimate table]] or a nested-model [[ANOVA]] (likelihood-ratio) test; unnecessary interactions increase the risk of overfitting. An interaction with a categorical predictor of more than two levels has several coefficients; test them jointly with the nested-model test, since the individual coefficients and their p-values depend on which level is the base
+- **Hierarchical principle**: if an interaction is included, its main effects are included too, even if their p-values are not significant. $x_1 \times x_2$ is typically correlated with $x_1$ and $x_2$, so leaving the main effects out tends to alter the meaning of the interaction
 
 ![[Media/Figures/Interaction.svg|340]]
 

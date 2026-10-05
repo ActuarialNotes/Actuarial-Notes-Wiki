@@ -1,18 +1,18 @@
 ---
 verification:
   status: verified
-  confidence: medium
-  last_checked: 2026-10-04
+  confidence: high
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:edd6177e722aa444131a2d91997294392b3ff9f5ecdcbce0e2f6369458107ac9
+  content_hash: sha256:da165d17759c0d6fb615f99b40485fd8487a8013a1518c0b6c535d61ea170d83
   sources:
-    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 pp.6-8 (life-annuity-due ä_x and -immediate a_x; ä_x = 1 + νp_xä_{x+1}; 1 = dä_x + A_x, ä_x = (1 - A_x)/d; temporary and guaranteed annuities), ch.4 p.9, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "Struppeck, Life Contingencies Study Note for CAS Exam S (revised 9/19/2015), ch.3 pp.6-8 (life-annuity-due ä_x and life-annuity-immediate a_x; ä_x = 1 + νp_xä_{x+1} and its verbal reading; d = interest paid at the start of the year; 1 = dä_x + A_x, ä_x = (1 - A_x)/d; annuity until death or n years whichever first, and guaranteed n years whichever last), ch.4 p.9 (replicating portfolios: ä_40 - (1.03)^{-25}(l_65/l_40)ä_65 for the temporary annuity, ä_5 + (1.03)^{-5}(l_25/l_20)ä_25 for the guaranteed one), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "CAS Exam MAS-I Tables, Illustrative Life Table: Basic Functions and Single Benefit Premiums at i = 0.06, PDF p.4, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
-    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.2.2 / §4.2 p.107 (ā_{K|} = (1 - v^K)/δ, δ = ln(1+i)), eq.(4.26)-(4.27) p.108 (ā_x = ∫ v^t tpx dt, temporary to n), eq.(4.34) p.111 (constant force: ā_{x:n} = (1 - e^{-(δ+μ)n})/(δ+μ)), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
-    - "SOA Exam MLC Sample Solutions (MLC-09-16, 2016), Q14 (p.10; PDF p.11: ā = 1/(μ+δ) and Ā = μ/(μ+δ) under constant force, μ = 0.03, δ = 0.06 giving Ā = 1/3 and δā = 2/3), sha256:791e13b42b926bfe8abe54f489fa6767aa508c9c0419bfa2340a24e9a2ea37f7 — https://www.soa.org/globalassets/assets/files/edu/edu-2014-spring-mlc-sol.pdf"
+    - "Slud, Actuarial Mathematics and Life-Table Statistics (Univ. of Maryland, (c)2001), §1.2 p.9 (d = i/(1+i)), §4.1 p.100 eq.(4.4) (annuity-immediate = annuity-due less its time-0 payment), p.104 eq.(4.16) (ä_{x:n} = Σ v^k kp_x), §4.2 p.108 eq.(4.26) (ā_x = ∫ v^t tp_x dt), sha256:dccaca6b0e9f58a2f472390538e901660d0a45eb816e2869657718735c2b80bb — https://www.math.umd.edu/~slud/s470/BookChaps/01Book.pdf"
+    - "SOA Exam MLC Sample Solutions (MLC-09-16, 2016), Q14 (p.10; PDF p.11: ā = 1/(μ+δ), Ā = μ/(μ+δ) under constant force, Ā + δā = 1), sha256:791e13b42b926bfe8abe54f489fa6767aa508c9c0419bfa2340a24e9a2ea37f7 — https://www.soa.org/globalassets/assets/files/edu/edu-2014-spring-mlc-sol.pdf"
     - "CAS Exam MAS-I Spring 2019, Q11-Q12 — official exam paper (scan), PDF pp.15-16, sha256:02debe7c986ee38d3f484b277d0dc4a08ec424d0bb3b868b4890e4edb9312274 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-19.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 1
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain A tasks 4-6 and readings (p.3), reading list (p.6: Ross A1-A6, Struppeck A5-6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Annuity.md
 ---
@@ -38,7 +38,7 @@ A **Life Annuity** pays periodic benefits contingent on the survival of one or m
 >
 > > [!answer]-
 > > $$\ddot{a}_{40} = 1 + \frac{0.99722 \times 14.6864}{1.06} = 1 + 13.8166 = 14.8166$$
-> > $$\ddot{a}_{40} = \frac{1 - 0.16132}{0.06/1.06} = \frac{0.83868}{0.056604} = 14.8167$$
+> > $$\ddot{a}_{40} = \frac{1 - 0.16132}{0.06/1.06} = \frac{0.83868 \times 1.06}{0.06} = 14.8167$$
 > > The table lists $\ddot{a}_{40} = 14.8166$; the second route is off in the last digit only because $A_{40}$ is rounded to five places.
 
 > [!example]- Temporary Annuity-Due to Age 65 {Example}

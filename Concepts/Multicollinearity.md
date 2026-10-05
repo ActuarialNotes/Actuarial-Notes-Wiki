@@ -21,6 +21,7 @@ verification:
 
 > $$\text{Var}(\hat\beta_j) = \frac{\sigma^{2}}{S_{jj}} \times \text{VIF}_j$$
 
+- $S_{jj} = \sum_{i=1}^{n} (x_{ij} - \bar{x}_j)^2$ is the centred sum of squares of predictor $x_j$ (not the uncentred diagonal entry of $\mathbf{X}^\top\mathbf{X}$), so $\sigma^2/S_{jj}$ is $\text{Var}(\hat\beta_j)$ when $x_j$ is the only predictor, and $\text{VIF}_j$ is the factor by which the other predictors inflate it
 - $R_j^2$ is from regressing predictor $x_j$ on all the *other* predictors. A **variance inflation factor** above $5$–$10$ is the usual flag
 - Symptoms: a significant overall $F$ test with no significant individual coefficients, coefficients that flip sign when a variable is added or a few rows change, and standard errors that are implausibly large
 - What it does **not** hurt is prediction inside the observed range of the predictors — fitted values and [[R-Squared]] are unaffected. It damages *interpretation*, which is fatal for a rating model where each relativity must stand on its own

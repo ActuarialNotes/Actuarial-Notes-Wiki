@@ -15,14 +15,16 @@ verification:
   log: .verify/Concepts/Model Structure.md
 ---
 
-**Model Structure** is the specific set of terms included in an [[Extended Linear Model]]'s linear predictor — which predictors, transformations, and [[Interaction|interactions]] appear — as distinct from the choice of response distribution or [[Link Function]].
+**Model Structure** is the specified form of an [[Extended Linear Model]]: the distribution of the response, the [[Link Function]], and the terms of the linear predictor — which predictors, transformations, and [[Interaction|interactions]] appear. This is the CAS MAS-I usage: choosing a GLM's model structure from the behavior of the data includes choosing its link function and the distribution of the dependent variable.
 
-> $$\eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 (x_1 \times x_2) + \beta_4 x_1^2 + \cdots$$
+> $$Y \sim \text{chosen distribution}, \qquad g(\mu) = \eta, \qquad \eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 (x_1 \times x_2) + \beta_4 x_1^2 + \cdots$$
 
-- Model structure decisions include: which [[Categorical Predictor|predictors]] to include, whether to add [[Interaction|interaction terms]], and whether to band or transform (e.g., polynomial terms for) continuous variables — this is the focus of **[[Variable Selection]]**
-- A model can have the correct distribution and link but the wrong structure (e.g., a missing interaction); structure adequacy is checked with a [[Residual Plot]] or a [[Marginal Model Plot]]
-- Adding structure (more terms) always improves in-sample fit but risks overfitting; [[AIC]] and [[BIC]] penalize unnecessary complexity when comparing structures
-- Two models with the same response distribution and link but different structure are compared using **[[ANOVA]] (analysis of deviance)** if one is nested within the other
+- $\mu = E(Y)$ and $g$ is the link. The distribution and link are chosen from the behavior of the response; [[Model Selection]] covers how
+- Linear-predictor decisions include: which [[Categorical Predictor|predictors]] to include, whether to add [[Interaction|interaction terms]], and whether to band or transform continuous variables (e.g., [[Polynomial Regression|polynomial terms]]) — the choice of terms is the focus of **[[Variable Selection]]**
+- For a [[Linear Mixed Model]] (MAS-II), the structure also covers how the model accommodates correlated observations and a variance that is not constant; the MAS-II outline names the model structure and variable selection as separate things to evaluate
+- A model can have the correct distribution and link but the wrong linear predictor (e.g., a missing interaction); its adequacy is checked with a [[Residual Plot]] or a [[Marginal Model Plot]]
+- Adding terms always improves in-sample fit but risks overfitting; [[AIC]] and [[BIC]] penalize unnecessary complexity when comparing structures
+- Two models with the same distribution and link, one's linear predictor nested within the other's, are compared using **[[ANOVA]] (analysis of deviance)**
 
 ![[Media/Figures/Model_Structure.svg|340]]
 
@@ -30,4 +32,6 @@ verification:
 > An actuary fits a Poisson GLM for claim frequency two ways: Model 1 uses main effects for territory and vehicle age only ([[AIC]] $= 4{,}102$). Model 2 adds a territory $\times$ vehicle age interaction ([[AIC]] $= 4{,}085$). Which model structure is preferred?
 >
 > > [!answer]-
-> > Lower AIC indicates a better trade-off between fit and complexity. Since Model 2's AIC ($4{,}085$) is lower than Model 1's ($4{,}102$), the richer model structure — including the territory $\times$ vehicle age **[[Interaction]]** — is preferred, provided the interaction terms are also individually significant in the [[Parameter Estimate Tables|parameter estimate table]].
+> > Lower AIC indicates a better trade-off between fit and complexity. Since Model 2's AIC ($4{,}085$) is lower than Model 1's ($4{,}102$), the richer model structure — including the territory $\times$ vehicle age **[[Interaction]]** — is preferred.
+> >
+> > Territory is categorical, so the interaction is a set of coefficients, at least one per non-base territory. Judge them **jointly**, as this AIC comparison does or as a nested F-test of all of them at once would, not one p-value at a time in the [[Parameter Estimate Tables|parameter estimate table]]: the individual coefficients and their p-values change with the choice of base territory, and the joint test does not.

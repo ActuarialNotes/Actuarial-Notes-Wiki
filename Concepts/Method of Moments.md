@@ -27,7 +27,7 @@ The **Method of Moments** (MoM) estimates parameters by setting the sample momen
 - One parameter needs one equation ($\bar{X} = \mu(\theta)$); two parameters need the first two moments, usually solved as mean and variance
 - MoM estimators are **[[Consistency|consistent]]** by the law of large numbers, but they are generally **not** [[Efficiency|efficient]] and not always [[Unbiasedness|unbiased]] — MLE beats them asymptotically
 - They can produce **impossible values** (a negative variance, a shape parameter below zero) when the sample moments are unusual; MLE is constrained by the likelihood and cannot
-- MoM does not use the [[Sufficient Statistic]] structure of the model, which is exactly why information is left on the table
+- MoM is not built from the [[Sufficient Statistic]], so in some models it leaves information on the table — for the gamma (both parameters unknown), beta and Pareto, the moment estimators are not functions of the sufficient statistics. In others it lands on one anyway: $\bar{X}$ for the Bernoulli and Poisson, and $\big(\bar{X}, \tfrac{1}{n}\sum (X_i - \bar{X})^2\big)$ for the Normal, where the MoM estimators are also the MLEs
 - It handles awkward likelihoods well: for a mixture or a compound distribution, the moments are simple even when the density is not
 - Censored or truncated data breaks the plain method — the sample moments no longer estimate the population moments, so the theoretical moments must be recomputed under the [[Censoring]] or [[Truncation]] scheme
 

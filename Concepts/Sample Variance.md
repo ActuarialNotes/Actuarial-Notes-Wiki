@@ -26,7 +26,7 @@ The **Sample Variance** $S^2$ measures the spread of a random sample around its 
 > $$E[S^2] = \sigma^2, \qquad \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1} \ \text{ (Normal data)}$$
 
 - The divisor $n - 1$ is the **degrees of freedom**: one is spent estimating $\mu$ by $\bar{X}$, and the deviations $X_i - \bar{X}$ sum to zero, so only $n-1$ of them are free
-- Using $n$ instead gives the [[Maximum Likelihood Estimation|MLE]] $\hat\sigma^2 = \frac{n-1}{n}S^2$, which is biased low by $\sigma^2/n$ but has smaller [[Mean Square Error]] — the classic bias-variance trade-off in estimation
+- Dividing by $n$ instead gives $\hat\sigma^2 = \frac{n-1}{n}S^2$, which is biased low by $\sigma^2/n$ for any population. For a Normal population it is the [[Maximum Likelihood Estimation|MLE]] and has smaller [[Mean Square Error]] than $S^2$ — the classic bias-variance trade-off in estimation. The MSE comparison needs normality: for Bernoulli$(1/2)$ data, $S^2$ has the smaller MSE once $n \ge 5$
 - The computing form $S^2 = \frac{1}{n-1}\left(\sum X_i^2 - n\bar{X}^2\right)$ is what exam problems usually need
 - For Normal data, $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ independent of $\bar{X}$; this is what makes the $t$-statistic $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ work, and it gives $\text{Var}(S^2) = 2\sigma^4/(n-1)$
 - Tests and [[Confidence Interval|intervals]] for $\sigma^2$ come from the same $\chi^2$ [[Sampling Distribution]]
@@ -41,7 +41,7 @@ The **Sample Variance** $S^2$ measures the spread of a random sample around its 
 > > $$\bar{x} = \frac{4 + 6 + 9 + 11 + 20}{5} = 10$$
 > > $$\sum x_i^2 = 16 + 36 + 81 + 121 + 400 = 654$$
 > > $$s^2 = \frac{654 - 5(10)^2}{5 - 1} = \frac{154}{4} = 38.5$$
-> > So $s = 6.20$ (thousand). The MLE would divide by $5$ instead: $\hat\sigma^2 = 154/5 = 30.8$.
+> > So $s = 6.20$ (thousand). Dividing by $5$ instead — the MLE, if the claims are a Normal sample — gives $\hat\sigma^2 = 154/5 = 30.8$.
 
 > [!example]- Testing a Variance {Example}
 > A sample of $n = 25$ losses from a Normal population gives $s^2 = 150$. Test $H_0: \sigma^2 = 100$ against $H_1: \sigma^2 > 100$ at $\alpha = 0.05$, given $\chi^2_{0.05, 24} = 36.42$.

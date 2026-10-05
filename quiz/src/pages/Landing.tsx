@@ -1303,23 +1303,21 @@ export default function Landing() {
           (`examStrip`, above), which is what stays in sight as the concept list
           scrolls. */}
       <div className={cn(hasTopic && 'space-y-2')}>
-        <div className="flex items-center gap-2">
-          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">
-            {hasTopic ? examLabel : 'Quiz'}
-          </h1>
-          {!user && (
-            <Link
-              to="/auth"
-              className="shrink-0 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="text-primary underline-offset-2 hover:underline">Sign in</span>
-              <span className="hidden sm:inline"> to save progress</span>
-            </Link>
-          )}
-          {/* The body picker rides the title row, the shape the Study Guides
-              tab opens on — it governs the whole exam list below, so it sits
-              with the title rather than in a label row of its own. */}
-          {!hasTopic && (
+        {!hasTopic && (
+          <div className="flex items-center gap-2">
+            <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Quiz</h1>
+            {!user && (
+              <Link
+                to="/auth"
+                className="shrink-0 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span className="text-primary underline-offset-2 hover:underline">Sign in</span>
+                <span className="hidden sm:inline"> to save progress</span>
+              </Link>
+            )}
+            {/* The body picker rides the title row, the shape the Study Guides
+                tab opens on — it governs the whole exam list below, so it sits
+                with the title rather than in a label row of its own. */}
             <SegmentedControl
               label="Examining body"
               size="lg"
@@ -1332,8 +1330,8 @@ export default function Landing() {
               ]}
               className="shrink-0"
             />
-          )}
-        </div>
+          </div>
+        )}
 
         {selectedConcept && (
           <div className="flex items-center gap-2">
@@ -1470,18 +1468,6 @@ export default function Landing() {
                       <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
                     ) : (
                       <>
-                        {selectedConcepts.length > 0 && (
-                          <p className="px-1 text-xs text-muted-foreground">
-                            {selectedConcepts.length} topic{selectedConcepts.length === 1 ? '' : 's'} selected.
-                            <button
-                              type="button"
-                              onClick={() => setSelectedConcepts([])}
-                              className="ml-1.5 rounded underline underline-offset-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                            >
-                              Clear
-                            </button>
-                          </p>
-                        )}
                         {groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}

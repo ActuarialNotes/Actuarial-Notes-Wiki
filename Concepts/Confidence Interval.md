@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b501e9b33aa31c505ba272e85a1d8910d2947abdc9969711f32fa58235fe8527
+  content_hash: sha256:ee4e19a034aab1f4d48e2588aa8eb5e93ad1a455e763794ae66aec2d243eea10
   sources:
     - "Siegrist, Random (randomservices.org), ch.7 Set Estimation §1 Introduction: confidence level, 'the true value of theta is either in this set, or is not', long-run proportion of sets containing theta converges to 1 - alpha, sha256:e5e6cb402c737c1d63a58ef4509975633f9cfa483f8f0afa8860ff9b6dbb4ee3 — https://www.randomservices.org/random/interval/Introduction.html"
     - "Siegrist, Random, ch.7 §2 Estimation in the Normal Model: for a normal random sample, M +/- z(1 - alpha/2) sigma/sqrt(n), M +/- t_{n-1}(1 - alpha/2) S/sqrt(n), [(n-1)S^2/chi^2_{n-1}(1 - alpha/2), (n-1)S^2/chi^2_{n-1}(alpha/2)] (not symmetric about S^2); length L = 2 z sigma/sqrt(n), sha256:21c59dd27f38c17148de5af35d53d94a01c51cd4f230c81d75e91173a9917586 — https://www.randomservices.org/random/interval/Normal.html"

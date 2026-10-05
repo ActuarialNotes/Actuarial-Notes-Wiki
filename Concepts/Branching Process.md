@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9505a12147b999911b18db085912b03c1d786947c861e2d5af277962229b51e1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Branching Process.md
+---
+
 A **Branching Process** (Galton–Watson process) models a population in which each individual, by the end of its life, independently produces $j$ offspring with probability $P_j$. The size of generation $n$, $X_n$, is a [[Markov Chain]] on $\{0, 1, 2, \ldots\}$: it is the total offspring $Z_i$ of the $X_{n-1}$ members of the generation before.
 
 > $$X_n = \sum_{i=1}^{X_{n-1}} Z_i$$

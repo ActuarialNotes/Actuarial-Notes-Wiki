@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9252764ee5b80977105bb7cadccebb9206dba009d84b96ef9d20c6c54c5410a4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Concepts/Gambler's Ruin Problem.md"
+---
+
 The **Gambler's Ruin Problem** asks how likely a gambler is to reach a target before going broke. On each independent play the gambler wins one unit with probability $p$ and loses one with probability $q = 1 - p$; starting with $i$ units and stopping at $0$ or $N$, the fortune is a [[Markov Chain]] with absorbing states $0$ and $N$, and $P_i$ is the probability of reaching $N$ first.
 
 > $$P_i = \begin{cases} \dfrac{1 - (q/p)^i}{1 - (q/p)^N} & p \neq \tfrac12 \\[10pt] \dfrac{i}{N} & p = \tfrac12 \end{cases}$$

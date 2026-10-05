@@ -17,3 +17,14 @@ created: 2026-10-04
 - proposed_action: Drop the 'Predictor effects' contrast (all three admit interactions, transformations and banded variables — ISLR sec.3.3.2, Monograph secs.5.4/5.6) and the 'Any | Any' row, or replace the row with what the outline groups under the heading.
 - applied: false
 - fingerprint: 1d91d013eba9
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: F-001 re-confirmed against ISLR sec.3.3.2 and Monograph secs.5.4/5.6; formulas and 'OLS = Normal + identity' vs Rodriguez B.1.2; three modelling choices and comparison tools vs outline tasks 2, 5, 7, 8; Gamma/log severity and Poisson counts vs Monograph sec.2.7; figure (nested OLS within GLM within ELM) read; links and embed resolve
+- sources_checked: CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C description and tasks 1-9, PDF p.5; Dobson/James/Larsen citations PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; MAS-I reading), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf, sec.3.3.2 'Extensions of the Linear Model' (interaction and polynomial terms in least squares, printed pp.87-91, PDF pp.97-101); sec.4.6.3 (printed pp.170-172, PDF pp.180-182); Rodriguez, GLM lecture notes (Princeton), App. B, Generalized Linear Model Theory, secs.B.1.1-B.1.2 (PDF pp.2-4), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf, sec.2.1.3 fn.1 (PDF p.16); secs.2.7.1-2.7.2 (gamma for severity, Poisson for frequency, PDF pp.29-31); secs.5.4, 5.6 (PDF pp.58-71)
+- note: F-001 (major) left open: the table's 'Predictor effects' contrast and 'Any | Any' row are not what the sources say. Everything else on the page is supported. Exam pages linking it: MAS-I, MAS-II.

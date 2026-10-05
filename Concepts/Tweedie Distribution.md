@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:892a03408bbd2e28263904259376db3faaba8d2ab64354a9d9080899f113b2c7
-  sources: []
+  sources:
+    - "Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf, p.2 'Tweedie Distributions' (Var = a E(Y)^p; p = 0, 1, (1,2), 2, 3; compound Poisson-gamma; software estimating p)"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf, sec.2.7.3 (Tweedie, eqs 5-9, point mass at zero, p range, PDF pp.32-35); sec.5.1.1 (frequency/severity vs pure premium, PDF pp.53-54)"
+    - "scikit-learn User Guide, sec.3.4 'Mean Poisson, Gamma, and Tweedie deviances' (closed-form Tweedie deviance), sha256:7e740e140ba75771bb1c7de132babfd958c277b5529d187e7ba744e69729120c — https://scikit-learn.org/stable/modules/model_evaluation.html"
   open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Tweedie Distribution.md

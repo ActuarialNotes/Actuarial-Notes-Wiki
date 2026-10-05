@@ -29,7 +29,7 @@ The **F-Distribution** $F(n, m)$ with $n$ numerator and $m$ denominator degrees 
 > > \end{align*}
 > > $$
 > >
-> > Compare with $F(2, 24)$. In the table's denominator-24 rows, numerator column 2, the upper 5% point is $3.403$ and the upper 10% point is $2.538$. Since $2.538 < 3.0 < 3.403$, the p-value is between 0.05 and 0.10: do not reject at 5%; the two predictors can be dropped.
+> > Compare with $F(2, 24)$. In the table's denominator-24 rows, numerator column 2, the upper 5% point is $3.403$ and the upper 10% point is $2.538$. Since $2.538 < 3.0 < 3.403$, the p-value is between 0.05 and 0.10: do not reject at 5%. The data do not show that the two predictors are needed.
 
 > [!example]- Comparing the Volatility of Two Territories {Example}
 > Normal claim amounts are sampled from two territories: territory A has $n = 11$ and $s_A^2 = 2.4$; territory B has $n = 9$ and $s_B^2 = 0.8$. Test $H_0: \sigma_A^2 = \sigma_B^2$ against a two-sided alternative at the 10% level.

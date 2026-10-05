@@ -47,3 +47,14 @@ created: 2026-10-04
 - proposed_action: Delete 'the Deviance has no simple closed form — ' and the 'so model comparison leans on AIC' inference, or state that the unit deviance is closed form while the density needs a series.
 - applied: false
 - fingerprint: 51ac14517671
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: power-variance definition, table rows and compound Poisson-gamma structure vs Larsen p.2 and Monograph sec.2.7.3; point mass at zero vs Monograph; freq/sev vs pure-premium trade-offs vs Monograph sec.5.1.1; F-001 re-derived from Monograph eqs 7-9 (frequency ~ mu^(2-p), severity ~ mu^(p-1)); F-003 closed form re-run (1.4100036 both ways at y=3, mu=1.2, p=1.6); examples recomputed (e^5.52 = 249.6, e^5.30 = 200.3, e^0.22 = 1.246); figure read; links resolve
+- sources_checked: Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf, p.2 'Tweedie Distributions' (Var = a E(Y)^p; p = 0, 1, (1,2), 2, 3; compound Poisson-gamma; software estimating p); Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf, sec.2.7.3 (Tweedie, eqs 5-9, point mass at zero, p range, PDF pp.32-35); sec.5.1.1 (frequency/severity vs pure premium, PDF pp.53-54); scikit-learn User Guide, sec.3.4 'Mean Poisson, Gamma, and Tweedie deviances' (closed-form Tweedie deviance), sha256:7e740e140ba75771bb1c7de132babfd958c277b5529d187e7ba744e69729120c — https://scikit-learn.org/stable/modules/model_evaluation.html
+- note: F-001 (major), F-002 and F-003 (minor) confirmed and left open. No new findings. Exam pages linking it: MAS-I, PCPA.

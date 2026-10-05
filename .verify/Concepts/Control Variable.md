@@ -17,3 +17,29 @@ created: 2026-10-04
 - proposed_action: Delete 'and a territory or class variable that is priced separately outside the model' (the rest of the sentence is the Monograph sec.5.1.3 usage), or say such variables enter as offsets per secs.2.6 and 9.2.
 - applied: false
 - fingerprint: 52e1a7f09803
+
+## [F-002] 'Control variables are still checked for significance and reasonableness' — not found in any source read
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-05
+- severity: minor
+- status: open
+- locus: bullet 4, line 21
+- claim: Control variables are still checked for statistical significance and reasonableness in the parameter estimate table, even though they will not appear in the final rating plan
+- evidence: Not located in the sources read for this page. Monograph 5 sec.5.1.3 (printed p.46, PDF p.56) describes the temporal control variable only as picking up trend, development and rate-change effects 'so that they do not influence the parameter estimates of the rating variables', adding that 'the individual effects of development, trend, etc. are usually not of interest in models built for the purpose of rating' — nothing on testing the control's own significance; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf. Neither the 2026 MAS-I outline (task C6, PDF p.5; sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) nor Larsen (pp.1-3; Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf) says anything on it.
+- source_rank: 3
+- proposed_action: Cite a source for the practice or delete the bullet.
+- applied: false
+- fingerprint: 26b8d04ba203
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: definition and year-as-control vs Monograph sec.5.1.3; F-001 re-confirmed against Monograph secs.2.6/9.2; coefficient estimated vs offset fixed at 1 vs Monograph sec.2.6; omitted-variable effect on correlated rating variables vs Monograph sec.2.9; example (calendar year as control) vs sec.5.1.3; figure read; links resolve
+- sources_checked: Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; PCPA reading, rank 3 for MAS-I), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf, sec.5.1.3 (temporal variable as a control, PDF p.56); sec.2.6 and sec.9.2 (separately priced territory/class as an offset, PDF pp.27, 100); sec.2.9 (GLM separates each variable's effect from correlated ones, PDF p.37); CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), task C6, PDF p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: F-001 (major) confirmed and left open. New F-002 (minor): the 'still checked for significance' bullet has no source. Linked by the MAS-I exam page only.

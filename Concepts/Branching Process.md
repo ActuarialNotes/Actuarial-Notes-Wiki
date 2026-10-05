@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9505a12147b999911b18db085912b03c1d786947c861e2d5af277962229b51e1
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch 4 'Markov Chains' (an earlier edition than the 12th ed. the 2026 MAS-I outline assigns; course-hosted copy on the NTNU TMA4265 page, printed pp.185-280, PDF p.n = printed p.184+n), §4.7 Branching Processes pp.233-236 (PDF pp.49-52): offspring distribution P_j with P_j < 1 for all j, X_n a Markov chain, state 0 recurrent and all others transient when P0 > 0 (die out or converge to infinity), mu and sigma^2, X_0 = 1, X_n = sum_{i=1}^{X_{n-1}} Z_i, E[X_n] = mu^n, Var(X_n | X_{n-1}) = X_{n-1} sigma^2 and Eq. (4.19) Var(X_n) = sigma^2 mu^(n-1)(1-mu^n)/(1-mu) for mu != 1, n sigma^2 for mu = 1, pi_0 = 1 if mu <= 1, Eq. (4.20) pi_0 = sum pi_0^j P_j, smallest positive solution when mu > 1, Examples 4.28-4.30 (pi_0^n for n ancestors), sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., CHANCE Project GNU FDL version dated 4 July 2006), §10.2 Branching Processes pp.378-381 (PDF pp.386-389): d_m = P(dies out by generation m), d_0 = 0, monotone to d, Eq. (10.1)-(10.2) d_m = h(d_{m-1}), d = h(d) with d = 1 always a root; Theorem 10.2 (d the smallest root; m <= 1 => d = 1; m > 1 => d < 1) p.380; at most two offspring: roots d = 1 and d = p0/p2, p.381, sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random (randomservices.org), Ch 15 §11 'Discrete-Time Branching Chains': f(1) = 1 trivial case (every state absorbing); f(0) > 0 => every positive state transient, extinction or explosion; chain from x particles = x independent copies, extinction q^x; q a fixed point of the offspring PGF; m <= 1 => q = 1, m > 1 => 0 < q < 1; f(0) = 1-p, f(2) = p gives q = (1-p)/p, sha256:3e58cfd2f74dd0bdc8d925ffe41e6017ab9851e6bc6ecc7e84bfc578c655ccdc — https://www.randomservices.org/random/markov/Branching.html"
+    - "CAS Exam MAS-I Fall 2018, Q11 — official exam paper (scan), PDF p.15; Final Answer Key PDF p.50 (Q11 = A), sha256:47ced888a314db1a5e29e28c0a52f989966b21a079b1c08634b73dc90e844296 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_fmasi-18.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Branching Process.md

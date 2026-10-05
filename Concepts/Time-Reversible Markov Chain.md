@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:153d69e414c2539ff5b3a37250e270073f3522af4bf9108f7035336bf8de14a9
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch 4 'Markov Chains' (an earlier edition than the 12th ed. the 2026 MAS-I outline assigns; course-hosted copy on the NTNU TMA4265 page, printed pp.185-280, PDF p.n = printed p.184+n), §4.8 Time Reversible Markov Chains pp.236-242 (PDF pp.52-58): stationary ergodic chain traced backward, Q_ij = pi_j P_ji / pi_i, time reversible iff Q_ij = P_ij, Eq. (4.21) pi_i P_ij = pi_j P_ji and its rate interpretation p.237; Eq. (4.22) nonnegative x_i summing to 1 with x_i P_ij = x_j P_ji => reversible and x_i = pi_i p.237; Example 4.31 nearest-neighbour chain on 0..M reversible (moves i -> i+1 and back alternate) pp.238-239; Example 4.32 random walk on a connected graph with symmetric arc weights, pi_i = sum_j w_ij / sum_i sum_j w_ij, pp.240-241; 'usually no solution' and Eq. (4.25) P_ik P_kj P_ji = P_ij P_jk P_ki, Theorem 4.2 cycle criterion p.242; Theorem 4.1 Eq. (4.7) p.205, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Siegrist, Random (randomservices.org), Ch 15 §7 'Time Reversal in Discrete-Time Chains': reversibility via the balance equation; solving the reversibility condition 'is often easier than using the definition of invariance directly'; Kolmogorov cycle condition — an irreducible positive recurrent chain is reversible iff every cycle has the probability of its reversal, sha256:9aa4f030ec3b7f9225284b497d4fd8b4c114088e999509049b9bf829b7d4a62f — https://www.randomservices.org/random/markov/TimeReversal.html"
+    - "Siegrist, Random (randomservices.org), Ch 15 §14 'Random Walks on Graphs': a random walk on a connected graph with conductance c is reversible with respect to C(x) = sum_y c(x,y), sha256:ae887db7f9a51245ae88a050f75b470aabeee64f2257ed9aeeea0eef091640e8 — https://www.randomservices.org/random/markov/WalkGraph.html"
+    - "Siegrist, Random (randomservices.org), Ch 15 §13 'Discrete-Time Birth-Death Chains': every irreducible recurrent birth-death chain is reversible, sha256:11fd7af4e9d00fb72857d73ce96bd41e6a78c0e4ad172587025d7096858dee94 — https://www.randomservices.org/random/markov/BirthDeath.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Time-Reversible Markov Chain.md

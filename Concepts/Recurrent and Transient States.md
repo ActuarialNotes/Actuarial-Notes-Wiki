@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fddacb618e605446015fd9d5f2a49ca40c8574bb348d28fd5a668f51c065c084
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch 4 'Markov Chains' (an earlier edition than the 12th ed. the 2026 MAS-I outline assigns; course-hosted copy on the NTNU TMA4265 page, printed pp.185-280, PDF p.n = printed p.184+n), §4.3 Classification of States pp.193-204 (PDF pp.9-20): accessible / communicate / classes / irreducible and P^0_ii = 1 pp.193-194; f_i, recurrent iff f_i = 1, visits geometric f_i^(n-1)(1-f_i) with mean 1/(1-f_i) pp.195-196; E[visits] = sum_{n>=0} P^n_ii and Proposition 4.1 p.196; finite chain not all transient p.196; Corollary 4.2 and Remarks (transience a class property; finite irreducible chain recurrent) p.197; Example 4.15 random walk recurrent iff p = 1/2 pp.198-199; §4.4 p.204 (PDF p.20) period definition, periodicity a class property, positive recurrence a class property, finite chain recurrent => positive recurrent, ergodic = positive recurrent aperiodic, null recurrent footnote; Theorem 4.1 p.205; §4.5.1 three classes p.217; §4.7 P0 > 0 => states != 0 transient p.233, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Siegrist, Random (randomservices.org), Ch 15 §5 'Periodicity': d(x) = gcd{n >= 1: P^n(x,x) > 0}, d the largest integer with returns only at its multiples, period a class property, P(x,x) > 0 => aperiodic, sha256:6311c165cff1538b2b8da7ff2f5b6d243b86cb6f1e7cb423a2712c3a7689f9b3 — https://www.randomservices.org/random/markov/Periodicity.html"
+    - "Siegrist, Random (randomservices.org), Ch 15 §4 'Transience and Recurrence': recurrent class is irreducible (closed); a finite closed set has a recurrent state; finite irreducible set is a recurrent class; geometric number of visits, sha256:24edb8bd0237b0e3abd7beeae48596f35421c9aa35653c6845cfaebb223c5535 — https://www.randomservices.org/random/markov/Recurrence.html"
+    - "Siegrist, Random (randomservices.org), Ch 15 §6 'Stationary and Limiting Distributions': positive/null recurrence class property; a finite closed set has no null recurrent states; ergodic = irreducible, positive recurrent, aperiodic, sha256:d4719c5e1cb9ad3be4fbf84c8dd849390f7d1ad15ced112f6312be83e5545680 — https://www.randomservices.org/random/markov/Limiting.html"
+    - "Siegrist, Random (randomservices.org), Ch 15 §14 'Random Walks on Graphs', simple random walk on Z: transient if p != 1/2, null recurrent if p = 1/2, sha256:ae887db7f9a51245ae88a050f75b470aabeee64f2257ed9aeeea0eef091640e8 — https://www.randomservices.org/random/markov/WalkGraph.html"
+    - "CAS Exam MAS-I Spring 2018, Q10 — official exam paper (scan), PDF p.14; Final Answer Key PDF p.50 (Q10 = D), sha256:12d102c422a45e87674b082ad448ac5e25a495115f963d1a9ac63a9f8f028020 — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf"
+    - "CAS Exam MAS-I Fall 2019, Q9 — official exam paper (scan), PDF p.13; Final Answer Key PDF p.50 (Q9 = E), sha256:32e26dbc1bd463e053ea0f9116473551be6d1b2f35b6d3670a716ecb86a141bd — https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_fmasi-19.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Recurrent and Transient States.md

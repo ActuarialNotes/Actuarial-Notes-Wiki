@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:46205889e0cb0dfa3f13416b57731a648dc92e47d0317d39fa09edf449fd7319
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch 4 'Markov Chains' (an earlier edition than the 12th ed. the 2026 MAS-I outline assigns; course-hosted copy on the NTNU TMA4265 page, printed pp.185-280, PDF p.n = printed p.184+n), §4.6 Mean Time Spent in Transient States pp.230-232 (PDF pp.46-48): P_T with row sums < 1, s_ij and Eq. (4.18) s_ij = delta_ij + sum_k P_ik s_kj, recurrent states drop out, S = I + P_T S, S = (I - P_T)^-1 and the inverse exists, f_ij = (s_ij - delta_ij)/s_jj, make the states of A absorbing for the time to enter A; Examples 4.26-4.27, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Grinstead & Snell, Introduction to Probability (2nd rev. ed., CHANCE Project GNU FDL version dated 4 July 2006), §11.2 Absorbing Markov Chains: Theorem 11.4 N = (I - Q)^-1 = I + Q + Q^2 + ..., n_ij expected visits with the initial state counted, p.418 (PDF p.426); Definition 11.3 'fundamental matrix' p.419 (PDF p.427); Theorem 11.5 t = Nc p.419; Theorem 11.6 B = NR p.420 (PDF p.428), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf"
+    - "Siegrist, Random (randomservices.org), Ch 15 §4 'Transience and Recurrence': (P^n)_B = (P_B)^n on the transient states, G_B = sum P_B^n, I_B - P_B invertible when B is finite, sha256:24edb8bd0237b0e3abd7beeae48596f35421c9aa35653c6845cfaebb223c5535 — https://www.randomservices.org/random/markov/Recurrence.html"
+    - "Siegrist, Random (randomservices.org), Ch 12 §10 'Timid Play': win probability f(x) used for the gambler's-ruin cross-check in Example 2, sha256:e0ac4e5bbd2287e7322092c87063ddb9afdea4bbeacf83ab9597df579d86459b — https://www.randomservices.org/random/games/Timid.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mean Time Spent in Transient States.md

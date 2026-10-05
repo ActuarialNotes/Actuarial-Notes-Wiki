@@ -67,7 +67,7 @@ Here $r_i$ is the standardized residual and $p + 1$ the number of coefficients. 
 >
 > > [!answer]-
 > > 1. **Mean structure**: vehicle age enters linearly but its effect is curved. Band it, or add a quadratic term
-> > 2. **Mean structure**: the model under-predicts large risks. Try $\ln(\text{insured value})$ in place of the raw value, or an interaction with the variable that separates the large risks
+> > 2. **Mean structure**: the model under-predicts large risks, so insured value's fitted curve rises too slowly at the top of its range. Give it more flexibility there — a band for the largest values, a polynomial term, or a hinge that lets the slope steepen past a break point — or add an interaction with the variable that separates the large risks. (Logging insured value would make its curve flatter at the top, the opposite of what is needed)
 > > 3. **Distribution**: the largest claims are more extreme than a Gamma allows. Check them for data errors, then consider a heavier-tailed response or capping large losses and loading for the excess
 > > 4. **Variance**: Pearson residuals divide by $\sqrt{V(\hat\mu)} = \hat\mu$. If they shrink as $\hat\mu$ grows, the true variance grows *more slowly* than $\mu^2$, so the variance function is too steep for these data
 

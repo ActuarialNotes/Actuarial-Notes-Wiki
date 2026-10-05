@@ -1,13 +1,13 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:49f65726baf4f72048d6a09302c4f51eac3d225ee013de7396cb0f2db5ef3a2d
+  content_hash: sha256:1d18f174494ec0f75a2e09c71bedb0b6d142f9cfad1ebea5fa01dac767cf7ce0
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.1 eq. 2.6 (PDF p.41), §2.2.2 eq. 2.7 and 'never lie below Var(e)' (PDF p.45), §2.2.3 eq. 2.9 (PDF p.48), §5.1.1-5.1.4 eqs. 5.1-5.3 (PDF pp.207-215), §5.2 eq. 5.8 (PDF p.220), §6.1.3 AIC/BIC (PDF pp.240-244), §8.2.1 OOB (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Test Error.md
 ---

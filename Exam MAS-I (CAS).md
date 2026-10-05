@@ -59,12 +59,19 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Compound Poisson Process]] — a [[Frequency|random number]] of [[Claim|claims]] of [[Severity|random size]]
 > - [[Mixed Poisson Process]] — a [[Mixing Distribution|random rate]] across the [[Insurance Portfolio|portfolio]]
 > - [[Probability Distributions|Distributions]] that arise: [[Poisson Distribution]], [[Exponential Distribution]], [[Gamma]], [[Negative Binomial Distribution]], [[Uniform Continuous Distribution]]
-> - [[Transformations of Random Variables]] — deriving the [[Probability Distributions|distribution]] of a function of a [[Survival Model|lifetime]] or [[Severity|claim size]]
-> - [[Combinatorics]] — counting the [[System Reliability|path and cut sets]] of a $k$-out-of-$n$ [[System Reliability|system]]
 > 
 > ### Markov Chains
 > - [[Markov Chain]] — the [[Transition Probability Matrix|transition probability matrix]], $n$-step [[Chapman-Kolmogorov Equations|transitions]], and the [[Stationary Distribution|stationary distribution]]
 > - Actuarial uses: [[Bonus-Malus System|bonus-malus systems]], [[Multi-State Model|multi-state disability/mortality models]], [[Credit Rating Migration|credit-rating migration]]
+> 
+> ### Reliability Theory
+> - [[System Reliability]] — [[System Reliability|structure functions]], [[System Reliability|minimal path and minimal cut sets]], [[System Reliability|systems of independent components]], and the [[System Reliability|expected system lifetime]]
+> - [[Inclusion-Exclusion Principle]] — [[System Reliability|bounds on the reliability function]]
+> - [[Combinatorics]] — counting the [[System Reliability|path and cut sets]] of a $k$-out-of-$n$ [[System Reliability|system]]
+> 
+> ### Simulation
+> - [[Inversion Method]] — using the [[Cumulative Distribution Function (CDF)|CDF]] to simulate a [[Inversion Method|draw by inversion]] ([[Inversion Method|the inverse transformation method]])
+> - [[Rejection Method]]
 > 
 > ### Survival Models and Life Contingencies
 > - [[Survival Model]] and the [[Hazard Rate]] ([[Hazard Rate|force of mortality]])

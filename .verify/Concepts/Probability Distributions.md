@@ -75,3 +75,67 @@ created: 2026-10-04
 - checks_run: Three relationships (binomial -> Poisson, binomial -> normal, Poisson -> normal) against G&S §5.1 / §9.1, Siegrist and Tse §1.3.1 - conditions agree (after F-001 LaTeX fix). Exponential family: page form h(x) exp(eta(theta)T(x) - A(theta)) equals Larsen / Dobson & Barnett exp[a(y)b(theta) + c(theta) + d(y)] with h = e^d, T = a, eta = b, A = -c - a notation difference, not corrected. Distribution analogies: binomial label contradicts the sources (F-002). Placeholders and empty sections (F-003). External resources: probstats.org could not be reached (TLS failure, then HTTP 503); ProbOnto and SIPMath 3.0 were not read - unchecked. Figure (Poisson(6) bars with the N(6, 6) curve) is consistent with the Poisson -> normal bullet. No wiki links; figure embed exists. Only Exam MAS-I links the page (six times).
 - sources_checked: Grinstead & Snell, Introduction to Probability (2nd rev. ed., GNU FDL version), §5.1 Poisson distribution as the binomial limit with np = lambda, n large and p small, p.188-189 (PDF p.196-197); §9.1 Central Limit Theorem for Bernoulli trials, S_n binomial, p.325-326 (PDF p.333-334), sha256:763eab9894983ddfd6cd7f84685548d1515a9326a2d9fd015474534460551a5e — https://math.dartmouth.edu/~prob/prob/prob.pdf; Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (Random), "The Poisson Distribution": binomial with n p_n -> a converges to Poisson; Normal Approximation as the parameter grows; binomial normal approximation when np and n(1-p) are large (both >= 5), sha256:cf3d0aacfdb40291bb729d32f6f7692b39e4c4a13a1e09f86ef8826bef61f688 — https://www.randomservices.org/random/poisson/Poisson.html; Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview, §1.3.1 BN(n, theta) = x successes in n trials, "When n is large, X is approximately normally distributed" (PDF p.25), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf; Larsen, "Generalized Linear Models", CAS Study Note (Dec 2015, rev. June 2016), Exponential Family Formulas f(y; theta) = exp[a(y)b(theta) + c(theta) + d(y)] (PDF p.3), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf
 - note: F-001 (minor, garbled LaTeX in the Relationships bullets) fixed in this change. Open: F-002 minor (binomial labelled a single coin flip), F-003 nit (placeholders / empty sections). Low: the page is an unfinished stub and its external-resources list could not be checked.
+
+## [F-004] Exponential-family formula written in Unicode, not LaTeX
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- severity: nit
+- status: open
+- locus: Exponential Family, formula line
+- claim: f(x∣θ)=h(x)exp(η(θ)T(x)−A(θ)) inside $...$
+- evidence: The formula is the right form (it equals Larsen p.3 exp[a(y)b(θ) + c(θ) + d(y)] with h = e^d, T = a, η = b, A = -c), but it is typed with Unicode ∣, θ, η and the minus sign U+2212, and a bare exp, which the vault LaTeX rules (actuarial-concept-definitions skill, LaTeX rules 4) exclude; it was also inline rather than a > $$ block like every other formula in the vault.
+- proposed_action: Rewrite as > $$f(x \mid \theta) = h(x)\exp\big(\eta(\theta)\,T(x) - A(\theta)\big)$$.
+- applied: true
+- fingerprint: e29c8d90ce4f
+
+## [F-005] External resource ProbStats cannot be reached or checked
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- severity: minor
+- status: open
+- locus: External Resources, item 1
+- claim: [ProbStats](https://probstats.org/) for visual plots.
+- evidence: probstats.org failed again this session: curl over HTTPS fails certificate verification (also with the extended CA bundles earlier agents built), HTTP returns 503, and a WebFetch returned HTTP 503 Service Unavailable. Run 8861 got the same (TLS failure, then 503). Nothing supports the description, and the link does not serve a page. The other two resources were checked this session: ProbOnto (sites.google.com/site/probonto, ProbOnto v2.5, the ontology and knowledge base of probability distributions, 228 relationships) and the SIPmath 3.0 Standard (probabilitymanagement.org/30-standard, an open JSON standard encoding streams of trials of a probability distribution).
+- proposed_action: Remove the ProbStats line (it can be restored if the site comes back); link ProbOnto and the SIPmath 3.0 Standard to the pages read.
+- applied: true
+- fingerprint: 1e58d6e48a4d
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-002
+- status: resolved
+- note: The list now names a single coin flip as Bernoulli and the binomial as n flips: "- **Bernoulli** (a coin flip)" and "- **[[Binomial Distribution|Binomial]]** (the number of heads in $n$ coin flips)" (was "Binomial (a Coin Flip)"). Grinstead & Snell Def. 3.5 and Ex. 3.7, PDF p.104 (a Bernoulli trials process is a sequence of experiments with two outcomes and a constant success probability; a coin tossed ten times is one) and p.212 / PDF p.220 (a binomial variable is the sum of n independent 0-1 variables), sha256:763eab98…; Tse §1.3.1 eq. (1.17), publisher preview PDF p.25 (BN(n, θ) gives the probability of x successes in n independent trials), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404. The two neighbouring analogies were tightened to what the sources say: Poisson = "the number of heads in many flips of a coin that rarely lands heads" (G&S §5.1 p.189 / PDF p.197: binomial with n large, p small, np = λ) and Normal = "the number of heads in many coin flips, approximately" (G&S p.212 / PDF p.220, CLT; Tse PDF p.25).
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-003
+- status: resolved
+- note: Placeholders completed from sources read this session, and each list item now links its verified concept page. List: "Exponential ()" → "(the waiting time between events of a [[Poisson Process]])" and "Gamma ()" → "(the waiting time to the n-th event of a [[Poisson Process]])" — Daniel Fact 1.26 p.13 (homogeneous Poisson process: interevent times independent exponentials with mean 1/λ; T_n gamma with α = n, θ = 1/λ), sha256:e345451e…; "Uniform (a die roll)" kept — Daniel Ex. 1.16 pp.9-10 (a six-sided die gives a uniform variable on 1..6). Empty sections filled: Binomial pf, E = np, Var = np(1-p) (Tse eqs. (1.17), (1.19) PDF p.25; CAS MAS-I Tables Appendix B.2.1.3, PDF p.15); Poisson pf, E = Var = λ (Daniel Def. & Prop. 1.1 p.4; MAS-I Tables B.2.1.1); Normal density with μ the mean and σ the standard deviation (Grinstead & Snell §5.2 p.212 / PDF p.220); Exponential density, F(x) = 1 - e^{-x/θ}, E[X] = θ (MAS-I Tables A.3.3.1, PDF p.12, sha256:cb567413…) and its gamma links (Daniel Def. & Prop. 1.20 (4)-(5) p.11: α = 1 is the exponential; a sum of α (integer) independent exponentials with mean θ is gamma). Central Limit Theorem item now links [[Central Limit Theorem]]. Each formula checked numerically in Python (pf sums to 1, moments, densities, and Larsen p.3 rows for the normal, exponential and Poisson reproduce the same densities).
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-004
+- status: resolved
+- note: Applied in this change: the formula is now a display block in LaTeX, > $$f(x \mid \theta) = h(x)\exp\big(\eta(\theta)\,T(x) - A(\theta)\big)$$, under a heading that links [[Exponential Family]], with one bullet tying it to Larsen's form: exp[a(y)b(θ) + c(θ) + d(y)] with h = e^d, T = a, η = b, A = -c (Larsen, "Generalized Linear Models", CAS study note, Exponential Family Formulas, PDF p.3, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd; Larsen states the formulas supplement Dobson & Barnett §3.2, whose text was not read — the Dobson preview ends before Ch.3, so the bullet attributes the form to Larsen only).
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-005
+- status: resolved
+- note: Applied in this change: the ProbStats line was removed (unreachable this session and in run 8861; it can be restored if the site returns). ProbOnto and SIPmath 3.0 now link the pages read this session: https://sites.google.com/site/probonto/ (ProbOnto v2.5, "the Ontology and Knowledge Base of Probability Distributions", 150 distributions, 228 relationships and re-parameterisation formulas; HTML sha256:ed52d75d7a5c627a29f572d32dc7663de1c9f479fe417def97287cd90531d0b9) and https://www.probabilitymanagement.org/30-standard (the open SIPmath 3.0 Standard wraps the 22 numbers that encode a stream of trials of a probability distribution in a JSON object; HTML sha256:a24e2d392925e624be4e85bfa19d16c3b423140ccd0bb544800c4a5fd4d42c0a). Their one-line descriptions are unchanged; the name is now written "SIPmath" as the standard spells it.

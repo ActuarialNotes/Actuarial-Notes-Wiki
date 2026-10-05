@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:83abfc44986fe4c3d4d209e5e6da7cd92f551b2f05520a45c3cfc0e96e887a3c
+  content_hash: sha256:e57d3a2931ee45775af4cb8de51546f8dba71e8525e6fdea6ade84ffacc6c94b
   sources:
     - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS, Exam MAS-I — Modern Actuarial Statistics-I exam page, read 2026-10-04: windows Jul 29-Aug 4 and Oct 28-Nov 5, 2026; fee $550 ($440 students); links the 2026 Content Outline, sha256:60386e2cc573d16ac1792989fdf4d27382f0944e668a773669bb2567ca26004a — https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i"
@@ -20,7 +20,7 @@ verification:
     - "Struppeck, Life Contingencies, CAS Study Note (rev. Sept 2015), full-text search, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
     - "Ross, Introduction to Probability Models, 13th ed. (Elsevier 2023), publisher product page, chapter-level contents, sha256:4feee1adf6f271c13df56c766024e4cbd75c1c730698a0e109a95f1260839a23 — https://shop.elsevier.com/books/introduction-to-probability-models/ross/978-0-443-18761-2"
     - "Tse, Nonlife Actuarial Models (CUP 2009), Cambridge Core contents p.vii image, sha256:310e411c2bcc82d3ba9d145325e7a649444a68994c6d03c990c75475c2e59fc0, and chapter summaries for Ch 2, 11, 12, 13 — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271"
-  open_findings: 9
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam MAS-I (CAS).md
 ---
@@ -157,7 +157,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > - [[Multinomial Logistic Regression|Nominal (multinomial) logistic regression]] and [[Ordinal Logistic Regression|ordinal logistic regression]]
 > - [[Poisson Regression]] for [[Frequency|claim counts]]
 > - [[Log-Linear Model]]s for [[Log-Linear Model|contingency tables]]
-> - [[Tweedie Distribution]] for [[Pure Premium|pure premium]]
+> - [[Tweedie Distribution]]s, whose [[Variance|variance]] is a [[Tweedie Distribution|power of the mean]]
 > - [[Quasi-Likelihood]] for [[Quasi-Likelihood|overdispersion]]
 > - [[Naive Bayes]] and [[Quadratic Discriminant Analysis]] — [[Naive Bayes|generative models for classification]]
 > 
@@ -184,11 +184,11 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > ### Shrinkage and Dimension Reduction
 > - [[Regularization]] — [[Regularization|ridge regression]] and the [[Regularization|lasso]]
-> - [[Principal Components Regression]] and [[Partial Least Squares]]
+> - [[Principal Components Regression]] and [[Partial Least Squares]] — [[Principal Components Regression|dimension reduction methods]], with an overview of [[Principal Components Analysis|principal components analysis]]
 > - [[High-Dimensional Data]]
 > 
 > ### Diagnostic Plots
-> - [[Residual Plot]]
+> - [[Residual]]s and the [[Residual Plot]]
 > - [[QQ Plot]]
 > - [[Marginal Model Plot]]
 > - [[Added Variable Plot]]

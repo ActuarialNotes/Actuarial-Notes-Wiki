@@ -1,14 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ff2f2125d6a1d37173a3ac387624bce6e30a7e5c1d3acf940b148e622798cfe7
+  content_hash: sha256:4000a2c758b190281f42643a03b7c82b3ef6350acb60ad3d8dc89afaf8642fbe
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.1 (PDF pp.503-504), §12.2.4 scaling and scree plot (PDF pp.513-516, incl. CV available only for PCR), §12.2.5, §12.4 and §12.4.2 scaling (PDF pp.522-535), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-II Content Outline 2026, Domain C tasks 5-8 (PDF p.3), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch 11 'Clustering' (PDF p.203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.1 subjective, EDA, no cross-validation (PDF pp.503-504), §12.2 derived variables for supervised learning (PDF p.505), §12.2.4 scaling (PDF pp.513-514) and number of components - scree, subjective, CV only for PCR (PDF pp.515-516), §12.4.2 scaling before dissimilarities (PDF p.536), practical issues - validating clusters, not robust, cluster subsets (PDF pp.537-538), §6.3.2 PCR drawback (PDF p.268), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 5-8 (PDF p.3) and James reading list Ch 12 (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch 10 'Data Mining Techniques' - Factor Analysis, Cluster Analysis (PDF pp.195-196) and Ch 11 'Clustering' (PDF p.203), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Unsupervised Learning.md
@@ -21,7 +21,7 @@ verification:
 - The two MAS-II syllabus methods: [[Principal Components Analysis]] (find a few directions that carry most of the variance) and [[Clustering]] (find groups of similar observations)
 - **No objective scorecard.** There is no held-out label, so [[Cross-Validation]] cannot arbitrate — a [[Scree Plot]] elbow or a [[Dendrogram]] cut is a judgement call
 - Results are **scale-sensitive**: both PCA and distance-based clustering must have their variables standardized when units differ
-- Common actuarial uses: grouping territories or classes, and exploratory data analysis before a [[Generalized Linear Model]]
+- Common actuarial uses: compressing a long list of highly correlated rating variables into a few uncorrelated score variables (principal components), grouping territories or classes, and exploratory data analysis before a [[Generalized Linear Model]]
 - Often a **preprocessing step** — principal components fed into a supervised model as predictors
 
 ![[Media/Figures/Unsupervised_Learning.svg|340]]

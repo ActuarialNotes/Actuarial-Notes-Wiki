@@ -61,3 +61,14 @@ created: 2026-10-05
 - resolves: F-002
 - status: resolved
 - note: Deleted the sentence 'Each bootstrap resample overlaps the original data (about 63% of distinct observations), so a model scored on it looks optimistic.' The bullet now ends 'Cross-validation measures how well a model predicts', which James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy) Ch 5 intro supports (PDF p.206: CV for model assessment/selection, the bootstrap 'most commonly to provide a measure of accuracy of a parameter estimate'), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf. ISLR does not state the optimism consequence, and the rank-3 source that does (Hastie, Tibshirani & Friedman, ESL §7.11) could not be fetched again this session (hastie.su.domains: connection reset), so the unsourced claim is removed.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: high
+- checks_run: re-pass after run-3707 resolutions of F-001/F-002 (both deletions): whole log read; both deletions confirmed in git and the remaining sentences re-read (bullet 1 ends at MSE / error rate per eqs. 2.6, 2.9; bootstrap bullet ends 'Cross-validation measures how well a model predicts' per Ch 5 intro p.206 and eq. 5.8); every formula re-diffed (2.6, 2.9, 2.7, 5.1, 5.2 with leverage, 5.3); validation-set, k-fold bias/variance, OOB and AIC/BIC claims re-read; both examples recomputed in numpy (CV_A 420, CV_B 450, gaps 40/140; fit 1.5 + 2x, training MSE 1.25, leverages 0.7/0.3, CV(4) = 3.685 by the shortcut and by brute-force refits, ratio 2.95, end-point inflation 11.1x); 10 wiki links resolve
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.1 eq. 2.6 and training MSE vs flexibility (PDF pp.41-43), §2.2.2 eq. 2.7 and 'never lie below Var(e)' (PDF p.45), §2.2.3 eq. 2.9 (PDF p.48), Ch 5 intro (PDF p.206), §5.1.1-5.1.4 eqs. 5.1-5.3, leverage, k = 5 or 10, LOOCV correlation (PDF pp.207-215), §5.2 eq. 5.8 (PDF p.220), §6.1.3 indirect adjustment of training error (PDF p.240), §8.2.1 OOB (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list incl. Ch 2 (excl. §2.2.3) and Ch 5 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Re-pass binding the run-3707 deletions; nothing further changed.

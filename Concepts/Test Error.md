@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:1d18f174494ec0f75a2e09c71bedb0b6d142f9cfad1ebea5fa01dac767cf7ce0
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.1 eq. 2.6 (PDF p.41), §2.2.2 eq. 2.7 and 'never lie below Var(e)' (PDF p.45), §2.2.3 eq. 2.9 (PDF p.48), §5.1.1-5.1.4 eqs. 5.1-5.3 (PDF pp.207-215), §5.2 eq. 5.8 (PDF p.220), §6.1.3 AIC/BIC (PDF pp.240-244), §8.2.1 OOB (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.1 eq. 2.6 and training MSE vs flexibility (PDF pp.41-43), §2.2.2 eq. 2.7 and 'never lie below Var(e)' (PDF p.45), §2.2.3 eq. 2.9 (PDF p.48), Ch 5 intro (PDF p.206), §5.1.1-5.1.4 eqs. 5.1-5.3, leverage, k = 5 or 10, LOOCV correlation (PDF pp.207-215), §5.2 eq. 5.8 (PDF p.220), §6.1.3 indirect adjustment of training error (PDF p.240), §8.2.1 OOB (PDF p.350), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list incl. Ch 2 (excl. §2.2.3) and Ch 5 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Test Error.md

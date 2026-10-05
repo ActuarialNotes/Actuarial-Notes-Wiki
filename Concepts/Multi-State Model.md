@@ -1,16 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:87cdbe636e0da959371df5440bb2266ad40cfcc44aea32f460c42b250eb18b74
   sources:
-    - "Daniel, 'Multi-state transition models with actuarial applications' (2004; reprinted by CAS and SOA): Sec. 1.1 Examples 1.1 (alive-dead), 1.3 (multiple lives, four states), 1.4 (disability) PDF pp.2-3; Sec. 1.2 Def. 1.7 non-homogeneous Markov chain, Thm 1.18 kQ_n = Q_n ... Q_{n+k-1}, 'Warning on interpretation' and Thm 1.19 kP(i)_n = P(i)_n ... P(i)_{n+k-1} (staying vs. being in a state), Example 1.20 PDF pp.4-8; Sec. 2.3 Thm 2.12 APV of cash flows while in states = sum_k kQ(s,i)_n x C x kv_n PDF p.16, sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 - https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
-    - "Heriot-Watt University F79AF lecture notes, Ch. 5 'Markov Multiple-State Models': Sec. 5.1 two-state alive-dead model, death governed by the transition intensity mu^ad (the force of mortality) PDF pp.1-5; Sec. 5.2 general model with age-dependent intensities PDF pp.5-6; Sec. 5.3 Fig. 5 disability model Able/Ill/Dead with recovery PDF pp.7-8, sha256:84d9098f7ae74942523f1ab7fae8739d963e6428c314b43ec41c7e1b28b0a6b1 - https://www.macs.hw.ac.uk/~andrea/f79af/notes5.pdf"
-    - "Struppeck, 'Life Contingencies', CAS Study Note (Oct 2014, rev. Sept 2015) - MAS-I syllabus reading: hazard rate used for mortality is the 'force of mortality'; joint-life annuity pays until one dies, last-survivor until both have died, PDF p.11, sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 - https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
-    - "Ross, Introduction to Probability Models, Ch. 4 (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists): Sec. 4.2 Chapman-Kolmogorov pp.189-190, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
-  open_findings: 1
+    - "Daniel, 'Multi-state transition models with actuarial applications' (2004; CAS study note reprint): Examples 1.1, 1.3 (pair of lives: joint status fails at the first failure, last-survivor at the last; four states), 1.4 (disability, moving back and forth) PDF pp.2-3; Thm 1.18 kQ_n = Q_n … Q_{n+k-1} PDF p.7; 'Warning on interpretation' and Thm 1.19 kP(i)_n = P(i)_n … P(i)_{n+k-1} (being in vs remaining in a state) PDF p.7; Thm 2.12 APV of cash flows while in states PDF p.16, sha256:0ca2c70a5c022a0032026ae139bd59e9fee3142d0455ed071e2d8698573200f8 — https://www.casact.org/sites/default/files/database/studynotes_daniel.pdf"
+    - "Struppeck, 'Life Contingencies', CAS Study Note (Oct 2014, rev. Sept 2015) — MAS-I syllabus reading, PDF p.11 (the hazard rate for mortality is the force of mortality; joint-life annuity pays until one of the two dies, last-survivor until both have died), sha256:8ea3f762df47e0c143b217219e7aa7033709e55f2a6378de25ed385673e3a849 — https://www.casact.org/sites/default/files/2021-03/MAS-I_Struppeck.pdf"
+    - "Heriot-Watt University F79AF lecture notes, Ch. 5 'Markov Multiple-State Models': §5.1 alive-dead model with the force of mortality as the transition intensity μ^ad PDF pp.1-3; §5.2 age-dependent intensities PDF p.6; §5.3 Fig. 5 Able/Ill/Dead disability model with recovery PDF pp.7-8, sha256:84d9098f7ae74942523f1ab7fae8739d963e6428c314b43ec41c7e1b28b0a6b1 — https://www.macs.hw.ac.uk/~andrea/f79af/notes5.pdf"
+    - "Ross, Introduction to Probability Models, Ch. 4 (course-hosted copy on the NTNU TMA4265 page; an edition earlier than the 11th-13th the 2026 outline lists): §4.2 Chapman-Kolmogorov pp.189-191, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Multi-State Model.md
 ---

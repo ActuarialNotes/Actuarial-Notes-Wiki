@@ -1,16 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:9cc64b2ac32cf9839b052ab426283bd301480425297b3b3ec1350382637587d8
   sources:
-    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on NTNU TMA4265 page; edition earlier than the 11th-13th the 2026 outline lists, file dated 2012-09-06): Ex. 4.7 Bonus Malus system, s_i(k) and a_k notation, P_ij = sum over k with s_i(k)=j of e^-lambda lambda^k/k!, pp.188-189; Proposition 4.3 and Ex. 4.23 average annual premium = sum pi_j x premium_j, pp.215-216, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 - https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
-    - "Lemaire & Zi, 'A Comparative Analysis of 30 Bonus-Malus Systems', ASTIN Bulletin 24(2), 1994 (CAS-hosted): Introduction (BMS surcharge/discount by claims; a priori classification vs. need for BMS) pp.287-288; Tool #3 efficiency = elasticity of the mean stationary premium w.r.t. claim frequency, typically far below 1 (Table 4) p.294; Tool #4 'hunger for bonus', paying small claims to avoid surcharges, pp.294-296, sha256:44976cd13085959f1c41c738cc06163b0999de01beb4411b2f6d5b33859ec181 - https://www.casact.org/sites/default/files/database/astin_vol24no2_287.pdf"
-    - "Charpentier, David & Elie, 'Optimal Claiming Strategies in Bonus Malus Systems and Implied Markov Chains', Risks 5(4):58, 2017: Sec. 1 (BMS as Markov chains; hunger for bonus - small accidents not reported; zero-inflated claim data) p.1; Sec. 1.2-1.3 stationary distribution -> average premium, short-term rule 'not claim when l < P3 - P1' pp.2-3; Sec. 2.2 stationary distribution depends only on frequency, not severity p.4, sha256:7aca0a4b2950faa930301254577a315125779ee70accd96e61d57d66214ac764 - https://pdfs.semanticscholar.org/e029/9f4413e126653c375b792038ea8b6c8b21c1.pdf"
-    - "Niemiec, 'Bonus-Malus Systems as Markov Set-Chains', ASTIN Bulletin 37(1), 2007 (CAS-hosted), Sec. 1 Introduction (constant individual claim frequency -> homogeneous Markov chain) p.53, sha256:5ca8e5a1c851ba2d6855f29319172d102e4eeee90c2ae1cd1d040b8ff4114fe8 - https://www.casact.org/sites/default/files/database/astin_vol37no1_53.pdf"
-  open_findings: 1
+    - "Ross, Introduction to Probability Models, Ch. 4 'Markov Chains' (course-hosted copy on the NTNU TMA4265 page; an edition earlier than the 11th-13th the 2026 outline lists): Ex. 4.7 Bonus Malus system, s_i(k) and Poisson a_k, P_ij = Σ_{k: s_i(k)=j} e^{-λ}λ^k/k!, pp.188-189; Proposition 4.3 and Ex. 4.23 average annual premium = Σ_j π_j × premium_j, pp.215-216, sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "Niemiec, 'Bonus-Malus Systems as Markov Set-Chains', ASTIN Bulletin 37(1), 2007 (CAS-hosted), §1 Introduction p.53 (constant individual claim frequency → constant transition probabilities → homogeneous Markov chain), sha256:5ca8e5a1c851ba2d6855f29319172d102e4eeee90c2ae1cd1d040b8ff4114fe8 — https://www.casact.org/sites/default/files/database/astin_vol37no1_53.pdf"
+    - "Lemaire & Zi, 'A Comparative Analysis of 30 Bonus-Malus Systems', ASTIN Bulletin 24(2), 1994 (CAS-hosted): Introduction pp.287-288 (merit rating; more a priori classification decreases the need for a BMS); Tool #3 efficiency = elasticity of the mean stationary premium w.r.t. claim frequency p.294; Tool #4 hunger for bonus — policyholders pay small claims themselves to avoid surcharges, pp.294-295, sha256:44976cd13085959f1c41c738cc06163b0999de01beb4411b2f6d5b33859ec181 — https://www.casact.org/sites/default/files/database/astin_vol24no2_287.pdf"
+    - "Charpentier, David & Elie, 'Optimal Claiming Strategies in Bonus Malus Systems and Implied Markov Chains', Risks 5(4):58, 2017: §1 p.1 (hunger for bonus; small accidents not reported), §1.2 p.3 (not claiming when the loss is below the premium difference), §2.1 p.4 (stationary distribution depends only on claim frequency, not on severity), sha256:7aca0a4b2950faa930301254577a315125779ee70accd96e61d57d66214ac764 — https://pdfs.semanticscholar.org/e029/9f4413e126653c375b792038ea8b6c8b21c1.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Bonus-Malus System.md
 ---

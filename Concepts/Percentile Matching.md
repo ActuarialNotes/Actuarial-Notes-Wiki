@@ -4,12 +4,12 @@ verification:
   confidence: medium
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bfcaafbb34b4605940ba09cf5243e26ca2d9e078bd13a54bba73eeb8c2ed489f
+  content_hash: sha256:ed7806dd19ad1d0c33f0ebf0bbcd7ddea07d1edf244a4c952afcd174cefe1129
   sources:
-    - "Loss Data Analytics (Frees et al., open textbook), ch.4: §4.1.1.3 smoothed empirical quantile (1-h)X_(j) + hX_(j+1), j = floor((n+1)q), h = (n+1)q - j; Example 4.1.11 n = 11, q = 0.4 gives 0.2 X_(4) + 0.8 X_(5); §4.1.3.2 percentile matching, needed when moments do not exist, estimates vary with the percentiles chosen, Pareto needs a numerical routine; MLE uses data more efficiently, moments and percentile matching are easier to explain and give starting values, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), reading list PDF p.6: Tse §12.1, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed contents PDF pp.10-13: §12.1 'Methods of moments and percentile matching', §12.1.2 'Method of percentile matching' (contents only; body not freely available), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
-  open_findings: 1
+    - "Frees et al., Loss Data Analytics (open text), ch.4 Model Selection and Estimation: §4.1.1.3 smoothed empirical quantile (1-h)X_(j) + hX_(j+1), j = floor((n+1)q), h = (n+1)q - j (Example 4.1.3); §4.1.3.1 moments not available when they do not exist, percentile matching as the alternative; §4.1.3.2 Example 4.1.10 Pareto quantile theta((1-q)^(-1/alpha) - 1), numerical routine required, no analytic solution; Example 4.1.11 loglogistic by ratio of the two equations, n = 11, q = 0.4 gives 0.2 X_(4) + 0.8 X_(5); estimates vary with percentiles chosen; MLE more efficient, moments/percentile matching easier to explain and give starting values, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), reading list PDF p.6: Tse §12.1 assigned, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge UP, 2009), publisher preview, printed Contents (PDF pp.10-13): §12.1 Methods of moments and percentile matching (contents only), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Percentile Matching.md
 ---
@@ -23,7 +23,7 @@ verification:
 > $$j = \lfloor (n+1)g \rfloor, \qquad h = (n+1)g - j$$
 
 - $\hat\pi_g$ is the **smoothed empirical percentile**: locate position $(n+1)g$ among the [[Order Statistics|order statistics]] $x_{(1)} \le \cdots \le x_{(n)}$ and interpolate linearly between the neighbouring observations. For $n = 11$ and $g = 0.4$, the position is $4.8$, so $\hat\pi_{0.4} = 0.2\,x_{(4)} + 0.8\,x_{(5)}$.
-- Distributions with a closed-form inverse CDF — exponential, [[Weibull Distribution|Weibull]], [[Pareto Distribution|Pareto]], loglogistic — give equations that can be solved by hand; the general case $F^{-1}(g \mid \theta) = \hat\pi_g$ may need a numerical solver.
+- The exponential, [[Weibull Distribution|Weibull]] and loglogistic give equations that can be solved by hand: for the two-parameter ones, dividing one equation by the other eliminates $\theta$. A closed-form inverse CDF is not enough on its own — the two-parameter [[Pareto Distribution|Pareto]] has $F^{-1}(g) = \theta\big((1 - g)^{-1/\alpha} - 1\big)$, yet its two percentile equations have no analytic solution and need a numerical solver, as does the general case $F^{-1}(g \mid \theta) = \hat\pi_g$.
 - **Choices matter.** Different percentile levels give different estimates, and the method uses only a few points of the sample. [[Maximum Likelihood Estimation|Maximum likelihood]] uses the data more efficiently and is generally preferred; percentile matching and moments give quick, explainable estimates and starting values for the MLE search.
 - Because percentiles always exist, the method can fit heavy-tailed severity models such as a Pareto with $\alpha \le 1$, where the moment equations have no solution (see [[Tail Weight]]).
 

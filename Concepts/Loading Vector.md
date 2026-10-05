@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: medium
+  confidence: high
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:f5e90b52658ce3f2de8f9feacf20af52a0caf4e04fd843c694ff2f0139b91d1e
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §12.2.1 eqs. 12.1-12.4, unit-norm constraint, orthogonality and footnote 2 (PDF pp.505-507), §12.2.4 uniqueness up to sign (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-II Content Outline 2026, Domain C tasks 5-8 (PDF p.3) and James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-  open_findings: 1
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), §6.3.1 eq. 6.19 loadings both positive and similar size, 'almost an average' (PDF p.262), §12.2.1 eqs. 12.1-12.4, unit-norm constraint and 'arbitrarily large variance' (PDF pp.505-506), orthogonality, footnote 2 eigenvectors, first loading vector as 'overall' measure (PDF p.507), §12.2.4 uniqueness up to a sign flip for loadings and scores (PDF p.515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 5-6 (PDF p.3) and James reading list Ch 12 (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loading Vector.md
 ---

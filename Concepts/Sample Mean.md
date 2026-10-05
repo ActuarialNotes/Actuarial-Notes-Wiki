@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:86ebf7fefea80971eab7a2b30243293d60b278178346d0f41c19de7ea7d98c85
+  content_hash: sha256:c789784356070dbd57ff979d8d6f8417124d679b1b6ea2ec34bab8862e5e4e53
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §5.2 The Sample Mean (definition; outlier exercise: dropping one score of 10 moves the mean 64 → 66.25), sha256:e21a3da7773a6f7f925b4cb0c583d5331abb1656fe01ed952c8d42b26f238cab — https://www.randomservices.org/random/sample/Mean.html"

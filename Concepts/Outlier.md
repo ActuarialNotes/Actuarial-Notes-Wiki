@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:754a86e15eedaf80f5dda4f429dcbb749d88020c7aab7b796791dbe344b794a2
+  content_hash: sha256:42acc0b926deaefa128c4b5655fb70d61e87c7e3e3dcaf348fd838114eb3ff69
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.1.6 'What are outliers in the data?', sha256:1f1c9855ffcd8cd40165c97844e410a56edb032b8100616794732a32dfb094ee — https://www.itl.nist.gov/div898/handbook/prc/section1/prc16.htm"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.7 'Box Plot' (box plots with fences), sha256:4cb2b0dd09d0803cb0613c9cf7dc939e80491badfc0f39b1f4fdb0468ff29730 — https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm"

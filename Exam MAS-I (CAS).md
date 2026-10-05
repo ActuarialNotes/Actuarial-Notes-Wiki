@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e57d3a2931ee45775af4cb8de51546f8dba71e8525e6fdea6ade84ffacc6c94b
+  content_hash: sha256:179646059b7932f37efe14cb36de682038cb96a8810358936ed04a60148de9c1
   sources:
     - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS, Exam MAS-I — Modern Actuarial Statistics-I exam page, read 2026-10-04: windows Jul 29-Aug 4 and Oct 28-Nov 5, 2026; fee $550 ($440 students); links the 2026 Content Outline, sha256:60386e2cc573d16ac1792989fdf4d27382f0944e668a773669bb2567ca26004a — https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i"
@@ -51,7 +51,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 3. Calculate [[Limited Expected Value]]
 > 4. Perform [[Survival Model]] and [[Hazard Rate]] calculations
 > 5. Perform [[Joint Life]] calculations
-> 6. Calculate simple [[Whole Life Insurance]] or [[Life Annuity]] problems
+> 6. Calculate simple [[Whole Life Insurance|whole life]] or [[Life Annuity|annuity]] problems
 > 
 > ### Poisson Processes
 > - [[Poisson Process]] — [[Counting Process|counts]], [[Interarrival Time|interarrival times]], [[Poisson Thinning|thinning]], and [[Poisson Superposition|superposition]]
@@ -88,12 +88,12 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > 1. Estimate the [[Sample Mean|mean]] and [[Sample Variance|variance]] given a [[Random Sample|sample]]
 > 2. Estimate a [[Sufficient Statistic]] for a [[Probability Distributions|distribution]]
-> 3. Test [[Hypothesis Testing|statistical hypotheses]], including [[Type I Error]] and [[Type II Error]]
+> 3. Test [[Hypothesis Testing|statistical hypotheses]], including [[Type I Error|Type I]] and [[Type II Error|Type II errors]]
 > 4. Test [[Sample Mean|means]] and [[Sample Variance|variances]] using [[Critical Value|critical values]] from a [[Sampling Distribution]]
 > 5. Model [[Claim|insurance claim]] [[Frequency]] and [[Severity]]
 > 6. Model [[Claim|insurance claims]] in [[Aggregate Loss Model|aggregate]]
 > 7. Calculate [[Order Statistics]] of a [[Random Sample|sample]]
-> 8. Perform [[Parameter Estimation|point estimation of statistical parameters]] using [[Maximum Likelihood Estimation]] ([[Maximum Likelihood Estimation|MLE]]) applying criteria to [[Parameter Estimation|estimates]] such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the [[Incomplete Data|data]])
+> 8. Perform [[Parameter Estimation|point estimation of statistical parameters]] using [[Maximum Likelihood Estimation]] ([[Maximum Likelihood Estimation|MLE]]) applying criteria to [[Parameter Estimation|estimates]] such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the [[Incomplete Data|data]])
 > 9. Adjust calculations for the effect of [[Incomplete Data|missing data values]], including [[Censoring]] and [[Truncation]]
 > 
 > ### Summarizing a Sample
@@ -140,14 +140,14 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > Candidates should be able to solve problems using [[Extended Linear Model|extended linear models]] and determine when these [[Extended Linear Model|models]] are appropriate to use.
 > 
 > 1. Select the [[Model Selection|appropriate model]] for an [[Extended Linear Model|extended linear model]]
-> 2. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Data Types|data set to be modeled]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model]])
+> 2. Select the appropriate [[Model Structure|model structure]] for an [[Extended Linear Model|extended linear model]] given the behavior of the [[Data Types|data set to be modeled]] (e.g., appropriate [[Link Function]] and [[Probability Distributions|distribution]] for the [[Response Variable|dependent variable]] for [[Generalized Linear Model|GLM]])
 > 3. Evaluate [[Model Selection|models]] developed using an [[Extended Linear Model|extended linear model]] approach
 > 4. Interpret the [[Extended Linear Model|extended linear model]] [[Model Output|output]] from [[Statistical Software|statistical software]], such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA|ANOVA tables]]
 > 5. Distinguish among [[Categorical Predictor|categorical, ordinal, and continuous predictors]] and their [[Interaction|interactions]], and how these relate to their usage in an [[Extended Linear Model|extended linear model]]
-> 6. Understand and apply [[Control Variable|control]] and [[Offset Variable|offset variables]] in [[Generalized Linear Model]]s
+> 6. Understand and apply [[Control Variable|control]] and [[Offset Variable|offset variables]] in [[Generalized Linear Model|GLMs]]
 > 7. Understand and calculate [[AIC]], [[BIC]], [[Deviance]], and [[R-Squared]]
-> 8. Analyze [[Model Diagnostics|model diagnostic plots]] (e.g., [[Residual Plot]]s, [[Marginal Model Plot|marginal model]], [[QQ Plot]]s, and [[Added Variable Plot|added variable plots]]) to assess [[Model Fit|quality of fit]]
-> 9. Interpret [[Exploratory Data Analysis]] plots for various [[Data Types|data types]] (e.g., [[Box Plot|box plots]], [[Univariate Plot|univariate plots]], [[Histogram|histograms]])
+> 8. Analyze [[Model Diagnostics|model diagnostic plots]] (e.g., [[Residual Plot|residual]], [[Marginal Model Plot|marginal model]], [[QQ Plot|QQ]], and [[Added Variable Plot|added variable plots]]) to assess [[Model Fit|quality of fit]]
+> 9. Interpret [[Exploratory Data Analysis]] plots for various [[Data Types|data types]] (e.g., [[Box Plot|box]], [[Univariate Plot|univariate]], [[Histogram|histograms]])
 > 
 > ### Model Families
 > - [[Linear Regression]] — the [[Ordinary Least Squares|ordinary least-squares]] starting point

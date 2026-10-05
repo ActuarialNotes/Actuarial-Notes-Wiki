@@ -315,3 +315,27 @@ created: 2026-10-04
 - resolves: F-012
 - status: resolved
 - note: The bullet now reads '[[Tweedie Distribution]]s, whose [[Variance|variance]] is a [[Tweedie Distribution|power of the mean]]', Larsen PDF p.2's definition (Var[Y] = a[E(Y)]^p; sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd). Pure Premium is no longer linked from the MAS-I page and leaves its concept set.
+
+## [F-014] Six task statements read link labels where the outline has its own words
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- severity: nit
+- status: open
+- locus: Learning Objectives, tasks A6, B3, B8, C2, C6, C8, C9
+- claim: With the links stripped, A6 read 'whole life insurance or life annuity problems', B3 'including Type I Error and Type II Error', B8 '... minimum variance, and mean square error', C2 '... for Generalized Linear Model)', C6 '... in Generalized Linear Models', C8 '(e.g., residual plots, marginal model, QQ plots, and added variable plots)' and C9 '(e.g., box plots, univariate plots, histograms)'.
+- evidence: CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06; https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed): p.3 A6 'Calculate simple whole life or annuity problems'; p.4 B3 'including Type I and Type II errors', B8 '... efficiency, minimum variance, mean square error (e.g., accounting for censoring and truncation in the data)'; p.5 C2 '... for the dependent variable for GLM)', C6 'Understand and apply control and offset variables in GLMs', C8 '(e.g., residual, marginal model, QQ, and added variable plots)', C9 '(e.g., box, univariate, histograms)'. Found by stripping the links from every numbered task (scripts/syllabus_lib.py strip_links) and searching for it in the outline's text; the other 17 tasks and all three preambles match (B's 'second semester' for the outline's '2nd semester' is kept, since the noun-phrase chunker reads '2nd' as the word 'nd').
+- source_rank: 1
+- proposed_action: Put the links on the outline's own words via aliases; targets unchanged, so the concept set does not change.
+- applied: true
+- fingerprint: cb1417ec0c38
+
+## [F-014/R] Task wording restored with aliases
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- resolves: F-014
+- status: resolved
+- note: A6 now reads '[[Whole Life Insurance|whole life]] or [[Life Annuity|annuity]] problems'; B3 'including [[Type I Error|Type I]] and [[Type II Error|Type II errors]]'; B8 drops the inserted 'and' before Mean Square Error; C2 ends 'for [[Generalized Linear Model|GLM]])'; C6 'in [[Generalized Linear Model|GLMs]]'; C8 '(e.g., [[Residual Plot|residual]], [[Marginal Model Plot|marginal model]], [[QQ Plot|QQ]], and [[Added Variable Plot|added variable plots]])'; C9 '(e.g., [[Box Plot|box]], [[Univariate Plot|univariate]], [[Histogram|histograms]])'. Every one of the 24 tasks, links stripped, is now a substring of the outline 2026 text pp.3-5 (sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed). Link targets unchanged; syllabus_lint 0 errors 0 warnings, test_syllabus_lib OK.

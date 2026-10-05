@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:7ab2a55bc4f5042851d591856daded7937a96662befc63f4c99f9ba41ea54395
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Cross-Correlation.md
 ---

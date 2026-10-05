@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f7431ccd3b02db6065ed88e1416bc2a950382d5a1f12e29729354f931e7e377f
+  content_hash: sha256:7175e0bff1bf528ba0c3906f8249876688b8a97ba5b480c297456f1af4c22bac
   sources:
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020, open textbook), Ch.4 §4.3.1 (grouped data = interval censored, Example 4.3.1 exponential grouped MLE with p = e^(-1000/theta); right-censored and left-truncated likelihood prod_E f/(1-F(C_L)) prod_R (1-F(C_U))/(1-F(C_L)); exponential special case theta-hat = sum of (min(x, C_U) - C_L) over the number of uncensored observations) and §4.3.2.2 Kaplan-Meier with right-censored, left-truncated risk sets, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
     - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.1-3.5.2.3 grouped likelihood prod [F(c_j) - F(c_{j-1})]^{n_j}, policy limit as right censoring S(u), deductible as left truncation f(x)/S(d), Example 3.5.7 combined deductible-and-limit likelihood, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"

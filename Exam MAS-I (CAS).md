@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:832cec0f9c32f8f440d95cb945f7e879fc5cda0955d767a5cf087f56e7d9258e
+  content_hash: sha256:83abfc44986fe4c3d4d209e5e6da7cd92f551b2f05520a45c3cfc0e96e887a3c
   sources:
     - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS, Exam MAS-I — Modern Actuarial Statistics-I exam page, read 2026-10-04: windows Jul 29-Aug 4 and Oct 28-Nov 5, 2026; fee $550 ($440 students); links the 2026 Content Outline, sha256:60386e2cc573d16ac1792989fdf4d27382f0944e668a773669bb2567ca26004a — https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i"

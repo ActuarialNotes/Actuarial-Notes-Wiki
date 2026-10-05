@@ -520,6 +520,13 @@ Other important `lib/` modules:
   `timed=1`; `components/QuizTimer.tsx` counts down in the quiz header from the first
   question (not the pre-quiz concept list), goes amber in the last tenth and counts the
   overrun in red rather than ending the quiz. Pure and tested.
+- `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
+  in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
+  one exam's bank: how many questions a quiz can draw, where they came from (the exam's own past
+  papers with their sittings and span, the body's published samples, questions moved here from
+  another exam's paper, the vault's own), how many are kept off-syllabus, and the real paper's
+  length and time per question or point from `quizTiming.ts`'s pace table — none for an exam
+  with no pace on file. Pure and tested.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,

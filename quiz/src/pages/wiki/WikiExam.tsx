@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, Link, useSearchParams } from 'react-router-dom'
-import { ChevronLeft, Loader2, CalendarDays } from 'lucide-react'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, examDisplayName, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -13,6 +13,7 @@ import { ExamVersionMenu } from '@/components/wiki/ExamVersionMenu'
 import { ExamSittingInfoButton } from '@/components/wiki/ExamSittingInfoButton'
 import { ExamProjectButton } from '@/components/wiki/ExamProjectButton'
 import { ExamLogo } from '@/components/ExamLogo'
+import { FloatingSearchBack } from '@/components/FloatingSearchBar'
 import { examAccentStyle } from '@/lib/examColors'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -155,15 +156,7 @@ export default function WikiExam() {
   ), [progressKey])
 
   const backLink = useMemo(() => (
-    <Link
-      to="/wiki"
-      state={RESTORE_SCROLL}
-      aria-label="All exams"
-      title="All exams"
-      className="inline-flex items-center justify-center shrink-0 -ml-1.5 h-7 w-7 rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-colors not-prose"
-    >
-      <ChevronLeft className="h-5 w-5" />
-    </Link>
+    <FloatingSearchBack to="/wiki" state={RESTORE_SCROLL} label="All exams" />
   ), [])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or

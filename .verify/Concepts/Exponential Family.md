@@ -84,3 +84,14 @@ created: 2026-10-04
 - resolves: F-003
 - status: resolved
 - note: 'any link that maps the mean range onto the whole line is allowed' replaced by 'any one-to-one, differentiable link may be used'; the log-link-for-insurance clause kept. Source: Rodriguez, GLM notes App. B sec.B.1.2 (PDF p.3: 'a one-to-one continuous differentiable transformation g(mu_i)'; PDF p.4: 'other combinations are also possible'), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; Larsen p.2 ('one can use a non-canonical link function'), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T21:11Z/3707
+- date: 2026-10-05
+- status_set: verified
+- confidence: medium
+- checks_run: every edit re-read against its source (Tweedie canonical link vs statmod, theta = mu^(1-p)/(1-p) checked numerically; IRLS/Fisher scoring/information X'WX/phi/asymptotic chi^2 vs Rodriguez B.2-B.3.2; quasi-likelihood vs Rodriguez c4a sec.1 and Larsen p.1; link admissibility vs Rodriguez B.1.2); density, mean and variance vs Rodriguez B.1.1; other canonical links vs Larsen p.3 and the 1-p rule; Poisson example recomputed; links resolve
+- sources_checked: Larsen, 'Generalized Linear Models', CAS Study Note (Dec 2015, rev. June 2016; MAS-I reading), pp.1-3 (quasi-likelihood; Tweedie power-variance list; canonical links and exponential-family table), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf; Rodriguez, GLM lecture notes (Princeton), App. B secs.B.1.1-B.3.2 (PDF pp.2-7), sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf; Rodriguez, GLM lecture notes, Models for Count Data With Overdispersion, sec.1 (PDF pp.1-2), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf; Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision; rank 3 for MAS-I), sec.2.1.3 fn.1 (PDF p.16), sec.2.7.1 (PDF p.29), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; statmod reference manual (G. Smyth), tweedie() help page: canonical link power = 1 - var.power, sha256:108779ab82400727c502d80a56cecb547895e7fc6dc51acbe105183e529d191a — https://search.r-project.org/CRAN/refmans/statmod/html/tweedie.html
+- note: Resolve run: F-001 (critical), F-002, F-003 resolved. Medium: the Tweedie canonical link rests on a rank-3 source and the examples are the vault's own.

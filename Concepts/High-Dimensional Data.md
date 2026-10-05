@@ -1,4 +1,4 @@
-**High-Dimensional Data** are data sets with as many features as observations or more, $p \ge n$ (ISLR treats $p > n$ as the definition, and $p$ slightly below $n$ as raising the same issues). In this setting least squares and other classical methods fit the training data perfectly whether or not any real relationship exists, so they overfit badly.
+**High-Dimensional Data** are data sets with more features than observations, $p > n$; the same problems arise when $p$ is close to $n$. Once $p \ge n$, least squares and other classical methods fit the training data perfectly whether or not any real relationship exists, so they overfit badly.
 
 > $$p \ge n \;\Longrightarrow\; \text{RSS} = 0 \ \text{ and } \ R^2 = 1$$
 

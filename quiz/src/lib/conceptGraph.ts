@@ -385,6 +385,12 @@ export interface ConceptGraph {
   byKey: Map<string, Connection>
   /** Each concept's connections, strongest first, keyed by lower-cased name. */
   neighbours: Map<string, Connection[]>
+  /**
+   * How common each concept's name is across the topic: the share of its
+   * other pages that write it in passing, 0–1, keyed by lower-cased name
+   * (`PageEvidence.share`).
+   */
+  share: Map<string, number>
 }
 
 /**
@@ -537,7 +543,7 @@ export function buildConceptGraph({ concepts, page, questions, lines }: GraphInp
       neighbours.set(n.toLowerCase(), list)
     }
   }
-  return { concepts: names, connections, byKey, neighbours }
+  return { concepts: names, connections, byKey, neighbours, share: new Map(names.map(n => [n.toLowerCase(), share(n)])) }
 }
 
 /** The other end of a connection. */

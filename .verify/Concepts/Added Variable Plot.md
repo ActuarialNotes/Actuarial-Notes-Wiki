@@ -1,0 +1,60 @@
+---
+target: Concepts/Added Variable Plot.md
+created: 2026-10-04
+---
+
+## [F-001] Points far from the fitted line called influential
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: major
+- status: open
+- locus: bullet 4
+- claim: 'Points far out on the e_xj axis are high-leverage observations for x_j; points far from the fitted line are influential and worth investigating'
+- evidence: Vertical distance from the AV-plot line is the ordinary residual: the residuals of the AV fit are identical to the full model's (Velleman & Welsch property 2, via Wikipedia 'Partial regression plot'), so a point far from the line is an outlier. Weisberg, ALR 4e §9.5.4 pp.224-225: 'Cases corresponding to points at the left or right of an added-variable plot that do not match the general trend in the plot are likely to be influential' - influence needs both partial leverage (far out horizontally) and a large residual. ISLR 2nd ed. §3.3.3 pp.97-99: an outlier without an unusual predictor value typically has little effect on the fit; the outlier + high leverage combination is the dangerous one. The page's first half (far out on e_xj = high leverage) is right. ALR sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf; ISLR sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf
+- source_rank: 2
+- proposed_action: Say that points far from the line are outliers (large residuals), and that the influential ones are those far out on the horizontal axis that also break from the trend.
+- applied: false
+- fingerprint: 5e61fc551f92
+
+## [F-002] AV plot presented as the check on a predictor's functional form
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: lead sentence; bullet 2; example 'Reading an Added Variable Plot'
+- claim: Lead: 'used to check whether x_j's effect is correctly specified'; bullet 2: 'curvature suggests x_j needs a transformation'; example: a U-shape means a single linear term is misspecified - add a quadratic or band vehicle age.
+- evidence: Stata Base Reference Manual, [R] regress postestimation diagnostic plots, avplot Remarks p.5: 'The y and x coordinates of the added-variable plot cannot be used to identify functional form, or, at least, not well (see Mallows [1986]). In the construction of the added-variable plot, the relationship between y and x is forced to be linear.' Wikipedia 'Partial regression plot' (Velleman & Welsch 1981): AV plots do show 'many kinds of failures of the model ... (nonlinearity, heteroscedasticity, unusual patterns)', but 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)'. The car manual provides crPlots (component+residual) separately for that job. So curvature can flag non-linearity, but the plot is a weak guide to the form; the page presents it as the specification check. Stata sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf; Wikipedia sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot
+- source_rank: 3
+- proposed_action: Author to add the caveat: an AV plot shows the adjusted coefficient (slope = beta_j) and influential points; curvature may flag non-linearity, but the form is better chosen from a partial residual (component+residual) plot or binned residuals against x_j.
+- applied: false
+- fingerprint: f336b87f5348
+
+## [F-003] Adjusted contribution called 'marginal'
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- severity: minor
+- status: open
+- locus: bullet 3
+- claim: 'the added variable plot isolates x_j's **marginal** contribution after controlling for the other predictors'
+- evidence: In this vocabulary 'marginal' means unadjusted: the car reference manual's avPlots examples contrast '# marginal plot, ignoring other predictors' with '# AV plot, adjusting for others' (p.14). The UCLA OARC diagnostics chapter describes the AV plot as the response 'after both ... have been adjusted for all other predictors', and the correlation in the plot is the partial correlation (Wikipedia, Velleman & Welsch). The adjusted contribution is the partial one; 'marginal' also collides with the marginal model plot named beside it in MAS-I task C8. car sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; UCLA sha256:de14ccf40c9e9eed21b92e1a9ed432a00abd13f6cb086b80b5af26900cdb30c — https://stats.oarc.ucla.edu/stata/webbooks/reg/chapter2/stata-webbooksregressionwith-statachapter-2-regression-diagnostics/
+- source_rank: 3
+- proposed_action: Replace 'marginal' with 'partial' (or 'adjusted').
+- applied: false
+- fingerprint: ae795578dba8
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-04T20:47Z/8861
+- date: 2026-10-04
+- status_set: verified
+- confidence: medium
+- checks_run: Name = partial regression plot (Stata, UCLA, Wikipedia, car); construction e_Y = residuals of Y on the other predictors, e_xj = residuals of x_j on them, plotted against each other = ALR primer §3.1, Wikipedia; slope of the fitted line = beta-hat_j of the full model (ALR primer: intercept 0, same slope; Stata: same coefficient and SE up to df; UCLA). Far out on e_xj = high (partial) leverage, influential = edge points off the trend (ALR §9.5.4) - bullet 4 half wrong (F-001). Functional-form use (F-002). 'Marginal' wording (F-003). Control variables: the other predictors include any control variable - fine. Example: U-shape = non-linear net effect - non-linearity can show (Velleman & Welsch), remedy question folded into F-002. Figure (generated, added_variable_plot): y residual vs x4 residual through the origin with slope beta-hat_4 - matches the construction. Links resolve exactly.
+- sources_checked: Weisberg, Computing Primer for Applied Linear Regression, 4th ed., Using R (2013), §3.1-3.1.2 pp.23-24: AV plot = residuals of y on the other regressor(s) vs residuals of x_j on them; its regression has intercept 0 and slope equal to x_j's coefficient in the full model; car::avPlots, sha256:ba7e3c9c947bb3354af65f57801b1e6f6f234a69a54f0f395c75a013bd850c9d — https://www.statpower.net/Content/313/R%20Stuff/alrprimer.pdf; StataCorp, Stata Base Reference Manual (release 19), [R] regress postestimation diagnostic plots, avplot Remarks pp.4-6: added-variable (partial-regression) plot; its regression has the same coefficient as the full model; 'cannot be used to identify functional form, or, at least, not well (see Mallows [1986]). In the construction of the added-variable plot, the relationship between y and x is forced to be linear.', sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf; Wikipedia, 'Partial regression plot' (wikitext retrieved 2026-10-04), citing Velleman & Welsch (1981): construction from two sets of residuals; LS fit has intercept 0 and slope beta_i; its residuals equal the full model's; used mostly to identify high-leverage and influential points; 'the x-axis is not X_i. This limits its usefulness in determining the need for a transformation (which is the primary purpose of the partial residual plot)', sha256:8ecce810efb2f345c2582914e56ad6e8bd2d40dec1e403dd541a5481bc48011a — https://en.wikipedia.org/wiki/Partial_regression_plot; Fox & Weisberg, R package 'car' 3.1-5 reference manual (2026): mmps 'Marginal Model Plotting' pp.89-91 (response vs a linear combination u of the regressors, with a smooth of the data and a smooth of the fitted values on u; drawn versus each term and versus the fitted values/linear predictor; GLM smoother is a GAM with the model's family and link); avPlots 'Added-Variable Plots' pp.11-14 (examples contrast 'marginal plot, ignoring other predictors' with 'AV plot, adjusting for others'); crPlots 'Component+Residual (Partial Residual) Plots' p.39, sha256:5471a6e3292bcc8fcd9a83bf8f912989ce46de55e4a323595bcbb91a9d591cd3 — https://cran.r-project.org/web/packages/car/car.pdf; UCLA OARC, Regression with Stata, Chapter 2 'Regression Diagnostics': leverage > (2k+2)/n (k predictors); Cook's D conventional cut-off 4/n; avplot = added-variable/partial-regression plot, line has the coefficient's slope, used to spot influential points, sha256:de14ccf40c9e9eed21b92e1a9ed432a00abd13f6cb086b80b5af26900cdb30c — https://stats.oarc.ucla.edu/stata/webbooks/reg/chapter2/stata-webbooksregressionwith-statachapter-2-regression-diagnostics/; Weisberg, Applied Linear Regression, 4th ed. (Wiley 2014), Ch.9 'Regression Diagnostics' (course copy): intro p.204; §9.1.5 residual-plot shapes (megaphone = nonconstant variance, curvature = wrong mean function) pp.209-210; §9.5.1-9.5.3 Cook's distance D_i = (r_i^2/p')h_ii/(1-h_ii), the distance between Y-hat and Y-hat(i), D_i near 1 as calibration pp.220-221; §9.5.4 added-variable plots and influence pp.224-225; §9.6 normal probability plots pp.225-226, sha256:7ecdc82a05367d2107915fe0535c8cbf65a9f47d95ee80b8816e0c5903d507af — https://www2.stat.duke.edu/courses/Fall21/sta521.001/papers/Applied_Linear_Regression_CHAPTER_9_Regression_Diagnostics.pdf; James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021; CAS-hosted copy), §3.3.3 'Potential Problems' pp.92-102 (PDF pp.102-112): residual plots, U-shape = non-linearity (Fig 3.9); correlated errors and tracking vs time (Fig 3.10); funnel = heteroscedasticity, log Y remedy (Fig 3.11); outliers, studentized residuals beyond ±3 (Fig 3.12); leverage statistic, average (p+1)/n (eq 3.37, Fig 3.13); VIF, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain C tasks 4 and 8 (p.5), 'Parameter and Diagnostic Tables' (p.7), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf
+- note: Open: F-001 major (outlier vs influential), F-002 minor (functional form), F-003 minor ('marginal'). Medium: no freely available MAS-I reading covers AV plots (ISLR does not; Dobson's body not checked), so the plot's construction rests on rank-3 references (Weisberg's primer and ALR chapter, Stata, car, UCLA); ISLR supports only the outlier/leverage distinction. Linked only by MAS-I C8.

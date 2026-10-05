@@ -6,13 +6,13 @@
  * here because it is forty lines and the app has no graph library to borrow
  * one from:
  *
- * - every concept is a **body** the size of its card, and every found recipe
- *   adds a **junction** body the size of its relation tag, sitting between the
- *   two ingredients with the result hanging off it — so the tag is a thing on
- *   the board that other things keep clear of, not a label painted over them;
- * - **springs** pull each ingredient and the result toward their junction;
+ * - every concept on the board is a **body** the size of its card;
+ * - every connection found is a **spring** between its two cards, stiffer and
+ *   shorter the stronger the connection — so the strongly connected gather
+ *   and the loosely connected sit further out, and the map's shape says what
+ *   its numbers say;
  * - every pair of bodies **repels**, and overlapping rectangles are pushed
- *   apart outright (**collision**), which is what keeps a fifty-concept graph
+ *   apart outright (**collision**), which is what keeps an eighty-concept graph
  *   from becoming a spiderweb of cards on top of each other;
  * - a weak **gravity** toward the origin stops the whole graph drifting off;
  * - **alpha** is the temperature: every force is scaled by it, it cools each
@@ -39,12 +39,6 @@ export interface Body {
    * way of the drop meant for it.
    */
   ghost?: boolean
-  /**
-   * The row the body belongs on, as a world y. A body with one is held to its
-   * row (and drawn to the middle sideways only); one without floats free under
-   * gravity on both axes.
-   */
-  row?: number
 }
 
 export interface Spring {
@@ -52,12 +46,8 @@ export interface Spring {
   b: string
   /** The rest length, centre to centre. */
   length: number
-  /**
-   * Hang `b` straight below `a` rather than anywhere at that distance — how a
-   * result sits under the tag that made it, so a board reads top to bottom
-   * from what the reader started with to what they built.
-   */
-  below?: boolean
+  /** How hard it pulls, as a share of the full spring (1 when left out). */
+  k?: number
 }
 
 export interface Point {
@@ -81,9 +71,6 @@ const VELOCITY_KEEP = 0.55
 const SPRING_K = 0.12
 const CHARGE = 2600
 const GRAVITY = 0.012
-const ROW_K = 0.12
-/** The distance between two rows of the board, in world px. */
-export const ROW_GAP = 150
 /** Clear space kept around every body, in world px. */
 const GAP = 14
 
@@ -95,9 +82,16 @@ export function cardSize(name: string): { w: number; h: number } {
   return { w, h: lines === 2 ? 52 : 38 }
 }
 
-/** A relation tag's box. */
-export function tagSize(label: string): { w: number; h: number } {
-  return { w: Math.max(56, label.length * 6.1 + 18), h: 22 }
+/**
+ * A connection's spring, from its strength (0–100): the strongest pull their
+ * cards to a short arm's length, the faintest hang loose at nearly three
+ * times that. `reach` is how much of the length the cards themselves take up
+ * (half of each one's width), so the gap between them — where the strength
+ * is written — is what the strength decides.
+ */
+export function connectionSpring(a: string, b: string, strength: number, reach = 0): Spring {
+  const s = Math.min(100, Math.max(0, strength)) / 100
+  return { a, b, length: reach + 150 - 100 * s, k: 0.25 + 0.75 * s }
 }
 
 export function makeBody(at: Point, size: { w: number; h: number }): Body {
@@ -118,20 +112,6 @@ export function step(bodies: Record<string, Body>, springs: readonly Spring[], a
     const a = bodies[s.a]
     const b = bodies[s.b]
     if (!a || !b || a.ghost || b.ghost) continue
-    if (s.below) {
-      // Sideways, toward a column; a body with a row leaves its height to it.
-      const ex = (b.x - a.x) * SPRING_K * alpha
-      const ey = b.row === undefined ? (b.y - a.y - s.length) * SPRING_K * alpha : 0
-      if (!a.pinned) {
-        a.vx += ex
-        a.vy += ey
-      }
-      if (!b.pinned) {
-        b.vx -= ex
-        b.vy -= ey
-      }
-      continue
-    }
     let dx = b.x - a.x
     let dy = b.y - a.y
     let d = Math.hypot(dx, dy)
@@ -140,18 +120,14 @@ export function step(bodies: Record<string, Body>, springs: readonly Spring[], a
       dy = 0
       d = 1
     }
-    const f = ((d - s.length) / d) * SPRING_K * alpha
-    // Between two bodies with rows a spring only draws them into line: the
-    // rows own the heights, and a long spring across several rows would
-    // otherwise drag a card halfway to the row of what it made.
-    const vertical = a.row !== undefined && b.row !== undefined ? 0 : 1
+    const f = ((d - s.length) / d) * SPRING_K * (s.k ?? 1) * alpha
     if (!a.pinned) {
       a.vx += dx * f
-      a.vy += dy * f * vertical
+      a.vy += dy * f
     }
     if (!b.pinned) {
       b.vx -= dx * f
-      b.vy -= dy * f * vertical
+      b.vy -= dy * f
     }
   }
 
@@ -173,8 +149,7 @@ export function step(bodies: Record<string, Body>, springs: readonly Spring[], a
       const d = Math.sqrt(d2)
       const f = (CHARGE * alpha) / Math.max(d2, 400)
       const fx = (dx / d) * f
-      // Across two rows the push is sideways only: the rows own the heights.
-      const fy = a.row !== undefined && b.row !== undefined && a.row !== b.row ? 0 : (dy / d) * f
+      const fy = (dy / d) * f
       if (!a.pinned) {
         a.vx -= fx
         a.vy -= fy
@@ -195,8 +170,7 @@ export function step(bodies: Record<string, Body>, springs: readonly Spring[], a
       continue
     }
     body.vx -= body.x * GRAVITY * alpha
-    if (body.row === undefined) body.vy -= body.y * GRAVITY * alpha
-    else body.vy += (body.row - body.y) * ROW_K * alpha
+    body.vy -= body.y * GRAVITY * alpha
     body.vx *= VELOCITY_KEEP
     body.vy *= VELOCITY_KEEP
     body.x += body.vx
@@ -219,18 +193,12 @@ export function separate(list: readonly Body[]): number {
     const a = list[i]
     for (let j = i + 1; j < list.length; j++) {
       const b = list[j]
-      // Two bodies bound for different rows pass through each other on the
-      // way: settled, their rows keep them apart, and pushing them here would
-      // only wedge one above the other on the wrong row.
-      if (a.row !== undefined && b.row !== undefined && a.row !== b.row) continue
       const ox = (a.w + b.w) / 2 + GAP - Math.abs(b.x - a.x)
       const oy = (a.h + b.h) / 2 + GAP - Math.abs(b.y - a.y)
       if (ox <= 0 || oy <= 0) continue
       if (a.pinned && b.pinned) continue
       const share = a.pinned || b.pinned ? 1 : 0.5
-      // On one row, apart sideways: the row is where both belong.
-      const sameRow = a.row !== undefined && a.row === b.row
-      if (ox < oy || sameRow) {
+      if (ox < oy) {
         const dir = b.x >= a.x ? 1 : -1
         const push = ox * share * dir
         if (!a.pinned) a.x -= push
@@ -253,31 +221,31 @@ export function cool(alpha: number): number {
   return next < ALPHA_MIN ? 0 : next
 }
 
-/** Where a new concept appears: off the side of its two ingredients, past the tag between them. */
-export function spawnPoint(a: Point, b: Point, turn = 1): Point {
-  const mx = (a.x + b.x) / 2
-  const my = (a.y + b.y) / 2
-  let nx = -(b.y - a.y)
-  let ny = b.x - a.x
-  const len = Math.hypot(nx, ny)
-  if (len < 1e-3) {
-    nx = 0
-    ny = 1
-  } else {
-    nx /= len
-    ny /= len
-  }
-  // Prefer below the pair, the way a sum is written under its terms.
-  if (ny < 0) {
-    nx = -nx
-    ny = -ny
-  }
-  return { x: mx + nx * 96 * turn, y: my + ny * 96 * turn }
+/**
+ * Where a concept arriving beside `anchor` appears: on the far side of it from
+ * the middle of the board, so the map grows outward rather than into itself,
+ * turned by `turn` (radians) so two arrivals at one card don't land on one spot.
+ */
+export function spawnNear(anchor: Point, centre: Point, turn = 0): Point {
+  let angle = Math.atan2(anchor.y - centre.y, anchor.x - centre.x)
+  if (Math.hypot(anchor.x - centre.x, anchor.y - centre.y) < 1) angle = Math.PI / 2
+  angle += turn
+  return { x: anchor.x + Math.cos(angle) * 170, y: anchor.y + Math.sin(angle) * 170 }
 }
 
-/** The opening layout: the primitives side by side along the top row, centred on the origin. */
+/**
+ * Concepts arriving with nowhere else to go. A few go side by side across the
+ * middle of the board; more are laid out in a sunflower spiral around it, so a
+ * whole board restored at once starts as a disc the forces can settle, not a
+ * line they can't fold up.
+ */
 export function seedPositions(count: number): Point[] {
-  return Array.from({ length: count }, (_, i) => ({ x: (i - (count - 1) / 2) * 190, y: 0 }))
+  if (count <= 3) return Array.from({ length: count }, (_, i) => ({ x: (i - (count - 1) / 2) * 220, y: 0 }))
+  const golden = Math.PI * (3 - Math.sqrt(5))
+  return Array.from({ length: count }, (_, i) => {
+    const r = 130 * Math.sqrt(i)
+    return { x: Math.round(r * Math.cos(i * golden)), y: Math.round(r * Math.sin(i * golden) * 0.7) }
+  })
 }
 
 /** The topmost card whose box (grown by `slop`) holds the point, skipping `except`. */
@@ -377,8 +345,8 @@ export function anyOverlap(list: readonly Body[]): boolean {
 
 /**
  * Where the segment from `from` toward a box's centre crosses the box's edge —
- * so an edge's arrow ends at the card it points to, not under it. Returns the
- * centre itself when `from` is inside the box.
+ * so what is drawn on a line sits on the stretch of it between two cards, not
+ * under either. Returns the centre itself when `from` is inside the box.
  */
 export function edgeToBox(from: Point, box: Pick<Body, 'x' | 'y' | 'w' | 'h'>, inset = 3): Point {
   const dx = from.x - box.x
@@ -388,4 +356,11 @@ export function edgeToBox(from: Point, box: Pick<Body, 'x' | 'y' | 'w' | 'h'>, i
   if (Math.abs(dx) <= hw && Math.abs(dy) <= hh) return { x: box.x, y: box.y }
   const t = Math.min(hw / Math.max(Math.abs(dx), 1e-6), hh / Math.max(Math.abs(dy), 1e-6))
   return { x: box.x + dx * t, y: box.y + dy * t }
+}
+
+/** The middle of the stretch of line between two cards — where its label goes. */
+export function lineLabelPoint(a: Pick<Body, 'x' | 'y' | 'w' | 'h'>, b: Pick<Body, 'x' | 'y' | 'w' | 'h'>): Point {
+  const p = edgeToBox(b, a, 0)
+  const q = edgeToBox(a, b, 0)
+  return { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 }
 }

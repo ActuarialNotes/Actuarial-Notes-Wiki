@@ -8,29 +8,21 @@ import {
   useRef,
   useState,
 } from 'react'
-import {
-  CRAFT_RELATIONS,
-  availableNodes,
-  foundRecipes,
-  nodeDepths,
-  recipeId,
-  type CraftModule,
-  type CraftProgress,
-  type CraftRecipe,
-} from '@/lib/conceptCraft'
+import { foundConnections, placedConcepts, type CraftProgress } from '@/lib/conceptCraft'
+import { strengthTier, type ConceptGraph, type Connection } from '@/lib/conceptGraph'
 import {
   ALPHA_MIN,
-  ROW_GAP,
   bodyAt,
   cardSize,
+  connectionSpring,
   cool,
-  edgeToBox,
   fitView,
+  lineLabelPoint,
   makeBody,
   seedPositions,
-  spawnPoint,
+  spawnNear,
   step,
-  tagSize,
+  toScreen,
   toWorld,
   zoomAt,
   type Body,
@@ -40,51 +32,60 @@ import {
   type View,
 } from '@/lib/craftLayout'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
+import { hashString } from '@/lib/quests'
 import type { ConceptLevels } from '@/hooks/useConceptLevels'
 import { cn } from '@/lib/utils'
 
 /**
  * **The Concept Craft board** — an infinite, zoomable canvas with every
- * concept the reader holds on it as a card, every recipe they have found as a
- * tag between its two ingredients with the result hanging off it, and a small
- * force simulation (`lib/craftLayout.ts`) keeping the lot apart.
+ * concept the reader has put on it as a card, every connection they have found
+ * as a line between two cards carrying its strength, and a small force
+ * simulation (`lib/craftLayout.ts`) keeping the lot apart — the stronger a
+ * connection, the shorter and stiffer its spring, so the map's shape says what
+ * its numbers say.
  *
  * What it does with the reader's hands:
  * - drag a card onto another → `onCombine`, which answers whether the card
- *   should **bounce** back to where it was lifted from (no link, or a Mastery
- *   prompt to answer first) or **stay**;
- * - tap a card → `onSelect` (the inspector), or, with a deck card held,
- *   `onCombine` with that;
+ *   should **bounce** back to where it was lifted from (nothing connects them)
+ *   or **stay**;
+ * - tap a card → `onOpen` (the app's concept popup), or, with a deck card
+ *   held, `onCombine` with that;
+ * - tap a connection's strength → `onConnection`, the card that says why;
  * - drag the empty board to pan, pinch or wheel to zoom.
  *
  * Positions live in a ref and the frame is re-rendered from it while the
  * simulation is warm; the page is told where everything settled (`onSettle`)
  * so the layout outlives the visit. The page drives the rest through
- * `BoardCommands` — fit, tidy, focus a card, and the hit-testing a card
- * dragged in from the deck needs.
+ * `BoardCommands`.
  */
 
 export interface BoardCommands {
   fit: () => void
   tidy: () => void
   zoom: (factor: number) => void
-  focus: (name: string) => void
+  /** Bring a card into view if it is out of it. */
+  reveal: (name: string) => void
   /** The concept under a screen point, if any. */
   conceptAt: (clientX: number, clientY: number) => string | null
   /** Whether a screen point is over the board at all. */
   contains: (clientX: number, clientY: number) => boolean
-  /** Move a concept to a screen point — a deck card dropped on empty board. */
-  place: (name: string, clientX: number, clientY: number) => void
+  /**
+   * Where a concept should land — a deck card dropped on empty board. Moves
+   * it there if it is on the board; otherwise it arrives there when it is put
+   * on it.
+   */
+  placeAt: (name: string, clientX: number, clientY: number) => void
 }
 
 export type DropVerdict = 'bounce' | 'stay'
 
 export interface CraftBoardProps {
-  module: CraftModule
+  graph: ConceptGraph
   progress: CraftProgress
   /** Where the concepts were left last time, by lower-cased name. */
   saved: Record<string, [number, number]>
   levels: ConceptLevels
+  /** The concept being read in the popup — lit, with its connections. */
   selected: string | null
   /** A deck card picked up by a tap, waiting for a second concept. */
   held: string | null
@@ -94,24 +95,28 @@ export interface CraftBoardProps {
   hover: string | null
   /** Room the page's panels cover at the board's edges — what "fit" frames around. */
   insets: Insets
-  /** The concept and recipe just found — the pop and the line drawing in. */
+  /** Connections weaker than this are not drawn. */
+  minStrength: number
+  /** The concept and connection just found — the pop and the line drawing in. */
   freshNode: string | null
-  freshRecipe: string | null
-  /** A recipe to light up — a pair dropped again, a tag tapped. */
-  flashRecipe: string | null
-  onSelect: (name: string | null) => void
+  freshConnection: string | null
+  /** A connection to light up — a pair dropped together again. */
+  flashConnection: string | null
+  /** The connection whose card is open. */
+  openConnection: string | null
+  onOpen: (name: string) => void
   onCombine: (a: string, b: string) => DropVerdict
-  onTag: (recipe: CraftRecipe) => void
+  onConnection: (connection: Connection) => void
   onSettle: (positions: Record<string, [number, number]>) => void
 }
 
 const conceptKey = (name: string) => `c:${name.toLowerCase()}`
-const junctionKey = (id: string) => `j:${id}`
-const INGREDIENT_SPRING = 118
-const RESULT_SPRING = 92
 const DRAG_SLOP = 5
 const BOUNCE_MS = 320
 const VIEW_MS = 380
+/** Below this zoom a strength is too small to read, and only the lines are drawn. */
+const BADGE_ZOOM = 0.5
+const BADGE = { w: 28, h: 18 }
 
 type Gesture =
   | { kind: 'node'; name: string; key: string; startClient: Point; startBody: Point; moved: boolean }
@@ -138,9 +143,18 @@ function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3)
 }
 
+/** A line's weight and ink, from its connection's strength. */
+function edgeStyle(strength: number, lit: boolean): { width: number; color: string } {
+  const s = strength / 100
+  if (lit) return { width: 1.5 + 2.5 * s, color: 'hsl(var(--primary))' }
+  const tier = strengthTier(strength)
+  const alpha = tier === 'strong' ? 0.85 : tier === 'moderate' ? 0.55 : 0.3
+  return { width: 0.75 + 2.75 * s, color: `hsl(var(--foreground) / ${alpha})` }
+}
+
 export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function CraftBoard(
   {
-    module,
+    graph,
     progress,
     saved,
     levels,
@@ -149,12 +163,14 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     hinted,
     hover,
     insets,
+    minStrength,
     freshNode,
-    freshRecipe,
-    flashRecipe,
-    onSelect,
+    freshConnection,
+    flashConnection,
+    openConnection,
+    onOpen,
     onCombine,
-    onTag,
+    onConnection,
     onSettle,
   },
   ref,
@@ -170,42 +186,43 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   const dropTarget = useRef<string | null>(null)
   const tweens = useRef(new Map<string, Tween>())
   const viewTween = useRef<{ from: View; to: View; start: number } | null>(null)
+  const pending = useRef(new Map<string, Point>())
   const fitted = useRef(false)
+  const foundSeen = useRef('')
+  const [pointing, setPointing] = useState<string | null>(null)
   const [, setFrame] = useState(0)
 
   // Read through refs by the loop and the gestures, which outlive any one render.
-  const latest = useRef({ onSettle, onCombine, onSelect, held, insets })
-  latest.current = { onSettle, onCombine, onSelect, held, insets }
+  const latest = useRef({ onSettle, onCombine, onOpen, held, insets })
+  latest.current = { onSettle, onCombine, onOpen, held, insets }
 
-  const available = useMemo(() => availableNodes(module, progress), [module, progress])
-  const recipes = useMemo(() => {
-    // One junction per pair found; a result reached two ways hangs off both.
-    return foundRecipes(module, progress)
-  }, [module, progress])
+  const placed = useMemo(() => placedConcepts(graph, progress), [graph, progress])
+  const connections = useMemo(() => foundConnections(graph, progress), [graph, progress])
 
-  const springs = useMemo<Spring[]>(() => recipes.flatMap(r => {
-    const j = junctionKey(recipeId(r))
-    return [
-      { a: conceptKey(r.a), b: j, length: INGREDIENT_SPRING },
-      { a: conceptKey(r.b), b: j, length: INGREDIENT_SPRING },
-      { a: j, b: conceptKey(r.result), length: RESULT_SPRING, below: true },
-    ]
-  }), [recipes])
+  const springs = useMemo<Spring[]>(
+    () => connections.map(c => connectionSpring(
+      conceptKey(c.a),
+      conceptKey(c.b),
+      c.strength,
+      (cardSize(c.a).w + cardSize(c.b).w) / 2,
+    )),
+    [connections],
+  )
   const springsRef = useRef(springs)
   springsRef.current = springs
 
-  const conceptKeys = useMemo(() => available.map(conceptKey), [available])
+  const conceptKeys = useMemo(() => placed.map(conceptKey), [placed])
   const conceptKeysRef = useRef(conceptKeys)
   conceptKeysRef.current = conceptKeys
 
   const positions = useCallback((): Record<string, [number, number]> => {
     const out: Record<string, [number, number]> = {}
-    for (const name of available) {
+    for (const name of placed) {
       const b = bodies.current[conceptKey(name)]
       if (b) out[name.toLowerCase()] = [Math.round(b.x), Math.round(b.y)]
     }
     return out
-  }, [available])
+  }, [placed])
   const positionsRef = useRef(positions)
   positionsRef.current = positions
 
@@ -318,6 +335,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
         fit(false)
         fitted.current = true
       }
+      setFrame(f => (f + 1) % 1_000_000)
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -325,66 +343,58 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     return () => ro.disconnect()
   }, [fit])
 
-  // ── Keep the bodies in step with what the reader holds ───────────────────
+  // ── Keep the bodies in step with what is on the board ────────────────────
   useLayoutEffect(() => {
     const all = bodies.current
     const wanted = new Set<string>()
+    const found = connections.map(c => c.key).join(',') || ' '
+    const existing = Object.values(all)
+    const centre = existing.length
+      ? { x: existing.reduce((s, b) => s + b.x, 0) / existing.length, y: existing.reduce((s, b) => s + b.y, 0) / existing.length }
+      : { x: 0, y: 0 }
+    const reach = existing.reduce((r, b) => Math.max(r, Math.hypot(b.x - centre.x, b.y - centre.y)), 0)
+    // Concepts with nowhere to go yet, numbered in arrival order for the seeds.
+    const loose = placed.filter(name => {
+      const key = conceptKey(name)
+      return !all[key] && !saved[name.toLowerCase()] && !pending.current.has(name.toLowerCase())
+    }).length
+    const seeds = seedPositions(loose)
+    let seeded = 0
     let added = 0
-    const seeds = seedPositions(module.primitives.length)
 
-    available.forEach(name => {
+    // In the order they were placed, so each can arrive beside one before it.
+    placed.forEach(name => {
       const key = conceptKey(name)
       wanted.add(key)
       if (all[key]) return
       const remembered = saved[name.toLowerCase()]
-      let at: Point | null = remembered ? { x: remembered[0], y: remembered[1] } : null
+      const asked = pending.current.get(name.toLowerCase())
+      pending.current.delete(name.toLowerCase())
+      let at: Point | null = asked ?? (remembered ? { x: remembered[0], y: remembered[1] } : null)
       if (!at) {
-        const made = recipes.find(r => r.result.toLowerCase() === name.toLowerCase())
-        const a = made && all[conceptKey(made.a)]
-        const b = made && all[conceptKey(made.b)]
-        if (a && b) at = spawnPoint(a, b)
+        // Beside a card it is connected to, on the outside of the map.
+        const link = connections.find(c => {
+          const other = c.a.toLowerCase() === name.toLowerCase() ? c.b : c.b.toLowerCase() === name.toLowerCase() ? c.a : null
+          return other && all[conceptKey(other)]
+        })
+        const other = link && (link.a.toLowerCase() === name.toLowerCase() ? link.b : link.a)
+        const anchor = other ? all[conceptKey(other)] : undefined
+        if (anchor) at = spawnNear(anchor, centre, ((hashString(name) % 628) / 100) * 0.35)
       }
       if (!at) {
-        const i = module.primitives.findIndex(p => p.toLowerCase() === name.toLowerCase())
-        // An ingredient a milestone introduced lands beside the node that
-        // earned it, the second one beside the first.
-        const step = module.introduces?.find(s => s.nodes.some(n => n.toLowerCase() === name.toLowerCase()))
-        const trigger = step && all[conceptKey(step.after)]
-        const nth = step ? step.nodes.findIndex(n => n.toLowerCase() === name.toLowerCase()) : 0
-        at = i >= 0 ? seeds[i] : trigger ? { x: trigger.x + 190 * (nth + 1), y: trigger.y } : { x: 0, y: 0 }
+        // Nothing to arrive beside: in the middle of an empty board, or
+        // around the edge of a full one.
+        const angle = ((hashString(name) % 360) * Math.PI) / 180
+        at = existing.length === 0
+          ? seeds[seeded]
+          : { x: centre.x + Math.cos(angle) * (reach + 160), y: centre.y + Math.sin(angle) * (reach + 160) }
+        seeded++
       }
       all[key] = makeBody(at, cardSize(name))
       added++
     })
 
-    recipes.forEach(r => {
-      const key = junctionKey(recipeId(r))
-      wanted.add(key)
-      if (all[key]) return
-      const a = all[conceptKey(r.a)]
-      const b = all[conceptKey(r.b)]
-      const at = a && b ? { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 } : { x: 0, y: 0 }
-      all[key] = makeBody(at, tagSize(CRAFT_RELATIONS[r.relation].label))
-      added++
-    })
-
     for (const key of Object.keys(all)) if (!wanted.has(key)) delete all[key]
-
-    // Every body's row, from how deep it sits in what has been built — set on
-    // every change, since a shorter route found can lift a concept a row.
-    const depths = nodeDepths(module, progress)
-    available.forEach(name => {
-      const body = all[conceptKey(name)]
-      const d = depths.get(name.toLowerCase())
-      if (body) body.row = d === undefined ? undefined : d * ROW_GAP
-    })
-    recipes.forEach(r => {
-      const body = all[junctionKey(recipeId(r))]
-      const a = depths.get(r.a.toLowerCase())
-      const b = depths.get(r.b.toLowerCase())
-      const c = depths.get(r.result.toLowerCase())
-      if (body && a !== undefined && b !== undefined && c !== undefined) body.row = ((Math.max(a, b) + c) / 2) * ROW_GAP
-    })
 
     if (added > 0) {
       if (!fitted.current && size.current.w > 0) {
@@ -402,12 +412,16 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
       } else {
         kick(0.5)
       }
+    } else if (foundSeen.current && found !== foundSeen.current) {
+      // A connection found between two cards already down: draw them together.
+      kick(0.3)
     }
+    foundSeen.current = found
     // `saved` is only read for concepts arriving on the board, never to move
     // one already there — the store echoing back where things settled must
     // not restart the simulation.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [available, recipes, module, progress, kick, fit])
+  }, [placed, connections, kick, fit])
 
   // Wheel zoom: a native listener, because React's is passive and the page
   // must not scroll under the board.
@@ -434,8 +448,34 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
 
   const nameOf = useCallback((key: string | null) => {
     if (!key) return null
-    return available.find(n => conceptKey(n) === key) ?? null
-  }, [available])
+    return placed.find(n => conceptKey(n) === key) ?? null
+  }, [placed])
+
+  const reveal = useCallback((name: string) => {
+    const b = bodies.current[conceptKey(name)]
+    if (!b) return
+    const { w, h } = size.current
+    const inset = latest.current.insets
+    const p = toScreen(view.current, b)
+    const margin = 24
+    const inside = p.x - (b.w / 2) * view.current.k >= inset.left + margin
+      && p.x + (b.w / 2) * view.current.k <= w - inset.right - margin
+      && p.y - (b.h / 2) * view.current.k >= inset.top + margin
+      && p.y + (b.h / 2) * view.current.k <= h - inset.bottom - margin
+    if (inside) return
+    const k = Math.max(view.current.k, 0.8)
+    const cx = inset.left + (w - inset.left - inset.right) / 2
+    const cy = inset.top + (h - inset.top - inset.bottom) / 2
+    moveView({ k, x: cx - b.x * k, y: cy - b.y * k })
+  }, [moveView])
+
+  // The concept being read: once the reader has opened over the bottom of
+  // the board, make sure its card is still in sight above it.
+  useEffect(() => {
+    if (!selected) return
+    const t = window.setTimeout(() => reveal(selected), prefersReducedMotion() ? 0 : 300)
+    return () => window.clearTimeout(t)
+  }, [selected, reveal])
 
   // ── Commands for the page ────────────────────────────────────────────────
   useImperativeHandle(ref, () => ({
@@ -457,12 +497,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     zoom: factor => {
       moveView(zoomAt(view.current, { x: size.current.w / 2, y: size.current.h / 2 }, factor))
     },
-    focus: name => {
-      const b = bodies.current[conceptKey(name)]
-      if (!b) return
-      const k = Math.max(view.current.k, 0.9)
-      moveView({ k, x: size.current.w / 2 - b.x * k, y: size.current.h / 2 - b.y * k })
-    },
+    reveal,
     conceptAt: (clientX, clientY) => {
       const p = toWorld(view.current, local(clientX, clientY))
       return nameOf(bodyAt(bodies.current, conceptKeysRef.current, p))
@@ -471,17 +506,20 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
       const rect = rootRef.current?.getBoundingClientRect()
       return !!rect && clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom
     },
-    place: (name, clientX, clientY) => {
-      const b = bodies.current[conceptKey(name)]
-      if (!b) return
+    placeAt: (name, clientX, clientY) => {
       const p = toWorld(view.current, local(clientX, clientY))
+      const b = bodies.current[conceptKey(name)]
+      if (!b) {
+        pending.current.set(name.toLowerCase(), p)
+        return
+      }
       b.x = p.x
       b.y = p.y
       b.vx = 0
       b.vy = 0
       kick(0.35)
     },
-  }), [fit, kick, moveView, local, nameOf])
+  }), [fit, kick, moveView, local, nameOf, reveal])
 
   // ── Gestures ──────────────────────────────────────────────────────────────
   const startNodeDrag = (e: React.PointerEvent, name: string) => {
@@ -572,10 +610,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
       return
     }
     gesture.current = null
-    if (g.kind === 'pan') {
-      if (!g.moved && !cancelled) latest.current.onSelect(null)
-      return
-    }
+    if (g.kind === 'pan') return
     const body = bodies.current[g.key]
     if (body) body.ghost = false
     const target = nameOf(dropTarget.current)
@@ -585,7 +620,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
       if (cancelled) return
       const holding = latest.current.held
       if (holding && holding.toLowerCase() !== g.name.toLowerCase()) latest.current.onCombine(holding, g.name)
-      else latest.current.onSelect(g.name)
+      else latest.current.onOpen(g.name)
       setFrame(f => (f + 1) % 1_000_000)
       return
     }
@@ -610,11 +645,18 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   // ── Drawing ───────────────────────────────────────────────────────────────
   const v = view.current
   const all = bodies.current
-  const sel = selected?.toLowerCase() ?? null
-  const hintSet = new Set(hinted.map(h => h.toLowerCase()))
   const g = gesture.current
   const dragging = g?.kind === 'node' && g.moved ? g.key : null
   const targetKey = dragging ? dropTarget.current : null
+  const hintSet = new Set(hinted.map(h => h.toLowerCase()))
+  // What the reader is looking at: the concept being read, the one under the
+  // pointer, or one connection's card. Everything else steps back.
+  const focus = (dragging ? null : pointing) ?? selected?.toLowerCase() ?? null
+  const touches = (c: Connection, name: string) => c.a.toLowerCase() === name || c.b.toLowerCase() === name
+  const isLit = (c: Connection) => c.key === openConnection || c.key === flashConnection || (!!focus && touches(c, focus))
+  const anyLit = !!focus || !!openConnection
+  const visible = connections.filter(c => c.strength >= minStrength || isLit(c))
+  const badges = v.k >= BADGE_ZOOM
 
   return (
     <div
@@ -635,82 +677,77 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
         className="absolute left-0 top-0 origin-top-left"
         style={{ transform: `translate(${v.x}px, ${v.y}px) scale(${v.k})` }}
       >
-        <svg className="absolute left-0 top-0 overflow-visible" width={1} height={1} aria-hidden="true">
-          <defs>
-            <marker id="craft-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0 0.5 L7.5 4 L0 7.5 Z" fill="hsl(var(--muted-foreground))" />
-            </marker>
-            <marker id="craft-arrow-lit" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0 0.5 L7.5 4 L0 7.5 Z" fill="hsl(var(--foreground))" />
-            </marker>
-          </defs>
-          {recipes.map(r => {
-            const id = recipeId(r)
-            const a = all[conceptKey(r.a)]
-            const b = all[conceptKey(r.b)]
-            const j = all[junctionKey(id)]
-            const c = all[conceptKey(r.result)]
-            if (!a || !b || !j || !c) return null
-            const lit = !!sel && [r.a, r.b, r.result].some(n => n.toLowerCase() === sel)
-            const flash = flashRecipe === id
-            const end = edgeToBox(j, c, 4)
-            const fresh = freshRecipe === id
+        <svg className="pointer-events-none absolute left-0 top-0 overflow-visible" width={1} height={1} aria-hidden="true">
+          {visible.map(c => {
+            const a = all[conceptKey(c.a)]
+            const b = all[conceptKey(c.b)]
+            if (!a || !b) return null
+            const lit = isLit(c)
+            const { width, color } = edgeStyle(c.strength, lit)
+            const fresh = freshConnection === c.key
             return (
-              <g key={id} className={cn(fresh && 'craft-edge-in', flash && 'craft-edge-flash')}>
+              <g
+                key={c.key}
+                className={cn(fresh && 'craft-edge-in', flashConnection === c.key && 'craft-edge-flash')}
+                opacity={anyLit && !lit ? 0.3 : 1}
+              >
                 <path
-                  d={`M${a.x} ${a.y} L${j.x} ${j.y} L${b.x} ${b.y}`}
+                  d={`M${a.x} ${a.y} L${b.x} ${b.y}`}
                   pathLength={fresh ? 1 : undefined}
                   fill="none"
-                  stroke={lit || flash ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground) / 0.5)'}
-                  strokeWidth={lit || flash ? 2 : 1.5}
-                />
-                <path
-                  d={`M${j.x} ${j.y} L${end.x} ${end.y}`}
-                  pathLength={fresh ? 1 : undefined}
-                  fill="none"
-                  stroke={lit || flash ? 'hsl(var(--foreground))' : 'hsl(var(--muted-foreground) / 0.5)'}
-                  strokeWidth={lit || flash ? 2 : 1.5}
-                  strokeDasharray={fresh ? undefined : '5 4'}
-                  markerEnd={`url(#${lit || flash ? 'craft-arrow-lit' : 'craft-arrow'})`}
+                  stroke={color}
+                  strokeWidth={width}
+                  strokeLinecap="round"
                 />
               </g>
             )
           })}
         </svg>
 
-        {recipes.map(r => {
-          const id = recipeId(r)
-          const j = all[junctionKey(id)]
-          if (!j) return null
-          const lit = (!!sel && [r.a, r.b, r.result].some(n => n.toLowerCase() === sel)) || flashRecipe === id
+        {badges && visible.map(c => {
+          const a = all[conceptKey(c.a)]
+          const b = all[conceptKey(c.b)]
+          if (!a || !b) return null
+          const lit = isLit(c)
+          // A busy board shows only the numbers of what is being looked at.
+          if (anyLit && !lit) return null
+          const { x, y } = lineLabelPoint(a, b)
+          const tier = strengthTier(c.strength)
           return (
             <button
-              key={id}
+              key={c.key}
               type="button"
               data-sound="none"
               onPointerDown={e => e.stopPropagation()}
-              onClick={() => onTag(r)}
+              onClick={() => onConnection(c)}
               className={cn(
-                'absolute left-0 top-0 flex items-center justify-center whitespace-nowrap rounded-full px-2 text-[11px] font-medium leading-none transition-colors',
+                'absolute left-0 top-0 flex items-center justify-center rounded-full text-[10px] font-semibold leading-none tabular-nums transition-colors',
+                // What is being looked at is never under a card.
+                lit ? 'z-[15]' : 'z-[5]',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                lit ? 'bg-foreground text-background' : 'bg-muted text-muted-foreground hover:text-foreground',
+                lit
+                  ? 'bg-primary text-primary-foreground'
+                  : tier === 'strong'
+                    ? 'bg-foreground text-background hover:bg-primary hover:text-primary-foreground'
+                    : 'bg-muted text-muted-foreground ring-1 ring-border hover:text-foreground',
+                freshConnection === c.key && 'craft-node-pop',
               )}
-              style={{ width: j.w, height: j.h, transform: `translate(${j.x - j.w / 2}px, ${j.y - j.h / 2}px)` }}
-              title={`${r.a} ${CRAFT_RELATIONS[r.relation].label.toLowerCase()} ${r.b} → ${r.result}`}
-              aria-label={`${r.a} ${CRAFT_RELATIONS[r.relation].label.toLowerCase()} ${r.b} makes ${r.result}`}
-              data-testid="craft-tag"
+              style={{ width: BADGE.w, height: BADGE.h, transform: `translate(${x - BADGE.w / 2}px, ${y - BADGE.h / 2}px)` }}
+              title={`${c.a} and ${c.b}: ${tier} connection, ${c.strength} of 100`}
+              aria-label={`${c.a} and ${c.b}: ${tier} connection, strength ${c.strength}`}
+              data-testid="craft-strength"
             >
-              {CRAFT_RELATIONS[r.relation].label}
+              {c.strength}
             </button>
           )
         })}
 
-        {available.map(name => {
+        {placed.map(name => {
           const key = conceptKey(name)
           const b = all[key]
           if (!b) return null
           const lower = name.toLowerCase()
-          const isSelected = sel === lower
+          const isSelected = selected?.toLowerCase() === lower
           const isHeld = held?.toLowerCase() === lower
           const isTarget = targetKey === key || hover?.toLowerCase() === lower
           const isDragging = dragging === key
@@ -728,15 +765,17 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
                 data-sound="none"
                 data-craft-node={name}
                 onPointerDown={e => startNodeDrag(e, name)}
+                onPointerEnter={e => { if (e.pointerType === 'mouse') setPointing(lower) }}
+                onPointerLeave={() => setPointing(p => (p === lower ? null : p))}
                 // Pointer taps are resolved in the board's own pointerup (a tap
                 // and a drag start the same way); this is the keyboard's way in.
                 onClick={e => {
                   if (e.detail !== 0) return
                   const holding = latest.current.held
                   if (holding && holding.toLowerCase() !== lower) onCombine(holding, name)
-                  else onSelect(name)
+                  else onOpen(name)
                 }}
-                aria-pressed={isSelected}
+                aria-current={isSelected ? 'true' : undefined}
                 className={cn(
                   'relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg bg-card px-2.5 text-center text-card-foreground',
                   'text-[13px] font-medium leading-tight shadow-[var(--shadow-card)] transition-transform duration-150',

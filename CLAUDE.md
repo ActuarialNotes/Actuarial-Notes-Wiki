@@ -72,13 +72,13 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
   `Store.tsx` — the Store, `/store`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` and `/craft/:moduleId`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  `/craft` and `/craft/:topicId`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
   Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
-  deck, inspector and Mastery prompt), `components/research/` (flag-gated).
+  deck and a connection's card), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -244,18 +244,22 @@ before touching that area**:
   `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
 - `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle at the top of
-  the Quiz tab): a topic's concepts combined on a dark, zoomable board — drag one card onto
-  another to find the link between them (the two stay, a tag names the relation, the result
-  hangs below), or watch it bounce back. The recipe book is **authored**
-  (`data/conceptCraft.ts`, six topics from Exam P to Exam 5), every concept a `Concepts/` page
-  and every recipe restating its result's own page — derived wiki links were tried and are
-  "see also", not "made of". **Explore** crafts at once; **Mastery** asks "how does A relate to
-  B?" of *every* drop, related or not, with *No direct link* always a choice, or the prompt
-  would give the real pairs away. A daily challenge with step counts and hints, an inspector
-  that reuses the app's summary, action menu, reader and question browser, and a **layered**
-  force layout (rows by craft depth, forces sideways only) so a full topic reads top to bottom
-  without overlaps. localStorage only; feeds no mastery or XP. Read before touching anything
-  named `craft*` or `conceptCraft`.
+  the Quiz tab): how a topic's concepts connect, found by hand on a dark, zoomable board —
+  drop one card on another and, where the vault ties them together, a line joins them
+  carrying the connection's **strength**, 0–100; where nothing does, the card goes back.
+  Nothing opens on a find: the map is the answer. Nothing is authored either — a topic is
+  an exam page's learning objective (`craftTopics`, thirty boards), and every connection is
+  **derived** (`lib/conceptGraph.ts`) from what the pages say about each other (links, and
+  names written out — a common name discounted by how many of the topic's pages write it),
+  which concepts the quiz pool tests together, and which the syllabus names on one line,
+  combined as a noisy-OR; the sentences are kept as the connection's evidence. A card on the
+  board opens in the app's **concept popup** (no board-side concept card); a line's strength
+  opens the connection's card — strength, what it is measured on, the pages' words, its
+  questions with **Practice**, the syllabus line. The daily challenge is "what connects A and
+  B?" (two concepts joined only through a third). The measure is how much the *vault* says
+  about a pair, so a weak pair that should be strong is a page to fix, not a weight to tune.
+  localStorage only; feeds no mastery or XP. Read before touching anything named `craft*`,
+  `conceptCraft` or `conceptGraph`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
@@ -965,16 +969,22 @@ Other important `lib/` modules:
   rate-limited Contents API — the first screen of the app has to find things offline. What
   the bundle can't answer, the foot of the results hands to the Search page, which now takes
   `?type=` and `?q=`. Pure and tested.
-- `conceptCraft.ts` / `craftLayout.ts` — **Concept Craft** (`docs/concept-craft.md`).
-  `conceptCraft.ts` is the game as pure functions: the closed relation vocabulary
-  (`CRAFT_RELATIONS`), `combine`, what a reader holds (`availableNodes` — derived from the
-  recipes found, which is all `hooks/useConceptCraft.ts` stores), the Mastery prompt
-  (`relationQuestion`), the challenge (`dailyChallenge`, `craftPlan`, `nextCraft`), the board's
-  rows (`nodeDepths`), the inspector's summary (`conceptSummary`, built on `leadParagraph`) and
-  `moduleProblems`, which `data/conceptCraft.test.ts` runs over the recipe book alongside its
-  vault checks. `craftLayout.ts` is the board's physics and camera: bodies, springs, rows,
-  collision, a dragged card as a **ghost** (no force reaches it — or collision would shove the
-  target out from under the drop), `fitView` with insets for the panels. Both pure and tested.
+- `conceptGraph.ts` / `conceptCraft.ts` / `craftLayout.ts` — **Concept Craft**
+  (`docs/concept-craft.md`). `conceptGraph.ts` is the derived graph: `pageMentions` (what a page
+  says about other concepts — every link, and every topic concept named in its text, longest
+  name first, never inside a link, math or code — with the sentence it sits in),
+  `connectionStrength` (the noisy-OR over pages, questions and syllabus lines, weights in
+  `STRENGTH_WEIGHTS`, cut-off `MIN_STRENGTH`, bands `STRENGTH_TIERS`) and `buildConceptGraph`.
+  `conceptCraft.ts` is the game: topics read off the exam pages (`objectiveBlocks`,
+  `craftTopics` — studiable exams, objectives with six or more concept pages), a board as two
+  lists, placed concepts and found pair keys (`combine`, `withPlaced`, `withConnection`,
+  `topicTally` — all that `hooks/useConceptCraft.ts` stores), and the challenge
+  (`challengeOrder`, `dailyChallenge`, `bridgePlan`, `isBridged`). `craftLayout.ts` is the
+  board's physics and camera: bodies, springs sized by strength (`connectionSpring`),
+  collision, seeding (`spawnNear`, `seedPositions`), a dragged card as a **ghost** (no force
+  reaches it — or collision would shove the target out from under the drop), `fitView` with
+  insets for the panels. All pure and tested; `conceptCraftVault.test.ts` runs the first two
+  over the real vault.
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
   approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
@@ -1075,8 +1085,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **195 test files /
-~3150 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **196 test files /
+~3175 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

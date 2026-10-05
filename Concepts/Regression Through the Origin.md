@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
+  last_checked_by: agent:validate-v1
   content_hash: sha256:437d994b132cab24d5ed70f58f6ab897a9c7f829d3419f7f8611fe1a30dd8339
-  sources: []
+  sources:
+    - "Larsen, Generalized Linear Models, CAS Study Note (rev. 6/29/2016), 'Regression Through the Origin', PDF p.1: intercept zero or left out; dropped when its test shows it not significantly different from zero; 'can lead to non-intuitive results'; for a general linear model it implies a zero response when all explanatory variables are zero, 'which may not yield sensible results', sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "Paul, D., 'Regression through the origin', Statistics LibreTexts (UC Davis), pageRevision 10, last modified 17 Aug 2020: proportional response / profit vs sales / insignificant intercept; errors uncorrelated, mean 0, variance sigma^2; b = sum XY / sum X^2, E(b) = beta; SSE = sum Y^2 - b^2 sum X^2; MSE = SSE/(n-1) unbiased, d.f. n-1; Var(b) = sigma^2/sum X^2; CI b ± t(1-alpha/2; n-1) s(b); SSTO = sum Y^2 with n d.f., SSR 1 d.f., sha256:1ab7ee828c0be9b0fc905be543dbc26e7f96577fc9086a72712491b866017b78 (HTML as fetched; the page embeds per-request session tokens) — https://stats.libretexts.org/Bookshelves/Computing_and_Modeling/Supplemental_Modules_(Computing_and_Modeling)/Regression_Analysis/Simple_linear_regression/Regression_through_the_origin"
+    - "Eisenhauer, J.G., 'Regression through the Origin', Teaching Statistics 25(3):76-80 (2003), doi:10.1111/1467-9639.00136 (metadata confirmed via Crossref): pp.76-77 a priori zero intercept, Hocking 'if the data are far from the origin, we have no evidence that the linearity applies'; p.77 RTO residuals usually have a nonzero mean and the cross-product term is nonzero, so the usual decomposition fails; p.78 centred R^2 can be negative; R^2 = sum Yhat^2/sum Y^2 is non-negative and 'equals or exceeds' the centred measure; d.f. n, k, n-k; p.79 packages disagree (Excel vs SPSS), SPSS: about-the-origin R^2 'CANNOT be compared'; p.80 compare RTO with OLS by the OLS constant's p-value and the two standard errors. Copy read: third-party repost of the publisher PDF at https://web.ist.utl.pt/~ist11038/compute/errtheory/,regression/regrthroughorigin.pdf, sha256:78184c18dc1d766a484a68353985493c5d3a8d7a4996dcdb3dfc747f554335d5"
+    - "R documentation, stats::summary.lm, Value 'r.squared': R^2 = 1 - sum R_i^2 / sum (y_i - y*)^2, 'where y* is the mean of y_i if there is an intercept and zero otherwise', sha256:52be4406a547f6a905ee71eb8737033c90e339e8ff7147af116cb4b2d6376c2c — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/summary.lm.html"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 §2.8, PDF p.43 (the dummies for every level add up to the constant) and p.47 (alternative: drop the constant and give each group its own intercept), sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf; App. B §B.1.2, PDF p.3: eta = g(mu) = x'beta, mu = g^-1(x'beta), log and logit links, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "CAS Exam MAS-I Tables (version 01/15/2018), t table two-sided tail 0.05: df 4 = 2.776, df 3 = 3.182 (PDF p.16), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Regression Through the Origin.md

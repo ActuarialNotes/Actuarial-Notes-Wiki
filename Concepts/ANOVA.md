@@ -4,15 +4,16 @@ verification:
   confidence: medium
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:5669d6e93da5551091bbfe8d67b2ac73d7938f5dc2d8c860223e075ade2a7f02
+  content_hash: sha256:2c2693c96f530b180fc77fc340c220fd13892b658ca9a0353233fc8a6c9fcd05
   sources:
-    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.4 hierarchical anova Table 2.2, PDF pp.13-14; §2.5 Tables 2.7-2.8 regression and hierarchical anova, PDF pp.24-25; §2.6.4 one-way anova Table 2.12, PDF p.31, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
-    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.3.2 likelihood ratio tests, scaled deviance, eq (B.13), exact F for normal errors, phi = 1 for binomial/Poisson, PDF pp.6-7, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
-    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §6.2 F-test, eq.(17) F = (D_S - D_B)/(# added parameters x phi-hat_B) on (# added, n - p_B) df, printed p.65 (PDF p.75), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.3.4 hierarchical anova Table 2.2, PDF p.14; §2.5 Tables 2.7-2.8, PDF pp.24-25; §2.6.4 one-way anova Table 2.12, PDF p.31; §2.8 'Analysis of Covariance Models' ('models where some of the predictors are continuous variates and some are discrete factors'), PDF p.42, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
+    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), App. B 'Generalized Linear Model Theory', §B.3.2 likelihood ratio tests, scaled deviance, exact F for normal errors, phi = 1 for binomial/Poisson, PDF pp.6-7, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §6.2 F-test, eq.(17), printed p.65 (PDF p.75), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "Penn State STAT 501 Regression Methods (online course notes), Lesson 2 §2.6 ANOVA table: SSR, SSE, SSTO, df add up, MSR, MSE, F* = MSR/MSE, sha256:1e70ff328d0ed946e167ac2949a287f8b23c3ae7f407af884fe4c6e447a6be32 — https://online.stat.psu.edu/stat501/Lesson02.html"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 6 §6.2 general linear F-test and Analysis of Variance output; §6.3 sequential (extra, Type I) sums of squares, order of entry matters, regression SS decomposes into sequential SS, sha256:23f9fd1867db940775816d73b0313cbcacbc0b7d67bcff3be7b4f02430cf981e — https://online.stat.psu.edu/stat501/Lesson06.html"
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.2.2 F-statistic (3.23) and E{RSS/(n-p-1)} = sigma², printed p.76 (PDF p.86), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C task 4 ('Interpret the extended linear model output from statistical software, such as parameter estimate tables and ANOVA tables') and task 7, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 6 §6.2 general linear F-test; §6.3 sequential sums of squares, order matters, sha256:23f9fd1867db940775816d73b0313cbcacbc0b7d67bcff3be7b4f02430cf981e — https://online.stat.psu.edu/stat501/Lesson06.html"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.2.2 F-statistic (3.23), printed p.76 (PDF p.86), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7 'How can we make multiple comparisons?' ('What to do after equality of means is rejected'; the ANOVA F test is a preliminary test; Tukey's method for all pairwise differences, Scheffé's for all contrasts, Bonferroni for a pre-selected group of contrasts), sha256:9817042aaf1da7217dfc789ce4a98c1610cface5e73a9d0babbff034ebf2bc6d — https://www.itl.nist.gov/div898/handbook/prc/section4/prc47.htm"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C tasks 4 and 7, p.5; p.6 Hogg 9.1-9.6 and Dobson & Barnett Ch 1-9 for C1-C9, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/ANOVA.md
@@ -36,6 +37,7 @@ verification:
 - $k$ = number of groups, $N$ = total observations
 - $H_0$: all group means are equal; reject if $F > F_{\alpha, k-1, N-k}$
 - ANOVA is a special case of a linear model: it is equivalent to a regression with indicator variables for group membership
+- When the $F$ test rejects $H_0$, [[Multiple Comparisons|multiple-comparison procedures]] (Tukey, Scheffé, Bonferroni) find which means differ; adding a continuous variate to the group indicators gives an [[Analysis of Covariance]] model
 
 **Regression ANOVA table** (fitted model with $p$ predictors and an intercept, $n$ observations):
 

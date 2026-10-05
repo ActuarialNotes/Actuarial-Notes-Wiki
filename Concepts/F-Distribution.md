@@ -31,6 +31,7 @@ The **F-Distribution** $F(n, m)$ with $n$ numerator and $m$ denominator degrees 
 - $U$ and $V$ are independent. The mean depends only on the denominator degrees of freedom and is close to 1 when $m$ is large.
 - **Reciprocal:** $1/F \sim F(m, n)$. A lower-tail critical value is therefore the reciprocal of an upper-tail one with the degrees of freedom swapped: the value below which $F(n, m)$ falls with probability $\alpha$ is $1/c$, where $c$ is the upper-$\alpha$ point of $F(m, n)$.
 - **Link to t:** if $T \sim t(m)$ then $T^2 \sim F(1, m)$ — see [[Student's t-Distribution]].
+- **Noncentral F:** if $U$ is instead [[Noncentral Chi-Squared Distribution|noncentral chi-squared]], the ratio has the noncentral F-distribution, whose mean is larger than that of the central $F(n, m)$.
 - **Two normal variances:** for independent normal samples of sizes $n_X$ and $n_Y$, $\dfrac{S_X^2/\sigma_X^2}{S_Y^2/\sigma_Y^2} \sim F(n_X - 1,\ n_Y - 1)$, using the [[Sample Variance|sample variances]].
 - **Nested linear models:** dropping $q$ of the $p$ predictors from a [[Linear Regression|linear regression]] fitted to $n$ observations raises the [[Residual Sum of Squares|residual sum of squares]] from $\text{RSS}$ to $\text{RSS}_0$; with normal errors and the $q$ coefficients truly zero,
   $\dfrac{(\text{RSS}_0 - \text{RSS})/q}{\text{RSS}/(n - p - 1)} \sim F(q,\ n - p - 1)$. With $q = p$ this is the overall F-statistic, and [[ANOVA]] tables test group means the same way.

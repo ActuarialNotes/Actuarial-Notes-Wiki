@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a6298ddd412e4a19a1c611190f8effd7a5e03022021e8ed191ba0dfb3835ed78
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Ordinal Logistic Regression.md
+---
+
 **Ordinal Logistic Regression** models a response with $J$ ordered categories through its **cumulative** probabilities $\gamma_j = P(Y \le j)$. The usual form is the **proportional odds** (cumulative logit) model, which applies the logit [[Link Function]] to each $\gamma_j$ and gives every cut-point its own intercept $\theta_j$ but one common set of slopes $\boldsymbol\beta$.
 
 > $$\ln\!\left(\frac{\gamma_j}{1-\gamma_j}\right) = \theta_j + \mathbf{x}^\top\boldsymbol\beta$$

@@ -16,7 +16,7 @@ verification:
   log: .verify/Concepts/ANOVA.md
 ---
 
-**Analysis of Variance (ANOVA)** is a statistical method for testing whether the means of two or more groups differ by partitioning total variability in the response into explained and unexplained components.
+**Analysis of Variance (ANOVA)** is a statistical method for testing whether the means of two or more groups differ by partitioning total variability in the response into explained and unexplained components. Regression output prints the same partition as an **ANOVA table** for the fitted model, where it tests whether the predictors explain any of the response.
 
 > **One-Way ANOVA F-Test:**
 > $$F = \frac{\text{MSB}}{\text{MSW}}$$
@@ -33,8 +33,20 @@ verification:
 
 - $k$ = number of groups, $N$ = total observations
 - $H_0$: all group means are equal; reject if $F > F_{\alpha, k-1, N-k}$
-- **Analysis of Deviance** (the GLM analogue) compares nested [[Generalized Linear Model]]s by the change in [[Deviance]], which follows a $\chi^2$ distribution asymptotically
 - ANOVA is a special case of a linear model: it is equivalent to a regression with indicator variables for group membership
+
+**Regression ANOVA table** (fitted model with $p$ predictors and an intercept, $n$ observations):
+
+| Source | SS | df | MS | F |
+| :--- | :--- | :--- | :--- | :--- |
+| Regression | $\text{SSR} = \sum(\hat y_i - \bar y)^2$ | $p$ | $\text{MSR} = \text{SSR}/p$ | $\text{MSR}/\text{MSE}$ |
+| Residual (Error) | $\text{RSS} = \sum(y_i - \hat y_i)^2$ | $n-p-1$ | $\text{MSE} = \text{RSS}/(n-p-1)$ | |
+| Total | $\text{SS}_\text{Tot} = \sum(y_i - \bar y)^2$ | $n-1$ | | |
+
+- The sums of squares and the degrees of freedom both add up: $\text{SS}_\text{Tot} = \text{SSR} + \text{RSS}$ and $(n-1) = p + (n-p-1)$. MSE is $\hat\sigma^2$
+- $F = \text{MSR}/\text{MSE} \sim F_{p,\, n-p-1}$ under $H_0: \beta_1 = \cdots = \beta_p = 0$ — the overall test that no predictor is related to the response. The one-way table above is the case where the predictors are the $k-1$ group indicators: Between is the Regression row ($p = k-1$), Within is the Residual row
+- A **sequential** (hierarchical, Type I) table splits the Regression row into one row per predictor in the order it entered the model — $\text{SSR}(x_1)$, then $\text{SSR}(x_2 \mid x_1)$, and so on, each the drop in RSS from adding that term. The rows sum to SSR, and each row's $F$ is its MS over the full model's MSE. **Order matters**: a predictor's sequential SS is what it adds *after* the ones above it, which can differ greatly from what it explains alone
+- **Analysis of Deviance** (the GLM analogue) compares nested [[Generalized Linear Model]]s by the change in [[Deviance]]. The change **scaled by the dispersion** $\phi$, $[D_{\text{small}} - D_{\text{big}}]/\phi$, is asymptotically $\chi^2$ with degrees of freedom equal to the number of added parameters. For Poisson and binomial $\phi = 1$, so the raw change in deviance is compared with $\chi^2$; when $\phi$ is estimated (Normal, Gamma), use the $F$ test $F = \dfrac{D_{\text{small}} - D_{\text{big}}}{(\text{number of added parameters}) \times \hat\phi_{\text{big}}}$ on (added parameters, $n - p_{\text{big}}$) df, with $p_{\text{big}}$ counting the intercept. For a Normal model the deviance is the RSS and this $F$ is exact
 
 ![[Media/Figures/ANOVA.svg|340]]
 

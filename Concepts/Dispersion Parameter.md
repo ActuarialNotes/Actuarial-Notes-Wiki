@@ -23,9 +23,9 @@ The **Dispersion Parameter** $\phi$ is the scale factor in an [[Exponential Fami
 
 - For the **Normal** response $\phi = \sigma^2$; for **Poisson** and **binomial** the theory fixes $\phi = 1$; for **[[Gamma]]** $\phi$ is the squared coefficient of variation
 - $\phi$ does **not** affect the fitted coefficients $\hat\beta$ — it scales their standard errors by $\sqrt{\hat\phi}$, and so changes every p-value and [[Confidence Interval]] in [[Parameter Estimate Tables]]
-- $\hat\phi > 1$ in a Poisson or binomial model is **overdispersion**: more spread than the distribution permits, usually from unmodelled heterogeneity, correlated observations, or a missing predictor
-- Two estimators are in common use — the Pearson $\chi^2$ statistic over degrees of freedom (above) and the residual [[Deviance]] over degrees of freedom. The Pearson version is generally preferred
-- The **scaled deviance** $D^* = D/\phi$ is what is compared against $\chi^2$; when $\phi$ has to be estimated, model comparisons use the $F$ statistic $\frac{\Delta D/r}{\hat\phi}$ instead
+- $\hat\phi > 1$ in a Poisson or binomial model is **overdispersion**: more spread than the distribution permits, usually from variation in risk level among policyholders that the model's predictors do not explain
+- Two estimators are in common use — the Pearson $\chi^2$ statistic over degrees of freedom (above) and the unscaled residual [[Deviance]] over degrees of freedom, $D/(n-p)$. The Pearson version is the standard approach
+- With $D$ the unscaled deviance, the **scaled deviance** $D^* = D/\phi$ is what is compared against $\chi^2$; when $\phi$ has to be estimated, comparing nested models that differ by $r$ parameters uses the $F$ statistic $\frac{\Delta D/r}{\hat\phi}$ instead, with $\hat\phi$ from the larger model
 - Prior weights $w_i$ (e.g. exposure or claim count) divide the variance: a group average built from many observations is more precisely known, which is how grouped data is fitted correctly
 
 ![[Media/Figures/Dispersion_Parameter.svg|340]]

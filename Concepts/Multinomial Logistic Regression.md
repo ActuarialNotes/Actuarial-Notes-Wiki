@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fb5992f7c3ed488f7bc7b3b64557874a76e31150035f982fc3e5ec89633bf124
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Multinomial Logistic Regression.md
+---
+
 **Multinomial Logistic Regression** extends [[Logistic Regression]] to a nominal response with $J > 2$ unordered categories. One category is chosen as the **baseline** $J$, and the log-odds of each other category against it is modelled as a linear function of the predictors. Dobson & Barnett call it *nominal logistic regression*.
 
 > $$\ln\!\left(\frac{\pi_j}{\pi_J}\right) = \beta_{0j} + \beta_{1j}x_1 + \cdots + \beta_{pj}x_p$$

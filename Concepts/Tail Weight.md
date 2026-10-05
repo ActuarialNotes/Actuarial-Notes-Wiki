@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e9212937d374039087a988ab2a62f29ddc5e3ffc5d71640ed6529986c87996d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Tail Weight.md
+---
+
 **Tail Weight** describes how much probability a [[Severity Distribution|severity distribution]] puts on very large losses — how slowly its survival function $S(x) = 1 - F(x)$ falls to 0. A **heavy-tailed** distribution such as the [[Pareto Distribution|Pareto]] makes extreme claims far more likely than a **light-tailed** one such as the [[Gamma|gamma]], and distributions are compared by four related measures.
 
 > $$\lim_{x \to \infty} \frac{S_X(x)}{S_Y(x)} = \lim_{x \to \infty} \frac{f_X(x)}{f_Y(x)}$$

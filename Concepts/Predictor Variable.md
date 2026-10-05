@@ -15,7 +15,7 @@ verification:
   log: .verify/Concepts/Predictor Variable.md
 ---
 
-A **predictor variable** — also called an explanatory or independent variable, a covariate, a feature, or in ratemaking a [[Rating Variable|rating variable]] — is an input $x_j$ used to explain or predict the [[Response Variable|response]]. Each predictor fills one or more columns of the [[Design Matrix|design matrix]] and receives its own coefficient.
+A **predictor variable** — also called an explanatory or independent variable, a covariate, a feature, or in ratemaking a [[Rating Variable|rating variable]] — is an input $x_j$ used to explain or predict the [[Response Variable|response]]. Each predictor fills one or more columns of the [[Design Matrix|design matrix]] and receives its own coefficient. Usage of *covariate* varies: Dobson & Barnett reserve it for a quantitative explanatory variable and call a qualitative one a **factor**.
 
 > $$g(\mu_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}$$
 
@@ -50,4 +50,4 @@ A **predictor variable** — also called an explanatory or independent variable,
 > > &= 0.10
 > > \end{align*}
 > > $$
-> > The $t$-statistic falls from $0.15/0.04 = 3.75$ to $0.15/0.10 = 1.50$. The effect may be entirely real, but the data cannot separate it from the correlated predictors, so vehicle value looks insignificant. Dropping it on that basis is a mistake; combining the correlated variables or accepting the joint effect is the better response.
+> > The $t$-statistic falls from $0.15/0.04 = 3.75$ to $0.15/0.10 = 1.50$. The effect may be entirely real, but the data cannot separate it from the correlated predictors, so vehicle value looks insignificant. The low $t$-statistic does not show that the effect is absent. The two standard remedies are to drop one of the collinear predictors, usually at little cost to the fit since the information it carries is largely redundant, or to combine them into a single predictor.

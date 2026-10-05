@@ -24,6 +24,7 @@ A **Categorical Predictor** is an explanatory variable in a [[Generalized Linear
 | Continuous | Vehicle age, driver age | A single coefficient, or banded/transformed |
 
 - A categorical predictor with $k$ levels is represented using $k-1$ **indicator (dummy) variables**; the omitted level is the **reference level**, absorbed into the intercept (see [[Parameter Estimate Tables]])
+- **Terminology differs between the MAS-I sources.** The CAS outline lists categorical, ordinal and continuous predictors as three kinds, which is the sense used here. Dobson & Barnett call nominal and ordinal variables alike *categorical*; a qualitative explanatory variable is a **factor** and its categories are its **levels**
 - An **[[Interaction]]** between two predictors allows the effect of one to differ across the levels of the other, e.g., the effect of vehicle age differing by territory
 - Continuous predictors assume a smooth effect on the response (linear on the link scale unless transformed); banding a continuous variable into categories trades smoothness for flexibility at the cost of extra parameters
 - Choosing the right type for each variable is part of selecting the [[Model Structure]] of an [[Extended Linear Model]]

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5f3c6c8c0ae493d1bfd42287c91f4e13b4c82ae54ec32b7b56c0cc4e6910ff17
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Empirical Distribution.md
+---
+
 The **Empirical Distribution** of a sample $x_1, \ldots, x_n$ is the discrete distribution that puts probability $1/n$ on each observation. Its CDF, the **empirical distribution function** $F_n$, is the proportion of the sample at or below $x$ — the basic nonparametric estimate of an unknown [[Cumulative Distribution Function (CDF)|CDF]] $F$ from complete individual data.
 
 > $$F_n(x) = \frac{1}{n}\sum_{i=1}^{n} \mathbf{1}\{x_i \le x\}$$

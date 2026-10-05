@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:950a073ed9210bf55cd67e79b5d2d8a558e5d7ba57a593fad0cd3c83a712c3ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Rao-Blackwell Theorem.md
+---
+
 The **Rao-Blackwell Theorem** turns any [[Unbiasedness|unbiased]] estimator $W$ of $\tau(\theta)$ into one that is at least as good: condition it on a [[Sufficient Statistic|sufficient statistic]] $T$. The result $\varphi(T) = E[W \mid T]$ is still unbiased and its variance is never larger, for every value of $\theta$.
 
 > $$\varphi(T) = E[\,W \mid T\,]$$

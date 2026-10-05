@@ -902,7 +902,7 @@ export function storeDisclaimer(seller: string | null, checked: string | null): 
   const whom = `${named.join(', ')} or any other organization named here`
   return [
     `Actuarial Notes is an independent study resource. It is not affiliated with, endorsed by, sponsored by or acting for ${whom}. Product names, logos and trademarks are the property of their owners and appear only to identify the products.`,
-    `Prices, contents, dates and other details are transcribed from the seller’s public page${checked ? ` as read on ${longDate(checked)}` : ''} and may have changed since. The seller’s own page and terms govern any purchase; confirm every detail there before you buy. Nothing in the Store is sold, and no payment for it is taken, on Actuarial Notes.`,
+    `Prices, contents, dates and other details are transcribed from the seller’s public page${checked ? ` as read on ${longDate(checked)}` : ''} and may have changed since. The seller’s own page and terms govern any purchase; confirm every detail there before you buy. No product in the Shop's aisles is sold, and no payment for it is taken, on Actuarial Notes.`,
     'Reviews are excerpts of public posts and published testimonials, quoted as their authors wrote them and linked to where they appear. They are the opinions of their authors, not of Actuarial Notes, and are not verified purchases.',
     'This information is provided “as is”, for general information only, without warranty of any kind, and is not professional, financial or purchasing advice. Listing a product is not a recommendation, and no listing is a paid placement.',
   ]

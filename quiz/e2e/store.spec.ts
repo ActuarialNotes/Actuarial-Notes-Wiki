@@ -8,7 +8,7 @@ test.describe('store', () => {
   test('shelves the aisles and narrows them by exam', async ({ page }) => {
     await page.goto('/store')
 
-    await expect(page.getByRole('heading', { name: 'Store', exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Shop', exact: true })).toBeVisible()
     for (const aisle of ['Registration', 'Study materials', 'Calculators', 'Textbooks']) {
       await expect(page.getByRole('heading', { name: aisle, exact: true })).toBeVisible()
     }

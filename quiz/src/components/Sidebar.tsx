@@ -767,7 +767,7 @@ export default function Sidebar() {
               The gem shop is a corner of it, so this row stays lit there. */}
           <SidebarItem
             to="/store"
-            label="Store"
+            label="Shop"
             icon={<ShoppingBag className="h-5 w-5 lg:h-4 lg:w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}

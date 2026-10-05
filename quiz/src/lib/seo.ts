@@ -840,7 +840,7 @@ const STATIC_TITLES: Record<string, string> = {
   '/craft': `Concept Craft | ${SITE_NAME}`,
   '/settings': `Settings | ${SITE_NAME}`,
   '/upgrade': `Upgrade | ${SITE_NAME}`,
-  '/store': `Actuarial Exam Store | ${SITE_NAME}`,
+  '/store': `Actuarial Exam Shop | ${SITE_NAME}`,
   '/store/gems': `Gem Shop | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
   '/wiki/resources': `Actuarial Exam Syllabus Readings & Resources | ${SITE_NAME}`,

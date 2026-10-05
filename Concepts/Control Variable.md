@@ -17,10 +17,10 @@ A **Control Variable** is a predictor included in an insurance [[Generalized Lin
 
 > $$\hat{\beta}_{\text{rating}}\big|_{\text{control omitted}} \;\neq\; \hat{\beta}_{\text{rating}}\big|_{\text{control included}} \quad \text{if the rating and control variables are correlated}$$
 
-- Common control variables in ratemaking include accident year or calendar year (to absorb trend) and a territory or class variable that is priced separately outside the model
+- The common control variable in ratemaking is a temporal variable such as accident year or calendar year, which picks up trend, loss development and rate changes the target has not been adjusted for
+- A territory or class that is priced separately outside the model is **not** a control variable: it enters as an [[Offset Variable|offset]], with its coefficient fixed, so the other variables are fitted in its presence
 - Omitting a relevant control variable causes **omitted variable bias**: correlated rating variables' coefficients absorb some of the missing variable's true effect, distorting the indicated rate relativities
 - A control variable's coefficient is **estimated from the data**, unlike an **[[Offset Variable]]**, whose coefficient is fixed at $1$
-- Control variables are still checked for statistical significance and reasonableness in the [[Parameter Estimate Tables|parameter estimate table]], even though they will not appear in the final rating plan
 
 ![[Media/Figures/Control_Variable.svg|340]]
 

@@ -1,10 +1,10 @@
 ---
 verification:
   status: verified
-  confidence: low
+  confidence: medium
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:657450d3fd8b09ea831e20f02d9937e2e52b5605938aea9d468d3d062eb6f31d
+  content_hash: sha256:db6dbdd2770b77502c336473a658554d58cd01b940e13c2be832f0a1fe9e2120
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 1 (estimate mean and variance), 2 (sufficient statistic), 4 (critical values from a sampling distribution), 7 (order statistics), 8 (MLE; consistency, unbiasedness, sufficiency, efficiency, minimum variance, MSE; censoring and truncation), 9 (PDF p.4); Hogg Domain B §§4.1, 5.1, 6.1–6.5, 7.1–7.6 and Tse §§12.1, 12.3 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "Siegrist, Random, §5.5 The Sample Variance (divisor n − 1, n − 1 free deviations, computing formula, E(S²) = σ², var(S²) = (σ4 − (n−3)σ⁴/(n−1))/n; outlier exercise: s 16 → 11.62 when one score is dropped), sha256:452e2841007fad173229a9bb069a4acdda8e0d0bc6c1632f7239ef585248b0c6 — https://www.randomservices.org/random/sample/Variance.html"
@@ -14,7 +14,7 @@ verification:
     - "Penn State STAT 415, Lesson 2 Estimation (Part I): Ex 2.7 divisor-n variance estimator biased, E = (n−1)σ²/n; Ex 2.8 S² unbiased, sha256:6f5a6c01ae2d4c7cb46a18ad68a9e26b8177b5035860946e83d31b6236a6534d — https://online.stat.psu.edu/stat415/Lesson02.html"
     - "Penn State STAT 415, Lesson 7 §7.1 Properties of MLEs: consistency, equivariance, asymptotic normality 'subject to some regularity conditions'; Ex 7.1 normal MLEs x̄ and divisor-n variance (I(θ) written for the whole sample there), sha256:0c6afc848ae41251fc702348e0e8c603c5725f1f03c20b4731d789a61babbe0b — https://online.stat.psu.edu/stat415/Lesson07.html"
     - "CAS Exam MAS-I Tables, 'Lower-tail areas for Chi-square distributions', df 24, 0.950 column = 36.42 (PDF p.20), sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Sample Variance.md
 ---

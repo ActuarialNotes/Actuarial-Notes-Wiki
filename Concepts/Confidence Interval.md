@@ -26,17 +26,18 @@ A **Confidence Interval** is a range computed from a sample that covers the unkn
 
 > $$\bar{X} \pm t_{\alpha/2,\,n-1}\,\frac{S}{\sqrt{n}} \qquad (\sigma \text{ estimated})$$
 
+- Both intervals assume a random sample from a **normal** population. The $z$ interval is then exact, and so is the $t$ interval, because $(\bar{X} - \mu)/(S/\sqrt{n})$ has a [[Student's t-Distribution|$t$ distribution]] with $n - 1$ degrees of freedom. For a non-normal population both are only approximate, through the [[Central Limit Theorem (CLT)|CLT]], and need a larger $n$ the further the population is from normal
 - The general form is $\hat\theta \pm (\text{critical value}) \times \text{SE}(\hat\theta)$, where the critical value comes from the estimator's [[Sampling Distribution]]
 - The **coverage** statement is about the procedure, not one interval: $95\%$ of intervals built this way contain $\theta$. Once computed, a given interval either contains $\theta$ or does not
 - Width shrinks like $1/\sqrt{n}$ and grows with confidence — going from $95\%$ to $99\%$ multiplies the half-width by $2.576/1.96 = 1.31$
-- Use $t_{n-1}$ whenever $\sigma$ is replaced by $S$; the extra width is the price of estimating the spread, and it matters most for small $n$
-- For a variance, the interval is built from the $\chi^2$ distribution and is **asymmetric**: $\left(\frac{(n-1)S^2}{\chi^2_{\alpha/2}},\ \frac{(n-1)S^2}{\chi^2_{1-\alpha/2}}\right)$
+- Use $t_{n-1}$ whenever $\sigma$ is replaced by $S$; the extra width is the price of estimating the spread, and it matters most for small $n$. Here $z_{\alpha/2}$ and $t_{\alpha/2,\,n-1}$ are **upper**-tail points (area $\alpha/2$ above them). The CAS MAS-I $t$ table is headed by *two-sided* tail areas, so $t_{\alpha/2,\,n-1}$ is in the column headed $\alpha$: $t_{0.025,\,15} = 2.131$ is under $0.05$
+- For a variance, the interval is built from the [[Chi-Squared Distribution|$\chi^2$ distribution]], since $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ for a normal sample, and is **asymmetric**: $\left(\frac{(n-1)S^2}{\chi^2_{n-1}(1-\alpha/2)},\ \frac{(n-1)S^2}{\chi^2_{n-1}(\alpha/2)}\right)$. Here $\chi^2_{n-1}(p)$ is the point with **lower**-tail area $p$, which is the CAS MAS-I chi-square table's column $p$, so the larger point gives the lower endpoint. For $n = 16$ at $95\%$ the df $15$ row gives $\left(\frac{15S^2}{27.49},\ \frac{15S^2}{6.26}\right)$. This interval needs the normal population at every $n$: no CLT rescues it
 - For an [[Maximum Likelihood Estimation|MLE]], the large-sample interval $\hat\theta \pm z_{\alpha/2}/\sqrt{n I(\hat\theta)}$ uses the [[Fisher Information]]; for a GLM coefficient it is $\hat\beta_j \pm z_{\alpha/2}\text{SE}(\hat\beta_j)$, and exponentiating both endpoints gives an interval for the multiplicative rating factor
 
 ![[Media/Figures/Confidence_Interval.svg|340]]
 
 > [!example]- Interval for a Mean with Unknown Variance {Example}
-> A sample of $n = 16$ claims has $\bar{x} = 8{,}400$ and $s = 1{,}200$. Build a $95\%$ confidence interval for $\mu$, given $t_{0.025, 15} = 2.131$.
+> A sample of $n = 16$ claims, assumed drawn from a normal population, has $\bar{x} = 8{,}400$ and $s = 1{,}200$. Build a $95\%$ confidence interval for $\mu$, given $t_{0.025, 15} = 2.131$.
 >
 > > [!answer]-
 > > $$\text{SE} = \frac{s}{\sqrt{n}} = \frac{1{,}200}{4} = 300$$

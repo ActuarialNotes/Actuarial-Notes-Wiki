@@ -1,16 +1,16 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
   content_hash: sha256:665aa998f8f3c5c94e9cd89c67b98f00449155f17ccfc03f82cdbf5179569b00
   sources:
-    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (Aug 2020, open textbook), Ch.4 Model Selection and Estimation §4.3.1.2 censored data (right-censoring most common, min(X, C_U) with policy limit example; left-censoring max(X, C_L)), §4.3.1.4 likelihood-contribution table (exact f(x), right-censored 1 - F(C_U), interval-censored F(C_U) - F(C_L)) and exponential special case, mortality-study Type A (alive at study end = right-censored), sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
-    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.2 MLE for censored data, L = prod f(x_i) x S(u)^m, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
-    - "Dey, Lipsitz, Cooper, Trinh, Krzywinski & Altman, \"Survival analysis—time-to-event data and censoring\", Nature Methods 19(8), 2022 (Points of Significance), Fig. 3 caption, sha256:ca9f23c68a24089908bddcad8f88975bbf7ef603a0835200bfd828849af4f28d (article page HTML) — https://www.nature.com/articles/s41592-022-01563-7"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 8 and 9 \"accounting for censoring and truncation\", \"missing data values, including censoring and truncation\" (PDF p.4), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-  open_findings: 1
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1 (open textbook), Ch.4 Model Selection and Estimation §4.3.1.2 (right-censoring most common, X_U* = min(X, C_U); left-censoring max(X, C_L); a reinsurer not observing small claims is censoring from the left; grouped / interval-censored data), §4.3.1.4 likelihood-contribution table (exact f(x), right-censored 1 - F(C_U), interval F(C_U) - F(C_L)) and exponential special case, HTML fetched 2026-10-05, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "Frees & Johnson (eds.), Loss Data Analytics, Version 1.1, Ch.3 §3.5.2.2 MLE for censored data (L = Π f(x_i) × S(u)^m), HTML fetched 2026-10-05, sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "Dey, Lipsitz, Cooper, Trinh, Krzywinski & Altman, 'Survival analysis—time-to-event data and censoring', Nature Methods 19(8), 2022, Fig. 3 caption (treating censored times as observed event times underestimates survival), article HTML fetched 2026-10-05, sha256:44e0b7fe90a312e529a72b9bf7b37506acfa215cf52e88378ed80ed5448851fb — https://www.nature.com/articles/s41592-022-01563-7"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06, 2026-06-29), Domain B tasks 8-9 (MLE 'accounting for censoring and truncation'; 'missing data values, including censoring and truncation'), PDF p.4; Tse §§10.1, 10.2, 12.3 listed for Domain B, PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Censoring.md
 ---

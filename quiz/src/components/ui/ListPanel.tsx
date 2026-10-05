@@ -2,7 +2,7 @@
 // chevron — the pattern a phone's Settings and its App Store use for "tap to go
 // somewhere". The exam lists on the Quiz and Study Guides tabs are drawn with
 // it (`components/ExamRow.tsx`), and so are the one-row panels above them
-// (Quiz Battle, the general guide, Actuaria Online), so everything on those two
+// (Quiz Battle, Concept Craft, the general guide, Actuaria Online), so everything on those two
 // pages that opens somewhere looks it.
 //
 // Why rows rather than a grid of cards: a card with no arrow and a row of

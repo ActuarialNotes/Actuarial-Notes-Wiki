@@ -1590,6 +1590,73 @@ summary .katex-display,
   .battle-confetti { display: none; }
 }
 
+/* ── Concept Craft ────────────────────────────────────────────────────────────
+   The board (docs/concept-craft.md). Its floor is a dot grid, drawn here and
+   sized and offset from the board's own camera inline, so the dots travel and
+   scale with a pan or a zoom — the one cue a blank canvas has that it moved.
+   Not `.actuaria-grid`, which is Actuaria's in-world floor and never a study
+   surface; this one is functional, and it lives only under the board.
+   Everything else marks a thing that happened — a card crafted, a link drawn,
+   a pair recalled — and stops; reduced motion keeps every end state. */
+.craft-floor {
+  background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+}
+
+/* A concept arriving on the board, or in the deck: popped in, once. */
+@keyframes craft-node-pop {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.craft-node-pop {
+  animation: craft-node-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* A link found: its lines draw in from the ingredients. The paths carry
+   pathLength=1 while this runs, so the dash is the whole line. */
+@keyframes craft-edge-in {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+.craft-edge-in path {
+  stroke-dasharray: 1;
+  animation: craft-edge-in 520ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* A pair already found, dropped together again: its lines pulse once. */
+@keyframes craft-edge-flash {
+  0%, 100% { opacity: 1; }
+  40%      { opacity: 0.35; }
+}
+.craft-edge-flash {
+  animation: craft-edge-flash 700ms ease-in-out 2;
+}
+
+/* The inspector: a drawer from the right on a wide board, a sheet from below
+   on a phone. Arrival only, like a dialog (style guide §9.1). */
+@keyframes craft-drawer-in {
+  from { opacity: 0; translate: 16px 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+.craft-drawer-in {
+  animation: craft-drawer-in 220ms cubic-bezier(0.25, 0.6, 0.3, 1) backwards;
+}
+@keyframes craft-sheet-in {
+  from { translate: 0 24px; opacity: 0; }
+  to   { translate: 0 0; opacity: 1; }
+}
+.craft-sheet-in {
+  animation: craft-sheet-in 240ms cubic-bezier(0.25, 0.6, 0.3, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .craft-node-pop,
+  .craft-edge-flash { animation: none; }
+  .craft-edge-in path { animation: none; stroke-dasharray: none; }
+  .craft-drawer-in,
+  .craft-sheet-in { animation: toast-fade-in 160ms ease-out both; }
+}
+
 /* ── Actuaria Online ─────────────────────────────────────────────────────────
    The game layer's scope (docs/actuaria-online.md, style guide §2.6). Every
    /actuaria route renders inside `<div class="actuaria dark">`: in-world

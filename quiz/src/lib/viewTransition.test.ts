@@ -229,6 +229,9 @@ describe('deskPlace', () => {
     expect(deskPlace('/quiz').depth).toBeGreaterThan(deskPlace('/').depth)
     // Quiz Battle lies over the Quiz tab's exam list, as a quiz does.
     expect(deskPlace('/battle')).toEqual({ tab: deskPlace('/').tab, depth: deskPlace('/quiz').depth })
+    // So does Concept Craft's topic picker, with a topic's board a sheet over it.
+    expect(deskPlace('/craft')).toEqual({ tab: deskPlace('/').tab, depth: 1 })
+    expect(deskPlace('/craft/exam-p-general-probability')).toEqual({ tab: deskPlace('/').tab, depth: 2 })
     expect(deskPlace('/review').depth).toBeGreaterThan(deskPlace('/quiz').depth)
   })
 

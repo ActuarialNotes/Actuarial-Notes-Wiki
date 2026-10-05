@@ -8,8 +8,7 @@ import { BattleTopRow } from '@/components/battle/BattleTopRow'
 import { PlayerTile } from '@/components/battle/PlayerTile'
 import type { PlayerStatus } from '@/components/battle/BattleScoreboard'
 import { useBattleMusic, useNow } from '@/hooks/useBattle'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useConceptLevels, type ConceptLevels as Levels } from '@/hooks/useConceptLevels'
 import { SEATS, isFinalRound, otherSeat, type BattlePlayer, type Seat } from '@/lib/battle'
 import {
   battleExamName,
@@ -31,7 +30,6 @@ import {
   type BattleDraft,
   type TopicGroup,
 } from '@/lib/battleTopics'
-import { latestMasteryStates, type MasteryState } from '@/lib/mastery'
 import { playSound } from '@/lib/soundEngine'
 import { cn } from '@/lib/utils'
 
@@ -41,25 +39,6 @@ import { cn } from '@/lib/utils'
 // own level on that concept — and neither sees the other's until both are in.
 // Then both picks are laid out and the questions are dealt from them, one card
 // at a time, before the count-in.
-
-interface Levels {
-  levelOf: (name: string) => MasteryState
-  isCollected: (name: string) => boolean
-}
-
-/** This player's level on each concept and whether they've collected its card — what a tile's edge says. */
-function useConceptLevels(): Levels {
-  const { records } = useConceptMastery()
-  const cards = useCollectedCards(s => s.cards)
-  return useMemo(() => {
-    const states = latestMasteryStates(records, new Date())
-    const collected = new Set(cards.map(c => c.name.toLowerCase()))
-    return {
-      levelOf: name => states.get(name.toLowerCase()) ?? 'new',
-      isCollected: name => collected.has(name.toLowerCase()),
-    }
-  }, [records, cards])
-}
 
 /** The pick or the draw, whichever the room is at. */
 export function BattleDraftScreen({

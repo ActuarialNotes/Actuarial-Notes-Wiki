@@ -76,6 +76,9 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/quiz', tab: 3, depth: 1 },
   // Quiz Battle is opened from the Quiz tab's exam list, a sheet over it.
   { prefix: '/battle', tab: 3, depth: 1 },
+  // Concept Craft is opened from the same place; a topic's board is a sheet
+  // laid over the topic picker.
+  { prefix: '/craft', tab: 3, depth: 1, below: 2 },
   { prefix: '/review', tab: 3, depth: 2 },
   // The Projects tab; an attempt is a sheet laid over the list of briefs.
   { prefix: '/project', tab: 4, depth: 0, below: 1 },

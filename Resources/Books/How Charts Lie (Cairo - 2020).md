@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:179f5dfc34e3d8c0ad394002f30daf4de39e9948ab34b254930e59681c31453f
+  content_hash: sha256:4d9dd2fcdeb512514683f809ba178fb18f8b47e6854238a3a2b516ab71f8c775
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/How Charts Lie (Cairo - 2020).md
 ---
-![[How Charts Lie (Cairo - 2020) - Cover.svg]]
+![[How Charts Lie (Cairo - 2020) - Cover.jpg]]
 
 A book on how charts can mislead as well as inform, teaching readers to spot the lies in deceptive visuals and to use good ones to understand complex stories. In the publisher's description, charts lie by displaying incomplete or inaccurate data, suggesting misleading patterns and concealing uncertainty, or are misunderstood; the book works through examples from election-result infographics to global GDP maps and box-office record charts. Norton's description of the October 2020 paperback (256 pages) says it includes "an updated afterword on the graphics of the COVID-19 pandemic."
 

@@ -8,11 +8,11 @@ Edition: "8th"
 Type: "Textbook"
 ISBN: "978-0-13-468699-8"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:48c376ed2e64136718b50724ae01bb0a0dc3459b6cc7f92e61724406aaeeaff8
+  content_hash: sha256:34f2731f6ea9aa28cbaf2934ba529af7116e131fe90be5b5b017927d515fab69
   sources:
     - "Hogg, McKean & Craig, Introduction to Mathematical Statistics, 8th ed., Global Edition, publisher eBook preview: title and copyright pages (PDF pp.2-3), Contents pp.5-9 (PDF pp.6-10), sha256:7fd80607a820477e03ff2c8f3469f5cfa57d095d766cbc29d39d723ef5a69a99 — https://api.pageplace.de/preview/DT0400.9781292264783_A39514650/preview-9781292264783_A39514650.pdf"
     - "Pearson product page, Introduction to Mathematical Statistics 8th ed.: Title overview and hardcover ISBN-13 9780134686998 'Published 2018 (2018 update)', fetched 2026-10-05, sha256:7e7698f26a8731ddc2ccabfac24e4341c39f052ebdad72883f22f6efae9f4492 — https://www.pearson.com/en-us/subject-catalog/p/introduction-to-mathematical-statistics/P200000006211"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Mathematical Statistics (Hogg et al. - 2018).md
 ---
-![[Introduction to Mathematical Statistics (Hogg et al. - 2018) - Cover.svg]]
+![[Introduction to Mathematical Statistics (Hogg et al. - 2018) - Cover.jpg]]
 
 A comprehensive textbook of mathematical statistics that treats classical inference procedures in estimation and testing extensively. In the publisher's description it promotes understanding through numerous illustrative examples and exercises, and its flexible organization suits a range of mathematical statistics courses. The 8th edition's revisions connect statistical theory with statistical practice: use of the statistical software R is expanded throughout, more real data sets (in the free R package hmcpkg) illustrate or compare methods, and new topics include Tukey's multiple comparison procedure in Chapter 9 and confidence intervals for correlation coefficients in Chapters 9 and 10.
 

@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2cb870302dee07228c8e66118d0c7f8e218c6b232a019a5d11b4e9053f278bfa
+  content_hash: sha256:cdd1a95bd1910771293f71eef849301de6a1a3e85f9325c701fe355eb060155a
   sources: []
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Predictive Modeling Applications in Actuarial Science Volume 1 (Frees, Derrig and Meyers - 2014).md"
 ---
-![[Predictive Modeling Applications in Actuarial Science Volume 1 (Frees, Derrig and Meyers - 2014) - Cover.svg]]
+![[Predictive Modeling Applications in Actuarial Science Volume 1 (Frees, Derrig and Meyers - 2014) - Cover.jpg]]
 
 An edited volume on predictive modeling, the use of data to forecast future events, for actuaries and other financial analysts. The publisher describes it as written for analysts developing their expertise in statistics who want concrete examples of predictive modeling, and for seasoned analysts wanting an overview of advanced statistical topics relevant to actuarial practice. It is the first volume of a two-volume set, edited by Edward W. Frees, Richard A. Derrig and Glenn Meyers with each chapter by its own authors, and the project was funded by the Casualty Actuarial Society and the Canadian Institute of Actuaries.
 

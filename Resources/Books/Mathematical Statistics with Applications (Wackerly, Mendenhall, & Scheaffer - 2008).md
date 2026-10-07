@@ -8,11 +8,11 @@ Edition: "7th"
 Type: "Textbook"
 ISBN: "978-0495110811"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-27
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a827dae4aac8b14c880d70c557c0802addb712fd04a096394499274458320875
+  content_hash: sha256:90b49504b9e0b85b8b2998becdc49b08da4ecabb2b3b4163323485725dce999e
   sources:
     - "SOA Probability Exam syllabus, November 2026, REFERENCES pp.5-7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Mathematical Statistics with Applications, 7th edition, table of contents and description (WebAssign, Cengage Learning), https://www.webassign.net/features/textbooks/wackerlystat7/details.html, fetched 2026-09-27, sha256:2b338d52354b0d6d9be5228f04593c25b7739efeb740aae93c2ce480260f59ff"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: ".verify/Resources/Books/Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008).md"
 ---
-![[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008) - Cover.svg]]
+![[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008) - Cover.jpg]]
 
 A textbook presenting a foundation in statistical theory while conveying the relevance and importance of that theory in solving practical problems. In the publisher's description, its practical applications and exercises help students discover the nature of statistics and understand its essential role in scientific research. The seventh edition runs to sixteen chapters, from probability and random variables through estimation, hypothesis testing, linear models, the analysis of variance, categorical data, nonparametric statistics and Bayesian inference.
 

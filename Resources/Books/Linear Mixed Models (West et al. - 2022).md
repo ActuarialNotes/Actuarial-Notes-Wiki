@@ -12,13 +12,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:54fa34148abb4377a0be8daa91062f0870d9b9d351833a9a8856d80c61480fbe
+  content_hash: sha256:7f21e08f34c0cfc786e55729417c8f62cbdb8aa35ca5f96663b4114e66c29514
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Linear Mixed Models (West et al. - 2022).md
 ---
-![[Linear Mixed Models (West et al. - 2022) - Cover.svg]]
+![[Linear Mixed Models (West et al. - 2022) - Cover.jpg]]
 
 A step-by-step guide to fitting linear mixed models (LMMs) in SAS, SPSS, R, Stata and HLM, covering the most popular packages for the task in one book. It gives a chapter to the key theory underlying LMMs for clustered, longitudinal and repeated-measures data, then analyses real-world data sets from a variety of study designs — hypothesis testing, interpretation of results and model diagnostics — with each package's code and tables of estimates that allow the results to be compared across procedures. The third edition updates every example, with new tools for visualization and interpretation, and adds a chapter on power analysis for mixed-effects models.
 

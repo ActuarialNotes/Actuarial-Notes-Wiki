@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1185bb79ff9e7fad79777b6c36647fee515907db21f52fba80f7502d5fc98eec
+  content_hash: sha256:b3a74361731a901e9e9f01bdb9392a69ededb39027f78f0bdccb08c3e385f065
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Introductory Time Series with R (Cowpertwait - 2009).md
 ---
-![[Introductory Time Series with R (Cowpertwait - 2009) - Cover.svg]]
+![[Introductory Time Series with R (Cowpertwait - 2009) - Cover.jpg]]
 
 A concise text that takes the non-specialist, at a fairly quick pace, to where they can confidently apply a range of time series methods using R. It assumes a first-year university statistics course and treats each model the same way: a motivating section, the model defined in mathematical notation, R code that simulates data from it and fits the model to recover its parameters, and a fit to a historical data set with diagnostic plots. Each chapter ends with a summary of the R commands used and exercises; derivations sit in starred sections that can be skipped. Part of Springer's Use R! series.
 

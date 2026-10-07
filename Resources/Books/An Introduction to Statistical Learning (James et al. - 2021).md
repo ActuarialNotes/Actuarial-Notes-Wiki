@@ -13,7 +13,7 @@ verification:
   confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2ff5d1bafaa1e4a26a9024a12d1a3ef882cb378ab809c604f9056a845c5f4b6d
+  content_hash: sha256:90a9f2ff2a1b7f64acb7baccc79c8bb4ac960aad49e35cd5ed86060a49a05f7e
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer, first printing Aug 4 2021) — title page, Preface pp.vii-viii, printed Contents pp.ix-xv and the PDF bookmark outline, CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.5-6 (Domain C readings; James citation, chapter/section scope, C1-C9, OP), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
@@ -24,7 +24,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Statistical Learning (James et al. - 2021).md
 ---
-![[An Introduction to Statistical Learning (James et al. - 2021) - Cover.svg]]
+![[An Introduction to Statistical Learning (James et al. - 2021) - Cover.jpg]]
 
 An introduction to statistical learning, the tools for making sense of complex datasets, focused on applying the methods rather than their mathematics. Written for advanced undergraduates, master's students and analysts in other fields, it gives every chapter from Chapter 2 on a lab in R. This second edition adds chapters on deep learning, survival analysis and multiple testing, and treatments of naive Bayes and generalized linear models (Chapter 4), Bayesian additive regression trees (Chapter 8) and matrix completion (Chapter 12). The authors offer the PDF free on the book's website.
 

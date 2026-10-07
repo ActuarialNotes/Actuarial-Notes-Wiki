@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2caa5f559fc3183c4c1b3c4f6be4a5f8f65624c9b9cbda3f85ea1ba963b94c5a
+  content_hash: sha256:b96922bbd94961c30cc96dd8720f4738008ab5265d7d411e23f510ab112b8075
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Storytelling with Data (Knaflic - 2015).md
 ---
-![[Storytelling with Data (Knaflic - 2015) - Cover.svg]]
+![[Storytelling with Data (Knaflic - 2015) - Cover.jpg]]
 
 A book on the fundamentals of [[Data Visualization|data visualization]] and on communicating effectively with data by telling a story with it. In its publisher's words, it teaches how to understand the importance of context and audience, determine the appropriate type of graph, recognize and eliminate clutter, direct the audience's attention to the most important parts of the data, think like a designer, and use storytelling so a message resonates. Wiley published the paperback in November 2015 (288 pages).
 

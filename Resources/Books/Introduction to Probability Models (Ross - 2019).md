@@ -8,11 +8,11 @@ Edition: "12th"
 Type: "Textbook"
 ISBN: "978-0-12-814346-9"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8085c20c51965f70cc3c52034e37826b7942f9f323b1eca3c613647c83b67400
+  content_hash: sha256:beef5096e06a2e214820036be67ef5e17a05d1c5167741f2fa9e6cfd96dbfb1f
   sources:
     - "Ross, Introduction to Probability Models, Twelfth Edition (Academic Press, 2019), title page and printed Contents pp. v-x, library scan (TU Ilmenau via K10plus), re-fetched 2026-10-05, sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"
     - "Google Books record for ISBN 9780128143469: publisher description, Twelfth Edition, Academic Press 2019, fetched 2026-10-05, sha256:9ee0a9dcaa73134607d9b364b22944e733e2fda14cb2f01dd6896383d695ff21 — https://books.google.com/books?vid=ISBN9780128143469"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/Introduction to Probability Models (Ross - 2019).md
 ---
-![[Introduction to Probability Models (Ross - 2019) - Cover.svg]]
+![[Introduction to Probability Models (Ross - 2019) - Cover.jpg]]
 
 A textbook introducing elementary probability modelling and stochastic processes, and how probability theory can be applied. In the publisher's description those applications run through engineering, computer science, management science, the physical and social sciences and operations research; the twelfth edition keeps the text's hallmark features — its writing style, and exercises and examples across a wide breadth of probability topics — and includes many real-world applications in engineering, science, business and economics.
 

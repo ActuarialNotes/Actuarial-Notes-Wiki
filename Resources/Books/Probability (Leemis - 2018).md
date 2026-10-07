@@ -8,11 +8,11 @@ Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-9829174-7-3"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:95c7df4632079e791885eafc0abe126ada0b486658af01f09d3b5d4d47e34c56
+  content_hash: sha256:870a0368ffa33bcf6696366b98e26e04c125974337a037dc9ac7cb6753f4957d
   sources:
     - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
     - "Lawrence M. Leemis, Probability, Second Edition: contents (author list), https://www.math.wm.edu/~leemis/ptext.con, sha256:2e8c718840614a51e42de65131bc4f91268a3fbb0402bc0f258c0ebe0118f955 (fetched 2026-09-28 with the InCommon RSA OV SSL CA 3 intermediate supplied)"
@@ -24,7 +24,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/Probability (Leemis - 2018).md
 ---
-![[Probability (Leemis - 2018) - Cover.svg]]
+![[Probability (Leemis - 2018) - Cover.jpg]]
 
 A calculus-based introduction to probability covering the traditional topics, with a secondary emphasis on Monte Carlo simulation. Examples from a wide range of fields apply the theory to real-world problems, and its description says it covers all of the topics of the SOA's Exam P. The second edition adds moment-ratio diagrams at the end of Chapter 5 and a univariate distribution relationship chart at the end of Chapter 8.
 

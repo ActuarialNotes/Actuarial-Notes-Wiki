@@ -13,13 +13,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9cbc1abd65655e59ddc6555327e1db934abecb2016e6f1dbeff06cf2f8c8e420
+  content_hash: sha256:4b8b9ff81b4fd6055654349ba027e85bbdbc47f532036f1655ddc770728eb1ee
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Stochastic Loss Reserving Using Generalized Linear Models (Taylor and McGuire - 2016).md
 ---
-![[Stochastic Loss Reserving Using Generalized Linear Models (Taylor and McGuire - 2016) - Cover.svg]]
+![[Stochastic Loss Reserving Using Generalized Linear Models (Taylor and McGuire - 2016) - Cover.jpg]]
 
 A CAS monograph that formulates the chain ladder, and the statistical distribution of its loss reserve, as generalized linear models. Its purpose is to provide access to GLMs for loss reserving, beginning with a strong emphasis on the chain ladder: it identifies the two families of stochastic model that generate the chain ladder algorithm, estimates the reserve's prediction error by the delta method and the bootstrap, reviews the diagnostics GLM software provides for testing the model, and constructs extensions where the model fails. Each chapter opens with a short summary, and one workers compensation paid-loss triangle is used throughout. It is Number 3 in the CAS Monograph Series.
 

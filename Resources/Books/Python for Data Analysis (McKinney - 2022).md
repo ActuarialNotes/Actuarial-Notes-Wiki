@@ -13,13 +13,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a24edb27e72ac3331376281c451daaa38c74c1d2ecd8b49cb31c12c27e7e89b2
+  content_hash: sha256:4791c3b023bf074be809eb1483b6f6c75efb36d1dce286f69f888a877db0b9e2
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Python for Data Analysis (McKinney - 2022).md
 ---
-![[Python for Data Analysis (McKinney - 2022) - Cover.svg]]
+![[Python for Data Analysis (McKinney - 2022) - Cover.jpg]]
 
 A guide to the nuts and bolts of manipulating, processing, cleaning and crunching data in Python. It covers the parts of the Python language and its data-oriented library ecosystem and tools that equip a reader to become an effective data analyst, with the focus on Python programming, libraries and tools rather than on data analysis methodology. The third edition, updated for pandas 2.0.0 and Python 3.10, was first published in August 2022 and is also available free as an open-access HTML edition on the author's site.
 

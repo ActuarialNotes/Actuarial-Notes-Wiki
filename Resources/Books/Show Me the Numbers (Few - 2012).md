@@ -12,13 +12,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c66b9058c6e68bb880030d2e1898244f0ab44c94278e7a6ba60bb9cca72bf49a
+  content_hash: sha256:c72a6f5134c8f3d8982953bc6498693bb246e2190a7c4aafd5349f41e64aa477
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Show Me the Numbers (Few - 2012).md
 ---
-![[Show Me the Numbers (Few - 2012) - Cover.svg]]
+![[Show Me the Numbers (Few - 2012) - Cover.jpg]]
 
 A guide to designing tables and graphs that communicate quantitative information effectively and efficiently. Its publisher's description starts from the observation that most presentations of quantitative information are poorly designed, because almost no one has been trained to design tables and graphs for communication. The second edition was published by Analytics Press in June 2012; it runs from simple statistics and visual perception through table and graph design to telling stories with numbers, with practice exercises and answers.
 

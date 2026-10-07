@@ -13,13 +13,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ed523a0b3c05d832de8457cad50289afa0ca4cffc747fd3585d1fb34eb2acec6
+  content_hash: sha256:4c0290439fb18e968bbd580f57f250d4836a95b7addb63204362d91b14fa0e7c
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Using the ODP Bootstrap Model (Shapland - 2016).md
 ---
-![[Using the ODP Bootstrap Model (Shapland - 2016) - Cover.svg]]
+![[Using the ODP Bootstrap Model (Shapland - 2016) - Cover.jpg]]
 
 A practitioner's guide to the over-dispersed Poisson (ODP) bootstrap model, which estimates a distribution of possible outcomes for unpaid claims. It gathers the evolutionary changes from different papers into a complete ODP bootstrap modeling framework using a standard notation, generalizes it into a more flexible GLM bootstrap, describes the adjustments needed for practical use, and addresses the diagnostic testing of the model's assumptions and ways to combine or credibility weight its results with other models into a "best estimate" of the distribution. It is number 4 in the CAS Monograph Series; in lieu of technical appendices, companion Excel workbooks illustrate the calculations.
 

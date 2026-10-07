@@ -1,0 +1,38 @@
+# Failed FM once with a 5. Has seen everything, holds some confident
+# misconceptions, reviews what he missed. Tests whether pages correct
+# misconceptions rather than just introduce ideas.
+name: Daniel (repeat test-taker)
+exam: FM
+description: >
+  Failed his first FM sitting with a 5 (just under the pass mark). Studied from
+  a commercial manual last time; strong on annuities and loans, weak on bonds
+  and asset-liability management, and sure of a few things that are wrong.
+prior_knowledge:
+  calculus: comfortable
+  algebra: comfortable
+  probability: passed Exam P
+  interest_theory: >
+    studied the whole FM syllabus once; remembers annuity-immediate and
+    annuity-due formulas and loan amortization well
+  misconceptions:
+    - thinks Macaulay and modified duration are the same thing
+    - believes a bond bought at a premium has a book value that rises over time
+  mastered_concepts: [Annuity Immediate, Annuity Due, Amortization Schedule, Outstanding Balance, Perpetuity]
+gaps:
+  - Duration, convexity and immunization
+  - Bond amortization of premium and accumulation of discount
+  - Forward and spot rates
+traits:
+  reading_thoroughness: 0.5
+  skim_tendency: 0.45
+  derivation_patience: 0.5
+  math_anxiety: 0.35
+  guess_tendency: 0.2
+  confidence_bias: 0.5
+  reading_speed_wpm: 240
+study_strategy: spaced-review
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 10
+feedback: solution
+seed: 41

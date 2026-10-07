@@ -217,6 +217,12 @@ before touching that area**:
   redirected, to whoever *lands* on it. Read before touching `lib/seo*.ts`,
   `documentHead.ts`, `usePageTracking`, `index.html`'s `page-head` markers, or the
   redirect in `WikiConcept`.
+- `docs/simulated-learner.md` — the **simulated learner** (`simulations/`, `./run-learner`): a model
+  playing a configured student (YAML profiles) who studies the vault and practises questions, so
+  reports show where guides and questions fail which learners. The learner may see study pages and
+  question stems/options only — enforced by an allowlist loader, a context guard and a tool-less,
+  MCP-less headless Claude Code backend, and proven by `simulations/tests/test_isolation.py` (CI).
+  Never edits the vault; only the run reports are committed.
 - `docs/analytics-and-monitoring.md` — **Google Analytics** and error capture. GA is not in
   `index.html`: `initAnalytics()` (`lib/analytics.ts`, from `main.tsx`) loads it only on a
   measured visit — the production host, not automation (`navigator.webdriver`, bot user

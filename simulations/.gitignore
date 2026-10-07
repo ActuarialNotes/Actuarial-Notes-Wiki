@@ -1,0 +1,8 @@
+# Runs keep their raw logs (events, the learner's full context, notes, state)
+# locally; only the markdown reports are committed.
+runs/**
+!runs/**/
+!runs/**/report.md
+!runs/**/comparison.md
+__pycache__/
+!runs/.gitkeep

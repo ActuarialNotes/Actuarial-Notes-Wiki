@@ -1,0 +1,34 @@
+# Career changer from accounting: knows money vocabulary, rusty and anxious on
+# calculus. Tests whether the guides teach the maths they assume.
+name: Marcus (career changer, weak calculus)
+exam: FM
+description: >
+  Thirty-four-year-old accountant moving into actuarial work. Business degree
+  twelve years ago; one semester of calculus he barely passed. Knows loans,
+  amortization schedules and present value from work, mostly via spreadsheets.
+prior_knowledge:
+  calculus: one semester, long forgotten — knows a derivative is a slope, cannot integrate
+  algebra: solid arithmetic and percentages; shaky with logarithms and exponent rules
+  probability: none formal
+  interest_theory: present value and loan amortization as done in Excel (PV, PMT functions)
+  finance: accounting, bonds on a balance sheet, amortization schedules
+  mastered_concepts: [Simple Interest, Present Value, Amortization Schedule]
+gaps:
+  - Calculus (derivatives, integrals, limits)
+  - Logarithms and solving for an exponent
+  - Continuous compounding and the force of interest
+  - Summation notation and geometric series
+traits:
+  reading_thoroughness: 0.6
+  skim_tendency: 0.3
+  derivation_patience: 0.25
+  math_anxiety: 0.8
+  guess_tendency: 0.25
+  confidence_bias: -0.4
+  reading_speed_wpm: 200
+study_strategy: read-then-practice
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 8
+feedback: solution
+seed: 23

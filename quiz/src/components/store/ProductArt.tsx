@@ -1,33 +1,48 @@
 // The pictures on the Store's cards.
 //
-// A product is drawn, not photographed: the Store holds no seller's images
-// (copying a box shot would be lifting a brand's own material, and hotlinking
-// one would send a request to the seller from every visit), so each card leads
-// with a small illustration of the *kind* of thing it is — a book for a study
-// manual, a screen for a video course, a stack of question cards for a
-// practice bank, a gift box for a bundle — painted in the exam's own accent
-// (`lib/examColors.ts`). A shelf narrowed to Exam FM is a shelf of FM's indigo;
-// the whole Store, unfiltered, runs the ramp from blue to red.
+// A product is shown by its seller's own picture of it wherever the seller's
+// page has one (`ProductImage`, copied into `public/store-products/` — never
+// hotlinked, so browsing sends no request to a seller):
+//
+//   • a **cover** — the flat front of a manual, as the seller shows it — is
+//     bound into a book: a 3/4 view with its spine turned towards the reader,
+//     the spine printed with the cover's own left edge, a hinge crease and the
+//     light catching the board (`BoundCover`);
+//   • a **photo** — a calculator, a laptop, a box — is shown as it is, standing
+//     on the stage with its own shadow (`ProductPhoto`).
+//
+// A product with no picture gets the same book, its cover printed in the
+// exam's accent (`lib/examColors.ts`) with the product's own title, its seller
+// and what kind of thing it is (`MockupBook`) — so a shelf narrowed to Exam FM
+// is FM's indigo, and a mock-up never pretends to be a real jacket: the words
+// on it are the Store's, set in the Store's type. A calculator with no picture
+// (the BA-35, discontinued) is drawn from what tells the models apart
+// (`CalculatorArt`).
 //
 // They are pictures, not information: the card names the product and its
-// seller beside every one, so each drawing is `aria-hidden`. Nothing here moves
-// on its own; the object lifts a little when its card is hovered, and only
-// where the reader hasn't asked for reduced motion.
+// seller beside every one, so each is `aria-hidden`. Nothing here moves on its
+// own; the object lifts a little when its card is hovered — a book turns a
+// little more towards the reader — and only where motion is welcome.
 
-import type { ReactNode } from 'react'
+import { useId, type CSSProperties, type ReactNode } from 'react'
+import { STORE_SELLERS } from '@/data/storeCatalog'
 import { examMonogramLines } from '@/lib/examLogo'
-import { artAccentStyle, type CalculatorLook, type StudyKind } from '@/lib/store'
+import {
+  COVER_TITLE_WIDTH,
+  STUDY_KIND_LABEL,
+  artAccentStyle,
+  coverTitle,
+  type CalculatorLook,
+  type CalculatorProduct,
+  type StudyProduct,
+} from '@/lib/store'
+import type { StoreBook } from '@/lib/storeBooks'
 import { cn } from '@/lib/utils'
-
-const VIVID = { fill: 'var(--exam-accent-vivid)' }
-const ACCENT = { fill: 'var(--exam-accent)' }
-const CARD = { fill: 'hsl(var(--card))' }
-const INK = { fill: 'hsl(var(--foreground))' }
 
 /**
  * The stage a picture stands on: the exam's soft wash, a light falling from
- * the top left, and the object lifted on hover. `children` is the SVG scene,
- * drawn in a 160×100 box.
+ * the top left, and the object lifted on hover. `children` is the picture,
+ * centred — a drawn scene is a 160×100 SVG box.
  */
 export function ArtStage({
   examKey,
@@ -37,7 +52,7 @@ export function ArtStage({
   overlay,
 }: {
   examKey?: string
-  /** A plain stage — for a calculator or a book cover, which bring their own colour. */
+  /** A plain stage — for a calculator or a textbook, which bring their own colour. */
   neutral?: boolean
   className?: string
   children: ReactNode
@@ -49,7 +64,8 @@ export function ArtStage({
       aria-hidden="true"
       style={artAccentStyle(examKey)}
       className={cn(
-        'relative isolate overflow-hidden',
+        // A size container, so a picture can fit both of the stage's sides (`BOOK_HEIGHT`).
+        'relative isolate overflow-hidden [container-type:size]',
         neutral ? 'bg-muted/70' : 'bg-[var(--exam-accent-soft)]',
         className,
       )}
@@ -63,190 +79,187 @@ export function ArtStage({
   )
 }
 
-/** The ground shadow every object stands on. */
+/** The ground shadow a drawn object stands on. */
 function Shadow({ cx = 80, width = 36 }: { cx?: number; width?: number }) {
   return <ellipse cx={cx} cy={91} rx={width} ry={3.5} fill="black" opacity={0.12} />
 }
 
-/** A study manual: a hardback in the exam's colour, its monogram on the cover. */
-function BookShape({ examKey, x = 0, tilt = -6 }: { examKey?: string; x?: number; tilt?: number }) {
-  const lines = examKey ? examMonogramLines(examKey) : []
+// ── Books ────────────────────────────────────────────────────────────────────
+
+/**
+ * A hardback in 3/4 view, `face` its front board. The spine is a face of its
+ * own, turned 90° back from the board's left edge and printed with `spine`
+ * (a CSS background); the board carries a hinge crease and a sheen. Sized by
+ * height — the face sets the width from its own proportions.
+ */
+function BookBinding({ face, spine, style }: { face: ReactNode; spine: string; style?: CSSProperties }) {
   return (
-    <g transform={`translate(${x} 0) rotate(${tilt} 82 50)`}>
-      <rect x={59} y={10} width={48} height={72} rx={3.5} style={VIVID} />
-      {/* The spine's shade, and the block of pages showing at the fore-edge. */}
-      <rect x={59} y={10} width={7} height={72} rx={2} fill="black" opacity={0.2} />
-      <rect x={105} y={13} width={4} height={66} rx={1} fill="white" opacity={0.92} />
-      <rect x={105.6} y={20} width={2.8} height={0.7} fill="black" opacity={0.12} />
-      <rect x={105.6} y={40} width={2.8} height={0.7} fill="black" opacity={0.12} />
-      <rect x={105.6} y={60} width={2.8} height={0.7} fill="black" opacity={0.12} />
-      <rect x={71} y={20} width={27} height={3} rx={1.5} fill="white" opacity={0.92} />
-      <rect x={71} y={26} width={18} height={3} rx={1.5} fill="white" opacity={0.6} />
-      {lines.length > 0 && (
-        <text
-          x={85}
-          y={lines.length > 1 ? 52 : 60}
-          textAnchor="middle"
-          fill="white"
-          fontWeight={800}
-          fontSize={lines.length > 1 || lines[0]!.length > 2 ? 13 : 19}
-          fontFamily="ui-sans-serif, system-ui, sans-serif"
-          letterSpacing="-0.02em"
-        >
-          {lines.map((line, i) => (
-            <tspan key={i} x={85} dy={i === 0 ? 0 : 14}>{line}</tspan>
-          ))}
-        </text>
-      )}
-    </g>
+    <span className="relative block h-full [perspective:800px]" style={style}>
+      {/* The book's shadow on the stage, cast down and to the right. */}
+      <span className="absolute -bottom-[4%] left-[6%] h-[7%] w-full rounded-[50%] bg-black/40 blur-[6px]" />
+      <span
+        className={cn(
+          'relative block h-full [transform-style:preserve-3d] [transform:rotateY(30deg)]',
+          'transition-transform duration-500 ease-out motion-safe:group-hover:[transform:rotateY(18deg)]',
+        )}
+      >
+        <span
+          className="absolute inset-y-0 right-full w-[11%] origin-right rounded-l-[2px] [transform:rotateY(-90deg)]"
+          style={{ background: spine }}
+        />
+        <span className="relative block h-full overflow-hidden rounded-r-[3px] rounded-l-[1px] shadow-[6px_8px_14px_-6px_rgba(0,0,0,0.5)]">
+          {face}
+          <span
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(90deg, rgba(0,0,0,0.32) 0%, rgba(255,255,255,0.28) 2.2%, rgba(0,0,0,0.12) 4.5%, transparent 9%),' +
+                'linear-gradient(118deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 30%, transparent 46%),' +
+                'linear-gradient(0deg, rgba(0,0,0,0.12), transparent 30%)',
+            }}
+          />
+        </span>
+      </span>
+    </span>
   )
 }
 
-/** A video course: a screen with a play button and a part-watched bar. */
-function ScreenShape({ live = false }: { live?: boolean }) {
+/**
+ * How tall a book stands: most of the stage's height, but never so tall that
+ * its width — about four-fifths of its height, and the spine besides — runs
+ * past the stage's sides on a narrow card.
+ */
+const BOOK_HEIGHT = 'block h-[min(84cqh,88cqw)] max-h-40'
+
+/** The darkening the spine's print gets — it faces away from the light. */
+const SPINE_SHADE = 'linear-gradient(90deg, rgba(0,0,0,0.5), rgba(0,0,0,0.28) 70%, rgba(0,0,0,0.38))'
+
+/** A seller's flat cover, bound into a book. */
+export function BoundCover({ src }: { src: string }) {
   return (
-    <g>
-      <rect x={70} y={70} width={20} height={9} style={ACCENT} opacity={0.45} />
-      <rect x={58} y={78} width={44} height={4} rx={2} style={ACCENT} opacity={0.55} />
-      <rect x={34} y={12} width={92} height={60} rx={7} style={VIVID} />
-      <rect x={38} y={16} width={84} height={52} rx={4} style={CARD} />
-      {live ? (
-        <>
-          {/* A seminar: someone at the front of the room, and the live dot. */}
-          <circle cx={80} cy={36} r={8} style={VIVID} opacity={0.85} />
-          <path d="M64 62 q16 -20 32 0 z" style={VIVID} opacity={0.85} />
-          <rect x={44} y={21} width={20} height={7} rx={3.5} fill="rgb(239 68 68)" />
-          <circle cx={48.5} cy={24.5} r={1.6} fill="white" />
-          <text x={56.5} y={26.6} textAnchor="middle" fill="white" fontSize={4.6} fontWeight={800} fontFamily="ui-sans-serif, system-ui, sans-serif">LIVE</text>
-        </>
-      ) : (
-        <>
-          <circle cx={80} cy={39} r={13} style={VIVID} />
-          <path d="M76 32 L89 39 L76 46 Z" fill="white" />
-          <rect x={46} y={59} width={68} height={3} rx={1.5} style={INK} opacity={0.12} />
-          <rect x={46} y={59} width={28} height={3} rx={1.5} style={VIVID} />
-          <circle cx={74} cy={60.5} r={2.6} style={VIVID} />
-        </>
-      )}
-    </g>
+    <span className={BOOK_HEIGHT}>
+      <BookBinding
+        face={<img src={src} alt="" loading="lazy" decoding="async" className="block h-full w-auto max-w-none" />}
+        // The spine is printed with the cover's own left edge, as a wraparound jacket is.
+        spine={`${SPINE_SHADE}, url("${src}") left center / auto 100% no-repeat, #1f2937`}
+      />
+    </span>
   )
 }
 
-/** A practice bank: a pile of question cards, the top one answered. */
-function QuestionCardsShape() {
+/** A picture of the thing itself, standing on the stage. */
+export function ProductPhoto({ src }: { src: string }) {
   return (
-    <g>
-      <g transform="rotate(9 80 50)">
-        <rect x={54} y={18} width={54} height={64} rx={5} style={VIVID} opacity={0.35} />
-      </g>
-      <g transform="rotate(-5 80 50)">
-        <rect x={54} y={16} width={54} height={64} rx={5} style={VIVID} opacity={0.6} />
-      </g>
-      <rect x={53} y={14} width={54} height={66} rx={5} style={CARD} />
-      <rect x={53} y={14} width={54} height={66} rx={5} fill="none" stroke="var(--exam-accent-muted)" strokeWidth={1} />
-      <circle cx={63} cy={25} r={5.5} style={VIVID} />
-      <text x={63} y={27.8} textAnchor="middle" fill="white" fontSize={7.5} fontWeight={800} fontFamily="ui-sans-serif, system-ui, sans-serif">Q</text>
-      <rect x={72} y={22} width={27} height={2.6} rx={1.3} style={INK} opacity={0.35} />
-      <rect x={72} y={27} width={18} height={2.6} rx={1.3} style={INK} opacity={0.2} />
-      {[38, 48, 58, 68].map((y, i) => (
-        <g key={y}>
-          {i === 1 ? (
-            <>
-              <circle cx={62} cy={y} r={3.4} style={VIVID} />
-              <path d={`M60.4 ${y} l1.2 1.3 l2.4 -2.6`} stroke="white" strokeWidth={1.2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </>
-          ) : (
-            <circle cx={62} cy={y} r={3} fill="none" stroke="hsl(var(--foreground))" strokeOpacity={0.3} strokeWidth={1} />
-          )}
-          <rect x={69} y={y - 1.3} width={i === 1 ? 26 : 22 - i * 2} height={2.6} rx={1.3} style={i === 1 ? VIVID : INK} opacity={i === 1 ? 0.9 : 0.22} />
-        </g>
-      ))}
-    </g>
+    <img
+      src={src}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      className="block h-auto max-h-[82%] w-auto max-w-[84%] object-contain [filter:drop-shadow(0_6px_8px_rgba(0,0,0,0.3))_drop-shadow(0_1px_1px_rgba(0,0,0,0.2))]"
+    />
   )
 }
 
-/** Flashcards: two cards fanned, a question on the front one. */
-function FlashcardsShape() {
+const SERIF = 'ui-serif, Georgia, Cambria, "Times New Roman", serif'
+const SANS = 'ui-sans-serif, system-ui, sans-serif'
+
+/**
+ * A product with no picture of its own, as a book whose cover the Store
+ * printed: the exam's accent, the seller across the top, the product's title,
+ * and the exam's monogram over what kind of thing it is.
+ */
+export function MockupBook({ title, by, label, examKey }: { title: string; by?: string; label?: string; examKey?: string }) {
+  const { size, lines } = coverTitle(title)
+  const monogram = examKey ? examMonogramLines(examKey) : []
+  const light = useId()
+  // Letter-spaced capitals run about three-quarters of their size each; a long name is set smaller to fit.
+  const bySize = by ? Math.min(6.4, COVER_TITLE_WIDTH / (by.length * 0.78)) : 0
   return (
-    <g>
-      <g transform="rotate(12 80 54)">
-        <rect x={52} y={22} width={58} height={40} rx={5} style={VIVID} opacity={0.55} />
-      </g>
-      <g transform="rotate(-8 80 54)">
-        <rect x={50} y={28} width={60} height={42} rx={5} style={CARD} />
-        <rect x={50} y={28} width={60} height={42} rx={5} fill="none" stroke="var(--exam-accent-muted)" strokeWidth={1} />
-        <text x={80} y={56} textAnchor="middle" style={VIVID} fontSize={22} fontWeight={800} fontFamily="ui-sans-serif, system-ui, sans-serif">?</text>
-      </g>
-    </g>
+    <span className={BOOK_HEIGHT} style={artAccentStyle(examKey)}>
+      <BookBinding
+        spine={`${SPINE_SHADE}, var(--exam-accent-vivid)`}
+        face={
+          <svg viewBox="0 0 120 160" className="block h-full w-auto" style={{ aspectRatio: '3 / 4' }} role="presentation">
+            <defs>
+              <linearGradient id={light} x1="0" y1="0" x2="0.35" y2="1">
+                <stop offset="0" stopColor="white" stopOpacity={0.16} />
+                <stop offset="0.55" stopColor="white" stopOpacity={0} />
+                <stop offset="1" stopColor="black" stopOpacity={0.3} />
+              </linearGradient>
+            </defs>
+            <rect width={120} height={160} style={{ fill: 'var(--exam-accent-vivid)' }} />
+            <rect width={120} height={160} fill={`url(#${light})`} />
+            {/* A designer's touch: rings rising from the bottom-right corner. */}
+            <g fill="none" stroke="white" strokeOpacity={0.09}>
+              {[30, 46, 62, 78].map(r => (
+                <circle key={r} cx={120} cy={160} r={r} strokeWidth={r === 30 ? 9 : 1.4} />
+              ))}
+            </g>
+            {by && (
+              <text x={13} y={19} fill="white" fillOpacity={0.82} fontSize={bySize} fontWeight={700} letterSpacing="0.14em" fontFamily={SANS}>
+                {by.toUpperCase()}
+              </text>
+            )}
+            <rect x={13} y={25} width={22} height={1.6} rx={0.8} fill="white" opacity={0.7} />
+            <text x={13} y={42 + size * 0.8} fill="white" fontSize={size} fontWeight={700} fontFamily={SERIF} letterSpacing="-0.01em">
+              {lines.map((line, i) => (
+                <tspan key={i} x={13} dy={i === 0 ? 0 : size * 1.16}>{line}</tspan>
+              ))}
+            </text>
+            {monogram.length > 0 && (
+              <g>
+                <rect x={13} y={124} width={24} height={24} rx={5} fill="white" />
+                <text
+                  x={25}
+                  y={monogram.length > 1 ? 134 : 140.5}
+                  textAnchor="middle"
+                  style={{ fill: 'var(--exam-accent-vivid)' }}
+                  fontSize={monogram.length > 1 || monogram[0]!.length > 2 ? 8 : 12}
+                  fontWeight={800}
+                  fontFamily={SANS}
+                >
+                  {monogram.map((line, i) => (
+                    <tspan key={i} x={25} dy={i === 0 ? 0 : 8}>{line}</tspan>
+                  ))}
+                </text>
+              </g>
+            )}
+            {label && (
+              <text x={monogram.length ? 43 : 13} y={139} fill="white" fillOpacity={0.85} fontSize={6.2} fontWeight={700} letterSpacing="0.12em" fontFamily={SANS}>
+                {label.toUpperCase()}
+              </text>
+            )}
+          </svg>
+        }
+      />
+    </span>
   )
 }
 
-/** A bundle: a gift box, tied with a ribbon. */
-function GiftShape() {
+/** The picture for a study material: the seller's own, or the Store's book. */
+export function StudyArt({ product, examKey }: { product: StudyProduct; examKey?: string }) {
+  const { image } = product
+  if (image?.shape === 'cover') return <BoundCover src={image.src} />
+  if (image) return <ProductPhoto src={image.src} />
   return (
-    <g>
-      <rect x={50} y={40} width={60} height={42} rx={4} style={VIVID} />
-      <rect x={50} y={40} width={60} height={42} rx={4} fill="black" opacity={0.08} />
-      <rect x={46} y={30} width={68} height={13} rx={3} style={VIVID} />
-      <rect x={76} y={30} width={8} height={52} fill="white" opacity={0.92} />
-      <rect x={50} y={52} width={60} height={6} fill="white" opacity={0.25} />
-      {/* The bow: two loops and their tails. */}
-      <path d="M80 30 C66 14, 58 26, 72 30 Z" fill="white" opacity={0.95} />
-      <path d="M80 30 C94 14, 102 26, 88 30 Z" fill="white" opacity={0.95} />
-      <circle cx={80} cy={30} r={3.4} fill="white" />
-    </g>
+    <MockupBook
+      title={product.name}
+      by={STORE_SELLERS[product.offer.sellerId]?.name}
+      label={STUDY_KIND_LABEL[product.kind]}
+      examKey={examKey}
+    />
   )
 }
 
-/** An online course: a laptop with a lesson ticked through. */
-function LaptopShape() {
-  return (
-    <g>
-      <rect x={40} y={14} width={80} height={54} rx={5} style={VIVID} />
-      <rect x={44} y={18} width={72} height={46} rx={3} style={CARD} />
-      {[26, 36, 46, 56].map((y, i) => (
-        <g key={y}>
-          {i < 2 ? (
-            <>
-              <circle cx={53} cy={y} r={3.2} style={VIVID} />
-              <path d={`M51.5 ${y} l1.1 1.2 l2.2 -2.4`} stroke="white" strokeWidth={1.1} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </>
-          ) : (
-            <circle cx={53} cy={y} r={2.8} fill="none" stroke="hsl(var(--foreground))" strokeOpacity={0.3} strokeWidth={1} />
-          )}
-          <rect x={60} y={y - 1.3} width={44 - i * 5} height={2.6} rx={1.3} style={INK} opacity={i < 2 ? 0.4 : 0.18} />
-        </g>
-      ))}
-      <path d="M30 70 h100 l-6 9 h-88 z" style={VIVID} />
-      <rect x={70} y={70} width={20} height={2.5} rx={1.2} fill="white" opacity={0.5} />
-    </g>
-  )
+/** A textbook: its cover from the vault, bound — or the Store's book with its title. */
+export function TextbookArt({ book, examKey }: { book: StoreBook; examKey?: string }) {
+  if (book.coverImage) return <BoundCover src={book.coverImage} />
+  return <MockupBook title={book.title} by={book.publisher} label={book.type} examKey={examKey} />
 }
 
-/** The picture for a study material of this kind. */
-export function StudyArt({ kind, examKey }: { kind: StudyKind; examKey?: string }) {
-  return (
-    <svg viewBox="0 0 160 100" className="h-full w-full max-h-40" role="presentation">
-      <Shadow width={kind === 'bundle' ? 34 : kind === 'video' || kind === 'seminar' || kind === 'course' ? 46 : 32} />
-      {kind === 'manual' && <BookShape examKey={examKey} />}
-      {kind === 'video' && <ScreenShape />}
-      {kind === 'seminar' && <ScreenShape live />}
-      {kind === 'practice' && <QuestionCardsShape />}
-      {kind === 'flashcards' && <FlashcardsShape />}
-      {kind === 'bundle' && <GiftShape />}
-      {kind === 'course' && <LaptopShape />}
-    </svg>
-  )
-}
-
-/** A textbook with no cover image of its own: the manual's hardback, untitled. */
-export function PlainBookArt({ examKey }: { examKey?: string }) {
-  return (
-    <svg viewBox="0 0 160 100" className="h-full w-full max-h-40" role="presentation">
-      <Shadow width={30} />
-      <BookShape examKey={examKey} tilt={-4} />
-    </svg>
-  )
+/** A calculator: the maker's photograph, or the drawing where there is none. */
+export function CalculatorPicture({ calculator }: { calculator: CalculatorProduct }) {
+  return calculator.image ? <ProductPhoto src={calculator.image.src} /> : <CalculatorArt look={calculator.look} />
 }
 
 // ── Calculators ──────────────────────────────────────────────────────────────
@@ -272,7 +285,7 @@ const ACCENT_KEY: Record<CalculatorLook['accent'], string | null> = {
  * its body, its highlight keys, a financial calculator's TVM row, and the
  * solar strip where it has one.
  */
-export function CalculatorArt({ look }: { look: CalculatorLook }) {
+function CalculatorArt({ look }: { look: CalculatorLook }) {
   const palette = BODY[look.body]
   const accent = ACCENT_KEY[look.accent]
   const displayH = look.lines === 4 ? 20 : look.lines === 2 ? 13 : 10

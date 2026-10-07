@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  coverTitle,
   STORE_AISLES,
   STORE_EXAMS,
   aisleCounts,
@@ -451,5 +452,24 @@ describe('reviews', () => {
       { source: 'actuarial-outpost', count: 1 },
       { source: 'publisher', count: 1 },
     ])
+  })
+})
+
+describe('coverTitle', () => {
+  it('sets a short title large, on as few lines as it needs', () => {
+    expect(coverTitle('Exam 9 Study Guide')).toEqual({ size: 14, lines: ['Exam 9 Study', 'Guide'] })
+  })
+
+  it('steps the size down until a long title fits, keeping every word', () => {
+    const title = 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation'
+    const { size, lines } = coverTitle(title)
+    expect(size).toBeLessThan(14)
+    expect(lines.join(' ')).toBe(title)
+  })
+
+  it('cuts a title too long for the board, with an ellipsis', () => {
+    const { size, lines } = coverTitle(Array.from({ length: 40 }, () => 'Reserving').join(' '))
+    expect(size).toBe(9)
+    expect(lines[lines.length - 1]).toMatch(/…$/)
   })
 })

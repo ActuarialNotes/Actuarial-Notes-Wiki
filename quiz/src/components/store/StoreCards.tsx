@@ -5,7 +5,8 @@
 //     left to register;
 //   • a study material or a calculator is a **product card**: its picture on
 //     the exam's wash, its name, who sells it, and its price;
-//   • a textbook is its **cover**, from the vault's own resource page.
+//   • a textbook is its **cover**, from the vault's own resource page, bound
+//     into a book.
 //
 // The whole card is the target — it opens the product sheet, where everything
 // the seller says about it is laid out — and nothing on a card is a second
@@ -15,7 +16,7 @@
 import { CalendarDays, Hourglass, MessageSquareQuote } from 'lucide-react'
 import { ExamLogo } from '@/components/ExamLogo'
 import { CheckMark } from '@/components/CheckMark'
-import { ArtStage, CalculatorArt, PlainBookArt, StudyArt } from '@/components/store/ProductArt'
+import { ArtStage, CalculatorPicture, StudyArt, TextbookArt } from '@/components/store/ProductArt'
 import { SellerLogo } from '@/components/store/SellerLogo'
 import { formatSittingDate } from '@/data/examSittings'
 import { STORE_SELLERS } from '@/data/storeCatalog'
@@ -115,10 +116,10 @@ export function ProductCard({ item, onOpen, reviewCount = 0 }: { item: StoreItem
   let art: React.ReactNode = null
   let kind = ''
   if (item.type === 'study') {
-    art = <StudyArt kind={item.study.kind} examKey={examKey} />
+    art = <StudyArt product={item.study} examKey={examKey} />
     kind = STUDY_KIND_LABEL[item.study.kind]
   } else if (item.type === 'calculator') {
-    art = <CalculatorArt look={item.calculator.look} />
+    art = <CalculatorPicture calculator={item.calculator} />
     kind = 'Calculator'
   }
 
@@ -205,16 +206,7 @@ export function BookCard({ item, onOpen }: { item: Extract<StoreItem, { type: 'b
           </>
         }
       >
-        {book.coverImage ? (
-          <img
-            src={book.coverImage}
-            alt=""
-            loading="lazy"
-            className="h-[78%] max-h-36 w-auto rounded-[3px] object-contain shadow-md ring-1 ring-black/10"
-          />
-        ) : (
-          <PlainBookArt examKey={item.exams[0]} />
-        )}
+        <TextbookArt book={book} examKey={item.exams[0]} />
       </ArtStage>
       <span className="flex min-w-0 flex-1 flex-col gap-1 p-3 sm:p-4">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{book.type}</span>

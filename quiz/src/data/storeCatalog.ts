@@ -26,6 +26,8 @@
 import type { CalculatorPolicy, CalculatorProduct, StoreSeller, StudyProduct } from '@/lib/store'
 
 const LOGO = '/store-sellers'
+/** The sellers' own pictures of their products, copied — see `ProductImage`. */
+const IMG = '/store-products'
 
 export const STORE_SELLERS: Readonly<Record<string, StoreSeller>> = {
   // ── Examining bodies ──────────────────────────────────────────────────────
@@ -80,6 +82,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-p-manual',
     kind: 'manual',
     name: 'Exam P Study Guide with Instructional Videos',
+    image: { src: `${IMG}/actex-p-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/p/exam-p-study-manual' },
     exams: ['P'],
     offer: {
       sellerId: 'actex',
@@ -116,6 +119,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-p-bundle',
     kind: 'bundle',
     name: 'ACTEX Exam P Study Guide with Videos and Bootcamp',
+    image: { src: `${IMG}/actex-p-bundle.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/p/exam-p-study-manual-video-bootcamp' },
     exams: ['P'],
     offer: {
       sellerId: 'actex',
@@ -148,6 +152,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-p-practice',
     kind: 'practice',
     name: 'Exam P GOAL - Online Practice Problems & Exams',
+    image: { src: `${IMG}/actex-goal.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/p/exam-p-goal' },
     exams: ['P'],
     offer: {
       sellerId: 'actex',
@@ -174,6 +179,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-p-flashcards',
     kind: 'flashcards',
     name: 'Exam P Digital Flashcards',
+    image: { src: `${IMG}/actex-flashcards.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/p/exam-p-flashcards' },
     exams: ['P'],
     offer: {
       sellerId: 'actex',
@@ -198,6 +204,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-fm-manual',
     kind: 'manual',
     name: 'Exam FM Study Guide with Instructional Videos',
+    image: { src: `${IMG}/actex-fm-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/fm/exam-fm-study-manual' },
     exams: ['FM'],
     offer: {
       sellerId: 'actex',
@@ -234,6 +241,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-fm-bundle',
     kind: 'bundle',
     name: 'ACTEX Exam FM Study Guide with Videos and Bootcamp',
+    image: { src: `${IMG}/actex-fm-bundle.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/fm/exam-fm-study-manual-video-bootcamp' },
     exams: ['FM'],
     offer: {
       sellerId: 'actex',
@@ -266,6 +274,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-fm-practice',
     kind: 'practice',
     name: 'Exam FM GOAL - Online Practice Problems & Exams',
+    image: { src: `${IMG}/actex-goal.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/fm/exam-fm-goal' },
     exams: ['FM'],
     offer: {
       sellerId: 'actex',
@@ -292,6 +301,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-fm-flashcards',
     kind: 'flashcards',
     name: 'Exam FM Digital Flashcards',
+    image: { src: `${IMG}/actex-flashcards.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/fm/exam-fm-flashcards' },
     exams: ['FM'],
     offer: {
       sellerId: 'actex',
@@ -456,6 +466,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-p-video',
     kind: 'video',
     name: 'Exam P: Probability',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/P' },
     exams: ['P'],
     offer: {
       sellerId: 'tia',
@@ -478,6 +489,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-fm-video',
     kind: 'video',
     name: 'Exam FM: Financial Mathematics',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/FM' },
     exams: ['FM'],
     offer: {
       sellerId: 'tia',
@@ -500,6 +512,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-p-asm-manual',
     kind: 'manual',
     name: 'ASM Study Manual Program for Exam P',
+    image: { src: `${IMG}/asm-p-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453148820' },
     exams: ['P'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -529,6 +542,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-p-asm-bundle',
     kind: 'bundle',
     name: 'ASM Exam P Study Guide with Videos and Bootcamp',
+    image: { src: `${IMG}/asm-p-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453150206' },
     exams: ['P'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -560,6 +574,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-fm-asm-manual',
     kind: 'manual',
     name: 'ASM Study Manual Program for Exam FM',
+    image: { src: `${IMG}/asm-fm-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453148564' },
     exams: ['FM'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -592,6 +607,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-fm-asm-bundle',
     kind: 'bundle',
     name: 'ASM Exam FM Study Guide with Videos and Bootcamp',
+    image: { src: `${IMG}/asm-fm-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453150215' },
     exams: ['FM'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -624,6 +640,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-fm-broverman-manual',
     kind: 'manual',
     name: 'S. Broverman Study Guide for SOA Exam FM/CAS Exam 2',
+    image: { src: `${IMG}/broverman-fm-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453143038' },
     exams: ['FM'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -673,6 +690,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'analystprep-p-bundle',
     kind: 'bundle',
     name: 'Exam P – Learn + Practice Package',
+    image: { src: `${IMG}/analystprep-laptop.webp`, shape: 'photo', from: 'https://analystprep.com/shop/actuarial-exams-complete-courses-by-analystprep/' },
     exams: ['P'],
     offer: {
       sellerId: 'analystprep',
@@ -697,6 +715,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'analystprep-fm-bundle',
     kind: 'bundle',
     name: 'Exam FM – Learn + Practice Package',
+    image: { src: `${IMG}/analystprep-laptop.webp`, shape: 'photo', from: 'https://analystprep.com/shop/actuarial-exams-complete-courses-by-analystprep/' },
     exams: ['FM'],
     offer: {
       sellerId: 'analystprep',
@@ -721,6 +740,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'analystprep-p-fm-bundle',
     kind: 'bundle',
     name: 'Actuarial Unlimited Package – Exams P and FM',
+    image: { src: `${IMG}/analystprep-laptop.webp`, shape: 'photo', from: 'https://analystprep.com/shop/actuarial-exams-complete-courses-by-analystprep/' },
     exams: ['P', 'FM'],
     offer: {
       sellerId: 'analystprep',
@@ -742,6 +762,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-i-manual',
     kind: 'manual',
     name: 'Exam MAS-I Study Guide with Instructional Videos',
+    image: { src: `${IMG}/actex-mas-i-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/mas-i/exam-mas-i-study-manual' },
     exams: ['MAS-I'],
     offer: {
       sellerId: 'actex',
@@ -778,6 +799,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-i-practice',
     kind: 'practice',
     name: 'Exam MAS-I GOAL - Online Practice Problems & Exams',
+    image: { src: `${IMG}/actex-goal.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/mas-i/exam-mas-i-goal' },
     exams: ['MAS-I'],
     offer: {
       sellerId: 'actex',
@@ -808,6 +830,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-i-flashcards',
     kind: 'flashcards',
     name: 'Exam MAS-I Digital Flashcards',
+    image: { src: `${IMG}/actex-flashcards.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/mas-i/exam-mas-i-flashcards' },
     exams: ['MAS-I'],
     offer: {
       sellerId: 'actex',
@@ -833,6 +856,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-ii-manual',
     kind: 'manual',
     name: 'Exam MAS-II Study Guide with Instructional Videos',
+    image: { src: `${IMG}/actex-mas-ii-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/mas-ii/exam-mas-ii-study-manual' },
     exams: ['MAS-II'],
     offer: {
       sellerId: 'actex',
@@ -869,6 +893,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-ii-practice',
     kind: 'practice',
     name: 'Exam MAS-II GOAL - Online Practice Problems & Exams',
+    image: { src: `${IMG}/actex-goal.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/mas-ii/exam-mas-ii-goal' },
     exams: ['MAS-II'],
     offer: {
       sellerId: 'actex',
@@ -899,6 +924,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-mas-ii-flashcards',
     kind: 'flashcards',
     name: 'Exam MAS-II Digital Flashcards',
+    image: { src: `${IMG}/actex-flashcards.webp`, shape: 'photo', from: 'https://www.actexlearning.com/exams/mas-ii/exam-mas-ii-flashcards' },
     exams: ['MAS-II'],
     offer: {
       sellerId: 'actex',
@@ -928,6 +954,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-mas-i-asm-manual',
     kind: 'manual',
     name: 'ASM Study Manual Program for CAS Exam MAS-I',
+    image: { src: `${IMG}/asm-mas-i-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453149796' },
     exams: ['MAS-I'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -960,6 +987,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actuarial-bookstore-mas-ii-asm-manual',
     kind: 'manual',
     name: 'ASM Study Manual Program for CAS Exam MAS-II',
+    image: { src: `${IMG}/asm-mas-ii-manual.webp`, shape: 'cover', from: 'https://www.actuarialbookstore.com/order_selection.aspx?id=453142458' },
     exams: ['MAS-II'],
     offer: {
       sellerId: 'actuarial-bookstore',
@@ -1256,6 +1284,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-mas-i-video',
     kind: 'video',
     name: 'CAS Exam MAS-I',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/MAS' },
     exams: ['MAS-I'],
     offer: {
       sellerId: 'tia',
@@ -1285,6 +1314,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-mas-ii-video',
     kind: 'video',
     name: 'CAS Exam MAS-II',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/MAS2' },
     exams: ['MAS-II'],
     offer: {
       sellerId: 'tia',
@@ -1314,6 +1344,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'rising-fellow-cas-5-video',
     kind: 'video',
     name: 'Exam 5 Online Course',
+    image: { src: `${IMG}/rising-fellow-cas-5.webp`, shape: 'photo', from: 'https://risingfellow.com/exam-prep/exam-5/' },
     exams: ['CAS-5'],
     offer: {
       sellerId: 'rising-fellow',
@@ -1340,6 +1371,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'rising-fellow-cas-6u-video',
     kind: 'video',
     name: 'Exam 6 (US) Online Course',
+    image: { src: `${IMG}/rising-fellow-cas-6u.webp`, shape: 'photo', from: 'https://risingfellow.com/exam-prep/exam-6/' },
     exams: ['CAS-6'],
     offer: {
       sellerId: 'rising-fellow',
@@ -1365,6 +1397,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'rising-fellow-cas-7-video',
     kind: 'video',
     name: 'Exam 7 Online Course',
+    image: { src: `${IMG}/rising-fellow-cas-7.webp`, shape: 'photo', from: 'https://risingfellow.com/exam-prep/exam-7/' },
     exams: ['CAS-7'],
     offer: {
       sellerId: 'rising-fellow',
@@ -1390,6 +1423,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'rising-fellow-cas-8-video',
     kind: 'video',
     name: 'Exam 8 Online Course',
+    image: { src: `${IMG}/rising-fellow-cas-8.webp`, shape: 'photo', from: 'https://risingfellow.com/exam-prep/exam-8/' },
     exams: ['CAS-8'],
     offer: {
       sellerId: 'rising-fellow',
@@ -1412,6 +1446,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'rising-fellow-cas-9-video',
     kind: 'video',
     name: 'Exam 9 Online Course',
+    image: { src: `${IMG}/rising-fellow-cas-9.webp`, shape: 'photo', from: 'https://risingfellow.com/exam-prep/exam-9/' },
     exams: ['CAS-9'],
     offer: {
       sellerId: 'rising-fellow',
@@ -1437,6 +1472,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-5-video',
     kind: 'video',
     name: 'CAS Exam 5: Basic Techniques for Ratemaking and Estimating Claim Liabilities',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/Exam5' },
     exams: ['CAS-5'],
     offer: {
       sellerId: 'tia',
@@ -1466,6 +1502,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-6u-video',
     kind: 'video',
     name: 'CAS Exam 6: US Regulation and Financial Reporting',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/Exam6' },
     exams: ['CAS-6'],
     offer: { sellerId: 'tia', url: 'https://www.theinfiniteactuary.com/Exam6', price: { amount: 1395, currency: 'USD' }, checked: '2026-10-02' },
     includes: [
@@ -1487,6 +1524,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-7-video',
     kind: 'video',
     name: 'CAS Exam 7: Advanced Estimation of Claims Liabilities',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/Exam7' },
     exams: ['CAS-7'],
     offer: { sellerId: 'tia', url: 'https://www.theinfiniteactuary.com/Exam7', price: { amount: 1495, currency: 'USD' }, checked: '2026-10-02' },
     includes: [
@@ -1508,6 +1546,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-8-video',
     kind: 'video',
     name: 'CAS Exam 8: Advanced Ratemaking',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/Exam8' },
     exams: ['CAS-8'],
     offer: { sellerId: 'tia', url: 'https://www.theinfiniteactuary.com/Exam8', price: { amount: 1495, currency: 'USD' }, checked: '2026-10-02' },
     includes: [
@@ -1529,6 +1568,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-9-video',
     kind: 'video',
     name: 'CAS Exam 9: Risk Management for Actuaries',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/Exam9' },
     exams: ['CAS-9'],
     offer: { sellerId: 'tia', url: 'https://www.theinfiniteactuary.com/Exam9', price: { amount: 1495, currency: 'USD' }, checked: '2026-10-02' },
     includes: [
@@ -1550,6 +1590,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'tia-cas-pcpa-video',
     kind: 'video',
     name: 'CAS Property and Casualty Predictive Analytics',
+    image: { src: `${IMG}/tia-devices.webp`, shape: 'photo', from: 'https://www.theinfiniteactuary.com/PCPA' },
     exams: ['CAS-PCPA'],
     offer: { sellerId: 'tia', url: 'https://www.theinfiniteactuary.com/PCPA', price: { amount: 595, currency: 'USD' }, checked: '2026-10-02' },
     includes: [
@@ -1571,6 +1612,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'battleacts-cas-5-manual',
     kind: 'manual',
     name: 'CAS Exam 5 Study Guide',
+    image: { src: `${IMG}/battleacts-laptop.webp`, shape: 'photo', from: 'https://battleactsmain.ca/v2/product/exam5' },
     exams: ['CAS-5'],
     offer: {
       sellerId: 'battleacts',
@@ -1637,6 +1679,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'battleacts-cas-7-manual',
     kind: 'manual',
     name: 'CAS Exam 7 Study Guide',
+    image: { src: `${IMG}/battleacts-laptop.webp`, shape: 'photo', from: 'https://battleactsmain.ca/v2/product/exam7' },
     exams: ['CAS-7'],
     offer: {
       sellerId: 'battleacts',
@@ -1659,6 +1702,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'battleacts-cas-8-manual',
     kind: 'manual',
     name: 'CAS Exam 8 Study Guide',
+    image: { src: `${IMG}/battleacts-laptop.webp`, shape: 'photo', from: 'https://battleactsmain.ca/v2/product/exam8' },
     exams: ['CAS-8'],
     offer: {
       sellerId: 'battleacts',
@@ -1681,6 +1725,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'battleacts-cas-9-manual',
     kind: 'manual',
     name: 'CAS Exam 9 Study Guide',
+    image: { src: `${IMG}/battleacts-laptop.webp`, shape: 'photo', from: 'https://battleactsmain.ca/v2/product/exam9' },
     exams: ['CAS-9'],
     offer: {
       sellerId: 'battleacts',
@@ -1703,6 +1748,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-5-bundle',
     kind: 'bundle',
     name: 'Exam 5 Study Guide',
+    image: { src: `${IMG}/actex-cas-5-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-5/exam-cas-5-study-manual' },
     exams: ['CAS-5'],
     offer: {
       sellerId: 'actex',
@@ -1734,6 +1780,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-6c-bundle',
     kind: 'bundle',
     name: 'Exam 6 Canada Study Guide',
+    image: { src: `${IMG}/actex-cas-6c-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-6-canada/exam-cas-6-canada-study-manual' },
     exams: ['CAS-6'],
     offer: {
       sellerId: 'actex',
@@ -1764,6 +1811,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-6u-bundle',
     kind: 'bundle',
     name: 'Exam 6 US Study Guide',
+    image: { src: `${IMG}/actex-cas-6u-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-6-us/exam-cas-6-us-study-manual' },
     exams: ['CAS-6'],
     offer: {
       sellerId: 'actex',
@@ -1794,6 +1842,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-7-bundle',
     kind: 'bundle',
     name: 'Exam 7 Study Guide',
+    image: { src: `${IMG}/actex-cas-7-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-7/exam-cas-7-study-guide' },
     exams: ['CAS-7'],
     offer: {
       sellerId: 'actex',
@@ -1822,6 +1871,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-8-bundle',
     kind: 'bundle',
     name: 'Exam 8 Study Guide',
+    image: { src: `${IMG}/actex-cas-8-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-8/exam-cas-8-study-guide' },
     exams: ['CAS-8'],
     offer: {
       sellerId: 'actex',
@@ -1850,6 +1900,7 @@ export const STUDY_PRODUCTS: readonly StudyProduct[] = [
     id: 'actex-cas-9-manual',
     kind: 'manual',
     name: 'Exam 9 Study Guide',
+    image: { src: `${IMG}/actex-cas-9-manual.webp`, shape: 'cover', from: 'https://www.actexlearning.com/exams/cas-9/exam-cas-9-study-manual' },
     exams: ['CAS-9'],
     offer: {
       sellerId: 'actex',
@@ -2303,6 +2354,7 @@ export const CALCULATORS: readonly CalculatorProduct[] = [
     makerUrl: `${TI}/scientific-calculators/ti-30xs-mv`,
     approvedBy: ['SOA', 'CAS'],
     look: { lines: 4, body: 'navy', accent: 'green', solar: true },
+    image: { src: `${IMG}/ti-30xs-multiview.webp`, shape: 'photo', from: `${TI}/scientific-calculators/ti-30xs-mv` },
     facts: [
       { label: 'Display', value: 'Four-line × 16-character, easy-to-read LCD display' },
       { label: 'Power', value: 'Dual power (solar and battery)' },
@@ -2354,6 +2406,7 @@ export const CALCULATORS: readonly CalculatorProduct[] = [
     makerUrl: `${TI}/financial/baii-plus`,
     approvedBy: ['SOA', 'CAS'],
     look: { lines: 1, body: 'black', accent: 'amber', financial: true },
+    image: { src: `${IMG}/ba-ii-plus.webp`, shape: 'photo', from: `${TI}/financial/baii-plus` },
     facts: [
       { label: 'Display', value: 'One-line, 10-digit display' },
       { label: 'Power', value: 'One lithium 2032 battery included; APD (Automatic Power Down) conserves power' },
@@ -2394,6 +2447,7 @@ export const CALCULATORS: readonly CalculatorProduct[] = [
     makerUrl: `${TI}/financial/baii-plus-professional`,
     approvedBy: ['SOA', 'CAS'],
     look: { lines: 1, body: 'silver', accent: 'amber', financial: true },
+    image: { src: `${IMG}/ba-ii-plus-professional.webp`, shape: 'photo', from: `${TI}/financial/baii-plus-professional` },
     facts: [
       { label: 'Display', value: 'Ten-digit display' },
       { label: 'Power', value: 'One lithium 2032 battery included; APD (Automatic Power Down) conserves power' },
@@ -2434,6 +2488,7 @@ export const CALCULATORS: readonly CalculatorProduct[] = [
     makerUrl: `${TI}/scientific-calculators/ti-30x-iis`,
     approvedBy: ['SOA', 'CAS'],
     look: { lines: 2, body: 'slate', accent: 'sky', solar: true },
+    image: { src: `${IMG}/ti-30x-iis.webp`, shape: 'photo', from: `${TI}/scientific-calculators/ti-30x-iis` },
     facts: [
       { label: 'Display', value: 'Two-line display, 11 digit scrollable entry line with 10-digit answer and two-digit exponent line' },
       { label: 'Power', value: 'Solar and battery powered (dual power)' },
@@ -2491,6 +2546,7 @@ export const CALCULATORS: readonly CalculatorProduct[] = [
     makerUrl: `${TI}/scientific-calculators/ti-30xa`,
     approvedBy: ['SOA', 'CAS'],
     look: { lines: 1, body: 'charcoal', accent: 'green' },
+    image: { src: `${IMG}/ti-30xa.webp`, shape: 'photo', from: `${TI}/scientific-calculators/ti-30xa` },
     facts: [
       { label: 'Display', value: 'One-line, 10-digit display' },
       { label: 'Power', value: 'Battery power' },

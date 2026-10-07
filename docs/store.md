@@ -38,16 +38,21 @@ where the subscription is taken through Stripe. It reads *Active* for a reader w
    for the reason `lib/resourceMeta.ts` gives for the "Get a copy" logos. The one live
    request is a textbook's Amazon price, asked when its sheet opens
    (`lib/amazonPrice.ts`), and only on a deployment with Associates credentials.
-5. **Products are drawn, not photographed.** A card leads with an illustration of the
-   *kind* of thing it is — a hardback for a study manual, a screen for a video course, a
-   pile of answered question cards for a practice bank, a gift box for a bundle, a laptop
-   for an online course — painted in the exam's own accent (`lib/examColors.ts`), so a
-   shelf narrowed to Exam FM is FM's indigo and the whole Store runs the ramp from blue to
-   red (`components/store/ProductArt.tsx`). Calculators are drawn from what tells the
-   models apart — lines on the display, body, highlight keys, a financial calculator's TVM
-   row, a solar strip — in the objects' own colours: a black calculator is black in either
-   theme, which is why those few hexes are not tokens. A textbook shows its cover from the
-   vault.
+5. **The seller's own picture, or the Store's book.** A product whose seller's (or for
+   a calculator, maker's) page shows a picture of it carries that picture as `image`
+   (`ProductImage` in `lib/store.ts`): copied into `quiz/public/store-products/` — trimmed,
+   given a transparent background where it had a white one, resized to WebP, never redrawn
+   — with the page it came from in `from`, which `storeCatalog.test.ts` holds to the
+   seller's own domain. A `cover` (a manual's flat front) is bound into a book in 3/4 view,
+   its spine printed with the cover's own left edge (`BoundCover` in
+   `components/store/ProductArt.tsx`); a `photo` (a calculator, a laptop, an app tile) is
+   shown as it is (`ProductPhoto`). A textbook's vault cover is bound the same way. Where no
+   page shows the product — Coaching Actuaries' pricing pages, a seller whose only image is
+   its logo — the card shows the **Store's book** (`MockupBook`): the same binding, its cover
+   printed in the exam's accent (`lib/examColors.ts`) with the product's own title
+   (`coverTitle` fits it), its seller and its kind, in the Store's type, so it can't pass for
+   a real jacket. The BA-35, discontinued and pictured nowhere, is still drawn from what
+   tells the models apart (`CalculatorArt`), in the object's own colours.
 
 ## The shelf
 
@@ -176,7 +181,7 @@ online free wears a **Free online** sticker.
 | `quiz/src/components/store/ProductSheet.tsx` | The product sheet, per aisle — with its reviews and disclaimer |
 | `quiz/src/components/store/CompareSheet.tsx` | The comparison table of one exam's study materials |
 | `quiz/src/components/store/useStoreDialog.ts` | What both dialogs do while open: focus, Tab, Escape, scroll lock |
-| `quiz/src/components/store/ProductArt.tsx` | The drawings |
+| `quiz/src/components/store/ProductArt.tsx` | The pictures: bound covers, product photos, the Store's book, the drawn calculator |
 | `quiz/src/components/store/SellerLogo.tsx` | A seller's logo tile, monogram fallback |
 | `quiz/src/lib/store.ts` | Types, aisles, exams, prices, registration status, the shelf (pure, tested) |
 | `quiz/src/lib/storeBooks.ts` | The textbook aisle from the vault (pure, tested; runs in `vite.config.ts`) |
@@ -184,6 +189,7 @@ online free wears a **Free online** sticker.
 | `quiz/src/data/storeReviews.ts` | The quoted reviews and the sellers' printed ratings |
 | `quiz/src/data/examFees.ts` | The exam fee tables |
 | `quiz/public/store-sellers/` | The sellers' logos |
+| `quiz/public/store-products/` | The sellers' and makers' own product pictures (`image`) |
 | `quiz/public/review-sources/` | Reddit's logo (Actuarial Outpost serves only its web host's default icon, so it gets a monogram) |
 
 ## Adding or updating a product
@@ -193,7 +199,9 @@ online free wears a **Free online** sticker.
    guessed.
 2. Add or edit the entry in `data/storeCatalog.ts` with today's `checked` date. A new seller
    needs a `STORE_SELLERS` entry and its logo in `public/store-sellers/` (the site's own
-   icon — `apple-touch-icon` or the largest favicon — resized to 96px).
+   icon — `apple-touch-icon` or the largest favicon — resized to 96px). If the page shows
+   the product, copy its picture into `public/store-products/` as WebP and set `image`
+   (`cover` for a flat front cover, `photo` for anything else) with the page in `from`.
 3. `npm test` — `data/storeCatalog.test.ts` checks every offer goes to the domain of the
    seller it names, every date and price is well formed, every exam is one the shelf
    knows, every calculator is on the list it claims, and every logo is in the bundle.

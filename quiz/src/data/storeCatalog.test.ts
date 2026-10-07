@@ -33,6 +33,28 @@ describe('the sellers', () => {
   })
 })
 
+describe('the product pictures', () => {
+  const pictured = [
+    ...STUDY_PRODUCTS.map(p => ({ owner: p.id, image: p.image, site: STORE_SELLERS[p.offer.sellerId]?.site })),
+    ...CALCULATORS.map(c => ({ owner: c.id, image: c.image, site: STORE_SELLERS[c.makerId]?.site })),
+  ].filter(p => p.image)
+
+  it('are copies in the bundle, never hotlinks', () => {
+    expect(pictured.length).toBeGreaterThan(0)
+    for (const { owner, image } of pictured) {
+      expect(image!.src, owner).toMatch(/^\/store-products\/[a-z0-9-]+\.webp$/)
+      expect(existsSync(path.join(PUBLIC, image!.src)), `${owner}: ${image!.src}`).toBe(true)
+    }
+  })
+
+  it("were copied from the seller's — or the maker's — own site", () => {
+    for (const { owner, image, site } of pictured) {
+      expect(image!.from, owner).toMatch(/^https:\/\//)
+      expect(host(image!.from), owner).toBe(host(site!))
+    }
+  })
+})
+
 describe('the offers', () => {
   it('go to the seller they name, over https', () => {
     for (const { owner, offer } of offers) {

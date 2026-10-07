@@ -20,7 +20,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
 import { SittingTimeline } from '@/components/SittingTimeline'
-import { ArtStage, CalculatorArt, PlainBookArt, StudyArt } from '@/components/store/ProductArt'
+import { ArtStage, CalculatorPicture, StudyArt, TextbookArt } from '@/components/store/ProductArt'
 import { SellerLogo } from '@/components/store/SellerLogo'
 import { useStoreDialog } from '@/components/store/useStoreDialog'
 import { CALCULATOR_POLICIES, STORE_SELLERS } from '@/data/storeCatalog'
@@ -157,7 +157,7 @@ function sheetBody(item: StoreItem, today: string, amazon: AmazonPrice | null): 
     case 'book':
       return {
         kind: item.book.type,
-        art: <BookCover item={item} />,
+        art: <TextbookArt book={item.book} examKey={item.exams[0]} />,
         neutralArt: true,
         content: <BookContent item={item} amazon={amazon} />,
         footer: <BookFooter item={item} amazon={amazon} />,
@@ -354,7 +354,7 @@ function studyBody(item: Extract<StoreItem, { type: 'study' }>): SheetBody {
   const sellerName = seller?.name ?? hostOf(study.offer.url)
   return {
     kind: STUDY_KIND_LABEL[study.kind],
-    art: <StudyArt kind={study.kind} examKey={item.exams[0]} />,
+    art: <StudyArt product={study} examKey={item.exams[0]} />,
     artExam: item.exams[0],
     byline: <Byline seller={seller} />,
     content: (
@@ -523,7 +523,7 @@ function calculatorBody(item: Extract<StoreItem, { type: 'calculator' }>): Sheet
 
   return {
     kind: 'Calculator',
-    art: <CalculatorArt look={calculator.look} />,
+    art: <CalculatorPicture calculator={calculator} />,
     neutralArt: true,
     byline: <Byline seller={maker} />,
     content: (
@@ -674,14 +674,6 @@ function lowest(offer: StoreOffer): number | undefined {
 }
 
 // ── Textbooks ─────────────────────────────────────────────────────────────────
-
-function BookCover({ item }: { item: Extract<StoreItem, { type: 'book' }> }) {
-  return item.book.coverImage ? (
-    <img src={item.book.coverImage} alt="" className="h-[82%] w-auto rounded-[3px] object-contain shadow-lg ring-1 ring-black/10" />
-  ) : (
-    <PlainBookArt examKey={item.exams[0]} />
-  )
-}
 
 function BookContent({ item, amazon }: { item: Extract<StoreItem, { type: 'book' }>; amazon: AmazonPrice | null }) {
   const { book } = item

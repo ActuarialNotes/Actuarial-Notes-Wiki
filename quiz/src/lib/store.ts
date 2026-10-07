@@ -195,11 +195,32 @@ export const STUDY_KIND_LABEL: Record<StudyKind, string> = {
 }
 
 /** A study material: a manual, a course, a question bank, a package of them. */
+/**
+ * The seller's — or for a calculator, the maker's — own picture of a product,
+ * copied from the page in `from` into `public/store-products/` (trimmed and
+ * resized, never redrawn), the way the sellers' logos are: browsing the Store
+ * sends no request to a seller. A product whose pages show no picture of it
+ * has none, and is drawn instead (`components/store/ProductArt.tsx`).
+ */
+export interface ProductImage {
+  /** `/store-products/<file>.webp`. */
+  src: string
+  /**
+   * `cover` — a flat front cover, which the Store binds into a book; `photo` —
+   * a picture of the thing itself (a calculator, a laptop, a box), shown as it is.
+   */
+  shape: 'cover' | 'photo'
+  /** The seller's or maker's page the picture was copied from. */
+  from: string
+}
+
 export interface StudyProduct {
   id: string
   kind: StudyKind
   /** As the seller titles it. */
   name: string
+  /** The seller's own picture of it, when its page shows one. */
+  image?: ProductImage
   exams: string[]
   /** Who makes it — and, here, sells it: the offer is on the maker's own site. */
   offer: StoreOffer
@@ -248,6 +269,8 @@ export interface CalculatorProduct {
   makerUrl?: string
   approvedBy: ExamBody[]
   look: CalculatorLook
+  /** The maker's own picture of it — the drawing (`look`) stands in where there is none. */
+  image?: ProductImage
   /** Facts from the maker's page: display, power. */
   facts?: { label: string; value: string }[]
   /** What it does, from the maker's page. */
@@ -937,3 +960,38 @@ export function reviewTally(reviews: readonly StoreReview[]): { source: ReviewSo
     .map(source => ({ source, count: reviews.filter(r => r.source === source).length }))
     .filter(t => t.count > 0)
 }
+
+// ── Pictures ─────────────────────────────────────────────────────────────────
+
+/** Greedy word wrap into lines of at most `width` characters. */
+function wrap(text: string, width: number): string[] {
+  const lines: string[] = []
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const last = lines[lines.length - 1]
+    if (last !== undefined && last.length + 1 + word.length <= width) lines[lines.length - 1] = `${last} ${word}`
+    else lines.push(word)
+  }
+  return lines
+}
+
+/**
+ * The size a mock-up's title is set at — the largest whose lines fit the
+ * cover's title block — and its lines; a title too long even at the smallest
+ * is cut, with an ellipsis, rather than run off the board.
+ */
+export function coverTitle(title: string): { size: number; lines: string[] } {
+  const sizes = [14, 12, 10.5, 9]
+  for (const size of sizes) {
+    // A serif line of capitals and lowercase averages about half its size per character.
+    const lines = wrap(title, Math.floor(COVER_TITLE_WIDTH / (size * 0.5)))
+    if (lines.length <= Math.floor(COVER_TITLE_HEIGHT / (size * 1.16))) return { size, lines }
+  }
+  const size = sizes[sizes.length - 1]!
+  const lines = wrap(title, Math.floor(COVER_TITLE_WIDTH / (size * 0.5))).slice(0, Math.floor(COVER_TITLE_HEIGHT / (size * 1.16)))
+  lines[lines.length - 1] = `${lines[lines.length - 1]!.replace(/[\s,:;–-]+$/, '')}…`
+  return { size, lines }
+}
+
+/** The title block on a mock-up's 120×160 board (`components/store/ProductArt.tsx`). */
+export const COVER_TITLE_WIDTH = 96
+const COVER_TITLE_HEIGHT = 66

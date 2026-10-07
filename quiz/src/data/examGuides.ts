@@ -50,13 +50,7 @@ export interface GeneralGuide {
   ref: WikiEntryRef
 }
 
-export const GENERAL_GUIDES: GeneralGuide[] = [
-  {
-    title: 'How to Study for Actuarial Exams',
-    ref: {
-      kind: 'guide',
-      name: 'How to Study for Actuarial Exams',
-      path: 'Guides/How to Study for Actuarial Exams.md',
-    },
-  },
-]
+// Empty on purpose: "How to Study for Actuarial Exams" (`Guides/How to Study for
+// Actuarial Exams.md`) was taken off the Study Guides page. The page itself stays
+// in the vault (the AI connector reads it); add an entry here to list it again.
+export const GENERAL_GUIDES: GeneralGuide[] = []

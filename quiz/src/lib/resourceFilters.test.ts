@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { WikiIndexItem } from './wikiIndex'
 import {
+  bodyForExam,
   emptyResourceFacets,
   filterResources,
   hasResourceFilters,
@@ -8,6 +9,8 @@ import {
   resourceFacetValues,
   resourceFacetsFromParams,
   resourceFacetsToParams,
+  resourceStripExams,
+  resourcesForBody,
   toggleResourceFacet,
   type ResourceFacetSelection,
 } from './resourceFilters'
@@ -123,5 +126,38 @@ describe('the selection', () => {
 
   it('reads an empty or unknown query as no filter', () => {
     expect(resourceFacetsFromParams(new URLSearchParams('exam=&sort=year'))).toEqual(emptyResourceFacets())
+  })
+})
+
+describe('the exam strip', () => {
+  const PAGES = [
+    'Exam P-1 (SOA)', 'Exam FM-2 (SOA)', 'Exam FAM (SOA)', 'Exam GH-201C (SOA)', 'Exam GH-201U (SOA)',
+    'Exam MAS-I (CAS)', 'Exam 5 (CAS)', 'Exam 6U (CAS)', 'Exam 6C (CAS)', 'Exam 7 (CAS)',
+  ]
+  const strips = { SOA: resourceStripExams(PAGES, 'SOA'), CAS: resourceStripExams(PAGES, 'CAS') }
+
+  it("lists a body's ladder, each exam once, variants side by side", () => {
+    expect(strips.SOA.map(e => e.label)).toEqual([
+      'Exam P-1', 'Exam FM-2', 'Exam FAM', 'Exam GH-201C', 'Exam GH-201U',
+    ])
+    expect(strips.CAS.map(e => e.label)).toEqual([
+      'Exam P-1', 'Exam FM-2', 'Exam MAS-I', 'Exam 5', 'Exam 6C', 'Exam 6U', 'Exam 7',
+    ])
+    expect(strips.SOA.find(e => e.label === 'Exam GH-201U')?.key).toBe('FSA-GH201')
+    expect(strips.CAS.find(e => e.label === 'Exam 6C')?.key).toBe('CAS-6')
+  })
+
+  it("opens on an exam's own body when only the other ladder has it", () => {
+    expect(bodyForExam('Exam 7', 'SOA', strips)).toBe('CAS')
+    expect(bodyForExam('Exam P-1', 'SOA', strips)).toBe('SOA')
+    expect(bodyForExam('Exam P-1', 'CAS', strips)).toBe('CAS')
+    expect(bodyForExam(null, 'CAS', strips)).toBe('CAS')
+  })
+
+  it("keeps the body's readings and the resources that are no exam's", () => {
+    expect(names(resourcesForBody(SHELF, strips.SOA))).toEqual(['Ross', 'Reference sheet'])
+    expect(names(resourcesForBody(SHELF, strips.CAS))).toEqual([
+      'Ross', 'Werner', 'Friedland', 'Marshall', 'MCT Guideline', 'Reference sheet',
+    ])
   })
 })

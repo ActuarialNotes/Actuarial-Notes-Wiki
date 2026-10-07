@@ -5,6 +5,10 @@ import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
+import { ExamStrip } from '@/components/ExamStrip'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -13,12 +17,15 @@ import { splitAuthors } from '@/lib/authorNames'
 import {
   RESOURCE_FACETS,
   RESOURCE_FACET_LABEL,
+  bodyForExam,
   emptyResourceFacets,
   filterResources,
   hasResourceFilters,
   resourceFacetOptions,
   resourceFacetsFromParams,
   resourceFacetsToParams,
+  resourceStripExams,
+  resourcesForBody,
   toggleResourceFacet,
   type ResourceFacet,
 } from '@/lib/resourceFilters'
@@ -33,6 +40,9 @@ import {
 } from '@/lib/resourceVintages'
 import { syllabusEditions } from '@/data/syllabusVintages'
 import { cn } from '@/lib/utils'
+
+// The Exam filter is the strip of exam logos; the rest are dropdowns.
+const DROPDOWN_FACETS = RESOURCE_FACETS.filter(facet => facet !== 'exam')
 
 const EMPTY_TITLE: Record<ResourceFacet, string> = {
   exam: 'None of these resources is a syllabus reading',
@@ -225,6 +235,11 @@ export default function WikiResources() {
   // first frame rather than one "Loading…" later.
   const [index, setIndex] = useState<WikiIndexItem[]>(() => bundledWikiIndex() ?? [])
   const [searchParams, setSearchParams] = useSearchParams()
+  const { selectedTrack } = useExamProgress()
+  // The SOA/CAS picker the Study Guides page carries, the same stored choice
+  // (`lib/bodyFilter.ts`): it picks whose exams the strip offers, and with no
+  // exam chosen, whose readings the shelf holds.
+  const [bodyOverride, setBodyOverride] = useState<ExamBody | null>(loadBody)
 
   useEffect(() => {
     setPageRefs([])
@@ -244,8 +259,18 @@ export default function WikiResources() {
     () => withCurrentExams(index.filter(i => i.category === 'document'), syllabusEditions),
     [index],
   )
-  const examCount = useMemo(() => index.filter(i => i.category === 'exam').length, [index])
+  const examPages = useMemo(() => index.filter(i => i.category === 'exam').map(i => i.name), [index])
+  const examCount = examPages.length
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
+  const strips = useMemo(
+    () => ({ SOA: resourceStripExams(examPages, 'SOA'), CAS: resourceStripExams(examPages, 'CAS') }),
+    [examPages],
+  )
+  // The strip picks one exam at a time; an older link naming several shows the first.
+  const chosenExam = selection.exam.size > 0 ? [...selection.exam][0] : null
+  const body = bodyForExam(chosenExam, bodyOverride ?? defaultBody(selectedTrack), strips)
+  const strip = strips[body]
+  const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
   // reading list, and the Exam filter's work is done by that list.
@@ -256,8 +281,8 @@ export default function WikiResources() {
   const entries = useMemo<VintageShelfEntry[]>(
     () => vintage
       ? vintageShelf(books, vintage, showDropped)
-      : books.map(item => ({ item, change: null, stub: false })),
-    [books, vintage, showDropped],
+      : (selection.exam.size > 0 ? books : bodyBooks).map(item => ({ item, change: null, stub: false })),
+    [books, bodyBooks, selection.exam, vintage, showDropped],
   )
   const pool = useMemo(() => entries.map(e => e.item), [entries])
   const facetSelection = useMemo(
@@ -270,13 +295,11 @@ export default function WikiResources() {
   }, [entries, pool, facetSelection])
   const filtering = hasResourceFilters(selection) || vintageLabel !== null || showDropped
   const options = useMemo(
-    () => Object.fromEntries(RESOURCE_FACETS.map(facet => [
+    () => Object.fromEntries(DROPDOWN_FACETS.map(facet => [
       facet,
-      // The Exam filter always counts the whole shelf; the others count what
-      // the vintage leaves.
-      facet === 'exam' ? resourceFacetOptions(books, facet, selection) : resourceFacetOptions(pool, facet, facetSelection),
+      resourceFacetOptions(pool, facet, facetSelection),
     ])),
-    [books, pool, selection, facetSelection],
+    [pool, facetSelection],
   ) as Record<ResourceFacet, ReturnType<typeof resourceFacetOptions>>
 
   const vintageOptions = useMemo(
@@ -300,10 +323,22 @@ export default function WikiResources() {
   // A filter is the same page showing something else, so it replaces the
   // history entry rather than stacking one per tick.
   function toggle(facet: ResourceFacet, value: string) {
-    let next = resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams)
-    // A vintage is an edition of one exam's syllabus; another exam starts at its own newest.
-    if (facet === 'exam') next = vintageToParams(null, showDropped, next)
-    setSearchParams(next, { replace: true })
+    setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
+  }
+
+  // One exam at a time, or none. A vintage is an edition of one exam's
+  // syllabus, so another exam starts at its own newest.
+  function chooseExam(label: string | null) {
+    const exam = new Set(label ? [label] : [])
+    const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
+    setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
+  }
+
+  // The other body's ladder doesn't hold the chosen exam, so the choice goes.
+  function chooseBody(next: ExamBody) {
+    saveBody(next)
+    setBodyOverride(next)
+    if (next !== body && chosenExam) chooseExam(null)
   }
 
   function chooseVintage(label: string) {
@@ -325,19 +360,33 @@ export default function WikiResources() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="min-w-0 truncate text-2xl font-bold tracking-tight">Resources</h1>
+      {/* The same title row as the Study Guides page, picker and all: the
+          two are one tab's two pages, and the body is one choice across them. */}
+      <header className="flex items-center gap-2">
+        <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">Resources</h1>
+        <SegmentedControl
+          label="Examining body"
+          size="lg"
+          pill
+          value={body}
+          onChange={chooseBody}
+          options={[
+            { value: 'SOA', label: 'SOA' },
+            { value: 'CAS', label: 'CAS' },
+          ]}
+          className="shrink-0"
+        />
       </header>
 
-      {/* The way back across to the tab's other page, the exam ladder — the
-          row the ladder carries to here, pointing the other way. Half the
-          width from sm up, as it is in the ladder's guide row. */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <StudyGuidesPageRow page="exams" count={examCount} />
-      </div>
+      <ExamStrip
+        exams={strip.map(e => ({ value: e.label, name: e.label, logoKey: e.key }))}
+        value={chosenExam}
+        onChange={chooseExam}
+        className="sm:-mx-6 sm:px-6"
+      />
 
-      <div className="flex flex-wrap items-center gap-2">
-        {RESOURCE_FACETS.map(facet => {
+      <div className="-mt-3 flex flex-wrap items-center gap-2">
+        {DROPDOWN_FACETS.map(facet => {
           const opts = options[facet]
           const counts = new Map(opts.map(o => [o.value, o.count]))
           return (
@@ -392,6 +441,13 @@ export default function WikiResources() {
           />
         </div>
       )}
+
+      {/* The way back across to the tab's other page, the exam ladder — the
+          row the ladder carries to here, pointing the other way. Half the
+          width from sm up, as it is in the ladder's guide row. */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <StudyGuidesPageRow page="exams" count={examCount} />
+      </div>
 
       {books.length === 0 ? (
         <p className="text-sm text-muted-foreground">Loading resources…</p>

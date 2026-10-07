@@ -162,17 +162,24 @@ export default function WikiHome() {
 
     return credTracks.map(track => {
       const orderedExams: WikiIndexItem[] = []
+      const chunks: { label: string; exams: WikiIndexItem[] }[] = []
       const seenKeys = new Set<string>()
       for (const section of track.sections) {
         if (section.collapsed) continue
+        const sectionExams: WikiIndexItem[] = []
         for (const item of section.items) {
           if (seenKeys.has(item.id)) continue
           seenKeys.add(item.id)
           const items = examsByKey.get(item.id)
-          if (items) orderedExams.push(...items)
+          if (items) sectionExams.push(...items)
         }
+        orderedExams.push(...sectionExams)
+        if (sectionExams.length > 0) chunks.push({ label: section.label, exams: sectionExams })
       }
-      return { track, exams: orderedExams }
+      // Only a credential with elective tracks (the FSA's practice areas) is
+      // drawn in chunks; the others are one ladder and stay one list.
+      const chunked = track.sections.some(s => s.elective)
+      return { track, exams: orderedExams, chunks: chunked ? chunks : null }
     })
   }, [examsByKey])
 
@@ -318,7 +325,7 @@ export default function WikiHome() {
               </div>
             )}
 
-            {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams }) => (
+            {filteredTrackGroups.filter(g => g.exams.length > 0).map(({ track, exams: trackExams, chunks }) => (
               <div key={track.key}>
                 <GroupHeading>
                   {/* The designation as a heading of its own — the short
@@ -348,22 +355,43 @@ export default function WikiHome() {
                 </GroupHeading>
 
                 {/* One grouped list per credential, a row per exam, two
-                    columns from `sm` up. */}
-                <ListPanel columns={2}>
-                  {trackExams.map(exam => {
-                    const model = cardModels.get(exam.path)
-                    if (!model) return null
-                    // The tour's marker stays on the ladder's row, so an
-                    // exam in progress doesn't carry it twice.
-                    return (
-                      <ExamGuideRow
-                        key={exam.path}
-                        model={model}
-                        tourId={model.examId === 'P' ? 'exam-p' : undefined}
-                      />
-                    )
-                  })}
-                </ListPanel>
+                    columns from `sm` up. A credential with elective tracks
+                    (the FSA) is chunked by track instead: a small heading
+                    over each track's own list. */}
+                {chunks ? (
+                  <div className="space-y-5">
+                    {chunks.map(chunk => (
+                      <div key={chunk.label}>
+                        <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          {chunk.label}
+                        </p>
+                        <ListPanel columns={2}>
+                          {chunk.exams.map(exam => {
+                            const model = cardModels.get(exam.path)
+                            if (!model) return null
+                            return <ExamGuideRow key={exam.path} model={model} />
+                          })}
+                        </ListPanel>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ListPanel columns={2}>
+                    {trackExams.map(exam => {
+                      const model = cardModels.get(exam.path)
+                      if (!model) return null
+                      // The tour's marker stays on the ladder's row, so an
+                      // exam in progress doesn't carry it twice.
+                      return (
+                        <ExamGuideRow
+                          key={exam.path}
+                          model={model}
+                          tourId={model.examId === 'P' ? 'exam-p' : undefined}
+                        />
+                      )
+                    })}
+                  </ListPanel>
+                )}
               </div>
             ))}
           </div>

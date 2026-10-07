@@ -94,8 +94,14 @@ test.describe('store', () => {
     const head = await sheet.getByRole('columnheader').first().boundingBox()
     const cell = await sheet.getByRole('cell').filter({ hasText: /\$\d/ }).first().boundingBox()
     expect(Math.abs(head!.x - cell!.x)).toBeLessThan(2)
-    // Two columns fit on the screen, so the table is a comparison, not a list.
-    expect(head!.width).toBeLessThan(220)
+    // Exactly two columns fit on the screen, so the table is a comparison, not a list.
+    const second = await sheet.getByRole('columnheader').nth(1).boundingBox()
+    expect(Math.abs(head!.width * 2 - 390)).toBeLessThan(2)
+    expect(second!.x + second!.width).toBeLessThanOrEqual(390 + 1)
+
+    // A swipe snaps to the next column, so the pair is still whole.
+    await sheet.locator('div.overflow-auto').evaluate(el => el.scrollBy({ left: 40 }))
+    await expect.poll(async () => (await sheet.getByRole('columnheader').nth(1).boundingBox())!.x).toBeLessThan(2)
   })
 })
 

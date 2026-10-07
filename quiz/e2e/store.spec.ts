@@ -78,6 +78,25 @@ test.describe('store', () => {
     await page.keyboard.press('Escape')
     await expect(table).toHaveCount(0)
   })
+
+  test('the comparison reads on a phone: each cell sits under its own product', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/store?exam=MAS-I')
+    await page.getByTestId('store-compare').click()
+    const sheet = page.getByTestId('store-compare-sheet')
+    await expect(sheet).toBeVisible()
+
+    // The row labels are bands over the rows, not a column eating the width.
+    await expect(sheet.getByRole('rowheader')).toHaveCount(0)
+    await expect(sheet.getByText('Price', { exact: true }).locator('visible=true')).toHaveCount(1)
+
+    // The first product's price lies in the first product's column.
+    const head = await sheet.getByRole('columnheader').first().boundingBox()
+    const cell = await sheet.getByRole('cell').filter({ hasText: /\$\d/ }).first().boundingBox()
+    expect(Math.abs(head!.x - cell!.x)).toBeLessThan(2)
+    // Two columns fit on the screen, so the table is a comparison, not a list.
+    expect(head!.width).toBeLessThan(220)
+  })
 })
 
 // The gem shop is a corner of the Store. A full purchase needs auth + a gem

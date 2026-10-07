@@ -95,6 +95,14 @@ the lowest on the table marked), the options, what's included, every fact any of
 read, ending in each seller's link. A seller that doesn't state something gets a dash, never a
 guess. The table's own exam strip moves between exams; its kind pills narrow the columns.
 
+The **Compare** button in the study-materials heading is a filled, labelled pill at every
+width — it is that heading's one action. The table is one real `<table>` that lays itself out
+for a phone: the row-label column becomes a band over each row (its label held at the left
+edge while the columns scroll sideways), columns are `44cqw` wide so two fit with the third
+peeking in, the sticky product heads drop their picture, the kind pills scroll in one line and
+the disclaimer is held at the left edge, as wide as the pane. From `sm` up it is the grid with
+a pinned label column. `e2e/store.spec.ts` checks a cell sits under its own product at 390 px.
+
 ### Reviews
 
 `data/storeReviews.ts` quotes what candidates and sellers say, from three places: **r/actuary**

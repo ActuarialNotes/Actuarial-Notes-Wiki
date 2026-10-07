@@ -268,7 +268,9 @@ export default function Store() {
                   ? registrationUrgency(group.items, today).slice(0, SHELF_PREVIEW)
                   : showcase(group.items, SHELF_PREVIEW)
             // Comparing is a study-materials question, so it lives in that
-            // aisle's heading rather than in the filter row.
+            // aisle's heading rather than in the filter row. It is the
+            // heading's one action, so it is drawn as a button — filled,
+            // labelled at every width, and a full touch target tall.
             const compare = group.aisle === 'study' && comparable.length > 0 ? (
               <button
                 type="button"
@@ -276,10 +278,10 @@ export default function Store() {
                 data-testid="store-compare"
                 aria-label="Compare study materials"
                 title="Compare study materials"
-                className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <Columns3 className="h-4 w-4" aria-hidden />
-                <span className="hidden sm:inline">Compare</span>
+                Compare
               </button>
             ) : null
             const more = preview ? (

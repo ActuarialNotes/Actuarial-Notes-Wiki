@@ -467,10 +467,11 @@ Other important `lib/` modules:
   questions to convert — because its page and the Projects tab's simulator are material
   to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
-  `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. Exams 8
-  and 9 were promoted before all their readings had `Resources/Books/` pages, so they carry
+  `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. Exam 8
+  was promoted before all its readings had `Resources/Books/` pages, so it carries
   `"source_pages": "partial"` in `scripts/exam_catalog.json` and `syllabus_lint.py` warns
-  about a missing source on them rather than failing — drop the key once the pages exist. The DISC pages
+  about a missing source on it rather than failing — drop the key once the pages exist (Exam 9's
+  nine now do, and its key is gone). The DISC pages
   (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
   section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
   each topic equally. The one definition; the exam rows on both tabs dim

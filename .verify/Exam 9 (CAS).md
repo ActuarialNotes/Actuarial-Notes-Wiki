@@ -1,0 +1,47 @@
+---
+target: Exam 9 (CAS).md
+created: 2026-10-07
+---
+
+## [C-001] Six Source Material links have no Resources/Books page yet; being added in this change
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-07T04:05Z/9a4a
+- date: 2026-10-07
+- locus: ## Source Material: Brehm et al., Clark, Coval/Jurek/Stafford, Cummins 2008, Grossi and Kunreuther, Mildenhall and Major
+- note: syllabus_lint.py 'Exam 9 (CAS).md' reports 0 errors, 6 [broken-source] warnings: no page yet for Brehm et al. (line 80), Clark 2014 (82), Coval, Jurek and Stafford 2009 (84), Cummins 2008 (88), Grossi and Kunreuther 2005 (90) or Mildenhall and Major 2022 (92). Bernegger 1997, Cummins 2000 and Panning 2006 resolve exactly (scripts/vault_links.py). The six pages are being written in the same change, so this is not filed as a vault error; Exam 9 already carries source_pages: partial in scripts/exam_catalog.json, which keeps it a warning. Every link name was still checked against CAS's citation (see the pass entry). All 89 concept links on the page resolve exactly.
+
+## [C-002] Sources disagree on the Cummins 2008 title: CAS outline 'CAT Bond', publisher 'CAT Bonds'
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-07T04:05Z/9a4a
+- date: 2026-10-07
+- locus: ## Source Material: [[CAT Bonds and Other Risk-Linked Securities (Cummins - 2008)]]
+- note: CAS Exam 9 Content Outline, Fall 2026 (Exam_9_CO_2026_F v01 2026-03-18; https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8), PDF p.7, cites 'Cummins, J. D., "CAT Bond and Other Risk-Linked Securities: State of the Market and Recent Developments," Risk Management and Insurance Review, ... 2008, Vol. 11, No. 1, pp. 23-47', abbreviated 'Cummins CAT Bond'. The publisher's DOI record (Crossref, DOI 10.1111/j.1540-6296.2008.00127.x, read 2026-10-07 via https://api.crossref.org/works) gives the title as 'CAT Bonds and Other Risk-Linked Securities: State of the Market and Recent Developments', RMIR 11(1), 23-47, March 2008. That matches the outline's journal, volume, issue and pages. The 2007 SSRN working paper (DOI 10.2139/ssrn.1057401) also says 'CAT Bonds'. The Wiley and SSRN landing pages returned 403, so the paper's own title page was not read. The page links the plural, the publisher's form. That is a document title, not examinable content: the reading, its year, its code C7 and the C7 task text are unaffected. Not filed as a vault error and no edit. If CAS's singular is wanted on screen, an alias on the link would carry it without renaming the resource page.
+
+## [C-003] Correction to C-001: the concept-link count
+- entry_type: correction
+- author: agent:validate-v1
+- run_id: 2026-10-07T04:05Z/9a4a
+- date: 2026-10-07
+- locus: C-001, last sentence
+- note: C-001 says 'All 89 concept links on the page resolve exactly.' The count is wrong. Recounted with scripts/vault_links.py (iter_links, Vault.resolve): the page has 122 links. 113 go to Concepts/ pages, 66 of them distinct, and all 113 resolve exact. The other 9 are the Source Material readings: 3 exact, 6 missing, as C-001 lists. Nothing else in C-001 changes.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-07T04:05Z/9a4a
+- date: 2026-10-07
+- status_set: verified
+- confidence: high
+- checks_run: Delivery: the lead's 4-hour exam, 4.5-hour appointment and 15-minute scheduled break match outline p.1. Weights: A 25-35, B 20-30, C 20-30, D 15-25 and the four domain titles match p.3. Every preamble and task: links stripped, each page line is a whitespace-normalised substring of pp.3-6, word for word, with task counts 5/5/7/7, numbering 1-n and every e.g. list included; nothing on pp.3-6 is missing from the page. Readings lines: A (Grossi & Kunreuther, Clark, Bernegger), B (Mildenhall & Major), C (5 readings) and D (Brehm et al) match pp.3-6 in order. Source Material: 9 bullets for the 9 citations of the pp.7-8 table, title {9 Sources}. Every code matches: Bernegger A1, Brehm D1-D6, Clark A2-A3, Coval C5-C6, Cummins Capital C1-C4, Cummins CAT Bond C7, Grossi A4-A5, Mildenhall & Major B1-B5 and C1-C4, Panning C3, C5. Brehm's exclusions, Grossi's Chapters 2-6 scope and errata note, 'including study note' on Cummins Capital, and Mildenhall & Major's 'Including errata', Domain B and C chapter/section lists and the 'Proofs and Appendices' line are all word for word. Link names (title, author, year) against the citations: all agree. Brehm's '&' is written 'and', and the Cummins 2008 singular/plural is logged as C-002. The year in each name was confirmed by the document's own title page or Crossref. All 6 hyperlinks in the outline (link annotations pp.7-8) were fetched and read. Sitting: the CAS page links only the October 2026 outline; the window is Oct 19-27, 2026; no notice or errata; the 2027 schedule notice (10/06/2026) posts no new outline, so nothing rolls over. App data agrees: examPdfLinks '9-1' is this URL (v01 18 Mar 2026); examSittings CAS-9 runs 2026-10-19 to 2026-10-27 with deadline 2026-09-29; examSittingDetails CAS-9 has page URL exam-9-risk-management-actuaries, outline URL, refund 2026-10-06, 4 hours (4.5-hour appointment), item types per p.1, and fee 850/680 via examFees CAS_UPPER. Not on the page and not filed: p.2 cognitive levels (no vault exam page carries them) and the B/OP/SK source key. syllabus_lint: 0 errors, 6 broken-source warnings (C-001). test_syllabus_lib: 11 tests OK. Concept links: 113, all exact (C-003).
+- sources_checked: CAS, Exam Content Outline — Risk Management for Actuaries – Exam 9, Fall 2026 (the 'October 2026 Content Outline'; Exam_9_CO_2026_F v01 2026-03-18, 8 pp.), PDF pp.1-8 incl. link annotations, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf; CAS, Exam 9 — Risk Management for Actuaries exam page, read 2026-10-07: window October 19 - October 27, 2026; register by Sep. 29, 2026 11:59 pm; refund deadline October 6, 2026; fee $850 ($680 full-time students); 'October 2026 Content Outline' the only outline linked, sha256:872001ce9cc0ba0228683955f5e4ab65c003f9e8e97a5a9512aef521b6f35987 — https://www.casact.org/exam/exam-9-risk-management-actuaries; CAS, Clarification and Errata to Catastrophe Modeling (Grossi and Kunreuther), Section 2.4, dated March 29, 2021, sha256:8677464a4952483b031c9559d96f083629d4e22a14281c604368665f4d9c63a6 — https://www.casact.org/sites/default/files/2021-05/8_Grossi_Kunreuther_Errata_2021.pdf; CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026 (the outline's 'study note' hyperlink; corrects the formula on p.15), sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf; Mildenhall, Pricing Insurance Risk Book Errata (modified 2026-09-24), sha256:f5c76b2260e876546ae82977a8ee9fcfe1c29e63b55663a7dba29eee696f2a6e — https://blog.mynl.com/posts/publications/2022-01-20-Pricing-Insurance-Risk-Book/errata.html; Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class, ASTIN Bulletin 27(1) 1997 pp.99-111, PDF p.1 (scan, read as image), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf; Clark, Basics of Reinsurance Pricing, Actuarial Study Note, Revised 2014, PDF p.1, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf; Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy, Willis Re, PDF p.1, sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf; Crossref DOI metadata, read 2026-10-07 (https://api.crossref.org/works): Coval, Jurek & Stafford JEP 23(1) 3-25, 2009 (10.1257/jep.23.1.3); Cummins RMIR 3(1) 7-27, 2000 (10.1111/j.1540-6296.2000.tb00013.x); Cummins RMIR 11(1) 23-47, 2008 (10.1111/j.1540-6296.2008.00127.x); Grossi & Kunreuther, Springer 2005 (10.1007/b100669); Mildenhall & Major, Wiley 2022 (10.1002/9781119756538)
+- note: Verified high. No findings. Every examinable statement on the page is the Fall 2026 outline's own wording: delivery, four weights, preambles, 24 tasks, readings, and every reading's code and scope. The Cummins 2008 title conflict (C-002) is bibliographic and touches no examinable content. The six resource pages still missing (C-001) are being added in this change. No edits made.
+
+## [C-005] Update to C-001: all nine reading pages now exist in the working tree
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-07T04:05Z/9a4a
+- date: 2026-10-07
+- locus: ## Source Material; C-001
+- note: Re-run after the pass: syllabus_lint.py 'Exam 9 (CAS).md' now reports 0 errors and 0 warnings. All nine Resources/Books pages the Source Material links are present (uncommitted, written by the parallel resource-page work in this change). That same work has also dropped source_pages: partial from Exam 9's row in scripts/exam_catalog.json, so C-001's mention of that key describes HEAD, not the working tree. Nothing on this page changed. test_syllabus_lib: OK.

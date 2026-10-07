@@ -12,6 +12,14 @@
 //
 // The product names open the full sheet; each column ends in its seller's
 // link. Same shell as the product sheet (`useStoreDialog`).
+//
+// On a phone the table is one real table, laid out for a thumb: the row-label
+// column (a quarter of the screen, scrolling nothing) becomes a band above
+// each row whose label stays put while the columns scroll sideways, the
+// columns are narrow enough for two to sit side by side with the third
+// peeking in, the sticky product heads drop their picture, and the kind pills
+// scroll in one line. From `sm` up it is the classic grid with a pinned
+// label column.
 
 import { useId, useMemo, useState, type ReactNode } from 'react'
 import { ArrowUpRight, X } from 'lucide-react'
@@ -73,6 +81,7 @@ export function CompareSheet({
   const labels = comparisonFactLabels(shown.map(i => i.study))
   const cheapest = Math.min(...shown.map(i => lowestPrice(i) ?? Infinity))
   const examName = exams.find(e => e.key === examKey)?.name ?? examKey
+  const span = shown.length
 
   return (
     <OverlayPortal>
@@ -86,9 +95,9 @@ export function CompareSheet({
         <div
           ref={panelRef}
           data-testid="store-compare-sheet"
-          className="relative z-10 flex max-h-[94dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-card text-card-foreground shadow-2xl sm:max-h-[90vh] sm:max-w-6xl sm:rounded-2xl"
+          className="relative z-10 flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-card text-card-foreground shadow-2xl sm:h-auto sm:max-h-[90vh] sm:max-w-6xl sm:rounded-2xl"
         >
-          <header className="shrink-0 space-y-3 border-b border-border px-5 pb-3 pt-4">
+          <header className="shrink-0 space-y-2.5 border-b border-border px-5 pb-3 pt-4 sm:space-y-3">
             <div className="flex items-start gap-3">
               <h2 id={titleId} className="min-w-0 flex-1 text-lg font-semibold leading-tight tracking-tight">
                 Compare study materials
@@ -129,7 +138,7 @@ export function CompareSheet({
               ))}
             </div>
             {kinds.length > 1 && (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="-mx-5 flex gap-1.5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
                 {[null, ...kinds].map(k => (
                   <button
                     key={k ?? 'all'}
@@ -138,7 +147,7 @@ export function CompareSheet({
                     onClick={() => setKind(k)}
                     data-sound="select"
                     className={cn(
-                      'rounded-full px-2.5 py-1 text-xs font-medium transition-colors',
+                      'shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-2.5 sm:py-1',
                       kind === k ? 'bg-primary text-primary-foreground' : 'bg-accent hover:bg-accent/80',
                     )}
                   >
@@ -149,84 +158,91 @@ export function CompareSheet({
             )}
           </header>
 
-          <div className="min-h-0 flex-1 overflow-auto overscroll-contain">
-            <table className="w-max min-w-full border-separate border-spacing-0 text-left text-sm">
-              <thead>
-                <tr>
-                  <th scope="col" className={cn(ROW_HEAD, 'z-30 align-bottom')}>
-                    <span className="sr-only">Product</span>
-                  </th>
-                  {shown.map(item => (
-                    <th key={item.id} scope="col" className="sticky top-0 z-20 w-52 min-w-[13rem] border-b border-border bg-card p-3 align-top font-normal">
-                      <ProductHead item={item} onOpen={() => onOpen(item)} />
+          {/* One scroller for both axes, so the sticky heads and labels have a
+              single frame to stick in. It is a size container: the columns and
+              the disclaimer measure themselves against its width (`cqw`). */}
+          <div className="min-h-0 flex-1 overflow-auto max-sm:snap-x max-sm:snap-proximity overscroll-contain [container-type:inline-size]">
+            <div className="w-max min-w-full">
+              <table className="w-max min-w-full border-separate border-spacing-0 text-left text-sm">
+                <thead>
+                  <tr>
+                    <th scope="col" className="sticky left-0 top-0 z-30 hidden w-36 min-w-[9rem] border-b border-r border-border bg-card px-3 py-2.5 sm:table-cell">
+                      <span className="sr-only">Product</span>
                     </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <Row label="Kind">{shown.map(i => <Cell key={i.id}>{STUDY_KIND_LABEL[i.study.kind]}</Cell>)}</Row>
-                <Row label="Price">
-                  {shown.map(i => (
-                    <Cell key={i.id}>
-                      <PriceCell item={i} cheapest={shown.length > 1 && lowestPrice(i) === cheapest} />
-                    </Cell>
-                  ))}
-                </Row>
-                <Row label="Options">
-                  {shown.map(i => {
-                    const options = i.study.offer.options ?? []
-                    return <Cell key={i.id}>{options.length > 1 ? `${options.length} to choose from` : options.length === 1 ? options[0]!.name : null}</Cell>
-                  })}
-                </Row>
-                <Row label="What’s included">
-                  {shown.map(i => (
-                    <Cell key={i.id}>
-                      <Included lines={i.study.includes ?? []} />
-                    </Cell>
-                  ))}
-                </Row>
-                {labels.map(label => (
-                  <Row key={label} label={label === 'By' ? 'Author' : label}>
+                    {shown.map(item => (
+                      <th key={item.id} scope="col" className={cn(COLUMN, 'sticky top-0 z-20 border-b border-border bg-card p-3 align-top font-normal')}>
+                        <ProductHead item={item} onOpen={() => onOpen(item)} />
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <Row label="Kind" span={span}>{shown.map(i => <Cell key={i.id}>{STUDY_KIND_LABEL[i.study.kind]}</Cell>)}</Row>
+                  <Row label="Price" span={span}>
                     {shown.map(i => (
-                      <Cell key={i.id}>{i.study.facts?.filter(f => f.label === label).map(f => f.value).join('; ') || null}</Cell>
+                      <Cell key={i.id}>
+                        <PriceCell item={i} cheapest={shown.length > 1 && lowestPrice(i) === cheapest} />
+                      </Cell>
                     ))}
                   </Row>
-                ))}
-                <Row label="Exam windows">
-                  {shown.map(i => <Cell key={i.id}>{i.study.windows?.length ? i.study.windows.join('; ') : null}</Cell>)}
-                </Row>
-                <Row label="Reviews">
-                  {shown.map(i => (
-                    <Cell key={i.id}>
-                      <ReviewsCell item={i} />
-                    </Cell>
+                  <Row label="Options" span={span}>
+                    {shown.map(i => {
+                      const options = i.study.offer.options ?? []
+                      return <Cell key={i.id}>{options.length > 1 ? `${options.length} to choose from` : options.length === 1 ? options[0]!.name : null}</Cell>
+                    })}
+                  </Row>
+                  <Row label="What’s included" span={span}>
+                    {shown.map(i => (
+                      <Cell key={i.id}>
+                        <Included lines={i.study.includes ?? []} />
+                      </Cell>
+                    ))}
+                  </Row>
+                  {labels.map(label => (
+                    <Row key={label} label={label === 'By' ? 'Author' : label} span={span}>
+                      {shown.map(i => (
+                        <Cell key={i.id}>{i.study.facts?.filter(f => f.label === label).map(f => f.value).join('; ') || null}</Cell>
+                      ))}
+                    </Row>
                   ))}
-                </Row>
-                <Row label="Price checked">
-                  {shown.map(i => <Cell key={i.id}>{shortDate(i.study.offer.checked)}</Cell>)}
-                </Row>
-                <Row label="">
-                  {shown.map(i => (
-                    <Cell key={i.id}>
-                      <a
-                        href={i.study.offer.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-sound="open"
-                        onClick={() => trackStoreOutbound({ product: i.id, seller: i.study.offer.sellerId, aisle: i.aisle })}
-                        className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-                      >
-                        {STORE_SELLERS[i.study.offer.sellerId]?.short ?? 'Seller'}’s page
-                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-                      </a>
-                    </Cell>
-                  ))}
-                </Row>
-              </tbody>
-            </table>
+                  <Row label="Exam windows" span={span}>
+                    {shown.map(i => <Cell key={i.id}>{i.study.windows?.length ? i.study.windows.join('; ') : null}</Cell>)}
+                  </Row>
+                  <Row label="Reviews" span={span}>
+                    {shown.map(i => (
+                      <Cell key={i.id}>
+                        <ReviewsCell item={i} />
+                      </Cell>
+                    ))}
+                  </Row>
+                  <Row label="Price checked" span={span}>
+                    {shown.map(i => <Cell key={i.id}>{shortDate(i.study.offer.checked)}</Cell>)}
+                  </Row>
+                  <Row label="" span={span}>
+                    {shown.map(i => (
+                      <Cell key={i.id}>
+                        <a
+                          href={i.study.offer.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-sound="open"
+                          onClick={() => trackStoreOutbound({ product: i.id, seller: i.study.offer.sellerId, aisle: i.aisle })}
+                          className="inline-flex min-h-9 w-full items-center justify-center gap-1 rounded-md bg-primary px-3 py-1.5 text-center text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
+                        >
+                          {STORE_SELLERS[i.study.offer.sellerId]?.short ?? 'Seller'}’s page
+                          <ArrowUpRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                        </a>
+                      </Cell>
+                    ))}
+                  </Row>
+                </tbody>
+              </table>
 
-            <div className="space-y-1.5 px-5 py-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
-              {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
+              {/* As wide as the visible pane and held at its left edge, so the
+                  notice stays readable however far the table is scrolled. */}
+              <div className="sticky left-0 w-[100cqw] space-y-1.5 px-5 py-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
+                {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
+              </div>
             </div>
           </div>
         </div>
@@ -235,24 +251,42 @@ export function CompareSheet({
   )
 }
 
-const ROW_HEAD =
-  'sticky left-0 top-0 w-28 min-w-[7rem] border-b border-r border-border bg-card px-3 py-2.5 text-left text-xs font-semibold text-muted-foreground sm:w-36 sm:min-w-[9rem]'
+/** A product's column: two across a phone with the third peeking in, a fixed width from `sm`. */
+const COLUMN = 'w-[44cqw] min-w-[10.5rem] max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
+/** The row's label — pinned at the left on `sm`+; on a phone it is the band above the row instead. */
+const ROW_HEAD =
+  'max-sm:hidden sm:sticky sm:left-0 sm:z-10 sm:w-36 sm:min-w-[9rem] sm:border-b sm:border-r sm:border-border sm:bg-card sm:px-3 sm:py-2.5 sm:text-left sm:align-top sm:text-xs sm:font-semibold sm:text-muted-foreground'
+
+function Row({ label, span, children }: { label: string; span: number; children: ReactNode }) {
   return (
-    <tr>
-      <th scope="row" className={cn(ROW_HEAD, 'z-10 align-top')}>
-        {label}
-      </th>
-      {children}
-    </tr>
+    <>
+      {/* Phone only: the label as a band over the row. The label sits in a
+          sticky span inside a cell as wide as the table, so it stays at the
+          left edge while the columns scroll under it. */}
+      {label && (
+        <tr className="sm:hidden">
+          <td colSpan={span} className="border-b border-border bg-muted/60 p-0">
+            <span className="sticky left-0 inline-block px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              {label}
+            </span>
+          </td>
+        </tr>
+      )}
+      <tr>
+        <th scope="row" className={ROW_HEAD}>
+          {label}
+        </th>
+        {children}
+      </tr>
+    </>
   )
 }
 
 function Cell({ children }: { children: ReactNode }) {
   const empty = children === null || children === undefined || children === ''
   return (
-    <td className="border-b border-border px-3 py-2.5 align-top text-sm leading-snug">
+    <td className="border-b border-border px-3 py-2.5 align-top text-sm leading-snug max-sm:border-r max-sm:border-r-border">
       {empty ? <span className="text-muted-foreground" aria-label="Not stated">—</span> : children}
     </td>
   )
@@ -262,13 +296,15 @@ function ProductHead({ item, onOpen }: { item: StudyItem; onOpen: () => void }) 
   const seller = STORE_SELLERS[item.study.offer.sellerId]
   return (
     <span className="flex flex-col gap-2">
-      <ArtStage examKey={item.exams[0]} className="h-20 rounded-lg">
-        <StudyArt product={item.study} examKey={item.exams[0]} />
-      </ArtStage>
+      <span className="hidden sm:block">
+        <ArtStage examKey={item.exams[0]} className="h-20 rounded-lg">
+          <StudyArt product={item.study} examKey={item.exams[0]} />
+        </ArtStage>
+      </span>
       <button
         type="button"
         onClick={onOpen}
-        className="line-clamp-3 text-left text-sm font-semibold leading-snug underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="line-clamp-2 text-left text-sm font-semibold leading-snug underline-offset-2 sm:line-clamp-3 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {item.name}
       </button>

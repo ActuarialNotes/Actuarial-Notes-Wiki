@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fff34fbba06cef491d22655f54c30abedd404118f32764f5c305db44c0036b69
+  content_hash: sha256:5bf151842396b618853aa38a6ae77775b2b3fc2eb60345ad33aa895de9caf977
   sources: []
   open_findings: 0
   open_critical: 0
@@ -76,7 +76,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], [[Pricing|pricing]], [[Claim|claims]], and [[Care Management Situation|care management situations]] (applications include [[Medicare]], [[Medicaid]], and [[ACA Product|ACA products]])
 > 2. Apply [[Risk|risk]] adjustment concepts to [[Normalize Population Claims Experience|normalize population claims experience]]
-> 3. Apply [[Applicable Best Practice|applicable best practices]] in [[Risk|risk]] adjustment
+> 3. Apply [[Best Practice|applicable best practices]] in [[Risk|risk]] adjustment
 >
 > **Readings:**
 > - Healthcare Risk Adjustment and Predictive Modeling, Duncan, Ian G., 2nd Edition, 2018 (3a, 3b)
@@ -130,7 +130,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Describe [[Common|common]] applications of [[Predictive Analytics|predictive analytics]] in [[Health Care|health care]]
 > 2. Differentiate between types of [[Risk Score|risk score]] models
-> 3. Describe [[Common Healthcare Data|common healthcare data]] sources for [[Predictive Modelling|predictive modelling]]
+> 3. Describe [[Common Healthcare Data|common healthcare data]] sources for [[Predictive Analytics|predictive modelling]]
 > 4. Identify [[Challenge|challenges]] specific to the use of [[Healthcare Claim|healthcare claims]] in model [[Development|development]]
 > 5. Describe [[Ethical|ethical]] considerations for [[Actuary|actuaries]] in developing [[Predictive|predictive]] models
 >

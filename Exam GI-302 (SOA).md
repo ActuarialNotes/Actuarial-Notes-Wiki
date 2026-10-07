@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7e228b0878722cea41e52053c7bf3047b7284c17e4f6a48bbbe4dfb47673d310
+  content_hash: sha256:9d4c41272e3bb985e1f608f167dc343eb8dd36d3647fa594a4f844929be4eae1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -75,9 +75,9 @@ The learning objectives below are transcribed from the Jul 2027 [syllabus](https
 > - The Dodd-Frank Wall Street Reform and Consumer Protection Act: Insurance Provisions, Congressional Research Service, CRS Report R41372, Aug 2010 (2a-d, 2f)
 
 > [!example]- U.S. GI Financial Reporting and Financial Health Measurement {35–50%}
-> The candidate will understand the different [[Reporting Standard|reporting standards]] for U.S. general [[Insurance Company|insurance companies]] and use [[Statutory Financial Statement|statutory financial statement]] information to measure [[Insurer Financial Health|insurer financial health]].
+> The candidate will understand the different [[Reporting Standard|reporting standards]] for U.S. general [[Insurer|insurance companies]] and use [[Statutory Financial Statement|statutory financial statement]] information to measure [[Insurer Financial Health|insurer financial health]].
 >
-> 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. [[Statutory|statutory]] accounting and U.S. [[Tax|tax]] accounting for general [[Insurance Company|insurance companies]].
+> 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. [[Statutory|statutory]] accounting and U.S. [[Tax|tax]] accounting for general [[Insurer|insurance companies]].
 > 2. Describe the elements of the [[NAIC Annual Statement]].
 > 3. [[Complete]] and interpret [[NAIC Annual Statement Pages-schedule|NAIC Annual Statement pages/schedules]] (as referenced in the [[Resource|resources]]).
 > 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[Annual Statement]] (e.g., [[NAIC RBC]] and [[IRIS]] Ratios).

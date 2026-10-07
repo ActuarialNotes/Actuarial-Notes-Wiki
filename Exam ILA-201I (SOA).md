@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cfb1ce5b4cc3dd53be1a0e9a336b77a74b961354acfefcfa650c5221de8cbbb5
+  content_hash: sha256:678c0231a73eb39aef4624ccf9ad4d4096db9df5b8df8ca23f34853c1caa24f5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -52,7 +52,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and [[Tool|tools]] of [[Financial Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
 >
 > 1. Explain and calculate [[Regulatory Capital|regulatory capital]] using various [[International Framework|international frameworks]]
-> 2. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurance Company|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
+> 2. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
 > 3. Describe the purpose and application of [[Economic Capital|economic capital]]
 >
 > **Readings:**

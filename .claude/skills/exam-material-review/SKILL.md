@@ -105,7 +105,10 @@ Priority follows how much a candidate is hurt, not how easy the fix is:
    vault, and on Exam FM the stubs carry over a hundred inbound question links.
 2. **Broken links** in the exam's graph.
 3. **Missing content for a heavily-weighted objective.** New concept pages.
-4. **Missing warnings and identification guidance** on existing pages.
+4. **Missing warnings and identification guidance** on existing pages. These go
+   in the page's two collapsible closing sections — `> [!tip]- How it appears on
+   the exam` and `> [!warning]- Exam traps` (the `actuarial-concept-definitions`
+   skill has the shape) — rather than in the definition or the bullets.
 5. **Second worked examples** on pages carrying only a plug-in.
 6. **Questions** for zero-coverage concepts.
 7. **Comprehension checks** for anything newly linked from the syllabus.

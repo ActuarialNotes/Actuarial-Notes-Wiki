@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:812acedf10b176f3f3cd9260216d46124ee9557a12a0cb940e0d72b473e978f4
+  content_hash: sha256:1aea26ce19a7d8e2a91fd129e84d639884252997cee634fd8a300063e4a4745e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -76,11 +76,11 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 >
 > 1. Estimate the [[Parameter|parameters]] for [[Frequency|frequency]] and [[Severity Distribution|severity distributions]] by [[Maximum Likelihood Estimation|maximum likelihood]].
 > 2. Estimate the [[Variance|variance]] of the [[Estimator|estimators]] and construct [[Normal|normal]] and [[Non-Normal Confidence Interval|non-normal confidence intervals]].
-> 3. Use the [[Delta|delta]] method to estimate the [[Variance|variance]] of the [[Maximum Likelihood Estimator|maximum likelihood estimator]] of a function of the [[Parameter|parameter]](s).
+> 3. Use the [[Delta Method|delta]] method to estimate the [[Variance|variance]] of the [[Maximum Likelihood Estimator|maximum likelihood estimator]] of a function of the [[Parameter|parameter]](s).
 > 4. Estimate the [[Parameter|parameters]] for [[Severity|severity]], [[Frequency|frequency]], and aggregate [[Distribution|distributions]] using [[Bayesian Estimation]].
 > 5. Perform model [[Selection|selection]] using:
 >    - [[Graphical]] procedures.
->    - [[Hypothesis Test|Hypothesis tests]], including [[Kolmogorov-Smirnov]], [[Chi-square Goodness-Of-Fit|Chi-square goodness-of-fit]], and [[Likelihood]] ratio ([[LRT]]) [[Test|tests]].
+>    - [[Hypothesis Test|Hypothesis tests]], including [[Kolmogorov-Smirnov]], [[Chi-square Goodness-Of-Fit|Chi-square goodness-of-fit]], and [[Likelihood]] ratio ([[Likelihood Ratio Test|LRT]]) [[Test|tests]].
 >    - [[Score-based]] approaches, including [[Schwarz Bayesian Criterion]] ([[SBC]]), [[Bayesian Information Criterion]] ([[BIC]]), and [[AIC|Akaike Information Criterion]] ([[AIC]]).
 
 > [!example]- Credibility {12–20%}
@@ -93,7 +93,7 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 > [!example]- Reserving and Pricing for Short-Term Insurance Coverages {15–29%}
 > The Candidate will be able to calculate [[Reserve|reserves]] for [[Short-Term Insurance Coverage|short-term insurance coverages]].
 >
-> 1. Understand, interpret, and apply techniques for estimating [[Outstanding Claim|outstanding claims]], using the following methods:
+> 1. Understand, interpret, and apply techniques for estimating [[Unpaid Claims|outstanding claims]], using the following methods:
 >    - Expected [[Loss]] Ratio
 >    - [[Chain-Ladder]]
 >    - [[Bornhuetter-Ferguson]]
@@ -104,7 +104,7 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 >    - [[Poisson]] model
 >    - [[Overdispersed Poisson]] model
 > 3. Calculate [[Projected Loss|projected losses]] using [[Trend|trend]] analysis.
-> 4. Calculate overall [[Average Rate|average rates]] and [[Rate|rate]] changes using the [[Loss Cost|loss cost]] and [[Loss|loss]] ratio methods.
+> 4. Calculate overall [[Overall Rate Level Indication|average rates]] and [[Rate|rate]] changes using the [[Loss Cost|loss cost]] and [[Loss|loss]] ratio methods.
 > 5. Calculate [[Risk Classification Differential|risk classification differential]] changes, including [[Balancing Back|balancing back]].
 
 ## Source Material

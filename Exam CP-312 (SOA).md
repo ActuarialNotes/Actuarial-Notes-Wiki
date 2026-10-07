@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7b73f47ae599c00a85db6102bbad920e184c523f24ae8a2c34352fa83cf17a9a
+  content_hash: sha256:e2296ad01b4f579046af2f7fd754ec43acd55f0150144442e9770c1a34bc554a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -38,7 +38,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >    - [[Equity-Linked Guarantee|equity-linked guarantees]]
 >    - [[Index-Linked Credit|index-linked credits]]
 > 2. [[Nested]] models and their [[Output|outputs]]
-> 3. Model [[Validation|validation]] techniques
+> 3. Model [[Model Validation|validation]] techniques
 > 4. Model [[Efficiency|efficiency]] techniques
 >
 > **Readings:**
@@ -67,7 +67,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >    - [[Economic Scenario Generator|Economic Scenario Generators]] ([[ESG|ESGs]])
 >    - [[Market Risk]] Models
 >    - Other [[Statistical|statistical]] models
-> 2. Describe, apply, and evaluate model [[Validation|validation]] techniques
+> 2. Describe, apply, and evaluate model [[Model Validation|validation]] techniques
 > 3. Describe, apply, and evaluate model [[Efficiency|efficiency]] techniques
 >
 > **Readings:**
@@ -95,16 +95,16 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Chapters 1-3, 6
 
 > [!example]- Model Governance {15–25%}
-> The candidate will understand and be able to apply appropriate model [[Governance|governance]] to assess and [[Address Issues Common|address issues common]] to the [[Development|development]] and management of models.
+> The candidate will understand and be able to apply appropriate model [[Model Governance|governance]] to assess and [[Address Issues Common|address issues common]] to the [[Development|development]] and management of models.
 >
 > 1. Describe and apply model [[Governance Best Practice|governance best practices]] such as:
 >    - Determining fit for [[Purpose|purpose]]
 >    - Model design and [[Development|development]]
 >    - Model [[Risk|risk]] management
->    - Model [[Validation|validation]]
+>    - Model [[Model Validation|validation]]
 >    - Model [[Maintenance|maintenance]] and change management
 >    - Model and model [[Governance Documentation|governance documentation]] and [[Disclosure|disclosures]]
-> 2. Describe, compare and evaluate [[Organizational Structure|organizational structures]] for model [[Governance|governance]], including [[Control|controls]], roles, and [[Responsibility|responsibilities]]
+> 2. Describe, compare and evaluate [[Organizational Structure|organizational structures]] for model [[Model Governance|governance]], including [[Control|controls]], roles, and [[Responsibility|responsibilities]]
 >
 > **Readings:**
 > - ASOP 56: Modeling, Dec 2019, pp. 1-9 (3a)

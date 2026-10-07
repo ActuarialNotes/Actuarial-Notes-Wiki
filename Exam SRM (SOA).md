@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d726b8deb03d0c5d105b5ca311fde2aced266c380e5e1d61237a86a4ef6056b2
+  content_hash: sha256:d4061e4de20ef588fc7e9ec56b62a908d6d3ccd01c36cd411b46427914e75b30
   sources: []
   open_findings: 0
   open_critical: 0
@@ -59,7 +59,7 @@ The learning objectives below are transcribed from the January 2027 [syllabus](h
 > 1. Define terms used to [[Classify|classify]] the types of [[Modeling|modeling]] problems and methods, including [[Supervised|supervised]] versus [[Unsupervised Learning|unsupervised learning]] and [[Regression|regression]] versus [[Classification|classification]].
 > 2. Compare the [[Common|common]] methods of assessing model [[Accuracy|accuracy]].
 > 3. Understand how the [[Bias-Variance Tradeoff|bias-variance tradeoff]] impacts the selection of [[Statistical Learning|statistical learning]] methods.
-> 4. Understand [[Resampling|resampling]] methods used for model [[Validation|validation]], including
+> 4. Understand [[Resampling|resampling]] methods used for model [[Model Validation|validation]], including
 >    - [[Training]] set vs. test set approach
 >    - [[K-Fold Cross-Validation|k-fold cross-validation]]
 >    - [[Leave-one-out Cross-Validation|Leave-one-out cross-validation]]
@@ -79,15 +79,15 @@ The learning objectives below are transcribed from the January 2027 [syllabus](h
 >    - t and F [[Test|tests]]
 >    - [[AIC]] and [[BIC]]
 >    - [[Likelihood]] ratio test
-> 6. Calculate and interpret [[Predicted Value|predicted values]], and [[Confidence|confidence]] and [[Prediction Interval|prediction intervals]].
+> 6. Calculate and interpret [[Predicted Value|predicted values]], and [[Confidence Interval|confidence]] and [[Prediction Interval|prediction intervals]].
 > 7. Understand how approaches may [[Differ Compared|differ compared]] to using an [[Ordinary|ordinary]] least [[Square|squares]] model, including
->    - [[Regularized Regression|Regularized regression]] ([[Lasso|lasso]], [[Ridge Regression|ridge regression]])
+>    - [[Regularization|Regularized regression]] ([[Lasso|lasso]], [[Ridge Regression|ridge regression]])
 >    - [[K-Nearest Neighbors|K-nearest neighbors]]
 
 > [!example]- Time Series Models {10–15%}
 > The Candidate will understand key concepts concerning [[Regression-Based Time Series|regression-based time series]] models.
 >
-> 1. Define the concepts and [[Component|components]] of [[Stochastic Time Series Process|stochastic time series processes]], including [[Random Walk|random walks]], [[Stationarity|stationarity]], and [[Autocorrelation|autocorrelation]].
+> 1. Define the concepts and [[Component|components]] of [[Stochastic Time Series Process|stochastic time series processes]], including [[Random Walk|random walks]], [[Stationarity|stationarity]], and [[Autocorrelation Function|autocorrelation]].
 > 2. Describe specific time [[Series|series]] models, including, [[Exponential Smoothing|exponential smoothing]], [[Autoregressive|autoregressive]], and [[Autoregressive Conditionally Heteroskedastic|autoregressive conditionally heteroskedastic]] models.
 > 3. Calculate and interpret [[Predicted Value|predicted values]] and [[Confidence Interval|confidence intervals]].
 

@@ -1,6 +1,6 @@
 ---
 name: actuarial-concept-definitions
-description: Write or improve a concept-definition page in Concepts/*.md — a concise precise definition, a LaTeX formula block, and 1–3 worked examples. Use when the user asks to create, write, draft, fill in, or clean up a Concepts/ page (SOA Exam P / FM probability and financial mathematics, or CAS Exam 5+ ratemaking and reserving), to standardize the definition/formula/example structure of existing pages, to write a Resources/Books source-material page, or to review/validate an exam syllabus for missing terms and broken wiki-links.
+description: Write or improve a concept-definition page in Concepts/*.md — a concise precise definition, a LaTeX formula block, 1–3 worked examples, and collapsible "How it appears on the exam" and "Exam traps" sections. Use when the user asks to create, write, draft, fill in, or clean up a Concepts/ page (SOA Exam P / FM probability and financial mathematics, or CAS Exam 5+ ratemaking and reserving), to standardize the definition/formula/example structure of existing pages, to write a Resources/Books source-material page, or to review/validate an exam syllabus for missing terms and broken wiki-links.
 ---
 
 # Actuarial Concept Definition Writer
@@ -51,7 +51,8 @@ Always finish with the validator (see "Workflow" step 6); it catches all three.
 ## The required shape of every page
 
 The user's non-negotiable core: **concise precise definition → LaTeX formula
-block → 1–3 examples.** Use this canonical layout (it standardizes the ordering
+block → 1–3 examples → how it appears on the exam → exam traps.** Use this
+canonical layout (it standardizes the ordering
 that is currently inconsistent across the vault — many pages scatter property
 bullets *above* the formula; always put them *after*):
 
@@ -70,13 +71,44 @@ bullets *above* the formula; always put them *after*):
 >
 > > [!answer]-
 > > <Worked solution. Multi-step → align*.>
+
+> [!tip]- How it appears on the exam
+> - <the question shapes that test it, on the exams that link the page>
+
+> [!warning]- Exam traps
+> - <the mistakes that cost candidates the marks>
 ```
+
+The two closing sections are **collapsible callouts**, folded by default like
+the learning objectives on an exam page (the trailing `-`). They are their own
+callout types — `tip` renders teal with a lightbulb, `warning` amber with a
+triangle — so they never read as one more `{Example}` card, and nothing that
+parses `[!example]` callouts (exam pages only) sees them.
 
 The only YAML frontmatter a concept page carries is its `verification:` block
 (`docs/verification.md`), and you don't write that by hand: author the page
 without frontmatter, then run `python3 scripts/verify_check.py --sync`, which
 adds it. The body starts directly with the bold term. (A handful of older
 non-P/FM pages carry other frontmatter keys too; do not copy those.)
+
+The one exception is **`aliases:`**, when a study guide links the page under a
+different spelling (`[[Black-Schole]]` for `Black-Scholes Model`). Write it as a
+YAML list in a frontmatter block of its own; `--sync` appends `verification:`
+after it:
+
+```markdown
+---
+aliases:
+  - Black-Schole
+  - Black-Scholes
+---
+**The Black-Scholes Model** …
+```
+
+Frontmatter aliases are read by Obsidian and the AI connector — **not by the
+app**, which fetches `Concepts/<exact link target>.md`. So an alias also goes in
+`scripts/concept_aliases.json` (see "Variant spellings on a generated study
+guide" below), which is what makes the link land in the app.
 
 ### 1. The definition (first line)
 
@@ -175,6 +207,32 @@ Each example is a collapsible callout with a nested answer callout:
 - Always end with the numeric answer and a one-line interpretation when it adds
   meaning ("...so the bond sells at a premium").
 
+### 6. How it appears on the exam (collapsible)
+
+`> [!tip]- How it appears on the exam` — 2–5 bullets on the **question shapes**
+that test this concept on the exams that link the page: what the question gives
+and what it asks for, which other concepts it is paired with, whether it is a
+calculation, a definition-recognition or a "describe/evaluate" written answer,
+and roughly how many steps. Name the exam when the page serves several (`FAM`
+asks for X; `ALTAM` builds it into a profit test). Ground it in the syllabus
+objective wording (the exam page's numbered objectives) and in the question bank
+when one exists (`questions/<bank>/` tagged with the page) — never invent a
+frequency ("appears on every sitting") you have not counted.
+
+### 7. Exam traps (collapsible)
+
+`> [!warning]- Exam traps` — 2–5 bullets, each a specific mistake and its fix:
+a timing or convention slip (annuity-immediate vs due, curtate vs complete, `q`
+vs `p`), a confusable neighbour (`[[Deductible]]` vs `[[Deductible Rating]]`),
+a units or rate-basis mismatch, a sign or direction error, an assumption the
+method needs that the question quietly violates. Write the trap so a candidate
+could catch it mid-question: say what the wrong answer looks like. Generic
+advice ("read carefully") does not belong here.
+
+Both callouts go **after the last example** and are required on every new
+page. Inside them, math and links work as in the body; keep each bullet to one
+or two lines.
+
 ## LaTeX rules (phone readability — same as the question converters)
 
 The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
@@ -204,13 +262,21 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
 4. **Clean notation:** `$…$` inline, `$$…$$` for display. No smart quotes, no
    OCR dashes (`−` → `-`), no Unicode fractions (`½` → `\frac{1}{2}`). Use
    `\times`, `\leq`, `\geq`, `\cdot`. Escape dollar amounts as `\$`.
+   Money goes *inside* the math with the dollar escaped — `$\$1{,}000$` —
+   never an escaped dollar before the math (`\$$1{,}000$`), which starts with
+   `$$` and can open a display block.
 
 ## Workflow
 
 1. **Identify the concept(s)** and whether each page exists. Use `ls`, not just
    a glob, so you *see* extensionless files:
    `ls -b Concepts/ | grep -i "<keyword>"`. Existing → improve in place to this
-   structure; missing → create `Concepts/<Exact Name>.md`.
+   structure; missing → create `Concepts/<Exact Name>.md`. For a vault-wide
+   worklist of missing pages — ranked, tiered and batched —
+   run `python3 scripts/find_concept_gaps.py` and read `CONCEPT_GAPS_PLAN.md`;
+   `--check` says whether a batch's links now resolve. Before writing a page for
+   a gap, check the vault for the same concept under another name (`Outstanding
+   Claim` is `Unpaid Claims`); an alias beats a duplicate page.
 2. **Read 2–3 neighboring pages** of the same family for tone/symbols (e.g. for
    an FM annuity, read `Annuity Immediate`, `Annuity Due`, `Perpetuity`). Match
    notation: `i`, `v`, `d`, `\delta`, `a_{\overline{n}|}`, `s_{\overline{n}|}`
@@ -241,6 +307,30 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
    Renames change what the collectors bundle, so a rename that looks harmless in
    git can still break the app.
 8. **Self-check** against the checklist below, then commit.
+
+## Variant spellings on a generated study guide
+
+The in-development exam pages (the SOA's FAM onward, the DISCs, 6U) are
+*generated* by `scripts/syllabus_write.py`, which links every noun phrase of an
+objective to the page that names it — or to the page that *should* exist, named
+by its own rule (Title Case, singular). That rule produces targets that are poor
+titles (`[[Black-Schole]]`, `[[Joint Live]]`, `[[Delta]]` for *delta method*) and
+cuts terms short (`[[Generalized Linear]] model`). Don't hand-edit those pages
+(`syllabus_lint.py` holds them to the extracted syllabus) and don't name a page
+after a bad target. Instead:
+
+1. Write the page under its proper title, with the linked spelling in its
+   frontmatter `aliases:`.
+2. Map the spelling in `scripts/concept_aliases.json` → `aliases` (key written
+   lower-case, hyphens as spaces: `"black schole": "Black-Scholes Model"`). When
+   the spelling means different pages on different exams, use `namesakes`
+   instead, keyed by wiki id (`"governance": {"default": "Corporate Governance",
+   "cp-312": "Model Governance"}`). `quiz/src/lib/examCatalog.test.ts` fails if
+   a target page doesn't exist, so commit the page before or with the entry.
+3. Re-render the affected exam pages — `python3 scripts/syllabus_write.py <wiki
+   ids>` then `python3 scripts/verify_check.py --sync` — which re-points the
+   links through the alias table and changes nothing else. A target that is
+   already a good title needs none of this: name the page exactly as linked.
 
 ## Namesake pages — link the one for the right exam
 
@@ -422,7 +512,8 @@ app can never display — so the concept looks permanently unstudied.
 
 ## Quality checklist (per page)
 
-- [ ] Body starts with `**Term**` + definition, under a `verification:`-only frontmatter block (`scripts/verify_check.py --sync` writes it; never hand-edit its derived fields)
+- [ ] Body starts with `**Term**` + definition, under a frontmatter block holding only `aliases:` (if a variant spelling links it) and `verification:` (`scripts/verify_check.py --sync` writes it; never hand-edit its derived fields)
+- [ ] Each alias also mapped in `scripts/concept_aliases.json`, and the generated exam pages re-rendered
 - [ ] Definition is 1–2 precise sentences with relevant `[[wiki-links]]`
 - [ ] Defining formula is in a `> $$` block **immediately after** the definition
 - [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; distinct formulas in separate stacked blocks; long lines broken across `\\`
@@ -430,9 +521,11 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Every symbol in the formula is defined (prose/bullet, not crammed `\text{where}`)
 - [ ] Property bullets come **after** the formula, before the examples
 - [ ] 1–3 `> [!example]- … {Example}` callouts, each with a nested `> [!answer]-`
+- [ ] `> [!tip]- How it appears on the exam` and `> [!warning]- Exam traps`, both collapsed (`-`), after the last example, specific to the exams that link the page
+- [ ] Worked numbers recomputed in code, not by eye
 - [ ] Example count scales to concept breadth; examples are actuarial, not generic
 - [ ] Multi-step solutions use `align*`, one `&=` step per line, `$$` on own lines
-- [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; `\$` for money)
+- [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; money as `$\$1{,}000$`)
 - [ ] Image embeds only reference files that exist in `Media/`
 - [ ] `Resources/Books/` page only: written from the extracted document (`docs/resource-pages.md`), cover first, `## Sources` last, `python3 scripts/resource_lint.py` clean
 - [ ] All `[[wiki-links]]` resolve to existing `Concepts/` pages

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:163765e8f0dd94be1286c1164ee8c37118830dcf6e09f68eec918dcba47b2917
+  content_hash: sha256:96bd1a2d3da8fc9226884a71fc0b1d667eca6a9204390ccf5ec91d36931933b8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,17 +28,17 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Enterprise Risk Management Foundations {24–40%}
-> The candidate will understand the [[Foundation|foundations]] of [[ERM]] and be able to apply them to [[Organization|organizations]].
+> The candidate will understand the [[Foundation|foundations]] of [[Enterprise Risk Management|ERM]] and be able to apply them to [[Organization|organizations]].
 >
 > **1. Fundamentals of ERM**
 >
-> 1. Describe the concept of [[ERM]], the [[Driver|drivers]] behind it and the resulting value to [[Organization|organizations]]
+> 1. Describe the concept of [[Enterprise Risk Management|ERM]], the [[Driver|drivers]] behind it and the resulting value to [[Organization|organizations]]
 >
 > **2. The Internal Environment**
 >
 > 1. Recommend an appropriate [[Enterprise Risk|enterprise risk]] management framework for an [[Organization|organization]]
-> 2. Analyze the [[ERM]] roles and [[Responsibility|responsibilities]] of the [[People|people]] within an [[Organization|organization]] and how the different [[Group|groups]] can [[Collaborate|collaborate]] effectively
-> 3. Demonstrate an understanding of [[Governance|governance]] issues, such as [[Agency|agency]], [[Compliance|compliance]] and [[Legal Risk|legal risks]] and the need for [[Audit|audit]] and [[Market Conduct Compliance Activity|market conduct compliance activities]]
+> 2. Analyze the [[Enterprise Risk Management|ERM]] roles and [[Responsibility|responsibilities]] of the [[People|people]] within an [[Organization|organization]] and how the different [[Group|groups]] can [[Collaborate|collaborate]] effectively
+> 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as [[Agency|agency]], [[Compliance|compliance]] and [[Legal Risk|legal risks]] and the need for [[Audit|audit]] and [[Market Conduct Compliance Activity|market conduct compliance activities]]
 > 4. Evaluate the elements and [[Structure|structure]] of a [[Successful Risk|successful risk]] management function
 >
 > **3. The External Environment**

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:549d9656033abb76f40ca2f714811cb3368a8c18bc2cd5fc64a489d086a9cc63
+  content_hash: sha256:814c980deea4ac0864f0da17fdab389795278a6ee02f41452b75eb93a64fa2ea
   sources: []
   open_findings: 0
   open_critical: 0
@@ -41,7 +41,7 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > The Candidate will be able to identify the [[Business|business]] problem, how the available [[Data|data]] relates to possible analyses, and use the information to propose an appropriate [[Modeling|modeling]] approach.
 >
 > 1. Assess whether [[Descriptive|descriptive]], [[Predictive|predictive]], and [[Prescriptive Analytics Apply|prescriptive analytics applies]] to a [[Business|business]] problem.
-> 2. Describe the characteristics of [[Predictive Modeling|predictive modeling]] problems.
+> 2. Describe the characteristics of [[Predictive Analytics|predictive modeling]] problems.
 > 3. Explain the concepts of [[Bias|bias]], [[Variance|variance]], model [[Complexity|complexity]], and the [[Bias-Variance Trade-Off|bias-variance trade-off]].
 > 4. Translate a [[Vague Question|vague question]] into one that can be analyzed with [[Statistics|statistics]] and [[Predictive Analytics|predictive analytics]] to solve a [[Business|business]] problem.
 > 5. Consider factors such as available [[Data|data]] and [[Technology|technology]], significance of [[Business|business]] impact, and implementation [[Challenge|challenges]] to define the problem.
@@ -51,14 +51,14 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > The Candidate will be able to work with various [[Data|data]] types, understand [[Principle|principles]] of [[Data|data]] design, and construct a [[Variety|variety]] of [[Common Visualization|common visualizations]] for [[Exploring Data|exploring data]].
 >
 > 1. Identify [[Structured|structured]] and [[Unstructured Data|unstructured data]] types.
-> 2. Identify the types of [[Variable|variables]] and terminology used in [[Predictive Modeling|predictive modeling]].
+> 2. Identify the types of [[Variable|variables]] and terminology used in [[Predictive Analytics|predictive modeling]].
 > 3. Evaluate [[Effective Data|effective data]] design with [[Respect|respect]] to time [[Frame|frame]], [[Sampling|sampling]], and [[Granularity|granularity]].
 > 4. Apply the key [[Principle|principles]] of constructing [[Graph|graphs]].
 > 5. Apply [[Univariate Data Exploration|univariate data exploration]] techniques.
 > 6. Apply [[Bivariate Data Exploration|bivariate data exploration]] techniques.
 
 > [!example]- Data Transformations and Unsupervised Learning Techniques {10–20%}
-> The Candidate will be able to [[Transform Data|transform data]], including application of [[Unsupervised Learning|unsupervised learning]] techniques, to improve [[Predictive Modeling|predictive modeling]] outcomes.
+> The Candidate will be able to [[Transform Data|transform data]], including application of [[Unsupervised Learning|unsupervised learning]] techniques, to improve [[Predictive Analytics|predictive modeling]] outcomes.
 >
 > 1. Create [[Feature|features]] from [[Existing Data|existing data]] that may [[Add|add]] value.
 > 2. Apply [[Principal Component|principal components]] analysis to [[Transform Data|transform data]].
@@ -70,7 +70,7 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > 1. Select and validate a [[Generalized Linear Model|GLM]] as appropriate for a [[Business|business]] problem.
 > 2. Apply [[Offset|offsets]] and [[Weight|weights]] as appropriate.
 > 3. Interpret model [[Coefficient|coefficients]], including interaction terms.
-> 4. Select appropriate [[Hyperparameter|hyperparameters]] for [[Regularized Regression|regularized regression]].
+> 4. Select appropriate [[Hyperparameter|hyperparameters]] for [[Regularization|regularized regression]].
 
 > [!example]- Tree-Based Models {10–20%}
 > The Candidate will be able to apply [[Tree-Based|tree-based]] models as appropriate for a [[Business|business]] problem.

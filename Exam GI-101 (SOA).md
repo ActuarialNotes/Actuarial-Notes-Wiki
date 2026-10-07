@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b7d7018ca26bc80ed887a432cfadb087ba5dab61c2daaf5f459adabcdf758ae2
+  content_hash: sha256:154dd323fccf1bd1f8776d20e8b7ffb60116a9e3188b8608e777877025e4d6d5
   sources: []
   open_findings: 0
   open_critical: 0
@@ -57,9 +57,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will demonstrate the [[Ability|ability]] to prepare [[Claim|claims]] and [[Exposure Data|exposure data]] for general [[Insurance|insurance]] actuarial work.
 >
 > 1. Create [[Development Triangle|development triangles]] of [[Claim|claims]] and [[Count|counts]] from detailed [[Claim Transaction Data|claim transaction data]]
-> 2. Describe the different types of [[Exposure|exposures]] used for conducting actuarial work
+> 2. Describe the different types of [[Exposure Base|exposures]] used for conducting actuarial work
 > 3. Calculate [[Written|written]], [[Earned|earned]], [[In-Force|in-force]] and [[Unearned Premium|unearned premiums]] for [[Portfolio|portfolios]] of [[Policy|policies]] with various [[Policy|policy]] terms and [[Earnings Pattern|earnings patterns]]
-> 4. Adjust historical [[Earned Premium|earned premiums]] to current [[Rate Level|rate levels]]
+> 4. Adjust historical [[Earned Premium|earned premiums]] to current [[On-Leveling|rate levels]]
 > 5. Understand types of changes [[Influencing Average Premium Level|influencing average premium levels]]
 > 6. Describe adjustments needed to estimate [[Ultimate Premium|ultimate premiums]]
 >
@@ -102,13 +102,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >     - Chapter 23 (excluding section 23.4)
 
 > [!example]- Trending {6–16%}
-> The candidate will understand [[Trending|trending]] procedures as applied to [[Ultimate Claim|ultimate claims]], [[Exposure|exposures]] and [[Insurance Premium|premiums]].
+> The candidate will understand [[Trending|trending]] procedures as applied to [[Ultimate Claim|ultimate claims]], [[Exposure Base|exposures]] and [[Insurance Premium|premiums]].
 >
 > 1. Identify and describe the [[Influence|influences]] of [[Portfolio|portfolio]] changes on [[Claim Frequency|claim frequency]] and [[Severity|severity]]
 > 2. Identify the time [[Period|periods]] associated with [[Trending|trending]] procedures
-> 3. Analyze and evaluate [[Trend|trend]] for [[Claim|claims]] (including [[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure|exposures]] (including [[Inflation-Sensitive Exposure|inflation-sensitive exposures]] and [[Insurance Premium|premiums]])
-> 4. Choose [[Trend Rate|trend rates]] for [[Claim|claims]] ([[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure|exposures]]
-> 5. Calculate [[Trend|trend]] factors for [[Claim|claims]] and [[Exposure|exposures]]
+> 3. Analyze and evaluate [[Trend|trend]] for [[Claim|claims]] (including [[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]] (including [[Inflation-Sensitive Exposure|inflation-sensitive exposures]] and [[Insurance Premium|premiums]])
+> 4. Choose [[Trend Rate|trend rates]] for [[Claim|claims]] ([[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]]
+> 5. Calculate [[Trend|trend]] factors for [[Claim|claims]] and [[Exposure Base|exposures]]
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022 (5a-e)

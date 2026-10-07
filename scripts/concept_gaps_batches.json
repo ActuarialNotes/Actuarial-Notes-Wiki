@@ -1,0 +1,1951 @@
+{
+ "_comment": "Batch membership pinned by scripts/find_concept_gaps.py --pin. Edit by hand to reorder or move concepts between batches.",
+ "batches": [
+  {
+   "n": 1,
+   "tier": 1,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "astam-1|Reserving and Pricing for Short-Term Insurance Coverages; astam-1|Construction and Selection of Parametric Models"
+   ],
+   "concepts": [
+    "Convolution",
+    "Estimator",
+    "Delta",
+    "Average Rate",
+    "Outstanding Claim",
+    "Insurance Coverage",
+    "Short-Term Insurance",
+    "Short-Term Insurance Coverage",
+    "Liability Insurance",
+    "Rate Level",
+    "Exposure",
+    "Insurance Company",
+    "Insurable Interest"
+   ]
+  },
+  {
+   "n": 2,
+   "tier": 1,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Embedded Options in Life Insurance and Annuity Products; altam-1|Pension Plans and Retirement Benefits"
+   ],
+   "concepts": [
+    "Black-Schole",
+    "Payoff",
+    "Accrued Liability",
+    "Normal Cost",
+    "Health Insurance",
+    "Life Insurance",
+    "Universal Life Insurance",
+    "Validation",
+    "Reinsurance Transaction",
+    "Annuity Contract"
+   ]
+  },
+  {
+   "n": 3,
+   "tier": 1,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-201u|U.S. Financial Reporting Requirements; fam-1|Premium and Policy Value Calculation for Long-Term Insurance Coverages"
+   ],
+   "concepts": [
+    "Equivalence Principle",
+    "Fractional Age",
+    "Reserve",
+    "Valuation",
+    "Life Insurance Company",
+    "Valuation Principle"
+   ]
+  },
+  {
+   "n": 4,
+   "tier": 1,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Applications and Risks of Derivatives; inv-201|Valuation of Derivatives"
+   ],
+   "concepts": [
+    "Pension Plan",
+    "Mortality",
+    "Volatility",
+    "Hedging",
+    "Delta Hedging",
+    "Risk Neutral",
+    "Put-Call Parity"
+   ]
+  },
+  {
+   "n": 5,
+   "tier": 1,
+   "topic": [
+    "Health",
+    "gh-101|Underwriting and Funding; gh-201u|Reserving"
+   ],
+   "concepts": [
+    "Retiree",
+    "Underwriting",
+    "Funding",
+    "Best Practice",
+    "Claim Reserve"
+   ]
+  },
+  {
+   "n": 6,
+   "tier": 1,
+   "topic": [
+    "Retirement",
+    "ret-101|Benefit Plan Structure, Features and Investments; ret-201|Accounting Standards"
+   ],
+   "concepts": [
+    "Retirement Plan",
+    "Benefit Plan",
+    "Plan Sponsor",
+    "Plan Design"
+   ]
+  },
+  {
+   "n": 7,
+   "tier": 1,
+   "topic": [
+    "Statistics and predictive analytics",
+    "atpa-1|Model Explainability and Communication; atpa-1|Working with Data"
+   ],
+   "concepts": [
+    "Governance",
+    "Predictive Modeling",
+    "Unstructured Data",
+    "Hyperparameter",
+    "Classification Tree",
+    "Regularized Regression"
+   ]
+  },
+  {
+   "n": 8,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "astam-1|Aggregate Models; astam-1|Construction and Selection of Parametric Models"
+   ],
+   "concepts": [
+    "Continuous Distribution",
+    "Claims Distribution",
+    "Discrete Severity Distribution",
+    "Discretized Version",
+    "Local Moment Matching",
+    "Recursive Formulas",
+    "Bayesian Estimation",
+    "Bayesian Information Criterion",
+    "Non-Normal Confidence Interval",
+    "Schwarz Bayesian Criterion"
+   ]
+  },
+  {
+   "n": 9,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "astam-1|Reserving and Pricing for Short-Term Insurance Coverages; astam-1|Credibility"
+   ],
+   "concepts": [
+    "Policy Limit",
+    "Loss Reinsurance",
+    "Stop Loss Reinsurance",
+    "Bühlmann",
+    "Empirical Bayesian Estimation",
+    "Greatest Accuracy",
+    "Projected Loss",
+    "Balancing Back",
+    "Outstanding Claims Reserve",
+    "Overdispersed Poisson"
+   ]
+  },
+  {
+   "n": 10,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "astam-1|Severity Models; disc-ia|3. Common Policy Concepts"
+   ],
+   "concepts": [
+    "Risk Classification Differential",
+    "Tail Risk",
+    "Mean Excess",
+    "New Distribution",
+    "Generalized Extreme",
+    "Generalized Pareto Distribution",
+    "Extreme Value Distribution",
+    "Splicing",
+    "Insurance to Value",
+    "Replacement Cost"
+   ]
+  },
+  {
+   "n": 11,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-ia|4. Personal Auto Policy; disc-ia|5. Homeowners Property Coverage"
+   ],
+   "concepts": [
+    "Personal Auto Policy",
+    "Auto Physical Damage Coverage",
+    "Endorsement",
+    "Homeowners Policy",
+    "Causes of Loss",
+    "Building and Personal Property Coverage Form",
+    "Coverage Analysis",
+    "Commercial General Liability",
+    "Business Income Coverage",
+    "Umbrella Liability"
+   ]
+  },
+  {
+   "n": 12,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-rm|5. Insurance as a Risk Management Technique; disc-rm|11. Underwriting Other Types of Coverage"
+   ],
+   "concepts": [
+    "Umbrella Liability Insurance",
+    "Risk Control",
+    "Claims Handling",
+    "Underwriting Cycle",
+    "Risk Identification",
+    "Loss Exposure",
+    "Liability Loss Exposure",
+    "Property Loss Exposure",
+    "Insurance Operations",
+    "Insurance Producer"
+   ]
+  },
+  {
+   "n": 13,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "fam-1|Parametric Estimation; fam-1|Pricing and Reserving for Short-Term Insurance Coverages"
+   ],
+   "concepts": [
+    "Censored Data",
+    "Frequency Distribution",
+    "Individual Data",
+    "Grouped Data",
+    "Adjusting Premium",
+    "Contingencies Loading",
+    "Ratemaking Data",
+    "Individual Risk",
+    "Shape Parameter",
+    "Desirable Property"
+   ]
+  },
+  {
+   "n": 14,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "fam-1|Short-Term Insurance and Reinsurance Coverages; fam-1|Severity, Frequency, and Aggregate Models"
+   ],
+   "concepts": [
+    "Log-Normal",
+    "Stop-Loss Insurance",
+    "Reinsurance Coverage",
+    "Reinsurer",
+    "Claim Amounts Paid",
+    "Unpaid Unallocated Loss Adjustment Expense",
+    "Future Cost",
+    "Exposure Data",
+    "Ultimate Claim",
+    "Ultimate Value"
+   ]
+  },
+  {
+   "n": 15,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-101|Projecting Ultimate Claims; gi-101|Trending"
+   ],
+   "concepts": [
+    "Large Claim",
+    "Claim Settlement",
+    "Investigative Testing",
+    "Berquist-Sherman Data",
+    "Claim Frequency",
+    "Trend Rate",
+    "Trending",
+    "Credit Rating Agency",
+    "Claim Liability",
+    "Insurance Liability"
+   ]
+  },
+  {
+   "n": 16,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-201|Financial Reporting; gi-201|Regulatory Environment"
+   ],
+   "concepts": [
+    "Financial Instrument",
+    "Reporting Standard",
+    "Financial Reporting Standard",
+    "Insurance-reinsurance",
+    "Automobile Insurance",
+    "Credit Score",
+    "Regulatory Environment",
+    "Catastrophe Risk Load",
+    "Development Pattern",
+    "Excess Limit"
+   ]
+  },
+  {
+   "n": 17,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-301|Specialized Ratemaking Topics; gi-301|Reinsurance"
+   ],
+   "concepts": [
+    "Layer",
+    "Premium Liability",
+    "Reinsurance Contract",
+    "Reinstatement Premium",
+    "Retrospectively Rated Policy",
+    "Claims-Made Policy",
+    "Deductible Option",
+    "Premium Asset",
+    "Insurer Financial Health",
+    "Annual Statement"
+   ]
+  },
+  {
+   "n": 18,
+   "tier": 2,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-302|U.S. General Insurance Products and Coverages"
+   ],
+   "concepts": [
+    "Property Insurance",
+    "Loss Payment",
+    "Professional Liability",
+    "Commercial Property Insurance",
+    "Policy Provisions",
+    "Terrorism"
+   ]
+  },
+  {
+   "n": 19,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Embedded Options in Life Insurance and Annuity Products; inv-101|Portfolio Construction, Management, and Assessment"
+   ],
+   "concepts": [
+    "Guaranteed Minimum Death Benefit",
+    "Options Embedded",
+    "Rebalancing",
+    "Discrete-Time Rebalancing",
+    "Equity-Linked Life Insurance Cash Flow",
+    "Equity-Linked Life Insurance Guarantee",
+    "Guaranteed Minimum Accumulation-maturity Benefit",
+    "Guaranteed Minimum Income Benefit",
+    "Guaranteed Minimum Maturity Benefit",
+    "Guaranteed Minimum Withdrawal Benefit"
+   ]
+  },
+  {
+   "n": 20,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Pension Plans and Retirement Benefits; altam-1|Joint Life Insurance and Annuities"
+   ],
+   "concepts": [
+    "Replicating Portfolio",
+    "Future Lifetime",
+    "Joint-Life Mortality",
+    "Joint Live",
+    "Time-To-Status-Failure Random Variable",
+    "Retirement Benefit",
+    "Benefits Payable",
+    "DB Plan",
+    "Early Exit",
+    "Accrued Benefit"
+   ]
+  },
+  {
+   "n": 21,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Pension Plans and Retirement Benefits; cp-321|Retiree Group Benefits"
+   ],
+   "concepts": [
+    "Age Retirement",
+    "Career Average Earning",
+    "Career Average Revalued Earning",
+    "Plan Participant",
+    "DC Plan Participant",
+    "Final Average Salary",
+    "Pension Plan Valuation",
+    "Projected Unit Credit",
+    "Required Contribution",
+    "Required Contribution Rate"
+   ]
+  },
+  {
+   "n": 22,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Premium and Policy Valuation for Long-Term State-Dependent Coverages; altam-1|Pension Plans and Retirement Benefits"
+   ],
+   "concepts": [
+    "Salary Scale",
+    "Service Table",
+    "Target Replacement",
+    "Traditional Unit Credit",
+    "Policy Value",
+    "Long-Term Health Insurance",
+    "Single Life",
+    "State-Dependent Insurance",
+    "State-Dependent Life Insurance",
+    "State-Dependent Cash Flow"
+   ]
+  },
+  {
+   "n": 23,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Profit Analysis; altam-1|Premium and Policy Valuation for Long-Term State-Dependent Coverages"
+   ],
+   "concepts": [
+    "Thiele's Differential Equation",
+    "Three-Term Woolhouse Approximation",
+    "Profit Margin",
+    "Internal Rate",
+    "Profit Testing",
+    "Discounted Payback Period",
+    "Emerging Surplus",
+    "Term Life",
+    "Long-Term Life",
+    "Profit Signature"
+   ]
+  },
+  {
+   "n": 24,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Survival Models for Contingent Cash Flows; altam-1|Profit Analysis"
+   ],
+   "concepts": [
+    "Profit Vector",
+    "Markov Multiple",
+    "Continuous Time Markov",
+    "Multiple Decrement",
+    "Transition Intensity",
+    "Approximate Confidence Interval",
+    "Asymptotic Property",
+    "Continuing Care Retirement Community",
+    "Continuous Time Markov Multiple",
+    "Deconstruct Multiple Decrement Table"
+   ]
+  },
+  {
+   "n": 25,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Survival Models for Contingent Cash Flows"
+   ],
+   "concepts": [
+    "Discrete Time Transition Probability",
+    "Heterogeneity",
+    "Individual-joint Life Mortality",
+    "Kolmogorov's Forward Equation",
+    "Long-Term Health Insurance Benefit",
+    "Long-Term Insurance Benefit",
+    "Mortality Curve",
+    "Mortality-morbidity",
+    "Piecewise Constant Transition Intensity",
+    "Single Decrement"
+   ]
+  },
+  {
+   "n": 26,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "altam-1|Universal Life Insurance; altam-1|Survival Models for Contingent Cash Flows"
+   ],
+   "concepts": [
+    "State-Contingent Life",
+    "State-Dependent Probability",
+    "Account Value",
+    "Deterministic Profit Testing",
+    "Cashflow",
+    "Lapse",
+    "No-Lapse Guarantee",
+    "Universal Life Contract",
+    "Universal Life Policy",
+    "Insurance Product"
+   ]
+  },
+  {
+   "n": 27,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "cp-341|Types of Reinsurance Arrangements and Methods; cp-341|Key Accounting and Regulatory Considerations"
+   ],
+   "concepts": [
+    "Regulatory Framework",
+    "US Regulatory",
+    "Reinsurance Arrangement",
+    "Reinsurance Treaty",
+    "Insolvency",
+    "Yearly Renewable Term",
+    "Funds Withheld Arrangement",
+    "Modified Coinsurance",
+    "Contribution Pension Plan",
+    "Retirement Financial Security"
+   ]
+  },
+  {
+   "n": 28,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "fam-1|Mortality Models; fam-1|Premium and Policy Value Calculation for Long-Term Insurance Coverages"
+   ],
+   "concepts": [
+    "Individual Live",
+    "Complete Future Lifetime Random Variable",
+    "Mortality Probability",
+    "Parametric Survival",
+    "Future Lifetime Distribution",
+    "Non-Parametric Mortality",
+    "Net Premium",
+    "Gross Premium",
+    "Age Rating",
+    "Constant Multiple"
+   ]
+  },
+  {
+   "n": 29,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "fam-1|Premium and Policy Value Calculation for Long-Term Insurance Coverages; fam-1|Present Value Random Variables for Long-Term Insurance Coverages"
+   ],
+   "concepts": [
+    "Long-Term Insurance Coverage",
+    "Single Live",
+    "Constant Addition",
+    "Endowment",
+    "Endowment Insurance",
+    "Future Loss Random Variable",
+    "Modelling Extra Risk",
+    "Modified Net Premium Policy Value",
+    "Policy Value Calculation Process",
+    "Portfolio Percentile Principle"
+   ]
+  },
+  {
+   "n": 30,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "fam-1|Present Value Random Variables for Long-Term Insurance Coverages; ila-201i|Advanced Product Management"
+   ],
+   "concepts": [
+    "Whole Life Annuity",
+    "Annuity Payment",
+    "Standard Actuarial Notation",
+    "Claims Acceleration Approximation",
+    "Continuous Payment Frequency",
+    "Past Experience",
+    "New Business",
+    "Individual Life",
+    "Inforce",
+    "Active In-Force"
+   ]
+  },
+  {
+   "n": 31,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-201i|Advanced Product Management; ila-201i|Capital Management"
+   ],
+   "concepts": [
+    "Economic Value Creation",
+    "Fundamental Strategy",
+    "Insurance Enterprise",
+    "Policyholder Dividend",
+    "Regulatory Capital",
+    "Financial Capital",
+    "Valuation Standard",
+    "Life Insurance Risk",
+    "Longevity",
+    "Longevity Risk"
+   ]
+  },
+  {
+   "n": 32,
+   "tier": 2,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-201u|U.S. Financial Reporting Requirements; ila-201i|Management and Evaluation of Life Insurance Risks"
+   ],
+   "concepts": [
+    "Own Risk Solvency Assessment",
+    "US GAAP",
+    "Annuity Product",
+    "Individual Life Insurance",
+    "Principles-Based Reserve",
+    "US Statutory"
+   ]
+  },
+  {
+   "n": 33,
+   "tier": 2,
+   "topic": [
+    "Financial economics and investments",
+    "fam-1|Option Pricing Fundamentals; cp-351|Measuring Risks from Assets and Liabilities"
+   ],
+   "concepts": [
+    "Jurisdiction",
+    "Market Risk",
+    "Simple European-style Derivative",
+    "Single Non-Dividend Paying Asset",
+    "Option Pricing",
+    "Binomial Option Pricing",
+    "Black-Scholes Formula",
+    "Delta Hedge",
+    "Simple Option",
+    "Investment Portfolio"
+   ]
+  },
+  {
+   "n": 34,
+   "tier": 2,
+   "topic": [
+    "Financial economics and investments",
+    "inv-101|Portfolio Construction, Management, and Assessment; inv-201|Applications and Risks of Derivatives"
+   ],
+   "concepts": [
+    "Real Estate",
+    "Private Equity",
+    "Default Risk",
+    "Target Return",
+    "Asset Portfolio",
+    "Performance Measurement",
+    "Active Strategy",
+    "Indexing",
+    "Asset Allocation",
+    "Embedded Option",
+    "Counterparty",
+    "Variable Annuity",
+    "Asset Pricing"
+   ]
+  },
+  {
+   "n": 35,
+   "tier": 2,
+   "topic": [
+    "Health",
+    "cp-321|Reserving; cp-321|Asset Adequacy"
+   ],
+   "concepts": [
+    "Liability Cash Flow",
+    "Asset Adequacy",
+    "Investment Income",
+    "Required Capital",
+    "Disability Income",
+    "Long Term Care",
+    "Unearned Premium Reserve",
+    "Claim Reserves Held",
+    "Long Duration Health Contract",
+    "Post-Employment Benefit"
+   ]
+  },
+  {
+   "n": 36,
+   "tier": 2,
+   "topic": [
+    "Health",
+    "gh-101|Manual Rates; cp-321|Retiree Group Benefits"
+   ],
+   "concepts": [
+    "Retiree Health",
+    "Employer Liability",
+    "Retiree Group Benefit",
+    "Post-Retirement",
+    "Base Rate",
+    "Manual Rate",
+    "Data Source",
+    "Rating Manual",
+    "Claim Data",
+    "Contracts Described"
+   ]
+  },
+  {
+   "n": 37,
+   "tier": 2,
+   "topic": [
+    "Health",
+    "gh-101|Underwriting and Funding; gh-201c|Financial Statements"
+   ],
+   "concepts": [
+    "Critical Metrics",
+    "Group Life",
+    "Risk Assessment",
+    "Eligibility Requirement",
+    "Total Risk",
+    "Funding Mechanism",
+    "Funding Case-Specific Risk",
+    "Long Duration Contract",
+    "Health Insurer",
+    "Disability Benefit"
+   ]
+  },
+  {
+   "n": 38,
+   "tier": 2,
+   "topic": [
+    "Health",
+    "gh-201u|Flow of Funds; gh-201u|Financial Statements"
+   ],
+   "concepts": [
+    "Government Programs Providing Health",
+    "Project Financial",
+    "Capital Need",
+    "Insurance Company Financial Statement",
+    "GAAP Statement",
+    "Health Care System",
+    "Funds Flow",
+    "Market Power",
+    "Physicians Play",
+    "Provider Systems Compete"
+   ]
+  },
+  {
+   "n": 39,
+   "tier": 2,
+   "topic": [
+    "Health",
+    "gh-201u|Regulation; gh-201u|Reserving"
+   ],
+   "concepts": [
+    "Filing",
+    "United State",
+    "Applicable Law",
+    "Policy Making Process",
+    "Data Resource",
+    "Traditional Valuation",
+    "Health Insurance Contract",
+    "Medicare",
+    "Medicaid",
+    "Utilization",
+    "Reimbursement"
+   ]
+  },
+  {
+   "n": 40,
+   "tier": 2,
+   "topic": [
+    "ERM and corporate finance",
+    "cfe-101|Embedding ERM into Decision-Making; cp-311|Strategic Budgeting, Forecasting, and Value Measures"
+   ],
+   "concepts": [
+    "Capital Requirement",
+    "Economic Capital",
+    "Third Party",
+    "Decision-Making Process",
+    "Risk Limit",
+    "Legal Risk",
+    "Risk Diversification",
+    "Financial Performance",
+    "Porter's Five Force",
+    "Forecasting",
+    "Strategic Budgeting",
+    "Organization's Ability"
+   ]
+  },
+  {
+   "n": 41,
+   "tier": 2,
+   "topic": [
+    "Retirement",
+    "ret-101|Benefit Plan Structure, Features and Investments; ret-101|Participant Risks"
+   ],
+   "concepts": [
+    "Investment Policy",
+    "Savings Plan",
+    "Plan Investment",
+    "Retirement Plan Investment",
+    "Plan Feature",
+    "Retirement Income",
+    "Sponsored Plan",
+    "Investment Option",
+    "Sponsor Risk",
+    "Plan Merger"
+   ]
+  },
+  {
+   "n": 42,
+   "tier": 2,
+   "topic": [
+    "Retirement",
+    "ret-201|Actuarial Assumptions; ret-301|Assumptions"
+   ],
+   "concepts": [
+    "Spin-Off",
+    "Retirement Income Plan",
+    "Single Employer",
+    "Financial Economics",
+    "Multi-Employer",
+    "Asset Liability",
+    "Investment Risk",
+    "Canadian Pension Legislation",
+    "Regulatory Policy",
+    "Tax Legislation"
+   ]
+  },
+  {
+   "n": 43,
+   "tier": 2,
+   "topic": [
+    "Retirement",
+    "ret-301|Methods"
+   ],
+   "concepts": [
+    "Wind-Up",
+    "Asset Valuation",
+    "Ongoing Plan",
+    "Plan Termination",
+    "Termination-wind-up"
+   ]
+  },
+  {
+   "n": 44,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "atpa-1|Advanced Predictive Analytics Models; atpa-1|Model Explainability and Communication"
+   ],
+   "concepts": [
+    "Explainability",
+    "Analytical Effort",
+    "Computational Efficiency",
+    "Proxy Discrimination",
+    "Stacking",
+    "Table Importability",
+    "Too Many Variable",
+    "Train-test-validate Set",
+    "Interpretability",
+    "Shapley Value"
+   ]
+  },
+  {
+   "n": 45,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "atpa-1|Model Explainability and Communication"
+   ],
+   "concepts": [
+    "Algorithmic Transparency",
+    "Common Language",
+    "Decomposability",
+    "Dependence Plot",
+    "Effective Manner While",
+    "Gain Chart",
+    "Individual Conditional Expectation Plot",
+    "Post-Hoc Interpretability",
+    "Recommended Analytics",
+    "Straightforward Manner"
+   ]
+  },
+  {
+   "n": 46,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "atpa-1|Working with Data; atpa-1|Model Explainability and Communication"
+   ],
+   "concepts": [
+    "Variable Importance Plot",
+    "Data Set",
+    "Final Product",
+    "Biases Introduced",
+    "Data Collection Practice",
+    "Data Lake",
+    "Data Pipeline",
+    "Data Structure",
+    "Data Warehouse",
+    "File Structure"
+   ]
+  },
+  {
+   "n": 47,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "atpa-1|Working with Data; pa-1|Data Exploration and Visualization"
+   ],
+   "concepts": [
+    "Handle Missing Data",
+    "Imputation",
+    "Internal Consistency",
+    "Otherwise Modify Data",
+    "Preparing Data",
+    "Relational Database",
+    "Data Analytics",
+    "External Data",
+    "Bivariate Data Exploration",
+    "Common Visualization"
+   ]
+  },
+  {
+   "n": 48,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "pa-1|Data Exploration and Visualization; srm-1|Basics of Statistical Learning"
+   ],
+   "concepts": [
+    "Effective Data",
+    "Exploring Data",
+    "Granularity",
+    "Univariate Data Exploration",
+    "Existing Data",
+    "Bias-Variance Trade-Off",
+    "Vague Question",
+    "K-Fold Cross-Validation",
+    "Leave-one-out Cross-Validation",
+    "Resampling"
+   ]
+  },
+  {
+   "n": 49,
+   "tier": 2,
+   "topic": [
+    "Statistics and predictive analytics",
+    "srm-1|Linear Models; srm-1|Decision Trees"
+   ],
+   "concepts": [
+    "Training Data",
+    "Overfitting",
+    "Regression Tree",
+    "Predicted Value",
+    "Diagnostic Test",
+    "Ridge Regression",
+    "Corresponding Link",
+    "Lasso",
+    "Autoregressive Conditionally Heteroskedastic",
+    "Regression-Based Time Series",
+    "Stochastic Time Series Process"
+   ]
+  },
+  {
+   "n": 50,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-ia|12. Specialty Coverages Part 1; disc-ia|13. Specialty Coverages Part 2"
+   ],
+   "concepts": [
+    "Professional Liability Insurance",
+    "Directors and Officers Liability Insurance",
+    "Employment Practices Liability Insurance",
+    "Environmental Insurance",
+    "Fiduciary Liability Insurance",
+    "International Insurance",
+    "Aircraft Insurance",
+    "Cyber Insurance",
+    "Terrorism Risk Insurance Program",
+    "Intentional Tort"
+   ]
+  },
+  {
+   "n": 51,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-ia|3. Common Policy Concepts; disc-ia|14. Insurance Law Part 1"
+   ],
+   "concepts": [
+    "Negligence",
+    "Premises Liability",
+    "Products Liability",
+    "Strict Liability",
+    "Insurable Risk",
+    "Compensatory Damages",
+    "Loss Settlement Provisions",
+    "Actual Cash Value",
+    "Medical Payments Coverage",
+    "Health Insurance Plans"
+   ]
+  },
+  {
+   "n": 52,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-rm|10. Underwriting Business Income and Commercial Liability Coverage; disc-ia|9. Commercial Property Insurance Part 2"
+   ],
+   "concepts": [
+    "Term Life Insurance",
+    "Blanket Insurance",
+    "Common Policy Conditions",
+    "Period of Restoration",
+    "Commercial Crime Insurance",
+    "Premises and Operations Liability",
+    "Products and Completed Operations Liability",
+    "Business Auto Coverage",
+    "SWOT Analysis",
+    "Business Continuity Management"
+   ]
+  },
+  {
+   "n": 53,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "disc-rm|6. Overview of Insurance Operations; disc-rm|7. Insurance Marketing and Distribution"
+   ],
+   "concepts": [
+    "Organizational Resilience",
+    "Insurer Goals and Constraints",
+    "Insurtech",
+    "Types of Insurers",
+    "Insurance Distribution Systems",
+    "Insurance Marketing",
+    "Underwriting Policy",
+    "Underwriting Authority",
+    "Conduct Investigative Testing",
+    "Funding Requirement"
+   ]
+  },
+  {
+   "n": 54,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-101|Introduction and Key Considerations; gi-101|Preparing Claims and Exposure Data for Actuarial Work"
+   ],
+   "concepts": [
+    "Real-Life Scenario",
+    "Self-Insurer",
+    "Professional Judgment",
+    "Actuary's Responsibility",
+    "Professionalism Requirement",
+    "Qualitative Information Required",
+    "Earnings Pattern",
+    "Ultimate Premium",
+    "Claim Transaction Data",
+    "Influencing Average Premium Level"
+   ]
+  },
+  {
+   "n": 55,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-101|Projecting Ultimate Claims; gi-101|Ratemaking"
+   ],
+   "concepts": [
+    "Data Triangle",
+    "Required Data",
+    "Case Estimate",
+    "Development-Based Frequency-Severity",
+    "Generalized Cape Cod",
+    "Projected Ultimate Value",
+    "Varying Circumstance",
+    "Contingency Margin",
+    "Expenses Required",
+    "Expense Trending"
+   ]
+  },
+  {
+   "n": 56,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-201|General Insurance Company Operations; gi-201|Financial Economics"
+   ],
+   "concepts": [
+    "Fundamental Ratemaking",
+    "Inflation-Sensitive Exposure",
+    "Behavioral Finance",
+    "Asset Liability Management Strategy",
+    "Underwriting Profit Margin",
+    "EU Solvency II Capital Requirement",
+    "Claim Handling Process",
+    "Insurer Risk",
+    "International Business",
+    "Peril"
+   ]
+  },
+  {
+   "n": 57,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-201|Legal Environment; gi-201|General Insurance Company Operations"
+   ],
+   "concepts": [
+    "Pricing General Insurance Policy",
+    "Risk Mitigation Instrument",
+    "Insurance Law",
+    "Social Inflation",
+    "International Legal Environment",
+    "Legal Cases-issues Included",
+    "Mass Torts-class Action Suit",
+    "Syllabus Resource",
+    "Tort Law Environment",
+    "Tort Trend"
+   ]
+  },
+  {
+   "n": 58,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-201|Regulatory Environment; gi-201|Responsibilities of the Actuary"
+   ],
+   "concepts": [
+    "Transnational Tort Litigation",
+    "Collective Insurance Industry Organization",
+    "Insolvency Regulation",
+    "Insurance Programs Controlled",
+    "Telematics",
+    "Insurance Actuarial Opinion",
+    "International Actuarial Association",
+    "Professionalism Principle",
+    "Professionalism Required",
+    "Catastrophe Modeling Output"
+   ]
+  },
+  {
+   "n": 59,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-301|Stochastic Reserving; gi-301|Reinsurance"
+   ],
+   "concepts": [
+    "Property Catastrophe Risk Load",
+    "Insurance Premium Liability",
+    "Pricing Property Catastrophe Cover",
+    "Risk Transfer Testing",
+    "Claims-Made Contract",
+    "Increased Limit Option",
+    "Chain Ladder Estimator",
+    "Parametric Estimator",
+    "Reserve Variability",
+    "Stochastic Loss Development"
+   ]
+  },
+  {
+   "n": 60,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-302|U.S. General Insurance Products and Coverages; gi-302|Responsibilities of a U.S. Signing General Insurance Actuary"
+   ],
+   "concepts": [
+    "Applicable Standard",
+    "Signing Actuary",
+    "Signing General Insurance Actuary",
+    "NAIC Annual Statement Pages-schedule",
+    "NAIC RBC",
+    "Statutory Financial Statement",
+    "Cyber Risk",
+    "Premium Basis",
+    "Commercial Auto Insurance",
+    "Employers Liability Insurance"
+   ]
+  },
+  {
+   "n": 61,
+   "tier": 3,
+   "topic": [
+    "Short-term insurance (P&C, general)",
+    "gi-302|U.S. General Insurance Products and Coverages; gi-302|U.S. General Insurance Regulation"
+   ],
+   "concepts": [
+    "Excess Liability",
+    "ISO Commercial Automobile Policy",
+    "ISO Commercial Property",
+    "ISO Homeowner",
+    "ISO Personal Auto Policy",
+    "ISO WC",
+    "Specialty Insurance Coverage",
+    "Surety",
+    "Insurance Department",
+    "Insurance Commissioners' Duty",
+    "Insurance Personnel",
+    "Licensing Requirement",
+    "Regulatory Body"
+   ]
+  },
+  {
+   "n": 62,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "cp-351|Measuring Risks from Assets and Liabilities; cp-351|Objectives of Asset Liability Management"
+   ],
+   "concepts": [
+    "Long-Tail Liability",
+    "Portfolio's Exposure",
+    "Regulatory Capital Adequacy",
+    "Risk Identification Tool",
+    "ALM Failure",
+    "Insurance Contracts Generate Embedded Option",
+    "Lessons Learned",
+    "ALM Risk",
+    "ALM Context",
+    "Asset Allocation Strategy"
+   ]
+  },
+  {
+   "n": 63,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "cp-351|Tools and Strategies to Manage ALM Risks; inv-101|Asset Classes"
+   ],
+   "concepts": [
+    "Extreme ALM Event",
+    "Interest Rate Derivative",
+    "Liability Profile",
+    "Long-Tail Insurance Liability",
+    "Transferring Risk",
+    "Asset Class",
+    "Corporate Bond",
+    "Hedge Fund",
+    "Mortgage-backed Security",
+    "Distinguishing Investment"
+   ]
+  },
+  {
+   "n": 64,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-101|Asset Classes; inv-101|Credit Risk Management"
+   ],
+   "concepts": [
+    "Leveraged Loan",
+    "Private Debt",
+    "Public Equity",
+    "Residential Mortgage",
+    "Structured Credit Product",
+    "Individual Security",
+    "Credit Risk Modeling",
+    "Portfolio Level",
+    "Passive Strategy",
+    "Institutional Investor"
+   ]
+  },
+  {
+   "n": 65,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-101|Portfolio Construction, Management, and Assessment"
+   ],
+   "concepts": [
+    "Fixed Income Investment",
+    "Asset Benchmark",
+    "Enhance Yield",
+    "Fixed Income Portfolio",
+    "Investment Governance Structure",
+    "Investment Policy Statement",
+    "Liquidity",
+    "Optimal Portfolio Allocation",
+    "Performance Attribution Metrics",
+    "Portfolio Management Process"
+   ]
+  },
+  {
+   "n": 66,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Applications and Risks of Derivatives"
+   ],
+   "concepts": [
+    "Operational Failure",
+    "Cross Greek",
+    "Dynamic Hedging",
+    "Fund Performance",
+    "Guarantee Cost",
+    "Hedge Strategy",
+    "Implied Volatility",
+    "Indexed Annuity",
+    "Partially Hedged",
+    "Structured Product"
+   ]
+  },
+  {
+   "n": 67,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Key Types of Derivatives; inv-201|Applications and Risks of Derivatives"
+   ],
+   "concepts": [
+    "Target Volatility Fund",
+    "Variable Annuity Guarantee Rider",
+    "Asian Option",
+    "Butterfly Spread",
+    "Call Spread",
+    "Central Clearing",
+    "Collar",
+    "Daily Margin Variation",
+    "Daily Settle",
+    "Derivative Instrument"
+   ]
+  },
+  {
+   "n": 68,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Key Types of Derivatives; inv-201|Valuation of Derivatives"
+   ],
+   "concepts": [
+    "Derivatives Strategy",
+    "Derivatives Trading",
+    "Exchange Traded",
+    "Exotic Option",
+    "Floor",
+    "Put Spread",
+    "Straddle",
+    "Strangle",
+    "Swaption",
+    "Arrow-Debreau Security"
+   ]
+  },
+  {
+   "n": 69,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Valuation of Derivatives"
+   ],
+   "concepts": [
+    "Black-Scholes-Merton",
+    "Euler-Maruyama Discretization",
+    "Girsanov's Theorem",
+    "Incomplete Market",
+    "Isometry",
+    "Jump-Diffusion",
+    "Local- Volatility",
+    "Martingale",
+    "Modeling Smile",
+    "No-Arbitrage"
+   ]
+  },
+  {
+   "n": 70,
+   "tier": 3,
+   "topic": [
+    "Financial economics and investments",
+    "inv-201|Valuation of Derivatives"
+   ],
+   "concepts": [
+    "Numeraire",
+    "Numerical Discretization",
+    "Observed Price",
+    "Pricing Derivative",
+    "Stochastic Calculus Theory",
+    "Stochastic Differential Equation",
+    "Stochastic Volatility",
+    "Traded Security",
+    "Transition Density",
+    "Volatility Smile"
+   ]
+  },
+  {
+   "n": 71,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cfe-101|Embedding ERM into Decision-Making"
+   ],
+   "concepts": [
+    "Capital Assessment",
+    "Marginal Capital",
+    "Non-Financial Risk",
+    "Return Trade-Off",
+    "Gauge Performance",
+    "Organization's Risk Profile",
+    "Organizational Process",
+    "Risk Capital Once Aggregated",
+    "Risk Once Aggregated",
+    "Risk Strategy"
+   ]
+  },
+  {
+   "n": 72,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cfe-101|Risk Analysis and Evaluation; cfe-101|Enterprise Risk Management Foundations"
+   ],
+   "concepts": [
+    "Risk-capital Strategy",
+    "External Environment",
+    "Market Conduct Compliance Activity",
+    "Emerging Risk",
+    "Risk Accumulation",
+    "Compounding Risk",
+    "Contagion-Related Risk",
+    "Easily Quantifiable",
+    "Monitoring Mechanism",
+    "Risk Aggregation"
+   ]
+  },
+  {
+   "n": 73,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cfe-201|Corporate Finance; cfe-201|Financial Statement Analysis"
+   ],
+   "concepts": [
+    "Optimal Capital Structure",
+    "Capital Budgeting",
+    "Competitive Environment",
+    "Corporate Finance",
+    "Divestiture",
+    "Organization Optimiz",
+    "Evolving Quantitative",
+    "Foreign Exchange Rate",
+    "Financial Metrics",
+    "Organization's Performance"
+   ]
+  },
+  {
+   "n": 74,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cfe-201|Managerial Accounting and Operational Excellence; cp-311|Introduction to Strategic Management"
+   ],
+   "concepts": [
+    "Reported Financial Statement",
+    "Business Process",
+    "Distort Perceived Performance",
+    "Drive Decision Making",
+    "Operational Excellence",
+    "Operational Process",
+    "Uncertain Condition",
+    "Business Environment",
+    "Business-Level Strategy",
+    "Competitive Dynamics"
+   ]
+  },
+  {
+   "n": 75,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cp-311|Introduction to Strategic Management; cp-311|Organizational Behavior"
+   ],
+   "concepts": [
+    "Corporate-Level Strategy",
+    "External-inorganic Growth Strategy",
+    "Market Opportunity",
+    "Organization's Business Strategy",
+    "Cognitive Biase",
+    "Making Suboptimal Individual",
+    "Organizational Behavior Plays",
+    "Organizational Decision-Making",
+    "Sustainable Growth",
+    "Effective Strategic Budgeting"
+   ]
+  },
+  {
+   "n": 76,
+   "tier": 3,
+   "topic": [
+    "ERM and corporate finance",
+    "cp-311|Strategic Budgeting, Forecasting, and Value Measures"
+   ],
+   "concepts": [
+    "Financial Budgeting",
+    "Forecasting Decision Making Process",
+    "Organization's Initiative",
+    "Organization's Strategic",
+    "Tracking Progress"
+   ]
+  },
+  {
+   "n": 77,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "cp-321|Manual Rates; cp-321|Asset Adequacy"
+   ],
+   "concepts": [
+    "Asset Adequacy Standard",
+    "Asset Matching",
+    "Cash Flow Projection",
+    "Mismatched Asset",
+    "IFRS 17, US GAAP",
+    "Data Credibility",
+    "Base Rate Development",
+    "Commission",
+    "Guaranty Association",
+    "Long Term Care Rate Increase"
+   ]
+  },
+  {
+   "n": 78,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "cp-321|Reserving; cp-321|Plan and Product Provisions"
+   ],
+   "concepts": [
+    "Properly Modelling",
+    "Critical Illness",
+    "Medicare Supplement",
+    "Social Security Disability Income Benefit",
+    "Policy Reserve",
+    "Appliable Best Practice",
+    "Non-Claim Reserves Held",
+    "Premium Deficiency Reserve",
+    "Employers Offer Retiree Group Benefit",
+    "Life Plan Design"
+   ]
+  },
+  {
+   "n": 79,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-101|Plan and Product Provisions; cp-321|Retiree Group Benefits"
+   ],
+   "concepts": [
+    "Post-Employment Benefit Plan",
+    "Retiree Health Valuation",
+    "Service Cost",
+    "Employee Benefit Plan",
+    "Employee Benefit Strategy",
+    "Medical Cost Trend Experience",
+    "Plan Provision",
+    "Prescription Drug",
+    "Product Development Process",
+    "Short Duration Contract"
+   ]
+  },
+  {
+   "n": 80,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-101|Underwriting and Funding; gh-201c|Financial Statements"
+   ],
+   "concepts": [
+    "Case-Specific Pricing",
+    "Claim Credibility",
+    "Pooling",
+    "Risk Assessment Mechanism",
+    "Underwriting Situation",
+    "Health Insurance Company",
+    "Taxable Income",
+    "Insurer Financial Statement",
+    "International Financial Reporting Standard",
+    "Canadian Health Care System"
+   ]
+  },
+  {
+   "n": 81,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-201u|Government Programs; gh-201c|Government Programs"
+   ],
+   "concepts": [
+    "Private Group Insurance Plan",
+    "Capital Strain",
+    "Canadian Healthcare System",
+    "Affordable Care Act",
+    "Filing Requirement",
+    "Government Programs Providing Health Benefit",
+    "Medicaid Program Structure",
+    "Medicare Benefit",
+    "Short Duration Group",
+    "Actuarially Adjusted"
+   ]
+  },
+  {
+   "n": 82,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-301|Disease Management; gh-301|Healthcare Risk Adjustment1"
+   ],
+   "concepts": [
+    "Healthcare Intervention",
+    "Non-Chronic Trend",
+    "Reflects Patient Risk",
+    "Utilization Rate",
+    "ACA Product",
+    "Care Management Situation",
+    "Normalize Population Claims Experience",
+    "Multiple Data",
+    "Coding Set",
+    "Clinical Policy Bulletin"
+   ]
+  },
+  {
+   "n": 83,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-301|Medical Data; gh-301|Predictive Analytics"
+   ],
+   "concepts": [
+    "Coding Structure",
+    "Medical Coding",
+    "Private Data",
+    "Revenue Code",
+    "Healthcare Data",
+    "Healthcare Claim",
+    "Risk Score",
+    "Provider Reimbursement",
+    "Accountable Care Organization",
+    "Provider Payment"
+   ]
+  },
+  {
+   "n": 84,
+   "tier": 3,
+   "topic": [
+    "Health",
+    "gh-301|Social Determinants of Health; gh-301|Provider Contracting and Reimbursement"
+   ],
+   "concepts": [
+    "Quality Perspective",
+    "Quality Viewpoint",
+    "Standard Contracting",
+    "Health Care Cost",
+    "Social Determinant",
+    "SDOH Derived Statistics",
+    "Traditional Actuarial Practice"
+   ]
+  },
+  {
+   "n": 85,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-101|Benefit Plan Design Recommendation"
+   ],
+   "concepts": [
+    "Plan Design Feature",
+    "Retirement Risk",
+    "Sponsor's Plan",
+    "Employee Perspective",
+    "Introducing Option",
+    "Investment Risk Applicable",
+    "Labor Force Demographics",
+    "Plan Sponsor's Particular",
+    "Promote Employee Behavior Consistent",
+    "Retirement Plan Design"
+   ]
+  },
+  {
+   "n": 86,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-101|Benefit Plan Structure, Features and Investments; ret-101|Benefit Plan Design Recommendation"
+   ],
+   "concepts": [
+    "Tax Incentive",
+    "Taxpayers' Perspective",
+    "Investment Vehicle",
+    "Payment Option",
+    "Providing Retirement Benefit",
+    "Retirement Fund Asset",
+    "Ancillary Benefit",
+    "Benefit Eligibility Requirement",
+    "Benefit Subsidy",
+    "Contribution Formula"
+   ]
+  },
+  {
+   "n": 87,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-101|Benefit Plan Structure, Features and Investments"
+   ],
+   "concepts": [
+    "Executive Retirement Plan",
+    "Hybrid Plan",
+    "Late Retirement Option",
+    "Optional Employee Contribution",
+    "Participant Investment Option",
+    "Plan Eligibility Requirement",
+    "Retirement Plan Asset",
+    "Shared Risk Plan",
+    "Target Benefit Plan",
+    "Vesting"
+   ]
+  },
+  {
+   "n": 88,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-101|Participant Risks; ret-101|Sponsor Risks"
+   ],
+   "concepts": [
+    "Benefit Adequacy",
+    "Public Sector Employer",
+    "Replacement Income",
+    "Retirement Plans Sponsored",
+    "Single Employer Sponsored Retirement Plan",
+    "Social Insurance Plan",
+    "Early Retirement",
+    "Decumulation Feature",
+    "Optional Form",
+    "Portability Option"
+   ]
+  },
+  {
+   "n": 89,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-201|Methods; ret-201|Accounting Standards"
+   ],
+   "concepts": [
+    "Postponed Retirement",
+    "Termination-windup",
+    "Plan Curtailment",
+    "Pension Valuation",
+    "Cost Recognition",
+    "Cost Stability",
+    "Pension Benefit",
+    "Periodic Valuation",
+    "Cash Flow Requirement",
+    "Plan Sponsor Risk"
+   ]
+  },
+  {
+   "n": 90,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-201|Valuations for the Purpose of Funding; ret-301|Methods"
+   ],
+   "concepts": [
+    "Funding Policy",
+    "Government-sponsored Plan",
+    "Multi-employer Plan",
+    "Plan Asset Composition",
+    "Principles Applicable",
+    "Single-employer Plan",
+    "Stakeholders' Interest",
+    "Asset Transfer",
+    "Going Concern Funding",
+    "Government Regulation"
+   ]
+  },
+  {
+   "n": 91,
+   "tier": 3,
+   "topic": [
+    "Retirement",
+    "ret-301|Regulations: Evaluation and Application; ret-301|Regulations: Plan Funding"
+   ],
+   "concepts": [
+    "Individual Savings Plan",
+    "Members' Right",
+    "Plan Amendment",
+    "Plan Establishment",
+    "Plan Termination-wind-Up",
+    "Registered Retirement Plan",
+    "Reporting Requirement",
+    "Tax Regulation Pertaining",
+    "Funding Restrictions Imposed",
+    "Pension Plan Funding",
+    "Retirement Funding Alternative"
+   ]
+  },
+  {
+   "n": 92,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "cp-312|Cash Flow Models for Long-Term Insurance Business; cp-312|Model Governance"
+   ],
+   "concepts": [
+    "Complex Component",
+    "Dynamic Policyholder",
+    "Equity-Linked Guarantee",
+    "Index-Linked Credit",
+    "Long-Term Insurance Business",
+    "Governance Best Practice",
+    "Governance Documentation",
+    "Organizational Structure",
+    "Economic Scenario Generator",
+    "Financial Business"
+   ]
+  },
+  {
+   "n": 93,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "cp-341|Key Accounting and Regulatory Considerations; cp-341|Reinsurance Administration and Management"
+   ],
+   "concepts": [
+    "OSFI Requirement",
+    "Reinsurance Requirement",
+    "Canadian Regulatory",
+    "Global Jurisdiction",
+    "International Reinsurance Regulatory Framework",
+    "Private Equity Backed Reinsurer",
+    "US Stat Requirement",
+    "Reinsurance Administration",
+    "Reinsurance Counterparty Credit Risk",
+    "Captive Reinsurance Transaction"
+   ]
+  },
+  {
+   "n": 94,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "cp-341|Types of Reinsurance Arrangements and Methods; cp-341|Transferring Risk"
+   ],
+   "concepts": [
+    "Reinsurance Agreement Provision",
+    "Inforce Reinsurance",
+    "Offshore Reinsurance",
+    "Advanced Reinsurance Transaction",
+    "Annuity Coinsurance",
+    "Global Reinsurance Market",
+    "Life Insurance Yearly Renewable Term",
+    "Non-Proportional Reinsurance Transaction",
+    "PRTs-longevity Swap",
+    "Private Equity Involvement"
+   ]
+  },
+  {
+   "n": 95,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-101|Individual Life and Annuity Product Design and Pricing; ila-101|Assumption Development and Experience Studies"
+   ],
+   "concepts": [
+    "Experience Study",
+    "Modern Mortality Table",
+    "Premium Persistency",
+    "Term Conversion",
+    "Annuity Product Design",
+    "Common Profit Metrics",
+    "Nonforfeiture",
+    "Pricing Insurance Product",
+    "Pricing Practice",
+    "Annuity Context"
+   ]
+  },
+  {
+   "n": 96,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-101|Introduction to Assets and Risk Management; ila-101|Introduction to Life and Annuity Valuation Concepts"
+   ],
+   "concepts": [
+    "Annuity Liability",
+    "Common Insurance Guarantees Generate Embedded Option",
+    "Duration-convexity Matching",
+    "Integrating ALM",
+    "Life Insurance Reinsurance Arrangement",
+    "Segmentation",
+    "Deferred Acquisition Cost",
+    "International Regulatory Framework",
+    "Life Insurance Reserve",
+    "Term Insurance Reserve"
+   ]
+  },
+  {
+   "n": 97,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-101|Product Management; ila-201i|Advanced Product Management"
+   ],
+   "concepts": [
+    "Rising Interest Rate Environment",
+    "Annuity Distribution",
+    "Annuity Insurance Product",
+    "Canadian Tax Regulation",
+    "Challenges Insurers Face",
+    "Corporate Taxation",
+    "Investment Income Tax",
+    "Policyholder Taxation",
+    "International Capital Requirement",
+    "International Framework"
+   ]
+  },
+  {
+   "n": 98,
+   "tier": 3,
+   "topic": [
+    "Long-term insurance (life, annuities)",
+    "ila-201i|International Financial Reporting Requirements; ila-201u|Advanced Product Management"
+   ],
+   "concepts": [
+    "International Life Insurance Company",
+    "US Company Tax Rule",
+    "Crediting Rating Agency Framework",
+    "Formulaic Reserve"
+   ]
+  },
+  {
+   "n": 99,
+   "tier": 3,
+   "topic": [
+    "Statistics and predictive analytics",
+    "disc-da|3. Preparing Data for Analysis; disc-da|1. Planning an Insurer Data Modeling Project"
+   ],
+   "concepts": [
+    "Data Documentation",
+    "Data Ethics",
+    "Statistical Plan",
+    "Data Mart",
+    "Data Validation",
+    "Database Index",
+    "Table Join",
+    "User-Defined Function",
+    "Web Scraping",
+    "Structured Data",
+    "Data Preparation"
+   ]
+  }
+ ]
+}

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cb7fefd218fcee0a63a0549c4addc577ba28c8be779279fbd52162ed4daa7c09
+  content_hash: sha256:8ad36f7a571546fc969878b9958f60e7b74e94b97fdefb2a3ea29f82158fac95
   sources: []
   open_findings: 0
   open_critical: 0
@@ -79,11 +79,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >    - [[Martingale|Martingales]],
 >    - Change of [[Numeraire|numeraire]]
 >    - [[Girsanov's Theorem|Girsanov's theorem]]
-> 5. Understand and apply the concepts of [[Risk-Neutral|risk-neutral]] measure, [[Forward|forward]] measure, [[Normalization|normalization]], and the [[Market|market]] price of [[Risk|risk]]
+> 5. Understand and apply the concepts of [[Risk-Neutral Valuation|risk-neutral]] measure, [[Forward|forward]] measure, [[Normalization|normalization]], and the [[Market|market]] price of [[Risk|risk]]
 > 6. Understand [[Option Pricing|option pricing]] techniques including:
 >    - Calculating an [[Expectation|expectation]]
 >    - By solving an [[PDE]]
-> 7. Understand the [[Limitation|limitations]] of the [[Black-Scholes-Merton]] model
+> 7. Understand the [[Limitation|limitations]] of the [[Black-Scholes Model|Black-Scholes-Merton]] model
 > 8. Understand and apply [[Numerical Discretization|numerical discretization]] methods to price [[Option|options]] including [[Euler-Maruyama Discretization|Euler-Maruyama discretization]] and [[Transition Density|transition density]] methods
 > 9. Calibrate a model to [[Observed Price|observed prices]] of [[Traded Security|traded securities]] including [[Fitting|fitting]] to a given [[Yield Curve|yield curve]]
 > 10. Define and explain the concept of [[Volatility Smile|volatility smiles]] and describe several approaches for [[Modeling Smile|modeling smiles]], including [[Stochastic Volatility|stochastic volatility]], [[Local- Volatility|local- volatility]], [[Jump-Diffusion|jump-diffusions]].

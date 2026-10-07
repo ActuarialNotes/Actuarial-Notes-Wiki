@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9f19abca01fc80796308974d064c746fbe1dbf4003d24080d19c5be5e0669b4e
+  content_hash: sha256:15e0dfde23050f1c474b11d132d01dfa1768ec77db6419b31b01db1af86d4d77
   sources: []
   open_findings: 0
   open_critical: 0
@@ -67,7 +67,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > The candidate will understand the procedure for estimating [[Premium Liability|premium liabilities]].
 >
 > 1. Understand the purpose of general [[Insurance Premium Liability|insurance premium liabilities]].
-> 2. Calculate the [[Premium Liability|premium liabilities]] for a general [[Insurance Company|insurance company]].
+> 2. Calculate the [[Premium Liability|premium liabilities]] for a general [[Insurer|insurance company]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (3a, 3b)

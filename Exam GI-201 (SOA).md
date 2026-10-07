@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7cf8383dc8c8afdcb0c18c38b975956df4c7f9a115f42cbe5e7a627c98660745
+  content_hash: sha256:8ba1ff98d4ee4f6bc8cac4d4c9139061674d467fb137878a0a8c43f2602f1228
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,9 +28,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 ## Learning Objectives
 
 > [!example]- General Insurance Company Operations {5–10%}
-> The candidate will understand the [[Structure|structure]] and functions of a general [[Insurance Company|insurance company]].
+> The candidate will understand the [[Structure|structure]] and functions of a general [[Insurer|insurance company]].
 >
-> 1. Describe the various [[Core|core]] and supporting functions of a general [[Insurance Company|insurance company]].
+> 1. Describe the various [[Core|core]] and supporting functions of a general [[Insurer|insurance company]].
 > 2. Differentiate among the various [[Classification|classifications]] of [[Insurer|insurers]].
 > 3. Describe the [[Marketing|marketing]] and [[Distribution|distribution]] of general [[Insurance Product|insurance products]].
 > 4. Understand the [[Process|processes]] for [[Underwriting|underwriting]] and [[Pricing General Insurance Policy|pricing general insurance policies]].
@@ -39,7 +39,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > 7. Explain why [[Premium Audit|premium audits]] are conducted.
 > 8. Demonstrate knowledge of general [[Insurance Risk|insurance risks]], [[Peril|perils]], [[Product|product]] characteristics / issues, and [[Contract|contracts]].
 > 9. Describe and compare the different types of [[Reinsurance|reinsurance]] and [[Risk Mitigation Instrument|risk mitigation instruments]].
-> 10. Demonstrate knowledge of the issues regarding [[International Business|international business]] for [[Insurance Company|insurance companies]].
+> 10. Demonstrate knowledge of the issues regarding [[International Business|international business]] for [[Insurer|insurance companies]].
 >
 > **Readings:**
 > - General Insurance Company Operations, SOA, May 2025 (1a-g)
@@ -103,7 +103,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > The candidate will understand elements of [[Financial Economics|financial economics]] relevant to general [[Insurance|insurance]].
 >
 > 1. Demonstrate knowledge of [[Behavioral Finance|behavioral finance]].
-> 2. Demonstrate knowledge of [[Asset Liability Management Strategy|asset liability management strategies]] for general [[Insurance Company|insurance companies]].
+> 2. Demonstrate knowledge of [[Asset Liability Management Strategy|asset liability management strategies]] for general [[Insurer|insurance companies]].
 > 3. Calculate an [[Underwriting Profit Margin|underwriting profit margin]] using different models under a [[Financial Economics|financial economics]] approach.
 >
 > **Readings:**
@@ -112,7 +112,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - Ratemaking: A Financial Economics Approach, D’Arcy, S. and Dyer, M., 1997 Proceedings of the Casualty Actuarial Society, Volume LXXXIV, sections 1, 2, 4 & 6 Note: Sections 3 and 5 are not required reading but may be beneficial as background reading. (4c)
 
 > [!example]- Financial Reporting {10–20%}
-> The candidate will understand elements of [[Financial Reporting|financial reporting]] for general [[Insurance Company|insurance companies]].
+> The candidate will understand elements of [[Financial Reporting|financial reporting]] for general [[Insurer|insurance companies]].
 >
 > 1. Demonstrate knowledge of the different types of general [[Insurance Liability|insurance liabilities]].
 > 2. Understand and apply the concepts of [[Insurance-reinsurance|insurance/reinsurance]] accounting.
@@ -136,7 +136,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >
 > 1. Understand the various considerations for [[Performance Measurement|performance measurement]] of a general [[Insurer|insurer]].
 > 2. Understand and apply [[Financial Health|financial health]] ratios.
-> 3. Demonstrate knowledge of [[Solvency Monitoring|solvency monitoring]] for general [[Insurance Company|insurance companies]].
+> 3. Demonstrate knowledge of [[Solvency Monitoring|solvency monitoring]] for general [[Insurer|insurance companies]].
 > 4. Understand and apply the [[EU Solvency II Capital Requirement|EU Solvency II capital requirement]].
 > 5. Demonstrate knowledge of [[ORSA]].
 > 6. Discuss the function of [[Credit Rating Agency|credit rating agencies]] and their influence on general [[Insurer|insurers]].

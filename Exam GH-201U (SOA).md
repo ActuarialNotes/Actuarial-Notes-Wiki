@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2c30d34ffd81b4e5b1b1f9295966b425d31b2d2677a346e3c45654bc2c5a92f0
+  content_hash: sha256:83bc8daead579a891afd3f4c203a4b17ef90a4025ee8f033b95fd766e038ef51
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,7 +36,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 4. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
 > 5. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate [[non-IBNR]] types of [[Reserve|reserves]] and explain when each is [[Required|required]]
-> 7. Apply [[Applicable Best Practice|applicable best practices]] related to [[Reserving|reserving]]
+> 7. Apply [[Best Practice|applicable best practices]] related to [[Reserving|reserving]]
 >
 > **Readings:**
 > - Video: Valuation at the Heart of Health Insurance (Background)
@@ -58,8 +58,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting [[Principle|Principles]] ([[GAAP]])
 > 2. Interpret the results of both [[Statutory|statutory]] and [[GAAP Statement|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
 > 3. [[Project Financial|Project financial]] outcomes and recommend [[Strategy|strategy]]
-> 4. Evaluate [[Capital Need|capital needs]] using [[RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
-> 5. Apply [[Applicable Best Practice|applicable best practices]] related to [[Financial Statements|financial statements]]
+> 4. Evaluate [[Capital Need|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
+> 5. Apply [[Best Practice|applicable best practices]] related to [[Financial Statements|financial statements]]
 >
 > **Readings:**
 > - Read. Think. Write., Health Section News, Oct 2004 (2e)
@@ -73,7 +73,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - GH201-401-25: Structured Reinsurance: Impact on Health Product Pricing (2d)
 
 > [!example]- Regulation {15–25%}
-> The candidate will understand how to evaluate the impact of [[Regulation|regulation]] on [[Insurance Company|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
+> The candidate will understand how to evaluate the impact of [[Regulation|regulation]] on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
 >
 > 1. Describe the [[Regulatory|regulatory]] and [[Policy Making Process|policy making process]] in the [[United State|United States]]
 > 2. Describe the major [[Applicable Law|applicable laws]] and [[Regulation|regulations]] and evaluate their impact

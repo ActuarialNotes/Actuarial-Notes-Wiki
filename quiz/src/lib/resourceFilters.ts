@@ -1,5 +1,9 @@
 import type { WikiIndexItem } from './wikiIndex'
 import { compareExamLabels } from './resourceExams'
+import { examDisplayName } from './wikiRoutes'
+import { wikiExamIdToProgressKey } from './wikiParser'
+import { CAS_TRACK_KEYS, SOA_TRACK_KEYS, type ExamBody } from './bodyFilter'
+import { TRACKS } from '../data/tracks'
 
 // The filters on the Study Guides tab's **Resources** page — Exam, Publisher
 // and Year — as one definition: what each matches, the options each offers
@@ -133,4 +137,88 @@ export function resourceFacetsToParams(selection: ResourceFacetSelection, params
     for (const value of selection[facet]) next.append(facet, value)
   }
   return next
+}
+
+// ── The exam strip ───────────────────────────────────────────────────────────
+//
+// The Exam filter is drawn as the Store's strip of exam logos
+// (`components/ExamStrip.tsx`), one exam at a time, under the SOA/CAS picker
+// the Study Guides page carries (`lib/bodyFilter.ts`). The strip is a body's
+// ladder — the exams of its two credentials, in the order the Study Guides
+// page lists them — less any exam the vault has no page for.
+
+export interface ResourceStripExam {
+  /** The exam's label, as a resource's `exams` carry it: `Exam P-1`, `Exam GH-201C`. */
+  label: string
+  /** The `exam_progress` key its logo is drawn from: `P`, `CAS-6`, `FSA-GH201`. */
+  key: string
+}
+
+const BODY_TRACKS: Record<ExamBody, ReadonlySet<string>> = { SOA: SOA_TRACK_KEYS, CAS: CAS_TRACK_KEYS }
+const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
+
+/** An exam page's progress key, from its name (`Exam GH-201C (SOA)` → `FSA-GH201`). */
+function examPageKey(name: string): string {
+  return wikiExamIdToProgressKey(examDisplayName(name).replace(/^Exam\s+/i, '').trim())
+}
+
+/**
+ * One body's exams, from the vault's exam pages (`Exam P-1 (SOA)`, …): walked
+ * down the body's credential tracks so the strip reads as its ladder, each
+ * exam once (P and FM sit on both an associate and a fellow track), an exam's
+ * regional variants (6C, 6U) side by side.
+ */
+export function resourceStripExams(examPageNames: readonly string[], body: ExamBody): ResourceStripExam[] {
+  const byKey = new Map<string, string[]>()
+  for (const name of examPageNames) {
+    const key = examPageKey(name)
+    const labels = byKey.get(key) ?? []
+    labels.push(examDisplayName(name))
+    byKey.set(key, labels)
+  }
+  const out: ResourceStripExam[] = []
+  const seen = new Set<string>()
+  for (const trackKey of TRACK_ORDER) {
+    if (!BODY_TRACKS[body].has(trackKey)) continue
+    const track = TRACKS.find(t => t.key === trackKey)
+    for (const section of track?.sections ?? []) {
+      for (const item of section.items) {
+        if (seen.has(item.id)) continue
+        seen.add(item.id)
+        for (const label of [...(byKey.get(item.id) ?? [])].sort(compareExamLabels)) {
+          out.push({ label, key: item.id })
+        }
+      }
+    }
+  }
+  return out
+}
+
+/**
+ * The body a shelf opens on when its URL names an exam: the exam's own body if
+ * only the other body's ladder has it (a link to Exam 7 opens on CAS whatever
+ * was last picked), otherwise the one picked.
+ */
+export function bodyForExam(
+  label: string | null,
+  picked: ExamBody,
+  strips: Readonly<Record<ExamBody, readonly ResourceStripExam[]>>,
+): ExamBody {
+  if (!label) return picked
+  const other: ExamBody = picked === 'SOA' ? 'CAS' : 'SOA'
+  const inPicked = strips[picked].some(e => e.label === label)
+  return !inPicked && strips[other].some(e => e.label === label) ? other : picked
+}
+
+/**
+ * The shelf under a body with no exam chosen: every reading for one of the
+ * body's exams, and every resource that is no exam's reading — those belong to
+ * neither body, so neither hides them.
+ */
+export function resourcesForBody(
+  items: readonly WikiIndexItem[],
+  strip: readonly ResourceStripExam[],
+): WikiIndexItem[] {
+  const labels = new Set(strip.map(e => e.label))
+  return items.filter(item => !item.exams?.length || item.exams.some(l => labels.has(l)))
 }

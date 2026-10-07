@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { BookMarked, Calculator, ChevronRight, Columns3, Gem, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
-import { ExamLogo } from '@/components/ExamLogo'
+import { ExamStrip } from '@/components/ExamStrip'
 import { LogoTile } from '@/components/LogoTile'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { BookCard, ProductCard, RegistrationTicket } from '@/components/store/StoreCards'
@@ -18,7 +18,6 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { ProBadge } from '@/components/ProBadge'
 import { usePageHead } from '@/hooks/usePageHead'
 import { STORE_HEAD } from '@/lib/seo'
-import { examAccentStyle } from '@/lib/examColors'
 import {
   AISLE_LABEL,
   PRICE_BANDS,
@@ -42,7 +41,6 @@ import {
   storeDisclaimer,
   storeShelf,
   type StoreAisle,
-  type StoreExam,
   type StoreItem,
 } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -182,7 +180,12 @@ export default function Store() {
         </p>
       </header>
 
-      <ExamStrip exams={exams} value={exam} studying={studying} onChange={key => choose({ exam: key })} />
+      <ExamStrip
+        exams={exams.map(e => ({ value: e.key, name: e.name, logoKey: e.key }))}
+        value={exam}
+        studying={studying}
+        onChange={key => choose({ exam: key })}
+      />
 
       <div ref={shelfTop} className="scroll-mt-16 lg:scroll-mt-2" />
       <AisleNav value={aisle} counts={counts} onChange={a => choose({ aisle: a })} />
@@ -360,127 +363,6 @@ export default function Store() {
         />
       )}
     </div>
-  )
-}
-
-/**
- * The exams, as the ladder's logos left to right — the accent ramp from blue
- * to red — with **All** first. A radiogroup: one tab stop, arrows move. An
- * exam the reader is studying carries a dot.
- */
-function ExamStrip({
-  exams,
-  value,
-  studying,
-  onChange,
-}: {
-  exams: readonly StoreExam[]
-  value: string | null
-  studying: ReadonlySet<string>
-  onChange: (key: string | null) => void
-}) {
-  const groupRef = useRef<HTMLDivElement>(null)
-  const choices: (string | null)[] = [null, ...exams.map(e => e.key)]
-
-  function onKeyDown(e: ReactKeyboardEvent) {
-    const delta = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
-    if (delta === 0) return
-    e.preventDefault()
-    const at = choices.indexOf(value)
-    const next = choices[(at + delta + choices.length) % choices.length] ?? null
-    onChange(next)
-    groupRef.current?.querySelector<HTMLElement>(`[data-exam="${next ?? 'all'}"]`)?.focus()
-  }
-
-  // Keep the chosen exam in view when the strip scrolls sideways (a phone).
-  // The strip alone scrolls, never the page: `scrollIntoView` would also move
-  // the window, and fight the router putting a returning reader back where
-  // they were (lib/routeScrollMemory.ts).
-  useEffect(() => {
-    const strip = groupRef.current
-    const el = strip?.querySelector<HTMLElement>(`[data-exam="${value ?? 'all'}"]`)
-    if (!strip || !el || strip.scrollWidth <= strip.clientWidth) return
-    const left = el.offsetLeft - (strip.clientWidth - el.offsetWidth) / 2
-    strip.scrollTo({ left: Math.max(0, left) })
-  }, [value])
-
-  return (
-    <div
-      ref={groupRef}
-      role="radiogroup"
-      aria-label="Exam"
-      onKeyDown={onKeyDown}
-      className="relative -mx-4 flex gap-1 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:flex-wrap [&::-webkit-scrollbar]:hidden"
-    >
-      <ExamChoice id="all" ariaLabel="All exams" active={value === null} onSelect={() => onChange(null)}>
-        <LogoTile size="md" className="bg-foreground text-[13px] font-bold text-background shadow-sm">
-          All
-        </LogoTile>
-      </ExamChoice>
-      {exams.map(exam => (
-        <ExamChoice
-          key={exam.key}
-          id={exam.key}
-          ariaLabel={exam.name}
-          active={value === exam.key}
-          dimmed={value !== null && value !== exam.key}
-          studying={studying.has(exam.key)}
-          accent={exam.key}
-          onSelect={() => onChange(value === exam.key ? null : exam.key)}
-        >
-          <ExamLogo examKey={exam.key} size="md" />
-        </ExamChoice>
-      ))}
-    </div>
-  )
-}
-
-function ExamChoice({
-  id,
-  ariaLabel,
-  active,
-  dimmed,
-  studying,
-  accent,
-  onSelect,
-  children,
-}: {
-  id: string
-  ariaLabel: string
-  active: boolean
-  dimmed?: boolean
-  studying?: boolean
-  accent?: string
-  onSelect: () => void
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={active}
-      aria-label={`${ariaLabel}${studying ? ' (studying)' : ''}`}
-      title={ariaLabel}
-      tabIndex={active ? 0 : -1}
-      data-exam={id}
-      onClick={onSelect}
-      style={accent ? examAccentStyle(accent) : undefined}
-      className={cn(
-        'group relative flex shrink-0 items-center justify-center rounded-xl p-1.5 transition-[background-color,opacity] duration-150',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        active
-          ? accent
-            ? 'bg-[var(--exam-accent-soft)] ring-1 ring-[var(--exam-accent-muted)]'
-            : 'bg-accent'
-          : 'hover:bg-accent/60',
-        dimmed && 'opacity-55 hover:opacity-100',
-      )}
-    >
-      <span className="transition-transform duration-200 ease-out motion-safe:group-hover:-translate-y-0.5">{children}</span>
-      {studying && (
-        <span className="absolute right-0.5 top-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-background" aria-hidden />
-      )}
-    </button>
   )
 }
 

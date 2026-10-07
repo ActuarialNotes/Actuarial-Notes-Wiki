@@ -98,8 +98,8 @@ guess. The table's own exam strip moves between exams; its kind pills narrow the
 The **Compare** button in the study-materials heading is a filled, labelled pill at every
 width — it is that heading's one action. The table is one real `<table>` that lays itself out
 for a phone: the row-label column becomes a band over each row (its label held at the left
-edge while the columns scroll sideways), columns are `44cqw` wide so two fit with the third
-peeking in, the sticky product heads drop their picture, the kind pills scroll in one line and
+edge while the columns scroll sideways), columns are exactly `50cqw` wide, so two always sit
+side by side and scrolling snaps a column at a time, the sticky product heads drop their picture, the kind pills scroll in one line and
 the disclaimer is held at the left edge, as wide as the pane. From `sm` up it is the grid with
 a pinned label column. `e2e/store.spec.ts` checks a cell sits under its own product at 390 px.
 

@@ -16,8 +16,8 @@
 // On a phone the table is one real table, laid out for a thumb: the row-label
 // column (a quarter of the screen, scrolling nothing) becomes a band above
 // each row whose label stays put while the columns scroll sideways, the
-// columns are narrow enough for two to sit side by side with the third
-// peeking in, the sticky product heads drop their picture, and the kind pills
+// columns are exactly half the pane, so two sit side by side and
+// scrolling snaps a column at a time, the sticky product heads drop their picture, and the kind pills
 // scroll in one line. From `sm` up it is the classic grid with a pinned
 // label column.
 
@@ -161,7 +161,7 @@ export function CompareSheet({
           {/* One scroller for both axes, so the sticky heads and labels have a
               single frame to stick in. It is a size container: the columns and
               the disclaimer measure themselves against its width (`cqw`). */}
-          <div className="min-h-0 flex-1 overflow-auto max-sm:snap-x max-sm:snap-proximity overscroll-contain [container-type:inline-size]">
+          <div className="min-h-0 flex-1 overflow-auto max-sm:snap-x max-sm:snap-mandatory overscroll-contain [container-type:inline-size]">
             <div className="w-max min-w-full">
               <table className="w-max min-w-full border-separate border-spacing-0 text-left text-sm">
                 <thead>
@@ -251,8 +251,8 @@ export function CompareSheet({
   )
 }
 
-/** A product's column: two across a phone with the third peeking in, a fixed width from `sm`. */
-const COLUMN = 'w-[44cqw] min-w-[10.5rem] max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
+/** A product's column: exactly half the pane on a phone, so two always sit side by side and a swipe lands on the next pair; a fixed width from `sm`. */
+const COLUMN = 'w-[50cqw] min-w-[50cqw] max-sm:snap-always max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
 
 /** The row's label — pinned at the left on `sm`+; on a phone it is the band above the row instead. */
 const ROW_HEAD =

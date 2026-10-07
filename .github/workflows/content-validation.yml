@@ -15,6 +15,11 @@ name: Content Validation
 # The third gates the resource pages (docs/resource-pages.md): every
 # Resources/Books/ page in the one shape the standard defines, its syllabus
 # callout matching the exam pages, its sources named (scripts/resource_lint.py).
+#
+# The fourth holds the simulated learner (docs/simulated-learner.md) to its
+# isolation guarantee: no question's solution reaches the learner. It runs on
+# content changes too, because a new heading or a reworded solution is exactly
+# what could slip past the loader. No model is called; the runs are scripted.
 on:
   pull_request:
     paths:
@@ -30,6 +35,7 @@ on:
       - 'scripts/vault_links.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
+      - 'simulations/**'
       - '.github/workflows/content-validation.yml'
   push:
     branches: [main]
@@ -46,6 +52,7 @@ on:
       - 'scripts/vault_links.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
+      - 'simulations/**'
       - '.github/workflows/content-validation.yml'
   workflow_dispatch:
 
@@ -99,3 +106,20 @@ jobs:
       # Standard library only (resource_extract.py, which needs PyMuPDF, is not run here).
       - name: Lint resource pages
         run: python3 scripts/resource_lint.py
+
+  simulated-learner:
+    name: simulated learner isolation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # PyYAML reads the learner profiles and question frontmatter.
+      - name: Install PyYAML
+        run: python3 -m pip install pyyaml
+
+      - name: Isolation and component tests
+        run: python3 -m unittest discover -s simulations/tests -t simulations

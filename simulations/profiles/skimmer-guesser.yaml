@@ -1,0 +1,32 @@
+# Busy, impatient student who skims and guesses. Finds out which guides only
+# work if read word for word, and which questions reward pattern-matching.
+name: Tyler (skims and guesses)
+exam: FM
+description: >
+  Second-year economics student cramming for FM in three weeks around a
+  part-time job. Decent at maths when he slows down, which he rarely does.
+  Learns from practice questions more than from reading.
+prior_knowledge:
+  calculus: two semesters of calculus, B grades
+  algebra: fine
+  probability: intro statistics course
+  interest_theory: saw compound interest and present value in a macro course
+  finance: basic — knows what a bond and a mortgage are
+  mastered_concepts: [Compound Interest]
+gaps:
+  - Annuity notation
+  - Duration and immunization
+traits:
+  reading_thoroughness: 0.2
+  skim_tendency: 0.85
+  derivation_patience: 0.2
+  math_anxiety: 0.2
+  guess_tendency: 0.7
+  confidence_bias: 0.6
+  reading_speed_wpm: 320
+study_strategy: practice-first
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 12
+feedback: solution
+seed: 37

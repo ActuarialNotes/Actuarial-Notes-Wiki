@@ -2,22 +2,30 @@ import { create } from 'zustand'
 import { EMPTY_PROGRESS, pairKey, type CraftProgress } from '@/lib/conceptCraft'
 
 /**
- * A reader's **Concept Craft** boards (docs/concept-craft.md): per topic, the
+ * A reader's **Concept Craft** board (docs/concept-craft.md): one board, the
+ * **starter packs** added to it (topic ids, in the order added), the
  * connections found and where each concept was left — plus which connections
- * the board shows (`filter`). Everything else on a board, the concepts in hand
- * among it, is made from the connections found (`boardState`).
+ * the board shows (`filter`). Everything else on the board, the concepts in
+ * hand among it, is made from the packs and the connections found
+ * (`boardState`).
  *
  * localStorage only, the way Cowork's stores are (`hooks/useCoworkLibrary.ts`):
- * the record is small, it is pair keys rather than content, and a board is a
- * study aid whose loss on a new device costs a few minutes of play — not worth
- * a server table. Synchronous for the same reason every local-first store here
- * is: a connection lands on the board in the same render it was found.
+ * the record is small, it is ids and pair keys rather than content, and a board
+ * is a study aid whose loss on a new device costs a few minutes of play — not
+ * worth a server table. Synchronous for the same reason every local-first store
+ * here is: a connection lands on the board in the same render it was found.
  *
  * It holds no graph. The page passes connections in where one is needed, so
  * nothing that imports the store pulls the vault into a chunk.
  */
 
-const STORAGE_KEY = 'craft.v3'
+const STORAGE_KEY = 'craft.v4'
+/**
+ * The third version's save: a board per topic, each picked before it opened.
+ * Its boards are folded into the one board — each topic played becomes a pack
+ * on it, with what was found and where it lay — then the key is cleared.
+ */
+const PER_TOPIC_KEY = 'craft.v3'
 /**
  * Earlier saves: the first version's recipes from an authored book, and the
  * second's concepts placed by hand. Neither means anything to a board whose
@@ -29,66 +37,108 @@ const RETIRED_KEYS = ['craft.v1', 'craft.v2']
 export type StrengthFilter = 'all' | 'moderate' | 'strong'
 
 export interface CraftBoardSave {
+  /** The starter packs added (topic ids), in the order added. */
+  packs: string[]
   /** Connections found (`pairKey`), in the order found. */
   found: string[]
   /** Where each concept was left, keyed by lower-cased name, rounded to the pixel. */
   positions: Record<string, [number, number]>
 }
 
-const EMPTY_BOARD: CraftBoardSave = { found: [], positions: {} }
+export const EMPTY_BOARD: CraftBoardSave = { packs: [], found: [], positions: {} }
 
 interface Saved {
   filter: StrengthFilter
-  boards: Record<string, CraftBoardSave>
+  board: CraftBoardSave
 }
 
 const FILTERS: readonly StrengthFilter[] = ['all', 'moderate', 'strong']
+const FALLBACK: Saved = { filter: 'all', board: EMPTY_BOARD }
 
 function strings(value: unknown): string[] {
   return Array.isArray(value) ? value.filter((x): x is string => typeof x === 'string') : []
 }
 
-function cleanBoard(raw: unknown): CraftBoardSave {
-  if (!raw || typeof raw !== 'object') return EMPTY_BOARD
-  const r = raw as Record<string, unknown>
+function cleanPositions(raw: unknown): Record<string, [number, number]> {
   const positions: Record<string, [number, number]> = {}
-  if (r.positions && typeof r.positions === 'object') {
-    for (const [key, value] of Object.entries(r.positions as Record<string, unknown>)) {
+  if (raw && typeof raw === 'object') {
+    for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
       if (Array.isArray(value) && value.length === 2 && value.every(n => typeof n === 'number' && Number.isFinite(n))) {
         positions[key] = [value[0] as number, value[1] as number]
       }
     }
   }
+  return positions
+}
+
+function cleanBoard(raw: unknown): CraftBoardSave {
+  if (!raw || typeof raw !== 'object') return EMPTY_BOARD
+  const r = raw as Record<string, unknown>
   return {
+    packs: [...new Set(strings(r.packs).filter(Boolean))],
     found: [...new Set(strings(r.found).filter(s => s.includes('|')))],
-    positions,
+    positions: cleanPositions(r.positions),
   }
 }
 
+function parseObject(raw: string | null): Record<string, unknown> | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, unknown>) : null
+  } catch {
+    return null
+  }
+}
+
+const cleanFilter = (value: unknown): StrengthFilter =>
+  (FILTERS.includes(value as StrengthFilter) ? (value as StrengthFilter) : 'all')
+
 /** What survives a round trip through storage — every field checked, anything else dropped. */
 export function parseCraftSave(raw: string | null): Saved {
-  const fallback: Saved = { filter: 'all', boards: {} }
-  if (!raw) return fallback
-  try {
-    const parsed = JSON.parse(raw) as Record<string, unknown>
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return fallback
-    const boards: Record<string, CraftBoardSave> = {}
-    if (parsed.boards && typeof parsed.boards === 'object') {
-      for (const [id, board] of Object.entries(parsed.boards as Record<string, unknown>)) boards[id] = cleanBoard(board)
-    }
-    const filter = FILTERS.includes(parsed.filter as StrengthFilter) ? (parsed.filter as StrengthFilter) : 'all'
-    return { filter, boards }
-  } catch {
-    return fallback
+  const parsed = parseObject(raw)
+  if (!parsed) return FALLBACK
+  return { filter: cleanFilter(parsed.filter), board: cleanBoard(parsed.board) }
+}
+
+/**
+ * The third version's boards, one per topic, as the one board: every topic with
+ * a connection found becomes a pack, in the order saved, its connections and
+ * positions kept. Null when there is nothing to carry over.
+ */
+export function migratePerTopicSave(raw: string | null): Saved | null {
+  const parsed = parseObject(raw)
+  if (!parsed || !parsed.boards || typeof parsed.boards !== 'object') return null
+  const board: CraftBoardSave = { packs: [], found: [], positions: {} }
+  for (const [id, value] of Object.entries(parsed.boards as Record<string, unknown>)) {
+    if (!value || typeof value !== 'object') continue
+    const r = value as Record<string, unknown>
+    const found = strings(r.found).filter(s => s.includes('|'))
+    if (found.length === 0) continue
+    board.packs.push(id)
+    for (const key of found) if (!board.found.includes(key)) board.found.push(key)
+    board.positions = { ...cleanPositions(r.positions), ...board.positions }
   }
+  if (board.packs.length === 0) return null
+  return { filter: cleanFilter(parsed.filter), board }
 }
 
 function load(): Saved {
   try {
     for (const key of RETIRED_KEYS) localStorage.removeItem(key)
-    return parseCraftSave(localStorage.getItem(STORAGE_KEY))
+    const current = localStorage.getItem(STORAGE_KEY)
+    const old = localStorage.getItem(PER_TOPIC_KEY)
+    if (old !== null) {
+      localStorage.removeItem(PER_TOPIC_KEY)
+      const migrated = current === null ? migratePerTopicSave(old) : null
+      if (migrated) {
+        persist(migrated)
+        return migrated
+      }
+    }
+    return parseCraftSave(current)
   } catch {
-    return { filter: 'all', boards: {} }
+    return FALLBACK
   }
 }
 
@@ -100,12 +150,14 @@ function persist(saved: Saved) {
 
 interface ConceptCraftState extends Saved {
   setFilter: (filter: StrengthFilter) => void
+  /** Add a starter pack — a topic's seeds — to the board. Idempotent. */
+  addPack: (topicId: string) => void
   /** Record a connection found. Idempotent. */
-  addConnection: (topicId: string, connection: { a: string; b: string }) => void
-  /** Remember where the concepts lie. Replaces the topic's positions wholesale. */
-  savePositions: (topicId: string, positions: Record<string, [number, number]>) => void
-  /** Clear a topic's board. */
-  resetBoard: (topicId: string) => void
+  addConnection: (connection: { a: string; b: string }) => void
+  /** Remember where the concepts lie. Replaces the positions wholesale. */
+  savePositions: (positions: Record<string, [number, number]>) => void
+  /** Clear the board: no packs, nothing found. */
+  resetBoard: () => void
 }
 
 export const useConceptCraft = create<ConceptCraftState>((set, get) => {
@@ -113,36 +165,24 @@ export const useConceptCraft = create<ConceptCraftState>((set, get) => {
     persist(next)
     set(next)
   }
-  const saved = (): Saved => ({ filter: get().filter, boards: get().boards })
-  const updateBoard = (topicId: string, change: (board: CraftBoardSave) => CraftBoardSave) => {
-    const current = saved()
-    const board = current.boards[topicId] ?? EMPTY_BOARD
+  const updateBoard = (change: (board: CraftBoardSave) => CraftBoardSave) => {
+    const { filter, board } = get()
     const next = change(board)
-    if (next === board) return
-    commit({ ...current, boards: { ...current.boards, [topicId]: next } })
+    if (next !== board) commit({ filter, board: next })
   }
 
   return {
     ...load(),
-    setFilter: filter => commit({ ...saved(), filter }),
-    addConnection: (topicId, { a, b }) => updateBoard(topicId, board => {
+    setFilter: filter => commit({ filter, board: get().board }),
+    addPack: topicId => updateBoard(board => (board.packs.includes(topicId) ? board : { ...board, packs: [...board.packs, topicId] })),
+    addConnection: ({ a, b }) => updateBoard(board => {
       const key = pairKey(a, b)
       return board.found.includes(key) ? board : { ...board, found: [...board.found, key] }
     }),
-    savePositions: (topicId, positions) => updateBoard(topicId, board => ({ ...board, positions })),
-    resetBoard: topicId => {
-      const current = saved()
-      const boards = { ...current.boards }
-      delete boards[topicId]
-      commit({ ...current, boards })
-    },
+    savePositions: positions => updateBoard(board => ({ ...board, positions })),
+    resetBoard: () => commit({ filter: get().filter, board: EMPTY_BOARD }),
   }
 })
-
-/** A topic's board, or the empty one. */
-export function boardFor(boards: Record<string, CraftBoardSave>, topicId: string): CraftBoardSave {
-  return boards[topicId] ?? EMPTY_BOARD
-}
 
 /** The game's view of a board: the connections found. */
 export function progressOf(board: CraftBoardSave): CraftProgress {

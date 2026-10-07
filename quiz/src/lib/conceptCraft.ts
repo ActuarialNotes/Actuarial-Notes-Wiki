@@ -277,6 +277,67 @@ export function seedConcepts(graph: CraftGraph): string[] {
   return [p, q, ...seeds.filter(s => s !== p && s !== q)]
 }
 
+// ─── Starter packs ───────────────────────────────────────────────────────────
+
+/**
+ * One board's graph, out of the graphs of the **starter packs** a reader has
+ * added to it — each pack a topic, its graph and seeds read on their own. The
+ * graphs are laid side by side, not re-read together, so every pack keeps the
+ * recipes it was dealt for and can still be made in full from its own seeds:
+ * a concept two packs share is one card, a pair two packs both connect is one
+ * connection (the stronger reading), and what that pair makes is what either
+ * pack says it makes.
+ */
+export function mergeGraphs(graphs: readonly CraftGraph[]): CraftGraph {
+  if (graphs.length === 1) return graphs[0]
+  const concepts: string[] = []
+  const names = new Set<string>()
+  const byKey = new Map<string, Connection>()
+  const share = new Map<string, number>()
+  const makes = new Map<string, Recipe[]>()
+  for (const g of graphs) {
+    for (const c of g.concepts) {
+      if (names.has(norm(c))) continue
+      names.add(norm(c))
+      concepts.push(c)
+    }
+    for (const c of g.connections) {
+      const known = byKey.get(c.key)
+      if (!known || c.strength > known.strength) byKey.set(c.key, c)
+    }
+    for (const [k, v] of g.share) if (!share.has(k)) share.set(k, v)
+    for (const [key, recipes] of g.makes) {
+      const kept = makes.get(key) ?? []
+      for (const r of recipes) if (!kept.some(x => norm(x.makes) === norm(r.makes))) kept.push(r)
+      makes.set(key, kept.sort((x, y) => y.score - x.score))
+    }
+  }
+  const connections = [...byKey.values()].sort((x, y) => y.strength - x.strength)
+  const neighbours = new Map<string, Connection[]>()
+  for (const c of connections) {
+    for (const end of [norm(c.a), norm(c.b)]) {
+      const list = neighbours.get(end)
+      if (list) list.push(c)
+      else neighbours.set(end, [c])
+    }
+  }
+  return { concepts, connections, byKey, neighbours, share, makes }
+}
+
+/** The cards a board deals: each pack's seeds, pack by pack in the order added, none twice. */
+export function packSeeds(packs: readonly (readonly string[])[]): string[] {
+  const out: string[] = []
+  const seen = new Set<string>()
+  for (const seeds of packs) {
+    for (const s of seeds) {
+      if (seen.has(norm(s))) continue
+      seen.add(norm(s))
+      out.push(s)
+    }
+  }
+  return out
+}
+
 // ─── A reader's board ────────────────────────────────────────────────────────
 
 /** A reader's place in one topic: the connections found (`pairKey`), in the order found. */

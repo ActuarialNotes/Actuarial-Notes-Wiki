@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:27d6cb1b99205d14d7ae4a8cdc9cd0f045157ae2c64bfeb4e6c5bf44da99da68
+  content_hash: sha256:6cfb9a88d4dff1e432cc1f6823480c5ce8a5ab968f59ce39b69498bfdc1bd97d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,7 +22,7 @@ A **Plan Sponsor** is the employer, group of employers, union or joint board tha
 - **Symbols:** $AL_t$ is the [[Actuarial Accrued Liability]] and $F_t$ the fund's assets, so $UAL_t$ is the unfunded liability (a surplus if negative); $NC_t$ is the [[Normal Cost]]; the deficit is amortized over $m$ years with payments at the start of each year. Legislation and the funding policy fix $m$ and the valuation basis.
 - **Roles:** plan designer, funder (setting [[Funding|funding policy]] within regulatory limits), fiduciary or administrator, and employer — four hats whose interests can conflict.
 - **Risks:** in DB the sponsor bears investment, interest-rate, [[Mortality|longevity]] and salary risk, which surface as contribution volatility, balance-sheet liabilities under accounting standards, and cash demands in bad years. In a [[Defined Contribution Plan]] its cost is fixed at the contribution rate times payroll.
-- Sponsors manage the risk through design (DC or hybrid plans, benefit caps), investment ([[Duration Matching|liability-driven investing]], [[Hedging]]) and risk transfer (annuity buy-outs to an [[Insurance Company]]).
+- Sponsors manage the risk through design (DC or hybrid plans, benefit caps), investment ([[Duration Matching|liability-driven investing]], [[Hedging]]) and risk transfer (annuity buy-outs to an [[Insurer|insurance company]]).
 
 > [!example]- The Sponsor's Contribution with a Deficit {Example}
 > A plan's actuarial liability is \$120{,}000{,}000 and its assets \$105{,}000{,}000. The normal cost is \$6{,}000{,}000 and payroll is \$60{,}000{,}000, of which members contribute 5%. The deficit is amortized over 15 years at 5%, payments at the start of each year. Find the sponsor's contribution as a percent of payroll.

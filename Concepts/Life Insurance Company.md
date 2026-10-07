@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:c3401f6d0edf30c49a7b3f6c43b2541eb12b4e88c6192c76c1691eb24226308e
+  content_hash: sha256:c34f08207d50e22beea6c0db328bb2210ed61a56397c304667a0a1b5d67f87a6
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Life Insurance Company.md
 ---
 
-**A Life Insurance Company** is an [[Insurance Company|insurer]] whose business is long-duration contracts contingent on human life: [[Life Insurance|life insurance]], [[Annuity Contract|annuities]] and, often, disability, long-term care and group benefits. It collects premiums years or decades before it pays benefits. Its balance sheet is therefore dominated by policy [[Reserve|reserves]], backed by long-term invested assets, with a layer of capital above them. Regulators require that capital, and [[Rating Agency|rating agencies]] judge it.
+**A Life Insurance Company** is an [[Insurer|insurer]] whose business is long-duration contracts contingent on human life: [[Life Insurance|life insurance]], [[Annuity Contract|annuities]] and, often, disability, long-term care and group benefits. It collects premiums years or decades before it pays benefits. Its balance sheet is therefore dominated by policy [[Reserve|reserves]], backed by long-term invested assets, with a layer of capital above them. Regulators require that capital, and [[Rating Agency|rating agencies]] judge it.
 
 > $$\text{Surplus} = \text{Assets} - \text{Policy liabilities}$$
 

@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
-import { Link, Navigate, useSearchParams } from 'react-router-dom'
-import { BookMarked, Calculator, ChevronRight, Columns3, Gem, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
+import { Navigate, useSearchParams } from 'react-router-dom'
+import { BookMarked, Calculator, ChevronRight, Columns3, Layers, ShoppingBag, Ticket, X, type LucideIcon } from 'lucide-react'
 import booksBundle from 'virtual:store-books'
 import { ExamStrip } from '@/components/ExamStrip'
 import { LogoTile } from '@/components/LogoTile'
@@ -12,8 +12,6 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { STORE_REVIEWS } from '@/data/storeReviews'
 import { CALCULATORS, STUDY_PRODUCTS } from '@/data/storeCatalog'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
-import { useAuth } from '@/hooks/useAuth'
-import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
 import { ProBadge } from '@/components/ProBadge'
 import { usePageHead } from '@/hooks/usePageHead'
@@ -83,8 +81,6 @@ export default function Store() {
   const [today] = useState(() => isoDay(new Date()))
   const [open, setOpen] = useState<StoreItem | null>(null)
   const shelfTop = useRef<HTMLDivElement>(null)
-  const { user } = useAuth()
-  const { balance } = useGems()
   const { isPro } = useSubscription()
   const { progress } = useExamProgress()
 
@@ -163,22 +159,29 @@ export default function Store() {
 
   return (
     <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8">
-      <header className="space-y-1">
-        <div className="flex items-center gap-3">
-          <h1 className="min-w-0 flex-1 text-2xl font-bold tracking-tight">Shop</h1>
-          <Link
-            to="/store/gems"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300"
-          >
-            <Gem className="h-4 w-4" aria-hidden />
-            Gem Shop
-            {user && <span className="tabular-nums">· {balance.toLocaleString()}</span>}
-          </Link>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          Registration, study materials, calculators and textbooks — each bought from the people who sell it.
-        </p>
+      <header>
+        <h1 className="text-2xl font-bold tracking-tight">Shop</h1>
       </header>
+
+      {/* What Actuarial Notes itself offers leads the page, ahead of
+          everything sold elsewhere. */}
+      <ListPanel>
+        <ListRow
+          to="/upgrade"
+          leading={
+            <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
+              <ProBadge size="md" className="bg-background text-foreground" />
+            </LogoTile>
+          }
+          title="Actuarial Notes Pro"
+          subtitle="A daily study plan paced to your exam date, so you walk in confident"
+          trailing={
+            isPro
+              ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
+              : <span className="text-sm font-semibold tabular-nums">$10 / month</span>
+          }
+        />
+      </ListPanel>
 
       <ExamStrip
         exams={exams.map(e => ({ value: e.key, name: e.name, logoKey: e.key }))}
@@ -311,37 +314,6 @@ export default function Store() {
           })}
         </div>
       )}
-
-      {/* The two things Actuarial Notes itself offers, after everything sold
-          elsewhere: Pro, and the gems the reader earns. */}
-      <ListPanel>
-        <ListRow
-          to="/upgrade"
-          leading={
-            <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
-              <ProBadge size="md" className="bg-background text-foreground" />
-            </LogoTile>
-          }
-          title="Actuarial Notes Pro"
-          subtitle="A daily study plan paced to your exam date, so you walk in confident"
-          trailing={
-            isPro
-              ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
-              : <span className="text-sm font-semibold tabular-nums">$10 / month</span>
-          }
-        />
-        <ListRow
-          to="/store/gems"
-          leading={
-            <LogoTile size="lg" className="bg-emerald-500 text-white shadow-sm">
-              <Gem className="h-6 w-6" />
-            </LogoTile>
-          }
-          title="Gem Shop"
-          subtitle="Spend the gems you earn on characters, skins and banners"
-          trailing={user ? <span className="text-sm font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">{balance.toLocaleString()}</span> : undefined}
-        />
-      </ListPanel>
 
       <footer className="mx-auto max-w-2xl space-y-1.5 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
         <h2 className="font-semibold uppercase tracking-wider">Disclaimer</h2>

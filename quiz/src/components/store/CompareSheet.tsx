@@ -263,7 +263,7 @@ function ProductHead({ item, onOpen }: { item: StudyItem; onOpen: () => void }) 
   return (
     <span className="flex flex-col gap-2">
       <ArtStage examKey={item.exams[0]} className="h-20 rounded-lg">
-        <StudyArt kind={item.study.kind} examKey={item.exams[0]} />
+        <StudyArt product={item.study} examKey={item.exams[0]} />
       </ArtStage>
       <button
         type="button"

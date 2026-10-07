@@ -27,7 +27,37 @@
     "bayes' theorem": "Bayes Theorem",
     "minimum capital test": "MCT",
     "own risk and solvency assessment": "ORSA",
-    "financial condition testing": "FCT"
+    "financial condition testing": "FCT",
+    "delta": "Delta Method",
+    "short term insurance": "Short-Term Insurance Coverage",
+    "liability coverage": "Liability Insurance",
+    "insurance company": "Insurer",
+    "outstanding claim": "Unpaid Claims",
+    "exposure": "Exposure Base",
+    "rate level": "On-Leveling",
+    "average rate": "Overall Rate Level Indication",
+    "black schole": "Black-Scholes Model",
+    "black scholes": "Black-Scholes Model",
+    "black scholes merton": "Black-Scholes Model",
+    "accrued liability": "Actuarial Accrued Liability",
+    "validation": "Model Validation",
+    "fractional age": "Fractional Age Assumption",
+    "risk neutral": "Risk-Neutral Valuation",
+    "applicable best practice": "Best Practice",
+    "appliable best practice": "Best Practice",
+    "benefit plan": "Defined Benefit Plan",
+    "db": "Defined Benefit Plan",
+    "dc": "Defined Contribution Plan",
+    "regularized regression": "Regularization",
+    "predictive modeling": "Predictive Analytics",
+    "predictive modelling": "Predictive Analytics",
+    "delta hedge": "Delta Hedging",
+    "hedge": "Hedging",
+    "erm": "Enterprise Risk Management",
+    "rbc": "Risk-Based Capital",
+    "lrt": "Likelihood Ratio Test",
+    "autocorrelation": "Autocorrelation Function",
+    "confidence": "Confidence Interval"
   },
   "namesakes": {
     "deductible": { "default": "Deductible", "5-1": "Deductible Rating" },
@@ -36,6 +66,7 @@
     "trend": { "default": "Trend", "5-1": "Loss Trend", "mas-ii": "Deterministic and Stochastic Trend" },
     "payment": { "default": "Payment", "fm-2": "Payment Amount" },
     "premium": { "default": "Insurance Premium", "fm-2": "Premium" },
-    "standards of practice": { "default": "Actuarial Standards of Practice", "6c-1": "Standards of Practice" }
+    "standards of practice": { "default": "Actuarial Standards of Practice", "6c-1": "Standards of Practice" },
+    "governance": { "default": "Corporate Governance", "cp-312": "Model Governance", "atpa-1": "Model Governance" }
   }
 }

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:367042b1d3e77db1de4714d34d8b5c535f578dfc855a2fab79e5e33c82a6def1
+  content_hash: sha256:8700e906dd3cf7ea678d65ac34baade17c85e4a6750a2931e629dce294b6013b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,7 +36,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 4. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claim Processing|claim processing]] changes, etc.)
 > 5. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate [[non-IBNR]] types of [[Reserve|reserves]] and explain when each is [[Required|required]]
-> 7. Apply [[Applicable Best Practice|applicable best practices]] related to [[Reserving|reserving]]
+> 7. Apply [[Best Practice|applicable best practices]] related to [[Reserving|reserving]]
 >
 > **Readings:**
 > - Video: Valuation at the Heart of Health Insurance (Background)
@@ -76,11 +76,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - GH201-101-25: Group and Health Reinsurance – A Primer for Actuaries (2c)
 
 > [!example]- Regulation & Taxation {15–25%}
-> The candidate will understand how to evaluate the impact of [[Regulation|regulation]] and [[Taxation|taxation]] on [[Insurance Company|insurance companies]] and [[Plan Sponsor|plan sponsors]] in Canada.
+> The candidate will understand how to evaluate the impact of [[Regulation|regulation]] and [[Taxation|taxation]] on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in Canada.
 >
 > 1. Describe the [[Regulatory|regulatory]] and [[Policy Making Process|policy making process]] in Canada
 > 2. Describe the major [[Applicable Law|applicable laws]] and [[Regulation|regulations]] and evaluate their impact
-> 3. Understand the impact of the [[Taxation|taxation]] of both [[Insurance Company|insurance companies]] and the [[Product|products]] they [[Provide|provide]]
+> 3. Understand the impact of the [[Taxation|taxation]] of both [[Insurer|insurance companies]] and the [[Product|products]] they [[Provide|provide]]
 >
 > **Readings:**
 > - Canadian Insurance Taxation, Swales, et. al., 4th Edition, 2015 (3c)

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7c44a72bc07e92f4d858fa7f23e48a4df5b552d58861912a3e0a31561278cbda
+  content_hash: sha256:aba4edb8782454afc5d3f6a7a5a1dc8a2763c94ff0312c516729d133d648c578
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand how to analyze different types of [[Design|designs]] for [[Retirement Plan|retirement plans]] and [[Retirement Plan Investment|retirement plan investments]].
 >
 > 1. Describe the [[Structure|structure]] of the following [[Plan|plans]]:
->    - [[Traditional]] defined [[Benefit Plan|benefit plans]]
+>    - [[Traditional]] defined [[Defined Benefit Plan|benefit plans]]
 >    - Defined [[Contribution|contribution]] and [[Savings Plan|savings plans]]
 >    - [[Hybrid Plan|Hybrid plans]]
 >    - Other alternative [[Retirement Plan|retirement plans]] such as [[Executive Retirement Plan|executive retirement plans]], [[Shared Risk Plan|shared risk plans]], [[Target Benefit Plan|target benefit plans]], etc.
@@ -153,7 +153,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 2. Assess the [[Tradeoff|tradeoffs]] between different goals
 > 3. Assess the [[Feasibility|feasibility]] of achieving the [[Sponsor'|sponsor’s]] goals for their [[Retirement Plan|retirement plan]]
 > 4. State relationships or recognize [[Contradiction|contradictions]] between a [[Sponsor's Plan|sponsor’s plan]] design goals and [[Retirement Risk|retirement risks]] faced by [[Retiree|retirees]]
-> 5. State relationship or recognize [[Contradiction|contradictions]] between [[Sponsor'|sponsor’s]] goals and [[Taxpayers' Perspective|taxpayers’ perspective]] when evaluating [[Benefit Plan|benefit plan]] design
+> 5. State relationship or recognize [[Contradiction|contradictions]] between [[Sponsor'|sponsor’s]] goals and [[Taxpayers' Perspective|taxpayers’ perspective]] when evaluating [[Defined Benefit Plan|benefit plan]] design
 > 6. Identify the ways that [[Regulation|regulation]] impacts the [[Sponsor's Plan|sponsor’s plan]] design goals
 > 7. Design [[Retirement|retirement]] programs that manage [[Retirement Risk|retirement risk]], are [[Consistent|consistent]] with [[Sponsor'|sponsor’s]] objectives and [[Promote Employee Behavior Consistent|promote employee behavior consistent]] with [[Sponsor'|sponsor’s]] objectives.
 > 8. Evaluate the [[Pro|pros]] and [[Con|cons]] from both a [[Sponsor|sponsor]] and [[Employee Perspective|employee perspective]] of [[Introducing Option|introducing options]] that impact the [[Labor Force Demographics|labor force demographics]]

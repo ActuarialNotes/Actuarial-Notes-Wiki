@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b2d377db787de9b1282aceec1c49d138c8732645cfab0eb5dd6000020baa19f4
+  content_hash: sha256:78786e1ed490504f93e35997d812b1bda43baa11a855c57ab79bafa8024a3900
   sources: []
   open_findings: 0
   open_critical: 0
@@ -56,7 +56,7 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 > 4. Derive and apply [[Kolmogorov's Forward Equation|Kolmogorov’s forward equations]] for [[Continuous Time Markov Multiple|continuous time Markov multiple]] state models.
 > 5. Calculate [[State-Dependent Probability|state-dependent probabilities]] for [[Continuous Time Markov|continuous time Markov]] models.
 > 6. Apply the [[Chapman-Kolmogorov Equations|Chapman-Kolmogorov equations]] to calculate [[Discrete Time Transition Probability|discrete time transition probabilities]] in the [[Markov]] model.
-> 7. Construct and [[Deconstruct Multiple Decrement Table|deconstruct multiple decrement tables]] using the associated [[Single Decrement|single decrement]] models and appropriate [[Fractional Age|fractional age]] assumptions.
+> 7. Construct and [[Deconstruct Multiple Decrement Table|deconstruct multiple decrement tables]] using the associated [[Single Decrement|single decrement]] models and appropriate [[Fractional Age Assumption|fractional age]] assumptions.
 > 8. Calculate [[Maximum Likelihood Estimate|maximum likelihood estimates]] of [[Transition Intensity|transition intensities]] and [[Probability|probabilities]] for [[Multiple|multiple]] state and [[Multiple Decrement|multiple decrement]] models, assuming [[Piecewise Constant Transition Intensity|piecewise constant transition intensities]].
 > 9. Calculate [[Approximate Confidence Interval|approximate confidence intervals]] for the [[Estimator|estimators]] in Topic 1(h), using [[Asymptotic Property|asymptotic properties]] of the [[Maximum Likelihood Estimator|maximum likelihood estimators]].
 
@@ -89,11 +89,11 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 > [!example]- Pension Plans and Retirement Benefits {10–18%}
 > The Candidate will understand how [[Retirement Benefit|retirement benefits]] are [[Accrued|accrued]], valued, and [[Funded|funded]].
 >
-> 1. Calculate [[Replacement|replacement]] ratios for Defined [[Contribution]] ([[DC]]), and Defined [[Benefit]] ([[DB]]) [[Plan|plans]], including [[Final Average Salary|final average salary]] ([[FAS]]), [[Career Average Earning|career average earnings]] ([[CAE]]), and [[Career Average Revalued Earning|career average revalued earnings]] ([[CARE]]) [[Plan|plans]].
+> 1. Calculate [[Replacement|replacement]] ratios for Defined [[Contribution]] ([[Defined Contribution Plan|DC]]), and Defined [[Benefit]] ([[Defined Benefit Plan|DB]]) [[Plan|plans]], including [[Final Average Salary|final average salary]] ([[FAS]]), [[Career Average Earning|career average earnings]] ([[CAE]]), and [[Career Average Revalued Earning|career average revalued earnings]] ([[CARE]]) [[Plan|plans]].
 > 2. Calculate the [[Required Contribution Rate|required contribution rate]] to [[Meet|meet]] a [[Target Replacement|target replacement]] ratio for a [[DC Plan Participant|DC plan participant]], using a [[Deterministic|deterministic]] approach.
 > 3. Identify, interpret, and apply [[Service Table|service table]] and [[Salary Scale|salary scale]] functions for [[Pension Plan Valuation|pension plan valuation]].
 > 4. For a [[DB Plan|DB plan]], calculate and interpret [[Accrued Benefit|accrued benefits]], including [[Benefit|benefits]] on [[Early Exit|early exit]] from the [[Plan|plan]].
-> 5. For a [[DB Plan|DB plan]], calculate and interpret the actuarial [[Accrued Liability|accrued liability]] and the [[Normal Cost|normal cost]] for [[Benefits Payable|benefits payable]] on [[Age Retirement|age retirement]] or [[Early Exit|early exit]] using the [[Projected Unit Credit|projected unit credit]] ([[PUC]]) and [[Traditional Unit Credit|traditional unit credit]] ([[TUC]]) [[Valuation|valuation]] methods.
+> 5. For a [[DB Plan|DB plan]], calculate and interpret the actuarial [[Actuarial Accrued Liability|accrued liability]] and the [[Normal Cost|normal cost]] for [[Benefits Payable|benefits payable]] on [[Age Retirement|age retirement]] or [[Early Exit|early exit]] using the [[Projected Unit Credit|projected unit credit]] ([[PUC]]) and [[Traditional Unit Credit|traditional unit credit]] ([[TUC]]) [[Valuation|valuation]] methods.
 
 > [!example]- Universal Life Insurance {10–18%}
 > The Candidate will understand the [[Policy|policy]] design and [[Benefits Payable|benefits payable]] under Type A and Type B [[Universal Life Contract|Universal Life contracts]] and be able to assess and quantify [[Account Value|account values]], [[Insurance Premium|premiums]], and [[Reserve|reserves]].
@@ -103,17 +103,17 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 > 3. Use [[Deterministic Profit Testing|deterministic profit testing]] to calculate [[Insurance Premium|premiums]] or [[Reserve|reserves]], and assess [[Emerging Surplus|emerging surplus]] for [[Universal Life Insurance|Universal Life insurance]], including [[Profit Signature|profit signature]], [[Profit Vector|profit vector]], [[Net|net]] present value, [[Internal Rate|internal rate]] of [[Return|return]], [[Profit Margin|profit margin]], and [[Discounted Payback Period|discounted payback periods]], under [[Best|best]] estimate or [[Stress|stress]] test assumptions.
 
 > [!example]- Embedded Options in Life Insurance and Annuity Products {10–18%}
-> The Candidate will understand various types of [[Equity-Linked Life Insurance Guarantee|equity-linked life insurance guarantees]], [[Option|options]] that are [[Embedded|embedded]] in [[Life Insurance|life insurance]] and [[Annuity Contract|annuity contracts]] and be able to price, [[Reserve|reserve]], and [[Hedge|hedge]] the [[Risk|risk]] inherent in these [[Option|options]].
+> The Candidate will understand various types of [[Equity-Linked Life Insurance Guarantee|equity-linked life insurance guarantees]], [[Option|options]] that are [[Embedded|embedded]] in [[Life Insurance|life insurance]] and [[Annuity Contract|annuity contracts]] and be able to price, [[Reserve|reserve]], and [[Hedging|hedge]] the [[Risk|risk]] inherent in these [[Option|options]].
 >
 > 1. Define and calculate [[Payoff|payoffs]] under each of the following [[Options Embedded|options embedded]] in [[Insurance|insurance]] and [[Annuity Contract|annuity contracts]]:
 >    - [[Guaranteed Minimum Death Benefit|Guaranteed minimum death benefit]]
 >    - [[Guaranteed Minimum Maturity Benefit|Guaranteed minimum maturity benefit]]
 >    - [[Guaranteed Minimum Income Benefit|Guaranteed minimum income benefit]]
 >    - [[Guaranteed Minimum Withdrawal Benefit|Guaranteed minimum withdrawal benefit]]
-> 2. Value the following [[Options Embedded|options embedded]] in [[Insurance|insurance]] and [[Annuity Contract|annuity contracts]], using the [[Black-Schole|Black-Scholes]] model:
+> 2. Value the following [[Options Embedded|options embedded]] in [[Insurance|insurance]] and [[Annuity Contract|annuity contracts]], using the [[Black-Scholes Model|Black-Scholes]] model:
 >    - [[Guaranteed Minimum Death Benefit|Guaranteed minimum death benefit]]
 >    - [[Guaranteed Minimum Accumulation-maturity Benefit|Guaranteed minimum accumulation/maturity benefit]]
-> 3. Construct a [[Replicating Portfolio|replicating portfolio]] for the [[Option|options]] in 7(b) using [[Delta-Hedging|delta-hedging]]
+> 3. Construct a [[Replicating Portfolio|replicating portfolio]] for the [[Option|options]] in 7(b) using [[Delta Hedging|delta-hedging]]
 > 4. Understand and evaluate the [[Cost|costs]] associated with [[Discrete-Time Rebalancing|discrete-time rebalancing]].
 > 5. Use [[Deterministic Profit Testing|deterministic profit testing]] to assess [[Emerging Surplus|emerging surplus]] for [[Equity-Linked Life Insurance Cash Flow|equity-linked life insurance cash flows]], including [[Profit Signature|profit signature]], [[Profit Vector|profit vector]], [[Net|net]] present value, [[Internal Rate|internal rate]] of [[Return|return]], [[Profit Margin|profit margin]], and [[Discounted Payback Period|discounted payback periods]], under [[Best|best]] estimate or [[Stress|stress]] test assumptions.
 

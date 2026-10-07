@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0e5f3b5c1db2979167c914e0692ba27bc746263f9f419bba9f4b0b62d519003f
+  content_hash: sha256:9aeb08ea01f99257a9c86199fd4a20aee43671632e0729e91e6f3270a3d07aff
   sources: []
   open_findings: 0
   open_critical: 0
@@ -41,7 +41,7 @@ The learning objectives below are transcribed from the [syllabus](https://www.so
 > 3. Discuss and comply with relevant [[Regulation|regulations]] that apply to working with [[Data|data]] and models.
 
 > [!example]- Working with Data {20–30%}
-> The Candidate will be able to understand basic [[Database|database]] calculations and [[Manipulation|manipulations]] and prepare [[Data|data]] for [[Predictive Modeling|predictive modeling]] applications.
+> The Candidate will be able to understand basic [[Database|database]] calculations and [[Manipulation|manipulations]] and prepare [[Data|data]] for [[Predictive Analytics|predictive modeling]] applications.
 >
 > 1. Understand the basic [[Structure|structure]] of a [[Data Pipeline|data pipeline]], including being able to perform the following tasks:
 >    - Evaluate the [[Quality|quality]] of appropriate [[Data|data]] sources for a problem
@@ -92,7 +92,7 @@ The learning objectives below are transcribed from the [syllabus](https://www.so
 >    - [[Shapley Value|Shapley values]]
 >    - [[Lift]] and [[Gain Chart|gain charts]].
 > 3. Explain why a model is predicting certain [[Value|values]] for certain [[Record|records]].
-> 4. Perform [[Data|data]] and model [[Governance|governance]] and develop model [[Documentation|documentation]] in an [[Ethical Context|ethical context]].
+> 4. Perform [[Data|data]] and model [[Model Governance|governance]] and develop model [[Documentation|documentation]] in an [[Ethical Context|ethical context]].
 > 5. Communicate in a [[Clear|clear]] and [[Straightforward Manner|straightforward manner]] using [[Common Language|common language]] that is appropriate for the intended [[Audience|audience]].
 > 6. [[Structure]] a [[Report|report]] in an [[Effective Manner While|effective manner while]] following [[Standard|standards]] of practice for actuarial [[Communication|communication]].
 

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e374f69f4ce405db989bbebe80f7361b9b516b59ecf556f26e7269148f311efc
+  content_hash: sha256:baf318e0c53e073cc09da22ed4e415d0ecf2490bfa2dc2518be8f7265948f995
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > The candidate will understand how to [[Apply-synthesize|apply/synthesize]] the methods and models used to value [[Pension Benefit|pension benefits]] for various purposes.
 >
 > 1. Differentiate between the various purposes for valuing [[Pension Plan|pension plans]]
-> 2. Perform [[Periodic Valuation|periodic valuations]] of [[Ongoing Plan|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Accrued Liability|accrued liability]], using a [[Variety|variety]] of [[Cost|cost]] methods
+> 2. Perform [[Periodic Valuation|periodic valuations]] of [[Ongoing Plan|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a [[Variety|variety]] of [[Cost|cost]] methods
 > 3. Analyze and communicate the [[Pattern|pattern]] of [[Cost Recognition|cost recognition]] that [[Arise|arises]] under a [[Variety|variety]] of [[Cost|cost]] methods
 > 4. Analyze and communicate the impact on [[Cost Stability|cost stability]] of a [[Variety|variety]] of [[Asset Valuation|asset valuation]] methods
 >

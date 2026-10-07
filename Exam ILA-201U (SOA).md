@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f08dd10b58d48eecd1a81c2b0d22275b8bf4e0e41774a23f0e84b9b6249ef3cb
+  content_hash: sha256:b7cfab3a70a2a74b73ddd3ef4006223131d087177f580478f02ace0d25e01312
   sources: []
   open_findings: 0
   open_critical: 0
@@ -68,7 +68,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Explain and calculate [[Required Capital|required capital]] under a [[US Regulatory|US regulatory]] framework
 > 2. Describe the purpose and application of [[Economic Capital|economic capital]]
-> 3. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurance Company|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
+> 3. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
 > 4. Explain and apply methods in [[Capital|capital]] management
 >
 > **Readings:**

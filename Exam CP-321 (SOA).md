@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ca670becf7afa8c661ce934c0eca2c37bade1d8fa3cb455d2c208bcb93dcded1
+  content_hash: sha256:0b0c923dce5f484f7e112c1a16209d0e5f826c91ffdccc9821002d8eb00d651c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -86,7 +86,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > 4. Calculate appropriate [[Claim Reserve|claim reserves]] given [[Data|data]]
 > 5. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claim Processing|claim processing]] changes, etc.)
 > 6. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
-> 7. Apply [[Appliable Best Practice|appliable best practices]] related to [[Reserving|reserving]]
+> 7. Apply [[Best Practice|appliable best practices]] related to [[Reserving|reserving]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (3a-3e, 3g)
@@ -105,7 +105,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > 2. Prepare [[Financial Statements|financial statements]] in accordance with Generally Accepted Accounting [[Principle|Principles]] ([[GAAP]]) and [[IFRS]] 17
 > 3. Interpret the results of both [[Statutory|statutory]] and [[GAAP Statement|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
 > 4. [[Project Financial|Project financial]] outcomes and recommend a [[Strategy|strategy]]
-> 5. Apply [[Applicable Best Practice|applicable best practices]]
+> 5. Apply [[Best Practice|applicable best practices]]
 >
 > **Readings:**
 > - CP321-107-25: Health Insurance Accounting Basics for Actuaries, Sections 4-7 (4a-4d)

@@ -73,7 +73,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
   `Store.tsx` — the Store, `/store`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` and `/craft/:topicId`, lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
@@ -259,8 +259,9 @@ before touching that area**:
   `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
 - `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle at the top of
-  the Quiz tab): a topic crafted out of its building blocks on a dark, zoomable board. It
-  starts with the **seeds** — what nothing in the topic is made from, and no more
+  the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
+  opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
+  logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
   (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
   drops one card on another: where the vault ties them together, a line joins them carrying
   the connection's **strength**, 0–100, and the connection **makes** what is built from the

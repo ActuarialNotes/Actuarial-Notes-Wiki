@@ -350,7 +350,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/battle" element={<BattleRoute />} />
-                {/* Concept Craft: the topic picker, and one topic's board. */}
+                {/* Concept Craft: the board, and a link adding one topic's pack to it. */}
                 <Route path="/craft" element={<CraftRoute />} />
                 <Route path="/craft/:topicId" element={<CraftRoute />} />
                 {/* Actuaria Online: the title, the star map, the sectors, the

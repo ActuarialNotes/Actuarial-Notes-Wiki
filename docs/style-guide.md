@@ -272,8 +272,9 @@ nothing is new: cards are `bg-card` wearing the foil (§4.3), a relation's tag i
 a `bg-muted` pill that fills with `bg-foreground` when its card is selected, and
 selection is a `primary` outline (§2.5). Its floor, `.craft-floor`, is a dot
 grid like `.actuaria-grid` but sized and offset from the board's camera so it
-moves with a pan or a zoom; it belongs to the board alone. The topic picker is a
-plain page in the reader's theme.
+moves with a pan or a zoom; it belongs to the board alone. The starter packs its
+**+** opens are a popover in the header, dark with the board, each exam's packs
+under its `ExamLogo`.
 
 ---
 

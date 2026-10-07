@@ -11,11 +11,32 @@ back. Every connection found stays on the board, so a topic
 ends as a map of how its concepts relate — the strongly connected drawn close
 together, the loosely connected further out.
 
-It lives at **`/craft`** (the topic picker) and **`/craft/:topicId`** (one topic's
-board), opened from the **Concept Craft** row at the top of the Quiz tab, beside
-Quiz Battle — a way of studying, not an exam. The routes are sheets laid over the
-Quiz tab (`deskPlace` in `lib/viewTransition.ts`) and light the Quiz row in the
-sidebar.
+It lives at **`/craft`** — one board, opened from the **Concept Craft** row at the
+top of the Quiz tab, beside Quiz Battle: a way of studying, not an exam. The board
+opens straight away, empty the first time, and its **+** (top right) opens the
+**starter packs**: every topic, under its exam's logo, in ladder order, in a menu that
+scrolls in place. Picking one adds that topic's seeds to the board — a pack on the
+board is ticked off — and any number of packs, from any exams, can share it.
+`/craft/:topicId` is a link to one pack: it adds it and shows the board. The route is
+a sheet laid over the Quiz tab (`deskPlace` in `lib/viewTransition.ts`) and lights
+the Quiz row in the sidebar.
+
+### Starter packs
+
+Each pack is a topic read on its own — its graph and seeds exactly as below — and the
+board lays the packs' graphs side by side (`mergeGraphs`): a concept two packs share
+is one card, a pair two packs both connect is one connection (the stronger reading),
+and what that pair makes is what either pack says it makes. They are not re-read as
+one bigger topic, which would re-weigh every name in passing and re-pick every
+recipe, so a pack could no longer be made in full from its own seeds. The hand deals
+each pack's seeds in the order the packs were added (`packSeeds`). A pack is
+*complete* once every connection of its own topic is found; the board, once every
+connection on it is.
+
+Before the packs, a reader chose one topic from a picker page and played it on a
+board of its own; those boards are folded into the one board on load
+(`migratePerTopicSave`) — each topic played becomes a pack, its finds and positions
+kept.
 
 ## Where it came from
 
@@ -59,14 +80,14 @@ connection's card says what it made and quotes the page that says why.
 |---|---|
 | `quiz/src/lib/conceptGraph.ts` | **The graph**, pure and tested: what a page says about other concepts (`pageMentions` — links, and names written out), the strength formula (`connectionStrength`, `STRENGTH_WEIGHTS`, `MIN_STRENGTH`, `STRENGTH_TIERS`) and `buildConceptGraph`. |
 | `quiz/src/lib/conceptRecipes.ts` | **The recipes**, pure and tested: what a page's opening names and where (`openingNames`, `pageOpening`, `beforeAside`, `abbreviationOf`), each concept's best recipes (`buildRecipes`, `RECIPES`, `PLACE`) and what each connection makes (`recipesByPair`). |
-| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`) and a connection's practice (`practiceQuestions`). |
+| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), starter packs on one board (`mergeGraphs`, `packSeeds`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`) and a connection's practice (`practiceQuestions`). |
 | `quiz/src/lib/craftLayout.ts` | The board's physics and geometry, pure and tested: bodies, strength-weighted springs, collision, seeding, where a made card lands (`spawnBeside`), the camera, hit-testing, where a line's label goes. |
-| `quiz/src/hooks/useConceptCraft.ts` | The reader's boards — localStorage, pair keys only — and which connections the board shows. |
+| `quiz/src/hooks/useConceptCraft.ts` | The reader's board — localStorage, pack ids and pair keys only — and which connections the board shows. |
 | `quiz/src/hooks/useConceptLevels.ts` | A concept's level and collected state for drawing its card — shared with Quiz Battle's topic pick. |
-| `quiz/src/pages/Craft.tsx` | The topic picker and one topic's screen: top bar, deck, board, connection card. Lazy (`lazyRoute`). |
-| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck`, `CraftConnection` (a connection's card), `CraftLogo`. |
+| `quiz/src/pages/Craft.tsx` | The board's screen: top bar with its **+**, the empty board's invitation, deck, board, connection card. Lazy (`lazyRoute`). |
+| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck`, `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftLogo`. |
 | `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), and no quoted sentence cuts a formula in half. |
-| `quiz/e2e/craft.spec.ts` | The way in, a connection found that makes new cards — drawn from the line that made them — with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card: what it made, down to its quiz. |
+| `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card: what it made, down to its quiz. |
 
 ## Topics
 
@@ -316,12 +337,12 @@ scoped like Actuaria's (style guide §2.6): the screen carries `.dark` and
 `color-scheme: dark`, so the sidebar and anything portalled to the body keep the
 reader's own theme. Its floor is a dot grid (`.craft-floor`) whose spacing and offset
 follow the camera, the one cue a blank canvas has that it was panned or zoomed. The
-topic picker follows the reader's theme like any other page.
+starter-pack menu hangs off the board's header and so is dark with it.
 
 ### The exam's colour
 
-The board takes its exam's accent (`examAccentStyle`, `lib/examColors.ts`) on the
-screen's root, and it marks what is **new** and what is **in play**: a card made but
+The board takes an exam's accent (`examAccentStyle`, `lib/examColors.ts`) on the
+screen's root — that of the pack added last — and it marks what is **new** and what is **in play**: a card made but
 not yet in any connection found is filled with the exam's vivid accent, with a halo of
 the soft one — the same cards are ringed in it in the deck — until the reader
 connects it to something; a held, selected or targeted card is outlined in it; lit
@@ -329,8 +350,8 @@ lines, their strengths and the dashed lines to what each connection made are dra
 in it; and so is the connection card's meter, its **Practice** button and what it
 made. Everything else stays the board's greys, so the colour
 always means the same thing. Which cards are new is derived, not stored (`fresh` in
-`boardState`). The topic picker leads each topic with its exam's logo, in the same
-colour (`ExamLogo`).
+`boardState`). The starter-pack menu leads each exam's packs with its logo, and each
+pack's add button is in that exam's colour (`ExamLogo`).
 
 ## No second anything
 
@@ -359,16 +380,17 @@ colour (`ExamLogo`).
 
 ## Storage
 
-localStorage only (`craft.v3`), the way Cowork's stores are: per topic, the
-connections found, as pair keys in the order found, and where each card was left,
-plus the filter. Nothing else is stored — the cards in hand, which find made each and
+localStorage only (`craft.v4`), the way Cowork's stores are: one board — the packs
+added (topic ids, in order), the connections found, as pair keys in the order found,
+and where each card was left — plus the filter. Nothing else is stored — the cards in hand, which find made each and
 which are new are all re-read from that one list against the graph (`boardState`:
-the seeds, then each connection in order, kept only while both its ends were in hand
+every pack's seeds, then each connection in order, kept only while both its ends were in hand
 when it was found). So a vault edit that drops a concept or a connection takes it off
 the board rather than breaking it, and one that changes what a pair makes — or a
 change to the rules, like the fourth version's — changes the board with it. The earlier versions' saves — `craft.v1`'s recipe ids, `craft.v2`'s
 hand-placed concepts and challenge days — mean nothing to a board whose concepts are
-made, and are removed on load. `parseCraftSave` checks every field on the way in. A
+made, and are removed on load; `craft.v3`'s boards, one per topic, are folded into the
+one board (`migratePerTopicSave`) and then removed. `parseCraftSave` checks every field on the way in. A
 server table, synced the way the flashcard deck is (`lib/flashcardSync.ts`), is the
 natural next step once the game has been played.
 

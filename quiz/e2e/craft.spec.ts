@@ -1,16 +1,17 @@
 import { test, expect, type Page } from '@playwright/test'
 
-// Concept Craft (docs/concept-craft.md): the way in from the Quiz tab, a
-// connection found by dropping one concept on another — new concepts made,
+// Concept Craft (docs/concept-craft.md): the way in from the Quiz tab onto an
+// empty board, a starter pack added from the + menu, a connection found by dropping one concept on another — new concepts made,
 // and nothing to close afterwards — a pair nothing connects going back, the
 // tap-then-tap way in, the app's concept popup a card opens, and a
 // connection's own card down to its quiz. Every flow is signed out, so the
 // board lives in localStorage alone, which is also what it does for a reader.
 //
-// The cards a topic starts with are read off the vault (`seedConcepts`), so
+// The cards a pack starts with are read off the vault (`seedConcepts`), so
 // nothing here names them: the deck deals them in order, and the first two are
 // always a connected pair — the one whose recipe its page states most plainly,
-// so the first drop makes something.
+// so the first drop makes something. Most flows open the board through a
+// topic's link (`/craft/<topic>`), which adds that pack and shows the board.
 
 const TOPIC = '/craft/exam-p-general-probability'
 
@@ -61,17 +62,31 @@ function strength(page: Page, x: string, y: string) {
 }
 
 test.describe('concept craft', () => {
-  test('opens from the Quiz tab onto the topic picker', async ({ page }) => {
+  test('opens from the Quiz tab onto an empty board, and adds a starter pack from the + menu', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('concept-craft-entry').click()
     await expect(page).toHaveURL(/\/craft$/)
-    await page.getByTestId('craft-topic').filter({ hasText: 'General Probability' }).click()
-    await expect(page).toHaveURL(new RegExp(`${TOPIC}$`))
+    await expect(page.getByTestId('craft-empty')).toBeVisible()
+    await expect(page.locator('[data-craft-node]')).toHaveCount(0)
+
+    await page.getByTestId('craft-add').click()
+    const menu = page.getByTestId('craft-pack-menu')
+    await expect(menu).toBeVisible()
+    await menu.getByTestId('craft-pack').filter({ hasText: 'General Probability' }).click()
+    await expect(menu).toHaveCount(0)
+    await expect(page.getByTestId('craft-empty')).toHaveCount(0)
     await expect(page.getByTestId('craft-tally')).toContainText(/^\d+ of \d+ concepts · 0 of \d+ connections$/)
     // A hand, not the deck: a few cards to make the rest from.
     const cards = await inHand(page)
     expect(cards.length).toBeGreaterThanOrEqual(2)
     await expect(page.locator('[data-craft-node]')).toHaveCount(cards.length)
+
+    // A pack on the board is ticked off; another adds its cards beside the first's.
+    await page.getByTestId('craft-add').click()
+    await expect(menu.locator('[data-pack="exam-p-general-probability"]')).toBeDisabled()
+    await menu.getByTestId('craft-pack').filter({ hasText: 'Time Value of Money' }).first().click()
+    await expect.poll(async () => (await inHand(page)).length).toBeGreaterThan(cards.length)
+    expect((await inHand(page)).slice(0, cards.length)).toEqual(cards)
   })
 
   test('makes new concepts from a connection, with nothing to close, and keeps them', async ({ page }) => {
@@ -104,6 +119,7 @@ test.describe('concept craft', () => {
     // pairs nothing connects. Try them, tapping one deck card then another,
     // until one goes back.
     await page.goto('/craft/exam-pcpa-dealing-with-data')
+    await expect(page).toHaveURL(/\/craft$/)
     const cards = await inHand(page)
     const tiles = page.getByTestId('craft-deck-tile')
     const notice = page.getByTestId('craft-notice').filter({ hasText: 'No connection between these two' })

@@ -8,8 +8,10 @@ import {
   craftGraph,
   craftTopics,
   madeBy,
+  mergeGraphs,
   objectiveBlocks,
   objectiveTitle,
+  packSeeds,
   practiceQuestions,
   PRACTICE_FALLBACK,
   recipesOf,
@@ -155,6 +157,44 @@ describe('combine', () => {
   it('finds nothing between unconnected concepts, or a concept and itself', () => {
     expect(combine(GRAPH, one, 'Fire', 'Earth').kind).toBe('none')
     expect(combine(GRAPH, one, 'Fire', 'fire').kind).toBe('none')
+  })
+})
+
+describe('starter packs', () => {
+  // A second pack sharing Water with the first, and the pair Fire–Water read
+  // stronger; Ice is made from Water and Cold.
+  const COLD = topic(
+    {
+      Water: '**Water** is wet.',
+      Cold: '**Cold** is the absence of heat.',
+      Fire: '**Fire** is hot.',
+      Ice: '**Ice** is [[Water]] gone [[Cold]].',
+    },
+    [['Water', 'Cold'], ['Fire', 'Water'], ['Fire', 'Water'], ['Fire', 'Water']],
+  )
+  const BOTH = mergeGraphs([GRAPH, COLD])
+
+  it('is one graph of every pack’s concepts, each concept once', () => {
+    expect(BOTH.concepts).toEqual(['Fire', 'Water', 'Earth', 'Air', 'Steam', 'Mud', 'Cloud', 'Lone', 'Cold', 'Ice'])
+    expect(mergeGraphs([GRAPH])).toBe(GRAPH)
+  })
+
+  it('keeps one connection per pair, the stronger reading, and every pack’s recipes', () => {
+    const fireWater = BOTH.connections.filter(c => c.key === 'fire|water')
+    expect(fireWater).toHaveLength(1)
+    expect(fireWater[0].strength).toBeGreaterThan(GRAPH.byKey.get('fire|water')!.strength)
+    expect(madeBy(BOTH, 'Fire', 'Water')).toEqual(['Steam'])
+    expect(madeBy(BOTH, 'Water', 'Cold')).toEqual(['Ice'])
+    expect(BOTH.neighbours.get('water')?.map(c => c.key)).toContain('cold|water')
+  })
+
+  it('deals each pack’s seeds in the order added, none twice, and every pack can still be made in full', () => {
+    const seeds = packSeeds([SEEDS, seedConcepts(COLD)])
+    expect(seeds.slice(0, SEEDS.length)).toEqual(SEEDS)
+    expect(new Set(seeds.map(s => s.toLowerCase())).size).toBe(seeds.length)
+    expect(seeds).toContain('Cold')
+    const all = boardState(BOTH, seeds, found(['Fire', 'Water'], ['Water', 'Earth'], ['Steam', 'Air'], ['Water', 'Cold']))
+    expect(all.held).toHaveLength(BOTH.concepts.length)
   })
 })
 

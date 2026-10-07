@@ -157,31 +157,33 @@ export default function Store() {
 
   const examName = exam ? storeExam(exam)?.name : null
 
+  // Actuarial Notes' own offer leads the study materials, ahead of what other
+  // people sell.
+  const proRow = (
+    <ListPanel>
+      <ListRow
+        to="/upgrade"
+        leading={
+          <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
+            <ProBadge size="md" className="bg-background text-foreground" />
+          </LogoTile>
+        }
+        title="Actuarial Notes Pro"
+        subtitle="A daily study plan paced to your exam date, so you walk in confident"
+        trailing={
+          isPro
+            ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
+            : <span className="text-sm font-semibold tabular-nums">$10 / month</span>
+        }
+      />
+    </ListPanel>
+  )
+
   return (
     <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8">
       <header>
         <h1 className="text-2xl font-bold tracking-tight">Shop</h1>
       </header>
-
-      {/* What Actuarial Notes itself offers leads the page, ahead of
-          everything sold elsewhere. */}
-      <ListPanel>
-        <ListRow
-          to="/upgrade"
-          leading={
-            <LogoTile size="lg" className="bg-foreground text-background shadow-sm">
-              <ProBadge size="md" className="bg-background text-foreground" />
-            </LogoTile>
-          }
-          title="Actuarial Notes Pro"
-          subtitle="A daily study plan paced to your exam date, so you walk in confident"
-          trailing={
-            isPro
-              ? <span className="text-sm font-semibold text-green-700 dark:text-green-400">Active</span>
-              : <span className="text-sm font-semibold tabular-nums">$10 / month</span>
-          }
-        />
-      </ListPanel>
 
       <ExamStrip
         exams={exams.map(e => ({ value: e.key, name: e.name, logoKey: e.key }))}
@@ -299,6 +301,7 @@ export default function Store() {
                 // would only say it again, unless it carries a control.
                 heading={!aisle || !!compare}
                 action={compare || more ? <span className="flex items-center gap-3">{compare}{more}</span> : null}
+                lead={group.aisle === 'study' ? proRow : undefined}
               >
                 {shown.map(item =>
                   item.aisle === 'registration' ? (
@@ -402,7 +405,7 @@ function AislePill({
   )
 }
 
-function Aisle({ aisle, count, heading = true, action, children }: { aisle: StoreAisle; count: number; heading?: boolean; action?: ReactNode; children: ReactNode }) {
+function Aisle({ aisle, count, heading = true, action, lead, children }: { aisle: StoreAisle; count: number; heading?: boolean; action?: ReactNode; lead?: ReactNode; children: ReactNode }) {
   const Icon = AISLE_ICON[aisle]
   return (
     <section aria-labelledby={`aisle-${aisle}`} aria-label={heading ? undefined : AISLE_LABEL[aisle]} className="space-y-3" data-testid={`aisle-${aisle}`}>
@@ -416,6 +419,7 @@ function Aisle({ aisle, count, heading = true, action, children }: { aisle: Stor
         <span className="text-sm tabular-nums text-muted-foreground">{count}</span>
         {action && <span className="ml-auto shrink-0">{action}</span>}
       </div>
+      {lead}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>
     </section>
   )

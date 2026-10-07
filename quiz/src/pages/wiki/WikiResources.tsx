@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Minus, Plus, X } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
@@ -20,7 +20,6 @@ import {
   bodyForExam,
   emptyResourceFacets,
   filterResources,
-  hasResourceFilters,
   resourceFacetOptions,
   resourceFacetsFromParams,
   resourceFacetsToParams,
@@ -293,7 +292,6 @@ export default function WikiResources() {
     const kept = new Set(filterResources(pool, facetSelection))
     return entries.filter(e => kept.has(e.item))
   }, [entries, pool, facetSelection])
-  const filtering = hasResourceFilters(selection) || vintageLabel !== null || showDropped
   const options = useMemo(
     () => Object.fromEntries(DROPDOWN_FACETS.map(facet => [
       facet,
@@ -416,16 +414,6 @@ export default function WikiResources() {
           surface="card"
           single
         />
-        {filtering && (
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="inline-flex items-center gap-1 rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          >
-            <X className="h-4 w-4" aria-hidden />
-            Clear
-          </button>
-        )}
       </div>
 
       {vintage?.previous && (
@@ -444,10 +432,13 @@ export default function WikiResources() {
 
       {/* The way back across to the tab's other page, the exam ladder — the
           row the ladder carries to here, pointing the other way. Half the
-          width from sm up, as it is in the ladder's guide row. */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <StudyGuidesPageRow page="exams" count={examCount} />
-      </div>
+          width from sm up, as it is in the ladder's guide row. Gone once an
+          exam is chosen: the shelf is then that exam's, not the tab's. */}
+      {!chosenExam && (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <StudyGuidesPageRow page="exams" count={examCount} />
+        </div>
+      )}
 
       {books.length === 0 ? (
         <p className="text-sm text-muted-foreground">Loading resources…</p>

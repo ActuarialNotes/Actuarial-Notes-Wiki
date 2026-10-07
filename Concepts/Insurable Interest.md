@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:da3a314f19982dc7b1ff39b0609c11d712c7ca6cfc346a05af75c7b81b52e593
+  content_hash: sha256:056484b38c33ee3e3bbb3094b6db98713becc7a79149fcce953044e2f14b7531
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ verification:
 - Insurable interest works alongside the policy's valuation provisions (actual cash value or replacement cost) and [[Coinsurance|coinsurance]]/insurance-to-value clauses: interest decides *whose* loss and how much of it, valuation decides what the loss is worth.
 
 > [!example]- A Co-Owner Insures the Whole Building {Example}
-> A building is owned $70\%$ by Ana and $30\%$ by Ben. Ana alone buys a property policy on it with a \$$600{,}000$ limit and no coinsurance clause. A fire causes \$$200{,}000$ of damage. What does Ana recover, and who bears the rest?
+> A building is owned $70\%$ by Ana and $30\%$ by Ben. Ana alone buys a property policy on it with a $\$600{,}000$ limit and no coinsurance clause. A fire causes $\$200{,}000$ of damage. What does Ana recover, and who bears the rest?
 >
 > > [!answer]-
 > > Ana's insurable interest is her $70\%$ share:
@@ -37,12 +37,12 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Ben, who is not an insured, bears his \$$60{,}000$ share. The \$$600{,}000$ limit does not make the whole loss collectible: Ana cannot recover for a loss that is not hers.
+> > Ben, who is not an insured, bears his $\$60{,}000$ share. The $\$600{,}000$ limit does not make the whole loss collectible: Ana cannot recover for a loss that is not hers.
 
 > [!example]- Interest at Inception Versus at Loss {Example}
 > Decide whether each claim is payable on insurable interest grounds:
 >
-> (a) A firm buys a \$$1{,}000{,}000$ policy on its chief actuary's life. She leaves the firm and dies two years later.
+> (a) A firm buys a $\$1{,}000{,}000$ policy on its chief actuary's life. She leaves the firm and dies two years later.
 >
 > (b) A homeowner sells her house on 1 March but keeps her homeowners policy in force; the house burns on 15 April.
 >

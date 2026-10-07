@@ -6,7 +6,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:44edf03f12aae44af9783a51214d67cf2a3c7c28feda708da9d3434d1eb9eec9
+  content_hash: sha256:6a68f57804df2b040e53f47e127c56386fe28c3c4ba90b346fda80bf544ab519
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,10 +24,10 @@ verification:
 - Liability is the classic [[Long Tail Lines|long-tail]] line: injuries are litigated and settled over years, so [[IBNR]] and development dominate its reserves — unlike first-party physical damage ([[Short Tail Insurance]]).
 
 > [!example]- Combined Single Versus Split Limits {Example}
-> A delivery van hits a car. Three occupants are injured, with damages of \$$450{,}000$, \$$380{,}000$ and \$$300{,}000$, and the other driver's \$$120{,}000$ car is destroyed. Defence costs are \$$90{,}000$. How much does the insurer pay in damages, and how much falls on the insured, if the policy has (a) a \$$1{,}000{,}000$ combined single limit, (b) split limits of \$$250{,}000$ / \$$500{,}000$ / \$$100{,}000$?
+> A delivery van hits a car. Three occupants are injured, with damages of $\$450{,}000$, $\$380{,}000$ and $\$300{,}000$, and the other driver's $\$120{,}000$ car is destroyed. Defence costs are $\$90{,}000$. How much does the insurer pay in damages, and how much falls on the insured, if the policy has (a) a $\$1{,}000{,}000$ combined single limit, (b) split limits of $\$250{,}000$ / $\$500{,}000$ / $\$100{,}000$?
 >
 > > [!answer]-
-> > Total damages are \$$1{,}250{,}000$.
+> > Total damages are $\$1{,}250{,}000$.
 > >
 > > (a) One limit for the whole accident:
 > >
@@ -39,7 +39,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > (b) Each injured person is capped at \$$250{,}000$, the accident at \$$500{,}000$, property damage at \$$100{,}000$:
+> > (b) Each injured person is capped at $\$250{,}000$, the accident at $\$500{,}000$, property damage at $\$100{,}000$:
 > >
 > > $$
 > > \begin{align*}
@@ -52,10 +52,10 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > In both cases the \$$90{,}000$ of defence is paid on top of the damages. The combined single limit leaves the insured with \$$400{,}000$ less exposure for the same accident.
+> > In both cases the $\$90{,}000$ of defence is paid on top of the damages. The combined single limit leaves the insured with $\$400{,}000$ less exposure for the same accident.
 
 > [!example]- What a Higher Limit Costs {Example}
-> Liability claims per vehicle are Poisson with mean $0.05$, and claim size is Pareto with $\alpha = 2$, $\theta = 200{,}000$, so $E[X \wedge u] = 200{,}000\left[1 - \frac{200{,}000}{200{,}000 + u}\right]$. Find the expected loss cost per vehicle at a \$$100{,}000$ basic limit and at \$$1{,}000{,}000$, and the increased limits factor.
+> Liability claims per vehicle are Poisson with mean $0.05$, and claim size is Pareto with $\alpha = 2$, $\theta = 200{,}000$, so $E[X \wedge u] = 200{,}000\left[1 - \frac{200{,}000}{200{,}000 + u}\right]$. Find the expected loss cost per vehicle at a $\$100{,}000$ basic limit and at $\$1{,}000{,}000$, and the increased limits factor.
 >
 > > [!answer]-
 > > $$
@@ -81,6 +81,6 @@ verification:
 > - Pairs with the business auto form's insuring agreement: who is an insured, what a covered auto is, and that defence is in addition to the limit.
 
 > [!warning]- Exam traps
-> - **Treating defence as eroding the limit.** Under the business auto liability coverage it is paid on top; an answer that subtracts defence from the \$$1{,}000{,}000$ has applied a professional-liability-style form.
-> - **Applying split limits per claimant only.** The per-accident cap binds after the per-person caps: $3 \times 250{,}000 = 750{,}000$ is cut to \$$500{,}000$.
+> - **Treating defence as eroding the limit.** Under the business auto liability coverage it is paid on top; an answer that subtracts defence from the $\$1{,}000{,}000$ has applied a professional-liability-style form.
+> - **Applying split limits per claimant only.** The per-accident cap binds after the per-person caps: $3 \times 250{,}000 = 750{,}000$ is cut to $\$500{,}000$.
 > - **First-party versus third-party.** Damage to the insured's *own* vehicle is physical damage coverage, not liability; adding it to the liability claim is a classification error.

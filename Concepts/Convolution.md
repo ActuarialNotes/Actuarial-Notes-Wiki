@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:20bb5ea11f2b58a0f1a8f730743ae48cc8381d8e8d63a3f6546d6cce0205abe3
+  content_hash: sha256:1b366e6f28deb339b53d1e3cd7029e3f40fbac61a1c570d50d0ac4a25fed10af
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,7 +25,7 @@ verification:
 - For (a,b,0) and (a,b,1) frequencies the Panjer recursion gives the same probabilities more cheaply; for large portfolios the [[Normal Approximation|normal approximation]] replaces both.
 
 > [!example]- Aggregate Claims From a Small Book {Example}
-> A policy has at most two claims a year: $\Pr(N=0)=0.5$, $\Pr(N=1)=0.3$, $\Pr(N=2)=0.2$. Each claim is $1$ or $2$ (in \$$1{,}000$s) with probabilities $0.6$ and $0.4$, independent of $N$ and of each other. Find $\Pr(S \le 2)$ and the stop-loss premium $E[(S-2)_+]$.
+> A policy has at most two claims a year: $\Pr(N=0)=0.5$, $\Pr(N=1)=0.3$, $\Pr(N=2)=0.2$. Each claim is $1$ or $2$ (in $\$1{,}000$s) with probabilities $0.6$ and $0.4$, independent of $N$ and of each other. Find $\Pr(S \le 2)$ and the stop-loss premium $E[(S-2)_+]$.
 >
 > > [!answer]-
 > > Two claims convolve to
@@ -59,10 +59,10 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Aggregate claims stay at or below \$$2{,}000$ with probability $0.872$, and a stop-loss cover attaching at \$$2{,}000$ costs \$$160$ in expectation.
+> > Aggregate claims stay at or below $\$2{,}000$ with probability $0.872$, and a stop-loss cover attaching at $\$2{,}000$ costs $\$160$ in expectation.
 
 > [!example]- Convolution With a Per-Loss Deductible {Example}
-> The number of losses is binomial with $m = 3$, $q = 0.4$. Ground-up losses are $1$, $2$ or $3$ (in \$$1{,}000$s) with probabilities $0.25$, $0.40$, $0.35$. A deductible of $1$ applies to each loss. Let $S$ be aggregate payments. Calculate $\Pr(S \le 2)$.
+> The number of losses is binomial with $m = 3$, $q = 0.4$. Ground-up losses are $1$, $2$ or $3$ (in $\$1{,}000$s) with probabilities $0.25$, $0.40$, $0.35$. A deductible of $1$ applies to each loss. Let $S$ be aggregate payments. Calculate $\Pr(S \le 2)$.
 >
 > > [!answer]-
 > > Per loss, $Y = (X-1)_+$ takes values $0, 1, 2$ with probabilities $0.25, 0.40, 0.35$ — a mass at zero, so every $k$ contributes. Binomial weights are $0.216, 0.432, 0.288, 0.064$.
@@ -91,7 +91,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Check: payments are binomial with $q = 0.4(0.75) = 0.3$, so $\Pr(S=0) = 0.7^3 = 0.343$. Aggregate payments are at most \$$2{,}000$ with probability about $0.838$.
+> > Check: payments are binomial with $q = 0.4(0.75) = 0.3$, so $\Pr(S=0) = 0.7^3 = 0.343$. Aggregate payments are at most $\$2{,}000$ with probability about $0.838$.
 
 > [!tip]- How it appears on the exam
 > - **FAM** (*calculate probabilities using the convolution method*): a frequency with two or three possible values and a severity on two or three points; asked for $\Pr(S = x)$, $\Pr(S \le x)$, or a stop-loss premium $E[(S-d)_+]$ built from the first few $f_S(x)$.

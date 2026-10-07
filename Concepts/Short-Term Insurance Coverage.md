@@ -6,7 +6,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:87c451a05f110366486f11db7463939b095d640dd2c633554631d07fe7b94c8d
+  content_hash: sha256:0fc9e6bce0398992b88a40eea8c7cc44354caf3153af812b2bbb7f875bee6df8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,7 +26,7 @@ A **short-term insurance coverage** is an [[Insurance Coverage|insurance coverag
 - Contrast with long-term coverages (life insurance, annuities), where premiums and benefits are fixed for decades and interest and mortality, not claim development, dominate.
 
 > [!example]- Rate for an Auto Coverage With a Deductible {Example}
-> Losses per exposure are Poisson with mean $0.08$; ground-up loss size is exponential with mean \$$5{,}000$. The coverage has a \$$1{,}000$ ordinary deductible. Fixed expenses are \$$25$ per exposure, variable expenses $20\%$ of premium and the profit provision $5\%$. The current rate is \$$440$. Find the indicated rate and rate change.
+> Losses per exposure are Poisson with mean $0.08$; ground-up loss size is exponential with mean $\$5{,}000$. The coverage has a $\$1{,}000$ ordinary deductible. Fixed expenses are $\$25$ per exposure, variable expenses $20\%$ of premium and the profit provision $5\%$. The current rate is $\$440$. Find the indicated rate and rate change.
 >
 > > [!answer]-
 > > For an exponential, the expected payment per loss is $E[(X - 1{,}000)_+] = 5{,}000\,e^{-0.2}$.
@@ -47,7 +47,7 @@ A **short-term insurance coverage** is an [[Insurance Coverage|insurance coverag
 > > The current rate is about $6.8\%$ short of covering expected losses, expenses and profit.
 
 > [!example]- Outstanding Claims Two Ways {Example}
-> An accident year at $12$ months has earned premium \$$10{,}000{,}000$, paid claims \$$3{,}000{,}000$, a paid cumulative development factor to ultimate of $2.5$, and an expected loss ratio of $65\%$. Estimate outstanding claims by the chain-ladder and Bornhuetter-Ferguson methods.
+> An accident year at $12$ months has earned premium $\$10{,}000{,}000$, paid claims $\$3{,}000{,}000$, a paid cumulative development factor to ultimate of $2.5$, and an expected loss ratio of $65\%$. Estimate outstanding claims by the chain-ladder and Bornhuetter-Ferguson methods.
 >
 > > [!answer]-
 > > $$
@@ -66,7 +66,7 @@ A **short-term insurance coverage** is an [[Insurance Coverage|insurance coverag
 > > \end{align*}
 > > $$
 > >
-> > Paid emergence is running ahead of expectation (chain-ladder ultimate loss ratio $75\%$ against $65\%$); BF gives that early emergence no weight in the unpaid portion, so it reserves \$$600{,}000$ less.
+> > Paid emergence is running ahead of expectation (chain-ladder ultimate loss ratio $75\%$ against $65\%$); BF gives that early emergence no weight in the unpaid portion, so it reserves $\$600{,}000$ less.
 
 > [!tip]- How it appears on the exam
 > - **FAM** (*use basic methods to calculate premiums and reserves for short-term insurance coverages*): an indicated rate or rate change by the loss cost or loss ratio method from adjusted data, or outstanding claims by expected loss ratio, chain-ladder or BF from a small triangle.

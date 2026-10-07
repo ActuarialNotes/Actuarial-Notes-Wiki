@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1e30864a962da86cd22af90a00febfb83763f634b7905f54476db0f96397d135
+  content_hash: sha256:14af64bd13ca9506bf1183fd95ba258a05c3f7c07734fb7a9de0b42bcd92299a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ An **insurance coverage** is the protection an [[Insurance Policy|insurance poli
 - The same event can be covered either way: a hospital stay can trigger an expense-reimbursing indemnity and a fixed daily cash benefit at once.
 
 > [!example]- Indemnity Versus Fixed Benefit for One Illness {Example}
-> A policyholder incurs \$$12{,}000$ of medical expenses. Her medical expense coverage has a \$$1{,}000$ deductible and pays $80\%$ above it; she also holds a critical illness policy paying a fixed \$$25{,}000$ on diagnosis. What does each coverage pay?
+> A policyholder incurs $\$12{,}000$ of medical expenses. Her medical expense coverage has a $\$1{,}000$ deductible and pays $80\%$ above it; she also holds a critical illness policy paying a fixed $\$25{,}000$ on diagnosis. What does each coverage pay?
 >
 > > [!answer]-
 > > $$
@@ -34,10 +34,10 @@ An **insurance coverage** is the protection an [[Insurance Policy|insurance poli
 > > \end{align*}
 > > $$
 > >
-> > The indemnity leaves her \$$3{,}200$ of the expense and could never pay more than \$$12{,}000$; the fixed benefit pays \$$25{,}000$ regardless of what the illness cost.
+> > The indemnity leaves her $\$3{,}200$ of the expense and could never pay more than $\$12{,}000$; the fixed benefit pays $\$25{,}000$ regardless of what the illness cost.
 
 > [!example]- How Coverage Design Moves the Cost {Example}
-> For a life aged $x$, $q_x = 0.010$, $q_{x+1} = 0.012$, $q_{x+2} = 0.015$ and $i = 5\%$. Compare the expected present value of a 3-year term insurance and a 3-year endowment insurance, each with sum insured \$$100{,}000$ payable at the end of the year of death (and, for the endowment, on survival to $x+3$).
+> For a life aged $x$, $q_x = 0.010$, $q_{x+1} = 0.012$, $q_{x+2} = 0.015$ and $i = 5\%$. Compare the expected present value of a 3-year term insurance and a 3-year endowment insurance, each with sum insured $\$100{,}000$ payable at the end of the year of death (and, for the endowment, on survival to $x+3$).
 >
 > > [!answer]-
 > > $$

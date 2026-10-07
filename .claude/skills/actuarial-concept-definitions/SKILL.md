@@ -262,6 +262,9 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
 4. **Clean notation:** `$…$` inline, `$$…$$` for display. No smart quotes, no
    OCR dashes (`−` → `-`), no Unicode fractions (`½` → `\frac{1}{2}`). Use
    `\times`, `\leq`, `\geq`, `\cdot`. Escape dollar amounts as `\$`.
+   Money goes *inside* the math with the dollar escaped — `$\$1{,}000$` —
+   never an escaped dollar before the math (`\$$1{,}000$`), which starts with
+   `$$` and can open a display block.
 
 ## Workflow
 
@@ -522,7 +525,7 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Worked numbers recomputed in code, not by eye
 - [ ] Example count scales to concept breadth; examples are actuarial, not generic
 - [ ] Multi-step solutions use `align*`, one `&=` step per line, `$$` on own lines
-- [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; `\$` for money)
+- [ ] LaTeX is clean (no smart quotes, OCR dashes, Unicode fractions; money as `$\$1{,}000$`)
 - [ ] Image embeds only reference files that exist in `Media/`
 - [ ] `Resources/Books/` page only: written from the extracted document (`docs/resource-pages.md`), cover first, `## Sources` last, `python3 scripts/resource_lint.py` clean
 - [ ] All `[[wiki-links]]` resolve to existing `Concepts/` pages

@@ -6,7 +6,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:82e6c433df3999f46ee0c69f8ac75cdbe2d3e06dc3b2e862595bdaac721091b7
+  content_hash: sha256:9996d478c744d7348384ca431fab903cf560416407326b7856d96f434fe526d1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,7 +26,7 @@ The **delta method** approximates the variance of a smooth function $g(\hat\thet
 - The approximation is good when $\text{Var}(\hat\theta)$ is small relative to the curvature of $g$; for strongly nonlinear $g$ or small samples it can understate the spread.
 
 > [!example]- Probability a Loss Exceeds the Deductible {Example}
-> Fifty losses are fitted by an exponential distribution; the MLE is $\hat\theta = \bar x = 2{,}000$, with $\widehat{\text{Var}}(\hat\theta) = \hat\theta^2/n$. Estimate the probability that a loss exceeds a \$$500$ deductible, and give an approximate $95\%$ confidence interval.
+> Fifty losses are fitted by an exponential distribution; the MLE is $\hat\theta = \bar x = 2{,}000$, with $\widehat{\text{Var}}(\hat\theta) = \hat\theta^2/n$. Estimate the probability that a loss exceeds a $\$500$ deductible, and give an approximate $95\%$ confidence interval.
 >
 > > [!answer]-
 > > Here $g(\theta) = e^{-500/\theta}$, so $g'(\theta) = \frac{500}{\theta^2}e^{-500/\theta}$.
@@ -77,7 +77,7 @@ The **delta method** approximates the variance of a smooth function $g(\hat\thet
 > > \end{align*}
 > > $$
 > >
-> > The fitted mean claim is about \$$2{,}253$, but with a coefficient of variation near $16\%$ on the estimate itself — about $42\%$ of the variance ($0.010368/0.024768$) comes from uncertainty in $\sigma$, which the mean amplifies through $\sigma^2/2$.
+> > The fitted mean claim is about $\$2{,}253$, but with a coefficient of variation near $16\%$ on the estimate itself — about $42\%$ of the variance ($0.010368/0.024768$) comes from uncertainty in $\sigma$, which the mean amplifies through $\sigma^2/2$.
 
 > [!tip]- How it appears on the exam
 > - **ASTAM** (*use the delta method to estimate the variance of the maximum likelihood estimator of a function of the parameter(s)*): fit by maximum likelihood, get $\text{Var}(\hat\theta)$ from the information, then ask for the variance or interval of $S(d)$, a percentile, $E[X \wedge u]$ or a mean.

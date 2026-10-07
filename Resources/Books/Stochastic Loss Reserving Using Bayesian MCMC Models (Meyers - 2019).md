@@ -14,13 +14,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d4b8379e79b4f95acbe5b9f306c5df8b6632f401daaa80cc2b8f7ef1d36e5f1f
+  content_hash: sha256:3abd6b7e5e04c3baf7f4d5244105a42f87abd64e25789a1230a2f2dd761208ac
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers - 2019).md
 ---
-![[Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers - 2019) - Cover.svg]]
+![[Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers - 2019) - Cover.jpg]]
 
 A CAS monograph that tests stochastic loss reserve models on outcomes from the CAS Loss Reserve Database and proposes Bayesian MCMC models that validate better. It begins by testing the Mack model on incurred data and the bootstrap overdispersed Poisson model on paid data, then proposes Bayesian MCMC models that recognize correlation between accident years in incurred data, allow for a change in the claim settlement rate in paid data, and combine paid and incurred data in one model. It continues with dependencies between lines of insurance and a cost of capital risk margin. This second edition (2019) revises the 2015 original, with the models run in Stan instead of JAGS.
 

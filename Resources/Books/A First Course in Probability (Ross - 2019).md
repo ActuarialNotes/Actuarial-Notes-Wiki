@@ -8,11 +8,11 @@ Edition: "10th"
 Type: "Textbook"
 ISBN: "978-0-13-475311-9"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fb1b4ea7a860665fd6556f4c08cb91d6771d7db79c5bbd9e089be7fadbc40a1c
+  content_hash: sha256:7eddb4b9b8b8612477c53daa55b6f00e64c2e4bdeee663177e2510ecd8ea23a2
   sources:
     - "Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii; sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6, https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf"
     - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.5, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/A First Course in Probability (Ross - 2019).md
 ---
-![[A First Course in Probability (Ross - 2019) - Cover.svg]]
+![[A First Course in Probability (Ross - 2019) - Cover.jpg]]
 
 An elementary introduction to the theory of probability for students of mathematics, statistics, engineering and the sciences who know elementary calculus. Through numerous examples it presents both the mathematics of probability theory and its many possible applications. The tenth edition adds material on the Pareto distribution (Section 5.6.5), Poisson limit results (Section 8.5) and the Lorenz curve (Section 8.7), and new examples on NCAA basketball tournament win probabilities and the friendship paradox.
 

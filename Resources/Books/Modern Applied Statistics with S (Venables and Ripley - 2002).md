@@ -12,13 +12,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4f031cc5274f040c43e3534ed63c34939592adf1fdcd3ec318b841b3fcfc28bb
+  content_hash: sha256:5e7e766401b142f34ec1108fcefe35dc9f546dd9ae8aa8149b6dea4ce79583d9
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Modern Applied Statistics with S (Venables and Ripley - 2002).md
 ---
-![[Modern Applied Statistics with S (Venables and Ripley - 2002) - Cover.svg]]
+![[Modern Applied Statistics with S (Venables and Ripley - 2002) - Cover.jpg]]
 
 A guide to using the S environments, S-PLUS and R, for statistical analysis: both an introduction to S and a course in modern statistical methods. Readers are assumed to have a basic grounding in statistics, and the emphasis throughout is on practical problems and full analyses of real data sets, across linear, non-linear and smooth regression, tree-based methods, multivariate analysis, pattern recognition, survival analysis, time series and spatial statistics. The fourth edition is written for S-PLUS 6.0 or R 1.5.0 or later and adds coverage of R. It is published in Springer's Statistics and Computing series.
 

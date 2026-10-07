@@ -38,11 +38,23 @@ citation block with a third of its width empty reads as a layout bug.
 
 ## Real jackets win, always
 
-A scanned or publisher-supplied jacket is the better picture. Three of the thirty
-pages have one — Hogg's *Probability and Statistical Inference*, Asimow's
-*Probability and Statistics with Applications*, Hassett's *Probability for Risk
-Management* — and they are left exactly as they are. The other twenty-seven get a
-drawn one.
+A scanned or publisher-supplied jacket is the better picture. Twenty-nine of the
+pages have one, and they are left exactly as they are; the rest get a drawn one. Where
+a real jacket came from, in the order it was tried:
+
+- **Open Library, by the page's own ISBN** (`covers.openlibrary.org/b/isbn/<ISBN>-L.jpg?default=false`
+  — the flag makes a missing cover a 404 rather than a 1×1 placeholder). Most trade and
+  university-press textbooks.
+- **Amazon's ISBN-10 image** (`images-na.ssl-images-amazon.com/images/P/<ISBN-10>.01.LZZZZZZZ.jpg`)
+  for the ISBNs Open Library lacks.
+- **The document's own first page**, for a CAS Monograph — its PDF opens on a designed
+  cover — and Friedland's *Estimating Unpaid Claims*. A paper, study note, standard or
+  regulator's guideline has no jacket (its first page is a title page, unreadable at card
+  size), so those keep the generated cover, as does a book whose cover could not be found
+  (the ACTEX titles, the Canadian casebooks).
+
+Every cover was looked at against the page's edition before it went in — the ISBN is the
+page's, so an edition mismatch means the page's ISBN is wrong, not the image.
 
 To replace a generated cover with a real one:
 

@@ -14,13 +14,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f470cd369ca7b24b436bf98c56ebb68a117ca961c8cc992af0265333a5156497
+  content_hash: sha256:1f63ae8d8cc1de1f2cfa49a13f716fc94243157952a33ec60bfd43b5966324eb
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020).md
 ---
-![[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020) - Cover.svg]]
+![[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020) - Cover.jpg]]
 
 A comprehensive guide to creating an insurance rating plan using generalized linear models (GLMs), with an emphasis on application over theory. Written for actuaries practising in property/casualty insurance, it presents the technical foundations through insurance examples, then covers the model-building process, data preparation, selection of model form, model refinement and model validation, and briefly discusses extensions to the GLM. It is number 5 in the CAS Monograph Series; the copy CAS now hosts is the second edition's 2025 revision, whose contents and Chapter 7 match the 2020 printing page for page.
 

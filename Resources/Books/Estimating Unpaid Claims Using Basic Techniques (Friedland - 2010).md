@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:589b30300d59ae4dc7e1e7a83f878251fbc3f04269209f7ed309cd07c457bbe2
+  content_hash: sha256:f7a4bbc2d48e30e117386233de0dc50da25f6c0af377aa4767edb165dc3a2d4d
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010).md
 ---
-![[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010) - Cover.svg]]
+![[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010) - Cover.jpg]]
 
 A CAS text on estimating unpaid claims for property and casualty insurers, reinsurers and self-insured entities using basic techniques. Written by Jacqueline Friedland of KPMG, with significant contributions by Rachel Dutil and Edward Lam, it was created to replace a number of readings on the CAS's 2007 syllabus with a single educational publication. Its four parts are Introduction, Information Gathering, Basic Techniques for Estimating Unpaid Claims, and Estimating Unpaid Claim Adjustment Expenses; three appendices reproduce a CAS statement of principles and two actuarial standards of practice. This is Version 3, dated July 30, 2010, which added Chapter 17.
 

@@ -7,11 +7,11 @@ date: "2009"
 Type: "Textbook"
 ISBN: "978-0-521-76465-0"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:124309734e7b6755e5ddf6449b0750b33c71bae854158d9cab91f7679c88e270
+  content_hash: sha256:7eb8de720240107bdaeba6a52171cfd3ae59b1deb60f6d2dd44760090d4f6387
   sources:
     - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge University Press, 2009), publisher eBook preview: title page (PDF p.5), copyright page (PDF p.6: (c) Y.-K. Tse 2009, hardback ISBN-13 978-0-521-76465-0), full printed Contents pp. vii-xii (PDF pp.9-14, text layer), Preface (PDF pp.15-16), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
     - "Cambridge Core book record: series International Series on Actuarial Science, ISBN 9780521764650, print publication date 17 September 2009, fetched 2026-10-05, sha256:87f03cc238550bce65ef555ceb2af5e55a37f26a1d1adde3bdf4ef99a1a8c8d0 — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/Nonlife Actuarial Models (Tse - 2009).md
 ---
-![[Nonlife Actuarial Models (Tse - 2009) - Cover.svg]]
+![[Nonlife Actuarial Models (Tse - 2009) - Cover.jpg]]
 
 A textbook for senior undergraduates on the theory, methods and empirical implementation of nonlife actuarial models. Its preface says it covers all the topics of Exam C of the Society of Actuaries (Exam 4 of the Casualty Actuarial Society) as per the 2007 Basic Education Catalog, and some beyond them, such as risk measures and ruin theory. It is in four parts — loss models, risk and ruin, credibility, and model construction and evaluation — with an appendix reviewing statistics, many worked examples, and Excel computation notes in several chapters.
 

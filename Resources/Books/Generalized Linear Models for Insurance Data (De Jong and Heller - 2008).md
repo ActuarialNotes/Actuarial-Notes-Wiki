@@ -11,13 +11,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ea6ae4e4c0a33d19de4b84837f3f58740468de395f2dc6366d36cb451fff4b50
+  content_hash: sha256:f5c4a26d0963c933e80faf1166f1f614af0880700d06f4de642f41db78ccac71
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models for Insurance Data (De Jong and Heller - 2008).md
 ---
-![[Generalized Linear Models for Insurance Data (De Jong and Heller - 2008) - Cover.svg]]
+![[Generalized Linear Models for Insurance Data (De Jong and Heller - 2008) - Cover.jpg]]
 
 A textbook on generalized linear models (GLMs) for insurance applications, with its analyses based on real insurance data sets. In the publisher's description it treats GLMs, covers all standard exponential family distributions, extends the methodology to correlated data structures and discusses developments beyond the GLM, focusing on issues specific to insurance data such as model selection with large data sets and varying exposure times. Computations are illustrated in SAS, and in R where SAS is not convenient; code and output for every example are in Appendix 1. It is part of the International Series on Actuarial Science.
 

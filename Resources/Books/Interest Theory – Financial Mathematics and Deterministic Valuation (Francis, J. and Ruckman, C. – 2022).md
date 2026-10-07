@@ -8,11 +8,11 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-0-9981604-4-3"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:75c6053d6f01a6005950d160213db1470aafc4bda0f899909c6b87d272766419
+  content_hash: sha256:29cff43ffd62c180760ad03dad33804b1aaae4d5775fa7431a0973ff50d26175
   sources:
     - "Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, re-fetched 2026-09-29, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf"
     - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Francis & Ruckman entry), PDF p.5-6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
@@ -20,7 +20,7 @@ verification:
   open_critical: 0
   log: ".verify/Resources/Books/Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022).md"
 ---
-![[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022) - Cover.svg]]
+![[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022) - Cover.jpg]]
 
 A textbook explaining the interest theory required for the SOA and CAS Financial Mathematics (FM) exam. In the publisher's description it identifies Key Concepts throughout for easy reference and carries over 300 end-of-chapter questions written in the style of the exam's multiple-choice questions, each with a difficulty rating; fully worked solutions, showing the use of the BA II Plus calculator, are a free download from the publisher. The authors' introduction describes a text that moves through the material quickly so that the reader can begin practising questions sooner.
 

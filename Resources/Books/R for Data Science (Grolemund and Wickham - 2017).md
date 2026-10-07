@@ -13,13 +13,13 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1a2d93a0e791a49d62a3f8c5931cf1a288286330345a8046b74bc9299a8065d8
+  content_hash: sha256:3c139fb27095eb58258935884dc2ea98a8a4e70cfcfe251a80e0ab2e2bb5d867
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/R for Data Science (Grolemund and Wickham - 2017).md
 ---
-![[R for Data Science (Grolemund and Wickham - 2017) - Cover.svg]]
+![[R for Data Science (Grolemund and Wickham - 2017) - Cover.jpg]]
 
 A book that teaches how to do data science with R: getting data into R, into its most useful structure, and transforming, visualising and modelling it. It offers a practicum of skills for data science and the best practices for doing each of them with R, including the grammar of graphics, literate programming and reproducible research. The authors keep this first edition, published in January 2017, free online at r4ds.had.co.nz; the site notes that a second edition was published in June 2023.
 

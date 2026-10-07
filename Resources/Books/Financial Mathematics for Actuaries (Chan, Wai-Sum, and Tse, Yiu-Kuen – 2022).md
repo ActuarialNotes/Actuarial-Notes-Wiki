@@ -8,11 +8,11 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-981-12-4327-1"
 verification:
-  status: verified
-  confidence: low
+  status: stale
+  confidence: null
   last_checked: 2026-09-29
   last_checked_by: agent:validate-v1
-  content_hash: sha256:470e01e45695c08b731508de0a08b5a1bd23f96d9067363ee5b98c470865c9c0
+  content_hash: sha256:3a679f14a48928034e13d61504778dd5c71f31cd35e7c42a3f89b2a58e3a44bb
   sources:
     - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Chan & Tse entry), PDF p.5, 7, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
     - "World Scientific's Crossref deposit for Financial Mathematics for Actuaries, 3rd ed.: chapter records 10.1142/9789811243288_0001–_0011 with titles and page ranges, re-fetched 2026-09-29, sha256:8a015cb140eaa779b82f41856ee5800df2af336f25d2ed78a0fc2b5a44b964ee — https://api.crossref.org/works?filter=isbn:9789811243271&rows=40&select=DOI,title,page,type"
@@ -22,7 +22,7 @@ verification:
   open_critical: 0
   log: ".verify/Resources/Books/Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022).md"
 ---
-![[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022) - Cover.svg]]
+![[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022) - Cover.jpg]]
 
 A textbook on the fundamental concepts of financial mathematics essential for evaluating any financial product and instrument. It centres on the present and future values of streams of cash flows under different interest rate environments and, in the publisher's description, covers the body of knowledge the Society of Actuaries requires for its Financial Mathematics (FM) exam, with numerous examples and exercises, some adapted from past FM exams. The third edition adds an "R Laboratory" section of R code to every chapter except Chapter 9, revises key definitions and alters the theme structure.
 

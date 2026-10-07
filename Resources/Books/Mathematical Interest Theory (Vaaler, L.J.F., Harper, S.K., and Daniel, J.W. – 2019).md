@@ -8,11 +8,11 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-4704-4393-1"
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bc8a6cb8fa484a170ce48689f68faa624331b7a89ad70af79b9ffe38f15857e6
+  content_hash: sha256:196e29a2a09bb3f48a013c552191c4c888cec028a8371dc158721cc988410548
   sources:
     - "Vaaler, Harper & Daniel, Mathematical Interest Theory, 3rd ed. (MAA Press, an imprint of the American Mathematical Society, 2019) — title page and Contents pp.vii–x, library scan (ZBW, linked from the K10plus record), PDF pp.1–5 read as images, sha256:81799b5ea775d35a9b466601c96e6c6ef6b260718a598bb627462f6b86f7e918 — https://www.gbv.de/dms/zbw/1664825304.pdf"
     - "K10plus catalogue record for ISBN 9781470443931 (MARC 020, 245, 250, 264, 300, 490, 700) — https://sru.k10plus.de/opac-de-627?version=1.1&operation=searchRetrieve&query=pica.isb%3D9781470443931&maximumRecords=10&recordSchema=marcxml"
@@ -23,7 +23,7 @@ verification:
   open_critical: 0
   log: ".verify/Resources/Books/Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019).md"
 ---
-![[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019) - Cover.svg]]
+![[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019) - Cover.jpg]]
 
 An introduction to how investments grow over time, done in a mathematically precise manner with an emphasis on practical applications. In the publisher's description it is written for anyone with a strong high-school algebra background who wants to be an informed borrower or investor, introduces modern financial topics — arbitrage, options, futures and swaps — and carries more than 260 worked examples and over 475 problems, with numerical answers in an appendix. It is Volume 57 of the AMS/MAA Textbooks series, published by MAA Press, an imprint of the American Mathematical Society.
 

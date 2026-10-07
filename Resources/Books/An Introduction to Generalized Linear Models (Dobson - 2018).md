@@ -8,11 +8,11 @@ Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-138-74151-5"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f5a375f4e20e1f0620b2edc4bfdd1752d7c3a0f3882fad0adfd538aed539d9ba
+  content_hash: sha256:6c63eb3d70d625ce36f84bae5f9b05f20479a8a3decda2edf34c2d8d82acc2a6
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title and copyright pages, Contents pp. vii-xiii (PDF pp.8-14), Preface, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "Routledge product page, An Introduction to Generalized Linear Models 4th ed., Description, fetched 2026-10-05, sha256:09db8a693f9d97e58315f29112c66336849ec3d0c6c5ddbac0e7d6ed5957e4e8 — https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515"
@@ -21,7 +21,7 @@ verification:
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Generalized Linear Models (Dobson - 2018).md
 ---
-![[An Introduction to Generalized Linear Models (Dobson - 2018) - Cover.svg]]
+![[An Introduction to Generalized Linear Models (Dobson - 2018) - Cover.jpg]]
 
 A textbook presenting generalized linear models as a unified framework for statistical modelling, accessible to undergraduates and researchers in other fields. It sets out the theoretical background — the Normal, Poisson and binomial distributions, estimation, model fitting and inference — before methods for particular kinds of data: multiple linear regression, analysis of variance, logistic regression, log-linear models, survival analysis, multilevel models, and Bayesian models fitted by Markov chain Monte Carlo, with code for Stata, R and WinBUGS. The fourth edition adds sections on model selection and non-linear associations and a Postface on good statistical practice.
 

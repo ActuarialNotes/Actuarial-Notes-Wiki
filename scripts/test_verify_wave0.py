@@ -318,6 +318,34 @@ class BatchTests(TempVault):
         self.assertEqual(finding.fields["applied"], "true")
         self.assertEqual(finding.fields["run_id"], "2026-10-09T00:00Z/abcd")
 
+    def test_a_batch_applied_twice_leaves_every_log_byte_identical(self) -> None:
+        """A replayed batch — the same run's ops applied again — must append
+        nothing: not a 'recurrence' of the findings it resolved, not a second
+        resolution, not a second pass. Wave 1 hit exactly this."""
+        ops = [
+            {"op": "finding", "path": self.rels[0], "severity": "minor", "locus": "stem",
+             "claim": "Says 1,205.", "evidence": "The booklet prints 1,250.", "applied": True},
+            {"op": "resolution", "path": self.rels[0], "resolves": "F-001", "note": "Fixed."},
+            {"op": "pass", "path": self.rels[0], "status": "verified", "confidence": "high",
+             "source": ["CAS Exam 5 Fall 2019, Q1, sha256:ab — https://x/a.pdf"]},
+        ]
+        self.batch(ops, "--run-id", "2026-10-09T00:00Z/abcd")
+        log_path = self.root / V.log_rel_for(self.rels[0])
+        page_path = self.root / self.rels[0]
+        first = (log_path.read_text(encoding="utf-8"), page_path.read_text(encoding="utf-8"))
+        self.batch(ops, "--run-id", "2026-10-09T00:00Z/abcd")
+        self.assertEqual((log_path.read_text(encoding="utf-8"), page_path.read_text(encoding="utf-8")), first)
+        self.assertEqual(len(V.read_log(self.rels[0]).findings()), 1)
+
+    def test_a_later_run_still_records_a_recurrence(self) -> None:
+        ops = [{"op": "finding", "path": self.rels[0], "severity": "minor", "locus": "stem",
+                "claim": "Says 1,205.", "evidence": "The booklet prints 1,250."},
+               {"op": "resolution", "path": self.rels[0], "resolves": "F-001", "note": "Fixed."}]
+        self.batch(ops, "--run-id", "2026-10-09T00:00Z/abcd")
+        self.batch(ops[:1], "--run-id", "2026-10-16T00:00Z/ef01")
+        findings = V.read_log(self.rels[0]).findings()
+        self.assertEqual([f.fields.get("recurrence_of", "") for f in findings], ["", "F-001"])
+
     def test_a_malformed_op_stops_the_batch_before_anything_is_written(self) -> None:
         with self.assertRaises(SystemExit) as caught:
             self.batch([

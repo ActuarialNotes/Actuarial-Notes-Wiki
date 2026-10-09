@@ -180,6 +180,15 @@ def cmd_finding(args: argparse.Namespace) -> int:
             _sync(rel)
             print(f"{rel}: reaffirmed {prior.entry_id} (no duplicate finding created)")
             return 0
+        # Closed in this same run: the run is being replayed (a batch applied
+        # twice), not re-detecting a regression. A recurrence needs a later
+        # sweep to find the problem back after it was fixed.
+        if args.run_id and (prior.fields.get("run_id") == args.run_id or any(
+            e.entry_type == "resolution" and e.fields.get("resolves") == prior.entry_id
+            and e.fields.get("run_id") == args.run_id for e in log.entries
+        )):
+            print(f"{rel}: {prior.entry_id} was recorded and closed in this run — nothing appended")
+            return 0
         # Closed, but back. That is a regression, and it gets its own entry that
         # names the one it recurs from.
         recurrence_of = prior.entry_id
@@ -224,6 +233,12 @@ def cmd_resolution(args: argparse.Namespace) -> int:
         raise SystemExit(f"no log at {V.log_rel_for(rel)} — nothing to resolve")
     if not any(e.entry_id == args.resolves for e in log.entries):
         raise SystemExit(f"{args.resolves} is not an entry in {V.log_rel_for(rel)}")
+    if args.run_id and any(
+        e.entry_type == "resolution" and e.fields.get("resolves") == args.resolves
+        and e.fields.get("run_id") == args.run_id for e in log.entries
+    ):
+        print(f"{rel}: {args.resolves} already resolved in this run — nothing appended")
+        return 0
 
     entry_text = V.render_entry(
         _next_resolution_id(log, args.resolves),
@@ -295,6 +310,22 @@ def cmd_pass(args: argparse.Namespace) -> int:
 
     if args.status != "verified" and args.confidence:
         raise SystemExit("confidence is only meaningful on a verified page")
+
+    # The same pass recorded twice in one run (a replayed batch) on unchanged
+    # bytes says nothing the first did: append nothing.
+    log = V.read_log(rel)
+    current = V.content_hash(path.read_text(encoding="utf-8"))
+    block_now = V.parse_verification(path.read_text(encoding="utf-8")) or {}
+    if args.run_id and log and block_now.get("content_hash") == current:
+        for e in reversed(log.entries):
+            if e.entry_type == "comment" and e.fields.get("status_set"):
+                if (e.fields.get("run_id") == args.run_id
+                        and e.fields.get("status_set") == args.status
+                        and (e.fields.get("confidence") or "") == (args.confidence or "")
+                        and e.fields.get("sources_checked", "") == ("; ".join(args.source) if args.source else "")):
+                    print(f"{rel}: this pass is already recorded in this run — nothing appended")
+                    return 0
+                break
 
     entry_text = V.render_entry(
         _next_comment_id(V.read_log(rel)),

@@ -1,13 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9ed14f2a703be881b67d455725cdd5c98964401545c7dc99c937cc988231f9cc
+  content_hash: sha256:6547e0917e217955261662b748a7696a25fe09f65cc4924e04e2c005c1ad32c0
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp.64,68-71 (PDF pp.76,80-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21); Ch. 4 p.56 (PDF p.68); Ch. 5 pp.64, 68-72 (PDF pp.76, 80-84), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Earned Premium.md
 ---
@@ -18,11 +18,11 @@ verification:
 
 > $$\text{EP for one policy} = \text{Full premium} \times \frac{\text{days elapsed}}{\text{policy term}}$$
 
-- Earned premium is the correct denominator for a [[Loss Ratio|loss ratio]] and for any rate indication, because it covers the same period as the losses in the numerator. Pairing losses with [[Written Premium|written premium]] flatters a growing book and penalizes a shrinking one.
+- Earned premium is the usual denominator of a [[Loss Ratio|loss ratio]] — Werner & Modlin: "typically, the ratio uses total reported losses and total earned premium" — because it is the premium for the coverage already provided, the coverage under which the losses arose. Pairing losses with [[Written Premium|written premium]] flatters a growing book and penalizes a shrinking one.
 - **Calendar year** earned premium blends policy cohorts: CY 2024 earned premium comes from policies written in both $2023$ and $2024$, at whatever rates were then in force. That is why it must be brought to current level ([[On-Leveling]]) before use.
 - **Policy year** earned premium comes from one cohort only, and is fully earned $24$ months after the policy year begins (for annual policies).
-- Earning is pro rata *by default*, but the pattern must match the exposure. Warranty, crop and some construction covers earn on a non-uniform schedule because risk is not uniform over the term.
-- The premium the ratemaking analysis actually uses is earned premium **at current rate level, trended** — three successive adjustments, each addressing a different distortion: mix of rate levels, then the drift in average premium per exposure ([[Premium Trend]]).
+- Earning is pro rata *by default*, but the pattern must match the exposure. Werner & Modlin note that an even earning pattern does not hold for lines such as warranty, or for lines with seasonal writings such as boat owners insurance, and actuaries specify other earning patterns for them from historical experience.
+- The premium the ratemaking analysis actually uses is historical earned premium after three successive adjustments, each addressing a different distortion: brought to the **current rate level** ([[On-Leveling]]) for rate changes during and after the experience period, **developed to ultimate** where it is still changing (incomplete policy years, premium awaiting audit), and **trended** for the change in average premium from shifts in the mix of business ([[Premium Trend]]).
 
 ![[Media/Figures/Earned_Premium.svg|340]]
 
@@ -69,4 +69,4 @@ verification:
 > > &= \$27{,}000{,}000 \;\checkmark
 > > \end{align*}$$
 > >
-> > Earned premium lags written premium by $\$3{,}000{,}000$ — exactly the growth in the unearned reserve, and exactly the amount by which a written-premium loss ratio would understate the true one.
+> > Earned premium lags written premium by $\$3{,}000{,}000$ — exactly the growth in the unearned reserve, and exactly the amount by which written premium would overstate the denominator of the loss ratio.

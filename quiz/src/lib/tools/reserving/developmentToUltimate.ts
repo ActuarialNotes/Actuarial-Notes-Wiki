@@ -9,6 +9,10 @@ export const developmentToUltimate: ToolSpec = {
   fields: [
     { kind: 'number', key: 'tail', label: 'Tail factor', symbol: 'T', unit: 'factor', judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 0.001, default: 1, description: 'Development beyond the last age. 1 assumes none.' },
     {
+      kind: 'choice', key: 'rounding', label: 'CDFs', options: [{ value: 'none', label: 'Unrounded' }, { value: 'three', label: '3 decimals' }], default: 'none',
+      description: 'Whether each CDF is rounded to three decimals before the percent developed is taken from it, as Friedland\'s exhibits do (Estimating Unpaid Claims Using Basic Techniques, Chapter 7). Unrounded carries full precision.',
+    },
+    {
       kind: 'table', key: 'factors', label: 'Selected factors', minRows: 1, maxRows: 60,
       description: 'Each evaluation age with the selected age-to-age factor from it to the next age. Leave the last age\'s factor blank: only the tail develops it.',
       columns: [
@@ -41,6 +45,9 @@ export const developmentToUltimate: ToolSpec = {
       running *= rows[k].factor == null ? 1 : Number(rows[k].factor)
       cdfs[k] = running
     }
+    // Friedland's convention: each CDF is rounded on its own (the products
+    // themselves stay unrounded), and everything downstream uses the rounded one.
+    if (input.rounding === 'three') for (let k = 0; k < cdfs.length; k++) cdfs[k] = Math.round(cdfs[k] * 1000) / 1000
     const out = rows.map((r, k) => Object.assign({}, r, { cdf: cdfs[k], developed: 1 / cdfs[k] }))
     const warnings = rows.some(r => r.factor != null && Number(r.factor) < 1)
       ? ['A factor below 1 develops downward: usual for reported claims with redundant case reserves, unusual for paid.']

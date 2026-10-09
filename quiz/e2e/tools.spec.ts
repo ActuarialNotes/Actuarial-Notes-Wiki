@@ -35,6 +35,11 @@ test.describe('tools', () => {
 
     await card.getByText('Show working').click()
     await expect(card.getByText('% unreported, 2023')).toBeVisible()
+
+    // The menu says what the tool was tested against: Friedland's Chapter 9 exhibit.
+    await page.getByRole('button', { name: 'More' }).click()
+    await expect(page.getByText('Tested against')).toBeVisible()
+    await expect(page.getByRole('link', { name: /Friedland \(2010\), Ch\. 9, Exhibit I, Sheet 1, p\. 162/ })).toBeVisible()
   })
 
   test('sends age-to-age averages on to Development to Ultimate', async ({ page }) => {

@@ -28,7 +28,7 @@ async function copy(text: string): Promise<boolean> {
   }
 }
 
-export function ToolMenu({ items, header }: { items: ToolMenuItem[]; header?: ReactNode }) {
+export function ToolMenu({ items, header }: { items: ToolMenuItem[]; header?: ReactNode | ((close: () => void) => ReactNode) }) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const [place, setPlace] = useState<MenuPlacement | null>(null)
@@ -92,7 +92,11 @@ export function ToolMenu({ items, header }: { items: ToolMenuItem[]; header?: Re
             style={{ position: 'fixed', left: place.left, top: place.top ?? undefined, bottom: place.bottom ?? undefined, width: MENU_WIDTH, maxHeight: place.maxHeight }}
             className="paper-drop z-[70] overflow-y-auto rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lg"
           >
-            {header && <div className="px-2.5 py-2 text-xs text-muted-foreground">{header}</div>}
+            {header && (
+              <div className="px-2.5 py-2 text-xs text-muted-foreground">
+                {typeof header === 'function' ? header(() => setOpen(false)) : header}
+              </div>
+            )}
             {items.map(item => {
               const Icon = copied === item.key ? Check : ICONS[item.icon]
               return (

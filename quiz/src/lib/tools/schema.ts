@@ -1,5 +1,6 @@
 import { defaultInput } from './input'
 import { AREAS } from './registry'
+import { checksFor, type SourceRef } from './checks'
 import type { NumberUnit, TableColumn, ToolField, ToolSpec } from './types'
 
 const UNIT_HINT: Record<NumberUnit, string> = {
@@ -65,6 +66,11 @@ export function inputSchema(spec: ToolSpec): Record<string, unknown> {
   }
 }
 
+/** "Friedland, … (CAS, 2010), Chapter 7, Exhibit I, Sheet 1, p. 106" — a check's source as one line. */
+export function sourceLine(s: SourceRef): string {
+  return s.question ? s.title : `${s.title}, ${s.locator}, p. ${s.page}`
+}
+
 /** What `list_tools` says about a tool. */
 export function toolSummary(spec: ToolSpec) {
   return {
@@ -73,6 +79,7 @@ export function toolSummary(spec: ToolSpec) {
     area: AREAS.find(a => a.id === spec.area)?.label ?? spec.area,
     answers: spec.answers,
     version: spec.version,
+    tested_against: checksFor(spec.id).map(sourceLine),
   }
 }
 

@@ -352,7 +352,11 @@ before touching that area**:
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
   `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
   **after any change under `lib/tools/`, run `npm run tools:bundle`** — `bundle.test.ts` fails
-  on a stale copy. Each tool does one thing (one question, one method; bigger
+  on a stale copy. Nine tools reproduce published worked examples in CI (§17): Friedland's and
+  Werner & Modlin's exhibits, read off the CAS PDFs by `scripts/tool_fixtures.py` into
+  `lib/tools/fixtures/*.json`, and SOA FM sample questions whose keyed answers `checks.test.ts`
+  reads from the bank. `lib/tools/checks.ts` is both the test list and what the card's "Tested
+  against" says, so nothing is claimed that doesn't pass. Each tool does one thing (one question, one method; bigger
   jobs chain tools), and each is one small live card in the distribution simulator's shape
   (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
@@ -1146,8 +1150,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **200 test files /
-~3445 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **201 test files /
+~3470 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1296,6 +1300,10 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `tool_fixtures.py` — published worked examples → **Actuarial Tools** fixtures
+  (`quiz/src/lib/tools/fixtures/*.json`): Friedland's and Werner & Modlin's exhibits read off
+  the CAS's PDFs, each checked by sha256, with no model retyping a number. PyMuPDF, imported
+  lazily. Tests: `scripts/test_tool_fixtures.py`. See `docs/actuarial-tools.md` §17.
 - `resource_extract.py` / `resource_lint.py` — the **resource-page** pipeline
   (`docs/resource-pages.md`): the first fetches a page's real document and extracts what
   can be read rather than judged (sha256, metadata, bookmark outline as vault markdown,

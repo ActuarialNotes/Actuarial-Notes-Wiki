@@ -211,57 +211,67 @@ var presentValue = {
       label: "Cash flows",
       minRows: 1,
       maxRows: 500,
-      description: "Each cash flow: its time in years from today and its amount (negative for an outflow).",
+      description: "Each cash flow: its time from today (in years, or in whatever period the rate is per), its amount (negative for an outflow), and optionally the t-year spot rate to discount it at \u2014 left blank, the flow is discounted at the rate above.",
       columns: [
         { key: "time", label: "Time t", kind: "number", unit: "years" },
-        { key: "amount", label: "Amount", kind: "number", unit: "money" }
+        { key: "amount", label: "Amount", kind: "number", unit: "money" },
+        { key: "spot", label: "Spot rate", kind: "number", unit: "percent", optional: true }
       ],
       default: [
-        { time: 1, amount: 100 },
-        { time: 2, amount: 100 },
-        { time: 3, amount: 100 }
+        { time: 1, amount: 100, spot: null },
+        { time: 2, amount: 100, spot: null },
+        { time: 3, amount: 100, spot: null }
       ]
     }
   ],
-  notation: () => "PV = \u03A3 CF\u209C \xB7 v\u1D57,  v = 1/(1 + i)",
+  notation: () => "PV = \u03A3 CF\u209C \xB7 (1 + i\u209C)\u207B\u1D57",
   view: "table",
   grid: "flows",
   compute: (input) => {
     const i = Number(input.i);
-    const flows = input.flows;
+    const flows2 = input.flows;
     const v = 1 / (1 + i);
-    const rows = flows.map((r) => {
+    const rows = flows2.map((r) => {
+      if (r.spot != null && Math.abs(Number(r.spot)) > 1) {
+        throw new ToolInputError("flows", `The spot rate at t = ${r.time} must be a decimal: write ${Number(r.spot) / 100} or "${r.spot}%".`);
+      }
       const t = Number(r.time);
       const amount = Number(r.amount);
-      const discount = v ** t;
+      const discount = r.spot == null ? v ** t : (1 + Number(r.spot)) ** -t;
       return Object.assign({}, r, { discount, pv: amount * discount });
     });
-    const pv = rows.reduce((s, r) => s + r.pv, 0);
+    const pv2 = rows.reduce((s, r) => s + r.pv, 0);
     const total = rows.reduce((s, r) => s + Number(r.amount), 0);
-    const warnings = flows.some((r) => Number(r.time) < 0) ? ["A cash flow has a negative time: it is accumulated to today, not discounted."] : [];
+    const warnings = flows2.some((r) => Number(r.time) < 0) ? ["A cash flow has a negative time: it is accumulated to today, not discounted."] : [];
     return {
       tiles: [
-        { symbol: "PV", label: "Today", value: pv, unit: "money" },
+        { symbol: "PV", label: "Today", value: pv2, unit: "money" },
         { symbol: "\u03A3CF", label: "Undiscounted", value: total, unit: "money" }
       ],
       table: {
         columns: [
           { key: "time", label: "Time t", kind: "number", unit: "years" },
           { key: "amount", label: "Amount", kind: "number", unit: "money" },
+          { key: "spot", label: "Spot rate", kind: "number", unit: "percent" },
           { key: "discount", label: "v\u1D57", kind: "number", unit: "factor", computed: true },
           { key: "pv", label: "PV", kind: "number", unit: "money", computed: true }
         ],
         rows,
-        footer: { time: "Total", amount: total, discount: null, pv }
+        footer: { time: "Total", amount: total, spot: null, discount: null, pv: pv2 }
       },
       trace: [
         { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
-        ...rows.slice(0, 12).map((r) => ({ label: `PV at t = ${r.time}`, formula: `${r.amount} \xD7 v^${r.time}`, result: r.pv, unit: "money" })),
-        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv, unit: "money" }
+        ...rows.slice(0, 12).map((r) => ({
+          label: `PV at t = ${r.time}`,
+          formula: r.spot == null ? `${r.amount} \xD7 v^${r.time}` : `${r.amount} \xD7 (1 + ${r.spot})^\u2212${r.time}`,
+          result: r.pv,
+          unit: "money"
+        })),
+        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv2, unit: "money" }
       ],
       warnings,
-      values: { present_value: pv, undiscounted: total, v },
-      summary: `Present value ${formatValue(pv, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
+      values: { present_value: pv2, undiscounted: total, v },
+      summary: `Present value ${formatValue(pv2, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
     };
   },
   method: { concepts: ["Present Value", "Discount Function"], readings: [] }
@@ -269,54 +279,48 @@ var presentValue = {
 
 // src/lib/tools/reserving/ageToAge.ts
 var AVERAGES = [
-  { value: "volume_all", label: "Volume, all" },
-  { value: "simple_all", label: "Simple, all" },
-  { value: "volume_3", label: "Volume, latest 3" },
-  { value: "simple_3", label: "Simple, latest 3" },
-  { value: "medial_5", label: "Medial, latest 5" },
-  { value: "geometric_all", label: "Geometric, all" }
+  { value: "volume", label: "Volume-weighted" },
+  { value: "simple", label: "Simple" },
+  { value: "medial", label: "Medial" },
+  { value: "geometric", label: "Geometric" }
 ];
 var AVERAGE_MEANING = {
-  volume_all: "volume-weighted over all origins",
-  simple_all: "simple mean over all origins",
-  volume_3: "volume-weighted over the latest 3 origins",
-  simple_3: "simple mean over the latest 3 origins",
-  medial_5: "mean of the latest 5, excluding the highest and lowest",
-  geometric_all: "geometric mean over all origins"
+  volume: "the sum of the later values over the sum of the earlier ones (volume-weighted)",
+  simple: "the simple mean of the factors",
+  medial: "the simple mean with the highest and lowest factor left out (with fewer than three, the simple mean)",
+  geometric: "the geometric mean of the factors"
 };
+function averageName(method, latest) {
+  const name = AVERAGES.find((a) => a.value === method)?.label.toLowerCase() ?? method;
+  return `${name}, ${latest > 0 ? `latest ${latest}` : "all years"}`;
+}
 var intervalLabel = (from, to) => `${from}\u2013${to}`;
 function factorsAt(tri, j) {
   const out = [];
-  for (const row of tri.values) {
-    const from = row[j];
-    const to = row[j + 1];
+  for (const row2 of tri.values) {
+    const from = row2[j];
+    const to = row2[j + 1];
     if (from == null || to == null || from === 0) continue;
     out.push({ factor: to / from, from, to });
   }
   return out;
 }
-function averageFactor(pairs, kind) {
-  if (!pairs.length) return null;
-  const latest = (n) => pairs.slice(-n);
-  const simple = (ps) => ps.reduce((s, p) => s + p.factor, 0) / ps.length;
-  const volume = (ps) => ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0);
-  switch (kind) {
-    case "simple_all":
-      return simple(pairs);
-    case "volume_3":
-      return volume(latest(3));
-    case "simple_3":
-      return simple(latest(3));
-    case "medial_5": {
-      const ps = latest(5);
+function averageFactor(pairs, method, latest = 0) {
+  const ps = latest > 0 ? pairs.slice(-latest) : pairs;
+  if (!ps.length) return null;
+  const simple = (xs) => xs.reduce((s, p) => s + p.factor, 0) / xs.length;
+  switch (method) {
+    case "simple":
+      return simple(ps);
+    case "medial": {
       if (ps.length < 3) return simple(ps);
       const sorted = [...ps].sort((a, b) => a.factor - b.factor);
       return simple(sorted.slice(1, -1));
     }
-    case "geometric_all":
-      return Math.exp(pairs.reduce((s, p) => s + Math.log(p.factor), 0) / pairs.length);
+    case "geometric":
+      return Math.exp(ps.reduce((s, p) => s + Math.log(p.factor), 0) / ps.length);
     default:
-      return volume(pairs);
+      return ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0);
   }
 }
 var ageToAgeFactors = {
@@ -348,30 +352,48 @@ var ageToAgeFactors = {
       label: "Average",
       judgment: true,
       options: AVERAGES,
-      default: "volume_all",
-      description: `Which average of each interval's factors to take: ${AVERAGES.map((a) => `${a.value} (${AVERAGE_MEANING[a.value]})`).join(", ")}.`
+      default: "volume",
+      description: `Which average of each interval's factors to take: ${AVERAGES.map((a) => `${a.value} (${AVERAGE_MEANING[a.value]})`).join("; ")}.`
+    },
+    {
+      kind: "number",
+      key: "latest",
+      label: "Latest years",
+      symbol: "n",
+      unit: "count",
+      integer: true,
+      judgment: true,
+      min: 0,
+      max: 100,
+      sliderMax: 10,
+      step: 1,
+      default: 0,
+      zeroLabel: "All",
+      description: "Average over the latest n origins at each age (the most recent diagonals). 0 averages every origin."
     }
   ],
   notation: () => "f\u2C7C = C\u1D62,\u2C7C\u208A\u2081 / C\u1D62,\u2C7C",
   view: "table",
   compute: (input) => {
     const tri = input.triangle;
-    const kind = String(input.average);
+    const method = String(input.average);
+    const latest = Number(input.latest);
+    const named = averageName(method, latest);
     const intervals = tri.ages.slice(0, -1).map((age, j) => ({ j, label: intervalLabel(age, tri.ages[j + 1]) }));
     const rows = tri.origins.map((origin, o) => {
-      const row = { origin };
+      const row2 = { origin };
       for (const { j, label } of intervals) {
         const from = tri.values[o][j];
         const to = tri.values[o][j + 1];
-        row[label] = from != null && to != null && from !== 0 ? to / from : null;
+        row2[label] = from != null && to != null && from !== 0 ? to / from : null;
       }
-      return row;
+      return row2;
     });
     const warnings = [];
     const averages = intervals.map(({ j, label }) => {
       const pairs = factorsAt(tri, j);
       if (pairs.length === 1) warnings.push(`The ${label} factor rests on one origin.`);
-      return averageFactor(pairs, kind);
+      return averageFactor(pairs, method, latest);
     });
     const footer = { origin: "Average" };
     intervals.forEach(({ label }, k) => {
@@ -391,12 +413,13 @@ var ageToAgeFactors = {
       trace: intervals.flatMap(({ j, label }, k) => {
         const pairs = factorsAt(tri, j);
         if (!pairs.length || averages[k] == null) return [];
-        const formula = kind.startsWith("volume") ? `\u03A3 C(${tri.ages[j + 1]}) / \u03A3 C(${tri.ages[j]}) over ${kind === "volume_3" ? Math.min(3, pairs.length) : pairs.length} origins` : `${AVERAGE_MEANING[kind] ?? kind}, ${pairs.length} factors`;
+        const used = latest > 0 ? Math.min(latest, pairs.length) : pairs.length;
+        const formula = method === "volume" ? `\u03A3 C(${tri.ages[j + 1]}) / \u03A3 C(${tri.ages[j]}) over ${used} origin${used === 1 ? "" : "s"}` : `${named}: ${used} factor${used === 1 ? "" : "s"}`;
         return [{ label: `Average ${label}`, formula, result: averages[k], unit: "factor" }];
       }),
       warnings,
       values: { intervals: intervals.map((i) => i.label), ages: tri.ages, averages, factors: rows },
-      summary: `Age-to-age averages (${AVERAGE_MEANING[kind] ?? kind}): ${shown.join(", ")}.`
+      summary: `Age-to-age averages (${named}): ${shown.join(", ")}.`
     };
   },
   method: {
@@ -427,6 +450,14 @@ var developmentToUltimate = {
   answers: "What are the cumulative development factors to ultimate?",
   fields: [
     { kind: "number", key: "tail", label: "Tail factor", symbol: "T", unit: "factor", judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 1e-3, default: 1, description: "Development beyond the last age. 1 assumes none." },
+    {
+      kind: "choice",
+      key: "rounding",
+      label: "CDFs",
+      options: [{ value: "none", label: "Unrounded" }, { value: "three", label: "3 decimals" }],
+      default: "none",
+      description: "Whether each CDF is rounded to three decimals before the percent developed is taken from it, as Friedland's exhibits do (Estimating Unpaid Claims Using Basic Techniques, Chapter 7). Unrounded carries full precision."
+    },
     {
       kind: "table",
       key: "factors",
@@ -464,6 +495,7 @@ var developmentToUltimate = {
       running *= rows[k].factor == null ? 1 : Number(rows[k].factor);
       cdfs[k] = running;
     }
+    if (input.rounding === "three") for (let k = 0; k < cdfs.length; k++) cdfs[k] = Math.round(cdfs[k] * 1e3) / 1e3;
     const out = rows.map((r, k) => Object.assign({}, r, { cdf: cdfs[k], developed: 1 / cdfs[k] }));
     const warnings = rows.some((r) => r.factor != null && Number(r.factor) < 1) ? ["A factor below 1 develops downward: usual for reported claims with redundant case reserves, unusual for paid."] : [];
     return {
@@ -595,13 +627,17 @@ var expectedClaims = {
       label: "Origins",
       minRows: 1,
       maxRows: 100,
-      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against).",
-      columns: [ORIGIN_COLUMN, { key: "premium", label: "Earned premium", kind: "number", unit: "money" }],
+      description: "Each origin with its earned premium (on-level and trended, if that is what the ELR is set against), and optionally its own ELR \u2014 left blank, the origin takes the expected loss ratio above.",
+      columns: [
+        ORIGIN_COLUMN,
+        { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
+        { key: "elr", label: "Own ELR", kind: "number", unit: "percent", optional: true }
+      ],
       default: [
-        { origin: "2020", premium: 2600 },
-        { origin: "2021", premium: 2800 },
-        { origin: "2022", premium: 3e3 },
-        { origin: "2023", premium: 3e3 }
+        { origin: "2020", premium: 2600, elr: null },
+        { origin: "2021", premium: 2800, elr: null },
+        { origin: "2022", premium: 3e3, elr: null },
+        { origin: "2023", premium: 3e3, elr: null }
       ]
     }
   ],
@@ -610,7 +646,13 @@ var expectedClaims = {
   grid: "rows",
   compute: (input) => {
     const elr = Number(input.elr);
-    const rows = input.rows.map((r) => Object.assign({}, r, { expected: Number(r.premium) * elr }));
+    const rows = input.rows.map((r) => {
+      if (r.elr != null && (Number(r.elr) < 0 || Number(r.elr) > 3)) {
+        throw new ToolInputError("rows", `Origin ${r.origin}'s ELR must be a decimal between 0 and 3: write ${Number(r.elr) / 100} or "${r.elr}%".`);
+      }
+      const ratio = r.elr == null ? elr : Number(r.elr);
+      return Object.assign({}, r, { ratio, expected: Number(r.premium) * ratio });
+    });
     const total = rows.reduce((s, r) => s + r.expected, 0);
     const premium = rows.reduce((s, r) => s + Number(r.premium), 0);
     return {
@@ -619,12 +661,13 @@ var expectedClaims = {
         columns: [
           ORIGIN_COLUMN,
           { key: "premium", label: "Earned premium", kind: "number", unit: "money" },
+          { key: "elr", label: "Own ELR", kind: "number", unit: "percent" },
           { key: "expected", label: "Expected claims", kind: "number", unit: "money", computed: true }
         ],
         rows,
-        footer: { origin: "Total", premium, expected: total }
+        footer: { origin: "Total", premium, elr: null, expected: total }
       },
-      trace: rows.map((r) => ({ label: `Expected, ${r.origin}`, formula: `${elr} \xD7 ${r.premium}`, result: r.expected, unit: "money" })),
+      trace: rows.map((r) => ({ label: `Expected, ${r.origin}`, formula: `${formatValue(r.ratio, "percent")} \xD7 ${r.premium}`, result: r.expected, unit: "money" })),
       warnings: [],
       values: { expected: rows.map((r) => r.expected), total_expected: total }
     };
@@ -749,12 +792,12 @@ var lossRatioMethod = {
   view: "none",
   compute: (input) => {
     const LR = Number(input.loss_ratio);
-    const F = Number(input.fixed);
+    const F2 = Number(input.fixed);
     const V = Number(input.variable);
     const Q = Number(input.profit);
     const plr = 1 - V - Q;
     if (plr <= 0) throw new ToolInputError("variable", "V + Q must be below 100%: nothing would be left for losses and fixed expenses.");
-    const change = (LR + F) / plr - 1;
+    const change = (LR + F2) / plr - 1;
     return {
       tiles: [
         { symbol: "\u0394R", label: "Indicated change", value: change, unit: "percent" },
@@ -762,7 +805,7 @@ var lossRatioMethod = {
       ],
       trace: [
         { label: "Variable permissible loss ratio", formula: `1 \u2212 ${V} \u2212 ${Q}`, result: plr, unit: "percent" },
-        { label: "Indicated change", formula: `(${LR} + ${F}) / ${plr.toFixed(4)} \u2212 1`, result: change, unit: "percent" }
+        { label: "Indicated change", formula: `(${LR} + ${F2}) / ${plr.toFixed(4)} \u2212 1`, result: change, unit: "percent" }
       ],
       warnings: [],
       values: { indicated_change: change, variable_permissible_loss_ratio: plr }
@@ -1161,8 +1204,8 @@ function tableField(f, raw) {
   if (raw.length < f.minRows || raw.length > f.maxRows) {
     throw new ToolInputError(f.key, `"${f.key}" needs between ${f.minRows} and ${f.maxRows} rows; got ${raw.length}.`);
   }
-  return raw.map((row, i) => {
-    const cells = Array.isArray(row) ? Object.fromEntries(f.columns.map((c, j) => [c.key, row[j]])) : row;
+  return raw.map((row2, i) => {
+    const cells = Array.isArray(row2) ? Object.fromEntries(f.columns.map((c, j) => [c.key, row2[j]])) : row2;
     if (!isObject(cells)) throw new ToolInputError(f.key, `Row ${i + 1} of "${f.key}" must be an object with ${f.columns.map((c) => c.key).join(", ")}.`);
     const out = {};
     for (const c of f.columns) {
@@ -1194,12 +1237,12 @@ function triangleField(f, raw) {
   if (rows.length < 2) throw new ToolInputError(f.key, `"${f.key}" needs at least two origins.`);
   const width = Math.max(...rows.map((r) => Array.isArray(r) ? r.length : 0));
   if (width < 2) throw new ToolInputError(f.key, `"${f.key}" needs at least two ages.`);
-  const values = rows.map((row, i) => {
-    if (!Array.isArray(row)) throw new ToolInputError(f.key, `Row ${i + 1} of "${f.key}" must be an array of numbers.`);
+  const values2 = rows.map((row2, i) => {
+    if (!Array.isArray(row2)) throw new ToolInputError(f.key, `Row ${i + 1} of "${f.key}" must be an array of numbers.`);
     const out = [];
     let ended = false;
     for (let j = 0; j < width; j++) {
-      const cell = row[j];
+      const cell = row2[j];
       if (cell == null || cell === "") {
         ended = true;
         out.push(null);
@@ -1213,13 +1256,13 @@ function triangleField(f, raw) {
     if (out[0] === null) throw new ToolInputError(f.key, `"${f.key}" row ${i + 1} is empty.`);
     return out;
   });
-  const origins = Array.isArray(shape.origins) && shape.origins.length === values.length ? shape.origins.map((o) => String(o)) : values.map((_, i) => String(i + 1));
+  const origins = Array.isArray(shape.origins) && shape.origins.length === values2.length ? shape.origins.map((o) => String(o)) : values2.map((_, i) => String(i + 1));
   const ages = Array.isArray(shape.ages) && shape.ages.length === width ? shape.ages.map((a, j) => {
     const n = readNumber(a, false);
     if (n === null) throw new ToolInputError(f.key, `"${f.key}" age ${j + 1} is not a number.`);
     return n;
   }) : Array.from({ length: width }, (_, j) => (j + 1) * 12);
-  return { origins, ages, values };
+  return { origins, ages, values: values2 };
 }
 function readField(field, raw) {
   switch (field.kind) {
@@ -1234,7 +1277,7 @@ function readField(field, raw) {
   }
 }
 function defaultValue(field) {
-  if (field.kind === "table") return field.default.map((row) => ({ ...row }));
+  if (field.kind === "table") return field.default.map((row2) => ({ ...row2 }));
   if (field.kind === "triangle") return { ...field.default, values: field.default.values.map((r) => [...r]) };
   return field.default;
 }
@@ -1283,6 +1326,1326 @@ function runTool(spec, raw) {
     trace: output.trace,
     method: spec.method
   };
+}
+
+// src/lib/tools/fixtures/friedland-2010.json
+var friedland_2010_default = {
+  generated_by: "scripts/tool_fixtures.py",
+  source: {
+    resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)",
+    title: "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010)",
+    url: "https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf",
+    sha256: "5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464"
+  },
+  exhibits: {
+    ch7_exhibit1_sheet1: {
+      locator: "Chapter 7, Exhibit I, Sheet 1",
+      printed_page: 106,
+      units: "$000",
+      ages: [
+        12,
+        24,
+        36,
+        48,
+        60,
+        72,
+        84,
+        96,
+        108,
+        120
+      ],
+      triangle: {
+        origins: [
+          "1998",
+          "1999",
+          "2000",
+          "2001",
+          "2002",
+          "2003",
+          "2004",
+          "2005",
+          "2006",
+          "2007"
+        ],
+        ages: [
+          12,
+          24,
+          36,
+          48,
+          60,
+          72,
+          84,
+          96,
+          108,
+          120
+        ],
+        values: [
+          [
+            37017487,
+            43169009,
+            45568919,
+            46784558,
+            47337318,
+            47533264,
+            47634419,
+            47689655,
+            47724678,
+            47742304
+          ],
+          [
+            38954484,
+            46045718,
+            48882924,
+            50219672,
+            50729292,
+            50926779,
+            51069285,
+            51163540,
+            51185767,
+            null
+          ],
+          [
+            41155776,
+            49371478,
+            52358476,
+            53780322,
+            54303086,
+            54582950,
+            54742188,
+            54837929,
+            null,
+            null
+          ],
+          [
+            42394069,
+            50584112,
+            53704296,
+            55150118,
+            55895583,
+            56156727,
+            56299562,
+            null,
+            null,
+            null
+          ],
+          [
+            44755243,
+            52971643,
+            56102312,
+            57703851,
+            58363564,
+            58592712,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45163102,
+            52497731,
+            55468551,
+            57015411,
+            57565344,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45417309,
+            52640322,
+            55553673,
+            56976657,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            46360869,
+            53790061,
+            56786410,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            46582684,
+            54641339,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            48853563,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      factors: {
+        "1998": [
+          1.166,
+          1.056,
+          1.027,
+          1.012,
+          1.004,
+          1.002,
+          1.001,
+          1.001,
+          1
+        ],
+        "1999": [
+          1.182,
+          1.062,
+          1.027,
+          1.01,
+          1.004,
+          1.003,
+          1.002,
+          1
+        ],
+        "2000": [
+          1.2,
+          1.061,
+          1.027,
+          1.01,
+          1.005,
+          1.003,
+          1.002
+        ],
+        "2001": [
+          1.193,
+          1.062,
+          1.027,
+          1.014,
+          1.005,
+          1.003
+        ],
+        "2002": [
+          1.184,
+          1.059,
+          1.029,
+          1.011,
+          1.004
+        ],
+        "2003": [
+          1.162,
+          1.057,
+          1.028,
+          1.01
+        ],
+        "2004": [
+          1.159,
+          1.055,
+          1.026
+        ],
+        "2005": [
+          1.16,
+          1.056
+        ],
+        "2006": [
+          1.173
+        ]
+      },
+      averages: {
+        simple_latest_5: [
+          1.168,
+          1.058,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ],
+        simple_latest_3: [
+          1.164,
+          1.056,
+          1.027,
+          1.012,
+          1.005,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ],
+        medial_latest_5: [
+          1.165,
+          1.057,
+          1.027,
+          1.01,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ],
+        volume_latest_5: [
+          1.168,
+          1.058,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ],
+        volume_latest_3: [
+          1.164,
+          1.056,
+          1.027,
+          1.012,
+          1.005,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ],
+        geometric_latest_4: [
+          1.164,
+          1.057,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1
+        ]
+      },
+      selected: [
+        1.164,
+        1.056,
+        1.027,
+        1.012,
+        1.005,
+        1.003,
+        1.002,
+        1.001,
+        1,
+        1
+      ],
+      cdf: [
+        1.292,
+        1.11,
+        1.051,
+        1.023,
+        1.011,
+        1.006,
+        1.003,
+        1.001,
+        1,
+        1
+      ],
+      percent_reported: [
+        0.774,
+        0.901,
+        0.951,
+        0.978,
+        0.989,
+        0.994,
+        0.997,
+        0.999,
+        1,
+        1
+      ],
+      pdf_page: 112
+    },
+    ch7_exhibit1_sheet3: {
+      locator: "Chapter 7, Exhibit I, Sheet 3",
+      printed_page: 108,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          age: 120,
+          reported: 47742304,
+          paid: 47644187,
+          cdf_reported: 1,
+          cdf_paid: 1.002,
+          ultimate_reported: 47742304,
+          ultimate_paid: 47739475
+        },
+        {
+          origin: "1999",
+          age: 108,
+          reported: 51185767,
+          paid: 51000534,
+          cdf_reported: 1,
+          cdf_paid: 1.004,
+          ultimate_reported: 51185767,
+          ultimate_paid: 51204536
+        },
+        {
+          origin: "2000",
+          age: 96,
+          reported: 54837929,
+          paid: 54533225,
+          cdf_reported: 1.001,
+          cdf_paid: 1.006,
+          ultimate_reported: 54892767,
+          ultimate_paid: 54860424
+        },
+        {
+          origin: "2001",
+          age: 84,
+          reported: 56299562,
+          paid: 55878421,
+          cdf_reported: 1.003,
+          cdf_paid: 1.011,
+          ultimate_reported: 56468461,
+          ultimate_paid: 56493084
+        },
+        {
+          origin: "2002",
+          age: 72,
+          reported: 58592712,
+          paid: 57807215,
+          cdf_reported: 1.006,
+          cdf_paid: 1.02,
+          ultimate_reported: 58944268,
+          ultimate_paid: 58963359
+        },
+        {
+          origin: "2003",
+          age: 60,
+          reported: 57565344,
+          paid: 55930654,
+          cdf_reported: 1.011,
+          cdf_paid: 1.04,
+          ultimate_reported: 58198563,
+          ultimate_paid: 58167880
+        },
+        {
+          origin: "2004",
+          age: 48,
+          reported: 56976657,
+          paid: 53774672,
+          cdf_reported: 1.023,
+          cdf_paid: 1.085,
+          ultimate_reported: 58287120,
+          ultimate_paid: 58345519
+        },
+        {
+          origin: "2005",
+          age: 36,
+          reported: 56786410,
+          paid: 50644994,
+          cdf_reported: 1.051,
+          cdf_paid: 1.184,
+          ultimate_reported: 59682517,
+          ultimate_paid: 59963673
+        },
+        {
+          origin: "2006",
+          age: 24,
+          reported: 54641339,
+          paid: 43606497,
+          cdf_reported: 1.11,
+          cdf_paid: 1.404,
+          ultimate_reported: 60651886,
+          ultimate_paid: 61223522
+        },
+        {
+          origin: "2007",
+          age: 12,
+          reported: 48853563,
+          paid: 27229969,
+          cdf_reported: 1.292,
+          cdf_paid: 2.39,
+          ultimate_reported: 63118803,
+          ultimate_paid: 65079626
+        }
+      ],
+      pdf_page: 114
+    },
+    ch8_exhibit2_sheet1: {
+      locator: "Chapter 8, Exhibit II, Sheet 1",
+      printed_page: 142,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          reported: 47742304,
+          paid: 47644187,
+          cdf_reported: 1,
+          cdf_paid: 1.002,
+          ultimate_reported: 47742304,
+          ultimate_paid: 47739475,
+          initial_ultimate: 47740890,
+          premium: 68574209,
+          estimated_ratio: 0.696,
+          selected_ratio: 0.75,
+          expected: 51430657
+        },
+        {
+          origin: "1999",
+          reported: 51185767,
+          paid: 51000534,
+          cdf_reported: 1,
+          cdf_paid: 1.004,
+          ultimate_reported: 51185767,
+          ultimate_paid: 51204536,
+          initial_ultimate: 51195152,
+          premium: 68544981,
+          estimated_ratio: 0.747,
+          selected_ratio: 0.75,
+          expected: 51408736
+        },
+        {
+          origin: "2000",
+          reported: 54837929,
+          paid: 54533225,
+          cdf_reported: 1.001,
+          cdf_paid: 1.006,
+          ultimate_reported: 54892767,
+          ultimate_paid: 54860424,
+          initial_ultimate: 54876596,
+          premium: 68907977,
+          estimated_ratio: 0.796,
+          selected_ratio: 0.75,
+          expected: 51680983
+        },
+        {
+          origin: "2001",
+          reported: 56299562,
+          paid: 55878421,
+          cdf_reported: 1.003,
+          cdf_paid: 1.011,
+          ultimate_reported: 56468461,
+          ultimate_paid: 56493084,
+          initial_ultimate: 56480772,
+          premium: 72544955,
+          estimated_ratio: 0.779,
+          selected_ratio: 0.75,
+          expected: 54408716
+        },
+        {
+          origin: "2002",
+          reported: 58592712,
+          paid: 57807215,
+          cdf_reported: 1.006,
+          cdf_paid: 1.02,
+          ultimate_reported: 58944268,
+          ultimate_paid: 58963359,
+          initial_ultimate: 58953814,
+          premium: 79228887,
+          estimated_ratio: 0.744,
+          selected_ratio: 0.75,
+          expected: 59421665
+        },
+        {
+          origin: "2003",
+          reported: 57565344,
+          paid: 55930654,
+          cdf_reported: 1.011,
+          cdf_paid: 1.04,
+          ultimate_reported: 58198563,
+          ultimate_paid: 58167880,
+          initial_ultimate: 58183221,
+          premium: 86643542,
+          estimated_ratio: 0.672,
+          selected_ratio: 0.65,
+          expected: 56318302
+        },
+        {
+          origin: "2004",
+          reported: 56976657,
+          paid: 53774672,
+          cdf_reported: 1.023,
+          cdf_paid: 1.085,
+          ultimate_reported: 58287120,
+          ultimate_paid: 58345519,
+          initial_ultimate: 58316320,
+          premium: 91763523,
+          estimated_ratio: 0.636,
+          selected_ratio: 0.65,
+          expected: 59646290
+        },
+        {
+          origin: "2005",
+          reported: 56786410,
+          paid: 50644994,
+          cdf_reported: 1.051,
+          cdf_paid: 1.184,
+          ultimate_reported: 59682517,
+          ultimate_paid: 59963673,
+          initial_ultimate: 59823095,
+          premium: 94115312,
+          estimated_ratio: 0.636,
+          selected_ratio: 0.65,
+          expected: 61174953
+        },
+        {
+          origin: "2006",
+          reported: 54641339,
+          paid: 43606497,
+          cdf_reported: 1.11,
+          cdf_paid: 1.404,
+          ultimate_reported: 60651886,
+          ultimate_paid: 61223522,
+          initial_ultimate: 60937704,
+          premium: 95272279,
+          estimated_ratio: 0.64,
+          selected_ratio: 0.65,
+          expected: 61926981
+        },
+        {
+          origin: "2007",
+          reported: 48853563,
+          paid: 27229969,
+          cdf_reported: 1.292,
+          cdf_paid: 2.39,
+          ultimate_reported: 63118803,
+          ultimate_paid: 65079626,
+          initial_ultimate: 64099215,
+          premium: 95176240,
+          estimated_ratio: 0.673,
+          selected_ratio: 0.65,
+          expected: 61864556
+        }
+      ],
+      pdf_page: 148
+    },
+    ch9_exhibit1_sheet1: {
+      locator: "Chapter 9, Exhibit I, Sheet 1",
+      printed_page: 162,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          expected: 51430657,
+          cdf_reported: 1,
+          cdf_paid: 1.002,
+          unreported: 0,
+          unpaid: 2e-3,
+          ibnr_reported: 0,
+          ibnr_paid: 102656,
+          reported: 47742304,
+          paid: 47644187,
+          ultimate_reported: 47742304,
+          ultimate_paid: 47746843
+        },
+        {
+          origin: "1999",
+          expected: 51408736,
+          cdf_reported: 1,
+          cdf_paid: 1.004,
+          unreported: 0,
+          unpaid: 4e-3,
+          ibnr_reported: 0,
+          ibnr_paid: 204816,
+          reported: 51185767,
+          paid: 51000534,
+          ultimate_reported: 51185767,
+          ultimate_paid: 51205350
+        },
+        {
+          origin: "2000",
+          expected: 51680983,
+          cdf_reported: 1.001,
+          cdf_paid: 1.006,
+          unreported: 1e-3,
+          unpaid: 6e-3,
+          ibnr_reported: 51629,
+          ibnr_paid: 308236,
+          reported: 54837929,
+          paid: 54533225,
+          ultimate_reported: 54889558,
+          ultimate_paid: 54841461
+        },
+        {
+          origin: "2001",
+          expected: 54408716,
+          cdf_reported: 1.003,
+          cdf_paid: 1.011,
+          unreported: 3e-3,
+          unpaid: 0.011,
+          ibnr_reported: 162738,
+          ibnr_paid: 591984,
+          reported: 56299562,
+          paid: 55878421,
+          ultimate_reported: 56462300,
+          ultimate_paid: 56470405
+        },
+        {
+          origin: "2002",
+          expected: 59421665,
+          cdf_reported: 1.006,
+          cdf_paid: 1.02,
+          unreported: 6e-3,
+          unpaid: 0.02,
+          ibnr_reported: 354404,
+          ibnr_paid: 1165131,
+          reported: 58592712,
+          paid: 57807215,
+          ultimate_reported: 58947116,
+          ultimate_paid: 58972346
+        },
+        {
+          origin: "2003",
+          expected: 56318302,
+          cdf_reported: 1.011,
+          cdf_paid: 1.04,
+          unreported: 0.011,
+          unpaid: 0.038,
+          ibnr_reported: 612761,
+          ibnr_paid: 2166089,
+          reported: 57565344,
+          paid: 55930654,
+          ultimate_reported: 58178105,
+          ultimate_paid: 58096743
+        },
+        {
+          origin: "2004",
+          expected: 59646290,
+          cdf_reported: 1.023,
+          cdf_paid: 1.085,
+          unreported: 0.022,
+          unpaid: 0.078,
+          ibnr_reported: 1341021,
+          ibnr_paid: 4672751,
+          reported: 56976657,
+          paid: 53774672,
+          ultimate_reported: 58317678,
+          ultimate_paid: 58447423
+        },
+        {
+          origin: "2005",
+          expected: 61174953,
+          cdf_reported: 1.051,
+          cdf_paid: 1.184,
+          unreported: 0.049,
+          unpaid: 0.155,
+          ibnr_reported: 2968528,
+          ibnr_paid: 9506918,
+          reported: 56786410,
+          paid: 50644994,
+          ultimate_reported: 59754938,
+          ultimate_paid: 60151912
+        },
+        {
+          origin: "2006",
+          expected: 61926981,
+          cdf_reported: 1.11,
+          cdf_paid: 1.404,
+          unreported: 0.099,
+          unpaid: 0.288,
+          ibnr_reported: 6136908,
+          ibnr_paid: 17819445,
+          reported: 54641339,
+          paid: 43606497,
+          ultimate_reported: 60778247,
+          ultimate_paid: 61425942
+        },
+        {
+          origin: "2007",
+          expected: 61864556,
+          cdf_reported: 1.292,
+          cdf_paid: 2.39,
+          unreported: 0.226,
+          unpaid: 0.582,
+          ibnr_reported: 13981773,
+          ibnr_paid: 35979805,
+          reported: 48853563,
+          paid: 27229969,
+          ultimate_reported: 62835336,
+          ultimate_paid: 63209774
+        }
+      ],
+      pdf_page: 168
+    }
+  }
+};
+
+// src/lib/tools/fixtures/basic-ratemaking-2016.json
+var basic_ratemaking_2016_default = {
+  generated_by: "scripts/tool_fixtures.py",
+  source: {
+    resource: "Basic Ratemaking (Werner - 2016)",
+    title: "Werner & Modlin, Basic Ratemaking (CAS, 5th ed., 2016)",
+    url: "https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf",
+    sha256: "6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c"
+  },
+  exhibits: {
+    ch12_full_standard: {
+      locator: "Chapter 12, classical credibility: the full credibility standard",
+      printed_page: "218",
+      p: 0.9,
+      k: 0.05,
+      z: 1.645,
+      standard: 1082,
+      pdf_page: 230
+    },
+    ch12_square_root_rule: {
+      locator: "Chapter 12, classical credibility: the square root rule",
+      printed_page: "219",
+      claims: 100,
+      standard: 1082,
+      z: 0.3,
+      pdf_page: 231
+    },
+    a7_lr_indication: {
+      locator: "Appendix A, LR Indication",
+      printed_page: "A-7",
+      rows: {
+        "11": {
+          label: "Selected Projected Loss and LAE Ratio",
+          value: 0.619
+        },
+        "12": {
+          label: "Fixed Expense Provision",
+          value: 0.113
+        },
+        "13": {
+          label: "Variable Expense Provision",
+          value: 0.17
+        },
+        "14": {
+          label: "UW Profit Provision",
+          value: 0.05
+        },
+        "15": {
+          label: "Variable Permissible Loss Ratio",
+          value: 0.78
+        },
+        "16": {
+          label: "Indicated Rate Change",
+          value: -0.062
+        },
+        "17": {
+          label: "Credibility",
+          value: 1
+        },
+        "18": {
+          label: "Trended Present Rates Indication",
+          value: 0.062
+        },
+        "19": {
+          label: "Credibility-Weighted Indicated Rate Change",
+          value: -0.062
+        },
+        "20": {
+          label: "Selected Rate Change",
+          value: -0.062
+        }
+      },
+      pdf_page: 344
+    },
+    a8_credibility: {
+      locator: "Appendix A, Credibility",
+      printed_page: "A-8",
+      rows: {
+        "1": {
+          label: "Total Number of Claims in Historical Period",
+          value: 3612
+        },
+        "2": {
+          label: "Number of Claims for Full Credibility",
+          value: 1082
+        },
+        "3": {
+          label: "Credibility",
+          value: 1
+        },
+        "4": {
+          label: "Latest Indicated Rate Change",
+          value: 0.132
+        },
+        "5": {
+          label: "Last Rate Change Taken",
+          value: 0.05
+        },
+        "6": {
+          label: "Residual Indication",
+          value: 0.078
+        },
+        "7": {
+          label: "Projected Loss Trend",
+          value: 5e-3
+        },
+        "8": {
+          label: "Projected Premium Trend",
+          value: 0.02
+        },
+        "9": {
+          label: "Net Trend",
+          value: -0.015
+        },
+        "10": {
+          label: "Trend Period",
+          value: 1
+        },
+        "11": {
+          label: "Trended Present Rates Indication",
+          value: 0.062
+        }
+      },
+      pdf_page: 345
+    },
+    b5_pp_indication: {
+      locator: "Appendix B, PP Indication",
+      printed_page: "B-5",
+      rows: {
+        "8": {
+          label: "Selected Projected Non-Cat Pure Premium",
+          value: 469.88
+        },
+        "9": {
+          label: "Number of Claims",
+          value: 683
+        },
+        "10": {
+          label: "Claims Required for Full Crediblity",
+          value: 1082
+        },
+        "11": {
+          label: "Credibilty",
+          value: 0.795
+        },
+        "12": {
+          label: "Regional Non-Cat Pure Premium",
+          value: 585.75
+        },
+        "13": {
+          label: "Credibility-Weighted Non-Cat Pure Premium",
+          value: 493.63
+        },
+        "14": {
+          label: "Non-Modeled Cat Pure Premium",
+          value: 29.11
+        },
+        "15": {
+          label: "Modeled Cat Pure Premium",
+          value: 74.57
+        },
+        "16": {
+          label: "Total Pure Premium",
+          value: 597.31
+        },
+        "17": {
+          label: "Projected Net Reinsurance Cost Per Exposure",
+          value: 15.68
+        },
+        "18": {
+          label: "Projected Fixed Expense Per Exposure",
+          value: 77.83
+        },
+        "19": {
+          label: "Variable Expense Provision",
+          value: 0.138
+        },
+        "20": {
+          label: "Profit and Contingency Provision",
+          value: 0.05
+        },
+        "21": {
+          label: "Variable Permissible Loss Ratio",
+          value: 0.812
+        },
+        "22": {
+          label: "Indicated Rate",
+          value: 850.76
+        },
+        "23": {
+          label: "Selected Rate",
+          value: 850.76
+        }
+      },
+      pdf_page: 363
+    },
+    c7_lr_indication: {
+      locator: "Appendix C, LR Indication",
+      printed_page: "C-7",
+      rows: {
+        "8": {
+          label: "Selected Loss and ALAE Ratio",
+          value: 1.085
+        },
+        "9": {
+          label: "Expense and ULAE Ratio",
+          value: 0.347
+        },
+        "10": {
+          label: "Profit and Contingency Provision",
+          value: -0.05
+        },
+        "11": {
+          label: "Permissible Loss Ratio",
+          value: 0.703
+        },
+        "12": {
+          label: "Statewide Indicated Rate Change",
+          value: 0.543
+        },
+        "13": {
+          label: "Number of Reported Claims",
+          value: 283
+        },
+        "14": {
+          label: "Claims Required for Full Credility Standard",
+          value: 683
+        },
+        "15": {
+          label: "Credibility",
+          value: 0.644
+        },
+        "16": {
+          label: "Countrywide Indicated Rate Change",
+          value: 0.185
+        },
+        "17": {
+          label: "Credibility-Weighted Indicated Rate Change",
+          value: 0.416
+        },
+        "18": {
+          label: "Selected Rate Change",
+          value: 0.416
+        }
+      },
+      pdf_page: 380
+    }
+  }
+};
+
+// src/lib/tools/checks.ts
+var F = friedland_2010_default.exhibits;
+var friedlandRef = (exhibit) => ({
+  resource: friedland_2010_default.source.resource,
+  title: friedland_2010_default.source.title,
+  url: friedland_2010_default.source.url,
+  locator: exhibit.locator,
+  page: exhibit.printed_page
+});
+var W = basic_ratemaking_2016_default.exhibits;
+var wernerRef = (exhibit) => ({
+  resource: basic_ratemaking_2016_default.source.resource,
+  title: basic_ratemaking_2016_default.source.title,
+  url: basic_ratemaking_2016_default.source.url,
+  locator: exhibit.locator,
+  page: exhibit.printed_page
+});
+var row = (exhibit, n) => exhibit.rows[String(n)].value;
+var FACTOR = 5e-4 + 1e-9;
+var PERCENT = 5e-4 + 1e-9;
+var DOLLAR = 0.5 + 1e-6;
+var ch7 = F.ch7_exhibit1_sheet1;
+var ch7Projections = F.ch7_exhibit1_sheet3;
+var ch8 = F.ch8_exhibit2_sheet1;
+var ch9 = F.ch9_exhibit1_sheet1;
+var values = (r, key) => r.values[key];
+function averageInput(key) {
+  const [average, , n] = key.split("_");
+  return { average, latest: Number(n) };
+}
+var CHECKS = [
+  {
+    tool: "reserving.age_to_age_factors",
+    source: friedlandRef(ch7),
+    cases: [
+      {
+        name: "Part 2, the age-to-age factors",
+        input: { triangle: ch7.triangle },
+        expect: Object.entries(ch7.factors).flatMap(
+          ([origin, printed]) => printed.map((value, j) => ({
+            what: `${origin}, ${ch7.ages[j]}\u2013${ch7.ages[j + 1]}`,
+            printed: value,
+            tolerance: FACTOR,
+            actual: (r) => {
+              const row2 = r.values.factors.find((f) => f.origin === origin);
+              return Number(row2[`${ch7.ages[j]}\u2013${ch7.ages[j + 1]}`]);
+            }
+          }))
+        )
+      },
+      ...Object.entries(ch7.averages).map(([key, printed]) => ({
+        name: `Part 3, ${key.replace(/_/g, " ")}`,
+        input: { triangle: ch7.triangle, ...averageInput(key) },
+        expect: printed.map((value, j) => ({
+          what: `${ch7.ages[j]}\u2013${ch7.ages[j + 1]}`,
+          printed: value,
+          tolerance: FACTOR,
+          actual: (r) => values(r, "averages")[j]
+        }))
+      }))
+    ]
+  },
+  {
+    tool: "reserving.development_to_ultimate",
+    source: friedlandRef(ch7),
+    cases: [
+      {
+        name: "Part 4, CDF to ultimate and percent reported from the selected factors",
+        input: {
+          // The exhibit takes percent reported from the CDF it prints, rounded to three decimals.
+          rounding: "three",
+          tail: ch7.selected[ch7.selected.length - 1],
+          factors: ch7.ages.map((age, j) => ({ age, factor: j < ch7.ages.length - 1 ? ch7.selected[j] : null }))
+        },
+        expect: [
+          ...ch7.cdf.map((value, j) => ({
+            what: `CDF at ${ch7.ages[j]}`,
+            printed: value,
+            tolerance: FACTOR,
+            actual: (r) => values(r, "cdfs")[j]
+          })),
+          ...ch7.percent_reported.map((value, j) => ({
+            what: `percent reported at ${ch7.ages[j]}`,
+            printed: value,
+            tolerance: PERCENT,
+            actual: (r) => values(r, "percent_developed")[j]
+          }))
+        ]
+      }
+    ]
+  },
+  {
+    tool: "reserving.chain_ladder",
+    source: friedlandRef(ch7Projections),
+    cases: ["reported", "paid"].map((basis) => ({
+      name: `Column (${basis === "reported" ? 7 : 8}), ultimate claims from ${basis} claims`,
+      input: {
+        basis,
+        rows: ch7Projections.rows.map((r) => ({ origin: r.origin, latest: r[basis], cdf: basis === "reported" ? r.cdf_reported : r.cdf_paid }))
+      },
+      expect: ch7Projections.rows.map((r, k) => ({
+        what: `${r.origin} ultimate`,
+        printed: basis === "reported" ? r.ultimate_reported : r.ultimate_paid,
+        tolerance: DOLLAR,
+        actual: (res) => values(res, "ultimate")[k]
+      }))
+    }))
+  },
+  {
+    tool: "reserving.expected_claims",
+    source: friedlandRef(ch8),
+    cases: [
+      {
+        name: "Column (12), expected claims from earned premium and the selected claim ratio",
+        input: { rows: ch8.rows.map((r) => ({ origin: r.origin, premium: r.premium, elr: r.selected_ratio })) },
+        expect: ch8.rows.map((r, k) => ({
+          what: `${r.origin} expected claims`,
+          printed: r.expected,
+          tolerance: DOLLAR,
+          actual: (res) => values(res, "expected")[k]
+        }))
+      }
+    ]
+  },
+  {
+    tool: "reserving.bornhuetter_ferguson",
+    source: friedlandRef(ch9),
+    cases: ["reported", "paid"].map((basis) => {
+      const reported = basis === "reported";
+      return {
+        name: `Columns (${reported ? "5), (7) and (11" : "6), (8) and (12"}), the B-F method with ${basis} claims`,
+        input: {
+          basis,
+          rows: ch9.rows.map((r) => ({ origin: r.origin, latest: r[basis], cdf: reported ? r.cdf_reported : r.cdf_paid, expected: r.expected }))
+        },
+        expect: ch9.rows.flatMap((r, k) => [
+          {
+            what: `${r.origin} percent ${reported ? "unreported" : "unpaid"}`,
+            printed: reported ? r.unreported : r.unpaid,
+            tolerance: PERCENT,
+            actual: (res) => values(res, "percent_unreported")[k]
+          },
+          {
+            what: `${r.origin} expected ${reported ? "unreported" : "unpaid"} claims`,
+            printed: reported ? r.ibnr_reported : r.ibnr_paid,
+            tolerance: DOLLAR,
+            actual: (res) => values(res, "reserve")[k]
+          },
+          {
+            what: `${r.origin} ultimate`,
+            printed: reported ? r.ultimate_reported : r.ultimate_paid,
+            tolerance: DOLLAR,
+            actual: (res) => values(res, "ultimate")[k]
+          }
+        ])
+      };
+    })
+  }
+];
+CHECKS.push(
+  ...[
+    { exhibit: W.a7_lr_indication, loss: 11, fixed: 12, variable: 13, profit: 14, plr: 15, change: 16 },
+    // Appendix C treats every expense, with ULAE, as variable: no fixed provision.
+    { exhibit: W.c7_lr_indication, loss: 8, fixed: null, variable: 9, profit: 10, plr: 11, change: 12 }
+  ].map(({ exhibit, loss, fixed, variable, profit, plr, change }) => ({
+    tool: "ratemaking.loss_ratio_method",
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Rows (${plr}) and (${change}), the permissible loss ratio and indicated rate change`,
+      input: { loss_ratio: row(exhibit, loss), fixed: fixed === null ? 0 : row(exhibit, fixed), variable: row(exhibit, variable), profit: row(exhibit, profit) },
+      expect: [
+        { what: "variable permissible loss ratio", printed: row(exhibit, plr), tolerance: PERCENT, actual: (r) => Number(r.values.variable_permissible_loss_ratio) },
+        { what: "indicated rate change", printed: row(exhibit, change), tolerance: PERCENT, actual: (r) => Number(r.values.indicated_change) }
+      ]
+    }]
+  })),
+  {
+    tool: "credibility.full_credibility_standard",
+    source: wernerRef(W.ch12_full_standard),
+    cases: [{
+      name: "the claims needed for full credibility at the chapter's p and k",
+      input: { basis: "frequency", p: W.ch12_full_standard.p, k: W.ch12_full_standard.k },
+      expect: [
+        { what: "standard normal quantile", printed: W.ch12_full_standard.z, tolerance: FACTOR, actual: (r) => Number(r.values.z) },
+        { what: "full credibility standard", printed: W.ch12_full_standard.standard, tolerance: DOLLAR, actual: (r) => Number(r.values.standard) }
+      ]
+    }]
+  },
+  {
+    tool: "credibility.partial_credibility",
+    source: wernerRef(W.ch12_square_root_rule),
+    cases: [{
+      name: "the square root rule at the chapter's claim count",
+      input: { claims: W.ch12_square_root_rule.claims, standard: W.ch12_square_root_rule.standard },
+      // The chapter prints Z to two decimals.
+      expect: [{ what: "Z", printed: W.ch12_square_root_rule.z, tolerance: 5e-3 + 1e-9, actual: (r) => Number(r.values.z) }]
+    }]
+  },
+  ...[
+    { exhibit: W.a8_credibility, claims: 1, standard: 2, z: 3 },
+    { exhibit: W.b5_pp_indication, claims: 9, standard: 10, z: 11 },
+    { exhibit: W.c7_lr_indication, claims: 13, standard: 14, z: 15 }
+  ].map(({ exhibit, claims, standard, z }) => ({
+    tool: "credibility.partial_credibility",
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Row (${z}), the credibility of ${row(exhibit, claims)} claims`,
+      input: { claims: row(exhibit, claims), standard: row(exhibit, standard) },
+      expect: [{ what: "Z", printed: row(exhibit, z), tolerance: PERCENT, actual: (r) => Number(r.values.z) }]
+    }]
+  }))
+);
+var pv = (r) => Number(r.values.present_value);
+var flows = (n, from, amount) => Array.from({ length: n }, (_, k) => ({ time: from + k, amount: amount(k) }));
+var QUESTION_CHECKS = [
+  {
+    tool: "finance.present_value",
+    question: "fm-026",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 26",
+    quotes: ["5000", "7% per year", "20 payments", "one year from today", "5%"],
+    input: { i: 0.05, flows: flows(20, 1, (k) => 5e3 * 1.07 ** (k + 1)) },
+    tolerance: 50,
+    value: pv
+  },
+  {
+    tool: "finance.present_value",
+    question: "fm-071",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 71",
+    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
+    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
+    input: { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] },
+    tolerance: 0.5,
+    value: pv
+  },
+  {
+    tool: "finance.present_value",
+    question: "fm-082",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 82",
+    quotes: ["30-year annuity", "5% annual effective", "first payment of the annuity is due in ten years in the amount of 1,000", "increase by 500 each year"],
+    input: { i: 0.05, flows: flows(30, 10, (k) => 1e3 + 500 * k) },
+    tolerance: 0.5,
+    value: pv
+  },
+  {
+    tool: "finance.present_value",
+    question: "fm-225",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 225",
+    quotes: ["| 1 | 10 | 4.0% |", "| 2 | 12 | 4.5% |", "| 3 | 15 | 5.5% |", "| 4 | 20 | 7.0% |"],
+    input: {
+      flows: [
+        { time: 1, amount: 10, spot: 0.04 },
+        { time: 2, amount: 12, spot: 0.045 },
+        { time: 3, amount: 15, spot: 0.055 },
+        { time: 4, amount: 20, spot: 0.07 }
+      ]
+    },
+    tolerance: 5e-3,
+    value: pv
+  }
+];
+QUESTION_CHECKS.push(
+  {
+    tool: "finance.present_value",
+    question: "fm-245",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 245",
+    quotes: ["annual effective interest rate of 5%", "10-year annuity-immediate", "annual payment of 100", "increases each year by 15%"],
+    input: { i: 0.05, flows: flows(10, 1, (k) => 100 * 1.15 ** k) },
+    tolerance: 0.5,
+    value: pv
+  },
+  {
+    tool: "finance.present_value",
+    question: "fm-281",
+    bank: "exam-fm",
+    label: "SOA Exam FM sample question 281",
+    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
+    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
+    input: { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1e3 }] },
+    tolerance: 0.5,
+    value: pv
+  }
+);
+var questionRef = (q) => ({
+  question: q.question,
+  title: q.label,
+  url: `/quiz?ids=${q.question}`,
+  locator: q.label
+});
+function verifyCheck(check) {
+  const spec = toolById(check.tool);
+  if (!spec) throw new Error(`No tool ${check.tool}`);
+  const out = [];
+  for (const c of check.cases) {
+    const result = runTool(spec, c.input);
+    for (const e of c.expect) {
+      const actual = e.actual(result);
+      if (!(Math.abs(actual - e.printed) <= e.tolerance)) {
+        out.push({ tool: check.tool, locator: check.source.locator, case: c.name, what: e.what, printed: e.printed, actual });
+      }
+    }
+  }
+  return out;
+}
+function checksFor(toolId) {
+  return [
+    ...CHECKS.filter((c) => c.tool === toolId).map((c) => c.source),
+    ...QUESTION_CHECKS.filter((q) => q.tool === toolId).map(questionRef)
+  ];
+}
+function checkedValueCount(toolId) {
+  return CHECKS.filter((c) => c.tool === toolId).reduce((n, c) => n + c.cases.reduce((m, k) => m + k.expect.length, 0), 0);
 }
 
 // src/lib/tools/schema.ts
@@ -1343,13 +2706,17 @@ function inputSchema(spec) {
     additionalProperties: false
   };
 }
+function sourceLine(s) {
+  return s.question ? s.title : `${s.title}, ${s.locator}, p. ${s.page}`;
+}
 function toolSummary(spec) {
   return {
     id: spec.id,
     name: spec.name,
     area: AREAS.find((a) => a.id === spec.area)?.label ?? spec.area,
     answers: spec.answers,
-    version: spec.version
+    version: spec.version,
+    tested_against: checksFor(spec.id).map(sourceLine)
   };
 }
 function describeTool(spec) {
@@ -1410,9 +2777,13 @@ function runPath(slug, input) {
 }
 export {
   AREAS,
+  CHECKS,
   ENGINE_VERSION,
+  QUESTION_CHECKS,
   TOOLS,
   ToolInputError,
+  checkedValueCount,
+  checksFor,
   decodeRunInput,
   defaultInput,
   describeTool,
@@ -1423,8 +2794,10 @@ export {
   readNumber,
   runPath,
   runTool,
+  sourceLine,
   toolById,
   toolBySlug,
   toolSlug,
-  toolSummary
+  toolSummary,
+  verifyCheck
 };

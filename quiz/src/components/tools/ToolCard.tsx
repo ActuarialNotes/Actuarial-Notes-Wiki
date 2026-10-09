@@ -11,10 +11,11 @@
 // the card, the export and the "Copy for AI" call alike.
 
 import { useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { RotateCcw } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
 import {
   ToolInputError,
+  checksFor,
   formatValue,
   runPath,
   runTool,
@@ -28,11 +29,12 @@ import {
 } from '@/lib/tools'
 import { fromDisplay, toDisplay } from '@/lib/tools/format'
 import { runToolCall, toolResultSheets } from '@/lib/toolExport'
-import { fieldVisible, initialDraft, type Draft } from '@/lib/toolDraft'
+import { fieldVisible, groupSources, initialDraft, type Draft } from '@/lib/toolDraft'
 import { downloadWorkbook } from '@/lib/xlsx'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { EditableTable, ResultTableView, TriangleGrid, type DraftRow, type DraftTriangle } from './ToolGrid'
 import { ToolMenu, type ToolMenuItem } from './ToolMenu'
+import { PdfLinkButton } from '@/components/PdfLinkButton'
 import { cn } from '@/lib/utils'
 
 export function ToolCard({
@@ -111,7 +113,7 @@ export function ToolCard({
           >
             <RotateCcw className="h-5 w-5" aria-hidden />
           </button>
-          <ToolMenu items={menu} header={spec.answers} />
+          <ToolMenu items={menu} header={close => <MenuHeader spec={spec} onRead={close} />} />
         </div>
       </div>
 
@@ -178,6 +180,46 @@ export function ToolCard({
   )
 }
 
+/**
+ * The menu's head: the question the tool answers, then what it was tested
+ * against (R6) — each source opening in the app's reader. Drawn only for a
+ * check `lib/tools/checks.ts` runs, so the line can't claim one that isn't.
+ */
+function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
+  const sources = checksFor(spec.id)
+  return (
+    <div className="space-y-2">
+      <p>{spec.answers}</p>
+      {sources.length > 0 && (
+        <div className="space-y-1">
+          <p className="flex items-center gap-1 font-medium text-foreground">
+            <BadgeCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden /> Tested against
+          </p>
+          {groupSources(sources).map(s =>
+            s.kind === 'questions' ? (
+              // Published exam questions: open them, to work them beside the tool.
+              <Link key={s.url} to={s.url} onClick={onRead} className="flex items-start gap-1.5 py-0.5 text-left hover:text-foreground hover:underline">
+                <ListChecks className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden /> {s.label}
+              </Link>
+            ) : (
+              <PdfLinkButton
+                key={s.url}
+                url={s.url}
+                label={s.label}
+                title={s.title}
+                subtitle={s.subtitle}
+                chip={false}
+                onOpen={onRead}
+                className="text-left text-xs"
+              />
+            ),
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /** A judgment left at its default says so in place (R3): a small dot, named for screen readers. */
 function DefaultDot({ show }: { show: boolean }) {
   if (!show) return null
@@ -203,7 +245,7 @@ function NumberControl({ field, value, chosen, onChange }: { field: NumberField;
           <input
             aria-label={`${field.label} value`}
             inputMode="decimal"
-            value={text ?? String(shown)}
+            value={text ?? (field.zeroLabel && value === 0 ? field.zeroLabel : String(shown))}
             onFocus={() => setText(String(shown))}
             onChange={e => {
               setText(e.target.value)

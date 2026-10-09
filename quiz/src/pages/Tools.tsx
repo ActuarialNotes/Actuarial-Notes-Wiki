@@ -10,7 +10,8 @@
 import { useCallback, useEffect } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import { ArrowLeft, Calculator, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
-import { AREAS, TOOLS, decodeRunInput, toolBySlug, toolSlug, type PracticeArea } from '@/lib/tools'
+import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea } from '@/lib/tools'
+import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolCard } from '@/components/tools/ToolCard'
@@ -81,6 +82,7 @@ function Catalogue() {
                   }
                   title={t.name}
                   subtitle={t.answers}
+                  trailing={checksFor(t.id).length > 0 ? <CheckMark className="h-4 w-4" label="Tested against a published worked example" /> : undefined}
                   data-testid="tool-row"
                 />
               ))}

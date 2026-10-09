@@ -37,6 +37,8 @@ export interface NumberField extends FieldBase {
   step: number
   /** The slider's end, where `max` is only the validation bound (an amount can be any size). */
   sliderMax?: number
+  /** What the card prints for 0, where 0 means something other than nothing ("All" years). */
+  zeroLabel?: string
   default: number
   integer?: boolean
 }

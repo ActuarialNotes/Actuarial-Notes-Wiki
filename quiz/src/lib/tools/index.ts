@@ -7,7 +7,8 @@
 
 export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSlug } from './registry'
 export { runTool } from './run'
-export { describeTool, inputSchema, toolSummary } from './schema'
+export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
+export { CHECKS, QUESTION_CHECKS, checksFor, checkedValueCount, verifyCheck, type QuestionCheck, type SourceRef } from './checks'
 export { defaultInput, normalizeInput, readNumber } from './input'
 export { formatValue } from './format'
 export { decodeRunInput, encodeRunInput, runPath } from './share'

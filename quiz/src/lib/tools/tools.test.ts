@@ -73,9 +73,13 @@ describe('the envelope', () => {
 
   it('marks a judgment left at its default, and one that was chosen', () => {
     const left = run('reserving.age_to_age_factors')
-    expect(left.judgments).toEqual([expect.objectContaining({ field: 'average', default: true, value: 'volume_all' })])
-    const chosen = run('reserving.age_to_age_factors', { average: 'simple_all' })
-    expect(chosen.judgments[0]).toMatchObject({ default: false, value: 'simple_all' })
+    expect(left.judgments).toEqual([
+      expect.objectContaining({ field: 'average', default: true, value: 'volume' }),
+      expect.objectContaining({ field: 'latest', default: true, value: 0 }),
+    ])
+    const chosen = run('reserving.age_to_age_factors', { average: 'simple' })
+    expect(chosen.judgments[0]).toMatchObject({ default: false, value: 'simple' })
+    expect(chosen.judgments[1]).toMatchObject({ default: true })
   })
 
   it('names an unknown field rather than silently using it', () => {
@@ -158,13 +162,18 @@ describe('Age-to-Age Factors', () => {
   it('takes each average the way it is defined', () => {
     const pairs = factorsAt({ ...triangle, values: triangle.values }, 0)
     expect(pairs.map(p => p.factor)).toEqual([1.5, 1700 / 1100])
-    expect(averageFactor(pairs, 'volume_all')).toBeCloseTo(3200 / 2100, 12)
-    expect(averageFactor(pairs, 'simple_all')).toBeCloseTo((1.5 + 1700 / 1100) / 2, 12)
-    expect(averageFactor(pairs, 'geometric_all')).toBeCloseTo(Math.sqrt(1.5 * (1700 / 1100)), 12)
+    expect(averageFactor(pairs, 'volume')).toBeCloseTo(3200 / 2100, 12)
+    expect(averageFactor(pairs, 'simple')).toBeCloseTo((1.5 + 1700 / 1100) / 2, 12)
+    expect(averageFactor(pairs, 'geometric')).toBeCloseTo(Math.sqrt(1.5 * (1700 / 1100)), 12)
+    // Latest n takes the most recent origins; asking for more than there are takes them all.
+    expect(averageFactor(pairs, 'volume', 1)).toBeCloseTo(1700 / 1100, 12)
+    expect(averageFactor(pairs, 'volume', 9)).toBeCloseTo(3200 / 2100, 12)
     const five = [1.1, 1.3, 1.2, 1.5, 1.0].map(f => ({ factor: f, from: 100, to: 100 * f }))
     // Medial: drop the highest and lowest of the latest five.
-    expect(averageFactor(five, 'medial_5')).toBeCloseTo((1.1 + 1.3 + 1.2) / 3, 12)
-    expect(averageFactor(five, 'simple_3')).toBeCloseTo((1.2 + 1.5 + 1.0) / 3, 12)
+    expect(averageFactor(five, 'medial', 5)).toBeCloseTo((1.1 + 1.3 + 1.2) / 3, 12)
+    expect(averageFactor(five, 'simple', 3)).toBeCloseTo((1.2 + 1.5 + 1.0) / 3, 12)
+    // Medial over two factors is their simple mean (Friedland, Chapter 7, Exhibit I's footnote).
+    expect(averageFactor(five, 'medial', 2)).toBeCloseTo((1.5 + 1.0) / 2, 12)
   })
 
   it('says when a factor rests on one origin', () => {

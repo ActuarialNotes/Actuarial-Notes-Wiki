@@ -491,8 +491,13 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     expect(out.input_hash).toMatch(/^sha256:/)
     expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson#input=/)
     expect(out.trace.length).toBeGreaterThan(0)
+    // What it was tested against travels with the result (docs/actuarial-tools.md R6).
+    expect(out.tested_against).toContain('Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Chapter 9, Exhibit I, Sheet 1, p. 162')
     const defaulted = JSON.parse((await tool('run_tool', { tool: 'reserving.age_to_age_factors' })).text)
-    expect(defaulted.judgments).toEqual([expect.objectContaining({ field: 'average', default: true })])
+    expect(defaulted.judgments).toEqual([
+      expect.objectContaining({ field: 'average', default: true }),
+      expect.objectContaining({ field: 'latest', default: true }),
+    ])
   })
 
   it('still calculates when the knowledge base cannot be loaded, just without page links', async () => {

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { fieldVisible, fromMode, initialDraft, parseClipboardBlock, toMode } from './toolDraft'
+import { fieldVisible, fromMode, groupSources, initialDraft, parseClipboardBlock, shortSource, toMode } from './toolDraft'
+import { checksFor } from './tools'
 import { toolResultSheets, runToolCall } from './toolExport'
 import { runTool, toolById, type ToolSpec } from './tools'
 
@@ -24,6 +25,30 @@ describe('the card draft', () => {
     const cv = full.fields.find(f => f.key === 'cv')!
     expect(fieldVisible(full, cv, initialDraft(full))).toBe(false)
     expect(fieldVisible(full, cv, { ...initialDraft(full), basis: 'severity' })).toBe(true)
+  })
+})
+
+describe('a source, named short', () => {
+  it('cuts a vault page name to its author and year', () => {
+    expect(shortSource('Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)')).toBe('Friedland (2010)')
+    expect(shortSource('OSFI MCT')).toBe('OSFI MCT')
+  })
+})
+
+describe('what a card says it was tested against', () => {
+  it('gives one line per document, listing its pages', () => {
+    const lines = groupSources(checksFor('credibility.partial_credibility'))
+    expect(lines).toEqual([expect.objectContaining({ kind: 'document', label: 'Werner (2016), pp. 219, A-8, B-5, C-7' })])
+  })
+
+  it('gives one exhibit its locator, and folds exam questions into one link to the quiz', () => {
+    expect(groupSources(checksFor('reserving.bornhuetter_ferguson'))[0].label).toBe('Friedland (2010), Ch. 9, Exhibit I, Sheet 1, p. 162')
+    const [questions] = groupSources(checksFor('finance.present_value'))
+    expect(questions).toEqual({
+      kind: 'questions',
+      url: '/quiz?ids=fm-026,fm-071,fm-082,fm-225,fm-245,fm-281',
+      label: 'SOA Exam FM sample questions 26, 71, 82, 225, 245, 281',
+    })
   })
 })
 
@@ -64,7 +89,8 @@ describe('the export', () => {
   it('marks a judgment left at its default in the workpaper', () => {
     const s = spec('reserving.age_to_age_factors')
     const about = toolResultSheets(s, runTool(s, initialDraft(s))).find(x => x.name === 'About this run')!.rows
-    expect(about).toContainEqual(['Judgment: Average', 'volume_all (default — not chosen)'])
+    expect(about).toContainEqual(['Judgment: Average', 'volume (default — not chosen)'])
+    expect(about).toContainEqual(['Judgment: Latest years', '0 (default — not chosen)'])
   })
 
   it('writes the run_tool call an agent would make', () => {

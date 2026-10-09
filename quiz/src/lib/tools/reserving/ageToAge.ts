@@ -1,22 +1,24 @@
 import type { TableRow, ToolSpec, Triangle } from '../types'
 
 const AVERAGES = [
-  { value: 'volume_all', label: 'Volume, all' },
-  { value: 'simple_all', label: 'Simple, all' },
-  { value: 'volume_3', label: 'Volume, latest 3' },
-  { value: 'simple_3', label: 'Simple, latest 3' },
-  { value: 'medial_5', label: 'Medial, latest 5' },
-  { value: 'geometric_all', label: 'Geometric, all' },
+  { value: 'volume', label: 'Volume-weighted' },
+  { value: 'simple', label: 'Simple' },
+  { value: 'medial', label: 'Medial' },
+  { value: 'geometric', label: 'Geometric' },
 ]
 
 /** What each average is, for the trace and an agent reading the schema. */
 const AVERAGE_MEANING: Record<string, string> = {
-  volume_all: 'volume-weighted over all origins',
-  simple_all: 'simple mean over all origins',
-  volume_3: 'volume-weighted over the latest 3 origins',
-  simple_3: 'simple mean over the latest 3 origins',
-  medial_5: 'mean of the latest 5, excluding the highest and lowest',
-  geometric_all: 'geometric mean over all origins',
+  volume: 'the sum of the later values over the sum of the earlier ones (volume-weighted)',
+  simple: 'the simple mean of the factors',
+  medial: 'the simple mean with the highest and lowest factor left out (with fewer than three, the simple mean)',
+  geometric: 'the geometric mean of the factors',
+}
+
+/** "volume-weighted, latest 5" — the average as the trace and the summary name it. */
+export function averageName(method: string, latest: number): string {
+  const name = AVERAGES.find(a => a.value === method)?.label.toLowerCase() ?? method
+  return `${name}, ${latest > 0 ? `latest ${latest}` : 'all years'}`
 }
 
 /** The interval a factor spans, "12–24". */
@@ -36,24 +38,29 @@ export function factorsAt(tri: Triangle, j: number): Pair[] {
   return out
 }
 
-/** The chosen average of one interval's factors, or null when there are none to average. */
-export function averageFactor(pairs: Pair[], kind: string): number | null {
-  if (!pairs.length) return null
-  const latest = (n: number) => pairs.slice(-n)
-  const simple = (ps: Pair[]) => ps.reduce((s, p) => s + p.factor, 0) / ps.length
-  const volume = (ps: Pair[]) => ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0)
-  switch (kind) {
-    case 'simple_all': return simple(pairs)
-    case 'volume_3': return volume(latest(3))
-    case 'simple_3': return simple(latest(3))
-    case 'medial_5': {
-      const ps = latest(5)
+/**
+ * The chosen average of one interval's factors over its latest `latest`
+ * origins (all of them at 0), or null when there are none to average. Medial
+ * drops the one highest and one lowest factor, as Friedland's "Latest 5x1"
+ * does, and with fewer than three factors is the simple mean (Friedland,
+ * Chapter 7, Exhibit I's footnote).
+ */
+export function averageFactor(pairs: Pair[], method: string, latest = 0): number | null {
+  const ps = latest > 0 ? pairs.slice(-latest) : pairs
+  if (!ps.length) return null
+  const simple = (xs: Pair[]) => xs.reduce((s, p) => s + p.factor, 0) / xs.length
+  switch (method) {
+    case 'simple':
+      return simple(ps)
+    case 'medial': {
       if (ps.length < 3) return simple(ps)
       const sorted = [...ps].sort((a, b) => a.factor - b.factor)
       return simple(sorted.slice(1, -1))
     }
-    case 'geometric_all': return Math.exp(pairs.reduce((s, p) => s + Math.log(p.factor), 0) / pairs.length)
-    default: return volume(pairs)
+    case 'geometric':
+      return Math.exp(ps.reduce((s, p) => s + Math.log(p.factor), 0) / ps.length)
+    default:
+      return ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0)
   }
 }
 
@@ -79,15 +86,22 @@ export const ageToAgeFactors: ToolSpec = {
       },
     },
     {
-      kind: 'choice', key: 'average', label: 'Average', judgment: true, options: AVERAGES, default: 'volume_all',
-      description: `Which average of each interval's factors to take: ${AVERAGES.map(a => `${a.value} (${AVERAGE_MEANING[a.value]})`).join(', ')}.`,
+      kind: 'choice', key: 'average', label: 'Average', judgment: true, options: AVERAGES, default: 'volume',
+      description: `Which average of each interval's factors to take: ${AVERAGES.map(a => `${a.value} (${AVERAGE_MEANING[a.value]})`).join('; ')}.`,
+    },
+    {
+      kind: 'number', key: 'latest', label: 'Latest years', symbol: 'n', unit: 'count', integer: true, judgment: true,
+      min: 0, max: 100, sliderMax: 10, step: 1, default: 0, zeroLabel: 'All',
+      description: 'Average over the latest n origins at each age (the most recent diagonals). 0 averages every origin.',
     },
   ],
   notation: () => 'fⱼ = Cᵢ,ⱼ₊₁ / Cᵢ,ⱼ',
   view: 'table',
   compute: input => {
     const tri = input.triangle as Triangle
-    const kind = String(input.average)
+    const method = String(input.average)
+    const latest = Number(input.latest)
+    const named = averageName(method, latest)
     const intervals = tri.ages.slice(0, -1).map((age, j) => ({ j, label: intervalLabel(age, tri.ages[j + 1]) }))
     const rows: TableRow[] = tri.origins.map((origin, o) => {
       const row: TableRow = { origin }
@@ -102,7 +116,7 @@ export const ageToAgeFactors: ToolSpec = {
     const averages: (number | null)[] = intervals.map(({ j, label }) => {
       const pairs = factorsAt(tri, j)
       if (pairs.length === 1) warnings.push(`The ${label} factor rests on one origin.`)
-      return averageFactor(pairs, kind)
+      return averageFactor(pairs, method, latest)
     })
     const footer: TableRow = { origin: 'Average' }
     intervals.forEach(({ label }, k) => { footer[label] = averages[k] })
@@ -122,14 +136,15 @@ export const ageToAgeFactors: ToolSpec = {
       trace: intervals.flatMap(({ j, label }, k) => {
         const pairs = factorsAt(tri, j)
         if (!pairs.length || averages[k] == null) return []
-        const formula = kind.startsWith('volume')
-          ? `Σ C(${tri.ages[j + 1]}) / Σ C(${tri.ages[j]}) over ${kind === 'volume_3' ? Math.min(3, pairs.length) : pairs.length} origins`
-          : `${AVERAGE_MEANING[kind] ?? kind}, ${pairs.length} factors`
+        const used = latest > 0 ? Math.min(latest, pairs.length) : pairs.length
+        const formula = method === 'volume'
+          ? `Σ C(${tri.ages[j + 1]}) / Σ C(${tri.ages[j]}) over ${used} origin${used === 1 ? '' : 's'}`
+          : `${named}: ${used} factor${used === 1 ? '' : 's'}`
         return [{ label: `Average ${label}`, formula, result: averages[k]!, unit: 'factor' as const }]
       }),
       warnings,
       values: { intervals: intervals.map(i => i.label), ages: tri.ages, averages, factors: rows },
-      summary: `Age-to-age averages (${AVERAGE_MEANING[kind] ?? kind}): ${shown.join(', ')}.`,
+      summary: `Age-to-age averages (${named}): ${shown.join(', ')}.`,
     }
   },
   method: {

@@ -35,6 +35,7 @@ import {
   toolSummary,
 } from '../_tools/engine.js'
 
+
 export const SERVER_VERSION = '1.0.0'
 
 /** Mirrors PUBLIC_SITE_URL in src/lib/aiConnector.ts (pinned by mcpServer.test.ts). */
@@ -708,6 +709,7 @@ TOOLS.push(
         input,
         input_hash: inputHash,
         method: methodRefs(ix, spec.method),
+        tested_against: toolSummary(spec).tested_against,
         app_url: `${site}${runPath(toolSlug(spec), input)}`,
       }))
     },

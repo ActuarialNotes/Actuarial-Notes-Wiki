@@ -3,7 +3,7 @@
 The concept pages the study guides link to that don't exist yet: found, ranked, and cut into
 batches to write. **Status: Phase A (batches 1–7) done — 44 pages written, 7 targets aliased to
 existing pages, study guides re-rendered. Phase B reviewed and planned (§8) with one example
-page written; approved 2026-10-09, in progress.**
+page written; plan approved 2026-10-09, revised example awaiting your review.**
 
 - Rerun the analysis: `python3 scripts/find_concept_gaps.py` (summary) ·
   `--update-plan` (refresh the generated half of this file) · `--json out.json` (everything) ·
@@ -133,10 +133,10 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
   namesake table (`Deductible` vs `Deductible Rating`) in `scripts/concept_aliases.json`.
 - **LaTeX**: `\$` for money, no Unicode fractions or smart quotes; worked numbers recomputed in
   Python before commit.
-- **Sentences** (from Phase B): write every bullet, tip and trap as one or more full sentences. Don't open a
-  bullet with a bold label and a fragment (`**Origin.** It is …`, `**Interest is δ.**`), and don't leave a
-  sentence without a verb (`Closed forms are rare.` is fine; `Rare in closed form.` is not). Bold an exam
-  name at the start of a tip bullet only when the sentence that follows is complete. Concise, not verbose.
+- **Sentences** (from Phase B): a bullet, tip or trap may open with a short bold label (`**Sum at risk.**`,
+  `**Annual premiums.**`, or an exam name in the tips), and everything after the label is written in full
+  sentences. Don't leave stub sentences that drop the reason or the verb (`Closed forms are rare.` on its own,
+  `Start where the value is known.`); say the point and why in one or two plain sentences. Concise, not verbose.
 
 ## 5. Link problems noted in the guides (not fixed — guides are out of scope)
 
@@ -167,7 +167,8 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
 | 2026-10-07 | re-render | — | `1c25ccc` | 21 development guides; text identical, 72 link targets moved |
 | 2026-10-07 | fix | 6 | `96b96f4` | Money written inside the math; 1,980 formulas render in KaTeX |
 | 2026-10-09 | B review | 1 | `3cfec33` | Phase B triaged (§8): 80 pages, 147 aliases, 13 skips; example `Thiele's Differential Equation` |
-| 2026-10-09 | B style | — | — | Plan approved; example rewritten in full sentences, rule added to §4 |
+| 2026-10-09 | B style | — | `f86e3df` | Plan approved; example rewritten in full sentences, rule added to §4 |
+| 2026-10-09 | B style | — | — | Bold labels restored in the example, full sentences after each; rule in §4 updated |
 
 ## 7. Phase A record (2026-10-07)
 
@@ -240,8 +241,8 @@ It links three G4 pages that don't exist yet (`Policy Value`, `Multiple State Mo
 
 ### 8.1 Judgment calls
 
-Approved as recommended on 2026-10-09, with one change to the example page: every bullet, tip and
-trap is now written in full sentences (§4, "Sentences"). The three pages in item 4 are written short and
+Approved as recommended on 2026-10-09, with one change to the example page: bullets, tips and traps
+keep their bold labels, and the text after each label is written in full sentences (§4, "Sentences"). The three pages in item 4 are written short and
 flagged for review, and the optional extras in item 7 are left out.
 
 1. **`Policy Value` gets its own page** (FAM/ALTAM: prospective and retrospective values, the recursion, gross

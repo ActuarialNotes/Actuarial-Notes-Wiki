@@ -252,4 +252,5 @@ TypeScript clients in all four modes: `@modelcontextprotocol/sdk` 1.x (legacy, n
   put the connector in front of readers who never visit Settings. Both need a review submission.
 - **Calculators.** The distribution simulators' tested maths (`lib/distributionMath.ts`) would
   make a good `distribution` tool, grounded in the exam parameterizations. Today it is
-  TypeScript the function can't import.
+  TypeScript the function can't import. `docs/actuarial-tools.md` plans the calculators and
+  how one engine reaches both the app and this function.

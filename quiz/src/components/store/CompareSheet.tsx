@@ -21,7 +21,7 @@
 // scroll in one line. From `sm` up it is the classic grid with a pinned
 // label column.
 
-import { useId, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { ArrowUpRight, X } from 'lucide-react'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { CheckMark } from '@/components/CheckMark'
@@ -82,6 +82,7 @@ export function CompareSheet({
   const cheapest = Math.min(...shown.map(i => lowestPrice(i) ?? Infinity))
   const examName = exams.find(e => e.key === examKey)?.name ?? examKey
   const span = shown.length
+  const { scrollerRef, pane } = usePhoneColumns()
 
   return (
     <OverlayPortal>
@@ -159,11 +160,16 @@ export function CompareSheet({
           </header>
 
           {/* One scroller for both axes, so the sticky heads and labels have a
-              single frame to stick in. It is a size container: the columns and
-              the disclaimer measure themselves against its width (`cqw`). */}
-          <div className="min-h-0 flex-1 overflow-auto max-sm:snap-x max-sm:snap-mandatory overscroll-contain [container-type:inline-size]">
+              single frame to stick in. Its measured width sets the phone
+              columns (`--col`, half of it) and the disclaimer's (`--pane`) in
+              pixels, so no browser has to resolve container units on a table cell. */}
+          <div
+            ref={scrollerRef}
+            style={{ '--pane': `${pane}px`, '--col': `${pane / 2}px`, '--n': span } as CSSProperties}
+            className="min-h-0 flex-1 overflow-auto overscroll-contain max-sm:snap-x max-sm:snap-mandatory"
+          >
             <div className="w-max min-w-full">
-              <table className="w-max min-w-full border-separate border-spacing-0 text-left text-sm">
+              <table className="min-w-full border-separate border-spacing-0 text-left text-sm max-sm:table-fixed max-sm:w-[calc(var(--col)*var(--n))] sm:w-max">
                 <thead>
                   <tr>
                     <th scope="col" className="sticky left-0 top-0 z-30 hidden w-36 min-w-[9rem] border-b border-r border-border bg-card px-3 py-2.5 sm:table-cell">
@@ -240,7 +246,7 @@ export function CompareSheet({
 
               {/* As wide as the visible pane and held at its left edge, so the
                   notice stays readable however far the table is scrolled. */}
-              <div className="sticky left-0 w-[100cqw] space-y-1.5 px-5 py-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
+              <div className="sticky left-0 w-[var(--pane)] space-y-1.5 px-5 py-4 text-[11px] leading-relaxed text-muted-foreground" data-testid="store-disclaimer">
                 {storeDisclaimer(null, null).map(p => <p key={p}>{p}</p>)}
               </div>
             </div>
@@ -251,8 +257,56 @@ export function CompareSheet({
   )
 }
 
+/**
+ * The phone layout's two measurements and its snapping. The pane's width is
+ * read off the scroller (and kept current) so a column is exactly half of it;
+ * and because not every browser snaps to a table cell (`scroll-snap` is only
+ * a hint in Safari), a scroll that comes to rest between columns is nudged to
+ * the nearest one, so the reader always sees a whole pair.
+ */
+function usePhoneColumns() {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const [pane, setPane] = useState(0)
+
+  useLayoutEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    const measure = () => setPane(el.clientWidth)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    let timer: number | undefined
+    const settle = () => {
+      if (window.matchMedia('(min-width: 640px)').matches) return
+      const column = el.clientWidth / 2
+      const last = el.scrollWidth - el.clientWidth
+      const target = Math.min(Math.round(el.scrollLeft / column) * column, last)
+      if (Math.abs(target - el.scrollLeft) < 1) return
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      el.scrollTo({ left: target, behavior: still ? 'auto' : 'smooth' })
+    }
+    const onScroll = () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(settle, 120)
+    }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.clearTimeout(timer)
+      el.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+
+  return { scrollerRef, pane }
+}
+
 /** A product's column: exactly half the pane on a phone, so two always sit side by side and a swipe lands on the next pair; a fixed width from `sm`. */
-const COLUMN = 'w-[50cqw] min-w-[50cqw] max-sm:snap-always max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
+const COLUMN = 'max-sm:w-[var(--col)] max-sm:snap-always max-sm:snap-start max-sm:border-r max-sm:border-border sm:w-52 sm:min-w-[13rem]'
 
 /** The row's label — pinned at the left on `sm`+; on a phone it is the band above the row instead. */
 const ROW_HEAD =

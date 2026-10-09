@@ -13,9 +13,9 @@ together, the loosely connected further out.
 
 It lives at **`/craft`** — one board, opened from the **Concept Craft** row at the
 top of the Quiz tab, beside Quiz Battle: a way of studying, not an exam. The board
-opens straight away, empty the first time, and its **+** (top right) opens the
+opens straight away, empty the first time, and its **+** (bottom right, the largest control on the board) opens the
 **starter packs**: every topic, under its exam's logo, in ladder order, in a menu that
-scrolls in place. Picking one adds that topic's seeds to the board — a pack on the
+opens upwards from the button and scrolls in place. Picking one adds that topic's seeds to the board — a pack on the
 board is ticked off — and any number of packs, from any exams, can share it.
 `/craft/:topicId` is a link to one pack: it adds it and shows the board. The route is
 a sheet laid over the Quiz tab (`deskPlace` in `lib/viewTransition.ts`) and lights
@@ -84,8 +84,8 @@ connection's card says what it made and quotes the page that says why.
 | `quiz/src/lib/craftLayout.ts` | The board's physics and geometry, pure and tested: bodies, strength-weighted springs, collision, seeding, where a made card lands (`spawnBeside`), the camera, hit-testing, where a line's label goes. |
 | `quiz/src/hooks/useConceptCraft.ts` | The reader's board — localStorage, pack ids and pair keys only — and which connections the board shows. |
 | `quiz/src/hooks/useConceptLevels.ts` | A concept's level and collected state for drawing its card — shared with Quiz Battle's topic pick. |
-| `quiz/src/pages/Craft.tsx` | The board's screen: top bar with its **+**, the empty board's invitation, deck, board, connection card. Lazy (`lazyRoute`). |
-| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck`, `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftLogo`. |
+| `quiz/src/pages/Craft.tsx` | The board's screen: top bar, the empty board's invitation, deck, board, the bottom-right controls (**+**, zoom, fit, tidy, filter, clear), connection card. Lazy (`lazyRoute`). |
+| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck` (a side panel on a wide board only — a phone has no deck, every card being on its board), `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftLogo`. |
 | `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), and no quoted sentence cuts a formula in half. |
 | `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card: what it made, down to its quiz. |
 
@@ -253,7 +253,7 @@ and something it plainly makes: *Spot Rate* and *Yield Rate*, the *Yield Curve*.
 - **Tap** a card on the board to read it: the app's concept popup opens over the
   bottom of the screen on a walk of the cards in hand (`walk: 'corpus'`, which drops
   the popup's syllabus-filter picker — and never a concept not yet made), the board
-  gives up that room (`--concept-split-height`; a phone's deck steps aside too), and
+  gives up that room (`--concept-split-height`), and
   the card being read is lit with its connections.
 - **Tap a strength** on a line to open that connection's card.
 - **No drag?** Tap a card in the deck to hold it; the next card tapped, in the deck
@@ -320,7 +320,8 @@ A well-played topic has dozens of lines. Three things keep it readable:
   connection whose card is open is **lit** — its lines and their strengths in the
   exam's colour, the strengths drawn above the cards — and every other line steps
   back, its strength hidden.
-- **The filter** (board menu → *Show*): every connection, moderate and strong
+- **The filter** (its own button, bottom right, cycling through the three and
+  saying which in a line of text): every connection, moderate and strong
   (40+), or strong only (70+). It hides lines, never data — a lit card still shows all
   of its own — and is remembered.
 
@@ -337,7 +338,7 @@ scoped like Actuaria's (style guide §2.6): the screen carries `.dark` and
 `color-scheme: dark`, so the sidebar and anything portalled to the body keep the
 reader's own theme. Its floor is a dot grid (`.craft-floor`) whose spacing and offset
 follow the camera, the one cue a blank canvas has that it was panned or zoomed. The
-starter-pack menu hangs off the board's header and so is dark with it.
+starter-pack menu hangs off the **+** and so is dark with the board.
 
 ### The exam's colour
 

@@ -18,8 +18,8 @@ export interface PackGroup {
  * **The starter packs** — what the board's **+** opens: every exam section the
  * vault makes a topic of (`craftTopics`), under its exam's logo, in ladder
  * order. Picking one adds its seeds to the board; a pack already on the board
- * carries the checkmark and can't be added twice. A menu hung off the button,
- * scrolling in place rather than covering the board.
+ * carries the checkmark and can't be added twice. A menu hung up from the button
+ * (bottom right of the board), scrolling in place rather than covering it.
  */
 export function CraftPackMenu({
   groups,
@@ -58,7 +58,7 @@ export function CraftPackMenu({
       role="menu"
       aria-label="Starter packs"
       data-testid="craft-pack-menu"
-      className="paper-drop absolute right-2 top-full z-50 mt-1 flex max-h-[min(70dvh,34rem)] w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-xl bg-popover text-popover-foreground shadow-xl ring-1 ring-border"
+      className="paper-drop absolute bottom-full right-0 z-50 mb-3 flex max-h-[min(60dvh,34rem)] w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-xl bg-popover text-popover-foreground shadow-xl ring-1 ring-border"
     >
       <p className="shrink-0 border-b border-border/60 px-4 py-2.5 text-sm font-semibold">Add a starter pack</p>
       <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-1 [scrollbar-width:thin]">

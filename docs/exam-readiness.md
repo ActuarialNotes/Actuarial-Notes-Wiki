@@ -128,8 +128,8 @@ while they render at the top of the page:
    title, band verdict or insight line: the number is the card's one statement. The logo says which exam the
    card is scoped to without re-printing its name, and carries that exam's accent
    (`lib/examColors.ts`) so the card sits on the same ladder as every other surface that
-   shows one. Above the card, leading the dashboard, is the **calendar** — the exam date, the
-   target-ready date straight under it, then the schedule strip — as a full-width section
+   shows one. Above the card, leading the dashboard, is the **calendar** — the exam date and the days
+   left, set large, then the schedule strip — as a full-width section
    with no card background or padding; under the card, bare on the page, come the
    **primary actions**.
 
@@ -154,8 +154,9 @@ while they render at the top of the page:
    about it one object rather than two cards saying the same thing at opposite ends of the
    page. It keeps everything the card did: tapping a day opens that day's panel below the
    block (its sessions, gems, level-ups and what the plan schedules for it), the
-   *schedule-forming* sweep plays out on it when a plan is locked in, and the **Target ready**
-   date row sits above the strip, under the exam date (`dateRowsAbove`).
+   *schedule-forming* sweep plays out on it when a plan is locked in. The **target-ready**
+   date has no row of its own: its day is the amber cell on the strip, and it is set in the
+   Study Plan modal.
 2. **Today's Study Plan** — what to do about that score today. It follows the number rather
    than the ring: a reader who has just read *Not started* is looking for the next step, not
    for a breakdown of how the number was reached.

@@ -110,13 +110,6 @@ interface Props {
    * only the target-ready row.
    */
   showExamDateRow?: boolean
-  /**
-   * Where the date rows go in the `linear` layout: under the strip (the
-   * default), or above it. The readiness card prints the exam date above the
-   * strip, so it puts the target-ready row there too, straight under it — the
-   * two deadlines read as one list before the timeline they mark.
-   */
-  dateRowsAbove?: boolean
 }
 
 /**
@@ -206,7 +199,6 @@ export function ExamHeatmap({
   playbackStepMs = 60,
   layout = 'grid',
   showExamDateRow = true,
-  dateRowsAbove = false,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -445,7 +437,7 @@ export function ExamHeatmap({
   }
 
   const dateRows = (
-    <div className={`flex flex-col gap-1 empty:hidden ${dateRowsAbove ? 'pb-2' : 'pt-0.5'}`}>
+    <div className="flex flex-col gap-1 pt-0.5 empty:hidden">
       {showExamDateRow && (
       <div className="flex items-center gap-1.5">
         {!editing || onOpenStudyPlan ? (
@@ -559,8 +551,6 @@ export function ExamHeatmap({
       // the days to read as squares. The month row, the strip, the window band
       // and the tap resolution all read it, so they stay over the same days.
       <div className="space-y-1.5 [--strip-gap:1px] sm:[--strip-gap:2px]">
-        {dateRowsAbove && dateRows}
-
         {/* Month ticks, over the days they name. */}
         <div className="flex gap-[var(--strip-gap)]" style={{ height: 11, maxWidth: stripMaxWidth }}>
           {linearMonthLabels.map((label, i) => (
@@ -649,7 +639,7 @@ export function ExamHeatmap({
           })}
         </div>
 
-        {!dateRowsAbove && dateRows}
+        {dateRows}
       </div>
     )
   }

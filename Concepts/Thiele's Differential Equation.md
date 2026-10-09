@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:528a56495599083cdfb54268e7183783cc747e7cdcccb7873d74d9b29983e717
+  content_hash: sha256:de5b66f84f90346e83ed07a6b3ec9a048efadbb1fa728b4fc464d4707e6fd841
   sources: []
   open_findings: 0
   open_critical: 0
@@ -17,10 +17,10 @@ verification:
 
 > $$\begin{aligned} \frac{d}{dt}\,{}_tV^{(i)} = {} & \delta_t\,{}_tV^{(i)} + P_t^{(i)} - B_t^{(i)} \\ & - \sum_{j \neq i} \mu_{x+t}^{ij}\left(S_t^{(ij)} + {}_tV^{(j)} - {}_tV^{(i)}\right) \end{aligned}$$
 
-- **Symbols.** Following Dickson, Hardy & Waters (chapters 7–8), $\delta_t$ is the [[Force of Interest|force of interest]], $P_t$ and $e_t$ are the annual premium and expense rates, $S_t$ is the sum insured, $E_t$ is the expense of paying a claim, and $\mu_{x+t}$ is the [[Hazard Rate|force of mortality]]. In the multiple state form, $P_t^{(i)}$ and $B_t^{(i)}$ are the premium and benefit rates paid while in state $i$, and $S_t^{(ij)}$ is the lump sum paid on a move from state $i$ to state $j$.
-- **Sum at risk.** A death costs the insurer the sum at risk, $S_t + E_t - {}_tV$, rather than the full benefit, because the policy value already held is released to pay it. On a move from state $i$ to state $j$ the sum at risk is $S_t^{(ij)} + {}_tV^{(j)} - {}_tV^{(i)}$, so a move into a costlier state is a cost even when no lump sum is paid.
-- **Origin.** The equation is the continuous form of the [[Reserve|policy value recursion]]. Writing the recursion over a short step $h$, subtracting ${}_tV$, dividing by $h$ and letting $h \to 0$ gives the first block above.
-- **Solving it.** The equation rarely has a closed-form solution, so it is solved numerically. The usual method starts from the value known at the end of the contract (${}_nV = 0$ for term insurance, or the maturity benefit for an endowment) and steps backward with Euler's method, ${}_{t-h}V \approx {}_tV - h\,\frac{d}{dt}{}_tV$. The premium that makes ${}_0V = 0$ is the [[Equivalence Principle|equivalence principle]] premium.
+- **Symbols:** Following Dickson, Hardy & Waters (chapters 7–8), $\delta_t$ is the [[Force of Interest|force of interest]], $P_t$ and $e_t$ are the annual premium and expense rates, $S_t$ is the sum insured, $E_t$ is the expense of paying a claim, and $\mu_{x+t}$ is the [[Hazard Rate|force of mortality]]. In the multiple state form, $P_t^{(i)}$ and $B_t^{(i)}$ are the premium and benefit rates paid while in state $i$, and $S_t^{(ij)}$ is the lump sum paid on a move from state $i$ to state $j$.
+- **Sum at risk:** A death costs the insurer the sum at risk, $S_t + E_t - {}_tV$, rather than the full benefit, because the policy value already held is released to pay it. On a move from state $i$ to state $j$ the sum at risk is $S_t^{(ij)} + {}_tV^{(j)} - {}_tV^{(i)}$, so a move into a costlier state is a cost even when no lump sum is paid.
+- **Origin:** The equation is the continuous form of the [[Reserve|policy value recursion]]. Writing the recursion over a short step $h$, subtracting ${}_tV$, dividing by $h$ and letting $h \to 0$ gives the first block above.
+- **Solving it:** The equation rarely has a closed-form solution, so it is solved numerically. The usual method starts from the value known at the end of the contract (${}_nV = 0$ for term insurance, or the maturity benefit for an endowment) and steps backward with Euler's method, ${}_{t-h}V \approx {}_tV - h\,\frac{d}{dt}{}_tV$. The premium that makes ${}_0V = 0$ is the [[Equivalence Principle|equivalence principle]] premium.
 
 > [!example]- Policy Value of a Term Insurance by Euler's Method {Example}
 > A fully continuous 10-year term insurance on $(50)$ pays \$100,000 at the moment of death. Premiums are paid continuously at \$190 a year, there are no expenses, and $\delta = 0.05$. You are given $\mu_{60} = 0.003222$ and $\mu_{59.5} = 0.003051$. Write down Thiele's equation and its boundary condition, then estimate ${}_9V$ by Euler's method with $h = 0.5$, working backward from $t = 10$.
@@ -71,12 +71,12 @@ verification:
 
 > [!tip]- How it appears on the exam
 > - **ALTAM** asks candidates to write down Thiele's equation for a stated contract, such as a single-life policy with expenses or each state of a disability income, long-term care or CCRC model, and to explain what each term pays for.
-> - **Numerical answers.** The question then asks for a numerical answer, using Euler's method with a given step size from the boundary condition or from a given policy value, to reach a policy value or the premium that makes ${}_0V = 0$.
-> - **Reverse questions.** Some questions work in reverse: they give the equations and ask which premiums and benefits the contract pays in each state, or they ask for the derivation from the policy value recursion.
+> - **Numerical answers:** The question then asks for a numerical answer, using Euler's method with a given step size from the boundary condition or from a given policy value, to reach a policy value or the premium that makes ${}_0V = 0$.
+> - **Reverse questions:** Some questions work in reverse: they give the equations and ask which premiums and benefits the contract pays in each state, or they ask for the derivation from the policy value recursion.
 
 > [!warning]- Exam traps
-> - **Sum at risk, not sum insured.** The death term is $-(S_t + E_t - {}_tV)\,\mu_{x+t}$. Writing $-S_t\,\mu_{x+t}$ instead forgets that the policy value is released on death and makes the derivative too negative.
-> - **Force of interest, not effective rate.** The interest term uses the force of interest $\delta$, not the effective rate $i$. Using 5% where $\delta = \ln 1.05 = 0.04879$ overstates the interest earned.
-> - **The starting value.** Euler's method must start from a value that is known. For an endowment, ${}_nV$ is the maturity benefit rather than 0, and each backward step takes the derivative at the known end $t$.
-> - **Every transition.** Each state's equation needs a term for every possible move out of that state, so the sick state usually has a recovery term as well as a death term. A premium that is waived while the insured is sick does not appear in the sick state's equation.
-> - **Annual premiums.** The equation assumes that payments are continuous. With annual premiums, it holds between premium dates with $P_t = 0$, and the policy value jumps up by the premium, less expenses, on each premium date.
+> - **Sum at risk, not sum insured:** The death term is $-(S_t + E_t - {}_tV)\,\mu_{x+t}$. Writing $-S_t\,\mu_{x+t}$ instead forgets that the policy value is released on death and makes the derivative too negative.
+> - **Force of interest, not effective rate:** The interest term uses the force of interest $\delta$, not the effective rate $i$. Using 5% where $\delta = \ln 1.05 = 0.04879$ overstates the interest earned.
+> - **The starting value:** Euler's method must start from a value that is known. For an endowment, ${}_nV$ is the maturity benefit rather than 0, and each backward step takes the derivative at the known end $t$.
+> - **Every transition:** Each state's equation needs a term for every possible move out of that state, so the sick state usually has a recovery term as well as a death term. A premium that is waived while the insured is sick does not appear in the sick state's equation.
+> - **Annual premiums:** The equation assumes that payments are continuous. With annual premiums, it holds between premium dates with $P_t = 0$, and the policy value jumps up by the premium, less expenses, on each premium date.

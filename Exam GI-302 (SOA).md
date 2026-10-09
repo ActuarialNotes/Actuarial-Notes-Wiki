@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7d3b3b5b7298195593594cb6ba67c85944c0d57149cb6112e51c12282c527211
+  content_hash: sha256:728a62b03bea2766d4bd0d360efc6d1cfd4aa78c8a60016efe978f662012e2ea
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,17 +30,17 @@ The learning objectives below are transcribed from the Jul 2027 [syllabus](https
 > [!example]- U.S. General Insurance Products and Coverages {5–10%}
 > The candidate will understand the different types of general [[Insurance Policy|insurance products]] and [[Coverage|coverages]] offered in the [[United State|United States]].
 >
-> 1. Describe the contents of the [[ISO Personal Auto Policy]] ([[PAP]]) and the [[ISO Homeowner|ISO Homeowners]] ([[HO]]) [[Policy|policies]] and the [[Coverage|coverages]] they [[Provide|provide]].
-> 2. Explain how [[Insurable Interest|insurable interest]], [[Policy Provision|policy provisions]] for valuing [[Loss|losses]], and [[Insurance|insurance]] to value [[Affect|affect]] a [[Loss Payment|loss payment]] amount under [[Property Insurance|property insurance]].
+> 1. Describe the contents of the [[Personal Auto Policy|ISO Personal Auto Policy]] ([[Personal Auto Policy|PAP]]) and the [[Homeowners Policy|ISO Homeowners]] ([[Homeowners Policy|HO]]) [[Policy|policies]] and the [[Coverage|coverages]] they [[Provide|provide]].
+> 2. Explain how [[Insurable Interest|insurable interest]], [[Policy Provisions|policy provisions]] for valuing [[Loss|losses]], and [[Insurance|insurance]] to value [[Affect|affect]] a [[Property Insurance|loss payment]] amount under [[Property Insurance|property insurance]].
 > 3. Describe [[Commercial Property Insurance|commercial property insurance]] in terms of [[Category|categories]] of [[Loss Exposure|loss exposures]].
-> 4. Describe the contents of the [[ISO Commercial Property|ISO commercial property]] ([[CP]]) and general [[Liability|liability]] ([[CGL]]) [[Policy|policies]], and types of [[Coverage|coverage]] they [[Provide|provide]].
+> 4. Describe the contents of the [[Commercial Property Insurance|ISO commercial property]] ([[CP]]) and general [[Liability|liability]] ([[Commercial General Liability|CGL]]) [[Policy|policies]], and types of [[Coverage|coverage]] they [[Provide|provide]].
 > 5. Identify the factors that [[Affect Commercial Insurance Premium|affect commercial insurance premiums]] and how [[Insurance Premium|premium]] is determined.
 > 6. Describe [[Commercial Auto Insurance|commercial auto insurance]] in terms of the [[Loss Exposure|loss exposures]].
 > 7. Describe the contents of the [[ISO Commercial Automobile Policy|ISO Commercial Automobile policies]] and the [[Coverage|coverages]] they [[Provide|provide]].
-> 8. Describe the [[Workers Compensation|workers compensation]] ([[WC]]) [[System|system]].
+> 8. Describe the [[Workers Compensation|workers compensation]] ([[Workers Compensation Insurance|WC]]) [[System|system]].
 > 9. Explain why [[Employers Liability Insurance|employers liability insurance]] is needed and how the [[ISO WC]] and [[Employers Liability Insurance Policy Address|Employers Liability Insurance Policy address]] this need.
 > 10. Explain how [[Premium Basis|premium bases]], [[Classification|classifications]], and [[Premium Adjustments Affect WC Insurance|premium adjustments affect WC insurance]].
-> 11. Describe various [[Specialty Insurance Coverage|specialty insurance coverages]] (including [[Excess Liability|excess liability]], [[Umbrella Liability|umbrella liability]], [[Professional Liability|professional liability]], [[Cyber Risk|cyber risk]], [[Surety|surety]] and [[Terrorism|terrorism]]).
+> 11. Describe various [[Specialty Insurance Coverage|specialty insurance coverages]] (including [[Umbrella Liability Insurance|excess liability]], [[Umbrella Liability Insurance|umbrella liability]], [[Professional Liability Insurance|professional liability]], [[Cyber Risk|cyber risk]], [[Surety|surety]] and [[Terrorism Insurance|terrorism]]).
 >
 > **Readings:**
 > - General Insurance: U.S. Policies and Coverages, SOA, May 2025 (1a, 1d, 1g, 1i, 1k)
@@ -75,12 +75,12 @@ The learning objectives below are transcribed from the Jul 2027 [syllabus](https
 > - The Dodd-Frank Wall Street Reform and Consumer Protection Act: Insurance Provisions, Congressional Research Service, CRS Report R41372, Aug 2010 (2a-d, 2f)
 
 > [!example]- U.S. GI Financial Reporting and Financial Health Measurement {35–50%}
-> The candidate will understand the different [[Reporting Standard|reporting standards]] for U.S. general [[Insurer|insurance companies]] and use [[Statutory Financial Statement|statutory financial statement]] information to measure [[Insurer Financial Health|insurer financial health]].
+> The candidate will understand the different [[Financial Reporting|reporting standards]] for U.S. general [[Insurer|insurance companies]] and use [[Statutory Financial Statement|statutory financial statement]] information to measure [[Financial Health|insurer financial health]].
 >
 > 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. [[Statutory|statutory]] accounting and U.S. [[Tax|tax]] accounting for general [[Insurer|insurance companies]].
 > 2. Describe the elements of the [[NAIC Annual Statement]].
 > 3. [[Complete]] and interpret [[NAIC Annual Statement Pages-schedule|NAIC Annual Statement pages/schedules]] (as referenced in the [[Resource|resources]]).
-> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[Annual Statement]] (e.g., [[NAIC RBC]] and [[IRIS]] Ratios).
+> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[NAIC RBC]] and [[IRIS]] Ratios).
 >
 > **Readings:**
 > - FRE-802-19: National Association of Insurance Commissioners (NAIC), Accounting Practices and Procedures Manual, 2018 Preamble (3a)

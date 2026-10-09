@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5bf151842396b618853aa38a6ae77775b2b3fc2eb60345ad33aa895de9caf977
+  content_hash: sha256:f26fb0350b6d29f7970e08d0e8bf389c1e453613170fc89c54bd4abc1f069b0e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand how to evaluate the effectiveness of [[Provider Reimbursement|provider reimbursement]] methods from both a [[Cost|cost]] and [[Quality Viewpoint|quality viewpoint]].
 >
 > 1. Describe [[Contract|contracts]] between [[Payer|payers]] and [[Provider|providers]]
-> 2. Calculate [[Provider Payment|provider payments]] under various [[Reimbursement|reimbursement]] methods
+> 2. Calculate [[Provider Payment|provider payments]] under various [[Provider Reimbursement|reimbursement]] methods
 > 3. Evaluate [[Standard Contracting|standard contracting]] methods from a [[Cost-Effective|cost-effective]] and [[Quality Perspective|quality perspective]]
 > 4. Evaluate [[Accountable Care Organization|accountable care organizations]] ([[ACO]]) and their impact on [[Quality|quality]], [[Utilization|utilization]], and [[Cost|cost]]
 >

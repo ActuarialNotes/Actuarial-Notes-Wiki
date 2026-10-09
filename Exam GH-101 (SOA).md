@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d764911f8de54e1e4f4cd160ca403c2bc39da4d27d219eac92864edf700eef58
+  content_hash: sha256:c9184716c3d26ed4aabdc969cbd501f0e297e18fb757a7a03d21f555a6d22d98
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,11 +28,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Plan and Product Provisions {10–20%}
-> The candidate will understand how to describe [[Plan Provision|plan provisions]] typically offered under [[Short Duration Contract|short duration contracts]] ([[Medical|medical]], [[Dental|dental]], [[Vision|vision]], [[Prescription Drug|prescription drug]], [[Group Life|group life]]).
+> The candidate will understand how to describe [[Plan Provision|plan provisions]] typically offered under [[Short Duration Contract|short duration contracts]] ([[Medical|medical]], [[Dental|dental]], [[Vision|vision]], [[Prescription Drug|prescription drug]], [[Group Life Insurance|group life]]).
 >
 > 1. Describe typical [[Organization|organizations]] offering these [[Contract|contracts]]
 > 2. Describe each of the [[Contract|contracts]] listed above
-> 3. Evaluate the potential [[Moral Hazard|moral hazard]] and [[Financial|financial]] and [[Legal Risk|legal risks]] associated with each type of [[Contract|contract]]
+> 3. Evaluate the potential [[Moral Hazard|moral hazard]] and [[Financial|financial]] and [[Operational Risk|legal risks]] associated with each type of [[Contract|contract]]
 > 4. Describe the [[Product Development Process|product development process]] including [[Risk|risks]] and [[Opportunity|opportunities]] to be considered during the [[Process|process]]
 >
 > **Readings:**
@@ -49,11 +49,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Manual Rates {25–40%}
 > The candidate will understand how to calculate and recommend a [[Manual Rate|manual rate]] for each of the [[Contracts Described|contracts described]] in [[Learning]] Objective 1.
 >
-> 1. Identify and evaluate sources of [[Data|data]] needed for [[Pricing|pricing]], including the [[Quality|quality]], [[Appropriateness|appropriateness]], and [[Limitation|limitations]] of each [[Data Source|data source]]
+> 1. Identify and evaluate sources of [[Data|data]] needed for [[Pricing|pricing]], including the [[Quality|quality]], [[Appropriateness|appropriateness]], and [[Limitation|limitations]] of each [[Data Quality|data source]]
 > 2. Develop a [[Medical Cost Trend Experience|medical cost trend experience]] analysis
 > 3. Calculate and recommend [[Assumption|assumptions]]
-> 4. Calculate and recommend a [[Manual Rate|manual rate]] (includes developing a [[Base Rate|base rate]] and applying a [[Rating Manual|rating manual]])
-> 5. Identify [[Critical Metrics|critical metrics]] to evaluate [[Actual|actual]] vs. expected results
+> 4. Calculate and recommend a [[Manual Rate|manual rate]] (includes developing a [[Manual Rate|base rate]] and applying a [[Manual Rate|rating manual]])
+> 5. Identify [[Actual vs Expected Analysis|critical metrics]] to evaluate [[Actual|actual]] vs. expected results
 > 6. Apply actuarial [[Best Practice|best practices]] in evaluating and projecting [[Claim Data|claim data]]
 >
 > **Readings:**
@@ -75,9 +75,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Underwriting and Funding {25–40%}
 > The candidate will understand how to apply [[Principle|principles]] of [[Pricing|pricing]], [[Risk Assessment|risk assessment]], and [[Funding|funding]] to an [[Underwriting Situation|underwriting situation]].
 >
-> 1. Understand the [[Risk|risks]] and [[Opportunity|opportunities]] associated with a given [[Contract|contract]], [[Eligibility Requirement|eligibility requirement]], or [[Funding Mechanism|funding mechanism]]
+> 1. Understand the [[Risk|risks]] and [[Opportunity|opportunities]] associated with a given [[Contract|contract]], [[Underwriting|eligibility requirement]], or [[Funding|funding mechanism]]
 > 2. Understand, evaluate, and apply [[Risk Assessment Mechanism|risk assessment mechanisms]]
-> 3. Recommend [[Strategy|strategies]] for appropriately [[Pricing|pricing]], [[Underwriting|underwriting]], and [[Funding Case-Specific Risk|funding case-specific risks]]
+> 3. Recommend [[Strategy|strategies]] for appropriately [[Pricing|pricing]], [[Underwriting|underwriting]], and [[Funding|funding case-specific risks]]
 > 4. Describe and apply approaches to [[Claim Credibility|claim credibility]] and [[Pooling|pooling]]
 > 5. Apply [[Total Risk]] Analysis ([[TRA]]) [[Strategy|strategies]] to [[Case-Specific Pricing|case-specific pricing]]
 >

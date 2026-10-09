@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:43a1e8d88ecc50b229cf23e82c9a05598c3d3fb45b49cec127a618c987cfd783
+  content_hash: sha256:3948eaf53649bc8b523a6bc211b4770da8158b9431314cca1eb707b16830dd8f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -44,13 +44,13 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 ## Learning Objectives
 
 > [!example]- Short-Term Insurance and Reinsurance Coverages {5–10%}
-> The Candidate will understand and be able to apply the key [[Feature|features]] of [[Insurance|insurance]] and [[Reinsurance Coverage|reinsurance coverages]].
+> The Candidate will understand and be able to apply the key [[Feature|features]] of [[Insurance|insurance]] and [[Reinsurance|reinsurance coverages]].
 >
 > 1. Identify the types of [[Coverage Modifications|coverage modifications]] for [[Short-Term Insurance Coverage|short-term insurance]].
 > 2. Perform calculations assessing the impact of [[Coverage Modifications|coverage modifications]].
 > 3. Perform calculations of the [[Loss Elimination|loss elimination]] ratio and the effect of [[Inflation|inflation]] on [[Loss|losses]].
 > 4. Identify the operation of basic [[Form|forms]] of [[Proportional|proportional]] and [[Excess|excess]] of [[Excess of Loss|loss reinsurance]] and understand their impact on [[Reserving|reserving]] and [[Pricing|pricing]].
-> 5. Determine the [[Allocation|allocation]] of [[Claim Amounts Paid|claim amounts paid]] by the [[Insurer|insurer]] and [[Reinsurer|reinsurer]] under various [[Form|forms]] of [[Reinsurance|reinsurance]].
+> 5. Determine the [[Allocation|allocation]] of [[Claim Amounts Paid|claim amounts paid]] by the [[Insurer|insurer]] and [[Reinsurance|reinsurer]] under various [[Form|forms]] of [[Reinsurance|reinsurance]].
 
 > [!example]- Severity, Frequency, and Aggregate Models {12.5–17.5%}
 > The Candidate will understand the characteristics of and uses for commonly used [[Severity|severity]], [[Frequency|frequency]], and aggregate models.
@@ -72,9 +72,9 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > **The Candidate will be able to, for aggregate risk models:**
 >
 > 9. Define [[Collective|collective]] and [[Individual Risk Model|individual risk]] models and calculate their [[Mean|mean]] and [[Variance|variance]].
-> 10. Use the [[Log-Normal|log-normal]] or [[Normal Approximation|normal approximation]] to [[Approximate|approximate]] the aggregate [[Distribution|distribution]].
+> 10. Use the [[Lognormal Distribution|log-normal]] or [[Normal Approximation|normal approximation]] to [[Approximate|approximate]] the aggregate [[Distribution|distribution]].
 > 11. Calculate [[Probability|probabilities]] using the [[Convolution|convolution]] method.
-> 12. Calculate the expected [[Payment|payment]] for [[Stop-Loss Insurance|stop-loss insurance]].
+> 12. Calculate the expected [[Payment|payment]] for [[Stop-Loss Reinsurance|stop-loss insurance]].
 > 13. Calculate Value at [[Risk]] and [[Tail]] Value at [[Risk]].
 > 14. Determine whether a given [[Risk|risk]] measure has certain [[Risk Measure|desirable properties]].
 
@@ -113,10 +113,10 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > 4. Apply [[Put-Call Parity|put-call parity]].
 
 > [!example]- Long-Term Insurance Coverages and Retirement Financial Security Programs {2.5–5%}
-> The Candidate will understand the key [[Feature|features]] of [[Insurance Coverage|insurance coverages]] and [[Retirement Financial Security|retirement financial security]] programs.
+> The Candidate will understand the key [[Feature|features]] of [[Insurance Coverage|insurance coverages]] and [[Retirement Plan|retirement financial security]] programs.
 >
 > 1. Define and apply the concept of [[Insurable Interest|insurable interest]].
-> 2. Identify the [[Long-Term Insurance Coverage|long-term insurance coverages]] ([[Life|life]], [[Health|health]]), [[Annuities|annuities]], and defined [[Benefit|benefit]] and defined [[Contribution Pension Plan|contribution pension plans]].
+> 2. Identify the [[Long-Term Insurance Coverage|long-term insurance coverages]] ([[Life|life]], [[Health|health]]), [[Annuities|annuities]], and defined [[Benefit|benefit]] and defined [[Defined Contribution Plan|contribution pension plans]].
 
 > [!example]- Mortality Models {10–15%}
 > The Candidate will understand key concepts concerning [[Parametric|parametric]] and [[Life Table|non-parametric mortality]] models for [[Future Lifetime Random Variable|individual lives]].
@@ -130,8 +130,8 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > [!example]- Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
 > The Candidate will be able to perform calculations on the present value [[Random Variable|random variables]] associated with [[Benefit|benefits]] and [[Expenses|expenses]] for [[Long Term Insurance Coverage|long term insurance coverages]].
 >
-> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Annuity Payment|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on [[Annual|annual]], 1/[[M-Thly|m-thly]] and [[Continuous Payment Frequency|continuous payment frequency]].
-> 2. Calculate [[Probability|probabilities]], [[Mean|means]], [[Variance|variances]] and [[Covariance|covariances]] for the [[Random Variable|random variables]] in Topic 9(a), using [[Fractional Age Assumption|fractional age]] or [[Claims Acceleration Approximation|claims acceleration approximations]] where appropriate.
+> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Life Annuity|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on [[Annual|annual]], 1/[[M-Thly|m-thly]] and [[Continuous Payment Frequency|continuous payment frequency]].
+> 2. Calculate [[Probability|probabilities]], [[Mean|means]], [[Variance|variances]] and [[Covariance|covariances]] for the [[Random Variable|random variables]] in Topic 9(a), using [[Fractional Age Assumption|fractional age]] or [[Fractional Age Assumption|claims acceleration approximations]] where appropriate.
 > 3. Understand the relationships between the [[Insurance|insurance]], [[Pure Endowment|endowment]], and [[Annuity|annuity]] present value [[Random Variable|random variables]] in Topic 9(a), and between their expected [[Value|values]].
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).
 > 5. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for the expected [[Value|values]] of the [[Random Variable|random variables]] in Topic 9(a).
@@ -139,7 +139,7 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 > [!example]- Premium and Policy Value Calculation for Long-Term Insurance Coverages {15–22.5%}
 > The Candidate will be able to use and explain the [[Insurance Premium|premium]] and [[Policy Value|policy value calculation processes]] for [[Long-Term Insurance Coverage|long-term insurance coverages]].
 >
-> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with [[Term|term]] and [[Whole Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
+> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with [[Term|term]] and [[Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
 > 2. Calculate [[Insurance Premium|premiums]] based on the [[Equivalence Principle|equivalence principle]], the [[Portfolio Percentile Principle|portfolio percentile principle]], and for a given expected present value of [[Profit|profit]], for the [[Policy|policies]] in Topic 10(a).
 > 3. Calculate and interpret [[Policy Value|gross premium]], [[Policy Value|net premium]] and [[Modified Net Premium Policy Value|modified net premium policy values]] for the [[Policy|policies]] in Topic 10(a).
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).

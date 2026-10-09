@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4c807bb4f68ba40849ce19283a22a5955ee9bbbec078ddf5565be70ae6ec56c1
+  content_hash: sha256:928e36908aae51f0b1cf10bbe771e3253d88b14581297bcdd9e8cc9abdc6103e
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,7 +28,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 ## Learning Objectives
 
 > [!example]- Assumptions {20–30%}
-> The candidate will understand how to [[Analyze-synthesize|analyze/synthesize]] the factors that go into selection of actuarial assumptions for [[Funding|funding]] purposes of [[Retirement Plan|retirement plans]] under [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], [[Tax Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
+> The candidate will understand how to [[Analyze-synthesize|analyze/synthesize]] the factors that go into selection of actuarial assumptions for [[Funding|funding]] purposes of [[Retirement Plan|retirement plans]] under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
 >
 > 1. Describe and apply appropriate techniques used in the [[Development|development]] of assumptions for [[Funding|funding]] purposes
 > 2. Evaluate and recommend appropriate assumptions for [[Funding|funding]] purposes
@@ -48,15 +48,15 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - RET301-100-25: Financial Services Commission of Ontario: Actuarial Guidance Note: Determination of the Solvency Liability Adjustment (1a)
 
 > [!example]- Methods {20–30%}
-> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Funding|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], [[Tax Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
+> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Funding|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
 >
 > 1. Differentiate between various purposes for valuing [[Pension Plan|pension plans]], including:
->    - [[Going Concern Funding|Going concern funding]]
->    - [[Solvency]] and hypothetical [[Wind-Up|wind-up]]
+>    - [[Going-Concern Valuation|Going concern funding]]
+>    - [[Solvency]] and hypothetical [[Plan Termination|wind-up]]
 >    - [[Termination-wind-up|Termination/wind-up]]
-> 2. Analyze a [[Variety|variety]] of [[Asset Valuation|asset valuation]] methods appropriate for [[Regulatory|regulatory]] purposes
-> 3. Prepare [[Valuation|valuation]] results for [[Ongoing Plan|ongoing plans]] appropriate for [[Regulatory|regulatory]] purposes
-> 4. Prepare [[Valuation|valuation]] results for [[Special|special]] purposes, including [[Plan Termination|plan terminations]], [[Plan Merger|plan mergers]] or [[Spin-Off|spin-off]], actuarial [[Equivalence|equivalence]] calculations and [[Asset Transfer|asset transfers]]
+> 2. Analyze a [[Variety|variety]] of [[Asset Valuation Method|asset valuation]] methods appropriate for [[Regulatory|regulatory]] purposes
+> 3. Prepare [[Valuation|valuation]] results for [[Going-Concern Valuation|ongoing plans]] appropriate for [[Regulatory|regulatory]] purposes
+> 4. Prepare [[Valuation|valuation]] results for [[Special|special]] purposes, including [[Plan Termination|plan terminations]], [[Plan Merger and Spin-Off|plan mergers]] or [[Plan Merger and Spin-Off|spin-off]], actuarial [[Equivalence|equivalence]] calculations and [[Asset Transfer|asset transfers]]
 >
 > **Readings:**
 > - Part 1000 of the CIA Standards of Practice - General, CIA, Jan 2026, sections 1000-1700 (2a-2d)
@@ -68,17 +68,17 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - Calculation of Incremental Cost on a Hypothetical Wind-Up or Solvency Basis, CIA Educational Note, Apr 2023 (2a, 2c)
 
 > [!example]- Regulations: Evaluation and Application {20–30%}
-> The candidate will understand how to evaluate and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], and [[Tax Legislation|tax legislation]] for [[Registered Retirement Plan|registered retirement plans]].
+> The candidate will understand how to evaluate and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] for [[Registered Retirement Plan|registered retirement plans]].
 >
 > 1. Describe sources and framework of [[Government Regulation|government regulation]]
-> 2. Describe and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]] and [[Tax Regulation Pertaining|tax regulation pertaining]] to:
+> 2. Describe and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]] and [[Tax Regulation Pertaining|tax regulation pertaining]] to:
 >    - [[Plan]] design
 >    - [[Plan Establishment|Plan establishment]]
 >    - [[Members' Right|Members’ rights]]
 >    - [[Contribution|Contributions]] and [[Benefit|benefits]]
 >    - [[Plan Amendment|Plan amendment]]
 >    - [[Plan Termination-wind-Up|Plan termination/wind-up]]
->    - [[Plan Merger|Plan merger]] or [[Spin-Off|spin-off]]
+>    - [[Plan Merger and Spin-Off|Plan merger]] or [[Plan Merger and Spin-Off|spin-off]]
 >    - [[Reporting Requirement|Reporting requirements]]
 >    - [[Individual Savings Plan|Individual savings plans]]
 >
@@ -122,7 +122,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - RET301-115-26: Q&A: Answering Your Tax Questions on RRSPs, TFSAs, and the New First-Home Savings Account (FHSA) (3b)
 
 > [!example]- Regulations: Plan Funding {20–30%}
-> The candidate will understand how to apply the [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], and [[Tax Legislation|tax legislation]] in the [[Context|context]] of [[Pension Plan Funding|pension plan funding]].
+> The candidate will understand how to apply the [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] in the [[Context|context]] of [[Pension Plan Funding|pension plan funding]].
 >
 > 1. Evaluate [[Retirement Funding Alternative|retirement funding alternatives]] for the [[Plan Sponsor|plan sponsor]], [[Shareholder|shareholders]] and [[Participant|participants]]
 > 2. Evaluate [[Funding Restrictions Imposed|funding restrictions imposed]] by [[Regulation|regulations]]

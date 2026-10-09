@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2302bdc54ccd3e88a9a6daf4b521f09c060201c5c5d84ffd535531d9a24d5231
+  content_hash: sha256:75aea96cb0905b307e64efa653034732dd18c9e6405c080a135d4ebf8f3a1d20
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,14 +28,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Benefit Plan Structure, Features and Investments {30–50%}
-> The candidate will understand how to analyze different types of [[Design|designs]] for [[Retirement Plan|retirement plans]] and [[Retirement Plan Investment|retirement plan investments]].
+> The candidate will understand how to analyze different types of [[Design|designs]] for [[Retirement Plan|retirement plans]] and [[Investment Policy Statement|retirement plan investments]].
 >
 > 1. Describe the [[Structure|structure]] of the following [[Plan|plans]]:
 >    - [[Traditional]] defined [[Defined Benefit Plan|benefit plans]]
->    - Defined [[Contribution|contribution]] and [[Savings Plan|savings plans]]
+>    - Defined [[Contribution|contribution]] and [[Defined Contribution Plan|savings plans]]
 >    - [[Hybrid Plan|Hybrid plans]]
 >    - Other alternative [[Retirement Plan|retirement plans]] such as [[Executive Retirement Plan|executive retirement plans]], [[Shared Risk Plan|shared risk plans]], [[Target Benefit Plan|target benefit plans]], etc.
-> 2. Given a [[Plan|plan]] type, explain the relevance and [[Range|range]] of [[Plan Feature|plan features]] including the following:
+> 2. Given a [[Plan|plan]] type, explain the relevance and [[Range|range]] of [[Plan Design|plan features]] including the following:
 >    - [[Plan Eligibility Requirement|Plan eligibility requirements]]
 >    - [[Benefit Eligibility Requirement|Benefit eligibility requirements]], [[Accrual|accrual]], [[Vesting|vesting]]
 >    - [[Benefit]] / [[Contribution Formula|contribution formula]], including methods of [[Integration|integration]] with [[Benefit|benefits]] provided by [[Social Insurance|social insurance]]
@@ -45,7 +45,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >    - [[Participant Investment Option|Participant investment options]]
 >    - [[Required]] and [[Optional Employee Contribution|optional employee contributions]]
 >    - [[Early]] and [[Late Retirement Option|late retirement options]]
->    - [[Indexing]]
+>    - [[Plan Design|Indexing]]
 > 3. Discuss [[Investment|investment]] of [[Retirement Plan Asset|retirement plan assets]]
 >    - Assess the different types and combinations of [[Investment Vehicle|investment vehicles]] typically used for [[Providing Retirement Benefit|providing retirement benefits]].
 >    - Distinguish the various [[Strategy|strategies]], approaches and techniques used to manage [[Retirement Fund Asset|retirement fund assets]]
@@ -91,12 +91,12 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand how to analyze the [[Risk|risks]] faced by [[Retiree|retirees]] and the [[Participant|participants]] of [[Retirement Plan|retirement plans]].
 >
 > 1. Identify [[Risk|risks]] faced by [[Retiree|retirees]] and the [[Elderly|elderly]]
-> 2. Describe and contrast the [[Risk|risks]] faced by [[Participant|participants]] of various [[Sponsored Plan|sponsored plans]], such as:
+> 2. Describe and contrast the [[Risk|risks]] faced by [[Participant|participants]] of various [[Retirement Plan|sponsored plans]], such as:
 >    - [[Retirement Plans Sponsored|Retirement plans sponsored]] by [[Public Sector Employer|public sector employers]]
 >    - [[Single Employer Sponsored Retirement Plan|Single employer sponsored retirement plans]]
 >    - [[Retirement Plan|Retirement plans]] involving more than one [[Employer|employer]], and
 >    - [[Social Insurance Plan|Social insurance plans]]
-> 3. Evaluate [[Benefit Adequacy|benefit adequacy]] and measure [[Replacement Income|replacement income]] for [[Member|members]] of a [[Particular Plan|particular plan]] given other sources of [[Retirement Income|retirement income]]
+> 3. Evaluate [[Benefit Adequacy|benefit adequacy]] and measure [[Replacement Income|replacement income]] for [[Member|members]] of a [[Particular Plan|particular plan]] given other sources of [[Replacement Ratio|retirement income]]
 > 4. Describe ways in which [[Retirement Plan|retirement plan]] design can manage the [[Range|range]] of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]]
 >
 > **Readings:**
@@ -124,14 +124,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Sponsor Risks {15–25%}
 > The candidate will understand how to analyze the [[Risk|risks]] faced by [[Sponsor|sponsors]] of [[Retirement Plan|retirement plans]].
 >
-> 1. Identify how [[Plan Feature|plan features]], [[Temporary|temporary]] or [[Permanent|permanent]], can [[Adversely Affect|adversely affect]] the [[Plan Sponsor|plan sponsor]]
-> 2. Assess the [[Sponsor Risk|sponsor risk]] from [[Option|options]] offered, including:
+> 1. Identify how [[Plan Design|plan features]], [[Temporary|temporary]] or [[Permanent|permanent]], can [[Adversely Affect|adversely affect]] the [[Plan Sponsor|plan sponsor]]
+> 2. Assess the [[Plan Sponsor|sponsor risk]] from [[Option|options]] offered, including:
 >    - [[Postponed Retirement|Postponed retirement]]
 >    - [[Early Retirement|Early retirement]]
 >    - [[Optional Form|Optional forms]] of [[Payment|payment]] factors
 >    - [[Embedded Option|Embedded options]]
 >    - [[Portability Option|Portability options]]
->    - [[Investment Option|Investment options]]
+>    - [[Defined Contribution Plan|Investment options]]
 >    - [[Decumulation Feature|Decumulation features]]
 > 3. Describe ways to mitigate the [[Risk|risks]] identified with a [[Particular Plan Feature|particular plan feature]]
 >
@@ -159,7 +159,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 8. Evaluate the [[Pro|pros]] and [[Con|cons]] from both a [[Sponsor|sponsor]] and [[Employee Perspective|employee perspective]] of [[Introducing Option|introducing options]] that impact the [[Labor Force Demographics|labor force demographics]]
 > 9. Recommend a method to integrate [[Benefit|benefits]] provided by [[Social Insurance|social insurance]] with [[Retirement Plan Design|retirement plan designs]] in [[Order|order]] to [[Meet|meet]] the [[Plan Sponsor's Particular|plan sponsor’s particular]] goals and [[Defend|defend]] the [[Recommendation|recommendation]]
 > 10. Recommend an appropriate [[Plan|plan]] type and [[Plan Design Feature|plan design features]] for [[Providing Retirement Benefit|providing retirement benefits]] and [[Defend|defend]] the [[Recommendation|recommendations]]
-> 11. Assess the potential effects, including [[Tax|tax]] implications, of various [[Investment|investments]] and [[Investment Policy|investment policies]] on all of the [[Stakeholder|stakeholders]]
+> 11. Assess the potential effects, including [[Tax|tax]] implications, of various [[Investment|investments]] and [[Investment Policy Statement|investment policies]] on all of the [[Stakeholder|stakeholders]]
 > 12. Identify and assess the sources of [[Investment Risk Applicable|investment risk applicable]] to [[Retirement Fund Asset|retirement fund assets]]
 > 13. Explain and apply [[Restriction|restrictions]] on [[Plan Design Feature|plan design features]] to a proposed [[Plan|plan]] design, taking into accounting the use of [[Tax Incentive|tax incentives]] and understanding [[Conflict|conflicts]] between [[Regulation|regulations]] and design objectives
 > 14. Identify changes that could [[Reduce Sponsor Risk|reduce sponsor risk]].

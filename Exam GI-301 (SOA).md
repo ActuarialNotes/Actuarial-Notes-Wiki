@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:15e0dfde23050f1c474b11d132d01dfa1768ec77db6419b31b01db1af86d4d77
+  content_hash: sha256:41de279208c6ce6d1fa7239e7b8e8fd732d1e2aaae2725c90ae68a114eece52b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -54,10 +54,10 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 >     - Result: LDF Curve-Fitting and Stochastic Reserving: A Maximum Likelihood Approach
 
 > [!example]- Development Analysis for Excess Limits and Layers {5–10%}
-> The candidate will understand the considerations in the [[Development|development]] of [[Loss|losses]] for [[Excess Limit|excess limits]] and [[Layer|layers]].
+> The candidate will understand the considerations in the [[Development|development]] of [[Loss|losses]] for [[Excess Loss Development Factor|excess limits]] and [[Layer of Insurance|layers]].
 >
-> 1. Estimate [[Ultimate Claim|ultimate claims]] for [[Excess Limit|excess limits]] and [[Layer|layers]].
-> 2. Understand the [[Difference|differences]] in [[Development Pattern|development patterns]] and [[Trend|trends]] for [[Excess Limit|excess limits]] and [[Layer|layers]].
+> 1. Estimate [[Ultimate Loss|ultimate claims]] for [[Excess Loss Development Factor|excess limits]] and [[Layer of Insurance|layers]].
+> 2. Understand the [[Difference|differences]] in [[Loss Development|development patterns]] and [[Trend|trends]] for [[Excess Loss Development Factor|excess limits]] and [[Layer of Insurance|layers]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (2a, 2b)
@@ -66,7 +66,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > [!example]- Premium Liabilities {0–5%}
 > The candidate will understand the procedure for estimating [[Premium Liability|premium liabilities]].
 >
-> 1. Understand the purpose of general [[Insurance Premium Liability|insurance premium liabilities]].
+> 1. Understand the purpose of general [[Premium Liability|insurance premium liabilities]].
 > 2. Calculate the [[Premium Liability|premium liabilities]] for a general [[Insurer|insurance company]].
 >
 > **Readings:**
@@ -97,14 +97,14 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 >     - Appendix E: Public Entity Self-Insurance Pool, sections E.3.1 & E.3.2
 
 > [!example]- Specialized Ratemaking Topics {25–35%}
-> The candidate will understand and be able to apply [[Ratemaking|ratemaking]] techniques for the following [[Situation|situations]]: [[Classification Ratemaking|classification ratemaking]], [[Deductible Option|deductible options]], [[Increased Limit Option|increased limit options]], [[Claims-Made Policy|claims-made policies]] and [[Individual Risk Rating|individual risk rating]].
+> The candidate will understand and be able to apply [[Ratemaking|ratemaking]] techniques for the following [[Situation|situations]]: [[Classification Ratemaking|classification ratemaking]], [[Deductible Rating|deductible options]], [[Increased Limit Option|increased limit options]], [[Claims Made Coverage|claims-made policies]] and [[Individual Risk Rating|individual risk rating]].
 >
 > 1. Understand and apply [[Classification Ratemaking|classification ratemaking]] methods.
 > 2. Explain the issues and considerations regarding [[Classification Ratemaking|classification ratemaking]].
-> 3. Price for [[Deductible Option|deductible options]] and [[Increased Limits|increased limits]].
+> 3. Price for [[Deductible Rating|deductible options]] and [[Increased Limits|increased limits]].
 > 4. Develop [[Rate|rates]] for [[Claims-Made Contract|claims-made contracts]].
 > 5. Understand and apply techniques for [[Individual Risk Rating|individual risk rating]].
-> 6. Estimate the [[Premium Asset|premium asset]] for [[Retrospectively Rated Policy|retrospectively rated policies]].
+> 6. Estimate the [[Retrospective Premium Reserve|premium asset]] for [[Retrospective Rating|retrospectively rated policies]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (6a, 6b)
@@ -124,17 +124,17 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 >     - Result: Estimating the Premium Asset on Retrospectively Rated Policies
 
 > [!example]- Reinsurance {15–20%}
-> The candidate will understand the fundamentals of [[Reinsurance|reinsurance]] and demonstrate knowledge of [[Reinsurance Reserving|reinsurance reserving]], the [[Fundamental|fundamental]] techniques of [[Reinsurance Pricing|reinsurance pricing]] and [[Risk Transfer Testing|risk transfer testing]] of [[Reinsurance Contract|reinsurance contracts]].
+> The candidate will understand the fundamentals of [[Reinsurance|reinsurance]] and demonstrate knowledge of [[Reinsurance Reserving|reinsurance reserving]], the [[Fundamental|fundamental]] techniques of [[Reinsurance Pricing|reinsurance pricing]] and [[Risk Transfer Testing|risk transfer testing]] of [[Reinsurance|reinsurance contracts]].
 >
 > 1. Understand the types of [[Reinsurance|reinsurance]] and key [[Reinsurance|reinsurance]] terms.
 > 2. Explain the [[Principal|principal]] functions of [[Reinsurance|reinsurance]].
 > 3. Analyze and describe the various types of [[Reinsurance|reinsurance]].
 > 4. Understand the issues encountered when applying [[Loss Development|loss development]] methods to [[Reinsurance|reinsurance]].
-> 5. Calculate the price of a [[Reinsurance Contract|reinsurance contract]].
+> 5. Calculate the price of a [[Reinsurance|reinsurance contract]].
 > 6. Apply an aggregate [[Distribution|distribution]] model to a [[Reinsurance Pricing|reinsurance pricing]] scenario.
 > 7. Describe considerations involved in [[Pricing Property Catastrophe Cover|pricing property catastrophe covers]].
-> 8. Understand the application of a [[Reinstatement Premium|reinstatement premium]].
-> 9. Test for [[Risk Transfer|risk transfer]] in [[Reinsurance Contract|reinsurance contracts]].
+> 8. Understand the application of a [[Reinstatements|reinstatement premium]].
+> 9. Test for [[Risk Transfer|risk transfer]] in [[Reinsurance|reinsurance contracts]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (7a-c)
@@ -154,7 +154,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > 1. Understand the purpose and [[Development|development]] of [[Catastrophe|catastrophe]] models.
 > 2. Understand the type of [[Output Produced|output produced]] by [[Catastrophe|catastrophe]] models.
 > 3. Understand how [[Catastrophe|catastrophe]] model [[Output|output]] can be used in actuarial tasks.
-> 4. Allocate a [[Property Catastrophe Risk Load|property catastrophe risk load]] among different [[Account|accounts]].
+> 4. Allocate a [[Catastrophe Risk Load|property catastrophe risk load]] among different [[Account|accounts]].
 >
 > **Readings:**
 > - Uses of Catastrophe Model Output, AAA, Jul 2018 (excluding “Florida Commission on Hurricane Loss Projection Methodology” section on pp. 6, 7, 29-30, 35 & all Appendices) (8a-c)

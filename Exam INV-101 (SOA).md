@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d8f9739d66202101b6d736f835349549604f6473f39b36d983ed6bde587088f0
+  content_hash: sha256:acc91012acddf69ddf9f12b3c5b03d2c8f64ace5ffb3870b8426e4a851dcca4d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -77,14 +77,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand [[Portfolio|portfolio]] construction, management, and [[Assessment|assessment]].
 >
 > 1. Describe the [[Portfolio Management Process|portfolio management process]] and recommend [[Investment Governance Structure|investment governance structure]]
-> 2. Develop an [[Investment Policy Statement|investment policy statement]] ([[IPS]]) for an [[Institutional Investor|institutional investor]]
+> 2. Develop an [[Investment Policy Statement|investment policy statement]] ([[Investment Policy Statement|IPS]]) for an [[Institutional Investor|institutional investor]]
 > 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], [[Passive-active|passive/active]] management and [[Portfolio Rebalancing|rebalancing]]
 > 4. Recommend and justify an [[Optimal Portfolio Allocation|optimal portfolio allocation]] in a [[Risk-Return|risk-return]] framework
 > 5. Demonstrate an understanding of [[Common|common]] techniques to [[Enhance Yield|enhance yield]] and manage [[Liquidity|liquidity]] in [[Fixed Income Portfolio|fixed income portfolios]]
-> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various [[Strategy|strategies]], including [[Indexing|indexing]] and [[Target Return|target return]]
+> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various [[Strategy|strategies]], including [[Passive Management|indexing]] and [[Immunization|target return]]
 > 7. Construct and manage [[Portfolio|portfolios]] of [[Equity|equity]] under various [[Passive Strategy|passive strategies]]
-> 8. Construct and manage [[Portfolio|portfolios]] of [[Equity|equity]] under various [[Active Strategy|active strategies]]
-> 9. Apply [[Performance Measurement|performance measurement]] methodologies to various [[Asset Portfolio|asset portfolios]]
+> 8. Construct and manage [[Portfolio|portfolios]] of [[Equity|equity]] under various [[Active Management|active strategies]]
+> 9. Apply [[Performance Measurement|performance measurement]] methodologies to various [[Portfolio|asset portfolios]]
 > 10. Describe and assess techniques to select or build an [[Asset Benchmark|asset benchmark]] for a given [[Investment|investment]] objective
 > 11. Assess and interpret [[Performance Attribution Metrics|performance attribution metrics]] for a given [[Asset|asset]] or [[Portfolio|portfolio]]
 > 12. Understand how behavior [[Bias|bias]] can impact [[Portfolio|portfolio]] management
@@ -111,7 +111,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand the [[Best Practice|best practices]] of [[Credit Risk|credit risk]] management.
 >
 > 1. Demonstrate an understanding of [[Credit Risk|credit risk]] analysis including at the [[Portfolio Level|portfolio level]]
-> 2. Demonstrate an understanding of and the [[Ability|ability]] to apply both the concepts and techniques used in the [[Measurement|measurement]] of [[Default Risk|default risk]] of [[Individual Security|individual securities]]
+> 2. Demonstrate an understanding of and the [[Ability|ability]] to apply both the concepts and techniques used in the [[Measurement|measurement]] of [[Credit Risk|default risk]] of [[Individual Security|individual securities]]
 > 3. Understand, evaluate, and apply [[Credit Risk Modeling|credit risk modeling]] techniques.
 >
 > **Readings:**

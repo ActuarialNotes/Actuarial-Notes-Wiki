@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:678c0231a73eb39aef4624ccf9ad4d4096db9df5b8df8ca23f34853c1caa24f5
+  content_hash: sha256:3233f8f3f774cd5577d09dc4354ed7ab47bb8cfdae202722729e7d5a864fe5d6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,10 +28,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- International Financial Reporting Requirements {40–50%}
-> The candidate will understand and apply [[Valuation Principle|valuation principles]] to [[Individual Life Insurance|individual life insurance]] and [[Annuity Product|annuity products]] issued by [[International Life Insurance Company|international life insurance companies]].
+> The candidate will understand and apply [[Valuation Principle|valuation principles]] to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by [[International Life Insurance Company|international life insurance companies]].
 >
-> 1. Describe the appropriate [[IFRS]] 17 accounting and [[Valuation Standard|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Product|annuity products]]
-> 2. Evaluate the appropriate [[IFRS]] 17 accounting and [[Valuation Standard|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Product|annuity products]]
+> 1. Describe the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
+> 2. Evaluate the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
 >
 > **Readings:**
 > - ILA201-600-25: International Actuarial Note 100: Application of IFRS 17 (Ch. 1, section A – Introduction to GMM only, Ch. 5, 7-9 & 16) (1a, 1b)
@@ -49,7 +49,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023 (1a, 1b)
 
 > [!example]- Capital Management {20–30%}
-> The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and [[Tool|tools]] of [[Financial Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
+> The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and [[Tool|tools]] of [[Regulatory Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
 >
 > 1. Explain and calculate [[Regulatory Capital|regulatory capital]] using various [[International Framework|international frameworks]]
 > 2. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
@@ -64,11 +64,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - Economic Capital for Life Insurance Companies, SOA Research Paper, Oct 2016 (only sections 2 & 6) (2c)
 
 > [!example]- Management and Evaluation of Life Insurance Risks {10–15%}
-> The candidate will understand various approaches to manage and evaluate [[Life Insurance Risk|life insurance risks]].
+> The candidate will understand various approaches to manage and evaluate [[Insurance Risk|life insurance risks]].
 >
 > 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for [[Modeling|modeling]] and [[Offset|offsets]] between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
-> 2. Understand the role and framework used by [[Regulator|regulators]] and [[Credit Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
-> 3. Explain and understand the use and application of the [[Own Risk Solvency Assessment]] ([[ORSA]]) [[Report|report]]
+> 2. Understand the role and framework used by [[Regulator|regulators]] and [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
+> 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) [[Report|report]]
 >
 > **Readings:**
 > - ILA201-100-25: Diversification: Consideration on Modelling Aspects & Related Fungibility and Transferability, CRO Forum, Oct 2013 (pp. 1-18) (3a)
@@ -77,13 +77,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19) (3c)
 
 > [!example]- Advanced Product Management {20–30%}
-> The candidate will understand value [[Creation|creation]] and [[Inforce|inforce]] management techniques for [[Life|life]] and [[Annuity Product|annuity products]].
+> The candidate will understand value [[Creation|creation]] and [[In-Force Management|inforce]] management techniques for [[Life|life]] and [[Annuity Contract|annuity products]].
 >
-> 1. Describe and evaluate [[Fundamental Strategy|fundamental strategies]] for enhancing value and [[Profitability|profitability]] through [[Active In-Force|active in-force]] and [[Operational|operational]] management
-> 2. Describe, evaluate, and apply the [[Economic Value Creation|economic value creation]] framework
+> 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and [[Profitability|profitability]] through [[In-Force Management|active in-force]] and [[Operational|operational]] management
+> 2. Describe, evaluate, and apply the [[Economic Value|economic value creation]] framework
 > 3. Recommend and justify changes to [[Policyholder Dividend|policyholder dividends]]
 > 4. Understand [[Corporate Taxation|corporate taxation]], [[Policyholder Taxation|policyholder taxation]] and calculate [[Investment Income Tax|investment income tax]]
-> 5. Describe and apply the methods and [[Principle|principles]] of [[Embedded|embedded]] value for an [[Insurance Enterprise|insurance enterprise]]
+> 5. Describe and apply the methods and [[Principle|principles]] of [[Embedded|embedded]] value for an [[Embedded Value|insurance enterprise]]
 >
 > **Readings:**
 > - ILA201-101-25: Life in-force Management: Improving Consumer Value and Long-Term Profitability (4a)

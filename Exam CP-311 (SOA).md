@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f359b8c3395e139b035e720a8e212222f3060d3c875c172da0b5001db57e4662
+  content_hash: sha256:dcf42f2e97af111198de4012a69a79a84cdac14cb8703c8141dd0fc6c39c4e5d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -31,7 +31,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > The candidate will understand and apply [[Strategic|strategic]] management concepts and [[Framework|frameworks]] to develop an [[Organization's Business Strategy|organization’s business strategies]] and solutions.
 >
 > 1. Evaluate and apply [[Strategic|strategic]] management concepts, recognizing factors that [[Affect Development|affect development]] and implementation of [[Strategy|strategies]]:
->    - Describe and apply [[Strategic|strategic]] management models including [[Porter's Five Force|Porter's five forces]] model and value [[Chain|chain]] analysis
+>    - Describe and apply [[Strategic|strategic]] management models including [[Porter's Five Forces|Porter's five forces]] model and value [[Chain|chain]] analysis
 >    - Assess and recommend an appropriate [[Business-Level Strategy|business-level strategy]] for a given [[Situation|situation]]
 >    - Assess and recommend an appropriate [[Corporate-Level Strategy|corporate-level strategy]] for a given [[Situation|situation]]
 >    - Explain the impact of [[Competitive Dynamics|competitive dynamics]] on [[Strategic|strategic]] management
@@ -59,10 +59,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - CP311-108-26: Tying Short Term Decisions to Long Term Strategy (1a, 1b)
 
 > [!example]- Strategic Budgeting, Forecasting, and Value Measures {28–47%}
-> The candidate will understand how [[Sustainable Growth|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and [[Forecasting|forecasting]]. The candidate will also understand measures of an [[Organization'|organization’s]] value and their uses in [[Decision Making|decision making]].
+> The candidate will understand how [[Sustainable Growth|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and [[Strategic Budgeting|forecasting]]. The candidate will also understand measures of an [[Organization'|organization’s]] value and their uses in [[Decision Making|decision making]].
 >
-> 1. Explain how [[Strategic Budgeting|strategic budgeting]] and [[Forecasting|forecasting]] can create value and [[Sustainable Growth|sustainable growth]]
-> 2. Assess how [[Effective Strategic Budgeting|effective strategic budgeting]] and [[Forecasting|forecasting]] are in [[Tracking Progress|tracking progress]] of an [[Organization's Initiative|organization’s initiatives]]
+> 1. Explain how [[Strategic Budgeting|strategic budgeting]] and [[Strategic Budgeting|forecasting]] can create value and [[Sustainable Growth|sustainable growth]]
+> 2. Assess how [[Effective Strategic Budgeting|effective strategic budgeting]] and [[Strategic Budgeting|forecasting]] are in [[Tracking Progress|tracking progress]] of an [[Organization's Initiative|organization’s initiatives]]
 > 3. Demonstrate how an [[Organization's Strategic|organization’s strategic]] goals can be effectively [[Incorporated|incorporated]] into the [[Financial Budgeting|financial budgeting]] and [[Forecasting Decision Making Process|forecasting decision making process]]
 > 4. Evaluate and recommend appropriate value measures for an [[Organization|organization]]
 > 5. Assess the impact of [[Performance|performance]] measures and [[Incentive|incentives]] on key [[Business|business]] decisions and [[Stakeholder|stakeholder]] value
@@ -105,7 +105,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > [!example]- Organizational Behavior {8–13%}
 > The candidate will understand the role [[Organizational Behavior Plays|organizational behavior plays]] in [[Organizational Decision-Making|organizational decision-making]] and [[Efficacy|efficacy]].
 >
-> 1. Evaluate the impact of [[Human|human]] behavior factors on the effectiveness of [[Decision-Making Process|decision-making processes]] within [[Organization|organizations]]
+> 1. Evaluate the impact of [[Human|human]] behavior factors on the effectiveness of [[Decision-Making|decision-making processes]] within [[Organization|organizations]]
 > 2. Explain the role of [[Cognitive Biase|cognitive biases]] on [[Making Suboptimal Individual|making suboptimal individual]] decisions
 >
 > **Readings:**

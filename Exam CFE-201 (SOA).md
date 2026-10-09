@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9ff16db41638cc3a9de2cf7be27cc8895de45e31f0d09bc65bdf6d239f6c9dbd
+  content_hash: sha256:9d1c5ec8526a3f4734be09c0a060b3e9b07c2c44732ea0009fddac75894bf5de
   sources: []
   open_findings: 0
   open_critical: 0
@@ -51,7 +51,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > [!example]- Financial Statement Analysis {21–35%}
 > The candidate will understand how to [[Gauge|gauge]] an [[Organization's Performance|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
 >
-> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the [[Interrelationship|interrelationships]] among them, in [[Order|order]] to measure [[Financial Performance|financial performance]]
+> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the [[Interrelationship|interrelationships]] among them, in [[Order|order]] to measure [[Key Financial Measures|financial performance]]
 > 2. Identify [[Unusual|unusual]] or [[Questionable|questionable]] accounting [[Practice|practices]] and analyze their impact on the [[Quality|quality]] of key [[Financial Metrics|financial metrics]]
 > 3. Analyze the impact of accounting [[Policy|policies]] related to [[Tax|taxes]] and [[Foreign Exchange Rate|foreign exchange rates]] on [[Financial Statements|financial statements]]
 >

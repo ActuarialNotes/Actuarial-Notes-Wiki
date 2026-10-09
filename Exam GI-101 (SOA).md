@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:154dd323fccf1bd1f8776d20e8b7ffb60116a9e3188b8608e777877025e4d6d5
+  content_hash: sha256:2c583329c171ea6939f8193eb597b4c4fdf81bcb162326182086dcd12f21f81d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -33,8 +33,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 1. Identify sources of [[Professionalism Requirement|professionalism requirements]] and [[Good|good]] practice
 > 2. Demonstrate knowledge of [[Good|good]] practice related to actuarial work
 > 3. Use the actuarial control [[Cycle|cycle]] to [[Frame|frame]] actuarial work
-> 4. Understand the [[Component|components]] of [[Ultimate Value|ultimate values]]
-> 5. Explain how [[Estimate|estimates]] of [[Ultimate Value|ultimate values]] are used
+> 4. Understand the [[Component|components]] of [[Ultimate Loss|ultimate values]]
+> 5. Explain how [[Estimate|estimates]] of [[Ultimate Loss|ultimate values]] are used
 > 6. Demonstrate the importance of understanding key terminology and [[Interrelationship|interrelationships]]
 > 7. Identify different types of [[Data|data]] used for actuarial work
 > 8. Explain the [[Responsibility|responsibilities]] of the [[Actuary|actuary]] related to [[Data|data]]
@@ -54,7 +54,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries, No. 25, Credibility Procedures, 2013 (1l)
 
 > [!example]- Preparing Claims and Exposure Data for Actuarial Work {8–18%}
-> The candidate will demonstrate the [[Ability|ability]] to prepare [[Claim|claims]] and [[Exposure Data|exposure data]] for general [[Insurance|insurance]] actuarial work.
+> The candidate will demonstrate the [[Ability|ability]] to prepare [[Claim|claims]] and [[Exposure Base|exposure data]] for general [[Insurance|insurance]] actuarial work.
 >
 > 1. Create [[Development Triangle|development triangles]] of [[Claim|claims]] and [[Count|counts]] from detailed [[Claim Transaction Data|claim transaction data]]
 > 2. Describe the different types of [[Exposure Base|exposures]] used for conducting actuarial work
@@ -71,19 +71,19 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Projecting Ultimate Claims {42–56%}
 > The candidate will know how to calculate and evaluate [[Projected Ultimate Value|projected ultimate values]].
 >
-> 1. Identify considerations for selecting methods for estimating [[Ultimate Claim|ultimate claims]]
-> 2. Identify and describe [[Good|good]] practice related to projecting [[Ultimate Claim|ultimate claims]] with regard to [[Required Data|required data]], [[Large Claim|large claims]], and comparison of current to [[Prior|prior]] actuarial work
-> 3. Identify the types of [[Development Triangle|development triangles]] that can be used for [[Investigative Testing|investigative testing]]
-> 4. Analyze [[Development Triangle|development triangles]] for [[Investigative Testing|investigative testing]]
+> 1. Identify considerations for selecting methods for estimating [[Ultimate Loss|ultimate claims]]
+> 2. Identify and describe [[Good|good]] practice related to projecting [[Ultimate Loss|ultimate claims]] with regard to [[Required Data|required data]], [[Large Loss|large claims]], and comparison of current to [[Prior|prior]] actuarial work
+> 3. Identify the types of [[Development Triangle|development triangles]] that can be used for [[Data Diagnostic Analysis|investigative testing]]
+> 4. Analyze [[Development Triangle|development triangles]] for [[Data Diagnostic Analysis|investigative testing]]
 > 5. Describe the key assumptions underlying the following [[Projection|projection]] methods: [[Development|development]] method, [[Development-Based Frequency-Severity|development-based frequency-severity]] method, expected method, [[Bornhuetter Ferguson]] method, [[Benktander]] method, [[Cape Cod]] method, and [[Generalized Cape Cod]] method
-> 6. Demonstrate knowledge of [[Good|good]] practice related to projecting [[Ultimate Value|ultimate values]]
-> 7. Estimate [[Ultimate Value|ultimate values]] using the methods cited in (e)
-> 8. Describe the [[Berquist-Sherman Data|Berquist-Sherman data]] adjustments and their key assumptions
-> 9. Adjust [[Data Triangle|data triangles]] for changes in the [[Adequacy|adequacy]] of [[Case Estimate|case estimates]] or changes in the [[Rate|rate]] of [[Claim Settlement|claim settlement]] using a [[Berquist-Sherman Data|Berquist-Sherman data]] adjustment
-> 10. Estimate [[Ultimate Claim|ultimate claims]] using the appropriate [[Berquist-Sherman Data|Berquist-Sherman data]] adjustments
+> 6. Demonstrate knowledge of [[Good|good]] practice related to projecting [[Ultimate Loss|ultimate values]]
+> 7. Estimate [[Ultimate Loss|ultimate values]] using the methods cited in (e)
+> 8. Describe the [[Berquist-Sherman Method|Berquist-Sherman data]] adjustments and their key assumptions
+> 9. Adjust [[Data Triangle|data triangles]] for changes in the [[Adequacy|adequacy]] of [[Case Estimate|case estimates]] or changes in the [[Rate|rate]] of [[Settlement Rate|claim settlement]] using a [[Berquist-Sherman Method|Berquist-Sherman data]] adjustment
+> 10. Estimate [[Ultimate Loss|ultimate claims]] using the appropriate [[Berquist-Sherman Method|Berquist-Sherman data]] adjustments
 > 11. Explain the effect of [[Changing Conditions|changing conditions]] on the [[Projection|projection]] methods cited in (e)
 > 12. Assess the [[Appropriateness|appropriateness]] of the [[Projection|projection]] methods cited in (e) in [[Varying Circumstance|varying circumstances]]
-> 13. Evaluate and justify [[Selection|selections]] of [[Ultimate Value|ultimate values]] based on the methods cited in (e)
+> 13. Evaluate and justify [[Selection|selections]] of [[Ultimate Loss|ultimate values]] based on the methods cited in (e)
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022 (3a-m)
@@ -91,23 +91,23 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >     - Appendices A through C and F (excluding A.3.6 and A.5)
 
 > [!example]- Financial Reporting {4–12%}
-> The candidate will understand [[Financial Reporting|financial reporting]] of [[Claim Liability|claim liabilities]] with [[Respect|respect]] to [[Unpaid Unallocated Loss Adjustment Expense|unpaid unallocated loss adjustment expenses]].
+> The candidate will understand [[Financial Reporting|financial reporting]] of [[Unpaid Claims|claim liabilities]] with [[Respect|respect]] to [[Unallocated Loss Adjustment Expenses ULAE|unpaid unallocated loss adjustment expenses]].
 >
-> 1. Describe the key assumptions underlying ratio and [[Count-Based|count-based]] methods for estimating [[Unpaid Unallocated Loss Adjustment Expense|unpaid unallocated loss adjustment expenses]]
-> 2. Estimate [[Unpaid Unallocated Loss Adjustment Expense|unpaid unallocated loss adjustment expenses]] using ratio and [[Count-Based|count-based]] methods
-> 3. Evaluate and justify [[Selection|selections]] of [[Unpaid Unallocated Loss Adjustment Expense|unpaid unallocated loss adjustment expenses]] based on ratio and [[Count-Based|count-based]] methods
+> 1. Describe the key assumptions underlying ratio and [[Count-Based|count-based]] methods for estimating [[Unallocated Loss Adjustment Expenses ULAE|unpaid unallocated loss adjustment expenses]]
+> 2. Estimate [[Unallocated Loss Adjustment Expenses ULAE|unpaid unallocated loss adjustment expenses]] using ratio and [[Count-Based|count-based]] methods
+> 3. Evaluate and justify [[Selection|selections]] of [[Unallocated Loss Adjustment Expenses ULAE|unpaid unallocated loss adjustment expenses]] based on ratio and [[Count-Based|count-based]] methods
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022 (4a-c)
 >     - Chapter 23 (excluding section 23.4)
 
 > [!example]- Trending {6–16%}
-> The candidate will understand [[Trending|trending]] procedures as applied to [[Ultimate Claim|ultimate claims]], [[Exposure Base|exposures]] and [[Insurance Premium|premiums]].
+> The candidate will understand [[Trend|trending]] procedures as applied to [[Ultimate Loss|ultimate claims]], [[Exposure Base|exposures]] and [[Insurance Premium|premiums]].
 >
-> 1. Identify and describe the [[Influence|influences]] of [[Portfolio|portfolio]] changes on [[Claim Frequency|claim frequency]] and [[Severity|severity]]
-> 2. Identify the time [[Period|periods]] associated with [[Trending|trending]] procedures
+> 1. Identify and describe the [[Influence|influences]] of [[Portfolio|portfolio]] changes on [[Frequency|claim frequency]] and [[Severity|severity]]
+> 2. Identify the time [[Period|periods]] associated with [[Trend|trending]] procedures
 > 3. Analyze and evaluate [[Trend|trend]] for [[Claim|claims]] (including [[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]] (including [[Inflation-Sensitive Exposure|inflation-sensitive exposures]] and [[Insurance Premium|premiums]])
-> 4. Choose [[Trend Rate|trend rates]] for [[Claim|claims]] ([[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]]
+> 4. Choose [[Trend|trend rates]] for [[Claim|claims]] ([[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]]
 > 5. Calculate [[Trend|trend]] factors for [[Claim|claims]] and [[Exposure Base|exposures]]
 >
 > **Readings:**
@@ -120,9 +120,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Quantify different types of [[Expenses Required|expenses required]] for [[Ratemaking|ratemaking]] including [[Expense Trending|expense trending]] procedures
 > 2. Incorporate [[Underwriting Profit|underwriting profit]] and [[Contingency Margin|contingency margins]] in [[Ratemaking|ratemaking]]
-> 3. Explain the [[Requirement|requirements]] for [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Claim|large claims]] in [[Ratemaking|ratemaking]]
-> 4. Calculate [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Claim|large claims]]
-> 5. Apply [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Claim|large claims]] in [[Ratemaking|ratemaking]]
+> 3. Explain the [[Requirement|requirements]] for [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
+> 4. Calculate [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Loss|large claims]]
+> 5. Apply [[Loading|loadings]] for [[Catastrophe|catastrophes]] and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
 > 6. Describe the [[Claim|claim]] ratio and [[Pure Premium|pure premium]] methods of [[Ratemaking|ratemaking]]
 > 7. Calculate indicated [[Rate|rates]] and [[Rate|rate]] changes using the [[Claim|claim]] ratio and [[Pure Premium|pure premium]] methods
 > 8. Demonstrate the use of [[Credibility|credibility]] in [[Ratemaking|ratemaking]]
@@ -137,9 +137,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Identify [[Data|data]] and information [[Requirement|requirements]]
 > 2. [[Conduct Investigative Testing|Conduct investigative testing]]
-> 3. Choose [[Projection|projection]] methods to estimate [[Ultimate Value|ultimate values]]
-> 4. Estimate [[Ultimate Value|ultimate values]]
-> 5. Justify [[Selection|selections]] of [[Ultimate Value|ultimate values]]
+> 3. Choose [[Projection|projection]] methods to estimate [[Ultimate Loss|ultimate values]]
+> 4. Estimate [[Ultimate Loss|ultimate values]]
+> 5. Justify [[Selection|selections]] of [[Ultimate Loss|ultimate values]]
 > 6. Develop [[Reserve|reserves]] for [[Financial Reporting|financial reporting]]
 >
 > **Readings:**

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:96bd1a2d3da8fc9226884a71fc0b1d667eca6a9204390ccf5ec91d36931933b8
+  content_hash: sha256:6f9bb58064cffb14238f6fafda606191bd1282bda5d37f6d885a589516f7d3a3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -38,7 +38,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Recommend an appropriate [[Enterprise Risk|enterprise risk]] management framework for an [[Organization|organization]]
 > 2. Analyze the [[Enterprise Risk Management|ERM]] roles and [[Responsibility|responsibilities]] of the [[People|people]] within an [[Organization|organization]] and how the different [[Group|groups]] can [[Collaborate|collaborate]] effectively
-> 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as [[Agency|agency]], [[Compliance|compliance]] and [[Legal Risk|legal risks]] and the need for [[Audit|audit]] and [[Market Conduct Compliance Activity|market conduct compliance activities]]
+> 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as [[Agency|agency]], [[Compliance|compliance]] and [[Operational Risk|legal risks]] and the need for [[Audit|audit]] and [[Market Conduct Compliance Activity|market conduct compliance activities]]
 > 4. Evaluate the elements and [[Structure|structure]] of a [[Successful Risk|successful risk]] management function
 >
 > **3. The External Environment**
@@ -132,7 +132,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > **1. Making Decisions**
 >
-> 1. Describe how an [[Organization|organization]] can articulate its approach to [[Risk|risk]] using [[Risk Appetite|risk appetite]] and [[Risk Limit|risk limits]]
+> 1. Describe how an [[Organization|organization]] can articulate its approach to [[Risk|risk]] using [[Risk Appetite|risk appetite]] and [[Risk Appetite|risk limits]]
 > 2. Assess the [[Risk|risk]] and [[Return Trade-Off|return trade-offs]] for decisions (e.g. those targeting changes in the [[Organization's Risk Profile|organization’s risk profiles]])
 >
 > **2. Responding to Risks**
@@ -141,13 +141,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 2. Demonstrate the use of [[Control|controls]] in an [[Organizational Process|organizational process]]
 > 3. Demonstrate how [[Derivative|derivatives]] or similar methods may be used to manage or [[Reduce Risk|reduce risk]]
 > 4. Demonstrate how [[Reinsurance|reinsurance]] or similar methods may be used to manage or [[Reduce Risk|reduce risk]]
-> 5. Analyze how [[ALM]] and similar [[Risk Strategy|risk strategies]] can be used to manage or [[Reduce Risk|reduce risk]] in an [[Organization|organization]]
+> 5. Analyze how [[Asset-Liability Management|ALM]] and similar [[Risk Strategy|risk strategies]] can be used to manage or [[Reduce Risk|reduce risk]] in an [[Organization|organization]]
 > 6. Demonstrate possible techniques for managing [[Non-Financial Risk|non-financial risks]]
 >
 > **3. Risk Capital**
 >
 > 1. Explain how to develop a [[Capital|capital]] model for a hypothetical [[Organization|organization]]
-> 2. Demonstrate a [[Conceptual|conceptual]] understanding of [[Economic|economic]] measures of value and [[Capital Requirement|capital requirements]] (e.g., [[EVA]], [[Embedded|embedded]] value, [[Economic Capital|economic capital]], [[Regulatory|regulatory]] measures, and accounting measures) and their uses in [[Decision-Making Process|decision-making processes]]
+> 2. Demonstrate a [[Conceptual|conceptual]] understanding of [[Economic|economic]] measures of value and [[Regulatory Capital|capital requirements]] (e.g., [[EVA]], [[Embedded|embedded]] value, [[Economic Capital|economic capital]], [[Regulatory|regulatory]] measures, and accounting measures) and their uses in [[Decision-Making|decision-making processes]]
 > 3. Apply [[Risk|risk]] measures (such as [[VaR]] and [[TVaR]]) and demonstrate how to use them in value and [[Capital Assessment|capital assessment]]
 > 4. Demonstrate the use of techniques to allocate [[Risk Once Aggregated|risk once aggregated]]
 > 5. Propose techniques of attributing the “[[Cost|cost]]” of [[Risk-capital Strategy|risk/capital strategies]] to [[Business Unit|business units]] in [[Order|order]] to [[Gauge Performance|gauge performance]] (e.g. [[Return|returns]] on [[Marginal Capital|marginal capital]])

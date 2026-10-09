@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:dee1e434f8496c6ae77f79aa02db152a3833cc11d641c5186ea9843af8d24f9a
+  content_hash: sha256:90d0b675a7334da5142cc252e45d15262b65068c74404928fe8d26d37b511593
   sources: []
   open_findings: 0
   open_critical: 0
@@ -50,17 +50,17 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - Excerpts from Business Law for Insurance Professionals, Assignment 3, pp. 3.29-3.39 (begin on pp. 3.29 with “Financial Considerations in International Business”) (1j)
 
 > [!example]- Regulatory Environment {20–32%}
-> The candidate will understand the [[Regulatory Environment|regulatory environment]] for general [[Insurance|insurance]].
+> The candidate will understand the [[Insurance Regulation|regulatory environment]] for general [[Insurance|insurance]].
 >
 > 1. Describe the functions and goals of the different [[Form|forms]] of [[Insurance Regulation|insurance regulation]].
 > 2. Describe the [[Protection|protections]] provided by [[Solvency|solvency]] and [[Insolvency Regulation|insolvency regulation]].
 > 3. Understand the issue of [[Discrimination|discrimination]] and [[Insurance|insurance]].
-> 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and [[Telematics|telematics]] in [[Automobile Insurance|automobile insurance]].
+> 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and [[Telematics|telematics]] in [[Personal Auto Policy|automobile insurance]].
 > 5. Describe the [[Development|development]] of general [[Insurance Programs Controlled|insurance programs controlled]] by [[Government|government]] or [[Collective Insurance Industry Organization|collective insurance industry organizations]] and their [[Mechanism|mechanisms]] of operation.
-> 6. Discuss the issues with the use of [[Credit Score|credit scores]] by [[Insurer|insurers]].
+> 6. Discuss the issues with the use of [[Credit-Based Insurance Scoring|credit scores]] by [[Insurer|insurers]].
 > 7. Understand the function and [[Regulation|regulation]] of price [[Optimization|optimization]].
 > 8. Outline the function and [[Regulation|regulation]] of [[Captive|captives]].
-> 9. Understand the functions and [[Regulatory Environment|regulatory environment]] for [[Reinsurance|reinsurance]].
+> 9. Understand the functions and [[Insurance Regulation|regulatory environment]] for [[Reinsurance|reinsurance]].
 >
 > **Readings:**
 > - The General Insurance Regulatory Environment, SOA, May 2025 (2a-b)
@@ -103,8 +103,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > The candidate will understand elements of [[Financial Economics|financial economics]] relevant to general [[Insurance|insurance]].
 >
 > 1. Demonstrate knowledge of [[Behavioral Finance|behavioral finance]].
-> 2. Demonstrate knowledge of [[Asset Liability Management Strategy|asset liability management strategies]] for general [[Insurer|insurance companies]].
-> 3. Calculate an [[Underwriting Profit Margin|underwriting profit margin]] using different models under a [[Financial Economics|financial economics]] approach.
+> 2. Demonstrate knowledge of [[Asset-Liability Management|asset liability management strategies]] for general [[Insurer|insurance companies]].
+> 3. Calculate an [[Financial Economics|underwriting profit margin]] using different models under a [[Financial Economics|financial economics]] approach.
 >
 > **Readings:**
 > - Behavioral Finance, J. Ritter, Pacific-Basin Finance Journal, Volume 11, Issue 4, Sep 2003, sections 1-3 (pp. 429-434) (4a)
@@ -114,11 +114,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > [!example]- Financial Reporting {10–20%}
 > The candidate will understand elements of [[Financial Reporting|financial reporting]] for general [[Insurer|insurance companies]].
 >
-> 1. Demonstrate knowledge of the different types of general [[Insurance Liability|insurance liabilities]].
+> 1. Demonstrate knowledge of the different types of general [[Insurance Contract Liabilities|insurance liabilities]].
 > 2. Understand and apply the concepts of [[Insurance-reinsurance|insurance/reinsurance]] accounting.
-> 3. Understand the different [[Financial Reporting Standard|financial reporting standards]] for general [[Insurer|insurers]].
-> 4. Understand key terms and considerations related to [[Claim Liability|claim liabilities]].
-> 5. Understand the [[Reporting|reporting]] of [[Financial Instrument|financial instruments]].
+> 3. Understand the different [[Financial Reporting|financial reporting standards]] for general [[Insurer|insurers]].
+> 4. Understand key terms and considerations related to [[Unpaid Claims|claim liabilities]].
+> 5. Understand the [[Reporting|reporting]] of [[Financial Asset Classification|financial instruments]].
 >
 > **Readings:**
 > - IAA Risk Book: Liabilities for General Insurance, Insurance Regulation Committee, International Actuarial Association, May 2023 (pp. 2-22) (5a)
@@ -132,14 +132,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Ch. 3: Accounting for Financial Instruments (excluding 3.4.3)
 
 > [!example]- Financial Health Measurement {15–20%}
-> The candidate will understand the analysis of a general [[Insurer's Financial Health|insurer’s financial health]].
+> The candidate will understand the analysis of a general [[Financial Health|insurer’s financial health]].
 >
-> 1. Understand the various considerations for [[Performance Measurement|performance measurement]] of a general [[Insurer|insurer]].
+> 1. Understand the various considerations for [[Key Financial Measures|performance measurement]] of a general [[Insurer|insurer]].
 > 2. Understand and apply [[Financial Health|financial health]] ratios.
 > 3. Demonstrate knowledge of [[Solvency Monitoring|solvency monitoring]] for general [[Insurer|insurance companies]].
 > 4. Understand and apply the [[EU Solvency II Capital Requirement|EU Solvency II capital requirement]].
 > 5. Demonstrate knowledge of [[ORSA]].
-> 6. Discuss the function of [[Credit Rating Agency|credit rating agencies]] and their influence on general [[Insurer|insurers]].
+> 6. Discuss the function of [[Rating Agency|credit rating agencies]] and their influence on general [[Insurer|insurers]].
 >
 > **Readings:**
 > - General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bc115e6dfba192e967b29ca0e2b943883dad8e6a17ec3f435d48a345c56aaba3
+  content_hash: sha256:b3139ef56f70cf5eb2fa11eeae7a500e64818a33e679487fa2a3278d21ef67a1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -68,7 +68,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Valuation of Derivatives {40–60%}
 > The candidate will understand the [[Principle|principles]] and techniques for the [[Valuation|valuation]] of [[Derivative|derivatives]].
 >
-> 1. Understand the [[Principle|principles]] of [[No-Arbitrage|no-arbitrage]] and [[Replication|replication]] in [[Asset Pricing|asset pricing]].
+> 1. Understand the [[Principle|principles]] of [[No-Arbitrage|no-arbitrage]] and [[Replication|replication]] in [[Risk-Neutral Valuation|asset pricing]].
 > 2. Understand [[Arrow-Debreau Security|Arrow-Debreau security]] and the [[Distinction|distinction]] between [[Complete|complete]] and [[Incomplete Market|incomplete markets]]
 > 3. Understand [[Put-Call Parity|put-call parity]] and price [[Bound|bounds]]
 > 4. Understand [[Stochastic Calculus Theory|Stochastic Calculus theory]] and technique used in [[Pricing Derivative|pricing derivatives]] including:
@@ -133,10 +133,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 3. Understand [[Delta Hedging|delta hedging]], and the [[Interplay|interplay]] between [[Hedging|hedging]] assumptions and [[Hedging|hedging]] outcomes
 > 4. Understand the concepts of [[Realized|realized]] versus [[Implied Volatility|implied volatility]]
 > 5. Understand how [[Hedge Strategy|hedge strategies]] may [[Fail|fail]]
-> 6. Identify and evaluate [[Embedded Option|embedded options]] in [[Liability|liabilities]] (e.g., [[Indexed Annuity|indexed annuity]], [[Structured Product|structured product]] based [[Variable Annuity|variable annuity]], and [[Variable Annuity Guarantee Rider|variable annuity guarantee riders]] including [[GMxB]], etc.)
+> 6. Identify and evaluate [[Embedded Option|embedded options]] in [[Liability|liabilities]] (e.g., [[Indexed Annuity|indexed annuity]], [[Structured Product|structured product]] based [[Equity-Linked Insurance|variable annuity]], and [[Variable Annuity Guarantee Rider|variable annuity guarantee riders]] including [[GMxB]], etc.)
 > 7. Demonstrate an understanding of [[Hedging|hedging]] for [[Embedded Option|embedded option]] in [[Liability|liabilities]] with:
 > 8. [[Risk|Risks]] that can be [[Hedged|hedged]], including those of [[Equity|equity]], [[Interest Rate|interest rate]], [[Volatility|volatility]], and [[Cross Greek|cross Greeks]],
-> 9. [[Risk|Risks]] that can only be [[Partially Hedged|partially hedged]] or [[Cannot|cannot]] be [[Hedged|hedged]], including those of [[Policyholder|policyholder]] behavior, [[Mortality|mortality]], [[Basis|basis]], [[Counterparty|counterparty]], [[Correlation|correlation]], and [[Operational Failure|operational failures]]
+> 9. [[Risk|Risks]] that can only be [[Partially Hedged|partially hedged]] or [[Cannot|cannot]] be [[Hedged|hedged]], including those of [[Policyholder|policyholder]] behavior, [[Mortality|mortality]], [[Basis|basis]], [[Credit Risk|counterparty]], [[Correlation|correlation]], and [[Operational Failure|operational failures]]
 > 10. Demonstrate an understanding of [[Target Volatility Fund|target volatility funds]] and their effect on [[Fund Performance|fund performance]], [[Guarantee Cost|guarantee cost]], and [[Risk|risk]] control
 >
 > **Readings:**

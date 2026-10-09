@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:83bc8daead579a891afd3f4c203a4b17ef90a4025ee8f033b95fd766e038ef51
+  content_hash: sha256:aab14f9e1607891c054a79bbb0a8dc1e9598d30ca333c44429fe4ad135d3f648
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,13 +28,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Reserving {30–40%}
-> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Short Duration Group|short duration group]] and [[Health Insurance Contract|health insurance contracts]].
+> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Short Duration Group|short duration group]] and [[Group Health Insurance|health insurance contracts]].
 >
 > 1. Describe the types of [[Claim Reserve|claim reserves]]
-> 2. Explain the [[Limitation|limitations]] and [[Biase|biases]] of the [[Traditional Valuation|traditional valuation]] methods
+> 2. Explain the [[Limitation|limitations]] and [[Biase|biases]] of the [[Claim Reserve|traditional valuation]] methods
 > 3. Calculate appropriate [[Claim Reserve|claim reserves]] given [[Data|data]]
 > 4. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
-> 5. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
+> 5. Evaluate [[Data Quality|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate [[non-IBNR]] types of [[Reserve|reserves]] and explain when each is [[Required|required]]
 > 7. Apply [[Best Practice|applicable best practices]] related to [[Reserving|reserving]]
 >
@@ -53,12 +53,12 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ASOP 42: Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims (excluding Appendices) (1g)
 
 > [!example]- Financial Statements {25–35%}
-> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] in accordance with [[Statutory]] Accounting [[Standard|Standards]] and [[GAAP]].
+> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with [[Statutory]] Accounting [[Standard|Standards]] and [[GAAP]].
 >
 > 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting [[Principle|Principles]] ([[GAAP]])
-> 2. Interpret the results of both [[Statutory|statutory]] and [[GAAP Statement|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
+> 2. Interpret the results of both [[Statutory|statutory]] and [[GAAP|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
 > 3. [[Project Financial|Project financial]] outcomes and recommend [[Strategy|strategy]]
-> 4. Evaluate [[Capital Need|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
+> 4. Evaluate [[Regulatory Capital|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
 > 5. Apply [[Best Practice|applicable best practices]] related to [[Financial Statements|financial statements]]
 >
 > **Readings:**
@@ -75,7 +75,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Regulation {15–25%}
 > The candidate will understand how to evaluate the impact of [[Regulation|regulation]] on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
 >
-> 1. Describe the [[Regulatory|regulatory]] and [[Policy Making Process|policy making process]] in the [[United State|United States]]
+> 1. Describe the [[Regulatory|regulatory]] and [[State and Federal Insurance Regulation|policy making process]] in the [[United State|United States]]
 > 2. Describe the major [[Applicable Law|applicable laws]] and [[Regulation|regulations]] and evaluate their impact
 >
 > **Readings:**
@@ -95,7 +95,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Describe [[Medicare Benefit|Medicare benefits]] and evaluate [[Pricing|pricing]] and [[Filing Requirement|filing requirements]]
 > 2. Describe [[Medicaid Program Structure|Medicaid program structure]] and [[Benefit|benefits]], and evaluate [[Pricing|pricing]] and [[Filing Requirement|filing requirements]]
-> 3. Describe the [[Affordable Care Act]] and evaluate impacts on [[Pricing|pricing]] and [[Filing|filing]]
+> 3. Describe the [[Affordable Care Act]] and evaluate impacts on [[Pricing|pricing]] and [[Rate Regulation|filing]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (4a, 4b)
@@ -114,9 +114,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Flow of Funds {5–15%}
 > The candidate will understand how to describe the [[Flow|flow]] of [[Fund|funds]] in the [[Health Care System|health care system]] and the role of [[Provider|providers]] in the [[System|system]].
 >
-> 1. [[Establish]] a framework of how [[Funds Flow|funds flow]] through the [[Health Care System|health care system]]
+> 1. [[Establish]] a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
 > 2. Describe the role [[Physicians Play|physicians play]] and their influence on the [[Flow|flow]] of [[Fund|funds]]
-> 3. Describe the [[Market Power|market power]] of [[Hospital|hospitals]] and how [[Provider Systems Compete|provider systems compete]] for [[Patient|patients]], [[Physician|physicians]], and [[Contract|contracts]]
+> 3. Describe the [[Health Care System|market power]] of [[Hospital|hospitals]] and how [[Provider Systems Compete|provider systems compete]] for [[Patient|patients]], [[Physician|physicians]], and [[Contract|contracts]]
 > 4. Describe the [[Flow|flow]] of [[Fund|funds]] in the [[Canadian Healthcare System|Canadian healthcare system]] and the roles of the [[Provider|provider]] and [[Government|government]]
 >
 > **Readings:**

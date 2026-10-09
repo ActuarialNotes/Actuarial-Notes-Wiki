@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a40ae30a232b5d7ba6cf26a1bcf3279f6d38c091fcf75f1dba89fad530f41b94
+  content_hash: sha256:7551b49f2ca5e426c6e98011ac85242f6c082d563f8e9ae1a6ab9a7029571950
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,9 +28,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Objectives of Asset Liability Management {5–20%}
-> The candidate will understand the objectives of [[Asset Liability]] Management ([[ALM]]).
+> The candidate will understand the objectives of [[Asset-Liability Management|Asset Liability]] Management ([[Asset-Liability Management|ALM]]).
 >
-> 1. Explain the [[Principle|principles]] of [[Asset Liability]] Management
+> 1. Explain the [[Principle|principles]] of [[Asset-Liability Management|Asset Liability]] Management
 > 2. Understand the [[Lessons Learned|lessons learned]] from [[ALM Failure|ALM failures]]
 > 3. Demonstrate an understanding of various [[ALM Risk|ALM risks]]
 > 4. Describe how different [[Pension|pension]] and [[Insurance Contracts Generate Embedded Option|insurance contracts generate embedded options]]
@@ -59,7 +59,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 1. Demonstrate an understanding of various [[Risk Identification Tool|risk identification tools]]
 > 2. Evaluate a [[Company'|company’s]] or a [[Portfolio's Exposure|portfolio’s exposures]] to various [[Risk|risks]]
 > 3. Understand measures of [[Regulatory Capital Adequacy|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various [[Jurisdiction|jurisdictions]]
-> 4. Evaluate the [[Difficulty|difficulties]] of [[Investing|investing]] for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 [[Year|years]]) such as [[Inflation|inflation]] and [[Longevity|longevity]]
+> 4. Evaluate the [[Difficulty|difficulties]] of [[Investing|investing]] for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 [[Year|years]]) such as [[Inflation|inflation]] and [[Longevity Risk|longevity]]
 >
 > **Readings:**
 > - CP351-101-25: ALM for Life, Annuities, and Pensions (section 4) (2a)

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9a1938f8ad4d0cc9480809f92d59f5e2c60e8e8ef7515bc8a4324345d3282c9e
+  content_hash: sha256:408eaaed6c3675fccbc8ea5a0fe9390151cca1f4eb9db31a51c9cac8f650b450
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,11 +28,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Individual Life and Annuity Product Design and Pricing {15–25%}
-> The candidate will understand the [[Design|designs]] of the [[Common Life|common Life]] and [[Annuity Product|Annuity products]] and their associated [[Feature|features]] and inherent [[Risk|risks]], and the methods to design and price these [[Product|products]].
+> The candidate will understand the [[Design|designs]] of the [[Common Life|common Life]] and [[Annuity Contract|Annuity products]] and their associated [[Feature|features]] and inherent [[Risk|risks]], and the methods to design and price these [[Product|products]].
 >
 > 1. Describe and compare various [[Life Insurance|life insurance]] and [[Annuity Product Design|annuity product designs]]
-> 2. Evaluate and apply [[Pricing Practice|pricing practices]] for [[Life|life]] and [[Annuity Product|annuity products]]
-> 3. Describe and apply the [[Common Profit Metrics|common profit metrics]] ([[IRR]], Value of [[New Business]], [[Embedded]] Value, [[ROE]]) used in [[Pricing Insurance Product|pricing insurance products]]
+> 2. Evaluate and apply [[Pricing Practice|pricing practices]] for [[Life|life]] and [[Annuity Contract|annuity products]]
+> 3. Describe and apply the [[Common Profit Metrics|common profit metrics]] ([[IRR]], Value of [[Embedded Value|New Business]], [[Embedded]] Value, [[ROE]]) used in [[Pricing Insurance Product|pricing insurance products]]
 > 4. Explain and apply [[Nonforfeiture|nonforfeiture]] calculation techniques
 >
 > **Readings:**
@@ -48,10 +48,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA101-105-25: Life Insurance and Annuity Non-forfeiture Practices (1d)
 
 > [!example]- Assumption Development and Experience Studies {15–25%}
-> The candidate will understand different types of actuarial assumptions and how [[Experience Study|experience studies]] are designed and used for evaluating [[Past Experience|past experience]] and for setting assumptions.
+> The candidate will understand different types of actuarial assumptions and how [[Experience Study|experience studies]] are designed and used for evaluating [[Experience Study|past experience]] and for setting assumptions.
 >
 > 1. Describe types of actuarial assumptions commonly used for [[Life Insurance|life insurance]] and [[Annuity|annuity]] actuarial functions
-> 2. Describe and evaluate [[Mortality|mortality]], [[Lapse|lapse]], [[Premium Persistency|premium persistency]], [[Term Conversion|term conversions]] and [[Utilization|utilization]] assumptions used for various purposes, and apply methods and techniques for their [[Development|development]]
+> 2. Describe and evaluate [[Mortality|mortality]], [[Lapse|lapse]], [[Premium Persistency|premium persistency]], [[Term Conversion|term conversions]] and [[Experience Study|utilization]] assumptions used for various purposes, and apply methods and techniques for their [[Development|development]]
 > 3. Explain and apply actuarial [[Credibility|credibility]] methods
 > 4. Describe and apply the framework, [[Process|process]], and significant considerations for creating [[Modern Mortality Table|modern mortality tables]] used by [[Life Insurance Company|life insurance companies]]
 > 5. Describe the [[Process|process]] and apply techniques for [[Experience Study|experience studies]]
@@ -73,7 +73,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > The candidate will understand [[Common|common]] issues and [[Practice|practices]] related to [[Product]] Management.
 >
 > 1. Describe and assess [[Insurance|insurance]] and [[Annuity Distribution|annuity distribution]] approaches and [[Underwriting|underwriting]] approaches
-> 2. Describe and apply the significant [[US]] and [[Canadian Tax Regulation|Canadian tax regulations]] relating to the [[Taxation|taxation]] of [[Individual Life|individual life]] and [[Annuity Insurance Product|annuity insurance products]]
+> 2. Describe and apply the significant [[US]] and [[Canadian Tax Regulation|Canadian tax regulations]] relating to the [[Taxation|taxation]] of [[Life Insurance|individual life]] and [[Annuity Insurance Product|annuity insurance products]]
 > 3. Recommend and justify changes to [[Non-Guaranteed|non-guaranteed]] elements
 > 4. Describe and evaluate the [[Challenges Insurers Face|challenges insurers face]] in a [[Rising Interest Rate Environment|rising interest rate environment]]
 >
@@ -93,8 +93,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Introduction to Life and Annuity Valuation Concepts {15–25%}
 > The candidate will understand [[Common Valuation|common valuation]] and [[Capital|capital]] techniques used in [[US]], [[Canadian]], and [[International Regulatory Framework|international regulatory frameworks]].
 >
-> 1. Describe the [[US Statutory|US statutory]] actuarial framework, including the [[Principles-Based Reserve|principles-based reserves]] and calculate basic [[Life Insurance Reserve|life insurance reserves]]
-> 2. Describe the [[US GAAP]] actuarial framework and calculate [[Term Insurance Reserve|term insurance reserves]] and [[Deferred Acquisition Cost|deferred acquisition cost]]
+> 1. Describe the [[Statutory Accounting Principles|US statutory]] actuarial framework, including the [[Principles-Based Reserving|principles-based reserves]] and calculate basic [[Life Insurance Reserve|life insurance reserves]]
+> 2. Describe the [[GAAP|US GAAP]] actuarial framework and calculate [[Term Insurance Reserve|term insurance reserves]] and [[Deferred Acquisition Cost|deferred acquisition cost]]
 > 3. Describe the [[IFRS]] actuarial framework, including the basic calculation of [[Reserve|reserves]]
 > 4. Explain and apply methods in [[Capital|capital]] management across various [[Jurisdiction|jurisdictions]]
 >
@@ -117,7 +117,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > 3. Describe how [[Common Insurance Guarantees Generate Embedded Option|common insurance guarantees generate embedded options]] and calculate the value of these [[Option|options]]
 > 4. Explain the function and [[Attribute|attributes]] of [[Common Asset|common assets]] used to support [[Life Insurance|life insurance]] and [[Annuity Liability|annuity liabilities]]
 > 5. Describe basic terms, concepts, and types of [[Life Insurance Reinsurance Arrangement|life insurance reinsurance arrangements]]
-> 6. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Yearly Renewable Term|yearly renewable term]], [[Coinsurance|coinsurance]], [[Modified Coinsurance|modified coinsurance]], and [[Funds Withheld Arrangement|funds withheld arrangements]]
+> 6. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Reinsurance Transaction|yearly renewable term]], [[Coinsurance|coinsurance]], [[Reinsurance Transaction|modified coinsurance]], and [[Reinsurance Transaction|funds withheld arrangements]]
 >
 > **Readings:**
 > - ILA101-112-25: Revisiting the Role of Insurance Company ALM within a Risk Management Framework (5a)

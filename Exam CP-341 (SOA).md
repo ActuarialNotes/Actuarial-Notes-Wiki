@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6911ec15b8d0a4d14f47416d6983796fa5e6bab97b688dcefcdb7c395fbe6aaf
+  content_hash: sha256:6235f56601f5856bceb29e7210e19b92da7883c6a643e38a2c396596bcabc701
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 >
 > 1. Describe basic terms and concepts related to [[Reinsurance|reinsurance]]
 > 2. Understand the key [[Aspect|aspects]] of [[Automatic|automatic]] and [[Facultative Reinsurance|facultative reinsurance]]
-> 3. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Yearly Renewable Term|yearly renewable term]], [[Coinsurance|coinsurance]], [[Modified Coinsurance|modified coinsurance]], and [[Funds Withheld Arrangement|funds withheld arrangements]]
+> 3. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Reinsurance Transaction|yearly renewable term]], [[Coinsurance|coinsurance]], [[Reinsurance Transaction|modified coinsurance]], and [[Reinsurance Transaction|funds withheld arrangements]]
 > 4. Explain reasons for using [[Inforce Reinsurance|inforce reinsurance]], approaches used for [[Inforce Reinsurance|inforce reinsurance]], and [[Advantage|advantages]] and [[Disadvantage|disadvantages]] of each approach
 > 5. Demonstrate knowledge of different [[Form|forms]] of [[Reinsurance|reinsurance]] for different [[Product|products]]; specifically, [[PRTs-longevity Swap|PRTs/longevity swaps]], [[Annuity Coinsurance|annuity coinsurance]], and [[Life Insurance Yearly Renewable Term|life insurance yearly renewable term]]
 > 6. Describe and evaluate types of [[Non-Proportional Reinsurance Transaction|non-proportional reinsurance transactions]]
@@ -58,11 +58,11 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CP341-104-25: Private Equity and Life Insurers (1h)
 
 > [!example]- Transferring Risk {20–35%}
-> The candidate will understand the fundamentals of [[Risk Transfer|risk transfer]] between two [[Counterparty|counterparties]].
+> The candidate will understand the fundamentals of [[Risk Transfer|risk transfer]] between two [[Credit Risk|counterparties]].
 >
-> 1. Describe the elements within [[Reinsurance Treaty|reinsurance treaties]]
-> 2. Describe the elements and considerations of [[Risk Transfer|risk transfer]] between [[Counterparty|counterparties]], and evaluate their impact on [[Reinsurance Agreement Provision|reinsurance agreement provisions]]
-> 3. Explain the considerations and [[Process|process]] of managing [[Insolvency|insolvency]] of the [[Ceding|ceding]] and assuming [[Party|parties]] within a [[Reinsurance Transaction|reinsurance transaction]]
+> 1. Describe the elements within [[Treaty Reinsurance|reinsurance treaties]]
+> 2. Describe the elements and considerations of [[Risk Transfer|risk transfer]] between [[Credit Risk|counterparties]], and evaluate their impact on [[Reinsurance Agreement Provision|reinsurance agreement provisions]]
+> 3. Explain the considerations and [[Process|process]] of managing [[Solvency|insolvency]] of the [[Ceding|ceding]] and assuming [[Party|parties]] within a [[Reinsurance Transaction|reinsurance transaction]]
 > 4. Explain the types, uses, and functions of [[Captive Reinsurance Transaction|captive reinsurance transactions]]
 >
 > **Readings:**
@@ -80,11 +80,11 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - The Impact of BEAT on US Foreign Affiliated Reinsurance, Taxing Times, Dec 2020 (2c, 2d)
 
 > [!example]- Key Accounting and Regulatory Considerations {25–40%}
-> The candidate will understand [[Regulatory Framework|regulatory frameworks]] for [[Reinsurance Transaction|reinsurance transactions]] across [[US]], [[Canadian]], and [[Global Jurisdiction|global jurisdictions]].
+> The candidate will understand [[Credit for Reinsurance|regulatory frameworks]] for [[Reinsurance Transaction|reinsurance transactions]] across [[US]], [[Canadian]], and [[Global Jurisdiction|global jurisdictions]].
 >
-> 1. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the [[US Regulatory|US regulatory]] framework
+> 1. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the [[State and Federal Insurance Regulation|US regulatory]] framework
 > 2. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the [[Canadian Regulatory|Canadian regulatory]] framework
-> 3. Understand [[US GAAP]] and [[US Stat Requirement|US Stat requirements]] related to [[Reinsurance|reinsurance]]
+> 3. Understand [[GAAP|US GAAP]] and [[US Stat Requirement|US Stat requirements]] related to [[Reinsurance|reinsurance]]
 > 4. Understand [[IFRS]] and [[OSFI Requirement|OSFI requirements]] related to [[Reinsurance|reinsurance]]
 > 5. Understand key [[International Reinsurance Regulatory Framework|international reinsurance regulatory frameworks]], especially as they relate to the use of [[Offshore Reinsurance|offshore reinsurance]] and [[Private Equity Backed Reinsurer|private equity backed reinsurers]].
 >
@@ -111,7 +111,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CP341-108-25: The Heat is on for US Asset-Intensive Reinsurance Regulations (3e)
 
 > [!example]- Reinsurance Administration and Management {0–10%}
-> The candidate will understand and be able to explain [[Practice|practices]] for [[Administering|administering]] and managing [[Reinsurance Arrangement|reinsurance arrangements]].
+> The candidate will understand and be able to explain [[Practice|practices]] for [[Administering|administering]] and managing [[Reinsurance Transaction|reinsurance arrangements]].
 >
 > 1. Describe [[Feature|features]] and considerations related to [[Reinsurance Administration|reinsurance administration]]
 > 2. Describe and evaluate concepts related to the management of [[Reinsurance|reinsurance]]

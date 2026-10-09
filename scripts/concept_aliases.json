@@ -363,7 +363,8 @@
     "going concern funding": "Going-Concern Valuation",
     "insurance premium liability": "Premium Liability",
     "asset liability management strategy": "Asset-Liability Management",
-    "spinoff": "Plan Merger and Spin-Off"
+    "spinoff": "Plan Merger and Spin-Off",
+    "insurer's financial health": "Financial Health"
   },
   "namesakes": {
     "deductible": { "default": "Deductible", "5-1": "Deductible Rating" },

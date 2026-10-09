@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:deaa951c4cc9994ed12d56b3a4c33d725aa8dc23bcd69abf7958ed410d3365af
+  content_hash: sha256:95733ea680451585b8c8da7e1260609c5b5cfb29bcc988399f1d2c858ca53d7a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,11 +28,11 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 ## Learning Objectives
 
 > [!example]- Plan and Product Provisions {5–15%}
-> The candidate will understand how to describe [[Benefit|benefits]] typically offered under [[Long Duration Contract|long duration contracts]] ([[Disability Income|disability income]], [[Long Term Care|long term care]], [[Critical Illness|critical illness]], [[Medicare Supplement]]).
+> The candidate will understand how to describe [[Benefit|benefits]] typically offered under [[Long-Term Insurance Coverage|long duration contracts]] ([[Disability Income Insurance|disability income]], [[Long-Term Care Insurance|long term care]], [[Critical Illness|critical illness]], [[Medicare Supplement]]).
 >
 > 1. Describe typical [[Organization|organizations]] offering these [[Contract|contracts]] and their [[Motivation|motivation]] for offering each type
 > 2. Describe each type of [[Contract|contract]] listed above
-> 3. Evaluate the potential [[Moral Hazard|moral hazards]] and [[Financial|financial]] and [[Legal Risk|legal risks]] associated with each [[Contract|contract]]
+> 3. Evaluate the potential [[Moral Hazard|moral hazards]] and [[Financial|financial]] and [[Operational Risk|legal risks]] associated with each [[Contract|contract]]
 > 4. Describe [[Social Security Disability Income Benefit|Social Security disability income benefits]] in the [[United State|United States]]
 >
 > **Readings:**
@@ -49,13 +49,13 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > [!example]- Manual Rates {25–35%}
 > The candidate will understand how to calculate [[Rate|rates]] for each of the [[Contracts Described|contracts described]] in [[Learning]] Objective 1.
 >
-> 1. Identify and evaluate sources of [[Data|data]] needed for [[Pricing|pricing]], including the [[Quality|quality]], [[Appropriateness|appropriateness]], and [[Limitation|limitations]] of each [[Data Source|data source]]
+> 1. Identify and evaluate sources of [[Data|data]] needed for [[Pricing|pricing]], including the [[Quality|quality]], [[Appropriateness|appropriateness]], and [[Limitation|limitations]] of each [[Data Quality|data source]]
 > 2. Calculate and recommend [[Assumption|assumptions]]
-> 3. Calculate and recommend a [[Manual Rate|manual rate]] (includes [[Base Rate Development|base rate development]] and applying a [[Rating Manual|rating manual]]) and describe the role of [[Data Credibility|data credibility]] used to calculate the [[Rate|rate]]
-> 4. Identify [[Critical Metrics|critical metrics]] to evaluate [[Actual|actual]] vs. expected results
-> 5. Recommend [[Strategy|strategies]] for [[Properly Modelling|properly modelling]], [[Pricing|pricing]], [[Underwriting|underwriting]], and [[Funding Case-Specific Risk|funding case-specific risks]]
+> 3. Calculate and recommend a [[Manual Rate|manual rate]] (includes [[Base Rate Development|base rate development]] and applying a [[Manual Rate|rating manual]]) and describe the role of [[Data Credibility|data credibility]] used to calculate the [[Rate|rate]]
+> 4. Identify [[Actual vs Expected Analysis|critical metrics]] to evaluate [[Actual|actual]] vs. expected results
+> 5. Recommend [[Strategy|strategies]] for [[Properly Modelling|properly modelling]], [[Pricing|pricing]], [[Underwriting|underwriting]], and [[Funding|funding case-specific risks]]
 > 6. Describe the purpose and objectives of [[Guaranty Association|Guaranty Associations]] and the [[Multi-State|multi-state]] framework for [[Long Term Care Rate Increase|long term care rate increases]]
-> 7. Apply actuarial [[Best Practice|best practices]] in evaluating and projecting [[Cash Flow|cash flows]] ([[Insurance Premium|premiums]], [[Claim|claims]], [[Investment Income|investment income]], [[Expenses|expenses]], [[Commission|commissions]]), [[Liability|liabilities]], and [[Required Capital|required capital]]
+> 7. Apply actuarial [[Best Practice|best practices]] in evaluating and projecting [[Cash Flow|cash flows]] ([[Insurance Premium|premiums]], [[Claim|claims]], [[Investment Income|investment income]], [[Expenses|expenses]], [[Commission|commissions]]), [[Liability|liabilities]], and [[Regulatory Capital|required capital]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021
@@ -78,14 +78,14 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - ASOP 41: Actuarial Communications (excluding Appendices) (2g)
 
 > [!example]- Reserving {15–25%}
-> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Long-Duration Contract|long-duration contracts]].
+> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Long-Term Insurance Coverage|long-duration contracts]].
 >
-> 1. Describe and calculate types of [[Non-Claim Reserves Held|non-claim reserves held]] for [[Long Duration Health Contract|long duration health contracts]]: [[Policy Reserve|policy reserves]], [[Unearned Premium Reserve|unearned premium reserves]], and [[Premium Deficiency Reserve|premium deficiency reserves]]
-> 2. Describe and calculate types of [[Claim Reserves Held|claim reserves held]] for [[Long Duration Health Contract|long duration health contracts]]: [[PVANYD]] (present value of [[Amount|amounts]] not [[Yet|yet]] due), [[ICOS]] (in [[Course|course]] of [[Settlement|settlement]]), and [[IBNR]] ([[Incurred|incurred]] but not [[Reported|reported]])
-> 3. Explain the [[Limitation|limitations]] and [[Biase|biases]] of [[Traditional Valuation|traditional valuation]] methods
+> 1. Describe and calculate types of [[Non-Claim Reserves Held|non-claim reserves held]] for [[Health Insurance|long duration health contracts]]: [[Policy Reserve|policy reserves]], [[Unearned Premium|unearned premium reserves]], and [[Premium Deficiency Reserve|premium deficiency reserves]]
+> 2. Describe and calculate types of [[Claim Reserve|claim reserves held]] for [[Health Insurance|long duration health contracts]]: [[PVANYD]] (present value of [[Amount|amounts]] not [[Yet|yet]] due), [[ICOS]] (in [[Course|course]] of [[Settlement|settlement]]), and [[IBNR]] ([[Incurred|incurred]] but not [[Reported|reported]])
+> 3. Explain the [[Limitation|limitations]] and [[Biase|biases]] of [[Claim Reserve|traditional valuation]] methods
 > 4. Calculate appropriate [[Claim Reserve|claim reserves]] given [[Data|data]]
 > 5. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claim Processing|claim processing]] changes, etc.)
-> 6. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
+> 6. Evaluate [[Data Quality|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
 > 7. Apply [[Best Practice|appliable best practices]] related to [[Reserving|reserving]]
 >
 > **Readings:**
@@ -99,11 +99,11 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - CP321-105-25: Supplemental Comments (March 2022) for CP321-104-25 (3a, 3g)
 
 > [!example]- Insurer Financial Statements {5–15%}
-> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] for [[Long Duration Contract|long duration contracts]].
+> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] for [[Long-Term Insurance Coverage|long duration contracts]].
 >
-> 1. Compare [[Valuation Standard|valuation standards]] under [[IFRS 17, US GAAP]], and [[Statutory]] Accounting
+> 1. Compare [[Valuation Principle|valuation standards]] under [[IFRS 17, US GAAP]], and [[Statutory]] Accounting
 > 2. Prepare [[Financial Statements|financial statements]] in accordance with Generally Accepted Accounting [[Principle|Principles]] ([[GAAP]]) and [[IFRS]] 17
-> 3. Interpret the results of both [[Statutory|statutory]] and [[GAAP Statement|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
+> 3. Interpret the results of both [[Statutory|statutory]] and [[GAAP|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
 > 4. [[Project Financial|Project financial]] outcomes and recommend a [[Strategy|strategy]]
 > 5. Apply [[Best Practice|applicable best practices]]
 >
@@ -113,12 +113,12 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - IFRS 17 Insurance Contract Examples (4b, 4d)
 
 > [!example]- Asset Adequacy {0–10%}
-> The candidate will understand how to evaluate [[Asset Matching|asset matching]] and [[Asset Adequacy Standard|asset adequacy standards]] for [[Long Duration Contract|long duration contracts]].
+> The candidate will understand how to evaluate [[Asset Matching|asset matching]] and [[Asset Adequacy Standard|asset adequacy standards]] for [[Long-Term Insurance Coverage|long duration contracts]].
 >
-> 1. Understand the [[Principle|principles]] of [[Asset-Liability]] Management ([[ALM]])
+> 1. Understand the [[Principle|principles]] of [[Asset-Liability Management|Asset-Liability]] Management ([[Asset-Liability Management|ALM]])
 > 2. Evaluate techniques for addressing [[Mismatched Asset|mismatched assets]] and [[Liability|liabilities]]
-> 3. Describe [[Asset Adequacy|asset adequacy]] approaches commonly applied to [[Long-Duration Health Contract|long-duration health contracts]]
-> 4. Describe [[Cash Flow Projection|cash flow projections]] and interactions between [[Asset|asset]] and [[Liability Cash Flow|liability cash flows]]
+> 3. Describe [[Asset Adequacy Analysis|asset adequacy]] approaches commonly applied to [[Health Insurance|long-duration health contracts]]
+> 4. Describe [[Cash Flow Projection|cash flow projections]] and interactions between [[Asset|asset]] and [[Asset Adequacy Analysis|liability cash flows]]
 >
 > **Readings:**
 > - CP321-108-25: ALM for Life, Annuities, and Pensions, Sections 2, 5 & 6 (5a, 5b)
@@ -126,15 +126,15 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - ASOP 22: Statements of Actuarial Opinion Based on Asset Adequacy Analysis for Life Insurance, Annuity, or Health Insurance Reserves and Other Liabilities (excluding Appendices) (5c)
 
 > [!example]- Retiree Group Benefits {20–30%}
-> The candidate will understand how to design and perform [[Valuation|valuations]] of [[Retiree Group Benefit|retiree group benefits]].
+> The candidate will understand how to design and perform [[Valuation|valuations]] of [[Retiree Group Benefits|retiree group benefits]].
 >
 > 1. Describe why [[Employers Offer Retiree Group Benefit|employers offer retiree group benefits]]
 > 2. Determine appropriate [[Demographic|demographic]], [[Economic|economic]], and [[Benefit|benefit]] assumptions and apply to a [[Retiree Health Valuation|retiree health valuation]]
-> 3. Determine [[Employer Liability|employer liabilities]], [[Service Cost|service cost]], and [[Expense|expense]] for [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit|post-employment benefits]] and prepare [[Disclosure|disclosure]] information for [[Financial Reporting|financial reporting]] purposes
-> 4. Describe current issues faced by [[Government|governments]], [[Employer|employers]], and [[Employee|employees]] related to [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit|post-employment benefits]]
-> 5. Apply actuarial [[Best Practice|best practices]] to [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit Plan|post-employment benefit plans]]
-> 6. Propose ways to manage the [[Range|range]] of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]] through [[Retiree Health|retiree health]] and [[Life Plan Design|life plan designs]]
-> 7. Advise a [[Plan Sponsor|plan sponsor]] regarding the choice of design elements for their [[Retiree Health|retiree health]] program given [[Situational Context|situational context]]
+> 3. Determine [[Retiree Group Benefits|employer liabilities]], [[Service Cost|service cost]], and [[Expense|expense]] for [[Retiree Group Benefits|post-retirement]] and [[Retiree Group Benefits|post-employment benefits]] and prepare [[Disclosure|disclosure]] information for [[Financial Reporting|financial reporting]] purposes
+> 4. Describe current issues faced by [[Government|governments]], [[Employer|employers]], and [[Employee|employees]] related to [[Retiree Group Benefits|post-retirement]] and [[Retiree Group Benefits|post-employment benefits]]
+> 5. Apply actuarial [[Best Practice|best practices]] to [[Retiree Group Benefits|post-retirement]] and [[Post-Employment Benefit Plan|post-employment benefit plans]]
+> 6. Propose ways to manage the [[Range|range]] of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]] through [[Retiree Group Benefits|retiree health]] and [[Life Plan Design|life plan designs]]
+> 7. Advise a [[Plan Sponsor|plan sponsor]] regarding the choice of design elements for their [[Retiree Group Benefits|retiree health]] program given [[Situational Context|situational context]]
 >
 > **Readings:**
 > - CP321-110-25: Chapter 24 of Morneau Shepell Handbook of Canadian Pension & Benefit Plans, 17th Edition, 2020 (6a, 6b, 6d, 6f, 6g)

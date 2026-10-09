@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8700e906dd3cf7ea678d65ac34baade17c85e4a6750a2931e629dce294b6013b
+  content_hash: sha256:c47b418feb89c929b6553804fb4a6ba0480c6daf1fda5c411a2b7532eaa31287
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,13 +28,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 ## Learning Objectives
 
 > [!example]- Reserving {15–30%}
-> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Group|group]] and [[Health Insurance Contract|health insurance contracts]].
+> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Group|group]] and [[Group Health Insurance|health insurance contracts]].
 >
 > 1. Describe the types of [[Claim Reserve|claim reserves]]
-> 2. Explain the [[Limitation|limitations]] and [[Biase|biases]] of the [[Traditional Valuation|traditional valuation]] methods
+> 2. Explain the [[Limitation|limitations]] and [[Biase|biases]] of the [[Claim Reserve|traditional valuation]] methods
 > 3. Calculate appropriate [[Claim Reserve|claim reserves]] given [[Data|data]]
 > 4. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claim Processing|claim processing]] changes, etc.)
-> 5. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
+> 5. Evaluate [[Data Quality|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate [[non-IBNR]] types of [[Reserve|reserves]] and explain when each is [[Required|required]]
 > 7. Apply [[Best Practice|applicable best practices]] related to [[Reserving|reserving]]
 >
@@ -48,10 +48,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - Canadian Institute of Actuaries Standards of Practice - Insurance, Jun 2024, sections 1400, 1510, 1700, 2100, 2200 & 2300 (1d, 1g)
 
 > [!example]- Financial Statements {20–35%}
-> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] in accordance with [[IFRS]].
+> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with [[IFRS]].
 >
 > 1. Interpret [[Insurer Financial Statement|insurer financial statements]] from the [[Viewpoint|viewpoint]] of various [[Stakeholder|stakeholders]]
-> 2. Evaluate key [[Financial Performance|financial performance]] measures used by [[Life|life]] and [[Health Insurer|health insurers]] for both [[Short|short]] and [[Long-Duration Contract|long-duration contracts]]
+> 2. Evaluate key [[Key Financial Measures|financial performance]] measures used by [[Life|life]] and [[Insurer|health insurers]] for both [[Short|short]] and [[Long-Term Insurance Coverage|long-duration contracts]]
 > 3. [[Project Financial|Project financial]] outcomes and recommend a [[Strategy|strategy]] to [[Senior|senior]] management to achieve [[Financial|financial]] goals
 > 4. Describe how to compute the [[Taxable Income|taxable income]] of a [[Life|life]] and [[Health Insurance Company|health insurance company]]
 > 5. Explain [[Fair|fair]] value accounting [[Principle|principles]] and describe [[International Financial Reporting Standard|International Financial Reporting Standards]] ([[IFRS]])
@@ -78,7 +78,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Regulation & Taxation {15–25%}
 > The candidate will understand how to evaluate the impact of [[Regulation|regulation]] and [[Taxation|taxation]] on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in Canada.
 >
-> 1. Describe the [[Regulatory|regulatory]] and [[Policy Making Process|policy making process]] in Canada
+> 1. Describe the [[Regulatory|regulatory]] and [[Insurance Regulation|policy making process]] in Canada
 > 2. Describe the major [[Applicable Law|applicable laws]] and [[Regulation|regulations]] and evaluate their impact
 > 3. Understand the impact of the [[Taxation|taxation]] of both [[Insurer|insurance companies]] and the [[Product|products]] they [[Provide|provide]]
 >
@@ -109,9 +109,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - GH201-648-25: Canadian Life and Health Insurance Industry Agreement to Protect Canadians’ Drug Coverage (3b)
 
 > [!example]- Government Programs {20–30%}
-> The candidate will understand how to describe and evaluate [[Government Programs Providing Health|government programs providing health]] and [[Disability Benefit|disability benefits]] in Canada.
+> The candidate will understand how to describe and evaluate [[Social Insurance|government programs providing health]] and [[Social Insurance|disability benefits]] in Canada.
 >
-> 1. Describe [[Eligibility Requirement|eligibility requirements]] for [[Social|social]] programs in Canada and the [[Benefit|benefits]] provided
+> 1. Describe [[Underwriting|eligibility requirements]] for [[Social|social]] programs in Canada and the [[Benefit|benefits]] provided
 > 2. Describe how [[Private Group Insurance Plan|private group insurance plans]] work within the framework of [[Social|social]] programs in Canada
 >
 > **Readings:**
@@ -152,9 +152,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Flow of Funds {5–15%}
 > The candidate will understand how to describe the [[Flow|flow]] of [[Fund|funds]] in the [[Health Care System|health care system]] and the role of [[Provider|providers]] in the [[System|system]].
 >
-> 1. [[Establish]] a framework of how [[Funds Flow|funds flow]] through the [[Health Care System|health care system]]
+> 1. [[Establish]] a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
 > 2. Describe the role [[Physicians Play|physicians play]] and their influence on the [[Flow|flow]] of [[Fund|funds]]
-> 3. Describe the [[Market Power|market power]] of [[Hospital|hospitals]] and how [[Provider Systems Compete|provider systems compete]] for [[Patient|patients]], [[Physician|physicians]], and [[Contract|contracts]]
+> 3. Describe the [[Health Care System|market power]] of [[Hospital|hospitals]] and how [[Provider Systems Compete|provider systems compete]] for [[Patient|patients]], [[Physician|physicians]], and [[Contract|contracts]]
 > 4. Compare the [[Flow|flow]] of [[Fund|funds]] in the [[US]] and [[Canadian Health Care System|Canadian health care systems]] and evaluate the value of different [[System|systems]]
 >
 > **Readings:**

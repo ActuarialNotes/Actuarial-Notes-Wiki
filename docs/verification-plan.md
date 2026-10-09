@@ -259,7 +259,27 @@ The order is value per token. Clear what is known to be wrong first. Do what is 
 next. Then go exam by exam, so each campaign ends with an exam whose questions, concepts,
 readings and page are all checked, which is the state a student can trust.
 
-### Wave 1: the backlog (bands 0 and 1). About 80 files.
+### Wave 1: the backlog (bands 0 and 1). About 80 files. **Done** (run `2026-10-09T19:04Z/2db6`)
+
+> **Outcome** (`.verify/_runs/2026-10-09T19-04Z-2db6.md`): 79 files, 72 now verified (21
+> high, 50 medium, 1 low). All 64 backlog findings outside Exam 6C's page were closed,
+> including the four criticals; 84 more were found and 78 of them fixed in the run.
+>
+> Left behind:
+> - **In review**, each for a source that couldn't be read: Close Year, Profit and
+>   Contingency Provision, Insurer and fm-231.
+> - **Untouched:** Exam 6C's syllabus page, which waits on its F-001.
+> - **New open findings on four 6C pages:** *MCT* and *Capital Required* multiply by 1.5
+>   where OSFI's guideline divides (critical); *Solvency* and *Supervisory Target Capital
+>   Ratio* use LICAT's name for the denominator (major).
+>
+> Two source drifts surfaced:
+> - SOA re-issued the Exam P sample PDFs under the same URLs. No key differs on the 565
+>   questions matched; 109 still need a look.
+> - CAS revised the Fall 2026 Exam 5 outline in place (v02), and `Exam 5 (CAS).md` is out
+>   of step with it.
+>
+> Fold both into the Exam P re-check and the Exam 5 campaign.
 
 - **4 disputed concept pages** with open criticals: *Complement of Credibility*,
   *Expense Ratio*, *Exposure Base* and *In-Force*. **Each needs a human decision**

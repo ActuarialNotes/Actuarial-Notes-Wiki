@@ -1,13 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f6c272a378f205d6b79a7ce4bc9d2b5eb7859283f1c3f537fca39313f5655d1a
   sources: []
-  open_findings: 0
-  open_critical: 0
+  open_findings: 1
+  open_critical: 1
   log: .verify/Concepts/Capital Required.md
 ---
 

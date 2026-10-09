@@ -1,0 +1,19 @@
+---
+target: Concepts/Supervisory Target Capital Ratio.md
+created: 2026-10-09
+---
+
+## [F-001] MCT denominator named 'Base Solvency Buffer', a LICAT term
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: major
+- status: open
+- locus: 'What a breach brings' bullet and the worked example ('a base solvency buffer of $150 million')
+- claim: Growth raises the Base Solvency Buffer; an insurer holds a 158% MCT ratio with capital available of $237 million and a base solvency buffer of $150 million.
+- evidence: OSFI's MCT guideline (2024), §1.1.1: 'The resulting MCT capital requirements are then divided by 1.5 to derive the minimum capital requirements. The MCT ratio is expressed as the capital available over the minimum capital required.' §1.1.5 repeats it. The phrase 'base solvency buffer' occurs nowhere in the guideline; it is LICAT's term (the life insurers' test). OSFI Minimum Capital Test guideline (2024), §1.1.1 and §1.1.5, sha256:34c28477cae162661beec2d0b80b23314746df6b488fe6b959fe0606177fc60e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024
+- source_rank: 1
+- proposed_action: Use the guideline's term, minimum capital required, throughout; the 150% target arithmetic is otherwise on the right basis.
+- applied: false
+- fingerprint: 029812012d47

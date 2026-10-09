@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
   ChevronLeft,
@@ -659,15 +660,16 @@ function CraftPlay({
 }
 
 function BoardHeader({ tally }: { tally: TopicTally | null }) {
-  const navigate = useNavigate()
+  // Back where the board was opened from — the Quiz tab, or a study guide.
+  const back = useBack({ to: '/', label: 'Quiz' })
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
       <MobileNavButton className="lg:hidden" />
       <button
         type="button"
-        onClick={() => navigate('/')}
-        aria-label="Back to the Quiz tab"
-        title="Quiz"
+        onClick={back.go}
+        aria-label={backName(back)}
+        title={backName(back)}
         className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <ChevronLeft className="h-4 w-4" />

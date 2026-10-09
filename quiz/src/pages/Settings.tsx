@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { useBack } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
@@ -267,6 +269,7 @@ const ACCOUNT_NAV_ITEMS = [
 
 export default function Settings() {
   const navigate = useNavigate()
+  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
   const { user, loading: authLoading } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const { isPro, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
@@ -1116,8 +1119,8 @@ export default function Settings() {
             </> /* end user && */}
 
             <div className="text-center pt-2">
-              <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                ← Back to Dashboard
+              <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                ← Back to {back.label}
               </Link>
             </div>
           </div>

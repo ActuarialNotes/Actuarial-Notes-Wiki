@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useBack } from '@/hooks/useBack'
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
@@ -28,7 +29,7 @@ import { QuizTimer } from '@/components/QuizTimer'
 import { RaidHitChip } from '@/components/actuaria/RaidHitChip'
 import { reportRaidHit } from '@/lib/actuaria/raidClient'
 import { ACTUARIA_ENABLED } from '@/lib/featureFlags'
-import { moveScreen } from '@/lib/viewTransition'
+import { moveScreen, REPLACE_AS_PUSH } from '@/lib/viewTransition'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
@@ -43,6 +44,14 @@ export default function Quiz() {
   const [searchParams] = useSearchParams()
   const { search } = useLocation()
   const navigate = useNavigate()
+  // Out of the quiz the way the reader came in — the exam's builder, a study
+  // guide, the search they were on, Concept Craft — back where it was left.
+  // `from` only says where to go for a quiz opened straight from its address.
+  const quizFrom = searchParams.get('from')
+  const back = useBack({
+    to: quizFrom === 'search' ? '/search' : quizFrom === 'dashboard' ? '/dashboard' : '/',
+    label: quizFrom === 'search' ? 'Search' : quizFrom === 'dashboard' ? 'Dashboard' : 'Quiz',
+  })
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
@@ -351,10 +360,7 @@ export default function Quiz() {
   function handleQuit() {
     leavingRef.current = true
     leaveQuiz()
-    const from = searchParams.get('from')
-    if (from === 'search') navigate('/search')
-    else if (from === 'dashboard') navigate('/dashboard')
-    else navigate('/')
+    back.go()
   }
 
   function handleSelectAnswer(key: string) {
@@ -456,7 +462,9 @@ export default function Quiz() {
         setManualGrade(key, grade)
       }
       await completeQuiz(user?.id ?? null, masteryRecords)
-      navigate(`/review?${searchParams.toString()}`)
+      // In the quiz's place, not after it: Back from the review goes to where
+      // the quiz was started, never onto a quiz that is over.
+      navigate(`/review?${searchParams.toString()}`, { replace: true, state: REPLACE_AS_PUSH })
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save quiz. Please try again.')
       setIsSubmitting(false)
@@ -515,8 +523,8 @@ export default function Quiz() {
             <p className="text-sm text-muted-foreground">
               No questions match your selected filters. Try different topics or difficulty.
             </p>
-            <Button onClick={() => navigate('/')} variant="outline" className="w-full">
-              Back to Home
+            <Button onClick={back.go} variant="outline" className="w-full">
+              Back to {back.label}
             </Button>
           </CardContent>
         </Card>

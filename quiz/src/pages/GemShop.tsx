@@ -29,6 +29,7 @@ import { ShipGlyph } from '@/components/actuaria/ShipGlyph'
 import { storeShips, SHIP_SLOT_LABEL, type ShipCosmetic } from '@/data/actuariaShips'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { backLabel, useBack } from '@/hooks/useBack'
 import { cn } from '@/lib/utils'
 
 type StoreTab = 'characters' | 'skins' | 'banners' | 'ships'
@@ -69,6 +70,7 @@ function RarityBadge({ rarity }: { rarity: AnyRarity }) {
  */
 export default function GemShop() {
   const navigate = useNavigate()
+  const back = useBack({ to: '/store', label: 'Store' })
   const { user } = useAuth()
   const { isPro, isBetaTester, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
@@ -270,9 +272,10 @@ export default function GemShop() {
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
 
-      {/* Up to the Store this shop is a corner of — back where it was left. */}
-      <Link to="/store" state={RESTORE_SCROLL} className="-mb-3 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="h-4 w-4" /> Store
+      {/* Back to where the reader came from, or up to the Store this shop is a
+          corner of — either way, back where it was left. */}
+      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backLabel(back)} className="-mb-3 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="h-4 w-4" /> {back.label}
       </Link>
 
       {/* Header */}

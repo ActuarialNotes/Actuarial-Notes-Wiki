@@ -114,6 +114,17 @@ VAGUE = {
     "assess", "compare", "recommend", "interpret", "demonstrate", "analyse", "discuss",
     "construct", "determine", "select", "perform", "develop", "create", "manage", "use",
 }
+# Targets a person read in context and found to name no concept, though the word
+# lists above can't tell: each is part of a sentence the noun-phrase linker cut out
+# ("report in an [[Effective Manner While]] following standards", "companies in various
+# [[Jurisdiction|jurisdictions]]"). Reviewed for Phase B of CONCEPT_GAPS_PLAN.md; keys as
+# concept_key.
+REVIEWED_NOISE = {
+    "benefit payable", "jurisdiction", "single non dividend paying asset", "analytical effort",
+    "computational efficiency", "common language", "effective manner while", "recommended analytics",
+    "straightforward manner", "final product", "biase introduced", "otherwise modify data",
+    "vague question",
+}
 # Leading modifiers that don't change which concept is meant: `Applicable Best
 # Practice` is `Best Practice`.
 MODIFIERS = {"applicable", "appropriate", "key", "various", "relevant", "certain", "major", "typical", "basic", "principal"}
@@ -156,7 +167,7 @@ TERMS_OF_ART = {
     "pooling", "layer", "floor", "forecasting", "underwriting", "insurable", "spinoff", "divestiture",
     "heterogeneity", "granularity", "segmentation", "terrorism", "negligence", "cashflow",
     "autocorrelation", "isometry", "counterparty", "decomposability", "commission", "endorsement",
-    "filing", "jurisdiction", "retiree", "self insurer", "no arbitrage", "jump diffusion",
+    "filing", "retiree", "self insurer", "no arbitrage", "jump diffusion",
     "black schole", "black schole merton", "chain ladder", "bornhuetter ferguson", "bühlmann",
     "log normal", "kolmogorov smirnov", "multi employer", "post retirement", "wind up",
     "termination wind up", "termination windup", "mortality morbidity", "insurance reinsurance",
@@ -181,6 +192,8 @@ def is_noise(name: str) -> bool:
     """A target that names no concept (see VAGUE / PLAIN)."""
     if name.endswith("'"):
         return True                          # `[[Company']]s` — a possessive cut in half
+    if concept_key(name) in REVIEWED_NOISE:
+        return True
     words = concept_key(name).split()
     if not words:
         return True

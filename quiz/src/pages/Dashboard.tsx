@@ -557,7 +557,7 @@ export default function Dashboard() {
   // Primary actions — Read concepts (left) + the narrow Fix Mistakes button +
   // Start Today's Quiz (right). Authored here because this page owns their
   // triggers, but handed to ReadinessCard, which renders them straight under
-  // the Exam readiness card, outside any card, above the schedule strip. Fix Mistakes lives inside this block on purpose — the
+  // the Exam readiness card, outside any card. Fix Mistakes lives inside this block on purpose — the
   // pinned-header copies swap in once primaryActionsRef has scrolled past, so
   // all three have to scroll out together.
   const primaryActions = activeSyllabus ? (
@@ -873,7 +873,7 @@ export default function Dashboard() {
           here by ReadinessCard (below) so they lead the dashboard: the score is
           the answer to the question the page exists to answer, and the plan
           under it is what to do about that answer today. The primary actions
-          (`primaryActions`) sit under the readiness card, above the schedule. */}
+          (`primaryActions`) sit under the readiness card, the schedule above it. */}
       {activeSyllabus && <div ref={setReadinessSlotEl} />}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}

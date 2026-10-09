@@ -299,8 +299,8 @@ interface Props {
   readinessSlot?: HTMLElement | null
   /** The primary actions that act on this score (Read concepts / Fix mistakes /
    *  Start quiz). Rendered straight under the Exam readiness card, bare on the
-   *  page, between it and the schedule — but authored by the Dashboard, which
-   *  owns their triggers. Omitted, the schedule follows the card directly. */
+   *  page — but authored by the Dashboard, which
+   *  owns their triggers. Omitted, the group ends with the card. */
   actions?: ReactNode
 }
 
@@ -1061,14 +1061,13 @@ export function ReadinessCard({
 
   // The three cards the Dashboard leads with, in this order:
   //
-  //   1. **Exam readiness** — the headline answer to "how ready am I?". The
-  //      exam's logo, the band verdict and the score as a KPI, then how many
-  //      concepts today's plan still asks for, and the insight line under its
-  //      own small "Insight" label. Under the card, bare on the page, come the
-  //      primary actions (`actions`) that move the score, and then the
-  //      calendar — the exam date it is racing and the schedule strip
+  //   1. **Exam readiness** — led by the calendar, a full-width section of its
+  //      own rather than a card: the exam date the score is racing, the
+  //      target-ready date under it, and the schedule strip
   //      (`examScheduleBlock`, with `dayDetailPanel` for whichever day is
-  //      tapped) — as a full-width section of its own rather than a card.
+  //      tapped). Then the card — the exam's logo, the score as "X% Ready", and
+  //      how many concepts today's plan still asks for — and under it,
+  //      bare on the page, the primary actions (`actions`) that move the score.
   //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
   //      score today. It follows the number rather than the ring: the reader who
   //      has just read "Not started" is looking for the next step, not for a
@@ -1113,7 +1112,7 @@ export function ReadinessCard({
   // that day below. Everything the separate card did — the day panel, the
   // schedule-forming sweep, the target-ready date — happens in this block.
   const examScheduleBlock = (
-    <div ref={studyScheduleCardRef} className="space-y-2">
+    <div ref={studyScheduleCardRef} className="space-y-1">
       <button
         type="button"
         onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
@@ -1159,6 +1158,7 @@ export function ReadinessCard({
         <ExamHeatmap
           layout="linear"
           showExamDateRow={false}
+          dateRowsAbove
           sessions={examSessions}
           examProgressKey={progressKey}
           targetDate={examDate}
@@ -1357,88 +1357,9 @@ export function ReadinessCard({
 
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
-      <Card className="border-0">
-        <CardContent className="p-6 space-y-4">
-          {/* The exam's logo, then title and verdict, with the score itself on
-              the right — the empty half of this row is what the KPI is for. It
-              stacks under the verdict on a narrow phone rather than squeezing it. */}
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-            <div className="flex min-w-0 flex-1 items-center gap-3">
-              {/* The exam's own logo leads the card. The card is scoped to one
-                  exam and the tabs above it switch which — the tile is what says
-                  *which* without re-printing the name, and its accent puts the
-                  exam on the ladder (lib/examColors.ts). Branding, so the tile
-                  itself is aria-hidden and the heading carries the meaning. */}
-              <ExamLogo examKey={progressKey} size="lg" />
-              <div className="min-w-0 space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-muted-foreground">Exam readiness</h3>
-                  {/* The study streak — renders nothing without a live streak. */}
-                  {STREAK_ENABLED && user && <StreakNavBadge />}
-                </div>
-                <p className="text-xl font-semibold tracking-tight leading-tight">{readiness.band.label}</p>
-              </div>
-            </div>
-            {/* The score, and what today did to it. The arrow is the only thing on the
-                card that reports *change* rather than state — green up, red down, and
-                absent entirely when the number hasn't budged, so it stays a signal. It
-                needs no "today" caption under it: the whole card is about this exam right
-                now, and the label it carries for screen readers (and on hover) says the
-                rest without spending a grey line on it (docs/visual-noise-review.md). */}
-            <div className="flex shrink-0 items-center gap-2">
-              {readinessMoveToday !== 0 && (
-                <span
-                  className={
-                    'flex items-center gap-0.5 text-sm font-semibold tabular-nums ' +
-                    (readinessMoveToday > 0
-                      ? 'text-green-600 dark:text-green-400'
-                      : 'text-red-600 dark:text-red-400')
-                  }
-                  title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
-                  aria-label={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} percentage point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
-                >
-                  {readinessMoveToday > 0
-                    ? <ArrowUp className="h-4 w-4" aria-hidden="true" />
-                    : <ArrowDown className="h-4 w-4" aria-hidden="true" />}
-                  {Math.abs(readinessMoveToday)}
-                </span>
-              )}
-              <p
-                className="text-4xl font-bold tabular-nums leading-none tracking-tight"
-                style={{
-                  color: flashRadial ? '#22c55e' : undefined,
-                  transition: 'color 0.8s ease-out',
-                }}
-              >
-                {readinessPct}%
-              </p>
-            </div>
-          </div>
-
-          {/* What today asks for: the concepts left on today's plan. Only
-              where there is a plan to count (Pro, with concepts scheduled). */}
-          {todayLine && <p className="text-base font-medium leading-snug">{todayLine}</p>}
-
-          {/* The insight line, when there is one — smaller, and labelled, so
-              it reads as an aside to the line above rather than a second
-              headline. `readiness.insight` is null on an untouched exam and
-              whenever no rule found anything worth a line, and the block goes
-              with it — nothing generic stands in (lib/readiness.ts). */}
-          {readiness.insight && (
-            <div className="space-y-0.5">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Insight</p>
-              <p className="text-xs text-muted-foreground leading-snug">{readiness.insight.text}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* The ways to act on this score, straight under it and bare on the
-          page — no card around them. */}
-      {actions}
-
-      {/* The calendar: the date the score is racing and the schedule under
-          it, as a full-width section of its own rather than a card. A
+      {/* The calendar leads the group: the date the score is racing, the
+          target-ready date under it, and the schedule under both — a
+          full-width section of its own rather than a card. A
           readiness percentage only means something against a deadline, so
           this carries the day itself, how far off it is, and — when no date
           is set, or the one set isn't a real sitting — the next published
@@ -1450,6 +1371,70 @@ export function ReadinessCard({
         {examScheduleBlock}
         {dayDetailPanel}
       </section>
+
+      <Card className="border-0">
+        <CardContent className="p-6 space-y-4">
+          {/* The exam's logo, then the score as "X% Ready" — no title, verdict
+              or insight: the number is the card's one statement, and the line
+              under it is what to do about it today. */}
+          <div className="flex items-center gap-3">
+            {/* The exam's own logo leads the card. The card is scoped to one
+                exam and the tabs above it switch which — the tile is what says
+                *which* without re-printing the name, and its accent puts the
+                exam on the ladder (lib/examColors.ts). Branding, so the tile
+                itself is aria-hidden and the heading carries the meaning. */}
+            <ExamLogo examKey={progressKey} size="lg" />
+            <h3
+              className="min-w-0 flex-1 text-3xl font-bold tracking-tight leading-none"
+              aria-label={`Exam readiness: ${readinessPct}%`}
+            >
+              <span
+                className="tabular-nums"
+                style={{
+                  color: flashRadial ? '#22c55e' : undefined,
+                  transition: 'color 0.8s ease-out',
+                }}
+              >
+                {readinessPct}%
+              </span>{' '}
+              Ready
+            </h3>
+            {/* What today did to the score. The only thing on the card that
+                reports *change* rather than state — green up, red down, and
+                absent entirely when the number hasn't budged, so it stays a
+                signal. Its label (screen readers, hover) says "today" without
+                spending a grey line on it (docs/visual-noise-review.md). */}
+            {readinessMoveToday !== 0 && (
+              <span
+                className={
+                  'flex shrink-0 items-center gap-0.5 text-sm font-semibold tabular-nums ' +
+                  (readinessMoveToday > 0
+                    ? 'text-green-600 dark:text-green-400'
+                    : 'text-red-600 dark:text-red-400')
+                }
+                title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+                aria-label={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} percentage point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+              >
+                {readinessMoveToday > 0
+                  ? <ArrowUp className="h-4 w-4" aria-hidden="true" />
+                  : <ArrowDown className="h-4 w-4" aria-hidden="true" />}
+                {Math.abs(readinessMoveToday)}
+              </span>
+            )}
+            {/* The study streak — renders nothing without a live streak. */}
+            {STREAK_ENABLED && user && <StreakNavBadge />}
+          </div>
+
+          {/* What today asks for: the concepts left on today's plan. Only
+              where there is a plan to count (Pro, with concepts scheduled). */}
+          {todayLine && <p className="text-base font-medium leading-snug">{todayLine}</p>}
+        </CardContent>
+      </Card>
+
+      {/* The ways to act on this score, straight under it and bare on the
+          page — no card around them. */}
+      {actions}
+
 
       {studyPlanCardContent}
 
@@ -1515,7 +1500,7 @@ export function ReadinessCard({
   return (
     <div className="space-y-4">
       {/* One column. The cards the Dashboard wants at the very top of the
-          page — Exam readiness, its actions and the schedule strip under it,
+          page — the schedule strip, Exam readiness and its actions,
           Today's Study Plan and the Study Guide — portal into the slot it
           supplies; what's left here is the plan's warnings, full width. The
           `order-*` classes keep the inline (no-slot) fallback in the same

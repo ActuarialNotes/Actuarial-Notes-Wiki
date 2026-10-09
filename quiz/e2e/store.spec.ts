@@ -105,6 +105,26 @@ test.describe('store', () => {
   })
 })
 
+test.describe('comparison snapping', () => {
+  // Not every browser snaps to a table cell, so a scroll that comes to rest
+  // between two columns is settled by the sheet itself.
+  test('a scroll that stops between columns settles on the nearest one', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/store?exam=P')
+    await page.getByTestId('store-compare').click()
+    const sheet = page.getByTestId('store-compare-sheet')
+    const scroller = sheet.locator('div.overflow-auto')
+    await expect(sheet.getByRole('columnheader').first()).toBeVisible()
+
+    await scroller.evaluate(el => {
+      el.style.scrollSnapType = 'none' // leave the settling to the script
+      el.scrollTo({ left: 260 })
+    })
+    // Half the pane is a column: 195px at 390, so 260 settles on 195.
+    await expect.poll(() => scroller.evaluate(el => Math.round(el.scrollLeft)), { timeout: 4000 }).toBe(195)
+  })
+})
+
 // The gem shop is a corner of the Store. A full purchase needs auth + a gem
 // balance (Supabase), so this smoke verifies the catalog surface renders and
 // is navigable — the shell every cosmetic purchase starts from.

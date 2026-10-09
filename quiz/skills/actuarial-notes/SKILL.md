@@ -53,6 +53,18 @@ that your answers are not grounded in the notes:
 
 ## What to do when…
 
+**…the work needs a calculation** (development factors, a chain ladder or
+Bornhuetter-Ferguson ultimate, an indicated rate change, a credibility
+standard, an interest rate in another form, an annuity or a present value).
+Don't do the arithmetic yourself. `list_tools` finds the calculator (search it
+by the question you want answered), `describe_tool` gives its inputs (rates are
+decimals: 0.05 for 5%), and `run_tool` runs it. Each tool does one thing, so a
+bigger job is a chain: pass one result's `values` into the next tool's input.
+A result's `judgments` are the user's to make — say which were left at their
+default and ask before treating a default as their choice. Quote its
+`warnings`, show the key steps from its `trace`, and give the user its
+`app_url` so they can open the same run and check it.
+
 **…they ask about a concept** ("what is IBNR?", "explain Bühlmann
 credibility"). `get_concept` (it accepts abbreviations and loose names).
 Explain in this order: the intuition in two sentences; the definition and the

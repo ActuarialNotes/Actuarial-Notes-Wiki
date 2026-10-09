@@ -345,11 +345,14 @@ before touching that area**:
   `initialize`-handshake ones before it), and the mirrors kept in step with the app by tests. Read
   before touching anything under `quiz/api/_mcp/`, `quiz/api/mcp.js`, `lib/knowledgeBase.ts` or
   `quiz/skills/`.
-- `docs/actuarial-tools.md` — **the plan for Actuarial Tools** (not built yet): a third mode of
-  actuarial calculators — reserving, ratemaking, distributions, credibility, reinsurance,
-  financial maths, capital, life — that people use as a card and AI agents use through
-  the MCP connector (`list_tools` / `describe_tool` / `run_tool`) and a JSON API, all running
-  one pure engine in `lib/tools/`. Each tool does one thing (one question, one method; bigger
+- `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
+  page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
+  calculators — eleven so far across reserving, ratemaking, credibility and financial maths —
+  that people use as a card (`components/tools/ToolCard.tsx`) and AI agents use through the
+  MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
+  `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
+  **after any change under `lib/tools/`, run `npm run tools:bundle`** — `bundle.test.ts` fails
+  on a stale copy. Each tool does one thing (one question, one method; bigger
   jobs chain tools), and each is one small live card in the distribution simulator's shape
   (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
@@ -1143,8 +1146,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **197 test files /
-~3205 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **200 test files /
+~3445 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

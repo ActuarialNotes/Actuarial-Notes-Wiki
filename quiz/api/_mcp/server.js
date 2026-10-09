@@ -8,6 +8,10 @@
 //              get_practice_questions / check_answer
 //                                     a practice loop that never shows the answer
 //                                     before the student has given theirs
+//              list_tools / describe_tool / run_tool
+//                                     the Actuarial Tools calculators — the same
+//                                     engine the app's Tools page runs
+//                                     (docs/actuarial-tools.md §7)
 //   resources  the exam catalogue and each syllabus, plus templates for any
 //              concept, source, guide or question
 //   prompts    the skills: a study session, explaining a concept, a practice
@@ -19,6 +23,17 @@
 
 import { ErrorCode, McpError, ResourceNotFoundError } from './protocol.js'
 import { normalizeTerm } from './knowledgeBase.js'
+import {
+  AREAS as TOOL_AREAS,
+  TOOLS as CALCULATORS,
+  ToolInputError as CalculatorInputError,
+  describeTool,
+  runPath,
+  runTool,
+  toolById,
+  toolSlug,
+  toolSummary,
+} from '../_tools/engine.js'
 
 export const SERVER_VERSION = '1.0.0'
 
@@ -38,6 +53,7 @@ export const INSTRUCTIONS = `Actuarial Notes is a study wiki for the SOA and CAS
 - Every result carries a fact-check status. Most pages are "Not fact checked" — community-written and not yet checked against the source text — so when an exact figure, formula or rule matters, say that and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
 - To quiz someone, get_practice_questions returns questions without their answers. Ask one at a time, wait for the student's answer, then call check_answer to mark it and show the official solution. Never reveal or hint at an answer first.
 - An exam marked "in development" has a syllabus outline, few written concept pages and little or no question bank.
+- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, indicated rate change, credibility standards, interest and annuities), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
 - This is study material, not professional actuarial advice.`
 
 const STATUS_WORDS = {
@@ -593,6 +609,111 @@ export const TOOLS = [
   },
 ]
 
+// ── Calculators (docs/actuarial-tools.md §7) ─────────────────────────────────
+
+const AREA_IDS = TOOL_AREAS.map(a => a.id)
+
+function calculator(args) {
+  const id = text(args, 'tool', { required: true, max: 120 })
+  const spec = toolById(id)
+  if (!spec) throw new ToolInputError(`No calculator called "${id}". Call list_tools for the ids.`)
+  return spec
+}
+
+/** A method's concept pages, with their URLs and fact checks where the notes have them. */
+function methodRefs(ix, method) {
+  return {
+    concepts: method.concepts.map(name => {
+      const doc = ix?.concept(name)
+      return doc ? { name: doc.title, url: doc.url, fact_check: doc.factCheck.label } : { name }
+    }),
+    readings: method.readings,
+  }
+}
+
+TOOLS.push(
+  {
+    name: 'list_tools',
+    title: 'List actuarial calculators',
+    description:
+      'List the Actuarial Tools calculators: each does one thing and answers one question (e.g. "What\'s the Bornhuetter-Ferguson ultimate?"). Returns JSON {"tools": [{id, name, area, answers, version}]}. Call describe_tool for a tool\'s inputs, then run_tool. Use these instead of doing actuarial arithmetic yourself.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        area: { type: 'string', enum: AREA_IDS, description: 'Only tools in this practice area.' },
+        query: { type: 'string', description: 'Words to match against a tool\'s name and the question it answers, e.g. "ultimate", "credibility", "annuity".' },
+      },
+    },
+    annotations: { title: 'List actuarial calculators', ...READ_ONLY },
+    standalone: true,
+    _meta: invoking('Listing calculators…', 'Listed calculators'),
+    run(args) {
+      const area = choice(args, 'area', AREA_IDS)
+      const query = text(args, 'query')
+      const words = query ? normalizeTerm(query).split(' ').filter(Boolean) : []
+      const tools = CALCULATORS
+        .filter(t => !area || t.area === area)
+        .filter(t => words.every(w => normalizeTerm(`${t.name} ${t.answers} ${t.id}`).includes(w)))
+        .map(toolSummary)
+      return result(JSON.stringify({ tools }))
+    },
+  },
+  {
+    name: 'describe_tool',
+    title: 'Describe a calculator',
+    description:
+      'Everything needed to call one calculator: its input JSON Schema (rates are decimals, 0.05 for 5%), the judgments it takes (left out, the default is used and the result says so), its notation, the concept pages and readings that define its method, and which tools its result can feed next.',
+    inputSchema: {
+      type: 'object',
+      properties: { tool: { type: 'string', description: 'The tool id from list_tools, e.g. "reserving.chain_ladder".' } },
+      required: ['tool'],
+    },
+    annotations: { title: 'Describe a calculator', ...READ_ONLY },
+    standalone: true,
+    _meta: invoking('Reading the calculator…', 'Read the calculator'),
+    run(args, ix) {
+      const spec = calculator(args)
+      return result(JSON.stringify({ ...describeTool(spec), method: methodRefs(ix, spec.method) }))
+    },
+  },
+  {
+    name: 'run_tool',
+    title: 'Run a calculator',
+    description:
+      'Run one calculator on the user\'s data. Returns JSON: summary, tiles (the headline results), table, values (typed, to pass into the next tool), judgments (each with default: true/false — surface the defaulted ones to the user), warnings, trace (each step\'s formula and result), method (concept pages with their fact check), input_hash and app_url, which opens the same run in the app for the user to check. Deterministic: the same input gives the same result.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        tool: { type: 'string', description: 'The tool id from list_tools.' },
+        input: { type: 'object', description: 'The input, keyed by the field names describe_tool gives. Omitted fields take their defaults.' },
+      },
+      required: ['tool'],
+    },
+    annotations: { title: 'Run a calculator', ...READ_ONLY },
+    standalone: true,
+    _meta: invoking('Calculating…', 'Calculated'),
+    run(args, ix, { site }) {
+      const spec = calculator(args)
+      if (args.input !== undefined && !isObject(args.input)) throw new ToolInputError('"input" must be an object keyed by field name.')
+      let run
+      try {
+        run = runTool(spec, args.input ?? {})
+      } catch (err) {
+        if (err instanceof CalculatorInputError) throw new ToolInputError(`${err.message} Call describe_tool for "${spec.id}" to see its fields.`)
+        throw err
+      }
+      const { input, inputHash, ...rest } = run
+      return result(JSON.stringify({
+        ...rest,
+        input,
+        input_hash: inputHash,
+        method: methodRefs(ix, spec.method),
+        app_url: `${site}${runPath(toolSlug(spec), input)}`,
+      }))
+    },
+  },
+)
+
 const TOOLS_BY_NAME = new Map(TOOLS.map(t => [t.name, t]))
 
 /** A deterministic shuffle when seeded (mulberry32), otherwise a random one. */
@@ -879,14 +1000,16 @@ export function createActuarialNotesServer({ loadIndex, siteUrl = DEFAULT_SITE_U
     methods: {
       'tools/list': params => {
         rejectCursor(params)
-        return { tools: TOOLS.map(({ run: _run, ...definition }) => definition) }
+        return { tools: TOOLS.map(({ run: _run, standalone: _standalone, ...definition }) => definition) }
       },
       'tools/call': async params => {
         const tool = TOOLS_BY_NAME.get(params.name)
         if (!tool) throw new McpError(ErrorCode.INVALID_PARAMS, `Unknown tool: ${params.name}`)
-        const ix = await index()
+        // A calculator needs the notes only to link its method pages, so it
+        // still answers — unlinked — when the knowledge base can't be loaded.
+        const ix = tool.standalone ? await index().catch(() => null) : await index()
         try {
-          return await tool.run(isObject(params.arguments) ? params.arguments : {}, ix)
+          return await tool.run(isObject(params.arguments) ? params.arguments : {}, ix, { site })
         } catch (err) {
           if (err instanceof ToolInputError) return errorResult(err.message)
           throw err

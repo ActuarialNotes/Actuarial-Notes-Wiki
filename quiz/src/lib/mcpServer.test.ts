@@ -65,9 +65,9 @@ const call = async (method: string, params: Record<string, unknown>) =>
   (await (server.methods as Record<string, (p: unknown, c: unknown) => unknown>)[method](params, ctx)) as Record<string, unknown>
 
 describe('tools/list', () => {
-  it('lists seven read-only tools with object input schemas', async () => {
+  it('lists ten read-only tools with object input schemas', async () => {
     const { tools } = (await call('tools/list', {})) as { tools: Record<string, unknown>[] }
-    expect(tools.map(t => t.name)).toEqual(['search', 'fetch', 'list_exams', 'get_exam', 'get_concept', 'get_practice_questions', 'check_answer'])
+    expect(tools.map(t => t.name)).toEqual(['search', 'fetch', 'list_exams', 'get_exam', 'get_concept', 'get_practice_questions', 'check_answer', 'list_tools', 'describe_tool', 'run_tool'])
     for (const t of tools) {
       expect(t).not.toHaveProperty('run')
       expect((t.inputSchema as { type: string }).type).toBe('object')
@@ -374,7 +374,7 @@ describe('completion', () => {
 describe('the loader failing', () => {
   it('reports the knowledge base as unavailable without failing the listings', async () => {
     const broken = createActuarialNotesServer({ loadIndex: async () => { throw new Error('404') } })
-    expect(((await broken.methods['tools/list']({}, ctx)) as { tools: unknown[] }).tools).toHaveLength(7)
+    expect(((await broken.methods['tools/list']({}, ctx)) as { tools: unknown[] }).tools).toHaveLength(10)
     await expect(broken.methods['tools/call']({ name: 'list_exams', arguments: {} }, ctx)).rejects.toMatchObject({
       code: ErrorCode.INTERNAL_ERROR,
       message: expect.stringMatching(/could not be loaded/),
@@ -462,5 +462,51 @@ describe('the connector over the real vault', async () => {
       expect(marked.isError, `${exam.key}: ${id}`).toBeFalsy()
       expect(marked.content[0].text).toMatch(/### (Answer|Model answer|Solution)/)
     }
+  })
+})
+
+describe('the calculators — list_tools, describe_tool, run_tool', () => {
+  it('lists the tools, narrowed by area and by words', async () => {
+    const all = JSON.parse((await tool('list_tools', {})).text).tools
+    expect(all.map((t: { id: string }) => t.id)).toContain('reserving.bornhuetter_ferguson')
+    const reserving = JSON.parse((await tool('list_tools', { area: 'reserving' })).text).tools
+    expect(reserving.every((t: { area: string }) => t.area === 'Reserving')).toBe(true)
+    const found = JSON.parse((await tool('list_tools', { query: 'credibility' })).text).tools
+    expect(found.map((t: { id: string }) => t.id)).toEqual(['credibility.full_credibility_standard', 'credibility.partial_credibility'])
+  })
+
+  it('describes a tool with its schema and its method pages, linked where the notes have them', async () => {
+    const d = JSON.parse((await tool('describe_tool', { tool: 'finance.annuity' })).text)
+    expect(d.input_schema.properties.i).toMatchObject({ type: 'number', minimum: 0, maximum: 1 })
+    expect(d.method.concepts).toEqual([{ name: 'Annuity Immediate' }, { name: 'Annuity Due' }])
+    expect((await tool('describe_tool', { tool: 'nope' })).text).toMatch(/No calculator called "nope"/)
+  })
+
+  it('runs a tool and hands back judgments, the trace and a link to the same run', async () => {
+    const out = JSON.parse((await tool('run_tool', {
+      tool: 'reserving.bornhuetter_ferguson',
+      input: { rows: [{ origin: '2023', latest: 1200, cdf: 1.6762, expected: 1950 }] },
+    })).text)
+    expect(out.values.total_ultimate).toBeCloseTo(1986.65, 1)
+    expect(out.input_hash).toMatch(/^sha256:/)
+    expect(out.app_url).toMatch(/^https:\/\/quiz\.actuarialnotes\.com\/tools\/bornhuetter-ferguson#input=/)
+    expect(out.trace.length).toBeGreaterThan(0)
+    const defaulted = JSON.parse((await tool('run_tool', { tool: 'reserving.age_to_age_factors' })).text)
+    expect(defaulted.judgments).toEqual([expect.objectContaining({ field: 'average', default: true })])
+  })
+
+  it('still calculates when the knowledge base cannot be loaded, just without page links', async () => {
+    const broken = createActuarialNotesServer({ loadIndex: async () => { throw new Error('offline') } })
+    const out = (await broken.methods['tools/call']({ name: 'run_tool', arguments: { tool: 'finance.annuity' } }, ctx)) as ToolResult
+    const body = JSON.parse(out.content[0].text)
+    expect(body.values.present_value).toBeCloseTo(772.17, 2)
+    expect(body.method.concepts).toEqual([{ name: 'Annuity Immediate' }, { name: 'Annuity Due' }])
+  })
+
+  it('answers a bad input with a tool error that points at describe_tool', async () => {
+    const out = await tool('run_tool', { tool: 'finance.annuity', input: { i: 5 } })
+    expect(out.isError).toBe(true)
+    expect(out.text).toMatch(/write 0.05 or "5%".*describe_tool/)
+    expect((await tool('run_tool', { tool: 'finance.annuity', input: 'x' })).isError).toBe(true)
   })
 })

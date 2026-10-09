@@ -83,6 +83,9 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/project', tab: 4, depth: 0, below: 1 },
   // The Store, listed after Projects; the gem shop is a sheet laid over it.
   { prefix: '/store', tab: 4.2, depth: 0, below: 1 },
+  // Tools, listed between Projects and the Shop; a tool's card is a sheet laid
+  // over the catalogue.
+  { prefix: '/tools', tab: 4.1, depth: 0, below: 1 },
   // Actuaria Online, under the sidebar's PLAY label after Projects. Its own
   // tabs, in the order its tab bar lists them (lib/actuaria/nav.ts), so an
   // in-world move slides the way the tabs read and never borrows the Quiz tab's

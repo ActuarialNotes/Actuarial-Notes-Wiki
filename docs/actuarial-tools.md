@@ -1,6 +1,7 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-09 · Status: **plan**. Nothing here is built yet._
+_Last updated: 2026-10-09 · Status: **first set built** — eleven tools on the Tools page and in the
+MCP connector. §16 says what is built and what of this plan is still to do._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -368,7 +369,11 @@ and gives a corrected example. The MCP connector already does this
 
 ### 6.1 Where it lives
 
-**Recommendation: Tools is a third app mode**, beside Study and Cowork, in `lib/appMode.ts`:
+**Decided: Tools is a page in the sidebar** (`/tools`, between Projects and the Shop), inside
+Study mode and open to every reader, gated by `TOOLS_ENABLED`. The rest of this section is the
+option weighed against it, kept for the record.
+
+The option was a third app mode, beside Study and Cowork, in `lib/appMode.ts`:
 
 ```ts
 { id: 'tools', label: 'Tools', tagline: 'Actuarial calculators, for you and your AI',
@@ -869,8 +874,7 @@ previous phase's tools pass R6.
 
 ## 14. Open decisions (the product owner's call)
 
-1. **Mode or section?** Tools as a third mode (recommended, §6.1) or a sidebar entry in
-   Study mode. A third mode out of Preview puts the mode pill in front of every reader.
+1. ~~**Mode or section?**~~ Decided: a page in the sidebar, in Study mode (§6.1).
 2. **Access and pricing.** Recommended: every calculator free and signed-out (it's public
    method maths, it's the SEO and connector story, and an agent needs no account), with
    **Pro** for synced runs, Analyses, Cowork population and, later, higher API limits.
@@ -889,9 +893,59 @@ previous phase's tools pass R6.
 
 ## 15. Immediate next steps
 
-1. Ratify §3 (the ground rules) and decisions 1–3 in §14. Everything in Phase 0 depends on
-   them.
-2. Run the §8.2 bundling spike. It's the one technical unknown.
-3. Transcribe the first two fixtures: an FM sample solution for the Interest Converter and
-   Friedland's Ch. 7 example for Age-to-Age Factors. Then build Phase 0 against them, card
-   first: the card's look is the thing to settle before tools multiply.
+1. **Transcribe the first published fixtures (R6).** No tool reproduces a cited worked example
+   in CI yet, so none says what it was tested against. Start with Friedland's Ch. 7–9
+   examples for the reserving tools, a Werner & Modlin Ch. 8 example for the Loss Ratio Method,
+   and SOA FM sample solutions for the finance tools. Until then the page is open but untested
+   against a source; gating it back to Preview is a one-line change if that should wait.
+2. Map bank questions to tools (§9.2), so explanations gain **Work it in a tool** and the
+   agent eval has its set.
+3. Build the rest of Phase 1 (§11) on the card that now exists.
+
+## 16. What's built (2026-10-09)
+
+**Eleven tools**, each in its own file under `quiz/src/lib/tools/<area>/`:
+
+| Area | Tools |
+|---|---|
+| Reserving | Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson |
+| Ratemaking | Loss Ratio Method (with the variable permissible loss ratio as a tile) |
+| Credibility | Full Credibility Standard, Partial Credibility |
+| Financial mathematics | Interest Converter, Annuity, Present Value |
+
+**The engine** (`quiz/src/lib/tools/`): `types.ts` (the spec and the result envelope),
+`input.ts` (lenient in, strict out: `"5%"`, `"$1,200"`, a bare matrix for a triangle, rows as
+objects or arrays; errors that name the field and the fix), `hash.ts` (a synchronous SHA-256 of
+the canonical input), `run.ts` (the envelope: judgments marked `default` when the caller left
+them out), `schema.ts` (the JSON Schema an agent reads), `share.ts` (`#input=` run links),
+`registry.ts`. Relative imports only. Tested in `tools.test.ts`, including the registry's R9
+rules (one question, at most six scalar inputs, at most three tiles, every handoff accepted by
+its target).
+
+**One engine for the connector (§8.2).** The spike's answer was the fallback: the bundle is
+committed. `npm run tools:bundle` writes `quiz/api/_tools/engine.js` with esbuild (pinned as a
+dev dependency), and `lib/tools/bundle.test.ts` rebuilds it and fails when the committed copy
+differs, then runs every tool through both engines and requires byte-identical results (R1).
+
+**The connector** (`quiz/api/_mcp/server.js`): `list_tools`, `describe_tool`, `run_tool`, the
+server instructions' line on using them, and the skill's "Calculations" section. The three are
+`standalone`: they answer even when the knowledge base can't be loaded, with the method's
+pages unlinked. `run_tool` returns the envelope with `input_hash`, the method's concept pages
+(URL and fact check) and an `app_url` that opens the same run.
+
+**The app**: the sidebar row, `/tools` (catalogue: practice areas as `ListPanel`s, each row the
+tool's question) and `/tools/:slug` (the card alone), `pages/Tools.tsx`, lazy. The card is
+`components/tools/ToolCard.tsx` with `ToolGrid.tsx` (the editable table whose computed columns
+sit beside the inputs; the triangle with its cumulative ↔ incremental switch; Excel paste
+into both) and `ToolMenu.tsx` (copy link, copy for AI, copy JSON, `.xlsx` via
+`lib/toolExport.ts`, Send to…). Pure helpers are `lib/toolDraft.ts`. The title opens the
+method's concept pages in the concept popup, loading the wiki bundle on that first tap.
+`e2e/tools.spec.ts` covers the sidebar, a live recompute, an error kept to one line, Send to…,
+a run link and the phone fit.
+
+**Not built yet**, from §3–§11: published fixtures and the *Tested against* line (R6); the
+question-bank fixtures (§9.2) and the agent eval (§9.4); `POST /api/tools/{id}` and the OpenAPI
+export (§7.2); the MCP prompts `reserve_analysis` / `rate_indication` / `check_my_work`; the
+`%%tool%%` marker on concept pages and the concept-menu row (§6.4); saved runs and Analyses
+(§6.5, §8.5); analytics events (§8.6); the notation and working as KaTeX rather than plain
+text.

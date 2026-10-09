@@ -46,6 +46,36 @@ class NounPhraseTest(unittest.TestCase):
         self.assertEqual(phrases("the Bühlmann credibility premium"), ["Bühlmann credibility premium"])
 
 
+class ChunkerEdgeTest(unittest.TestCase):
+    def test_a_trailing_participle_or_adjective_is_the_clause_not_the_name(self):
+        self.assertEqual(phrases("the capital buffer required"), ["capital buffer"])
+        self.assertEqual(phrases("the insurer's strategic plan"), ["insurer's strategic plan"])
+        self.assertEqual(phrases("aligned with the insurer's strategic"), ["insurer's"])
+
+    def test_adverbs_and_verbs_cut_a_phrase(self):
+        self.assertEqual(phrases("losses actuarially adjusted"), ["losses"])
+        self.assertEqual(phrases("an adjusted rate"), ["adjusted rate"])   # leading, it is part of the name
+        self.assertEqual(phrases("risk once aggregated"), ["risk"])
+        self.assertEqual(phrases("Provide advice on early retirement"), ["advice", "early retirement"])
+
+    def test_defined_benefit_is_a_name(self):
+        self.assertEqual(phrases("Traditional defined benefit plans"), ["Traditional defined benefit plans"])
+        self.assertEqual(phrases("the losses defined above"), ["losses"])
+
+
+class NeedsNoteTest(unittest.TestCase):
+    def test_a_single_word_needs_a_note_only_when_it_has_a_page(self):
+        has = {"Credibility"}.__contains__
+        self.assertTrue(sl.needs_note("Credibility", has))
+        self.assertFalse(sl.needs_note("structure", has))
+        self.assertTrue(sl.needs_note("benefit subsidies", has))   # two words: a page to write
+
+    def test_the_lint_skips_a_lone_word_with_no_page(self):
+        has = {"IBNR"}.__contains__
+        self.assertEqual(sl.unlinked_noun_phrases("the structure of IBNR", has), ["IBNR"])
+        self.assertEqual(sl.unlinked_noun_phrases("the structure of IBNR"), ["structure", "IBNR"])
+
+
 class UnlinkedNounPhraseTest(unittest.TestCase):
     def test_a_link_covers_its_phrase(self):
         self.assertEqual(sl.unlinked_noun_phrases("Perform [[Hazard Rate]] calculations"), [])
@@ -72,7 +102,7 @@ PAGE = """\
 > 2. Estimate [[Tail Factor|tail factors]].
 >
 > ### A heading about stuff
-> - [[Chain Ladder Method]] — its age-to-age factors
+> - [[Chain Ladder Method]] — its age-to-age development factors and its structure
 >
 > **Readings:** Friedland
 
@@ -95,7 +125,9 @@ class LintSubItemsTest(unittest.TestCase):
         self.assertEqual(found, {
             (lines.index("> Candidates should understand loss reserves.") + 1, "`loss reserves`"),
             (lines.index(">    - using the development triangle") + 1, "`development triangle`"),
-            (lines.index("> - [[Chain Ladder Method]] — its age-to-age factors") + 1, "`age-to-age`"),
+            # "structure", one word with no page of its own, need not be a link
+            (lines.index("> - [[Chain Ladder Method]] — its age-to-age development factors and its structure") + 1,
+             "`age-to-age development`"),
         })
 
 

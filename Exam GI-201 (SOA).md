@@ -3,15 +3,16 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   sitting: "Nov 2026/Mar 2027"
   source_sha256: 4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8ba1ff98d4ee4f6bc8cac4d4c9139061674d467fb137878a0a8c43f2602f1228
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:310160e51cb84f394e898b7a3ae96f8b3ff39494d53e98282a159fdb5fc3b503
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam GI-201 (SOA).md
 ---
@@ -23,21 +24,19 @@ verification:
 # Exam GI-201
 **GI 201 – Operational, Financial, Regulatory and Legal** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
 
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- General Insurance Company Operations {5–10%}
-> The candidate will understand the [[Structure|structure]] and functions of a general [[Insurer|insurance company]].
+> The candidate will understand the structure and functions of a general [[Insurer|insurance company]].
 >
-> 1. Describe the various [[Core|core]] and supporting functions of a general [[Insurer|insurance company]].
-> 2. Differentiate among the various [[Classification|classifications]] of [[Insurer|insurers]].
-> 3. Describe the [[Marketing|marketing]] and [[Distribution|distribution]] of general [[Insurance Product|insurance products]].
-> 4. Understand the [[Process|processes]] for [[Underwriting|underwriting]] and [[Pricing General Insurance Policy|pricing general insurance policies]].
-> 5. Describe the [[Activity|activities]] and [[Challenge|challenges]] in the [[Claim Handling Process|claim handling process]].
-> 6. Describe the goals of [[Insurer Risk|insurer risk]] control [[Activity|activities]].
+> 1. Describe the various core and supporting functions of a general [[Insurer|insurance company]].
+> 2. Differentiate among the various classifications of [[Insurer|insurers]].
+> 3. Describe the marketing and distribution of general [[Insurance Policy|insurance products]].
+> 4. Understand the processes for [[Underwriting|underwriting]] and [[Pricing General Insurance Policy|pricing general insurance policies]].
+> 5. Describe the activities and challenges in the [[Claim Handling Process|claim handling process]].
+> 6. Describe the goals of [[Insurer Risk|insurer risk]] control activities.
 > 7. Explain why [[Premium Audit|premium audits]] are conducted.
-> 8. Demonstrate knowledge of general [[Insurance Risk|insurance risks]], [[Peril|perils]], [[Product|product]] characteristics / issues, and [[Contract|contracts]].
+> 8. Demonstrate knowledge of general [[Insurance Risk|insurance risks]], perils, product characteristics / issues, and contracts.
 > 9. Describe and compare the different types of [[Reinsurance|reinsurance]] and [[Risk Mitigation Instrument|risk mitigation instruments]].
 > 10. Demonstrate knowledge of the issues regarding [[International Business|international business]] for [[Insurer|insurance companies]].
 >
@@ -50,16 +49,16 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - Excerpts from Business Law for Insurance Professionals, Assignment 3, pp. 3.29-3.39 (begin on pp. 3.29 with “Financial Considerations in International Business”) (1j)
 
 > [!example]- Regulatory Environment {20–32%}
-> The candidate will understand the [[Regulatory Environment|regulatory environment]] for general [[Insurance|insurance]].
+> The candidate will understand the [[Regulatory Environment|regulatory environment]] for general insurance.
 >
-> 1. Describe the functions and goals of the different [[Form|forms]] of [[Insurance Regulation|insurance regulation]].
-> 2. Describe the [[Protection|protections]] provided by [[Solvency|solvency]] and [[Insolvency Regulation|insolvency regulation]].
-> 3. Understand the issue of [[Discrimination|discrimination]] and [[Insurance|insurance]].
-> 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and [[Telematics|telematics]] in [[Automobile Insurance|automobile insurance]].
-> 5. Describe the [[Development|development]] of general [[Insurance Programs Controlled|insurance programs controlled]] by [[Government|government]] or [[Collective Insurance Industry Organization|collective insurance industry organizations]] and their [[Mechanism|mechanisms]] of operation.
+> 1. Describe the functions and goals of the different forms of [[Insurance Regulation|insurance regulation]].
+> 2. Describe the protections provided by [[Solvency|solvency]] and [[Insolvency Regulation|insolvency regulation]].
+> 3. Understand the issue of discrimination and [[Insurance|insurance]].
+> 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and telematics in [[Automobile Insurance|automobile insurance]].
+> 5. Describe the development of general insurance programs controlled by government or [[Collective Insurance Industry Organization|collective insurance industry organizations]] and their mechanisms of operation.
 > 6. Discuss the issues with the use of [[Credit Score|credit scores]] by [[Insurer|insurers]].
-> 7. Understand the function and [[Regulation|regulation]] of price [[Optimization|optimization]].
-> 8. Outline the function and [[Regulation|regulation]] of [[Captive|captives]].
+> 7. Understand the function and regulation of price [[Optimization|optimization]].
+> 8. Outline the function and regulation of [[Captive|captives]].
 > 9. Understand the functions and [[Regulatory Environment|regulatory environment]] for [[Reinsurance|reinsurance]].
 >
 > **Readings:**
@@ -78,17 +77,17 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, section 10 (2i)
 
 > [!example]- Legal Environment {15–25%}
-> The candidate will understand [[Tort Law|tort law]] and [[Insurance Law|insurance law]] with [[Respect|respect]] to general [[Insurance|insurance]].
+> The candidate will understand [[Tort Law|tort law]] and [[Insurance Law|insurance law]] with respect to general insurance.
 >
-> 1. Describe and interpret the key elements of [[Tort Law|tort law]] and the underlying [[Principle|principles]] of [[Insurance Law|insurance law]].
-> 2. Discuss the issues of [[Tort Trend|tort trends]] and [[Tort Reform|tort reform]] as it [[Apply|applies]] to the general [[Insurance Industry|insurance industry]].
+> 1. Describe and interpret the key elements of [[Tort Law|tort law]] and the underlying principles of [[Insurance Law|insurance law]].
+> 2. Discuss the issues of [[Tort Trend|tort trends]] and [[Tort Reform|tort reform]] as it applies to the general [[Insurance Industry|insurance industry]].
 > 3. Understand the effects of [[Transnational Tort Litigation|transnational tort litigation]].
 > 4. Understand [[Mass Torts-class Action Suit|mass torts/class action suits]] and discuss their effect on the general [[Insurance Industry|insurance industry]].
 > 5. Understand the use of [[No-Fault Insurance|no-fault insurance]].
-> 6. Understand the [[International Legal Environment|international legal environment]] as it relates to general [[Insurance|insurance]].
-> 7. Discuss the influence of the U.S. [[Tort Law Environment|tort law environment]] in other [[Country|countries]].
-> 8. Discuss the issue of [[Social Inflation|social inflation]] and its effect on general [[Insurance|insurance]].
-> 9. Describe and interpret [[Legal Cases-issues Included|legal cases/issues included]] in the [[Syllabus Resource|syllabus resources]].
+> 6. Understand the [[International Legal Environment|international legal environment]] as it relates to general insurance.
+> 7. Discuss the influence of the U.S. [[Tort Law Environment|tort law environment]] in other countries.
+> 8. Discuss the issue of [[Social Inflation|social inflation]] and its effect on general insurance.
+> 9. Describe and interpret [[Legal Cases-issue|legal cases/issues]] included in the [[Syllabus Resource|syllabus resources]].
 >
 > **Readings:**
 > - Excerpts from Business Law for Insurance Professionals, Assignments 1 & 2 (3a, 3i)
@@ -100,7 +99,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - Social Inflation: Navigating the Evolving Claims Environment, The Geneva Association, Dec 2020 (pp. 6-17, 19-34 & 36-38) (3h-i)
 
 > [!example]- Financial Economics {5–8%}
-> The candidate will understand elements of [[Financial Economics|financial economics]] relevant to general [[Insurance|insurance]].
+> The candidate will understand elements of [[Financial Economics|financial economics]] relevant to general insurance.
 >
 > 1. Demonstrate knowledge of [[Behavioral Finance|behavioral finance]].
 > 2. Demonstrate knowledge of [[Asset Liability Management Strategy|asset liability management strategies]] for general [[Insurer|insurance companies]].
@@ -118,7 +117,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > 2. Understand and apply the concepts of [[Insurance-reinsurance|insurance/reinsurance]] accounting.
 > 3. Understand the different [[Financial Reporting Standard|financial reporting standards]] for general [[Insurer|insurers]].
 > 4. Understand key terms and considerations related to [[Claim Liability|claim liabilities]].
-> 5. Understand the [[Reporting|reporting]] of [[Financial Instrument|financial instruments]].
+> 5. Understand the reporting of [[Financial Instrument|financial instruments]].
 >
 > **Readings:**
 > - IAA Risk Book: Liabilities for General Insurance, Insurance Regulation Committee, International Actuarial Association, May 2023 (pp. 2-22) (5a)
@@ -146,7 +145,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Ch. 10: Performance Measurement for General Insurers (excluding 10.4.3, and 10.8.3.1-10.9.1) (6a)
 >     - Ch. 11: Financial Ratios for Insurers (excluding 11.6.2, 11.7.1, 11.8, and 11.10-11.11) (6a-b)
 >     - Ch. 12: Solvency Monitoring (excluding 12.5.3, 12.9.2-12.9.3, 12.10.2, 12.11 and 12.13) (6c-e)
-> - IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial 6a, c-d, f Association, May 2023, section 9
+> - IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, section 9 (6a, c-d, f)
 > - IAA Risk Book: Own Risk Solvency Assessment, Insurance Regulation Committee, International Actuarial Association, May 2023, pp. 3-19 (excluding sections 10.1 & 11) (6e)
 > - NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual, NAIC, as of Dec 2022, pp. 1-5 & 7-16 (6e)
 > - Deriving Value from ORSA: Board Perspective, International Actuarial Association, Apr 2015, pp. 1-8 (6e)
@@ -154,10 +153,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Ch. 13: General Insurance Financial Ratings (excluding sections 13.4.3-13.4.6.4, 13.5.2 and the first paragraph on page 376 after the Insight box)
 
 > [!example]- Responsibilities of the Actuary {5–10%}
-> The candidate will understand the [[Standard|standards]] of practice and [[Professionalism Required|professionalism required]] of the [[Actuary|actuary]].
+> The candidate will understand the standards of practice and professionalism required of the [[Actuary|actuary]].
 >
-> 1. Describe, interpret and apply [[Professionalism Principle|professionalism principles]] as defined by the [[International Actuarial Association]] ([[IAA]]).
-> 2. Describe, interpret and apply [[Standard|Standards]] of Practice as defined by the [[IAA]].
+> 1. Describe, interpret and apply [[Professionalism Principle|professionalism principles]] as defined by the [[International Actuarial Association]] (IAA).
+> 2. Describe, interpret and apply Standards of Practice as defined by the [[IAA]].
 > 3. Demonstrate knowledge of the general [[Insurance Actuarial Opinion|insurance actuarial opinion]] and the role of the [[Appointed Actuary|appointed actuary]].
 > 4. Describe and apply the concept of [[Materiality|materiality]].
 >
@@ -186,6 +185,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - [[IAA Risk Book - Reinsurance (Insurance Regulation Committee - 2023)|IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 2-4, 7 and 11]]
 >      - Outcomes 1i
 >      - Outcomes 2i
+>      - Outcomes 6a, c-d, f
 > - [[Excerpts from Business Law for Insurance Professionals|Excerpts from Business Law for Insurance Professionals, Assignment 3, pp. 3.29-3.39 (begin on pp. 3.29 with “Financial Considerations in International Business”)]]
 >      - Outcomes 1j
 >      - Outcomes 3a, 3i

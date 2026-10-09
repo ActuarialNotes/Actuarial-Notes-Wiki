@@ -2,13 +2,14 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-13
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1ba734e4f7519fdb2ed50937edc6a8ede954cb21adbf5c96e9e0ebc6ceacdab4
+  content_hash: sha256:5d56788d42bba9207154e9edefa4451c203e6474ae75bd3c4ce7fa05479df334
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 pp.154-157 (PDF pp.166-169), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.29-30 (PDF pp.35-36), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 2
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.155-158 (PDF pp.167-170), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.29-30 (PDF pp.35-36), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; reinstated May 2021), Section III p.3, Homogeneity and Credibility, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Homogeneity.md
 ---
@@ -19,8 +20,8 @@ verification:
 
 - Homogeneity is always traded against [[Credibility]]. Splitting a book finer makes each group more alike but leaves each with less data; combining groups buys volume at the price of averaging together risks that genuinely differ. Every segmentation decision in ratemaking and reserving is a point on that curve.
 - In **ratemaking**, a non-homogeneous class means systematic cross-subsidy: the better risks in the class are overcharged and leave (see [[Classification Ratemaking]]), while the worse risks stay — the adverse selection spiral that risk classification exists to prevent.
-- In **reserving**, homogeneity is about the *emergence pattern* rather than the loss cost. Two coverages may have similar loss ratios and completely different reporting and settlement speeds; combining them into one triangle produces development factors that describe neither. See [[Reserving Data Organization]].
-- Werner's criteria for evaluating a rating variable are **actuarial** (statistically significant, accurate, homogeneous within class, credible), **operational** (objective, verifiable, cheap to administer), **social** (privacy, causality, affordability, controllability) and **legal** — homogeneity is one requirement inside the actuarial criterion, not the whole test.
+- In **reserving**, Friedland groups claims on the behaviour that drives development — reporting patterns, settlement patterns, how well case reserves can be set, the likelihood of reopening — alongside consistency of coverage, claim volume and severity. Two coverages may have similar loss ratios and completely different reporting and settlement speeds; combining them into one triangle produces development factors that describe neither. See [[Reserving Data Organization]].
+- Werner's criteria for evaluating a rating variable (after Finger's *Risk Classification*) are **statistical** (statistical significance, homogeneity, credibility), **operational** (objective, inexpensive to administer, verifiable), **social** (affordability, causality, controllability, privacy concerns) and **legal** — homogeneity is one requirement inside the statistical criteria, not the whole test.
 - Homogeneity is checked, not assumed: compare loss ratios, frequencies and severities across subgroups within a proposed class, and look for a consistent difference that persists across years.
 
 ![[Media/Figures/Homogeneity.svg|340]]
@@ -39,7 +40,7 @@ verification:
 > > [!answer]-
 > > $$\text{Class pure premium} = \frac{\$7{,}975{,}000}{10{,}000} = \$797.50$$
 > >
-> > Relativities to the class average: $0.75$, $1.07$ and $1.88$. Long-haul risks cost more than twice what local risks cost, so the class is **not homogeneous** — a single rate overcharges local operators by $25\%$ and undercharges long haul by $47\%$.
+> > Relativities to the class average: $0.75$, $1.07$ and $1.88$. Long-haul risks cost more than twice what local risks cost, so the class is **not homogeneous** — the single rate is $33\%$ above the local operators' cost and $47\%$ below the long-haul cost.
 > >
 > > The remedy is to introduce radius of operation as a rating variable. The subgroup volumes support it: even the $1{,}500$-exposure long-haul cell carries a difference far too large to be noise, and the relativities should be [[Credibility|credibility-weighted]] against the class average rather than used raw.
 > >

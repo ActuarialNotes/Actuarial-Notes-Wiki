@@ -27,3 +27,71 @@ created: 2026-09-12
 - confidence: medium
 - checks_run: Recomputed both examples from scratch first. V = 15.0 + 2.5 + 6.0(0.25) + 4.0(0.50) = 21.0%; F% = 6.0(0.75) + 4.0(0.50) = 6.5%; F = 0.065 x $800 = $52.00; rate divisor 1 - 0.210 - 0.050 = 0.740. Second example: (150 + 52)/0.74 = $272.97 vs 150/(1 - 0.275 - 0.05) = $222.22, a $50.75 (18.6%) shortfall — the page's '$51, or 19%' rounds correctly, and the total expense ratio 15 + 2.5 + 6 + 4 = 27.5% checks. The headline formula is Werner's Ch. 8 p. 143 (PDF p. 155) with his own numbers ($300 + $25)/(1 - 0.25 - 0.10) = $500. The 75%-fixed / dollars-per-exposure mechanics are Werner Table 7.4 and p. 131 (PDF p. 143): 'the fixed expense provision can be multiplied by the projected average premium'. The all-variable distortion direction (undercharges below-average risks, overcharges above-average ones) is Werner Table 7.3 p. 130. The expense-trend bullet is Werner p. 135 (PDF p. 147): 'If the average fixed expenses and average premium are changing at the same rate, then the fixed expense ratio will be consistent and no trending is necessary.' Confidence medium because of F-001 (major, open): the page puts other acquisition on the earned-premium denominator where Werner puts it on written. Links, embed and LaTeX clean.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-139 (PDF pp. 137-151), Other Expenses and Profit: simple example, expense categories, All Variable Expense Method (Table 7.3), Premium-based Projection Method (Table 7.4), Trending Expenses, Reinsurance Costs, Permissible Loss Ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p. 9 (PDF p. 21), Underwriting Expense Ratio — written vs earned premium denominators, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp. 141-145 (PDF pp. 153-157), rate = (PP + E_F)/(1.0 - V - Q_T), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Werner Ch.1 p.9 (PDF p.21) and Ch.7 p.128 Table 7.2 (PDF p.140) re-read: commissions, other acquisition, and taxes/licenses/fees to written premium; general expenses to earned. Bullet now lists other acquisition with the written-premium group, and states Werner's growth point (little impact when volume is stable; written moves away from earned in a growing or shrinking book).
+
+## [F-002] 'Permissible loss ratio' given as 1 - V - Q_T, which Werner calls the variable permissible loss ratio
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: major
+- status: open
+- locus: bullet 5, permissible loss ratio
+- claim: 'The permissible loss ratio is the complement of the expense and profit provisions: PLR = 1 - V - Q_T where fixed expenses are handled separately.'
+- evidence: Werner Ch.7 p.139 (PDF p.151): 'VPLR = 1.0 - V - Q_T' pays for loss, LAE and fixed expenses; the total permissible loss ratio 'PLR = 1.0 - F - V - Q_T' pays for loss and LAE only; 'If all expenses are treated as variable expenses, the VPLR and PLR are the same.' The page attaches the PLR name to the VPLR formula, and Werner's loss ratio indication (Ch.8 p.143, PDF p.155) compares loss + fixed expense ratio to the VPLR, so the two are not interchangeable.
+- source_rank: 2
+- proposed_action: Give both ratios with Werner's names and formulas.
+- applied: true
+- fingerprint: 40530ee66aae
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Applied: bullet now gives VPLR = 1 - V - Q_T and PLR = 1 - F - V - Q_T with what each pays for and when they coincide (Werner Ch.7 p.139).
+
+## [F-003] Expense examples, all-variable method, reinsurance and trend bullets drift from the source
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: bullets 1-3, 6-7
+- claim: Variable expenses include 'licences and fees'; fixed expenses include 'much of other acquisition'; the all-variable method is 'simpler and still common'; reinsurance 'and the catastrophe provision sit alongside the expense provisions'; 'Expense trend is often ignored on the assumption that fixed expenses inflate at roughly the same rate as premium'.
+- evidence: Werner Ch.7 pp.126-127 (PDF pp.138-139) gives premium taxes and commissions as variable examples and home-office overhead as fixed; the all-variable method 'is still used when pricing insurance products for which the total underwriting expenses are dominated by variable expenses (i.e., many commercial lines products)' (p.127); reinsurance (p.137, PDF p.149): losses reduced for expected non-proportional recoveries and premium reduced by the ceded amount, or the net cost included as an expense item; proportional may need no explicit treatment. Trending (p.135, PDF p.147): variable ratios need none; a premium-based fixed ratio needs none if fixed expense and premium change at the same rate; a per-exposure figure on a non-inflation-sensitive base is trended.
+- source_rank: 2
+- proposed_action: Restate each to Werner's text.
+- applied: true
+- fingerprint: e83a6d131b21
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-003
+- status: resolved
+- note: Applied: bullets 1-3 and 6-7 restated to Werner Ch.7 pp.126-127, 135, 137. Both examples recomputed: V = 21.0%, F% = 6.5%, F = $52.00; (150+52)/0.74 = $272.97 vs 150/0.675 = $222.22, shortfall $50.75 (18.6%). The adverse-selection remark in Example 2 is supported by Werner Ch.9 p.151 (PDF p.163).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: F-001 re-checked against Werner Ch.1 p.9 and Table 7.2 and fixed; every bullet diffed against Ch.7; rate formula against Ch.8 pp.142-143; both examples recomputed in python.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-139 (PDF pp.137-151), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.141-145 (PDF pp.153-157), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Two more findings opened and applied (F-002 major, VPLR/PLR mislabel; F-003 minor). Confidence medium: vault-authored examples.

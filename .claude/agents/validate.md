@@ -45,6 +45,29 @@ and will refuse your command if you try to go around them.
    official solution. Agreement of (independent recomputation + official source)
    is the bar for `verified`. Disagreement is always a finding, never a quiet fix.
 
+## Working a packet
+
+When the batch is a **packet** — one source document and the files it verifies
+(`docs/verification-plan.md`) — the source is read once and the mechanical work is
+already done. Use the packet tooling instead of fetching per file:
+
+- **A past paper.** `python3 scripts/verify_paper.py build --exam "Exam 5" --year 2019
+  --session Fall` (or `--soa fm --questions … --solutions … --ids 351-462`). Read
+  `packet.md`, then for each question `blind/<n>.md` **first** and recompute from it,
+  then `source/<n>.md`: the publisher's key or sample answers, the stem diff, the
+  mechanical leads. A `clean` stem needs no page image. Render the pages a `check` or
+  `diverges` row names (`verify_sources.py render`) and read them. A lead is a place to
+  look, not a finding: the extractor misreads too.
+- **A reading.** `python3 scripts/verify_route.py --packet "<reading>"` lists its
+  concepts with their focus pages. Read the document's outline, then those pages
+  (`verify_sources.py text <url> --pages …`). Check the reading's own resource page in
+  the same load.
+- **Cite from the cache.** `verify_sources.py cite <url> --locator "Q12, p.6"` prints
+  the `--source` line, with the sha256 of the copy you actually read.
+- **Record the packet in one write.** Put every pass, finding and resolution in one
+  JSON file and run `verify_record.py batch <file> --run-id "$RUN_ID"`. It refuses
+  exactly what the single commands refuse.
+
 ## The pass, step by step
 
 ### 1. Pick the batch

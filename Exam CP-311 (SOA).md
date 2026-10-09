@@ -5,12 +5,13 @@ syllabus:
   source_sha256: 7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f359b8c3395e139b035e720a8e212222f3060d3c875c172da0b5001db57e4662
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0985d8630886db2fee4fbfc54d6ec4644d494bc5bc1c4ae205da2b124f4f52ae
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-311, all pages, sha256:7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-311 (SOA).md
@@ -23,21 +24,19 @@ verification:
 # Exam CP-311
 **CP 311 – Strategic Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
 
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Introduction to Strategic Management {26–43%}
-> The candidate will understand and apply [[Strategic|strategic]] management concepts and [[Framework|frameworks]] to develop an [[Organization's Business Strategy|organization’s business strategies]] and solutions.
+> The candidate will understand and apply strategic management concepts and frameworks to develop an [[Organization's Business Strategy|organization’s business strategies]] and solutions.
 >
-> 1. Evaluate and apply [[Strategic|strategic]] management concepts, recognizing factors that [[Affect Development|affect development]] and implementation of [[Strategy|strategies]]:
->    - Describe and apply [[Strategic|strategic]] management models including [[Porter's Five Force|Porter's five forces]] model and value [[Chain|chain]] analysis
->    - Assess and recommend an appropriate [[Business-Level Strategy|business-level strategy]] for a given [[Situation|situation]]
->    - Assess and recommend an appropriate [[Corporate-Level Strategy|corporate-level strategy]] for a given [[Situation|situation]]
->    - Explain the impact of [[Competitive Dynamics|competitive dynamics]] on [[Strategic|strategic]] management
-> 2. Evaluate commonly used [[Business Strategy|business strategies]] and their application under different [[Economic|economic]], [[Risk|risk]] and [[Business Environment|business environments]]:
->    - Critique and evaluate [[Internal-organic|internal/organic]] and [[External-inorganic Growth Strategy|external/inorganic growth strategies]]
->    - Assess and recommend [[Business Strategy|business strategies]] under different [[Business Situation|business situations]] and [[Market Opportunity|market opportunities]], utilizing the [[Applicable Strategic|applicable strategic]] or change management models
+> 1. Evaluate and apply strategic management concepts, recognizing factors that [[Affect Development|affect development]] and implementation of strategies:
+>    - Describe and apply strategic management models including [[Porter's Five Force|Porter's five forces]] model and value chain analysis
+>    - Assess and recommend an appropriate [[Business-Level Strategy|business-level strategy]] for a given situation
+>    - Assess and recommend an appropriate [[Corporate-Level Strategy|corporate-level strategy]] for a given situation
+>    - Explain the impact of [[Competitive Dynamics|competitive dynamics]] on strategic management
+> 2. Evaluate commonly used [[Business Strategy|business strategies]] and their application under different economic, [[Risk|risk]] and [[Business Environment|business environments]]:
+>    - Critique and evaluate internal/organic and [[External-inorganic Growth Strategy|external/inorganic growth strategies]]
+>    - Assess and recommend [[Business Strategy|business strategies]] under different [[Business Situation|business situations]] and [[Market Opportunity|market opportunities]], utilizing the applicable strategic or change management models
 >
 > **Readings:**
 > - Strategic Management: Concepts and Cases: Competitiveness and Globalization, Concepts, Hitt, Michael, Ireland, Duane, and Hoskisson, Robert, 14th Edition, 2023
@@ -59,14 +58,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - CP311-108-26: Tying Short Term Decisions to Long Term Strategy (1a, 1b)
 
 > [!example]- Strategic Budgeting, Forecasting, and Value Measures {28–47%}
-> The candidate will understand how [[Sustainable Growth|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and [[Forecasting|forecasting]]. The candidate will also understand measures of an [[Organization'|organization’s]] value and their uses in [[Decision Making|decision making]].
+> The candidate will understand how [[Sustainable Growth|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and forecasting. The candidate will also understand measures of an organization’s value and their uses in [[Decision Making|decision making]].
 >
-> 1. Explain how [[Strategic Budgeting|strategic budgeting]] and [[Forecasting|forecasting]] can create value and [[Sustainable Growth|sustainable growth]]
-> 2. Assess how [[Effective Strategic Budgeting|effective strategic budgeting]] and [[Forecasting|forecasting]] are in [[Tracking Progress|tracking progress]] of an [[Organization's Initiative|organization’s initiatives]]
-> 3. Demonstrate how an [[Organization's Strategic|organization’s strategic]] goals can be effectively [[Incorporated|incorporated]] into the [[Financial Budgeting|financial budgeting]] and [[Forecasting Decision Making Process|forecasting decision making process]]
+> 1. Explain how [[Strategic Budgeting|strategic budgeting]] and forecasting can create value and [[Sustainable Growth|sustainable growth]]
+> 2. Assess how [[Effective Strategic Budgeting|effective strategic budgeting]] and forecasting are in [[Tracking Progress|tracking progress]] of an [[Organization's Initiative|organization’s initiatives]]
+> 3. Demonstrate how an organization’s strategic goals can be effectively incorporated into the [[Financial Budgeting|financial budgeting]] and [[Forecasting Decision Making Process|forecasting decision making process]]
 > 4. Evaluate and recommend appropriate value measures for an [[Organization|organization]]
-> 5. Assess the impact of [[Performance|performance]] measures and [[Incentive|incentives]] on key [[Business|business]] decisions and [[Stakeholder|stakeholder]] value
-> 6. Assess an [[Organization's Ability|organization’s ability]] to create value and recommend [[Action|actions]] to improve value [[Creation|creation]]
+> 5. Assess the impact of performance measures and incentives on key business decisions and [[Stakeholder|stakeholder]] value
+> 6. Assess an [[Organization's Ability|organization’s ability]] to create value and recommend actions to improve value creation
 >
 > **Readings:**
 > - Handbook of Budgeting, Lalli, W.R., 6th Edition, 2012
@@ -87,11 +86,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Ch 43: Banks (2d, 2f)
 
 > [!example]- Decision Modeling and Optimization {13–22%}
-> The candidate will understand how to apply [[Decision Making|decision making]] models to general [[Managerial|managerial]] decisions within specified [[Constraint|constraints]].
+> The candidate will understand how to apply [[Decision Making|decision making]] models to general managerial decisions within specified [[Constraint|constraints]].
 >
-> 1. Apply [[Fundamental|fundamental]] techniques and [[Framework|frameworks]] of management [[Science|science]] to make [[Informed Business|informed business]] decisions
-> 2. Apply [[Statistical|statistical]] and [[Quantification|quantification]] methods to analyze [[Managerial|managerial]] decisions with [[Uncertain Condition|uncertain conditions]]
-> 3. Evaluate [[Business|business]] decisions using [[Quantitative|quantitative]] and [[Statistical|statistical]] methods
+> 1. Apply fundamental techniques and frameworks of management science to make [[Informed Business|informed business]] decisions
+> 2. Apply statistical and quantification methods to analyze managerial decisions with [[Uncertain Condition|uncertain conditions]]
+> 3. Evaluate business decisions using [[Quantitative|quantitative]] and statistical methods
 >
 > **Readings:**
 > - Data, Models and Decisions: The Fundamentals of Management Science, Bertsimas, Dimitris and Freund, Robert, 2004 (3a-3c)
@@ -103,9 +102,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - CP311-111-26: Deciding How to Decide (3a)
 
 > [!example]- Organizational Behavior {8–13%}
-> The candidate will understand the role [[Organizational Behavior Plays|organizational behavior plays]] in [[Organizational Decision-Making|organizational decision-making]] and [[Efficacy|efficacy]].
+> The candidate will understand the role [[Organizational Behavior Plays|organizational behavior plays]] in [[Organizational Decision-Making|organizational decision-making]] and efficacy.
 >
-> 1. Evaluate the impact of [[Human|human]] behavior factors on the effectiveness of [[Decision-Making Process|decision-making processes]] within [[Organization|organizations]]
+> 1. Evaluate the impact of human behavior factors on the effectiveness of [[Decision-Making Process|decision-making processes]] within organizations
 > 2. Explain the role of [[Cognitive Biase|cognitive biases]] on [[Making Suboptimal Individual|making suboptimal individual]] decisions
 >
 > **Readings:**

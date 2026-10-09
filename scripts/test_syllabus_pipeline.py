@@ -92,6 +92,54 @@ class ExtractTest(unittest.TestCase):
         self.assertEqual(se.join_wrapped("a simple European-", "style derivative"), "a simple European-style derivative")
 
 
+LEAD_IN_TOPIC = """\
+2. Topic: Actuarial Assumptions (15%-25%)
+
+Learning Objectives
+
+The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial
+assumptions used in pension valuations
+
+Learning Outcomes
+
+Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for
+different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able
+to:
+    a) Evaluate appropriateness of current assumptions
+
+                                                                                            Learning
+Resources
+                                                                                            Outcomes
+
+Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6,
+7.1-7.3, 8                                                                                  2a. 2b
+
+IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial          6a, c-d, f
+Association, May 2023, section 9
+"""
+
+
+class ExtractQuirksTest(unittest.TestCase):
+    """Three syllabi the parser once misread (RET 201, CP 312, GI 201)."""
+
+    def setUp(self):
+        self.topic = se.parse_topics(LEAD_IN_TOPIC.split("\n"))[0]
+
+    def test_a_long_lead_in_heads_the_outcomes_not_the_objective(self):
+        self.assertTrue(self.topic["objective"].endswith("used in pension valuations"))
+        self.assertTrue(self.topic["outcomes"][0]["group"].startswith("Given a context"))
+        self.assertTrue(self.topic["outcomes"][0]["group"].endswith("the Candidate will be able to:"))
+
+    def test_codes_with_a_full_stop_or_bare_letters_stay_out_of_the_citation(self):
+        rows = self.topic["resources"]
+        self.assertEqual(rows[0]["citation"],
+                         "Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8")
+        self.assertEqual(rows[0]["codes"], "2a. 2b")
+        self.assertEqual(rows[1]["citation"], "IAA Risk Book: Reinsurance, Insurance Regulation Committee, "
+                                              "International Actuarial Association, May 2023, section 9")
+        self.assertEqual(rows[1]["codes"], "6a, c-d, f")
+
+
 class NamingTest(unittest.TestCase):
     def test_exam_identity(self):
         ident = sw.exam_identity({"title": "GH 201-C – Valuation and Regulation, Canada", "wiki_id": "gh-201c"})

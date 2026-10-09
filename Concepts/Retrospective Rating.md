@@ -1,29 +1,29 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-13
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:13ccbf458cd33c277ac3de3b5c7e03a53aa7b6fe60322329c09401480ead1122
+  content_hash: sha256:fbadda2f5cd763309d7f87f2cd132fc457d4dc8a8cb42dac209b95002106d32d
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 'Commercial Lines Rating Mechanisms', printed pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 2
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Retrospective Rating.md
 ---
 
 **Retrospective Rating** adjusts a policy's premium *after* the period, based on the insured's own losses during that period, within a guaranteed minimum and maximum. Unlike [[Experience Rating|experience rating]], which uses past years to price the coming one, a retro plan charges the insured for its own current-year experience.
 
-> $$R = \left(\text{BP} + \text{CL} \times \text{LCF}\right) \times \text{TM}$$
+> $$R = \left(\text{BP} + L \times \text{LCF}\right) \times \text{TM}$$
 
 > $$\text{Retro Premium} = \min\!\left(\max(R,\, R_{\min}),\, R_{\max}\right)$$
 
 - **Basic premium (BP)** covers the insurer's non-LAE expenses, profit, and the **net insurance charge** — the cost of the maximum and minimum guarantees. It is expressed as a basic premium factor times standard premium.
-- **Converted losses (CL × LCF)** are the insured's actual limited losses multiplied by the **loss conversion factor**, which loads them for loss adjustment expense.
-- **Tax multiplier (TM)** grosses the whole thing up for premium taxes, licences, fees and assessments, which are payable on the premium actually collected.
-- An **excess loss premium** is added when the plan limits individual claims: the insured pays a charge for the per-occurrence cap rather than bearing the whole of a large loss.
-- The **maximum** protects the insured against a bad year, the **minimum** protects the insurer against a good one. Together they define how much risk is actually transferred; a plan with a tight max/min band is close to guaranteed cost, a wide one close to self-insurance. The **net insurance charge** in the basic premium is the price of that band, and is derived from Table M (insurance charges by entry ratio and risk size).
-- Retro plans suit **large accounts** with credible volume, and they align incentives directly: every dollar of loss inside the band costs the insured $\text{LCF} \times \text{TM}$ dollars of premium. They also expose the insurer to credit risk, since additional premium is billed after the fact.
+- **Converted losses** $(L \times \text{LCF})$ are the insured's reported losses $L$, limited by any per-accident limit, multiplied by the **loss conversion factor**, which loads them for the ALAE not already in the losses plus ULAE.
+- **Tax multiplier (TM)** grosses the whole thing up for premium taxes and related assessments.
+- When the plan limits individual losses (a per-accident loss limitation), the insured pays for that limit too: its cost is either built into the table of insurance charges or, in some plans, computed as a separate additional charge.
+- The **maximum** protects the insured against a bad year, the **minimum** protects the insurer against a good one. Together they define how much risk is actually transferred; a plan with a tight max/min band is close to guaranteed cost, a wide one close to self-insurance. The **net insurance charge** in the basic premium — the insurance charge for the maximum less the insurance savings for the minimum — is the price of that band; the charge and savings come from a table of values, expressed as a percentage of expected unlimited losses (deriving the table is beyond Werner's scope).
+- Retro plans suit **large accounts** with credible volume, and they align incentives directly: every dollar of loss inside the band costs the insured $\text{LCF} \times \text{TM}$ dollars of premium. Conceptually a retro plan is close to self-insurance, except that its loss limits and its maximum and minimum leave some risk with the insurer.
 
 ![[Media/Figures/Retrospective_Rating.svg|340]]
 

@@ -3,15 +3,16 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
   sitting: "Mar 2027/Jul 2027"
   source_sha256: 794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:baf318e0c53e073cc09da22ed4e415d0ecf2490bfa2dc2518be8f7265948f995
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c50feb675c0b9095e68cc4c1d983d71456ca7f59383b380db37c9b35a36af0d3
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam RET-201 (SOA).md
 ---
@@ -23,17 +24,15 @@ verification:
 # Exam RET-201
 **RET 201 – Retirement Plan Valuation** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
 
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Methods {10–20%}
-> The candidate will understand how to [[Apply-synthesize|apply/synthesize]] the methods and models used to value [[Pension Benefit|pension benefits]] for various purposes.
+> The candidate will understand how to apply/synthesize the methods and models used to value [[Pension Benefit|pension benefits]] for various purposes.
 >
 > 1. Differentiate between the various purposes for valuing [[Pension Plan|pension plans]]
-> 2. Perform [[Periodic Valuation|periodic valuations]] of [[Ongoing Plan|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a [[Variety|variety]] of [[Cost|cost]] methods
-> 3. Analyze and communicate the [[Pattern|pattern]] of [[Cost Recognition|cost recognition]] that [[Arise|arises]] under a [[Variety|variety]] of [[Cost|cost]] methods
-> 4. Analyze and communicate the impact on [[Cost Stability|cost stability]] of a [[Variety|variety]] of [[Asset Valuation|asset valuation]] methods
+> 2. Perform [[Periodic Valuation|periodic valuations]] of [[Ongoing Plan|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a variety of cost methods
+> 3. Analyze and communicate the pattern of [[Cost Recognition|cost recognition]] that arises under a variety of cost methods
+> 4. Analyze and communicate the impact on [[Cost Stability|cost stability]] of a variety of [[Asset Valuation|asset valuation]] methods
 >
 > **Readings:**
 > - RET201-100-25: Chapter 15 (Sections 1500 through 1515) of Canadian Pensions and Retirement Income Planning (remaining material is background only; legislative requirements will not be tested) (1a)
@@ -56,12 +55,14 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - e-Learning Module: Pension Projection (background only) (1a, 1b)
 
 > [!example]- Actuarial Assumptions {15–25%}
-> The candidate will understand how to [[Analyze-synthesize|analyze/synthesize]] the factors that go into selection of actuarial assumptions used in [[Pension Valuation|pension valuations]] Given a [[Context|context]], including [[Valuation|valuations]] for specific purposes ([[Funding|funding]], accounting, [[Termination-windup|termination/windup]]) and for different types of [[Plan|plans]] ([[Single Employer|single employer]], [[Multi-Employer|multi-employer]], [[Open|open]], [[Closed|closed]], [[Public|public]]), the Candidate will be able to:
+> The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in [[Pension Valuation|pension valuations]]
+>
+> **Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:**
 >
 > 1. Evaluate [[Appropriateness|appropriateness]] of current assumptions
-> 2. Describe and explain the different [[Perspective|perspectives]] on the selection and [[Development|development]] of assumptions, including [[Financial Economics|financial economics]]
+> 2. Describe and explain the different perspectives on the selection and development of assumptions, including [[Financial Economics|financial economics]]
 > 3. Recommend appropriate assumptions and [[Defend|defend]] the selection
-> 4. Evaluate [[Actual Experience|actual experience]], including [[Comparison|comparisons]] to assumptions
+> 4. Evaluate [[Actual Experience|actual experience]], including comparisons to assumptions
 >
 > **Readings:**
 > - Selecting and Documenting Pension Assumptions Other Than Discount Rate and Investment Return, AAA, Jun 2025 (2a-2d)
@@ -74,15 +75,15 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - Credibility Educational Resource for Pension Actuaries, SOA, Aug 2017 (2d)
 
 > [!example]- Accounting Standards {35–45%}
-> The candidate will understand how to perform [[Valuation|valuations]] and prepare [[Disclosure|disclosure]] information for [[Retirement Income Plan|retirement income plans]] under [[Applicable|applicable]] accounting [[Standard|standards]].
+> The candidate will understand how to perform [[Valuation|valuations]] and prepare disclosure information for [[Retirement Income Plan|retirement income plans]] under applicable accounting standards.
 >
-> 1. Perform calculations in accordance with [[Applicable|applicable]] accounting [[Standard|standards]], including:
->    - [[Annual]] accounting [[Valuation|valuations]]
->    - [[Plan Curtailment|Plan curtailment]] and [[Termination-windup|termination/windup]]
->    - [[Plan Merger|Plan mergers]], [[Acquisition|acquisitions]] and [[Spinoff|spinoffs]]
-> 2. Advise [[Plan Sponsor|plan sponsors]] on [[Common|common]] accounting methods, [[Cost|costs]] and [[Disclosure|disclosures]] for [[Retirement Plan|retirement plans]] under various [[Standard|standards]] and [[Interpretation|interpretations]]
-> 3. Demonstrate the [[Sensitivity|sensitivity]] of [[Financial|financial]] measures to given changes in [[Plan|plan]] design
-> 4. Perform and interpret the results of [[Projection|projections]] for [[Short-Term|short-term]] planning including the effect of proposed [[Plan|plan]] changes
+> 1. Perform calculations in accordance with applicable accounting [[Standard|standards]], including:
+>    - Annual accounting [[Valuation|valuations]]
+>    - [[Plan Curtailment|Plan curtailment]] and termination/windup
+>    - [[Plan Merger|Plan mergers]], acquisitions and spinoffs
+> 2. Advise [[Plan Sponsor|plan sponsors]] on common accounting methods, costs and disclosures for [[Retirement Plan|retirement plans]] under various standards and interpretations
+> 3. Demonstrate the sensitivity of financial measures to given changes in [[Plan|plan]] design
+> 4. Perform and interpret the results of projections for short-term planning including the effect of proposed [[Plan|plan]] changes
 >
 > **Readings:**
 > - ASOP 4: Measuring Pension Obligations and Determining Pension Plan Costs or Contributions (3a-3d)
@@ -104,12 +105,12 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (excluding Appendices) (3a)
 
 > [!example]- Retirement Plan Investment and Risk Management {10–20%}
-> The candidate will recognize and appropriately reflect the role of [[Retirement Plan Investment|retirement plan investments]] in managing [[Plan Sponsor Risk|plan sponsor risk]] and make [[Recommendation|recommendations]].
+> The candidate will recognize and appropriately reflect the role of [[Retirement Plan Investment|retirement plan investments]] in managing [[Plan Sponsor Risk|plan sponsor risk]] and make recommendations.
 >
 > 1. Evaluate the interaction of [[Plan Investment|plan investments]] with various [[Valuation|valuation]] methods and assumptions
 > 2. Evaluate how factors including [[Cash Flow Requirement|cash flow requirements]], various [[Plan Design|plan designs]] and various [[Economic Environments Affect Setting Investment Strategy|economic environments affect setting investment strategy]]
-> 3. Describe [[Strategy|strategies]] and techniques for [[Asset-liability|asset/liability]] management
-> 4. [[Provide Advice|Provide advice]] and analysis to [[Plan Sponsor|plan sponsors]] regarding the [[Mitigation|mitigation]] of [[Investment Risk|investment risks]]
+> 3. Describe strategies and techniques for [[Asset-liability|asset/liability]] management
+> 4. Provide advice and analysis to [[Plan Sponsor|plan sponsors]] regarding the mitigation of [[Investment Risk|investment risks]]
 >
 > **Readings:**
 > - Fundamentals of Private Pensions, McGill, Dan, 9th Edition, 2010, (4a-4d)
@@ -123,10 +124,10 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - New Solutions to an Age-Old Problem: Innovative Strategies for Managing Pension and Longevity Risk, NAAJ, Nov 2019 (4d)
 
 > [!example]- Valuations for the Purpose of Funding {5–15%}
-> The candidate will understand the general [[Principles Applicable|principles applicable]] to the [[Funding|funding]] of [[Retirement Income Plan|retirement income plans]] and recommend a [[Funding Policy|funding policy]].
+> The candidate will understand the general principles applicable to the [[Funding|funding]] of [[Retirement Income Plan|retirement income plans]] and recommend a [[Funding Policy|funding policy]].
 >
-> 1. Describe the [[Option|options]] available to [[Plan Sponsor|plan sponsors]] for [[Funding|funding]] their [[Retirement Plan|retirement plans]]
-> 2. Given a [[Context|context]], such as [[Regulatory Environment|regulatory environment]], [[Plan Asset Composition|plan asset composition]], [[Stakeholders' Interest|stakeholders’ interests]], [[Sponsor|sponsor]] goals, the candidate will be able to analyze and [[Defend|defend]] an appropriate [[Funding Policy|funding policy]] for various types of [[Retirement Income Plan|retirement income plans]], including:
+> 1. Describe the options available to [[Plan Sponsor|plan sponsors]] for [[Funding|funding]] their [[Retirement Plan|retirement plans]]
+> 2. Given a context, such as [[Regulatory Environment|regulatory environment]], [[Plan Asset Composition|plan asset composition]], [[Stakeholders' Interest|stakeholders’ interests]], sponsor goals, the candidate will be able to analyze and defend an appropriate [[Funding Policy|funding policy]] for various types of [[Retirement Income Plan|retirement income plans]], including:
 >    - [[Single-employer Plan|Single-employer plans]]
 >    - [[Multi-employer Plan|Multi-employer plans]]
 >    - [[Government-sponsored Plan|Government-sponsored plans]]

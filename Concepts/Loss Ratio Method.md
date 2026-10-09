@@ -1,13 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c3fcb3300fd193d0ec13f0f59bdd5473556d22499832f0964e50b9c3e239abe7
+  content_hash: sha256:640858ef0c2734b0d0adebdccf3b0b4a20bffbd0004e43f889479c2f921fb46f
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.143-147 (PDF pp.155-159), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.139 (PDF p.151); Ch. 8 pp.141-148 (PDF pp.153-160), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Ratio Method.md
 ---
@@ -20,9 +20,9 @@ verification:
 
 - The first form is Werner's: [[Fixed Expenses|fixed expenses]] as a ratio in the **numerator**, [[Variable Expenses|variable expenses]] $V$ and profit $Q_T$ in the denominator. The second is the all-variable simplification, where $\text{PLR} = 1 - V - F\% - Q_T$. Using $F\%$ in both places double-counts it.
 - The numerator's loss ratio must be **projected**: ultimate losses (developed), trended to the future policy period, over earned premium brought to **current rate level** ([[On-Leveling]]) and trended ([[Premium Trend]]).
-- The method's advantage is that it needs no exposure data, which makes it the practical choice where the [[Exposure Base|exposure base]] is dollar-denominated (payroll, sales, amount of insurance) or unreliable. Its requirement is a clean rate-change history, without which on-levelling is guesswork.
-- It produces a **change**, not a rate — so it cannot price a new programme, and it presumes the current rate structure is a sensible starting point.
-- The method is equivalent to the [[Pure Premium Method]] given consistent inputs, because a loss ratio is the pure premium divided by the average premium. Most filings use the loss ratio method for the overall indication and the pure premium method for [[Classification Ratemaking|class relativities]].
+- The method's advantage is that it needs no exposure data, which makes it preferable where exposure data is unavailable or the product has no clearly defined [[Exposure Base|exposure base]] (Werner & Modlin's example: commercial general liability, whose sub-lines use different exposure bases). Its requirement is premium at current rate level, which is hard to calculate accurately after many changes to a complex rating algorithm.
+- It produces a **change**, not a rate — so it cannot price a new line of business with no current rates to adjust. It is the more widely used of the two methods, and preferred where the indicated change itself is a critically important statistic for the pricing decision.
+- The method is equivalent to the [[Pure Premium Method]] given consistent data and assumptions, because a loss ratio is the pure premium divided by the average premium; an approximation such as the parallelogram method in the on-level premium can make the two disagree.
 
 ![[Media/Figures/Loss_Ratio_Method.svg|340]]
 
@@ -83,4 +83,4 @@ verification:
 > >
 > > $$\text{Indicated change} = +4.7\%$$
 > >
-> > Two judgment calls sit inside this: whether to weight the three years equally (as here, by premium volume) or to give more weight to the most recent, and whether the $69.0\%$ in AY 2024 is a genuine improvement or an artefact of the $1.42$ CDF on the least mature year. A common refinement is to weight $20/30/50$ toward recency — which here would give a slightly lower indication.
+> > Two judgment calls sit inside this: whether to weight the three years by premium volume (as here — summing losses and premium across years, which weights each year's loss ratio by its premium) or to select weights that give more to the most recent years, and whether the $69.0\%$ in AY 2024 is a genuine improvement or an artefact of the $1.42$ CDF on the least mature year. Weighting the loss ratios $20/30/50$ toward recency would give $70.9\%$ here, and a slightly lower indication of $+3.9\%$.

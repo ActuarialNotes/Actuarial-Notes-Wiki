@@ -1,29 +1,31 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0da16c098c3fd44a40cf641651818759247d9998fd48b2e3c4e86799ee21f7a4
+  content_hash: sha256:c0bb81b2ef1cb3bedeffc383005447044e449827f0f69d41cc8d5b411b9d42e4
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-135 (PDF pp. 137-147), simple example, All Variable Expense Method and Table 7.3, Premium-based Projection Method and Table 7.4, Exposure/Policy-based Projection Method, Trending Expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p. 143 (PDF p. 155), indicated average rate = (PP + E_F)/(1.0 - V - Q_T), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-135 (PDF pp.137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p.143 (PDF p.155), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 p.31 (PDF p.43), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Fixed Expenses.md
 ---
 
-**Fixed Expenses** are underwriting expenses that do not vary with the size of the premium — policy issuance, most general expenses, inspections, filing fees, part of "other acquisition". They cost roughly the same on a $\$500$ policy as on a $\$5{,}000$ one, so they are recovered as a **dollar amount per exposure**, not as a percentage of premium.
+**Fixed Expenses** are underwriting expenses assumed to be the same for each risk regardless of the size of the premium — typically home-office overhead, and per-policy costs such as printing and data entry. They cost roughly the same on a $\$500$ policy as on a $\$5{,}000$ one, so they are recovered as a **dollar amount per exposure**, not as a percentage of premium.
 
-> $$F = \frac{\text{Total Fixed Expenses}}{\text{Earned Exposures}}$$
+> $$F = \frac{\text{Total Fixed Expenses}}{\text{Exposures (or Policies)}}$$
 
 > $$\text{Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
 
 - $F$ enters the **numerator** of the rate; [[Variable Expenses|variable expenses]] $V$ and the profit provision $Q_T$ enter the **denominator**. This asymmetry is the whole content of the fixed/variable distinction, and it is what makes the rate a flat charge plus a proportional gross-up.
-- Loading fixed expenses as a percentage of premium instead — the **all-variable expense method** — makes large policies subsidize small ones. It remains common because it is simpler and because the distortion is invisible in aggregate: the overall rate level is unchanged, only its distribution across policy sizes is wrong.
-- Expense studies rarely split cleanly. Werner's practical approach is to assign each expense category a **fixed percentage** based on judgment and the company's cost structure (e.g. general expenses $75\%$ fixed, other acquisition $50\%$ fixed), then convert the fixed dollars to a per-exposure amount using the projected average premium or exposure count.
-- Because $F$ is a dollar amount, it must be **trended** if fixed costs are inflating and the exposure count is not. Werner's simplification — assuming fixed expenses inflate at the same rate as premium — is only safe when the two genuinely move together.
-- The fixed provision is also where the [[Minimum Premium|minimum premium]] comes from: below some policy size, $F$ plus the pure premium exceeds what any percentage-based rate would produce, and the minimum premium is what makes small policies viable.
+- Loading fixed expenses as a percentage of premium instead — the **all-variable expense method** — undercharges risks with below-average premium and overcharges those above it, so large policies subsidize small ones. For the average risk the two treatments give the same premium, so the overall rate level is unchanged; only its distribution across policy sizes is wrong. The method is still used for products whose expenses are dominated by variable expenses (many commercial lines).
+- Expense studies rarely split cleanly. Ideally detailed expense data or activity-based cost studies make the split; otherwise it is generally made judgmentally, with other professionals in the company, as a **fixed percentage** of each category (Werner's example: general expenses $75\%$ fixed). The fixed dollars are then put per exposure either by multiplying the fixed expense ratio by the projected average premium, or by dividing fixed expenses directly by exposures or policy count.
+- Because $F$ is a dollar amount, it is expected to rise with inflation. In the premium-based method no trend is needed if average fixed expense and average premium change at the same rate; with a per-exposure figure on a base that does not inflate (car-years, house-years) or per policy, trending is appropriate.
+- Companies using the all-variable method may soften its distortion with an **expense constant** — a flat fee on every policy for issuance, auditing and handling expenses that apply uniformly — or with **premium discounts** that reduce the expense loading as policy premium grows, as workers compensation insurers do.
 
 ![[Media/Figures/Fixed_Expenses.svg|340]]
 

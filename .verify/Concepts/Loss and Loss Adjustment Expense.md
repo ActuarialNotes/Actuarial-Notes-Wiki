@@ -57,3 +57,41 @@ created: 2026-09-13
 - confidence: high
 - checks_run: LAE = ALAE + ULAE diffed against Werner Ch. 1 p.4 (the identity is displayed there) and the ALAE/ULAE definitions against Werner Ch. 3 p.42 and Friedland Ch. 1 p.9; the DCC/A&O correspondence and the warning that the definitions do not match against Friedland p.9 ('the NAIC promulgated two new categorizations of adjustment expenses (effective January 1, 1998)... defense and cost containment (DCC) and adjusting and other (A&O)'); the loss & LAE ratio against Werner Ch. 6 p.94; the paid/reported/ultimate ladder against Werner Ch. 6 pp.93-94; the ULAE ratio method against Werner Ch. 6 p.122 (finding F-002); the adjustment ordering against Werner Ch. 6 pp.94-95 (finding F-003). Both examples recomputed before reading the answers: 0.04 x 728,000 = 29,120, total 757,120, 757,120/1,200,000 = 63.09%, 0.631/0.65 - 1 = -2.9%, ALAE 78,000/650,000 = 12.0%; and 5,000,000 - 2,000,000 = 3,000,000, x 1.28 = 3,840,000, x 1.05^2.5 = 4,338,048 - which is where finding F-001 (fixed in this pass) came from.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.4 (PDF p.16), Ch. 3 p.42 (PDF p.54), Ch. 6 pp.93-95 and p.122 (PDF pp.105-107, 134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 1 p.9 (PDF p.15), Ch. 16 p.369 (PDF p.375), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Confirmed on the page this session: 1.1297, 4,338,000 and 4,598,300. Recomputed: 1.05^2.5 = 1.129726; 3,840,000 x 1.1297 = 4,338,048; 4,338,000 x 1.06 = 4,598,280.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Werner Ch.6 p.122 (PDF p.134) re-read: 'calculating the ratio of calendar year paid ULAE to calendar year paid loss plus ALAE over several years ... The resulting ratio of ULAE to loss plus ALAE is then applied to loss plus ALAE that has been adjusted for extraordinary events, development, and trend.' Bullet now says exactly that.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-003
+- status: resolved
+- note: Werner Ch.6 p.94 (PDF p.106) re-read: removal of extraordinary events comes first ('Preliminary adjustments may involve removing extraordinary events ... and replacing them with a provision'), 'This text will not prescribe a specific order', and a catastrophe provision 'should be added to non-catastrophe losses that have already been trended and developed to ultimate'. Bullet now lists: remove shock and catastrophe losses -> develop -> trend -> restate for benefit/coverage changes -> add back the long-term provision -> load ULAE, and says Werner prescribes no single order beyond the catastrophe and ULAE placements (p.94; p.122, PDF p.134).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Loss & LAE ratio and LAE = ALAE + ULAE against Werner p.9 and p.121; ALAE/ULAE definitions against Werner p.42 and p.121; ALAE included with losses for development and trend against p.121; DCC/A&O replacing ALAE/ULAE in 1998 US reporting, and the in-house vs outside counsel inconsistency, against p.121; ULAE ratio against p.122; adjustment ordering and shock-loss provision against pp.94-96. Both examples recomputed before reading: 0.04 x 728,000 = 29,120, total 757,120, /1,200,000 = 63.09%, 0.631/0.65 - 1 = -2.9%, ALAE 78/650 = 12.0%; 3,000,000 x 1.28 = 3,840,000, x 1.05^2.5 = 4,338,149 (4,338,000 at the page's rounded 1.1297), x 1.06 = 4,598,300.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21); Ch. 3 p.42 (PDF p.54); Ch. 6 pp.94-97 and 121-123 (PDF pp.106-109, 133-135), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: All three prior findings resolved (F-001 already applied). Confidence medium: the examples, and the 'typical of a liability line' remark (Werner p.122 says only that ALAE is not substantial for homeowners), are vault-authored.

@@ -149,6 +149,9 @@ def _lint_structure(rel: str, page: sl.ExamPage, report: Report, exam: dict) -> 
                      f"section weights run {lo_sum}–{hi_sum}%, a range that doesn't contain 100%")
 
 
+_ALIASES: dict = {}
+
+
 def _lint_links(rel: str, page: sl.ExamPage, vault: vl.Vault, report: Report, strict, exam: dict) -> None:
     for ln, line in enumerate(page.text.split("\n"), 1):
         if re.match(r"^>?\s*\|", line) and "[[" in line:
@@ -185,13 +188,19 @@ def _lint_links(rel: str, page: sl.ExamPage, vault: vl.Vault, report: Report, st
         return bool(l.strip()) and not re.match(r"^\s*(\*\*.*\*\*\s*$|#|\*\*Readings)", l) \
             and not sl.KEY_CONCEPTS_RE.match(l)
 
+    import syllabus_write  # the renderer's resolution, so the two agree on what has a page
+    linker = syllabus_write.Linker(vault, exam.get("wiki_id", ""), _ALIASES.setdefault("tables", vl.load_aliases()))
+
+    def has_page(phrase: str) -> bool:
+        return linker.existing(phrase) is not None
+
     for s in page.sections:
         lines = [(ln, l) for ln, l in zip(s.line_nos, s.lines) if l in s.preamble and prose(l)]
         for o in s.objectives:
             lines.append((o.line_no, o.text))
             lines += [(ln, l) for ln, l in zip(o.extra_line_nos, o.extra) if prose(l)]
         for ln, line in lines:
-            missing = sl.unlinked_noun_phrases(line)
+            missing = sl.unlinked_noun_phrases(line, has_page)
             if missing:
                 report.warn(rel, ln, "unlinked-noun",
                             "noun phrase(s) with no note: " + ", ".join(f"`{m}`" for m in missing))

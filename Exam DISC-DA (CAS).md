@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:91ceac53874471719b551237b5dc038b0eb7de4174e54b5aed72da3574c95985
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ee2fda39e89cb7302402766ee0068874aee73e8068eddb46bf4a000d6bb8d773
+  sources:
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), PDF pp.1-3, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
+    - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
+    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced', sha256:a84507a4d89728d73d486a1baae822d65d097911608d6cb7f89be5470e5f3e3d — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam DISC-DA (CAS).md
@@ -19,7 +22,7 @@ verification:
 
 **Introduction to Data and Analytics (DISC DA)** is one of the three *Data and Insurance Series Courses* (DISCs) the CAS requires for the [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]]. The DISCs are online, self-paced courses run by The Institutes. Each ends in an exam of 75 application-based multiple-choice questions, with 100 minutes to answer them, and the course fee includes one attempt. The course itself contains the learning objectives and all the material needed to meet them; a textbook with the same content, condensed review notes, a course guide of sample questions and answers, and flashcards are sold separately and are optional.
 
-The objectives below are the course syllabus The Institutes publishes: ten numbered topics, each broken into sections that the syllabus letters a, b, c. It gives the topics no exam weights.
+The Institutes gives the topics no exam weights.
 
 ## Learning Objectives
 

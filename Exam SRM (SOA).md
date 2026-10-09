@@ -5,12 +5,13 @@ syllabus:
   source_sha256: 2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d4061e4de20ef588fc7e9ec56b62a908d6d3ccd01c36cd411b46427914e75b30
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:65e6dad6985afec94dff89415bdeb72293c2366757550612459e392cf11b8214
+  sources:
+    - "SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam SRM (SOA).md
@@ -49,69 +50,67 @@ The Statistics for Risk Modeling exam is a three and one-half hour exam that con
 >
 > Unofficial pass/fail results will be sent within one hour to the email address you used to schedule your appointment.
 
-The learning objectives below are transcribed from the January 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Basics of Statistical Learning {5–10%}
 > The Candidate will understand key concepts of [[Statistical Learning|statistical learning]].
 >
-> 1. Define terms used to [[Classify|classify]] the types of [[Modeling|modeling]] problems and methods, including [[Supervised|supervised]] versus [[Unsupervised Learning|unsupervised learning]] and [[Regression|regression]] versus [[Classification|classification]].
-> 2. Compare the [[Common|common]] methods of assessing model [[Accuracy|accuracy]].
+> 1. Define terms used to classify the types of modeling problems and methods, including supervised versus [[Unsupervised Learning|unsupervised learning]] and regression versus classification.
+> 2. Compare the common methods of assessing model [[Accuracy|accuracy]].
 > 3. Understand how the [[Bias-Variance Tradeoff|bias-variance tradeoff]] impacts the selection of [[Statistical Learning|statistical learning]] methods.
-> 4. Understand [[Resampling|resampling]] methods used for model [[Model Validation|validation]], including
+> 4. Understand [[Cross-Validation|resampling]] methods used for model [[Model Validation|validation]], including
 >    - [[Training]] set vs. test set approach
->    - [[K-Fold Cross-Validation|k-fold cross-validation]]
->    - [[Leave-one-out Cross-Validation|Leave-one-out cross-validation]]
+>    - [[Cross-Validation|k-fold cross-validation]]
+>    - [[Cross-Validation|Leave-one-out cross-validation]]
 
 > [!example]- Linear Models {40–50%}
 > The Candidate will understand key concepts concerning [[Generalized Linear|generalized linear]] models.
 >
-> 1. Compare model assumptions for [[Ordinary|ordinary]] least [[Square|squares]] and [[Generalized Linear|generalized linear]] models.
-> 2. Identify the [[Member|members]] of the [[Exponential Family|exponential family]] of [[Distribution|distributions]] and [[Corresponding Link|corresponding link]] functions.
-> 3. Apply the [[Business Context|business context]] of a problem to interpret [[Parameter|parameters]].
-> 4. Interpret [[Diagnostic Test|diagnostic tests]] of model fit and assumption checking, using
+> 1. Compare model assumptions for ordinary least squares and [[Generalized Linear|generalized linear]] models.
+> 2. Identify the members of the [[Exponential Family|exponential family]] of distributions and [[Link Function|corresponding link]] functions.
+> 3. Apply the [[Business Context|business context]] of a problem to interpret parameters.
+> 4. Interpret [[Model Diagnostics|diagnostic tests]] of model fit and assumption checking, using
 >    - [[Graphical]] methods
 >    - [[Quantitative]] methods
 > 5. Select an [[Appropriate|appropriate]] model, considering
->    - [[Distribution|Distributions]] and [[Link|link]] functions
+>    - Distributions and [[Link|link]] functions
 >    - [[Variable Transformation|Variable transformations]] and interactions
 >    - t and F [[Test|tests]]
 >    - [[AIC]] and [[BIC]]
 >    - [[Likelihood]] ratio test
-> 6. Calculate and interpret [[Predicted Value|predicted values]], and [[Confidence Interval|confidence]] and [[Prediction Interval|prediction intervals]].
-> 7. Understand how approaches may [[Differ Compared|differ compared]] to using an [[Ordinary|ordinary]] least [[Square|squares]] model, including
->    - [[Regularization|Regularized regression]] ([[Lasso|lasso]], [[Ridge Regression|ridge regression]])
+> 6. Calculate and interpret [[Fitted Values|predicted values]], and [[Confidence Interval|confidence]] and [[Prediction Interval|prediction intervals]].
+> 7. Understand how approaches may differ compared to using an ordinary least [[Square|squares]] model, including
+>    - [[Regularization|Regularized regression]] ([[Regularization|lasso]], [[Regularization|ridge regression]])
 >    - [[K-Nearest Neighbors|K-nearest neighbors]]
 
 > [!example]- Time Series Models {10–15%}
-> The Candidate will understand key concepts concerning [[Regression-Based Time Series|regression-based time series]] models.
+> The Candidate will understand key concepts concerning [[Time Series|regression-based time series]] models.
 >
-> 1. Define the concepts and [[Component|components]] of [[Stochastic Time Series Process|stochastic time series processes]], including [[Random Walk|random walks]], [[Stationarity|stationarity]], and [[Autocorrelation Function|autocorrelation]].
-> 2. Describe specific time [[Series|series]] models, including, [[Exponential Smoothing|exponential smoothing]], [[Autoregressive|autoregressive]], and [[Autoregressive Conditionally Heteroskedastic|autoregressive conditionally heteroskedastic]] models.
-> 3. Calculate and interpret [[Predicted Value|predicted values]] and [[Confidence Interval|confidence intervals]].
+> 1. Define the concepts and components of [[Time Series|stochastic time series processes]], including [[Random Walk|random walks]], [[Stationarity|stationarity]], and [[Autocorrelation Function|autocorrelation]].
+> 2. Describe specific time series models, including, [[Exponential Smoothing|exponential smoothing]], autoregressive, and autoregressive conditionally heteroskedastic models.
+> 3. Calculate and interpret [[Fitted Values|predicted values]] and [[Confidence Interval|confidence intervals]].
 
 > [!example]- Decision Trees {20–25%}
 > The Candidate will understand key concepts concerning [[Decision Tree|decision tree]] models.
 >
 > 1. Describe the construction of [[Decision Tree|decision trees]], including
->    - How they are optimally fit to [[Training Data|training data]]
->    - How they are [[Pruned|pruned]] to mitigate [[Overfitting|overfitting]]
+>    - How they are optimally fit to [[Train-Test Split|training data]]
+>    - How they are pruned to mitigate [[Overfitting|overfitting]]
 > 2. [[Predict]] outcomes using
 >    - [[Classification Tree|Classification trees]]
 >    - [[Regression Tree|Regression trees]]
 > 3. Describe [[Bagging|bagging]], [[Boosting|boosting]], and [[Random Forest|random forests]] and the [[Hyperparameter|hyperparameters]] used to control them.
-> 4. Compare [[Decision Tree|decision trees]] to [[Linear|linear]] models including uses and [[Relative|relative]] strengths.
+> 4. Compare [[Decision Tree|decision trees]] to linear models including uses and relative strengths.
 
 > [!example]- Unsupervised Learning Techniques {10–15%}
-> The Candidate will understand key concepts concerning [[Principal Component|principal component]] and [[Cluster|cluster]] analysis.
+> The Candidate will understand key concepts concerning [[Principal Component|principal component]] and cluster analysis.
 >
 > 1. Define [[Principal Component|principal components]], including how they are calculated.
-> 2. Interpret the results of a [[Principal Component|principal components]] analysis, considering [[Loading|loading]] factors and [[Proportion|proportion]] of [[Variance Explained|variance explained]].
+> 2. Interpret the results of a [[Principal Component|principal components]] analysis, considering loading factors and proportion of [[Variance|variance]] explained.
 > 3. Describe and compare the [[Algorithm|algorithms]] for:
 >    - [[K-Means Clustering|K-means clustering]]
 >    - [[Hierarchical Clustering|Hierarchical clustering]]
-> 4. Explain methods for deciding the [[Number|number]] of [[Cluster|clusters]].
+> 4. Explain methods for deciding the number of [[Cluster|clusters]].
 
 ## Source Material
 > [!answer]- Source Material

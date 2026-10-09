@@ -1,0 +1,15 @@
+---
+target: Exam DISC-DA (CAS).md
+created: 2026-10-09
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- status_set: verified
+- confidence: high
+- checks_run: Lead: DISCs online with The Institutes, 75 application-based MC questions in 100 minutes, fee includes one attempt, the course contains the objectives and all material, textbook (identical content), review notes (condensed), course guide (sample Q&A) and flashcards supplemental and not required — all match the CAS DISC page; ACAS requirement matches its place under ACAS Exams; 'self-paced' matches the 05/12/2022 CAS announcement. No replacement claimed, consistent with the CAS page's '(New!)'. Topics and sections: links stripped, ligatures (ti, fi, ff) and U+2010 hyphens normalised, all 10 topic titles and 37 lettered sections match the PDF word for word and in order (47/47 lines, script diff, zero differences), lettering a-n mapped to the page's 1-n; nothing in the PDF is missing. Weights: the PDF prints no weights or percentages anywhere, so 'The Institutes gives the topics no exam weights' holds (scripts/exam_catalog.json weighted: false agrees). Source Material: one bullet, the course textbook page (The Institutes - 2023, matching the PDF's © 2023), chapters 1–10 = the 10 topics; the CAS page says the textbook is identical to the course. App data: examPdfLinks 'disc-da' is this URL, the one the CAS page links; examSittingDetails DISC facts match the CAS page. syllabus_lint: 0 errors, 14 broken-link warnings (concept pages not yet written for an in-development exam).
+- sources_checked: The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), PDF pp.1-3, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf; CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses; CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced', sha256:a84507a4d89728d73d486a1baae822d65d097911608d6cb7f89be5470e5f3e3d — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics
+- note: Verified high. No findings. Every topic and section is the published syllabus word for word, and every lead fact is on the CAS DISC page or its 2022 announcement. No edits made.

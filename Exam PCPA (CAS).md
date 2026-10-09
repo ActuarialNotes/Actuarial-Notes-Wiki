@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:82e1521a2e56b380cd55ce2291caba69e64ba578439c8b35a6695866d7d793d9
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4a6142742fb54cedd19caf4637fb2e6e54c89ce6e27c358eb0868972d101b9b2
+  sources:
+    - "CAS, PCPA Exam & Project Content Outline — Property and Casualty Predictive Analytics, v.8 updated 9.9.2026, effective September 2026 (9 pp.), PDF pp.1-9 incl. link annotations pp.5-7, sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"
+    - "CAS, Property & Casualty Predictive Analytics (PCPA) exam page, read 2026-10-09: the outline above ('Download Now') is the only content outline linked, sha256:9eb8cfcb4d4de9b7baed3b5392556908cd9a0aa108e6f0737b90f76aded1937f — https://www.casact.org/exam/property-casualty-predictive-analytics-pcpa"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam PCPA (CAS).md
 ---
@@ -17,7 +19,7 @@ verification:
 
 # Exam PCPA
 
-**Property and Casualty Predictive Analytics (PCPA)** is a two-part requirement for the [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]]: a 2-hour computer-based exam of 40 questions, followed by a project in which the candidate builds a [[Generalized Linear Model]] on a data set provided by the CAS and reports on it in a brief technical report. The exam is offered continuously, year-round, and is the prerequisite for the project. Candidates typically sit it after Exams MAS-I, MAS-II and 5, so it assumes a foundational knowledge of [[Predictive Analytics|predictive analytics]].
+**Property and Casualty Predictive Analytics (PCPA)** is a two-part requirement for the [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]]: a 2-hour computer-based exam of 40 questions, followed by a project in which the candidate builds a [[Generalized Linear Model]] on one or two data sets provided by the CAS and reports on it in a brief technical report. The exam is offered continuously, year-round, and is the prerequisite for the project. Candidates typically sit it after Exams MAS-I, MAS-II and 5, so it assumes a foundational knowledge of [[Predictive Analytics|predictive analytics]].
 
 ## Learning Objectives
 
@@ -63,7 +65,7 @@ verification:
 > - [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]
 >      - B1–B2 (Chapter 7)
 > - [[Generalized Linear Models for Insurance Data (De Jong and Heller - 2008)]]
->      - B1–B2 (Chapters 5, 6, 8 and related code in the Appendix)
+>      - B1–B2 (Chapters 5, 6, 8 and related code in Appendix)
 > - [[R for Actuaries and Data Scientists with Applications to Insurance (Fannin - 2020)]]
 >      - B1–B2 (Chapters 6, 15, 18 and 19)
 > - [[Show Me the Numbers (Few - 2012)]]

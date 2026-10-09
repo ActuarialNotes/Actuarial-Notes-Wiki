@@ -36,6 +36,7 @@ import {
   examPageIdFromFile,
   examProgressKeyFromFile,
   examQuizTopic,
+  studyGuidesForResource,
   todaysPlanConcepts,
   todaysPlanRowState,
 } from '@/lib/examMenu'
@@ -125,8 +126,21 @@ export function ConceptActionMenu({
   const { addCard, hasCard, cards } = useFlashcards()
   const closePopup = useConceptPopup(s => s.close)
   const { records: masteryRecords } = useConceptMastery()
+  const { syllabi } = useWikiSyllabus()
 
   const isOnWiki = location.pathname.startsWith('/wiki/')
+  // Where a resource opens in its study guide: the exams whose Source Material
+  // lists it. The one already open wins, so the row never moves a reader between
+  // guides; none greys the row out.
+  const resourceGuide = useMemo(() => {
+    if (entry.kind !== 'resource') return null
+    const guides = studyGuidesForResource(syllabi, entry.name)
+    const routes = guides.map(s => wikiRoute({ kind: 'exam', name: s.fileName! }))
+    const open = routes.indexOf(location.pathname)
+    if (routes.length === 0) return null
+    // Opened at the reading, not the top of the guide (`?resource=`, WikiExam).
+    return `${routes[open >= 0 ? open : 0]!}?resource=${encodeURIComponent(entry.name)}`
+  }, [syllabi, entry.kind, entry.name, location.pathname])
   const isExam = entry.kind === 'exam'
   const markdown = content ?? fetchedContent
   // The exam menu leads with a readiness bar and a countdown, so it is given a
@@ -298,6 +312,23 @@ export function ConceptActionMenu({
               disabled={isOnWiki}
               onClick={() => { routerNavigate(wikiRoute(entry)); onClose() }}
               className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isOnWiki ? 'opacity-40 cursor-not-allowed' : 'hover:bg-accent'}`}
+            >
+              <BookOpen className="h-3.5 w-3.5 shrink-0" />
+              Open in Study Guide
+            </button>
+          )}
+          {entry.kind === 'resource' && (
+            <button
+              type="button"
+              disabled={!resourceGuide}
+              title={resourceGuide ? undefined : 'Not a reading in any study guide'}
+              onClick={() => {
+                if (!resourceGuide) return
+                onClose()
+                closePopup()
+                routerNavigate(resourceGuide)
+              }}
+              className={`${ACTION_MENU_ROW_CLASS} disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent`}
             >
               <BookOpen className="h-3.5 w-3.5 shrink-0" />
               Open in Study Guide

@@ -14,8 +14,9 @@ source read in that run, and the log stays append-only.
 > themselves (every past-paper PDF and every `Available from:` document was downloaded,
 > page-counted and text-extracted for this plan). Refresh the status numbers with
 > `python3 scripts/generate_validation_status.py` and the queue with
-> `python3 scripts/verify_targets.py`. The packet tables below can only be re-derived with
-> the Wave 0 tooling, which doesn't exist yet.
+> `python3 scripts/verify_targets.py --by-source`. Re-derive the reading packets with
+> `python3 scripts/verify_route.py --fetch` and a paper's packet with
+> `python3 scripts/verify_paper.py build` (section 4).
 
 ## 1. Where things stand
 
@@ -53,8 +54,8 @@ SOA text keyed by question with page ranges, a token stem diff, a link check, a 
 recorder) and got to about **12.5k per question**. That is a 50× drop, and almost all of
 it came from **not putting the same source into context twice**.
 
-None of that tooling was committed. Wave 0 below commits it. The rest of the plan follows
-from four rules:
+None of that tooling was committed at the time. Wave 0 (section 4) rebuilt it as scripts.
+The rest of the plan follows from four rules:
 
 1. **Batch by source, not by folder or alphabet.** A work packet is one source document
    plus every vault file that document can verify. That means one past paper and its
@@ -181,49 +182,76 @@ Two consequences:
   rank-3 references, nothing more. MAS-I set the precedent: verify at **medium** at most,
   and say why in the pass note.
 
-## 4. Wave 0: tooling to build before the big waves
+## 4. Wave 0: the packet tooling (built)
 
-Each of these pays for itself on the first packet it serves. Each is a small, stdlib-first
-script with tests beside it, in the style of `verify_*.py`. Every one was prototyped while
-writing this plan and works on real data.
+Each piece is a small stdlib-first script beside the other `verify_*.py`, tested in
+`scripts/test_verify_wave0.py` with no network, PyMuPDF or Tesseract (CI has none of the
+three). Point the cache somewhere for the session first: the hook sets
+`VERIFY_SOURCE_CACHE`, and without it the cache is `<tmp>/verify-sources`.
 
-1. **`verify_sources.py`: the shared source cache.** Fetch a document once per session,
-   record its sha256, page count and outline, and extract every page's text into a cache
-   outside the repo, keyed by URL. Scanned pages get OCR'd text too (next item). Every
-   packet reads from the cache by page range. Nothing is fetched twice, and every pass in a
-   packet cites the same digest.
-2. **OCR for scanned booklets.** `pdf_extract.py --ocr` already supports it, but the
-   container has no Tesseract. `apt-get install -y tesseract-ocr` works here; put it in the
-   session-start hook. **Measured:** OCR of the Exam 5 Fall 2019 booklet takes 46 seconds of
-   CPU. A plain token match of the vault's 25 stems against it finds 89% of their numbers
-   and 91% of their words. 22 of the 25 questions are within a few tokens (point values, part
-   letters, OCR slips), and **three (Q10, Q11, Q23) diverge enough to need the page image
-   read.** Those three are exactly the questions a model should spend vision tokens on.
-3. **`verify_paper.py`: one past paper as a packet.** Use `pdf_extract.py`'s
-   segmentation to cut the paper into questions with page ranges. Gather every vault
-   question that cites that paper, across banks via `originally_exam`. Then print, per
-   question:
-   - a **blind stem** (frontmatter, `answer:` and Explanation stripped), for the
-     recompute-first rule (P5);
-   - a **token diff** of the stem against the paper's text or OCR;
-   - the **examiner's report section** for that question.
+1. **`verify_sources.py`: the shared source cache.** `fetch <url>` downloads a document
+   once, records its sha256, page count and outline, and writes every page's text into
+   the cache outside the repo, keyed by URL. Scanned pages are OCR'd when Tesseract is
+   installed, and `meta.json` lists them (`ocr_pages`), plus any page left with no text
+   (`image_pages`). `text --pages`, `search`, `render --pages` and `cite --locator` read
+   from the cache. The last prints the `--source` line a pass records, digest and URL
+   included.
+2. **OCR for scanned booklets.** `.claude/hooks/session-start.sh` (cloud sessions only)
+   installs PyMuPDF and `tesseract-ocr` and sets the cache variable. It is synchronous, so
+   both are in place before a session's first command. OCR of a 30-page booklet takes about
+   45 seconds of CPU, once per paper.
+3. **`verify_paper.py`: one past paper as a packet.**
+   - `list` shows every paper with what is left on it.
+   - `build --exam "Exam 5" --year 2019 --session Fall` writes the packet. Its members
+     are every question sat on that paper, across banks via `originally_exam`.
+   - The report side (points, parts, sample answers, examiner's report, an MC key) comes
+     from `pdf_extract.py`, run once and cached.
+   - Each stem is **located** in the OCR'd booklet by its own tokens. It is not taken from
+     the converter's alignment, which misplaces prompts on a scan. Then it is diffed
+     against the page it lands on and given a verdict: `clean`, `check` or `diverges`.
+   - The output is `blind/<n>.md`, the stem alone for the recompute-first rule, and
+     `source/<n>.md`, holding the diff, the mechanical leads (points, parts, key,
+     options), the paper's prompt and the report. `packet.md` is one row per question.
+   - `--soa fm --questions … --solutions … --ids 351-462` does the same for an SOA
+     sample set.
+4. **`verify_route.py`: concept → reading → pages.**
+   - Routing goes from task codes to readings, then a search of the cached readings for
+     each concept's name and aliases.
+   - The result is a greedy set cover of reading packets, each concept with its *focus*
+     pages (the few that name it most).
+   - `--fetch` fills the cache. `--packet "<reading>"` prints one packet for an agent.
+     `--json` writes the routing that `verify_targets.py --routes` reads.
+5. **`verify_record.py batch ops.json`: a packet recorded at once.**
+   - The file is a list of `finding` / `resolution` / `comment` / `pass` operations, each
+     with the same keys as the command's flags.
+   - Every operation is parsed before any is written, so a typo stops the batch with
+     nothing recorded.
+   - The P1 refusals still apply one operation at a time.
+6. **`verify_targets.py --by-source [--routes routes.json]`.**
+   - The same priority bands, emitted as packets: a paper, a reading with its concepts and
+     its resource page, one resource's document, the generated SOA syllabus pages as one
+     packet, or one hand-made syllabus page.
+   - Each packet ranks by its most urgent file, then by how many files one load clears.
+   - The weekly sweep prints this view beside the file list; its agent still takes files.
 
-   The model reads the blind stem, recomputes, then reads the diff and the report. A page
-   image is added only when the diff is non-trivial or the question carries an exhibit.
-4. **`verify_route.py`: concept → reading → pages.** Each concept page maps to the syllabus
-   task codes it's linked under (`syllabus_lib.parse_exam_page`, e.g. Exam 7 task
-   `A6`). Those codes map to the readings assigned to them (the Source Material lines
-   `A2-A3, A6-A8`). Then search the cached reading text for the concept's name and aliases.
-   The output is the packet table above: reading → concepts → page numbers. A greedy set
-   cover means each reading is loaded once. Exams with no task codes (the SOA pages) fall
-   back to all of the exam's readings, which is fine because they have two to four each.
-5. **`verify_record.py batch`: write a whole packet at once.** Record the passes, findings
-   and resolutions for a packet from one JSON file. Right now each file costs several
-   recorder calls. FM's ad-hoc batch recorder is part of what kept a 10-question batch at
-   20–30 tool calls.
-6. **`verify_targets.py --by-source`.** The existing priority bands stay. Within a band,
-   emit packets rather than files, ranked by files verified per source token. The weekly
-   sweep (`validate-sweep.yml`) then picks up whole packets.
+**Measured on real packets** (9 Oct 2026):
+
+| Packet | Files | Build time | Stems | Mechanical leads |
+|---|---:|---|---|---:|
+| Exam 5 Fall 2019 (scanned booklet) | 25 | 48 s fetch + OCR once, then 14 s | 13 clean, 8 check, 4 diverging | 0 |
+| SOA FM sample questions Q351–Q462 | 112 | 57 s | 111 clean, 1 check | 5 |
+| Concept routing, whole vault | 590 | 6 min with `--fetch`, 2 min cached | 269 routed, 209 closed, 64 unnamed, 48 unlinked | — |
+
+On Exam 5 Fall 2019 a pass reads page images for 12 questions, not all 25, and for each
+one only the page the locator found. Of the 4 that diverge, 3 describe a chart in prose
+(Q10, Q11, Q23) and one carries an editorial note (Q20). Both need the page read. A
+`check` is usually an OCR slip: Q1's one "missing" number, 125, is on its page.
+
+The FM sample set's five leads are formula options. The PDF's text layer garbles their
+order across letters, so those five are read from the page too. The routing reproduces
+the plan's prototype figures within a few concepts. A reading packet now names pages:
+*Basics of Reinsurance Pricing* covers 12 concepts on 22 of its 52 pages, *Clash Cover*
+on page 22 alone.
 
 ## 5. The waves, in order
 
@@ -231,7 +259,27 @@ The order is value per token. Clear what is known to be wrong first. Do what is 
 next. Then go exam by exam, so each campaign ends with an exam whose questions, concepts,
 readings and page are all checked, which is the state a student can trust.
 
-### Wave 1: the backlog (bands 0 and 1). About 80 files.
+### Wave 1: the backlog (bands 0 and 1). About 80 files. **Done** (run `2026-10-09T19:04Z/2db6`)
+
+> **Outcome** (`.verify/_runs/2026-10-09T19-04Z-2db6.md`): 79 files, 72 now verified (21
+> high, 50 medium, 1 low). All 64 backlog findings outside Exam 6C's page were closed,
+> including the four criticals; 84 more were found and 78 of them fixed in the run.
+>
+> Left behind:
+> - **In review**, each for a source that couldn't be read: Close Year, Profit and
+>   Contingency Provision, Insurer and fm-231.
+> - **Untouched:** Exam 6C's syllabus page, which waits on its F-001.
+> - **New open findings on four 6C pages:** *MCT* and *Capital Required* multiply by 1.5
+>   where OSFI's guideline divides (critical); *Solvency* and *Supervisory Target Capital
+>   Ratio* use LICAT's name for the denominator (major).
+>
+> Two source drifts surfaced:
+> - SOA re-issued the Exam P sample PDFs under the same URLs. No key differs on the 565
+>   questions matched; 109 still need a look.
+> - CAS revised the Fall 2026 Exam 5 outline in place (v02), and `Exam 5 (CAS).md` is out
+>   of step with it.
+>
+> Fold both into the Exam P re-check and the Exam 5 campaign.
 
 - **4 disputed concept pages** with open criticals: *Complement of Credibility*,
   *Expense Ratio*, *Exposure Base* and *In-Force*. **Each needs a human decision**

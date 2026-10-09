@@ -32,3 +32,56 @@ created: 2026-09-13
 - proposed_action: Drop the attribution to Werner, or replace it with what Werner does say (p.201, PDF p.213: ground-up losses may be unknown because insureds do not report claims below the deductible, leaving censored 'net' losses).
 - applied: false
 - fingerprint: 9503c9b02513
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Werner Ch.11 p.200 (PDF p.212): the relativity (1 - LER) is derived assuming all expenses are variable and variable expense and profit are a constant percentage of premium. Bullet rewritten to say so, and the loss-portion point now rests on Werner Ch.9 p.161 (PDF p.173): where fixed expenses are material and not charged as a fee, include the fixed-expense loading, which flattens the indicated relativities. The attribution 'Werner applies the LER to the loss cost and re-loads expenses' is deleted.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Werner Ch.11 pp.202-203 (PDF pp.214-215): the LER approach assumes the same claiming behaviour at every deductible; an insured may not report a small net claim under a higher deductible for fear of a surcharge; self-selecting lower-risk insureds choose higher deductibles, so those policies may be more profitable; a Ch.9/10 analysis reflects the differences and the actuary may view both. The bullet is rewritten to that; 'claims suppression', 'moral hazard reduction' and the 'credits set purely on LER tend to be conservative' attribution are deleted.
+
+## [F-003] Example says the profit load stops the rate falling by the full LER
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: Example 'Pricing a Deductible Option', closing note
+- claim: The rate does not fall by the full LER because the $70 of fixed expense and the profit load ride on regardless.
+- evidence: Recomputed: rate = (LC + 70)/0.71, so the ratio of two rates is (LC2 + 70)/(LC1 + 70); the variable expense and profit provisions (29% of premium) scale with the loss cost and cancel. Only the $70 fixed expense dampens the change: 530.10 -> 396.80 is -25.1% of loss cost, 845.21 -> 657.46 is -22.2% of rate. Werner Ch.9 p.161 (PDF p.173) makes the same point: it is the fixed expense loading that flattens relativities. sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- source_rank: 2
+- proposed_action: Attribute the dampening to the fixed expense only.
+- applied: true
+- fingerprint: 99276272cae2
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-003
+- status: resolved
+- note: Note now reads: 'because the $70 of fixed expense rides on regardless — the variable expense and profit loads scale with the loss cost, so they fall in proportion.' Figures unchanged (25% of losses, 22% of premium).
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Formulas against Werner's discrete and continuous LER (pp.200-202). Consistency bullet re-grounded on Werner's continuous eliminated-loss formula (derivative 1 - F(D)). Empirical vs fitted LERs and the net-loss data restriction (p.201). Behavioural bullet (pp.202-203). Inflation bullet against Werner p.202 (trend comments from the ILF section apply to deductibles) and Palmer's leveraged effect. Deductible recovery bullet rewritten to Werner's large-deductible considerations (p.303: reimbursement, processing cost, credit risk, rarely fully collateralized). Unsourced 'fit matters most for large deductibles' deleted. Example 1 recomputed: 530.10/480.50/396.80; 845.21/775.35/657.46; 0.140 and 0.079 per $1; Example 2: 0.53%/0.24%/0.28% per $100.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.197-204 (PDF pp.209-216); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf
+- note: F-001, F-002 fixed; F-003 found and fixed. Medium: examples are vault-authored.

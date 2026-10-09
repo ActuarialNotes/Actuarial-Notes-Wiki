@@ -70,8 +70,15 @@ reading with everything each topic assigns from it.
 finds (`syllabus_lib.noun_phrases` — the owner's rule, and the lint's) becomes a link: to the
 concept page it names when one resolves (`vault_links.canonical_page`: namesakes, aliases,
 the name, its singular), otherwise to the page that *should* exist, named the vault's way
-(Title Case, singular). A line whose only nouns are generic ("Calculate and recommend
-assumptions") links its last one, so every objective names a concept. A reading links its
+(Title Case, singular). The one exception is a **single word with no page** — "structure",
+"business", "traditional" — which stays plain text (`syllabus_lib.needs_note`): linked, those
+were two links in five on the generated pages, to pages nobody would write, and they buried
+the objective's real concepts. A phrase ends on its noun, so a trailing participle or
+adjective ("information required", "the organization's strategic") is cut off it, and an
+adverb ("actuarially") cuts a phrase; "defined benefit" / "defined contribution" are names,
+not a verb. A line that would otherwise link nothing links its last noun phrase — or, with
+none, its last generic noun ("Calculate and recommend assumptions") — so every objective
+names a concept. A reading links its
 `Resources/Books/` page when the page's whole title appears in the citation as a run of
 words (stricter than `factCheckSources.ts`'s word-subset rule), and otherwise the page that
 should exist: `Title (Author - Year)`, `ASOP n - Title`, or `CODE - Title` for an SOA study

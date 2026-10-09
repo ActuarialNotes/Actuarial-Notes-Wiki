@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-13
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a9c1c3928d28e4dd6e2160a2897b2864e8dbf3515d5998c3b8b969854dc13cc3
+  content_hash: sha256:846fc670f4610e8fe02e26ee6a53d2b57159ebfd33af38e9c9c98c8d443a64ce
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 16 pp.313-319 (PDF pp.325-331), Ch. 2 p.26 (PDF p.38), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.38, 42-43 (PDF pp.44, 48-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.16 pp.312-321 (PDF pp.324-333); Ch.2 p.26 (PDF p.38), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.42-43 (PDF pp.48-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claims Made Coverage.md
 ---
@@ -18,12 +18,17 @@ verification:
 > $$\text{Covered if } \; \text{accident date} \ge \text{retro date} \; \text{ and } \; \text{report date} \in \text{policy period}$$
 
 - Two conditions must hold together. The **retroactive date** caps how far back an accident may have occurred; the **policy period** fixes when the claim must be reported. A claim failing either test is not covered.
-- An **extended reporting period** (ERP, or "tail coverage") lets an insured report, after the policy expires, claims arising from occurrences during the covered window. Its mirror image is **prior acts** ("nose") coverage, which moves a new policy's retroactive date back to pick up a predecessor policy's exposure.
-- Because coverage closes at expiry, a claims-made policy year has **no pure IBNR** — only IBNER on claims already reported. Development is faster, reserves are smaller, and estimates are far more stable than on the [[Occurrence Coverage|occurrence]] form.
-- Claims-made business is organized on a [[Report Year]] basis: the report year *is* the coverage cohort, so losses and earned premium match exactly.
+- An **extended reporting endorsement** (ERP, or "tail coverage") covers claims that occurred during the claims-made coverage period but are reported after the last policy expires — what a retiring physician, or an insured switching to an occurrence policy, needs to avoid a gap. Switching the other way, from occurrence to claims-made, the retroactive date should be coordinated with the expiration of the last occurrence policy to give complete coverage without overlap.
+- Because the trigger is the report date, a claims-made policy has **no pure IBNR** — only IBNER on claims already reported — so the risk of reserve inadequacy is greatly reduced relative to the [[Occurrence Coverage|occurrence]] form.
+- Claims-made business is organized on a [[Report Year]] basis: in Werner's report-year-by-lag table a claims-made policy is a row, where an occurrence policy is a diagonal. Report-year development measures only known claims, not pure IBNR.
 - Rates for a claims-made programme **step up** through the maturity years. A first-year policy covers only accidents since the retro date — a thin sliver of exposure — while a mature policy covers the full reporting distribution. The steps stop once the programme is mature.
-- Werner's principles for claims-made pricing: a claims-made policy should always cost less than an occurrence policy for the same exposure; if the reporting pattern is stable, the claims-made rate is less sensitive to the reporting-pattern assumption; and claims-made policies incur no liability for [[IBNR]] beyond the reported claims, so the insurer's exposure to unexpected reporting-pattern shifts falls on the insured instead.
-- Standard in professional liability — medical malpractice, D&O, E&O, lawyers' and architects' liability — where occurrence-form IBNR proved unpriceable.
+- The five principles of claims-made policies (Marker and Mohl, as set out by Werner):
+  1. A claims-made policy should always cost less than an occurrence policy **as long as claim costs are increasing**.
+  2. If there is a sudden, unpredictable change in the underlying trends, the claims-made policy priced on the prior trend will be closer to the correct price than an occurrence policy priced on the prior trend.
+  3. If there is a sudden, unexpected shift in the reporting pattern, the cost of a **mature** claims-made policy will be affected relatively little, if at all, relative to the occurrence policy.
+  4. Claims-made policies incur no liability for [[IBNR]], so the risk of reserve inadequacy is greatly reduced.
+  5. The investment income earned from claims-made policies is substantially less than under occurrence policies — which the target underwriting profit provision must reflect, along with the reduced pricing risk.
+- Introduced for professional liability, including medical malpractice, after the high economic and social inflation and rising claim frequency of the 1960s and 1970s left long-tailed occurrence products significantly underpriced for years before insurers noticed. Friedland lists medical malpractice, products liability, errors and omissions and directors' and officers' liability among the lines where coverage may be claims-made.
 
 ![[Media/Figures/Claims_Made_Coverage.svg|340]]
 
@@ -44,7 +49,7 @@ verification:
 > >
 > > **(b) Not covered by this policy.** The report date falls in $2025$. It would attach to the $2025$ renewal (whose retro date must still reach back to $2023$), or to an ERP if one was purchased.
 > >
-> > **(c) Not covered.** The accident predates the retroactive date, so no claims-made policy in this programme responds regardless of when it is reported. This is the gap that prior-acts coverage is bought to fill.
+> > **(c) Not covered.** The accident predates the retroactive date, so no claims-made policy in this programme responds regardless of when it is reported. An insured moving from occurrence coverage sets the retroactive date at the expiration of the last occurrence policy, which is the policy that covers an accident like this one.
 > >
 > > **(d) Covered.** Both tests pass — the ordinary case of an accident and report in the same year.
 
@@ -65,4 +70,4 @@ verification:
 > >
 > > The first-year policy costs a quarter of the occurrence policy — and the insured who buys it must understand that the discount is not free: it reflects genuinely narrower coverage, and leaving the programme without buying an ERP leaves the remaining $75\%$ of the exposure uninsured.
 > >
-> > With trend included, each step is also multiplied by one year's trend, so a mature claims-made rate still sits below the occurrence rate by roughly the average reporting lag's worth of trend.
+> > With claim costs trending upward, Principle 1 applies to the mature step too: the mature claims-made policy costs less than the occurrence policy for the same year, because the occurrence policy's claims are reported further into the future, where trend has pushed costs higher.

@@ -27,3 +27,23 @@ created: 2026-09-13
 - confidence: medium
 - checks_run: Non-pricing levers checked against Werner Ch.14 printed p.264: expense reduction; 'tighten the underwriting criteria or non-renew policies that have grossly inadequate premium'; coverage level change ('a homeowners insurer may adjust the policy to exclude coverage for mold losses... equivalent to a rate level increase'); and 'better loss control procedures' with the workers compensation medical-management/return-to-work example -- so all four of the page's bullets are sourced, as is the framing that companies in constrained markets 'rely on the information to improve profitability through these non-pricing solutions' (Ch.13 p.256). The off-balance display matches Werner p.276: 'The final term of the equation, which is the reciprocal of one plus the change in average rate differential, is commonly referred to as the off-balance factor.' Rate capping and its knock-on base-rate adjustment are Werner pp.280-281 (worked example: off-balance 0.9749 = 1/(1+2.57%), cap at 20%, base rate up 0.87% to cover the $8,459 shortfall). Recomputed the page's examples before reading them: 1.20/1.10-1 = +9.09% -> +9.1% correct; off-balance 1.060/1.035 = 1.024155 -> 1.0242, $480 x 1.0242 = $491.62, and the check 1.0242 x 1.035 = 1.0600, and 1.06 x 1.035 = 1.0971 = +9.7% -- all correct. Medium confidence because the phasing example's deficiency figure does not reproduce from its own premise (F-001).
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.14 'Implementation', printed pp.263-264, 276 and 280-281 (PDF pp.275-276, 288, 292-293), and Ch.13 printed p.256 (PDF p.268), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Recomputed: 1.20/1.10 - 1 = 9.09%; with the $40M earned at the +10% level the deficiency is 40,000,000 x 0.0909 = $3.64M (Werner Ch.14 pp.263-264 measures the same gap directly in the fundamental insurance equation). The unexplained /1.20 is removed and the figure changed from ~$3,000,000 to ~$3,640,000.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Non-pricing levers re-read against Werner p.264 — expense reduction added (it was missing), 'agency compensation' and 'claims handling' wording replaced by Werner's marketing and loss-control items. Base-rate display relabelled to Werner's 'change in average rate differential' (p.276, off-balance factor = reciprocal). Capping bullet rewritten to Werner's relativity capping (pp.280-283) and premium transition rule (p.284: 15% cap, 1.20/1.15 - 1 = 4.3%; base rate over whole period vs end of transition; overlapping transitions) — the unsourced 'two rate levels tracked for on-levelling' removed. Practical-constraints paragraph tied to Ch.13 systems constraints, Ch.14 communication, and the Ch.6 trend period running from the proposed effective date. Distribution-shift remark rewritten to Werner p.285. Examples recomputed: $3.64M; 1.060/1.035 = 1.0242, 480 x 1.0242 = 491.62, 1.06 x 1.035 = 1.097.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.14 pp.263-264, 276-285 (PDF pp.275-276, 288-297); Ch.13 pp.241-243, 256 (PDF pp.253-255, 268); Ch.6 p.113 (PDF p.125), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: F-001 fixed. Medium: worked examples are vault-authored.

@@ -27,3 +27,23 @@ created: 2026-09-13
 - confidence: medium
 - checks_run: The two-condition trigger diffed against Werner Ch. 16 p.318 ('The claims-made coverage only covers claims that occur on or after the retroactive date' plus report in the policy period, illustrated by L(2011,0) for a first-year policy) and Ch. 2 p.26; extended reporting coverage against Werner Ch. 2 p.26 ('extended reporting coverage covers claims that occur during the coverage period but are reported after the policy terminates') and Ch. 16 p.316; no pure IBNR against Werner Ch. 16 p.317 Principle 4 and Friedland Ch. 3 p.43; step factors as a percentage of the mature claims-made rate against Werner Ch. 16 p.318 and the maturity table at Ch. 2 p.26; the report-year basis against Friedland Ch. 3 p.42 and Werner Ch. 16 p.314. All four rows of the trigger example checked date by date. The step example recomputed before reading the answers: a 25/35/25/15 reporting pattern gives cumulative 0.25/0.60/0.85/1.00, so 5,000/12,000/17,000/20,000 as printed; the closing remark that a mature claims-made rate sits below the occurrence rate by about the average lag's worth of trend is borne out by Werner's Table 16.3, where 1,000.00 x 1.05^2 = 1,102.50 against an occurrence loss cost of 1,105.13. The principles bullet is wrong - finding F-001, major, open - which is why confidence is medium rather than high.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 16 pp.313-319 (PDF pp.325-331), Ch. 2 p.26 (PDF p.38), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.38, 42-43 (PDF pp.44, 48-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Werner Ch.16 pp.315-317 (PDF pp.327-329), re-read: the five principles (Marker and Mohl 1980) are now listed as Werner states them — P1 with 'as long as claim costs are increasing', P2 (sudden trend change), P3 with 'sudden, unexpected shift' and 'mature', P4 'risk of reserve inadequacy is greatly reduced', P5 reduced investment income and its effect on the target underwriting profit provision.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Trigger and retroactive date against Werner p.318; extended reporting against Werner Ch.2 p.26 and Ch.16 pp.319-321, with the unsourced 'prior acts (nose)' sentence replaced by Werner's retro-date coordination on switching from occurrence; no pure IBNR (P4); report-year aggregation (Werner p.314 row vs diagonal; Friedland pp.42-43, report-year data measures known claims only) — unsourced 'losses and premium match exactly' removed; step factors p.318; five principles pp.315-317; history and lines (Werner p.312; Friedland p.42 lists med mal, products, E&O, D&O) — 'lawyers' and architects'' removed. Example 1 checked date by date; example (c) note tied to Werner's retro-date coordination. Example 2 recomputed: 0.25/0.60/0.85/1.00 x 20,000; trend remark rewritten to Principle 1 and Werner's report-year trend logic.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.16 pp.312-321 (PDF pp.324-333); Ch.2 p.26 (PDF p.38), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.42-43 (PDF pp.48-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf
+- note: Major finding fixed. Medium: the examples are vault-authored.

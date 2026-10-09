@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:46d0e83c16b9c7c77e7533d7a7282a092f63db2a336437aa2a470ea0722386f4
-  sources: []
-  open_findings: 2
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:06fb060d184ee603ffa5053899697ea97fba72fdaa24ebc91fab5ec0b40fd554
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.197-204 (PDF pp.209-216); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Deductible Rating.md
 ---
@@ -17,12 +19,12 @@ verification:
 
 > $$\text{Deductible Relativity} = 1 - \text{LER}(d)$$
 
-- The relativity applies to the **loss** portion of the rate, not the whole rate. [[Fixed Expenses|Fixed expenses]] do not fall because the insured took a deductible, so crediting the full $(1 - \text{LER})$ against the entire premium over-credits the deductible. Werner's formulation applies the LER to the loss cost and re-loads expenses afterwards.
-- LERs are computed from the size-of-loss distribution — empirically where volume permits, from a fitted severity curve otherwise. The fit matters most for large deductibles, where the answer depends on the tail.
-- Deductible credits must satisfy a **consistency** requirement: the credit per dollar of deductible must *decrease* as the deductible rises, because successive layers contain progressively less expected loss. A credit schedule that violates this lets an insured buy a higher deductible and gain more credit than the layer is worth.
-- Two behavioural effects mean the observed saving exceeds the pure LER, and both belong in the pricing judgment: **claims suppression** (insureds do not report losses near the deductible, so even the excess portion is never claimed) and **moral hazard reduction** (retention improves care). Werner cautions that these are real but hard to quantify, and that credits set purely on LER tend to be conservative.
+- Werner derives the relativity $(1 - \text{LER})$ assuming **all expenses are variable** and the variable expense and profit provisions are a constant percentage of premium, so under that assumption it applies to the whole rate. [[Fixed Expenses|Fixed expenses]] do not fall because the insured took a deductible: where they are material and are not charged as a separate fee, Werner's general rule for relativities is to include the fixed-expense loading, which flattens the indicated relativity — in effect the credit applies to the loss portion only.
+- LERs are computed from the size-of-loss distribution — empirically when ground-up losses are known, or from a fitted continuous distribution. When the data hold only losses net of the deductible, policies with a deductible *higher* than the one being priced cannot be used.
+- Deductible credits must satisfy a **consistency** requirement. Werner writes the losses eliminated by a deductible $D$ as $\int_0^D x f(x)\,dx + D\,[1 - F(D)]$, so each extra dollar of deductible eliminates $1 - F(D)$ per claim — the chance a loss exceeds $D$ — which can only fall as $D$ rises. The credit per dollar of deductible must therefore *decrease* as the deductible rises; a schedule that violates this is not consistent with any size-of-loss distribution.
+- The LER approach assumes **claiming behaviour is the same at every deductible**, and Werner notes two ways it is not: an insured with a higher deductible may not report a claim whose small net payment is not worth a claim surcharge, and where insureds choose freely, lower-risk insureds tend to choose higher deductibles — so higher-deductible policies may end up more profitable than lower ones. A classification analysis of the historical data reflects these differences, and the actuary may look at both sets of indications before selecting.
 - Deductibles erode with [[Inflation|inflation]]: a fixed $d$ eliminates a falling share of a growing loss, so relativities must be refreshed or higher-deductible business becomes under-priced.
-- On the reserving side, the mirror concept is the [[Deductible Recovery|deductible recovery]] — amounts billed back to the insured on a large-deductible programme, which must be estimated and collected, and carry credit risk.
+- On a large deductible policy the insurer may pay the whole claim and seek reimbursement below the deductible from the insured — the [[Deductible Recovery|deductible recovery]] — so the premium must cover invoicing and monitoring and a provision for the credit risk that the insured cannot pay, which collateral rarely covers fully.
 
 ![[Media/Figures/Deductible_Rating.svg|340]]
 
@@ -55,7 +57,7 @@ verification:
 > >
 > > The marginal credit falls from $14.0$ cents to $7.9$ cents per dollar of retention, as it must — the second, wider layer contains proportionally less expected loss.
 > >
-> > Note also that the rate does **not** fall by the full LER: raising the deductible from $\$500$ to $\$2{,}500$ eliminates $25\%$ of losses but only $22\%$ of premium, because the $\$70$ of fixed expense and the profit load ride on regardless.
+> > Note also that the rate does **not** fall by the full LER: raising the deductible from $\$500$ to $\$2{,}500$ eliminates $25\%$ of losses but only $22\%$ of premium, because the $\$70$ of fixed expense rides on regardless — the variable expense and profit loads scale with the loss cost, so they fall in proportion.
 
 > [!example]- An Inconsistent Credit Schedule {Example}
 > A commercial property filing proposes these deductible credits against a $\$1{,}000$-deductible base:

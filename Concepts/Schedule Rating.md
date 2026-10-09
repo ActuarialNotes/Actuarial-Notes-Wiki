@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:345522f0ad2d71acf42a4df5147c3a000f510351e3655eb4a24a94d65cca3c61
-  sources: []
-  open_findings: 1
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7a1a5d46174a534a6446c93e33c4cff6b6149214f17a9b990df0d2f0f0d9060b
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.289, 297-298, 323 (PDF pp.301, 309-310, 335); Ch.5 p.73 (PDF p.85); Ch.2 p.16 (PDF p.28), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Schedule Rating.md
 ---
@@ -15,11 +16,11 @@ verification:
 
 > $$\text{Schedule-Rated Premium} = \text{Manual Premium} \times \left(1 + \sum_k s_k\right)$$
 
-- Where [[Experience Rating|experience rating]] is **statistical** — it looks at what happened — schedule rating is **prospective and judgmental**: it looks at features expected to affect future losses before they show up in the record. That makes it the right tool for a risk that has recently improved, or for a new operation with no experience at all.
-- The filed schedule lists eligible categories with maximum credits and debits, and most jurisdictions cap the total modification at $\pm 25\%$. Each modification must be documented against a specific, observable characteristic.
-- Order of application: schedule and experience modifications are both applied to manual premium to produce **standard premium**. Convention varies on sequencing; because both are multiplicative the product is the same, but the filed [[Rating Algorithm|rating algorithm]] must state the order so results are reproducible.
-- The obvious weakness is **consistency**. Two underwriters can see the same risk differently, and the discretion can become a competitive discount wearing an actuarial label. Regulators review aggregate schedule credits for exactly this reason: a book where nearly every risk receives the maximum credit is not being schedule-rated, it is being discounted.
-- Because credits are judgmental, they are also a source of **rate level leakage**: the filed manual rate can be adequate while the *achieved* rate is not. Monitoring the average schedule modification over time is part of measuring true rate change.
+- Where [[Experience Rating|experience rating]] looks at what happened, schedule rating looks at characteristics expected to have a material effect on future losses that are not reflected in the manual rate — or, if experience rating applies, not adequately reflected in the past experience. A newly implemented loss control programme is Werner's example. When both apply, the underwriter must avoid double-counting: the new programme will eventually show up in the loss experience too.
+- The filed schedule lists eligible categories with maximum credits and debits, and credits and debits are typically subject to an overall maximum modification — $25\%$ in Werner's illustrative workers compensation plan. State laws and regulations generally require the filed guidelines to be applied consistently, and documentation is often required to support each credit and debit.
+- Order of application: schedule rating alters the manual rate, or — where experience rating applies — the manual rate as modified by experience rating, as the filed [[Rating Algorithm|rating algorithm]] sets out.
+- The weakness is **judgment**. Characteristics can be objective (years a physician has been licensed) or subjective (quality of management); objective ones are easier to quantify and validate, but schedule rating often requires significant underwriting judgment — which is why consistent application and documentation are required.
+- Because credits are judgmental, they are also a source of **rate level leakage**: the filed manual rate can be adequate while the *achieved* rate is not. Subjective debits and credits complicate putting premium on-level, and the actuary may measure how credit and debit practices have changed by reviewing their distributions over recent years.
 
 ![[Media/Figures/Schedule_Rating.svg|340]]
 

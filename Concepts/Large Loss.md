@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dec205a207136cf24e055cd21d9f83dd5f7b9cee4021c32aa57d188b46db4e28
-  sources: []
-  open_findings: 1
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f028b34cb04ca2dd3f8619bc454d075e1d483a573449ca14f551d4a537ab17c0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 pp.95-98 (PDF pp.107-110), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 p.32 (PDF p.38); Ch.7 p.96 (PDF p.102), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Large Loss.md
 ---
@@ -17,14 +19,10 @@ verification:
 
 > $$\text{Excess Load} = \frac{\text{Expected losses above } M}{\text{Expected losses below } M}$$
 
-- The standard treatment has three steps: **cap** each claim at a threshold $M$ for the experience analysis, **compute** an excess load from a wider base (more years, more states, industry data), and **add it back**. The rate then covers the full expected cost without being hostage to whether a shock loss happened to occur in the experience period.
-- The threshold is a trade-off. A low cap removes too much real experience and makes the analysis depend heavily on the excess load; a high cap leaves the volatility in. Werner's guidance is to set $M$ where the credibility gained by capping outweighs the data lost.
-- The excess load must be computed over a **long** period — a decade or more — precisely because large losses are rare. Using the same five years for both the capped experience and the excess load defeats the purpose.
-- Where [[Increased Limits|ILFs]] exist, the load follows directly from them:
-
-> $$\text{Excess Load} = \frac{\text{ILF}(U)}{\text{ILF}(M)} - 1$$
-
-- In **reserving** the parallel treatment applies: pull large claims out of the triangle, develop the remainder with factors undistorted by shock losses, and reserve the large claims individually or with their own (much longer) pattern. Leaving a $\$2$M claim in an immature diagonal and multiplying it by a CDF of $4$ produces an $\$8$M estimate from one claim.
+- The standard treatment has three steps: **cap** each claim at a threshold $M$ for the experience analysis, **compute** an excess load from a longer-term view of how often such losses occur, and **add it back**. The rate then covers the full expected cost without being hostage to whether a shock loss happened to occur in the experience period.
+- Ideally the threshold is the point at which losses become extraordinary and their inclusion makes rates volatile. It may be the basic limit — and then the premium in a loss ratio indication must be put on a basic-limits basis too. Otherwise Werner sets it to balance including as many losses as possible against minimizing volatility: for example at the $99$th percentile of claim sizes, or at a percentage of losses; where the size-of-loss distribution varies a lot by policy (property), as a percentage of the amount of insurance rather than a fixed amount.
+- The excess load is computed over a **long** period because large losses are rare — Werner's illustrations are $10$ years for a medium-sized homeowners insurer's large fire losses and $20$ for a small personal umbrella insurer — but not so long that older data has become irrelevant. Ideally the procedure is run on losses trended to future levels, since higher layers are subject to greater inflation.
+- In **reserving** the parallel treatment applies: the actuary may exclude large claims from the initial projection, then add back a case-specific projection for the reported large claims and a smoothed provision for the IBNR portion of large claims (Friedland), or build the triangles on claims limited to, say, $\$500{,}000$ or $\$1$M per occurrence. Leaving a $\$2$M claim in an immature diagonal and multiplying it by a CDF of $4$ produces an $\$8$M estimate from one claim.
 - Distinguish a large loss from a [[Catastrophe Loss|catastrophe]]: a large loss is one claim of unusual size, a catastrophe is many claims from one event. Both are excluded from base experience, but the loads are built differently.
 
 ![[Media/Figures/Large_Loss.svg|340]]
@@ -53,7 +51,7 @@ verification:
 > > The uncapped figure would have been $\$14{,}000{,}000/20{,}000 = \$700$ — close to the answer here, but only by coincidence. Had the five years contained *no* claim over $\$500{,}000$, the uncapped pure premium would have been $\$600$ and the class would have been under-priced by $17\%$; had it contained a $\$5$M claim, over-priced by a similar margin. Capping removes that dependence on luck.
 
 > [!example]- A Shock Loss in an Immature Triangle {Example}
-> Accident year $2024$ reported losses at $12$ months are $\$4{,}500{,}000$, including a single $\$1{,}500{,}000$ claim reserved at policy limits. The selected reported CDF at $12$ months is $3.20$. Historical non-large-loss experience suggests $\$3{,}000{,}000$ of ordinary losses develop to about $\$9{,}600{,}000$.
+> Accident year $2024$ reported losses at $12$ months are $\$4{,}500{,}000$, including a single $\$1{,}500{,}000$ claim reserved at policy limits. The selected reported CDF at $12$ months is $3.20$, built on ordinary (non-large) claims. A smoothed provision for large claims not yet reported, from the long-term large-loss experience, is $\$700{,}000$.
 >
 > Estimate ultimate losses correctly.
 >

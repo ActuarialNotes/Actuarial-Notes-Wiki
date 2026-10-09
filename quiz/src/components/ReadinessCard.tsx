@@ -299,8 +299,8 @@ interface Props {
   readinessSlot?: HTMLElement | null
   /** The primary actions that act on this score (Read concepts / Fix mistakes /
    *  Start quiz). Rendered straight under the Exam readiness card, bare on the
-   *  page, between it and the schedule — but authored by the Dashboard, which
-   *  owns their triggers. Omitted, the schedule follows the card directly. */
+   *  page — but authored by the Dashboard, which
+   *  owns their triggers. Omitted, the group ends with the card. */
   actions?: ReactNode
 }
 
@@ -1061,14 +1061,14 @@ export function ReadinessCard({
 
   // The three cards the Dashboard leads with, in this order:
   //
-  //   1. **Exam readiness** — the headline answer to "how ready am I?". The
-  //      exam's logo, the band verdict and the score as a KPI, then how many
-  //      concepts today's plan still asks for, and the insight line under its
-  //      own small "Insight" label. Under the card, bare on the page, come the
-  //      primary actions (`actions`) that move the score, and then the
-  //      calendar — the exam date it is racing and the schedule strip
+  //   1. **Exam readiness** — led by the calendar, a full-width section of its
+  //      own rather than a card: the exam date the score is racing, the
+  //      target-ready date under it, and the schedule strip
   //      (`examScheduleBlock`, with `dayDetailPanel` for whichever day is
-  //      tapped) — as a full-width section of its own rather than a card.
+  //      tapped). Then the card — the exam's logo, the band verdict and the
+  //      score as a KPI, how many concepts today's plan still asks for, and
+  //      the insight line under its own small "Insight" label — and under it,
+  //      bare on the page, the primary actions (`actions`) that move the score.
   //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
   //      score today. It follows the number rather than the ring: the reader who
   //      has just read "Not started" is looking for the next step, not for a
@@ -1113,7 +1113,7 @@ export function ReadinessCard({
   // that day below. Everything the separate card did — the day panel, the
   // schedule-forming sweep, the target-ready date — happens in this block.
   const examScheduleBlock = (
-    <div ref={studyScheduleCardRef} className="space-y-2">
+    <div ref={studyScheduleCardRef} className="space-y-1">
       <button
         type="button"
         onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
@@ -1159,6 +1159,7 @@ export function ReadinessCard({
         <ExamHeatmap
           layout="linear"
           showExamDateRow={false}
+          dateRowsAbove
           sessions={examSessions}
           examProgressKey={progressKey}
           targetDate={examDate}
@@ -1357,6 +1358,21 @@ export function ReadinessCard({
 
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
+      {/* The calendar leads the group: the date the score is racing, the
+          target-ready date under it, and the schedule under both — a
+          full-width section of its own rather than a card. A
+          readiness percentage only means something against a deadline, so
+          this carries the day itself, how far off it is, and — when no date
+          is set, or the one set isn't a real sitting — the next published
+          sitting window for this exam (data/examSittings.ts). Under those
+          lines is the timeline, laid out linear so it spans exactly the
+          stretch they name; tapping a day on it opens that day in
+          `dayDetailPanel` below. */}
+      <section aria-label="Study schedule" className="space-y-1">
+        {examScheduleBlock}
+        {dayDetailPanel}
+      </section>
+
       <Card className="border-0">
         <CardContent className="p-6 space-y-4">
           {/* The exam's logo, then title and verdict, with the score itself on
@@ -1437,19 +1453,6 @@ export function ReadinessCard({
           page — no card around them. */}
       {actions}
 
-      {/* The calendar: the date the score is racing and the schedule under
-          it, as a full-width section of its own rather than a card. A
-          readiness percentage only means something against a deadline, so
-          this carries the day itself, how far off it is, and — when no date
-          is set, or the one set isn't a real sitting — the next published
-          sitting window for this exam (data/examSittings.ts). Under those
-          lines is the timeline, laid out linear so it spans exactly the
-          stretch they name; tapping a day on it opens that day in
-          `dayDetailPanel` below. */}
-      <section aria-label="Study schedule" className="space-y-1">
-        {examScheduleBlock}
-        {dayDetailPanel}
-      </section>
 
       {studyPlanCardContent}
 
@@ -1515,7 +1518,7 @@ export function ReadinessCard({
   return (
     <div className="space-y-4">
       {/* One column. The cards the Dashboard wants at the very top of the
-          page — Exam readiness, its actions and the schedule strip under it,
+          page — the schedule strip, Exam readiness and its actions,
           Today's Study Plan and the Study Guide — portal into the slot it
           supplies; what's left here is the plan's warnings, full width. The
           `order-*` classes keep the inline (no-slot) fallback in the same

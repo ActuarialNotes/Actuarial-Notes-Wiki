@@ -19,7 +19,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, with the primary actions and the schedule under it) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the schedule above it, the `NN%` KPI beside the band verdict, the primary actions under it) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
@@ -124,9 +124,10 @@ while they render at the top of the page:
    the insight line, smaller, under its own **Insight** label. The logo says which exam the
    card is scoped to without re-printing its name, and carries that exam's accent
    (`lib/examColors.ts`) so the card sits on the same ladder as every other surface that
-   shows one. Under the card, bare on the page rather than in a card of their own, come the
-   **primary actions**, and under them the **calendar** — the exam dates row and the
-   schedule strip — as a full-width section with no card background or padding.
+   shows one. Above the card, leading the dashboard, is the **calendar** — the exam date, the
+   target-ready date straight under it, then the schedule strip — as a full-width section
+   with no card background or padding; under the card, bare on the page, come the
+   **primary actions**.
 
    The dates block is the deadline the score is racing — a readiness percentage means
    nothing without one, so the section carries it. It prints the chosen exam date and how many
@@ -150,7 +151,7 @@ while they render at the top of the page:
    page. It keeps everything the card did: tapping a day opens that day's panel below the
    block (its sessions, gems, level-ups and what the plan schedules for it), the
    *schedule-forming* sweep plays out on it when a plan is locked in, and the **Target ready**
-   date row sits under the strip.
+   date row sits above the strip, under the exam date (`dateRowsAbove`).
 2. **Today's Study Plan** — what to do about that score today. It follows the number rather
    than the ring: a reader who has just read *Not started* is looking for the next step, not
    for a breakdown of how the number was reached.

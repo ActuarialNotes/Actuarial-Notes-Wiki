@@ -92,6 +92,12 @@ decide what is true.
 - One PR per batch: `Validate: <exam/topic> (<n> files, <m> findings)`, body =
   the run summary with critical findings first. Never a push to `main`.
 
+## What to run next
+
+`docs/verification-plan.md` is the plan for the unverified remainder of the vault: work
+packets keyed by source document (one past paper, or one reading plus its concepts and its
+resource page), the tooling to build before the big waves, and the order to run them in.
+
 ## First run — field notes
 
 `docs/validation-agent-first-run.md` records the first real sweep

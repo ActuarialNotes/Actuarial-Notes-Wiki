@@ -347,9 +347,11 @@ before touching that area**:
   `quiz/skills/`.
 - `docs/actuarial-tools.md` — **the plan for Actuarial Tools** (not built yet): a third mode of
   actuarial calculators — reserving, ratemaking, distributions, credibility, reinsurance,
-  financial maths, capital, life — that people use on a tool page and AI agents use through
+  financial maths, capital, life — that people use as a card and AI agents use through
   the MCP connector (`list_tools` / `describe_tool` / `run_tool`) and a JSON API, all running
-  one pure engine in `lib/tools/`. Its ground rules: tools compute and people judge (every
+  one pure engine in `lib/tools/`. Each tool does one thing (one question, one method; bigger
+  jobs chain tools), and each is one small live card in the distribution simulator's shape
+  (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
   transcribed with their source), and no tool leaves Preview until it reproduces a published
   worked example in CI. Read before building any of it.

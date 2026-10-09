@@ -3,9 +3,16 @@
 _Last updated: 2026-10-09 · Status: **plan**. Nothing here is built yet._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
-people and AI agents both use. A person uses a tool page. An agent uses the same tool through
+people and AI agents both use. A person uses a tool card. An agent uses the same tool through
 the MCP connector or a JSON endpoint. Both run the same code on the same inputs and get the
 same numbers, the same working and the same citations.
+
+Two design choices shape everything below:
+- **Each tool does one thing.** It answers one question with one method: *Bornhuetter-Ferguson
+  ultimate*, not *Reserving*. Bigger jobs are built by passing one tool's output to the next.
+- **Each tool is small and live**, in the shape of the distribution simulators
+  (`docs/distribution-simulators.md`): one card, the answer on top, the inputs below it,
+  recomputed as they change, and nothing else on screen.
 
 This document is the build spec. §4 lists which tools practitioners need, what each is for,
 and its features. The rest covers how the tools are built, verified, shown to people and
@@ -27,7 +34,7 @@ exposed to agents, phase by phase.
 **It is** a set of deterministic, documented calculators for actuarial methods. Each one:
 - takes the user's data (a triangle, a loss listing, a rate history, cash flows or
   distribution parameters);
-- applies one named method, as a cited reading defines it;
+- applies one named method, as a cited reading defines it, to answer one question;
 - returns the result, the step-by-step working, and the judgments that went into it.
 
 **It is not:**
@@ -52,11 +59,11 @@ exposed to agents, phase by phase.
 | User | Job to be done | Example |
 |---|---|---|
 | **Exam candidate** | "Show me the method working on numbers, step by step, and check my hand calculation." | Works an Exam 5 BF problem by hand, enters the triangle, and compares their result line by line with the tool's **Working**. |
-| **Practising actuary** | "Run the standard method on my data quickly and correctly, with workpapers I can file." | Pastes a paid triangle from Excel. Runs development factors, chain ladder, BF and Cape Cod side by side. Exports an `.xlsx` with the method references for the ASOP 41 documentation. |
-| **Pricing analyst** | "Build the indication from rate history, premium and losses." | Enters the rate-change history, then on-levels, trends and develops, and gets the indicated change under both the loss ratio and pure premium methods. |
+| **Practising actuary** | "Run the standard method on my data quickly and correctly, with workpapers I can file." | Pastes a paid triangle from Excel into Age-to-Age Factors, then sends the selections on to Development to Ultimate, and from there to Chain Ladder, BF and Cape Cod. Exports each run as an `.xlsx` with the method references for the ASOP 41 documentation. |
+| **Pricing analyst** | "Build the indication from rate history, premium and losses." | Gets on-level factors from the rate history, a trend factor from the selected trend, and the indicated change from the Loss Ratio Method tool. Each step is its own tool. |
 | **Reviewer / regulator / auditor** | "Re-perform a filed calculation from its exhibit numbers." | Enters the filing's factors and checks that the indicated change reproduces. |
-| **Adjacent professional** | "Understand what the number means." | Opens the **Method** tab, the concept page in the popup, without reading a textbook. |
-| **AI agent acting for any of these** | "Do the arithmetic with a verified engine instead of in the model's head, and give the human something to inspect." | Claude, with the connector, calls `run_tool` on an uploaded CSV, asks the user to pick the LDFs, runs the methods, drafts commentary citing the concept pages, and returns an `app_url` that opens the same run in the app. |
+| **Adjacent professional** | "Understand what the number means." | Taps the tool's title, which opens the concept page in the popup, without reading a textbook. |
+| **AI agent acting for any of these** | "Do the arithmetic with a verified engine instead of in the model's head, and give the human something to inspect." | Claude, with the connector, runs Age-to-Age Factors on an uploaded CSV, asks the user to pick the LDFs, runs each method as its own call, drafts commentary citing the concept pages, and returns an `app_url` for each run. |
 
 The agent row is the reason the section exists. A general model will do a chain ladder
 "by hand" in its reply. It miscounts the triangle, rounds partway through, and invents a
@@ -70,7 +77,7 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
 `docs/ai-connector.md` and `docs/actuaria-online.md` §2.
 
 - **R1 — One engine, two front doors.** A tool is a pure function in `quiz/src/lib/tools/`.
-  The tool page, the MCP connector and the HTTP endpoint all call that function. Nothing is
+  The tool card, the MCP connector and the HTTP endpoint all call that function. Nothing is
   re-implemented for a surface. A parity test runs every tool's fixtures through all three
   and requires identical output.
 - **R2 — Nothing is invented.** Results are derived from inputs. A tool ships no default
@@ -89,12 +96,12 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
   the values substituted and the result, in order. A run is reproducible. The result names
   the tool version and engine version and a hash of the canonicalised input. Anything random
   (bootstrap, simulation) takes a seed and echoes it.
-- **R5 — The method is a vault page.** A tool's **Method** tab is its concept page, opened in
+- **R5 — The method is a vault page.** A tool's title opens its concept page in
   `ConceptPopup` (there is no second reader; see `docs/cowork.md` §4). The tool's metadata
   links its concept pages and the readings with chapters. The method page's fact-check
   verdict travels with every result, as it does for every MCP result today.
 - **R6 — Tested against a source.** A tool can leave Preview only once it reproduces at
-  least one **published** worked example to the source's precision (§9). The tool page shows
+  least one **published** worked example to the source's precision (§9). The tool card shows
   what it was tested against, for example "Reproduces Friedland (2010) Ch. 7 example". It
   shows nothing until such a test passes in CI.
 - **R7 — The user's data stays theirs.** In the app, tools compute in the browser, and data
@@ -104,6 +111,20 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
 - **R8 — Tool ids are public API.** `reserving.chain_ladder` is a contract, like the MCP tool
   names. Tools are semver'd. A breaking change ships as a new major version, and the old one
   keeps answering through a deprecation window.
+- **R9 — One tool, one job.** A tool answers **one question**, which its spec states in one
+  sentence (`answers`), and produces **one kind of output**. The test for whether two methods
+  are one tool or two: if they answer the same question **from the same inputs**, they're
+  options of one tool (the averages in Age-to-Age Factors, the curves in Tail Factor). If
+  they need different inputs, they're different tools (the loss ratio and pure premium
+  methods need premium and exposure respectively). Anything that combines several
+  calculations is a chain of tools, never a bigger tool (§6.5). A registry test holds every
+  spec to it: one `answers` sentence, one produced kind, at most three headline results and
+  at most six scalar inputs.
+- **R10 — Small and live.** Every tool is one card in the distribution simulator's shape
+  (§6.3): the answer above, the inputs below, recomputed on every change, with no Run
+  button and no form to submit. It shows only what the answer needs. Everything else waits
+  behind one menu. A scalar tool fits an iPhone screen without scrolling, and an e2e test
+  holds it there. As with the simulator, a change that adds a row has to take one away.
 
 ---
 
@@ -111,124 +132,157 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
 
 The catalogue is organised by **practice area**: what a practitioner calls the work, not
 which exam examines it. Each tool lists the vault concept pages it implements and the exams
-that examine them, and the tool page shows that exam's logo, as an exam row does. That's
-the bridge back to Study mode.
+that examine them, and its catalogue row shows those exams' logos, as an exam row does.
+That's the bridge back to Study mode.
+
+Every tool is discrete (R9). Each row gives the one question it answers and what goes in
+and comes out. **→** means "can be sent to": the output of one tool is the input of the
+next.
 
 **Phase** is when the tool is built (§11). Priority comes from three things: how often
 practitioners do the calculation, how deep the vault's coverage is (P&C ratemaking and
 reserving are deep, life contingencies are still `development`), and how much existing code
 the tool can reuse.
 
-### 4.1 Data and triangles (the foundation every P&C tool stands on)
+### 4.1 Data
 
-| Tool | What it does | Key features | Vault pages | Phase |
+| Tool | Answers | In → out | Vault pages | Phase |
 |---|---|---|---|---|
-| **Triangle Toolkit** | Builds, converts and inspects development triangles | Paste from Excel (TSV) or CSV; long format (origin, age, value) or matrix; cumulative ↔ incremental; diagonals by calendar period; ratio triangles (paid ÷ reported, closed ÷ reported, average case O/S, average paid, paid ÷ on-level EP); heat-map shading of a diagonal shift | Development Triangle; Friedland Ch. 5–6 | 1 |
-| **Triangle Builder** | Turns a claim-transaction listing into triangles | Columns mapped by the user (claim id, accident/report/transaction date, paid, case); AY/RY/PY × evaluation age (any interval); paid, reported, reported/closed/open counts; ASOP 23-style data checks (negative values, dates out of order, a claim closed with case open, totals reconciled to the listing) | Ratemaking Data Organization; Accident Year, Policy Year, Report Year; ASOP 23 | 2 |
-| **Period & Dates** | The date arithmetic behind ratemaking and reserving | Earning of a policy in a period (any term, written evenly or by exact dates); average written/earned/accident date; trend periods (one-step, two-step); CY/AY/PY assignment of a transaction | Earned Exposure, Earned Premium, Trend | 1 |
+| **Triangle from Claim Listing** | What are the triangles in this claim data? | Transactions (claim, accident/report/transaction date, paid, case; columns mapped by the user), origin basis (AY/RY/PY), evaluation interval → one triangle: paid, reported, or reported/closed/open counts. ASOP 23-style checks (negative values, dates out of order, a claim closed with case open, totals reconciled) appear as warnings | Ratemaking Data Organization, Accident Year, Report Year, Policy Year; ASOP 23 | 2 |
+| **Ratio Triangle** | How does one triangle compare to another, cell by cell? | Two triangles → their ratio, shaded by size so a diagonal shift stands out. Covers paid ÷ reported, closed ÷ reported, average case O/S (case ÷ open counts) and average paid | Development Triangle; Friedland Ch. 6 | 1 |
+
+Cumulative ↔ incremental is not a tool. It's a switch on every triangle grid.
 
 ### 4.2 Reserving (Friedland 2010; Exam 5, 6C, 7)
 
-| Tool | What it does | Key features | Vault pages / reading | Phase |
+| Tool | Answers | In → out | Vault pages / reading | Phase |
 |---|---|---|---|---|
-| **Development Factors** | Age-to-age factors, averages, selections, CDFs | Simple, volume-weighted, medial (excluding high/low), geometric, latest-*n* averages; excluded cells; selected factors as input with the average in place shown as the default; CDFs, % reported/paid; development-factor triangle with outliers highlighted | Loss Development, Chain Ladder Method; Friedland Ch. 7 | 0 |
-| **Tail Factor** | Development beyond the triangle | Curve fits to (ATA − 1): exponential decay and inverse power, with fit statistics; Bondy; ratio of reported to paid at the last age; user-supplied tail; the fit's extrapolation drawn | Tail Factor; Clark (2003) for growth curves | 1 |
-| **Chain Ladder** | The development technique | Paid and reported side by side; ultimate, IBNR, total unpaid; consumes Development Factors' selections | Chain Ladder Method, Chain Ladder Assumptions; Friedland Ch. 7 | 1 |
-| **Expected Claims** | A priori ultimate | ELR × earned premium (on-level, trended), or a priori pure premium × exposure; ELR as input or derived from mature years with explicit adjustments | Friedland Ch. 8 | 1 |
-| **Bornhuetter-Ferguson** | Credibility-weighted ultimate | Paid and reported; % unreported = 1 − 1/CDF from a chain-ladder run or input; expected claims from that tool or input | Bornhuetter-Ferguson Method; Friedland Ch. 9 | 1 |
-| **Benktander** | Iterated BF | Number of iterations; convergence to chain ladder shown | Benktander Method; Mack (2000) | 1 |
-| **Cape Cod** | Stanard-Bühlmann | Used-up premium; ELR derived from all years; optional decay factor (generalised Cape Cod) | Cape Cod Method; Friedland Ch. 10 | 1 |
-| **Frequency-Severity** | Counts × severities | Projected ultimate counts and severities with trend to each AY; disposal-rate variant | Frequency-Severity Method; Friedland Ch. 11 | 2 |
-| **Case Outstanding Development** | Reserves from case | Case-to-paid and case-to-IBNR factors (self-insurer method) | Friedland Ch. 12 | 2 |
-| **Berquist-Sherman** | Adjusts for changes in operations | Case-adequacy adjustment (restating average case O/S by a severity trend); settlement-rate adjustment (disposal rates, interpolating paid on closed counts); runs chain ladder on the adjusted triangle | Berquist-Sherman Method; Friedland Ch. 13 | 2 |
-| **Recoveries** | S&S and reinsurance | Salvage and subrogation development and ratio methods; gross → ceded → net consistency | Salvage and Subrogation, Reinsurance Reserving; Friedland Ch. 14, Friedland (2022) | 2 |
-| **ALAE & ULAE** | Claim adjustment expenses | ALAE development / ratio methods; ULAE classical (paid-to-paid), Kittel refinement, Mango-Allen | Friedland Ch. 16–17 | 2 |
-| **Summary of Indications** | Puts methods side by side for selection | Every method's ultimate by origin; the user's selected ultimate (a judgment) with a reason field; range; implied IBNR and unpaid; reasonableness ratios (ultimate ÷ EP, severity, frequency) | Range of Indications; Friedland Ch. 15; ASOP 43 | 1 |
-| **Mack Chain Ladder** | Variability of chain-ladder reserves | Standard error by AY and total; σ² estimation and its tail extrapolation; residual plots for the model's assumptions | Mack Chain Ladder Model; Mack (1994) | 2 |
-| **ODP Bootstrap** | Predictive distribution of reserves | Shapland's ODP bootstrap: scaled Pearson residuals, heteroscedasticity adjustment, process variance (gamma), seeded, 1k–10k iterations; percentiles and histogram; runs in a Web Worker | ODP Bootstrap Model; Shapland (2016) | 2 |
-| **Clark LDF & Cape Cod** | Growth-curve reserving | Loglogistic or Weibull by MLE; LDF and Cape Cod variants; process and parameter variance; truncation | Clark (2003) | 2 |
-| **Actual vs. Expected** | Rolls an analysis forward | Expected emergence between evaluations from a prior run's pattern; A − E by origin | Roll Forward Analysis | 3 |
-| **Discounting & Risk Adjustment** | IFRS 17 measurement of claims | PV of a payment pattern with a user-supplied yield curve (bottom-up, illiquidity premium as input); risk adjustment by the confidence-level method (from a bootstrap or a fitted distribution) or the cost-of-capital method (capital and cost rate as inputs) | IFRS 17 Discount Rates, Insurance Risk Margin; CIA IFRS 17 pages | 3 |
+| **Age-to-Age Factors** | How has each origin developed between ages? | Triangle, average (simple, volume-weighted, medial, geometric; all or latest *n*), excluded cells → factor triangle and the average at each age. → Development to Ultimate | Loss Development; Friedland Ch. 7 | 0 |
+| **Tail Factor** | How much development is left after the last age? | Selected age-to-age factors, curve (exponential decay or inverse power fitted to factor − 1, or Bondy) → tail factor and the fitted curve | Tail Factor | 1 |
+| **Development to Ultimate** | What are the CDFs? | Selected age-to-age factors, tail → CDF and % developed by age. → Chain Ladder, BF, Benktander, Cape Cod | Chain Ladder Method | 1 |
+| **Chain Ladder** | What's the ultimate by development? | Latest diagonal, CDFs → ultimate and IBNR by origin | Chain Ladder Method, Chain Ladder Assumptions; Friedland Ch. 7 | 1 |
+| **Expected Claims** | What's the a priori ultimate? | Earned premium (or exposure), ELR (or pure premium) → expected claims by origin. → BF, Benktander | Friedland Ch. 8 | 1 |
+| **Bornhuetter-Ferguson** | What's the BF ultimate? | Latest diagonal, CDFs, expected claims → ultimate and IBNR by origin | Bornhuetter-Ferguson Method; Friedland Ch. 9 | 1 |
+| **Benktander** | What's the iterated BF ultimate? | As BF, plus the number of iterations → ultimate and IBNR | Benktander Method; Mack (2000) | 1 |
+| **Cape Cod** | What ELR do the data imply, and what ultimate follows? | Latest diagonal, CDFs, on-level earned premium, decay (optional) → the Cape Cod ELR and ultimates | Cape Cod Method; Friedland Ch. 10 | 1 |
+| **Frequency-Severity** | What's the ultimate from counts and severities? | Ultimate counts, ultimate severities, severity trend → ultimate by origin | Frequency-Severity Method; Friedland Ch. 11 | 2 |
+| **Case Outstanding Development** | What's the IBNR from case reserves? | Case triangle, paid triangle → IBNR by origin (self-insurer method) | Friedland Ch. 12 | 2 |
+| **Case Adequacy Adjustment** | What would the reported triangle be at today's case adequacy? | Reported, paid and open-count triangles, severity trend → adjusted reported triangle. → Age-to-Age Factors | Berquist-Sherman Method; Friedland Ch. 13 | 2 |
+| **Settlement Rate Adjustment** | What would the paid triangle be at today's settlement rate? | Paid, closed-count and ultimate-count triangles → adjusted paid triangle. → Age-to-Age Factors | Berquist-Sherman Method; Friedland Ch. 13 | 2 |
+| **ULAE — Classical** | What's the unpaid ULAE? | Paid ULAE, paid claims, IBNR, case → unpaid ULAE (paid-to-paid ratio) | Friedland Ch. 17 | 2 |
+| **ULAE — Kittel** | What's the unpaid ULAE, allowing for reporting? | As Classical, plus reported claims → unpaid ULAE | Friedland Ch. 17 | 2 |
+| **Mack Standard Error** | How uncertain is the chain-ladder reserve? | Triangle, selected factors → standard error by origin and in total | Mack Chain Ladder Model; Mack (1994) | 2 |
+| **ODP Bootstrap** | What's the distribution of the unpaid? | Incremental triangle, iterations, seed → percentiles and a histogram (in a Web Worker). → VaR & TVaR | ODP Bootstrap Model; Shapland (2016) | 2 |
+| **Clark Growth Curve** | What's the ultimate and its variance from a growth curve? | Incremental triangle, curve (loglogistic or Weibull), LDF or Cape Cod form → ultimates, reserve and its standard deviation | Clark (2003) | 2 |
+| **Expected Emergence** | How much should have emerged since the last review? | Prior ultimates, prior CDFs, ages now → expected emergence by origin, to compare with actual | Roll Forward Analysis | 3 |
+| **Risk Adjustment — Cost of Capital** | What's the IFRS 17 risk adjustment by the cost-of-capital method? | Projected capital by period, cost-of-capital rate, discount curve → risk adjustment | Insurance Risk Margin; CIA IFRS 17 pages | 3 |
+| **Risk Adjustment — Confidence Level** | What risk adjustment reaches a confidence level? | A distribution of unpaid (from ODP Bootstrap or a fit), confidence level, best estimate → risk adjustment | Insurance Risk Margin | 3 |
+
+Discounting claim payments is **Present Value** (§4.7). It's the same question as any other
+cash-flow PV.
 
 ### 4.3 Ratemaking (Werner & Modlin 2016; Exam 5)
 
-| Tool | What it does | Key features | Vault pages / reading | Phase |
+| Tool | Answers | In → out | Vault pages / reading | Phase |
 |---|---|---|---|---|
-| **Premium & Exposure** | Written, earned, unearned, in-force | By CY or PY; even-writing or exact dates; any policy term; the parallelogram drawn | Earned Exposure, Earned Premium; W&M Ch. 4–5 | 1 |
-| **On-Level Premium** | Brings historical premium to current rates | Parallelogram method from a rate-change history (dates, %, policy term, CY or PY aggregation), with the geometry drawn and each area shown; extension of exposures where the user has policy-level data | Parallelogram Method, On-Leveling, On Level Premium; W&M Ch. 5 | 1 |
-| **Trend** | Fits and applies trends | Exponential and linear least squares on frequency, severity, pure premium or average premium; latest-*n* points; R² and residuals; selected trend as input; trend periods from Period & Dates; one-step and two-step premium trend | Loss Trend, Premium Trend, Exponential Trend, Linear Trend; W&M Ch. 5–6; ASOP 13 | 1 |
-| **Overall Indication** | The indicated rate change | Loss ratio and pure premium methods side by side; fixed and variable expense provisions; permissible loss ratio; profit and contingency as input; consumes On-Level, Trend and a development run | Overall Rate Level Indication, Loss Ratio Method, Pure Premium Method, Permissible Loss Ratio; W&M Ch. 7–8 | 1 |
-| **Expense Provisions** | Expense ratios for the indication | All-variable method vs. premium-based and exposure/policy-based fixed expense projections; expense trend | Expense Provisions, Fixed Expenses; W&M Ch. 7 | 1 |
-| **Credibility-Weighted Indication** | Blends with a complement | Classical (limited fluctuation) Z; complements (trended present rates, larger group, competitor's indication as input) with the choice recorded as a judgment | Complement of Credibility; W&M Ch. 12 | 2 |
-| **Class Relativities** | One-way classification analysis | Pure premium and loss-ratio approaches; credibility weighting; base rate offset (off-balance); relativity capping and its re-balancing | Classification Ratemaking; W&M Ch. 9, 14 | 2 |
-| **ILFs & Deductibles** | Limit and deductible factors | ILFs from size-of-loss data (LEV-based, with trend and development caveats as judgments) or a fitted distribution; the consistency test (marginal ILFs falling); loss elimination ratios for deductibles | Increased Limits, Deductible, Limited Expected Value; W&M Ch. 11 | 2 |
-| **Rate Implementation** | From indication to a rate manual | Base rate needed for a target overall change given new relativities (extension of exposures or an approximate average relativity); dislocation by segment | Considerations for Implementing Rates; W&M Ch. 14 | 3 |
+| **Earned Premium** | How much of this premium is earned in a period? | Written premium (or exposure) by period, policy term, CY or PY basis → earned and unearned, with the parallelogram drawn | Earned Premium, Earned Exposure; W&M Ch. 4–5 | 1 |
+| **On-Level Factors** | What brings each year's premium to current rates? | Rate changes (date, %), policy term, CY or PY basis → on-level factor by year, with the parallelogram's areas drawn | Parallelogram Method, On-Leveling; W&M Ch. 5 | 1 |
+| **Extension of Exposures** | What would each policy pay at current rates? | Policies with their rating characteristics, current rate manual → on-level premium | On Level Premium; W&M Ch. 5 | 2 |
+| **Trend Fit** | What annual trend do these data show? | Points by period (frequency, severity, pure premium or average premium), exponential or linear, latest *n* → annual trend and R², with the fit drawn | Exponential Trend, Linear Trend; ASOP 13 | 1 |
+| **Trend Factor** | How far do these amounts trend to the future period? | Annual trend, experience period, effective date, policy term, rates-in-effect length → trend period and factor | Loss Trend, Premium Trend; W&M Ch. 5–6 | 1 |
+| **Two-Step Trend Factor** | How far does premium trend when the latest year isn't current? | Average premium history, current average premium, projected trend, dates → the two-step factor | Premium Trend; W&M Ch. 5 | 2 |
+| **Expense Ratios** | What are the fixed and variable expense ratios? | Expenses by type and year, premium; all-variable or premium-based fixed → fixed and variable ratios | Expense Provisions, Fixed Expenses; W&M Ch. 7 | 1 |
+| **Permissible Loss Ratio** | What loss ratio do the rates allow? | Variable expense ratio, profit and contingency → permissible loss ratio | Permissible Loss Ratio; W&M Ch. 7 | 1 |
+| **Loss Ratio Method** | What's the indicated rate change? | Projected loss & LAE ratio, fixed expense ratio, variable expense ratio, profit → indicated change | Loss Ratio Method, Overall Rate Level Indication; W&M Ch. 8 | 1 |
+| **Pure Premium Method** | What's the indicated average rate? | Projected pure premium, fixed expense per exposure, variable expense ratio, profit → indicated average rate | Pure Premium Method; W&M Ch. 8 | 1 |
+| **Credibility Weighting** | What's the blended indication? | Indication, complement, Z → credibility-weighted indication | Complement of Credibility; W&M Ch. 12 | 2 |
+| **Relativities — Pure Premium** | What are the indicated class relativities, from pure premiums? | Losses and exposures by class, base class → indicated relativities | Classification Ratemaking; W&M Ch. 9 | 2 |
+| **Relativities — Loss Ratio** | What are the indicated class relativities, from loss ratios? | Losses and premium at current relativities by class, current relativities → indicated relativities | Classification Ratemaking; W&M Ch. 9 | 2 |
+| **Base Rate Offset** | What base rate gives the overall change, after relativity changes? | Exposure distribution, current and proposed relativities, overall change → base rate | Considerations for Implementing Rates; W&M Ch. 14 | 2 |
+| **Increased Limit Factors** | What are the ILFs from these losses? | Ground-up losses by size, limits, basic limit → ILF by limit and the consistency check | Increased Limits; W&M Ch. 11 | 2 |
+| **Loss Elimination Ratio** | What share of losses does a deductible remove? | Ground-up losses by size, deductible → LER | Deductible; W&M Ch. 11 | 2 |
 
-### 4.4 Loss distributions and coverage (Exam P, MAS-I)
+### 4.4 Loss distributions (Exam P, MAS-I)
 
-| Tool | What it does | Key features | Vault pages | Phase |
+| Tool | Answers | In → out | Vault pages | Phase |
 |---|---|---|---|---|
-| **Distribution Calculator** | PDF/PMF, CDF, quantiles, moments | The exam parameterisations in `lib/distributions.ts`; probabilities between bounds; the existing simulator drawn as the result view | Continuous / Discrete Univariate Distributions | 1 (reuses `distributionMath.ts`) |
-| **Coverage Modifications** | Deductibles, limits, coinsurance, inflation | Per-loss and per-payment expected payments; ordinary vs. franchise deductible; LER; the effect of uniform inflation on each | Deductible, Limited Expected Value, Layer of Insurance | 1 |
-| **Aggregate Loss** | Frequency × severity | Moments; Panjer recursion over a discretised severity (rounding or local moment matching); normal / lognormal approximations; stop-loss premium; seeded simulation as a check | Aggregate Loss Model, Frequency-Severity Models | 2 |
-| **Distribution Fitting** | Fits a severity or frequency model to data | MLE, method of moments, percentile matching; grouped, censored and truncated data; KS, Anderson-Darling and chi-square tests; AIC / BIC; Q-Q and P-P plots | Fisher Information, Model Selection | 2 |
-| **Risk Measures** | VaR, TVaR and others | On a fitted distribution or a sample (e.g. an ODP Bootstrap run); expected policyholder deficit | Risk Measure | 2 |
+| **Distribution** | What's the probability, quantile or moment? | Distribution and parameters (the exam parameterisations in `lib/distributions.ts`), bounds or a level → probability or quantile, with the moments. This is the simulator itself, given a readout | Continuous / Discrete Univariate Distributions | 1 |
+| **Limited Expected Value** | What's the expected loss capped at *u*? | Distribution, limit → E[X∧u], E[X] and the LER, with the layer shaded | Limited Expected Value, Layer of Insurance | 1 |
+| **Expected Payment** | What does the insurer expect to pay per loss and per payment? | Distribution, deductible (ordinary or franchise), limit, coinsurance, inflation → per-loss and per-payment expected payment | Deductible | 1 |
+| **Aggregate Moments** | What are the mean and variance of aggregate losses? | Frequency and severity distributions → E[S], Var[S] | Aggregate Loss Model | 2 |
+| **Aggregate Distribution** | What's the distribution of aggregate losses? | Frequency, severity, discretisation span → the CDF by Panjer recursion | Aggregate Loss Model, Frequency-Severity Models | 2 |
+| **Stop-Loss Premium** | What does a stop-loss cover above *d* cost? | Frequency, severity, retention → E[(S − d)₊] | Aggregate Loss Model | 2 |
+| **Maximum Likelihood Fit** | Which parameters best fit these losses? | Data (individual, grouped, censored or truncated), family → parameters, log-likelihood, AIC/BIC. → Goodness of Fit, Distribution | Fisher Information, Model Selection | 2 |
+| **Goodness of Fit** | Does this distribution fit these data? | Data, fitted distribution → KS, Anderson-Darling and chi-square statistics, with a P-P plot | Model Selection | 2 |
+| **VaR & TVaR** | How big is the tail at level *p*? | Distribution or sample, *p* → VaR and TVaR | Risk Measure | 2 |
 
 ### 4.5 Credibility (Exam MAS-II, Exam 5, Exam 8)
 
-| Tool | What it does | Key features | Vault pages | Phase |
+| Tool | Answers | In → out | Vault pages | Phase |
 |---|---|---|---|---|
-| **Limited Fluctuation** | Full standard and partial credibility | Standards for frequency, severity, pure premium and aggregate claims from *p* and *k*; square-root rule | Limited Fluctuation Credibility, Full Credibility Standard | 1 |
-| **Bühlmann / Bühlmann-Straub** | Greatest-accuracy credibility | From structural parameters, or nonparametric empirical Bayes from the user's data (EPV, VHM estimated, with exposures); Z and premiums by risk | Bühlmann Credibility, Bühlmann-Straub Credibility, Empirical Bayes Credibility | 1 |
-| **Bayesian Credibility** | Conjugate updates | Poisson-gamma, binomial-beta, normal-normal, exponential-inverse gamma; posterior and predictive | Bayesian Credibility, Exact Credibility | 2 |
+| **Full Credibility Standard** | How many claims make full credibility? | *p*, *k*, what's being estimated (frequency, severity, pure premium), severity CV → the standard | Full Credibility Standard, Limited Fluctuation Credibility | 1 |
+| **Partial Credibility** | How much credibility does this experience get? | Observed claims, the full standard → Z by the square-root rule. → Credibility Weighting | Limited Fluctuation Credibility | 1 |
+| **Bühlmann Credibility** | What's Z from the structural parameters? | EPV, VHM, exposure → *k*, Z and the credibility premium | Bühlmann Credibility, Bühlmann-Straub Credibility | 1 |
+| **Empirical Bayes** | What are Z and the premiums from these data? | Experience by risk and period, with exposures → estimated EPV and VHM, Z and premium by risk | Empirical Bayes Credibility | 2 |
+| **Bayesian Update** | What's the posterior after this experience? | Conjugate pair (Poisson-gamma, binomial-beta, normal-normal, exponential-inverse gamma), prior, observations → posterior and predictive mean | Bayesian Credibility, Exact Credibility | 2 |
 
-### 4.6 Reinsurance, excess and individual risk rating (Exam 7, 8, 9)
+### 4.6 Reinsurance and individual risk rating (Exam 7, 8, 9)
 
-| Tool | What it does | Key features | Vault pages / reading | Phase |
+| Tool | Answers | In → out | Vault pages / reading | Phase |
 |---|---|---|---|---|
-| **Treaty Cession** | Gross → ceded → net on a loss listing | Quota share, surplus share (lines), per-risk XoL, cat XoL with reinstatements (pro-rata as to amount and/or time), aggregate stop loss | Types of Reinsurance, Excess of Loss, Aggregate Excess of Loss | 2 |
-| **Experience Rating (Burning Cost)** | Layer cost from history | Individual large losses trended and developed (factors as input), applied to the layer, burn cost by year, exposure-adjusted, loadings as input | Reinsurance Pricing; Clark (2014) | 2 |
-| **Exposure Rating** | Layer cost from exposure | Property: MBBEFD curves, with the Swiss Re Y1–Y4 parameters transcribed from Bernegger (1997) and user curves; casualty: ILF-based layer share | Exposure Curves; Bernegger (1997), Clark (2014) | 2 |
-| **Retrospective Rating** | Retro premium and its parts | Retro formula (basic, converted losses, LCF, tax multiplier, min/max); insurance charge and savings from an aggregate loss distribution (Table M built from the distribution, never from a copied table); the balance equation | Retrospective Rating, Retrospective Premium Reserve | 3 |
-| **Experience Rating Mod** | Primary/excess split plans | Credibility-weighted mod from actual and expected; split-plan parameters supplied by the user, or transcribed with source where a reading publishes them | Experience Rating | 3 |
+| **Quota Share** | What's ceded and retained? | Losses (and premium), ceded share → ceded and net | Types of Reinsurance | 2 |
+| **Surplus Share** | What's ceded under a surplus treaty? | Risks with limits and losses, retained line, number of lines → ceded share and amounts | Types of Reinsurance | 2 |
+| **Per-Risk Excess** | What does the layer pay on these losses? | Losses, retention, limit → layer losses and net | Excess of Loss | 2 |
+| **Cat Excess with Reinstatements** | What does a cat layer pay, and what do reinstatements cost? | Event losses, retention, limit, reinstatement terms → recoveries and reinstatement premium | Excess of Loss | 2 |
+| **Aggregate Stop Loss** | What does an aggregate cover recover? | Annual losses, attachment, limit (as amounts or loss ratios) → recovery | Aggregate Excess of Loss | 2 |
+| **Burning Cost** | What has the layer cost historically? | Large losses trended and developed (factors as input), subject premium, layer → burn cost by year and on average | Reinsurance Pricing; Clark (2014) | 2 |
+| **Exposure Rating** | What should a property layer cost from exposure? | Risk profile, MBBEFD curve (the Swiss Re Y1–Y4 parameters transcribed from Bernegger, or user *b* and *g*), layer → expected layer loss | Exposure Curves; Bernegger (1997), Clark (2014) | 2 |
+| **Retrospective Premium** | What's the retro premium on these losses? | Basic premium, losses, LCF, tax multiplier, min and max → retro premium | Retrospective Rating | 3 |
+| **Insurance Charge** | What's the charge for a maximum? | Aggregate loss distribution, entry ratio → charge and savings (Table M built from the distribution, never copied) | Retrospective Rating | 3 |
+| **Experience Mod** | What's the experience modification? | Actual and expected losses (primary and excess), credibility parameters supplied by the user or transcribed with source → mod | Experience Rating | 3 |
 
 ### 4.7 Financial mathematics (Exam FM, Exam 9)
 
-| Tool | What it does | Key features | Vault pages | Phase |
+| Tool | Answers | In → out | Vault pages | Phase |
 |---|---|---|---|---|
-| **Interest Converter** | Equivalent rates | Effective, nominal (*m*-thly) interest and discount, force of interest, real rates | Interest Rate, Nominal Interest Rate Convertible m-thly, Force of Interest | 0 |
-| **Cash Flows** | PV, FV, NPV, IRR | Irregular cash flows at a flat rate or a spot curve; IRR with multiple-root detection; dollar- and time-weighted returns | Discount Function, Rate of Return | 1 |
-| **Annuities** | Every annuity form | Immediate/due, deferred, continuous, *m*-thly, arithmetic and geometric increasing/decreasing, perpetuities; solve for any one unknown (PV, payment, *n*, *i*) | Annuities and its variants | 1 |
-| **Loan Schedule** | Amortisation | Amortisation and sinking-fund schedules; outstanding balance prospective and retrospective; refinancing comparison | Loan Amortization, Loan Repayment Comparison | 1 |
-| **Bond** | Price, yield, book value | Price from yield and yield from price; amortisation schedule (premium/discount); callable bonds (yield-to-worst); accrued interest, clean vs. dirty price | Bond Price, Bond Amortization, Callable Bond, Accrued Interest | 1 |
-| **Duration & Immunization** | Interest-rate sensitivity | Macaulay, modified and effective duration; convexity; Redington and full immunization tests; cash-flow matching | Duration, Immunization, Full Immunization, Duration Matching | 1 |
-| **Yield Curve** | Spot and forward rates | Bootstrapping spot rates from coupon bonds or par yields; forwards; pricing on the curve | Spot Rates and Forward Rates, Yield Curve | 2 |
+| **Interest Converter** | What's this rate in another form? | A rate in any form (effective, nominal *m*-thly interest or discount, force) → every other form | Interest Rate, Nominal Interest Rate Convertible m-thly, Force of Interest | 0 |
+| **Present Value** | What are these cash flows worth today? | Cash flows with times, flat rate or spot curve → PV (and FV), with the flows drawn on a timeline | Discount Function | 1 |
+| **Internal Rate of Return** | What rate makes these flows worth zero? | Cash flows with times → IRR, flagging more than one root | Rate of Return | 1 |
+| **Annuity** | Solve the annuity equation for one unknown | Type (immediate, due, continuous, deferred, increasing), three of PV, payment, *n*, *i* → the fourth | Annuities and its variants | 1 |
+| **Loan Schedule** | How is this loan repaid? | Amount, rate, term, payment frequency → amortisation schedule and the balance at any time | Loan Amortization | 1 |
+| **Bond Price ↔ Yield** | What's the price at this yield, or the yield at this price? | Face, coupon, term, frequency, and price or yield → the other; yield-to-worst for a callable bond | Bond Price, Callable Bond | 1 |
+| **Bond Amortization** | How does the book value move? | Bond terms, yield → book-value schedule with premium or discount amortised | Bond Amortization | 1 |
+| **Duration & Convexity** | How sensitive is this value to the rate? | Cash flows, rate → Macaulay and modified duration, convexity | Duration | 1 |
+| **Redington Immunization** | Is this portfolio immunized? | Asset and liability flows, rate → the three Redington conditions, each passed or failed | Immunization, Full Immunization | 1 |
+| **Spot & Forward Rates** | What's the spot curve under these bonds? | Coupon bonds or par yields → spot and forward rates | Spot Rates and Forward Rates, Yield Curve | 2 |
 
-### 4.8 Risk, capital and ERM (Exam 9, Exam 6C)
+### 4.8 Risk and capital (Exam 9, Exam 6C)
 
-| Tool | What it does | Key features | Vault pages / reading | Phase |
+| Tool | Answers | In → out | Vault pages / reading | Phase |
 |---|---|---|---|---|
-| **Aggregation & Copulas** | Combines lines' distributions | Gaussian and t copulas over fitted or simulated marginals; seeded; diversification benefit | Brehm et al. | 3 |
-| **Capital Allocation** | Allocates capital to units | Proportional, marginal, Euler (co-TVaR) on a joint sample; RAROC by unit | Cummins (2000), Return on Capital, Cost of Capital | 3 |
-| **MCT** | OSFI's Minimum Capital Test | The risk-factor arithmetic with every factor transcribed from the guideline in force, with its version and date; a factor the vault hasn't transcribed is absent, not estimated | OSFI MCT | 3 |
+| **Copula Aggregation** | What's the combined distribution of these lines? | Marginal distributions, correlation, copula (Gaussian or t), seed → combined sample and the diversification benefit. → VaR & TVaR, Capital Allocation | Brehm et al. | 3 |
+| **Capital Allocation** | How much capital does each unit use? | Joint sample by unit, measure (TVaR), method (proportional, marginal, Euler) → allocation by unit | Cummins (2000) | 3 |
+| **MCT Ratio** | What's the MCT ratio? | Capital available and each risk's amounts, with every factor transcribed from the OSFI guideline in force (version and date shown) → the ratio. A factor the vault hasn't transcribed is absent, not estimated | OSFI MCT | 3 |
 
-### 4.9 Life and health contingencies (SOA, ALTAM/FAM and the FSA tracks)
+### 4.9 Life contingencies (SOA, ALTAM/FAM and the FSA tracks)
 
 These exams are `development` in `lib/examStatus.ts`, so the tools wait for the vault:
 they're built once the concept pages exist and the tables are transcribed with their source.
 
-| Tool | What it does | Key features | Phase |
+| Tool | Answers | In → out | Phase |
 |---|---|---|---|
-| **Life Table** | Survival functions | *ₜp_x*, *ₜq_x*, *e_x*, select and ultimate; fractional ages (UDD, constant force); tables transcribed from a published source, or a parametric law (Gompertz, Makeham) with user parameters | 3 |
-| **Insurance & Annuity APVs** | Actuarial present values | Whole/term/endowment/deferred, discrete and continuous (UDD, claims acceleration, Woolhouse); net and gross premiums | 3 |
-| **Policy Values** | Reserves | Prospective/retrospective; recursion; Thiele numerically; multiple decrement and multi-state models; joint life | 3 |
+| **Survival Probability** | What's the chance (*x*) survives *t* years? | Table (transcribed) or law (Gompertz, Makeham), *x*, *t*, fractional-age assumption → *ₜp_x*, *ₜq_x*, *e_x* | 3 |
+| **Life Insurance Value** | What's the APV of this insurance? | Table, *x*, type (whole, term, endowment, deferred), interest → APV | 3 |
+| **Life Annuity Value** | What's the APV of this annuity? | Table, *x*, type, interest → APV | 3 |
+| **Net Premium** | What's the net premium? | Benefit and premium patterns, table, interest → net premium | 3 |
+| **Policy Value** | What's the reserve at time *t*? | Policy terms, basis, *t* → policy value, by recursion | 3 |
 
 ### 4.10 Statistical modelling (MAS-I, MAS-II, PA)
 
-| Tool | What it does | Key features | Phase |
+| Tool | Answers | In → out | Phase |
 |---|---|---|---|
-| **GLM** | Rating-factor models | Poisson/gamma/Tweedie/binomial by IRLS; log and logit links; offsets and weights; relativities, deviance, AIC; feeds Class Relativities | 3 |
-| **Regression** | Linear models | OLS with diagnostics (residuals, leverage, VIF); added-variable plots | 3 |
+| **GLM Relativities** | What relativities does a GLM give? | Data, rating variables, family (Poisson, gamma, Tweedie), log link, offset → relativities with standard errors. → Base Rate Offset | 3 |
+| **Linear Regression** | What's the fitted line? | Response, predictors → coefficients, R², residual plot | 3 |
 
 For anything heavier, a tool can offer **Open in workspace**. That opens the PCPA
 simulator's webR / Pyodide workspace (`docs/pcpa-project.md`) with the data and an
@@ -249,8 +303,9 @@ equivalent R or Python snippet, rather than re-implementing a modelling library.
 
 ## 5. Anatomy of a tool
 
-One shape for every tool, so that UI forms, MCP schemas, OpenAPI, docs and tests can all be
-generated from it.
+One shape for every tool, so that the card, MCP schemas, OpenAPI, docs and tests can all be
+generated from it. A spec is to a tool what a `DistributionSpec` is to the simulator: write
+the spec, and the card draws itself.
 
 ```ts
 // quiz/src/lib/tools/types.ts (sketch)
@@ -259,9 +314,13 @@ interface ToolSpec<I, O> {
   version: string               // semver of this tool
   name: string                  // 'Chain Ladder'
   area: PracticeArea            // 'reserving' | 'ratemaking' | 'distributions' | …
-  summary: string               // one line: what it computes
-  input: JsonSchema             // the one source of truth for validation, UI and agents
+  answers: string               // the one question, e.g. "What's the ultimate by development?" (R9)
+  input: JsonSchema             // the one source of truth for validation, the card and agents;
+                                // each field carries x-ui: slider {min,max,step} | choice | grid column
   output: JsonSchema
+  notation(input: I): string    // the formula with live values, under the title (LaTeX)
+  tiles(result: O): Tile[]      // the headline results, at most three (R9)
+  view: 'plot' | 'grid' | null  // the one thing drawn under the tiles
   run(input: I, ctx: RunContext): ToolResult<O>   // pure, deterministic (seeded if random)
   method: {
     concepts: string[]          // vault concept paths → Method tab, exam logos, fact check
@@ -271,8 +330,8 @@ interface ToolSpec<I, O> {
   examples: ToolExample[]       // published worked examples, cited (R2) — also fixtures
   checkedAgainst: Fixture[]     // what CI reproduces (R6)
   limits: { maxCells?: number; maxIterations?: number }
-  consumes?: DataKind[]         // what it can take from another tool's output (chaining)
-  produces?: DataKind[]
+  consumes: DataKind[]          // what it can take from another tool's output (chaining)
+  produces: DataKind            // exactly one kind (R9)
 }
 
 interface ToolResult<O> {
@@ -331,67 +390,108 @@ practitioner tools under "Study". See §14.
 
 | Route | Page |
 |---|---|
-| `/tools` | **Catalogue.** Practice areas as `ListPanel` groups (`components/ui/ListPanel.tsx`); search through `FloatingSearchBar` parts; each row shows the tool's name, its one line, the exam logos of the exams that examine it, and a *Tested against* tick once R6 passes. |
-| `/tools/:toolId` | **Tool page** (below). |
+| `/tools` | **Catalogue.** Practice areas as `ListPanel` groups (`components/ui/ListPanel.tsx`), searched through `FloatingSearchBar` parts. Each row has the tool's name, the question it answers, and the logos of the exams that examine it. The search matches the question too, so "what loss ratio do my rates allow" finds Permissible Loss Ratio. |
+| `/tools/:toolId` | **The tool card**, alone on the page under a back arrow. |
 | `/tools/runs` | **My runs.** Saved runs, localStorage first and synced to the account when signed in (§8.5). |
-| `/tools/analyses/:id` | **Analysis** (Phase 4). A saved chain of runs, e.g. triangle → factors → CL/BF/CC → summary. |
+| `/tools/analyses/:id` | **Analysis** (Phase 4). A saved chain of runs (§6.5). |
 
 The sidebar lists the practice areas while the mode is open, the way Study Guides lists
 Exams / Resources.
 
-### 6.3 The tool page
+### 6.3 The tool card
+
+Every tool is one card, `components/tools/ToolCard.tsx`, and it renders any spec. Its rules
+are the distribution simulator's (`docs/distribution-simulators.md`, *Layout & touch*),
+because that's the design this section is copying:
 
 ```
-┌ Chain Ladder  [Exam 5][Exam 7]                   ✓ Tested against Friedland Ch. 7 ┐
-│ Inputs                          │ Results  ·  Working  ·  Method  ·  Use with AI  │
-│  Triangle  [paste ▾][example ▾] │  Ultimate / IBNR / unpaid by AY (table + chart)  │
-│  ┌──────────────────────────┐   │  Judgments: averages = vol-weighted all (default)│
-│  │ grid (TSV paste, edits)  │   │  Warnings: 12–24 factor on 2 points              │
-│  └──────────────────────────┘   │                                                  │
-│  Factors  from Development ▸    │  [Export .xlsx] [CSV] [Copy JSON] [Share] [Save] │
-└──────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────┐
+│ Bornhuetter-Ferguson          ⟲   ⋯  │  title opens the method · reset · one menu
+│ U = L + E(1 − 1/CDF)                 │  the notation, with live values
+│ ┌───────────┐ ┌───────────┐          │
+│ │ U 5,504.8 │ │ IBNR 954.8│          │  at most three tiles
+│ └───────────┘ └───────────┘          │
+│  AY      L    CDF      E      U      │  one view: here the grid, which is
+│  2021  1,650  1.000  1,700  1,650.0  │  also the input (L, CDF and E are
+│  2022  1,700  1.100  1,850  1,868.2  │  editable; U is computed and shaded)
+│  2023  1,200  1.676  1,950  1,986.7  │
+│ ▸ Show working                       │
+└──────────────────────────────────────┘
 ```
 
-- **Inputs** are generated from the input schema, with `x-ui` hints for the custom
-  controls: a **data grid** (`components/tools/DataGrid.tsx`, lightweight, with paste from
-  Excel as the primary way in; Fortune-sheet is reserved for the workspace), a
-  rate-history editor, and a distribution picker that reuses the simulator's sliders. Every
-  field shows its unit. A judgment field shows which value is in force and whether it's the
-  default.
-- **Load an example** offers only cited, published examples (R2). Loading one shows its
-  citation above the grid.
-- **Results**: the headline figures, the tables (shared styling with Cowork exports), and a
-  chart where one helps, drawn with Recharts following the dataviz conventions and the
-  style guide. Charts include the triangle heat map, the parallelogram, trend fits and a
-  bootstrap histogram.
-- **Working**: the trace as KaTeX steps, so math focus works on it unchanged. Each step
-  links the concept it applies.
-- **Method**: the concept page in `ConceptPopup`, with the readings below as
-  `ResourceMetaCard`s and the fact-check verdict on top.
-- **Use with AI**: the exact `run_tool` call for this input (JSON), the connector address,
-  and a "Copy prompt" button. A human sees precisely what an agent would send and receive,
-  and can hand a run to an assistant. This is parity made visible.
-- **Actions**: **Export `.xlsx` / `.csv`** through `lib/xlsx.ts` (workbook sheets: Inputs,
-  Results, Working, Judgments, Method & sources); **Copy JSON**; **Share** (the input,
-  deflated and base64url-encoded into the URL fragment, so it never reaches a server, with
-  a fallback to "Save run" for large inputs); **Save**; and **Send to…**, which offers the
-  tools that consume this output (`consumes`/`produces`).
-- Heavy runs (bootstrap, simulation, MLE) go to a **Web Worker** with progress, so the page
-  never freezes. The same function still runs server-side for agents, under `limits`.
+- **It reads top-down**: title, reset and menu → notation → up to three tiles → one view
+  (a plot or a grid) → the inputs that aren't in the view (sliders and choices) → at most
+  one action. The only tools with an action are the random ones (ODP Bootstrap, Copula
+  Aggregation), which get the simulator's one **Simulate** button and nothing more.
+- **It's live.** Every change recomputes the result. There's no Run button and no form to
+  submit. A slider moves the tiles while it's being dragged.
+- **The answer comes first.** The tiles sit above what they summarise, each led by its
+  symbol (*U*, IBNR, *Z*, *PV*), as the simulator's μ, σ and γ₁ do.
+- **For a table tool the grid is both the input and the output.** The editable columns are
+  the inputs and the computed columns are the result, shaded. There's no input form beside
+  a result table. Pasting from Excel fills the grid. A triangle grid has the cumulative ↔
+  incremental switch.
+- **Scalar inputs are sliders**, the shared `.sim-slider` (a 32px knob, a 44px row). Each one's
+  value can be tapped to type an exact number, since an actuary often has the exact figure.
+  A method option with the same inputs (R9) is a segmented choice, never a dropdown of forms.
+- **A default says so in place.** An input left at its default carries a small dot, with
+  "default" in its accessible name. That's R3 on screen. There's no separate judgments
+  list in the card; the full list is in the export and the agent envelope.
+- **No explanatory text.** Units go in the labels, and the notation is the explanation. A
+  warning is one line under the tiles, shown only when there is one
+  (`docs/visual-noise-review.md`).
+- **The working is one fold.** "Show working" opens the trace as KaTeX steps, so math focus
+  works on it unchanged.
+- **The title is the way to the method.** It opens the concept page in the concept popup,
+  the same way an exam's title opens its menu. The page shows the readings and the fact
+  check.
+- **Everything else is in the ⋯ menu**: what it was tested against (R6), Export `.xlsx` /
+  `.csv` (through `lib/xlsx.ts`), Copy JSON, Copy for AI (the exact `run_tool` call),
+  Share (the input deflated into the URL fragment, which never reaches a server), Save,
+  and **Send to…** (the tools that consume this output).
+- **It fits a phone.** A scalar tool fits an iPhone screen without scrolling. A table tool
+  scrolls its grid and nothing else. Every button is `h-10`, as in the simulator. Charts
+  follow the style guide: `--primary` for the result only, everything else `currentColor` at
+  low opacity.
+- **Heavy work stays smooth.** Bootstrap, simulation and MLE run in a Web Worker, and the card
+  keeps its last result on screen until the new one is ready.
 
-### 6.4 Entry points from the rest of the app
+### 6.4 One card, everywhere
 
-- **Concept action menu** (`components/ConceptActionMenu.tsx`): an **Open in Tools** row for
-  any concept a tool implements (an index built from every `method.concepts`).
-- **Question explanations**: after the answer is revealed, never while the question is live
-  (the same rule as `showMeta`), a **Work it in a tool** link opens the tool with the
-  question's data loaded, where a fixture maps that question (§9.2).
-- **Distribution concept pages**: the inline simulator gains an "Open in Tools" corner link
-  to the full Distribution Calculator. Both draw from the same engine.
-- **Search**: tools join the Dashboard / Search page indexes (`lib/appSearch.ts`) as a
+The card is the same component wherever it appears, as the simulator is:
+- **On the tool's route**, alone.
+- **On a concept page**, inline. A `%%tool reserving.bornhuetter_ferguson%%` line, an
+  Obsidian comment that shows nothing in the vault, is swapped for the card by
+  `WikiArticle`, the way `%%credential-path%%` is. It opens empty or with the tool's cited
+  example (R2), never with invented numbers.
+- **Full screen**, in the image gallery, the way a distribution card opens there.
+- **From a question explanation**, after the answer is revealed and never while the
+  question is live (the same rule as `showMeta`): a **Work it in a tool** link opens the card
+  with the question's data loaded, where a fixture maps that question (§9.2).
+- **From the concept action menu** (`components/ConceptActionMenu.tsx`): an **Open in Tools**
+  row for any concept a tool implements.
+- **From search**: tools join the Dashboard and Search page indexes (`lib/appSearch.ts`) as a
   **Tools** pill.
-- **SEO**: one static page per tool (`dist/tools/<id>/index.html`) with its method
-  description and readings, generated alongside the wiki's (`docs/seo.md`).
+- **From a search engine**: one static page per tool (`dist/tools/<id>/index.html`) with its
+  question, notation and readings, generated alongside the wiki's (`docs/seo.md`).
+
+The distribution simulator becomes the **Distribution** tool's card: the same sliders, plot
+and tiles, plus a probability and quantile readout. The concept pages keep showing it
+exactly as they do now.
+
+### 6.5 Bigger jobs are chains, not bigger tools
+
+A reserve review or a rate indication is many questions, so it's many tools. Three things
+make that easy instead of tedious:
+- **Send to…** carries a result into the next tool, already filled in. Age-to-Age Factors
+  sends its averages to Development to Ultimate as the starting selections (each marked
+  as a default until the user changes it), which sends CDFs to Chain Ladder, BF and Cape Cod.
+- **Any grid column accepts a pasted column**, so data can come from Excel as easily as
+  from another tool.
+- **Analyses** (Phase 4) save a chain: the runs and the wiring between them, re-run when an
+  input upstream changes. Comparing methods side by side (the old "summary of indications")
+  is a view of an Analysis, not a tool, because comparing is choosing, and choosing is the
+  actuary's job (R3).
 
 ---
 
@@ -400,7 +500,7 @@ Exams / Resources.
 ### 7.1 MCP: three tools on the existing connector
 
 The calculators join the existing endpoint (`quiz/api/mcp.js`) rather than a new server, so
-a reader who has added Actuarial Notes already has them. To keep forty schemas out of every
+a reader who has added Actuarial Notes already has them. To keep eighty schemas out of every
 model's context, the connector exposes the catalogue **progressively**:
 
 | MCP tool | Input | Returns |
@@ -408,6 +508,11 @@ model's context, the connector exposes the catalogue **progressively**:
 | `list_tools` | optional `area`, `query`, `exam` | id, name, one line, area, exams, tested-against, version |
 | `describe_tool` | `tool` | the full input/output JSON Schema, a cited example input, method concepts and readings with URLs, the judgments the tool will ask for |
 | `run_tool` | `tool`, `input`, optional `trace` (default on), `format` (`json`/`markdown`) | the `ToolResult` envelope, as `structuredContent` with an `outputSchema` where the client's era supports it, and as text for older clients, plus an `app_url` that opens the same run in the app |
+
+Discrete tools suit agents. Each schema is small and asks for what one question needs, so
+a model fills it correctly more often, and a run's envelope is short enough to quote. The
+question in `answers` is what `list_tools` searches, so a model finds a tool by asking what
+it wants to know.
 
 All three are `readOnlyHint: true`, `idempotentHint: true` and `openWorldHint: false`. Nothing
 is written anywhere, and the same input always gives the same output. The connector's
@@ -417,11 +522,12 @@ and its method page's verdict travels with it.
 
 **Prompts** (the skills in MCP form) teach the workflows that chain tools and stop for human
 judgment:
-- `reserve_analysis`: inspect the triangle (diagnostics), compute factors, **ask the human to
-  select**, run the methods, show the Summary of Indications, ask the human to select an
-  ultimate, then draft commentary citing the method pages.
-- `rate_indication`: rate history → on-level → trend (human picks the trend) → develop →
-  indication.
+- `reserve_analysis`: Ratio Triangle for diagnostics → Age-to-Age Factors → **ask the human
+  to select** → Development to Ultimate → Chain Ladder, BF and Cape Cod as separate calls →
+  lay the ultimates side by side → ask the human to select an ultimate → draft commentary
+  citing the method pages.
+- `rate_indication`: On-Level Factors → Trend Fit (the human picks the trend) → Trend Factor
+  → Loss Ratio Method.
 - `check_my_work`: the candidate gives their hand result, the agent runs the tool, and the
   two are compared step by step against the trace.
 
@@ -439,28 +545,36 @@ the `app_url`.
 - No sign-in and no stored state (R7), rate-limited per IP on the `api/chat.js` pattern, with
   input-size caps from each tool's `limits`. API keys are a later, deliberate step (§14).
 
-### 7.3 An agent call, end to end
+### 7.3 An agent chain, end to end
+
+Three discrete calls. Each takes the previous one's output:
 
 ```jsonc
-// run_tool
-{ "tool": "reserving.bornhuetter_ferguson",
-  "input": {
-    "triangle": { "origins": ["2021","2022","2023"], "ages": [12,24,36],
-                  "values": [[1000,1500,1650],[1100,1700,null],[1200,null,null]],
-                  "kind": "cumulative", "measure": "reported" },
-    "cdf_from": "volume_weighted_all",      // a judgment, made explicit
-    "tail": 1.0,
-    "expected_claims": [1700, 1850, 1950] } }
+// 1. run_tool reserving.age_to_age_factors
+{ "triangle": { "origins": ["2021","2022","2023"], "ages": [12,24,36],
+                "values": [[1000,1500,1650],[1100,1700,null],[1200,null,null]],
+                "kind": "cumulative", "measure": "reported" },
+  "average": "volume_weighted_all" }
+// → factors 12–24: 1.5238, 24–36: 1.1000; warning: "The 24–36 factor rests on one origin."
 
-// → result (abridged)
+// 2. run_tool reserving.development_to_ultimate   (after the user accepts those as selections)
+{ "factors": { "12-24": 1.5238, "24-36": 1.1 } }
+// → CDFs 12: 1.6762, 24: 1.1000, 36: 1.0000; judgment: tail = 1.0 (default)
+
+// 3. run_tool reserving.bornhuetter_ferguson
+{ "origins": ["2021","2022","2023"], "latest": [1650,1700,1200],
+  "cdf": [1.0, 1.1, 1.6762], "expected_claims": [1700,1850,1950] }
+```
+
+The third call's envelope:
+
+```jsonc
 { "tool": "reserving.bornhuetter_ferguson", "version": "1.0.0", "inputHash": "sha256:…",
-  "summary": "Total BF ultimate 5,504.8; IBNR 954.8 …",
-  "judgments": [
-    { "field": "cdf_from", "value": "volume_weighted_all", "default": false },
-    { "field": "tail", "value": 1.0, "default": true,
-      "note": "No development assumed beyond 36 months." } ],
-  "warnings": [ "The 24–36 factor rests on one origin." ],
-  "trace": [ { "label": "% unreported, 2023", "latex": "1 - 1/CDF_{12}", "result": 0.4034 } ],
+  "summary": "BF ultimate 5,504.8; IBNR 954.8.",
+  "results": { "ultimate": [1650.0, 1868.2, 1986.7], "ibnr": [0.0, 168.2, 786.7] },
+  "judgments": [],
+  "warnings": [],
+  "trace": [ { "label": "% unreported, 2023", "latex": "1 - 1/1.6762", "result": 0.4034 } ],
   "method": { "concepts": ["https://…/wiki/concept/bornhuetter-ferguson-method"],
               "readings": [{ "title": "Estimating Unpaid Claims Using Basic Techniques",
                              "locator": "Ch. 9" }],
@@ -468,8 +582,9 @@ the `app_url`.
   "app_url": "https://quiz.actuarialnotes.com/tools/reserving.bornhuetter_ferguson#run=…" }
 ```
 
-(The triangle is a toy, there only to show the envelope's shape. The examples a tool ships
-and the docs print come from cited sources, by R2.)
+The judgments sit where they were made: the averaging in call 1 and the tail in call 2. BF
+itself takes none, so its list is empty. (The triangle is a toy, there only to show the
+shape. The examples a tool ships and the docs print come from cited sources, by R2.)
 
 ---
 
@@ -493,8 +608,9 @@ quiz/src/lib/tools/
   credibility/*.ts  finance/*.ts  reinsurance/*.ts  capital/*.ts  life/*.ts  stats/*.ts
   fixtures/<tool>/*.json   cited published examples (§9)
   *.test.ts
-quiz/src/pages/Tools/      Catalogue, ToolPage, Runs, Analysis (lazy chunk)
-quiz/src/components/tools/ DataGrid, SchemaForm, ResultTables, TracePanel, UseWithAI, charts
+quiz/src/pages/Tools/      Catalogue, ToolRoute, Runs, Analysis (lazy chunk)
+quiz/src/components/tools/ ToolCard (renders any spec), ToolGrid, ToolTiles, ToolMenu,
+                           WorkingFold, plots (shared with components/wiki/DistributionPlot)
 quiz/src/hooks/useToolRuns.ts, useToolWorker.ts
 quiz/api/tools.js          GET catalogue / POST run (HTTP)
 quiz/api/_tools/engine.js  the engine, bundled for the functions (§8.2)
@@ -534,7 +650,7 @@ have (`mcpServer.test.ts`). Either way, there is one implementation (R1).
 - The `tools` mode in `appMode.ts` (§6.1), its sidebar nav, and its route guard in `App.tsx`.
 - `/tools` is a `lib/lazyRoute.ts` route, a lazy chunk the way Cowork's is. The catalogue
   page imports only the registry's metadata (`registry.meta.ts`), not every engine, and each
-  tool page loads its own engine module.
+  tool card loads its own engine module.
 - A `deskPlace` entry in `lib/viewTransition.ts` for the new tab and its depths.
 
 ### 8.5 Persistence
@@ -600,8 +716,12 @@ question's precision. Questions with an open critical finding are skipped, as
 - **Schema**: every tool's examples validate against its own input schema; every output
   validates against its output schema; every concept path in `method.concepts` resolves to a
   vault file (as `coworkContent.test.ts` holds `wikiRef`s).
-- **E2E**: `e2e/tools.spec.ts` covers pasting a triangle, running, the Working tab, export,
-  and opening a share link.
+- **Discreteness (R9)**: every spec has one `answers` sentence, one `produces` kind, at most
+  three tiles and at most six scalar inputs, and every `consumes` kind is some tool's
+  `produces`, so no Send to… leads nowhere.
+- **E2E**: `e2e/tools.spec.ts` covers pasting a triangle, the result changing as an input
+  changes, Show working, export, Send to…, and opening a share link. At iPhone size, every
+  scalar tool's card fits the viewport without scrolling (R10).
 
 ### 9.4 Agent eval
 
@@ -635,53 +755,60 @@ previous phase's tools pass R6.
 - `lib/tools/` core: types, schema subset, coerce, envelope (hash, versions), trace,
   registry, the `Triangle` kind.
 - The engine-bundling spike (§8.2) and the chosen mechanism with its test.
-- `TOOLS_ENABLED`, the `tools` mode in Preview, `/tools` catalogue and tool-page shell with
-  schema-generated forms, `DataGrid` with Excel paste, Working tab, `.xlsx` export.
+- `TOOLS_ENABLED`, the `tools` mode in Preview, the `/tools` catalogue, and `ToolCard`
+  rendering a spec: notation, tiles, the grid with Excel paste, sliders, Show working, the ⋯
+  menu with `.xlsx` export.
 - MCP `list_tools` / `describe_tool` / `run_tool`; `POST /api/tools/{id}`.
-- **Two tools**: *Interest Converter* (scalar inputs) and *Development Factors* (tabular), each
-  with a published fixture.
+- **Two tools**: *Interest Converter* (a scalar card) and *Age-to-Age Factors* (a grid card),
+  each with a published fixture.
 - **Exit:** both tools return byte-identical envelopes through the UI engine, MCP and HTTP
   (parity test green). An agent in Claude can list, describe and run them, and its `app_url`
   opens the same run in the app.
 
-### Phase 1 — The core practice set (~25 tools)
-- Reserving: Tail Factor, Chain Ladder, Expected Claims, BF, Benktander, Cape Cod, Summary
-  of Indications.
-- Ratemaking: Period & Dates, Premium & Exposure, On-Level, Trend, Expense Provisions,
-  Overall Indication.
-- Distributions: Distribution Calculator (simulators re-pointed at it), Coverage
-  Modifications.
-- Credibility: Limited Fluctuation, Bühlmann / Bühlmann-Straub.
-- Finance: Cash Flows, Annuities, Loan Schedule, Bond, Duration & Immunization.
-- Triangle Toolkit with diagnostics. Chaining (Send to…). Saved runs (local). Share links.
-  Concept-menu entry points. Prompts `reserve_analysis`, `rate_indication`, `check_my_work`.
-  Skill section. OpenAPI.
+### Phase 1 — The core practice set (~30 tools)
+- Data: Ratio Triangle.
+- Reserving: Tail Factor, Development to Ultimate, Chain Ladder, Expected Claims, BF,
+  Benktander, Cape Cod.
+- Ratemaking: Earned Premium, On-Level Factors, Trend Fit, Trend Factor, Expense Ratios,
+  Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method.
+- Distributions: Distribution (the simulator re-pointed at it), Limited Expected Value,
+  Expected Payment.
+- Credibility: Full Credibility Standard, Partial Credibility, Bühlmann Credibility.
+- Finance: Present Value, Internal Rate of Return, Annuity, Loan Schedule, Bond Price ↔ Yield,
+  Bond Amortization, Duration & Convexity, Redington Immunization.
+- Send to…, saved runs (local), share links, the `%%tool%%` marker on concept pages, the
+  concept-menu row. Prompts `reserve_analysis`, `rate_indication`, `check_my_work`. Skill
+  section. OpenAPI.
 - **Exit:** every Phase 1 tool has at least one published fixture passing (R6). At least 50
   bank questions are mapped and reproduced. The tools-eval harness has a baseline for both
   arms. Then the mode can leave Preview (a §14 decision).
 
 ### Phase 2 — Depth for practitioners
-- Triangle Builder (transaction listings + data checks); Frequency-Severity, Case O/S,
-  Berquist-Sherman, Recoveries, ALAE & ULAE; Mack, ODP Bootstrap (Worker), Clark.
-- Credibility-Weighted Indication, Class Relativities, ILFs & Deductibles.
-- Aggregate Loss, Distribution Fitting, Risk Measures, Bayesian Credibility.
-- Treaty Cession, Burning Cost, Exposure Rating (MBBEFD transcribed); Yield Curve.
+- Triangle from Claim Listing; Frequency-Severity, Case Outstanding Development, Case
+  Adequacy and Settlement Rate Adjustments, ULAE (Classical, Kittel); Mack Standard Error,
+  ODP Bootstrap (Worker), Clark Growth Curve.
+- Extension of Exposures, Two-Step Trend Factor, Credibility Weighting, both Relativities
+  tools, Base Rate Offset, Increased Limit Factors, Loss Elimination Ratio.
+- Aggregate Moments, Aggregate Distribution, Stop-Loss Premium, Maximum Likelihood Fit,
+  Goodness of Fit, VaR & TVaR; Empirical Bayes, Bayesian Update.
+- Quota Share, Surplus Share, Per-Risk Excess, Cat Excess with Reinstatements, Aggregate Stop
+  Loss, Burning Cost, Exposure Rating (MBBEFD transcribed); Spot & Forward Rates.
 - Saved runs synced to the account (`user_tool_runs` migration).
-- **Exit:** a complete reserving analysis can be done on a pasted transaction listing and
-  exported as one workbook, in the app and through an agent. The tools-eval arm shows a
+- **Exit:** a complete reserving analysis can be done from a pasted transaction listing by
+  chaining tools, in the app and through an agent. The tools-eval arm shows a
   measured accuracy gain on Exam 5 / 7 numeric questions.
 
 ### Phase 3 — Breadth
-- Actual vs. Expected; Discounting & Risk Adjustment (IFRS 17); Rate Implementation.
-- Retro Rating, Experience Mod; Aggregation & Copulas, Capital Allocation, MCT (factors
-  transcribed).
-- GLM, Regression, with Open in workspace for anything beyond them.
+- Expected Emergence; Risk Adjustment (Cost of Capital, Confidence Level).
+- Retrospective Premium, Insurance Charge, Experience Mod; Copula Aggregation, Capital
+  Allocation, MCT Ratio (factors transcribed).
+- GLM Relativities, Linear Regression, with Open in workspace for anything beyond them.
 - Life contingencies, once the SOA life exams leave `development` and the tables are
   transcribed.
 
 ### Phase 4 — Workflows and distribution
-- **Analyses**: chained, saved, re-runnable pipelines, and an `analysis` envelope agents can
-  run as one call.
+- **Analyses**: chained, saved, re-runnable chains of tools (§6.5), with the side-by-side
+  comparison view, and an `analysis` envelope agents can run as one call.
 - Cowork population (§10).
 - `.xlsx` with **live formulas** where a method is spreadsheet-native (chain ladder, BF,
   indication), so the workpaper recalculates in Excel. That's an extension of `lib/xlsx.ts`
@@ -699,6 +826,8 @@ previous phase's tools pass R6.
 | **Bank questions reproduced** by a tool | Breadth of verified correctness, and the size of the eval set |
 | **Agent accuracy uplift** (tools-eval, with vs. without) | The core claim: agents are better with these tools |
 | **Invalid-input rate on agent calls** | How usable the schemas, coercion and errors are for models |
+| **Time to first result**: seconds from opening a card to its first computed answer | Whether the cards are as easy as R10 intends |
+| **Send to… use** | Whether discrete tools chain as easily as one big tool would have been |
 | **Runs per surface** (UI / MCP / HTTP) and **exports per run** | Adoption by humans vs. agents; whether outputs reach real workpapers |
 | **Judgments surfaced vs. defaults left in place** | Whether R3 works: are people and agents making selections? |
 | **Study → Tools and Tools → Study clicks** | Whether the section strengthens the learning product |
@@ -720,10 +849,17 @@ previous phase's tools pass R6.
 - **Licensing of parameter tables** (mortality tables, NCCI and Swiss Re curves, OSFI
   factors). Transcribe only tables published for free use, with source and date. Anything
   else is a user-supplied input.
-- **Catalogue sprawl** (forty tools, half-built). Phase gates, R6 before Preview exits, and
-  the shared kinds and `numeric.ts` so each new tool is mostly method, not plumbing.
+- **Catalogue sprawl** (eighty small tools, half-built). Phase gates, R6 before Preview
+  exits, and the shared kinds, `numeric.ts` and the one `ToolCard`, so each new tool is a
+  spec and a method, not a page.
+- **Too many small tools to find, or to chain by hand.** The catalogue and `list_tools`
+  search the question each tool answers. Send to… pre-fills the next tool. Analyses save a
+  chain. The metrics for Send to… use and time to first result say whether it's working.
+- **The card growing.** Every request to add a field or a panel to a card is pressure against
+  R10. The rule from the simulator applies: a change that adds a row takes one away, and the
+  e2e phone-size test fails otherwise.
 - **Tool bloat in model context.** Progressive disclosure (`list` → `describe` → `run`)
-  instead of forty MCP tools.
+  instead of eighty MCP tools.
 - **Function packaging** (§8.2). Resolved in the Phase 0 spike, with the committed-bundle
   fallback.
 - **Maintenance across three surfaces.** There's only one implementation. The surfaces are
@@ -738,9 +874,9 @@ previous phase's tools pass R6.
 2. **Access and pricing.** Recommended: every calculator free and signed-out (it's public
    method maths, it's the SEO and connector story, and an agent needs no account), with
    **Pro** for synced runs, Analyses, Cowork population and, later, higher API limits.
-3. **MCP shape.** Progressive `list/describe/run` (recommended) or one MCP tool per family.
-   The second suits clients that don't follow a describe step well. The eval (§9.4) can
-   decide it with data.
+3. **MCP shape.** Progressive `list/describe/run` (recommended) or a handful of the most-used
+   tools promoted to first-class MCP tools. The second suits clients that don't follow a
+   describe step well. The eval (§9.4) can decide it with data.
 4. **API keys.** Keep the HTTP API keyless and rate-limited, or issue keys (needed for
    batch use and for anything that ever stores state)?
 5. **Life contingencies timing.** Build alongside the SOA life exams' content, or ahead of
@@ -757,4 +893,5 @@ previous phase's tools pass R6.
    them.
 2. Run the §8.2 bundling spike. It's the one technical unknown.
 3. Transcribe the first two fixtures: an FM sample solution for the Interest Converter and
-   Friedland's Ch. 7 example for Development Factors. Then build Phase 0 against them.
+   Friedland's Ch. 7 example for Age-to-Age Factors. Then build Phase 0 against them, card
+   first: the card's look is the thing to settle before tools multiply.

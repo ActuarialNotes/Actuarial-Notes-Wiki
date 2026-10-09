@@ -1,12 +1,13 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:b01c4a2c81aebe2c203cd2d6022338a3c9e2501e25882b4f103ec78289d07dc2
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch. 9 'Bornhuetter-Ferguson Technique' pp.160-163 (PDF pp.166-169), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.9 pp.160-161 (PDF pp.166-167), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Mack, Credible Claims Reserves: The Benktander Method (ASTIN Bulletin 30(2), 2000), §§1-4 and 7, pp.333-342, 346-347 (PDF pp.1-10, 14-15): Theorems 1, 3, 4; numerical examples, sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Benktander Method.md

@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-13
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:df6f5b032e1c1f4ce58886aadda07dbf9708e54279babea28810842a8d7a6e2d
+  content_hash: sha256:62364346b5fc09d3df20158a822cf0a4558d2eff9dd8935a053dd70897dd3ea8
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 printed pp.13-14 (PDF pp.19-20) and Ch.3 printed pp.39-43 (PDF pp.45-49), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), sections 2.1, 3.3(a), 4.1 and 4.2(b), standard pp.2, 4, 9-10, sha256:b921a3c59038fcb748214ed127e97dfe9df2111c97ac1223f8cf9952c16304e9"
-  open_findings: 2
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 pp.4-5, 9-10, 14 (PDF pp.10-11, 15-16, 20), Ch.3 pp.39-43 (PDF pp.45-49), Ch.4 p.44 (PDF p.50), Ch.15 pp.345, 351 (PDF pp.351, 357), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, Doc. No. 159), §§2.1, 3.3(a), 4.1(c),(f), 4.2(b), PDF pp.7-9, 14-15, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss Reserving.md
 ---
@@ -18,6 +18,8 @@ verification:
 > $$\text{Total Reserve} = \text{Case Reserves} + \text{IBNR}$$
 
 > $$\text{IBNR} = \underbrace{\text{Pure IBNR}}_{\text{unreported}} + \underbrace{\text{IBNER}}_{\text{development on known claims}}$$
+
+That is the usual two-way split. Friedland's broad definition of IBNR, the one she uses throughout, has four components: future development on known claims, reopened claims, pure IBNR, and claims in transit (reported but not recorded).
 
 **The workflow**, following Friedland:
 
@@ -34,8 +36,8 @@ Further points:
 
 - No method is right; the **selection** is the deliverable. Methods disagree in informative ways, and the disagreement between paid and reported estimates is a diagnostic about the diagonal, not a menu.
 - Reserving and pricing are the same problem viewed from opposite ends. A reserving finding — severity trend stepping up, case adequacy shifting — is usually a pricing finding too.
-- Under-reserving is a leading cause of **insolvency**: it overstates surplus, understates the loss ratio, and therefore feeds an inadequate rate indication back into pricing, which produces more under-reserved business. The feedback loop is the reason reserve monitoring is continuous rather than annual.
-- Professional requirements come from [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]]: an actuarial central estimate, disclosure of methods and assumptions, and identification of any material change from the previous analysis.
+- Under-reserving can put **solvency** at risk: it presents the insurer as stronger than it is, and an inadequate estimate can lead it to cut rates on business already underpriced — worse still if the lower rates win market share (Friedland Ch. 1). Comparing actual with expected emergence between full analyses is how a deficiency is caught early (Ch. 15).
+- Professional requirements come from [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)|ASOP 43]]: identify the **intended measure** of the estimate — an actuarial central estimate (an expected value over the range of reasonably possible outcomes) is one of the measures it lists, alongside a high or low estimate, median, mean or specified percentile — and disclose it with the scope, the significant assumptions, and, when updating a previous estimate, any material change in assumptions, procedures, methods or models.
 
 ![[Media/Figures/Loss_Reserving.svg|340]]
 
@@ -50,7 +52,7 @@ Further points:
 > > &= \$3{,}000{,}000
 > > \end{align*}$$
 > >
-> > It covers two things: claims from $2025$ that the insurer has not yet heard about (**pure IBNR**), and the amount by which case reserves on the claims it *has* heard about will prove insufficient (**IBNER**). Separating them requires the count triangle.
+> > In the usual two-way split it covers claims from $2025$ that the insurer has not yet heard about (**pure IBNR**), and the amount by which case reserves on the claims it *has* heard about will prove insufficient (**IBNER**). Separating them requires the count triangle.
 > >
 > > > [!tip] Why the estimate has consequences beyond the balance sheet
 > > > A $\$3$M reserve set at $\$2$M overstates surplus by $\$1$M and understates the AY 2025 loss ratio by ten points on a $\$10$M premium book. That understated loss ratio then feeds the next rate indication, producing rates that are too low on business that is already unprofitable — and the deficiency compounds. Reserve error is not confined to the balance sheet; it propagates into pricing.

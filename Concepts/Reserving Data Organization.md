@@ -1,13 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-13
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:aa59f29c2e8b58778e84aa37503e7076d55f6dd0ed85757091d38c8282ebf73c
+  content_hash: sha256:1e97170c17d090c44cd4a8fe2184d0bac23961131b837d72d02dae3321402437
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 'Understanding the Types of Data Used in the Estimation of Unpaid Claims', printed pp.39-43 (PDF pp.45-49), and Ch.5 printed p.73 (PDF p.79), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 1
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.3 pp.29, 39-43 (PDF pp.35, 45-49), Ch.4 p.44 (PDF p.50), Ch.5 p.73 (PDF p.79), Ch.13 p.288 (PDF p.294), Ch.14 pp.330-331 (PDF pp.336-337), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reserving Data Organization.md
 ---
@@ -19,8 +19,8 @@ verification:
 > $$\text{IBNR} = \text{Ultimate} - \text{Reported to date}$$
 
 - **[[Accident Year]]** is the default reserving basis for direct business: claims grouped by occurrence date produce a [[Development Triangle]] whose rows share an exposure period and whose columns share a maturity.
-- **[[Policy Year]]** and **[[Underwriting Year]]** are used where the contract, not the calendar, defines the cohort — reinsurance, large-deductible and retro programs — at the cost of a longer, more leveraged development pattern.
-- **[[Report Year]]** is required for [[Claims Made Coverage|claims-made]] business and preferred for severity triangles, because a report year contains no pure [[IBNR]] and its claim-count denominator is fixed.
+- **[[Policy Year]]** and **[[Underwriting Year]]** are used where the contract, not the calendar, defines the cohort — reinsurance and large-deductible programs — at the cost of a longer, more leveraged development pattern.
+- **[[Report Year]]** is the basis actuaries often prefer for [[Claims Made Coverage|claims-made]] business: a report year contains no pure [[IBNR]], and its claim count is fixed at the close of the year.
 - **[[Calendar Year]]** is never a reserving cohort. Its diagonal *is* the data — a calendar year is one diagonal of every triangle — and a diagonal effect (a reserve strengthening, a settlement push, a change in [[Inflation|inflation]]) is a distortion to be diagnosed, not a cohort to be projected.
 
 Beyond the time basis, Friedland's segmentation requirements:

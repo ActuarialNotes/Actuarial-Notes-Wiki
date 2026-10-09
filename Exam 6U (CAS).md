@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:da07bafaa4fd254b3cd59adf294245a9e6f478367d54f6bcc9cebd399eb15f8f
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6ed399108732f34834a619a42ddf24204772a67ea6eb2bb465c64dccf2c669b8
+  sources:
+    - "CAS, Exam Content Outline — United States Regulation and Financial Reporting – Exam 6U, Fall 2026 (Exam_6U_CO_2026_F v02 2026_4_2, 12 pp.), PDF pp.1-12, sha256:11d626dc3093e467832cce0b86eca970c6add2904bb028d36f4c5b6e80356951 — https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf"
+    - "CAS, Exam 6U — Regulation and Financial Reporting (US) exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026; refund deadline October 6, 2026; fee $850 ($680 students); 'October 2026 Content Outline' the only outline linked, sha256:ec11b08b8decba6cb4c7372bbb5b3a6afdf164ae5042fbc1b9017d996008713c — https://www.casact.org/exam/exam-6u-regulation-and-financial-reporting-us"
+  open_findings: 9
   open_critical: 0
   log: .verify/Exam 6U (CAS).md
 ---
@@ -31,7 +33,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > 6. Discuss [[Tort Litigation|trends]] in [[Tort Litigation]] (e.g., [[Tort Reform]], [[Nuclear Verdicts]], [[Class Action|class action suits]]) and types of [[Litigation Costs|litigation costs]].
 > 7. Describe ways in which [[Latent Liability]] (e.g., [[Mass Tort|mass torts]] like [[Asbestos]]) can affect [[Insurance Industry|P/C insurance companies]].
 >
-> **Readings:** CASTF Predictive Models · CAS Financial Reporting · Cole and Marzen · Emmanuel · Feldblum (Rating Agencies) · FIO Report · Kucera · McCarty · NAIC IRIS · NAIC Price · NAIC RRG · NAIC Solvency Regulatory Framework · Porter 1 · Porter 2 · Vaughn
+> **Readings:** AAA Retained Risk · CASTF Predictive Models · CAS Financial Reporting · Cole and Marzen · Emmanuel · Feldblum (Rating Agencies) · FIO Report · Kucera · McCarty · NAIC APPM Preamble · NAIC IRIS · NAIC Price · NAIC RRG · NAIC Solvency Regulatory Framework · Porter 1 · Porter 2 · Vaughn
 
 > [!example]- B. Government Programs {5–15%}
 > Candidates identify major U.S. [[Government and Industry Insurance Programs|insurance programs]] administered by [[Government and Industry Insurance Programs|government agencies]] and [[Government and Industry Insurance Programs|industry organizations]], understanding objectives, operations, and effectiveness of programs such as [[Automobile Plans]], [[Crop Insurance]], [[Flood Insurance]], [[TRIA]], [[Florida Hurricane Catastrophe Fund|FHCF]], [[Guaranty Funds]], [[Residual Market|Residual Markets]], and [[Workers Compensation Insurance|Workers Compensation]].

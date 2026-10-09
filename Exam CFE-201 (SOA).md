@@ -5,12 +5,13 @@ syllabus:
   source_sha256: 512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9ff16db41638cc3a9de2cf7be27cc8895de45e31f0d09bc65bdf6d239f6c9dbd
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7444be9c90849eb006e44a685a137dabc881a528fc132d6d354e21292d1eaca7
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CFE-201 (SOA).md
@@ -23,16 +24,14 @@ verification:
 # Exam CFE-201
 **CFE 201 – Corporate Finance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
 
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Corporate Finance {15–29%}
-> The candidate will understand how an [[Organization Optimiz|organization optimizes]] its [[Corporate Finance|corporate finance]] decisions based on its [[Business|business]] objectives.
+> The candidate will understand how an [[Organization Optimiz|organization optimizes]] its [[Corporate Finance|corporate finance]] decisions based on its business objectives.
 >
-> 1. Recommend an [[Optimal Capital Structure|optimal capital structure]] for given [[Business|business]] objectives and the [[Competitive Environment|competitive environment]]
-> 2. Evaluate and apply the methods to determine the value of a [[Business|business]] or [[Project|project]], including the impact of [[Financial|financial]] and [[Non-Financial|non-financial]] factors on [[Capital Budgeting|capital budgeting]] and [[Allocation|allocation]] decisions
-> 3. Assess the impact on value [[Creation|creation]] from [[Business Strategy|business strategies]] such as [[Acquisition|acquisitions]], [[Divestiture|divestitures]], or [[Reinsurance|reinsurance]]
+> 1. Recommend an [[Optimal Capital Structure|optimal capital structure]] for given business objectives and the [[Competitive Environment|competitive environment]]
+> 2. Evaluate and apply the methods to determine the value of a business or project, including the impact of financial and non-financial factors on [[Capital Budgeting|capital budgeting]] and allocation decisions
+> 3. Assess the impact on value creation from [[Business Strategy|business strategies]] such as acquisitions, divestitures, or [[Reinsurance|reinsurance]]
 >
 > **Readings:**
 > - Video: Introduction to CFE 201 (Background)
@@ -49,11 +48,11 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla (1c)
 
 > [!example]- Financial Statement Analysis {21–35%}
-> The candidate will understand how to [[Gauge|gauge]] an [[Organization's Performance|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
+> The candidate will understand how to gauge an [[Organization's Performance|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
 >
-> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the [[Interrelationship|interrelationships]] among them, in [[Order|order]] to measure [[Financial Performance|financial performance]]
-> 2. Identify [[Unusual|unusual]] or [[Questionable|questionable]] accounting [[Practice|practices]] and analyze their impact on the [[Quality|quality]] of key [[Financial Metrics|financial metrics]]
-> 3. Analyze the impact of accounting [[Policy|policies]] related to [[Tax|taxes]] and [[Foreign Exchange Rate|foreign exchange rates]] on [[Financial Statements|financial statements]]
+> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the interrelationships among them, in order to measure [[Financial Performance|financial performance]]
+> 2. Identify unusual or questionable accounting practices and analyze their impact on the quality of key [[Financial Metrics|financial metrics]]
+> 3. Analyze the impact of accounting policies related to taxes and [[Foreign Exchange Rate|foreign exchange rates]] on [[Financial Statements|financial statements]]
 >
 > **Readings:**
 > - International Financial Statement Analysis, Robinson et al, 4th Edition, 2020
@@ -65,10 +64,10 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla (2a)
 
 > [!example]- Managerial Accounting and Operational Excellence {9–20%}
-> The candidate will understand how [[Managerial|managerial]] accounting and [[Operational Process|operational processes]] impact an [[Organization's Performance|organization’s performance]] evaluation and [[Decision Making|decision making]].
+> The candidate will understand how managerial accounting and [[Operational Process|operational processes]] impact an [[Organization's Performance|organization’s performance]] evaluation and [[Decision Making|decision making]].
 >
-> 1. Assess how [[Managerial|managerial]] accounting can [[Drive Decision Making|drive decision making]] and impact behavior and [[Performance|performance]] evaluation
-> 2. Assess and recommend methods used to allocate [[Cost|costs]] and how these methods can [[Distort Perceived Performance|distort perceived performance]]
+> 1. Assess how managerial accounting can [[Drive Decision Making|drive decision making]] and impact behavior and performance evaluation
+> 2. Assess and recommend methods used to allocate costs and how these methods can [[Distort Perceived Performance|distort perceived performance]]
 > 3. Recommend [[Best Practice|best practices]] in [[Business Process|business processes]] to achieve [[Operational Excellence|operational excellence]]
 >
 > **Readings:**
@@ -83,10 +82,10 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CFE201-115-27: Reorganizing to Capture Maximum Value Quickly (3c)
 
 > [!example]- Evolving Quantitative Methods and Technologies {25–45%}
-> The candidate will understand the appropriate application of [[Evolving Quantitative|evolving quantitative]] methods and [[Technology|technologies]] that [[Help|help]] to manage the [[Business|business]].
+> The candidate will understand the appropriate application of [[Evolving Quantitative|evolving quantitative]] methods and technologies that help to manage the business.
 >
-> 1. Evaluate the [[Appropriateness|appropriateness]] of applying [[Evolving|evolving]] methods and [[Technology|technologies]] to manage specific [[Business|business]] issues
-> 2. Apply [[Evolving|evolving]] methods and [[Technology|technologies]] for quantifying and managing [[Business Risk|business risks]] and [[Opportunity|opportunities]]
+> 1. Evaluate the appropriateness of applying evolving methods and technologies to manage specific [[Business|business]] issues
+> 2. Apply evolving methods and technologies for quantifying and managing [[Business Risk|business risks]] and opportunities
 >
 > **Readings:**
 > - Fundamentals of Machine Learning for Predictive Data Analytics, Kelleher, John D., Mac Namee, Brian and D’Arcy, Aoife, 2nd Edition, 2020 (4a, 4b)

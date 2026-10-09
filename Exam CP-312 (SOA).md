@@ -3,15 +3,16 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
   sitting: "Nov 2026/Mar 2027"
   source_sha256: 7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:634958717861eb3dcd3bc1e10be579a71cb6276c062604cb56060080a0bd51b2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:cd568771634b20a775056cfa72c1288e5258f051e70bd734016174597a849be8
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-312, all pages, sha256:7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam CP-312 (SOA).md
 ---
@@ -23,21 +24,19 @@ verification:
 # Exam CP-312
 **CP 312 – Model Development and Governance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
 
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Cash Flow Models for Long-Term Insurance Business {35–50%}
-> The candidate will understand, develop, apply, and evaluate [[Cash Flow|cash flow]] models for various types of [[Long-Term Insurance Business|long-term insurance business]]. The candidate will demonstrate an understanding of underlying [[Modeling|modeling]] methodologies: their strengths, [[Limitation|limitations]], and applications.
+> The candidate will understand, develop, apply, and evaluate [[Cash Flow|cash flow]] models for various types of [[Long-Term Insurance Business|long-term insurance business]]. The candidate will demonstrate an understanding of underlying modeling methodologies: their strengths, limitations, and applications.
 >
 > **The Candidate will be able to describe, develop, apply, and evaluate:**
 >
-> 1. Models and their [[Output|outputs]] for [[Insurance Policy|insurance products]] including those with [[Complex Component|complex components]] such as:
+> 1. Models and their outputs for [[Insurance Policy|insurance products]] including those with [[Complex Component|complex components]] such as:
 >    - [[Dynamic Policyholder|dynamic policyholder]] assumptions
 >    - [[Multi-State|multi-states]]
 >    - [[Equity-Linked Guarantee|equity-linked guarantees]]
 >    - [[Index-Linked Credit|index-linked credits]]
-> 2. [[Nested]] models and their [[Output|outputs]]
+> 2. Nested models and their [[Output|outputs]]
 > 3. Model [[Model Validation|validation]] techniques
 > 4. Model [[Efficiency|efficiency]] techniques
 >
@@ -61,19 +60,19 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Chapters 1-3, 6
 
 > [!example]- Other types of Models for Financial Business {30–45%}
-> The candidate will understand, apply, and evaluate other types of models for various types of [[Financial Business|financial business]]. The candidate will demonstrate an understanding of underlying methodologies: their strengths, [[Limitation|limitations]], and applications.
+> The candidate will understand, apply, and evaluate other types of models for various types of [[Financial Business|financial business]]. The candidate will demonstrate an understanding of underlying methodologies: their strengths, limitations, and applications.
 >
 > 1. Describe, apply, and assess types of models such as the following and evaluate the [[Appropriateness|appropriateness]] of their usage:
->    - [[Economic Scenario Generator|Economic Scenario Generators]] ([[ESG|ESGs]])
+>    - [[Economic Scenario Generator|Economic Scenario Generators]] (ESGs)
 >    - [[Market Risk]] Models
->    - Other [[Statistical|statistical]] models
+>    - Other statistical [[Model|models]]
 > 2. Describe, apply, and evaluate model [[Model Validation|validation]] techniques
 > 3. Describe, apply, and evaluate model [[Efficiency|efficiency]] techniques
 >
 > **Readings:**
 > - Video: Model Risk, SOA, 2024 (2a)
 >     - Model Risk Companion Notes
-> - Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8
+> - Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8 (2a. 2b)
 > - Economic Scenario Generators – three-part series, SOA:
 >     - Part I –Motivation for Stochastic Modeling, The Modeling Platform, Nov 2019 (2a)
 >     - Part II – Understanding Economic Scenario Generators, The Modeling Platform, Aug 2020 (2a)
@@ -95,7 +94,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Chapters 1-3, 6
 
 > [!example]- Model Governance {15–25%}
-> The candidate will understand and be able to apply appropriate model [[Model Governance|governance]] to assess and [[Address Issues Common|address issues common]] to the [[Development|development]] and management of models.
+> The candidate will understand and be able to apply appropriate model [[Model Governance|governance]] to assess and [[Address Issues Common|address issues common]] to the development and management of models.
 >
 > 1. Describe and apply model [[Governance Best Practice|governance best practices]] such as:
 >    - Determining fit for [[Purpose|purpose]]
@@ -103,8 +102,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >    - Model [[Risk|risk]] management
 >    - Model [[Model Validation|validation]]
 >    - Model [[Maintenance|maintenance]] and change management
->    - Model and model [[Governance Documentation|governance documentation]] and [[Disclosure|disclosures]]
-> 2. Describe, compare and evaluate [[Organizational Structure|organizational structures]] for model [[Model Governance|governance]], including [[Control|controls]], roles, and [[Responsibility|responsibilities]]
+>    - Model and model [[Governance Documentation|governance documentation]] and disclosures
+> 2. Describe, compare and evaluate [[Organizational Structure|organizational structures]] for model [[Model Governance|governance]], including controls, roles, and responsibilities
 >
 > **Readings:**
 > - ASOP 56: Modeling, Dec 2019, pp. 1-9 (3a)
@@ -144,7 +143,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - [[Metamodeling for Variable Annuities (Valdez)|Metamodeling for Variable Annuities, Valdez, Emiliano and Gan, Guojun]]
 >      - Chapters 1-3, 6 (1d)
 >      - Chapters 1-3, 6 (2c)
-> - [[Economic Scenario Generators - A Practical Guide (SOA - 2016)|Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8]]
+> - [[Economic Scenario Generators - A Practical Guide (SOA - 2016)|Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8]]
+>      - Outcomes 2a. 2b
 > - [[Economic Scenario Generators – three-part series (SOA:)|Economic Scenario Generators – three-part series, SOA:]]
 >      - Part I –Motivation for Stochastic Modeling, The Modeling Platform, Nov 2019 (2a)
 >      - Part II – Understanding Economic Scenario Generators, The Modeling Platform, Aug 2020 (2a)

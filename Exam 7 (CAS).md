@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:518298b567edef1f3dabaef6ddd6205f68f492ec189cf07313c0171c20e2113c
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bc30ac0f6daf04c1a8dca25f8ab0cf921afd6316155545a1860e7cb83e9883b7
+  sources:
+    - "CAS, Exam Content Outline — Advanced Estimation of Claims Liabilities – Exam 7, Fall 2026 (the 'October 2026 Content Outline'; Exam_7_CO_2026_F v04 2026_9_16, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "CAS, Exam 7 — Advanced Estimation of Claims Liabilities exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026 11:59 pm; fee $850 ($680 full-time students); refund deadline October 6, 2026; 'October 2026 Content Outline' the only outline linked, sha256:a1f1961b2d543a917412958c43136b75ce082e9c16e08a2d541fd081a211a279 — https://www.casact.org/exam/exam-7-advanced-estimation-claims-liabilities"
+    - "Mack, Credible Claims Reserves: The Benktander Method, ASTIN Bulletin 30(2) 2000 pp.333-347, PDF p.1 and p.15, sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
+    - "Clark, LDF Curve-Fitting and Stochastic Reserving, CAS Forum Fall 2003, PDF pp.1-2, sha256:1db0baa8ca6aef6711e6483601de5be6e180f016b1110a7fb0e49765c0953b9e — https://www.casact.org/sites/default/files/2021-03/7_Clark.pdf"
+    - "Meyers, CAS Monograph 8 (2nd ed.), PDF p.4 (Copyright 2019), sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf"
+    - "Shapland, CAS Monograph 4, PDF p.4 (Copyright 2016), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
+    - "Taylor and McGuire, CAS Monograph 3, PDF p.4 (Copyright 2016), sha256:d9ca082d0e8e8c0ed514e5e526cf0372cc457f4b5c94e4ff774cd6fc9e24249a — https://www.casact.org/sites/default/files/2021-03/7_Taylor.pdf"
+    - "Friedland, Reserving for Reinsurance, CAS Study Note, PDF pp.1-3, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam 7 (CAS).md
@@ -83,13 +91,13 @@ verification:
 > - [[Claims Development by Layer (Sahasrabuddhe - 2010)]]
 >      - A4 — Casualty Actuarial Society E-Forum, Fall 2010, Volume 1 (revised January 2, 2013), including errata
 > - [[Using the ODP Bootstrap Model (Shapland - 2016)]]
->      - A1, A9-A11, A13 — CAS Monograph #4, including errata; the supplementary modeling files linked on pages 61-62 aid understanding of the method's application
+>      - A1, A9-A11, A13 — CAS Monograph #4, including errata; supplementary modeling files linked on pages 61-62 will aid in understanding of the method's application
 > - [[A Model for Reserving Workers Compensation High Deductibles (Siewert - 1996)]]
 >      - A4 — Casualty Actuarial Society Forum, Summer 1996, pp. 217-244
 > - [[Stochastic Loss Reserving Using Generalized Linear Models (Taylor and McGuire - 2016)]]
 >      - A9-A12 — CAS Monograph #3, Chapters 1-6, including errata
 > - [[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)]]
->      - A5 — PCAS LXXXIII, 1996, pp. 611-647, excluding Section 5, including the discussion by Feldblum (PCAS LXXXV, 1998, pp. 274-315), Sections 1 and 2 only; candidates are not responsible for specific Annual Statement notation but are responsible for the concepts presented
+>      - A5 — PCAS LXXXIII, 1996, pp. 611-647, excluding Section 5, including the discussion by Feldblum (PCAS LXXXV, 1998, pp. 274-315), Sections 1 and 2 only; candidates will not be held responsible for specific Annual Statement notation but will be responsible for concepts presented
 > - [[Testing the Assumptions of Age-to-Age Factors (Venter - 1998)]]
 >      - A2, A6, A12 — PCAS LXXXV, 1998, pp. 807-847, including errata and updated errata
 > - [[Obtaining Predictive Distributions for Reserves Which Incorporate Expert Opinion (Verrall - 2007)]]

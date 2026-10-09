@@ -5,7 +5,7 @@
   "sitting": "Nov 2026/Mar 2027",
   "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf",
   "source_sha256": "7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757",
-  "extracted_at": "2026-10-05",
+  "extracted_at": "2026-10-09",
   "intro": [],
   "topics": [
     {
@@ -179,8 +179,8 @@
           ]
         },
         {
-          "citation": "Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8",
-          "codes": "",
+          "citation": "Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8",
+          "codes": "2a. 2b",
           "parts": []
         },
         {

@@ -5,7 +5,7 @@
   "sitting": "Mar 2027/Jul 2027",
   "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf",
   "source_sha256": "794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44",
-  "extracted_at": "2026-10-05",
+  "extracted_at": "2026-10-09",
   "intro": [],
   "topics": [
     {
@@ -140,13 +140,13 @@
         15,
         25
       ],
-      "objective": "The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in pension valuations Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:",
+      "objective": "The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in pension valuations",
       "outcomes": [
         {
           "letter": "a",
           "text": "Evaluate appropriateness of current assumptions",
           "bullets": [],
-          "group": null
+          "group": "Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:"
         },
         {
           "letter": "b",

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:aba4edb8782454afc5d3f6a7a5a1dc8a2763c94ff0312c516729d133d648c578
+  content_hash: sha256:2302bdc54ccd3e88a9a6daf4b521f09c060201c5c5d84ffd535531d9a24d5231
   sources: []
   open_findings: 0
   open_critical: 0
@@ -97,7 +97,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >    - [[Retirement Plan|Retirement plans]] involving more than one [[Employer|employer]], and
 >    - [[Social Insurance Plan|Social insurance plans]]
 > 3. Evaluate [[Benefit Adequacy|benefit adequacy]] and measure [[Replacement Income|replacement income]] for [[Member|members]] of a [[Particular Plan|particular plan]] given other sources of [[Retirement Income|retirement income]]
-> 4. Describe ways in which [[Retirement Plan|retirement plan]] design can manage the [[Range|range]] of [[Risk|risks]] faced by [[Plan Participant|plan participants]] and [[Retiree|retirees]]
+> 4. Describe ways in which [[Retirement Plan|retirement plan]] design can manage the [[Range|range]] of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]]
 >
 > **Readings:**
 > - Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e2296ad01b4f579046af2f7fd754ec43acd55f0150144442e9770c1a34bc554a
+  content_hash: sha256:634958717861eb3dcd3bc1e10be579a71cb6276c062604cb56060080a0bd51b2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >
 > **The Candidate will be able to describe, develop, apply, and evaluate:**
 >
-> 1. Models and their [[Output|outputs]] for [[Insurance Product|insurance products]] including those with [[Complex Component|complex components]] such as:
+> 1. Models and their [[Output|outputs]] for [[Insurance Policy|insurance products]] including those with [[Complex Component|complex components]] such as:
 >    - [[Dynamic Policyholder|dynamic policyholder]] assumptions
 >    - [[Multi-State|multi-states]]
 >    - [[Equity-Linked Guarantee|equity-linked guarantees]]

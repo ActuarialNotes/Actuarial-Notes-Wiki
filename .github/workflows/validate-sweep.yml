@@ -73,6 +73,9 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit || '10' }}
         run: |
           python3 scripts/verify_targets.py --limit "$LIMIT" ${TARGET:+"$TARGET"}
+          echo
+          echo "The same work as source packets (docs/verification-plan.md):"
+          python3 scripts/verify_targets.py --by-source --limit 10 ${TARGET:+"$TARGET"}
 
       # The `secrets` context is not reliably available to a step's own `if:`,
       # so the availability check is its own step with an output.

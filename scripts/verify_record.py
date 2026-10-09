@@ -28,12 +28,28 @@ Usage:
   python3 scripts/verify_record.py pass <path> --status verified --confidence high \\
       --source "CAS Exam 5 Fall 2019 Q17 — official solution PDF p.4" --run-id R
   python3 scripts/verify_record.py run --run-id R --summary summary.md
+  python3 scripts/verify_record.py batch packet-ops.json --run-id R
+
+`batch` applies a whole packet's records from one JSON file — a list of
+operations (or one per line), each the same command as above with its flags as
+keys:
+
+  [{"op": "pass", "path": "questions/exam-5/cas5-2019f-001.md", "status": "verified",
+    "confidence": "high", "source": ["CAS Exam 5 Fall 2019 …"], "checks": "…"},
+   {"op": "finding", "path": "…", "severity": "minor", "locus": "…", "claim": "…",
+    "evidence": "…", "applied": true}]
+
+Every operation is parsed before any is applied, so a typo stops the batch
+before it writes anything. The refusals still hold one operation at a time: a
+`verified` pass with no source, or over an open critical, stops the batch there,
+with everything before it recorded and nothing after it.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import re
 import secrets
@@ -337,7 +353,77 @@ def cmd_run(args: argparse.Namespace) -> int:
     return 0
 
 
-def main() -> int:
+BATCH_OPS = ("finding", "resolution", "comment", "pass")
+
+
+def op_argv(op: dict, defaults: dict) -> list[str]:
+    """One batch operation as the argv of the command it stands for.
+
+    Going through the real parser means a batch accepts exactly what the
+    commands do, with the same choices, requirements and defaults.
+    """
+    name = op.get("op")
+    if name not in BATCH_OPS:
+        raise ValueError(f"op must be one of {', '.join(BATCH_OPS)}, not {name!r}")
+    if not op.get("path"):
+        raise ValueError("every op needs a path")
+    argv = [name, str(op["path"])]
+    merged = {**{k: v for k, v in defaults.items() if v}, **op}
+    for key, value in merged.items():
+        if key in ("op", "path") or value is None or value is False:
+            continue
+        flag = "--" + key.replace("_", "-")
+        if value is True:
+            argv.append(flag)
+        elif isinstance(value, list):
+            for item in value:
+                argv += [flag, str(item)]
+        else:
+            argv += [flag, str(value)]
+    return argv
+
+
+def load_ops(text: str) -> list[dict]:
+    text = text.strip()
+    if not text:
+        return []
+    if text.startswith("["):
+        ops = json.loads(text)
+    else:
+        ops = [json.loads(line) for line in text.splitlines() if line.strip()]
+    if not all(isinstance(op, dict) for op in ops):
+        raise ValueError("a batch is a list of JSON objects")
+    return ops
+
+
+def cmd_batch(args: argparse.Namespace) -> int:
+    raw = Path(args.file).read_text(encoding="utf-8") if args.file != "-" else sys.stdin.read()
+    ops = load_ops(raw)
+    defaults = {"run_id": args.run_id, "author": args.author if args.author != DEFAULT_AUTHOR else None,
+                "date": args.date}
+    parser = build_parser()
+    parsed: list[argparse.Namespace] = []
+    for i, op in enumerate(ops):
+        try:
+            argv = op_argv(op, defaults)
+            parsed.append(parser.parse_args(argv))
+        except (ValueError, SystemExit) as exc:
+            raise SystemExit(f"batch op {i} is malformed ({exc}); nothing was recorded")
+    handlers = {"finding": cmd_finding, "resolution": cmd_resolution,
+                "comment": cmd_comment, "pass": cmd_pass}
+    for i, ns in enumerate(parsed):
+        try:
+            handlers[ns.command](ns)
+        except SystemExit as exc:
+            if exc.code in (0, None):
+                continue
+            raise SystemExit(f"batch stopped at op {i} ({ns.command} {ns.path}): {exc.code}\n"
+                             f"ops 0–{i - 1} are recorded; nothing after op {i} was applied")
+    print(f"batch: {len(parsed)} op(s) recorded")
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="command", required=True)
 
@@ -392,6 +478,14 @@ def main() -> int:
     common(p, with_path=False)
     p.add_argument("--summary", help="file to read the summary body from (default: stdin)")
 
+    p = sub.add_parser("batch", help="apply a packet's records from one JSON file")
+    common(p, with_path=False)
+    p.add_argument("file", help="JSON list (or JSON lines) of operations; - for stdin")
+    return ap
+
+
+def main() -> int:
+    ap = build_parser()
     args = ap.parse_args()
     if args.command == "run-id":
         print(make_run_id())
@@ -402,6 +496,7 @@ def main() -> int:
         "comment": cmd_comment,
         "pass": cmd_pass,
         "run": cmd_run,
+        "batch": cmd_batch,
     }[args.command](args)
 
 

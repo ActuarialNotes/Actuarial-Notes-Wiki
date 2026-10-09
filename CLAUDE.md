@@ -1275,7 +1275,13 @@ compile — don't "clean up" the flagged code as dead.
   OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
 - `verify_lib.py` / `verify_check.py` / `verify_targets.py` / `verify_context.py` /
   `verify_record.py` / `sync_reports.py` / `generate_validation_status.py` — the **VERIFY**
-  toolchain. `verify_check.py` is the CI gate (and `--sync` the repair pass);
+  toolchain. The **packet tooling** beside it (`docs/verification-plan.md` §4):
+  `verify_sources.py` (the shared source cache, outside the repo, OCR'ing scans),
+  `verify_paper.py` (one past paper and every question sat on it: blind stems, stems
+  located and diffed in the booklet, the report side), `verify_route.py` (concept →
+  syllabus task → reading → focus pages, one packet per reading), `verify_record.py batch`
+  and `verify_targets.py --by-source`. Cloud sessions get PyMuPDF and Tesseract from
+  `.claude/hooks/session-start.sh`. Tests: `scripts/test_verify_wave0.py`. `verify_check.py` is the CI gate (and `--sync` the repair pass);
   `verify_record.py` is the only supported way to write a finding, resolution or status —
   it dedupes findings by fingerprint and refuses to mark anything `verified` without a
   cited source. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.

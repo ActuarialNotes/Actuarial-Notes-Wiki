@@ -3,7 +3,7 @@
 The concept pages the study guides link to that don't exist yet: found, ranked, and cut into
 batches to write. **Status: Phase A (batches 1–7) done — 44 pages written, 7 targets aliased to
 existing pages, study guides re-rendered. Phase B reviewed and planned (§8) with one example
-page written; awaiting your go-ahead.**
+page written; approved 2026-10-09, in progress.**
 
 - Rerun the analysis: `python3 scripts/find_concept_gaps.py` (summary) ·
   `--update-plan` (refresh the generated half of this file) · `--json out.json` (everything) ·
@@ -133,6 +133,10 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
   namesake table (`Deductible` vs `Deductible Rating`) in `scripts/concept_aliases.json`.
 - **LaTeX**: `\$` for money, no Unicode fractions or smart quotes; worked numbers recomputed in
   Python before commit.
+- **Sentences** (from Phase B): write every bullet, tip and trap as one or more full sentences. Don't open a
+  bullet with a bold label and a fragment (`**Origin.** It is …`, `**Interest is δ.**`), and don't leave a
+  sentence without a verb (`Closed forms are rare.` is fine; `Rare in closed form.` is not). Bold an exam
+  name at the start of a tip bullet only when the sentence that follows is complete. Concise, not verbose.
 
 ## 5. Link problems noted in the guides (not fixed — guides are out of scope)
 
@@ -162,7 +166,8 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
 | 2026-10-07 | aliases | — | `b11d7db` | 30 aliases + the `governance` namesake in `scripts/concept_aliases.json` |
 | 2026-10-07 | re-render | — | `1c25ccc` | 21 development guides; text identical, 72 link targets moved |
 | 2026-10-07 | fix | 6 | `96b96f4` | Money written inside the math; 1,980 formulas render in KaTeX |
-| 2026-10-09 | B review | 1 | — | Phase B triaged (§8): 80 pages, 147 aliases, 13 skips; example `Thiele's Differential Equation` |
+| 2026-10-09 | B review | 1 | `3cfec33` | Phase B triaged (§8): 80 pages, 147 aliases, 13 skips; example `Thiele's Differential Equation` |
+| 2026-10-09 | B style | — | — | Plan approved; example rewritten in full sentences, rule added to §4 |
 
 ## 7. Phase A record (2026-10-07)
 
@@ -213,7 +218,7 @@ covered loss* (not Maximum Likelihood Estimation) and `[[Coefficient]]` means *m
 concept an existing page names only in its opening parenthesis (Insurer "(insurance company …)").
 
 
-## 8. Phase B plan (proposed 2026-10-09 — awaiting your go-ahead)
+## 8. Phase B plan (approved 2026-10-09)
 
 Phase B is the 21 pinned batches 8–10, 13, 19–26, 28, 29, 33 and 44–49: 211 targets, almost all
 on FAM, ALTAM, ASTAM, SRM, PA and ATPA. I read each one in its objective sentence and checked it
@@ -233,7 +238,11 @@ It has the single-life and multiple state forms, a term-insurance Euler example 
 disability-income example. Its numbers were recomputed in Python, and all 108 formulas render in KaTeX.
 It links three G4 pages that don't exist yet (`Policy Value`, `Multiple State Model`, `Transition Intensity`).
 
-### 8.1 Judgment calls to confirm
+### 8.1 Judgment calls
+
+Approved as recommended on 2026-10-09, with one change to the example page: every bullet, tip and
+trap is now written in full sentences (§4, "Sentences"). The three pages in item 4 are written short and
+flagged for review, and the optional extras in item 7 are left out.
 
 1. **`Policy Value` gets its own page** (FAM/ALTAM: prospective and retrospective values, the recursion, gross
    vs net). It does not alias to `Reserve`, which stays the cross-practice hub (P&C claim reserves, IFRS 17,

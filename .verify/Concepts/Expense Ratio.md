@@ -56,3 +56,89 @@ created: 2026-09-12
 - status_set: disputed
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp. 9-10 (PDF pp. 21-22), Underwriting Expense Ratio, Operating Expense Ratio, Combined Ratio, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 126-131 (PDF pp. 138-143), expense categories and the Premium-based Projection Method, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p. 144 (PDF p. 156), Profit % at Current Rates = 1.0 - Loss Ratio - OER = 1.0 - Combined Ratio, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
 - note: Disputed because of an open critical finding (F-001): the page's operating expense ratio adds ULAE where Werner Ch. 1 p. 10 adds total LAE. The fix is not mechanical — the worked example supplies no ALAE figure separately from losses — so nothing was edited. Checks actually run: recomputed both examples from scratch before reading the answers. Example 1 — UW expenses 6,900 + 1,150 + 1,840 + 2,530 = $12,420K; /46,000 = 27.0%; ULAE 1,600/40,000 = 4.0%; loss & ALAE 27,600/40,000 = 69.0%; 69 + 4 + 27 = 100.0%. The combined ratio construction (loss ratio on earned + LAE on earned + UW expenses on written) is Werner p. 10 verbatim, so the combined-ratio arithmetic is right even though the OER label is not. Example 2 — commissions 6,900/46,000 = 15.0%, taxes 1,150/46,000 = 2.5%, other acquisition 1,840/46,000 = 4.0%, general 2,530/40,000 = 6.325%; V = 15 + 2.5 + 2.0 + 1.581 = 21.08%; F% = 2.0 + 4.744 = 6.74%; F = 0.067 x 800 = $53.60. All reproduce, and the split method matches Werner Table 7.4. Two further minor findings opened: F-002 (the 27.8% total is not the statement ratio, which the page's own Example 1 puts at 27.0%) and F-003 (unsourced expense-ratio benchmarks by distribution channel). Links, embed and LaTeX clean.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Werner Ch.1 p.10 (PDF p.22) re-read: 'OER = UW Expense Ratio + LAE / Earned Premium', LAE = ALAE + ULAE (p.4, PDF p.16). Display formula now has LAE; bullet 2 rewritten (OER adds all LAE, allocated and unallocated, on earned premium; LAE counted once - Werner p.10 'the loss ratio should not include LAE or it will be double counted'). Example 1 given separate inputs - losses $25.6M, ALAE $2.0M, ULAE $1.6M (sum unchanged at $29.2M) - and recomputed: UW 12.42/46 = 27.0%; LAE (2.0+1.6)/40 = 9.0%; OER 36.0%; loss ratio 25.6/40 = 64.0%; combined 64 + 9 + 27 = 100.0% = LR + OER.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Werner Ch.1 p.9 (PDF p.21): for the UW expense ratio, onset expenses are measured to written premium, general expenses to earned, and the category ratios added. The closing sentence now says 21.1% + 6.7% = 27.8% is the UW expense ratio with general on earned (2.53/40 = 6.325% vs 2.53/46 = 5.5%), which is why it differs from Example 1's all-to-written 27.0%; the 'financial statement' claim is deleted. Recomputed: V = 15 + 2.5 + 2.0 + 1.58 = 21.08%; F% = 2.0 + 4.74 = 6.74%; F = 0.067 x 800 = $53.60.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-003
+- status: resolved
+- note: Numeric channel benchmarks deleted; bullet reduced to Werner Ch.7 p.127 (PDF p.139): a national direct writer may incur significant other acquisition costs for advertising; an agency-based company has lower other acquisition costs, at least partially offset by higher commissions.
+
+## [F-004] Growing-book bullet inverts Werner's reason for the written-premium denominator
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: major
+- status: open
+- locus: bullet 5, 'In a growing book the written-premium denominator flatters the ratio'
+- claim: 'In a growing book the written-premium denominator flatters the ratio, since this year's acquisition costs are spread over writings that will not be earned until next year. The distortion runs the other way in runoff.'
+- evidence: Werner Ch.7 p.128 (PDF p.140): 'The choice of written or earned premium will have relatively little impact if a company's volume of business is not changing materially … if a company is growing (or shrinking) significantly, written premium will be proportionately higher (or lower) than earned premium. Similarly, during a period of growth (or decline) the acquisition costs will be higher (or lower) … Use of an appropriate premium measure provides a better match.' Werner presents written premium as the correct match for onset expenses in a growing book, not a distortion that flatters the ratio.
+- source_rank: 2
+- proposed_action: Restate the bullet as Werner's matching argument.
+- applied: true
+- fingerprint: 317a51577383
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-004
+- status: resolved
+- note: Applied: bullet now states Werner p.128's point - little impact at stable volume; in a growing (shrinking) book written premium and acquisition costs both run proportionately higher (lower), which is why onset expenses are matched to written premium.
+
+## [F-005] UW expense ratio stated as all-to-written ('statutory') where Werner splits denominators
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: first display formula; bullet 1
+- claim: Formula 'UW Expense Ratio = Underwriting Expenses / Written Premium'; bullet 1 'The statutory underwriting expense ratio is conventionally on written premium'.
+- evidence: Werner Ch.1 p.9 (PDF p.21) defines UW Expense Ratio = UW Expenses / Premium, then measures onset expenses to written and general to earned and adds the category ratios; p.10 (PDF p.22) is where 'historically' the combined ratio puts UW expenses over written premium. The word 'statutory' and the written-only formula are not Werner's.
+- source_rank: 2
+- proposed_action: Denominator 'Premium'; bullet 1 to Werner's split, with the historical combined ratio's all-to-written convention named as such.
+- applied: true
+- fingerprint: 14bdf2e10650
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-005
+- status: resolved
+- note: Applied: formula denominator now 'Premium'; bullet 1 rewritten to Werner pp.9-10; Example 1's line labelled 'all to written'. The fixed/variable bullet softened to 'where both kinds are material' (Werner Ch.7 p.127).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: F-001 to F-003 re-checked against the cited pages and fixed; both examples rebuilt/recomputed in python (27.0%, 9.0%, 36.0%, 64.0%, 100.0%; V 21.08%, F% 6.74%, $53.60); every bullet diffed against Werner Ch.1 and Ch.7; links and LaTeX checked.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.4, 9-10 (PDF pp.16, 21-22), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.126-131 (PDF pp.138-143), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 p.144 (PDF p.156), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: The critical (OER with ULAE instead of LAE) is fixed and resolved. Two more findings opened and applied (F-004 major growing-book bullet, F-005 minor denominator). Confidence medium: vault-authored examples.

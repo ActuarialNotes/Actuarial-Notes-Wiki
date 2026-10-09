@@ -1,18 +1,21 @@
 ---
 verification:
-  status: disputed
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c2605e5ee605609e584eee4e85ba4c875ac68fc44f823c9643c60af2719ef6c4
+  content_hash: sha256:fc6151a204f99ea5939e6f084899bdea3f6e419714f532f08fc7fed69905b4bb
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.49-50 (PDF pp.61-62) and Ch. 2 pp.17,23 (PDF pp.29,35), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
-  open_critical: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.49-51, 61-62 (PDF pp.61-63, 73-74), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 pp.17, 23 (PDF pp.29, 35), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.2, 8 (PDF pp.14, 20), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.135 (PDF p.147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Exposure Base.md
 ---
 
-**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*. It is the denominator of the pure premium and the measure by which one insured's amount of insurance is compared with another's.
+**Exposure Base** is the basic unit of risk that underlies the premium — the quantity the rate is charged *per*. It measures a policy's exposure to loss, which is why it is the basis of the premium: base rates are expressed per exposure, and it is the denominator of the pure premium.
 
 > $$\text{Pure Premium} = \frac{\text{Losses} + \text{LAE}}{\text{Earned Exposures}}$$
 
@@ -20,15 +23,15 @@ verification:
 
 Werner & Modlin give three criteria for choosing one:
 
-- **Proportional to expected loss.** Doubling the exposure should roughly double expected losses. A base that is proportional to *frequency* but not severity (or vice versa) distorts the rate across sizes of risk.
-- **Practical.** Objective, verifiable, inexpensive to collect, and not easily manipulated by the insured. A base that must be estimated at inception and audited later (payroll, sales) trades practicality for proportionality — see [[Premium Audit]].
-- **Consistent with historical precedent.** Changing the base of a line already written on another base forces every historical year to be restated and disrupts comparison with industry data.
+- **Proportional to expected loss.** All else equal, a policy with two exposures should have twice the expected loss of a similar policy with one. Expected loss varies by many other factors too; those become rating or underwriting variables, and the factor with the most direct relationship to losses is chosen as the base.
+- **Practical.** Objective, and relatively easy and inexpensive to obtain and verify — which also keeps policyholders and producers from manipulating it (declared annual mileage invites more dishonesty than car-years). Where the most proportional measure cannot be tracked, a practical proxy is used: products liability rates on gross sales because products in use cannot be counted.
+- **Consistent with historical precedence.** A change of base can cause large premium swings for individual insureds, requires a change in the rating algorithm and systems, and may force significant adjustments to the several years of data a ratemaking analysis uses.
 
 Further properties:
 
-- Common bases: car-years (personal auto), house-years (homeowners), payroll per $\$100$ (workers compensation), gross sales or receipts (general liability), amount of insurance in $\$1{,}000$s (property).
-- Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]] — and the ratemaking denominator is always the earned one.
-- Dollar-denominated bases inflate on their own, which is what [[Exposure Trend]] adjusts for; count-based bases (car-years) do not.
+- Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property).
+- Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.
+- Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not.
 - Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].
 
 ![[Media/Figures/Exposure_Base.svg|340]]
@@ -46,9 +49,9 @@ Further properties:
 > >
 > > Under **headcount**, B pays twice A's premium. Under **payroll**, A pays twice B's.
 > >
-> > Workers compensation indemnity benefits are a percentage of the injured worker's wage, so the severity of A's claims is roughly four times B's per claim while B has twice the frequency exposure. Payroll captures both effects in one number, which is exactly the "proportional to expected loss" criterion.
+> > Payroll is the workers compensation base because it is responsive to changes in exposure: as the number of workers or the hours they work rise or fall, both payroll and the risk of loss move with them. Headcount would miss the hours.
 > >
-> > Payroll also scores well on practicality — it already exists in the employer's accounting records and is auditable — and it is universal industry precedent. Its weakness is that it inflates with wages even when injury risk is unchanged, which is why workers compensation rates must be adjusted for [[Exposure Trend|wage trend]] and why some jurisdictions cap the payroll of high-wage employees.
+> > But the comparison also shows where payroll is disputed. A pays twice B's premium for half the workers, purely because its wages are higher. In the 1980s there was pressure to move workers compensation medical coverage to *hours worked*, to correct perceived inadequacies of payroll for union companies with higher pay scales. The base was not changed — concerns about the transition were a major reason — and the rating variables and algorithm were adjusted instead: historical precedence at work. Payroll is also inflation-sensitive, which is why its trend is measured — see [[Exposure Trend]].
 
 > [!example]- Testing a Proposed Exposure Base {Example}
 > A homeowners insurer currently rates on house-years and proposes rating on *amount of insurance* (AOI) per $\$1{,}000$ instead. Analysis of its book shows:
@@ -70,8 +73,6 @@ Further properties:
 > > \text{over } \$400\text{K} &= \frac{7{,}000{,}000}{5{,}000} = \$1{,}400
 > > \end{align*}$$
 > >
-> > Loss cost rises steeply with amount of insurance, so a flat rate per house-year **is not proportional to expected loss**: small homes subsidize large ones. AOI is the better base on criterion one.
+> > Loss cost rises with amount of insurance, so a single rate per house-year with nothing else would leave small homes subsidizing large ones. But the rise is far from proportional: from the lowest band to the highest, loss per house-year rises by a factor of $1{,}400/600 = 2.3$, while the band boundaries quadruple from $\$100$K to $\$400$K. Rating per $\$1{,}000$ of AOI would over-charge large homes.
 > >
-> > But note the relationship is not linear — losses per house-year rise by a factor of $2.3$ while the midpoint of AOI rises by a factor of about $4$. A pure rate-per-$\$1{,}000$-of-AOI would over-charge large homes, because a total loss is rare and partial losses do not scale fully with the size of the house.
-> >
-> > The practical resolution, and standard homeowners practice, is to keep AOI as the exposure base and apply a **decreasing** rate per $\$1{,}000$ through an amount-of-insurance relativity curve, so that the base captures the bulk of the effect and [[Classification Ratemaking|classification relativities]] correct the residual.
+> > This is Werner & Modlin's own homeowners illustration: the expected loss for a $\$200{,}000$ home is higher than for a $\$100{,}000$ home, but not necessarily twice as high. On the criterion that the exposure base should be the factor most directly proportional to expected loss, **house-years remain the exposure base**, and amount of insurance is used as a **rating variable** — an AOI relativity applied to the base rate per house-year, as in Werner's homeowners rating algorithm. The proposal should be rejected; the AOI effect in the table is a case for an [[Classification Ratemaking|AOI relativity]], not a new base. (Werner notes that some U.K. homeowners insurers do use AOI or number of bedrooms as the base, adjusting the rating algorithm for the lack of proportionality.)

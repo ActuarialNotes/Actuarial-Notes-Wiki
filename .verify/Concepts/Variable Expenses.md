@@ -27,3 +27,47 @@ created: 2026-09-12
 - confidence: high
 - checks_run: Recomputed both examples from scratch before reading the answers. V = 15 + 2 + 3 = 20%; rate = 340/0.75 = $453.33; the funding check re-derived independently — 0.20 x 453.33 = $90.67, 0.05 x 453.33 = $22.67, plus $340 = $453.34. The additive counter-example also checks: 340 x 1.25 = $425, 0.25 x 425 = $106.25, 425 - 106.25 = $318.75, a $21.25 shortfall. Channel-shift example: before V = 21.5%, 465/0.735 = $632.65; after, commission 0.60 x 17% = 10.2%, F = 45 + 0.40 x 18 = $52.20, V = 14.7%, 472.20/0.803 = $588.04, a fall of 7.05%. All reproduce. Denominator placement and the categories (commissions and brokerage; taxes, licenses and fees; contingent commissions varying with loss ratio or volume) are Werner Ch. 7 p. 126 (PDF p. 138); the 'no need to trend the variable expense ratio' point is Werner p. 135 (PDF p. 147); the prospective-selection requirement for a distribution change is Werner p. 127 (PDF p. 139). One nit on a stem/solution mismatch (F-001, open). Links, embed and LaTeX clean.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-135 (PDF pp. 137-147), underwriting expense categories, contingent commissions, All Variable / Premium-based / Exposure-based methods, Trending Expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p. 9 (PDF p. 21), written- vs earned-premium denominators for expense ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Stem changed to 'will move 40% of its business to a direct channel', which is what the solution computes (blended commission 0.60 x 17% = 10.2%; added fixed 0.40 x $18 = $7.20). Recomputed: before 465/0.735 = $632.65; after 472.20/0.803 = $588.04; -7.05%.
+
+## [F-002] Unsourced percentage ranges and contingent-commission characterisation
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: lead; bullets 2 and 5
+- claim: 'commission (10-20%, higher in some commercial lines), premium taxes (2-3%) … Total V commonly runs 20-30%'; contingent commissions 'behave partly like a loss-sensitive cost and are sometimes provided for separately'; lead lists 'licences and fees' as variable.
+- evidence: Werner Ch.7 gives no such ranges. p.127 (PDF p.139): commissions much higher in lines needing an onset inspection (large commercial property) than personal auto; agency vs national direct writer trade commissions against other acquisition. p.126 (PDF p.138): commission rates may vary between new and renewal; contingent commissions vary with quality (a loss ratio) or amount of business. Variable examples given are premium taxes and commissions (p.127).
+- source_rank: 2
+- proposed_action: Replace with Werner's qualitative statements.
+- applied: true
+- fingerprint: 5993eeeae514
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Applied: lead, bullet 2 and bullet 5 restated to Werner Ch.7 pp.126-127. Example 1 recomputed: V = 20%, 340/0.75 = $453.33 (90.67 + 22.67 + 340); additive alternative 425 leaves 318.75, $21.25 short.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: F-001 fixed and both examples recomputed in python; every bullet diffed against Werner Ch.7 (denominators p.127-128, commission changes p.128, trending p.135).
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-135 (PDF pp.137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Confidence medium (was high): vault-authored examples, per the resolve-run policy.

@@ -65,29 +65,29 @@ Sources conflict, or a critical finding is unresolved. A human has to settle the
 |---|---|---:|
 | `Exam 7 (CAS).md` | 2026-10-09 | 8 |
 | `Exam 8 (CAS).md` | 2026-10-09 | 3 |
-| `Exam ALTAM (SOA).md` | 2026-10-09 | 2 |
-| `Exam ASTAM (SOA).md` | 2026-10-09 | 2 |
-| `Exam ATPA (SOA).md` | 2026-10-09 | 2 |
-| `Exam CFE-101 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CFE-201 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CP-311 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CP-312 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CP-321 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CP-341 (SOA).md` | 2026-10-09 | 2 |
-| `Exam CP-351 (SOA).md` | 2026-10-09 | 2 |
+| `Exam ALTAM (SOA).md` | 2026-10-09 | 1 |
+| `Exam ASTAM (SOA).md` | 2026-10-09 | 1 |
+| `Exam ATPA (SOA).md` | 2026-10-09 | 1 |
+| `Exam CFE-101 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CFE-201 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CP-311 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CP-312 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CP-321 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CP-341 (SOA).md` | 2026-10-09 | 1 |
+| `Exam CP-351 (SOA).md` | 2026-10-09 | 1 |
 | `Exam DISC-DA (CAS).md` | 2026-10-09 | 3 |
 | `Exam DISC-IA (CAS).md` | 2026-10-09 | 4 |
 | `Exam DISC-RM (CAS).md` | 2026-10-09 | 4 |
-| `Exam FAM (SOA).md` | 2026-10-09 | 2 |
-| `Exam GH-101 (SOA).md` | 2026-10-09 | 2 |
-| `Exam GH-201C (SOA).md` | 2026-10-09 | 2 |
-| `Exam GH-201U (SOA).md` | 2026-10-09 | 2 |
-| `Exam GH-301 (SOA).md` | 2026-10-09 | 2 |
-| `Exam GI-101 (SOA).md` | 2026-10-09 | 2 |
-| `Exam GI-201 (SOA).md` | 2026-10-09 | 2 |
-| `Exam GI-301 (SOA).md` | 2026-10-09 | 2 |
-| `Exam GI-302 (SOA).md` | 2026-10-09 | 2 |
-| `Exam ILA-101 (SOA).md` | 2026-10-09 | 2 |
+| `Exam FAM (SOA).md` | 2026-10-09 | 1 |
+| `Exam GH-101 (SOA).md` | 2026-10-09 | 1 |
+| `Exam GH-201C (SOA).md` | 2026-10-09 | 1 |
+| `Exam GH-201U (SOA).md` | 2026-10-09 | 1 |
+| `Exam GH-301 (SOA).md` | 2026-10-09 | 1 |
+| `Exam GI-101 (SOA).md` | 2026-10-09 | 1 |
+| `Exam GI-201 (SOA).md` | 2026-10-09 | 1 |
+| `Exam GI-301 (SOA).md` | 2026-10-09 | 1 |
+| `Exam GI-302 (SOA).md` | 2026-10-09 | 1 |
+| `Exam ILA-101 (SOA).md` | 2026-10-09 | 1 |
 
 ---
 

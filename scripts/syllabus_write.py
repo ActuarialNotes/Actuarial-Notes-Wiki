@@ -303,10 +303,7 @@ def render(data: dict, vault: vl.Vault) -> str:
             L += [f"> {p}", ">"]
         L.pop()
         L.append("")
-    edition = f"the {sittings} " if sittings else "the "
-    L += [f"The learning objectives below are transcribed from {edition}[syllabus]({data['source_url']}) the SOA publishes, "
-          "word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here."]
-    L += ["", "## Learning Objectives", ""]
+    L += ["## Learning Objectives", ""]
 
     for t in data["topics"]:
         L.append(f"> [!example]- {t['title']} {weight_tag(t)}")

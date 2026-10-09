@@ -5,12 +5,14 @@ syllabus:
   source_sha256: cd1c4219dd85ad017d63963b38a538c9b7271071f465ad2fd26449a11c940d74
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d8f9739d66202101b6d736f835349549604f6473f39b36d983ed6bde587088f0
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7a084330402114bfda7fd4c4fcdcafa1d7b0b00fe6ecb47540423b1471bc5ba9
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-101, all pages, sha256:cd1c4219dd85ad017d63963b38a538c9b7271071f465ad2fd26449a11c940d74 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam INV-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam INV-101
 **INV 101 – Portfolio Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

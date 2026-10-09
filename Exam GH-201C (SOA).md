@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8700e906dd3cf7ea678d65ac34baade17c85e4a6750a2931e629dce294b6013b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bff07464b0e2c1573fd71104f7acb1360314a8d73690015925e9b7aecd571533
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-201C (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GH-201C
 **GH 201-C – Valuation and Regulation, Canada** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 16d5e74841e90fdb61402248cb585dc8d7a3ceedbf678341478145a9e2fb4410
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9388ad6cd1d3d0062824d1877c41d8103dd7c1bb538d85382c98ca8c3b4ffcd7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:85ae4ebed29a2b719ba91233cf1add24502fe4f929370f66f2a3f1c9fb7f7724
+  sources:
+    - "SOA, current syllabus PDF for ATPA, all pages, sha256:16d5e74841e90fdb61402248cb585dc8d7a3ceedbf678341478145a9e2fb4410 — https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ATPA (SOA).md
@@ -28,8 +30,6 @@ The Advanced Topics in Predictive Analytics course provides candidates with the 
 > A thorough knowledge of probability (as covered in Exam P), mathematical statistics (as covered in VEE Mathematical Statistics), and selected models and methods for analyzing data (as covered in Exams SRM and PA) is assumed.
 >
 > The learning objectives and outcomes provided on the following pages follow the four modules of the e-Learning support provided. The ranges of weights shown in the Learning Objectives below are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that tasks often cover multiple learning objectives, including some weight for communication and ethics in many tasks.
-
-The learning objectives below are transcribed from the [syllabus](https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

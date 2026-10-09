@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 36804e53afb3a76a5987d8be2aaa263a3da3b595c7ec0b07960c335ab4cf5048
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:deaa951c4cc9994ed12d56b3a4c33d725aa8dc23bcd69abf7958ed410d3365af
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ce0b1fb9bbe4cbfd240ec78f63dd5e547631f1bcd9fa116c94dfd9fe9bcdb19c
+  sources:
+    - "SOA, Nov 2026/Jul 2027 syllabus PDF for CP-321, all pages, sha256:36804e53afb3a76a5987d8be2aaa263a3da3b595c7ec0b07960c335ab4cf5048 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-321 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CP-321
 **CP 321 – Disability, Long-Term Care, and Long-Duration Health Contracts** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

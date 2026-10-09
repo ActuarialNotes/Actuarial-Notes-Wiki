@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:43a1e8d88ecc50b229cf23e82c9a05598c3d3fb45b49cec127a618c987cfd783
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:55b10a8331d2db51da87ad030548cd4a5c08223a5ed5ec04699224770248591b
+  sources:
+    - "SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam FAM (SOA).md
@@ -38,8 +40,6 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > As part of the computer-based testing process, a few pilot questions will be randomly placed in the exam (both paper and pencil and computer-based forms). These pilot questions are included to judge their effectiveness for future exams, but they will NOT be used in the scoring of this exam. All other questions will be considered in the scoring. All unanswered questions are scored incorrect. Therefore, candidates should answer every question on the exam. There is no set requirement for the distribution of correct answers for the multiple-choice preliminary examinations. It is possible that a particular answer choice could appear many times on an examination or not at all. Candidates are advised to answer each question to the best of their ability, independently from how they have answered other questions on the examination.
 >
 > Since the CBT exam will be offered over a period of a few days, each candidate will receive a test form composed of questions selected from a pool of questions. Statistical scaling methods are used to ensure within reasonable and practical limits that, during the same testing period of a few days, all forms of the test are comparable in content and passing criteria. The methodology that has been adopted is used by many credentialing programs that give multiple forms of an exam. Unofficial pass/fail results will be sent within one hour to the email address you used to schedule your appointment.
-
-The learning objectives below are transcribed from the October 2026 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

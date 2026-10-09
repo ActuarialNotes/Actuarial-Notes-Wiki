@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f359b8c3395e139b035e720a8e212222f3060d3c875c172da0b5001db57e4662
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6317a7bfb7bcb5cc5a2a849551be06b375981ac37e9ce1927bb930222687bae6
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-311, all pages, sha256:7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-311 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CP-311
 **CP 311 – Strategic Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

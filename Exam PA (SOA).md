@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:cdfe5e14d8f97fa3e8d11cde4f6dc75854174e60f19630eec3423b6afac15e6f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7a2bbc4649000e14492991ab29287860131dad803ad7de915af21235f1d1814d
+  sources:
+    - "SOA, October 2026 syllabus PDF for PA, all pages, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam PA (SOA).md
@@ -32,8 +34,6 @@ The Predictive Analytics exam is administered as a three hour and thirty-minute 
 > The learning objectives and outcomes provided on the following pages follow the five modules of the e-Learning support provided. There is an additional module that is an Introduction to R. That knowledge is not part of the learning objectives for the course, but is needed to be able to work with the material in the other modules. The ranges of weights shown in the Learning Objectives below are intended to apply to the large majority of exams administered. On occasion, the weights of topics on an individual exam may fall outside the published range. Candidates should also recognize that tasks often cover multiple learning objectives, including some weight for communication in most tasks.
 >
 > 1 The Prometric computers will have the 2016 versions of Microsoft Word and Excel.
-
-The learning objectives below are transcribed from the October 2026 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

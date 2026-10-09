@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:15e0dfde23050f1c474b11d132d01dfa1768ec77db6419b31b01db1af86d4d77
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:187dbd998f2a961210d055c6f178b27246118b0856913e39affd0e862b9fbf25
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GI-301 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GI-301
 **GI 301 – Further Topics in General Insurance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

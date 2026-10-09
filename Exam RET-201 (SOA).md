@@ -3,15 +3,17 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
   sitting: "Mar 2027/Jul 2027"
   source_sha256: 794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:baf318e0c53e073cc09da22ed4e415d0ecf2490bfa2dc2518be8f7265948f995
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a9b5e3c9049a7e948dcb2d663637a413429a95a231fd2a2ccc108282990c2606
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam RET-201 (SOA).md
 ---
@@ -22,8 +24,6 @@ verification:
 
 # Exam RET-201
 **RET 201 – Retirement Plan Valuation** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 
@@ -56,7 +56,9 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - e-Learning Module: Pension Projection (background only) (1a, 1b)
 
 > [!example]- Actuarial Assumptions {15–25%}
-> The candidate will understand how to [[Analyze-synthesize|analyze/synthesize]] the factors that go into selection of actuarial assumptions used in [[Pension Valuation|pension valuations]] Given a [[Context|context]], including [[Valuation|valuations]] for specific purposes ([[Funding|funding]], accounting, [[Termination-windup|termination/windup]]) and for different types of [[Plan|plans]] ([[Single Employer|single employer]], [[Multi-Employer|multi-employer]], [[Open|open]], [[Closed|closed]], [[Public|public]]), the Candidate will be able to:
+> The candidate will understand how to [[Analyze-synthesize|analyze/synthesize]] the factors that go into selection of actuarial assumptions used in [[Pension Valuation|pension valuations]]
+>
+> **Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:**
 >
 > 1. Evaluate [[Appropriateness|appropriateness]] of current assumptions
 > 2. Describe and explain the different [[Perspective|perspectives]] on the selection and [[Development|development]] of assumptions, including [[Financial Economics|financial economics]]

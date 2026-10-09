@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7d708e5a6d8258920e704614742dedf9b1bcb1c7b9e73005206fc332270b731e
-  sources: []
-  open_findings: 0
+  sources:
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (the 'October 2026 Content Outline'; Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
+    - "CAS, Exam 8 — Advanced Ratemaking exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026 11:59 pm; fee $850 ($680 students); refund deadline October 6, 2026; 'October 2026 Content Outline' the only outline linked, sha256:84844040018c40dc5cab1a0f521698ce32383120b414c520dae1de8c3ca62c77 — https://www.casact.org/exam/exam-8-advanced-ratemaking"
+    - "Title pages of the outline's hyperlinked readings, read 2026-10-09 (casact.org unless noted): 8_ASOP12.pdf p.1 sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7; asop025_174.pdf (actuarialstandardsboard.org) p.1 sha256:04693d357236c800665202064f3eaa45307d92bb5648c0b36fcd5ce94a5d00d3; 8_Bahnemann.pdf p.1 sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8; 8_Bahnemann_Errata.pdf sha256:e03ea8f6bce776b3ea3cf1439f1fc06a965d8edb7c05f025ee0cf23584de2bed; 8_Bailey_Simon.pdf p.1 sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2; 8_Bailey_Simon_Discussion_of_Paper.pdf sha256:48b8d420ffd358904509532447e15d50df0d5b1756c2026f81e8d058a02f09e4; CAS_Monograph-16_From_GLMs.pdf p.1 sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74; 8_Couret_Venter.pdf p.1 sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18; 8_Fisher_et_al.pdf p.1 sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81; 8_Fisher_et_al_Case_Study.xlsx sha256:d1110d51591018fad4286d1c6bcb3dccfa9fbdac87422a044c707ed1f70b3350; 05-Goldburd-Khare-Tevet.pdf pp.1,3 sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757; Monograph_No_5_Errata_Sheet.pdf sha256:4622f59623aded645b229235ab0579a527823942ff35dce531033fe534b6735b; CAS_Monograph_13_2025_revision.pdf p.1 sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd; Monograph_13_Errata_sheet.pdf sha256:642022832e3ec1a7a08b587ae70a0e0d0d710ee30ab96f55b7907288e3b8e906; 8_Mahler.pdf p.1 sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58"
+  open_findings: 2
   open_critical: 0
   log: .verify/Exam 8 (CAS).md
 ---

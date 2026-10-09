@@ -5,12 +5,14 @@ syllabus:
   source_sha256: fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:4c807bb4f68ba40849ce19283a22a5955ee9bbbec078ddf5565be70ae6ec56c1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6a231253dff9f73c433dd902297d250eac87237ee4da6c5172634ae42e4fc0d8
+  sources:
+    - "SOA, Nov 2026/Jul 2027 syllabus PDF for RET-301, all pages, sha256:fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam RET-301 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam RET-301
 **RET 301 – Actuarial Topics for Canadian Retirement Plans** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

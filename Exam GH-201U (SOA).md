@@ -5,12 +5,14 @@ syllabus:
   source_sha256: dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:83bc8daead579a891afd3f4c203a4b17ef90a4025ee8f033b95fd766e038ef51
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8cdf70417d67e5aeaef1b067c67b69eed1034fde04441cc2fb75a0d1695a0569
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201U, all pages, sha256:dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-201U (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GH-201U
 **GH 201-U – Valuation and Regulation, U.S.** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

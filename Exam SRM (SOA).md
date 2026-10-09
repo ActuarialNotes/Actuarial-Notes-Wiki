@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dbefbf93e57b9d2473417e8e4307754e26e29fb7d4e94a6d66749046f6d8ce34
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a2d954feafc32c9cd7209f04903b31727f58b9dc754ec845d98bf857989fc977
+  sources:
+    - "SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam SRM (SOA).md
@@ -48,8 +50,6 @@ The Statistics for Risk Modeling exam is a three and one-half hour exam that con
 > are comparable in content and passing criteria. The methodology that has been adopted is used by many credentialing programs that give multiple forms of an exam.
 >
 > Unofficial pass/fail results will be sent within one hour to the email address you used to schedule your appointment.
-
-The learning objectives below are transcribed from the January 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d4a9cb70dbe5d1ae9a8945042c98d4bf98a0bbd2859a2094412cdf70d5c691b3
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1776e5673c88a2f38f18a574345f671876b1e509aead2644a276e9c0c9653b76
+  sources:
+    - "The Institutes, CAS DISC RM – Risk Management and Insurance Operations Course Syllabus (© 2023), PDF pp.1-4, sha256:34fbee38024d3433de5d84c09138114c56edfb0336468dfefefdc78e23f67eac — https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf"
+    - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
+    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced', sha256:a84507a4d89728d73d486a1baae822d65d097911608d6cb7f89be5470e5f3e3d — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
+    - "CAS, 'CAS and The Institutes Announce Refresh of Data Insurance Series Courses (DISCs)' (04/21/2023): Online Course 1 and Online Course 2 refreshed to DISC RM and DISC IA, sha256:51266be995b266f7112f32ceb54cebc9ce93888e78d20669f3e783b4b5b3d687 — https://casact.org/article/cas-and-institutes-announce-refresh-data-insurance-series-courses-discs"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam DISC-RM (CAS).md
@@ -19,7 +23,7 @@ verification:
 
 **Risk Management and Insurance Operations (DISC RM)** is one of the three *Data and Insurance Series Courses* (DISCs) the CAS requires for the [[Associate of the Casualty Actuarial Society (ACAS)|ACAS]]. The DISCs are online, self-paced courses run by The Institutes. Each ends in an exam of 75 application-based multiple-choice questions, with 100 minutes to answer them, and the course fee includes one attempt. The course itself contains the learning objectives and all the material needed to meet them; a textbook with the same content, condensed review notes, a course guide of sample questions and answers, and flashcards are sold separately and are optional. It replaced CAS Online Course 1 in 2023.
 
-The objectives below are the course syllabus The Institutes publishes: fifteen numbered topics, each broken into sections that the syllabus letters a, b, c. It gives the topics no exam weights.
+The Institutes gives the topics no exam weights.
 
 ## Learning Objectives
 

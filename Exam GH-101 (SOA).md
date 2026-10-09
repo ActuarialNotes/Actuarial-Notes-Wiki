@@ -5,12 +5,14 @@ syllabus:
   source_sha256: fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d764911f8de54e1e4f4cd160ca403c2bc39da4d27d219eac92864edf700eef58
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2b179726c5789c54ffd61921b2dff509f3be5c74fdb204a383bf4ba61fe76c3f
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-101, all pages, sha256:fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806 — https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GH-101
 **GH 101 – Benefits and Pricing** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

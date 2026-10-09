@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:84608c075934a1cbb774bb0c1f5f713f1a549cd61f683b2dd4810e3b90a54ee0
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:cacd57b73a4511893eebd4a103d67a06379f3b265fdc5d11d85075e1f8241737
+  sources:
+    - "SOA, OCTOBER 2026 syllabus PDF for ALTAM, all pages, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ALTAM (SOA).md
@@ -42,8 +44,6 @@ The ALTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > Past Exams Past LTAM Exams from October 2018 through 2022 and past ALTAM Exams from Spring 2023 through present are available on the SOA website.
 >
 > Updates Candidates should be sure to check the Updates page on the exam home page periodically for additional corrections or notices.
-
-The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

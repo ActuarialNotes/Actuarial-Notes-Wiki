@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1cacf39b274d52b3d309bf04e67830289f7fcc91777748b6f113792d054d7b58
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f318e1c0371532d84239f438009223c1c7acce41f5bfced9ae8c020ddb21a150
+  sources:
+    - "SOA, OCTOBER 2026 syllabus PDF for ASTAM, all pages, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ASTAM (SOA).md
@@ -42,8 +44,6 @@ The ASTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > Past Exams Past STAM and past ASTAM Exams from Spring 2023 through present are available on the SOA website.
 >
 > Updates Candidates should be sure to check the Updates page on the exam home page periodically for additional corrections or notices.
-
-The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

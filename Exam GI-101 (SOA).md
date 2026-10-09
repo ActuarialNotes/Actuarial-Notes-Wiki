@@ -5,12 +5,14 @@ syllabus:
   source_sha256: deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:154dd323fccf1bd1f8776d20e8b7ffb60116a9e3188b8608e777877025e4d6d5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e20ce63fa10faccb2aaeae6d854ea7e9e05e2f748b0c1f664bd9b8f5d4fa7d8a
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GI-101, all pages, sha256:deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GI-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GI-101
 **GI 101 – Ratemaking and Reserving** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

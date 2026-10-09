@@ -5,12 +5,14 @@ syllabus:
   source_sha256: daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b7cfab3a70a2a74b73ddd3ef4006223131d087177f580478f02ace0d25e01312
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:cdbaeca66f88abfa103f771bbe967988b4d2bfc57eb27e59f560b259287495f0
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ILA-201U (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam ILA-201U
 **ILA 201-U – Valuation and Advanced Product and Risk Management, U.S.** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

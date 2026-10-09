@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:bc115e6dfba192e967b29ca0e2b943883dad8e6a17ec3f435d48a345c56aaba3
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c5ee4f081f3bc456a334343c98092a30a8b82d1ad4c3280b84727ac8f85e0f1d
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-201, all pages, sha256:8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam INV-201 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam INV-201
 **INV 201 – Quantitative Finance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

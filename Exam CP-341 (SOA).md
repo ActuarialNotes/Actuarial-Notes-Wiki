@@ -5,12 +5,14 @@ syllabus:
   source_sha256: a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6911ec15b8d0a4d14f47416d6983796fa5e6bab97b688dcefcdb7c395fbe6aaf
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:03a09c6b07fc1ea4baccb6ffb6b74a8544e849afd73e7d68f2b004ed4f02e451
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-341 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CP-341
 **CP 341 – Advanced Life Reinsurance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

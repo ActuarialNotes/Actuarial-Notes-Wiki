@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5bf151842396b618853aa38a6ae77775b2b3fc2eb60345ad33aa895de9caf977
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d39247052d41a05ecbecf4f780b8c296f6c6706726d5f66231d8b1993052ec44
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-301, all pages, sha256:2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd — https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-301 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GH-301
 **GH 301 – Health Analytics Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9ff16db41638cc3a9de2cf7be27cc8895de45e31f0d09bc65bdf6d239f6c9dbd
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:312807bcfca655b630d9d413440f1dd719b5c4dd8970bdd5844fc79eb3e10fe3
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CFE-201 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CFE-201
 **CFE 201 – Corporate Finance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

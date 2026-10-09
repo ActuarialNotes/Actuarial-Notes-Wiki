@@ -5,12 +5,14 @@ syllabus:
   source_sha256: a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:96bd1a2d3da8fc9226884a71fc0b1d667eca6a9204390ccf5ec91d36931933b8
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:78e7a3e546ffd5766bb3a83c22f01fd8d9b4a5c7566d86bf51833de519080151
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CFE-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CFE-101
 **CFE 101 – Enterprise Risk Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

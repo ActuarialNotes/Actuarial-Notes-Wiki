@@ -3,15 +3,17 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   sitting: "Nov 2026/Mar 2027"
   source_sha256: 4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dee1e434f8496c6ae77f79aa02db152a3833cc11d641c5186ea9843af8d24f9a
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2496c336f8cc3d7e4ddc3b9d87f186f71d52540f010b1f2d362b124373ff4000
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam GI-201 (SOA).md
 ---
@@ -22,8 +24,6 @@ verification:
 
 # Exam GI-201
 **GI 201 – Operational, Financial, Regulatory and Legal** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 
@@ -146,7 +146,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >     - Ch. 10: Performance Measurement for General Insurers (excluding 10.4.3, and 10.8.3.1-10.9.1) (6a)
 >     - Ch. 11: Financial Ratios for Insurers (excluding 11.6.2, 11.7.1, 11.8, and 11.10-11.11) (6a-b)
 >     - Ch. 12: Solvency Monitoring (excluding 12.5.3, 12.9.2-12.9.3, 12.10.2, 12.11 and 12.13) (6c-e)
-> - IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial 6a, c-d, f Association, May 2023, section 9
+> - IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, section 9 (6a, c-d, f)
 > - IAA Risk Book: Own Risk Solvency Assessment, Insurance Regulation Committee, International Actuarial Association, May 2023, pp. 3-19 (excluding sections 10.1 & 11) (6e)
 > - NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual, NAIC, as of Dec 2022, pp. 1-5 & 7-16 (6e)
 > - Deriving Value from ORSA: Board Perspective, International Actuarial Association, Apr 2015, pp. 1-8 (6e)
@@ -186,6 +186,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - [[IAA Risk Book - Reinsurance (Insurance Regulation Committee - 2023)|IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, sections 2-4, 7 and 11]]
 >      - Outcomes 1i
 >      - Outcomes 2i
+>      - Outcomes 6a, c-d, f
 > - [[Excerpts from Business Law for Insurance Professionals|Excerpts from Business Law for Insurance Professionals, Assignment 3, pp. 3.29-3.39 (begin on pp. 3.29 with “Financial Considerations in International Business”)]]
 >      - Outcomes 1j
 >      - Outcomes 3a, 3i

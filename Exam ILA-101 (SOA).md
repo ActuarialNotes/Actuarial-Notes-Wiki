@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9a1938f8ad4d0cc9480809f92d59f5e2c60e8e8ef7515bc8a4324345d3282c9e
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:de18c23bf963461b750d2e9b0d9bc724f6b9f296fea36f951be9631e348c3791
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-101, all pages, sha256:6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ILA-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam ILA-101
 **ILA 101 – Pricing and Introduction to Valuation and Risk Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a40ae30a232b5d7ba6cf26a1bcf3279f6d38c091fcf75f1dba89fad530f41b94
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c5934017b872c214764dafb6e27652a9ce1425bee2265eec4984023acf06eb11
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-351 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam CP-351
 **CP 351 – Asset Liability Management** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

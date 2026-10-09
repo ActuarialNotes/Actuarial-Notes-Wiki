@@ -5,12 +5,14 @@ syllabus:
   source_sha256: d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2302bdc54ccd3e88a9a6daf4b521f09c060201c5c5d84ffd535531d9a24d5231
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c307ce70e2e16653354d7d4c9d8106e2c270bffd134d263aade76164a974ecf1
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for RET-101, all pages, sha256:d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam RET-101 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam RET-101
 **RET 101 – Retirement Plan Design** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

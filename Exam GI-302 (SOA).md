@@ -5,12 +5,14 @@ syllabus:
   source_sha256: 4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7d3b3b5b7298195593594cb6ba67c85944c0d57149cb6112e51c12282c527211
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:aa59c1b84f57070e4f7f26f1ff9252efc15b7eb88e45c24bdebff2cfab006dc3
+  sources:
+    - "SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GI-302 (SOA).md
@@ -22,8 +24,6 @@ verification:
 
 # Exam GI-302
 **GI 302 – General Insurance in the U.S.** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 

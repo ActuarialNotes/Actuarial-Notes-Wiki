@@ -3,15 +3,17 @@ syllabus:
   source_url: "https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
   sitting: "Nov 2026/Mar 2027"
   source_sha256: 7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757
-  extracted_at: 2026-10-05
+  extracted_at: 2026-10-09
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:634958717861eb3dcd3bc1e10be579a71cb6276c062604cb56060080a0bd51b2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c39cb25e8aaf1c779c60a37d6ad274f6a19e87c5d4591c5524329ed9eb89a3a1
+  sources:
+    - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-312, all pages, sha256:7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
+    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam CP-312 (SOA).md
 ---
@@ -22,8 +24,6 @@ verification:
 
 # Exam CP-312
 **CP 312 – Model Development and Governance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 
@@ -73,7 +73,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > **Readings:**
 > - Video: Model Risk, SOA, 2024 (2a)
 >     - Model Risk Companion Notes
-> - Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8
+> - Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8 (2a. 2b)
 > - Economic Scenario Generators – three-part series, SOA:
 >     - Part I –Motivation for Stochastic Modeling, The Modeling Platform, Nov 2019 (2a)
 >     - Part II – Understanding Economic Scenario Generators, The Modeling Platform, Aug 2020 (2a)
@@ -144,7 +144,8 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 > - [[Metamodeling for Variable Annuities (Valdez)|Metamodeling for Variable Annuities, Valdez, Emiliano and Gan, Guojun]]
 >      - Chapters 1-3, 6 (1d)
 >      - Chapters 1-3, 6 (2c)
-> - [[Economic Scenario Generators - A Practical Guide (SOA - 2016)|Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 2a. 2b 7.1-7.3, 8]]
+> - [[Economic Scenario Generators - A Practical Guide (SOA - 2016)|Economic Scenario Generators: A Practical Guide, SOA, Jul 2016, Ch. 1, 2, 4.1-4.3, 5, 6, 7.1-7.3, 8]]
+>      - Outcomes 2a. 2b
 > - [[Economic Scenario Generators – three-part series (SOA:)|Economic Scenario Generators – three-part series, SOA:]]
 >      - Part I –Motivation for Stochastic Modeling, The Modeling Platform, Nov 2019 (2a)
 >      - Part II – Understanding Economic Scenario Generators, The Modeling Platform, Aug 2020 (2a)

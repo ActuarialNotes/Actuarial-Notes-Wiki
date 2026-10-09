@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:99ad2764967048058312d9d7d35254a188a3486d7fcd606ea473a6e77adb1e22
+  content_hash: sha256:d8f9739d66202101b6d736f835349549604f6473f39b36d983ed6bde587088f0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,14 +30,14 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Asset Classes {25–40%}
 > The candidate will understand the [[Nature|nature]] and the [[Variety|variety]] of [[Asset Class|asset classes]] that can be used in constructing a [[Portfolio|portfolio]].
 >
-> 1. Demonstrate an understanding of [[Cash Flow|cash flow]] characteristics, underlying [[Risk|risks]] and roles in [[Investment Portfolio|investment portfolios]] of various [[Fixed Income Investment|fixed income investments]], including:
+> 1. Demonstrate an understanding of [[Cash Flow|cash flow]] characteristics, underlying [[Risk|risks]] and roles in [[Portfolio|investment portfolios]] of various [[Fixed Income Investment|fixed income investments]], including:
 >    - [[Government]] and [[Corporate Bond|corporate bonds]]
 >    - [[Leveraged Loan|Leveraged loans]]
 >    - [[Commercial]] and [[Residential Mortgage|residential mortgages]]
 >    - [[Mortgage-backed Security|Mortgage-backed securities]]
 >    - [[Structured Credit Product|Structured credit products]]
 >    - [[Private Debt|Private debt]]
-> 2. Demonstrate an understanding of the [[Distinguishing Investment|distinguishing investment]] characteristics and potential [[Contribution|contributions]] to [[Investment Portfolio|investment portfolios]] of various types of [[Equity|equity]] and alternative [[Investment|investments]], including:
+> 2. Demonstrate an understanding of the [[Distinguishing Investment|distinguishing investment]] characteristics and potential [[Contribution|contributions]] to [[Portfolio|investment portfolios]] of various types of [[Equity|equity]] and alternative [[Investment|investments]], including:
 >    - [[Public Equity]]
 >    - [[Private Equity]]
 >    - [[Real Estate]]
@@ -78,7 +78,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >
 > 1. Describe the [[Portfolio Management Process|portfolio management process]] and recommend [[Investment Governance Structure|investment governance structure]]
 > 2. Develop an [[Investment Policy Statement|investment policy statement]] ([[IPS]]) for an [[Institutional Investor|institutional investor]]
-> 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], [[Passive-active|passive/active]] management and [[Rebalancing|rebalancing]]
+> 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], [[Passive-active|passive/active]] management and [[Portfolio Rebalancing|rebalancing]]
 > 4. Recommend and justify an [[Optimal Portfolio Allocation|optimal portfolio allocation]] in a [[Risk-Return|risk-return]] framework
 > 5. Demonstrate an understanding of [[Common|common]] techniques to [[Enhance Yield|enhance yield]] and manage [[Liquidity|liquidity]] in [[Fixed Income Portfolio|fixed income portfolios]]
 > 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various [[Strategy|strategies]], including [[Indexing|indexing]] and [[Target Return|target return]]

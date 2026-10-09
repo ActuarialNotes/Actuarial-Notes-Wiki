@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e03f65aa4493c1c3f91bee6f99d51e1593c3dcabdc426753a601d45cc8f3214d
+  content_hash: sha256:4c807bb4f68ba40849ce19283a22a5955ee9bbbec078ddf5565be70ae6ec56c1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,7 +48,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > - RET301-100-25: Financial Services Commission of Ontario: Actuarial Guidance Note: Determination of the Solvency Liability Adjustment (1a)
 
 > [!example]- Methods {20–30%}
-> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Required Contribution|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], [[Tax Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
+> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Funding|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Regulatory Policy|regulatory policies]], [[Tax Legislation|tax legislation]], and actuarial [[Standard|standards]] of practice.
 >
 > 1. Differentiate between various purposes for valuing [[Pension Plan|pension plans]], including:
 >    - [[Going Concern Funding|Going concern funding]]

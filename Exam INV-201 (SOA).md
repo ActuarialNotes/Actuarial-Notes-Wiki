@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8ad36f7a571546fc969878b9958f60e7b74e94b97fdefb2a3ea29f82158fac95
+  content_hash: sha256:bc115e6dfba192e967b29ca0e2b943883dad8e6a17ec3f435d48a345c56aaba3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -80,7 +80,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 >    - Change of [[Numeraire|numeraire]]
 >    - [[Girsanov's Theorem|Girsanov's theorem]]
 > 5. Understand and apply the concepts of [[Risk-Neutral Valuation|risk-neutral]] measure, [[Forward|forward]] measure, [[Normalization|normalization]], and the [[Market|market]] price of [[Risk|risk]]
-> 6. Understand [[Option Pricing|option pricing]] techniques including:
+> 6. Understand [[Risk-Neutral Valuation|option pricing]] techniques including:
 >    - Calculating an [[Expectation|expectation]]
 >    - By solving an [[PDE]]
 > 7. Understand the [[Limitation|limitations]] of the [[Black-Scholes Model|Black-Scholes-Merton]] model

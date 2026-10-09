@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8ba1ff98d4ee4f6bc8cac4d4c9139061674d467fb137878a0a8c43f2602f1228
+  content_hash: sha256:dee1e434f8496c6ae77f79aa02db152a3833cc11d641c5186ea9843af8d24f9a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,7 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027 [syllab
 >
 > 1. Describe the various [[Core|core]] and supporting functions of a general [[Insurer|insurance company]].
 > 2. Differentiate among the various [[Classification|classifications]] of [[Insurer|insurers]].
-> 3. Describe the [[Marketing|marketing]] and [[Distribution|distribution]] of general [[Insurance Product|insurance products]].
+> 3. Describe the [[Marketing|marketing]] and [[Distribution|distribution]] of general [[Insurance Policy|insurance products]].
 > 4. Understand the [[Process|processes]] for [[Underwriting|underwriting]] and [[Pricing General Insurance Policy|pricing general insurance policies]].
 > 5. Describe the [[Activity|activities]] and [[Challenge|challenges]] in the [[Claim Handling Process|claim handling process]].
 > 6. Describe the goals of [[Insurer Risk|insurer risk]] control [[Activity|activities]].

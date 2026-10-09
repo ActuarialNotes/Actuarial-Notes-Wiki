@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9aeb08ea01f99257a9c86199fd4a20aee43671632e0729e91e6f3270a3d07aff
+  content_hash: sha256:9388ad6cd1d3d0062824d1877c41d8103dd7c1bb538d85382c98ca8c3b4ffcd7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -45,20 +45,20 @@ The learning objectives below are transcribed from the [syllabus](https://www.so
 >
 > 1. Understand the basic [[Structure|structure]] of a [[Data Pipeline|data pipeline]], including being able to perform the following tasks:
 >    - Evaluate the [[Quality|quality]] of appropriate [[Data|data]] sources for a problem
->    - Explain the [[Difference|difference]] between a [[Database|database]], [[Data Lake|data lake]], and [[Data Warehouse|data warehouse]]
->    - Describe how different [[Data Structure|data structures]] can be used in different [[Analytical|analytical]] tasks.
+>    - Explain the [[Difference|difference]] between a [[Database|database]], [[Data Warehouse|data lake]], and [[Data Warehouse|data warehouse]]
+>    - Describe how different [[Tidy Data|data structures]] can be used in different [[Analytical|analytical]] tasks.
 > 2. Explain the basics concepts of [[Database|database]] management, in [[Particular|particular]], [[Extract|extract]], [[Transform|transform]], and [[Load|load]] ([[ETL]]) operations. Demonstrate these [[Skill|skills]] by performing the following:
->    - [[Extract Data|Extract data]] from various [[File Structure|file structures]]
+>    - [[Extract Data|Extract data]] from various [[Data Pipeline|file structures]]
 >    - [[Subset]], aggregate, summarize, and [[Otherwise Modify Data|otherwise modify data]] for specific [[Exploratory|exploratory]] or [[Modeling|modeling]] purposes
->    - Create [[Data Set|data sets]] as a [[Final Product|final product]] of extracting and [[Transforming Data|transforming data]] that can be used in a [[Predictive|predictive]] model.
+>    - Create [[Data Pipeline|data sets]] as a [[Final Product|final product]] of extracting and [[Transforming Data|transforming data]] that can be used in a [[Predictive|predictive]] model.
 > 3. Assess the [[Accuracy|accuracy]] and [[Quality|quality]] of [[Data|data]].
->    - Describe how [[Data Collection Practice|data collection practices]] and assumptions [[Affect Data Quality|affect data quality]].
->    - Validate the [[Data|data]] for [[Internal Consistency|internal consistency]].
+>    - Describe how [[Data Quality|data collection practices]] and assumptions [[Affect Data Quality|affect data quality]].
+>    - Validate the [[Data|data]] for [[Data Quality|internal consistency]].
 > 4. Explain the terminology and [[Structure|structure]] of [[Relational Database|relational databases]] and be able to use [[Common|common]] keys between [[Collection|collections]] of [[Data|data]] to [[Merge|merge]] information from [[Multiple|multiple]] sources.
 > 5. [[Clean]] and organize [[Data|data]] by performing each of the following:
 >    - Check for [[Outlier|outliers]], both [[Univariate|univariate]] and [[Multivariate|multivariate]]
->    - [[Handle Missing Data|Handle missing data]] (including understanding the types of missing [[Data|data]]) by selecting the appropriate [[Action|action]] from [[Deletion|deletion]] of the [[Record|record]], [[Imputation|imputation]], and adding a missing value [[Flag|flag]].
-> 6. Detect possible [[Biases Introduced|biases introduced]] when [[Preparing Data|preparing data]] for a [[Predictive|predictive]] model.
+>    - [[Missing Data|Handle missing data]] (including understanding the types of missing [[Data|data]]) by selecting the appropriate [[Action|action]] from [[Deletion|deletion]] of the [[Record|record]], [[Missing Data|imputation]], and adding a missing value [[Flag|flag]].
+> 6. Detect possible [[Biases Introduced|biases introduced]] when [[Data Pipeline|preparing data]] for a [[Predictive|predictive]] model.
 
 > [!example]- Advanced Predictive Analytics Models {30–45%}
 > The Candidate will fit a [[Variety|variety]] of models and select one appropriate to the [[Circumstance|circumstances]] and intended use.
@@ -73,7 +73,7 @@ The learning objectives below are transcribed from the [syllabus](https://www.so
 > 5. Explain the [[Benefit|benefits]] of and demonstrate the combination of [[Multiple|multiple]] models via [[Stacking|stacking]] and [[Blending|blending]].
 > 6. Select and justify a [[Modeling|modeling]] approach based on [[Accuracy|accuracy]], [[Explainability|explainability]], [[Stability|stability]], [[Analytical Effort|analytical effort]], [[Computational Efficiency|computational efficiency]], and [[Table Importability|table importability]], taking into [[Account|account]] the [[Business Context|business context]] of the problem.
 > 7. Recognize and mitigate the [[Effect|effect]] of:
->    - Starting with [[Too Many Variable|too many variables]]
+>    - Starting with [[Variable Selection|too many variables]]
 >    - [[Repeated]] use of [[Train-test-validate Set|train/test/validate sets]]
 >    - Model [[Bias|bias]], including [[Fairness|fairness]] concepts and [[Proxy Discrimination|proxy discrimination]].
 
@@ -82,15 +82,15 @@ The learning objectives below are transcribed from the [syllabus](https://www.so
 >
 > 1. Understand [[Aspect|aspects]] of [[Explainability|explainability]], in [[Particular|particular]]:
 >    - The [[Connection|connection]] between [[Ethics|ethics]] and [[Explainability|explainability]]
->    - [[Suitability]], [[Decomposability|decomposability]], [[Algorithmic Transparency|algorithmic transparency]], and [[Post-Hoc Interpretability|post-hoc interpretability]]
+>    - [[Suitability]], [[Interpretability|decomposability]], [[Interpretability|algorithmic transparency]], and [[Interpretability|post-hoc interpretability]]
 >    - The [[Difference|difference]] between [[Explainability|explainability]] and [[Interpretability|interpretability]]
 >    - When a [[Lack|lack]] of [[Explainability|explainability]] may be [[Acceptable|acceptable]].
 > 2. Communicate and justify a [[Recommended Analytics|recommended analytics]] solution, including use as appropriate of:
->    - [[Variable Importance Plot|Variable importance plots]]
->    - Partial [[Dependence Plot|dependence plots]]
->    - [[Individual Conditional Expectation Plot|Individual conditional expectation plots]]
+>    - [[Variable Importance|Variable importance plots]]
+>    - Partial [[Partial Dependence Plot|dependence plots]]
+>    - [[Partial Dependence Plot|Individual conditional expectation plots]]
 >    - [[Shapley Value|Shapley values]]
->    - [[Lift]] and [[Gain Chart|gain charts]].
+>    - [[Lift]] and [[Lift|gain charts]].
 > 3. Explain why a model is predicting certain [[Value|values]] for certain [[Record|records]].
 > 4. Perform [[Data|data]] and model [[Model Governance|governance]] and develop model [[Documentation|documentation]] in an [[Ethical Context|ethical context]].
 > 5. Communicate in a [[Clear|clear]] and [[Straightforward Manner|straightforward manner]] using [[Common Language|common language]] that is appropriate for the intended [[Audience|audience]].

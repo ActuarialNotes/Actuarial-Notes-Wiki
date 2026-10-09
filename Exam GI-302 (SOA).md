@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9d4c41272e3bb985e1f608f167dc343eb8dd36d3647fa594a4f844929be4eae1
+  content_hash: sha256:7d3b3b5b7298195593594cb6ba67c85944c0d57149cb6112e51c12282c527211
   sources: []
   open_findings: 0
   open_critical: 0
@@ -28,7 +28,7 @@ The learning objectives below are transcribed from the Jul 2027 [syllabus](https
 ## Learning Objectives
 
 > [!example]- U.S. General Insurance Products and Coverages {5–10%}
-> The candidate will understand the different types of general [[Insurance Product|insurance products]] and [[Coverage|coverages]] offered in the [[United State|United States]].
+> The candidate will understand the different types of general [[Insurance Policy|insurance products]] and [[Coverage|coverages]] offered in the [[United State|United States]].
 >
 > 1. Describe the contents of the [[ISO Personal Auto Policy]] ([[PAP]]) and the [[ISO Homeowner|ISO Homeowners]] ([[HO]]) [[Policy|policies]] and the [[Coverage|coverages]] they [[Provide|provide]].
 > 2. Explain how [[Insurable Interest|insurable interest]], [[Policy Provision|policy provisions]] for valuing [[Loss|losses]], and [[Insurance|insurance]] to value [[Affect|affect]] a [[Loss Payment|loss payment]] amount under [[Property Insurance|property insurance]].

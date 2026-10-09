@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0b0c923dce5f484f7e112c1a16209d0e5f826c91ffdccc9821002d8eb00d651c
+  content_hash: sha256:deaa951c4cc9994ed12d56b3a4c33d725aa8dc23bcd69abf7958ed410d3365af
   sources: []
   open_findings: 0
   open_critical: 0
@@ -133,7 +133,7 @@ The learning objectives below are transcribed from the Nov 2026/Jul 2027 [syllab
 > 3. Determine [[Employer Liability|employer liabilities]], [[Service Cost|service cost]], and [[Expense|expense]] for [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit|post-employment benefits]] and prepare [[Disclosure|disclosure]] information for [[Financial Reporting|financial reporting]] purposes
 > 4. Describe current issues faced by [[Government|governments]], [[Employer|employers]], and [[Employee|employees]] related to [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit|post-employment benefits]]
 > 5. Apply actuarial [[Best Practice|best practices]] to [[Post-Retirement|post-retirement]] and [[Post-Employment Benefit Plan|post-employment benefit plans]]
-> 6. Propose ways to manage the [[Range|range]] of [[Risk|risks]] faced by [[Plan Participant|plan participants]] and [[Retiree|retirees]] through [[Retiree Health|retiree health]] and [[Life Plan Design|life plan designs]]
+> 6. Propose ways to manage the [[Range|range]] of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]] through [[Retiree Health|retiree health]] and [[Life Plan Design|life plan designs]]
 > 7. Advise a [[Plan Sponsor|plan sponsor]] regarding the choice of design elements for their [[Retiree Health|retiree health]] program given [[Situational Context|situational context]]
 >
 > **Readings:**

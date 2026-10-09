@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:814c980deea4ac0864f0da17fdab389795278a6ee02f41452b75eb93a64fa2ea
+  content_hash: sha256:cdfe5e14d8f97fa3e8d11cde4f6dc75854174e60f19630eec3423b6afac15e6f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,25 +42,25 @@ The learning objectives below are transcribed from the October 2026 [syllabus](h
 >
 > 1. Assess whether [[Descriptive|descriptive]], [[Predictive|predictive]], and [[Prescriptive Analytics Apply|prescriptive analytics applies]] to a [[Business|business]] problem.
 > 2. Describe the characteristics of [[Predictive Analytics|predictive modeling]] problems.
-> 3. Explain the concepts of [[Bias|bias]], [[Variance|variance]], model [[Complexity|complexity]], and the [[Bias-Variance Trade-Off|bias-variance trade-off]].
+> 3. Explain the concepts of [[Bias|bias]], [[Variance|variance]], model [[Complexity|complexity]], and the [[Bias-Variance Tradeoff|bias-variance trade-off]].
 > 4. Translate a [[Vague Question|vague question]] into one that can be analyzed with [[Statistics|statistics]] and [[Predictive Analytics|predictive analytics]] to solve a [[Business|business]] problem.
 > 5. Consider factors such as available [[Data|data]] and [[Technology|technology]], significance of [[Business|business]] impact, and implementation [[Challenge|challenges]] to define the problem.
 > 6. Assess what additional information or [[Next|next]] steps would improve the [[Ability|ability]] to apply [[Predictive Analytics|predictive analytics]] to a [[Business|business]] problem.
 
 > [!example]- Data Exploration and Visualization {20–30%}
-> The Candidate will be able to work with various [[Data|data]] types, understand [[Principle|principles]] of [[Data|data]] design, and construct a [[Variety|variety]] of [[Common Visualization|common visualizations]] for [[Exploring Data|exploring data]].
+> The Candidate will be able to work with various [[Data|data]] types, understand [[Principle|principles]] of [[Data|data]] design, and construct a [[Variety|variety]] of [[Data Visualization|common visualizations]] for [[Exploratory Data Analysis|exploring data]].
 >
 > 1. Identify [[Structured|structured]] and [[Unstructured Data|unstructured data]] types.
 > 2. Identify the types of [[Variable|variables]] and terminology used in [[Predictive Analytics|predictive modeling]].
-> 3. Evaluate [[Effective Data|effective data]] design with [[Respect|respect]] to time [[Frame|frame]], [[Sampling|sampling]], and [[Granularity|granularity]].
+> 3. Evaluate [[Data Design|effective data]] design with [[Respect|respect]] to time [[Frame|frame]], [[Sampling|sampling]], and [[Data Design|granularity]].
 > 4. Apply the key [[Principle|principles]] of constructing [[Graph|graphs]].
-> 5. Apply [[Univariate Data Exploration|univariate data exploration]] techniques.
+> 5. Apply [[Univariate Plot|univariate data exploration]] techniques.
 > 6. Apply [[Bivariate Data Exploration|bivariate data exploration]] techniques.
 
 > [!example]- Data Transformations and Unsupervised Learning Techniques {10–20%}
 > The Candidate will be able to [[Transform Data|transform data]], including application of [[Unsupervised Learning|unsupervised learning]] techniques, to improve [[Predictive Analytics|predictive modeling]] outcomes.
 >
-> 1. Create [[Feature|features]] from [[Existing Data|existing data]] that may [[Add|add]] value.
+> 1. Create [[Feature|features]] from [[Feature Engineering|existing data]] that may [[Add|add]] value.
 > 2. Apply [[Principal Component|principal components]] analysis to [[Transform Data|transform data]].
 > 3. Apply [[K-mean|K-means]] and [[Hierarchical Clustering|hierarchical clustering]] to [[Transform Data|transform data]].
 

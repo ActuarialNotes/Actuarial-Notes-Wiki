@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1aea26ce19a7d8e2a91fd129e84d639884252997cee634fd8a300063e4a4745e
+  content_hash: sha256:1cacf39b274d52b3d309bf04e67830289f7fcc91777748b6f113792d054d7b58
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,26 +48,26 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 ## Learning Objectives
 
 > [!example]- Severity Models {8–18%}
-> The Candidate will understand, interpret, and be able to perform calculations with commonly used [[Severity Distribution|severity distributions]], including [[Extreme Value Distribution|extreme value distributions]].
+> The Candidate will understand, interpret, and be able to perform calculations with commonly used [[Severity Distribution|severity distributions]], including [[Generalized Extreme Value Distribution|extreme value distributions]].
 >
 > 1. Describe how changes in the [[Parameters Affect|parameters affect]] the [[Distribution|distributions]].
-> 2. Create [[New Distribution|new distributions]] by [[Multiplication|multiplication]] by a [[Constant|constant]], raising to a [[Power|power]], [[Exponentiation|exponentiation]], [[Mixing|mixing]] and [[Splicing|splicing]].
+> 2. Create [[Creating New Distributions|new distributions]] by [[Multiplication|multiplication]] by a [[Constant|constant]], raising to a [[Power|power]], [[Exponentiation|exponentiation]], [[Mixing|mixing]] and [[Spliced Distribution|splicing]].
 > 3. Understand and interpret the characteristics of [[Severity Distribution|severity distributions]].
-> 4. Compare two [[Distribution|distributions]] based on various characteristics of their [[Tail|tails]], including [[Moment|moments]], ratios of [[Moment|moments]], limiting [[Tail|tail]] behavior, [[Hazard Rate|hazard rate]] functions, and [[Mean Excess|mean excess]] functions.
-> 5. Understand the [[Derivation|derivation]] and characteristics of the [[Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]].
-> 6. Apply the [[Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]] to the [[Estimation|estimation]] of [[Tail Risk|tail risk]] measures and [[Probability|probabilities]].
+> 4. Compare two [[Distribution|distributions]] based on various characteristics of their [[Tail|tails]], including [[Moment|moments]], ratios of [[Moment|moments]], limiting [[Tail|tail]] behavior, [[Hazard Rate|hazard rate]] functions, and [[Mean Excess Loss|mean excess]] functions.
+> 5. Understand the [[Derivation|derivation]] and characteristics of the [[Generalized Extreme Value Distribution|Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]].
+> 6. Apply the [[Generalized Extreme Value Distribution|Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]] to the [[Estimation|estimation]] of [[Risk Measure|tail risk]] measures and [[Probability|probabilities]].
 
 > [!example]- Aggregate Models {12–22%}
 > The Candidate will understand, interpret, and be able to perform calculations with aggregate [[Model|models]].
 >
-> 1. Use [[Convolution|convolution]] and [[Recursive Formulas|recursive formulas]] to derive [[Probability|probability]] and [[Distribution|distribution]] functions for aggregate [[Claims Distribution|claims distributions]] with (a,b,0) or (a,b,1) [[Frequency|frequency]], and with [[Discrete Severity Distribution|discrete severity distributions]].
-> 2. Derive the [[Discretized Version|discretized version]] of a [[Continuous Distribution|continuous distribution]] using the method of [[Rounding|rounding]] and [[Local Moment Matching|local moment matching]].
+> 1. Use [[Convolution|convolution]] and [[Panjer Recursion|recursive formulas]] to derive [[Probability|probability]] and [[Distribution|distribution]] functions for aggregate [[Aggregate Loss Model|claims distributions]] with (a,b,0) or (a,b,1) [[Frequency|frequency]], and with [[Severity Discretization|discrete severity distributions]].
+> 2. Derive the [[Severity Discretization|discretized version]] of a [[Continuous Random Variable|continuous distribution]] using the method of [[Rounding|rounding]] and [[Severity Discretization|local moment matching]].
 > 3. Perform calculations for [[Sum|sums]] of [[Compound Poisson|compound Poisson]] models.
 
 > [!example]- Coverage Modifications {8–18%}
 > The Candidate will understand, interpret, and be able to perform calculations with [[Respect|respect]] to [[Coverage Modifications|coverage modifications]].
 >
-> 1. Evaluate the effects of the following [[Coverage Modifications|coverage modifications]]: [[Deductible|deductibles]], [[Policy Limit|policy limits]], [[Maximum|maximum]] covered [[Loss|loss]], [[Coinsurance|coinsurance]], and [[Stop Loss Reinsurance|stop loss reinsurance]].
+> 1. Evaluate the effects of the following [[Coverage Modifications|coverage modifications]]: [[Deductible|deductibles]], [[Policy Limit|policy limits]], [[Maximum|maximum]] covered [[Loss|loss]], [[Coinsurance|coinsurance]], and [[Stop-Loss Reinsurance|stop loss reinsurance]].
 > 2. Calculate and interpret [[Loss Elimination|loss elimination]] ratios, [[Increased Limits|increased limits]] factors, and [[Deductible|deductible]] factors.
 > 3. Evaluate and interpret the effects of [[Inflation|inflation]] on [[Loss|losses]].
 
@@ -75,20 +75,20 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 > The Candidate will understand and be able to construct and estimate [[Parameter|parameters]] for [[Parametric|parametric]] models.
 >
 > 1. Estimate the [[Parameter|parameters]] for [[Frequency|frequency]] and [[Severity Distribution|severity distributions]] by [[Maximum Likelihood Estimation|maximum likelihood]].
-> 2. Estimate the [[Variance|variance]] of the [[Estimator|estimators]] and construct [[Normal|normal]] and [[Non-Normal Confidence Interval|non-normal confidence intervals]].
+> 2. Estimate the [[Variance|variance]] of the [[Estimator|estimators]] and construct [[Normal|normal]] and [[Approximate Confidence Interval|non-normal confidence intervals]].
 > 3. Use the [[Delta Method|delta]] method to estimate the [[Variance|variance]] of the [[Maximum Likelihood Estimator|maximum likelihood estimator]] of a function of the [[Parameter|parameter]](s).
 > 4. Estimate the [[Parameter|parameters]] for [[Severity|severity]], [[Frequency|frequency]], and aggregate [[Distribution|distributions]] using [[Bayesian Estimation]].
 > 5. Perform model [[Selection|selection]] using:
 >    - [[Graphical]] procedures.
 >    - [[Hypothesis Test|Hypothesis tests]], including [[Kolmogorov-Smirnov]], [[Chi-square Goodness-Of-Fit|Chi-square goodness-of-fit]], and [[Likelihood]] ratio ([[Likelihood Ratio Test|LRT]]) [[Test|tests]].
->    - [[Score-based]] approaches, including [[Schwarz Bayesian Criterion]] ([[SBC]]), [[Bayesian Information Criterion]] ([[BIC]]), and [[AIC|Akaike Information Criterion]] ([[AIC]]).
+>    - [[Score-based]] approaches, including [[BIC|Schwarz Bayesian Criterion]] ([[SBC]]), [[BIC|Bayesian Information Criterion]] ([[BIC]]), and [[AIC|Akaike Information Criterion]] ([[AIC]]).
 
 > [!example]- Credibility {12–20%}
 > The Candidate will understand and be able to estimate [[Loss|losses]] using [[Credibility|credibility]] procedures.
 >
-> 1. Explain and apply [[Bayesian]] ([[Greatest Accuracy|greatest accuracy]]) [[Credibility|credibility]].
-> 2. Apply [[Bühlmann]] and [[Bühlmann-Straub]] models and understand their relationship to [[Bayesian]] models.
-> 3. Explain and apply [[Empirical Bayesian Estimation|empirical Bayesian estimation]] in the [[Nonparametric|nonparametric]] and [[Semiparametric|semiparametric]] cases.
+> 1. Explain and apply [[Bayesian]] ([[Bühlmann Credibility|greatest accuracy]]) [[Credibility|credibility]].
+> 2. Apply [[Bühlmann Credibility|Bühlmann]] and [[Bühlmann-Straub]] models and understand their relationship to [[Bayesian]] models.
+> 3. Explain and apply [[Empirical Bayes Credibility|empirical Bayesian estimation]] in the [[Nonparametric|nonparametric]] and [[Semiparametric|semiparametric]] cases.
 
 > [!example]- Reserving and Pricing for Short-Term Insurance Coverages {15–29%}
 > The Candidate will be able to calculate [[Reserve|reserves]] for [[Short-Term Insurance Coverage|short-term insurance coverages]].
@@ -99,13 +99,13 @@ The learning objectives below are transcribed from the OCTOBER 2026 [syllabus](h
 >    - [[Bornhuetter-Ferguson]]
 >    - [[Bayesian]]
 >    - [[Frequency]] and [[Severity]]
-> 2. Understand, interpret, and apply the following [[Statistical|statistical]] models and assumptions used for [[Outstanding Claims Reserve|outstanding claims reserves]]:
+> 2. Understand, interpret, and apply the following [[Statistical|statistical]] models and assumptions used for [[Unpaid Claims|outstanding claims reserves]]:
 >    - [[Mack'|Mack’s]] model
 >    - [[Poisson]] model
->    - [[Overdispersed Poisson]] model
-> 3. Calculate [[Projected Loss|projected losses]] using [[Trend|trend]] analysis.
+>    - [[Over-Dispersed Poisson Model|Overdispersed Poisson]] model
+> 3. Calculate [[Loss Trend|projected losses]] using [[Trend|trend]] analysis.
 > 4. Calculate overall [[Overall Rate Level Indication|average rates]] and [[Rate|rate]] changes using the [[Loss Cost|loss cost]] and [[Loss|loss]] ratio methods.
-> 5. Calculate [[Risk Classification Differential|risk classification differential]] changes, including [[Balancing Back|balancing back]].
+> 5. Calculate [[Classification Ratemaking|risk classification differential]] changes, including [[Balancing Back|balancing back]].
 
 ## Source Material
 > [!answer]- Source Material

@@ -43,6 +43,10 @@ class Noise(unittest.TestCase):
                      "Parameters Affect", "Appropriate", "Company'", "Required"):
             self.assertTrue(g.is_noise(name), name)
 
+    def test_reviewed_noise(self):
+        for name in ("Effective Manner While", "Jurisdiction", "Biases Introduced", "Benefits Payable"):
+            self.assertTrue(g.is_noise(name), name)
+
     def test_real_terms_with_ordinary_words(self):
         for name in ("Account Value", "Market Risk", "Economic Capital", "Normal Cost",
                      "Multiple Decrement", "Early Retirement", "Retirement Plan", "Mortality"):

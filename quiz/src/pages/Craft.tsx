@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import {
-  Check,
   ChevronLeft,
+  ListFilter,
   Maximize,
-  MoreHorizontal,
   Plus,
   RotateCcw,
   Wand2,
@@ -201,7 +200,7 @@ function CraftScreen() {
         <CraftPlay packs={packs} packGraphs={ready.packGraphs} graph={ready.graph} seeds={ready.seeds} pool={pool ?? []} />
       ) : (
         <>
-          <BoardHeader tally={null} actions={null} />
+          <BoardHeader tally={null} />
           <div className="craft-floor flex min-h-0 flex-1 items-center justify-center" style={{ backgroundSize: '22px 22px' }}>
             <p className="rounded-full bg-card px-4 py-2 text-sm text-muted-foreground" role="status">Reading the notes…</p>
           </div>
@@ -261,8 +260,7 @@ function CraftPlay({
   const [fresh, setFresh] = useState<{ made: string[]; connection: string | null }>({ made: [], connection: null })
   const [flash, setFlash] = useState<string | null>(null)
   const [openKey, setOpenKey] = useState<string | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [packsOpen, setPacksOpen] = useState(false)
+    const [packsOpen, setPacksOpen] = useState(false)
 
   // The concept the popup is showing, while it is open — lit on the board.
   const reading = useConceptPopup(s => {
@@ -407,7 +405,6 @@ function CraftPlay({
   // ── Reading ──────────────────────────────────────────────────────────────
   const read = useCallback((name: string) => {
     setHeld(null)
-    setMenuOpen(false)
     // A sheet and the popup would share the bottom of a phone; the popup wins.
     if (isPhone) setOpenKey(null)
     // A walk of the cards in hand — never of a concept not yet made.
@@ -419,7 +416,6 @@ function CraftPlay({
 
   const showConnection = useCallback((connection: Connection) => {
     setOpenKey(key => (key === connection.key ? null : connection.key))
-    setMenuOpen(false)
     if (isPhone) useConceptPopup.getState().close()
   }, [isPhone])
 
@@ -430,18 +426,17 @@ function CraftPlay({
     navigate('/quiz?selection=stored')
   }, [navigate])
 
-  // Esc steps back one layer: a held card, then the connection's card, then
-  // the menu. The popup and the starter packs mind their own.
+  // Esc steps back one layer: a held card, then the connection's card. The
+  // popup and the starter packs mind their own.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || useConceptPopup.getState().open || packsOpen) return
       if (held) setHeld(null)
       else if (openKey) setOpenKey(null)
-      else if (menuOpen) setMenuOpen(false)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [held, openKey, menuOpen, packsOpen])
+  }, [held, openKey, packsOpen])
 
   const onSettle = useCallback((positions: Record<string, [number, number]>) => {
     savePositions(positions)
@@ -451,7 +446,12 @@ function CraftPlay({
     resetBoard()
     setHeld(null)
     setOpenKey(null)
-    setMenuOpen(false)
+  }
+
+  const cycleFilter = () => {
+    const next = FILTER_ROWS[(FILTER_ROWS.findIndex(f => f.value === filter) + 1) % FILTER_ROWS.length]
+    setFilter(next.value)
+    setNotice(next.label)
   }
 
   const empty = state.held.length === 0
@@ -464,19 +464,18 @@ function CraftPlay({
   // connection's card) down the right.
   const boardInsets = useMemo(
     () => (isPhone
-      ? { top: 16, right: 56, bottom: 8, left: 0 }
-      : { top: 16, right: open ? 376 : 64, bottom: 8, left: 316 }),
+      ? { top: 16, right: 80, bottom: 8, left: 0 }
+      : { top: 16, right: open ? 376 : 84, bottom: 8, left: 316 }),
     [isPhone, open],
   )
 
-  const deck = (layout: 'panel' | 'strip') => (
+  const deck = (
     <CraftDeck
       concepts={state.held}
       total={tally.concepts}
       fresh={state.fresh}
       levels={levels}
       held={held}
-      layout={layout}
       showHow={tally.found === 0}
       onTap={tapDeck}
       onDrag={dragDeck}
@@ -487,57 +486,7 @@ function CraftPlay({
 
   return (
     <>
-      <BoardHeader
-        tally={empty ? null : tally}
-        actions={
-          <>
-          {/* Not `relative`: the packs hang off the header's right edge, so a phone has room for them. */}
-          <div className="shrink-0">
-            <button
-              type="button"
-              data-craft-add
-              onClick={() => { setPacksOpen(v => !v); setMenuOpen(false) }}
-              aria-label="Add a starter pack"
-              title="Add a starter pack"
-              aria-haspopup="menu"
-              aria-expanded={packsOpen}
-              data-testid="craft-add"
-              className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                packsOpen && 'rotate-45',
-              )}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-            {packsOpen && (
-              <CraftPackMenu groups={packGroups()} added={added} onAdd={addStarter} onClose={() => setPacksOpen(false)} />
-            )}
-          </div>
-          <div className="relative shrink-0">
-            <button
-              type="button"
-              onClick={() => setMenuOpen(v => !v)}
-              aria-label="Board options"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </button>
-            {menuOpen && (
-              <BoardMenu
-                filter={filter}
-                onFilter={f => { setFilter(f); setMenuOpen(false) }}
-                onClose={() => setMenuOpen(false)}
-                onBack={() => navigate('/')}
-                onTidy={() => { boardRef.current?.tidy(); setMenuOpen(false) }}
-                onStartOver={empty ? null : startOver}
-              />
-            )}
-          </div>
-          </>
-        }
-      />
+      <BoardHeader tally={empty ? null : tally} />
 
       <div className="relative min-h-0 flex-1">
         <CraftBoard
@@ -595,33 +544,73 @@ function CraftPlay({
 
         {!isPhone && !empty && (
           <div className="pointer-events-none absolute bottom-3 left-3 top-3 z-20 flex flex-col justify-start">
-            <div className="pointer-events-auto flex max-h-full">{deck('panel')}</div>
+            <div className="pointer-events-auto flex max-h-full">{deck}</div>
           </div>
         )}
 
-        {/* Zoom and fit — the map controls, bottom right. */}
-        {!empty && <div
+        {/* The controls, bottom right under the thumb: the board's tools, the map's
+            zoom and fit, and the **+** last and largest. A short screen wraps them
+            into a second column rather than off the top. */}
+        <div
           className={cn(
-            'absolute bottom-3 z-20 flex flex-col overflow-hidden rounded-lg bg-card shadow-[var(--shadow-card)] transition-[right] duration-200',
+            'pointer-events-none absolute bottom-3 top-3 z-20 flex flex-col flex-wrap-reverse content-start items-center justify-end gap-3 transition-[right] duration-200',
             !isPhone && open ? 'right-[23.5rem]' : 'right-3',
           )}
         >
-          <MapButton label="Zoom in" onClick={() => boardRef.current?.zoom(1.25)}><ZoomIn className="h-4 w-4" /></MapButton>
-          <MapButton label="Zoom out" onClick={() => boardRef.current?.zoom(0.8)}><ZoomOut className="h-4 w-4" /></MapButton>
-          <MapButton label="Fit the board" onClick={() => boardRef.current?.fit()}><Maximize className="h-4 w-4" /></MapButton>
-        </div>}
+          {!empty && (
+            <ControlGroup>
+              <MapButton label="Tidy the layout" onClick={() => boardRef.current?.tidy()}><Wand2 className="h-6 w-6" /></MapButton>
+              <MapButton
+                label={`Showing: ${FILTER_ROWS.find(f => f.value === filter)?.label}. Tap to change`}
+                onClick={cycleFilter}
+                data-testid="craft-filter"
+              >
+                <span className="flex flex-col items-center gap-0.5">
+                  <ListFilter className="h-5 w-5" />
+                  <span className="text-[10px] font-semibold leading-none tabular-nums">{FILTER_SHORT[filter]}</span>
+                </span>
+              </MapButton>
+              <ClearButton onClear={startOver} />
+            </ControlGroup>
+          )}
+          {!empty && (
+            <ControlGroup>
+              <MapButton label="Zoom in" onClick={() => boardRef.current?.zoom(1.25)}><ZoomIn className="h-6 w-6" /></MapButton>
+              <MapButton label="Zoom out" onClick={() => boardRef.current?.zoom(0.8)}><ZoomOut className="h-6 w-6" /></MapButton>
+              <MapButton label="Fit the board" onClick={() => boardRef.current?.fit()}><Maximize className="h-6 w-6" /></MapButton>
+            </ControlGroup>
+          )}
+          {/* The packs open upwards from the +, over the board. */}
+          <div className="pointer-events-auto relative shrink-0">
+            <button
+              type="button"
+              data-craft-add
+              onClick={() => setPacksOpen(v => !v)}
+              aria-label="Add a starter pack"
+              title="Add a starter pack"
+              aria-haspopup="menu"
+              aria-expanded={packsOpen}
+              data-testid="craft-add"
+              className={cn(
+                'flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                packsOpen && 'rotate-45',
+              )}
+            >
+              <Plus className="h-8 w-8" />
+            </button>
+            {packsOpen && (
+              <CraftPackMenu groups={packGroups()} added={added} onAdd={addStarter} onClose={() => setPacksOpen(false)} />
+            )}
+          </div>
+        </div>
 
-        {/* A failed drop's one line, and the first-run line, share the bottom middle. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2 px-16">
-          {notice ? (
+        {/* A failed drop's one line, or a filter change's, bottom middle. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2 px-24">
+          {notice && (
             <p role="status" className="toast-fade-in rounded-full bg-card px-4 py-2 text-sm text-muted-foreground shadow-lg" data-testid="craft-notice">
               {notice}
             </p>
-          ) : tally.found === 0 && !empty ? (
-            <p className="rounded-full bg-card/80 px-4 py-2 text-center text-sm text-muted-foreground">
-              Drop one concept on another to see what they make.
-            </p>
-          ) : null}
+          )}
         </div>
         <p className="sr-only" role="status" aria-live="polite">{announce}</p>
 
@@ -640,9 +629,6 @@ function CraftPlay({
           </div>
         )}
       </div>
-
-      {/* While a concept is being read, a phone gives the deck's room to the board. */}
-      {isPhone && !popupOpen && !empty && <div className="relative z-30 shrink-0">{deck('strip')}</div>}
 
       {isPhone && open && (
         <div className="absolute inset-x-0 bottom-0 z-40 flex flex-col justify-end">
@@ -672,7 +658,7 @@ function CraftPlay({
   )
 }
 
-function BoardHeader({ tally, actions }: { tally: TopicTally | null; actions: ReactNode }) {
+function BoardHeader({ tally }: { tally: TopicTally | null }) {
   const navigate = useNavigate()
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
@@ -682,7 +668,7 @@ function BoardHeader({ tally, actions }: { tally: TopicTally | null; actions: Re
         onClick={() => navigate('/')}
         aria-label="Back to the Quiz tab"
         title="Quiz"
-        className="hidden shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:block"
+        className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -696,22 +682,60 @@ function BoardHeader({ tally, actions }: { tally: TopicTally | null; actions: Re
           </p>
         )}
       </div>
-      {actions}
     </header>
   )
 }
 
-function MapButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
+/** A stack of controls on one card, bottom right. */
+function ControlGroup({ children }: { children: ReactNode }) {
+  return (
+    <div className="pointer-events-auto flex shrink-0 flex-col overflow-hidden rounded-xl bg-card shadow-[var(--shadow-card)]">
+      {children}
+    </div>
+  )
+}
+
+function MapButton({
+  label,
+  onClick,
+  className,
+  children,
+  ...rest
+}: { label: string; onClick: () => void; className?: string; children: ReactNode } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'children'>) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
       title={label}
-      className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+      className={cn(
+        'flex h-14 w-14 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+        className,
+      )}
+      {...rest}
     >
       {children}
     </button>
+  )
+}
+
+/** Clear the board: the first tap arms it, the second clears — and it disarms itself. */
+function ClearButton({ onClear }: { onClear: () => void }) {
+  const [confirming, setConfirming] = useState(false)
+  useEffect(() => {
+    if (!confirming) return
+    const t = window.setTimeout(() => setConfirming(false), 3000)
+    return () => window.clearTimeout(t)
+  }, [confirming])
+  return (
+    <MapButton
+      label={confirming ? 'Tap again to clear the board' : 'Clear the board'}
+      onClick={() => (confirming ? onClear() : setConfirming(true))}
+      className={confirming ? 'bg-destructive text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground' : undefined}
+      data-testid="craft-clear"
+    >
+      <RotateCcw className="h-6 w-6" />
+    </MapButton>
   )
 }
 
@@ -721,69 +745,8 @@ const FILTER_ROWS: { value: StrengthFilter; label: string }[] = [
   { value: 'strong', label: `Strong only (${STRENGTH_TIERS.strong}+)` },
 ]
 
-function BoardMenu({
-  filter,
-  onFilter,
-  onClose,
-  onBack,
-  onTidy,
-  onStartOver,
-}: {
-  filter: StrengthFilter
-  onFilter: (filter: StrengthFilter) => void
-  onClose: () => void
-  onBack: () => void
-  onTidy: () => void
-  /** Clear the board — null while there is nothing on it. */
-  onStartOver: (() => void) | null
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [confirming, setConfirming] = useState(false)
-  useEffect(() => {
-    const onDown = (e: PointerEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
-    }
-    document.addEventListener('pointerdown', onDown)
-    return () => document.removeEventListener('pointerdown', onDown)
-  }, [onClose])
-  const row = 'flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-accent'
-  return (
-    <div ref={ref} role="menu" className="absolute right-0 top-full z-50 mt-1 w-64 rounded-md bg-popover py-1 text-popover-foreground shadow-md">
-      {/* The header's back arrow, which a phone's header has no room for. */}
-      <button type="button" role="menuitem" className={cn(row, 'sm:hidden')} onClick={onBack}>
-        <ChevronLeft className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Back to Quiz
-      </button>
-      <p className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Show</p>
-      {FILTER_ROWS.map(f => (
-        <button
-          key={f.value}
-          type="button"
-          role="menuitemradio"
-          aria-checked={filter === f.value}
-          className={row}
-          onClick={() => onFilter(f.value)}
-        >
-          <Check className={cn('h-3.5 w-3.5 shrink-0', filter !== f.value && 'invisible')} aria-hidden />
-          {f.label}
-        </button>
-      ))}
-      <div className="my-1 h-px bg-border" />
-      <button type="button" role="menuitem" className={row} onClick={onTidy}>
-        <Wand2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Tidy the layout
-      </button>
-      {onStartOver && (
-        <button
-          type="button"
-          role="menuitem"
-          className={cn(row, confirming && 'text-destructive')}
-          onClick={() => (confirming ? onStartOver() : setConfirming(true))}
-        >
-          <RotateCcw className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          {confirming ? 'Tap again to clear the board' : 'Clear the board'}
-        </button>
-      )}
-    </div>
-  )
+const FILTER_SHORT: Record<StrengthFilter, string> = {
+  all: 'All',
+  moderate: `${STRENGTH_TIERS.moderate}+`,
+  strong: `${STRENGTH_TIERS.strong}+`,
 }

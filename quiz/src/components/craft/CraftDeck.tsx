@@ -18,11 +18,9 @@ import { cn } from '@/lib/utils'
  * against it (a keyboard, a switch, a hand that can't hold a drag). Tapping a
  * held card puts it back.
  *
- * Two shapes: a panel down the side of a wide board, and a strip along the
- * bottom of a phone's. The drag reads its axis from the shape — across the
- * strip is a scroll, *up* out of it is a drag; down the panel is a scroll,
- * *across* is a drag — so neither steals the other's gesture. With a mouse
- * any movement is a drag.
+ * A panel down the side of a wide board; a phone has no deck, since every
+ * card is on its board. Down the panel is a scroll, *across* is a drag — so
+ * neither steals the other's gesture. With a mouse any movement is a drag.
  */
 export interface CraftDeckProps {
   /** The concepts in hand, in the order they came. */
@@ -33,7 +31,6 @@ export interface CraftDeckProps {
   fresh: ReadonlySet<string>
   levels: ConceptLevels
   held: string | null
-  layout: 'panel' | 'strip'
   /** Say how to play — only until the first connection is found; after that the board shows it. */
   showHow: boolean
   onTap: (name: string) => void
@@ -55,7 +52,7 @@ interface Press {
   dragging: boolean
 }
 
-export function CraftDeck({ concepts, total, fresh, levels, held, layout, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
+export function CraftDeck({ concepts, total, fresh, levels, held, showHow, onTap, onDrag, onDrop, onCancel }: CraftDeckProps) {
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState(false)
   const press = useRef<Press | null>(null)
@@ -82,7 +79,7 @@ export function CraftDeck({ concepts, total, fresh, levels, held, layout, showHo
         const far = Math.hypot(dx, dy) >= SLOP
         if (!far) return
         const intoBoard = p.mouse
-          || (layout === 'strip' ? dy < 0 && Math.abs(dy) > Math.abs(dx) : Math.abs(dx) > Math.abs(dy))
+          || Math.abs(dx) > Math.abs(dy)
         if (!intoBoard) {
           // The other axis: that's the list scrolling, not a card leaving it.
           press.current = null
@@ -130,26 +127,10 @@ export function CraftDeck({ concepts, total, fresh, levels, held, layout, showHo
           aria-label={`${name}${isNew ? ', new' : ''}${isHeld ? ' — held' : ''}`}
           data-sound="none"
           data-testid="craft-deck-tile"
-          className={cn('w-full', layout === 'strip' ? 'touch-pan-x' : 'touch-pan-y', 'cursor-grab')}
+          className={'w-full touch-pan-y cursor-grab'}
           {...tileHandlers(name)}
         />
       </div>
-    )
-  }
-
-  if (layout === 'strip') {
-    return (
-      <section aria-label="Concept deck" className="border-t border-border bg-background pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2">
-        <p className="flex items-center gap-1.5 whitespace-nowrap px-4 pb-1.5 text-xs text-muted-foreground">
-          <Layers className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          <span className="font-medium text-foreground">Concept deck</span>
-          <span className="tabular-nums">{concepts.length} of {total}</span>
-          {showHow && <span className="ml-auto truncate">Drag a card up</span>}
-        </p>
-        <div className="flex gap-2 overflow-x-auto px-4 pb-1 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {concepts.map(name => tile(name, 'w-[68px] shrink-0'))}
-        </div>
-      </section>
     )
   }
 

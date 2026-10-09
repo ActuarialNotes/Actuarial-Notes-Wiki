@@ -867,7 +867,7 @@ Other important `lib/` modules:
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
-  readiness** card (its first card: the `NN%` KPI, the band verdict and the primary actions,
+  readiness** card (its first card: the `NN%` KPI, the band verdict, today's concept count and the insight, then the primary actions and the calendar bare under it,
   with **Today's Study Plan** below it and then the ring and the criterion bar in the
   **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the

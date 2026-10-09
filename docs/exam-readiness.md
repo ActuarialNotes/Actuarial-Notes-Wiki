@@ -19,7 +19,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, over the primary actions) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, with the primary actions and the schedule under it) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
@@ -118,14 +118,18 @@ the right text, and one that it stays quiet when it should.
 mechanism as `studyScheduleSlot`), so the cards' state and logic stay with the study plan
 while they render at the top of the page:
 
-1. **Exam readiness** — the exam's **logo** beside the **title**, the **band verdict** with
-   the insight line under it, the score itself as a KPI to their right, then the **exam
-   dates** row and the **primary actions**. The logo says which exam the card is scoped to
-   without re-printing its name, and carries that exam's accent (`lib/examColors.ts`) so the
-   card sits on the same ladder as every other surface that shows one.
+1. **Exam readiness** — the exam's **logo** (the `lg` tile) beside the **title** and the
+   **band verdict**, the score itself as a KPI to their right, then **how many concepts
+   today's plan still asks for** ("6 concepts to study today" — Pro, with a plan only), and
+   the insight line, smaller, under its own **Insight** label. The logo says which exam the
+   card is scoped to without re-printing its name, and carries that exam's accent
+   (`lib/examColors.ts`) so the card sits on the same ladder as every other surface that
+   shows one. Under the card, bare on the page rather than in a card of their own, come the
+   **primary actions**, and under them the **calendar** — the exam dates row and the
+   schedule strip — as a full-width section with no card background or padding.
 
    The dates block is the deadline the score is racing — a readiness percentage means
-   nothing without one, so the card carries it. It prints the chosen exam date and how many
+   nothing without one, so the section carries it. It prints the chosen exam date and how many
    days that leaves, and falls back to *Set your exam date* when there is none; under either,
    the **next published sitting window** for this exam (`data/examSittings.ts`) appears only
    when it adds something — no date chosen yet, or a date that falls outside every known
@@ -170,7 +174,8 @@ It is one call — `computeExamReadiness` — read three ways:
   because by the time a reader has scrolled to the ring the KPI is off screen — a ring that
   measures something unnamed is worse than the number said twice.
 - **The band**, as the headline verdict at the top of the card under its title, with the
-  insight line under it when there is one (see above) and nothing under it when there is not.
+  insight line, labelled *Insight*, lower in the card when there is one (see above) and
+  nothing when there is not.
 - **The criteria**, as one bar each — today the one *Syllabus coverage* bar. A bar's
   *thickness* is the weight that criterion carries in the score (`4px + 6px × weight`), so
   nothing has to print "60% of score" — the worked example in

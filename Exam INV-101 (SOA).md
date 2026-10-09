@@ -9,10 +9,9 @@ verification:
   confidence: high
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7a084330402114bfda7fd4c4fcdcafa1d7b0b00fe6ecb47540423b1471bc5ba9
+  content_hash: sha256:fca24f5dd92a6d1e30fd3d35982347cef0ade62b73f74f499c42983eaaac54b3
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-101, all pages, sha256:cd1c4219dd85ad017d63963b38a538c9b7271071f465ad2fd26449a11c940d74 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf"
-    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam INV-101 (SOA).md
@@ -28,16 +27,16 @@ verification:
 ## Learning Objectives
 
 > [!example]- Asset Classes {25–40%}
-> The candidate will understand the [[Nature|nature]] and the [[Variety|variety]] of [[Asset Class|asset classes]] that can be used in constructing a [[Portfolio|portfolio]].
+> The candidate will understand the nature and the variety of [[Asset Class|asset classes]] that can be used in constructing a [[Portfolio|portfolio]].
 >
 > 1. Demonstrate an understanding of [[Cash Flow|cash flow]] characteristics, underlying [[Risk|risks]] and roles in [[Portfolio|investment portfolios]] of various [[Fixed Income Investment|fixed income investments]], including:
->    - [[Government]] and [[Corporate Bond|corporate bonds]]
+>    - Government and [[Corporate Bond|corporate bonds]]
 >    - [[Leveraged Loan|Leveraged loans]]
->    - [[Commercial]] and [[Residential Mortgage|residential mortgages]]
+>    - Commercial and [[Residential Mortgage|residential mortgages]]
 >    - [[Mortgage-backed Security|Mortgage-backed securities]]
 >    - [[Structured Credit Product|Structured credit products]]
 >    - [[Private Debt|Private debt]]
-> 2. Demonstrate an understanding of the [[Distinguishing Investment|distinguishing investment]] characteristics and potential [[Contribution|contributions]] to [[Portfolio|investment portfolios]] of various types of [[Equity|equity]] and alternative [[Investment|investments]], including:
+> 2. Demonstrate an understanding of the distinguishing investment characteristics and potential contributions to [[Portfolio|investment portfolios]] of various types of equity and alternative investments, including:
 >    - [[Public Equity]]
 >    - [[Private Equity]]
 >    - [[Real Estate]]
@@ -74,19 +73,19 @@ verification:
 > - INV101-100-25: Chapters 3 and 4 of Alternative Investments: A Primer for Investment Professionals, CFA Institute (1b)
 
 > [!example]- Portfolio Construction, Management, and Assessment {35–50%}
-> The candidate will understand [[Portfolio|portfolio]] construction, management, and [[Assessment|assessment]].
+> The candidate will understand [[Portfolio|portfolio]] construction, management, and assessment.
 >
 > 1. Describe the [[Portfolio Management Process|portfolio management process]] and recommend [[Investment Governance Structure|investment governance structure]]
-> 2. Develop an [[Investment Policy Statement|investment policy statement]] ([[IPS]]) for an [[Institutional Investor|institutional investor]]
-> 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], [[Passive-active|passive/active]] management and [[Portfolio Rebalancing|rebalancing]]
-> 4. Recommend and justify an [[Optimal Portfolio Allocation|optimal portfolio allocation]] in a [[Risk-Return|risk-return]] framework
-> 5. Demonstrate an understanding of [[Common|common]] techniques to [[Enhance Yield|enhance yield]] and manage [[Liquidity|liquidity]] in [[Fixed Income Portfolio|fixed income portfolios]]
-> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various [[Strategy|strategies]], including [[Indexing|indexing]] and [[Target Return|target return]]
-> 7. Construct and manage [[Portfolio|portfolios]] of [[Equity|equity]] under various [[Passive Strategy|passive strategies]]
-> 8. Construct and manage [[Portfolio|portfolios]] of [[Equity|equity]] under various [[Active Strategy|active strategies]]
+> 2. Develop an [[Investment Policy Statement|investment policy statement]] (IPS) for an [[Institutional Investor|institutional investor]]
+> 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], passive/active management and [[Portfolio Rebalancing|rebalancing]]
+> 4. Recommend and justify an [[Optimal Portfolio Allocation|optimal portfolio allocation]] in a risk-return framework
+> 5. Demonstrate an understanding of common techniques to [[Enhance Yield|enhance yield]] and manage liquidity in [[Fixed Income Portfolio|fixed income portfolios]]
+> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various strategies, including indexing and [[Target Return|target return]]
+> 7. Construct and manage [[Portfolio|portfolios]] of equity under various [[Passive Strategy|passive strategies]]
+> 8. Construct and manage [[Portfolio|portfolios]] of equity under various [[Active Strategy|active strategies]]
 > 9. Apply [[Performance Measurement|performance measurement]] methodologies to various [[Asset Portfolio|asset portfolios]]
-> 10. Describe and assess techniques to select or build an [[Asset Benchmark|asset benchmark]] for a given [[Investment|investment]] objective
-> 11. Assess and interpret [[Performance Attribution Metrics|performance attribution metrics]] for a given [[Asset|asset]] or [[Portfolio|portfolio]]
+> 10. Describe and assess techniques to select or build an [[Asset Benchmark|asset benchmark]] for a given investment objective
+> 11. Assess and interpret [[Performance Attribution Metrics|performance attribution metrics]] for a given asset or [[Portfolio|portfolio]]
 > 12. Understand how behavior [[Bias|bias]] can impact [[Portfolio|portfolio]] management
 >
 > **Readings:**
@@ -111,7 +110,7 @@ verification:
 > The candidate will understand the [[Best Practice|best practices]] of [[Credit Risk|credit risk]] management.
 >
 > 1. Demonstrate an understanding of [[Credit Risk|credit risk]] analysis including at the [[Portfolio Level|portfolio level]]
-> 2. Demonstrate an understanding of and the [[Ability|ability]] to apply both the concepts and techniques used in the [[Measurement|measurement]] of [[Default Risk|default risk]] of [[Individual Security|individual securities]]
+> 2. Demonstrate an understanding of and the ability to apply both the concepts and techniques used in the measurement of [[Default Risk|default risk]] of [[Individual Security|individual securities]]
 > 3. Understand, evaluate, and apply [[Credit Risk Modeling|credit risk modeling]] techniques.
 >
 > **Readings:**

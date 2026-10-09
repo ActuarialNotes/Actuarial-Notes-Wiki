@@ -9,10 +9,9 @@ verification:
   confidence: high
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8cdf70417d67e5aeaef1b067c67b69eed1034fde04441cc2fb75a0d1695a0569
+  content_hash: sha256:eb9f127e5333d851a626b3502cf8352ba858b32008ea0d7f483d1206ef704f14
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201U, all pages, sha256:dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf"
-    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-201U (SOA).md
@@ -31,12 +30,12 @@ verification:
 > The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Short Duration Group|short duration group]] and [[Health Insurance Contract|health insurance contracts]].
 >
 > 1. Describe the types of [[Claim Reserve|claim reserves]]
-> 2. Explain the [[Limitation|limitations]] and [[Biase|biases]] of the [[Traditional Valuation|traditional valuation]] methods
-> 3. Calculate appropriate [[Claim Reserve|claim reserves]] given [[Data|data]]
-> 4. Describe, calculate, and evaluate the impact of [[Environmental|environmental]] factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
-> 5. Evaluate [[Data Resource|data resources]] and [[Appropriateness|appropriateness]] for calculating [[Reserve|reserves]]
-> 6. Describe, calculate, and evaluate [[non-IBNR]] types of [[Reserve|reserves]] and explain when each is [[Required|required]]
-> 7. Apply [[Best Practice|applicable best practices]] related to [[Reserving|reserving]]
+> 2. Explain the limitations and biases of the [[Traditional Valuation|traditional valuation]] methods
+> 3. Calculate appropriate [[Claim Reserve|claim reserves]] given data
+> 4. Describe, calculate, and evaluate the impact of environmental factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
+> 5. Evaluate [[Data Resource|data resources]] and appropriateness for calculating [[Reserve|reserves]]
+> 6. Describe, calculate, and evaluate non-IBNR types of [[Reserve|reserves]] and explain when each is required
+> 7. Apply applicable [[Best Practice|best practices]] related to reserving
 >
 > **Readings:**
 > - Video: Valuation at the Heart of Health Insurance (Background)
@@ -53,13 +52,13 @@ verification:
 > - ASOP 42: Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims (excluding Appendices) (1g)
 
 > [!example]- Financial Statements {25–35%}
-> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] in accordance with [[Statutory]] Accounting [[Standard|Standards]] and [[GAAP]].
+> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] in accordance with Statutory Accounting Standards and [[GAAP]].
 >
-> 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting [[Principle|Principles]] ([[GAAP]])
-> 2. Interpret the results of both [[Statutory|statutory]] and [[GAAP Statement|GAAP statements]] from the [[Viewpoint|viewpoint]] of [[Stakeholder|stakeholders]], including [[Regulator|regulators]], [[Senior|senior]] management, and [[Investor|investors]]
-> 3. [[Project Financial|Project financial]] outcomes and recommend [[Strategy|strategy]]
+> 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting Principles ([[GAAP]])
+> 2. Interpret the results of both statutory and [[GAAP Statement|GAAP statements]] from the viewpoint of stakeholders, including regulators, senior management, and investors
+> 3. Project financial outcomes and recommend [[Strategy|strategy]]
 > 4. Evaluate [[Capital Need|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
-> 5. Apply [[Best Practice|applicable best practices]] related to [[Financial Statements|financial statements]]
+> 5. Apply applicable [[Best Practice|best practices]] related to [[Financial Statements|financial statements]]
 >
 > **Readings:**
 > - Read. Think. Write., Health Section News, Oct 2004 (2e)
@@ -73,10 +72,10 @@ verification:
 > - GH201-401-25: Structured Reinsurance: Impact on Health Product Pricing (2d)
 
 > [!example]- Regulation {15–25%}
-> The candidate will understand how to evaluate the impact of [[Regulation|regulation]] on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
+> The candidate will understand how to evaluate the impact of regulation on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
 >
-> 1. Describe the [[Regulatory|regulatory]] and [[Policy Making Process|policy making process]] in the [[United State|United States]]
-> 2. Describe the major [[Applicable Law|applicable laws]] and [[Regulation|regulations]] and evaluate their impact
+> 1. Describe the regulatory and [[Policy Making Process|policy making process]] in the [[United State|United States]]
+> 2. Describe the major applicable laws and [[Regulation|regulations]] and evaluate their impact
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021
@@ -91,11 +90,11 @@ verification:
 > - GH201-408-26: A Tale of Two Systems: How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe’s (3b)
 
 > [!example]- Government Programs {10–20%}
-> The candidate will understand how to describe [[Government Programs Providing Health Benefit|government programs providing health benefits]] in the [[United State|United States]].
+> The candidate will understand how to describe government programs providing [[Health Benefit|health benefits]] in the [[United State|United States]].
 >
-> 1. Describe [[Medicare Benefit|Medicare benefits]] and evaluate [[Pricing|pricing]] and [[Filing Requirement|filing requirements]]
-> 2. Describe [[Medicaid Program Structure|Medicaid program structure]] and [[Benefit|benefits]], and evaluate [[Pricing|pricing]] and [[Filing Requirement|filing requirements]]
-> 3. Describe the [[Affordable Care Act]] and evaluate impacts on [[Pricing|pricing]] and [[Filing|filing]]
+> 1. Describe [[Medicare Benefit|Medicare benefits]] and evaluate pricing and [[Filing Requirement|filing requirements]]
+> 2. Describe [[Medicaid Program Structure|Medicaid program structure]] and benefits, and evaluate pricing and [[Filing Requirement|filing requirements]]
+> 3. Describe the [[Affordable Care Act]] and evaluate impacts on pricing and filing
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (4a, 4b)
@@ -112,12 +111,12 @@ verification:
 > - GH201-405-25: A Hard Pill to Swallow: Appreciating the Mathematical Dynamics of the Affordable Care Act (4c)
 
 > [!example]- Flow of Funds {5–15%}
-> The candidate will understand how to describe the [[Flow|flow]] of [[Fund|funds]] in the [[Health Care System|health care system]] and the role of [[Provider|providers]] in the [[System|system]].
+> The candidate will understand how to describe the flow of funds in the [[Health Care System|health care system]] and the role of providers in the system.
 >
-> 1. [[Establish]] a framework of how [[Funds Flow|funds flow]] through the [[Health Care System|health care system]]
-> 2. Describe the role [[Physicians Play|physicians play]] and their influence on the [[Flow|flow]] of [[Fund|funds]]
-> 3. Describe the [[Market Power|market power]] of [[Hospital|hospitals]] and how [[Provider Systems Compete|provider systems compete]] for [[Patient|patients]], [[Physician|physicians]], and [[Contract|contracts]]
-> 4. Describe the [[Flow|flow]] of [[Fund|funds]] in the [[Canadian Healthcare System|Canadian healthcare system]] and the roles of the [[Provider|provider]] and [[Government|government]]
+> 1. Establish a framework of how [[Funds Flow|funds flow]] through the [[Health Care System|health care system]]
+> 2. Describe the role [[Physicians Play|physicians play]] and their influence on the flow of funds
+> 3. Describe the [[Market Power|market power]] of hospitals and how [[Provider System|provider systems]] compete for patients, physicians, and contracts
+> 4. Describe the flow of funds in the [[Canadian Healthcare System|Canadian healthcare system]] and the roles of the provider and government
 >
 > **Readings:**
 > - GH201-102-25: Flow of Funds in Healthcare System and the Role of Providers (5a-5d)

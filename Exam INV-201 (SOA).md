@@ -9,10 +9,9 @@ verification:
   confidence: high
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c5ee4f081f3bc456a334343c98092a30a8b82d1ad4c3280b84727ac8f85e0f1d
+  content_hash: sha256:4319637d2eb0a9d31f81099541527e062b14bbb45567bcf433b5e4a7264bf16c
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-201, all pages, sha256:8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf"
-    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam INV-201 (SOA).md
@@ -41,10 +40,10 @@ verification:
 >    - [[Swaption]]
 >    - [[Currency]]
 >    - [[Credit]]
-> 2. Be able to identify the key [[Difference|differences]] between [[Forward|forwards]] and [[Future|futures]]
-> 3. Be able to compare [[European]], [[American]], [[Bermudan]], [[Asian Option|Asian options]], and various [[Exotic Option|exotic options]]
+> 2. Be able to identify the key differences between forwards and [[Future|futures]]
+> 3. Be able to compare European, American, Bermudan, [[Asian Option|Asian options]], and various [[Exotic Option|exotic options]]
 > 4. Understand the mechanics of [[Derivatives Trading|derivatives trading]] including:
->    - [[Exchange Traded|Exchange traded]] vs [[OTC]]
+>    - Exchange traded vs [[OTC]]
 >    - [[Central Clearing]]
 >    - [[Daily Margin Variation|Daily margin variation]] and [[Daily Settle|daily settle]]
 > 5. Understand basic [[Derivatives Strategy|derivatives strategies]] including:
@@ -53,7 +52,7 @@ verification:
 >    - [[Collar|Collars]]
 >    - Covered [[Call|calls]]
 >    - [[Butterfly Spread|Butterfly spreads]]
->    - [[Straddle|Straddles]] and [[Strangle|strangles]]
+>    - Straddles and [[Strangle|strangles]]
 >
 > **Readings:**
 > - Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021
@@ -66,27 +65,27 @@ verification:
 >     - Ch. 29: Interest Rate Derivatives: The Standard Market Models (Sections 29.2-29.3) (1a)
 
 > [!example]- Valuation of Derivatives {40–60%}
-> The candidate will understand the [[Principle|principles]] and techniques for the [[Valuation|valuation]] of [[Derivative|derivatives]].
+> The candidate will understand the principles and techniques for the [[Valuation|valuation]] of derivatives.
 >
-> 1. Understand the [[Principle|principles]] of [[No-Arbitrage|no-arbitrage]] and [[Replication|replication]] in [[Asset Pricing|asset pricing]].
-> 2. Understand [[Arrow-Debreau Security|Arrow-Debreau security]] and the [[Distinction|distinction]] between [[Complete|complete]] and [[Incomplete Market|incomplete markets]]
-> 3. Understand [[Put-Call Parity|put-call parity]] and price [[Bound|bounds]]
+> 1. Understand the principles of no-arbitrage and replication in [[Asset Pricing|asset pricing]].
+> 2. Understand [[Arrow-Debreau Security|Arrow-Debreau security]] and the distinction between complete and [[Incomplete Market|incomplete markets]]
+> 3. Understand [[Put-Call Parity|put-call parity]] and price bounds
 > 4. Understand [[Stochastic Calculus Theory|Stochastic Calculus theory]] and technique used in [[Pricing Derivative|pricing derivatives]] including:
 >    - [[Stochastic Differential Equation|Stochastic differential equations]]
->    - [[Ito]]̄ [[Integral|integral]]
->    - [[Ito]]̄'s [[Lemma]]
->    - [[Ito]]̄ [[Isometry]]
+>    - Itō [[Integral|integral]]
+>    - Itō's [[Lemma]]
+>    - Itō [[Isometry]]
 >    - [[Martingale|Martingales]],
 >    - Change of [[Numeraire|numeraire]]
 >    - [[Girsanov's Theorem|Girsanov's theorem]]
-> 5. Understand and apply the concepts of [[Risk-Neutral Valuation|risk-neutral]] measure, [[Forward|forward]] measure, [[Normalization|normalization]], and the [[Market|market]] price of [[Risk|risk]]
+> 5. Understand and apply the concepts of [[Risk-Neutral Valuation|risk-neutral]] measure, forward measure, normalization, and the market price of [[Risk|risk]]
 > 6. Understand [[Risk-Neutral Valuation|option pricing]] techniques including:
 >    - Calculating an [[Expectation|expectation]]
 >    - By solving an [[PDE]]
-> 7. Understand the [[Limitation|limitations]] of the [[Black-Scholes Model|Black-Scholes-Merton]] model
-> 8. Understand and apply [[Numerical Discretization|numerical discretization]] methods to price [[Option|options]] including [[Euler-Maruyama Discretization|Euler-Maruyama discretization]] and [[Transition Density|transition density]] methods
-> 9. Calibrate a model to [[Observed Price|observed prices]] of [[Traded Security|traded securities]] including [[Fitting|fitting]] to a given [[Yield Curve|yield curve]]
-> 10. Define and explain the concept of [[Volatility Smile|volatility smiles]] and describe several approaches for [[Modeling Smile|modeling smiles]], including [[Stochastic Volatility|stochastic volatility]], [[Local- Volatility|local- volatility]], [[Jump-Diffusion|jump-diffusions]].
+> 7. Understand the limitations of the [[Black-Scholes Model|Black-Scholes-Merton]] model
+> 8. Understand and apply [[Numerical Discretization|numerical discretization]] methods to price options including [[Euler-Maruyama Discretization|Euler-Maruyama discretization]] and [[Transition Density|transition density]] methods
+> 9. Calibrate a model to [[Observed Price|observed prices]] of [[Traded Security|traded securities]] including fitting to a given [[Yield Curve|yield curve]]
+> 10. Define and explain the concept of [[Volatility Smile|volatility smiles]] and describe several approaches for [[Modeling Smile|modeling smiles]], including [[Stochastic Volatility|stochastic volatility]], [[Local- Volatility|local- volatility]], jump-diffusions.
 >
 > **Readings:**
 > - Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021 (2a, 2b)
@@ -126,17 +125,17 @@ verification:
 >     - Pp. 233-242: Questions 12-17
 
 > [!example]- Applications and Risks of Derivatives {30–50%}
-> The candidate will understand various applications and [[Risk|risks]] of [[Derivative|derivatives]].
+> The candidate will understand various applications and [[Risk|risks]] of derivatives.
 >
-> 1. Understand the [[Greek|Greeks]] of [[Derivative|derivatives]]
-> 2. Understand [[Static|static]] and [[Dynamic Hedging|dynamic hedging]]
-> 3. Understand [[Delta Hedging|delta hedging]], and the [[Interplay|interplay]] between [[Hedging|hedging]] assumptions and [[Hedging|hedging]] outcomes
-> 4. Understand the concepts of [[Realized|realized]] versus [[Implied Volatility|implied volatility]]
-> 5. Understand how [[Hedge Strategy|hedge strategies]] may [[Fail|fail]]
-> 6. Identify and evaluate [[Embedded Option|embedded options]] in [[Liability|liabilities]] (e.g., [[Indexed Annuity|indexed annuity]], [[Structured Product|structured product]] based [[Variable Annuity|variable annuity]], and [[Variable Annuity Guarantee Rider|variable annuity guarantee riders]] including [[GMxB]], etc.)
-> 7. Demonstrate an understanding of [[Hedging|hedging]] for [[Embedded Option|embedded option]] in [[Liability|liabilities]] with:
-> 8. [[Risk|Risks]] that can be [[Hedged|hedged]], including those of [[Equity|equity]], [[Interest Rate|interest rate]], [[Volatility|volatility]], and [[Cross Greek|cross Greeks]],
-> 9. [[Risk|Risks]] that can only be [[Partially Hedged|partially hedged]] or [[Cannot|cannot]] be [[Hedged|hedged]], including those of [[Policyholder|policyholder]] behavior, [[Mortality|mortality]], [[Basis|basis]], [[Counterparty|counterparty]], [[Correlation|correlation]], and [[Operational Failure|operational failures]]
+> 1. Understand the Greeks of [[Derivative|derivatives]]
+> 2. Understand static and [[Dynamic Hedging|dynamic hedging]]
+> 3. Understand [[Delta Hedging|delta hedging]], and the interplay between [[Hedging|hedging]] assumptions and [[Hedging|hedging]] outcomes
+> 4. Understand the concepts of realized versus [[Implied Volatility|implied volatility]]
+> 5. Understand how [[Hedge Strategy|hedge strategies]] may fail
+> 6. Identify and evaluate [[Embedded Option|embedded options]] in liabilities (e.g., [[Indexed Annuity|indexed annuity]], [[Structured Product|structured product]] based [[Variable Annuity|variable annuity]], and [[Variable Annuity Guarantee Rider|variable annuity guarantee riders]] including GMxB, etc.)
+> 7. Demonstrate an understanding of [[Hedging|hedging]] for [[Embedded Option|embedded option]] in liabilities with:
+> 8. [[Risk|Risks]] that can be hedged, including those of equity, [[Interest Rate|interest rate]], [[Volatility|volatility]], and [[Cross Greek|cross Greeks]],
+> 9. [[Risk|Risks]] that can only be partially hedged or cannot be hedged, including those of [[Policyholder|policyholder]] behavior, [[Mortality|mortality]], basis, counterparty, [[Correlation|correlation]], and [[Operational Failure|operational failures]]
 > 10. Demonstrate an understanding of [[Target Volatility Fund|target volatility funds]] and their effect on [[Fund Performance|fund performance]], [[Guarantee Cost|guarantee cost]], and [[Risk|risk]] control
 >
 > **Readings:**

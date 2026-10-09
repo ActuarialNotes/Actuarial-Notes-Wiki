@@ -9,10 +9,9 @@ verification:
   confidence: high
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b179726c5789c54ffd61921b2dff509f3be5c74fdb204a383bf4ba61fe76c3f
+  content_hash: sha256:3156d2d95a9298eaae406f78fbbd830301cb820acc3695779e5711fdec8f8715
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-101, all pages, sha256:fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806 — https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf"
-    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam GH-101 (SOA).md
@@ -28,12 +27,12 @@ verification:
 ## Learning Objectives
 
 > [!example]- Plan and Product Provisions {10–20%}
-> The candidate will understand how to describe [[Plan Provision|plan provisions]] typically offered under [[Short Duration Contract|short duration contracts]] ([[Medical|medical]], [[Dental|dental]], [[Vision|vision]], [[Prescription Drug|prescription drug]], [[Group Life|group life]]).
+> The candidate will understand how to describe [[Plan Provision|plan provisions]] typically offered under [[Short Duration Contract|short duration contracts]] (medical, dental, vision, [[Prescription Drug|prescription drug]], [[Group Life|group life]]).
 >
-> 1. Describe typical [[Organization|organizations]] offering these [[Contract|contracts]]
+> 1. Describe typical organizations offering these [[Contract|contracts]]
 > 2. Describe each of the [[Contract|contracts]] listed above
-> 3. Evaluate the potential [[Moral Hazard|moral hazard]] and [[Financial|financial]] and [[Legal Risk|legal risks]] associated with each type of [[Contract|contract]]
-> 4. Describe the [[Product Development Process|product development process]] including [[Risk|risks]] and [[Opportunity|opportunities]] to be considered during the [[Process|process]]
+> 3. Evaluate the potential [[Moral Hazard|moral hazard]] and financial and [[Legal Risk|legal risks]] associated with each type of contract
+> 4. Describe the [[Product Development Process|product development process]] including [[Risk|risks]] and opportunities to be considered during the process
 >
 > **Readings:**
 > - Video: The Variety of Short-Term Health and Group Benefits (Background)
@@ -47,13 +46,13 @@ verification:
 >     - Ch. 11: Group Life Insurance Benefits (1a, 1b, 1c)
 
 > [!example]- Manual Rates {25–40%}
-> The candidate will understand how to calculate and recommend a [[Manual Rate|manual rate]] for each of the [[Contracts Described|contracts described]] in [[Learning]] Objective 1.
+> The candidate will understand how to calculate and recommend a [[Manual Rate|manual rate]] for each of the contracts described in Learning Objective 1.
 >
-> 1. Identify and evaluate sources of [[Data|data]] needed for [[Pricing|pricing]], including the [[Quality|quality]], [[Appropriateness|appropriateness]], and [[Limitation|limitations]] of each [[Data Source|data source]]
+> 1. Identify and evaluate sources of data needed for pricing, including the quality, appropriateness, and limitations of each [[Data Source|data source]]
 > 2. Develop a [[Medical Cost Trend Experience|medical cost trend experience]] analysis
 > 3. Calculate and recommend [[Assumption|assumptions]]
 > 4. Calculate and recommend a [[Manual Rate|manual rate]] (includes developing a [[Base Rate|base rate]] and applying a [[Rating Manual|rating manual]])
-> 5. Identify [[Critical Metrics|critical metrics]] to evaluate [[Actual|actual]] vs. expected results
+> 5. Identify [[Critical Metrics|critical metrics]] to evaluate actual vs. expected results
 > 6. Apply actuarial [[Best Practice|best practices]] in evaluating and projecting [[Claim Data|claim data]]
 >
 > **Readings:**
@@ -73,13 +72,13 @@ verification:
 > - ASOP 41: Actuarial Communications (excluding Appendices) (2f)
 
 > [!example]- Underwriting and Funding {25–40%}
-> The candidate will understand how to apply [[Principle|principles]] of [[Pricing|pricing]], [[Risk Assessment|risk assessment]], and [[Funding|funding]] to an [[Underwriting Situation|underwriting situation]].
+> The candidate will understand how to apply principles of pricing, [[Risk Assessment|risk assessment]], and [[Funding|funding]] to an [[Underwriting Situation|underwriting situation]].
 >
-> 1. Understand the [[Risk|risks]] and [[Opportunity|opportunities]] associated with a given [[Contract|contract]], [[Eligibility Requirement|eligibility requirement]], or [[Funding Mechanism|funding mechanism]]
+> 1. Understand the [[Risk|risks]] and opportunities associated with a given contract, [[Eligibility Requirement|eligibility requirement]], or [[Funding Mechanism|funding mechanism]]
 > 2. Understand, evaluate, and apply [[Risk Assessment Mechanism|risk assessment mechanisms]]
-> 3. Recommend [[Strategy|strategies]] for appropriately [[Pricing|pricing]], [[Underwriting|underwriting]], and [[Funding Case-Specific Risk|funding case-specific risks]]
-> 4. Describe and apply approaches to [[Claim Credibility|claim credibility]] and [[Pooling|pooling]]
-> 5. Apply [[Total Risk]] Analysis ([[TRA]]) [[Strategy|strategies]] to [[Case-Specific Pricing|case-specific pricing]]
+> 3. Recommend strategies for appropriately pricing, [[Underwriting|underwriting]], and [[Funding Case-Specific Risk|funding case-specific risks]]
+> 4. Describe and apply approaches to [[Claim Credibility|claim credibility]] and pooling
+> 5. Apply [[Total Risk]] Analysis (TRA) strategies to [[Case-Specific Pricing|case-specific pricing]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (3d)
@@ -100,8 +99,8 @@ verification:
 > [!example]- Employee Benefits {15–25%}
 > The candidate will understand how to evaluate and recommend an [[Employee Benefit Strategy|employee benefit strategy]].
 >
-> 1. Describe the [[Structure|structure]] of [[Employee Benefit Plan|employee benefit plans]] and [[Product|products]] offered, and the rationale for offering these [[Structure|structures]]
-> 2. Recommend an [[Employee Benefit Strategy|employee benefit strategy]] in [[Light|light]] of an [[Employer'|employer’s]] objectives
+> 1. Describe the structure of [[Employee Benefit Plan|employee benefit plans]] and products offered, and the rationale for offering these structures
+> 2. Recommend an [[Employee Benefit Strategy|employee benefit strategy]] in light of an employer’s objectives
 >
 > **Readings:**
 > - GH101-103-25: Health Plan Payroll Contribution Strategies and Development for Employers (4b)

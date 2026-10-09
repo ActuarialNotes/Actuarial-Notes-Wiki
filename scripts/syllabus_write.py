@@ -133,9 +133,9 @@ def singular_phrase(phrase: str) -> str:
 class Linker:
     """Resolves a noun phrase to the concept page it names (or should name)."""
 
-    def __init__(self, vault: vl.Vault, wiki_id: str):
+    def __init__(self, vault: vl.Vault, wiki_id: str, tables: dict | None = None):
         self.vault, self.wiki_id = vault, wiki_id
-        self.tables = vl.load_aliases()
+        self.tables = tables or vl.load_aliases()
         self.cache: dict[str, str] = {}
 
     def target(self, phrase: str) -> str:
@@ -144,20 +144,30 @@ class Linker:
             self.cache[key] = self._target(phrase)
         return self.cache[key]
 
-    def _target(self, phrase: str) -> str:
+    def existing(self, phrase: str) -> str | None:
+        """The concept page a phrase resolves to, or None."""
         plain = phrase.replace("’", "'")
         for cand in dict.fromkeys([plain, singular_phrase(plain), title_case(plain), title_case(singular_phrase(plain))]):
             page = vl.canonical_page(cand, self.vault, self.wiki_id, self.tables)
             if page:
                 return page
-        return clean_name(title_case(singular_phrase(plain))) or clean_name(plain)
+        return None
+
+    def _target(self, phrase: str) -> str:
+        plain = phrase.replace("’", "'")
+        return self.existing(phrase) or clean_name(title_case(singular_phrase(plain))) or clean_name(plain)
 
     def link(self, text: str) -> str:
-        """`text` with every noun phrase wrapped in a link. A line whose only
-        nouns are generic ones ("Calculate and recommend assumptions") links
-        its last, so every objective names at least one concept."""
+        """`text` with every noun phrase that needs a note wrapped in a link
+        (`syllabus_lib.needs_note`: a single word only when it has a page). A
+        line that would otherwise link nothing links its last noun phrase — or,
+        with none, its last generic noun ("Calculate and recommend
+        assumptions") — so every objective names at least one concept."""
         out, last = [], 0
-        phrases = sl.noun_phrases(text)
+        found = sl.noun_phrases(text)
+        phrases = [p for p in found if sl.needs_note(p[2], lambda w: self.existing(w) is not None)]
+        if not phrases:
+            phrases = found[-1:]
         if not phrases:
             generic = [m for m in sl.WORD_RE.finditer(text)
                        if m.group(0).lower() in sl.GENERIC_NOUNS and not m.group(0)[0].isdigit()]

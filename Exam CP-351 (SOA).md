@@ -9,10 +9,9 @@ verification:
   confidence: high
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c5934017b872c214764dafb6e27652a9ce1425bee2265eec4984023acf06eb11
+  content_hash: sha256:502704ae356e50944e8af5967164138c0368e427ddb4055f75e098897120bd2a
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
-    - "SOA exam study-materials page, read 2026-10-09: links this syllabus PDF as the current edition"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-351 (SOA).md
@@ -28,10 +27,10 @@ verification:
 ## Learning Objectives
 
 > [!example]- Objectives of Asset Liability Management {5–20%}
-> The candidate will understand the objectives of [[Asset Liability]] Management ([[ALM]]).
+> The candidate will understand the objectives of [[Asset Liability]] Management (ALM).
 >
-> 1. Explain the [[Principle|principles]] of [[Asset Liability]] Management
-> 2. Understand the [[Lessons Learned|lessons learned]] from [[ALM Failure|ALM failures]]
+> 1. Explain the principles of [[Asset Liability]] Management
+> 2. Understand the lessons learned from [[ALM Failure|ALM failures]]
 > 3. Demonstrate an understanding of various [[ALM Risk|ALM risks]]
 > 4. Describe how different [[Pension|pension]] and [[Insurance Contracts Generate Embedded Option|insurance contracts generate embedded options]]
 >
@@ -54,12 +53,12 @@ verification:
 > - CP351-106-25: Liability Driven Investment Explained Chapters 1-2 (1d)
 
 > [!example]- Measuring Risks from Assets and Liabilities {25–45%}
-> The candidate will understand how to measure [[Risk|risks]] from [[Asset|assets]] and [[Liability|liabilities]].
+> The candidate will understand how to measure [[Risk|risks]] from assets and liabilities.
 >
 > 1. Demonstrate an understanding of various [[Risk Identification Tool|risk identification tools]]
-> 2. Evaluate a [[Company'|company’s]] or a [[Portfolio's Exposure|portfolio’s exposures]] to various [[Risk|risks]]
-> 3. Understand measures of [[Regulatory Capital Adequacy|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various [[Jurisdiction|jurisdictions]]
-> 4. Evaluate the [[Difficulty|difficulties]] of [[Investing|investing]] for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 [[Year|years]]) such as [[Inflation|inflation]] and [[Longevity|longevity]]
+> 2. Evaluate a company’s or a [[Portfolio's Exposure|portfolio’s exposures]] to various [[Risk|risks]]
+> 3. Understand measures of [[Regulatory Capital Adequacy|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various jurisdictions
+> 4. Evaluate the difficulties of investing for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 years) such as [[Inflation|inflation]] and longevity
 >
 > **Readings:**
 > - CP351-101-25: ALM for Life, Annuities, and Pensions (section 4) (2a)
@@ -80,10 +79,10 @@ verification:
 > - CP351-101-25: ALM for Life, Annuities, and Pensions (section 6) (2d)
 
 > [!example]- Tools and Strategies to Manage ALM Risks {40–60%}
-> The candidate will understand [[Tool|tools]] and [[Strategy|strategies]] to manage [[ALM Risk|ALM risks]].
+> The candidate will understand tools and strategies to manage [[ALM Risk|ALM risks]].
 >
 > 1. Develop and critique [[Asset Allocation Strategy|asset allocation strategies]] appropriate to underlying [[Liability Profile|liability profiles]] such as [[Pension Plan|pension plans]] and [[Long-Tail Insurance Liability|long-tail insurance liabilities]]
-> 2. Demonstrate an understanding of and apply [[Tool|tools]] and techniques for measuring and managing [[Interest Rate Risk|interest rate risk]] in an [[ALM Context|ALM context]]
+> 2. Demonstrate an understanding of and apply tools and techniques for measuring and managing [[Interest Rate Risk|interest rate risk]] in an [[ALM Context|ALM context]]
 > 3. Apply [[Stress Testing|stress testing]] and scenario analysis to assess [[Extreme ALM Event|extreme ALM events]]
 > 4. Understand and evaluate model and [[Parameter Risk|parameter risks]]
 > 5. Explain and implement techniques used to mitigate [[Market Risk|market risks]]

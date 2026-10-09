@@ -6,9 +6,11 @@ import {
   examPageIdFromFile,
   examProgressKeyFromFile,
   examQuizTopic,
+  studyGuidesForResource,
   todaysPlanConcepts,
   todaysPlanRowState,
 } from './examMenu'
+import type { WikiExamSyllabus } from './wikiParser'
 
 const sitting = (startDate: string, endDate: string | null = null): ExamSitting => ({
   examId: 'CAS-9',
@@ -147,5 +149,38 @@ describe('todaysPlanRowState', () => {
   it('has nothing to plan on an exam still in development, whoever is asking', () => {
     expect(todaysPlanRowState({ ...pro, inDevelopment: true })).toBe('unavailable')
     expect(todaysPlanRowState({ ...pro, inDevelopment: true, isPro: false })).toBe('unavailable')
+  })
+})
+
+describe('studyGuidesForResource', () => {
+  const syllabus = (fileName: string, readings: string[]): WikiExamSyllabus => ({
+    examId: fileName,
+    examLabel: fileName,
+    examTopic: '',
+    topics: [],
+    resources: readings.map(name => ({ name, target: name })),
+    fileName,
+  })
+  const ROSS = 'A First Course in Probability (Ross - 2019)'
+  const syllabi = [
+    syllabus('Exam MAS-I (CAS)', [ROSS, 'Other (X - 2020)']),
+    syllabus('Exam P-1 (SOA)', [ROSS]),
+    syllabus('Exam 5 (CAS)', ['Other (X - 2020)']),
+  ]
+
+  it('finds every study guide that lists the reading, in ladder order', () => {
+    expect(studyGuidesForResource(syllabi, ROSS).map(s => s.fileName)).toEqual([
+      'Exam P-1 (SOA)',
+      'Exam MAS-I (CAS)',
+    ])
+  })
+
+  it('matches the page name regardless of case and spacing', () => {
+    expect(studyGuidesForResource(syllabi, `  ${ROSS.toLowerCase()} `)).toHaveLength(2)
+  })
+
+  it('is empty for a resource no study guide lists', () => {
+    expect(studyGuidesForResource(syllabi, 'Unlisted (Nobody - 2001)')).toEqual([])
+    expect(studyGuidesForResource(syllabi, '')).toEqual([])
   })
 })

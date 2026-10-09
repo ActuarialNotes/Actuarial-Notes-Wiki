@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, LayoutDashboard, X, XCircle } from 'lucide-react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { ArrowUp, ChevronLeft, LayoutDashboard, X, XCircle } from 'lucide-react'
+import { backLabel as backName, useBack } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
 import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -61,6 +63,7 @@ function PostQuizCelebrations({ streakEligible }: { streakEligible: boolean }) {
 
 export default function Review() {
   const navigate = useNavigate()
+  const back = useBack({ to: '/', label: 'Quiz' }, { skip: path => path.split(/[?#]/)[0] === '/quiz' })
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -256,6 +259,15 @@ export default function Review() {
   const retryIds = session.questions.filter((_, i) => !outcomes[i]).map(q => q.id)
   const retryMode = session.mode
 
+  // A new quiz is set up in the builder this one came from, when it came from
+  // one — back to that exam, its choices as they were — and in the Quiz tab
+  // otherwise.
+  function handleNewQuiz() {
+    resetQuiz()
+    if (back.fromTrail && back.to.split(/[?#]/)[0] === '/') back.go()
+    else navigate('/')
+  }
+
   function handleTryAgain() {
     if (retryIds.length === 0) return
     try {
@@ -375,6 +387,13 @@ export default function Review() {
 
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
 
+      {/* Back to where the quiz was started — an exam's builder, a study guide,
+          Concept Craft. The review took the quiz's place in the history, so
+          this is the browser's own Back too. */}
+      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backName(back)} className="-mb-3 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="h-4 w-4" /> {back.label}
+      </Link>
+
       {/* ── First card: score header + concept coverage ──────────── */}
       <ConceptCoverageSection
         questions={session.questions}
@@ -474,7 +493,7 @@ export default function Review() {
             Try Again ({retryIds.length} missed)
           </Button>
         )}
-        <Button onClick={() => { resetQuiz(); navigate('/') }} className="flex-1">
+        <Button onClick={handleNewQuiz} className="flex-1">
           New Quiz
         </Button>
       </div>

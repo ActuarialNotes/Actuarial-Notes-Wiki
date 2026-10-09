@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
+import { useNavTrail, usePageLabel } from '@/hooks/useBack'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, ChevronDown, Circle, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
@@ -315,6 +316,12 @@ function QuizExamRow({
       trailing={<TodayQuizNavBadge count={todayQuizCount} complete={todayQuizComplete} />}
     />
   )
+}
+
+/** The Quiz tab's exam list — `/` with no exam open. */
+function isExamList(path: string): boolean {
+  const [pathname, search = ''] = path.split('?')
+  return pathname === '/' && !new URLSearchParams(search.split('#')[0]).get('topic')
 }
 
 export default function Landing() {
@@ -688,7 +695,10 @@ export default function Landing() {
   // Store the coverage-optimal question set and jump straight into the quiz.
   // `desiredCount` caps the questions (used when the user picks a smaller count);
   // the fewest-questions greedy cover keeps it on today's concepts either way.
-  const launchTodaysPlan = useCallback((desiredCount: number): boolean => {
+  // `replace` when launched by a Dashboard autostart: the address that asked for
+  // it would only launch another quiz, so Back from the quiz goes to the
+  // Dashboard instead.
+  const launchTodaysPlan = useCallback((desiredCount: number, replace = false): boolean => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return false
     const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
@@ -704,7 +714,7 @@ export default function Landing() {
       from: 'home',
     })
     if (timed) params.set('timed', '1')
-    navigate(`/quiz?${params.toString()}`)
+    navigate(`/quiz?${params.toString()}`, { replace })
     return true
   }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal, timed])
 
@@ -767,7 +777,7 @@ export default function Landing() {
       return
     }
     didAutostartRef.current = true
-    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }))
+    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }), true)
   }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
 
   // True while a dashboard-initiated autostart is still resolving (loading data
@@ -988,6 +998,8 @@ export default function Landing() {
 
   const mockExamCount = practiceExamQuestions(topic)
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
+  // An exam's builder names its entry, for the way back from what it opens.
+  usePageLabel(topic ? `${examLabel} quiz` : undefined)
 
   // The real paper's pace, said beside the Timed choice. `topic` is the same
   // exam name a question carries, so it is what the pace table is keyed by.
@@ -1132,14 +1144,42 @@ export default function Landing() {
   // builder opens at its top, the way a new page does, and the list comes back
   // scrolled to where it was left — set in a layout effect, so the new screen
   // is in place before the transition takes its picture.
+  //
+  // The exam is in the address all the same (`?topic=`), as an entry of its
+  // own: the browser's Back closes the builder, a quiz quit or finished comes
+  // back to *this exam's* builder rather than the list, and the builder is
+  // named on the trail (`hooks/useBack.ts`) so the pages after it say so.
   const listScrollRef = useRef(0)
+  const trail = useNavTrail()
   function openExam(value: string) {
     listScrollRef.current = window.scrollY
-    moveScreen('push', () => setTopic(value))
+    moveScreen('push', () => {
+      setTopic(value)
+      navigate(`/?topic=${encodeURIComponent(value)}`)
+    })
   }
   function closeExam() {
-    moveScreen('pop', () => setTopic(''))
+    // Opened from the list just before: Back to it, the browser's own Back.
+    const previous = trail.entries[trail.index - 1]
+    if (previous && isExamList(previous.path)) {
+      navigate(-1)
+      return
+    }
+    moveScreen('pop', () => {
+      setTopic('')
+      navigate('/', { replace: true })
+    })
   }
+  // Back and Forward move the address under the page: follow it, as the same
+  // move a click would have made.
+  const urlTopic = searchParams.get('topic') ?? ''
+  const topicRef = useRef(topic)
+  topicRef.current = topic
+  useEffect(() => {
+    if (urlTopic === topicRef.current) return
+    if (urlTopic) listScrollRef.current = window.scrollY
+    moveScreen(urlTopic ? 'push' : 'pop', () => setTopic(urlTopic))
+  }, [urlTopic])
 
   // The exam being configured, and the strip that names it in the search bar —
   // the study guide's strip (WikiExam), less what is about a sitting rather

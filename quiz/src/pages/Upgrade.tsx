@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useBack } from '@/hooks/useBack'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, BadgeCheck, Heart, Loader2, Lock, Tag, type LucideIcon } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
@@ -48,6 +49,7 @@ const EXTRAS: { text: string; Icon: LucideIcon }[] = [
 
 export default function Upgrade() {
   const navigate = useNavigate()
+  const back = useBack({ to: '/dashboard', label: 'Dashboard' })
   const { user } = useAuth()
   const { isPro, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)
@@ -133,8 +135,8 @@ export default function Upgrade() {
       <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
         You're already a Pro member. Thanks for your support!
       </div>
-      <Button variant="outline" className="w-full" onClick={() => navigate('/dashboard')}>
-        Back to Dashboard
+      <Button variant="outline" className="w-full" onClick={back.go}>
+        Back to {back.label}
       </Button>
     </div>
   ) : (

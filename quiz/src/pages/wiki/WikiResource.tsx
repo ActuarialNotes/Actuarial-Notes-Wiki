@@ -12,6 +12,7 @@ import { FactCheckBadge } from '@/components/FactCheckBadge'
 import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { backLabel, useBack } from '@/hooks/useBack'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 
 export default function WikiResource() {
@@ -19,6 +20,7 @@ export default function WikiResource() {
   const resourceName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
   const { openAt } = useConceptPopup()
+  const back = useBack({ to: RESOURCES_ROUTE, label: 'All resources' })
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   useWikiPageHead('resource', resourceName, status === 'error')
@@ -61,8 +63,10 @@ export default function WikiResource() {
 
   return (
     <div className="space-y-4">
-      <Link to={RESOURCES_ROUTE} state={RESTORE_SCROLL} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="h-4 w-4" /> All resources
+      {/* Back to the page this reading was opened from — an exam's Source
+          Material, a search — or up to the shelf for a reader who landed here. */}
+      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backLabel(back)} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+        <ChevronLeft className="h-4 w-4" /> {back.label}
       </Link>
 
       {status === 'loading' && (

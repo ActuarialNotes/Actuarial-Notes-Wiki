@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { backLabel, useBack, usePageLabel } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { CoworkTopBar } from '@/components/cowork/CoworkTopBar'
 import { EntityLogo } from '@/components/cowork/EntityLogo'
 import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
@@ -82,19 +84,29 @@ export default function Cowork() {
   // with, rather than restating the heading a few pixels below it.
   const entity = useMemo(() => (entityId ? entityById(COWORK_ENTITIES, entityId) : null), [entityId])
 
+  // Each place's way back leads to the page the reader came from (a
+  // deliverable's attached source, a search), and up the loop for one who
+  // landed here — `hooks/useBack.ts`.
+  const sourceBack = useBack({ to: '/cowork', label: 'Sources' })
+  const deliverableBack = useBack({ to: '/cowork/deliverables', label: 'Deliverables' })
+  // A source names its entry, so the page after it can say "Back to OSFI".
+  usePageLabel(entity?.name)
+
   const backLink = useMemo(
     () =>
       entity ? (
         <Link
-          to="/cowork"
-          aria-label="All sources"
-          title="All sources"
+          to={sourceBack.to}
+          state={RESTORE_SCROLL}
+          onClick={sourceBack.onLinkClick}
+          aria-label={backLabel(sourceBack)}
+          title={backLabel(sourceBack)}
           className="-ml-1.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
           <ChevronLeft className="h-5 w-5" />
         </Link>
       ) : null,
-    [entity],
+    [entity, sourceBack],
   )
 
   return (
@@ -115,14 +127,15 @@ export default function Cowork() {
         {deliverableId ? (
           <DeliverableDetail
             deliverableId={deliverableId}
-            onBack={() => navigate('/cowork/deliverables')}
+            onBack={deliverableBack.go}
+            backLabel={deliverableBack.label}
             onOpenResource={openResource}
             onBrowseSources={() => navigate('/cowork')}
           />
         ) : onDeliverables ? (
           <DeliverablesView onOpen={id => navigate(`/cowork/deliverables/${id}`)} />
         ) : entityId ? (
-          <SourcePage entityId={entityId} onOpenResource={openResource} onBack={() => navigate('/cowork')} />
+          <SourcePage entityId={entityId} onOpenResource={openResource} onBack={sourceBack.go} backLabel={sourceBack.label} />
         ) : (
           <SourcesView onOpenResource={openResource} />
         )}

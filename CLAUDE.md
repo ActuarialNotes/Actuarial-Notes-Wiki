@@ -846,6 +846,21 @@ Other important `lib/` modules:
   and a same-page change (query, hash) or a redirect leaves the window alone. The browser's
   own restoration is off. Pages don't save or restore their own scroll — don't add a
   per-page copy. Pure and tested; the flow is in `e2e/wiki.spec.ts`.
+- `navTrail.ts` — **where the reader came from**: the app's own record of the history stack,
+  fed by `PaperRouter` on every move (keyed by the `idx` the router stamps on `history.state`,
+  mirrored to sessionStorage, checked by entry key so another visit's record is never trusted).
+  `backTarget` is the nearest earlier entry on another *page* (a filter, a `?concept=` popup or
+  a hash is the same page; the sign-in screens are never a target), and `placeLabel` names it.
+  **Every back control goes through `hooks/useBack.ts`**: `useBack({ to, label })` returns the
+  way back — the browser's own Back to the page left (scroll, filters and search intact, drawn
+  as a `pop`), or up to the `to` fallback for a reader who came in from outside the app — and
+  its name ("Back to Exam P-1"); `usePageLabel` lets a page name its own entry better than its
+  path can (an exam's builder, a Cowork source, a project brief). Don't hardcode a parent in a
+  back arrow; pass it as the fallback. Two moves keep the history honest: the Quiz tab's open
+  exam is an entry of its own (`/?topic=…`), so quitting a quiz returns to that exam's builder,
+  and a finished quiz hands its entry to the review (`replace` with `REPLACE_AS_PUSH` from
+  `viewTransition.ts`, still drawn as a push), so Back from a review never lands on a quiz that
+  is over. Pure and tested; the flows are in `e2e/wiki.spec.ts` and `e2e/quiz-resume.spec.ts`.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
   Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite
@@ -1143,8 +1158,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **197 test files /
-~3205 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **198 test files /
+~3490 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

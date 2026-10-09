@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { backLabel as backName, useBack } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, Timer } from 'lucide-react'
 import { CredibilityBar } from '@/components/actuaria/CredibilityBar'
@@ -24,6 +26,8 @@ import { cn } from '@/lib/utils'
  */
 export function SimulationView({ world }: { world: ActuariaWorld }) {
   const navigate = useNavigate()
+  // Back the way the reader came, or up to the station this is a sheet over.
+  const back = useBack({ to: '/actuaria/battle', label: term('station') })
   const sectors = useMemo(() => world.sectors.filter(s => s.bankLabel), [world.sectors])
   const [picked, setPicked] = useState<string | null>(null)
   const sector =
@@ -44,10 +48,13 @@ export function SimulationView({ world }: { world: ActuariaWorld }) {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-4 sm:px-6 lg:py-6">
       <Link
-        to="/actuaria/battle"
+        to={back.to}
+        state={RESTORE_SCROLL}
+        onClick={back.onLinkClick}
+        aria-label={backName(back)}
         className="-ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <ChevronLeft className="h-4 w-4" aria-hidden /> {term('station')}
+        <ChevronLeft className="h-4 w-4" aria-hidden /> {back.label}
       </Link>
       <h1 className="actuaria-display text-xl sm:text-2xl"><Term id="simulation" /></h1>
 

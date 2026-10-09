@@ -24,7 +24,7 @@ import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { useBack } from '@/hooks/useBack'
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
@@ -155,9 +155,10 @@ export default function WikiExam() {
     <ExamLogo examKey={progressKey} size="md" />
   ), [progressKey])
 
-  const backLink = useMemo(() => (
-    <FloatingSearchBack to="/wiki" state={RESTORE_SCROLL} label="All exams" />
-  ), [])
+  // Back to wherever the reader opened this exam from — the Dashboard, the
+  // quiz builder, a search — and up to the exam list for one who landed here.
+  const back = useBack({ to: '/wiki', label: 'All exams' })
+  const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or
   // 'development' (the DISCs and Exam 6U: syllabus outline only). Drives the

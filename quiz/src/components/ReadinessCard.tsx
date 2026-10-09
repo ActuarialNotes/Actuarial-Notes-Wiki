@@ -1062,9 +1062,8 @@ export function ReadinessCard({
   // The three cards the Dashboard leads with, in this order:
   //
   //   1. **Exam readiness** — led by the calendar, a full-width section of its
-  //      own rather than a card: the exam date the score is racing, the
-  //      target-ready date under it, and the schedule strip
-  //      (`examScheduleBlock`, with `dayDetailPanel` for whichever day is
+  //      own rather than a card: the exam date the score is racing and the
+  //      days left, then the schedule strip (`examScheduleBlock`, with `dayDetailPanel` for whichever day is
   //      tapped). Then the card — the exam's logo, the score as "X% Ready", and
   //      how many concepts today's plan still asks for — and under it,
   //      bare on the page, the primary actions (`actions`) that move the score.
@@ -1110,7 +1109,9 @@ export function ReadinessCard({
   // the dashboard saying the same thing twice; merged here, the date is the
   // deadline, the strip is what has been done about it, and tapping a day opens
   // that day below. Everything the separate card did — the day panel, the
-  // schedule-forming sweep, the target-ready date — happens in this block.
+  // schedule-forming sweep — happens in this block. The target-ready date has
+  // no row of its own here: the strip marks its day in amber, and the Study
+  // Plan modal is where it is set.
   const examScheduleBlock = (
     <div ref={studyScheduleCardRef} className="space-y-1">
       <button
@@ -1122,14 +1123,14 @@ export function ReadinessCard({
           : 'Set your exam date'}
       >
         <span className="flex w-full items-center gap-2">
-          <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate text-sm font-medium">
+          <CalendarDays className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+          <span className="min-w-0 flex-1 truncate text-lg font-semibold">
             {examDate ? formatReadableDate(examDate) : 'Set your exam date'}
           </span>
           {countdownLabel && (
             <span
               className={
-                'shrink-0 text-sm font-semibold tabular-nums ' +
+                'shrink-0 text-lg font-semibold tabular-nums ' +
                 (daysToExam !== null && daysToExam < 0 ? 'text-muted-foreground' : '')
               }
             >
@@ -1138,7 +1139,7 @@ export function ReadinessCard({
           )}
         </span>
         {showNextSitting && nextSitting && (
-          <span className="flex w-full items-center gap-2 pl-6 text-xs text-muted-foreground">
+          <span className="flex w-full items-center gap-2 pl-7 text-sm text-muted-foreground">
             <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
             <span className="shrink-0 font-medium">{nextSitting.format}</span>
           </span>
@@ -1158,13 +1159,11 @@ export function ReadinessCard({
         <ExamHeatmap
           layout="linear"
           showExamDateRow={false}
-          dateRowsAbove
           sessions={examSessions}
           examProgressKey={progressKey}
           targetDate={examDate}
           onTargetDateChange={onExamDateChange ?? (() => {})}
           targetReadyDate={config.targetReadyDate}
-          onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
           examWindow={examWindow}
           onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
           onDayClick={date => { playback.stop(); setSelectedDay(date) }}
@@ -1358,7 +1357,7 @@ export function ReadinessCard({
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
       {/* The calendar leads the group: the date the score is racing, the
-          target-ready date under it, and the schedule under both — a
+          days left, and the schedule under both — a
           full-width section of its own rather than a card. A
           readiness percentage only means something against a deadline, so
           this carries the day itself, how far off it is, and — when no date

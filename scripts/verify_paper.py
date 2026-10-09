@@ -162,6 +162,8 @@ def diffable(stem: str) -> str:
 
 
 def _delatex(text: str) -> str:
+    # An environment's name (`\begin{cases}`) is markup, not a word the page prints.
+    text = re.sub(r"\\(?:begin|end)\{[^}]*\}", " ", text)
     text = text.replace("{,}", ",").replace("\\,", "").replace("\\%", "%").replace("\\$", "$")
     return re.sub(r"\\[A-Za-z]+", " ", text)
 

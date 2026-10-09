@@ -156,6 +156,11 @@ class PaperTests(unittest.TestCase):
         self.assertEqual(P.numbers("4,200,000 and 5.00 and $1{,}175$ and 0.450"),
                          ["4200000", "5", "1175", "0.45"])
 
+    def test_latex_environment_names_are_not_words(self) -> None:
+        stem = r"$$F(x) = \begin{cases} 1 - e^{-x/100}, & x > 0 \\ 0, & \text{otherwise.} \end{cases}$$"
+        self.assertNotIn("cases", P.words(stem))
+        self.assertIn("otherwise", P.words(stem))
+
     def test_the_diff_ignores_options_and_the_vaults_part_headings(self) -> None:
         diffable = P.diffable(P.blind_stem(MULTI_PART + "\n- A) 9\n"))
         self.assertNotIn("Part a", diffable)

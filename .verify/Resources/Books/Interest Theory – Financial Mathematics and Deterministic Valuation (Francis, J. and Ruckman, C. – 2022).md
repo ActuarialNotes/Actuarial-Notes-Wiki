@@ -54,3 +54,14 @@ created: 2026-09-28
 - confidence: medium
 - checks_run: Re-pass after F-001; the only byte change is the syllabus entry in ## Sources (now December 2026, p. 6; URL HTTP 200). Callout re-diffed against Dec 2026 pp.5-6: suggested text, Chapters 1 to 13, Chapter 14 excluding 14.04 and 14.05, Chapters 15-16 — word for word. The publisher's sample re-fetched with the same sha256 as the aa33 pass (c3b537a0…), so its outline check (103 entries, 0 differences), frontmatter and lead checks stand unchanged. resource_lint 0 errors 0 warnings. Medium: a commercial text read only through its sample pages.
 - sources_checked: Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, re-fetched 2026-09-29, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Francis & Ruckman entry), PDF p.5-6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
+
+## [C-004] Delta re-check — cover jacket
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: delta diff against the verified version; jacket compared with the frontmatter; cited sources re-fetched
+- sources_checked: Francis & Ruckman, Interest Theory: Financial Mathematics and Deterministic Valuation, Third Edition (ActuarialBrew, 2022), publisher's sample pages: title page p.1, copyright page p.2, Table of Contents pp.3-5, Introduction p.7, re-fetched 2026-09-29, sha256:c3b537a0237c73d4c5740005ebcecb4b73f646056d32e63f2884b8b05f1cb551 — https://www.actexmadriver.com/samples/Interest%20Theory%203rd%20Edition%20Sample.pdf; SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Francis & Ruckman entry), PDF p.5-6, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf
+- note: Stale only because of an edit after the pass of 2026-10-02 (commit 42d81378). The cover embed now names the real jacket, '- Cover.jpg', instead of the generated '- Cover.svg' (commit 756fa1d1, 2026-10-07). The jacket shows this page's title, authors and edition. Every PDF the earlier pass cited was re-fetched and is byte-identical; catalogue pages were re-read (an HTML page's hash moves on every fetch).

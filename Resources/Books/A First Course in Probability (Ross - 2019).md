@@ -8,15 +8,15 @@ Edition: "10th"
 Type: "Textbook"
 ISBN: "978-0-13-475311-9"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:7eddb4b9b8b8612477c53daa55b6f00e64c2e4bdeee663177e2510ecd8ea23a2
   sources:
-    - "Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii; sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6, https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf"
-    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.5, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
-    - "Pearson product page, A First Course in Probability 10th ed., Table of contents (fetched 2026-09-27, sha256:e889adc70c0c2f935f8893ec2477851a28c173bf6eae11979b02ee686ce1bbd2), https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334"
+    - "Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii;, sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6 — https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf"
+    - "SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.5, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf"
+    - "Pearson product page, A First Course in Probability 10th ed., Table of contents (fetched 2026-09-27, sha256:dabe1e922254e53f04636b1a8a931892898259f8401373911492cabde74580fd — https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/A First Course in Probability (Ross - 2019).md

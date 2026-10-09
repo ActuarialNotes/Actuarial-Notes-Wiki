@@ -129,15 +129,17 @@ export function ConceptActionMenu({
   const { syllabi } = useWikiSyllabus()
 
   const isOnWiki = location.pathname.startsWith('/wiki/')
-  // A resource's study guides: the exams whose Source Material lists it. The one
-  // already open wins, so the row never moves a reader between guides; none
-  // greys the row out.
+  // Where a resource opens in its study guide: the exams whose Source Material
+  // lists it. The one already open wins, so the row never moves a reader between
+  // guides; none greys the row out.
   const resourceGuide = useMemo(() => {
     if (entry.kind !== 'resource') return null
     const guides = studyGuidesForResource(syllabi, entry.name)
     const routes = guides.map(s => wikiRoute({ kind: 'exam', name: s.fileName! }))
     const open = routes.indexOf(location.pathname)
-    return routes.length === 0 ? null : routes[open >= 0 ? open : 0]!
+    if (routes.length === 0) return null
+    // Opened at the reading, not the top of the guide (`?resource=`, WikiExam).
+    return `${routes[open >= 0 ? open : 0]!}?resource=${encodeURIComponent(entry.name)}`
   }, [syllabi, entry.kind, entry.name, location.pathname])
   const isExam = entry.kind === 'exam'
   const markdown = content ?? fetchedContent

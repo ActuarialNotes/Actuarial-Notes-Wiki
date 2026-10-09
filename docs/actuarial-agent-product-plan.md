@@ -336,6 +336,7 @@ ontology's benefit #2 turned into Agent capability._
   text similarity — the retrieval upgrade in §5 step 2.
 - **B3 — Calculation tools.** Actuarial calculators grounded in the question bank's methods
   (loss/expense/combined ratios, development factors, PV/annuity math), with checkable outputs.
+  Planned in full in `docs/actuarial-tools.md`.
 - **B4 — Expand the competency-question suite** beyond the ontology's seed set; add
   faithfulness + term-precision metrics.
 - **Exit:** entity and calculation questions answered from KB facts + tools with citations;

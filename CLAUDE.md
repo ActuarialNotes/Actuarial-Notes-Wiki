@@ -345,6 +345,14 @@ before touching that area**:
   `initialize`-handshake ones before it), and the mirrors kept in step with the app by tests. Read
   before touching anything under `quiz/api/_mcp/`, `quiz/api/mcp.js`, `lib/knowledgeBase.ts` or
   `quiz/skills/`.
+- `docs/actuarial-tools.md` — **the plan for Actuarial Tools** (not built yet): a third mode of
+  actuarial calculators — reserving, ratemaking, distributions, credibility, reinsurance,
+  financial maths, capital, life — that people use on a tool page and AI agents use through
+  the MCP connector (`list_tools` / `describe_tool` / `run_tool`) and a JSON API, all running
+  one pure engine in `lib/tools/`. Its ground rules: tools compute and people judge (every
+  judgment an explicit input), nothing invented (no benchmark factors; examples and tables
+  transcribed with their source), and no tool leaves Preview until it reproduces a published
+  worked example in CI. Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
   pages behind it fold up into title bars — vertically, along the pane's short axis, so a

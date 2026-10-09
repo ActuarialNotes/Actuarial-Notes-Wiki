@@ -1,29 +1,29 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c4167c1ac08335a6cc610c93d8daa3818e14e1bb7698825c192c42bac16a46cb
+  content_hash: sha256:e2e9029559db09c70a1d3bb89d6a18add2e9f7355541954a224addf37424661b
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-135 (PDF pp. 137-147), underwriting expense categories, contingent commissions, All Variable / Premium-based / Exposure-based methods, Trending Expenses, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p. 9 (PDF p. 21), written- vs earned-premium denominators for expense ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-135 (PDF pp.137-147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Variable Expenses.md
 ---
 
-**Variable Expenses** are underwriting expenses that move proportionally with premium — commissions, premium taxes, licences and fees — and are therefore expressed as a percentage $V$ of premium and carried in the **denominator** of the rate formula.
+**Variable Expenses** are underwriting expenses that vary directly with premium — premium taxes and commissions are the standard examples — and are therefore expressed as a percentage $V$ of premium and carried in the **denominator** of the rate formula.
 
 > $$V = \frac{\text{Variable Expenses}}{\text{Premium}}$$
 
 > $$\text{Rate} = \frac{\text{Pure Premium} + F}{1 - V - Q_T}$$
 
 - The denominator placement is not a convention but arithmetic: if commission is $15\%$ *of the rate being solved for*, the rate must be grossed up by dividing, not by adding $15\%$ of something else. Adding instead of dividing under-recovers the expense.
-- Typical components: agent or broker commission ($10$–$20\%$, higher in some commercial lines), premium taxes ($2$–$3\%$), licences, fees and assessments, and the variable part of other acquisition. Total $V$ commonly runs $20$–$30\%$, and it varies sharply by **distribution channel**.
+- The size and make-up of $V$ vary by line and by company. Commissions tend to be much higher in lines that need a comprehensive inspection at the onset (large commercial property) than in lines that do not (personal auto); and within a line, an agency-based company pays higher commissions than a national direct writer, which spends more on other acquisition such as advertising — the **distribution channel** shifts cost between the two.
 - Because commissions and taxes attach when a policy is **written**, these ratios are computed against [[Written Premium|written premium]]; expenses incurred as coverage is provided use [[Earned Premium|earned premium]]. Mixing the denominators misstates the provision in a growing or shrinking book.
 - A **structural change** in distribution — moving business direct, renegotiating commission scales, adding a contingent commission — must be reflected prospectively rather than from historical ratios, since the ratemaking question is what the expenses *will* be.
-- Contingent or profit-sharing commissions complicate the split: they are a percentage of premium (variable) but conditional on loss experience, so they behave partly like a loss-sensitive cost and are sometimes provided for separately.
+- Commission rates may differ between new and renewal business, and **contingent commissions** vary the commission with the quality of the business written (e.g. a loss ratio) or its amount (e.g. predetermined volume goals).
 
 ![[Media/Figures/Variable_Expenses.svg|340]]
 
@@ -52,7 +52,7 @@ verification:
 > > Had the $25\%$ been *added* to $\$340$ instead ($\$340 \times 1.25 = \$425$), commissions and profit would consume $\$106.25$ and only $\$318.75$ would be left for a $\$340$ obligation — a $\$21$ shortfall on every policy.
 
 > [!example]- A Distribution Channel Shift {Example}
-> An insurer currently writes entirely through independent agents at $17\%$ commission. It will move $40\%$ of new business to a direct channel with no commission but $\$18$ per policy of additional fixed marketing cost. Premium taxes are $2.5\%$, other variable expenses $2\%$, fixed expenses $\$45$ per exposure, target profit $5\%$, pure premium $\$420$.
+> An insurer currently writes entirely through independent agents at $17\%$ commission. It will move $40\%$ of its business to a direct channel with no commission but $\$18$ per policy of additional fixed marketing cost. Premium taxes are $2.5\%$, other variable expenses $2\%$, fixed expenses $\$45$ per exposure, target profit $5\%$, pure premium $\$420$.
 >
 > Compute the indicated rate before and after the shift.
 >

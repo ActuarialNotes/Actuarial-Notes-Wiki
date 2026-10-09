@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-12
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ee6a8bdd8d6550b16a621e4f3925c302baa53b996c69e0e25c7cb9395d7a6588
+  content_hash: sha256:ad2d8b6c011047978ae681ee90084a264648e8cc1b404c2c05e67cb89076575b
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 6 p.99 (PDF p.111), Ch. 7 p.137 (PDF p.149) and Appendix B pp.B-3,B-8 (PDF pp.361,366), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 2
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 p.99 (PDF p.111), Ch.7 p.137 (PDF p.149), Appendix B pp.B-3, B-8 (PDF pp.361, 366), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.4 p.44 (PDF p.50), Ch.7 p.96 (PDF p.102), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Net of Reinsurance.md
 ---
@@ -19,11 +19,11 @@ verification:
 
 > $$\text{Net Loss Ratio} = \frac{\text{Gross Losses} - \text{Ceded Losses}}{\text{Gross Premium} - \text{Ceded Premium}}$$
 
-- Gross, [[Ceded Losses|ceded]] and [[Net Losses|net]] must each be internally consistent: net losses belong over net premium. Mixing bases — gross losses over net premium is the classic error — overstates the loss ratio by the whole cost of the reinsurance programme.
-- **Ratemaking is normally performed gross**, then the *net cost of reinsurance* is loaded as an expense. Werner defines that net cost as ceded premium minus expected ceded losses; it belongs in the numerator of the indication alongside other [[Expense Provisions|expense provisions]], not buried in the loss ratio.
+- Gross, [[Ceded Losses|ceded]] and [[Net Losses|net]] must each be internally consistent: net losses belong over net premium. Mixing bases — gross losses over net premium is the classic error — overstates the loss ratio. A first check on the data is that net losses and net premium are no greater than gross.
+- Ratemaking was historically done on a direct basis, but some analyses are now performed net. Werner gives two treatments of **non-proportional** reinsurance: reduce the projected losses by the expected recoveries and the premium by the amount ceded, or include the *net cost of reinsurance* — the cost of the reinsurance minus the expected recoveries — as an expense item in the indication, alongside the other [[Expense Provisions|expense provisions]]. Proportional reinsurance cedes premium and losses in the same proportion and may need no explicit treatment.
 - Rating net directly is defensible only when the reinsurance structure is stable, because the net experience embeds the treaty terms of each historical year. A change in attachment point makes prior net years non-comparable, while gross years remain usable.
-- Net experience is **less volatile** than gross — excess-of-loss reinsurance truncates exactly the [[Large Loss|large losses]] that drive volatility — which is why net data can look more credible than it is. The reinsurance is doing the smoothing, and the insurer is paying for it.
-- On the reserving side, the [[Reinsurance Recovery|ceded triangle]] develops differently from the gross one: cessions attach to the large, slow, litigated claims, so ceded patterns are longer-tailed and thinner. Friedland's guidance is to estimate gross and ceded separately and derive net as the difference, not to develop a net triangle whose mix shifts with each treaty change.
+- Net experience is **less volatile** than gross — excess-of-loss reinsurance caps exactly the [[Large Loss|large losses]] that drive volatility — so net development patterns are frequently at or below gross ones, and a net tail factor larger than the gross one is generally not reasonable.
+- On the reserving side, the [[Reinsurance Recovery|ceded triangle]] develops differently from the gross one: cessions attach to the large, slow, litigated claims, so ceded patterns are longer-tailed and thinner. Friedland does not prescribe one route: some actuaries analyze gross and ceded and derive net, others analyze gross and net, depending on data availability, the reinsurance programme and preference. What she requires is that gross, ceded and net stay consistent — in the data, in the judgments and in the selections — with net IBNR generally no greater than gross IBNR.
 
 ![[Media/Figures/Net_of_Reinsurance.svg|340]]
 

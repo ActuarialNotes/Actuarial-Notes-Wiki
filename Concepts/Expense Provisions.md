@@ -2,14 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-12
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0fc31e198f2afa793625bf340e9f5deeba0eae7181bca75fa70073d68abf704b
+  content_hash: sha256:92699e7865a20f6cf42723cfec21b8052b00c0c68df9a6fa19882dac701e3103
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp. 125-139 (PDF pp. 137-151), Other Expenses and Profit: simple example, expense categories, All Variable Expense Method (Table 7.3), Premium-based Projection Method (Table 7.4), Trending Expenses, Reinsurance Costs, Permissible Loss Ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p. 9 (PDF p. 21), Underwriting Expense Ratio — written vs earned premium denominators, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp. 141-145 (PDF pp. 153-157), rate = (PP + E_F)/(1.0 - V - Q_T), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 pp.125-139 (PDF pp.137-151), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 8 pp.141-145 (PDF pp.153-157), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Expense Provisions.md
 ---
@@ -20,13 +21,13 @@ verification:
 >
 > $$V = \text{variable expense \%}, \quad Q_T = \text{target UW profit \%}$$
 
-- [[Variable Expenses]] move proportionally with premium — commissions (a percentage of premium), premium taxes, licences and fees. They are expressed as a percentage and enter the **denominator** of the rate formula, so they gross up the rate rather than being added to it.
-- [[Fixed Expenses]] do not vary with premium — most general expenses, policy issuance, and much of "other acquisition". They are converted to a **dollar amount per exposure** and added to the pure premium in the numerator. Treating a fixed cost as variable over-charges large policies and under-charges small ones.
-- The **all-variable expense method** loads every expense as a percentage of premium. It is simpler and still common, but it systematically distorts rates across policy sizes because it implies a $\$5{,}000$ policy costs ten times as much to issue as a $\$500$ policy.
-- **Premium-based ratios use different denominators.** Commissions and taxes are incurred when premium is *written*, so those ratios are calculated on [[Written Premium]]; general and other-acquisition expenses are incurred as coverage is provided, so those ratios are calculated on [[Earned Premium]]. Mixing the two mis-states the provision when the book is growing or shrinking.
-- The **permissible loss ratio** is the complement of the expense and profit provisions: $\text{PLR} = 1 - V - Q_T$ where fixed expenses are handled separately (see [[Permissible Loss Ratio]], [[Loss Ratio Method]]).
-- **Reinsurance costs** and the [[Catastrophe Loss|catastrophe]] provision sit alongside the expense provisions in the [[Overall Rate Level Indication]]; the net cost of reinsurance (ceded premium less expected ceded losses) is a real cost of writing the business even though it is not an internal expense.
-- Expense **trend** is often ignored on the assumption that fixed expenses inflate at roughly the same rate as premium, but where the two diverge materially the fixed provision should be trended independently (see [[Loss Trend]], [[Premium Trend]]).
+- [[Variable Expenses]] move proportionally with premium — premium taxes and commissions are Werner's examples. They are expressed as a percentage and enter the **denominator** of the rate formula, so they gross up the rate rather than being added to it.
+- [[Fixed Expenses]] are assumed the same for each risk regardless of premium — typically home-office overhead, and per-policy costs such as printing and data entry. They are converted to a **dollar amount per exposure** and added to the pure premium in the numerator. Treating a fixed cost as variable over-charges large policies and under-charges small ones.
+- The **all-variable expense method** loads every expense as a percentage of premium. It is still used for products whose expenses are dominated by variable expenses (many commercial lines), but where fixed expenses are material it distorts rates across policy sizes, because it implies a $\$5{,}000$ policy costs ten times as much to issue as a $\$500$ policy.
+- **Premium-based ratios use different denominators.** Expenses incurred at the onset of the policy — commissions, other acquisition, and taxes, licenses and fees — are calculated on [[Written Premium]]; general expenses, incurred throughout the policy, on [[Earned Premium]]. The choice matters little when volume is stable, but in a growing or shrinking book written premium moves away from earned, and the matching denominator keeps the ratio right.
+- The **variable permissible loss ratio** is what is left after the variable expense and profit provisions, $\text{VPLR} = 1 - V - Q_T$, and pays for loss, LAE and fixed expenses; the **total permissible loss ratio** also takes out the fixed expense ratio, $\text{PLR} = 1 - F - V - Q_T$, and pays for loss and LAE alone. The two are equal when all expenses are treated as variable (see [[Permissible Loss Ratio]], [[Loss Ratio Method]]).
+- **Reinsurance costs** can enter the [[Overall Rate Level Indication]] too. Proportional reinsurance may need no explicit treatment; for non-proportional reinsurance the projected losses are reduced for expected recoveries and the premium reduced by the amount ceded — or the net cost (cost of the reinsurance less expected recoveries) is included as an expense item.
+- Expense **trend**: a variable expense ratio needs none, since it changes with premium automatically. A fixed expense *ratio* (premium-based method) needs none if average fixed expense and average premium change at the same rate; a fixed expense *per exposure* on a base that does not inflate (car-years, house-years) or per policy is expected to change and is trended (see [[Loss Trend]], [[Premium Trend]]).
 
 ![[Media/Figures/Expense_Provisions.svg|340]]
 

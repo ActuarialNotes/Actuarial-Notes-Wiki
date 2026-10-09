@@ -1,13 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
   content_hash: sha256:24178d80eef86dcd0aad41dbea402ef97edc48c202d05aec856f334a5f92bbfc
   sources: []
-  open_findings: 0
-  open_critical: 0
+  open_findings: 1
+  open_critical: 1
   log: .verify/Concepts/MCT.md
 ---
 

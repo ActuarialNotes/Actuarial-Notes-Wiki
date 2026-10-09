@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7cad8539b97f85ddaebe4019df927fab268df4417653e4854fafd0592721f599
-  sources: []
-  open_findings: 1
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:fc7b3abdf29b8e2ea01f6a123b4540913040f470332512e921f8983c6e035704
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.16 pp.312-319 (PDF pp.324-331), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Occurrence Coverage.md
 ---
@@ -15,11 +16,11 @@ verification:
 
 > $$\text{Covered if } \; \text{effective date} \le \text{accident date} \le \text{expiration date}$$
 
-- The occurrence form gives the insured permanent, automatic "tail" protection: once a policy period has been covered, every loss occurring in it is covered forever, with no need for an extended reporting endorsement.
-- The insurer bears the mirror image of that promise. It must reserve for **pure [[IBNR]]** — claims it has no knowledge of — for as long as claims from expired policies can still emerge, which in liability lines is decades.
-- Occurrence business is aggregated on an [[Accident Year]] basis, because the accident date is the trigger and premium is earned over the occurrence period.
-- Pricing an occurrence policy requires projecting loss costs to the future *accident* period and then developing them to ultimate — two adjustments that compound the uncertainty relative to [[Claims Made Coverage|claims-made]], which is why occurrence rates for the same exposure are higher.
-- General liability, auto liability, workers compensation and most personal lines are written on an occurrence basis. Professional liability moved largely to claims-made precisely because occurrence-form IBNR proved unpriceable in the malpractice crises of the 1970s and 80s.
+- The occurrence form gives the insured automatic "tail" protection: a loss occurring in the policy period is covered regardless of when the claim is reported, with no need for an extended reporting endorsement.
+- The insurer bears the mirror image of that promise. It must reserve for **pure [[IBNR]]** — claims it has no knowledge of — for as long as claims from expired policies can still emerge, which for a product like medical malpractice can be many years.
+- Occurrence business is aggregated on an [[Accident Year]] basis, because the accident date is the trigger: in Werner's report-year-by-lag table an occurrence policy is a diagonal.
+- Pricing an occurrence policy means projecting claims that may not be reported, let alone settled, for many years, where a [[Claims Made Coverage|claims-made]] price needs only the claims reported in the coming policy period — so the pricing risk is greater. And as long as claim costs are increasing, the occurrence policy costs more than the claims-made one (Principle 1 of claims-made policies).
+- Claims-made coverage was introduced as the alternative for professional liability, including medical malpractice, after high economic and social inflation and rising claim frequency in the 1960s and 1970s left long-tailed occurrence products significantly underpriced for years before insurers recognized it.
 
 ![[Media/Figures/Occurrence_Coverage.svg|340]]
 
@@ -41,17 +42,16 @@ verification:
 > > [!answer]-
 > > **Occurrence.** The policy covers accidents in $2026$, whose average accident date is mid-$2026$ — two years of trend from the mid-$2024$ base:
 > >
-> > $$\$1{,}000 \times 1.06^{2} = \$1{,}124$$
+> > $$\$1{,}000 \times 1.06^{2} = \$1{,}123.60$$
 > >
 > > **Claims-made (mature).** The policy covers claims *reported* in $2026$, which arise from accidents in $2026$, $2025$, $2024$ and $2023$ in the proportions above. The average accident date is therefore earlier:
 > >
+> > Weight each accident year's cost by its share of the claims reported in $2026$:
+> >
 > > $$\begin{align*}
-> > \text{Avg lag} &= 0.4(0) + 0.3(1) + 0.2(2) + 0.1(3) \\
-> > &= 1.0 \text{ year} \\[4pt]
-> > \text{Cost} &= \$1{,}000 \times 1.06^{2 - 1.0} \\
-> > &= \$1{,}060
+> > \text{Cost} &= \$1{,}000 \times \left[0.4(1.06^{2}) + 0.3(1.06^{1}) + 0.2(1.06^{0}) + 0.1(1.06^{-1})\right] \\
+> > &= \$449.44 + \$318.00 + \$200.00 + \$94.34 \\
+> > &= \$1{,}061.78
 > > \end{align*}$$
 > >
-> > The mature claims-made policy is about $6\%$ cheaper — one year of trend — because its claims come from older, cheaper accident years. In a first-year claims-made policy the gap is far larger, since only accidents on or after the retroactive date can attach.
-> >
-> > The occurrence form's extra cost is the price of the permanent tail, and it is the reason claims-made rates rise year by year as the retroactive period matures.
+> > The mature claims-made policy is about $5.5\%$ cheaper ($1{,}061.78 / 1{,}123.60 - 1$) — close to one year of trend, since the average reporting lag is $0.4(0) + 0.3(1) + 0.2(2) + 0.1(3) = 1.0$ year — because its claims come from older, cheaper accident years. (Putting the average lag in the exponent, $\$1{,}000 \times 1.06^{1.0} = \$1{,}060$, slightly understates the cost.) In a first-year claims-made policy the gap is far larger, since only accidents on or after the retroactive date can attach — which is why claims-made rates step up year by year until the policy is mature.

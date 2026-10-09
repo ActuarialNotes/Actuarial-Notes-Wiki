@@ -1,14 +1,17 @@
 ---
 verification:
-  status: disputed
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4c587a5c30db9c353673a48295a9fc733bcc1fce145ee8180cf6facaf3ff9024
+  content_hash: sha256:d0cc0d81642c0b4753f5492f4d6f2d83fd989a71ea69a7223e7d21a215816d84
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14) and Ch. 5 pp.70-71 (PDF pp.82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
-  open_critical: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.2, 8, 10 (PDF pp.14, 20, 22), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.57-58 (PDF pp.69-70), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp.66, 70-71 (PDF pp.78, 82-83), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 p.44 (PDF p.56); Ch. 13 pp.257, 259 (PDF pp.269, 271); Ch. 14 p.284 (PDF p.296), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/In-Force.md
 ---
 
@@ -16,13 +19,14 @@ verification:
 
 > $$\text{In-force at date } t = \sum_{\text{policies}} \mathbf{1}\{\text{effective} \le t < \text{expiration}\}$$
 
-> $$\text{In-force premium} = \sum \text{annualized premium of policies in force}$$
+> $$\text{In-force premium} = \sum \text{full-term premium of policies in force}$$
 
 - Written, earned and in-force answer three different questions. **Written** counts what was sold during the period, **earned** counts the coverage actually provided during the period, and **in-force** counts what is on the books right now — see [[Written Premium]] and [[Earned Premium]].
-- In-force premium is quoted on an **annualized** basis, so a six-month policy carrying $\$400$ of premium counts $\$800$ of in-force premium. That makes in-force comparable across policy terms but means it never ties to any accounting period.
-- The in-force snapshot is the right exposure measure whenever the question is *"what am I exposed to today"*: catastrophe accumulation and PML work, reinsurance treaty placement, capacity and concentration monitoring by territory or peril.
-- Comparing successive in-force snapshots isolates growth from rate: the change in policy count is pure volume, and the change in average in-force premium is rate plus [[Mix of Business|mix]].
-- In-force counts also feed retention and renewal analysis (policies in force at renewal $\div$ policies eligible), which drives [[Lifetime Value|customer lifetime value]] work.
+- In-force premium is the **full-term** premium of each policy in effect at the date — the policy's own term, not an annualized one — so a six-month policy carrying $\$400$ of premium contributes $\$400$. Books written on different terms are therefore not directly comparable: of two insurers writing the same written premium, one on annual and one on semi-annual policies, the semi-annual writer's in-force premium is half the other's. After a mid-term change, in-force premium is the full-term premium applicable on the date.
+- In-force exposures count the insured units exposed to loss at the date — a snapshot with no regard to the duration of the exposure. Companies define the insured unit differently: items such as cars (a three-car policy is three in-force exposures), policies, or written exposures.
+- As the best estimate of the company's [[Mix of Business|mix of business]] at a date, the latest in-force premium is used to measure the impact of a rate change on the existing portfolio, and the latest in-force distribution is normally the estimate of the distribution expected while new rates are in effect. Where earned premium by territory is unavailable, in-force premium by territory may stand in for it.
+- Changes in average premium, once adjusted for rate changes, show changes in the mix of business written; comparing successive in-force snapshots separates the change in volume (policy count) from the change in average premium.
+- Renewal analysis works on the in-force book too: the **retention ratio** is policies renewed $\div$ potential renewal policies, and rate scenarios for the renewal portfolio are tested on the in-force distribution — see also [[Lifetime Value|lifetime value analysis]], which allows for the fact that not all insureds renew.
 
 ![[Media/Figures/In-Force.svg|340]]
 
@@ -48,11 +52,11 @@ verification:
 > >
 > > $$\text{In-force count} = 3$$
 > >
-> > Annualizing D's six-month premium ($\$500 \times 2 = \$1{,}000$):
+> > Each policy in force contributes its full-term premium — D its six-month $\$500$, not an annualized $\$1{,}000$:
 > >
-> > $$\text{In-force premium} = 1{,}200 + 900 + 1{,}000 = \$3{,}100$$
+> > $$\text{In-force premium} = 1{,}200 + 900 + 500 = \$2{,}600$$
 > >
-> > Note that C is already *written* premium in CY 2024 even though it is not yet in force, and D is earning premium right now — three different answers from the same four policies.
+> > Note that C will count in CY 2024 *written* premium (its effective date is in 2024) even though it is not in force on $6/30$, and D is earning premium right now — three different answers from the same four policies.
 
 > [!example]- Separating Growth from Rate {Example}
 > An insurer reports the following homeowners in-force figures:
@@ -77,4 +81,4 @@ verification:
 > >
 > > Check: $1.050 \times 1.077 = 1.131$, the $+13.1\%$ total.
 > >
-> > The $+7.7\%$ is **not** all rate. It is rate change plus [[Premium Trend|premium trend]] from drift in amounts of insurance and mix. Attributing all of it to rate — and therefore assuming the book is $7.7\%$ better priced — is the error the two-step premium trend procedure exists to prevent.
+> > The $+7.7\%$ is **not** all rate. It is rate change plus [[Premium Trend|premium trend]] from shifts in mix such as amounts of insurance. Only once the premium is restated at current rate level does the change in average premium show the change in mix; attributing all of it to rate would assume the book is $7.7\%$ better priced than it is.

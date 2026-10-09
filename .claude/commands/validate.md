@@ -35,8 +35,15 @@ Before delegating, orient yourself:
 
 ```bash
 python3 scripts/verify_targets.py --limit 10      # what is most worth checking
+python3 scripts/verify_targets.py --by-source     # the same, as source packets
 RUN_ID=$(python3 scripts/verify_record.py run-id) # one id for the whole batch
 ```
+
+A **packet** is one source and the files it verifies: a past paper (give the paper,
+e.g. `Exam 5 Fall 2019`) or a reading (give its name). Build it once with
+`verify_paper.py build` or `verify_route.py --packet` before delegating, and hand the
+agent the packet rather than a file list. See `docs/verification-plan.md` §4 and
+"Working a packet" in the agent definition.
 
 ## The rules that are not negotiable
 

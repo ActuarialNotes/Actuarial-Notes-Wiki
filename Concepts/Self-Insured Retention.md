@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-13
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9a19169f07d2417c49dc1df0751017be49a6db48c4e43485d63de69f3bd58e2e
+  content_hash: sha256:be017e2fc352116dac8987d81f6fda83e0705949d44163061a8bb64771eb7699
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 printed p.199 (PDF p.211) and Ch.15 large-deductible example printed p.304 (PDF p.316), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 printed p.13 (PDF p.19), Ch.3 printed pp.35 and 41 (PDF pp.41, 47), Ch.5 printed p.73 (PDF p.79), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.303-304 (PDF pp.315-316); Ch.11 p.197 (PDF p.209), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.13 (PDF p.19); Ch.3 p.35 (PDF p.41); Ch.5 p.73 (PDF p.79); Ch.7 pp.84, 96 (PDF pp.90, 102); Ch.13 p.268 (PDF p.274); Ch.15 p.332 (PDF p.338); App. A p.426 (PDF p.432), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Self-Insured Retention.md
 ---
@@ -19,12 +19,11 @@ verification:
 
 > $$\text{Excess Loss} = \sum_i \max(X_i - R, 0)$$
 
-- **SIR vs. deductible.** Under an SIR the insured handles and pays claims in the retained layer directly, and the insurer's limit sits *above* the retention. Under a [[Deductible|deductible]] the insurer typically pays the claim ground-up and bills the insured back, and the deductible erodes the policy limit. The economics are similar; the cash flow, claims-handling duty, and [[Allocated Loss Adjustment Expense|ALAE]] treatment are not.
-- **Reserving for a retained layer is harder than reserving gross.** Retained losses are censored at $R$, so a [[Development Triangle]] of capped losses develops differently from a gross triangle — capping removes the large, slow-developing claims that drive the tail. Development factors must be built on data capped at the *same* retention, not borrowed from gross experience (see the loss-limitation issues in [[Large Loss]]).
-- **Data volume is the binding constraint.** A single self-insured entity rarely has [[Credibility|credible]] data at its own retention, so the actuary leans on the [[Complement of Credibility|complement]] — industry or [[External Information in Reserving|external benchmark]] development patterns adjusted to the entity's retention, exposure mix, and jurisdiction.
-- **ALAE treatment must be pinned down.** Whether ALAE erodes the retention, sits inside it, or is shared pro-rata materially changes both the retained cost and the triangle being developed. The same question governs the excess carrier's exposure.
-- **Collateral and accounting.** Regulators and excess carriers usually require collateral (letters of credit, trusts) sized off the actuarial estimate of retained unpaid claims, so the estimate has direct cash consequences for the entity. Estimates are often required on both an undiscounted and a discounted basis.
-- **Large deductible programs** are the insurance-market analogue: a policy written with a deductible of $\$250{,}000$ or more, where the insurer fronts the claims and the insured reimburses. The insurer carries credit risk on the reimbursement and must reserve gross while tracking the [[Deductible Recovery|deductible recoveries]] as an offsetting asset.
+- **SIR vs. deductible.** Under an SIR the entity itself bears the retained layer and excess coverage attaches above it — Friedland's self-insurance pool of municipalities retains $\$500{,}000$ per occurrence beneath its excess of loss cover. Under a large [[Deductible|deductible]] policy the insurer may instead pay the whole claim and seek reimbursement below the deductible from the insured, and either party may handle the claims inside the deductible. The economics are similar; the cash flow and the claims-handling duty are not.
+- **Reserving for a retained layer.** Retained losses are censored at $R$, and larger claims often develop differently from smaller ones, so a [[Development Triangle]] of capped losses develops differently from a gross triangle; retentions also distort severities. Friedland's self-insurance pool projects ultimate claims from reported and paid claims limited to its per-occurrence retention, and the development technique assumes stable retention limits over the experience period — so factors must be built on data capped at the *same* retention (see the loss-limitation issues in [[Large Loss]]).
+- **Data volume is often the binding constraint.** Where an entity's own development data is not sufficiently [[Credibility|credible]], actuaries typically rely on [[External Information in Reserving|benchmark]] patterns from comparable lines or industry data — Friedland's self-insurer examples use industry reporting and payment patterns. Self-insurers collect no premium in the insurer's sense, so exposure bases such as payroll, vehicles or property values stand in for it.
+- **ALAE treatment must be pinned down.** A deductible may apply to losses alone or to losses plus [[Allocated Loss Adjustment Expense|ALAE]], and the data used must be consistent with the policy's treatment of ALAE.
+- **Large deductible programs** are the insurance-market analogue: a deductible set high enough that the insured bears significant risk — Werner's examples are a $\$1$ million per-occurrence workers compensation deductible and a $\$500{,}000$ commercial general liability one. Where the insurer pays the claims and the insured reimburses, the premium carries the cost of processing the [[Deductible Recovery|deductible recoveries]] and a provision for credit risk, since collateral rarely covers it fully; and Friedland's reminder applies on the reserving side, that recoveries such as deductibles must be considered in evaluating the insurer's total reserve position.
 
 ![[Media/Figures/Self-Insured_Retention.svg|340]]
 

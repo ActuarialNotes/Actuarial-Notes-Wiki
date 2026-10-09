@@ -7,14 +7,14 @@ date: "2009"
 Type: "Textbook"
 ISBN: "978-0-521-76465-0"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:7eb8de720240107bdaeba6a52171cfd3ae59b1deb60f6d2dd44760090d4f6387
   sources:
     - "Tse, Nonlife Actuarial Models: Theory, Methods and Evaluation (Cambridge University Press, 2009), publisher eBook preview: title page (PDF p.5), copyright page (PDF p.6: (c) Y.-K. Tse 2009, hardback ISBN-13 978-0-521-76465-0), full printed Contents pp. vii-xii (PDF pp.9-14, text layer), Preface (PDF pp.15-16), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
-    - "Cambridge Core book record: series International Series on Actuarial Science, ISBN 9780521764650, print publication date 17 September 2009, fetched 2026-10-05, sha256:87f03cc238550bce65ef555ceb2af5e55a37f26a1d1adde3bdf4ef99a1a8c8d0 — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271"
+    - "Cambridge Core book record: series International Series on Actuarial Science, ISBN 9780521764650, print publication date 17 September 2009, fetched 2026-10-05, sha256:94ec7897146e2eaed8d290600b2e38f97b18e4bc1928865decc5076e195509bc — https://www.cambridge.org/core/books/nonlife-actuarial-models/41EF4E4BB9E3A31F63DDCC18C245C271"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026, Complete Text References p.4 (Tse: Chapters 6.1-6.3, 7.1-7.4, 8.1-8.2, and 9.1-9.2; A1-A2) and Domain A readings p.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0

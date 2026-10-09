@@ -96,7 +96,9 @@ decide what is true.
 
 `docs/verification-plan.md` is the plan for the unverified remainder of the vault: work
 packets keyed by source document (one past paper, or one reading plus its concepts and its
-resource page), the tooling to build before the big waves, and the order to run them in.
+resource page), the order to run them in, and the packet tooling (§4) that builds them —
+`verify_sources.py`, `verify_paper.py`, `verify_route.py`, `verify_record.py batch` and
+`verify_targets.py --by-source`.
 
 ## First run — field notes
 

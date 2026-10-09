@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:c6be55adce6c175b43f0447fd2084e847e1e92bd676bffbd72160bd6fa3527cc
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Solvency.md
 ---

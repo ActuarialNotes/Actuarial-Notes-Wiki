@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:27c469c1c187190abeebc3c790b74d6a9e1c56cd014c1d200cd609a56817a62b
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Supervisory Target Capital Ratio.md
 ---

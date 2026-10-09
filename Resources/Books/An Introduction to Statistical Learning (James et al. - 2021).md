@@ -9,17 +9,19 @@ Type: "Textbook"
 ISBN: "978-1-0716-1417-4"
 Available from: "[statlearning.com](https://www.statlearning.com/)"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-04
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:90a9f2ff2a1b7f64acb7baccc79c8bb4ac960aad49e35cd5ed86060a49a05f7e
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer, first printing Aug 4 2021) — title page, Preface pp.vii-viii, printed Contents pp.ix-xv and the PDF bookmark outline, CAS-hosted copy, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), pp.5-6 (Domain C readings; James citation, chapter/section scope, C1-C9, OP), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), pp.3-4 (Domain C readings; James scope, C1-C9, OP), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-    - "Crossref record for doi:10.1007/978-1-0716-1418-1 (title, subtitle with Applications in R, authors, Springer US, Springer Texts in Statistics, print ISBN 9781071614174), sha256:5782b3e6bc217981cd73db1f9a03fb1ed6dac5dbbb0663e509b592fb876a4a0a — https://api.crossref.org/works/10.1007/978-1-0716-1418-1"
-    - "An Introduction to Statistical Learning, authors' site (offers the 2nd-edition PDF free: Download the PDFs here — 2nd Edition of ISL with R), html sha256:2312bb72cb8d25954719aca8f9a1614dacde351d444a6f1fae5335e9a7ec8b18 — https://www.statlearning.com/"
+    - "Crossref record for doi:10.1007/978-1-0716-1418-1 (title, subtitle with Applications in R, authors, Springer US, Springer Texts in Statistics, print ISBN 9781071614174), sha256:38a0598c497347c7a8fa730b48e7f2ee6fea0a6ea52c52d3ce70583d2c81c316 — https://api.crossref.org/works/10.1007/978-1-0716-1418-1"
+    - "An Introduction to Statistical Learning, authors' site (offers the 2nd-edition PDF free: Download the PDFs here — 2nd Edition of ISL with R), html, sha256:26052e3e80e700fce1b0781d69d01cd2fc28ca80b8f4f11310b1027f566f9dad — https://www.statlearning.com/"
+    - "SOA Exam PA syllabus, October 2026, Readings, the James et al. table (First and Second Edition rows), sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
+    - "SOA Exam SRM syllabus, January 2027, Readings, James et al. Second Edition, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Introduction to Statistical Learning (James et al. - 2021).md

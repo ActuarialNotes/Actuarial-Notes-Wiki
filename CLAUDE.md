@@ -182,6 +182,13 @@ before touching that area**:
   how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
   compounding mechanism), and the line between what it may auto-fix and what it must only
   open a finding about.
+- `docs/verification-plan.md` — **the plan for fact checking the rest of the vault**, batched
+  by the source document each file is checked against rather than by folder: past papers as
+  packets (keyed by paper, so Exam 9's moved questions ride with their Exam 7/8 paper),
+  readings as packets (concept → syllabus task → reading → pages, with the reading's own
+  resource page in the same load), the near-mechanical syllabus pages, the Wave 0 tooling
+  (source cache, OCR'd booklets, blind-stem diffs, batch recording) and the maintainer
+  decisions that block parts of it. Read before planning or launching a VERIFY sweep.
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
@@ -860,7 +867,7 @@ Other important `lib/` modules:
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the Dashboard's **Exam
-  readiness** card (its first card: the `NN%` KPI, the band verdict and the primary actions,
+  readiness** card (led by the calendar bare above it, then the exam logo with `NN% Ready` and today's concept count, then the primary actions bare under it,
   with **Today's Study Plan** below it and then the ring and the criterion bar in the
   **Study Guide** card), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the

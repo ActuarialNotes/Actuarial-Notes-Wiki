@@ -19,7 +19,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **Exam readiness** card (the `NN%` KPI beside the band verdict, over the primary actions) | `components/ReadinessCard.tsx` |
+| Dashboard **Exam readiness** card (the schedule above it, the logo and `NN% Ready`, the primary actions under it) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
@@ -80,8 +80,12 @@ one sentence under the band label, derived from **this** learner's records. It r
 **Null is a normal outcome, not a fallback.** There is no insight to be had from an empty
 record, so an exam nobody has started gets no line at all; the empty ring and the *Not
 started* label are the whole story. A record where no rule below finds anything gets no line
-either. The card renders the paragraph only when the insight is non-null — nothing generic
-stands in for it.
+either. Nothing generic stands in for it.
+
+**No surface renders it today.** The Dashboard card used to print it under the band label;
+that card is now the logo, `NN% Ready` and today's concept count, and nothing else
+(see below). `assessment.insight` and `assessment.band` are still computed and tested, so
+a surface that wants either again just reads them.
 
 Three rules govern what may be said:
 
@@ -118,14 +122,19 @@ the right text, and one that it stays quiet when it should.
 mechanism as `studyScheduleSlot`), so the cards' state and logic stay with the study plan
 while they render at the top of the page:
 
-1. **Exam readiness** — the exam's **logo** beside the **title**, the **band verdict** with
-   the insight line under it, the score itself as a KPI to their right, then the **exam
-   dates** row and the **primary actions**. The logo says which exam the card is scoped to
-   without re-printing its name, and carries that exam's accent (`lib/examColors.ts`) so the
-   card sits on the same ladder as every other surface that shows one.
+1. **Exam readiness** — the exam's **logo** (the `lg` tile) beside the score as
+   **`NN% Ready`** (with the movement arrow when it moved today), then **how many concepts
+   today's plan still asks for** ("6 concepts to study today" — Pro, with a plan only). No
+   title, band verdict or insight line: the number is the card's one statement. The logo says which exam the
+   card is scoped to without re-printing its name, and carries that exam's accent
+   (`lib/examColors.ts`) so the card sits on the same ladder as every other surface that
+   shows one. Above the card, leading the dashboard, is the **calendar** — the exam date and the days
+   left, set large, then the schedule strip — as a full-width section
+   with no card background or padding; under the card, bare on the page, come the
+   **primary actions**.
 
    The dates block is the deadline the score is racing — a readiness percentage means
-   nothing without one, so the card carries it. It prints the chosen exam date and how many
+   nothing without one, so the section carries it. It prints the chosen exam date and how many
    days that leaves, and falls back to *Set your exam date* when there is none; under either,
    the **next published sitting window** for this exam (`data/examSittings.ts`) appears only
    when it adds something — no date chosen yet, or a date that falls outside every known
@@ -145,8 +154,9 @@ while they render at the top of the page:
    about it one object rather than two cards saying the same thing at opposite ends of the
    page. It keeps everything the card did: tapping a day opens that day's panel below the
    block (its sessions, gems, level-ups and what the plan schedules for it), the
-   *schedule-forming* sweep plays out on it when a plan is locked in, and the **Target ready**
-   date row sits under the strip.
+   *schedule-forming* sweep plays out on it when a plan is locked in. The **target-ready**
+   date has no row of its own: its day is the amber cell on the strip, and it is set in the
+   Study Plan modal.
 2. **Today's Study Plan** — what to do about that score today. It follows the number rather
    than the ring: a reader who has just read *Not started* is looking for the next step, not
    for a breakdown of how the number was reached.
@@ -155,22 +165,19 @@ while they render at the top of the page:
 
 The actions (*Read concepts* / *Fix mistakes* / *Start Quiz*) are the Dashboard's: it owns
 their triggers and the pinned-header copies, and hands them to `ReadinessCard` as the
-`actions` prop, which renders them as the readiness card's last row. The score and the two
-ways to move it are one surface, not a card with a detached button row under it.
+`actions` prop, which renders them straight under the readiness card, bare on the page.
 
-It is one call — `computeExamReadiness` — read three ways:
+It is one call — `computeExamReadiness` — read two ways on the Dashboard:
 
 - **The ring** (`StudyGuideRadial`, the surface the docs elsewhere call the Study Guide
   radial): one arc per syllabus concept, each section sized by its exam weight, each arc
   filled by that concept's mastery state on the green ladder (`lib/masteryFill.ts`). Its arcs come from `lib/readinessRing.ts`, so geometry lives in one
   place. The number in the middle is `overallPct`, printed while nothing is hovered or
   selected and replaced by the hovered concept's readout while one is. It carries no caption:
-  the criterion beside it and the *Exam readiness* KPI two cards up already name what it
+  the criterion beside it and the *NN% Ready* line two cards up already name what it
   measures (`docs/visual-noise-review.md`, test 1). It is printed here as well as in the KPI
   because by the time a reader has scrolled to the ring the KPI is off screen — a ring that
   measures something unnamed is worse than the number said twice.
-- **The band**, as the headline verdict at the top of the card under its title, with the
-  insight line under it when there is one (see above) and nothing under it when there is not.
 - **The criteria**, as one bar each — today the one *Syllabus coverage* bar. A bar's
   *thickness* is the weight that criterion carries in the score (`4px + 6px × weight`), so
   nothing has to print "60% of score" — the worked example in

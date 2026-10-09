@@ -2,7 +2,8 @@
 
 The concept pages the study guides link to that don't exist yet: found, ranked, and cut into
 batches to write. **Status: Phase A (batches 1–7) done — 44 pages written, 7 targets aliased to
-existing pages, study guides re-rendered. Next: Phase B, awaiting go-ahead.**
+existing pages, study guides re-rendered. Phase B reviewed and planned (§8) with one example
+page written; awaiting your go-ahead.**
 
 - Rerun the analysis: `python3 scripts/find_concept_gaps.py` (summary) ·
   `--update-plan` (refresh the generated half of this file) · `--json out.json` (everything) ·
@@ -161,6 +162,7 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
 | 2026-10-07 | aliases | — | `b11d7db` | 30 aliases + the `governance` namesake in `scripts/concept_aliases.json` |
 | 2026-10-07 | re-render | — | `1c25ccc` | 21 development guides; text identical, 72 link targets moved |
 | 2026-10-07 | fix | 6 | `96b96f4` | Money written inside the math; 1,980 formulas render in KaTeX |
+| 2026-10-09 | B review | 1 | — | Phase B triaged (§8): 80 pages, 147 aliases, 13 skips; example `Thiele's Differential Equation` |
 
 ## 7. Phase A record (2026-10-07)
 
@@ -211,6 +213,270 @@ covered loss* (not Maximum Likelihood Estimation) and `[[Coefficient]]` means *m
 concept an existing page names only in its opening parenthesis (Insurer "(insurance company …)").
 
 
+## 8. Phase B plan (proposed 2026-10-09 — awaiting your go-ahead)
+
+Phase B is the 21 pinned batches 8–10, 13, 19–26, 28, 29, 33 and 44–49: 211 targets, almost all
+on FAM, ALTAM, ASTAM, SRM, PA and ATPA. I read each one in its objective sentence and checked it
+against the 991 existing concept pages. Only 80 of them need a page of their own:
+
+| Outcome | Targets | Pages |
+|---|---|---|
+| A new page under the target's own name | 50 | 50 new |
+| A new page under a better title; the target becomes its alias (D2) | 76 | 30 new |
+| An existing page already covers it; alias only | 71 | — |
+| Not a concept; skip (D3) | 13 | — |
+| Already done in Phase A (`Delta Hedge`) | 1 | — |
+| **Total** | **211** | **80 new** |
+
+**Example page for review:** `Concepts/Thiele's Differential Equation.md` (group G4), written to §4's template.
+It has the single-life and multiple state forms, a term-insurance Euler example and a
+disability-income example. Its numbers were recomputed in Python, and all 108 formulas render in KaTeX.
+It links three G4 pages that don't exist yet (`Policy Value`, `Multiple State Model`, `Transition Intensity`).
+
+### 8.1 Judgment calls to confirm
+
+1. **`Policy Value` gets its own page** (FAM/ALTAM: prospective and retrospective values, the recursion, gross
+   vs net). It does not alias to `Reserve`, which stays the cross-practice hub (P&C claim reserves, IFRS 17,
+   pensions). FAM's "gross premium, net premium and modified net premium policy values" is cut into three links.
+   `Gross Premium` and `Net Premium` alias to `Policy Value`, and `Modified Net Premium Policy Value` (FPT) is its own page.
+2. **Guarantees: a hub plus four pages.** `Equity-Linked Insurance` takes the topic-level targets (*options
+   embedded*, *equity-linked guarantees / cash flows*). GMDB, GMMB (= GMAB), GMIB and GMWB each get a page,
+   because ALTAM lists them separately. `Payoff` (Phase A) keeps the payoff algebra.
+3. **Folded into pages that already cover them**, to avoid near-duplicates:
+   - ridge and lasso → `Regularization`
+   - k-fold, LOOCV and resampling → `Cross-Validation`
+   - FAS, CAE and CARE → `Defined Benefit Plan`
+   - UL account value → `Universal Life Insurance`
+   - long-term health insurance → `Health Insurance`
+   - joint-life targets → `Joint Life`
+   - BIC and SBC → `BIC`
+   - imputation → `Missing Data`
+4. **Two pages rest on sources I can't read.** `Table Importability` (ATPA) comes from the SOA's paywalled
+   e-learning modules. `Data Analytics` and `External Data` (DISC-DA) come from The Institutes' course text.
+   I'd write them short and flag them for review, or drop them. Your call.
+5. **Skip 13 targets that name no concept** (list below). Each is part of a sentence the noun-phrase linker
+   cut out, such as `Effective Manner While` or `Single Non-Dividend Paying Asset`. I'd add them to a short
+   hand-reviewed noise set in `scripts/find_concept_gaps.py`, so `--check` can pass for Phase B.
+   `Jurisdiction` is on the script's terms-of-art list, but on CP-351 and ILA-101 it only means "various
+   jurisdictions".
+6. **Re-render 14 generated guides** (D2) after the alias table grows. These are ALTAM, ASTAM, FAM, ATPA, SRM and PA,
+   plus one or two links each on CP-312, CP-321, GI-201, GI-302, INV-101, INV-201, RET-101 and RET-301.
+   Link targets change; the text does not. The four DISC targets are new pages named exactly as the
+   hand-written DISC guides link them, so no DISC guide is edited.
+7. **Optional extras:** `Value at Risk` and `Tail Value at Risk` (D4 suggested pulling them into Phase B; today
+   `Tail Risk` and `Desirable Property` alias to `Risk Measure`, an Exam 9 page), and `Actual Cash Value`
+   (batch 51), which `Replacement Cost` will define anyway.
+
+### 8.2 How it would run
+
+- Nine writing groups, one commit each, grouped by topic rather than by pinned batch so each group shares one notation:
+  AMLCR for G3–G6, Loss Models for G1–G2, McDonald/AMLCR for G7, ISLR/Frees for G8.
+  Order: G3, G1 and G2 first, since later groups link them; then G4, G6 and G7; then G5, G8 and G9.
+- Every page follows §4: worked numbers recomputed in Python, `verify_check.py --sync` (status `unverified`),
+  and a frontmatter `aliases:` list where a target is folded in. Existing pages get no frontmatter edit, so no
+  verified page goes stale; their aliases go in `scripts/concept_aliases.json` only.
+- Then one commit for the alias table and noise set, and one for the guide re-render.
+- Each commit is gated by the template check, a KaTeX render of every formula, `validate_links.py --studiable`,
+  `syllabus_lint.py`, `verify_check.py`, and `npm test` + `npm run build` in `quiz/`. The finish line is
+  `find_concept_gaps.py --check <the 211 targets>` exiting 0.
+- Each group's commit lists its pages and any facts stated from memory, for your review (D5).
+
+### 8.3 New pages by writing group (80)
+
+A name in *italics* after a page is a target that becomes its alias.
+
+**G1 — Severity and aggregate models** (ASTAM, FAM) · 10 pages
+
+- `Severity Discretization` ← *Discretized Version*, *Local Moment Matching*, *Discrete Severity Distribution*
+- `Panjer Recursion` ← *Recursive Formulas*
+- `Frequency Distribution`
+- `Creating New Distributions` ← *New Distribution*
+- `Spliced Distribution` ← *Splicing*
+- `Scale and Shape Parameters` ← *Shape Parameter*
+- `Mean Excess Loss` ← *Mean Excess*
+- `Generalized Extreme Value Distribution` ← *Generalized Extreme*, *Extreme Value Distribution*
+- `Generalized Pareto Distribution`
+- `Individual Risk Model` ← *Individual Risk*
+
+**G2 — Coverage, pricing and estimation** (ASTAM, FAM, DISC-IA, DISC-RM) · 8 pages
+
+- `Policy Limit`
+- `Stop-Loss Reinsurance` ← *Stop Loss Reinsurance*
+- `Balancing Back`
+- `Bayesian Estimation`
+- `Approximate Confidence Interval` ← *Non-Normal Confidence Interval*
+- `Grouped Data` ← *Individual Data*
+- `Insurance to Value`
+- `Replacement Cost`
+
+**G3 — Survival models and long-term coverages** (FAM) · 9 pages
+
+- `Future Lifetime Random Variable` ← *Future Lifetime*, *Complete Future Lifetime Random Variable*, *Future Lifetime Distribution*, *Mortality Probability*, *Individual Live*, *Single Life*, *Single Live*
+- `Parametric Survival Model` ← *Parametric Survival*
+- `Extra Risk` ← *Modelling Extra Risk*, *Age Rating*, *Constant Addition*, *Constant Multiple*
+- `Long-Term Insurance Coverage` ← *Long-Term Insurance Benefit*
+- `Term Life Insurance` ← *Term Life*
+- `Pure Endowment` ← *Endowment*
+- `Endowment Insurance`
+- `Future Loss Random Variable`
+- `Portfolio Percentile Principle`
+
+**G4 — Policy values and multiple state models** (FAM, ALTAM) · 10 pages
+
+- `Policy Value` ← *Policy Value Calculation Process*, *Gross Premium*, *Net Premium*
+- `Modified Net Premium Policy Value`
+- `Thiele's Differential Equation` — ✓ written (the example)
+- `Woolhouse's Formula` ← *Three-Term Woolhouse Approximation*
+- `Multiple State Model` ← *Markov Multiple*, *Continuous Time Markov*, *Continuous Time Markov Multiple*, *State-Dependent Probability*, *Mortality-morbidity*
+- `State-Dependent Insurance` ← *State-Dependent Life Insurance*, *State-Dependent Cash Flow*, *State-Contingent Life*
+- `Transition Intensity` ← *Piecewise Constant Transition Intensity*
+- `Kolmogorov's Forward Equation`
+- `Multiple Decrement Model` ← *Multiple Decrement*, *Deconstruct Multiple Decrement Table*, *Single Decrement*
+- `Continuing Care Retirement Community`
+
+**G5 — Profit testing and universal life** (ALTAM, ILA-101) · 8 pages
+
+- `Profit Testing` ← *Deterministic Profit Testing*
+- `Profit Vector` ← *Emerging Surplus*
+- `Profit Signature`
+- `Profit Margin`
+- `Internal Rate of Return` ← *Internal Rate*
+- `Discounted Payback Period`
+- `No-Lapse Guarantee`
+- `Lapse`
+
+**G6 — Pensions** (ALTAM) · 6 pages
+
+- `Accrued Benefit` ← *Early Exit*
+- `Projected Unit Credit Method` ← *Projected Unit Credit*
+- `Traditional Unit Credit Method` ← *Traditional Unit Credit*
+- `Replacement Ratio` ← *Target Replacement*
+- `Salary Scale`
+- `Service Table` ← *Age Retirement*
+
+**G7 — Options and equity-linked insurance** (FAM, ALTAM, INV-101, CP-312, CP-351) · 10 pages
+
+- `European Option` ← *Simple European-style Derivative*, *Simple Option*
+- `Binomial Option Pricing Model` ← *Binomial Option Pricing*
+- `Replicating Portfolio`
+- `Equity-Linked Insurance` ← *Options Embedded*, *Equity-Linked Life Insurance Guarantee*, *Equity-Linked Life Insurance Cash Flow*
+- `Guaranteed Minimum Death Benefit`
+- `Guaranteed Minimum Maturity Benefit` ← *Guaranteed Minimum Accumulation-maturity Benefit*
+- `Guaranteed Minimum Income Benefit`
+- `Guaranteed Minimum Withdrawal Benefit`
+- `Portfolio Rebalancing` ← *Rebalancing*
+- `Market Risk`
+
+**G8 — Statistical learning and data exploration** (SRM, PA) · 7 pages
+
+- `Overfitting`
+- `Regression Tree`
+- `ARCH Model` ← *Autoregressive Conditionally Heteroskedastic*
+- `Train-Test Split` ← *Train-test-validate Set*, *Training Data*
+- `Feature Engineering` ← *Existing Data*
+- `Data Design` ← *Effective Data*, *Granularity*
+- `Bivariate Data Exploration`
+
+**G9 — Explainability and working with data** (ATPA, DISC-DA) · 12 pages
+
+- `Explainability`
+- `Interpretability` ← *Decomposability*, *Algorithmic Transparency*, *Post-Hoc Interpretability*
+- `Shapley Value`
+- `Partial Dependence Plot` ← *Dependence Plot*, *Individual Conditional Expectation Plot*
+- `Stacking`
+- `Proxy Discrimination`
+- `Table Importability`
+- `Data Pipeline` ← *Preparing Data*, *Data Set*, *File Structure*
+- `Data Warehouse` ← *Data Lake*
+- `Relational Database`
+- `Data Analytics`
+- `External Data`
+
+### 8.4 Targets an existing page already covers (71)
+
+<details><summary>Alias table entries — target → existing page</summary>
+
+| Target | Existing page |
+|---|---|
+| `Continuous Distribution` | Continuous Random Variable |
+| `Claims Distribution` | Aggregate Loss Model |
+| `Bayesian Information Criterion` | BIC |
+| `Schwarz Bayesian Criterion` | BIC |
+| `Loss Reinsurance` | Excess of Loss |
+| `Bühlmann` | Bühlmann Credibility |
+| `Greatest Accuracy` | Bühlmann Credibility |
+| `Empirical Bayesian Estimation` | Empirical Bayes Credibility |
+| `Projected Loss` | Loss Trend |
+| `Outstanding Claims Reserve` | Unpaid Claims |
+| `Overdispersed Poisson` | Over-Dispersed Poisson Model |
+| `Risk Classification Differential` | Classification Ratemaking |
+| `Tail Risk` | Risk Measure |
+| `Desirable Property` | Risk Measure |
+| `Censored Data` | Censoring |
+| `Adjusting Premium` | On-Leveling |
+| `Contingencies Loading` | Profit and Contingency Provision |
+| `Ratemaking Data` | Ratemaking |
+| `Discrete-Time Rebalancing` | Delta Hedging |
+| `Joint-Life Mortality` | Joint Life |
+| `Joint Live` | Joint Life |
+| `Individual-joint Life Mortality` | Joint Life |
+| `Time-To-Status-Failure Random Variable` | Joint Life |
+| `Retirement Benefit` | Pension Plan |
+| `Pension Plan Valuation` | Pension Plan |
+| `DB Plan` | Defined Benefit Plan |
+| `Career Average Earning` | Defined Benefit Plan |
+| `Career Average Revalued Earning` | Defined Benefit Plan |
+| `Final Average Salary` | Defined Benefit Plan |
+| `DC Plan Participant` | Defined Contribution Plan |
+| `Required Contribution Rate` | Defined Contribution Plan |
+| `Plan Participant` | Retirement Plan |
+| `Required Contribution` | Funding |
+| `Long-Term Health Insurance` | Health Insurance |
+| `Long-Term Health Insurance Benefit` | Health Insurance |
+| `Long-Term Life` | Life Insurance |
+| `Heterogeneity` | Mortality |
+| `Mortality Curve` | Mortality |
+| `Non-Parametric Mortality` | Life Table |
+| `Discrete Time Transition Probability` | Transition Probability Matrix |
+| `Asymptotic Property` | Maximum Likelihood Estimation |
+| `Account Value` | Universal Life Insurance |
+| `Universal Life Contract` | Universal Life Insurance |
+| `Universal Life Policy` | Universal Life Insurance |
+| `Cashflow` | Cash Flow |
+| `Insurance Product` | Insurance Policy |
+| `Black-Scholes Formula` | Black-Scholes Model |
+| `Option Pricing` | Risk-Neutral Valuation |
+| `Investment Portfolio` | Portfolio |
+| `Too Many Variable` | Variable Selection |
+| `Gain Chart` | Lift |
+| `Variable Importance Plot` | Variable Importance |
+| `Handle Missing Data` | Missing Data |
+| `Imputation` | Missing Data |
+| `Internal Consistency` | Data Quality |
+| `Data Collection Practice` | Data Quality |
+| `Data Structure` | Tidy Data |
+| `Common Visualization` | Data Visualization |
+| `Exploring Data` | Exploratory Data Analysis |
+| `Univariate Data Exploration` | Univariate Plot |
+| `Bias-Variance Trade-Off` | Bias-Variance Tradeoff |
+| `K-Fold Cross-Validation` | Cross-Validation |
+| `Leave-one-out Cross-Validation` | Cross-Validation |
+| `Resampling` | Cross-Validation |
+| `Predicted Value` | Fitted Values |
+| `Diagnostic Test` | Model Diagnostics |
+| `Ridge Regression` | Regularization |
+| `Lasso` | Regularization |
+| `Corresponding Link` | Link Function |
+| `Regression-Based Time Series` | Time Series |
+| `Stochastic Time Series Process` | Time Series |
+
+</details>
+
+### 8.5 Skipped — not concepts (13)
+
+`Benefits Payable`, `Jurisdiction`, `Single Non-Dividend Paying Asset`, `Analytical Effort`, `Computational Efficiency`, `Common Language`, `Effective Manner While`, `Recommended Analytics`, `Straightforward Manner`, `Final Product`, `Biases Introduced`, `Otherwise Modify Data`, `Vague Question`.
+
+
 <!-- gaps:begin -->
 
 _Generated by `python3 scripts/find_concept_gaps.py --update-plan`. Do not edit between the markers._
@@ -219,19 +485,19 @@ _Generated by `python3 scripts/find_concept_gaps.py --update-plan`. Do not edit 
 
 | Bucket | Distinct targets | Links |
 |---|---|---|
-| Resolve exactly (Obsidian and the app) | | 2,713 |
+| Resolve exactly (Obsidian and the app) | | 2,724 |
 | Resolve only case-insensitively (Obsidian yes, app no) | | 0 |
 | Resolve through a frontmatter `aliases:` | | 0 |
-| **Concepts to write** (tiered and batched below) | **901** | 1,215 |
+| **Concepts to write** (tiered and batched below) | **900** | 1,214 |
 | Variant spelling of an existing page — link fix | 8 | 15 |
 | Cut short — the link plus its next words names an existing page | 38 | 75 |
 | Link noise — names no concept (`Cannot`, `Differ Compared`) | 235 | 585 |
 | One-word target, not a term of art — triage | 180 | 412 |
 | Ambiguous — needs your decision | 71 | 140 |
-| Missing reading — `Resources/Books/`, Source Material only | 641 | 680 |
+| Missing reading — `Resources/Books/`, Source Material only | 632 | 670 |
 | **Total** | | **5,835** |
 
-Within the concepts to write: 13 duplicate spellings merged (+1 acronyms, +15 fragments). Tier 1 / 2 / 3: **0 / 413 / 488**, in **100 batches** (7 done). Existing concept pages that are stubs: **21**.
+Within the concepts to write: 13 duplicate spellings merged (+1 acronyms, +15 fragments). Tier 1 / 2 / 3: **0 / 412 / 488**, in **100 batches** (7 done). Existing concept pages that are stubs: **21**.
 
 ### Missing concepts by exam
 
@@ -239,7 +505,7 @@ A concept linked from several exams counts once under each.
 
 | Exam | Stage | Tier 1 | Tier 2 | Tier 3 | Total |
 |---|---|---|---|---|---|
-| ALTAM (SOA) | development | 0 | 74 | 0 | 74 |
+| ALTAM (SOA) | development | 0 | 73 | 0 | 73 |
 | INV-201 (SOA) | development | 0 | 5 | 49 | 54 |
 | CP-321 (SOA) | development | 0 | 31 | 22 | 53 |
 | RET-101 (SOA) | development | 0 | 11 | 41 | 52 |
@@ -298,7 +564,7 @@ In order. Each batch is one topic (the exam and syllabus section it is most heav
 - **Batch 20** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Pension Plans and Retirement Benefits; ALTAM (SOA) › Joint Life Insurance and Annuities) · 10 concepts: `Replicating Portfolio`, `Future Lifetime`, `Joint-Life Mortality`, `Joint Live`, `Time-To-Status-Failure Random Variable`, `Retirement Benefit`, `Benefits Payable`, `DB Plan`, `Early Exit`, `Accrued Benefit`
 - **Batch 21** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Pension Plans and Retirement Benefits; CP-321 (SOA) › Retiree Group Benefits) · 10 concepts: `Age Retirement`, `Career Average Earning`, `Career Average Revalued Earning`, `Plan Participant`, `DC Plan Participant`, `Final Average Salary`, `Pension Plan Valuation`, `Projected Unit Credit`, `Required Contribution`, `Required Contribution Rate`
 - **Batch 22** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages; ALTAM (SOA) › Pension Plans and Retirement Benefits) · 10 concepts: `Salary Scale`, `Service Table`, `Target Replacement`, `Traditional Unit Credit`, `Policy Value`, `Long-Term Health Insurance`, `Single Life`, `State-Dependent Insurance`, `State-Dependent Life Insurance`, `State-Dependent Cash Flow`
-- **Batch 23** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Profit Analysis; ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages) · 10 concepts: `Thiele's Differential Equation`, `Three-Term Woolhouse Approximation`, `Profit Margin`, `Internal Rate`, `Profit Testing`, `Discounted Payback Period`, `Emerging Surplus`, `Term Life`, `Long-Term Life`, `Profit Signature`
+- **Batch 23** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Profit Analysis; ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages) · 10 concepts: `Thiele's Differential Equation` ✓, `Three-Term Woolhouse Approximation`, `Profit Margin`, `Internal Rate`, `Profit Testing`, `Discounted Payback Period`, `Emerging Surplus`, `Term Life`, `Long-Term Life`, `Profit Signature`
 - **Batch 24** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Survival Models for Contingent Cash Flows; ALTAM (SOA) › Profit Analysis) · 10 concepts: `Profit Vector`, `Markov Multiple`, `Continuous Time Markov`, `Multiple Decrement`, `Transition Intensity`, `Approximate Confidence Interval`, `Asymptotic Property`, `Continuing Care Retirement Community`, `Continuous Time Markov Multiple`, `Deconstruct Multiple Decrement Table`
 - **Batch 25** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Survival Models for Contingent Cash Flows) · 10 concepts: `Discrete Time Transition Probability`, `Heterogeneity`, `Individual-joint Life Mortality`, `Kolmogorov's Forward Equation`, `Long-Term Health Insurance Benefit`, `Long-Term Insurance Benefit`, `Mortality Curve`, `Mortality-morbidity`, `Piecewise Constant Transition Intensity`, `Single Decrement`
 - **Batch 26** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Universal Life Insurance; ALTAM (SOA) › Survival Models for Contingent Cash Flows) · 10 concepts: `State-Contingent Life`, `State-Dependent Probability`, `Account Value`, `Deterministic Profit Testing`, `Cashflow`, `Lapse`, `No-Lapse Guarantee`, `Universal Life Contract`, `Universal Life Policy`, `Insurance Product`
@@ -377,7 +643,7 @@ In order. Each batch is one topic (the exam and syllabus section it is most heav
 - **Batch 99** (Tier 3, to do) · Statistics and predictive analytics (DISC-DA (CAS) › 3. Preparing Data for Analysis; DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project) · 11 concepts: `Data Documentation`, `Data Ethics`, `Statistical Plan`, `Data Mart`, `Data Validation`, `Database Index`, `Table Join`, `User-Defined Function`, `Web Scraping`, `Structured Data`, `Data Preparation`
 - **Batch 100** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts) · 1 concepts: `Common Valuation`
 
-### Tier 2 — frequently linked, exam-relevant (413)
+### Tier 2 — frequently linked, exam-relevant (412)
 
 | # | Concept (canonical filename) | Aliases | Links (guides) | Qs tagged / mentioned | Weight | Exam(s) | Linked from | Depends on | Score |
 |---|---|---|---|---|---|---|---|---|---|
@@ -704,96 +970,95 @@ In order. Each batch is one topic (the exam and syllabus section it is most heav
 | 321 | `Concepts/Empirical Bayesian Estimation.md` | — | 1 (1) | 0 / 0 | 13% | ASTAM (SOA) | ASTAM (SOA) › Credibility | Bayesian Estimation | 4.45 |
 | 322 | `Concepts/Greatest Accuracy.md` | — | 1 (1) | 0 / 0 | 13% | ASTAM (SOA) | ASTAM (SOA) › Credibility | — | 4.45 |
 | 323 | `Concepts/State-Dependent Cash Flow.md` | — | 1 (1) | 0 / 0 | 13% | ALTAM (SOA) | ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages | — | 4.45 |
-| 324 | `Concepts/Thiele's Differential Equation.md` | — | 1 (1) | 0 / 0 | 13% | ALTAM (SOA) | ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages | — | 4.45 |
-| 325 | `Concepts/Three-Term Woolhouse Approximation.md` | — | 1 (1) | 0 / 0 | 13% | ALTAM (SOA) | ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages | — | 4.45 |
-| 326 | `Concepts/Filing.md` | — | 1 (1) | 0 / 0 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 4.42 |
-| 327 | `Concepts/Financial Reporting Standard.md` | — | 1 (1) | 0 / 0 | 7% | GI-201 (SOA) | GI-201 (SOA) › Financial Reporting | Reporting Standard | 4.42 |
-| 328 | `Concepts/Insurance-reinsurance.md` | — | 1 (1) | 0 / 0 | 7% | GI-201 (SOA) | GI-201 (SOA) › Financial Reporting | — | 4.42 |
-| 329 | `Concepts/Plan Investment.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Retirement Plan Investment and Risk Management | — | 4.42 |
-| 330 | `Concepts/Approximate Confidence Interval.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 331 | `Concepts/Asymptotic Property.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 332 | `Concepts/Bias-Variance Trade-Off.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Predictive Analytics Problem Definition | — | 4.4 |
-| 333 | `Concepts/Continuing Care Retirement Community.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 334 | `Concepts/Continuous Time Markov Multiple.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Continuous Time Markov, Markov Multiple | 4.4 |
-| 335 | `Concepts/Deconstruct Multiple Decrement Table.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Multiple Decrement | 4.4 |
-| 336 | `Concepts/Discrete Time Transition Probability.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 337 | `Concepts/Existing Data.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Data Transformations and Unsupervised Learning Techniques | — | 4.4 |
-| 338 | `Concepts/Heterogeneity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 339 | `Concepts/Individual-joint Life Mortality.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Joint-Life Mortality | 4.4 |
-| 340 | `Concepts/Kolmogorov's Forward Equation.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 341 | `Concepts/Log-Normal.md` | — | 1 (1) | 0 / 0 | 12% | FAM (SOA) | FAM (SOA) › Severity, Frequency, and Aggregate Models | — | 4.4 |
-| 342 | `Concepts/Long-Term Health Insurance Benefit.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Long-Term Health Insurance | 4.4 |
-| 343 | `Concepts/Long-Term Insurance Benefit.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 344 | `Concepts/Mortality Curve.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 345 | `Concepts/Mortality-morbidity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 346 | `Concepts/Piecewise Constant Transition Intensity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Transition Intensity | 4.4 |
-| 347 | `Concepts/Single Decrement.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 348 | `Concepts/State-Contingent Life.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 349 | `Concepts/State-Dependent Probability.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
-| 350 | `Concepts/Stop-Loss Insurance.md` | — | 1 (1) | 0 / 0 | 12% | FAM (SOA) | FAM (SOA) › Severity, Frequency, and Aggregate Models | — | 4.4 |
-| 351 | `Concepts/Vague Question.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Predictive Analytics Problem Definition | — | 4.4 |
-| 352 | `Concepts/Accrued Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 353 | `Concepts/Age Retirement.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 354 | `Concepts/Career Average Earning.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 355 | `Concepts/Career Average Revalued Earning.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 356 | `Concepts/Cashflow.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
-| 357 | `Concepts/DC Plan Participant.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | Plan Participant | 4.35 |
-| 358 | `Concepts/Discrete-Time Rebalancing.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | Rebalancing | 4.35 |
-| 359 | `Concepts/Equity-Linked Life Insurance Cash Flow.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 360 | `Concepts/Equity-Linked Life Insurance Guarantee.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 361 | `Concepts/Final Average Salary.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 362 | `Concepts/Guaranteed Minimum Accumulation-maturity Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 363 | `Concepts/Guaranteed Minimum Income Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 364 | `Concepts/Guaranteed Minimum Maturity Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 365 | `Concepts/Guaranteed Minimum Withdrawal Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 366 | `Concepts/No-Lapse Guarantee.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | Lapse | 4.35 |
-| 367 | `Concepts/Pension Plan Valuation.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 368 | `Concepts/Post-Retirement.md` | — | 3 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 4.35 |
-| 369 | `Concepts/Projected Unit Credit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 370 | `Concepts/Replicating Portfolio.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
-| 371 | `Concepts/Required Contribution Rate.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | Required Contribution | 4.35 |
-| 372 | `Concepts/Salary Scale.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 373 | `Concepts/Service Table.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 374 | `Concepts/Target Replacement.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 375 | `Concepts/Traditional Unit Credit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
-| 376 | `Concepts/Universal Life Contract.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
-| 377 | `Concepts/Universal Life Policy.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
-| 378 | `Concepts/Simple European-style Derivative.md` | — | 2 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 4.32 |
-| 379 | `Concepts/Single Non-Dividend Paying Asset.md` | — | 2 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 4.32 |
-| 380 | `Concepts/Extreme Value Distribution.md` | — | 1 (1) | 0 / 0 | 10% | ASTAM (SOA) | ASTAM (SOA) › Severity Models | — | 4.3 |
-| 381 | `Concepts/Splicing.md` | — | 1 (1) | 0 / 0 | 10% | ASTAM (SOA) | ASTAM (SOA) › Severity Models | — | 4.3 |
-| 382 | `Concepts/Long Term Care.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Plan and Product Provisions | — | 4.29 |
-| 383 | `Concepts/Autoregressive Conditionally Heteroskedastic.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
-| 384 | `Concepts/Contingencies Loading.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Pricing and Reserving for Short-Term Insurance Coverages | — | 4.28 |
-| 385 | `Concepts/Future Lifetime Distribution.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Mortality Models | Future Lifetime | 4.28 |
-| 386 | `Concepts/Non-Parametric Mortality.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Mortality Models | — | 4.28 |
-| 387 | `Concepts/Ratemaking Data.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Pricing and Reserving for Short-Term Insurance Coverages | — | 4.28 |
-| 388 | `Concepts/Regression-Based Time Series.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
-| 389 | `Concepts/Stochastic Time Series Process.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
-| 390 | `Concepts/Time-To-Status-Failure Random Variable.md` | — | 1 (1) | 0 / 0 | 10% | ALTAM (SOA) | ALTAM (SOA) › Joint Life Insurance and Annuities | — | 4.26 |
-| 391 | `Concepts/Catastrophe Risk Load.md` | — | 1 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Catastrophe Models and Risk Loads | — | 4.22 |
-| 392 | `Concepts/Terrorism.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.22 |
-| 393 | `Concepts/Umbrella Liability.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.22 |
-| 394 | `Concepts/Long Duration Health Contract.md` | Long-Duration Health Contract | 3 (1) | 0 / 0 | 9% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy; CP-321 (SOA) › Reserving | — | 4.21 |
-| 395 | `Concepts/Auto Physical Damage Coverage.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 4. Personal Auto Policy; DISC-RM (CAS) › 11. Underwriting Other Types of Coverage | — | 4.2 |
-| 396 | `Concepts/Insurance Producer.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 16. Insurance Regulation; DISC-RM (CAS) › 7. Insurance Marketing and Distribution | — | 4.2 |
-| 397 | `Concepts/Umbrella Liability Insurance.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1; DISC-RM (CAS) › 11. Underwriting Other Types of Coverage | Umbrella Liability | 4.2 |
-| 398 | `Concepts/Asset Adequacy.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 4.15 |
-| 399 | `Concepts/Unpaid Unallocated Loss Adjustment Expense.md` | — | 4 (1) | 0 / 0 | 4% | GI-101 (SOA) | GI-101 (SOA) › Financial Reporting | — | 4.11 |
-| 400 | `Concepts/Building and Personal Property Coverage Form.md` | — | 5 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 8. Commercial Property Insurance Part 1; DISC-IA (CAS) › 9. Commercial Property Insurance Part 2 | — | 4.08 |
-| 401 | `Concepts/Claim Amounts Paid.md` | — | 1 (1) | 0 / 0 | 6% | FAM (SOA) | FAM (SOA) › Short-Term Insurance and Reinsurance Coverages | — | 4.04 |
-| 402 | `Concepts/Resampling.md` | — | 1 (1) | 0 / 0 | 6% | SRM (SOA) | SRM (SOA) › Basics of Statistical Learning | — | 4.04 |
-| 403 | `Concepts/Binomial Option Pricing.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | Option Pricing | 3.92 |
-| 404 | `Concepts/Black-Scholes Formula.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 3.92 |
-| 405 | `Concepts/Grouped Data.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Parametric Estimation | — | 3.92 |
-| 406 | `Concepts/Simple Option.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 3.92 |
-| 407 | `Concepts/Excess Limit.md` | — | 3 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Development Analysis for Excess Limits and Layers | — | 3.88 |
-| 408 | `Concepts/Layer.md` | — | 3 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Development Analysis for Excess Limits and Layers | — | 3.88 |
-| 409 | `Concepts/Contribution Pension Plan.md` | — | 1 (1) | 0 / 0 | 3% | FAM (SOA) | FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | — | 3.86 |
-| 410 | `Concepts/Retirement Financial Security.md` | — | 1 (1) | 0 / 0 | 3% | FAM (SOA) | FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | — | 3.86 |
-| 411 | `Concepts/Business Income Coverage.md` | — | 3 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 3.67 |
-| 412 | `Concepts/Data Analytics.md` | — | 3 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project; DISC-DA (CAS) › 8. Basic Data Analysis | — | 3.67 |
-| 413 | `Concepts/Endorsement.md` | — | 3 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 4. Personal Auto Policy; DISC-IA (CAS) › 6. Homeowners Liability Coverage | — | 3.67 |
+| 324 | `Concepts/Three-Term Woolhouse Approximation.md` | — | 1 (1) | 0 / 0 | 13% | ALTAM (SOA) | ALTAM (SOA) › Premium and Policy Valuation for Long-Term State-Dependent Coverages | — | 4.45 |
+| 325 | `Concepts/Filing.md` | — | 1 (1) | 0 / 0 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 4.42 |
+| 326 | `Concepts/Financial Reporting Standard.md` | — | 1 (1) | 0 / 0 | 7% | GI-201 (SOA) | GI-201 (SOA) › Financial Reporting | Reporting Standard | 4.42 |
+| 327 | `Concepts/Insurance-reinsurance.md` | — | 1 (1) | 0 / 0 | 7% | GI-201 (SOA) | GI-201 (SOA) › Financial Reporting | — | 4.42 |
+| 328 | `Concepts/Plan Investment.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Retirement Plan Investment and Risk Management | — | 4.42 |
+| 329 | `Concepts/Approximate Confidence Interval.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 330 | `Concepts/Asymptotic Property.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 331 | `Concepts/Bias-Variance Trade-Off.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Predictive Analytics Problem Definition | — | 4.4 |
+| 332 | `Concepts/Continuing Care Retirement Community.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 333 | `Concepts/Continuous Time Markov Multiple.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Continuous Time Markov, Markov Multiple | 4.4 |
+| 334 | `Concepts/Deconstruct Multiple Decrement Table.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Multiple Decrement | 4.4 |
+| 335 | `Concepts/Discrete Time Transition Probability.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 336 | `Concepts/Existing Data.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Data Transformations and Unsupervised Learning Techniques | — | 4.4 |
+| 337 | `Concepts/Heterogeneity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 338 | `Concepts/Individual-joint Life Mortality.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Joint-Life Mortality | 4.4 |
+| 339 | `Concepts/Kolmogorov's Forward Equation.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 340 | `Concepts/Log-Normal.md` | — | 1 (1) | 0 / 0 | 12% | FAM (SOA) | FAM (SOA) › Severity, Frequency, and Aggregate Models | — | 4.4 |
+| 341 | `Concepts/Long-Term Health Insurance Benefit.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Long-Term Health Insurance | 4.4 |
+| 342 | `Concepts/Long-Term Insurance Benefit.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 343 | `Concepts/Mortality Curve.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 344 | `Concepts/Mortality-morbidity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 345 | `Concepts/Piecewise Constant Transition Intensity.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | Transition Intensity | 4.4 |
+| 346 | `Concepts/Single Decrement.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 347 | `Concepts/State-Contingent Life.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 348 | `Concepts/State-Dependent Probability.md` | — | 1 (1) | 0 / 0 | 12% | ALTAM (SOA) | ALTAM (SOA) › Survival Models for Contingent Cash Flows | — | 4.4 |
+| 349 | `Concepts/Stop-Loss Insurance.md` | — | 1 (1) | 0 / 0 | 12% | FAM (SOA) | FAM (SOA) › Severity, Frequency, and Aggregate Models | — | 4.4 |
+| 350 | `Concepts/Vague Question.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Predictive Analytics Problem Definition | — | 4.4 |
+| 351 | `Concepts/Accrued Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 352 | `Concepts/Age Retirement.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 353 | `Concepts/Career Average Earning.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 354 | `Concepts/Career Average Revalued Earning.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 355 | `Concepts/Cashflow.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
+| 356 | `Concepts/DC Plan Participant.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | Plan Participant | 4.35 |
+| 357 | `Concepts/Discrete-Time Rebalancing.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | Rebalancing | 4.35 |
+| 358 | `Concepts/Equity-Linked Life Insurance Cash Flow.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 359 | `Concepts/Equity-Linked Life Insurance Guarantee.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 360 | `Concepts/Final Average Salary.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 361 | `Concepts/Guaranteed Minimum Accumulation-maturity Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 362 | `Concepts/Guaranteed Minimum Income Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 363 | `Concepts/Guaranteed Minimum Maturity Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 364 | `Concepts/Guaranteed Minimum Withdrawal Benefit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 365 | `Concepts/No-Lapse Guarantee.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | Lapse | 4.35 |
+| 366 | `Concepts/Pension Plan Valuation.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 367 | `Concepts/Post-Retirement.md` | — | 3 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 4.35 |
+| 368 | `Concepts/Projected Unit Credit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 369 | `Concepts/Replicating Portfolio.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Embedded Options in Life Insurance and Annuity Products | — | 4.35 |
+| 370 | `Concepts/Required Contribution Rate.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | Required Contribution | 4.35 |
+| 371 | `Concepts/Salary Scale.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 372 | `Concepts/Service Table.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 373 | `Concepts/Target Replacement.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 374 | `Concepts/Traditional Unit Credit.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits | — | 4.35 |
+| 375 | `Concepts/Universal Life Contract.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
+| 376 | `Concepts/Universal Life Policy.md` | — | 1 (1) | 0 / 0 | 11% | ALTAM (SOA) | ALTAM (SOA) › Universal Life Insurance | — | 4.35 |
+| 377 | `Concepts/Simple European-style Derivative.md` | — | 2 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 4.32 |
+| 378 | `Concepts/Single Non-Dividend Paying Asset.md` | — | 2 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 4.32 |
+| 379 | `Concepts/Extreme Value Distribution.md` | — | 1 (1) | 0 / 0 | 10% | ASTAM (SOA) | ASTAM (SOA) › Severity Models | — | 4.3 |
+| 380 | `Concepts/Splicing.md` | — | 1 (1) | 0 / 0 | 10% | ASTAM (SOA) | ASTAM (SOA) › Severity Models | — | 4.3 |
+| 381 | `Concepts/Long Term Care.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Plan and Product Provisions | — | 4.29 |
+| 382 | `Concepts/Autoregressive Conditionally Heteroskedastic.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
+| 383 | `Concepts/Contingencies Loading.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Pricing and Reserving for Short-Term Insurance Coverages | — | 4.28 |
+| 384 | `Concepts/Future Lifetime Distribution.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Mortality Models | Future Lifetime | 4.28 |
+| 385 | `Concepts/Non-Parametric Mortality.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Mortality Models | — | 4.28 |
+| 386 | `Concepts/Ratemaking Data.md` | — | 1 (1) | 0 / 0 | 10% | FAM (SOA) | FAM (SOA) › Pricing and Reserving for Short-Term Insurance Coverages | — | 4.28 |
+| 387 | `Concepts/Regression-Based Time Series.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
+| 388 | `Concepts/Stochastic Time Series Process.md` | — | 1 (1) | 0 / 0 | 10% | SRM (SOA) | SRM (SOA) › Time Series Models | — | 4.28 |
+| 389 | `Concepts/Time-To-Status-Failure Random Variable.md` | — | 1 (1) | 0 / 0 | 10% | ALTAM (SOA) | ALTAM (SOA) › Joint Life Insurance and Annuities | — | 4.26 |
+| 390 | `Concepts/Catastrophe Risk Load.md` | — | 1 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Catastrophe Models and Risk Loads | — | 4.22 |
+| 391 | `Concepts/Terrorism.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.22 |
+| 392 | `Concepts/Umbrella Liability.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.22 |
+| 393 | `Concepts/Long Duration Health Contract.md` | Long-Duration Health Contract | 3 (1) | 0 / 0 | 9% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy; CP-321 (SOA) › Reserving | — | 4.21 |
+| 394 | `Concepts/Auto Physical Damage Coverage.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 4. Personal Auto Policy; DISC-RM (CAS) › 11. Underwriting Other Types of Coverage | — | 4.2 |
+| 395 | `Concepts/Insurance Producer.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 16. Insurance Regulation; DISC-RM (CAS) › 7. Insurance Marketing and Distribution | — | 4.2 |
+| 396 | `Concepts/Umbrella Liability Insurance.md` | — | 2 (2) | 0 / 0 | — | DISC-IA (CAS), DISC-RM (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1; DISC-RM (CAS) › 11. Underwriting Other Types of Coverage | Umbrella Liability | 4.2 |
+| 397 | `Concepts/Asset Adequacy.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 4.15 |
+| 398 | `Concepts/Unpaid Unallocated Loss Adjustment Expense.md` | — | 4 (1) | 0 / 0 | 4% | GI-101 (SOA) | GI-101 (SOA) › Financial Reporting | — | 4.11 |
+| 399 | `Concepts/Building and Personal Property Coverage Form.md` | — | 5 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 8. Commercial Property Insurance Part 1; DISC-IA (CAS) › 9. Commercial Property Insurance Part 2 | — | 4.08 |
+| 400 | `Concepts/Claim Amounts Paid.md` | — | 1 (1) | 0 / 0 | 6% | FAM (SOA) | FAM (SOA) › Short-Term Insurance and Reinsurance Coverages | — | 4.04 |
+| 401 | `Concepts/Resampling.md` | — | 1 (1) | 0 / 0 | 6% | SRM (SOA) | SRM (SOA) › Basics of Statistical Learning | — | 4.04 |
+| 402 | `Concepts/Binomial Option Pricing.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | Option Pricing | 3.92 |
+| 403 | `Concepts/Black-Scholes Formula.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 3.92 |
+| 404 | `Concepts/Grouped Data.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Parametric Estimation | — | 3.92 |
+| 405 | `Concepts/Simple Option.md` | — | 1 (1) | 0 / 0 | 4% | FAM (SOA) | FAM (SOA) › Option Pricing Fundamentals | — | 3.92 |
+| 406 | `Concepts/Excess Limit.md` | — | 3 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Development Analysis for Excess Limits and Layers | — | 3.88 |
+| 407 | `Concepts/Layer.md` | — | 3 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Development Analysis for Excess Limits and Layers | — | 3.88 |
+| 408 | `Concepts/Contribution Pension Plan.md` | — | 1 (1) | 0 / 0 | 3% | FAM (SOA) | FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | — | 3.86 |
+| 409 | `Concepts/Retirement Financial Security.md` | — | 1 (1) | 0 / 0 | 3% | FAM (SOA) | FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | — | 3.86 |
+| 410 | `Concepts/Business Income Coverage.md` | — | 3 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 3.67 |
+| 411 | `Concepts/Data Analytics.md` | — | 3 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project; DISC-DA (CAS) › 8. Basic Data Analysis | — | 3.67 |
+| 412 | `Concepts/Endorsement.md` | — | 3 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 4. Personal Auto Policy; DISC-IA (CAS) › 6. Homeowners Liability Coverage | — | 3.67 |
 
 ### Tier 3 — niche or single-link (488)
 
@@ -1450,7 +1715,7 @@ Targets that name no concept. The fix is to unlink them (in `scripts/syllabus_wr
 
 `NAIC` → `FRE-802-19 - National Association of Insurance Commissioners (NAIC)`
 
-### Missing resource pages (641)
+### Missing resource pages (632)
 
 Linked only from a Source Material shelf — a `Resources/Books/` reading, written to `docs/resource-pages.md` from the real document, not a concept page. Out of scope for this plan.
 
@@ -1459,7 +1724,6 @@ Linked only from a Source Material shelf — a `Resources/Books/` reading, writt
 - `Group Insurance (Skwire - 2021)` — CP-321 (SOA), GH-101 (SOA), GH-201C (SOA), GH-201U (SOA)
 - `ASOP 41 - Actuarial Communications` — CP-321 (SOA), GH-101 (SOA), GH-201U (SOA), GH-301 (SOA)
 - `Fundamentals of General Insurance Actuarial Analysis (Friedland - 2022)` — GI-101 (SOA), GI-201 (SOA), GI-301 (SOA)
-- `Basics of Reinsurance Pricing (Clark - 2014)` — 9 (CAS), GI-301 (SOA)
 - `Actuarial Mathematics for Life Contingent Risks (Dickson - 2020)` — ALTAM (SOA), FAM (SOA)
 - `Loss Models - From Data to Decisions (Klugman - 2019)` — ASTAM (SOA), FAM (SOA)
 - `Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Brown - 2022)` — ASTAM (SOA), FAM (SOA)
@@ -1544,14 +1808,6 @@ Linked only from a Source Material shelf — a `Resources/Books/` reading, writt
 - `Penalized Regression and Lasso Credibility (Holmes and Casotto - 2025)` — 8 (CAS)
 - `CGL Experience and Schedule Rating Plan (ISO)` — 8 (CAS)
 - `An Example of Credibility and Shifting Risk Parameters (Mahler - 1990)` — 8 (CAS)
-- `Swiss Re Exposure Curves and the MBBEFD Distribution Class (Bernegger - 1997)` — 9 (CAS)
-- `Enterprise Risk Analysis for Property and Liability Insurance Companies (Brehm et al.)` — 9 (CAS)
-- `The Economics of Structured Finance (Coval, Jurek, and Stafford - 2009)` — 9 (CAS)
-- `Allocation of Capital in the Insurance Industry (Cummins - 2000)` — 9 (CAS)
-- `CAT Bonds and Other Risk-Linked Securities (Cummins - 2008)` — 9 (CAS)
-- `Catastrophe Modeling: A New Approach to Managing Risk (Grossi and Kunreuther - 2005)` — 9 (CAS)
-- `Pricing Insurance Risk: Theory and Practice (Mildenhall and Major - 2022)` — 9 (CAS)
-- `Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Panning - 2006)` — 9 (CAS)
 - `ALTAM-21-23 - Variable Annuity Guarantees` — ALTAM (SOA)
 - `ASTAM-21-26 - Outstanding Claims Reserves` — ASTAM (SOA)
 - `ASTAM-22-23 - Chapter 5 of Quantitative Enterprise Risk Management` — ASTAM (SOA)

@@ -48,9 +48,9 @@ export function rememberPdfPage(url: string, page: number): void {
   else pdfPages.delete(url)
 }
 
-/** The page a stacked document was left on, or 1 for one that hasn't been read yet. */
-export function recallPdfPage(url: string): number {
-  return pdfPages.get(url) ?? 1
+/** The page a stacked document was left on, or `fallback` (its cited page, else 1) for one that hasn't been read yet. */
+export function recallPdfPage(url: string, fallback = 1): number {
+  return pdfPages.get(url) ?? fallback
 }
 
 /** Forget every remembered position — called when the popup closes. */

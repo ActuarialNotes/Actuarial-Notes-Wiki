@@ -16,7 +16,8 @@ import { PdfViewerPanel } from '@/components/PdfViewerPanel'
  *
  * Keyed on the document's URL so switching papers remounts the panel rather
  * than leaving the previous document's page number, zoom and scroll position
- * on the new one.
+ * on the new one — and on the page too, so a second citation of the same
+ * document opens at *its* page rather than the one the first was left on.
  */
 export function PdfReaderHost() {
   const doc = usePdfReader(state => state.doc)
@@ -24,10 +25,11 @@ export function PdfReaderHost() {
   if (!doc) return null
   return (
     <PdfViewerPanel
-      key={doc.url}
+      key={`${doc.url}#${doc.page ?? 1}`}
       url={doc.url}
       title={doc.title}
       subtitle={doc.subtitle}
+      initialPage={doc.page}
       onClose={closePdf}
     />
   )

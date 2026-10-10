@@ -46,7 +46,7 @@ export function PdfPagePanel({ entry, focusMode, onClose, trailing, keyboard }: 
       subtitle={entry.subtitle}
       focusMode={focusMode}
       keyboard={keyboard}
-      initialPage={recallPdfPage(entry.url)}
+      initialPage={recallPdfPage(entry.url, entry.page)}
       onPageChange={remember}
       controls={
         <>

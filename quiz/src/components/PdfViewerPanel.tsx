@@ -793,6 +793,8 @@ interface Props {
   title: string
   /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
   subtitle?: string
+  /** The page to open at — the one a citation points to. */
+  initialPage?: number
   onClose: () => void
 }
 
@@ -804,7 +806,7 @@ interface Props {
  * document opened from a page *inside* the popup is read in its stack instead
  * (`components/wiki/PdfPagePanel.tsx`).
  */
-export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
+export function PdfViewerPanel({ url, title, subtitle, initialPage, onClose }: Props) {
   const { play } = useSoundEffects()
   // A sheet of paper sliding out, same as the concept popup opening.
   useSoundOnMount('open')
@@ -874,6 +876,7 @@ export function PdfViewerPanel({ url, title, subtitle, onClose }: Props) {
         url={url}
         title={title}
         subtitle={subtitle}
+        initialPage={initialPage}
         focusMode={focusMode}
         controls={
           <>

@@ -40,7 +40,7 @@ export function shortSource(resource: string): string {
 
 /** One line of the card's "Tested against": a document (read in the app's reader) or a set of exam questions. */
 export type SourceLink =
-  | { kind: 'document'; url: string; title: string; label: string; subtitle: string }
+  | { kind: 'document'; url: string; title: string; label: string; subtitle: string; page?: number }
   | { kind: 'questions'; url: string; label: string }
 
 /**
@@ -61,7 +61,7 @@ export function groupSources(sources: SourceRef[]): SourceLink[] {
     const label = refs.length === 1
       ? `${short}, ${first.locator.replace('Chapter ', 'Ch. ')}, p. ${first.page}`
       : `${short}, pp. ${refs.map(r => r.page).join(', ')}`
-    return { kind: 'document', url: first.url, title: first.title, label, subtitle: refs.map(r => `${r.locator}, p. ${r.page}`).join('; ') }
+    return { kind: 'document', url: first.url, title: first.title, label, page: first.pdfPage, subtitle: refs.map(r => `${r.locator}, p. ${r.page}`).join('; ') }
   })
   if (questions.length) {
     // "SOA Exam FM sample question 26" … → "SOA Exam FM sample questions 26, 71".

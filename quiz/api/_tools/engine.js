@@ -165,7 +165,7 @@ var annuity = {
   view: "none",
   compute: (input) => {
     const due = input.timing === "due";
-    const P = Number(input.payment);
+    const P2 = Number(input.payment);
     const n = Number(input.n);
     const i = Number(input.i);
     const v = 1 / (1 + i);
@@ -177,20 +177,20 @@ var annuity = {
     const ssymbol = due ? "s\u0308" : "s";
     return {
       tiles: [
-        { symbol: "PV", label: "Today", value: P * factor, unit: "money" },
-        { symbol: "FV", label: "At n", value: P * accumulation, unit: "money" },
+        { symbol: "PV", label: "Today", value: P2 * factor, unit: "money" },
+        { symbol: "FV", label: "At n", value: P2 * accumulation, unit: "money" },
         { symbol: `${symbol}\u2309n`, label: "Factor", value: factor, unit: "factor" }
       ],
       trace: [
         { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
         { label: "Annuity-immediate factor", formula: i === 0 ? "a\u2309n = n" : `a\u2309n = (1 \u2212 v^${n}) / ${i}`, result: an, unit: "factor" },
         ...due ? [{ label: "Annuity-due factor", formula: "\xE4\u2309n = a\u2309n \xB7 (1 + i)", result: factor, unit: "factor" }] : [],
-        { label: "Present value", formula: `PV = ${P} \xD7 ${symbol}\u2309n`, result: P * factor, unit: "money" },
-        { label: "Accumulated value", formula: `FV = ${P} \xD7 ${ssymbol}\u2309n`, result: P * accumulation, unit: "money" }
+        { label: "Present value", formula: `PV = ${P2} \xD7 ${symbol}\u2309n`, result: P2 * factor, unit: "money" },
+        { label: "Accumulated value", formula: `FV = ${P2} \xD7 ${ssymbol}\u2309n`, result: P2 * accumulation, unit: "money" }
       ],
       warnings: [],
-      values: { present_value: P * factor, accumulated_value: P * accumulation, annuity_factor: factor, accumulation_factor: accumulation },
-      summary: `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(P * factor, "money")}, accumulated value ${formatValue(P * accumulation, "money")} at the end of period ${n} (factor ${formatValue(factor, "factor")}).`
+      values: { present_value: P2 * factor, accumulated_value: P2 * accumulation, annuity_factor: factor, accumulation_factor: accumulation },
+      summary: `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(P2 * factor, "money")}, accumulated value ${formatValue(P2 * accumulation, "money")} at the end of period ${n} (factor ${formatValue(factor, "factor")}).`
     };
   },
   method: { concepts: ["Annuity Immediate", "Annuity Due"], readings: [] }
@@ -298,6 +298,17 @@ function logGamma(x) {
   const t = z + LANCZOS_COEFFS.length - 0.5;
   return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(a);
 }
+function gammaFn(x) {
+  if (x < 0.5) return Math.PI / (Math.sin(Math.PI * x) * gammaFn(1 - x));
+  return Math.exp(logGamma(x));
+}
+function logBeta(a, b) {
+  return logGamma(a) + logGamma(b) - logGamma(a + b);
+}
+function logBinomialCoefficient(n, k) {
+  if (k < 0 || k > n) return -Infinity;
+  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
+}
 var EPS = 1e-14;
 var TINY = 1e-300;
 var MAX_ITER = 500;
@@ -337,10 +348,46 @@ function regularizedGammaP(a, x) {
   if (x === 0) return 0;
   return x < a + 1 ? gammaPSeries(a, x) : 1 - gammaQContinuedFraction(a, x);
 }
+function betaContinuedFraction(a, b, x) {
+  const qab = a + b;
+  const qap = a + 1;
+  const qam = a - 1;
+  let c = 1;
+  let d = 1 - qab * x / qap;
+  if (Math.abs(d) < TINY) d = TINY;
+  d = 1 / d;
+  let h = d;
+  for (let m = 1; m <= MAX_ITER; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < EPS) break;
+  }
+  return h;
+}
+function regularizedIncompleteBeta(a, b, x) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const front = Math.exp(a * Math.log(x) + b * Math.log1p(-x) - logBeta(a, b));
+  return x < (a + 1) / (a + b + 2) ? front * betaContinuedFraction(a, b, x) / a : 1 - front * betaContinuedFraction(b, a, 1 - x) / b;
+}
 function erf(x) {
   if (x === 0) return 0;
-  const p = regularizedGammaP(0.5, x * x);
-  return x > 0 ? p : -p;
+  const p2 = regularizedGammaP(0.5, x * x);
+  return x > 0 ? p2 : -p2;
 }
 function standardNormalPdf(z) {
   return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
@@ -348,28 +395,84 @@ function standardNormalPdf(z) {
 function standardNormalCdf(z) {
   return 0.5 * (1 + erf(z / Math.SQRT2));
 }
+function openUnit(rng) {
+  const u = rng();
+  return u > 0 ? u : Number.MIN_VALUE;
+}
+function sampleStandardNormal(rng) {
+  const u = openUnit(rng);
+  const v = rng();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function sampleGamma(shape, scale, rng) {
+  if (shape < 1) {
+    const u = openUnit(rng);
+    return sampleGamma(shape + 1, scale, rng) * Math.pow(u, 1 / shape);
+  }
+  const d = shape - 1 / 3;
+  const c = 1 / Math.sqrt(9 * d);
+  for (; ; ) {
+    let x;
+    let v;
+    do {
+      x = sampleStandardNormal(rng);
+      v = 1 + c * x;
+    } while (v <= 0);
+    v = v * v * v;
+    const u = openUnit(rng);
+    const x2 = x * x;
+    if (u < 1 - 0.0331 * x2 * x2) return d * v * scale;
+    if (Math.log(u) < 0.5 * x2 + d * (1 - v + Math.log(v))) return d * v * scale;
+  }
+}
+function sampleBeta(alpha, beta2, rng) {
+  const a = sampleGamma(alpha, 1, rng);
+  const b = sampleGamma(beta2, 1, rng);
+  const sum = a + b;
+  return sum > 0 ? a / sum : 0.5;
+}
+function sampleGeometricTrials(p2, rng) {
+  if (p2 >= 1) return 1;
+  return Math.ceil(Math.log(openUnit(rng)) / Math.log1p(-p2));
+}
+function sampleBinomial(n, p2, rng) {
+  let successes = 0;
+  for (let i = 0; i < n; i++) if (rng() < p2) successes++;
+  return successes;
+}
+function samplePoisson(lambda, rng) {
+  const limit = Math.exp(-lambda);
+  let k = 0;
+  let product = rng();
+  while (product > limit) {
+    k++;
+    product *= rng();
+    if (k > 1e4) break;
+  }
+  return k;
+}
 
 // src/lib/tools/numeric.ts
-function inverseNormalCdf(p) {
-  if (!(p > 0 && p < 1)) return p === 0 ? -Infinity : p === 1 ? Infinity : NaN;
+function inverseNormalCdf(p2) {
+  if (!(p2 > 0 && p2 < 1)) return p2 === 0 ? -Infinity : p2 === 1 ? Infinity : NaN;
   const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
   const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
   const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
   const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
   const low = 0.02425;
   let x;
-  if (p < low) {
-    const q = Math.sqrt(-2 * Math.log(p));
+  if (p2 < low) {
+    const q = Math.sqrt(-2 * Math.log(p2));
     x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-  } else if (p <= 1 - low) {
-    const q = p - 0.5;
+  } else if (p2 <= 1 - low) {
+    const q = p2 - 0.5;
     const r = q * q;
     x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
   } else {
-    const q = Math.sqrt(-2 * Math.log(1 - p));
+    const q = Math.sqrt(-2 * Math.log(1 - p2));
     x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
   }
-  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p) / standardNormalPdf(x);
+  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p2) / standardNormalPdf(x);
   return x;
 }
 function bisect(f, lo, hi) {
@@ -544,12 +647,12 @@ var loanSchedule = {
       throw new ToolInputError("payment", `A payment of ${formatValue(given, "money")} doesn't cover the first period's interest of ${formatValue(L * i, "money")}, so the loan is never repaid.`);
     }
     const an = i === 0 ? n : (1 - (1 + i) ** -n) / i;
-    const P = level ? L / an : given;
+    const P2 = level ? L / an : given;
     const rows = [];
     let balance = L;
     for (let k = 1; k <= (n || MAX_PAYMENTS); k++) {
       const interest = balance * i;
-      const payment = !level && n === 0 && balance + interest <= P ? balance + interest : P;
+      const payment = !level && n === 0 && balance + interest <= P2 ? balance + interest : P2;
       balance = balance + interest - payment;
       if (level && k === n) balance = 0;
       rows.push({ k, payment, interest, principal: payment - interest, balance });
@@ -565,7 +668,7 @@ var loanSchedule = {
     const warnings = !level && n > 0 && balance < -1e-9 ? [`The payments overpay the loan: the balance after payment ${n} is negative.`] : [];
     return {
       tiles: [
-        level ? { symbol: "P", label: "Level payment", value: P, unit: "money" } : n === 0 ? { symbol: "P\u2099", label: `Final (no. ${last2.k})`, value: last2.payment, unit: "money" } : { symbol: `B${n}`, label: `Balance after ${n}`, value: balance, unit: "money" },
+        level ? { symbol: "P", label: "Level payment", value: P2, unit: "money" } : n === 0 ? { symbol: "P\u2099", label: `Final (no. ${last2.k})`, value: last2.payment, unit: "money" } : { symbol: `B${n}`, label: `Balance after ${n}`, value: balance, unit: "money" },
         { symbol: "\u03A3I", label: "Total interest", value: totalInterest, unit: "money" },
         { symbol: "\u03A3P", label: "Total paid", value: totalPaid, unit: "money" }
       ],
@@ -581,14 +684,14 @@ var loanSchedule = {
         footer: { k: "Total", payment: totalPaid, interest: totalInterest, principal: totalPaid - totalInterest, balance: null }
       },
       trace: [
-        ...level ? [{ label: "Annuity factor", formula: `a\u2309${n} at ${i}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P, unit: "money" }] : [],
+        ...level ? [{ label: "Annuity factor", formula: `a\u2309${n} at ${i}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P2, unit: "money" }] : [],
         { label: "Interest in payment 1", formula: `${L} \xD7 ${i}`, result: rows[0].interest, unit: "money" },
         { label: "Principal in payment 1", formula: "P \u2212 I\u2081", result: rows[0].principal, unit: "money" },
         { label: `Balance after payment ${last2.k}`, formula: "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P\u2096", result: balance, unit: "money" }
       ],
       warnings,
       values: {
-        payment: P,
+        payment: P2,
         payments: rows.map((r) => r.payment),
         interest: rows.map((r) => r.interest),
         principal: rows.map((r) => r.principal),
@@ -597,7 +700,7 @@ var loanSchedule = {
         count: rows.length,
         total_interest: totalInterest
       },
-      summary: level ? `Level payment ${formatValue(P, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.` : `${rows.length} payments, the last ${formatValue(last2.payment, "money")}; balance after them ${formatValue(balance, "money")}; total interest ${formatValue(totalInterest, "money")}.`
+      summary: level ? `Level payment ${formatValue(P2, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.` : `${rows.length} payments, the last ${formatValue(last2.payment, "money")}; balance after them ${formatValue(balance, "money")}; total interest ${formatValue(totalInterest, "money")}.`
     };
   },
   method: { concepts: ["Loan Amortization", "Amortization Schedule", "Outstanding Balance"], readings: [] }
@@ -652,12 +755,12 @@ var bondPrice = {
   compute: (input) => {
     const t = bondTerms(input);
     const j = Number(input.yield) / t.m;
-    const P = bondPriceAt(t, j);
-    const premium = P - t.C;
-    const pvCoupons = P - t.C * (1 + j) ** -t.N;
+    const P2 = bondPriceAt(t, j);
+    const premium = P2 - t.C;
+    const pvCoupons = P2 - t.C * (1 + j) ** -t.N;
     return {
       tiles: [
-        { symbol: "P", label: "Price", value: P, unit: "money" },
+        { symbol: "P", label: "Price", value: P2, unit: "money" },
         { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium" : "Discount", value: Math.abs(premium), unit: "money" },
         { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
       ],
@@ -666,11 +769,11 @@ var bondPrice = {
         { label: "Yield per coupon period", formula: `j = ${Number(input.yield)} / ${t.m}`, result: j, unit: "percent" },
         { label: "Present value of the coupons", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} at j`, result: pvCoupons, unit: "money" },
         { label: "Present value of the redemption", formula: `${t.C} \xD7 v^${t.N}`, result: t.C * (1 + j) ** -t.N, unit: "money" },
-        { label: "Price", formula: "sum of the two", result: P, unit: "money" }
+        { label: "Price", formula: "sum of the two", result: P2, unit: "money" }
       ],
       warnings: [],
-      values: { price: P, premium, coupon: t.coupon, periods: t.N, yield_per_period: j, effective_yield: (1 + j) ** t.m - 1 },
-      summary: `Price ${formatValue(P, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
+      values: { price: P2, premium, coupon: t.coupon, periods: t.N, yield_per_period: j, effective_yield: (1 + j) ** t.m - 1 },
+      summary: `Price ${formatValue(P2, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
     };
   },
   method: { concepts: ["Bond Price", "Bonds"], readings: [] },
@@ -704,9 +807,9 @@ var bondYield = {
   view: "none",
   compute: (input) => {
     const t = bondTerms(input);
-    const P = Number(input.price);
-    const f = (j2) => bondPriceAt(t, j2) - P;
-    if (f(-0.99) < 0) throw new ToolInputError("price", `No yield gives a price of ${formatValue(P, "money")}: it's more than every coupon and the redemption together, undiscounted, would be worth even at \u221299%.`);
+    const P2 = Number(input.price);
+    const f = (j2) => bondPriceAt(t, j2) - P2;
+    if (f(-0.99) < 0) throw new ToolInputError("price", `No yield gives a price of ${formatValue(P2, "money")}: it's more than every coupon and the redemption together, undiscounted, would be worth even at \u221299%.`);
     let hi = 1;
     while (f(hi) > 0 && hi < 1e6) hi *= 2;
     if (f(hi) > 0) throw new ToolInputError("price", "The price is too low for any yield to give it.");
@@ -721,7 +824,7 @@ var bondYield = {
       ],
       trace: [
         { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
-        { label: "Yield per coupon period", formula: `the j where ${formatValue(t.coupon, "money")} a\u2309${t.N} + ${t.C} v^${t.N} = ${P}, by bisection`, result: j, unit: "percent" },
+        { label: "Yield per coupon period", formula: `the j where ${formatValue(t.coupon, "money")} a\u2309${t.N} + ${t.C} v^${t.N} = ${P2}, by bisection`, result: j, unit: "percent" },
         { label: "Nominal yield", formula: `i\u207D\u1D50\u207E = ${t.m} \xD7 j`, result: nominal, unit: "percent" },
         { label: "Effective annual yield", formula: `(1 + j)^${t.m} \u2212 1`, result: effective, unit: "percent" }
       ],
@@ -1011,7 +1114,7 @@ function factorsAt(tri, j) {
 function averageFactor(pairs, method, latest = 0) {
   const ps = latest > 0 ? pairs.slice(-latest) : pairs;
   if (!ps.length) return null;
-  const simple = (xs) => xs.reduce((s, p) => s + p.factor, 0) / xs.length;
+  const simple = (xs) => xs.reduce((s, p2) => s + p2.factor, 0) / xs.length;
   switch (method) {
     case "simple":
       return simple(ps);
@@ -1021,9 +1124,9 @@ function averageFactor(pairs, method, latest = 0) {
       return simple(sorted.slice(1, -1));
     }
     case "geometric":
-      return Math.exp(ps.reduce((s, p) => s + Math.log(p.factor), 0) / ps.length);
+      return Math.exp(ps.reduce((s, p2) => s + Math.log(p2.factor), 0) / ps.length);
     default:
-      return ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0);
+      return ps.reduce((s, p2) => s + p2.to, 0) / ps.reduce((s, p2) => s + p2.from, 0);
   }
 }
 var ageToAgeFactors = {
@@ -1554,10 +1657,10 @@ var fullCredibilityStandard = {
   notation: (input) => input.basis === "severity" ? "N = (z/k)\xB2 \xB7 CV\xB2" : input.basis === "pure_premium" ? "N = (z/k)\xB2 \xB7 (1 + CV\xB2)" : "N = (z/k)\xB2",
   view: "none",
   compute: (input) => {
-    const p = Number(input.p);
+    const p2 = Number(input.p);
     const k = Number(input.k);
     const cv = Number(input.cv);
-    const z = inverseNormalCdf((1 + p) / 2);
+    const z = inverseNormalCdf((1 + p2) / 2);
     const n0 = (z / k) ** 2;
     const multiplier = input.basis === "severity" ? cv ** 2 : input.basis === "pure_premium" ? 1 + cv ** 2 : 1;
     const standard = n0 * multiplier;
@@ -1567,7 +1670,7 @@ var fullCredibilityStandard = {
         { symbol: "z", label: "Quantile", value: z, unit: "plain" }
       ],
       trace: [
-        { label: "Standard normal quantile", formula: `z = \u03A6\u207B\xB9((1 + ${p})/2)`, result: z, unit: "plain" },
+        { label: "Standard normal quantile", formula: `z = \u03A6\u207B\xB9((1 + ${p2})/2)`, result: z, unit: "plain" },
         { label: "Frequency standard", formula: `n\u2080 = (${z.toFixed(4)} / ${k})\xB2`, result: n0, unit: "count" },
         ...multiplier !== 1 ? [{ label: "Full standard", formula: input.basis === "severity" ? `n\u2080 \xD7 ${cv}\xB2` : `n\u2080 \xD7 (1 + ${cv}\xB2)`, result: standard, unit: "count" }] : []
       ],
@@ -1623,6 +1726,765 @@ var partialCredibility = {
   }
 };
 
+// src/lib/tools/credibility/buhlmann.ts
+var buhlmannCredibility = {
+  id: "credibility.buhlmann_credibility",
+  version: "1.0.0",
+  name: "B\xFChlmann Credibility",
+  area: "credibility",
+  answers: "What's the credibility estimate from the structural parameters?",
+  fields: [
+    { kind: "number", key: "epv", label: "Expected process variance", symbol: "EPV", unit: "plain", min: 0, max: 1e18, sliderMax: 1e3, step: 1, default: 100, description: "The expected value of the process variance, per unit of exposure: E[Var(X | \u0398)]." },
+    { kind: "number", key: "vhm", label: "Variance of hypothetical means", symbol: "VHM", unit: "plain", min: 1e-18, max: 1e18, sliderMax: 100, step: 0.1, default: 10, description: "The variance of the hypothetical means: Var(E[X | \u0398])." },
+    { kind: "number", key: "exposure", label: "Exposure", symbol: "n", unit: "count", min: 0, max: 1e12, sliderMax: 100, step: 1, default: 5, description: "The risk's exposure in the experience: years for B\xFChlmann, the summed exposure units for B\xFChlmann-Straub." },
+    { kind: "number", key: "observed", label: "Observed mean", symbol: "X\u0304", unit: "plain", min: -1e18, max: 1e18, sliderMax: 1e3, step: 1, default: 60, description: "The risk's own mean per unit of exposure." },
+    { kind: "number", key: "prior", label: "Overall mean", symbol: "\u03BC", unit: "plain", min: -1e18, max: 1e18, sliderMax: 1e3, step: 1, default: 50, description: "The complement: the mean over all risks, E[X]." }
+  ],
+  notation: () => "k = EPV / VHM,  Z = n / (n + k),  P = Z\xB7X\u0304 + (1 \u2212 Z)\xB7\u03BC",
+  view: "none",
+  compute: (input) => {
+    const epv = Number(input.epv);
+    const vhm = Number(input.vhm);
+    const n = Number(input.exposure);
+    const xbar = Number(input.observed);
+    const mu = Number(input.prior);
+    if (!(vhm > 0)) throw new ToolInputError("vhm", "The VHM must be positive: with no difference between risks, Z is 0.");
+    const k = epv / vhm;
+    const Z = n / (n + k);
+    const estimate = Z * xbar + (1 - Z) * mu;
+    return {
+      tiles: [
+        { symbol: "P", label: "Credibility estimate", value: estimate, unit: "plain" },
+        { symbol: "Z", label: "Credibility", value: Z, unit: "percent" },
+        { symbol: "k", label: "EPV / VHM", value: k, unit: "plain" }
+      ],
+      trace: [
+        { label: "B\xFChlmann k", formula: `${epv} / ${vhm}`, result: k, unit: "plain" },
+        { label: "Credibility", formula: `${n} / (${n} + ${formatValue(k, "plain")})`, result: Z, unit: "percent" },
+        { label: "Credibility estimate", formula: `${formatValue(Z, "plain")} \xD7 ${xbar} + (1 \u2212 Z) \xD7 ${mu}`, result: estimate, unit: "plain" }
+      ],
+      warnings: [],
+      values: { k, z: Z, estimate },
+      summary: `Z = ${formatValue(Z, "percent")} (k = ${formatValue(k, "plain")}); credibility estimate ${formatValue(estimate, "plain")} per unit of exposure.`
+    };
+  },
+  method: { concepts: ["B\xFChlmann Credibility", "B\xFChlmann-Straub Credibility"], readings: [] }
+};
+
+// src/lib/distributions.ts
+function moments(mean, variance, extra = {}) {
+  return {
+    mean,
+    variance,
+    sd: Math.sqrt(Math.max(variance, 0)),
+    skewness: extra.skewness ?? null,
+    mode: extra.mode ?? null,
+    median: extra.median ?? null
+  };
+}
+function isInteger(x) {
+  return Math.abs(x - Math.round(x)) < 1e-9;
+}
+function discreteCdf(k, lo, pmf) {
+  const top = Math.floor(k + 1e-9);
+  if (top < lo) return 0;
+  let total = 0;
+  for (let i = lo; i <= top; i++) {
+    total += pmf(i);
+    if (total >= 1) return 1;
+  }
+  return Math.min(1, total);
+}
+function clipWindow(lo, hi, minLo, maxHi) {
+  const l = Math.max(minLo, Math.floor(lo));
+  const h = Math.min(maxHi, Math.ceil(hi));
+  return h > l ? [l, h] : [minLo, Math.max(minLo + 1, maxHi)];
+}
+var normal = {
+  key: "normal",
+  name: "Normal",
+  title: "Normal Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x \u2208 (\u2212\u221E, \u221E)",
+  params: [
+    { key: "mu", symbol: "\u03BC", label: "mean", min: -10, max: 10, step: 0.1, default: 0 },
+    { key: "sigma", symbol: "\u03C3", label: "standard deviation", min: 0.1, max: 5, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ N(\u03BC = ${fmt(p2.mu)}, \u03C3\xB2 = ${fmt(p2.sigma * p2.sigma)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => standardNormalPdf((x - p2.mu) / p2.sigma) / p2.sigma,
+  cdf: (x, p2) => standardNormalCdf((x - p2.mu) / p2.sigma),
+  moments: (p2) => moments(p2.mu, p2.sigma * p2.sigma, { skewness: 0, mode: p2.mu, median: p2.mu }),
+  range: (p2) => [p2.mu - 4 * p2.sigma, p2.mu + 4 * p2.sigma],
+  sample: (p2, rng) => p2.mu + p2.sigma * sampleStandardNormal(rng)
+};
+var lognormal = {
+  key: "lognormal",
+  name: "Lognormal",
+  title: "Lognormal Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "mu", symbol: "\u03BC", label: "log-mean", min: -2, max: 3, step: 0.05, default: 0 },
+    { key: "sigma", symbol: "\u03C3", label: "log-standard deviation", min: 0.05, max: 2, step: 0.05, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ Lognormal(\u03BC = ${fmt(p2.mu)}, \u03C3\xB2 = ${fmt(p2.sigma * p2.sigma)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0) return 0;
+    const z = (Math.log(x) - p2.mu) / p2.sigma;
+    return standardNormalPdf(z) / (x * p2.sigma);
+  },
+  cdf: (x, p2) => x <= 0 ? 0 : standardNormalCdf((Math.log(x) - p2.mu) / p2.sigma),
+  moments: (p2) => {
+    const s2 = p2.sigma * p2.sigma;
+    const mean = Math.exp(p2.mu + s2 / 2);
+    const variance = (Math.exp(s2) - 1) * Math.exp(2 * p2.mu + s2);
+    return moments(mean, variance, {
+      skewness: (Math.exp(s2) + 2) * Math.sqrt(Math.exp(s2) - 1),
+      mode: Math.exp(p2.mu - s2),
+      median: Math.exp(p2.mu)
+    });
+  },
+  // The mean + 4σ window is unusable once σ grows (the tail runs to hundreds),
+  // so cut at roughly the 99th percentile of the underlying normal instead.
+  range: (p2) => [0, Math.exp(p2.mu + 2.5 * p2.sigma)],
+  sample: (p2, rng) => Math.exp(p2.mu + p2.sigma * sampleStandardNormal(rng))
+};
+var exponential = {
+  key: "exponential",
+  name: "Exponential",
+  title: "Exponential Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "theta", symbol: "\u03B8", label: "scale (the mean)", min: 0.1, max: 10, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ Exp(\u03B8 = ${fmt(p2.theta)}), rate 1/\u03B8 = ${fmt(1 / p2.theta)}`,
+  normalize: (p2) => p2,
+  density: (x, p2) => x < 0 ? 0 : Math.exp(-x / p2.theta) / p2.theta,
+  cdf: (x, p2) => x <= 0 ? 0 : 1 - Math.exp(-x / p2.theta),
+  moments: (p2) => moments(p2.theta, p2.theta * p2.theta, {
+    skewness: 2,
+    mode: 0,
+    median: p2.theta * Math.LN2
+  }),
+  range: (p2) => [0, 6 * p2.theta],
+  sample: (p2, rng) => -p2.theta * Math.log(openUnit(rng))
+};
+var gamma = {
+  key: "gamma",
+  name: "Gamma",
+  title: "Gamma Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "alpha", symbol: "\u03B1", label: "shape", min: 0.2, max: 20, step: 0.1, default: 2 },
+    { key: "theta", symbol: "\u03B8", label: "scale", min: 0.1, max: 10, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ Gamma(\u03B1 = ${fmt(p2.alpha)}, \u03B8 = ${fmt(p2.theta)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0) return p2.alpha < 1 ? Infinity : p2.alpha === 1 ? 1 / p2.theta : 0;
+    const logF = (p2.alpha - 1) * Math.log(x) - x / p2.theta - p2.alpha * Math.log(p2.theta) - logGamma(p2.alpha);
+    return Math.exp(logF);
+  },
+  cdf: (x, p2) => x <= 0 ? 0 : regularizedGammaP(p2.alpha, x / p2.theta),
+  moments: (p2) => moments(p2.alpha * p2.theta, p2.alpha * p2.theta * p2.theta, {
+    skewness: 2 / Math.sqrt(p2.alpha),
+    mode: p2.alpha >= 1 ? (p2.alpha - 1) * p2.theta : null
+  }),
+  range: (p2) => [0, p2.theta * (p2.alpha + 4 * Math.sqrt(p2.alpha))],
+  sample: (p2, rng) => sampleGamma(p2.alpha, p2.theta, rng)
+};
+var beta = {
+  key: "beta",
+  name: "Beta",
+  title: "Beta Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "0 < x < 1",
+  params: [
+    { key: "alpha", symbol: "\u03B1", label: "shape", min: 0.1, max: 10, step: 0.1, default: 2 },
+    { key: "beta", symbol: "\u03B2", label: "shape", min: 0.1, max: 10, step: 0.1, default: 5 }
+  ],
+  notation: (p2) => `X ~ Beta(\u03B1 = ${fmt(p2.alpha)}, \u03B2 = ${fmt(p2.beta)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0 || x >= 1) return p2.alpha < 1 || p2.beta < 1 ? Infinity : 0;
+    return Math.exp((p2.alpha - 1) * Math.log(x) + (p2.beta - 1) * Math.log1p(-x) - logBeta(p2.alpha, p2.beta));
+  },
+  cdf: (x, p2) => regularizedIncompleteBeta(p2.alpha, p2.beta, x),
+  moments: (p2) => {
+    const a = p2.alpha;
+    const b = p2.beta;
+    const s = a + b;
+    const mean = a / s;
+    const variance = a * b / (s * s * (s + 1));
+    return moments(mean, variance, {
+      skewness: 2 * (b - a) * Math.sqrt(s + 1) / ((s + 2) * Math.sqrt(a * b)),
+      mode: a > 1 && b > 1 ? (a - 1) / (s - 2) : null
+    });
+  },
+  range: () => [0, 1],
+  sample: (p2, rng) => sampleBeta(p2.alpha, p2.beta, rng)
+};
+var binomial = {
+  key: "binomial",
+  name: "Binomial",
+  title: "Binomial Distribution",
+  kind: "discrete",
+  xLabel: "k",
+  yLabel: "P(X = k)",
+  support: "k = 0, 1, \u2026, n",
+  params: [
+    { key: "n", symbol: "n", label: "trials", min: 1, max: 100, step: 1, default: 20, integer: true },
+    { key: "p", symbol: "p", label: "success probability", min: 0.01, max: 0.99, step: 0.01, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ Bin(n = ${p2.n}, p = ${fmt(p2.p)})`,
+  normalize: (p2) => ({ ...p2, n: Math.round(p2.n) }),
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 0 || k > p2.n) return 0;
+    const i = Math.round(k);
+    return Math.exp(
+      logBinomialCoefficient(p2.n, i) + i * Math.log(p2.p) + (p2.n - i) * Math.log1p(-p2.p)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, 0, (i) => binomial.density(i, p2)),
+  moments: (p2) => {
+    const mean = p2.n * p2.p;
+    const variance = p2.n * p2.p * (1 - p2.p);
+    return moments(mean, variance, {
+      skewness: (1 - 2 * p2.p) / Math.sqrt(variance),
+      mode: Math.floor((p2.n + 1) * p2.p)
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt(p2.n * p2.p * (1 - p2.p));
+    return clipWindow(p2.n * p2.p - 4 * sd, p2.n * p2.p + 4 * sd, 0, p2.n);
+  },
+  sample: (p2, rng) => sampleBinomial(p2.n, p2.p, rng)
+};
+var poisson = {
+  key: "poisson",
+  name: "Poisson",
+  title: "Poisson Distribution",
+  kind: "discrete",
+  xLabel: "k",
+  yLabel: "P(X = k)",
+  support: "k = 0, 1, 2, \u2026",
+  params: [
+    { key: "lambda", symbol: "\u03BB", label: "rate (mean count)", min: 0.1, max: 30, step: 0.1, default: 4 }
+  ],
+  notation: (p2) => `X ~ Poisson(\u03BB = ${fmt(p2.lambda)})`,
+  normalize: (p2) => p2,
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 0) return 0;
+    const i = Math.round(k);
+    return Math.exp(-p2.lambda + i * Math.log(p2.lambda) - logGamma(i + 1));
+  },
+  // P(X ≤ k) = Q(k+1, λ): the regularized upper incomplete gamma.
+  cdf: (k, p2) => k < 0 ? 0 : 1 - regularizedGammaP(Math.floor(k + 1e-9) + 1, p2.lambda),
+  moments: (p2) => moments(p2.lambda, p2.lambda, {
+    skewness: 1 / Math.sqrt(p2.lambda),
+    mode: Math.floor(p2.lambda)
+  }),
+  range: (p2) => {
+    const sd = Math.sqrt(p2.lambda);
+    return clipWindow(p2.lambda - 4 * sd, p2.lambda + 4 * sd + 2, 0, Number.MAX_SAFE_INTEGER);
+  },
+  sample: (p2, rng) => samplePoisson(p2.lambda, rng)
+};
+var geometric = {
+  key: "geometric",
+  name: "Geometric",
+  title: "Geometric Distribution",
+  kind: "discrete",
+  xLabel: "k (trial of first success)",
+  yLabel: "P(X = k)",
+  support: "k = 1, 2, 3, \u2026",
+  params: [
+    { key: "p", symbol: "p", label: "success probability", min: 0.02, max: 0.95, step: 0.01, default: 0.25 }
+  ],
+  notation: (p2) => `X ~ Geom(p = ${fmt(p2.p)})`,
+  normalize: (p2) => p2,
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 1) return 0;
+    return Math.pow(1 - p2.p, Math.round(k) - 1) * p2.p;
+  },
+  cdf: (k, p2) => k < 1 ? 0 : 1 - Math.pow(1 - p2.p, Math.floor(k + 1e-9)),
+  moments: (p2) => {
+    const mean = 1 / p2.p;
+    const variance = (1 - p2.p) / (p2.p * p2.p);
+    return moments(mean, variance, {
+      skewness: (2 - p2.p) / Math.sqrt(1 - p2.p),
+      mode: 1,
+      median: Math.ceil(-1 / Math.log2(1 - p2.p))
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt((1 - p2.p) / (p2.p * p2.p));
+    return clipWindow(1, 1 / p2.p + 4 * sd, 1, 200);
+  },
+  sample: (p2, rng) => sampleGeometricTrials(p2.p, rng)
+};
+var negativeBinomial = {
+  key: "negativeBinomial",
+  name: "Negative Binomial",
+  title: "Negative Binomial Distribution",
+  kind: "discrete",
+  xLabel: "k (total trials)",
+  yLabel: "P(X = k)",
+  support: "k = r, r+1, r+2, \u2026",
+  params: [
+    { key: "r", symbol: "r", label: "successes required", min: 1, max: 20, step: 1, default: 3, integer: true },
+    { key: "p", symbol: "p", label: "success probability", min: 0.05, max: 0.95, step: 0.01, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ NegBin(r = ${p2.r}, p = ${fmt(p2.p)})`,
+  normalize: (p2) => ({ ...p2, r: Math.round(p2.r) }),
+  density: (k, p2) => {
+    if (!isInteger(k) || k < p2.r) return 0;
+    const i = Math.round(k);
+    return Math.exp(
+      logBinomialCoefficient(i - 1, p2.r - 1) + p2.r * Math.log(p2.p) + (i - p2.r) * Math.log1p(-p2.p)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, p2.r, (i) => negativeBinomial.density(i, p2)),
+  moments: (p2) => {
+    const mean = p2.r / p2.p;
+    const variance = p2.r * (1 - p2.p) / (p2.p * p2.p);
+    return moments(mean, variance, {
+      skewness: (2 - p2.p) / Math.sqrt(p2.r * (1 - p2.p)),
+      mode: p2.r === 1 ? 1 : Math.floor((p2.r - 1) / p2.p) + 1
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt(p2.r * (1 - p2.p) / (p2.p * p2.p));
+    return clipWindow(p2.r, p2.r / p2.p + 4 * sd, p2.r, 400);
+  },
+  sample: (p2, rng) => {
+    let trials = 0;
+    for (let i = 0; i < p2.r; i++) trials += sampleGeometricTrials(p2.p, rng);
+    return trials;
+  }
+};
+var hypergeometric = {
+  key: "hypergeometric",
+  name: "Hypergeometric",
+  title: "Hypergeometric Distribution",
+  kind: "discrete",
+  xLabel: "k (successes drawn)",
+  yLabel: "P(X = k)",
+  support: "max(0, n+K\u2212N) \u2264 k \u2264 min(n, K)",
+  params: [
+    { key: "N", symbol: "N", label: "population size", min: 5, max: 200, step: 1, default: 50, integer: true },
+    { key: "K", symbol: "K", label: "successes in population", min: 0, max: (p2) => p2.N, step: 1, default: 15, integer: true },
+    { key: "n", symbol: "n", label: "sample size (no replacement)", min: 1, max: (p2) => p2.N, step: 1, default: 10, integer: true }
+  ],
+  notation: (p2) => `X ~ HG(N = ${p2.N}, K = ${p2.K}, n = ${p2.n})`,
+  // K and n can't exceed the population, so a shrinking N drags them down.
+  normalize: (p2) => {
+    const N = Math.max(1, Math.round(p2.N));
+    return { N, K: clamp(Math.round(p2.K), 0, N), n: clamp(Math.round(p2.n), 1, N) };
+  },
+  density: (k, p2) => {
+    if (!isInteger(k)) return 0;
+    const i = Math.round(k);
+    if (i < Math.max(0, p2.n + p2.K - p2.N) || i > Math.min(p2.n, p2.K)) return 0;
+    return Math.exp(
+      logBinomialCoefficient(p2.K, i) + logBinomialCoefficient(p2.N - p2.K, p2.n - i) - logBinomialCoefficient(p2.N, p2.n)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, Math.max(0, p2.n + p2.K - p2.N), (i) => hypergeometric.density(i, p2)),
+  moments: (p2) => {
+    const { N, K: K2, n } = p2;
+    const mean = n * K2 / N;
+    const variance = N > 1 ? n * K2 * (N - K2) * (N - n) / (N * N * (N - 1)) : 0;
+    const skewness = N > 2 && variance > 0 ? (N - 2 * K2) * Math.sqrt(N - 1) * (N - 2 * n) / (Math.sqrt(n * K2 * (N - K2) * (N - n)) * (N - 2)) : null;
+    return moments(mean, variance, {
+      skewness,
+      mode: Math.floor((n + 1) * (K2 + 1) / (N + 2))
+    });
+  },
+  range: (p2) => {
+    const lo = Math.max(0, p2.n + p2.K - p2.N);
+    const hi = Math.min(p2.n, p2.K);
+    if (hi - lo <= 60) return [lo, Math.max(hi, lo + 1)];
+    const { mean, sd } = hypergeometric.moments(p2);
+    return clipWindow(mean - 4 * sd, mean + 4 * sd, lo, hi);
+  },
+  sample: (p2, rng) => {
+    let remaining = p2.N;
+    let successes = p2.K;
+    let drawn = 0;
+    for (let i = 0; i < p2.n; i++) {
+      if (rng() < successes / remaining) {
+        drawn++;
+        successes--;
+      }
+      remaining--;
+    }
+    return drawn;
+  }
+};
+function clamp(x, lo, hi) {
+  return Math.max(lo, Math.min(hi, x));
+}
+function fmt(x) {
+  if (!Number.isFinite(x)) return "\u2014";
+  if (Number.isInteger(x)) return String(x);
+  return Math.abs(x) >= 100 ? x.toFixed(0) : Math.abs(x) >= 1 ? x.toFixed(2) : x.toFixed(3).replace(/0+$/, "");
+}
+var DISTRIBUTIONS = {
+  normal,
+  lognormal,
+  exponential,
+  gamma,
+  beta,
+  binomial,
+  poisson,
+  geometric,
+  negativeBinomial,
+  hypergeometric
+};
+
+// src/lib/tools/distributions/distribution.ts
+var KEYS = Object.keys(DISTRIBUTIONS);
+var takes = (param2) => KEYS.filter((k) => DISTRIBUTIONS[k].params.some((p2) => p2.key === param2));
+var param = (key, f) => ({ kind: "number", key, showWhen: { field: "family", in: takes(key) }, ...f });
+var PARAMS = [
+  param("mu", { label: "Mean (log-mean for the lognormal)", symbol: "\u03BC", unit: "plain", min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 0, description: "\u03BC: the normal mean, or the mean of ln X for the lognormal." }),
+  param("sigma", { label: "Standard deviation (of ln X for the lognormal)", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: "\u03C3: the normal standard deviation, or that of ln X for the lognormal." }),
+  param("theta", { label: "Scale", symbol: "\u03B8", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: "\u03B8: the scale (an exponential's mean; a gamma's mean is \u03B1\u03B8)." }),
+  param("alpha", { label: "Shape", symbol: "\u03B1", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 20, step: 0.1, default: 2, description: "\u03B1: the gamma or beta shape." }),
+  param("beta", { label: "Second shape", symbol: "\u03B2", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 5, description: "\u03B2: the beta's second shape." }),
+  param("lambda", { label: "Mean count", symbol: "\u03BB", unit: "plain", min: 1e-9, max: 1e5, sliderMax: 30, step: 0.1, default: 4, description: "\u03BB: the Poisson mean." }),
+  param("n", { label: "Trials (sample size, hypergeometric)", symbol: "n", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 100, step: 1, default: 10, description: "n: the binomial's trials, or the hypergeometric's sample size." }),
+  param("p", { label: "Success probability", symbol: "p", unit: "plain", min: 1e-9, max: 1, sliderMax: 1, step: 0.01, default: 0.5, description: "p: the chance of a success on each trial." }),
+  param("r", { label: "Successes required", symbol: "r", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 20, step: 1, default: 3, description: "r: the negative binomial's successes (it counts total trials to the r-th)." }),
+  param("N", { label: "Population size", symbol: "N", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 200, step: 1, default: 50, description: "N: the hypergeometric population." }),
+  param("K", { label: "Successes in population", symbol: "K", unit: "count", integer: true, min: 0, max: 1e5, sliderMax: 50, step: 1, default: 15, description: "K: the hypergeometric population's successes." })
+];
+function params(input, key) {
+  const spec = DISTRIBUTIONS[key];
+  const p2 = Object.fromEntries(spec.params.map((q) => [q.key, Number(input[q.key])]));
+  if (key === "hypergeometric" && (p2.K > p2.N || p2.n > p2.N)) throw new ToolInputError("N", "The population N must hold at least K successes and the sample of n.");
+  if (key === "binomial" && p2.p > 1) throw new ToolInputError("p", "p is a probability: at most 1.");
+  return p2;
+}
+function quantile(key, p2, q) {
+  const spec = DISTRIBUTIONS[key];
+  const [lo0, hi0] = spec.range(p2);
+  if (spec.kind === "discrete") {
+    let k = Math.max(0, Math.floor(lo0) - 1);
+    while (spec.cdf(k, p2) < q - 1e-12 && k < 1e7) k++;
+    return k;
+  }
+  let lo = lo0;
+  let hi = hi0;
+  for (let n = 0; spec.cdf(lo, p2) > q && n < 200; n++) lo -= Math.max(1, Math.abs(lo));
+  for (let n = 0; spec.cdf(hi, p2) < q && n < 200; n++) hi += Math.max(1, Math.abs(hi));
+  return bisect((x) => spec.cdf(x, p2) - q, lo, hi);
+}
+var distribution = {
+  id: "distributions.distribution",
+  version: "1.0.0",
+  name: "Distribution",
+  area: "distributions",
+  answers: "What's the probability, quantile or moment?",
+  fields: [
+    {
+      kind: "choice",
+      key: "family",
+      label: "Distribution",
+      description: "The distribution, in the parameterisation of its concept page: exponential and gamma by scale \u03B8, the geometric counting trials to the first success (k \u2265 1), the negative binomial total trials to the r-th.",
+      options: KEYS.map((k) => ({ value: k, label: DISTRIBUTIONS[k].name })),
+      default: "normal"
+    },
+    ...PARAMS,
+    { kind: "number", key: "x", label: "Value", symbol: "x", unit: "plain", min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: "The value x for P(X \u2264 x) and P(X > x). For a count, P(X \u2265 k) is P(X > k \u2212 1)." },
+    { kind: "number", key: "q", label: "Quantile level", symbol: "q", unit: "percent", min: 1e-9, max: 0.999999999, sliderMax: 0.99, step: 0.01, default: 0.95, description: "The level q for the quantile, the smallest x with F(x) \u2265 q." }
+  ],
+  notation: (input) => DISTRIBUTIONS[String(input.family)].notation(params(input, String(input.family))),
+  view: "table",
+  compute: (input) => {
+    const key = String(input.family);
+    const spec = DISTRIBUTIONS[key];
+    const p2 = params(input, key);
+    const x = Number(input.x);
+    const q = Number(input.q);
+    const F2 = spec.cdf(x, p2);
+    const xq = quantile(key, p2, q);
+    const m = spec.moments(p2);
+    const rows = [
+      { measure: "Mean", value: m.mean },
+      { measure: "Variance", value: m.variance },
+      { measure: "Standard deviation", value: m.sd },
+      ...m.skewness === null ? [] : [{ measure: "Skewness", value: m.skewness }],
+      ...m.median === null ? [] : [{ measure: "Median", value: m.median }],
+      ...m.mode === null ? [] : [{ measure: "Mode", value: m.mode }]
+    ];
+    return {
+      tiles: [
+        { symbol: "F(x)", label: "P(X \u2264 x)", value: F2, unit: "plain" },
+        { symbol: "S(x)", label: "P(X > x)", value: 1 - F2, unit: "plain" },
+        { symbol: `x_q`, label: `${formatValue(q, "percent")} quantile`, value: xq, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          { key: "measure", label: "Moment", kind: "text" },
+          { key: "value", label: "", kind: "number", unit: "plain", computed: true }
+        ],
+        rows
+      },
+      trace: [
+        { label: `${spec.kind === "discrete" ? "Mass" : "Density"} at x`, formula: `${spec.kind === "discrete" ? "p" : "f"}(${x})`, result: spec.density(x, p2), unit: "plain" },
+        { label: "Distribution function", formula: `F(${x}) = P(X \u2264 ${x})`, result: F2, unit: "plain" },
+        { label: "Quantile", formula: `the smallest x with F(x) \u2265 ${q}`, result: xq, unit: "plain" }
+      ],
+      warnings: [],
+      values: { cdf: F2, survival: 1 - F2, quantile: xq, density: spec.density(x, p2), mean: m.mean, variance: m.variance, sd: m.sd, skewness: m.skewness, median: m.median, mode: m.mode },
+      summary: `For ${spec.notation(p2)}: P(X \u2264 ${x}) = ${formatValue(F2, "plain")}, the ${formatValue(q, "percent")} quantile is ${formatValue(xq, "plain")}, and the mean is ${formatValue(m.mean, "plain")}.`
+    };
+  },
+  method: { concepts: ["Continuous Univariate Distributions", "Discrete Univariate Distributions"], readings: [] }
+};
+
+// src/lib/tools/distributions/lossModels.ts
+var FAMILY = {
+  kind: "choice",
+  key: "family",
+  label: "Loss distribution",
+  description: "The ground-up loss distribution, in the exam tables' parameterisation: Pareto is the two-parameter (Lomax) form on x > 0; the single-parameter Pareto lives on x > \u03B8.",
+  options: [
+    { value: "exponential", label: "Exponential" },
+    { value: "uniform", label: "Uniform" },
+    { value: "pareto", label: "Pareto" },
+    { value: "single_pareto", label: "Single-parameter Pareto" },
+    { value: "gamma", label: "Gamma" },
+    { value: "lognormal", label: "Lognormal" },
+    { value: "weibull", label: "Weibull" }
+  ],
+  default: "exponential"
+};
+var scaled = ["exponential", "pareto", "single_pareto", "gamma", "weibull"];
+var PARAMETERS = [
+  { kind: "number", key: "theta", label: "Scale", symbol: "\u03B8", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 1e4, step: 10, default: 1e3, description: "The scale \u03B8: the mean of an exponential; the lower bound of a single-parameter Pareto.", showWhen: { field: "family", in: scaled } },
+  { kind: "number", key: "alpha", label: "Shape", symbol: "\u03B1", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 3, description: "The shape \u03B1 of a Pareto, single-parameter Pareto or gamma.", showWhen: { field: "family", in: ["pareto", "single_pareto", "gamma"] } },
+  { kind: "number", key: "tau", label: "Shape", symbol: "\u03C4", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 5, step: 0.05, default: 1.5, description: "The Weibull shape \u03C4.", showWhen: { field: "family", in: ["weibull"] } },
+  { kind: "number", key: "mu", label: "Log-mean", symbol: "\u03BC", unit: "plain", min: -1e3, max: 1e3, sliderMax: 15, step: 0.05, default: 7, description: "The lognormal \u03BC: the mean of ln X.", showWhen: { field: "family", in: ["lognormal"] } },
+  { kind: "number", key: "sigma", label: "Log-sd", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e3, sliderMax: 3, step: 0.05, default: 1, description: "The lognormal \u03C3: the standard deviation of ln X.", showWhen: { field: "family", in: ["lognormal"] } },
+  { kind: "number", key: "a", label: "From", symbol: "a", unit: "plain", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 0, description: "The uniform's lower end (losses are never negative).", showWhen: { field: "family", in: ["uniform"] } },
+  { kind: "number", key: "b", label: "To", symbol: "b", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 1e4, step: 10, default: 1e3, description: "The uniform's upper end.", showWhen: { field: "family", in: ["uniform"] } }
+];
+var fmt2 = (x) => Number.isInteger(x) ? String(x) : String(Number(x.toPrecision(6)));
+var P = regularizedGammaP;
+function lossModel(input) {
+  const family = String(input.family);
+  const theta = Number(input.theta);
+  const alpha = Number(input.alpha);
+  switch (family) {
+    case "exponential":
+      return {
+        family,
+        label: "Exponential",
+        notation: `Exp(\u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : Math.exp(-x / theta),
+        mean: theta,
+        lev: (u) => u <= 0 ? 0 : theta * (1 - Math.exp(-u / theta))
+      };
+    case "uniform": {
+      const a = Number(input.a);
+      const b = Number(input.b);
+      if (!(b > a)) throw new ToolInputError("b", "The uniform's upper end must be above its lower end.");
+      return {
+        family,
+        label: "Uniform",
+        notation: `U(${fmt2(a)}, ${fmt2(b)})`,
+        survival: (x) => x <= a ? 1 : x >= b ? 0 : (b - x) / (b - a),
+        mean: (a + b) / 2,
+        lev: (u) => u <= 0 ? 0 : u <= a ? u : u >= b ? (a + b) / 2 : a + ((b - a) ** 2 - (b - u) ** 2) / (2 * (b - a))
+      };
+    }
+    case "pareto":
+      return {
+        family,
+        label: "Pareto",
+        notation: `Pareto(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : (theta / (x + theta)) ** alpha,
+        mean: alpha > 1 ? theta / (alpha - 1) : Infinity,
+        lev: (u) => {
+          if (u <= 0) return 0;
+          if (alpha === 1) return theta * Math.log((u + theta) / theta);
+          return theta / (alpha - 1) * (1 - (theta / (u + theta)) ** (alpha - 1));
+        }
+      };
+    case "single_pareto":
+      return {
+        family,
+        label: "Single-parameter Pareto",
+        notation: `Single Pareto(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= theta ? 1 : (theta / x) ** alpha,
+        mean: alpha > 1 ? alpha * theta / (alpha - 1) : Infinity,
+        lev: (u) => {
+          if (u <= theta) return Math.max(u, 0);
+          if (alpha === 1) return theta * (1 + Math.log(u / theta));
+          return alpha * theta / (alpha - 1) - theta ** alpha / ((alpha - 1) * u ** (alpha - 1));
+        }
+      };
+    case "gamma":
+      return {
+        family,
+        label: "Gamma",
+        notation: `Gamma(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : 1 - P(alpha, x / theta),
+        mean: alpha * theta,
+        lev: (u) => u <= 0 ? 0 : alpha * theta * P(alpha + 1, u / theta) + u * (1 - P(alpha, u / theta))
+      };
+    case "lognormal": {
+      const mu = Number(input.mu);
+      const sigma = Number(input.sigma);
+      return {
+        family,
+        label: "Lognormal",
+        notation: `Lognormal(\u03BC = ${fmt2(mu)}, \u03C3 = ${fmt2(sigma)})`,
+        survival: (x) => x <= 0 ? 1 : 1 - standardNormalCdf((Math.log(x) - mu) / sigma),
+        mean: Math.exp(mu + sigma ** 2 / 2),
+        lev: (u) => {
+          if (u <= 0) return 0;
+          const z = (Math.log(u) - mu) / sigma;
+          return Math.exp(mu + sigma ** 2 / 2) * standardNormalCdf(z - sigma) + u * (1 - standardNormalCdf(z));
+        }
+      };
+    }
+    case "weibull": {
+      const tau = Number(input.tau);
+      const g = gammaFn(1 + 1 / tau);
+      return {
+        family,
+        label: "Weibull",
+        notation: `Weibull(\u03C4 = ${fmt2(tau)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : Math.exp(-((x / theta) ** tau)),
+        mean: theta * g,
+        lev: (u) => u <= 0 ? 0 : theta * g * P(1 + 1 / tau, (u / theta) ** tau) + u * Math.exp(-((u / theta) ** tau))
+      };
+    }
+    default:
+      throw new ToolInputError("family", `Unknown loss distribution "${family}".`);
+  }
+}
+
+// src/lib/tools/distributions/limitedExpectedValue.ts
+var limitedExpectedValue = {
+  id: "distributions.limited_expected_value",
+  version: "1.0.0",
+  name: "Limited Expected Value",
+  area: "distributions",
+  answers: "What's the expected loss, capped at u?",
+  fields: [
+    FAMILY,
+    ...PARAMETERS,
+    { kind: "number", key: "u", label: "Limit", symbol: "u", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 2e3, description: "The cap: the policy limit, or a deductible whose eliminated losses are E[X \u2227 u]." }
+  ],
+  notation: (input) => `E[X \u2227 u] = \u222B\u2080\u1D58 S(x) dx,  X ~ ${lossModel(input).notation}`,
+  view: "none",
+  compute: (input) => {
+    const model = lossModel(input);
+    const u = Number(input.u);
+    const lev = model.lev(u);
+    const ler = Number.isFinite(model.mean) ? lev / model.mean : 0;
+    const warnings = Number.isFinite(model.mean) ? [] : ["The mean is infinite (\u03B1 \u2264 1), so the loss elimination ratio is 0: no cap removes a finite share of an infinite mean."];
+    return {
+      tiles: [
+        { symbol: "E[X\u2227u]", label: "Limited", value: lev, unit: "money" },
+        { symbol: "E[X]", label: "Unlimited", value: model.mean, unit: "money" },
+        { symbol: "LER", label: "Share kept under u", value: ler, unit: "percent" }
+      ],
+      trace: [
+        { label: "Probability the loss exceeds u", formula: `S(${u})`, result: model.survival(u), unit: "percent" },
+        { label: "Limited expected value", formula: `E[X \u2227 ${u}], in closed form for the ${model.label.toLowerCase()}`, result: lev, unit: "money" },
+        { label: "Mean", formula: "E[X]", result: model.mean, unit: "money" },
+        { label: "Loss elimination ratio", formula: "E[X \u2227 u] / E[X]", result: ler, unit: "percent" }
+      ],
+      warnings,
+      values: { lev, mean: model.mean, ler, survival: model.survival(u) },
+      summary: `E[X \u2227 ${formatValue(u, "money")}] = ${formatValue(lev, "money")} for X ~ ${model.notation}; E[X] = ${formatValue(model.mean, "money")}.`
+    };
+  },
+  method: { concepts: ["Limited Expected Value", "Loss Elimination Ratio"], readings: [] },
+  next: [
+    { tool: "distributions.expected_payment", label: "Expected Payment", build: (input) => ({ family: input.family, theta: input.theta, alpha: input.alpha, tau: input.tau, mu: input.mu, sigma: input.sigma, a: input.a, b: input.b, limit: input.u }) }
+  ]
+};
+
+// src/lib/tools/distributions/expectedPayment.ts
+var expectedPayment = {
+  id: "distributions.expected_payment",
+  version: "1.0.0",
+  name: "Expected Payment",
+  area: "distributions",
+  answers: "What does the insurer expect to pay, per loss and per payment?",
+  fields: [
+    FAMILY,
+    ...PARAMETERS,
+    { kind: "number", key: "deductible", label: "Deductible", symbol: "d", unit: "money", min: 0, max: 1e12, sliderMax: 5e3, step: 10, default: 500, description: "The deductible per loss." },
+    { kind: "number", key: "limit", label: "Maximum covered loss", symbol: "u", unit: "money", min: 0, max: 1e12, sliderMax: 2e4, step: 100, default: 0, zeroLabel: "None", description: "The loss above which nothing more is paid (0 for none): with an ordinary deductible the most paid is u \u2212 d. For coinsurance c, multiply both expected payments by c." },
+    {
+      kind: "choice",
+      key: "type",
+      label: "Deductible",
+      description: "Ordinary: pays the loss less d. Franchise: pays the whole loss once it exceeds d.",
+      options: [{ value: "ordinary", label: "Ordinary" }, { value: "franchise", label: "Franchise" }],
+      default: "ordinary"
+    }
+  ],
+  notation: (input) => (input.type === "franchise" ? "E[Y_L] = E[X\u2227u] \u2212 E[X\u2227d] + d\xB7S(d)" : "E[Y_L] = E[X\u2227u] \u2212 E[X\u2227d]") + ",  E[Y_P] = E[Y_L] / S(d)",
+  view: "none",
+  compute: (input) => {
+    const model = lossModel(input);
+    const d = Number(input.deductible);
+    const u = Number(input.limit) === 0 ? Infinity : Number(input.limit);
+    if (u <= d) throw new ToolInputError("limit", "The maximum covered loss must be above the deductible (or 0 for none).");
+    const franchise = input.type === "franchise";
+    const top = Number.isFinite(u) ? model.lev(u) : model.mean;
+    const sd = model.survival(d);
+    const perLoss = top - model.lev(d) + (franchise ? d * sd : 0);
+    const perPayment = sd > 0 ? perLoss / sd : NaN;
+    const warnings = [
+      ...Number.isFinite(top) ? [] : ["With no limit the expected payment is infinite: this model has no finite mean (\u03B1 \u2264 1)."],
+      ...sd > 0 ? [] : ["No loss exceeds the deductible, so nothing is ever paid."]
+    ];
+    return {
+      tiles: [
+        { symbol: "E[Y_L]", label: "Per loss", value: perLoss, unit: "money" },
+        { symbol: "E[Y_P]", label: "Per payment", value: perPayment, unit: "money" },
+        { symbol: "S(d)", label: "Losses paid", value: sd, unit: "percent" }
+      ],
+      trace: [
+        { label: Number.isFinite(u) ? "Limited expected value at u" : "Mean loss", formula: Number.isFinite(u) ? `E[X \u2227 ${u}]` : "E[X]", result: top, unit: "money" },
+        { label: "Limited expected value at d", formula: `E[X \u2227 ${d}]`, result: model.lev(d), unit: "money" },
+        ...franchise ? [{ label: "Deductible given back on paid losses", formula: `${d} \xD7 S(${d})`, result: d * sd, unit: "money" }] : [],
+        { label: "Expected payment per loss", formula: franchise ? "E[X\u2227u] \u2212 E[X\u2227d] + d\xB7S(d)" : "E[X\u2227u] \u2212 E[X\u2227d]", result: perLoss, unit: "money" },
+        { label: "Probability a loss is paid", formula: `S(${d})`, result: sd, unit: "percent" },
+        { label: "Expected payment per payment", formula: "E[Y_L] / S(d)", result: perPayment, unit: "money" }
+      ],
+      warnings,
+      values: { per_loss: perLoss, per_payment: perPayment, survival: sd, lev_d: model.lev(d), lev_u: top },
+      summary: `Expected payment ${formatValue(perLoss, "money")} per loss and ${formatValue(perPayment, "money")} per payment, with a${franchise ? " franchise" : "n ordinary"} deductible of ${formatValue(d, "money")}${Number.isFinite(u) ? ` and losses covered to ${formatValue(u, "money")}` : ""}, for X ~ ${model.notation}.`
+    };
+  },
+  method: { concepts: ["Deductible", "Limited Expected Value"], readings: [] }
+};
+
 // src/lib/tools/registry.ts
 var ENGINE_VERSION = "0.1.0";
 var AREAS = [
@@ -1639,8 +2501,12 @@ var TOOLS = [
   expectedClaims,
   bornhuetterFerguson,
   lossRatioMethod,
+  distribution,
+  limitedExpectedValue,
+  expectedPayment,
   fullCredibilityStandard,
   partialCredibility,
+  buhlmannCredibility,
   interestConverter,
   annuity,
   presentValue,
@@ -2957,6 +3823,21 @@ var fm = (n, check) => ({
   label: `SOA Exam FM sample question ${n}`,
   ...check
 });
+var p = (n, check) => ({
+  question: `p-${String(n).padStart(3, "0")}`,
+  bank: "exam-p",
+  label: `SOA Exam P sample question ${n}`,
+  ...check
+});
+var cas = (id, check) => {
+  const [, exam, year, season, n] = /^(masi|masii)-(\d{4})([sf])-(\d+)$/.exec(id);
+  return {
+    question: id,
+    bank: exam === "masi" ? "exam-mas-i" : "exam-mas-ii",
+    label: `CAS Exam ${exam === "masi" ? "MAS-I" : "MAS-II"}, ${season === "s" ? "Spring" : "Fall"} ${year}, question ${Number(n)}`,
+    ...check
+  };
+};
 var QUESTION_CHECKS = [
   // ─── Present Value ─────────────────────────────────────────────────────────
   fm(26, {
@@ -3182,6 +4063,120 @@ var QUESTION_CHECKS = [
     ],
     tolerance: 0.5,
     value: ([, saved, bought]) => Number(saved.values.accumulated_value) / Number(bought.values.annuity_factor)
+  }),
+  // ─── Distributions ─────────────────────────────────────────────────────────
+  p(124, {
+    // Three independent weeks at a mean of 2 a week: Poisson with mean 6. Fewer than four is X ≤ 3.
+    quotes: ["Poisson distribution with mean 2", "mutually independent", "fewer than four tornadoes occur in a three-week period"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 6, x: 3 }),
+    tolerance: 5e-3,
+    value: val("cdf")
+  }),
+  p(158, {
+    quotes: ["Poisson distribution with mean 1", "mutually independent", "more than two days in a three-month period"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 3, x: 2 }),
+    tolerance: 5e-4,
+    value: val("survival")
+  }),
+  p(355, {
+    // A Poisson standard deviation of 2 is a mean of 4; at least two is more than one.
+    quotes: ["Poisson distribution with a standard deviation of 2", "at least two calls"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 4, x: 1 }),
+    tolerance: 5e-4,
+    value: val("survival")
+  }),
+  p(164, {
+    quotes: ["normally distributed with mean 10 and variance 4", "12th percentile"],
+    steps: one("distributions.distribution", { family: "normal", mu: 10, sigma: 2, q: 0.12 }),
+    tolerance: 5e-3,
+    value: val("quantile")
+  }),
+  p(390, {
+    // A gamma with mean αθ = 6 and variance αθ² = 18: θ = 3, α = 2.
+    quotes: ["gamma distribution with mean 6 and variance 18", "exceeds 4"],
+    steps: one("distributions.distribution", { family: "gamma", alpha: 2, theta: 3, x: 4 }),
+    tolerance: 5e-3,
+    value: val("survival")
+  }),
+  p(66, {
+    // The mean of 25 claims is normal with standard deviation 5,000 / √25 = 1,000.
+    quotes: ["normal distribution with mean 19,400 and standard deviation 5,000", "average of 25 randomly selected claims exceeds 20,000"],
+    steps: one("distributions.distribution", { family: "normal", mu: 19400, sigma: 1e3, x: 2e4 }),
+    tolerance: 5e-3,
+    value: val("survival")
+  }),
+  p(327, {
+    // The mean of 100 claims has standard deviation 500 / √100 = 50; K is its 99th percentile.
+    quotes: ["normally distributed with mean 2500 and standard deviation 500", "random sample of 100 claims will exceed $K$ is 0.01"],
+    steps: one("distributions.distribution", { family: "normal", mu: 2500, sigma: 50, q: 0.99 }),
+    tolerance: 0.5,
+    value: val("quantile")
+  }),
+  p(670, {
+    quotes: ["normally distributed with mean 2500 and standard deviation 500", "exceeds $P$ is 5%", "exceeds the median loss"],
+    steps: one("distributions.distribution", { family: "normal", mu: 2500, sigma: 500, q: 0.95 }),
+    tolerance: 0.5,
+    value: (rs) => Number(last(rs).values.quantile) - Number(last(rs).values.median)
+  }),
+  p(563, {
+    quotes: [String.raw`exponentially distributed with mean $\dfrac{400}{\ln 2}$`, "up to a maximum of 1000"],
+    steps: one("distributions.limited_expected_value", { family: "exponential", theta: 400 / Math.LN2, u: 1e3 }),
+    tolerance: 0.5,
+    value: val("lev")
+  }),
+  p(50, {
+    // f(y) = 2/y³ on y > 1 is the single-parameter Pareto with α = 2, θ = 1.
+    quotes: ["benefit limit of 10", String.raw`\frac{2}{y^3}, & y > 1`],
+    steps: one("distributions.limited_expected_value", { family: "single_pareto", alpha: 2, theta: 1, u: 10 }),
+    tolerance: 0.05,
+    value: val("lev")
+  }),
+  p(48, {
+    // The density is the single-parameter Pareto's with α = 2.5, θ = 0.6; what a deductible of 2 leaves unpaid is E[X ∧ 2].
+    quotes: [String.raw`\frac{2.5(0.6)^{2.5}}{x^{3.5}}, & x > 0.6`, "annual deductible of 2", "losses not paid by the insurance policy"],
+    steps: one("distributions.limited_expected_value", { family: "single_pareto", alpha: 2.5, theta: 0.6, u: 2 }),
+    tolerance: 5e-3,
+    value: val("lev")
+  }),
+  p(337, {
+    quotes: ["deductible of 3", "exponentially distributed with mean 10"],
+    steps: one("distributions.expected_payment", { family: "exponential", theta: 10, deductible: 3 }),
+    tolerance: 5e-3,
+    value: val("per_loss")
+  }),
+  p(601, {
+    // (3/1000)(1000/x)⁴ on x > 1000 is the single-parameter Pareto with α = 3, θ = 1000.
+    quotes: [String.raw`\dfrac{3}{1000}\left(\dfrac{1000}{x}\right)^4, & \text{for } x > 1000`, "deductible of 1100", "for a random loss"],
+    steps: one("distributions.expected_payment", { family: "single_pareto", alpha: 3, theta: 1e3, deductible: 1100 }),
+    tolerance: 0.5,
+    value: val("per_loss")
+  }),
+  cas("masi-2019f-001", {
+    // The memoryless distribution is the exponential.
+    quotes: ["memoryless distribution with mean 1,000", "deductible of 500", "losses that exceed the deductible"],
+    steps: one("distributions.expected_payment", { family: "exponential", theta: 1e3, deductible: 500 }),
+    tolerance: 0,
+    value: val("per_payment")
+  }),
+  cas("masi-2019f-023", {
+    quotes: [String.raw`lognormal distribution with $(\mu = 8,\ \sigma = 1)$`, "ordinary deductible of 1,000 per loss", "Losses below the deductible are not reported"],
+    steps: one("distributions.expected_payment", { family: "lognormal", mu: 8, sigma: 1, deductible: 1e3 }),
+    tolerance: 0,
+    value: val("per_payment")
+  }),
+  // ─── Credibility ───────────────────────────────────────────────────────────
+  cas("masii-2018f-004", {
+    quotes: ["pure premium of 960", "72,000 policies with a pure premium of 530", "expected variance of the pure premium within each region is 1,800,000,000", "variance of the region pure premium means is 45,000"],
+    steps: one("credibility.buhlmann_credibility", { epv: 18e8, vhm: 45e3, exposure: 72e3, observed: 530, prior: 960 }),
+    tolerance: 0,
+    value: val("estimate")
+  }),
+  cas("masii-2018f-005", {
+    // θ ~ U(0.05, 0.25): EPV = E[2θ] = 0.3, VHM = Var θ = 0.2²/12, μ = 0.15. 60 claims on 675 insureds; Year 4 has 250.
+    quotes: [String.raw`mean $\theta$ and variance $2\theta$`, "uniformly distributed from 0.05 to 0.25", "| 1 | 200 | 15 |", "| 2 | 250 | 20 |", "| 3 | 225 | 25 |", "| 4 | 250 | --- |"],
+    steps: one("credibility.buhlmann_credibility", { epv: 0.3, vhm: 0.2 ** 2 / 12, exposure: 675, observed: 60 / 675, prior: 0.15 }),
+    tolerance: 0,
+    value: (rs) => 250 * Number(last(rs).values.estimate)
   })
 ];
 var questionRef = (q) => ({

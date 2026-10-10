@@ -51,6 +51,24 @@ const fm = (n: number, check: Omit<QuestionCheck, 'question' | 'bank' | 'label'>
   ...check,
 })
 
+const p = (n: number, check: Omit<QuestionCheck, 'question' | 'bank' | 'label'>): QuestionCheck => ({
+  question: `p-${String(n).padStart(3, '0')}`,
+  bank: 'exam-p',
+  label: `SOA Exam P sample question ${n}`,
+  ...check,
+})
+
+/** A CAS past-paper question: `masi-2019f-001` is CAS Exam MAS-I, Fall 2019, question 1. */
+const cas = (id: string, check: Omit<QuestionCheck, 'question' | 'bank' | 'label'>): QuestionCheck => {
+  const [, exam, year, season, n] = /^(masi|masii)-(\d{4})([sf])-(\d+)$/.exec(id)!
+  return {
+    question: id,
+    bank: exam === 'masi' ? 'exam-mas-i' : 'exam-mas-ii',
+    label: `CAS Exam ${exam === 'masi' ? 'MAS-I' : 'MAS-II'}, ${season === 's' ? 'Spring' : 'Fall'} ${year}, question ${Number(n)}`,
+    ...check,
+  }
+}
+
 export const QUESTION_CHECKS: QuestionCheck[] = [
   // ─── Present Value ─────────────────────────────────────────────────────────
   fm(26, {
@@ -280,6 +298,122 @@ export const QUESTION_CHECKS: QuestionCheck[] = [
     ],
     tolerance: 0.5,
     value: ([, saved, bought]) => Number(saved.values.accumulated_value) / Number(bought.values.annuity_factor),
+  }),
+
+  // ─── Distributions ─────────────────────────────────────────────────────────
+  p(124, {
+    // Three independent weeks at a mean of 2 a week: Poisson with mean 6. Fewer than four is X ≤ 3.
+    quotes: ['Poisson distribution with mean 2', 'mutually independent', 'fewer than four tornadoes occur in a three-week period'],
+    steps: one('distributions.distribution', { family: 'poisson', lambda: 6, x: 3 }),
+    tolerance: 0.005,
+    value: val('cdf'),
+  }),
+  p(158, {
+    quotes: ['Poisson distribution with mean 1', 'mutually independent', 'more than two days in a three-month period'],
+    steps: one('distributions.distribution', { family: 'poisson', lambda: 3, x: 2 }),
+    tolerance: 0.0005,
+    value: val('survival'),
+  }),
+  p(355, {
+    // A Poisson standard deviation of 2 is a mean of 4; at least two is more than one.
+    quotes: ['Poisson distribution with a standard deviation of 2', 'at least two calls'],
+    steps: one('distributions.distribution', { family: 'poisson', lambda: 4, x: 1 }),
+    tolerance: 0.0005,
+    value: val('survival'),
+  }),
+  p(164, {
+    quotes: ['normally distributed with mean 10 and variance 4', '12th percentile'],
+    steps: one('distributions.distribution', { family: 'normal', mu: 10, sigma: 2, q: 0.12 }),
+    tolerance: 0.005,
+    value: val('quantile'),
+  }),
+  p(390, {
+    // A gamma with mean αθ = 6 and variance αθ² = 18: θ = 3, α = 2.
+    quotes: ['gamma distribution with mean 6 and variance 18', 'exceeds 4'],
+    steps: one('distributions.distribution', { family: 'gamma', alpha: 2, theta: 3, x: 4 }),
+    tolerance: 0.005,
+    value: val('survival'),
+  }),
+  p(66, {
+    // The mean of 25 claims is normal with standard deviation 5,000 / √25 = 1,000.
+    quotes: ['normal distribution with mean 19,400 and standard deviation 5,000', 'average of 25 randomly selected claims exceeds 20,000'],
+    steps: one('distributions.distribution', { family: 'normal', mu: 19400, sigma: 1000, x: 20000 }),
+    tolerance: 0.005,
+    value: val('survival'),
+  }),
+  p(327, {
+    // The mean of 100 claims has standard deviation 500 / √100 = 50; K is its 99th percentile.
+    quotes: ['normally distributed with mean 2500 and standard deviation 500', 'random sample of 100 claims will exceed $K$ is 0.01'],
+    steps: one('distributions.distribution', { family: 'normal', mu: 2500, sigma: 50, q: 0.99 }),
+    tolerance: 0.5,
+    value: val('quantile'),
+  }),
+  p(670, {
+    quotes: ['normally distributed with mean 2500 and standard deviation 500', 'exceeds $P$ is 5%', 'exceeds the median loss'],
+    steps: one('distributions.distribution', { family: 'normal', mu: 2500, sigma: 500, q: 0.95 }),
+    tolerance: 0.5,
+    value: rs => Number(last(rs).values.quantile) - Number(last(rs).values.median),
+  }),
+  p(563, {
+    quotes: [String.raw`exponentially distributed with mean $\dfrac{400}{\ln 2}$`, 'up to a maximum of 1000'],
+    steps: one('distributions.limited_expected_value', { family: 'exponential', theta: 400 / Math.LN2, u: 1000 }),
+    tolerance: 0.5,
+    value: val('lev'),
+  }),
+  p(50, {
+    // f(y) = 2/y³ on y > 1 is the single-parameter Pareto with α = 2, θ = 1.
+    quotes: ['benefit limit of 10', String.raw`\frac{2}{y^3}, & y > 1`],
+    steps: one('distributions.limited_expected_value', { family: 'single_pareto', alpha: 2, theta: 1, u: 10 }),
+    tolerance: 0.05,
+    value: val('lev'),
+  }),
+  p(48, {
+    // The density is the single-parameter Pareto's with α = 2.5, θ = 0.6; what a deductible of 2 leaves unpaid is E[X ∧ 2].
+    quotes: [String.raw`\frac{2.5(0.6)^{2.5}}{x^{3.5}}, & x > 0.6`, 'annual deductible of 2', 'losses not paid by the insurance policy'],
+    steps: one('distributions.limited_expected_value', { family: 'single_pareto', alpha: 2.5, theta: 0.6, u: 2 }),
+    tolerance: 0.005,
+    value: val('lev'),
+  }),
+  p(337, {
+    quotes: ['deductible of 3', 'exponentially distributed with mean 10'],
+    steps: one('distributions.expected_payment', { family: 'exponential', theta: 10, deductible: 3 }),
+    tolerance: 0.005,
+    value: val('per_loss'),
+  }),
+  p(601, {
+    // (3/1000)(1000/x)⁴ on x > 1000 is the single-parameter Pareto with α = 3, θ = 1000.
+    quotes: [String.raw`\dfrac{3}{1000}\left(\dfrac{1000}{x}\right)^4, & \text{for } x > 1000`, 'deductible of 1100', 'for a random loss'],
+    steps: one('distributions.expected_payment', { family: 'single_pareto', alpha: 3, theta: 1000, deductible: 1100 }),
+    tolerance: 0.5,
+    value: val('per_loss'),
+  }),
+  cas('masi-2019f-001', {
+    // The memoryless distribution is the exponential.
+    quotes: ['memoryless distribution with mean 1,000', 'deductible of 500', 'losses that exceed the deductible'],
+    steps: one('distributions.expected_payment', { family: 'exponential', theta: 1000, deductible: 500 }),
+    tolerance: 0,
+    value: val('per_payment'),
+  }),
+  cas('masi-2019f-023', {
+    quotes: [String.raw`lognormal distribution with $(\mu = 8,\ \sigma = 1)$`, 'ordinary deductible of 1,000 per loss', 'Losses below the deductible are not reported'],
+    steps: one('distributions.expected_payment', { family: 'lognormal', mu: 8, sigma: 1, deductible: 1000 }),
+    tolerance: 0,
+    value: val('per_payment'),
+  }),
+
+  // ─── Credibility ───────────────────────────────────────────────────────────
+  cas('masii-2018f-004', {
+    quotes: ['pure premium of 960', '72,000 policies with a pure premium of 530', 'expected variance of the pure premium within each region is 1,800,000,000', 'variance of the region pure premium means is 45,000'],
+    steps: one('credibility.buhlmann_credibility', { epv: 1.8e9, vhm: 45000, exposure: 72000, observed: 530, prior: 960 }),
+    tolerance: 0,
+    value: val('estimate'),
+  }),
+  cas('masii-2018f-005', {
+    // θ ~ U(0.05, 0.25): EPV = E[2θ] = 0.3, VHM = Var θ = 0.2²/12, μ = 0.15. 60 claims on 675 insureds; Year 4 has 250.
+    quotes: [String.raw`mean $\theta$ and variance $2\theta$`, 'uniformly distributed from 0.05 to 0.25', '| 1 | 200 | 15 |', '| 2 | 250 | 20 |', '| 3 | 225 | 25 |', '| 4 | 250 | --- |'],
+    steps: one('credibility.buhlmann_credibility', { epv: 0.3, vhm: 0.2 ** 2 / 12, exposure: 675, observed: 60 / 675, prior: 0.15 }),
+    tolerance: 0,
+    value: rs => 250 * Number(last(rs).values.estimate),
   }),
 ]
 

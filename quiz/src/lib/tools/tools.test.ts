@@ -15,6 +15,7 @@ import {
 import { canonicalJson, sha256Hex } from './hash'
 import { averageFactor, factorsAt } from './reserving/ageToAge'
 import { inverseNormalCdf } from './numeric'
+import { lossModel } from './distributions/lossModels'
 import { standardNormalCdf } from '../distributionMath'
 
 const tool = (id: string): ToolSpec => {
@@ -239,6 +240,67 @@ describe('Duration & Convexity, and Redington Immunization', () => {
     const off = run('finance.redington_immunization', { flows: [{ time: 2, asset: 10000, liability: 10000 }] })
     expect(off.values.immunized).toBe(false)
     expect(off.warnings[0]).toMatch(/convexity/)
+  })
+})
+
+describe('Loss distributions', () => {
+  /** ∫₀ᵘ S(x) dx by composite Simpson: the definition the closed forms must agree with. */
+  const integrate = (S: (x: number) => number, u: number, n = 20000) => {
+    const h = u / n
+    let sum = S(0) + S(u)
+    for (let k = 1; k < n; k++) sum += S(k * h) * (k % 2 ? 4 : 2)
+    return (sum * h) / 3
+  }
+  const models: Record<string, Record<string, number | string>> = {
+    exponential: { family: 'exponential', theta: 1000 },
+    uniform: { family: 'uniform', a: 200, b: 1800 },
+    pareto: { family: 'pareto', alpha: 3, theta: 2000 },
+    single_pareto: { family: 'single_pareto', alpha: 2.5, theta: 300 },
+    gamma: { family: 'gamma', alpha: 2.5, theta: 400 },
+    lognormal: { family: 'lognormal', mu: 6.5, sigma: 0.8 },
+    weibull: { family: 'weibull', tau: 1.7, theta: 900 },
+  }
+
+  it.each(Object.entries(models))('holds the %s limited expected value to ∫ S(x) dx', (_name, params) => {
+    const spec = tool('distributions.limited_expected_value')
+    const model = lossModel(normalizeInput(spec, params).input)
+    for (const u of [150, 700, 2500]) {
+      expect(run('distributions.limited_expected_value', { ...params, u }).values.lev as number).toBeCloseTo(integrate(model.survival, u), 2)
+    }
+  })
+
+  it('pays a franchise deductible back on every paid loss', () => {
+    const base = { family: 'exponential', theta: 1000, deductible: 500 }
+    const ordinary = run('distributions.expected_payment', base).values
+    const franchise = run('distributions.expected_payment', { ...base, type: 'franchise' }).values
+    expect(franchise.per_loss as number).toBeCloseTo((ordinary.per_loss as number) + 500 * Math.exp(-0.5), 9)
+    // Memoryless: the ordinary per-payment mean is the mean itself.
+    expect(ordinary.per_payment as number).toBeCloseTo(1000, 9)
+  })
+
+  it('caps the payment at the maximum covered loss, and refuses one below the deductible', () => {
+    const capped = run('distributions.expected_payment', { family: 'uniform', a: 0, b: 1000, deductible: 200, limit: 600 }).values
+    // ∫₂₀₀⁶⁰⁰ (1000 − x)/1000 dx = 400 − (600² − 200²)/2000 = 240.
+    expect(capped.per_loss as number).toBeCloseTo(240, 9)
+    expect(() => run('distributions.expected_payment', { deductible: 500, limit: 400 })).toThrow(/above the deductible/)
+  })
+
+  it('inverts the distribution function for its quantile', () => {
+    for (const input of [{ family: 'normal', mu: 3, sigma: 2 }, { family: 'gamma', alpha: 3, theta: 2 }, { family: 'lognormal', mu: 0, sigma: 1 }]) {
+      const q = run('distributions.distribution', { ...input, q: 0.9 }).values.quantile as number
+      expect(run('distributions.distribution', { ...input, x: q }).values.cdf as number).toBeCloseTo(0.9, 9)
+    }
+    // A count's quantile is the smallest k with F(k) ≥ q.
+    expect(run('distributions.distribution', { family: 'binomial', n: 2, p: 0.5, q: 0.75 }).values.quantile).toBe(1)
+  })
+})
+
+describe('Bühlmann Credibility', () => {
+  it('weights the risk by n / (n + EPV / VHM)', () => {
+    const out = run('credibility.buhlmann_credibility', { epv: 100, vhm: 25, exposure: 4, observed: 80, prior: 50 }).values
+    expect(out.k).toBe(4)
+    expect(out.z).toBe(0.5)
+    expect(out.estimate).toBe(65)
   })
 })
 

@@ -17,6 +17,10 @@ import { bornhuetterFerguson } from './reserving/bornhuetterFerguson'
 import { lossRatioMethod } from './ratemaking/lossRatioMethod'
 import { fullCredibilityStandard } from './credibility/fullCredibility'
 import { partialCredibility } from './credibility/partialCredibility'
+import { buhlmannCredibility } from './credibility/buhlmann'
+import { distribution } from './distributions/distribution'
+import { limitedExpectedValue } from './distributions/limitedExpectedValue'
+import { expectedPayment } from './distributions/expectedPayment'
 
 /** Bumped whenever the engine's shared behaviour (input reading, the envelope) changes. */
 export const ENGINE_VERSION = '0.1.0'
@@ -38,8 +42,12 @@ export const TOOLS: ToolSpec[] = [
   expectedClaims,
   bornhuetterFerguson,
   lossRatioMethod,
+  distribution,
+  limitedExpectedValue,
+  expectedPayment,
   fullCredibilityStandard,
   partialCredibility,
+  buhlmannCredibility,
   interestConverter,
   annuity,
   presentValue,

@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7695fabaaef0bd35f7d143057f9b4512248ca8fc40109689cfc8de746d6d7359
-  sources: []
+  sources:
+    - "Few, 'Effectively Communicating Numbers' (Perceptual Edge 2005), PDF p.6 (tables for look-up, graphs for shape), sha256:4de4c11e00faec2ea5fb3f4f31e240908e8356808a0253938d268359144f3a4e — https://www.perceptualedge.com/articles/Whitepapers/Communicating_Numbers.pdf"
+    - "Few, 'Eenie, Meenie, Minie, Moe: Selecting the Right Graph for Your Message' (Perceptual Edge 2004), PDF pp.3-7, seven message types and encodings table, sha256:6e1fc0374f53de68c72c7ec62a48895011abf17e0272c18493d8fee58376553a — https://www.perceptualedge.com/articles/ie/the_right_graph.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-204.md

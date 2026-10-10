@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d54afb53897fe9c581eef27c025af8a057c94853d30698b4c319b63cbd315a00
-  sources: []
+  sources:
+    - "Few, 'Eenie, Meenie, Minie, Moe: Selecting the Right Graph for Your Message' (Perceptual Edge 2004), PDF pp.3-7, seven message types and encodings table, sha256:6e1fc0374f53de68c72c7ec62a48895011abf17e0272c18493d8fee58376553a — https://www.perceptualedge.com/articles/ie/the_right_graph.pdf"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.6, sha256:5550b27f5be4dee9f495b8c4cd02609c713c46cf9dff80b372f34bd48a2d371f — https://clauswilke.com/dataviz/visualizing-amounts.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-202.md

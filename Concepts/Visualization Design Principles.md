@@ -1,11 +1,20 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d33552f55b13176ce67d51f13d39a4346f550c50a5fe0d9939f72b51b77b2157
-  sources: []
+  sources:
+    - "Wilke, Fundamentals of Data Visualization (online), ch.23, sha256:61165b47e92728aa04d804ecfe0ca00b9d49bdecd34ae22c432b00a81e52e88a — https://clauswilke.com/dataviz/balance-data-context.html"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.17, sha256:c62d185b4d647fcfe02d24a0707928062db6a7e8cb9172cf777943845e40b96b — https://clauswilke.com/dataviz/proportional-ink.html"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.19, sha256:a0a9d0529e2a5b92a35071db8e96bfce0e8f2a8941900173eb08effbad24be41 — https://clauswilke.com/dataviz/color-pitfalls.html"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.20, sha256:3bfb247d79ee5c09a0daf09a8b47a56d6e519226a2b4abd5ce4747c744d3f3e8 — https://clauswilke.com/dataviz/redundant-coding.html"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.22, sha256:06e044ab60f5f837e5bf29d6954d0ecd8bf1cf87819f1547cdd16bbcdd163724 — https://clauswilke.com/dataviz/figure-titles-captions.html"
+    - "Few, 'Tapping the Power of Visual Perception' (Perceptual Edge 2004), PDF pp.3-6 (short-term memory 3-7 chunks, preattentive attributes, 2-D location and line length), sha256:8a67f265391dcb842b5fbe5dfbad54cd5546e10025a250ca297864d7f79fd60a — https://www.perceptualedge.com/articles/ie/visual_perception.pdf"
+    - "Few, 'Practical Rules for Using Color in Charts' (Perceptual Edge 2008), Rules 3-9; ~10% of males and 1% of females colorblind, sha256:baf8d7c97cbac13933ec37efd691dc7ab4af6b799a6e8f28023019d4726006ef — https://www.perceptualedge.com/articles/visual_business_intelligence/rules_for_using_color.pdf"
+    - "Few, 'Eenie, Meenie, Minie, Moe: Selecting the Right Graph for Your Message' (Perceptual Edge 2004), PDF pp.3-7, seven message types and encodings table, sha256:6e1fc0374f53de68c72c7ec62a48895011abf17e0272c18493d8fee58376553a — https://www.perceptualedge.com/articles/ie/the_right_graph.pdf"
+    - "Wickham, Cetinkaya-Rundel & Grolemund, R for Data Science 2e, ch.11 Communication (tens or hundreds of plots; audience; title summarizes main finding), sha256:0756a2408a456cd5dc71f64d18a17f636dd57cfea2a817568f38689421eab088 — https://r4ds.hadley.nz/communication"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Visualization Design Principles.md

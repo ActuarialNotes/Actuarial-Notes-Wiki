@@ -12,12 +12,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a19bd09bc5e05391c7a0221c56b87072bd4d0c76b5572af7f3268d88d29eabbc
-  sources: []
+  sources:
+    - "SciPy docs, scipy.spatial.distance.jaccard, definition, sha256:57059b5d873f3326934e15ef4e74216370f277483f313f5812fce96713c2ae18 — https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jaccard.html"
+    - "SciPy docs, scipy.spatial.distance.hamming, definition, sha256:5e9a00450e4fd2da1723c587ccc89769226e19b9abca60dd9e41382526a5f7b4 — https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.hamming.html"
+    - "R cluster::daisy help page, Arguments and Details (Gower), sha256:9ae15cbff8e5e321e7b12d3662dc4c219be38e1aa5d7c9b2fc158aed259e7763 — https://stat.ethz.ch/R-manual/R-devel/library/cluster/html/daisy.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-234.md

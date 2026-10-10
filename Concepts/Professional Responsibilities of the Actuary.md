@@ -1,9 +1,9 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:923167f6eb09e006779df43e65fa8b88ee7abaafca28d562e8ffb1fa71c82e60
   sources: []
   open_findings: 0

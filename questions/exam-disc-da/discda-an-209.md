@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2bcffd40e6e290421a81201ccd2d0d5e8a7d46b4535715533bc9410cfe8b9f9c
-  sources: []
+  sources:
+    - "R cluster::daisy help page, Arguments and Details (Gower), sha256:9ae15cbff8e5e321e7b12d3662dc4c219be38e1aa5d7c9b2fc158aed259e7763 — https://stat.ethz.ch/R-manual/R-devel/library/cluster/html/daisy.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-209.md

@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b0c4b20943279aabea02eb85df1fdbfae1df4d44e1674392baa77cde6f2d042f
-  sources: []
+  sources:
+    - "Knaflic, storytellingwithdata.com 'exploratory vs explanatory analysis' (2014), post text, sha256:e20900367da7a69b5ba71cc68788da59db582996755bf398664c57f4acd0229a — https://www.storytellingwithdata.com/blog/2014/04/exploratory-vs-explanatory-analysis"
+    - "Wickham, Cetinkaya-Rundel & Grolemund, R for Data Science 2e, ch.11 Communication (tens or hundreds of plots; audience; title summarizes main finding), sha256:0756a2408a456cd5dc71f64d18a17f636dd57cfea2a817568f38689421eab088 — https://r4ds.hadley.nz/communication"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-201.md

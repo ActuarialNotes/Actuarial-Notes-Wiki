@@ -6,13 +6,11 @@ verification:
   last_checked_by: agent:validate-v1
   content_hash: sha256:feace85b1d0a2b45fd6161aa732763bd72bd5a515ce0203eebd491bf4929f713
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §3.2.1 'We interpret βj as the average effect on Y of a one unit increase in Xj, holding all other predictors fixed', printed p.72 (PDF p.82); §3.1.1 RSS and least squares PDF p.72; §3.2.2 F-statistic PDF p.86, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C tasks 4, 7 (R-squared) and 8 (diagnostic plots); ISLR Ch.3 §§3.1-3.3 a reading, PDF pp.5-6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-    - "CAS Exam MAS-II Content Outline 2026, prerequisites (candidates expected to have mastered Exam MAS-I; undergraduate regression course) and Domain B Linear Mixed Models tasks 1-4, PDF pp.5-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-    - "Rodríguez, Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 §2.2 least squares, PDF pp.6-8, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
-    - "Rodríguez, Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.4 §4.2-4.3 Poisson log link and offset, PDF pp.5-10, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
-    - "Larsen, Generalized Linear Models, CAS Study Note (rev. 6/29/2016), pp.1-2, sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §3.2 PDF p.82 (delta: beta_j holding all other predictors fixed); prior-pass sections §3.1-3.3, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Rodriguez, Lecture Notes on GLMs (Princeton WWS 509), ch.2, §2.2.1-2.2.3, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
+    - "Rodriguez, Lecture Notes on GLMs, App. B, §B.1, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Rodriguez, Lecture Notes on GLMs, ch.4, §4.2-4.3, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Linear Regression.md

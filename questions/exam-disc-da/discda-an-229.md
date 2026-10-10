@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2cf8c5c279da922239e5c1d7fa6a4955f0045ab19bcebd5acbe3bbd0f7ec5254
-  sources: []
+  sources:
+    - "DrivenData, Deon default Data Science Ethics Checklist (checklist.yml), sections A-E, items A.1-E.4, sha256:d1d2681923bba6f52c2900bae79d61e4ebe1a5ae8c1d19274b69a915277e4631 — https://raw.githubusercontent.com/drivendataorg/deon/main/deon/assets/checklist.yml"
+    - "15 U.S.C. §6802 (Cornell LII), (a)-(b), sha256:3fca2e8411b1bad536f5fe8ef6f197c521f95a16ecc96af2419d6af0a039dc51 — https://www.law.cornell.edu/uscode/text/15/6802"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-229.md

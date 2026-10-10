@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:59deaf9bff63fa92df10ac5d9ad9fc85989d4c9582b0755830795370040e38c7
-  sources: []
+  sources:
+    - "Wilke, Fundamentals of Data Visualization (online), ch.17, sha256:c62d185b4d647fcfe02d24a0707928062db6a7e8cb9172cf777943845e40b96b — https://clauswilke.com/dataviz/proportional-ink.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-205.md

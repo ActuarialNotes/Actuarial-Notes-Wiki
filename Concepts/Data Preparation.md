@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:be2b6b11440082488af1fdf64dfe3ed89ea29af0362ca2dafe4483cd32f7c417
-  sources: []
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §4.1-4.2 PDF pp.45-48, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "MySQL 8.0 Reference Manual, JOIN clause, LEFT JOIN null-row rule, sha256:43e50552524b2b85e91f5895f6c27240d9ca60480de24a0dfba19cbf41e1d829 — https://dev.mysql.com/doc/refman/8.0/en/join.html; MySQL 8.0 Reference Manual, Date and Time Functions, DATEDIFF, sha256:4552b2043aa78606f357e5a88a8c14c813bfbc8d1a25e8c9ef9e6bf4e44a3965 — https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html; MySQL 8.0 Reference Manual, Comparison Functions, COALESCE, LEAST, sha256:8fb9c7c63dd7dbaddb65d4f3952da94e1d49435b425d5216a5c590cb99f9ce81 — https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html"
+    - "Wickham et al., R for Data Science 2e, ch.5 Data tidying (tidy-data rules), sha256:623bd5d1fb571503eb6397b564e0814d779f3fc47d4c10193b9009c92b93bc11 — https://r4ds.hadley.nz/data-tidy"
+    - "scikit-learn User Guide, Common pitfalls, §'Data leakage', definition, sha256:21fac11c181ab35624dcf8673f0475d403d4f6ecf0f9bead01a573d7642b515c — https://scikit-learn.org/stable/common_pitfalls.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Data Preparation.md

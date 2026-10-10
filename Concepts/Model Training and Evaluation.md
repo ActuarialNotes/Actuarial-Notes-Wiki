@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a7fbfcc665da5e2e78e59eb29eb46d5c879c55d5bc83cf2d3a7febf3633ec878
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §2.2.2 PDF p.43 (U-shape, overfitting), §4.4.2 Table 4.7 PDF p.162, §5.1.3 PDF p.212, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §4.3-4.3.4 PDF pp.48-52; §7.2 PDF pp.86-87; §7.3-7.3.1 and Table 13, fn.17 PDF pp.93-95, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "ASB, ASOP No. 56 Modeling (Doc. 195, Dec 2019), §2.4 Hold-out Data, §2.12 Overfitting, §3.1, §3.6, sha256:f3e159300fde3ff3f9db4198eb6b0a660f182875b2cc47a2da92c2567b7bd799 — http://www.actuarialstandardsboard.org/wp-content/uploads/2020/01/asop056_195.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Training and Evaluation.md

@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:22f40ce4d4813a44ac64e69cfee9916dff7562025a1a200c3556518e62661856
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:be705fa8c8696aebf10f0d038f2dba40c71fc769ae6f221b6c4188c70e4cf3e7
+  sources:
+    - "FTC, Credit-Based Insurance Scores: Impacts on Consumers of Automobile Insurance (Report to Congress, July 2007), PDF pp.13-14, 29, 48-49, sha256:4ab0292ce105ff017feb03304dd6f89120b87fa76f8afea1594d7f2c7cbeb05d — https://www.ftc.gov/sites/default/files/documents/reports/credit-based-insurance-scores-impacts-consumers-automobile-insurance-report-congress-federal-trade/p044804facta_report_credit-based_insurance_scores.pdf"
+    - "NCOIL Model Act Regarding Use of Credit Information in Personal Insurance (2025 readoption text), §5A-B, §5E, §6, re-rating at renewal, sha256:77244865a5db8d1912cec5675aa3e089e5f7c42114fe2b179919a79beadb4f3f — https://ncoil.org/wp-content/uploads/2025/12/NCOIL-Credit-Model-July-2025.pdf"
+    - "Safeco Ins. Co. of America v. Burr, 551 U.S. 47 (2007), syllabus (Cornell LII), syllabus, sha256:1a96e589293bc167f65cec575a3318a6fa61a1b4eb4191f84c7eb573cd2eaee5 — https://www.law.cornell.edu/supct/html/06-84.ZS.html"
+    - "15 U.S.C. §1681b (Cornell LII), (a)(3)(C), sha256:6a76f86911643b4584aa96bbce68bbfcf097b5295d6c90e236c8256d16a02c1f — https://www.law.cornell.edu/uscode/text/15/1681b"
+    - "15 U.S.C. §1681m (Cornell LII), (a), sha256:328c82a65f0c1484276bdcc5f8ef2e0175a70a94491a87aa4a01abe456c03f06 — https://www.law.cornell.edu/uscode/text/15/1681m"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.10 operational criteria PDF p.168, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "The Institutes, CAS DISC DA Course Syllabus (© 2023), PDF pp.1-3, section 10.a-d titles, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Credit-Based Insurance Scoring.md

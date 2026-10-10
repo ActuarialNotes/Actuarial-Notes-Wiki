@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e4305868d449e86a5768a95d4fedec1c3cc78bc3a02fc6a46e6b6f8cc36e94d5
-  sources: []
+  sources:
+    - "NAIC Insurance Data Security Model Law (#668, 4th Qtr 2017), §4B-I, §5D, §6A, §9A(1), sha256:761e268abebbe55d4612b406d1ea1cfcba23b86264da2255ef15134da601e45f — https://content.naic.org/sites/default/files/model-law-668.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-217.md

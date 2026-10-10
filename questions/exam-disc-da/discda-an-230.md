@@ -13,12 +13,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6ad2673868f86382d6e450fc00f635d78ac063d64faa5b7a7ee1011e91a582df
-  sources: []
+  sources:
+    - "ASB, ASOP No. 12 Risk Classification (Doc. 132), §3.2.1, §3.2.2 Causality, §3.2.5 Applicable Law, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
+    - "ASB web page for ASOP No. 12, Document Number 132, status Adopted (current), sha256:301b504c0764673d2c52935f869c8c65bcfc6cebe432fa8e3289e86bef6f84b2 — https://www.actuarialstandardsboard.org/asops/risk-classification-practice-areas/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-230.md

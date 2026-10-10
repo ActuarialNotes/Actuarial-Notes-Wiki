@@ -12,12 +12,16 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7625b322b0a6761362b1c08a4dcf8f63f0518d67650b51e2f7d2c6365a95c789
-  sources: []
+  sources:
+    - "Few, 'Tapping the Power of Visual Perception' (Perceptual Edge 2004), PDF pp.3-6 (short-term memory 3-7 chunks, preattentive attributes, 2-D location and line length), sha256:8a67f265391dcb842b5fbe5dfbad54cd5546e10025a250ca297864d7f79fd60a — https://www.perceptualedge.com/articles/ie/visual_perception.pdf"
+    - "Few, 'Practical Rules for Using Color in Charts' (Perceptual Edge 2008), Rules 3-9; ~10% of males and 1% of females colorblind, sha256:baf8d7c97cbac13933ec37efd691dc7ab4af6b799a6e8f28023019d4726006ef — https://www.perceptualedge.com/articles/visual_business_intelligence/rules_for_using_color.pdf"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.19, sha256:a0a9d0529e2a5b92a35071db8e96bfce0e8f2a8941900173eb08effbad24be41 — https://clauswilke.com/dataviz/color-pitfalls.html"
+    - "Wilke, Fundamentals of Data Visualization (online), ch.20, sha256:3bfb247d79ee5c09a0daf09a8b47a56d6e519226a2b4abd5ce4747c744d3f3e8 — https://clauswilke.com/dataviz/redundant-coding.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-206.md

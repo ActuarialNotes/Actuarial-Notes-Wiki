@@ -46,7 +46,7 @@ export type SourceLink =
 /**
  * A tool's sources, one line per document — "Werner (2016), pp. 219, A-8, B-5,
  * C-7" rather than four buttons — and every exam question in one line that
- * opens them together in the quiz.
+ * opens them together in the quiz — one line per paper or sample set.
  */
 export function groupSources(sources: SourceRef[]): SourceLink[] {
   const docs = new Map<string, SourceRef[]>()
@@ -63,15 +63,19 @@ export function groupSources(sources: SourceRef[]): SourceLink[] {
       : `${short}, pp. ${refs.map(r => r.page).join(', ')}`
     return { kind: 'document', url: first.url, title: first.title, label, page: first.pdfPage, subtitle: refs.map(r => `${r.locator}, p. ${r.page}`).join('; ') }
   })
-  if (questions.length) {
-    // "SOA Exam FM sample question 26" … → "SOA Exam FM sample questions 26, 71".
-    const stem = questions[0].title.replace(/\s*\d+$/, '')
-    const numbers = questions.map(q => q.title.slice(stem.length).trim())
-    const same = questions.every(q => q.title.startsWith(stem))
+  // One line per set of questions — "SOA Exam FM sample questions 26, 71",
+  // "CAS Exam MAS-I, Fall 2019, questions 1, 23" — each opening them together in the quiz.
+  const sets = new Map<string, SourceRef[]>()
+  for (const q of questions) {
+    const stem = q.title.replace(/\s*\d+$/, '')
+    sets.set(stem, [...(sets.get(stem) ?? []), q])
+  }
+  for (const [stem, qs] of sets) {
+    const numbers = qs.map(q => q.title.slice(stem.length).trim())
     out.push({
       kind: 'questions',
-      url: `/quiz?ids=${questions.map(q => q.question).join(',')}`,
-      label: same && questions.length > 1 ? `${stem.replace(/question$/, 'questions')} ${numbers.join(', ')}` : questions.map(q => q.title).join('; '),
+      url: `/quiz?ids=${qs.map(q => q.question).join(',')}`,
+      label: qs.length > 1 ? `${stem.replace(/question$/, 'questions')} ${numbers.join(', ')}` : qs[0].title,
     })
   }
   return out

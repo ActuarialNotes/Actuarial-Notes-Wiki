@@ -35,7 +35,8 @@ export interface NumberField extends FieldBase {
   max: number
   /** The slider's step, in stored units. */
   step: number
-  /** The slider's end, where `max` is only the validation bound (an amount can be any size). */
+  /** The slider's ends, where `min` and `max` are only the validation bounds (an amount can be any size). */
+  sliderMin?: number
   sliderMax?: number
   /** What the card prints for 0, where 0 means something other than nothing ("All" years). */
   zeroLabel?: string

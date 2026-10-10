@@ -97,6 +97,6 @@ export const trendFit: ToolSpec = {
     readings: [{ resource: 'Basic Ratemaking (Werner - 2016)', locator: 'Ch. 5–6' }],
   },
   next: [
-    { tool: 'ratemaking.trend_factor', label: 'Trend Factor', build: (_input, output) => ({ trend: output.values.trend }) },
+    { tool: 'ratemaking.trend_factor', label: 'Trend Factor', build: (_input, output) => ({ trend: output.values.trend as number }) },
   ],
 }

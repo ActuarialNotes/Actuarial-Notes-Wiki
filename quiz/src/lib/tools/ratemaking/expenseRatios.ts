@@ -67,7 +67,7 @@ export const expenseRatios: ToolSpec = {
     readings: [{ resource: 'Basic Ratemaking (Werner - 2016)', locator: 'Ch. 7' }],
   },
   next: [
-    { tool: 'ratemaking.loss_ratio_method', label: 'Loss Ratio Method', build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) },
-    { tool: 'ratemaking.permissible_loss_ratio', label: 'Permissible Loss Ratio', build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) },
+    { tool: 'ratemaking.loss_ratio_method', label: 'Loss Ratio Method', build: (_input, output) => ({ fixed: output.values.fixed_provision as number, variable: output.values.variable_provision as number }) },
+    { tool: 'ratemaking.permissible_loss_ratio', label: 'Permissible Loss Ratio', build: (_input, output) => ({ fixed: output.values.fixed_provision as number, variable: output.values.variable_provision as number }) },
   ],
 }

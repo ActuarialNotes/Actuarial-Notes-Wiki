@@ -38,7 +38,7 @@ export const expectedPayment: ToolSpec = {
       tiles: [
         { symbol: 'E[Y_L]', label: 'Per loss', value: perLoss, unit: 'money' },
         { symbol: 'E[Y_P]', label: 'Per payment', value: perPayment, unit: 'money' },
-        { symbol: 'S(d)', label: 'Losses paid', value: sd, unit: 'percent' },
+        { symbol: 'S(d)', label: 'Paid', value: sd, unit: 'percent' },
       ],
       trace: [
         { label: Number.isFinite(u) ? 'Limited expected value at u' : 'Mean loss', formula: Number.isFinite(u) ? `E[X ∧ ${u}]` : 'E[X]', result: top, unit: 'money' },

@@ -14,13 +14,13 @@ const takes = (param: string) => KEYS.filter(k => DISTRIBUTIONS[k].params.some(p
 const param = (key: string, f: Omit<NumberField, 'kind' | 'key' | 'showWhen'>): NumberField => ({ kind: 'number', key, showWhen: { field: 'family', in: takes(key) }, ...f })
 
 const PARAMS: NumberField[] = [
-  param('mu', { label: 'Mean (log-mean for the lognormal)', symbol: 'μ', unit: 'plain', min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 0, description: 'μ: the normal mean, or the mean of ln X for the lognormal.' }),
-  param('sigma', { label: 'Standard deviation (of ln X for the lognormal)', symbol: 'σ', unit: 'plain', min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: 'σ: the normal standard deviation, or that of ln X for the lognormal.' }),
+  param('mu', { label: 'Mean', symbol: 'μ', unit: 'plain', min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 0, description: 'μ: the normal mean; for the lognormal, the mean of ln X.' }),
+  param('sigma', { label: 'Standard deviation', symbol: 'σ', unit: 'plain', min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: 'σ: the normal standard deviation; for the lognormal, that of ln X.' }),
   param('theta', { label: 'Scale', symbol: 'θ', unit: 'plain', min: 1e-9, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: 'θ: the scale (an exponential\'s mean; a gamma\'s mean is αθ).' }),
   param('alpha', { label: 'Shape', symbol: 'α', unit: 'plain', min: 1e-6, max: 1e6, sliderMax: 20, step: 0.1, default: 2, description: 'α: the gamma or beta shape.' }),
   param('beta', { label: 'Second shape', symbol: 'β', unit: 'plain', min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 5, description: 'β: the beta\'s second shape.' }),
   param('lambda', { label: 'Mean count', symbol: 'λ', unit: 'plain', min: 1e-9, max: 1e5, sliderMax: 30, step: 0.1, default: 4, description: 'λ: the Poisson mean.' }),
-  param('n', { label: 'Trials (sample size, hypergeometric)', symbol: 'n', unit: 'count', integer: true, min: 1, max: 100000, sliderMax: 100, step: 1, default: 10, description: 'n: the binomial\'s trials, or the hypergeometric\'s sample size.' }),
+  param('n', { label: 'Trials, or sample size', symbol: 'n', unit: 'count', integer: true, min: 1, max: 100000, sliderMax: 100, step: 1, default: 10, description: 'n: the binomial\'s trials, or the hypergeometric\'s sample size.' }),
   param('p', { label: 'Success probability', symbol: 'p', unit: 'plain', min: 1e-9, max: 1, sliderMax: 1, step: 0.01, default: 0.5, description: 'p: the chance of a success on each trial.' }),
   param('r', { label: 'Successes required', symbol: 'r', unit: 'count', integer: true, min: 1, max: 100000, sliderMax: 20, step: 1, default: 3, description: 'r: the negative binomial\'s successes (it counts total trials to the r-th).' }),
   param('N', { label: 'Population size', symbol: 'N', unit: 'count', integer: true, min: 1, max: 100000, sliderMax: 200, step: 1, default: 50, description: 'N: the hypergeometric population.' }),
@@ -65,7 +65,7 @@ export const distribution: ToolSpec = {
       default: 'normal',
     },
     ...PARAMS,
-    { kind: 'number', key: 'x', label: 'Value', symbol: 'x', unit: 'plain', min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: 'The value x for P(X ≤ x) and P(X > x). For a count, P(X ≥ k) is P(X > k − 1).' },
+    { kind: 'number', key: 'x', label: 'Value', symbol: 'x', unit: 'plain', min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 1, description: 'The value x for P(X ≤ x) and P(X > x). For a count, P(X ≥ k) is P(X > k − 1).' },
     { kind: 'number', key: 'q', label: 'Quantile level', symbol: 'q', unit: 'percent', min: 1e-9, max: 0.999999999, sliderMax: 0.99, step: 0.01, default: 0.95, description: 'The level q for the quantile, the smallest x with F(x) ≥ q.' },
   ],
   notation: input => DISTRIBUTIONS[String(input.family) as DistributionKey].notation(params(input, String(input.family) as DistributionKey)),
@@ -91,7 +91,7 @@ export const distribution: ToolSpec = {
       tiles: [
         { symbol: 'F(x)', label: 'P(X ≤ x)', value: F, unit: 'plain' },
         { symbol: 'S(x)', label: 'P(X > x)', value: 1 - F, unit: 'plain' },
-        { symbol: `x_q`, label: `${formatValue(q, 'percent')} quantile`, value: xq, unit: 'plain' },
+        { symbol: 'x_q', label: `q = ${formatValue(q, 'percent')}`, value: xq, unit: 'plain' },
       ],
       table: {
         columns: [

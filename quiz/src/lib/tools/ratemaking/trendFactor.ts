@@ -14,12 +14,12 @@ export const trendFactor: ToolSpec = {
       kind: 'choice', key: 'basis', label: 'Experience period', description: 'Accident year losses occur, on average, mid-year; a policy year\'s, half a term later.',
       options: [{ value: 'accident', label: 'Accident year' }, { value: 'policy', label: 'Policy year' }], default: 'accident',
     },
-    { kind: 'number', key: 'year', label: 'Experience year', symbol: 'Y', unit: 'count', integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: 'The accident or policy year being trended.' },
+    { kind: 'number', key: 'year', label: 'Experience year', symbol: 'Y', unit: 'count', integer: true, min: 1900, max: 2200, sliderMin: 2000, sliderMax: 2030, step: 1, default: 2023, description: 'The accident or policy year being trended.' },
     { kind: 'date', key: 'effective', label: 'Rates effective', symbol: 'E', default: '2025-01-01', description: 'The date the new rates take effect.' },
     { kind: 'number', key: 'in_effect', label: 'Rates in effect (months)', symbol: 'R', unit: 'count', integer: true, min: 1, max: 120, sliderMax: 36, step: 1, default: 12, description: 'How long the rates will be in effect, in months.' },
     { kind: 'number', key: 'term', label: 'Policy term (months)', symbol: 'T', unit: 'count', integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: 'The policy term in months (6 for six-month auto policies).' },
   ],
-  notation: () => 'factor = (1 + t)^(future average accident date − experience average accident date)',
+  notation: () => 'TF = (1 + t)ᵖ, p = average accident date under the new rates − in the experience',
   view: 'none',
   compute: input => {
     const t = Number(input.trend)
@@ -33,8 +33,8 @@ export const trendFactor: ToolSpec = {
     const factor = (1 + t) ** period
     return {
       tiles: [
-        { symbol: '(1+t)^p', label: 'Trend factor', value: factor, unit: 'factor' },
-        { symbol: 'p', label: 'Trend period (years)', value: period, unit: 'years' },
+        { symbol: 'TF', label: 'Trend factor', value: factor, unit: 'factor' },
+        { symbol: 'p', label: 'Years', value: period, unit: 'years' },
       ],
       trace: [
         { label: `Average accident date, ${input.basis === 'policy' ? 'policy' : 'accident'} year ${Y}`, formula: `${dateOfYear(from)}${input.basis === 'policy' ? ': mid-year plus half a term' : ': mid-year'}`, result: from, unit: 'years' },

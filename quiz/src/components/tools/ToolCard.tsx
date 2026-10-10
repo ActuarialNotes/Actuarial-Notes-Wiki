@@ -10,7 +10,7 @@
 // result's judgments say honestly which were left at their default (R3), in
 // the card, the export and the "Copy for AI" call alike.
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
 import {
@@ -22,8 +22,10 @@ import {
   toolById,
   toolSlug,
   type ChoiceField,
+  type DateField,
   type NumberField,
   type TableField,
+  type TriangleField,
   type ToolResult,
   type ToolSpec,
 } from '@/lib/tools'
@@ -86,8 +88,12 @@ export function ToolCard({
   ]
 
   const grid = spec.grid ? (spec.fields.find(f => f.key === spec.grid) as TableField) : null
-  const triangle = spec.fields.find(f => f.kind === 'triangle')
-  const scalars = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice') && fieldVisible(spec, f, draft)) as (NumberField | ChoiceField)[]
+  // Every grid-shaped input is drawn: a tool may take two triangles (a ratio) or
+  // a table beside its result (rate changes beside the on-level factors).
+  const triangles = spec.fields.filter((f): f is TriangleField => f.kind === 'triangle')
+  const tables = spec.fields.filter((f): f is TableField => f.kind === 'table' && f.key !== spec.grid)
+  const labelled = triangles.length + tables.length + (grid ? 1 : 0) > 1
+  const scalars = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && fieldVisible(spec, f, draft)) as (NumberField | ChoiceField | DateField)[]
 
   return (
     <div className="rounded-xl border border-border bg-card p-3 text-card-foreground space-y-3 sm:p-4" data-testid="tool-card">
@@ -135,11 +141,20 @@ export function ToolCard({
         <p key={w} className="text-sm text-amber-700 dark:text-amber-400">{w}</p>
       ))}
 
-      {triangle && (
-        <TriangleGrid value={valueOf(triangle) as DraftTriangle} onChange={t => set(triangle.key, t)} />
-      )}
+      {triangles.map(t => (
+        <InputBlock key={t.key} label={labelled ? t.label : null}>
+          <TriangleGrid value={valueOf(t) as DraftTriangle} onChange={v => set(t.key, v)} />
+        </InputBlock>
+      ))}
+      {tables.map(t => (
+        <InputBlock key={t.key} label={labelled ? t.label : null}>
+          <EditableTable field={t} rows={valueOf(t) as DraftRow[]} onChange={rows => set(t.key, rows)} />
+        </InputBlock>
+      ))}
       {grid ? (
-        <EditableTable field={grid} rows={valueOf(grid) as DraftRow[]} result={stale ? undefined : result?.table} onChange={rows => set(grid.key, rows)} />
+        <InputBlock label={labelled ? grid.label : null}>
+          <EditableTable field={grid} rows={valueOf(grid) as DraftRow[]} result={stale ? undefined : result?.table} onChange={rows => set(grid.key, rows)} />
+        </InputBlock>
       ) : (
         spec.view === 'table' && result?.table && (
           <div className={cn(stale && 'opacity-50')}>
@@ -153,6 +168,8 @@ export function ToolCard({
           {scalars.map(f =>
             f.kind === 'number' ? (
               <NumberControl key={f.key} field={f} value={Number(valueOf(f))} chosen={draft[f.key] !== undefined} onChange={v => set(f.key, v)} />
+            ) : f.kind === 'date' ? (
+              <DateControl key={f.key} field={f} value={String(valueOf(f))} onChange={v => set(f.key, v)} />
             ) : (
               <ChoiceControl key={f.key} field={f} value={String(valueOf(f))} chosen={draft[f.key] !== undefined} onChange={v => set(f.key, v)} />
             ),
@@ -221,6 +238,37 @@ function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
   )
 }
 
+/** One of several grid inputs, named, so a card with two triangles says which is which. */
+function InputBlock({ label, children }: { label: string | null; children: ReactNode }) {
+  if (!label) return <>{children}</>
+  return (
+    <section className="space-y-1" aria-label={label}>
+      <h3 className="text-sm text-muted-foreground">{label}</h3>
+      {children}
+    </section>
+  )
+}
+
+/** A date input: the browser's own picker, holding the ISO date the engine reads. */
+function DateControl({ field, value, onChange }: { field: DateField; value: string; onChange: (v: string) => void }) {
+  const id = `tool-${field.key}`
+  return (
+    <div className="flex items-center justify-between gap-3 py-1">
+      <label htmlFor={id} className="text-sm">
+        {field.symbol && <span className="font-semibold">{field.symbol}</span>}
+        <span className="text-muted-foreground">{field.symbol ? ' — ' : ''}{field.label}</span>
+      </label>
+      <input
+        id={id}
+        type="date"
+        value={value}
+        onChange={e => { if (e.target.value) onChange(e.target.value) }}
+        className="h-9 rounded-lg border border-border bg-background px-2 text-sm tabular-nums"
+      />
+    </div>
+  )
+}
+
 /** A judgment left at its default says so in place (R3): a small dot, named for screen readers. */
 function DefaultDot({ show }: { show: boolean }) {
   if (!show) return null
@@ -233,6 +281,7 @@ function NumberControl({ field, value, chosen, onChange }: { field: NumberField;
   const shown = toDisplay(value, field.unit)
   const [text, setText] = useState<string | null>(null)
   const sliderMax = Math.max(field.sliderMax ?? field.max, Math.min(value, field.max))
+  const sliderMin = Math.min(field.sliderMin ?? field.min, Math.max(value, field.min))
   const id = `tool-${field.key}`
   return (
     <div>
@@ -262,7 +311,7 @@ function NumberControl({ field, value, chosen, onChange }: { field: NumberField;
       <input
         id={id}
         type="range"
-        min={field.min}
+        min={sliderMin}
         max={sliderMax}
         step={field.step}
         value={value}

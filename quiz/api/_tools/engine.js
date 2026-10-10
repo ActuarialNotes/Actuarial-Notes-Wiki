@@ -2087,8 +2087,8 @@ var onLevelFactors = {
       options: [{ value: "calendar", label: "Calendar year" }, { value: "policy", label: "Policy year" }],
       default: "calendar"
     },
-    { kind: "number", key: "first", label: "First year", symbol: "Y\u2081", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2021, description: "The first year to bring on level." },
-    { kind: "number", key: "last", label: "Last year", symbol: "Y\u2099", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: "The last year to bring on level." },
+    { kind: "number", key: "first", label: "First year", symbol: "Y\u2081", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2021, description: "The first year to bring on level." },
+    { kind: "number", key: "last", label: "Last year", symbol: "Y\u2099", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The last year to bring on level." },
     {
       kind: "choice",
       key: "rounding",
@@ -2302,12 +2302,12 @@ var trendFactor = {
       options: [{ value: "accident", label: "Accident year" }, { value: "policy", label: "Policy year" }],
       default: "accident"
     },
-    { kind: "number", key: "year", label: "Experience year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: "The accident or policy year being trended." },
+    { kind: "number", key: "year", label: "Experience year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The accident or policy year being trended." },
     { kind: "date", key: "effective", label: "Rates effective", symbol: "E", default: "2025-01-01", description: "The date the new rates take effect." },
     { kind: "number", key: "in_effect", label: "Rates in effect (months)", symbol: "R", unit: "count", integer: true, min: 1, max: 120, sliderMax: 36, step: 1, default: 12, description: "How long the rates will be in effect, in months." },
     { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: "The policy term in months (6 for six-month auto policies)." }
   ],
-  notation: () => "factor = (1 + t)^(future average accident date \u2212 experience average accident date)",
+  notation: () => "TF = (1 + t)\u1D56, p = average accident date under the new rates \u2212 in the experience",
   view: "none",
   compute: (input) => {
     const t = Number(input.trend);
@@ -2321,8 +2321,8 @@ var trendFactor = {
     const factor = (1 + t) ** period;
     return {
       tiles: [
-        { symbol: "(1+t)^p", label: "Trend factor", value: factor, unit: "factor" },
-        { symbol: "p", label: "Trend period (years)", value: period, unit: "years" }
+        { symbol: "TF", label: "Trend factor", value: factor, unit: "factor" },
+        { symbol: "p", label: "Years", value: period, unit: "years" }
       ],
       trace: [
         { label: `Average accident date, ${input.basis === "policy" ? "policy" : "accident"} year ${Y}`, formula: `${dateOfYear(from)}${input.basis === "policy" ? ": mid-year plus half a term" : ": mid-year"}`, result: from, unit: "years" },
@@ -3048,13 +3048,13 @@ var KEYS = Object.keys(DISTRIBUTIONS);
 var takes = (param2) => KEYS.filter((k) => DISTRIBUTIONS[k].params.some((p2) => p2.key === param2));
 var param = (key, f) => ({ kind: "number", key, showWhen: { field: "family", in: takes(key) }, ...f });
 var PARAMS = [
-  param("mu", { label: "Mean (log-mean for the lognormal)", symbol: "\u03BC", unit: "plain", min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 0, description: "\u03BC: the normal mean, or the mean of ln X for the lognormal." }),
-  param("sigma", { label: "Standard deviation (of ln X for the lognormal)", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: "\u03C3: the normal standard deviation, or that of ln X for the lognormal." }),
+  param("mu", { label: "Mean", symbol: "\u03BC", unit: "plain", min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 0, description: "\u03BC: the normal mean; for the lognormal, the mean of ln X." }),
+  param("sigma", { label: "Standard deviation", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: "\u03C3: the normal standard deviation; for the lognormal, that of ln X." }),
   param("theta", { label: "Scale", symbol: "\u03B8", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: "\u03B8: the scale (an exponential's mean; a gamma's mean is \u03B1\u03B8)." }),
   param("alpha", { label: "Shape", symbol: "\u03B1", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 20, step: 0.1, default: 2, description: "\u03B1: the gamma or beta shape." }),
   param("beta", { label: "Second shape", symbol: "\u03B2", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 5, description: "\u03B2: the beta's second shape." }),
   param("lambda", { label: "Mean count", symbol: "\u03BB", unit: "plain", min: 1e-9, max: 1e5, sliderMax: 30, step: 0.1, default: 4, description: "\u03BB: the Poisson mean." }),
-  param("n", { label: "Trials (sample size, hypergeometric)", symbol: "n", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 100, step: 1, default: 10, description: "n: the binomial's trials, or the hypergeometric's sample size." }),
+  param("n", { label: "Trials, or sample size", symbol: "n", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 100, step: 1, default: 10, description: "n: the binomial's trials, or the hypergeometric's sample size." }),
   param("p", { label: "Success probability", symbol: "p", unit: "plain", min: 1e-9, max: 1, sliderMax: 1, step: 0.01, default: 0.5, description: "p: the chance of a success on each trial." }),
   param("r", { label: "Successes required", symbol: "r", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 20, step: 1, default: 3, description: "r: the negative binomial's successes (it counts total trials to the r-th)." }),
   param("N", { label: "Population size", symbol: "N", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 200, step: 1, default: 50, description: "N: the hypergeometric population." }),
@@ -3097,7 +3097,7 @@ var distribution = {
       default: "normal"
     },
     ...PARAMS,
-    { kind: "number", key: "x", label: "Value", symbol: "x", unit: "plain", min: -1e12, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: "The value x for P(X \u2264 x) and P(X > x). For a count, P(X \u2265 k) is P(X > k \u2212 1)." },
+    { kind: "number", key: "x", label: "Value", symbol: "x", unit: "plain", min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 1, description: "The value x for P(X \u2264 x) and P(X > x). For a count, P(X \u2265 k) is P(X > k \u2212 1)." },
     { kind: "number", key: "q", label: "Quantile level", symbol: "q", unit: "percent", min: 1e-9, max: 0.999999999, sliderMax: 0.99, step: 0.01, default: 0.95, description: "The level q for the quantile, the smallest x with F(x) \u2265 q." }
   ],
   notation: (input) => DISTRIBUTIONS[String(input.family)].notation(params(input, String(input.family))),
@@ -3123,7 +3123,7 @@ var distribution = {
       tiles: [
         { symbol: "F(x)", label: "P(X \u2264 x)", value: F2, unit: "plain" },
         { symbol: "S(x)", label: "P(X > x)", value: 1 - F2, unit: "plain" },
-        { symbol: `x_q`, label: `${formatValue(q, "percent")} quantile`, value: xq, unit: "plain" }
+        { symbol: "x_q", label: `q = ${formatValue(q, "percent")}`, value: xq, unit: "plain" }
       ],
       table: {
         columns: [
@@ -3353,7 +3353,7 @@ var expectedPayment = {
       tiles: [
         { symbol: "E[Y_L]", label: "Per loss", value: perLoss, unit: "money" },
         { symbol: "E[Y_P]", label: "Per payment", value: perPayment, unit: "money" },
-        { symbol: "S(d)", label: "Losses paid", value: sd, unit: "percent" }
+        { symbol: "S(d)", label: "Paid", value: sd, unit: "percent" }
       ],
       trace: [
         { label: Number.isFinite(u) ? "Limited expected value at u" : "Mean loss", formula: Number.isFinite(u) ? `E[X \u2227 ${u}]` : "E[X]", result: top, unit: "money" },

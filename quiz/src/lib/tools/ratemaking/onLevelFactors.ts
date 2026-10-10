@@ -49,8 +49,8 @@ export const onLevelFactors: ToolSpec = {
       kind: 'choice', key: 'basis', label: 'Premium', description: 'Calendar year earned premium is a mix of rate levels; a policy year\'s premium is written at the level in force when each policy was.',
       options: [{ value: 'calendar', label: 'Calendar year' }, { value: 'policy', label: 'Policy year' }], default: 'calendar',
     },
-    { kind: 'number', key: 'first', label: 'First year', symbol: 'Y₁', unit: 'count', integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2021, description: 'The first year to bring on level.' },
-    { kind: 'number', key: 'last', label: 'Last year', symbol: 'Yₙ', unit: 'count', integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: 'The last year to bring on level.' },
+    { kind: 'number', key: 'first', label: 'First year', symbol: 'Y₁', unit: 'count', integer: true, min: 1900, max: 2200, sliderMin: 2000, sliderMax: 2030, step: 1, default: 2021, description: 'The first year to bring on level.' },
+    { kind: 'number', key: 'last', label: 'Last year', symbol: 'Yₙ', unit: 'count', integer: true, min: 1900, max: 2200, sliderMin: 2000, sliderMax: 2030, step: 1, default: 2023, description: 'The last year to bring on level.' },
     {
       kind: 'choice', key: 'rounding', label: 'Rate level indices', judgment: true,
       description: 'Whether the rate levels are carried unrounded, or rounded to four decimals as Werner & Modlin\'s exhibits print and use them: each cumulative level at each step of the product, and each year\'s average level before the factor is taken.',

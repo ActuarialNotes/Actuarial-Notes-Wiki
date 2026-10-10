@@ -285,7 +285,8 @@ CHECKS.push(
       source: friedlandRef(gb),
       cases: Object.entries(gb.scenarios).flatMap(([scenario, rows]) => (['reported', 'paid'] as const).filter(basis => basis === 'paid' || gbKey === 'ch9_exhibit5_sheet1').map(basis => {
         const reported = basis === 'reported'
-        const prior = bf.scenarios[scenario as keyof typeof bf.scenarios]
+        // The two sheets name different scenarios; each Exhibit V scenario has its namesake on the matching Exhibit III sheet.
+        const prior = (bf.scenarios as unknown as Record<string, { origin: string; expected: number; reported: number; paid: number; unreported: number; unpaid: number }[]>)[scenario]
         return {
           name: `${scenario}, column (${reported ? 11 : 12}), the Benktander ultimate with ${basis} claims`,
           input: {

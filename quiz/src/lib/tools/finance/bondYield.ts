@@ -45,6 +45,6 @@ export const bondYield: ToolSpec = {
   },
   method: { concepts: ['Bond Price', 'Yield Rate'], readings: [] },
   next: [
-    { tool: 'finance.bond_price', label: 'Bond Price', build: (input, output) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: output.values.nominal_yield }) },
+    { tool: 'finance.bond_price', label: 'Bond Price', build: (input, output) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: output.values.nominal_yield as number }) },
   ],
 }

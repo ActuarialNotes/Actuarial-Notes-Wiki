@@ -44,7 +44,7 @@ verification:
 > A pressure cooker's lid blows off and burns a user, whose damages are \$400,000. The cooker was assembled by a manufacturer from a pressure valve made by a component supplier, sold to a distributor, and sold to the user by a retailer. The jury finds a manufacturing defect in the valve and a design defect in the cooker, whose lid had no lock to stop it being opened under pressure, and allocates fault 70% to the manufacturer and 30% to the component supplier. The retailer and distributor are found strictly liable but not at fault. How is the loss shared?
 >
 > > [!answer]-
-> > Where [[Joint and Several Liability|joint and several liability]] applies, the user can collect the whole \$400,000 from any defendant strictly liable to her, typically the solvent one with the most insurance. The defendants then settle among themselves through indemnity and contribution.
+> > Where joint and several liability applies, the user can collect the whole \$400,000 from any defendant strictly liable to her, typically the solvent one with the most insurance. The defendants then settle among themselves through indemnity and contribution.
 > > $$
 > > \begin{align*}
 > > \text{Manufacturer} &= 0.70 \times \$400{,}000 \\

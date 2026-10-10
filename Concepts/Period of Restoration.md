@@ -31,17 +31,17 @@ The **Period of Restoration** is the time over which a business income form pays
 - **Extended business income:** After the property is restored, the form pays for a further period, 60 days on the current ISO form, while sales recover. The extended period of indemnity option replaces it with a longer period shown in the declarations, for businesses whose customers take months to return. For the coinsurance basis and the coverage itself, see [[Business Income Coverage]].
 
 > [!example]- Estimating the Maximum Period of Restoration and the PML {Example}
-> A food processor's plant depends on a custom packaging line. An underwriter estimates the longest probable restoration after a total loss by fire: 3 weeks of debris removal, 6 weeks for plans and permits, 20 weeks to rebuild, and 4 more weeks because the current building code requires a sprinkler system and fire walls the old plant lacked. The new packaging line would be ordered at the end of week 3, has a 30-week lead time, and takes 4 weeks to install once both it and the building are ready. Net income plus continuing expenses is \$45,000 a week, and extra expense is estimated at \$60,000. Estimate the maximum period of restoration and the probable maximum loss of business income before any extended period.
+> A food processor's plant depends on a custom packaging line. An underwriter estimates the longest probable restoration after a total loss by fire: 3 weeks of debris removal, 6 weeks for plans and permits, 20 weeks to rebuild, and 4 more weeks because the current building code requires a sprinkler system and fire walls the old plant lacked. The new packaging line would be ordered at the end of week 3, has a 30-week lead time, and takes 4 weeks to install once both it and the building are ready. Net income plus continuing expenses is \$45,000 a week, and extra expense is estimated at \$60,000. The business income form is the unendorsed ISO CP 00 30. Estimate the maximum period of restoration and the probable maximum loss of business income before any extended period.
 >
 > > [!answer]-
-> > The building path and the machinery path run in parallel, and installation can start only when both are done.
+> > The form's period of restoration does not include any increased period required by an ordinance or law that regulates construction, so the 4 code weeks are left out of the building path. The building path and the machinery path run in parallel, and installation can start only when both are done.
 > > $$
 > > \begin{align*}
-> > t_{\text{building}} &= 3 + 6 + 20 + 4 \\
-> > &= 33 \text{ weeks} \\
+> > t_{\text{building}} &= 3 + 6 + 20 \\
+> > &= 29 \text{ weeks} \\
 > > t_{\text{machine}} &= 3 + 30 \\
 > > &= 33 \text{ weeks} \\
-> > t_R &= \max(33,\ 33) + 4 \\
+> > t_R &= \max(29,\ 33) + 4 \\
 > > &= 37 \text{ weeks}
 > > \end{align*}
 > > $$
@@ -54,7 +54,7 @@ The **Period of Restoration** is the time over which a business income form pays
 > > &= 1{,}705{,}714
 > > \end{align*}
 > > $$
-> > The two paths tie, so shortening only one of them changes nothing. Without the code upgrade the machinery still sets the period at 37 weeks, and with a spare line on hand the building still does. That is why an underwriter asks about equipment lead times as well as construction.
+> > The machinery sets the period here, 4 weeks longer than the building path. With a spare line on hand the building path would govern, and the period would be $29 + 4 = 33$ weeks. The 4 code weeks would still be spent rebuilding, but under the unendorsed form they fall outside the period of restoration, so the income lost in them is the insured's. That is why an underwriter asks about equipment lead times as well as construction, and about building code upgrades the form will not pay for.
 
 > [!example]- Is the Standard Extended Period Enough? {Example}
 > When the food processor above reopens, it expects to have lost customers: sales start 40% below normal and recover in a straight line to normal over 16 weeks. The weekly business income at risk is \$45,000. How much of the recovery loss does the standard 60-day extended business income cover, and what would an extended period of indemnity of 120 days add?

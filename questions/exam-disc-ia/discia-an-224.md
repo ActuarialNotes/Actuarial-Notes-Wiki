@@ -39,6 +39,6 @@ Which statement about tort immunities in the United States today is correct?
 
 Sovereign immunity means a government cannot be sued without its consent. Federal and state governments can waive it in whole or in part, so a state is liable in tort **only as far as it has consented**.
 
-- **B** is outdated: between the 1940s and 1992 almost every state abrogated or limited charitable immunity.
+- **B** is outdated: virtually every state with decisions on it has rejected complete charitable immunity or limited it.
 - **C** is outdated too: interspousal immunity has been abrogated or modified in many states, and very few still recognize it.
 - **D** reverses the Act, which **waived** federal immunity for many types of tort claims.

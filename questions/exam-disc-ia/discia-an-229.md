@@ -39,5 +39,5 @@ A contractor blasting rock for a highway cut uses every precaution the industry 
 Blasting is a standard example of an **abnormally dangerous activity**, one whose risk of serious harm reasonable care cannot eliminate. The law imposes strict liability on it, so the contractor pays for the harm it causes even though it took every reasonable precaution.
 
 - **A** applies the negligence standard. Strict liability removes the need to prove a breach.
-- **B** confuses this common law doctrine with statutory strict liability, such as workers compensation or dram shop acts. No statute is needed for blasting.
+- **B** confuses this common law doctrine with statutory strict liability, such as workers compensation. No statute is needed for blasting.
 - **D** has it backwards: the cracked foundation is compensatory damage, and punitive damages punish malicious or grossly reckless conduct, which there was not.

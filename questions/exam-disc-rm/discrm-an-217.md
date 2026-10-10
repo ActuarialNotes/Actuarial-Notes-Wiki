@@ -5,12 +5,12 @@ topic: "Probable Maximum Loss"
 learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
-bloom: understand
+bloom: apply
 wiki_link:
   - Concepts/Probable+Maximum+Loss
   - Concepts/COPE
   - Concepts/Commercial+Property+Insurance
-answer: "C"
+answer: "A"
 points: 1
 verification:
   status: disputed
@@ -29,23 +29,31 @@ verification:
   log: .verify/questions/exam-disc-rm/discrm-an-217.md
 ---
 
-A fire-resistive office building is valued at \$40 million. For a fire, the underwriter estimates three figures: (I) \$40 million, the loss if the building were completely destroyed; (II) \$22 million, the worst loss likely from a single fire if the sprinklers were impaired; (III) \$6 million, the largest loss expected from a fire with the building's protection working as intended. Which figure is which?
+A loss control engineer surveys a fire-resistive warehouse valued at \$40 million, protected by two automatic sprinkler systems and a paid fire department. The insurer's loss estimates use these definitions:
 
-- A) I is the probable maximum loss, II the maximum foreseeable loss, III the maximum possible loss
-- B) I is the maximum foreseeable loss, II the maximum possible loss, III the probable maximum loss
-- C) I is the maximum possible loss, II the maximum foreseeable loss, III the probable maximum loss
-- D) I is the maximum possible loss, II the probable maximum loss, III the maximum foreseeable loss
+- **Normal loss expectancy (NLE):** the loss expected with all fire protection in place and operating as intended.
+- **Probable maximum loss (PML):** the loss expected with some impairment of protection, normally one sprinkler system out of service, but not a shutdown of all protection.
+- **Maximum foreseeable loss (MFL):** the worst-case fire, with no sprinkler system working and no effective fire department response, stopped only by fire walls or space separation.
+
+The engineer estimates three figures: (I) \$6 million, with both sprinkler systems and the fire department working; (II) \$15 million, with one sprinkler system's control valve closed and everything else working; (III) \$28 million, with neither sprinkler system working and the fire department not arriving, the fire stopped by an interior fire wall. Which figure is which?
+
+- A) I is the NLE, II the PML, III the MFL
+- B) I is the PML, II the MFL, III the NLE
+- C) I is the PML, II the NLE, III the MFL
+- D) I is the NLE, II the MFL, III the PML
 
 ## Explanation
 
-- **Maximum possible loss (MPL):** the worst loss that could possibly occur from a single event, here total destruction, \$40 million.
-- **Maximum foreseeable loss (MFL):** the worst loss likely from a single event, here \$22 million with impaired sprinklers.
-- **Probable maximum loss (PML):** the maximum loss expected at the location from a fire, here \$6 million with protection working.
+Apply each definition to the protection each figure assumes:
 
-So I is the MPL, II the MFL and III the PML. The answer is **C**. Each figure is smaller than the one before because it assumes more of the building's protection works.
+- **(I) \$6 million:** all protection works, so it is the normal loss expectancy.
+- **(II) \$15 million:** one sprinkler system is impaired and the rest of the protection works, which is the probable maximum loss.
+- **(III) \$28 million:** no sprinklers and no fire department, a free burn stopped only by a fire wall, which is the maximum foreseeable loss.
+
+The answer is **A**. Each estimate assumes less of the protection works than the one before, so the figures rise from NLE to PML to MFL. None of them is the maximum possible loss, the total destruction of the \$40 million building, because the fire wall stops the worst foreseeable fire.
 
 **Why not the others**
 
-- **A** — Reverses the order, calling the largest figure the probable loss.
-- **B** — Calls the total-destruction figure foreseeable and the impaired-sprinkler figure the possible maximum, swapping the two.
-- **D** — Treats the impaired-sprinkler loss as the PML. The PML is the loss expected with protection working as intended; the impaired case is the MFL.
+- **B** — Calls the all-protection-working figure the PML. Under these definitions the PML assumes some impairment; protection working as intended is the NLE.
+- **C** — Same mistake for (I), and it calls the impaired-sprinkler figure the NLE, which assumes nothing is impaired.
+- **D** — Swaps PML and MFL. One closed valve with the fire department responding is a partial impairment, not the worst case.

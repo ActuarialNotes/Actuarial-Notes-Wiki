@@ -66,7 +66,7 @@ verification:
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The objective is to understand the common policy conditions. Questions name a situation, such as a cancellation, a request to add a location, an audit after expiration, a loss-control visit or the sale of the insured business, and ask which condition governs it and what it requires.
 > - **Return premium:** A question can give a premium and a cancellation date and ask for the refund when the insurer cancels and when the insured does, which is the pro rata against short-rate distinction.
-> - **Linked pages:** The conditions specific to property coverage are on [[Commercial Property Insurance]] and the [[Building and Personal Property Coverage Form]].
+> - **Linked pages:** The nine conditions that apply to a whole commercial property coverage part are on [[Commercial Property Conditions]]. The conditions specific to property coverage are on [[Commercial Property Insurance]] and the [[Building and Personal Property Coverage Form]].
 
 > [!warning]- Exam traps
 > - **Who cancels decides the refund:** The insurer's cancellation always returns pro rata premium. Only the first named insured's cancellation can produce a smaller, short-rate refund.

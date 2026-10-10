@@ -43,3 +43,7 @@ verification:
 > > **Canada:** OSFI must be notified of the change in appointment, and the actuary is entitled to state the reasons — the protection that keeps a dismissal over a valuation visible.
 > >
 > > **Why:** both regimes are designed to stop **opinion shopping** — replacing an actuary until one signs the number management wants. The regulator cannot see every valuation, so it makes the removal of an inconvenient actuary impossible to hide.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The Insurance Regulation section asks who the insurance regulators are. Questions ask what a state insurance department and its commissioner do, why the NAIC is not itself a regulator, and which state regulates a given activity of a multistate insurer, as in the first example.
+> - **Related objectives:** What the regulators do is spread over [[Insurance Licensing]], [[Solvency Monitoring]], [[Rate Regulation]], [[Policy Form Regulation]] and [[Market Conduct Regulation]].

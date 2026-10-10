@@ -54,7 +54,7 @@ An **Insurance Producer** is a licensed person or firm that sells, solicits or n
 
 > [!tip]- How it appears on the exam
 > - **DISC-RM:** Questions ask candidates to describe the distribution systems and channels, compare agents and brokers, and list or apply the functions producers perform, such as which function a producer is carrying out in a short scenario. A related objective asks how an insurer selects distribution systems for its markets.
-> - **DISC-IA:** The regulation section asks why and how insurers and insurance personnel are licensed, including producers and claims representatives, and what regulators can do when a licensee breaks the rules.
+> - **DISC-IA:** The regulation section asks why and how insurers and insurance personnel are licensed, including producers and claims representatives, and what regulators can do when a licensee breaks the rules. The licensing rules are on [[Insurance Licensing]].
 
 > [!warning]- Exam traps
 > - **Agent versus broker:** An agent represents the insurer and a broker represents the buyer. Saying that an independent agent represents the customer confuses the agency relationship with the customer relationship the agent manages.

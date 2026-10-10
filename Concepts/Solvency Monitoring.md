@@ -37,3 +37,7 @@ verification:
 > > RBC gives no signal: $340\%$ is above every action level, and the P&C trend test applies only between $200\%$ and $300\%$.
 > >
 > > The analyst therefore escalates on judgement: request the business plan, the MGA agreement and the insurer's controls over it, pricing support, reserving by program, and the reinsurance program; then schedule a **limited-scope examination** of the program's claims and reserves. Rapid growth into an unfamiliar line through a delegated authority is a classic insolvency pattern. If the exam finds material under-reserving, the regulator can find **hazardous financial condition** and order writings limited or capital added — with RBC still reading "no action".
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The Insurance Regulation section asks how regulators monitor insurer solvency. Questions ask what off-site analysis, on-site examinations, IRIS ratios and risk-based capital each contribute, which state leads the work, and what regulators can do when an insurer is in hazardous financial condition.
+> - **Applied questions:** A question describes an insurer's growth, ratios or capital and asks which tool would flag it and what action follows, as in the example.

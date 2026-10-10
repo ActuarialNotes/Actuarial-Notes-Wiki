@@ -66,7 +66,7 @@ $$
 **Common wrong entries**
 
 - **2.05** — leaves out the factor $k - 1$, using $\sqrt{F}$ alone.
-- **16.57** — forgets the square root, using $(k - 1)F$ as the multiplier.
+- **16.58** — forgets the square root, using $(k - 1)F$ as the multiplier.
 - **3.24** — uses $\sqrt{\hat\sigma^2/n}$, the standard error of one mean, instead of the standard error of a difference.
 
 ## Part b (1 point)

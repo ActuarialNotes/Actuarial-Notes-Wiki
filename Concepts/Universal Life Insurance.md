@@ -20,6 +20,7 @@ verification:
 - $P_t$ is the premium (the policyholder chooses it, within limits), $EC_t$ the expense charge, $i^c_t$ the credited rate, $q^{*}$ the cost-of-insurance mortality rate and $v_q = 1/(1+i_q)$ the CoI discount factor. $DB_t - AV_t$ is the additional death benefit, the insurer's net amount at risk
 - **Type A:** $DB_t = FA$, the face amount, so $CoI_t$ depends on $AV_t$ and the recursion is solved for $AV_t$. **Type B:** $DB_t = FA + AV_t$, so $CoI_t = q^{*}_{x+t-1}\,v_q\,FA$ directly
 - **Corridor:** to keep its tax status as insurance, the death benefit must be at least $(1 + \gamma_t)AV_t$; when this binds, $DB_t = (1+\gamma_t)AV_t$ replaces $FA$. A surrender pays the cash value $AV_t - SC_t$, after a surrender charge
+- **As a product:** Universal life is a cash value policy whose premiums and face amount are both flexible. The owner may pay on any pattern, so long as enough is paid to keep the policy in force: if the account value falls too low to cover the charges, the coverage ends unless the owner pays more or reduces the benefits. Increasing the face amount may require new evidence that the insured qualifies. This flexibility is the key difference from [[Whole Life Insurance|whole life]], whose premiums follow a set schedule.
 - The insurer's own profit test projects the account alongside its own interest, mortality and expense assumptions; a **no-lapse guarantee** keeps the cover in force when the account value runs out and needs a [[Reserve|reserve]] of its own
 
 > [!example]- One Year of a Type B Account {Example}

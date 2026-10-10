@@ -31,6 +31,7 @@ verification:
 - **Level annual premium:** a premium $P$ paid at the start of each year while $(x)$ is alive is a [[Life Annuity|life-annuity-due]], so $A_x = P\,\ddot{a}_x$; since $\ddot{a}_x = (1 - A_x)/d$, $P$ follows from $A_x$ and $d$ alone
 - **Variance:** the second moment ${}^2\!A_x$ of the present value is $A_x$ at discount factor $v^2$ (double the force of interest), and $\text{Var} = {}^2\!A_x - (A_x)^2$. The exam's Illustrative Life Table lists $1000A_x$, $1000\,{}^2\!A_x$ and $\ddot{a}_x$ at $i = 0.06$
 - **Paid at the moment of death** (continuous variant): $\bar{A}_x = E\!\left[e^{-\delta T_x}\right] = \int_0^\infty e^{-\delta t}\,{_t}p_x\,\mu_{x+t}\,dt$, with ${}^2\!\bar{A}_x$ at $2\delta$; under a constant force of mortality $\mu$, $\bar{A}_x = \mu/(\mu + \delta)$
+- **As a product:** Whole life is a *cash value* policy: coverage lasts for life as long as premiums are paid, and the premiums are typically level, so they start higher than for the same amount of [[Term Life Insurance|term insurance]] and build a cash value. A limited-payment version, such as premiums payable to age 65, has higher premiums. The owner can take a policy loan against the cash value, and any unpaid loan and interest is subtracted from the death benefit or cash value. If premiums stop, state nonforfeiture laws require the policy to give a paid-up benefit and, once premiums have been paid for at least three full years, a cash surrender value. Whole life's premiums follow a set schedule, unlike the flexible premiums of [[Universal Life Insurance|universal life]].
 
 ![[Media/Figures/Whole_Life_Insurance.svg|340]]
 
@@ -55,3 +56,7 @@ verification:
 > > $$\bar{A}_x = \frac{\mu}{\mu + \delta} = \frac{0.02}{0.07} = 0.2857$$
 > > $${}^2\!\bar{A}_x = \frac{0.02}{0.02 + 2(0.05)} = \frac{0.02}{0.12} = 0.1667$$
 > > $$\text{Var} = {}^2\!\bar{A}_x - (\bar{A}_x)^2 = \frac{1}{6} - \frac{4}{49} = \frac{25}{294} \approx 0.0850$$
+
+> [!tip]- How it appears on the exam
+> - **MAS-I:** The objective is to calculate simple whole life or annuity problems. Questions give Illustrative Life Table values and ask for an EPV, a level premium $A_x/\ddot{a}_x$, or the effect of a change in the table, as in the examples.
+> - **DISC-IA:** The Life and Health Insurance section asks for the features of whole life against [[Term Life Insurance|term]] and universal life: lifetime coverage, level scheduled premiums, cash values, policy loans and the nonforfeiture options if premiums stop.

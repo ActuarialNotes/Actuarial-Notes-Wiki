@@ -14,10 +14,10 @@ points: 1
 
 An insurer's strategic plan lists four proposed goals. Which one best meets the SMART test (specific, measurable, aggressive, realistic and time-bound)?
 
-- A) Become a better place to work
-- B) Grow as fast as possible in every line
-- C) Double commercial auto premium in one month
-- D) Cut the average time to acknowledge a claim from 6 days to 3 by June 30
+- A) Become a better place to work for our claims and underwriting staff
+- B) Grow written premium as fast as possible in every line we write
+- C) Double commercial auto written premium within the next calendar month
+- D) Cut average claim acknowledgment time from 6 days to 3 by June 30
 
 ## Explanation
 

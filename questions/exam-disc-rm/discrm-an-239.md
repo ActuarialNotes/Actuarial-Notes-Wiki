@@ -14,10 +14,10 @@ points: 1
 
 Two claims offices handle the same line. Office X had 800 claims reported, closed 760 of them and paid \$3,800,000 on the closed claims. Office Y had 900 reported, closed 630 and paid \$2,520,000. Which conclusion is best supported?
 
-- A) Y handles claims better, because its average paid per closed claim is lower
-- B) X handles claims better, because it paid more in total
-- C) The offices perform alike, because their average payments differ by only \$1,000
-- D) Y's lower average may rise as its open claims close, so the measures need to be read together
+- A) Y handles claims better, because its average paid per closed claim is the lower of the two
+- B) X handles claims better, because it paid more in total on the claims it closed
+- C) The offices perform alike, because their average payments differ by only \$1,000 a claim
+- D) Y's average may rise as its open claims close, so no one measure settles it
 
 ## Explanation
 

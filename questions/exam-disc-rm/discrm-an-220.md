@@ -23,7 +23,7 @@ A manufacturer buys business income coverage with a \$1,000,000 limit and a 50% 
 
 ## Explanation
 
-The insured needed $0.50 \times 2{,}400{,}000 = 1{,}200{,}000$ of insurance:
+The insured needed 50% of \$2,400,000, or \$1,200,000, of insurance:
 
 $$
 \begin{align*}

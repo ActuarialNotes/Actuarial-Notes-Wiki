@@ -32,7 +32,7 @@ $$
 \end{align*}
 $$
 
-The line earned an underwriting profit of \$1.5 million, a 3% margin, which is $1 - 0.97$. The answer is **C**.
+The line earned an underwriting profit of \$1.5 million, a 3% margin: one minus the combined ratio. The answer is **C**.
 
 **Why not the others**
 

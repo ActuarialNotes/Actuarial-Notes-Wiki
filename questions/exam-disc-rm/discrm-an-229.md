@@ -41,6 +41,6 @@ The answer is **B**. Payroll is the premium base, and the misclassification, not
 
 **Why not the others**
 
-- **A** — Corrects the payroll but leaves everyone in the clerical class: $16{,}000 \times 0.30 - 4{,}500$.
+- **A** — Corrects the payroll but leaves everyone in the clerical class: \$1,600,000 at \$0.30 per \$100, less the \$4,500 deposit.
 - **C** — Is the warehouse premium alone, ignoring both the clerical premium and the deposit.
 - **D** — Is the audited premium, not the adjustment to the deposit already paid.

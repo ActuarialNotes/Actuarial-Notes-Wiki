@@ -14,10 +14,10 @@ points: 1
 
 A regulator finds that an insurer, once, took 20 days to acknowledge a claim through an adjuster's oversight. Under the NAIC Unfair Claims Settlement Practices Act, when does such an act become an improper claims practice?
 
-- A) Whenever it happens, because each late acknowledgment is a violation
-- B) Only when the claimant sues the insurer under the act
-- C) When it is flagrant and in conscious disregard of the act, or frequent enough to be a general business practice
-- D) Only when the insurer's reserves on the claim are inadequate
+- A) Whenever it happens, because each late acknowledgment is a separate violation of the act
+- B) Only when the claimant files a lawsuit against the insurer under the act
+- C) When it is flagrant, or frequent enough to be a general business practice
+- D) Only when the insurer's case reserve on the claim turns out to be inadequate
 
 ## Explanation
 

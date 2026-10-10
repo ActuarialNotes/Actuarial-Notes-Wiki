@@ -22,7 +22,7 @@ An insurer's underwriting policy caps net written premium at 3 times policyholde
 
 ## Explanation
 
-New premium $N$ adds to the premium side and reduces surplus by $0.25N$, so the cap must hold after both effects:
+New premium $N$ adds to the premium side and reduces surplus by 25% of $N$, so the cap must hold after both effects:
 
 $$
 \begin{align*}
@@ -38,5 +38,5 @@ The answer is **B**, about \$45.7 million. Financial capacity is the constraint 
 **Why not the others**
 
 - **A** — Multiplies the \$80 million of room by 25%, as if only the expense could be written.
-- **C** — Divides by $1 + 0.25$, applying the expense strain without the 3-to-1 leverage on the lost surplus.
-- **D** — Ignores the expense strain on surplus entirely: $3 \times 300 - 820 = 80$.
+- **C** — Divides the \$80 million by 1.25, applying the expense strain without the 3-to-1 leverage on the lost surplus.
+- **D** — Ignores the expense strain on surplus entirely, taking the full \$80 million of room under the cap.

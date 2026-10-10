@@ -79,9 +79,9 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 10. Ethical and Societal Considerations of Data Analytics
 > 1. Using [[Data Ethics|Data Ethically]]
-> 2. How [[Insurance Data Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect [[Statistical Learning|Data Modeling]]
+> 2. How [[Insurance Data Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect Data Modeling
 > 3. Applying [[Data Ethics Checklist|Ethics Checklists]] to Insurance Data Modeling
-> 4. [[Unfair Discrimination|Societal Impact]] of [[Credit-Based Insurance Scoring|Credit-Based Insurance Scores]]
+> 4. Societal Impact of [[Credit-Based Insurance Scoring|Credit-Based Insurance Scores]]
 
 ## Source Material
 > [!answer]- Source Material

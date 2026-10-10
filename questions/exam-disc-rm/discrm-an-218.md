@@ -38,5 +38,5 @@ The answer is **D**.
 **Why not the others**
 
 - **A** — Uses an average month: $\frac{4(260{,}000) + 8(90{,}000)}{12} \times 4 + 50{,}000$. Averages hide the peak of a seasonal business.
-- **B** — Uses a window that misses one peak month, April through July: $3(260{,}000) + 90{,}000 + 50{,}000$.
+- **B** — Uses a window that misses one peak month, April through July: three peak months, one off-peak month and the extra expense.
 - **C** — Leaves out the extra expense the insured would incur to keep going.

@@ -23,7 +23,7 @@ A building is insured for \$1,200,000 under a commercial property policy with an
 
 ## Explanation
 
-The insured needed $0.80 \times 2{,}000{,}000 = 1{,}600{,}000$ of insurance. In the standard form the deductible is subtracted after the coinsurance ratio is applied:
+The insured needed 80% of \$2,000,000, or \$1,600,000, of insurance. In the standard form the deductible is subtracted after the coinsurance ratio is applied:
 
 $$
 \begin{align*}
@@ -38,6 +38,6 @@ The answer is **B**. The insured bears \$105,000 of the loss for carrying too li
 
 **Why not the others**
 
-- **A** — Uses 100% of value rather than 80% in the denominator: $0.60 \times 400{,}000 - 5{,}000$.
-- **C** — Subtracts the deductible before applying the ratio: $0.75 \times 395{,}000$.
+- **A** — Uses 100% of value rather than 80% in the denominator, a ratio of 0.60 instead of 0.75.
+- **C** — Subtracts the deductible before applying the ratio, taking 75% of \$395,000.
 - **D** — Ignores the coinsurance clause, as if the building were insured to value.

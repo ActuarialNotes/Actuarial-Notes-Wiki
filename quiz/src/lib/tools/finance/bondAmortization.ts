@@ -10,6 +10,7 @@ export const bondAmortization: ToolSpec = {
   name: 'Bond Amortization',
   area: 'finance',
   answers: 'How does the book value move to redemption?',
+  aka: ['book value', 'premium', 'discount', 'write-down'],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
   notation: () => 'Iₖ = j · BVₖ₋₁,  BVₖ = BVₖ₋₁ − (Fr/m − Iₖ)',
   view: 'table',

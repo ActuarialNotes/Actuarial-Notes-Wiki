@@ -10,6 +10,7 @@ export const capeCod: ToolSpec = {
   name: 'Cape Cod',
   area: 'reserving',
   answers: 'What expected claim ratio do the data imply, and what ultimate follows?',
+  aka: ['Stanard-Bühlmann', 'Stanard-Buhlmann', 'used-up premium'],
   fields: [
     BASIS_FIELD,
     {

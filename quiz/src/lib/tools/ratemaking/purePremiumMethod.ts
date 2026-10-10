@@ -7,6 +7,7 @@ export const purePremiumMethod: ToolSpec = {
   name: 'Pure Premium Method',
   area: 'ratemaking',
   answers: "What's the indicated average rate?",
+  aka: ['indicated rate', 'PP method'],
   fields: [
     { kind: 'number', key: 'pure_premium', label: 'Pure premium', symbol: 'PP', unit: 'money', min: 0, max: 1e12, sliderMax: 2000, step: 1, default: 300, description: 'Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in).' },
     { kind: 'number', key: 'fixed', label: 'Fixed expense per exposure', symbol: 'F', unit: 'money', min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: 'Projected fixed expenses per exposure.' },

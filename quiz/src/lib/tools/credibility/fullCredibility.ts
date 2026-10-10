@@ -13,6 +13,7 @@ export const fullCredibilityStandard: ToolSpec = {
   name: 'Full Credibility Standard',
   area: 'credibility',
   answers: 'How many expected claims make full credibility?',
+  aka: ['full credibility', 'limited fluctuation'],
   fields: [
     { kind: 'choice', key: 'basis', label: 'Estimating', description: 'What is being estimated. Frequency assumes Poisson claim counts.', options: BASES, default: 'frequency' },
     { kind: 'number', key: 'p', label: 'Probability', symbol: 'p', unit: 'percent', judgment: true, min: 0.5, max: 0.9999, step: 0.005, default: 0.9, description: 'The probability of being within k of the true value, as a decimal.' },

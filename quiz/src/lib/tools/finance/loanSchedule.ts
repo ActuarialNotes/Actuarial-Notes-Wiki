@@ -9,6 +9,7 @@ export const loanSchedule: ToolSpec = {
   name: 'Loan Schedule',
   area: 'finance',
   answers: 'How is this loan repaid, payment by payment?',
+  aka: ['amortization', 'outstanding balance', 'mortgage'],
   fields: [
     { kind: 'number', key: 'amount', label: 'Amount borrowed', symbol: 'L', unit: 'money', min: 0.01, max: 1e12, sliderMax: 100000, step: 100, default: 10000, description: 'The loan amount at time 0.' },
     { kind: 'number', key: 'i', label: 'Rate per period', symbol: 'i', unit: 'percent', min: 0, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04).' },

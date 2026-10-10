@@ -57,6 +57,7 @@ export const distribution: ToolSpec = {
   name: 'Distribution',
   area: 'distributions',
   answers: "What's the probability, quantile or moment?",
+  aka: ['probability', 'quantile', 'percentile', 'PDF', 'moments'],
   fields: [
     {
       kind: 'choice', key: 'family', label: 'Distribution',

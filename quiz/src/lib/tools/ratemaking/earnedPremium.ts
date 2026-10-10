@@ -8,6 +8,7 @@ export const earnedPremium: ToolSpec = {
   name: 'Earned Premium',
   area: 'ratemaking',
   answers: 'How much of this premium is written, earned and unearned in each year?',
+  aka: ['EP', 'unearned premium', 'earned exposure'],
   fields: [
     {
       kind: 'table', key: 'policies', label: 'Policies', minRows: 1, maxRows: 2000,

@@ -8,6 +8,7 @@ export const expectedPayment: ToolSpec = {
   name: 'Expected Payment',
   area: 'distributions',
   answers: 'What does the insurer expect to pay, per loss and per payment?',
+  aka: ['deductible', 'per payment', 'per loss', 'coinsurance', 'franchise deductible'],
   fields: [
     FAMILY,
     ...PARAMETERS,

@@ -11,6 +11,7 @@ export const bondYield: ToolSpec = {
   name: 'Bond Yield',
   area: 'finance',
   answers: 'What yield does this price give?',
+  aka: ['YTM', 'yield to maturity'],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE],
   notation: () => 'P = Fr/m · a⌉N + C · vᴺ, solved for j',
   view: 'none',

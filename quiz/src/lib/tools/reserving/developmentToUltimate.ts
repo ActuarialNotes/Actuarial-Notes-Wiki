@@ -6,6 +6,7 @@ export const developmentToUltimate: ToolSpec = {
   name: 'Development to Ultimate',
   area: 'reserving',
   answers: 'What are the cumulative development factors to ultimate?',
+  aka: ['CDF', 'LDF to ultimate', 'percent reported', 'percent developed'],
   fields: [
     { kind: 'number', key: 'tail', label: 'Tail factor', symbol: 'T', unit: 'factor', judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 0.001, default: 1, description: 'Development beyond the last age. 1 assumes none.' },
     {

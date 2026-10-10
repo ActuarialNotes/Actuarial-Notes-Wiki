@@ -35,6 +35,7 @@ export const durationConvexity: ToolSpec = {
   name: 'Duration & Convexity',
   area: 'finance',
   answers: 'How sensitive is the value of these cash flows to the rate?',
+  aka: ['Macaulay', 'modified duration', 'convexity'],
   fields: [
     { kind: 'number', key: 'i', label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The annual effective rate (the yield), as a decimal. Times are in years.' },
     {

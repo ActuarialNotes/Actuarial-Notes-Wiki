@@ -30,7 +30,11 @@ export interface NormalizedInput {
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
 
-/** Read a number from 1200, "1,200", "$1,200" or "5%" (which, for a percent field, is 0.05). */
+/**
+ * Read a number from 1200, "1,200", "$1,200" or "5%" (which, for a percent
+ * field, is 0.05) — or from arithmetic, as a spreadsheet cell takes it:
+ * "1700*1.05", "=1850/1.1", "(1+5%)^2" (docs/actuarial-tools.md §6.6).
+ */
 export function readNumber(raw: unknown, percent: boolean): number | null {
   if (typeof raw === 'number') return Number.isFinite(raw) ? raw : null
   if (typeof raw !== 'string') return null
@@ -38,8 +42,63 @@ export function readNumber(raw: unknown, percent: boolean): number | null {
   if (!text) return null
   const isPct = text.endsWith('%')
   const n = Number(isPct ? text.slice(0, -1) : text)
-  if (!Number.isFinite(n)) return null
-  return isPct && percent ? n / 100 : n
+  if (Number.isFinite(n)) return isPct && percent ? n / 100 : n
+  return evaluateArithmetic(text)
+}
+
+/**
+ * A cell's arithmetic, or null when it isn't any: numbers (a trailing % is a
+ * hundredth), + − × ÷ (also * x / ), ^ for a power, and brackets, with an
+ * optional leading "=". A small recursive-descent reader — never `eval`.
+ */
+export function evaluateArithmetic(raw: string): number | null {
+  const src = raw.replace(/\s+/g, '').replace(/^=/, '').replace(/[×x]/g, '*').replace(/÷/g, '/').replace(/−/g, '-')
+  if (!src || !/^[-+*/^().%\d eE]+$/.test(src)) return null
+  let i = 0
+  const peek = () => src[i]
+  const expr = (): number => {
+    let v = term()
+    while (peek() === '+' || peek() === '-') v = src[i++] === '+' ? v + term() : v - term()
+    return v
+  }
+  const term = (): number => {
+    let v = unary()
+    while (peek() === '*' || peek() === '/') v = src[i++] === '*' ? v * unary() : v / unary()
+    return v
+  }
+  // A power binds tighter than a sign, as in algebra: -2^2 is -4.
+  const unary = (): number => {
+    if (peek() === '-') { i++; return -unary() }
+    if (peek() === '+') { i++; return unary() }
+    return power()
+  }
+  const power = (): number => {
+    const base = atom()
+    if (peek() !== '^') return base
+    i++
+    return base ** unary()
+  }
+  const atom = (): number => {
+    let v: number
+    if (peek() === '(') {
+      i++
+      v = expr()
+      if (src[i++] !== ')') throw new Error('bracket')
+    } else {
+      const m = /^(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?/.exec(src.slice(i))
+      if (!m) throw new Error('number')
+      i += m[0].length
+      v = Number(m[0])
+    }
+    if (peek() === '%') { i++; v /= 100 }
+    return v
+  }
+  try {
+    const v = expr()
+    return i === src.length && Number.isFinite(v) ? v : null
+  } catch {
+    return null
+  }
 }
 
 function numberField(f: NumberField, raw: unknown): number {

@@ -1,8 +1,12 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-10 · Status: **Phase 1 nearly built** — thirty-two tools on the Tools page
-and in the MCP connector, each checked against a published source. §16 says what is built and
-§15 what of Phase 1 is still to do._
+_Last updated: 2026-10-10 · Status: **Phase 1 nearly built; V2 built** — thirty-five tools on
+the Tools page and in the MCP connector: thirty-two calculators, each checked against a published
+source, and three Data Sources. §16 says what is built and §15 what is next. **§18 is the V2
+review**: what the first build looked like on a phone, and the four changes it led to —
+assumptions picked rather than typed (§6.6), a live figure on every card (§6.7), **Data Sources**
+as a practice area (§4.11) and a search bar on the Tools page (§6.2). §16.1 says what of V2 was
+built and where the build departs from the plan._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -88,7 +92,9 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
   MBBEFD curve parameters, are **transcribed** with their source and the date read, never
   reconstructed. Sample inputs ("Load an example") are **published worked examples** with
   their citation (a Friedland exhibit, a Werner & Modlin appendix, a bank question), never
-  plausible-looking made-up data.
+  plausible-looking made-up data. A **Data Source** (§4.11) is the one way a published table
+  reaches a tool: a dated snapshot, extracted mechanically from the publisher's own file, its
+  licence named, chosen by the reader and never filled in silently.
 - **R3 — Tools compute; people judge.** A judgment is an input. Where a tool offers a default
   method choice (for example, all-year volume-weighted averages), the output's `judgments`
   list names it and marks it `default: true`. An agent therefore can't present a default as
@@ -123,10 +129,17 @@ These hold up the whole section. Each is enforced in code and pinned by a test, 
   spec to it: one `answers` sentence, one produced kind, at most three headline results and
   at most six scalar inputs.
 - **R10 — Small and live.** Every tool is one card in the distribution simulator's shape
-  (§6.3): the answer above, the inputs below, recomputed on every change, with no Run
-  button and no form to submit. It shows only what the answer needs. Everything else waits
-  behind one menu. A scalar tool fits an iPhone screen without scrolling, and an e2e test
-  holds it there. As with the simulator, a change that adds a row has to take one away.
+  (§6.3): the answer above, then one small **figure** of it (§6.7), then the inputs,
+  recomputed on every change, with no Run button and no form to submit. It shows only what
+  the answer needs. Everything else waits behind one menu. A scalar tool fits an iPhone
+  screen without scrolling, and an e2e test holds it there. As with the simulator, a change
+  that adds a row has to take one away.
+- **R11 — A figure only draws what the tool computed.** The figure is drawn from the run's
+  input and output, and where it needs more points (a price–yield curve, the Z curve) it gets
+  them by calling the same tool's `compute` again, never a second formula. It has no title and
+  no caption: axis ticks where a scale is needed and labels of a word or two, as
+  `docs/concept-figures.md` asks of the concept figures. A registry test requires every tool
+  to have one.
 
 ---
 
@@ -146,14 +159,16 @@ practitioners do the calculation, how deep the vault's coverage is (P&C ratemaki
 reserving are deep, life contingencies are still `development`), and how much existing code
 the tool can reuse.
 
-### 4.1 Data
+### 4.1 Data preparation
 
 | Tool | Answers | In → out | Vault pages | Phase |
 |---|---|---|---|---|
 | **Triangle from Claim Listing** | What are the triangles in this claim data? | Transactions (claim, accident/report/transaction date, paid, case; columns mapped by the user), origin basis (AY/RY/PY), evaluation interval → one triangle: paid, reported, or reported/closed/open counts. ASOP 23-style checks (negative values, dates out of order, a claim closed with case open, totals reconciled) appear as warnings | Ratemaking Data Organization, Accident Year, Report Year, Policy Year; ASOP 23 | 2 |
 | **Ratio Triangle** | How does one triangle compare to another, cell by cell? | Two triangles → their ratio, shaded by size so a diagonal shift stands out. Covers paid ÷ reported, closed ÷ reported, average case O/S (case ÷ open counts) and average paid | Development Triangle; Friedland Ch. 6 | 1 |
 
-Cumulative ↔ incremental is not a tool. It's a switch on every triangle grid.
+Cumulative ↔ incremental is not a tool. It's a switch on every triangle grid. Published data
+— a mortality table, a price index, a yield curve, a public triangle — is a different thing,
+the **Data Sources** area (§4.11): looking a table up is not preparing the reader's own data.
 
 ### 4.2 Reserving (Friedland 2010; Exam 5, 6C, 7)
 
@@ -290,11 +305,70 @@ For anything heavier, a tool can offer **Open in workspace**. That opens the PCP
 simulator's webR / Pyodide workspace (`docs/pcpa-project.md`) with the data and an
 equivalent R or Python snippet, rather than re-implementing a modelling library.
 
-### 4.11 Deliberately not tools
+### 4.11 Data Sources
+
+A data source answers **"what does this publisher's table say?"** It computes nothing. It looks
+up a slice of a published table, draws it, and hands it on. Data sources are what make the rest
+of the catalogue usable without a spreadsheet open beside it: Trend Fit wants an index, Present
+Value a yield curve, the life tools a mortality table, Age-to-Age Factors a triangle. In the
+catalogue they're their own practice area, **Data Sources**, listed first because that's where a
+chain starts. In the engine they're the area `data` (`PracticeArea`), and every one of them is
+held to R1–R11 like any other tool, plus these rules, which are R2 applied to a whole table:
+
+- **Extracted mechanically, never retyped.** `scripts/dataset_extract.py` reads the publisher's
+  own file (a CSV inside StatCan's table zip, BLS's tab-separated time-series files, NCHS's
+  `.xlsx`, the Treasury's CSV) into `quiz/src/lib/tools/data/datasets/<id>.json`, with each
+  file's URL, the sha256 of the bytes it read, the date read and the licence. It's the same pattern as `.syllabus/` (`docs/syllabus-pipeline.md`) and
+  `tool_fixtures.py` (§17). A table no script can read isn't offered.
+- **Free to reuse, licence named.** A dataset ships only under terms that allow redistribution:
+  a US federal work (public domain), the Statistics Canada Open Licence, or a publisher's terms
+  that say so. The licence is printed in the card's ⋯ menu and on the dataset's page. Anything
+  else, including the insurance-industry trend studies sold by subscription, stays a paste from
+  the reader's own copy.
+- **A dated snapshot.** A source is the edition read on a date, never fetched live when a tool
+  runs, because a run has to reproduce (R4): the dataset id and edition are part of the input
+  hash. A newer edition is a new snapshot, added by a PR. A scheduled workflow can open that
+  PR, the way the Monday validate sweep does, and older editions stay addressable.
+- **A page in the vault.** Each dataset has a `Resources/Data/<Name>.md` page written to the
+  resource-page standard (`docs/resource-pages.md`): what it is, who publishes it, the edition,
+  the licence. The card's title opens that page (R5), and its Fact Check verdict travels with
+  every value the dataset supplies.
+- **Chosen, never a default.** A value a data source supplies arrives in the next tool as a
+  judgment carrying its provenance (`source: { dataset, edition, slice }`). It's never
+  `default: true`, and nothing is filled in from a dataset unless the reader picked it there.
+- **Small, and carried by the engine.** A tool computes synchronously and the connector runs
+  the same engine, so the tables ride with it (`lib/tools/data/datasets.ts` imports them). That
+  keeps them out of the main chunk — the engine loads only in the Tools page's lazy chunk — and
+  they are kept small: monthly index values since 2000, the Treasury's curve at each month-end,
+  single-age life tables (about 100 KB in all). A table too big for that (daily curves, the CAS
+  triangles) is the point to move to fetched static files (`ai/datasets/<id>.json`), as first
+  planned.
+
+| Tool | Answers | In → out | Datasets, first wave | Sends to | Phase |
+|---|---|---|---|---|---|
+| **Life Table** | What does this published life table give at each age? | Table, population (all, male, female), age *x*, years ahead *t* → *q_x*, *l_x*, *e_x* from *x* to *x + t*, and *ₜp_x* | **Built:** *United States Life Tables, 2024* (NCHS, NVSR 75-05, Tables 1–3, ages 0–100+); Statistics Canada's complete life table, 2022–2024 (Table 13-10-0114-01, ages 0–110+). **Waiting:** the SOA's exam tables, the Standard Ultimate Life Table and the Illustrative Life Table, until their terms are confirmed (§14) | Survival Probability, Life Insurance Value, Life Annuity Value, Net Premium, Policy Value (§4.9), once built | V2 ✓ |
+| **Price Index** | How has this price index moved? | Series, from and to → the values by period, each one's 12-month (or 4-quarter) change, and the annualised and total change between the first and last | **Built:** BLS CPI-U (all items, medical care, motor vehicle maintenance and repair, motor vehicle insurance, used cars and trucks, shelter) and ECI (wages and salaries, private industry), monthly or quarterly since 2000; Statistics Canada CPI (all items, passenger vehicle insurance premiums, passenger vehicle parts, maintenance and repairs, health care, shelter), monthly since 2000. **Not yet:** Statistics Canada's building construction price indexes | Trend Fit (the window as points), Trend Factor (the annualised change as the selected trend, a judgment) | V2 ✓ |
+| **Yield Curve** | What were interest rates on this date? | Curve, date, term → the curve on or before the date, the yield at the term and the 10Y − 2Y slope | **Built:** the Treasury's daily par yield curve, its last trading day of each month since January 2000 (and the latest day of the month in progress). **Waiting:** the Bank of Canada's zero-coupon curves (§14) | Interest Converter (a par yield is nominal, convertible semiannually; the converter gives the effective rate), and through it Present Value, Annuity, Duration & Convexity and Redington Immunization, whose rate offers it as a source | V2 ✓ |
+| **Loss Development Data** | What are this insurer's published triangles? | Line of business, company → paid and incurred triangles and earned premium by accident year | The CAS Loss Reserving Database (Meyers & Shi, built from NAIC Schedule P: six lines, accident years 1988–1997, ten years of development, the later diagonals kept for back-testing) | Age-to-Age Factors, Ratio Triangle, Expected Claims (premium), Cape Cod | Waits on §14's terms |
+| **Exposure Curve** | What share of a risk's loss sits below this point? | Curve, a point as a share of the sum insured → the share of expected loss | Bernegger's (1997) MBBEFD parameters for the Swiss Re Y1–Y4 curves | Exposure Rating (§4.6) | 2 |
+| **Capital Factors** | What factor does the regulator set for this risk? | Guideline in force, risk category → the factor, with the guideline's section | OSFI's MCT guideline, by year | MCT Ratio (§4.8) | 3 |
+
+Second-wave candidates, each waiting on its terms or an extraction script: the SOA's Mortality
+and Other Rate Tables site (CPM2014, Pri-2012 and the other pension and annuity tables, published
+as XTbML), the Human Mortality Database (CC BY 4.0, behind a registration), the published
+loss-trend reviews of Canadian auto regulators, and OSFI's quarterly P&C returns, which the vault
+already describes (`Resources/Data/OSFI/`).
+
+The Loss Development Data triangles are real filed data, not a worked example, so they're not
+the "Load an example" a card offers (R2 keeps that for cited worked examples). They're what a
+student practises the reserving chain on once the textbook's examples run out, and what an
+agent can be asked to analyse when the reader has no triangle of their own.
+
+### 4.12 Deliberately not tools
 
 - **Benchmark factors** ("industry LDFs", typical trends). By R2 they can't exist unless
-  transcribed from a public source with its date. Even then they ship as a dataset the user
-  chooses, never as a default.
+  transcribed from a public source with its date. Even then they ship as a Data Source the
+  user chooses (§4.11), never as a default.
 - **Opinions, sign-offs, statements of actuarial opinion, filings.** Drafting belongs to
   the Agent plan's Phase C and to Cowork, with a human reviewer. A tool's output is an
   exhibit, not a conclusion.
@@ -323,6 +397,7 @@ interface ToolSpec<I, O> {
   notation(input: I): string    // the formula with live values, under the title (LaTeX)
   tiles(result: O): Tile[]      // the headline results, at most three (R9)
   view: 'plot' | 'grid' | null  // the one thing drawn under the tiles
+  figure: FigureKind            // the small live picture of the answer (§6.7, R11)
   run(input: I, ctx: RunContext): ToolResult<O>   // pure, deterministic (seeded if random)
   method: {
     concepts: string[]          // vault concept paths → Method tab, exam logos, fact check
@@ -348,11 +423,24 @@ interface ToolResult<O> {
 }
 ```
 
+A field that is an **assumption** (a CDF, an ELR, a trend, a selected factor) also names
+where a value for it can come from, so the card can offer it (§6.6):
+
+```ts
+// on a NumberField or a TableColumn
+pick?: {
+  kind: DataKind                // what fills it: 'FactorVector', 'TrendRate', 'SpotCurve'…
+  candidates?: (input) => { label: string; value: number }[]   // e.g. this triangle's averages
+  step: number                  // the stepper's nudge (0.001 for a factor, 0.5% for a rate)
+}
+```
+
 **Typed data kinds** let tools chain together, and let an agent pass one tool's output
 straight into the next: `Triangle` (origins, ages, values, cumulative|incremental, measure,
 units), `OriginVector` (ultimates, CDFs, ELRs by origin), `FactorVector`, `LossListing`,
 `ClaimTransactions`, `RateHistory`, `CashFlows`, `Distribution` (family + parameters,
-the `lib/distributions.ts` keys), `Sample` (simulated values).
+the `lib/distributions.ts` keys), `Sample` (simulated values), and the kinds the Data Sources
+produce (§4.11): `LifeTable`, `IndexSeries`, `SpotCurve`.
 
 **Lenient in, strict out.** Agents and humans hand data over in whatever form they have it.
 `coerce` accepts a triangle as a matrix with labels, as long-format rows, or as CSV text. It
@@ -396,13 +484,40 @@ practitioner tools under "Study". See §14.
 
 | Route | Page |
 |---|---|
-| `/tools` | **Catalogue.** Practice areas as `ListPanel` groups (`components/ui/ListPanel.tsx`), searched through `FloatingSearchBar` parts. Each row has the tool's name, the question it answers, and the logos of the exams that examine it. The search matches the question too, so "what loss ratio do my rates allow" finds Permissible Loss Ratio. |
+| `/tools` | **Catalogue.** A search bar on top, then the practice areas as `ListPanel` groups (`components/ui/ListPanel.tsx`), Data Sources first. Each row leads with its tool's figure in miniature (§6.7), then the tool's name, the question it answers, and the logos of the exams that examine it. See *The search bar* below. |
 | `/tools/:toolId` | **The tool card**, alone on the page under a back arrow. |
 | `/tools/runs` | **My runs.** Saved runs, localStorage first and synced to the account when signed in (§8.5). |
 | `/tools/analyses/:id` | **Analysis** (Phase 4). A saved chain of runs (§6.5). |
 
 The sidebar lists the practice areas while the mode is open, the way Study Guides lists
 Exams / Resources.
+
+**The search bar.** The Tools page gets the bar every other tab has, built from the
+`FloatingSearchBar` parts (`components/FloatingSearchBar.tsx`) the way `FlashcardsSearchBar`
+is, so a search feels the same here as anywhere else:
+- **What it matches**, ranked by `rankMatch` / `searchBy` (`lib/appSearch.ts`): the tool's
+  name first, then the question it answers ("what loss ratio do my rates allow" finds
+  Permissible Loss Ratio), then its method's concept names and the abbreviations its spec lists
+  (a new `aka` field: "BF", "LDF", "ELR", so "BF" and "Bornhuetter Ferguson" both land), its exams ("Exam 5"), and for a data source
+  the names of its datasets ("CPI", "medical care", "life table", "Treasury"). The matched run
+  is marked with `SearchHighlight`.
+- **Scope pills** under the input, one per practice area (`SearchScopePill`), narrow the list
+  while a query is typed. With no query, the page is the grouped catalogue as it is now.
+- **The query rides the URL** (`/tools?q=…&area=…`), so Back from a tool returns to the same
+  results, and the search is reported through `hooks/useSearchTracking.ts` like every other box.
+- **On a tool's page** the same bar sits above the card with the back link in its title strip
+  (`FloatingSearchStrip`), so the next tool in a chain is one search away rather than two taps
+  back to the list.
+- **The hamburger moves onto the bar's line.** `/tools` joins `lib/mobileNavHost.ts`, and the
+  page gains `<MobileNavButton />` in its bar in the same change, as that module requires. The
+  app header row the screenshots show above the page goes away.
+- **No match** says so in one line and hands the query to the Search page, which gains a
+  **Tools** pill (§6.4), as the Dashboard's bar hands over what it can't answer.
+
+The catalogue's search, the Search page's Tools pill and the connector's `list_tools` query
+read the same fields (`toolSearchText` in `lib/tools/registry.ts`, relative imports like the rest
+of the engine), so a person and an agent find the same tool with the same words. Today
+`list_tools` matches only the name and the question.
 
 ### 6.3 The tool card
 
@@ -417,17 +532,20 @@ because that's the design this section is copying:
 │ ┌───────────┐ ┌───────────┐          │
 │ │ U 5,504.8 │ │ IBNR 954.8│          │  at most three tiles
 │ └───────────┘ └───────────┘          │
-│  AY      L    CDF      E      U      │  one view: here the grid, which is
-│  2021  1,650  1.000  1,700  1,650.0  │  also the input (L, CDF and E are
-│  2022  1,700  1.100  1,850  1,868.2  │  editable; U is computed and shaded)
-│  2023  1,200  1.676  1,950  1,986.7  │
-│ ▸ Show working                       │
+│ ▇▇▇▇▇▇▇▇▇▇▇▇                         │  the figure (§6.7): latest, and IBNR
+│ ▇▇▇▇▇▇▇▇▇▇▇▇▒▒                       │  on top of it in the result colour,
+│ ▇▇▇▇▇▇▇▇▒▒▒▒▒▒▒                      │  one bar per origin; redrawn live
+│  AY      L    CDF ▾    E ▾  │   U    │  one view: here the grid, which is
+│  2021  1,650  1.000  1,700  │1,650.0 │  also the input (L, CDF and E are
+│  2022  1,700  1.100  1,850  │1,868.2 │  editable; U is computed, shaded and
+│  2023  1,200  1.676  1,950  │1,986.7 │  pinned at the right edge). ▾ opens
+│ ▸ Show working                       │  the column's sources (§6.6)
 └──────────────────────────────────────┘
 ```
 
-- **It reads top-down**: title, reset and menu → notation → up to three tiles → one view
-  (a plot or a grid) → the inputs that aren't in the view (sliders and choices) → at most
-  one action. The only tools with an action are the random ones (ODP Bootstrap, Copula
+- **It reads top-down**: title, reset and menu → notation → up to three tiles → the figure
+  (§6.7) → one view (a plot or a grid) → the inputs that aren't in the view (sliders and
+  choices) → at most one action. A plot tool's plot *is* its figure; it isn't drawn twice. The only tools with an action are the random ones (ODP Bootstrap, Copula
   Aggregation), which get the simulator's one **Simulate** button and nothing more.
 - **It's live.** Every change recomputes the result. There's no Run button and no form to
   submit. A slider moves the tiles while it's being dragged.
@@ -437,6 +555,13 @@ because that's the design this section is copying:
   the inputs and the computed columns are the result, shaded. There's no input form beside
   a result table. Pasting from Excel fills the grid. A triangle grid has the cumulative ↔
   incremental switch.
+- **The answer column never scrolls away.** The origin column is pinned at the left edge
+  and the computed columns at the right; only the input columns between them scroll. On a
+  phone the first screenshot in §18 shows the opposite: the inputs take the width and the
+  ultimate, the one column the reader came for, is cut off at "1,".
+- **Every number in a column is printed alike.** An input is shown with the thousands
+  separators and decimals of its unit once it loses focus, so a typed `1700` reads `1,700`
+  beside a total of `6,650`, and a column's total uses the column's own precision.
 - **Scalar inputs are sliders**, the shared `.sim-slider` (a 32px knob, a 44px row). Each one's
   value can be tapped to type an exact number, since an actuary often has the exact figure.
   A method option with the same inputs (R9) is a segmented choice, never a dropdown of forms.
@@ -499,6 +624,127 @@ make that easy instead of tedious:
   is a view of an Analysis, not a tool, because comparing is choosing, and choosing is the
   actuary's job (R3).
 
+### 6.6 Picking assumptions, not typing them
+
+Most of what a reader enters into a table tool isn't data. It's an **assumption**: a CDF, an
+expected-claims amount, an ELR, a selected factor, a trend. In the first build every one of
+those is a bare text box in a narrow cell, typed digit by digit on a phone keyboard. In Excel an
+actuary doesn't type a CDF; they point at where it comes from. The card should work the same
+way. Six pieces, each small:
+
+1. **A column's header is its menu.** Tapping an assumption column's header (`CDF ▾`,
+   `Expected ▾`) opens a short sheet of where its values can come from:
+   - **From a tool**: the tools that produce the column's kind (`pick.kind`, §5). Picking one
+     opens that tool's card in the sheet, filled from this card's grid where it can be (the
+     origins, the latest diagonal, the premium). Its result fills the column when the sheet
+     closes. BF's CDF column opens Development to Ultimate; its Expected column opens
+     Expected Claims, where an ELR slider and a premium column produce the amounts. This is
+     Send to… run backwards, so a chain can start from the tool the reader is actually in.
+   - **From a data source**: the Data Sources that produce the kind (§4.11). A trend comes
+     from Price Index, a discount curve from Yield Curve.
+   - **From a run**: the reader's saved runs and the last run of each tool this session that
+     produced the kind (§8.5).
+   - **Set every row to…**, **Scale by…** (×1.05, or +5%) and **Paste a column**, the things
+     a spreadsheet does to a column in one move.
+
+   Whatever fills the column is recorded as the judgment's source (R3), so an agent reading
+   the envelope sees "CDFs from Development to Ultimate, run `sha256:…`" rather than numbers
+   with no history.
+2. **On a touch screen a number cell opens a stepper, not a keyboard.** Tapping it opens a
+   small sheet under the grid: the value large, a `.sim-slider` centred on the current value
+   (±10% for a factor, the field's own range otherwise), − and + steppers at the field's
+   `pick.step`, and ‹ › to move to the cell above or below without closing it. **Candidates**
+   sit above the slider as chips: for an LDF, this triangle's averages (*Vol-wtd 3: 1.133*,
+   *Simple 5: 1.128*); for an ELR, the Cape Cod ELR if a Cape Cod run exists. One tap picks
+   one. The keyboard is still one tap away (the value is a text field) for an exact figure.
+3. **Factor selection is a tap on the averages.** In Age-to-Age Factors the averages rows
+   under the factor triangle become a selection grid. Tapping an average selects it for that
+   age, tapping an average's row label selects it at every age, and a **Selected** row at the
+   bottom shows each pick with the average it came from, or "typed" for a figure entered by
+   hand. That's the selection exhibit every reserving workpaper has, and it's what Send to…
+   carries to Development to Ultimate. Until the reader taps, the selections are the default
+   average and say so (R3).
+4. **Arithmetic in a cell.** Any number cell accepts `1700*1.05`, `=1850/1.1` or `5%`,
+   evaluated on blur by a small parser in `lib/tools/input.ts` (numbers, + − × ÷, brackets and
+   %; never `eval`). The cell keeps the result; the trace records what was typed.
+5. **The spreadsheet keys.** Enter moves down and Tab across, arrows move between cells, a
+   drag or shift-click selects a block, ⌘/Ctrl+D fills down, Delete clears the block, and
+   ⌘/Ctrl+Z undoes. That's in `ToolGrid.tsx` alone, so every table tool gets it at once.
+6. **A scalar has the same picker.** A slider's value is already tappable to type. It gains the
+   same steppers and, where the field has a `pick`, the same **From a tool / data source**
+   choices in the field's menu (Trend Factor's annual trend from Trend Fit or Price Index).
+
+None of this adds a row to the card (R10). The menu lives in the header that's already there,
+the stepper replaces the keyboard rather than sitting beside it, and the candidates appear only
+while a cell is being edited.
+
+### 6.7 A figure on every card
+
+Every tool has one small figure, drawn under the tiles and redrawn on every change, including
+while a slider is being dragged. It's the picture of the answer that the tiles put in numbers.
+Most readers check a result by its shape before its digits: a BF ultimate whose bar towers over
+its neighbours, a trend line that misses the points, a loan whose interest share never falls.
+The figure is that check.
+
+- **One component, a handful of kinds.** `components/tools/ToolFigure.tsx` draws a
+  `FigureSpec`, and each tool's spec says which kind and how to read its result into it. The
+  kinds: **bars** (stacked, one per origin or period), **curve** (a function with the current
+  point marked, a tangent or a shaded region), **points** (a scatter with a fitted line, or each
+  origin's factor as a dot over its age's average), **flows** (cash flows on a timeline, height
+  as amount), **split** (one 100% bar of a premium dollar), **heat** (a triangle shaded by
+  size) and **calendar** (policies as diagonals across calendar years, the parallelogram).
+  The data → shapes step is pure and tested (`lib/toolFigures.ts`, in the shape of
+  `lib/distributionPlot.ts`), and it lives app-side so the engine bundle stays as it is.
+- **The style guide's chart rules.** About 120px tall on a phone, the full card width,
+  `--primary` for the result and `currentColor` at low opacity for everything else (§6.3); in
+  an exam's tool the accent is the exam's (`examAccentStyle`). Hovering or touching a mark
+  names it in one line under the figure, the way the readiness ring names a concept.
+- **Some figures can be dragged.** Where a figure plots the input it depends on, dragging the
+  marked point sets that input: the point on Partial Credibility's Z curve sets the claim
+  count, the point on Bond Price's price–yield curve sets the yield. A dragged figure is just
+  another slider, so nothing else on the card changes.
+- **R11 holds it honest.** The figure only draws numbers the tool computed. A curve's other
+  points come from running the same `compute` over a range of the input, never from a second
+  formula, so the figure can't disagree with the tiles.
+- **The catalogue row's icon is the figure.** Each row in the catalogue leads with its tool's
+  figure in miniature, drawn from its first published example (R2). Eight reserving tools stop
+  being eight identical bank icons (§18).
+- **The phone fit still holds.** The figure is the one row V2 adds to a scalar card. R10's
+  e2e test keeps a scalar card on one iPhone screen, so the figure's height is set to fit. If
+  a card doesn't, its notation drops to one line before the figure shrinks.
+
+| Tool | The figure |
+|---|---|
+| Life Table | *q_x* by age on a log scale, the chosen ages highlighted |
+| Price Index | the series, the chosen window shaded and its annualised line drawn across it |
+| Yield Curve | yield by term, with the term a later tool reads marked |
+| Loss Development Data | each accident year's development to ultimate as a line |
+| Ratio Triangle | the heat triangle (the shading §4.1 already describes) |
+| Age-to-Age Factors | points: each origin's factor at each age, with the selected average as a short bar, so an outlier shows before it's averaged in |
+| Development to Ultimate | curve: percent developed by age, rising to 100% at the tail |
+| Chain Ladder, Bornhuetter-Ferguson, Benktander | bars: the latest diagonal, with IBNR stacked on it in the result colour, by origin |
+| Expected Claims | bars: expected claims by origin, the premium behind each as an outline |
+| Cape Cod | bars: used-up premium and reported claims by origin, the Cape Cod ELR as a line |
+| Earned Premium, On-Level Factors | calendar: the policies' diagonals over the years, each year's earned share (or each rate level's area) shaded |
+| Trend Fit | points: the data, with the fitted curve |
+| Trend Factor | a timeline from the experience period's average date to the future one, the trend period marked |
+| Expense Ratios, Permissible Loss Ratio | split: the premium dollar into losses, fixed expense, variable expense and profit |
+| Loss Ratio Method, Pure Premium Method | split: the indicated rate's dollar, beside the current one |
+| Distribution | the simulator's own plot (`components/wiki/DistributionPlot.tsx`) |
+| Limited Expected Value, Expected Payment | curve: the density, with the layer the insurer pays shaded |
+| Full Credibility Standard | curve: the normal density with the central *p* shaded between ±*k* |
+| Partial Credibility, Bühlmann Credibility | curve: *Z* against the claim count (or exposure), today's point marked and draggable |
+| Interest Converter | one axis, each equivalent form of the rate a tick on it (δ < *d* < *i*) |
+| Present Value, Annuity, Internal Rate of Return | flows: the cash flows on a timeline, each with its discounted height inside it; IRR adds the NPV-against-rate curve with its root (or roots) marked |
+| Loan Schedule | bars: each payment split into interest and principal, the balance as a line |
+| Bond Price, Bond Yield | curve: price against yield, the bond's point marked and draggable |
+| Bond Amortization | curve: book value by period, converging on the redemption value |
+| Duration & Convexity | curve: price against rate, with the duration's tangent at the current rate |
+| Redington Immunization | curve: assets and liabilities against the rate, the surplus shaded where it's positive |
+
+A tool added later picks a figure kind as part of its spec. The registry test fails a tool with
+none (R11).
+
 ---
 
 ## 7. The agent surface
@@ -511,7 +757,7 @@ model's context, the connector exposes the catalogue **progressively**:
 
 | MCP tool | Input | Returns |
 |---|---|---|
-| `list_tools` | optional `area`, `query`, `exam` | id, name, one line, area, exams, tested-against, version |
+| `list_tools` | optional `area` (including `data`), `query`, `exam` | id, name, one line, area, exams, tested-against, version; for a data source, its datasets with edition and licence |
 | `describe_tool` | `tool` | the full input/output JSON Schema, a cited example input, method concepts and readings with URLs, the judgments the tool will ask for |
 | `run_tool` | `tool`, `input`, optional `trace` (default on), `format` (`json`/`markdown`) | the `ToolResult` envelope, as `structuredContent` with an `outputSchema` where the client's era supports it, and as text for older clients, plus an `app_url` that opens the same run in the app |
 
@@ -612,11 +858,18 @@ quiz/src/lib/tools/
   ratemaking/*.ts
   distributions/*.ts    wraps lib/distributionMath.ts + lib/distributions.ts (moved under, re-exported)
   credibility/*.ts  finance/*.ts  reinsurance/*.ts  capital/*.ts  life/*.ts  stats/*.ts
+  data/*.ts             the Data Sources (§4.11): one file per tool, reading a dataset by id
   fixtures/<tool>/*.json   cited published examples (§9)
   *.test.ts
 quiz/src/pages/Tools/      Catalogue, ToolRoute, Runs, Analysis (lazy chunk)
-quiz/src/components/tools/ ToolCard (renders any spec), ToolGrid, ToolTiles, ToolMenu,
-                           WorkingFold, plots (shared with components/wiki/DistributionPlot)
+quiz/src/components/tools/ ToolCard (renders any spec), ToolGrid (with the column panel and
+                           the cell stepper, §6.6), ToolMenu, SourceSheet, FactorSelection,
+                           ToolFigure (§6.7), ToolsSearchBar (§6.2)
+quiz/src/lib/toolFigures.ts   result → FigureSpec, pure (app-side; not in the engine bundle)
+quiz/src/lib/toolColumns.ts   cell printing, steps, column moves, sources and candidates (§6.6)
+quiz/src/lib/toolSearch.ts    the catalogue's search; toolRuns.ts, the session's last runs
+quiz/src/lib/tools/data/      the Data Sources and their datasets/<id>.json (§4.11)
+Resources/Data/<Name>.md      one page per dataset: what it is, edition, licence (R5)
 quiz/src/hooks/useToolRuns.ts, useToolWorker.ts
 quiz/api/tools.js          GET catalogue / POST run (HTTP)
 quiz/api/_tools/engine.js  the engine, bundled for the functions (§8.2)
@@ -725,9 +978,18 @@ question's precision. Questions with an open critical finding are skipped, as
 - **Discreteness (R9)**: every spec has one `answers` sentence, one `produces` kind, at most
   three tiles and at most six scalar inputs, and every `consumes` kind is some tool's
   `produces`, so no Send to… leads nowhere.
+- **Figures (R11)**: every tool has a figure kind; `toolFigures.test.ts` builds each tool's
+  figure from its published examples and checks every plotted value is one the run produced
+  (or one `compute` produced over the range a curve sweeps).
+- **Datasets (§4.11)**: every dataset file's sha256 matches the source file its record names,
+  every dataset has a `Resources/Data/` page and a licence, and `dataset_extract.py`'s parsers
+  are tested on a saved copy of each publisher's format (`scripts/test_datasets.py`).
 - **E2E**: `e2e/tools.spec.ts` covers pasting a triangle, the result changing as an input
   changes, Show working, export, Send to…, and opening a share link. At iPhone size, every
-  scalar tool's card fits the viewport without scrolling (R10).
+  scalar tool's card fits the viewport without scrolling (R10). V2 adds: a search that finds
+  BF by "BF" and Permissible Loss Ratio by its question; a column filled from another tool
+  through its header; an LDF picked from the averages; and, at iPhone width, a table tool's
+  computed column fully on screen without scrolling the grid.
 
 ### 9.4 Agent eval
 
@@ -789,6 +1051,30 @@ previous phase's tools pass R6.
   bank questions are mapped and reproduced. The tools-eval harness has a baseline for both
   arms. Then the mode can leave Preview (a §14 decision).
 
+### V2 — Easier to use, and data to use it on (before Phase 2) — built, §16.1
+
+The first build is correct but hard to drive on a phone (§18). V2 fixes that before the
+catalogue grows, because every Phase 2 tool would inherit the same grid and the same blank card.
+In order, each step shippable alone:
+1. **The search bar** (§6.2): `ToolsSearchBar`, the `aka` field on specs, `/tools` in
+   `mobileNavHost.ts`, the Tools pill on the Search page, and `list_tools` matching the same
+   fields.
+2. **The grid's layout** (§6.3): pinned origin and result columns, inputs formatted on blur.
+3. **Picking assumptions** (§6.6): the column-header menu (From a tool, Set every row, Scale,
+   Paste), the cell stepper with candidates, the selection grid in Age-to-Age Factors, cell
+   arithmetic and the spreadsheet keys. Judgments gain `source`.
+4. **Figures** (§6.7): `ToolFigure` and `lib/toolFigures.ts`, a figure for each of the
+   thirty-two tools, the draggable points, and the miniatures on the catalogue rows.
+5. **Data Sources** (§4.11): `dataset_extract.py`, the `data` area, Life Table, Price Index,
+   Yield Curve and Loss Development Data with their first-wave datasets and their
+   `Resources/Data/` pages, the From a data source choice in the column menu, and
+   `ai/datasets/` served to the connector.
+
+- **Exit:** at iPhone width, a reader can run BF from Development to Ultimate's CDFs and Expected
+  Claims' amounts without typing a factor or leaving the BF card; every tool draws its figure;
+  each first-wave data source feeds the tool it names in §4.11; and the e2e additions in §9.3
+  pass.
+
 ### Phase 2 — Depth for practitioners
 - Triangle from Claim Listing; Frequency-Severity, Case Outstanding Development, Case
   Adequacy and Settlement Rate Adjustments, ULAE (Classical, Kittel); Mack Standard Error,
@@ -837,6 +1123,9 @@ previous phase's tools pass R6.
 | **Runs per surface** (UI / MCP / HTTP) and **exports per run** | Adoption by humans vs. agents; whether outputs reach real workpapers |
 | **Judgments surfaced vs. defaults left in place** | Whether R3 works: are people and agents making selections? |
 | **Study → Tools and Tools → Study clicks** | Whether the section strengthens the learning product |
+| **Assumption cells picked vs typed** (§6.6) | Whether the column menu and stepper replace the keyboard; counted per tool, never with a value |
+| **Searches that open a tool**, and searches with no result | Whether the search bar finds tools by the words people use; a no-result query is a missing `aka` or a missing tool |
+| **Data Source runs sent on** | Whether the datasets feed real chains, or are only browsed |
 
 ---
 
@@ -866,6 +1155,11 @@ previous phase's tools pass R6.
   e2e phone-size test fails otherwise.
 - **Tool bloat in model context.** Progressive disclosure (`list` → `describe` → `run`)
   instead of eighty MCP tools.
+- **A stale or unlicensed dataset.** Every dataset carries its edition and the date it was
+  read on the card, and none ships before its terms are confirmed (§14). The run's input hash
+  includes the edition, so an old run is reproducible after a refresh.
+- **A misleading figure.** A figure can only draw what its tool computed (R11), with axes from
+  zero where a bar's length is the point, and the test in §9.3 checks every plotted value.
 - **Function packaging** (§8.2). Resolved in the Phase 0 spike, with the committed-bundle
   fallback.
 - **Maintenance across three surfaces.** There's only one implementation. The surfaces are
@@ -886,7 +1180,14 @@ previous phase's tools pass R6.
    batch use and for anything that ever stores state)?
 5. **Life contingencies timing.** Build alongside the SOA life exams' content, or ahead of
    it for practitioners?
-6. **Open-sourcing the engine.** Publish `lib/tools/` as a package? It strengthens the
+6. **Dataset terms.** Before they ship (§4.11): may the SOA's exam tables (the Standard
+   Ultimate Life Table and the Illustrative Life Table) and its Mortality and Other Rate Tables
+   be redistributed as data, or only linked? Do the Bank of Canada's terms and the CAS Loss
+   Reserving Database's cover redistribution with attribution? Until each is confirmed in
+   writing or by the publisher's published terms, that dataset isn't bundled.
+7. **Dataset refresh.** A scheduled workflow opening a PR for each new edition (recommended,
+   like the validate sweep), or refreshed by hand when someone notices?
+8. **Open-sourcing the engine.** Publish `lib/tools/` as a package? It strengthens the
    "checkable, not black-box" story and invites review. It also makes the engine a public
    artifact to maintain.
 
@@ -894,6 +1195,10 @@ previous phase's tools pass R6.
 
 ## 15. Immediate next steps
 
+0. **The rest of V2 (§16.1, *Not built*)**: the Search page's Tools pill, block selection and
+   undo in the grid, From a saved run, and the datasets waiting on §14's terms (the SOA's exam
+   tables, the CAS triangles, the Bank of Canada's curves). A scheduled refresh of the datasets
+   (§14, decision 7) is the other open piece.
 1. **Finish Phase 1's tools (§11).** One tool is left, **Tail Factor**, waiting on a source
    that prints a fitted tail to check it against (R6): Friedland's Chapter 7 discusses the
    curves but its exhibits select the tail by judgment. Two parts of built tools are left too:
@@ -914,6 +1219,7 @@ reproducing a published worked example or exam question in CI (§17):
 
 | Area | Tools |
 |---|---|
+| Data Sources (V2, §16.1) | Life Table, Price Index, Yield Curve — these read published tables rather than compute, so they carry no "Tested against" mark |
 | Reserving | Ratio Triangle, Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson, Benktander, Cape Cod |
 | Ratemaking | Earned Premium, On-Level Factors, Trend Fit, Trend Factor, Expense Ratios, Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method |
 | Loss distributions | Distribution, Limited Expected Value, Expected Payment |
@@ -965,7 +1271,7 @@ method's concept pages in the concept popup, loading the wiki bundle on that fir
 `e2e/tools.spec.ts` covers the sidebar, a live recompute, an error kept to one line, Send to…,
 a run link and the phone fit.
 
-**Not built yet**, from §3–§11: the six Phase 1 tools and pieces in §15; the agent eval (§9.4);
+**Not built yet**, from §3–§11, besides all of V2 (§11, §18): the six Phase 1 tools and pieces in §15; the agent eval (§9.4);
 `POST /api/tools/{id}` and the OpenAPI export (§7.2); saved runs and Analyses (§6.5, §8.5);
 analytics events (§8.6); the notation and working as KaTeX rather than plain text.
 
@@ -974,6 +1280,76 @@ named, or On-Level Factors' rate changes beside the factors they produce. A `dat
 effective date) is the browser's date picker over an ISO date; `lib/tools/dates.ts` reads the
 texts' `01/01/17` too, and measures time in months as Werner & Modlin do. A number field may
 set `sliderMin` where its valid range starts far below where values live (a year, a mean).
+
+### 16.1 V2, built (2026-10-10)
+
+The four changes of §18, as built. Where the build departs from §4.11, §6.2, §6.6 or §6.7, it says so.
+
+**Search (§6.2).** `components/tools/ToolsSearchBar.tsx`, built from the `FloatingSearchBar`
+parts: on the catalogue the page itself is the result list, its query and practice-area pill in
+the URL (`?q=…&area=…`); on a tool's page a query opens a dropdown of tools over the card, and the
+strip under it carries the back control (`useBack`, so it returns to the page left). `/tools` is in
+`lib/mobileNavHost.ts`, so the app header row is gone there. A tool is found by
+`toolSearchText` (`lib/tools/registry.ts`): its name, a new `aka` field of short names ("BF",
+"LDF", "YTM"), its question, its concept pages and its area — ranked by `searchBy`
+(`lib/toolSearch.ts`), and the connector's `list_tools` matches the same words. Catalogue rows
+let the question wrap to two lines (`ListRow`'s new `subtitleLines`).
+
+**The grid (§6.3).** The origin column is pinned at the left and the **first** computed column at
+the right: pinning every computed column, as first tried, left a phone one input column. Cells
+print as their column does once they lose focus (`formatCell`), and input-column totals print the
+same way.
+
+**Picking assumptions (§6.6)**, in `lib/toolColumns.ts` (pure, tested) and
+`components/tools/ToolGrid.tsx`:
+- A number column's header opens a panel under the grid: **From** the tool that produces it
+  (`COLUMN_SOURCES`: CDFs from Development to Ultimate by position, expected claims from Expected
+  Claims by origin, latest values from Age-to-Age Factors' diagonal, selected factors from its
+  averages), **Every row** and **Scale by** (`×1.05`, `+5%`, `+100`). A scalar has the same
+  **From** as a button beside its value (`SCALAR_SOURCES`: a trend from Trend Fit or Price Index,
+  expense provisions from Expense Ratios, an ELR from Cape Cod, a rate from Yield Curve). Either
+  opens `components/tools/SourceSheet.tsx`: the source tool's own card, filled from this one where
+  it can be, and **Use these**.
+- Every number field reads arithmetic (`readNumber` → `evaluateArithmetic` in
+  `lib/tools/input.ts`, a recursive-descent reader, never `eval`), so an agent can send it too.
+  The cell keeps the result once it loses focus.
+- Enter and ↓ move down a column, ↑ up, ⌘/Ctrl+D fills from the cell above.
+- On a touch screen a number cell opens the **stepper** (no keyboard): the value, − and + at the
+  column's step (`stepFor`), a slider centred on it (`sliderRange`), and ‹ › to the next row.
+  Its **candidates** come from the session's last runs (`lib/toolRuns.ts`, sessionStorage):
+  every distinct average of an interval's factors for a selected factor, the last CDFs for a CDF
+  cell. With a mouse, a cell that has candidates shows them as chips under the grid.
+- Age-to-Age Factors gains the **selection exhibit** (`components/tools/FactorSelection.tsx`):
+  seven averages × every interval, each value the engine's own run; tap a value, or an average's
+  name for every interval; the **Selected** row names each pick's source, or "default". Send to…
+  carries the selections when there are any ("Send selections to Development to Ultimate").
+
+**Figures (§6.7).** `lib/toolFigures.ts` (pure, tested) and `components/tools/ToolFigure.tsx`,
+for all thirty-five tools. Curves come from `sweep` — the same engine over a range of one input —
+and `toolFigures.test.ts` checks every tool's default figure, that a reserve stacked on the latest
+diagonal reaches the ultimate the tool computed, and that a run's point sits on its swept curve.
+Draggable points: Distribution's *x*, Limited Expected Value's *u*, Expected Payment's
+deductible, Partial and Bühlmann Credibility's claims and exposure, Bond Price's yield, Duration
+& Convexity's and Redington's rate, and Life Table's age. The figure is 96 px tall, 72 px on a
+card with five inputs on screen and 56 px with six, and the notation is one line on a phone (a tap
+shows the rest), which keeps every scalar card on one 390 × 844 screen; the e2e test now checks
+thirteen of them. Departures from §6.7's table: Earned Premium and On-Level Factors are stacked
+bars (earned and unearned by year; each year's share of each rate level) rather than the
+calendar of policy diagonals; Cape Cod outlines each year's used-up premium × the Cape Cod ELR;
+Price Index joins its first and last values rather than drawing a growth curve, which would be a
+formula of the figure's own (R11). The catalogue's rows lead with the figure in miniature.
+
+**Data Sources (§4.11).** Built: Life Table, Price Index and Yield Curve, in `lib/tools/data/`,
+the practice area `data`, first in the catalogue; their datasets from
+`scripts/dataset_extract.py` (tests: `scripts/test_datasets.py`) with a `Resources/Data/` page
+each; the ⋯ menu names what a data tool reads, its edition, date read and licence; the
+connector's instructions point an agent at them for published figures. `datasets.test.ts` holds
+each dataset to its sha256s, licence and page.
+
+**Not built yet**, from V2: the Search page's **Tools** pill and the hand-off to it from a search
+with no result; block selection and undo in the grid; **From a run** (the saved runs it needs are
+§8.5's); Loss Development Data, the SOA tables and the Bank of Canada curves (§14); Statistics
+Canada's construction price indexes; a scheduled dataset refresh.
 
 ## 17. Tested against (R6)
 
@@ -1059,3 +1435,45 @@ and Annuity, which no question asks about alone, are checked.
 - *Fits of printed figures.* Appendix A's trend fits reproduce from the averages and frequencies
   the exhibit prints, not from the totals behind them (the 4-point premium fit is 1.95% from the
   totals, 1.947% from the printed averages, and the exhibit prints 1.9%).
+
+## 18. V2 review (2026-10-10)
+
+What the first build looks like on an iPhone, from two screenshots of the live site (the
+Bornhuetter-Ferguson card and the catalogue), and what each finding changes in this plan.
+
+**The BF card.**
+- *The answer is off screen.* The grid is Origin · Latest · CDF · Expected · Ultimate. At phone
+  width the input columns take the space and the computed Ultimate, the column the reader came
+  for, is cut off at "1,", with no sign that the grid scrolls. → Pin the origin and result
+  columns (§6.3).
+- *Assumptions are typed digit by digit.* The CDFs (1, 1.03, 1.133, 1.6995) and expected claims
+  are bare text cells. Nothing connects the CDF column to Development to Ultimate unless the
+  reader started there and used Send to…, and a reader who opened BF first has no way back. →
+  The column-header menu, From a tool, the stepper and its candidates (§6.6).
+- *Numbers print three ways.* Inputs are raw (`1700`), the totals have two decimals
+  (`6,650.00`), the tiles have two decimals (`7,734.52`). → Inputs formatted on blur, each total
+  at its column's precision (§6.3).
+- *Nothing to look at.* Tiles, then a table, then a toggle: no picture of how much of each year's
+  ultimate is IBNR, which is the BF method's whole idea. → A figure on every card (§6.7).
+- *What works.* The answer leads, the formula sits under the title, the card is live with no Run
+  button, and the Reported / Paid choice is one segmented control. All of that stays.
+
+**The catalogue.**
+- *Every row has the same icon.* Each tool takes its practice area's icon, so the reserving
+  list is a column of identical bank buildings, and the rows are told apart only by their names.
+  → Each row leads with its figure in miniature (§6.7).
+- *The questions are cut off.* "How does one triangle compare…", "What's the Bornhuetter-Fergus…":
+  the one line that says what a tool is for is the line that gets truncated. → Let the subtitle
+  wrap to two lines (a two-line clamp as an option on `ListRow`, which truncates to one today); the search makes the question findable
+  as well as readable.
+- *No search.* Thirty-two tools on one long page, and no way to type "BF" or "trend". Every other
+  tab has a search bar. → §6.2.
+- *The app header.* The hamburger and wordmark sit in a row of their own above the page title,
+  where every page with a search bar carries the hamburger on the bar's line instead. → `/tools`
+  joins `mobileNavHost.ts` with the search bar (§6.2).
+
+**And one gap that isn't on screen.** Every tool asks for data the reader has to bring. A student
+with no triangle of their own, or an analyst wanting the latest medical CPI, leaves the app to get
+it. → Data Sources (§4.11).
+
+The changes are planned as **V2**, ahead of Phase 2 (§11).

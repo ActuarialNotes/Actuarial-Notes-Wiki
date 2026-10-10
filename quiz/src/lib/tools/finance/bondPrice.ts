@@ -8,6 +8,7 @@ export const bondPrice: ToolSpec = {
   name: 'Bond Price',
   area: 'finance',
   answers: "What's this bond worth at this yield?",
+  aka: ['bond', 'price'],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
   notation: () => 'P = Fr/m · a⌉N + C · vᴺ,  at j = i⁽ᵐ⁾/m',
   view: 'none',

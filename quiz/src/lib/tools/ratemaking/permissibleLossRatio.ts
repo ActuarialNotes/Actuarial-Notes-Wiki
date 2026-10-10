@@ -6,6 +6,7 @@ export const permissibleLossRatio: ToolSpec = {
   name: 'Permissible Loss Ratio',
   area: 'ratemaking',
   answers: 'What loss ratio do the rates allow?',
+  aka: ['PLR', 'target loss ratio'],
   fields: [
     { kind: 'number', key: 'fixed', label: 'Fixed expense ratio', symbol: 'F', unit: 'percent', min: 0, max: 1, sliderMax: 0.3, step: 0.0025, default: 0, description: 'Fixed expenses as a share of premium (0 when every expense is treated as variable).' },
     { kind: 'number', key: 'variable', label: 'Variable expense ratio', symbol: 'V', unit: 'percent', min: 0, max: 1, sliderMax: 0.5, step: 0.0025, default: 0.25, description: 'Variable expenses as a share of premium.' },

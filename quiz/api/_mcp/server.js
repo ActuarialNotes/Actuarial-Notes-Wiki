@@ -31,6 +31,7 @@ import {
   runPath,
   runTool,
   toolById,
+  toolSearchText,
   toolSlug,
   toolSummary,
 } from '../_tools/engine.js'
@@ -54,7 +55,7 @@ export const INSTRUCTIONS = `Actuarial Notes is a study wiki for the SOA and CAS
 - Every result carries a fact-check status. Most pages are "Not fact checked" — community-written and not yet checked against the source text — so when an exact figure, formula or rule matters, say that and point to the official reading. A "Known issue" or "Disputed" page has an unresolved problem: say so before relying on it.
 - To quiz someone, get_practice_questions returns questions without their answers. Ask one at a time, wait for the student's answer, then call check_answer to mark it and show the official solution. Never reveal or hint at an answer first.
 - An exam marked "in development" has a syllabus outline, few written concept pages and little or no question bank.
-- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits and factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
+- For any actuarial calculation the calculators cover (development factors, chain ladder, Bornhuetter-Ferguson, Benktander, Cape Cod, on-level factors, trend fits and factors, expense provisions, indicated rates, deductibles and limited expected values, distribution probabilities, credibility, interest, annuities, loans, bonds, duration and immunization), use list_tools / describe_tool / run_tool rather than doing the arithmetic yourself. For published figures — US and Canadian life tables, CPI and wage indexes, US Treasury yield curves — the Data Sources tools (area "data") read the publisher's own table and name its edition and licence; never quote such a figure from memory. Each tool does one thing; chain them by passing one result into the next. A result's judgments are choices the user owns: say which were left at their default and ask before treating a default as a selection. Quote its warnings, and give the user its app_url to open the same run.
 - This is study material, not professional actuarial advice.`
 
 const STATUS_WORDS = {
@@ -642,7 +643,7 @@ TOOLS.push(
       type: 'object',
       properties: {
         area: { type: 'string', enum: AREA_IDS, description: 'Only tools in this practice area.' },
-        query: { type: 'string', description: 'Words to match against a tool\'s name and the question it answers, e.g. "ultimate", "credibility", "annuity".' },
+        query: { type: 'string', description: 'Words to match against a tool\'s name, the short names it goes by ("BF", "LDF"), the question it answers and its method\'s concepts, e.g. "ultimate", "credibility", "annuity".' },
       },
     },
     annotations: { title: 'List actuarial calculators', ...READ_ONLY },
@@ -654,7 +655,7 @@ TOOLS.push(
       const words = query ? normalizeTerm(query).split(' ').filter(Boolean) : []
       const tools = CALCULATORS
         .filter(t => !area || t.area === area)
-        .filter(t => words.every(w => normalizeTerm(`${t.name} ${t.answers} ${t.id}`).includes(w)))
+        .filter(t => words.every(w => normalizeTerm([t.id, ...toolSearchText(t)].join(' ')).includes(w)))
         .map(toolSummary)
       return result(JSON.stringify({ tools }))
     },

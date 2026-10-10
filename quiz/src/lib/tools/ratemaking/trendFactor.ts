@@ -8,6 +8,7 @@ export const trendFactor: ToolSpec = {
   name: 'Trend Factor',
   area: 'ratemaking',
   answers: 'How far do these losses trend to the period the rates will cover?',
+  aka: ['trend period', 'projected trend'],
   fields: [
     { kind: 'number', key: 'trend', label: 'Annual trend', symbol: 't', unit: 'percent', judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 0.0025, default: 0.03, description: 'The selected annual trend, as a decimal (from Trend Fit, or chosen).' },
     {

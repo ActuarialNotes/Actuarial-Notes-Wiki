@@ -7,6 +7,7 @@ export const annuity: ToolSpec = {
   name: 'Annuity',
   area: 'finance',
   answers: "What's a level annuity worth today, and when it ends?",
+  aka: ['annuity immediate', 'annuity due', 'perpetuity'],
   fields: [
     {
       kind: 'choice', key: 'timing', label: 'Payments', description: 'Whether each payment is at the end of its period (immediate) or the start (due).',

@@ -9,6 +9,7 @@ export const ratioTriangle: ToolSpec = {
   name: 'Ratio Triangle',
   area: 'reserving',
   answers: 'How does one triangle compare with another, cell by cell?',
+  aka: ['paid to reported', 'closed to reported', 'average case'],
   fields: [
     {
       kind: 'triangle', key: 'numerator', label: 'Numerator',

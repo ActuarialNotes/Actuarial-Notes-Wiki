@@ -11,6 +11,7 @@ export const redingtonImmunization: ToolSpec = {
   name: 'Redington Immunization',
   area: 'finance',
   answers: 'Are these assets Redington-immunized against these liabilities?',
+  aka: ['immunization', 'ALM', 'asset liability matching'],
   fields: [
     { kind: 'number', key: 'i', label: 'Annual effective rate', symbol: 'i', unit: 'percent', min: -0.5, max: 2, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The flat annual effective rate both sides are valued at. Times are in years.' },
     {

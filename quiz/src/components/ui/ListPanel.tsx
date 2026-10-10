@@ -50,8 +50,10 @@ export interface ListRowProps {
   title: ReactNode
   /** A small status tag set beside the title (an exam's *Beta*). */
   tag?: ReactNode
-  /** One line under the title; truncated rather than wrapped. */
+  /** One line under the title; truncated rather than wrapped, unless `subtitleLines` allows two. */
   subtitle?: ReactNode
+  /** How many lines the subtitle may take before it is cut — 2 for a sentence, such as a tool's question. */
+  subtitleLines?: 1 | 2
   /** A line of facts under that, as plain `text-xs` text — never pills. */
   meta?: ReactNode
   /** Before the chevron: a count, a checkmark. */
@@ -74,6 +76,7 @@ export function ListRow({
   title,
   tag,
   subtitle,
+  subtitleLines = 1,
   meta,
   trailing,
   dimmed = false,
@@ -95,7 +98,7 @@ export function ListRow({
           </span>
           {tag}
         </span>
-        {subtitle && <span className="block truncate text-sm text-muted-foreground">{subtitle}</span>}
+        {subtitle && <span className={cn('block text-sm text-muted-foreground', subtitleLines === 2 ? 'line-clamp-2' : 'truncate')}>{subtitle}</span>}
         {meta && (
           <span className="mt-1 flex flex-wrap items-center gap-x-1.5 text-xs tabular-nums text-muted-foreground">
             {meta}

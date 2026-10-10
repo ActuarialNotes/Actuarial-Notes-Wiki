@@ -6,6 +6,7 @@ export const lossRatioMethod: ToolSpec = {
   name: 'Loss Ratio Method',
   area: 'ratemaking',
   answers: "What's the indicated rate change?",
+  aka: ['indicated rate change', 'rate indication', 'LR method'],
   fields: [
     {
       kind: 'number', key: 'loss_ratio', label: 'Loss & LAE ratio', symbol: 'LR', unit: 'percent', min: 0, max: 5, sliderMax: 1.2, step: 0.005, default: 0.65,

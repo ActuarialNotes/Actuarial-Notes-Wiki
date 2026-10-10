@@ -48,7 +48,8 @@ test.describe('tools', () => {
     await page.getByRole('menuitem', { name: 'Send to Development to Ultimate' }).click()
     await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
     // The averages arrive as the selected factors: 12–24 is 1,500 + 1,700 + 1,800 over 1,000 + 1,100 + 1,200.
-    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(String((1500 + 1700 + 1800) / (1000 + 1100 + 1200)))
+    // (A cell prints its number to ten decimals once it isn't being edited.)
+    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(String(Math.round((1500 + 1700 + 1800) / (1000 + 1100 + 1200) * 1e10) / 1e10))
   })
 
   test('opens the run a link names', async ({ page }) => {
@@ -95,11 +96,92 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
   })
 
-  test('fits a scalar card on a phone without scrolling', async ({ page }) => {
+  test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/tools/annuity')
-    const box = await page.getByTestId('tool-card').boundingBox()
-    expect(box).not.toBeNull()
-    expect(box!.y + box!.height).toBeLessThanOrEqual(844)
+    for (const slug of [
+      'annuity', 'trend-factor', 'bond-price', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
+      'full-credibility-standard', 'limited-expected-value', 'expected-payment', 'permissible-loss-ratio',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter',
+    ]) {
+      await page.goto(`/tools/${slug}`)
+      await expect(page.getByTestId('tool-figure')).toBeVisible()
+      const box = await page.getByTestId('tool-card').boundingBox()
+      expect(box, slug).not.toBeNull()
+      expect(box!.y + box!.height, slug).toBeLessThanOrEqual(844)
+    }
+  })
+
+  test('draws a figure that follows the inputs, and sets an input when its point is dragged', async ({ page }) => {
+    await page.goto('/tools/partial-credibility')
+    const card = page.getByTestId('tool-card')
+    const z = card.getByTestId('tool-tile').first()
+    const before = await z.textContent()
+    const svg = card.getByTestId('tool-figure').locator('svg')
+    const box = (await svg.boundingBox())!
+    await page.mouse.move(box.x + box.width * 0.8, box.y + box.height / 2)
+    await page.mouse.down()
+    await page.mouse.up()
+    await expect(z).not.toHaveText(before ?? '')
+  })
+
+  test('searches the catalogue by name, short name and question, keeping the query in the URL', async ({ page }) => {
+    await page.goto('/tools')
+    const search = page.getByRole('textbox', { name: 'Search tools' })
+    await search.fill('BF')
+    await expect(page).toHaveURL(/[?&]q=BF/)
+    await expect(page.getByTestId('tool-row').first()).toContainText('Bornhuetter-Ferguson')
+    await search.fill('what loss ratio do the rates allow')
+    await expect(page.getByTestId('tool-row').first()).toContainText('Permissible Loss Ratio')
+    await page.getByTestId('tool-row').first().click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio/)
+    await page.goBack()
+    await expect(search).toHaveValue('what loss ratio do the rates allow')
+    await search.fill('zzzz')
+    await expect(page.getByTestId('tool-no-results')).toBeVisible()
+  })
+
+  test('finds the next tool from a tool\'s own page', async ({ page }) => {
+    await page.goto('/tools/development-to-ultimate')
+    await page.getByRole('textbox', { name: 'Search tools' }).fill('cape')
+    await page.getByTestId('tool-search-results').getByRole('button', { name: /Cape Cod/ }).click()
+    await expect(page).toHaveURL(/\/tools\/cape-cod$/)
+  })
+
+  test('fills a column from the tool that produces it, and keeps the answer column on screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/tools/bornhuetter-ferguson')
+    const card = page.getByTestId('tool-card')
+    // The ultimate column is pinned at the right edge, inside the card.
+    const cardBox = (await card.boundingBox())!
+    const ult = (await card.getByRole('columnheader', { name: 'Ultimate' }).boundingBox())!
+    expect(ult.x + ult.width).toBeLessThanOrEqual(cardBox.x + cardBox.width)
+    // A typed amount prints with its separators once the cell is left.
+    await card.getByLabel('Latest, row 1').fill('1700*2')
+    await card.getByLabel('Latest, row 2').focus()
+    await expect(card.getByLabel('Latest, row 1')).toHaveValue('3,400')
+    await card.getByRole('button', { name: 'CDF column' }).click()
+    await page.getByRole('button', { name: 'From Development to Ultimate' }).click()
+    const sheet = page.getByTestId('source-sheet')
+    await expect(sheet).toBeVisible()
+    await sheet.getByRole('button', { name: 'Use these' }).click()
+    await expect(sheet).toHaveCount(0)
+    // The latest origin takes the first age's CDF: 1.5 × 1.1 × 1.03.
+    await expect(card.getByLabel('CDF, row 4')).toHaveValue('1.6995')
+    await card.getByRole('button', { name: 'CDF column' }).click()
+    await page.getByLabel('Every row').fill('1.1')
+    await page.getByRole('button', { name: 'Set', exact: true }).click()
+    await expect(card.getByLabel('CDF, row 1')).toHaveValue('1.1')
+  })
+
+  test('selects the factors from the averages and sends the selections on', async ({ page }) => {
+    await page.goto('/tools/age-to-age-factors')
+    await page.getByRole('button', { name: 'Select Simple all at every age' }).click()
+    await expect(page.getByTestId('selected-factor').first()).toContainText('Simple all')
+    await page.getByRole('button', { name: 'More' }).click()
+    await page.getByRole('menuitem', { name: 'Send selections to Development to Ultimate' }).click()
+    await expect(page).toHaveURL(/\/tools\/development-to-ultimate#input=/)
+    // 12–24, the simple mean: (1.5 + 1700/1100 + 1.5) / 3.
+    const simple = (1.5 + 1700 / 1100 + 1.5) / 3
+    await expect(page.getByLabel('Factor to next, row 1')).toHaveValue(String(Math.round(simple * 1e10) / 1e10))
   })
 })

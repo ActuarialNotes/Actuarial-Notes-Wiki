@@ -10,6 +10,7 @@ export const benktander: ToolSpec = {
   name: 'Benktander',
   area: 'reserving',
   answers: "What's the iterated Bornhuetter-Ferguson ultimate?",
+  aka: ['iterated BF', 'GB'],
   fields: [
     BASIS_FIELD,
     {

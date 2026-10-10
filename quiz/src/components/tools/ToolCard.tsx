@@ -10,12 +10,13 @@
 // result's judgments say honestly which were left at their default (R3), in
 // the card, the export and the "Copy for AI" call alike.
 
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
+import { ArrowDownToLine, BadgeCheck, Database, ListChecks, RotateCcw } from 'lucide-react'
 import {
   ToolInputError,
   checksFor,
+  datasetsFor,
   formatValue,
   runPath,
   runTool,
@@ -26,9 +27,16 @@ import {
   type NumberField,
   type TableField,
   type TriangleField,
+  type ToolInput,
   type ToolResult,
   type ToolSpec,
 } from '@/lib/tools'
+import { fillColumn, scalarSources, selectionsToFactors, type ColumnSource, type Selection } from '@/lib/toolColumns'
+import { FactorSelection } from './FactorSelection'
+import { ToolFigure } from './ToolFigure'
+import { figureFor } from '@/lib/toolFigures'
+import { lastRun, rememberRun } from '@/lib/toolRuns'
+import { SourceSheet, type Sourcing } from './SourceSheet'
 import { fromDisplay, toDisplay } from '@/lib/tools/format'
 import { runToolCall, toolResultSheets } from '@/lib/toolExport'
 import { fieldVisible, groupSources, initialDraft, type Draft } from '@/lib/toolDraft'
@@ -43,14 +51,26 @@ export function ToolCard({
   spec,
   initialInput,
   onOpenMethod,
+  onResult,
+  embedded = false,
 }: {
   spec: ToolSpec
   initialInput?: unknown
   onOpenMethod?: () => void
+  /** Told each result as it changes (null while an input is unreadable) — the source sheet reads it. */
+  onResult?: (result: ToolResult | null) => void
+  /** Drawn inside another card's source sheet: no sources of its own, no Send to… */
+  embedded?: boolean
 }) {
   const navigate = useNavigate()
   const [draft, setDraft] = useState<Draft>(() => initialDraft(spec, initialInput))
   const lastGood = useRef<ToolResult | null>(null)
+  const [sourcing, setSourcing] = useState<Sourcing | null>(null)
+  // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval.
+  // A new triangle starts them over.
+  const selecting = spec.id === SELECTING_TOOL
+  const [selections, setSelections] = useState<(Selection | null)[]>([])
+  useEffect(() => setSelections([]), [draft.triangle])
 
   const outcome = useMemo(() => {
     try {
@@ -64,9 +84,40 @@ export function ToolCard({
   }, [spec, draft])
   const result = outcome.result
   const stale = outcome.error !== null
+  // The figure (§6.7), from the same run as the tiles.
+  const figure = useMemo(() => (result ? figureFor(result) : null), [result])
+  /** A figure's dragged point sets its input, held to the field's step and bounds as a slider is. */
+  const dragTo = (key: string, value: number) => {
+    const f = spec.fields.find(x => x.key === key)
+    if (!f || f.kind !== 'number') return
+    const stepped = f.integer ? Math.round(value) : Math.round(value / f.step) * f.step
+    set(key, Math.min(f.max, Math.max(f.min, Number(stepped.toFixed(10)))))
+  }
+
+  // The session remembers each tool's last good run, for the candidates a
+  // cell's stepper offers elsewhere (§6.6); a source sheet is told each result.
+  useEffect(() => {
+    if (result && !stale) rememberRun(spec.id, result.input)
+    onResult?.(stale ? null : result)
+  }, [result, stale, spec.id, onResult])
 
   const set = (key: string, value: unknown) => setDraft(d => ({ ...d, [key]: value }))
   const valueOf = (f: ToolSpec['fields'][number]) => draft[f.key] ?? (f as { default: unknown }).default
+
+  /** Open the tool a column's values come from, filled from this grid where it can be (§6.6). */
+  const fillFrom = (field: TableField, key: string, source: ColumnSource) => {
+    const tool = toolById(source.tool)
+    if (!tool) return
+    const column = field.columns.find(c => c.key === key)
+    const rows = valueOf(field) as DraftRow[]
+    setSourcing({
+      title: `${column?.label ?? key} from ${tool.name}`,
+      how: source.how,
+      tool,
+      initial: source.prefill?.(rows) ?? (lastRun(tool.id) as ToolInput | undefined),
+      apply: r => set(field.key, fillColumn(valueOf(field) as DraftRow[], key, source.take(r, rows))),
+    })
+  }
 
   const slug = toolSlug(spec)
   const menu: ToolMenuItem[] = [
@@ -77,12 +128,18 @@ export function ToolCard({
       key: 'xlsx', label: 'Download .xlsx', icon: 'download', disabled: !result || stale,
       run: () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) },
     },
-    ...(spec.next ?? []).flatMap(next => {
+    ...(embedded ? [] : spec.next ?? []).flatMap(next => {
       const target = toolById(next.tool)
       if (!target || !result || stale) return []
+      const picked = selecting && selections.some(Boolean)
       return [{
-        key: `next-${next.tool}`, label: `Send to ${next.label}`, icon: 'next' as const,
-        run: () => { navigate(runPath(toolSlug(target), next.build(result.input, result))) },
+        key: `next-${next.tool}`, label: `Send ${picked ? 'selections ' : ''}to ${next.label}`, icon: 'next' as const,
+        run: () => {
+          const built = picked
+            ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
+            : next.build(result.input, result)
+          navigate(runPath(toolSlug(target), built))
+        },
       }]
     }),
   ]
@@ -107,7 +164,7 @@ export function ToolCard({
           >
             {spec.name}
           </button>
-          <p className="mt-0.5 min-h-[1.5em] text-sm leading-snug text-muted-foreground tabular-nums">{spec.notation(result?.input ?? (draft as never))}</p>
+          <Notation text={spec.notation(result?.input ?? (draft as never))} />
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <button
@@ -136,6 +193,13 @@ export function ToolCard({
         </div>
       )}
 
+      {figure && (
+        <div className={cn(stale && 'opacity-50')}>
+          {/* A card with five or more inputs on screen draws a shorter figure, so it still fits one phone screen (R10). */}
+          <ToolFigure figure={figure} onDrag={dragTo} height={scalars.length >= 6 ? 56 : scalars.length >= 5 ? 72 : 96} />
+        </div>
+      )}
+
       {outcome.error && <p role="alert" className="text-sm text-destructive">{outcome.error}</p>}
       {!stale && result?.warnings.map(w => (
         <p key={w} className="text-sm text-amber-700 dark:text-amber-400">{w}</p>
@@ -153,7 +217,14 @@ export function ToolCard({
       ))}
       {grid ? (
         <InputBlock label={labelled ? grid.label : null}>
-          <EditableTable field={grid} rows={valueOf(grid) as DraftRow[]} result={stale ? undefined : result?.table} onChange={rows => set(grid.key, rows)} />
+          <EditableTable
+            field={grid}
+            rows={valueOf(grid) as DraftRow[]}
+            result={stale ? undefined : result?.table}
+            onChange={rows => set(grid.key, rows)}
+            toolId={embedded ? undefined : spec.id}
+            onFillFrom={(key, source) => fillFrom(grid, key, source)}
+          />
         </InputBlock>
       ) : (
         spec.view === 'table' && result?.table && (
@@ -162,12 +233,44 @@ export function ToolCard({
           </div>
         )
       )}
+      {selecting && result && !stale && !embedded && (
+        <FactorSelection
+          input={result.input}
+          intervals={result.values.intervals as string[]}
+          averages={result.values.averages as (number | null)[]}
+          selections={selections}
+          onSelect={setSelections}
+        />
+      )}
 
       {scalars.length > 0 && (
         <div className="space-y-1">
           {scalars.map(f =>
             f.kind === 'number' ? (
-              <NumberControl key={f.key} field={f} value={Number(valueOf(f))} chosen={draft[f.key] !== undefined} onChange={v => set(f.key, v)} />
+              <NumberControl
+                key={f.key}
+                field={f}
+                value={Number(valueOf(f))}
+                chosen={draft[f.key] !== undefined}
+                onChange={v => set(f.key, v)}
+                sources={embedded ? [] : scalarSources(spec.id, f.key).map(source => ({
+                  label: toolById(source.tool)?.name ?? source.tool,
+                  open: () => {
+                    const tool = toolById(source.tool)
+                    if (!tool) return
+                    setSourcing({
+                      title: `${f.label} from ${tool.name}`,
+                      how: source.how,
+                      tool,
+                      initial: lastRun(tool.id),
+                      apply: r => {
+                        const v = source.take(r)
+                        if (v != null && Number.isFinite(v)) set(f.key, v)
+                      },
+                    })
+                  },
+                }))}
+              />
             ) : f.kind === 'date' ? (
               <DateControl key={f.key} field={f} value={String(valueOf(f))} onChange={v => set(f.key, v)} />
             ) : (
@@ -193,9 +296,13 @@ export function ToolCard({
           </ol>
         </details>
       )}
+      {sourcing && <SourceSheet sourcing={sourcing} onClose={() => setSourcing(null)} />}
     </div>
   )
 }
+
+/** The tool whose card carries the LDF selection exhibit (§6.6). */
+const SELECTING_TOOL = 'reserving.age_to_age_factors'
 
 /**
  * The menu's head: the question the tool answers, then what it was tested
@@ -204,9 +311,27 @@ export function ToolCard({
  */
 function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
   const sources = checksFor(spec.id)
+  const datasets = datasetsFor(spec.id)
   return (
     <div className="space-y-2">
       <p>{spec.answers}</p>
+      {datasets.length > 0 && (
+        // A Data Source names what it reads (§4.11): the table, its edition, who publishes it, and the licence.
+        <div className="space-y-1.5" data-testid="dataset-sources">
+          <p className="flex items-center gap-1 font-medium text-foreground">
+            <Database className="h-3.5 w-3.5" aria-hidden /> Reads
+          </p>
+          {datasets.map(ds => (
+            <p key={ds.id} className="leading-snug">
+              <a href={ds.report} target="_blank" rel="noreferrer" className="text-foreground hover:underline">{ds.title}</a>
+              <span className="block text-xs">
+                {ds.publisher} · edition {ds.edition} · read {ds.sources.map(s => s.read).sort().pop()} ·{' '}
+                <a href={ds.licence.url} target="_blank" rel="noreferrer" className="hover:underline">{ds.licence.name}</a>
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
       {sources.length > 0 && (
         <div className="space-y-1">
           <p className="flex items-center gap-1 font-medium text-foreground">
@@ -235,6 +360,24 @@ function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
         </div>
       )}
     </div>
+  )
+}
+
+/**
+ * The notation under the title: one line on a phone, the rest a tap away —
+ * the figure needs the room more than a long formula's second and third
+ * lines do (R10).
+ */
+function Notation({ text }: { text: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <p
+      onClick={() => setOpen(o => !o)}
+      title={text}
+      className={cn('mt-0.5 min-h-[1.5em] cursor-default text-sm leading-snug text-muted-foreground tabular-nums', !open && 'line-clamp-1 sm:line-clamp-none')}
+    >
+      {text}
+    </p>
   )
 }
 
@@ -277,7 +420,20 @@ function DefaultDot({ show }: { show: boolean }) {
   )
 }
 
-function NumberControl({ field, value, chosen, onChange }: { field: NumberField; value: number; chosen: boolean; onChange: (v: number) => void }) {
+function NumberControl({
+  field,
+  value,
+  chosen,
+  onChange,
+  sources = [],
+}: {
+  field: NumberField
+  value: number
+  chosen: boolean
+  onChange: (v: number) => void
+  /** The tools this value can be taken from (§6.6), each opening in the source sheet. */
+  sources?: { label: string; open: () => void }[]
+}) {
   const shown = toDisplay(value, field.unit)
   const [text, setText] = useState<string | null>(null)
   const sliderMax = Math.max(field.sliderMax ?? field.max, Math.min(value, field.max))
@@ -292,6 +448,18 @@ function NumberControl({ field, value, chosen, onChange }: { field: NumberField;
           {field.judgment && <DefaultDot show={!chosen} />}
         </label>
         <span className="flex items-center gap-1">
+          {sources.map(s => (
+            <button
+              key={s.label}
+              type="button"
+              onClick={s.open}
+              aria-label={`${field.label} from ${s.label}`}
+              title={`From ${s.label}`}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              <ArrowDownToLine className="h-4 w-4" aria-hidden />
+            </button>
+          ))}
           <input
             aria-label={`${field.label} value`}
             inputMode="decimal"

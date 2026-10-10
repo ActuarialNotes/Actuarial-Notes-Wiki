@@ -10,7 +10,7 @@
  * serverless functions (`npm run tools:bundle`), outside the app's `@/` alias.
  */
 
-export type PracticeArea = 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
+export type PracticeArea = 'data' | 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
 export type NumberUnit = 'percent' | 'money' | 'factor' | 'count' | 'years' | 'plain'
@@ -151,6 +151,11 @@ export interface ToolSpec {
   area: PracticeArea
   /** The one question it answers (R9). */
   answers: string
+  /**
+   * The short names a reader or an agent types for it ("BF", "LDF", "CDF"):
+   * matched by the Tools search and `list_tools`, never shown on the card.
+   */
+  aka?: string[]
   fields: ToolField[]
   /** The formula with live values, under the title. */
   notation: (input: ToolInput) => string

@@ -553,3 +553,21 @@ describe('run links', () => {
     expect(decodeRunInput('')).toBeNull()
   })
 })
+
+describe('arithmetic in a cell (§6.6)', () => {
+  it('reads sums, products, powers, brackets and percents', async () => {
+    const { readNumber, evaluateArithmetic } = await import('./input')
+    expect(readNumber('1700*1.05', false)).toBeCloseTo(1785)
+    expect(readNumber('=1850/1.1', false)).toBeCloseTo(1681.818181)
+    expect(readNumber('1,000 + 250', false)).toBe(1250)
+    expect(readNumber('(1+5%)^2', false)).toBeCloseTo(1.1025)
+    expect(readNumber('2×3−1', false)).toBe(5)
+    expect(readNumber('-2^2', false)).toBe(-4)
+    expect(readNumber('5%', true)).toBe(0.05)
+    expect(evaluateArithmetic('1/0')).toBeNull()
+    expect(evaluateArithmetic('lots')).toBeNull()
+    expect(evaluateArithmetic('1+')).toBeNull()
+    expect(evaluateArithmetic('(1+2')).toBeNull()
+    expect(evaluateArithmetic('alert(1)')).toBeNull()
+  })
+})

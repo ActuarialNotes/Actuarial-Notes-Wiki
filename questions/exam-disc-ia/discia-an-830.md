@@ -8,7 +8,6 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Specialty+General+Liability+Forms
-  - Concepts/Vicarious+Liability
   - Concepts/Commercial+General+Liability
 answer: "C"
 points: 1
@@ -17,11 +16,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6dae455b33a62bfb456af44580ad37e18ae31435578a88f138e9d53e56a56c91
+  content_hash: sha256:dc0adc636fdbaf204a4de1088bff5e59c4c40e566d60a1071ed8191d659ef944
   sources:
     - "IRMI glossary, 'owners and contractors protective (OCP) liability coverage', definition, sha256:23f03e4cfed80ccf026d0dab18a94e9c6474f377e57126ba4f63e2b61292709b — https://www.irmi.com/term/insurance-definitions/owners-and-contractors-protective-(ocp)-liability-coverage"
     - "IRMI glossary, 'designated contractor', definition, sha256:7dc1f90691ae185072f75769dbc19acbbbf3fd6d34248621856ccbd6638e3174 — https://irmi.com/term/insurance-definitions/designated-contractor"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-830.md
 ---

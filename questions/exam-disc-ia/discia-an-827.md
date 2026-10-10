@@ -17,10 +17,10 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fbbef231953f52280c35893efd02b0cc00751530dfebb2cdedab28c8e6aa7b9e
+  content_hash: sha256:c0b1785b494e69daa45f35aaaeca7f42c63d8d10779aea74fe8bcd37a3342b1e
   sources:
     - "ISO CG 25 03 05 09 Designated Construction Project(s) General Aggregate Limit (NY OGS SPC Exhibit 21), paras A, B, C, sha256:509a3393d259f4582657f70278d7e328c56fcf7c1af5b0fc3fc6a091ec1bec17 — https://ogs.ny.gov/spc-exhibit-21"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-827.md
 ---
@@ -48,6 +48,6 @@ The answer is **C**.
 
 **Why not the others**
 
-- **A** charges the office claim to Project P's aggregate as well, exhausting it.
+- **A** treats Project P's aggregate as exhausted; under CG 25 03 it still has \$300,000 left, because the office claim reduces only the general aggregate.
 - **B** is the result without the endorsement: one \$2,000,000 general aggregate shared by all four claims.
 - **D** ignores the aggregate altogether.

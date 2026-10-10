@@ -17,7 +17,7 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:18a352bc72a5b50e3e5341938a2089cf2fec84d57cddb36cc49ccd188965a538
+  content_hash: sha256:7f43c905d154f97db08f8cfd914c331f610a76d17265117f1a888e8f5a3a495d
   sources:
     - "IRMI glossary, 'railroad protective liability', definition, sha256:fd4501160ac687ce88fc5b8e15e35adac26d680a50a130e8200b84954c71e24f — https://www.irmi.com/term/insurance-definitions/railroad-protective-liability"
     - "The Hartford, 'Railroad Protective Policy' (who is covered), Who's Covered, sha256:332b92af77f0910401e4211da1f5c42507014b6fbcd6e14779fb60079621fe28 — https://www.thehartford.com/resources/construction/railroad-protective-policy"
@@ -41,5 +41,5 @@ Railroad protective liability insurance protects a railroad from liability it in
 **Why not the others**
 
 - **B** — the OCP form protects a project owner or contractor that hires a designated contractor, and the designated contractor who buys it is not its named insured.
-- **C** — the CGL's definition of insured contract carves out an indemnity of a railroad for construction or demolition within 50 feet of railroad property, so the contractor's CGL would not cover that promise.
+- **C** — the CGL's definition of insured contract carves out an indemnity of a railroad for construction or demolition within 50 feet of railroad property and affecting its tracks, bridges, road-beds or crossings, so the contractor's CGL would not cover that promise.
 - **D** — this form insures the products-completed operations hazard of the insured's own products and completed work, not a railroad's liability for ongoing work.

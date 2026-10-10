@@ -4,11 +4,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:afa5eb209799e47a87d52a76bab3688251fd23c2500d2dfe26c6de71f3d58b8a
+  content_hash: sha256:c50968fb0b71dce57e6b615e55e3075136628717d2963b8cc6f888c2c8a84db4
   sources:
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section I Coverage A para 1.a-1.e (p.1); Section II para 1 (p.9); Section V defs 3, 4, 13, 17, 18 (pp.13-16), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
     - "FC&S Editors, 'Claims-Made CGL Form' (PropertyCasualty360, Feb 18 2014), reproducing CG 00 02 04 13 Coverage A/B triggers, conditions and Section V Extended Reporting Periods, Coverage A trigger para b-c of CG 00 02 04 13, sha256:50deda297f1951ab725a435ed84e2aef1287e833a2365374cede46df9213a9b7 — https://www.propertycasualty360.com/fcs/2014/02/18/claims-made-cgl-form"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/CGL Coverage A Insuring Agreement.md
 ---
@@ -30,7 +30,7 @@ The **CGL Coverage A insuring agreement** is the grant of bodily injury and prop
 - **Consequential damages (paragraph e):** Damages because of bodily injury include damages any person or organization claims for care, loss of services or death resulting at any time from the bodily injury, such as a spouse's claim for loss of services.
 - **The definitions it turns on:** "Bodily injury" is bodily injury, sickness or disease sustained by a person, including death resulting from any of them. "Property damage" is physical injury to tangible property, including all resulting loss of use (deemed to occur when the physical injury did), or loss of use of tangible property that is not physically injured (deemed to occur when the occurrence did); electronic data is not tangible property. An "occurrence" is an accident, including continuous or repeated exposure to substantially the same general harmful conditions. A "suit" is a civil proceeding alleging such damages, including an arbitration the insured must submit to or submits to with the insurer's consent, and any other alternative dispute resolution proceeding the insured submits to with consent.
 - **Coverage territory:** The United States (including its territories and possessions), Puerto Rico and Canada; international waters or airspace while travelling between those places; and anywhere else in the world if the injury arises from goods made or sold by the named insured in that territory, from the activities of a person whose home is in it but who is away for a short time on the insured's business, or from personal and advertising injury offenses committed through the Internet. For the worldwide part, the insured's responsibility to pay must be decided in a suit on the merits in the United States, Puerto Rico or Canada, or in a settlement the insurer agrees to.
-- **An injury trigger:** Coverage A of CG 00 01 is triggered by injury or damage during the policy period, not by when the claim is made, which is what makes it an [[Occurrence Coverage|occurrence]] form. The claims-made version, CG 00 02, adds a retroactive date and a claim-reporting requirement ([[CGL Endorsements]]). Whatever falls within this insuring agreement can still be removed by the [[CGL Coverage A Exclusions|Coverage A exclusions]].
+- **An injury trigger:** Coverage A of CG 00 01 is triggered by injury or damage during the policy period, not by when the claim is made, which is what makes it an [[Occurrence Coverage|occurrence]] form. The claims-made version, CG 00 02, adds a retroactive date and requires that a claim be first made against an insured during the policy period or an extended reporting period ([[CGL Endorsements]]). Whatever falls within this insuring agreement can still be removed by the [[CGL Coverage A Exclusions|Coverage A exclusions]].
 
 > [!example]- A Leak the Insured Already Knew About {Example}
 > A restaurant's CGL policy runs from January 1 to December 31. In November of the previous year, water from the restaurant's ice machine began seeping through the floor into the clothing store below, and the store's owner phoned the restaurant's sole owner, who is the named insured, to complain. The seepage continues into March, and in April the store sues for damage to its stock. Does the current policy's Coverage A respond?

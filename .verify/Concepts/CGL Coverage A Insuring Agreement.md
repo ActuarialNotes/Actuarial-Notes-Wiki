@@ -28,3 +28,23 @@ created: 2026-10-10
 - checks_run: every rule, definition, exclusion/exception and number against the cited form edition read this run; worked examples recomputed; [[links]] resolve; paraphrase vs form wording (copyright)
 - sources_checked: ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section I Coverage A para 1.a-1.e (p.1); Section II para 1 (p.9); Section V defs 3, 4, 13, 17, 18 (pp.13-16), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf; FC&S Editors, 'Claims-Made CGL Form' (PropertyCasualty360, Feb 18 2014), reproducing CG 00 02 04 13 Coverage A/B triggers, conditions and Section V Extended Reporting Periods, Coverage A trigger para b-c of CG 00 02 04 13, sha256:50deda297f1951ab725a435ed84e2aef1287e833a2365374cede46df9213a9b7 — https://www.propertycasualty360.com/fcs/2014/02/18/claims-made-cgl-form
 - note: Every insuring-agreement element, condition b(1)-(3), paras c-e, the definitions and the coverage territory (incl. the suit-on-the-merits proviso) match CG 00 01 04 13. Three examples rechecked against paras b(3), def. 4.c and def. 17.b/para e. Medium, not high: the CG 00 02 sentence rests on FC&S's reproduction of the claims-made form (rank 3; no ISO specimen of CG 00 02 found), and the coverage-analysis ordering in the exam tip rests on the vault's Coverage Analysis page. One minor open finding on the CG 00 02 wording.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv11
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Fixed to FC&S's reproduction of CG 00 02 04 13 Coverage A para b(3): CG 00 02 'requires that a claim be first made against an insured during the policy period or an extended reporting period' (replacing 'a claim-reporting requirement').
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv11
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: delta re-check of the edited passage against the cited source; lint/verify_check clean
+- sources_checked: ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section I Coverage A para 1.a-1.e (p.1); Section II para 1 (p.9); Section V defs 3, 4, 13, 17, 18 (pp.13-16), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf; FC&S Editors, 'Claims-Made CGL Form' (PropertyCasualty360, Feb 18 2014), reproducing CG 00 02 04 13 Coverage A/B triggers, conditions and Section V Extended Reporting Periods, Coverage A trigger para b-c of CG 00 02 04 13, sha256:50deda297f1951ab725a435ed84e2aef1287e833a2365374cede46df9213a9b7 — https://www.propertycasualty360.com/fcs/2014/02/18/claims-made-cgl-form
+- note: Re-verified after the dv11 fix to the open finding (now resolved); the change restates the passage to the source already cited, and nothing else in the file changed since this run's earlier pass. No open findings.

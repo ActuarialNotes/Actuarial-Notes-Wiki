@@ -28,3 +28,34 @@ created: 2026-10-10
 - checks_run: every rule, definition, exclusion/exception and number against the cited form edition read this run; worked examples recomputed; [[links]] resolve; paraphrase vs form wording (copyright)
 - sources_checked: ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage B para 1 and exclusions a-p (pp.6-7); Coverage A exclusion o (p.5); Section III paras 2 and 4 (pp.10-11); Section V defs 1 and 14 (pp.13, 15), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf
 - note: Insuring agreement, offense trigger, the seven offenses, 'advertisement', exclusions a-p with every exception, and the limit rules match CG 00 01 04 13. Examples recomputed: per-person cap 1,000,000 + 400,000 = 1,400,000, 600,000 of aggregate left; media exclusion j exception for offenses a-c. Medium because of one open minor form-fidelity finding on exclusion n.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv11
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Fixed to CG 00 01 04 13 Coverage B exclusion n (p.7): (n) now reads 'any loss, cost or expense arising out of any request, demand, order or statutory or regulatory requirement to test for, clean up or otherwise respond to pollutants, or a governmental claim or suit for those costs'.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv11
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: delta re-check of the edited passage against the cited source; lint/verify_check clean
+- sources_checked: ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage B para 1 and exclusions a-p (pp.6-7); Coverage A exclusion o (p.5); Section III paras 2 and 4 (pp.10-11); Section V defs 1 and 14 (pp.13, 15), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf
+- note: Re-verified after the dv11 fix to the open finding (now resolved); the change restates the passage to the source already cited, and nothing else in the file changed since this run's earlier pass. No open findings.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv11
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: every claim against ISO CG 00 01 04 13 after the F-001 fix
+- sources_checked: ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage B para 1 and exclusions a-p (pp.6-7); Coverage A exclusion o (p.5); Section III paras 2 and 4 (pp.10-11); Section V defs 1 and 14 (pp.13, 15), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf
+- note: Raised to high: with F-001 resolved, every substantive claim on the page checks against the rank-1 form read this run.

@@ -17,10 +17,10 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ef68feeab051b15f2904daa28d49df8ee3e3b75e97ea9c6d107beecd64d7ff03
+  content_hash: sha256:56a23d70bcd124fe3f12455eee8551378987efce7d44a87df58813695160db7a
   sources:
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage A para 1.b(3)-1.d (p.1); Section II para 1 (p.9), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-800.md
 ---
@@ -33,7 +33,7 @@ A warehouse company's occurrence CGL policy (ISO CG 00 01 04 13) incepts on July
 
 ## Explanation
 
-Paragraph b(3) removes injury or damage that, before the policy period, was known to have occurred by an insured listed in paragraph 1 of Who Is an Insured (the named insured and, for an organization, its executive officers and directors) or by an "employee" authorized to give or receive notice of an occurrence or claim. The forklift operator and the co-worker are neither, so their knowledge does not trigger the condition. Paragraph c then says damage not known before the policy period includes its continuation, so the known injury condition does not bar coverage. The answer is **C**.
+Paragraph b(3) removes injury or damage that, before the policy period, was known to have occurred by an insured listed in paragraph 1 of Who Is an Insured (the named insured and, for an organization, its executive officers and directors) or by an "employee" authorized to give or receive notice of an occurrence or claim. The forklift operator and the co-worker are neither, so their knowledge does not trigger the condition, and the known injury condition does not bar coverage. The answer is **C**.
 
 **Why not the others**
 

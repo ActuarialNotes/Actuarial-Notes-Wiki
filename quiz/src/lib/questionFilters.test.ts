@@ -7,7 +7,9 @@ import {
   hasFacetFilters,
   matchesFacets,
   splitSearchFilter,
+  ticksFor,
   toggleFacet,
+  toggleLevel,
   type FacetSelection,
 } from './questionFilters'
 import type { Question } from './parser'
@@ -73,6 +75,29 @@ describe('toggleFacet / hasFacetFilters', () => {
     expect(hasFacetFilters(start)).toBe(false)
     expect(hasFacetFilters(once)).toBe(true)
     expect(toggleFacet(once, 'exam', 'Exam 5').exam.size).toBe(0)
+  })
+})
+
+describe('difficulty ticks', () => {
+  const levels = ['easy', 'medium', 'hard']
+
+  it('shows every level ticked while none is chosen, and that is no filter', () => {
+    expect([...ticksFor(new Set(), levels)]).toEqual(levels)
+    expect(hasFacetFilters(select({ difficulty: levels }))).toBe(false)
+    expect(hasFacetFilters(select({ difficulty: ['easy'] }))).toBe(true)
+  })
+
+  it('unticking from the resting state keeps the other two', () => {
+    expect([...toggleLevel(new Set(), 'easy', levels)].sort()).toEqual(['hard', 'medium'])
+  })
+
+  it('ticking the last level back stores none chosen again', () => {
+    expect(toggleLevel(new Set(['medium', 'hard']), 'easy', levels).size).toBe(0)
+  })
+
+  it('never unticks the last level', () => {
+    const only = new Set(['hard'])
+    expect(toggleLevel(only, 'hard', levels)).toBe(only)
   })
 })
 

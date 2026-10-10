@@ -3,11 +3,12 @@ import type { Question } from '@/lib/parser'
 import {
   QUESTION_FACETS,
   facetOptions,
+  ticksFor,
+  toggleLevel,
   type FacetOption,
   type FacetSelection,
   type QuestionFacet,
 } from '@/lib/questionFilters'
-import { DifficultyDots } from '@/components/QuestionSearchRow'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 
 interface QuestionFilterBarProps {
@@ -41,8 +42,9 @@ const EMPTY_TITLE: Record<Exclude<QuestionFacet, 'difficulty'>, string> = {
 }
 
 /**
- * The filter row every list of questions carries: the three difficulty pills,
- * then the Concepts, Source, Exam and Sitting dropdowns. What each filter
+ * The filter row every list of questions carries: the Difficulty dropdown (all
+ * three levels ticked until one is unticked), then the Concepts, Source, Exam
+ * and Sitting dropdowns. What each filter
  * means — and the counts beside every option — is `lib/questionFilters.ts`;
  * this only draws it, so a list can't offer a different set of filters from
  * the next.
@@ -77,29 +79,30 @@ export function QuestionFilterBar({
     <div className="flex items-center gap-2 flex-wrap">
       {facets.map(facet => {
         if (facet === 'difficulty') {
-          return options.difficulty.map(opt => {
-            const active = selection.difficulty.has(opt.value)
-            return (
-              <button
-                key={`difficulty:${opt.value}`}
-                type="button"
-                data-sound="tick"
-                aria-pressed={active}
-                onClick={() => onToggle('difficulty', opt.value)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  active
-                    ? 'bg-primary/10 text-primary'
-                    : 'bg-background hover:bg-accent text-muted-foreground'
-                }`}
-              >
-                <DifficultyDots difficulty={opt.value} />
-                <span>{opt.label}</span>
-                <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
-                  {opt.count}
-                </span>
-              </button>
-            )
-          })
+          const opts = options.difficulty
+          const levels = opts.map(o => o.value)
+          const counts = new Map(opts.map(o => [o.value, o.count]))
+          // Every level opens ticked. The store holds that as "none chosen", so
+          // a tick is flipped by working out the stored set it should become and
+          // toggling whatever differs (the parent's toggle flips one value).
+          const toggleLevelTick = (value: string) => {
+            const current = selection.difficulty
+            const next = toggleLevel(current, value, levels)
+            for (const v of new Set([...current, ...next])) {
+              if (current.has(v) !== next.has(v)) onToggle('difficulty', v)
+            }
+          }
+          return (
+            <MultiSelectDropdown
+              key="difficulty"
+              label="Difficulty"
+              options={opts}
+              selected={ticksFor(selection.difficulty, levels)}
+              onToggle={toggleLevelTick}
+              getCount={value => counts.get(value) ?? 0}
+              allByDefault
+            />
+          )
         }
         const opts = options[facet]
         // Concepts is a refinement, not a filter every list must show: a

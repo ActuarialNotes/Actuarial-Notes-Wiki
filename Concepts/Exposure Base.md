@@ -30,6 +30,7 @@ Werner & Modlin give three criteria for choosing one:
 Further properties:
 
 - Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property).
+- **In underwriting (DISC-RM):** the premium base for a general liability account follows its classification. IRMI lists payroll, receipts, sales, square footage, area or man-hours for general liability, units for auto and value per \$1,000 for property, and a [[Premium Audit|premium audit]] verifies the base after the policy ends ([[Commercial General Liability]]).
 - Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.
 - Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not.
 - Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].

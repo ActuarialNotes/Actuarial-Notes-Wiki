@@ -73,3 +73,13 @@ verification:
 > > \end{align*}
 > > $$
 > > The LRT of $11.4$ on $2$ degrees of freedom exceeds $\chi^2_{0.05,\,2} = 5.99$; because the slope variance is tested on its boundary, the true p-value is smaller still than the naive one, so the conclusion only strengthens. AIC also prefers Model 2. BIC, charging $\ln 500 = 6.21$ per parameter rather than $2$, narrowly prefers Model 1. When the criteria split, look at the size of the estimated slope variance and at the residual plots by policyholder before adding structure.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.1 covers traditional data analysis. Questions give a small table of policy or claim data and ask for a mean, median, standard deviation or a one-way frequency, severity or pure premium, or ask what a gap between mean and median says about skewness.
+> - **MAS-II:** Questions compare fitted mixed models by log-likelihood, AIC and BIC, as in the second example.
+
+> [!warning]- Exam traps
+> - **Average of ratios:** An overall frequency is total claims over total exposure, not the average of the levels' frequencies.
+> - **Mean of skewed losses:** For right-skewed severity the mean sits well above the median; reporting only the mean overstates the typical claim.
+> - **One-way tables confound:** A level's relativity in a one-way table includes the effect of everything correlated with it.
+

@@ -16,10 +16,10 @@ wiki_link:
   - Concepts/Pareto+Distribution
 points: 4
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fa454c3125e2127c8eebe4f4cdd36d74c7052d26532f265c3e6aebc44aa81ce8
   sources: []
   open_findings: 0

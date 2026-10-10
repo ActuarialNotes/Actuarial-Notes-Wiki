@@ -14,12 +14,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3f3c8f88d293e56be653b4f442f08015f712b5aa33ed705a9dbfcc40498c6a57
-  sources: []
+  sources:
+    - "Ross, Introduction to Probability Models, Ch.4 Markov Chains (course-hosted copy, an edition earlier than the 11th-13th the outline lists), 4.8 Time Reversible Markov Chains: Eq.(4.21) pi_i P_ij = pi_j P_ji; Example 4.31 nearest-neighbour chain reversible (transitions i->i+1 and i+1->i alternate); Eq.(4.25) and Theorem 4.2 cycle criterion, printed pp.236-239, 242 (PDF pp.52-55, 58), sha256:9f01ac6c0ef8a6a641de075fe6af109d7215bad8c33734807fd654d4a1ad53e1 — https://arvidn.folk.ntnu.no/TMA4265/Chap%204%20from%20Ross.pdf"
+    - "CAS Exam MAS-I Content Outline 2026, Domain A tasks 1-3 and readings (Daniel, Ross, Struppeck), PDF p.3, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-019.md

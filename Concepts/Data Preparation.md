@@ -86,7 +86,7 @@ verification:
 > > The 600 extra rows show that claims were joined at claim level instead of being aggregated first: each term with two or more claims was repeated once per extra claim, and its exposure with it, adding 480 car-years. The frequency is understated by about 0.5%, small enough to pass unnoticed. A check of the row count against the 120,000 terms after the join would have caught it.
 
 > [!tip]- How it appears on the exam
-> - **DISC-DA:** Topic 9 covers preparing data for insurance applications using SQL, then creating data sets for claims models and for underwriting models. Application questions describe raw tables and a model's purpose and ask which step comes next, what the unit of observation should be, or which query produces the needed data set.
+> - **DISC-DA:** Topic 9 covers preparing data for insurance applications using SQL, then creating data sets for claims models and for underwriting models ([[Claims Modeling Dataset]], [[Underwriting Modeling Dataset]]). Application questions describe raw tables and a model's purpose and ask which step comes next, what the unit of observation should be, or which query produces the needed data set.
 > - **DISC-DA:** Questions draw on the tools of Topic 3, such as joins, null values and functions, and on the data issues of Topic 4. A typical question gives a symptom, such as too many rows or a frequency that looks too low, and asks for the preparation error that caused it.
 
 > [!warning]- Exam traps

@@ -14,12 +14,16 @@ wiki_link:
   - Concepts/Hypothesis+Testing
 points: 3
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:64c5bb78f413a059bba59222e094df2f8a4316143880e85889974f1d99dc1499
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c2a17101f2bc094b9171368b0307d0331311f6a4b672c0f382c5b830f7868288
+  sources:
+    - "Frees et al., Loss Data Analytics (open text), ch.4 Model Selection and Estimation, Kolmogorov-Smirnov statistic max(D+, D-), D- = max |F*_i - (i-1)/n|, sha256:c5fe1ff26cec4dee6f8bcc285b75c840202c947246f7b5d5598f9b837ccad021 — https://openacttexts.github.io/Loss-Data-Analytics/ChapModelSelection.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.5.16 Kolmogorov-Smirnov Goodness-of-Fit Test, limitation: the distribution must be fully specified; if parameters are estimated from the data the critical region is no longer valid and must be found by simulation, sha256:a6fc0668b01bdb8ecdd3b3d26d553eff8ef86441013ab3155009135baae55d1c — https://www.itl.nist.gov/div898/handbook/eda/section3/eda35g.htm"
+    - "Wikipedia, \"Lilliefors test\", estimating the parameters moves the hypothesised CDF closer to the data, making the maximum discrepancy smaller, sha256:968208b733ff9da11084a13ce385adb4ffceedfcab6bf02abf781a61c3ebb61d — https://en.wikipedia.org/wiki/Lilliefors_test"
+    - "CAS Exam MAS-I Content Outline 2026, Domain B tasks 1-9 and readings (Hogg, Tse), PDF p.4; text references (Hogg B sections incl. 2.8; Tse 2.2-2.5, 10.1, 10.2, 11.1, 12.1, 12.3, 13.2), PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-068.md

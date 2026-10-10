@@ -48,3 +48,12 @@ verification:
 >
 > > [!answer]-
 > > Two assumptions fail at once. A count response has variance that **grows with the mean**, breaking constant variance, and the identity link lets the linear predictor run below zero, producing impossible negative expected counts. The fix is a **Poisson GLM with a log link** ([[Poisson Regression]]), with log exposure as an [[Offset Variable|offset]] — the log link keeps $\hat\mu > 0$ and the Poisson variance function $V(\mu) = \mu$ matches the observed spread.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.3 covers analyzing data with linear functions. Questions give a fitted line or a short coefficient table and ask for a prediction, the meaning of a slope holding the other predictors fixed, or whether a linear model suits the response, as in the claim-count example above.
+> - **MAS-I and MAS-II:** Linear regression is the base case of the linear model family: least squares estimates, $R^2$, the $F$ test and the diagnostic plots that check its assumptions.
+
+> [!warning]- Exam traps
+> - **Slope without "holding the others fixed":** In a multiple regression, $\hat\beta_j$ is the change in the mean response for a unit change in $x_j$ with the other predictors unchanged, not the one-variable relationship.
+> - **Counts and skewed losses:** A Normal linear model can predict negative claim counts and ignores variance that grows with the mean; a GLM is the usual fix.
+

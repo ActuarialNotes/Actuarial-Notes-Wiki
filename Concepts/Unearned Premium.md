@@ -23,6 +23,9 @@ verification:
 - The change in the UEP is the entire bridge between written and [[Earned Premium|earned]] premium. A rising UEP means the book is growing (or prices rose); a falling UEP means it is shrinking.
 - Cancellation returns the unearned portion. **Pro rata** cancellation returns the full unearned premium; **short-rate** cancellation, used when the insured cancels, returns less than pro rata to recover acquisition costs that were incurred up front.
 - Because commissions and other acquisition costs are paid when the policy is *written* but the premium is earned over the term, rapid growth consumes surplus even on profitable business. This is the "growth penalty" of statutory accounting, and it is why a **premium deficiency reserve** must be established if the unearned premium is not expected to cover the future losses and expenses on that coverage.
+- **Statutory recording:** Under SSAP No. 53 the full written premium is recorded on the policy's effective date and placed in the unearned premium reserve at once, and the reserve is computed by the daily pro rata or the monthly pro rata method ([[Premium Accounting]]). Statutory accounting holds the full premium as unearned even though it has already expensed the acquisition costs, a conservative, solvency-focused presentation that lowers surplus.
+- **Loss reserves and the UPR:** The two are the largest liabilities on a property-casualty balance sheet: at the end of 2011, loss and LAE reserves were nearly 60% of U.S. industry liabilities and unearned premium about 20%. They cover different parts of the same policies. Under SSAP No. 55 a loss is recognized when the covered event occurs (for a claims-made policy, when it is reported), and the unpaid amount, case reserves plus IBNR plus LAE, is a loss reserve ([[Unpaid Claims]]). The UPR covers the unexpired coverage, on which no loss has yet occurred. As time passes the premium earns, the events of that period occur, and their unpaid cost moves into the loss reserves until it is paid.
+- **When the UPR is not enough:** The UPR is the fund for the losses still to occur on in-force business. SSAP No. 53 requires a premium deficiency reserve when the anticipated losses, LAE, commissions and other acquisition costs, and maintenance costs exceed the UPR plus future installments on existing policies. Acquisition costs already expensed are left out, policies are grouped as they are marketed, serviced and measured, a profitable group may not offset a deficient one, and the insurer discloses whether it counted anticipated investment income.
 
 ![[Media/Figures/Unearned_Premium.svg|340]]
 
@@ -74,3 +77,30 @@ verification:
 > > \end{align*}$$
 > >
 > > The insurer keeps an extra $\$120$ under short rate. That is not extra profit on the coverage — it is partial recovery of the commission and issuance costs already paid on a policy that will not run its term. In the ratemaking data both the return premium and the shortened exposure must flow through, or the average premium per [[Earned Exposure|earned exposure]] will be misstated.
+
+> [!example]- When the Unearned Premium Falls Short {Example}
+> At December 31 an insurer's homeowners book in one state has an unearned premium reserve of \$10,000,000 and no future installments due. Rates there were held down, and for the coverage still to be provided the insurer expects \$8,700,000 of losses, \$1,100,000 of loss adjustment expense and \$1,000,000 of maintenance costs. Commissions were paid and expensed when the policies were written. Its auto book in the same state is expected to be profitable. Is a premium deficiency reserve needed, and how large?
+>
+> > [!answer]-
+> > The commissions are already expensed, so they are left out of the test.
+> > $$
+> > \begin{align*}
+> > \text{Expected costs} &= 8{,}700{,}000 + 1{,}100{,}000 + 1{,}000{,}000 \\
+> > &= 10{,}800{,}000 \\
+> > \text{PDR} &= 10{,}800{,}000 - 10{,}000{,}000 \\
+> > &= 800{,}000
+> > \end{align*}
+> > $$
+> > The insurer records an \$800,000 liability with a charge to income, and discloses the amount. The auto book's expected profit cannot offset it, because the two are marketed and measured as separate groups. As the homeowners premium earns and claims occur, their unpaid cost will appear in the loss and LAE reserves; the PDR recognizes now that the premium held for them will not be enough.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** Two objectives use this page: computing the unearned premium, and examining the relationship between loss reserves and the unearned premium reserve. Expect a calculation of the UPR for a policy at a valuation date, and a question asking which liability an amount belongs in, the UPR or the loss reserves.
+> - **Premium deficiency:** A question can give the UPR and the expected future losses, LAE and maintenance costs for a group of policies and ask whether a premium deficiency reserve is needed and its amount.
+> - **Exam 5:** Ratemaking uses the UPR to bridge written and earned premium, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Loss reserves are for events that have happened:** A claim that has occurred is a loss reserve, not a draw on the UPR. The UPR keeps earning with the passage of time whether or not claims occur.
+> - **Acquisition costs in the deficiency test:** Commissions already expensed are not counted again when testing for a premium deficiency.
+> - **No offsetting between groups:** A deficiency in one grouping of policies is recorded even if another grouping is profitable.
+> - **Full premium at inception:** The statutory UPR at inception is the whole written premium, not the premium net of commission.
+

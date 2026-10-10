@@ -67,3 +67,13 @@ verification:
 > > - **Not the sole reason.** The insurer could not non-renew her solely because of the credit change.
 > >
 > > The provisions mark the line regulators have drawn: credit is admissible as a statistical predictor, but not where the credit damage reflects a misfortune rather than the behaviour the score is taken to measure.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 10.4 covers the societal impact of credit-based insurance scores. Questions ask for the arguments for and against their use, what the FCRA requires when a score raises a premium ([[Insurance Data Regulation]]), how state rules such as the extraordinary life circumstances exception work, and why the scores raise questions of proxy discrimination.
+> - **Exam 6U:** Questions apply the loss ratio relativity test and the state regulatory framework, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Predictive is not the same as permitted:** The FTC found scores predictive of auto claims and also found they differ across racial and ethnic groups; both findings matter to the policy question.
+> - **The insurance score is not the lending score:** It is built to predict insurance loss, and state laws based on the NCOIL model bar certain inputs such as income and ethnic group.
+> - **A ban moves cost, it does not remove it:** Prohibiting credit shifts premium from low-score to high-score insureds.
+

@@ -35,6 +35,9 @@ export interface DraftTriangle {
   values: unknown[][]
 }
 
+/** A cell another step fills: drawn on the primary colour, which is what a link is. */
+const LINKED_CELL = 'bg-primary text-primary-foreground'
+
 const cellInput =
   'w-full min-w-[4.5rem] bg-transparent px-2 py-1.5 text-sm tabular-nums outline-none rounded focus:bg-background focus:ring-2 focus:ring-ring'
 
@@ -47,11 +50,14 @@ export function EditableTable({
   onChange,
   toolId,
   onFillFrom,
+  linked = false,
 }: {
   field: TableField
   rows: DraftRow[]
   result?: ResultTable
   onChange: (rows: DraftRow[]) => void
+  /** Filled by another step (the Workflow Builder's links): the input cells are drawn on the primary colour. */
+  linked?: boolean
   /** The tool the grid belongs to: what its assumption columns can be filled from (§6.6). */
   toolId?: string
   /** Open a source tool's card to fill a column from its result. */
@@ -170,6 +176,7 @@ export function EditableTable({
                       number={c.kind === 'number'}
                       noKeyboard={coarse && c.kind === 'number'}
                       selected={shownCell?.r === r && shownCell.key === c.key}
+                      linked={linked}
                       onChange={v => setCell(r, c.key, v)}
                       onPaste={paste(r, ci)}
                       onKeyDown={onKey(r, ci, c.key)}
@@ -305,6 +312,7 @@ function GridCell({
   number,
   noKeyboard,
   selected,
+  linked = false,
   onChange,
   onPaste,
   onKeyDown,
@@ -318,6 +326,7 @@ function GridCell({
   number: boolean
   noKeyboard: boolean
   selected: boolean
+  linked?: boolean
   onChange: (v: unknown) => void
   onPaste: (e: ClipboardEvent<HTMLInputElement>) => void
   onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void
@@ -354,7 +363,7 @@ function GridCell({
         }
         onBlur()
       }}
-      className={cn(cellInput, number && 'text-right', selected && 'bg-background ring-2 ring-ring')}
+      className={cn(cellInput, number && 'text-right', linked && LINKED_CELL, selected && 'bg-background text-foreground ring-2 ring-ring')}
     />
   )
 }
@@ -582,7 +591,7 @@ export function ResultTableView({ table }: { table: ResultTable }) {
   )
 }
 
-export function TriangleGrid({ value, onChange }: { value: DraftTriangle; onChange: (t: DraftTriangle) => void }) {
+export function TriangleGrid({ value, onChange, linked = false }: { value: DraftTriangle; onChange: (t: DraftTriangle) => void; linked?: boolean }) {
   const [mode, setMode] = useState<TriangleMode>('cumulative')
   const [display, setDisplay] = useState<unknown[][]>(() => toMode(value.values, mode))
   // What this grid last sent up: a value arriving from anywhere else (a reset,
@@ -692,7 +701,7 @@ export function TriangleGrid({ value, onChange }: { value: DraftTriangle; onChan
                       value={asText(row[c])}
                       onChange={e => setCell(r, c, e.target.value)}
                       onPaste={paste(r, c)}
-                      className={cn(cellInput, 'text-right')}
+                      className={cn(cellInput, 'text-right', linked && LINKED_CELL)}
                     />
                   </td>
                 ))}

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { BookOpen, Calculator, ChevronLeft, ChevronRight, Database, PenLine, Plus, Search } from 'lucide-react'
+import { BookOpen, Calculator, ChevronLeft, ChevronRight, Database, FileSpreadsheet, PenLine, Plus, Search, Workflow as WorkflowIcon } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
 import { AREAS, TOOLS, type PracticeArea, type ToolSpec } from '@/lib/tools'
-import { CUSTOM_DATA, kindOfTool, type NewStep } from '@/lib/workflow'
+import { CUSTOM_DATA, TEMPLATES, TEMPLATE_PREFIX, kindOfTool, type NewStep } from '@/lib/workflow'
 import { examAccentStyle } from '@/lib/examColors'
 import { rankMatch } from '@/lib/appSearch'
 import { cn } from '@/lib/utils'
@@ -22,15 +22,24 @@ type Page =
   | { id: 'area'; area: PracticeArea }
   | { id: 'concepts' }
   | { id: 'exam'; shelf: ConceptShelf }
+  | { id: 'workflows' }
+
+/** A workflow the + offers as a sub-workflow: one in the reader's library. */
+export interface LibraryEntry {
+  id: string
+  title: string
+  steps: number
+}
 
 /**
  * **The Workflow Builder's +** — Concept Craft's starter-pack menu, turned
  * into a few pages (docs/workflow-builder.md): the first asks what kind of
  * step to add — data, a calculation or a concept — and each answer opens the
  * next page down, the way a phone's settings do, with a back arrow at the top.
- * Data is the Data Sources tools and the reader's own data; a calculation is
- * one of the Actuarial Tools, by practice area; a concept is a vault page,
- * by exam and section, or searched for by name.
+ * Data is the Data Sources tools, the reader's own data, or a CSV they
+ * upload; a calculation is one of the Actuarial Tools, by practice area; a
+ * concept is a vault page, by exam and section, or searched for by name; a
+ * workflow is one from the reader's library, or a template, as a single step.
  */
 export function WorkflowAddMenu({
   shelves,
@@ -40,6 +49,9 @@ export function WorkflowAddMenu({
   usedTools,
   usedConcepts,
   after,
+  library,
+  canNest,
+  onUploadCsv,
 }: {
   /** Every exam's concepts by section; null while the notes are read. */
   shelves: readonly ConceptShelf[] | null
@@ -53,7 +65,14 @@ export function WorkflowAddMenu({
   usedConcepts: ReadonlySet<string>
   /** The step a new one is added after, and connected from — named in the header. */
   after: string | null
+  /** The reader's library, offered as sub-workflows (the open workflow left out). */
+  library: readonly LibraryEntry[]
+  /** Whether a workflow may go on this board — not one that holds it already. */
+  canNest: (ref: string) => boolean
+  /** A CSV file chosen to upload: read, and put on the board. */
+  onUploadCsv: (file: File) => void
 }) {
+  const fileRef = useRef<HTMLInputElement>(null)
   const ref = useRef<HTMLDivElement>(null)
   const [stack, setStack] = useState<Page[]>([{ id: 'root' }])
   const [query, setQuery] = useState('')
@@ -134,6 +153,7 @@ export function WorkflowAddMenu({
           <NavRow icon={Database} title="Data" subtitle="Published tables, or your own" onClick={() => go({ id: 'data' })} testId="workflow-add-data" />
           <NavRow icon={Calculator} title="Calculation" subtitle={`${TOOLS.length - dataTools.length} tools in ${calcAreas.length} areas`} onClick={() => go({ id: 'calc' })} testId="workflow-add-calc" />
           <NavRow icon={BookOpen} title="Concept" subtitle="The method or idea a step rests on" onClick={() => go({ id: 'concepts' })} testId="workflow-add-concepts" />
+          <NavRow icon={WorkflowIcon} title="Workflow" subtitle="One from your library, or a template, as one step" onClick={() => go({ id: 'workflows' })} testId="workflow-add-workflows" />
         </>
       )
       break
@@ -143,12 +163,65 @@ export function WorkflowAddMenu({
         <>
           {dataTools.map(toolRow)}
           <Row
+            title="Upload a CSV"
+            subtitle="Dates and values to connect to the steps that use them"
+            icon={FileSpreadsheet}
+            onClick={() => fileRef.current?.click()}
+            testId="workflow-add-csv"
+          />
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".csv,.tsv,.txt,text/csv,text/plain"
+            className="hidden"
+            onChange={e => {
+              const file = e.target.files?.[0]
+              e.target.value = ''
+              if (file) onUploadCsv(file)
+            }}
+            data-testid="workflow-csv-input"
+          />
+          <Row
             title="Your own data"
             subtitle="Describe it, or paste the figures in"
             icon={PenLine}
             onClick={() => onAdd({ kind: 'data', ref: CUSTOM_DATA, label: 'Your data' })}
             testId="workflow-add-custom"
           />
+        </>
+      )
+      break
+    case 'workflows':
+      title = 'Workflow'
+      body = (
+        <>
+          <h3 className="px-4 pb-1.5 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your library</h3>
+          {library.length ? library.map(w => (
+            <Row
+              key={w.id}
+              title={w.title}
+              subtitle={canNest(w.id) ? `${w.steps} ${w.steps === 1 ? 'step' : 'steps'}` : 'Holds this workflow already'}
+              icon={WorkflowIcon}
+              blocked={!canNest(w.id)}
+              onClick={() => onAdd({ kind: 'workflow', ref: w.id, label: w.title })}
+              testId="workflow-add-library"
+              data={w.id}
+            />
+          )) : (
+            <p className="px-4 py-2 text-sm text-muted-foreground">Save a workflow to your library to use it here.</p>
+          )}
+          <h3 className="px-4 pb-1.5 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Templates</h3>
+          {TEMPLATES.map(t => (
+            <Row
+              key={t.id}
+              title={t.title}
+              subtitle={`${t.steps.length} steps`}
+              icon={WorkflowIcon}
+              onClick={() => onAdd({ kind: 'workflow', ref: TEMPLATE_PREFIX + t.id, label: t.title })}
+              testId="workflow-add-template"
+              data={t.id}
+            />
+          ))}
         </>
       )
       break
@@ -295,6 +368,7 @@ function Row({
   icon: Icon,
   onClick,
   added = false,
+  blocked = false,
   count,
   testId,
   data,
@@ -305,6 +379,8 @@ function Row({
   onClick: () => void
   /** On the board already, and only allowed once. */
   added?: boolean
+  /** Can't go on this board; the subtitle says why. */
+  blocked?: boolean
   /** On the board already this many times — a tool may be used more than once. */
   count?: number
   testId?: string
@@ -314,14 +390,15 @@ function Row({
     <button
       type="button"
       role="menuitem"
-      disabled={added}
-      aria-disabled={added}
+      disabled={added || blocked}
+      aria-disabled={added || blocked}
       onClick={onClick}
       data-testid={testId}
       data-ref={data}
       className={cn(
         'flex w-full items-center gap-3 px-4 py-2 text-left transition-colors focus-visible:bg-accent focus-visible:outline-none',
-        added ? 'cursor-default' : 'hover:bg-accent',
+        added || blocked ? 'cursor-default' : 'hover:bg-accent',
+        blocked && 'opacity-50',
       )}
     >
       {Icon && (
@@ -335,7 +412,7 @@ function Row({
       </span>
       {added ? (
         <CheckMark className="h-4 w-4" label="On the board" />
-      ) : (
+      ) : blocked ? null : (
         <span className="flex shrink-0 items-center gap-1.5">
           {!!count && <span className="text-xs tabular-nums text-muted-foreground" title="On the board already">×{count}</span>}
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground" aria-hidden>

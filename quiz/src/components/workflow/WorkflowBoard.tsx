@@ -1,18 +1,22 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
-import { BookOpen, Calculator, Database, type LucideIcon } from 'lucide-react'
+import { BookOpen, Calculator, Database, FileSpreadsheet, Workflow as WorkflowIcon, type LucideIcon } from 'lucide-react'
 import { fitView, toScreen, toWorld, zoomAt, type Insets, type Point, type View } from '@/lib/craftLayout'
-import { CELL, NODE, boxes, cellAt, cellCentre, cellKey, edgeGeometry, type Cell } from '@/lib/workflowGrid'
+import { GRID, NODE, boxes, cellAt, cellCentre, edgeGeometry, type Cell } from '@/lib/workflowGrid'
 import {
-  EDGE_LABEL,
+  CSV_DATA,
   KIND_LABEL,
   edgeKey,
   edgeKind,
+  edgeLabel,
+  innerErrors,
+  landingCell,
   stepName,
   type EdgeKind,
   type StepKind,
   type StepRun,
   type Workflow,
   type WorkflowEdge,
+  type WorkflowResolver,
 } from '@/lib/workflow'
 import { formatValue } from '@/lib/tools'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
@@ -21,16 +25,21 @@ import { cn } from '@/lib/utils'
 
 /**
  * **The Workflow Builder's board** (docs/workflow-builder.md) — Concept
- * Craft's canvas, with the physics taken out: every step is a card locked in
- * a cell of a grid (`lib/workflowGrid.ts`), and every connection an arrow from
- * one card's right edge into the next one's left.
+ * Craft's canvas, with the physics taken out: every step is a card that stays
+ * where it is put, snapped to a fine grid (`lib/workflowGrid.ts`), and every
+ * connection an arrow from one card's right edge into the next one's left.
+ * Only a concept's connection carries a word; values moving between steps are
+ * the line itself.
  *
  * What it does with the reader's hands:
- * - drag a card → it moves to the cell it is dropped on, if that cell is free;
+ * - drag a card → it moves anywhere, snapped to the grid; dropped on another
+ *   card, it lands in the nearest place clear of it (a dashed outline shows
+ *   where, as it is dragged);
  * - drag from a card's **port** (the dot on its right edge) onto another card
  *   → `onConnect`, a connection from the first to the second; tap the port and
  *   then a card for the same thing without dragging;
- * - tap a card → `onSelect`; tap a connection's label → `onSelectEdge`;
+ * - tap a card → `onSelect`; tap a connection (its line, or a concept's
+ *   label) → `onSelectEdge`;
  * - drag the empty board to pan, pinch or wheel to zoom — the same camera as
  *   Concept Craft's (`lib/craftLayout.ts`).
  */
@@ -52,12 +61,18 @@ export interface WorkflowBoardProps {
   selectedEdge: string | null
   /** A step whose port was tapped: the next card tapped is connected from it. */
   linking: string | null
-  /** Steps a deployment is working on right now — lit. */
-  active: ReadonlySet<string>
+  /**
+   * Upstream steps whose value the open step is linked to, and which of their
+   * headline figures it is (`carriedTile`, -1 for none in particular): drawn on
+   * the primary colour, as the linked field is on the open step's card.
+   */
+  marked: ReadonlyMap<string, number>
+  /** Finds a sub-workflow, so a line into or out of one knows whether it is a link. */
+  resolve?: WorkflowResolver
   insets: Insets
   onSelect: (id: string) => void
   onSelectEdge: (edge: WorkflowEdge) => void
-  onMove: (id: string, to: Cell) => boolean
+  onMove: (id: string, to: Cell) => void
   onConnect: (from: string, to: string) => void
   onLink: (id: string | null) => void
   onBackground: () => void
@@ -65,15 +80,18 @@ export interface WorkflowBoardProps {
 
 const DRAG_SLOP = 5
 const VIEW_MS = 380
-/** Below this zoom a connection's label is too small to read: a dot is drawn instead. */
+/** Below this zoom a concept connection's label is too small to read: a dot is drawn instead. */
 const LABEL_ZOOM = 0.6
+/** How wide a line is to the touch, in world px. */
+const LINE_HIT = 14
 
-const KIND_ICON: Record<StepKind, LucideIcon> = { data: Database, tool: Calculator, concept: BookOpen }
+const KIND_ICON: Record<StepKind, LucideIcon> = { data: Database, tool: Calculator, concept: BookOpen, workflow: WorkflowIcon }
 /** Each kind's stripe down the card's left edge. */
 const KIND_TINT: Record<StepKind, string> = {
   data: 'hsl(199 89% 56%)',
   tool: 'hsl(var(--primary))',
   concept: 'hsl(38 92% 56%)',
+  workflow: 'hsl(262 83% 70%)',
 }
 const ACCENT = 'hsl(var(--primary))'
 
@@ -109,7 +127,8 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
     selected,
     selectedEdge,
     linking,
-    active,
+    marked,
+    resolve,
     insets,
     onSelect,
     onSelectEdge,
@@ -362,20 +381,18 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
   const dragging = g?.kind === 'node' && g.moved ? g : null
   const drawingLink = g?.kind === 'link' && g.moved ? g : null
   const byId = new Map(workflow.nodes.map(n => [n.id, n]))
-  // Where a dragged card would land, and whether it may.
-  let dropCell: { cell: Cell; free: boolean } | null = null
+  // Where a dragged card will land: under the pointer, or the nearest place clear of the others.
+  let dropCell: Cell | null = null
   if (dragging) {
     const node = byId.get(dragging.id)
     if (node) {
       const c = cellCentre(node)
-      const cell = cellAt({ x: c.x + (dragging.at.x - dragging.start.x) / k, y: c.y + (dragging.at.y - dragging.start.y) / k })
-      const free = cell.col >= 0 && cell.row >= 0 && !workflow.nodes.some(n => n.id !== node.id && cellKey(n) === cellKey(cell))
-      dropCell = { cell, free }
+      dropCell = landingCell(workflow, node.id, cellAt({ x: c.x + (dragging.at.x - dragging.start.x) / k, y: c.y + (dragging.at.y - dragging.start.y) / k }))
     }
   }
   const linkTarget = drawingLink ? nodeAtWorld(toWorld(v, local(drawingLink.at.x, drawingLink.at.y))) : null
   const focus = selected ?? linking
-  const isLitEdge = (e: WorkflowEdge) => edgeKey(e) === selectedEdge || (!!focus && (e.from === focus || e.to === focus)) || (active.has(e.from) && active.has(e.to))
+  const isLitEdge = (e: WorkflowEdge) => edgeKey(e) === selectedEdge || (!!focus && (e.from === focus || e.to === focus))
   const anyLit = !!focus || !!selectedEdge
 
   return (
@@ -383,10 +400,10 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
       ref={rootRef}
       className="craft-floor relative h-full w-full touch-none select-none overflow-hidden"
       style={{
-        // The floor's dots sit on the grid's corners, so the grid is the board's texture.
-        backgroundSize: `${CELL.w * k}px ${CELL.h * k}px, ${(CELL.w / 4) * k}px ${(CELL.h / 4) * k}px`,
-        backgroundImage: 'radial-gradient(hsl(var(--muted-foreground) / 0.55) 1.5px, transparent 1.5px), radial-gradient(hsl(var(--border)) 1px, transparent 1px)',
-        backgroundPosition: `${v.x - 1.5}px ${v.y - 1.5}px, ${v.x - 1}px ${v.y - 1}px`,
+        // The floor's dots are the grid a card snaps to: the board's texture is its lattice.
+        backgroundSize: `${GRID * k}px ${GRID * k}px`,
+        backgroundImage: 'radial-gradient(hsl(var(--muted-foreground) / 0.3) 1px, transparent 1px)',
+        backgroundPosition: `${v.x - 1}px ${v.y - 1}px`,
         cursor: g?.kind === 'pan' && g.moved ? 'grabbing' : linking ? 'crosshair' : undefined,
       }}
       onPointerDown={onPointerDown}
@@ -399,13 +416,14 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
         {/* Where a dragged card would land. */}
         {dropCell && (
           <div
-            className={cn('absolute left-0 top-0 rounded-xl border-2 border-dashed', dropCell.free ? 'border-primary bg-primary/10' : 'border-destructive/70 bg-destructive/10')}
+            className="absolute left-0 top-0 rounded-xl border-2 border-dashed border-primary bg-primary/10"
             style={{
               width: NODE.w,
               height: NODE.h,
-              transform: `translate(${cellCentre(dropCell.cell).x - NODE.w / 2}px, ${cellCentre(dropCell.cell).y - NODE.h / 2}px)`,
+              transform: `translate(${cellCentre(dropCell).x - NODE.w / 2}px, ${cellCentre(dropCell).y - NODE.h / 2}px)`,
             }}
             aria-hidden
+            data-testid="workflow-drop-target"
           />
         )}
 
@@ -414,12 +432,25 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
             const from = byId.get(e.from)
             const to = byId.get(e.to)
             if (!from || !to) return null
-            const kind = edgeKind(workflow, e)
+            const kind = edgeKind(workflow, e, resolve)
             const lit = isLitEdge(e)
             const { width, color, dash } = edgeStroke(kind, lit)
             const { d, end } = edgeGeometry(from, to)
             return (
               <g key={edgeKey(e)} opacity={anyLit && !lit ? 0.35 : 1} data-testid="workflow-edge" data-kind={kind}>
+                {/* The line is its own way in: a wide, unseen stroke to tap. */}
+                <path
+                  d={d}
+                  fill="none"
+                  stroke="transparent"
+                  strokeWidth={LINE_HIT / Math.min(1, k)}
+                  style={{ pointerEvents: 'stroke', cursor: 'pointer' }}
+                  onPointerDown={ev => ev.stopPropagation()}
+                  onClick={() => onSelectEdge(e)}
+                  data-testid="workflow-edge-hit"
+                >
+                  <title>{`${stepName(from)} to ${stepName(to)}`}</title>
+                </path>
                 <path d={d} fill="none" stroke={color} strokeWidth={width} strokeDasharray={dash} strokeLinecap="round" />
                 <path d={`M${end.x - 9} ${end.y - 5.5} L${end.x} ${end.y} L${end.x - 9} ${end.y + 5.5} Z`} fill={color} />
               </g>
@@ -450,11 +481,13 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
           const from = byId.get(e.from)
           const to = byId.get(e.to)
           if (!from || !to) return null
-          const kind = edgeKind(workflow, e)
+          const kind = edgeKind(workflow, e, resolve)
+          const word = edgeLabel(kind)
+          if (!word) return null
           const lit = isLitEdge(e)
           const { mid } = edgeGeometry(from, to)
           const small = k < LABEL_ZOOM && !lit
-          const name = `${stepName(from)} to ${stepName(to)}: ${EDGE_LABEL[kind]}`
+          const name = `${stepName(from)} to ${stepName(to)}: ${word}`
           return (
             <button
               key={edgeKey(e)}
@@ -472,7 +505,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
               )}
               style={{ left: mid.x, top: mid.y, transform: `translate(-50%, -50%) scale(${small ? 1 / Math.max(k, 0.4) : 1})` }}
             >
-              {small ? null : e.note ? `${EDGE_LABEL[kind]} ·` : EDGE_LABEL[kind]}
+              {small ? null : e.note ? `${word} ·` : word}
               {!small && e.note && <span className="ml-1 inline-block max-w-[9rem] truncate align-bottom">{e.note}</span>}
             </button>
           )
@@ -485,10 +518,14 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
           const isSelected = selected === node.id
           const isLinking = linking === node.id
           const isTarget = linkTarget === node.id && linkTarget !== drawingLink?.id
-          const isActive = active.has(node.id)
-          const Icon = KIND_ICON[node.kind]
+          const Icon = node.ref === CSV_DATA ? FileSpreadsheet : KIND_ICON[node.kind]
           const run = runs.get(node.id)
-          const tile = run?.result?.tiles[0]
+          // A step the open one is linked to shows the figure it carries, on the link's colour.
+          const markedTile = marked.get(node.id)
+          const isMarked = markedTile !== undefined
+          const tile = run?.exits[0]?.tiles[markedTile !== undefined && markedTile >= 0 ? markedTile : 0]
+          const nested = node.kind === 'workflow'
+          const stuck = nested ? innerErrors(run) : 0
           const name = stepName(node)
           const concept = node.kind === 'concept'
           return (
@@ -523,8 +560,8 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
                   isLinking && 'outline-dashed',
                   isTarget && 'scale-105',
                   isDragging && 'cursor-grabbing opacity-90 shadow-xl',
-                  isActive && 'workflow-step-active',
                 )}
+                style={nested ? { boxShadow: '4px 4px 0 -1px hsl(var(--card)), 4px 4px 0 0 hsl(var(--border)), var(--shadow-card)' } : undefined}
               >
                 <span className="absolute inset-y-0 left-0 w-1" style={{ background: KIND_TINT[node.kind] }} aria-hidden />
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -533,10 +570,22 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
                 </span>
                 <span className="line-clamp-2 text-[13px] font-semibold leading-tight">{name}</span>
                 {run?.error ? (
-                  <span className="truncate text-[11px] text-amber-500">Needs input</span>
+                  <span className="truncate text-[11px] text-amber-500">{nested ? run.error : 'Needs input'}</span>
+                ) : node.csv ? (
+                  <span className="truncate text-[11px] tabular-nums text-muted-foreground">
+                    {node.csv.rows.length} {node.csv.rows.length === 1 ? 'row' : 'rows'} · {node.csv.columns.length} columns
+                  </span>
+                ) : !tile && stuck > 0 ? (
+                  <span className="truncate text-[11px] text-amber-500">{stuck} {stuck === 1 ? 'step needs' : 'steps need'} input</span>
                 ) : tile ? (
                   <span className="truncate text-[11px] tabular-nums text-muted-foreground" data-testid="workflow-step-value">
-                    {tile.symbol} = <span className="font-semibold text-foreground">{formatValue(tile.value, tile.unit)}</span>
+                    {tile.symbol} ={' '}
+                    <span
+                      className={cn('font-semibold text-foreground', isMarked && 'rounded bg-primary px-1 py-px text-primary-foreground')}
+                      data-testid={isMarked ? 'workflow-step-linked' : undefined}
+                    >
+                      {formatValue(tile.value, tile.unit)}
+                    </span>
                   </span>
                 ) : node.note ? (
                   <span className="truncate text-[11px] text-muted-foreground">{node.note}</span>

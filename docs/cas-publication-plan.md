@@ -221,10 +221,66 @@ and they are a stronger source than a textbook's summary of them.
   of its pages may only reach **medium**.
 - **DISC-DA** is checked against open textbooks.
 
-**The three course textbook pages** (`Resources/Books/… (The Institutes - 2023)`) can only be
-checked against the publisher's table of contents and the CAS's syllabus PDF. MAS-I set the
-precedent for a commercial-only source: **medium** at most, with the reason stated in the pass note.
-That is decision D3 below.
+**The three course textbook pages** (`Resources/Books/… (The Institutes - 2023)`) transcribe only
+the free syllabus PDFs and the CAS DISC page. Every claim on them was checked against those, so
+they were verified at **high**. The medium ceiling of D3 is for a page that says something about a
+commercial text's *contents*.
+
+### 3.5 What the fact check settled (10 Oct 2026)
+
+**Results.** Eleven fact-check packets and their clean-up rounds checked about 650 files. Every
+vault-written question was recomputed blind before its key was read. Below is how each DISC stood
+at the end of the day; the most recent results are pending (V4, V5, V8, W2).
+
+| Exam | Status | Remaining |
+|---|---|---|
+| **DISC-DA** | **ready** (7/7) | none |
+| **DISC-IA** | beta (6/7) | *Strict Liability* (dram-shop framing, being fixed) |
+| **DISC-RM** | beta | see below |
+
+**DISC-RM** still has these open:
+- four new DISC-specific pages being written and checked;
+- *Period of Restoration* and question 217;
+- *Types of Reinsurance*'s IFRS 17 bullet;
+- the Institutes-only frameworks, below.
+
+**Rules adopted while running it.** These apply to every later campaign.
+
+1. **A file with an open major finding is `in_review`, never `verified`.** A critical finding makes
+   it `disputed`, and the quiz withholds the question.
+2. **The clean-up round may author, within limits.** A checker may delete a claim, restate it to
+   what a source it read says, reword a question its own finding proposed changing, retag, or
+   drop or retarget a link. Each change is recorded as a finding plus a resolution, and the file is
+   then verified again. Anything new goes to a separate writer, and a different checker verifies
+   it. Examples are *Levels of Strategy* and the four DISC-RM pages.
+3. **Don't make a DISC depend on another exam's commercial reading.** Five DISC-RM sections linked
+   pages shared with Exam 9, whose Exam 9 half rests on Brehm et al.: 1.3, 1.4, 4.4, 5.1 and 15.3.
+   Those pages can't be verified until someone reads that book. Each of those sections now links its
+   own DISC page, and the shared pages are left for the Exam 9 campaign.
+4. **Never cite an unauthorized copy.** A checker found a full commercial textbook on a university
+   URL. The vault cites such a book bibliographically, by edition and pages, and never links the
+   copy. Prefer an open textbook covering the same ground. For DISC-RM that is Baranoff, Brockett
+   & Kahane, *Risk Management for Enterprises and Individuals* (Saylor, CC BY-NC-SA).
+5. **Watch for the wrong country.** The fact check found more Canadian (Exam 6C) pages linked from
+   U.S. DISC pages, beyond the ones writing caught: *Punitive Damages*, *Vicarious Liability*,
+   *Joint and Several Liability*, *Collateral Benefits*, *Limitation Period*, *Guaranty Funds*,
+   *Solvency Regulation* and *Notes to Financial Statements*. U.S. pages drop or retarget those
+   links. The Canadian pages are untouched.
+6. **Editing a page that another exam has verified costs that exam a re-check.** DISC additions made
+   15 such pages stale, among them MAS-I's *Data Types* and Exam 5's premium pages. Each needed a
+   delta check before MAS-I could be promoted.
+
+**What no free source states.** A few DISC-RM claims are frameworks that only The Institutes' course
+teaches:
+- insurer goals and constraints;
+- the list of marketing activities;
+- the four risk control goals;
+- essential, desirable and available coverage.
+
+They are the content of *Insurer Goals and Constraints* and *Insurance Marketing*, and of questions
+035, 041, 047 and 233. They stay `in_review` until someone checks them against the course text, or
+they are rewritten to what open sources say. That choice is decision D6. *Insurtech* is in the same
+position, because no open text is current enough.
 
 ## 4. Order of work
 
@@ -234,8 +290,8 @@ first (§1), because a fact check of the wrong page wastes the check.
 
 | # | Exam | What it takes | Why here |
 |---|---|---|---|
-| 1 | **MAS-I** → ready | Fix 2 catch-alls (*Probability Distributions*, *System Reliability*); verify the 117 `masi-an-*` questions against the concept pages and readings already verified | Cheapest promotion. Its concepts, readings and published questions are already checked. |
-| 2 | **DISC-DA, RM, IA** → beta, then ready | §3: write the 67 pages and the three banks (development → beta), then fact check pages, banks and the three textbook pages | The user's priority, and the only exams where links had to be redesigned. No past papers, so no paper packets: everything is reading packets on free primary documents. |
+| 1 | **MAS-I** → ready ✔ (10 Oct 2026) | Fix 2 catch-alls (*Probability Distributions*, *System Reliability*); verify the 117 `masi-an-*` questions against the concept pages and readings already verified | Cheapest promotion. Its concepts, readings and published questions are already checked. |
+| 2 | **DISC-DA, RM, IA** → beta ✔, then ready (DISC-DA ✔ 10 Oct 2026) | §3: write the 67 pages and the three banks (development → beta), then fact check pages, banks and the three textbook pages | The user's priority, and the only exams where links had to be redesigned. No past papers, so no paper packets: everything is reading packets on free primary documents. |
 | 3 | **Exam 7** → ready | Write questions for 7 concepts; verify 17 concepts, 15 readings, 118 questions (8 papers, keyed by paper, which clears 64 of Exam 9's questions too) | Smallest concept set of the papers exams. |
 | 4 | **Exam 8** → ready | Write the **10 missing reading pages**, then drop `"source_pages": "partial"`; questions for 6 concepts; fix 1 catch-all (*Rating Class*); verify 26 concepts, 12 readings, 132 questions | Shares papers with 9. |
 | 5 | **Exam 9** → ready | Questions for 10 concepts; verify 53 concepts, 9 readings, the remaining questions on its own 7 papers | Most of its bank arrives verified through 3 and 4. |
@@ -266,3 +322,6 @@ script's output in the PR.
   gives only titles, and the course text isn't available to confirm what each section covers. Any
   section that turns out to be broader or narrower than its page can be re-linked without touching
   the verified words.
+- **D6, frameworks only the course states** (§3.5). Either check the DISC-RM frameworks above
+  against The Institutes' course text, or rewrite those pages and questions to open sources, which
+  would drop the course's own framing.

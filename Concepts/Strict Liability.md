@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cb1f1f3390fa926cfb1a7a5771460259ea8220f1159bfa1f2b3793c306cc1cd2
+  content_hash: sha256:c32c503ff0fb43cbe2e4282c85d46b47db9a52fdad93aed51a4333836bf2f281
   sources: []
   open_findings: 3
   open_critical: 0

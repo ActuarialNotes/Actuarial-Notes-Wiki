@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f72bcefcab0d40c1770b5684cf5febf244abeda2abebd229ae2416034da96f88
+  content_hash: sha256:3a84e3e2e6c819dd20d16bf943f03cbfb6a9bf85ee6c32cc4aec1918d552b7bc
   sources:
     - "Cornell LII Wex, \"tort\", whole entry, sha256:5b6ecdfed997e750f3cb76fbd9b5f922438bf14a4f026bc153a25e5c7411144c — https://www.law.cornell.edu/wex/tort"
     - "Cornell LII Wex, \"comparative negligence\", whole entry, sha256:2f19566fa7f19db3c57ce3d0147aeaeebb7535d5e7d45ea9e111281973b8a240 — https://www.law.cornell.edu/wex/comparative_negligence"

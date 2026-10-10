@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d0fc214754acceb9c11ec081e34247e8a4c8c7a7f4c4c1f56da961c1812a7b8b
+  content_hash: sha256:f0b5f58208f9bb9900096ee403d42cc477c69a90054fd141296868dbb53d2374
   sources:
     - "NAIC testimony (Dilweg), House Financial Services, Mar 18 2010, PDF pp.2-6 (FAST tools, Analyst Team, Scoring System, Insurer Profiles, Financial Analysis Handbook stair-step, FAWG), sha256:6b54489519acef3b13de704b7ee457613331d9eb7881c25cb79a9928f9fa9239 — https://financialservices.house.gov/media/file/hearings/111/final_dilweg_testimony_3_18_2010.pdf"
     - "NAIC Model Law on Examinations (#390), examination frequency (not less than once every five years), sha256:0ac0345b424cbe0e28f85c01b9c87b276bdaa967c64dbb2accb192f04e9b46c4 — https://content.naic.org/sites/default/files/model-law-390.pdf"
@@ -33,7 +33,7 @@ verification:
 - **Its limits.** Every tool reads statutory statements, so an insurer that understates reserves looks healthy until development reveals it — which is why reserve-development ratios, the actuarial opinion and exam actuaries carry so much weight.
 
 > [!example]- Growth That Trips the Early Warning {Example}
-> A regional insurer's net written premium rises from $\$250$ million to $\$400$ million after it launches a commercial auto program through a managing general agent. Its RBC ratio is $340\%$, and its adjusted liabilities to liquid assets ratio has risen from $78\%$ to $96\%$ over two years. What does the monitoring system do?
+> A regional insurer's net written premium rises from $\$250$ million to $\$400$ million after it launches a commercial auto program through a managing general agent. Its RBC ratio is $340\%$, and its liabilities to liquid assets ratio has risen from $78\%$ to $96\%$ over two years. What does the monitoring system do?
 >
 > > [!answer]-
 > > $$
@@ -42,7 +42,7 @@ verification:
 > > &= 60\%
 > > \end{align*}
 > > $$
-> > That is outside IRIS's $-33\%$ to $+33\%$ usual range. The liquidity ratio is still inside its range (below $100\%$), but the IRIS manual notes that failed insurers typically show this ratio **rising** in their final years, so the trend matters more than the level.
+> > That is outside IRIS's $-33\%$ to $+33\%$ usual range. The liabilities to liquid assets ratio is still below the $105\%$ at which IRIS flags it, but it has risen $18$ points in two years, so the trend is worth watching as well as the level.
 > >
 > > RBC gives no signal: $340\%$ is above every action level, and the P&C trend test applies only between $200\%$ and $300\%$.
 > >

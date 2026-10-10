@@ -12,11 +12,11 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cd8a22a653dfa0eaf9a3d6ebe3ce8d3f3fec98f1fa1bfc9c5b51b581990c9967
+  content_hash: sha256:6690d431a287213fdb06b30881836a6421767a4410a29fed10369846bd9867c3
   sources:
     - "Cornell LII Wex, \"abnormally dangerous activity\", whole entry, sha256:ebfe3cfce29c1f965f9ce4d508c731258c0a87db6b6117d516da3277fbae14ba — https://www.law.cornell.edu/wex/abnormally_dangerous_activity"
     - "Cornell LII Wex, \"ultrahazardous activity\", whole entry, sha256:086f2b99ee5e944f2c3823938b5caf0a021fb147b60fd99ea5b5b5e689fa10ef — https://www.law.cornell.edu/wex/ultrahazardous_activity"

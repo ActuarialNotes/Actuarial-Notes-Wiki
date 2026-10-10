@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a2c5e596552a9cb5c997f4842851dc26f8124c7e838dd6e1c45a84521e7d45dc
+  content_hash: sha256:5ac603448dd99d4add590cccc73beab16ddcc94f73194958e90fb14af199e5e3
   sources:
     - "Cornell LII Wex, \"compensatory damages\", whole entry, sha256:92774229ad1d9384ec8fcb5661d421edc88df5736e2e901f042c3cf93c07a4d5 — https://www.law.cornell.edu/wex/compensatory_damages"
     - "Cornell LII Wex, \"special damages\", whole entry, sha256:50a0d567faf8e938120a8709acd04442ee0437f98dc5e175332ffb6f96c4f848 — https://www.law.cornell.edu/wex/special_damages"

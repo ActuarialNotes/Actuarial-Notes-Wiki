@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ca7e655086e55c7820dadb73b4712976bffb49f73dc1a903bc0590bcfea59b72
+  content_hash: sha256:5f58e731a278ba63faaa133f5dbb972e3ddf7bce8e0ab94b86236e15e73c8fea
   sources:
     - "Cornell LII Wex, \"intentional tort\", whole entry, sha256:6eeae7f913e8476b44f72be41bbf1f72e18f3f911bf7d0c51432a6346e3d878d — https://www.law.cornell.edu/wex/intentional_tort"
     - "Cornell LII Wex, \"battery\", whole entry, sha256:b1a72e1c4bb6db71b50fb25c9fb7cb4b88fcc9a2e504adf2a103787d3ced80c6 — https://www.law.cornell.edu/wex/battery"

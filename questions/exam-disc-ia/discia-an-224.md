@@ -12,11 +12,11 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:45c46c094793cb62be3bd07a9a38ceed8130ee4f9c59f6470b8a2af7797e97a2
+  content_hash: sha256:ae20878214fdb1f72a63d66bb8b164d632c22915dddc825f253e8faeab0b4a2a
   sources:
     - "Cornell LII Wex, \"sovereign immunity\", whole entry, sha256:16b2651a31fd3dce1d1d950f2aaac31dd411e62af79901dc93a001da76ca1cbc — https://www.law.cornell.edu/wex/sovereign_immunity"
     - "Picher v. Roman Catholic Bishop of Portland, 2009 ME 67 (Me. SJC), paras 12-17 (Restatement s.895E; Prosser & Keeton), read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://caselaw.findlaw.com/court/me-supreme-judicial-court/1010006.html"

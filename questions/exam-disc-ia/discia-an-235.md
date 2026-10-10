@@ -1,22 +1,21 @@
 ---
 id: "discia-an-235"
 exam: "Exam DISC-IA"
-topic: "Joint and Several Liability"
+topic: "Tort Law"
 learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
 wiki_link:
-  - Concepts/Joint+and+Several+Liability
   - Concepts/Tort+Law
 answer: "D"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:69edc1c9e917a7e9cb95bf069f42a57dbec636f75fb52a55514d6b93ecdb5389
+  content_hash: sha256:3e877c98407b69007fca42b04f363adf99104c2976568bdc35de85ee35c6ad55
   sources:
     - "Cornell LII Wex, \"joint and several liability\", whole entry, sha256:907bf1f785eab437a0b3da0331f065d205461aad65c49955408c9687146bdf55 — https://www.law.cornell.edu/wex/joint_and_several_liability"
   open_findings: 1

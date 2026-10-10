@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:72aaa4b42c84725955b73a4b31f20afb9a55baf8b73c45748532fc3adbfe4516
+  content_hash: sha256:3a180fac0099ab977e399fe1c76d8c5dda6d98edcec59fac5b454304a101811e
   sources:
     - "Cornell LII Wex, \"negligence\", whole entry, sha256:83fcfd0343f79398b5caeca4fa538f5e938906edbbbbd01840c24b5988fa3ef5 — https://www.law.cornell.edu/wex/negligence"
     - "Cornell LII Wex, \"comparative negligence\", whole entry, sha256:2f19566fa7f19db3c57ce3d0147aeaeebb7535d5e7d45ea9e111281973b8a240 — https://www.law.cornell.edu/wex/comparative_negligence"

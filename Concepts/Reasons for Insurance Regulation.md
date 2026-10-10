@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:15ac594b767791e02024d221c4ea7a65447229617409cb11a69eb7810c2f948d
+  content_hash: sha256:a135e0eb8f0248246dec66bc725c332b987fad8d817763a04330c2379af4e4fa
   sources:
     - "15 U.S.C. s.1011 (McCarran-Ferguson Act), via LII, section text and notes, sha256:4a241b15f73f03c4968717b2c27837c5a518e5a1b9a8101e583645654d615b23 — https://www.law.cornell.edu/uscode/text/15/1011"
     - "15 U.S.C. s.1012 (McCarran-Ferguson Act), via LII, section text and notes, sha256:535ac29a8bf43a413de01cd9bf4496970aff48d88a47c87cfbf296696012ef32 — https://www.law.cornell.edu/uscode/text/15/1012"
@@ -25,7 +25,7 @@ verification:
 
 > $$\text{A federal act overrides state insurance law} \iff \text{it specifically relates to the business of insurance}$$
 
-- **The rule above:** The McCarran-Ferguson Act of 1945 declares that continued regulation and taxation of the business of insurance by the states is in the public interest. No act of Congress is to be read to invalidate, impair or supersede a state law regulating or taxing insurance unless the act specifically relates to the business of insurance. The federal antitrust laws apply to insurance only to the extent state law does not regulate it, and agreements or acts of boycott, coercion or intimidation remain subject to the Sherman Act in any case. The history is on [[History of Insurance Regulation]] and the current federal role on [[State and Federal Insurance Regulation]].
+- **The rule above:** The McCarran-Ferguson Act of 1945 declares that continued regulation and taxation of the business of insurance by the states is in the public interest. No act of Congress is to be read to invalidate, impair or supersede a state law regulating or taxing insurance unless the act specifically relates to the business of insurance. The federal antitrust laws apply to insurance only to the extent state law does not regulate it, and agreements or acts of boycott, coercion or intimidation remain subject to the Sherman Act in any case. Since a 2021 amendment (15 U.S.C. 1013(c)) the exemption no longer covers the business of health insurance, including dental insurance. The history is on [[History of Insurance Regulation]] and the current federal role on [[State and Federal Insurance Regulation]].
 - **Consumer protection:** In the NAIC's account, government regulation of insurers and producers began in the states for one overriding reason, to protect consumers. The most important protection is making sure insurers remain solvent so they can pay claims. Beyond that, states supervise sales and marketing practices and policy terms and conditions so that consumers are treated fairly when they buy insurance and when they file claims.
 - **Market imperfections:** Economists justify regulating a business only where there is a demonstrable market failure, measured against a reasonably competitive market, and where the benefits exceed the costs. Since most insurance markets are competitive, the main economic rationale is to reduce how far insurers or producers misrepresent what is being promised at the sale, or fail to keep the promise through insolvency or deficient claims settlement. That calls for solvency oversight, and for some oversight of sales and claim practices to supplement market discipline and the buyer's remedies in contract and tort.
 - **Contracts the buyer can't negotiate:** A policy is a contract of adhesion, drafted by the insurer and offered on a take-it-or-leave-it basis, which is why regulators review policy forms and readability ([[Policy Form Regulation]]) and courts construe ambiguities against the insurer.
@@ -62,5 +62,5 @@ verification:
 > [!warning]- Exam traps
 > - **Solvency first:** Regulators name solvency as the most important consumer protection. An answer that puts low premiums first misses that a rate too low to cover costs is itself a solvency problem.
 > - **The NAIC is not a regulator:** It writes model laws and coordinates the states, but a model binds no one until a state enacts it, and the NAIC licenses and examines no insurer.
-> - **McCarran-Ferguson is not a full antitrust exemption:** Insurers are exempt from federal antitrust law only where the state regulates, and boycott, coercion and intimidation are never exempt.
+> - **McCarran-Ferguson is not a full antitrust exemption:** Insurers are exempt from federal antitrust law only where the state regulates, and boycott, coercion and intimidation are never exempt. Since 2021 health insurance is outside the exemption altogether.
 > - **U.S. versus Canada:** In the United States the states, led by the domiciliary state, supervise solvency. Canada splits solvency (OSFI) from market conduct (the provinces), which is on [[Insurance Regulation]].

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:34a0231c9db40dbacec61069cdf974707f3af29e91c105ed3269b7f1f39da1f2
+  content_hash: sha256:45433bb8fd057620b849b0c2606d28a7dd63612168239a8228ef3aed6eb090b4
   sources:
     - "Rowland v. Christian, 69 Cal. 2d 108 (1968) (Caselaw Access Project), opinion text, sha256:6637138ee1290c3ab8819bc096f5e472c37adcfcee21300471aa2cc33b72398d — https://static.case.law/cal-2d/69/cases/0108-01.json"
     - "Demag v. Better Power Equipment, 2014 VT 78 (Vt. Supreme Court), pp.3-6, 10-11, sha256:e74830ed35c819710cc75a2f6dddfa11e62a058e9cdbe78b138129b13b4be43f — https://www.vtcourts.gov/media/4343"

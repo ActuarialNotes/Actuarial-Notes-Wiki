@@ -8,16 +8,15 @@ type: multiple-choice
 bloom: apply
 wiki_link:
   - Concepts/Compensatory+Damages
-  - Concepts/Punitive+Damages
   - Concepts/Negligence
 answer: "A"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:84e90cf93f8480342ca51cef94e8b718e8a3e6a328440925fce3455192870b15
+  content_hash: sha256:491be8ef61292a7350e0ea3cae75e52455b3c1ae56e42af77c328afa926dc98d
   sources:
     - "Cornell LII Wex, \"compensatory damages\", whole entry, sha256:92774229ad1d9384ec8fcb5661d421edc88df5736e2e901f042c3cf93c07a4d5 — https://www.law.cornell.edu/wex/compensatory_damages"
     - "Cornell LII Wex, \"comparative negligence\", whole entry, sha256:2f19566fa7f19db3c57ce3d0147aeaeebb7535d5e7d45ea9e111281973b8a240 — https://www.law.cornell.edu/wex/comparative_negligence"

@@ -8,7 +8,6 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/State+Market+Conduct+Regulation
-  - Concepts/Unfair+Discrimination
 answer: "B"
 points: 1
 verification:

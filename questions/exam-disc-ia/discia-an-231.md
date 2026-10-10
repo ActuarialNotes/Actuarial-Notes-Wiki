@@ -8,15 +8,14 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Compensatory+Damages
-  - Concepts/Punitive+Damages
 answer: "C"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3c9813a202fb879677a9853e084ca53925847e785973adfac38c7fc6e1dce502
+  content_hash: sha256:4cbafa5392cc02e44cc9bd1c1a76d74dd77c13ae2c500d98ce3b5626722e9866
   sources:
     - "Cornell LII Wex, \"special damages\", whole entry, sha256:50a0d567faf8e938120a8709acd04442ee0437f98dc5e175332ffb6f96c4f848 — https://www.law.cornell.edu/wex/special_damages"
     - "Cornell LII Wex, \"compensatory damages\", whole entry, sha256:92774229ad1d9384ec8fcb5661d421edc88df5736e2e901f042c3cf93c07a4d5 — https://www.law.cornell.edu/wex/compensatory_damages"

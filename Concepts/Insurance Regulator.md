@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4713c4f4e9c737dddd6af1c9231d66bea03ec4ae21c2d23c5258238a7b6084ea
+  content_hash: sha256:c3608b73fbb7efdff518ebcd26c1d78ed13d0106bfeda9b4669ca63e61a11efa
   sources:
     - "15 U.S.C. s.1012 (McCarran-Ferguson Act), via LII, section text and notes, sha256:535ac29a8bf43a413de01cd9bf4496970aff48d88a47c87cfbf296696012ef32 — https://www.law.cornell.edu/uscode/text/15/1012"
     - "15 U.S.C. s.1013 (McCarran-Ferguson Act), via LII, section text and notes, sha256:12aef39131def2a132d65c7de84d47975d9938b1a5765a660f036c6b1efa0e6c — https://www.law.cornell.edu/uscode/text/15/1013"
@@ -30,10 +30,10 @@ verification:
 >
 > $$\text{U.S.} = \underbrace{\text{Domiciliary state}}_{\text{solvency lead}} + \underbrace{\text{Each licensing state}}_{\text{rates, forms, conduct}}$$
 
-- **United States.** Each state's department, headed by a commissioner (appointed in most states, elected in some), licenses insurers, reviews rates and forms, and conducts financial and market-conduct examinations. The McCarran-Ferguson Act (1945) leaves the business of insurance to the states: a federal statute does not override state insurance law unless it specifically relates to insurance, and federal [[Antitrust Law|antitrust law]] applies only to the extent the states do not regulate (boycott, coercion and intimidation excepted). The **domiciliary** state leads solvency supervision; every other state where the insurer is licensed regulates its rates and conduct there. See [[State and Federal Insurance Regulation]].
+- **United States.** Each state's department, headed by a commissioner (appointed in most states, elected in some), licenses insurers, reviews rates and forms, and conducts financial and market-conduct examinations. The McCarran-Ferguson Act (1945) leaves the business of insurance to the states: a federal statute does not override state insurance law unless it specifically relates to insurance, and federal [[Antitrust Law|antitrust law]] applies only to the extent the states do not regulate (boycott, coercion and intimidation excepted, and since 2021 health insurance, 15 U.S.C. 1013(c)). The **domiciliary** state leads solvency supervision; every other state where the insurer is licensed regulates its rates and conduct there. See [[State and Federal Insurance Regulation]].
 - **The NAIC is not a regulator.** It is the commissioners' association: it writes model laws, the [[NAIC Annual Statement]] and its instructions, the statutory accounting manual, the [[Risk-Based Capital|RBC]] formula and the [[IRIS Ratios]], and its accreditation program makes adoption of core solvency standards effectively mandatory. At federal level the Federal Insurance Office, created by [[Dodd-Frank]], monitors the industry but does not regulate it.
 - **Canada.** [[OSFI]] supervises federally regulated insurers' solvency through the [[MCT]], guidelines and staged intervention; provincial regulators ([[Financial Services Regulatory Authority of Ontario|FSRA]], the [[Autorité des marchés financiers|AMF]] and others) license insurers, approve auto rates where required and police conduct, and prudentially supervise provincially incorporated insurers. The [[Canadian Council of Insurance Regulators]] coordinates them. See [[Insurance Regulation]].
-- **What regulators require of the actuary.** In both countries the board must appoint a qualified actuary whose opinion on the reserves the regulator relies on. U.S.: the SAO attached to the Annual Statement, the confidential [[Actuarial Opinion Summary]], an [[Actuarial Report]] available by May 1, and notice to the domiciliary commissioner when the actuary is appointed or replaced. Canada: the [[Appointed Actuary]]'s opinion and report, [[FCT]], the [[Duty to Report]], and OSFI's qualification and [[Peer Review|peer review]] expectations.
+- **What regulators require of the actuary.** In both countries the board must appoint a qualified actuary whose opinion on the reserves the regulator relies on. U.S.: the SAO attached to the Annual Statement, the confidential [[Actuarial Opinion Summary]], an [[Actuarial Report]] available by May 1, and notice to the domiciliary commissioner when the actuary is appointed or replaced. Canada: the [[Appointed Actuary]]'s opinion and report, [[FCT]], the [[Duty to Report]], and OSFI's qualification and [[Peer Review|peer review]] expectations (OSFI is eliminating the peer review requirement under Guideline E-15 from January 1, 2027, keeping the Superintendent's power to request one).
 - **Regulators, auditors and rating agencies** all assess the same insurer for different users. Only the regulator can compel: examinations, capital plans, restrictions on business, and ultimately rehabilitation or liquidation.
 
 > [!example]- Which U.S. Regulator? {Example}
@@ -53,7 +53,7 @@ verification:
 > > [!answer]-
 > > **United States:** the insurer must notify the domiciliary insurance department within five business days, then within ten business days send a letter stating whether there were disagreements with the former actuary in the preceding $24$ months — over the opinion's type, scope, disclosures, risk of material adverse deviation or data quality — whether or not resolved. The former actuary is asked to respond, and both letters go to the commissioner.
 > >
-> > **Canada:** OSFI must be notified of the change in appointment, and the actuary is entitled to state the reasons — the protection that keeps a dismissal over a valuation visible.
+> > **Canada:** OSFI must be notified of the change in appointment, and an actuary whose appointment is revoked must submit a written statement of the circumstances and reasons to the directors and the Superintendent (Insurance Companies Act s.363); a replacement may not accept the appointment before receiving it — the protection that keeps a dismissal over a valuation visible.
 > >
 > > **Why:** both regimes are designed to stop **opinion shopping** — replacing an actuary until one signs the number management wants. The regulator cannot see every valuation, so it makes the removal of an inconvenient actuary impossible to hide.
 

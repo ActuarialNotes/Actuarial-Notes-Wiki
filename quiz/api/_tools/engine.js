@@ -1569,6 +1569,296 @@ var bornhuetterFerguson = {
   }
 };
 
+// src/lib/tools/reserving/benktander.ts
+var EXPECTED_COLUMN2 = { key: "expected", label: "Expected", kind: "number", unit: "money" };
+var benktander = {
+  id: "reserving.benktander",
+  version: "1.0.0",
+  name: "Benktander",
+  area: "reserving",
+  answers: "What's the iterated Bornhuetter-Ferguson ultimate?",
+  fields: [
+    BASIS_FIELD,
+    {
+      kind: "number",
+      key: "iterations",
+      label: "Iterations",
+      symbol: "k",
+      unit: "count",
+      integer: true,
+      judgment: true,
+      min: 1,
+      max: 100,
+      sliderMax: 10,
+      step: 1,
+      default: 2,
+      description: "How many times the B-F is applied, each time to the last ultimate: 1 is the B-F itself, 2 the Benktander (Mack 2000), and many approach the chain ladder."
+    },
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its latest cumulative value, the CDF to ultimate at its age, and its a priori expected claims.",
+      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN2],
+      default: [
+        { origin: "2020", latest: 1700, cdf: 1, expected: 1690 },
+        { origin: "2021", latest: 1850, cdf: 1.03, expected: 1820 },
+        { origin: "2022", latest: 1800, cdf: 1.133, expected: 1950 },
+        { origin: "2023", latest: 1300, cdf: 1.6995, expected: 1950 }
+      ]
+    }
+  ],
+  notation: (input) => `U\u207D\u2070\u207E = E,  U\u207D\u02B2\u207E = L + U\u207D\u02B2\u207B\xB9\u207E \xB7 (1 \u2212 1/CDF),  j = 1\u2026${input.iterations}`,
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const k = Number(input.iterations);
+    const warnings = checkCdfs(rows);
+    const reserve = reserveLabel(input.basis);
+    const out = rows.map((r) => {
+      const q = 1 - 1 / Number(r.cdf);
+      let u = Number(r.expected);
+      let bf = u;
+      for (let j = 1; j <= k; j++) {
+        u = Number(r.latest) + u * q;
+        if (j === 1) bf = u;
+      }
+      return Object.assign({}, r, { bf, ultimate: u, reserve: u - Number(r.latest), unreported: q });
+    });
+    const ult = out.reduce((s, r) => s + r.ultimate, 0);
+    const res = out.reduce((s, r) => s + r.reserve, 0);
+    return {
+      tiles: [
+        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
+        { symbol: reserve, label: "Total", value: res, unit: "money" }
+      ],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          LATEST_COLUMN,
+          CDF_COLUMN,
+          EXPECTED_COLUMN2,
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
+        ],
+        rows: out,
+        footer: {
+          origin: "Total",
+          latest: out.reduce((s, r) => s + Number(r.latest), 0),
+          cdf: null,
+          expected: out.reduce((s, r) => s + Number(r.expected), 0),
+          ultimate: ult,
+          reserve: res
+        }
+      },
+      trace: out.flatMap((r) => [
+        { label: `B-F ultimate, ${r.origin}`, formula: `${r.latest} + ${r.expected} \xD7 ${r.unreported.toFixed(4)}`, result: r.bf, unit: "money" },
+        { label: `After ${k} iteration${k === 1 ? "" : "s"}, ${r.origin}`, formula: `${r.latest} + U\u207D${k - 1}\u207E \xD7 ${r.unreported.toFixed(4)}`, result: r.ultimate, unit: "money" }
+      ]),
+      warnings,
+      values: {
+        ultimate: out.map((r) => r.ultimate),
+        reserve: out.map((r) => r.reserve),
+        bf_ultimate: out.map((r) => r.bf),
+        total_ultimate: ult,
+        total_reserve: res,
+        reserve_label: reserve
+      },
+      summary: `After ${k} B-F iteration${k === 1 ? "" : "s"}: ultimate ${formatValue(ult, "money")}, ${reserve} ${formatValue(res, "money")}.`
+    };
+  },
+  method: {
+    concepts: ["Benktander Method", "Bornhuetter-Ferguson Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 9" }]
+  }
+};
+
+// src/lib/tools/reserving/capeCod.ts
+var PREMIUM_COLUMN = { key: "premium", label: "Premium", kind: "number", unit: "money" };
+var capeCod = {
+  id: "reserving.cape_cod",
+  version: "1.0.0",
+  name: "Cape Cod",
+  area: "reserving",
+  answers: "What expected claim ratio do the data imply, and what ultimate follows?",
+  fields: [
+    BASIS_FIELD,
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its premium (on-level, and trended if claims are), its latest cumulative claims and the CDF to ultimate at its age.",
+      columns: [ORIGIN_COLUMN, PREMIUM_COLUMN, LATEST_COLUMN, CDF_COLUMN],
+      default: [
+        { origin: "2020", premium: 2600, latest: 1700, cdf: 1 },
+        { origin: "2021", premium: 2800, latest: 1850, cdf: 1.03 },
+        { origin: "2022", premium: 3e3, latest: 1800, cdf: 1.133 },
+        { origin: "2023", premium: 3e3, latest: 1300, cdf: 1.6995 }
+      ]
+    }
+  ],
+  notation: () => "ELR = \u03A3 L / \u03A3 (EP / CDF),  U = L + ELR \xB7 EP \xB7 (1 \u2212 1/CDF)",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const warnings = checkCdfs(rows);
+    const reserve = reserveLabel(input.basis);
+    const usedUp = rows.map((r) => Number(r.premium) / Number(r.cdf));
+    const totalUsed = usedUp.reduce((s, u) => s + u, 0);
+    const totalLatest = rows.reduce((s, r) => s + Number(r.latest), 0);
+    if (!(totalUsed > 0)) throw new ToolInputError("rows", "The used-up premium is zero: give each origin its premium.");
+    const elr = totalLatest / totalUsed;
+    const out = rows.map((r, k) => {
+      const expected = elr * Number(r.premium);
+      const unreported = 1 - 1 / Number(r.cdf);
+      const res2 = expected * unreported;
+      return Object.assign({}, r, { used: usedUp[k], expected, reserve: res2, ultimate: Number(r.latest) + res2 });
+    });
+    const ult = out.reduce((s, r) => s + r.ultimate, 0);
+    const res = out.reduce((s, r) => s + r.reserve, 0);
+    return {
+      tiles: [
+        { symbol: "ELR", label: "Cape Cod claim ratio", value: elr, unit: "percent" },
+        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
+        { symbol: reserve, label: "Total", value: res, unit: "money" }
+      ],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          PREMIUM_COLUMN,
+          LATEST_COLUMN,
+          CDF_COLUMN,
+          { key: "used", label: "Used-up premium", kind: "number", unit: "money", computed: true },
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
+        ],
+        rows: out,
+        footer: {
+          origin: "Total",
+          premium: rows.reduce((s, r) => s + Number(r.premium), 0),
+          latest: totalLatest,
+          cdf: null,
+          used: totalUsed,
+          ultimate: ult,
+          reserve: res
+        }
+      },
+      trace: [
+        { label: "Used-up premium", formula: "\u03A3 EP / CDF", result: totalUsed, unit: "money" },
+        { label: "Cape Cod claim ratio", formula: `${formatValue(totalLatest, "money")} / ${formatValue(totalUsed, "money")}`, result: elr, unit: "percent" },
+        ...out.map((r) => ({ label: `${reserve}, ${r.origin}`, formula: `${formatValue(elr, "percent")} \xD7 ${r.premium} \xD7 (1 \u2212 1/${Number(r.cdf).toFixed(4)})`, result: r.reserve, unit: "money" }))
+      ],
+      warnings,
+      values: {
+        elr,
+        used_up: usedUp,
+        expected: out.map((r) => r.expected),
+        reserve: out.map((r) => r.reserve),
+        ultimate: out.map((r) => r.ultimate),
+        total_ultimate: ult,
+        total_reserve: res,
+        reserve_label: reserve
+      },
+      summary: `The data imply an expected claim ratio of ${formatValue(elr, "percent")}; ultimate ${formatValue(ult, "money")}, ${reserve} ${formatValue(res, "money")}.`
+    };
+  },
+  method: {
+    concepts: ["Cape Cod Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 10" }]
+  }
+};
+
+// src/lib/tools/reserving/ratioTriangle.ts
+var example = (values2) => ({ origins: ["2021", "2022", "2023"], ages: [12, 24, 36], values: values2 });
+var ratioTriangle = {
+  id: "reserving.ratio_triangle",
+  version: "1.0.0",
+  name: "Ratio Triangle",
+  area: "reserving",
+  answers: "How does one triangle compare with another, cell by cell?",
+  fields: [
+    {
+      kind: "triangle",
+      key: "numerator",
+      label: "Numerator",
+      description: "The triangle on top: paid claims for paid-to-reported, closed counts for closed-to-reported, case outstanding for the average case.",
+      default: example([[400, 1e3, 1500], [450, 1100, null], [500, null, null]])
+    },
+    {
+      kind: "triangle",
+      key: "denominator",
+      label: "Denominator",
+      description: "The triangle beneath, of the same shape: reported claims, reported counts, open counts.",
+      default: example([[1e3, 1500, 1650], [1100, 1700, null], [1200, null, null]])
+    }
+  ],
+  notation: () => "R\u1D62\u2C7C = A\u1D62\u2C7C / B\u1D62\u2C7C",
+  view: "table",
+  compute: (input) => {
+    const A = input.numerator;
+    const B = input.denominator;
+    if (A.values.length !== B.values.length || A.values.some((r, i) => r.length !== B.values[i].length)) {
+      throw new ToolInputError("denominator", `The two triangles must be the same shape: ${A.values.length} origins by ${A.values[0].length} ages, and ${B.values.length} by ${B.values[0].length}.`);
+    }
+    const warnings = [];
+    const ratios = A.values.map((row2, i) => row2.map((a, j) => {
+      const b = B.values[i][j];
+      if (a === null || b === null) {
+        if (a !== b) throw new ToolInputError("denominator", `Origin ${A.origins[i]} has a value at ${A.ages[j]} in one triangle and not the other.`);
+        return null;
+      }
+      if (b === 0) {
+        warnings.push(`Origin ${A.origins[i]} at ${A.ages[j]}: the denominator is 0, so the ratio is left blank.`);
+        return null;
+      }
+      return a / b;
+    }));
+    const ageKey = (age) => String(age);
+    const columns = [
+      { key: "origin", label: "Origin", kind: "text" },
+      ...A.ages.map((age) => ({ key: ageKey(age), label: String(age), kind: "number", unit: "factor" }))
+    ];
+    const rows = A.origins.map((origin, i) => Object.assign({ origin }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), ratios[i][j]]))));
+    const pooled = A.ages.map((_, j) => {
+      let a = 0;
+      let b = 0;
+      A.values.forEach((row2, i) => {
+        if (row2[j] !== null && B.values[i][j] !== null) {
+          a += row2[j];
+          b += B.values[i][j];
+        }
+      });
+      return b === 0 ? null : a / b;
+    });
+    const latest = ratios.map((row2) => [...row2].reverse().find((r) => r !== null) ?? null);
+    return {
+      tiles: [
+        { symbol: "R", label: `Latest, ${A.origins[A.origins.length - 1]}`, value: latest[latest.length - 1] ?? NaN, unit: "factor" },
+        { symbol: "R\u0304", label: `All origins at ${A.ages[0]}`, value: pooled[0] ?? NaN, unit: "factor" }
+      ],
+      table: {
+        columns: columns.map((c, k) => k === 0 ? c : { ...c, computed: true }),
+        rows,
+        footer: Object.assign({ origin: "All origins" }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), pooled[j]])))
+      },
+      trace: A.ages.map((age, j) => ({ label: `All origins at ${age}`, formula: "\u03A3 A / \u03A3 B down the column", result: pooled[j] ?? NaN, unit: "factor" })),
+      warnings,
+      values: { ratios, pooled, latest },
+      summary: `Ratio triangle of ${A.origins.length} origins; the latest origin's ratio is ${formatValue(latest[latest.length - 1] ?? NaN, "factor")}.`
+    };
+  },
+  method: {
+    concepts: ["Development Triangle", "Data Diagnostic Analysis"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 6" }]
+  }
+};
+
 // src/lib/tools/ratemaking/lossRatioMethod.ts
 var lossRatioMethod = {
   id: "ratemaking.loss_ratio_method",
@@ -2495,11 +2785,14 @@ var AREAS = [
   { id: "finance", label: "Financial mathematics" }
 ];
 var TOOLS = [
+  ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
   chainLadder,
   expectedClaims,
   bornhuetterFerguson,
+  benktander,
+  capeCod,
   lossRatioMethod,
   distribution,
   limitedExpectedValue,
@@ -3557,6 +3850,2322 @@ var friedland_2010_default = {
         }
       ],
       pdf_page: 168
+    },
+    ch9_exhibit3_sheet1: {
+      locator: "Chapter 9, Exhibit III, Sheet 1",
+      printed_page: 168,
+      units: "$000",
+      scenarios: {
+        "Steady-State": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 919306,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 938067,
+            ultimate_paid: 938067,
+            ibnr_reported: 18761,
+            ibnr_paid: 18761,
+            actual_ibnr: 18761,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 935722,
+            paid: 827375,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 984970,
+            ultimate_paid: 984970,
+            ibnr_reported: 49249,
+            ibnr_paid: 49249,
+            actual_ibnr: 49249,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 930797,
+            paid: 734295,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1034219,
+            ultimate_paid: 1034219,
+            ibnr_reported: 103422,
+            ibnr_paid: 103422,
+            actual_ibnr: 103422,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 836166,
+            paid: 456090,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1085930,
+            ultimate_paid: 1085930,
+            ibnr_reported: 249764,
+            ibnr_paid: 249764,
+            actual_ibnr: 249764,
+            difference_reported: 0,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1019749,
+            ultimate_paid: 1015920,
+            ibnr_reported: 8934,
+            ibnr_paid: 5105,
+            actual_ibnr: 10210,
+            difference_reported: 1276,
+            difference_paid: 5105
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 1116300,
+            paid: 1047955,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 1135061,
+            ultimate_paid: 1123e3,
+            ibnr_reported: 18761,
+            ibnr_paid: 6700,
+            actual_ibnr: 22782,
+            difference_reported: 4020,
+            difference_paid: 16081
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 1203071,
+            paid: 1063768,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 1252319,
+            ultimate_paid: 1221363,
+            ibnr_reported: 49249,
+            ibnr_paid: 18292,
+            actual_ibnr: 63320,
+            difference_reported: 14071,
+            difference_paid: 45027
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 1263224,
+            paid: 996544,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1366646,
+            ultimate_paid: 1296467,
+            ibnr_reported: 103422,
+            ibnr_paid: 33243,
+            actual_ibnr: 140358,
+            difference_reported: 36936,
+            difference_paid: 107116
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 1194523,
+            paid: 651558,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1444287,
+            ultimate_paid: 1281397,
+            ibnr_reported: 249764,
+            ibnr_paid: 86874,
+            actual_ibnr: 356805,
+            difference_reported: 107042,
+            difference_paid: 269931
+          }
+        ]
+      },
+      pdf_page: 174
+    },
+    ch9_exhibit3_sheet2: {
+      locator: "Chapter 9, Exhibit III, Sheet 2",
+      printed_page: 169,
+      units: "$000",
+      scenarios: {
+        "Increasing Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 933377,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 951395,
+            ultimate_paid: 938067,
+            ibnr_reported: 18018,
+            ibnr_paid: 4690,
+            actual_ibnr: 4690,
+            difference_reported: -13328,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 962808,
+            paid: 827375,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1013733,
+            ultimate_paid: 984970,
+            ibnr_reported: 50925,
+            ibnr_paid: 22162,
+            actual_ibnr: 22162,
+            difference_reported: -28763,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 979922,
+            paid: 734295,
+            cdf_reported: 1.119,
+            cdf_paid: 1.408,
+            unreported: 0.106,
+            unpaid: 0.29,
+            ultimate_reported: 1089655,
+            ultimate_paid: 1034219,
+            ibnr_reported: 109733,
+            ibnr_paid: 54296,
+            actual_ibnr: 54296,
+            difference_reported: -55437,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 931185,
+            paid: 456090,
+            cdf_reported: 1.318,
+            cdf_paid: 2.381,
+            unreported: 0.241,
+            unpaid: 0.58,
+            ultimate_reported: 1193385,
+            ultimate_paid: 1085930,
+            ibnr_reported: 262200,
+            ibnr_paid: 154745,
+            actual_ibnr: 154745,
+            difference_reported: -107455,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios and Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1019749,
+            ultimate_paid: 1015920,
+            ibnr_reported: 8934,
+            ibnr_paid: 5105,
+            actual_ibnr: 10210,
+            difference_reported: 1276,
+            difference_paid: 5105
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 1133386,
+            paid: 1047955,
+            cdf_reported: 1.019,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 1151324,
+            ultimate_paid: 1123e3,
+            ibnr_reported: 17938,
+            ibnr_paid: -10386,
+            actual_ibnr: 5695,
+            difference_reported: -12243,
+            difference_paid: 16081
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 1237897,
+            paid: 1063768,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1289001,
+            ultimate_paid: 1221363,
+            ibnr_reported: 51105,
+            ibnr_paid: -16533,
+            actual_ibnr: 28494,
+            difference_reported: -22611,
+            difference_paid: 45027
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 1329895,
+            paid: 996544,
+            cdf_reported: 1.12,
+            cdf_paid: 1.408,
+            unreported: 0.107,
+            unpaid: 0.29,
+            ultimate_reported: 1440327,
+            ultimate_paid: 1296467,
+            ibnr_reported: 110432,
+            ibnr_paid: -33427,
+            actual_ibnr: 73688,
+            difference_reported: -36744,
+            difference_paid: 107116
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 1330264,
+            paid: 651558,
+            cdf_reported: 1.32,
+            cdf_paid: 2.381,
+            unreported: 0.243,
+            unpaid: 0.58,
+            ultimate_reported: 1593780,
+            ultimate_paid: 1281397,
+            ibnr_reported: 263516,
+            ibnr_paid: -48867,
+            actual_ibnr: 221064,
+            difference_reported: -42452,
+            difference_paid: 269931
+          }
+        ]
+      },
+      pdf_page: 175
+    },
+    ch9_exhibit5_sheet1: {
+      locator: "Chapter 9, Exhibit V, Sheet 1",
+      printed_page: 171,
+      units: "$000",
+      scenarios: {
+        "Steady-State": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 893397,
+            bf_ultimate_paid: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 938067,
+            bf_ultimate_paid: 938067,
+            reported: 919306,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 938067,
+            ultimate_paid: 938067,
+            ibnr_reported: 18761,
+            ibnr_paid: 18761,
+            actual_ibnr: 18761,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 984970,
+            bf_ultimate_paid: 984970,
+            reported: 935722,
+            paid: 827375,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 984970,
+            ultimate_paid: 984970,
+            ibnr_reported: 49249,
+            ibnr_paid: 49249,
+            actual_ibnr: 49249,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1034219,
+            bf_ultimate_paid: 1034219,
+            reported: 930797,
+            paid: 734295,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1034219,
+            ultimate_paid: 1034219,
+            ibnr_reported: 103422,
+            ibnr_paid: 103422,
+            actual_ibnr: 103422,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1085930,
+            bf_ultimate_paid: 1085930,
+            reported: 836166,
+            paid: 456090,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1085930,
+            ultimate_paid: 1085930,
+            ibnr_reported: 249764,
+            ibnr_paid: 249764,
+            actual_ibnr: 249764,
+            difference_reported: 0,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 1019749,
+            bf_ultimate_paid: 1015920,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1021012,
+            ultimate_paid: 1020821,
+            ibnr_reported: 10197,
+            ibnr_paid: 10006,
+            actual_ibnr: 10210,
+            difference_reported: 13,
+            difference_paid: 204
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 1135061,
+            bf_ultimate_paid: 1123e3,
+            reported: 1116300,
+            paid: 1047955,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 1139001,
+            ultimate_paid: 1137795,
+            ibnr_reported: 22701,
+            ibnr_paid: 21495,
+            actual_ibnr: 22782,
+            difference_reported: 80,
+            difference_paid: 1286
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1252319,
+            bf_ultimate_paid: 1221363,
+            reported: 1203071,
+            paid: 1063768,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 1265687,
+            ultimate_paid: 1259186,
+            ibnr_reported: 62616,
+            ibnr_paid: 56115,
+            actual_ibnr: 63320,
+            difference_reported: 704,
+            difference_paid: 7204
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1366646,
+            bf_ultimate_paid: 1296467,
+            reported: 1263224,
+            paid: 996544,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1399889,
+            ultimate_paid: 1372519,
+            ibnr_reported: 136665,
+            ibnr_paid: 109295,
+            actual_ibnr: 140358,
+            difference_reported: 3694,
+            difference_paid: 31064
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1444287,
+            bf_ultimate_paid: 1281397,
+            reported: 1194523,
+            paid: 651558,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1526709,
+            ultimate_paid: 1394768,
+            ibnr_reported: 332186,
+            ibnr_paid: 200245,
+            actual_ibnr: 356805,
+            difference_reported: 24620,
+            difference_paid: 156560
+          }
+        ]
+      },
+      pdf_page: 177
+    },
+    ch9_exhibit5_sheet2: {
+      locator: "Chapter 9, Exhibit V, Sheet 2",
+      printed_page: 172,
+      units: "$000",
+      scenarios: {
+        "Increasing Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 893397,
+            bf_ultimate_paid: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 951395,
+            bf_ultimate_paid: 938067,
+            reported: 933377,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 951651,
+            ultimate_paid: 938067,
+            ibnr_reported: 18274,
+            ibnr_paid: 4690,
+            actual_ibnr: 4690,
+            difference_reported: -13584,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1013733,
+            bf_ultimate_paid: 984970,
+            reported: 962808,
+            paid: 827375,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1015221,
+            ultimate_paid: 984970,
+            ibnr_reported: 52412,
+            ibnr_paid: 22162,
+            actual_ibnr: 22162,
+            difference_reported: -30250,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1089655,
+            bf_ultimate_paid: 1034219,
+            reported: 979922,
+            paid: 734295,
+            cdf_reported: 1.119,
+            cdf_paid: 1.408,
+            unreported: 0.106,
+            unpaid: 0.29,
+            ultimate_reported: 1095537,
+            ultimate_paid: 1034219,
+            ibnr_reported: 115615,
+            ibnr_paid: 54296,
+            actual_ibnr: 54296,
+            difference_reported: -61319,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1193385,
+            bf_ultimate_paid: 1085930,
+            reported: 931185,
+            paid: 456090,
+            cdf_reported: 1.318,
+            cdf_paid: 2.381,
+            unreported: 0.241,
+            unpaid: 0.58,
+            ultimate_reported: 1219330,
+            ultimate_paid: 1085930,
+            ibnr_reported: 288146,
+            ibnr_paid: 154745,
+            actual_ibnr: 154745,
+            difference_reported: -133401,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios and Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 1019749,
+            bf_ultimate_paid: 1015920,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1021012,
+            ultimate_paid: 1020821,
+            ibnr_reported: 10197,
+            ibnr_paid: 10006,
+            actual_ibnr: 10210,
+            difference_reported: 13,
+            difference_paid: 204
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 1151324,
+            bf_ultimate_paid: 1123e3,
+            reported: 1133386,
+            paid: 1047955,
+            cdf_reported: 1.019,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 1155402,
+            ultimate_paid: 1137795,
+            ibnr_reported: 22016,
+            ibnr_paid: 4409,
+            actual_ibnr: 5695,
+            difference_reported: -16321,
+            difference_paid: 1286
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1289001,
+            bf_ultimate_paid: 1221363,
+            reported: 1237897,
+            paid: 1063768,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1304776,
+            ultimate_paid: 1259186,
+            ibnr_reported: 66879,
+            ibnr_paid: 21289,
+            actual_ibnr: 28494,
+            difference_reported: -38385,
+            difference_paid: 7204
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1440327,
+            bf_ultimate_paid: 1296467,
+            reported: 1329895,
+            paid: 996544,
+            cdf_reported: 1.12,
+            cdf_paid: 1.408,
+            unreported: 0.107,
+            unpaid: 0.29,
+            ultimate_reported: 1483691,
+            ultimate_paid: 1372519,
+            ibnr_reported: 153796,
+            ibnr_paid: 42625,
+            actual_ibnr: 73688,
+            difference_reported: -80108,
+            difference_paid: 31064
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1593780,
+            bf_ultimate_paid: 1281397,
+            reported: 1330264,
+            paid: 651558,
+            cdf_reported: 1.32,
+            cdf_paid: 2.381,
+            unreported: 0.243,
+            unpaid: 0.58,
+            ultimate_reported: 1717017,
+            ultimate_paid: 1394768,
+            ibnr_reported: 386753,
+            ibnr_paid: 64504,
+            actual_ibnr: 221064,
+            difference_reported: -165689,
+            difference_paid: 156560
+          }
+        ]
+      },
+      pdf_page: 178
+    },
+    ch10_exhibit1_sheet1: {
+      locator: "Chapter 10, Exhibit I, Sheet 1",
+      printed_page: 180,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          premium: 68574209,
+          age: 120,
+          reported: 47742304,
+          cdf: 1,
+          percent_reported: 1,
+          used_up: 68574209,
+          claim_ratio: 0.696
+        },
+        {
+          origin: "1999",
+          premium: 68544981,
+          age: 108,
+          reported: 51185767,
+          cdf: 1,
+          percent_reported: 1,
+          used_up: 68544981,
+          claim_ratio: 0.747
+        },
+        {
+          origin: "2000",
+          premium: 68907977,
+          age: 96,
+          reported: 54837929,
+          cdf: 1.001,
+          percent_reported: 0.999,
+          used_up: 68839138,
+          claim_ratio: 0.797
+        },
+        {
+          origin: "2001",
+          premium: 72544955,
+          age: 84,
+          reported: 56299562,
+          cdf: 1.003,
+          percent_reported: 0.997,
+          used_up: 72327971,
+          claim_ratio: 0.778
+        },
+        {
+          origin: "2002",
+          premium: 79228887,
+          age: 72,
+          reported: 58592712,
+          cdf: 1.006,
+          percent_reported: 0.994,
+          used_up: 78756349,
+          claim_ratio: 0.744
+        },
+        {
+          origin: "2003",
+          premium: 86643542,
+          age: 60,
+          reported: 57565344,
+          cdf: 1.011,
+          percent_reported: 0.989,
+          used_up: 85700833,
+          claim_ratio: 0.672
+        },
+        {
+          origin: "2004",
+          premium: 91763523,
+          age: 48,
+          reported: 56976657,
+          cdf: 1.023,
+          percent_reported: 0.978,
+          used_up: 89700413,
+          claim_ratio: 0.635
+        },
+        {
+          origin: "2005",
+          premium: 94115312,
+          age: 36,
+          reported: 56786410,
+          cdf: 1.051,
+          percent_reported: 0.951,
+          used_up: 89548346,
+          claim_ratio: 0.634
+        },
+        {
+          origin: "2006",
+          premium: 95272279,
+          age: 24,
+          reported: 54641339,
+          cdf: 1.11,
+          percent_reported: 0.901,
+          used_up: 85830882,
+          claim_ratio: 0.637
+        },
+        {
+          origin: "2007",
+          premium: 95176240,
+          age: 12,
+          reported: 48853563,
+          cdf: 1.292,
+          percent_reported: 0.774,
+          used_up: 73665820,
+          claim_ratio: 0.663
+        }
+      ],
+      total: {
+        premium: 820771905,
+        reported: 543481587,
+        used_up: 781488943,
+        claim_ratio: 0.695
+      },
+      pdf_page: 186
+    },
+    ch10_exhibit1_sheet2: {
+      locator: "Chapter 10, Exhibit I, Sheet 2",
+      printed_page: 181,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          premium: 68574209,
+          claim_ratio: 0.695,
+          expected: 47689504,
+          cdf: 1,
+          unreported: 0,
+          ibnr: 0,
+          reported: 47742304,
+          ultimate: 47742304
+        },
+        {
+          origin: "1999",
+          premium: 68544981,
+          claim_ratio: 0.695,
+          expected: 47669177,
+          cdf: 1,
+          unreported: 0,
+          ibnr: 0,
+          reported: 51185767,
+          ultimate: 51185767
+        },
+        {
+          origin: "2000",
+          premium: 68907977,
+          claim_ratio: 0.695,
+          expected: 47921621,
+          cdf: 1.001,
+          unreported: 1e-3,
+          ibnr: 47874,
+          reported: 54837929,
+          ultimate: 54885803
+        },
+        {
+          origin: "2001",
+          premium: 72544955,
+          claim_ratio: 0.695,
+          expected: 50450934,
+          cdf: 1.003,
+          unreported: 3e-3,
+          ibnr: 150900,
+          reported: 56299562,
+          ultimate: 56450462
+        },
+        {
+          origin: "2002",
+          premium: 79228887,
+          claim_ratio: 0.695,
+          expected: 55099233,
+          cdf: 1.006,
+          unreported: 6e-3,
+          ibnr: 328624,
+          reported: 58592712,
+          ultimate: 58921336
+        },
+        {
+          origin: "2003",
+          premium: 86643542,
+          claim_ratio: 0.695,
+          expected: 60255708,
+          cdf: 1.011,
+          unreported: 0.011,
+          ibnr: 655601,
+          reported: 57565344,
+          ultimate: 58220945
+        },
+        {
+          origin: "2004",
+          premium: 91763523,
+          claim_ratio: 0.695,
+          expected: 63816367,
+          cdf: 1.023,
+          unreported: 0.022,
+          ibnr: 1434777,
+          reported: 56976657,
+          ultimate: 58411434
+        },
+        {
+          origin: "2005",
+          premium: 94115312,
+          claim_ratio: 0.695,
+          expected: 65451904,
+          cdf: 1.051,
+          unreported: 0.049,
+          ibnr: 3176068,
+          reported: 56786410,
+          ultimate: 59962478
+        },
+        {
+          origin: "2006",
+          premium: 95272279,
+          claim_ratio: 0.695,
+          expected: 66256509,
+          cdf: 1.11,
+          unreported: 0.099,
+          ibnr: 6565960,
+          reported: 54641339,
+          ultimate: 61207299
+        },
+        {
+          origin: "2007",
+          premium: 95176240,
+          claim_ratio: 0.695,
+          expected: 66189720,
+          cdf: 1.292,
+          unreported: 0.226,
+          ibnr: 14959286,
+          reported: 48853563,
+          ultimate: 63812849
+        }
+      ],
+      pdf_page: 187
+    },
+    ch6_tables_2_3: {
+      locator: "Chapter 6, Table 2 and Table 3",
+      printed_page: 65,
+      units: "$000 or counts",
+      tables: {
+        table_2: {
+          title: "Table 2 \u2013 Reported Claim Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              12811,
+              20370,
+              26656,
+              37667,
+              44414,
+              48701,
+              48169
+            ],
+            [
+              9651,
+              16995,
+              30354,
+              40594,
+              44231,
+              44373,
+              null
+            ],
+            [
+              16995,
+              40180,
+              58866,
+              71707,
+              70288,
+              null,
+              null
+            ],
+            [
+              28674,
+              47432,
+              70340,
+              70655,
+              null,
+              null,
+              null
+            ],
+            [
+              27066,
+              46783,
+              48804,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              19477,
+              31732,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              18632,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        },
+        table_3: {
+          title: "Table 3 \u2013 Paid Claim Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              2318,
+              7932,
+              13822,
+              22095,
+              31945,
+              40629,
+              44437
+            ],
+            [
+              1743,
+              6240,
+              12683,
+              22892,
+              34505,
+              39320,
+              null
+            ],
+            [
+              2221,
+              9898,
+              25950,
+              43439,
+              52811,
+              null,
+              null
+            ],
+            [
+              3043,
+              12219,
+              27073,
+              40026,
+              null,
+              null,
+              null
+            ],
+            [
+              3531,
+              11778,
+              22819,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              3529,
+              11865,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              3409,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 71
+    },
+    ch6_table_6: {
+      locator: "Chapter 6, Table 6",
+      printed_page: 68,
+      units: "$000 or counts",
+      tables: {
+        table_6: {
+          title: "Table 6 \u2013 Ratio of Paid Claims-to-Reported Claims",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              0.181,
+              0.389,
+              0.519,
+              0.587,
+              0.719,
+              0.834,
+              0.923
+            ],
+            [
+              0.181,
+              0.367,
+              0.418,
+              0.564,
+              0.78,
+              0.886,
+              null
+            ],
+            [
+              0.131,
+              0.246,
+              0.441,
+              0.606,
+              0.751,
+              null,
+              null
+            ],
+            [
+              0.106,
+              0.258,
+              0.385,
+              0.567,
+              null,
+              null,
+              null
+            ],
+            [
+              0.13,
+              0.252,
+              0.468,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.181,
+              0.374,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.183,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 74
+    },
+    ch6_table_8: {
+      locator: "Chapter 6, Table 8",
+      printed_page: 69,
+      units: "$000 or counts",
+      tables: {
+        table_8: {
+          title: "Table 8 \u2013 Reported Claim Count Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              1342,
+              1514,
+              1548,
+              1557,
+              1549,
+              1552,
+              1554
+            ],
+            [
+              1373,
+              1616,
+              1630,
+              1626,
+              1629,
+              1629,
+              null
+            ],
+            [
+              1932,
+              2168,
+              2234,
+              2249,
+              2258,
+              null,
+              null
+            ],
+            [
+              2067,
+              2293,
+              2367,
+              2390,
+              null,
+              null,
+              null
+            ],
+            [
+              1473,
+              1645,
+              1657,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              1192,
+              1264,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              1036,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 75
+    },
+    ch6_table_9: {
+      locator: "Chapter 6, Table 9",
+      printed_page: 70,
+      units: "$000 or counts",
+      tables: {
+        table_9: {
+          title: "Table 9 \u2013 Closed Claim Count Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              203,
+              607,
+              841,
+              1089,
+              1327,
+              1464,
+              1523
+            ],
+            [
+              181,
+              614,
+              941,
+              1263,
+              1507,
+              1568,
+              null
+            ],
+            [
+              235,
+              848,
+              1442,
+              1852,
+              2029,
+              null,
+              null
+            ],
+            [
+              295,
+              1119,
+              1664,
+              1946,
+              null,
+              null,
+              null
+            ],
+            [
+              307,
+              906,
+              1201,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              329,
+              791,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              276,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 76
+    },
+    ch6_table_10: {
+      locator: "Chapter 6, Table 10",
+      printed_page: 72,
+      units: "$000 or counts",
+      tables: {
+        table_10: {
+          title: "Table 10 \u2013 Ratio of Closed-to-Reported Claim Counts",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              0.151,
+              0.401,
+              0.543,
+              0.699,
+              0.857,
+              0.943,
+              0.98
+            ],
+            [
+              0.132,
+              0.38,
+              0.577,
+              0.777,
+              0.925,
+              0.963,
+              null
+            ],
+            [
+              0.122,
+              0.391,
+              0.645,
+              0.823,
+              0.899,
+              null,
+              null
+            ],
+            [
+              0.143,
+              0.488,
+              0.703,
+              0.814,
+              null,
+              null,
+              null
+            ],
+            [
+              0.208,
+              0.551,
+              0.725,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.276,
+              0.626,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.266,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 78
     }
   }
 };
@@ -4347,6 +6956,93 @@ var CHECKS = [
     })
   }
 ];
+var ch10 = F.ch10_exhibit1_sheet1;
+var ch10Projection = F.ch10_exhibit1_sheet2;
+var capeCodInput = { rows: ch10.rows.map((r) => ({ origin: r.origin, premium: r.premium, latest: r.reported, cdf: r.cdf })) };
+CHECKS.push(
+  {
+    tool: "reserving.cape_cod",
+    source: friedlandRef(ch10),
+    cases: [{
+      name: "Columns (7) and (8), used-up premium and the total expected claim ratio",
+      input: capeCodInput,
+      expect: [
+        ...ch10.rows.map((r, k) => ({ what: `${r.origin} used-up premium`, printed: r.used_up, tolerance: DOLLAR, actual: (res) => values(res, "used_up")[k] })),
+        { what: "expected claim ratio", printed: ch10.total.claim_ratio, tolerance: PERCENT, actual: (res) => Number(res.values.elr) }
+      ]
+    }]
+  },
+  {
+    tool: "reserving.cape_cod",
+    source: friedlandRef(ch10Projection),
+    cases: [{
+      name: "Columns (4), (7) and (9), expected claims, IBNR and ultimate claims",
+      input: capeCodInput,
+      expect: ch10Projection.rows.flatMap((r, k) => [
+        { what: `${r.origin} expected claims`, printed: r.expected, tolerance: DOLLAR, actual: (res) => values(res, "expected")[k] },
+        { what: `${r.origin} IBNR`, printed: r.ibnr, tolerance: DOLLAR, actual: (res) => values(res, "reserve")[k] },
+        { what: `${r.origin} ultimate`, printed: r.ultimate, tolerance: DOLLAR, actual: (res) => values(res, "ultimate")[k] }
+      ])
+    }]
+  }
+);
+CHECKS.push(
+  ...[["ch9_exhibit3_sheet1", "ch9_exhibit5_sheet1"], ["ch9_exhibit3_sheet2", "ch9_exhibit5_sheet2"]].flatMap(([bfKey, gbKey]) => {
+    const bf = F[bfKey];
+    const gb = F[gbKey];
+    return [{
+      tool: "reserving.benktander",
+      source: friedlandRef(gb),
+      cases: Object.entries(gb.scenarios).flatMap(([scenario, rows]) => ["reported", "paid"].filter((basis) => basis === "paid" || gbKey === "ch9_exhibit5_sheet1").map((basis) => {
+        const reported = basis === "reported";
+        const prior = bf.scenarios[scenario];
+        return {
+          name: `${scenario}, column (${reported ? 11 : 12}), the Benktander ultimate with ${basis} claims`,
+          input: {
+            basis,
+            iterations: 2,
+            rows: prior.map((r) => ({ origin: r.origin, latest: r[basis], cdf: 1 / (1 - (reported ? r.unreported : r.unpaid)), expected: r.expected }))
+          },
+          expect: rows.map((r, k) => {
+            const q = reported ? r.unreported : r.unpaid;
+            return {
+              what: `${r.origin} ultimate`,
+              printed: reported ? r.ultimate_reported : r.ultimate_paid,
+              tolerance: DOLLAR + 0.5 * (1 + q + q * q),
+              actual: (res) => values(res, "ultimate")[k]
+            };
+          })
+        };
+      }))
+    }];
+  })
+);
+var ch6 = (key, table) => {
+  const t = F[key].tables[table];
+  return { origins: t.origins, ages: t.ages, values: t.values };
+};
+CHECKS.push(
+  ...[
+    { key: "ch6_table_6", table: "table_6", numerator: ch6("ch6_tables_2_3", "table_3"), denominator: ch6("ch6_tables_2_3", "table_2"), what: "paid-to-reported" },
+    { key: "ch6_table_10", table: "table_10", numerator: ch6("ch6_table_9", "table_9"), denominator: ch6("ch6_table_8", "table_8"), what: "closed-to-reported counts" }
+  ].map(({ key, table, numerator, denominator, what }) => {
+    const printed = ch6(key, table);
+    return {
+      tool: "reserving.ratio_triangle",
+      source: friedlandRef(F[key]),
+      cases: [{
+        name: `${table.replace("table_", "Table ")}, the ratio of ${what}`,
+        input: { numerator, denominator },
+        expect: printed.values.flatMap((row2, i) => row2.flatMap((value, j) => value === null ? [] : [{
+          what: `${printed.origins[i]} at ${printed.ages[j]}`,
+          printed: value,
+          tolerance: FACTOR + 0.5 * (1 + numerator.values[i][j] / denominator.values[i][j]) / denominator.values[i][j],
+          actual: (res) => res.values.ratios[i][j] ?? NaN
+        }]))
+      }]
+    };
+  })
+);
 CHECKS.push(
   ...[
     { exhibit: W.a7_lr_indication, loss: 11, fixed: 12, variable: 13, profit: 14, plr: 15, change: 16 },

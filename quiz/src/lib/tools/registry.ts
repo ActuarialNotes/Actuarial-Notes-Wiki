@@ -14,6 +14,9 @@ import { developmentToUltimate } from './reserving/developmentToUltimate'
 import { chainLadder } from './reserving/chainLadder'
 import { expectedClaims } from './reserving/expectedClaims'
 import { bornhuetterFerguson } from './reserving/bornhuetterFerguson'
+import { benktander } from './reserving/benktander'
+import { capeCod } from './reserving/capeCod'
+import { ratioTriangle } from './reserving/ratioTriangle'
 import { lossRatioMethod } from './ratemaking/lossRatioMethod'
 import { fullCredibilityStandard } from './credibility/fullCredibility'
 import { partialCredibility } from './credibility/partialCredibility'
@@ -36,11 +39,14 @@ export const AREAS: { id: PracticeArea; label: string }[] = [
 
 /** Every tool, in the order a chain runs within each area. */
 export const TOOLS: ToolSpec[] = [
+  ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
   chainLadder,
   expectedClaims,
   bornhuetterFerguson,
+  benktander,
+  capeCod,
   lossRatioMethod,
   distribution,
   limitedExpectedValue,

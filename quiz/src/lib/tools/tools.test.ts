@@ -398,6 +398,37 @@ describe('Chain Ladder, Expected Claims and Bornhuetter-Ferguson', () => {
   })
 })
 
+describe('Benktander, Cape Cod and Ratio Triangle', () => {
+  const rows = [
+    { origin: '2021', latest: 1650, cdf: 1, expected: 1700, premium: 2500 },
+    { origin: '2022', latest: 1700, cdf: 1.1, expected: 1850, premium: 2600 },
+    { origin: '2023', latest: 1200, cdf: 1.6, expected: 1950, premium: 2700 },
+  ]
+
+  it('is the B-F after one iteration, and approaches the chain ladder after many', () => {
+    const bf = run('reserving.bornhuetter_ferguson', { rows }).values.ultimate as number[]
+    const one = run('reserving.benktander', { rows, iterations: 1 }).values.ultimate as number[]
+    one.forEach((u, k) => expect(u).toBeCloseTo(bf[k], 9))
+    const cl = run('reserving.chain_ladder', { rows }).values.ultimate as number[]
+    const many = run('reserving.benktander', { rows, iterations: 100 }).values.ultimate as number[]
+    many.forEach((u, k) => expect(u).toBeCloseTo(cl[k], 6))
+  })
+
+  it('takes its claim ratio from the data: latest claims over used-up premium', () => {
+    const out = run('reserving.cape_cod', { rows }).values
+    const elr = (1650 + 1700 + 1200) / (2500 + 2600 / 1.1 + 2700 / 1.6)
+    expect(out.elr as number).toBeCloseTo(elr, 12)
+    expect((out.ultimate as number[])[2]).toBeCloseTo(1200 + elr * 2700 * (1 - 1 / 1.6), 9)
+  })
+
+  it('divides two triangles of one shape cell by cell, and refuses two of different shapes', () => {
+    const out = run('reserving.ratio_triangle')
+    expect((out.values.ratios as (number | null)[][])[0][0]).toBeCloseTo(0.4, 12)
+    expect((out.values.ratios as (number | null)[][])[2][1]).toBeNull()
+    expect(() => run('reserving.ratio_triangle', { numerator: [[1, 2], [3, null]], denominator: [[1, 2, 3], [4, 5, null], [6, null, null]] })).toThrow(/same shape/)
+  })
+})
+
 describe('Loss Ratio Method', () => {
   it('indicates the change from the loss, expense and profit ratios', () => {
     const out = run('ratemaking.loss_ratio_method', { loss_ratio: 0.65, fixed: 0.05, variable: 0.2, profit: 0.05 })

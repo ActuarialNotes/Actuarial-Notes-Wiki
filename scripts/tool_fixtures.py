@@ -206,6 +206,113 @@ def friedland_ch9_sheet1(text: str) -> dict:
     }
 
 
+def friedland_ch10_sheet1(text: str) -> dict:
+    """Chapter 10, Exhibit I, Sheet 1: the Cape Cod's used-up premium and its expected claim ratio."""
+    lines = lines_of(text)
+    rows = year_rows(lines, lines.index('(8)') + 1, 'Total', width=7)
+    keys = ['premium', 'age', 'reported', 'cdf', 'percent_reported', 'used_up', 'claim_ratio']
+    total, _ = take_numbers(lines, lines.index('Total') + 1, 4)
+    return {
+        'locator': 'Chapter 10, Exhibit I, Sheet 1',
+        'printed_page': printed_page(lines),
+        'units': '$000',
+        'rows': [{'origin': y, **dict(zip(keys, v))} for y, v in rows.items()],
+        'total': dict(zip(['premium', 'reported', 'used_up', 'claim_ratio'], total)),
+    }
+
+
+def friedland_ch10_sheet2(text: str) -> dict:
+    """Chapter 10, Exhibit I, Sheet 2: the Cape Cod's expected claims, IBNR and ultimates from reported claims."""
+    lines = lines_of(text)
+    rows = year_rows(lines, lines.index('(9)') + 1, 'Total', width=8)
+    keys = ['premium', 'claim_ratio', 'expected', 'cdf', 'unreported', 'ibnr', 'reported', 'ultimate']
+    return {
+        'locator': 'Chapter 10, Exhibit I, Sheet 2',
+        'printed_page': printed_page(lines),
+        'units': '$000',
+        'rows': [{'origin': y, **dict(zip(keys, v))} for y, v in rows.items()],
+    }
+
+
+def scenario_blocks(lines: list[str], width: int, keys: list[str]) -> dict[str, list[dict]]:
+    """An exhibit printing several scenarios one under another, each headed by its name and closed by its Total."""
+    blocks: dict[str, list[dict]] = {}
+    i = 0
+    while True:
+        try:
+            first = lines.index('1999', i)
+        except ValueError:
+            break
+        name = lines[first - 1]
+        rows = year_rows(lines, first, 'Total', width=width)
+        blocks[name] = [{'origin': y, **dict(zip(keys, v))} for y, v in rows.items()]
+        i = lines.index('Total', first) + 1
+    return blocks
+
+
+def friedland_ch9_bf_scenarios(locator: str):
+    """Chapter 9, Exhibit III: the B-F under the changing-conditions scenarios, reported and paid."""
+    keys = ['age', 'expected', 'reported', 'paid', 'cdf_reported', 'cdf_paid', 'unreported', 'unpaid',
+            'ultimate_reported', 'ultimate_paid', 'ibnr_reported', 'ibnr_paid', 'actual_ibnr', 'difference_reported', 'difference_paid']
+
+    def parse(text: str) -> dict:
+        lines = lines_of(text)
+        return {'locator': locator, 'printed_page': printed_page(lines), 'units': '$000', 'scenarios': scenario_blocks(lines, len(keys), keys)}
+    return parse
+
+
+def friedland_ch9_benktander_scenarios(locator: str):
+    """Chapter 9, Exhibit V: the Benktander (Gunnar Benktander) method under the same scenarios."""
+    keys = ['age', 'bf_ultimate_reported', 'bf_ultimate_paid', 'reported', 'paid', 'cdf_reported', 'cdf_paid',
+            'unreported', 'unpaid', 'ultimate_reported', 'ultimate_paid', 'ibnr_reported', 'ibnr_paid',
+            'actual_ibnr', 'difference_reported', 'difference_paid']
+
+    def parse(text: str) -> dict:
+        lines = lines_of(text)
+        return {'locator': locator, 'printed_page': printed_page(lines), 'units': '$000', 'scenarios': scenario_blocks(lines, len(keys), keys)}
+    return parse
+
+
+def text_table(lines: list[str], title: str) -> dict:
+    """A table printed in Chapter 6's prose: its title, a header of ages, then a row per accident year."""
+    start = next(i for i, line in enumerate(lines) if line.startswith(title))
+    year_at = lines.index('Year', start)
+    ages, i = take_numbers(lines, year_at + 1, 7)
+    rows: dict[str, list[float]] = {}
+    current = None
+    while i < len(lines):
+        line = lines[i]
+        # A triangle's k-th origin has at most len(ages) − k values: a number past that is the page's, not the table's.
+        full = current is not None and len(rows[current]) >= len(ages) - (len(rows) - 1)
+        if YEAR.match(line):
+            current = line
+            rows[current] = []
+        elif current is not None and parse_number(line) is not None and not full:
+            rows[current].append(parse_number(line))
+        else:
+            break
+        i += 1
+    return {
+        'title': title,
+        'ages': ages,
+        'origins': list(rows),
+        'values': [vals + [None] * (len(ages) - len(vals)) for vals in rows.values()],
+    }
+
+
+def friedland_ch6(titles: list[str]):
+    """Chapter 6's diagnostic triangles for XYZ Insurer, read from the prose pages they are printed in."""
+    def parse(text: str) -> dict:
+        lines = lines_of(text)
+        return {
+            'locator': 'Chapter 6, ' + ' and '.join(t.split(' – ')[0] for t in titles),
+            'printed_page': printed_page(lines),
+            'units': '$000 or counts',
+            'tables': {t.split(' – ')[0].replace('Table ', 'table_'): text_table(lines, t) for t in titles},
+        }
+    return parse
+
+
 def werner_page(lines: list[str]) -> str:
     """A chapter page prints its number under the running head; an appendix exhibit ends with its own ('A - 7')."""
     if lines[0].startswith('Chapter'):
@@ -287,6 +394,17 @@ FRIEDLAND_EXHIBITS = {
     'ch7_exhibit1_sheet3': (114, friedland_ch7_sheet3),
     'ch8_exhibit2_sheet1': (148, friedland_ch8_sheet1),
     'ch9_exhibit1_sheet1': (168, friedland_ch9_sheet1),
+    'ch9_exhibit3_sheet1': (174, friedland_ch9_bf_scenarios('Chapter 9, Exhibit III, Sheet 1')),
+    'ch9_exhibit3_sheet2': (175, friedland_ch9_bf_scenarios('Chapter 9, Exhibit III, Sheet 2')),
+    'ch9_exhibit5_sheet1': (177, friedland_ch9_benktander_scenarios('Chapter 9, Exhibit V, Sheet 1')),
+    'ch9_exhibit5_sheet2': (178, friedland_ch9_benktander_scenarios('Chapter 9, Exhibit V, Sheet 2')),
+    'ch10_exhibit1_sheet1': (186, friedland_ch10_sheet1),
+    'ch10_exhibit1_sheet2': (187, friedland_ch10_sheet2),
+    'ch6_tables_2_3': (71, friedland_ch6(['Table 2 – Reported Claim Development Triangle', 'Table 3 – Paid Claim Development Triangle'])),
+    'ch6_table_6': (74, friedland_ch6(['Table 6 – Ratio of Paid Claims-to-Reported Claims'])),
+    'ch6_table_8': (75, friedland_ch6(['Table 8 – Reported Claim Count Development Triangle'])),
+    'ch6_table_9': (76, friedland_ch6(['Table 9 – Closed Claim Count Development Triangle'])),
+    'ch6_table_10': (78, friedland_ch6(['Table 10 – Ratio of Closed-to-Reported Claim Counts'])),
 }
 
 

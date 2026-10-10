@@ -73,5 +73,24 @@ class Exhibits(unittest.TestCase):
         self.assertEqual(sheet['printed_page'], 106)
 
 
+class ScenariosAndTextTables(unittest.TestCase):
+    def test_scenario_blocks_split_on_each_heading(self):
+        lines = ['Steady-State', '1999', '1', '2', '2000', '3', '4', 'Total', '9', '9',
+                 'Increasing', '1999', '5', '6', '2000', '7', '8', 'Total', '9']
+        blocks = tf.scenario_blocks(lines, 2, ['a', 'b'])
+        self.assertEqual(list(blocks), ['Steady-State', 'Increasing'])
+        self.assertEqual(blocks['Increasing'][1], {'origin': '2000', 'a': 7, 'b': 8})
+
+    def test_text_table_stops_at_the_triangle_edge(self):
+        # The page number after the last row is not part of the table.
+        lines = ['Table 8 – Reported Claim Count Development Triangle', 'Accident', 'Year',
+                 *['12', '24', '36', '48', '60', '72', '84'],
+                 '2002', *['1'] * 7, '2003', *['2'] * 6, '2004', *['3'] * 5, '2005', *['4'] * 4,
+                 '2006', *['5'] * 3, '2007', '6', '6', '2008', '7', '69']
+        table = tf.text_table(lines, 'Table 8')
+        self.assertEqual(table['origins'][-1], '2008')
+        self.assertEqual(table['values'][-1], [7, None, None, None, None, None, None])
+
+
 if __name__ == '__main__':
     unittest.main()

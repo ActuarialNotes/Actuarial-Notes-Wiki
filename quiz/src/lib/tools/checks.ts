@@ -231,6 +231,113 @@ export const CHECKS: ToolCheck[] = [
   },
 ]
 
+// Friedland's Cape Cod (Chapter 10, Exhibit I): the expected claim ratio from
+// used-up premium on Sheet 1, and the expected claims, IBNR and ultimates on Sheet 2.
+const ch10 = F.ch10_exhibit1_sheet1
+const ch10Projection = F.ch10_exhibit1_sheet2
+const capeCodInput = { rows: ch10.rows.map(r => ({ origin: r.origin, premium: r.premium, latest: r.reported, cdf: r.cdf })) }
+CHECKS.push(
+  {
+    tool: 'reserving.cape_cod',
+    source: friedlandRef(ch10),
+    cases: [{
+      name: 'Columns (7) and (8), used-up premium and the total expected claim ratio',
+      input: capeCodInput,
+      expect: [
+        ...ch10.rows.map((r, k) => ({ what: `${r.origin} used-up premium`, printed: r.used_up, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'used_up')[k] })),
+        { what: 'expected claim ratio', printed: ch10.total.claim_ratio, tolerance: PERCENT, actual: (res: ToolResult) => Number(res.values.elr) },
+      ],
+    }],
+  },
+  {
+    tool: 'reserving.cape_cod',
+    source: friedlandRef(ch10Projection),
+    cases: [{
+      name: 'Columns (4), (7) and (9), expected claims, IBNR and ultimate claims',
+      input: capeCodInput,
+      expect: ch10Projection.rows.flatMap((r, k) => [
+        { what: `${r.origin} expected claims`, printed: r.expected, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'expected')[k] },
+        { what: `${r.origin} IBNR`, printed: r.ibnr, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'reserve')[k] },
+        { what: `${r.origin} ultimate`, printed: r.ultimate, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'ultimate')[k] },
+      ]),
+    }],
+  },
+)
+
+// Friedland's Benktander (Chapter 9, Exhibit V) under the changing conditions,
+// from Exhibit III's expected claims. These scenarios are built from their
+// percentages unreported (1.0%, 2.0% …), which the CDFs print rounded (1.010),
+// and the exhibit's arithmetic uses the percentage: so the CDF given is
+// 1 / (1 − the printed percentage), as a reader working the exhibit would.
+// Not the reported claims of Sheet 2's case-strengthening scenarios: those
+// develop on five-year averages, which the exhibit prints only rounded both as
+// CDFs and as percentages, so no printed input reproduces them to the dollar.
+//
+// The inputs are themselves printed to the dollar, and U = L + q(L + qE) carries
+// their rounding through: the tolerance is the output's half-dollar plus that,
+// ½(1 + q + q²).
+CHECKS.push(
+  ...([['ch9_exhibit3_sheet1', 'ch9_exhibit5_sheet1'], ['ch9_exhibit3_sheet2', 'ch9_exhibit5_sheet2']] as const).flatMap(([bfKey, gbKey]) => {
+    const bf = F[bfKey]
+    const gb = F[gbKey]
+    return [{
+      tool: 'reserving.benktander',
+      source: friedlandRef(gb),
+      cases: Object.entries(gb.scenarios).flatMap(([scenario, rows]) => (['reported', 'paid'] as const).filter(basis => basis === 'paid' || gbKey === 'ch9_exhibit5_sheet1').map(basis => {
+        const reported = basis === 'reported'
+        const prior = bf.scenarios[scenario as keyof typeof bf.scenarios]
+        return {
+          name: `${scenario}, column (${reported ? 11 : 12}), the Benktander ultimate with ${basis} claims`,
+          input: {
+            basis,
+            iterations: 2,
+            rows: prior.map(r => ({ origin: r.origin, latest: r[basis], cdf: 1 / (1 - (reported ? r.unreported : r.unpaid)), expected: r.expected })),
+          },
+          expect: rows.map((r, k) => {
+            const q = reported ? r.unreported : r.unpaid
+            return {
+              what: `${r.origin} ultimate`,
+              printed: reported ? r.ultimate_reported : r.ultimate_paid,
+              tolerance: DOLLAR + 0.5 * (1 + q + q * q),
+              actual: (res: ToolResult) => values(res, 'ultimate')[k],
+            }
+          }),
+        }
+      })),
+    }]
+  }),
+)
+
+// Friedland's Chapter 6 diagnostics: Table 6 is Table 3 over Table 2, and
+// Table 10 is Table 9 over Table 8. The claims are printed in $000, so each
+// ratio carries their rounding: ½(1 + a/b)/b on top of the ratio's own.
+const ch6 = (key: 'ch6_tables_2_3' | 'ch6_table_6' | 'ch6_table_8' | 'ch6_table_9' | 'ch6_table_10', table: string) => {
+  const t = (F[key].tables as Record<string, { origins: string[]; ages: number[]; values: (number | null)[][] }>)[table]
+  return { origins: t.origins, ages: t.ages, values: t.values }
+}
+CHECKS.push(
+  ...[
+    { key: 'ch6_table_6' as const, table: 'table_6', numerator: ch6('ch6_tables_2_3', 'table_3'), denominator: ch6('ch6_tables_2_3', 'table_2'), what: 'paid-to-reported' },
+    { key: 'ch6_table_10' as const, table: 'table_10', numerator: ch6('ch6_table_9', 'table_9'), denominator: ch6('ch6_table_8', 'table_8'), what: 'closed-to-reported counts' },
+  ].map(({ key, table, numerator, denominator, what }) => {
+    const printed = ch6(key, table)
+    return {
+      tool: 'reserving.ratio_triangle',
+      source: friedlandRef(F[key]),
+      cases: [{
+        name: `${table.replace('table_', 'Table ')}, the ratio of ${what}`,
+        input: { numerator, denominator },
+        expect: printed.values.flatMap((row, i) => row.flatMap((value, j) => (value === null ? [] : [{
+          what: `${printed.origins[i]} at ${printed.ages[j]}`,
+          printed: value,
+          tolerance: FACTOR + (0.5 * (1 + numerator.values[i][j]! / denominator.values[i][j]!)) / denominator.values[i][j]!,
+          actual: (res: ToolResult) => (res.values.ratios as (number | null)[][])[i][j] ?? NaN,
+        }]))),
+      }],
+    }
+  }),
+)
+
 // Werner & Modlin: the loss ratio method's two worked indications, and the
 // classical credibility standard and square-root rule — the chapter's own
 // example and the three appendix exhibits that apply it.

@@ -19,12 +19,16 @@ import { normalizeVaultMath } from '@/lib/vaultMath'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
 import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
+import { vaultMediaUrl } from '@/lib/vaultAssets'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
 const GITHUB_BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
 const IMAGE_EXT_RE = /\.(png|jpe?g|gif|svg|webp|avif)$/i
 
 function rawGithubUrl(path: string): string {
+  // Anything under Media/ is served by the app itself (lib/vaultAssets.ts).
+  const own = vaultMediaUrl(path)
+  if (own) return own
   const clean = path.replace(/^\/+/, '')
   const encoded = clean.split('/').map(encodeURIComponent).join('/')
   return `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${encoded}`

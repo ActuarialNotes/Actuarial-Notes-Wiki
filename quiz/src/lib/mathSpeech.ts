@@ -63,6 +63,9 @@ class Parser {
   private out: string[] = []
   private i = 0
   private funcCand = false
+  // True right after a closed ( … ) — a function call or a group — so that
+  // whatever follows with no operator between is a product: (0.4)(0.2), P(A)P(B).
+  private groupEnd = false
 
   constructor(private readonly s: string, private readonly opts: ParserOptions = {}) {}
 
@@ -85,7 +88,7 @@ class Parser {
   }
 
   private push(word: string): void {
-    if (word) this.out.push(word)
+    if (word) { this.out.push(word); this.groupEnd = false }
   }
 
   private skipSpaces(): void {
@@ -103,6 +106,7 @@ class Parser {
     if (c === '{') { this.push(this.sub(this.readBraced())); this.funcCand = false; return }
     if (c === '}') { this.i++; return }
     if (c === '(') { this.paren(); return }
+    if (c === '[' && this.funcCand) { this.square(); return }
     if (c === ')' || c === '[' || c === ']') { this.i++; return }
     if (c === '|') { this.bar(); return }
     if (c === '_') { this.i++; this.push('sub'); this.push(this.speakArg(this.readArg())); this.funcCand = false; return }
@@ -156,6 +160,14 @@ class Parser {
         this.funcCand = false
         return
       }
+      case 'begin': case 'end': {
+        // An environment's name is not spoken ("cases", "aligned"); an array's
+        // column spec — \begin{array}{cc} — isn't either.
+        const env = this.readArg().trim()
+        if (name === 'begin' && env === 'array') { this.skipSpaces(); if (this.peek() === '{') this.readBraced() }
+        this.funcCand = false
+        return
+      }
       case 'lvert': case 'lVert': { this.pair(/\\r[vV]ert/); return }
       case 'vert': case 'Vert': this.bar(); return
       case 'mid': this.push(this.opts.bar ?? 'given'); this.funcCand = false; return
@@ -193,6 +205,25 @@ class Parser {
         return
       }
     }
+  }
+
+  // E[X] — square brackets straight after a function name are its argument, "E of X".
+  private square(): void {
+    this.i++ // skip '['
+    let depth = 1
+    const start = this.i
+    while (this.i < this.s.length && depth > 0) {
+      const c = this.s[this.i]
+      if (c === '[') depth++
+      else if (c === ']') { depth--; if (depth === 0) break }
+      this.i++
+    }
+    const inner = this.s.slice(start, this.i)
+    if (this.s[this.i] === ']') this.i++
+    this.push('of')
+    this.push(this.sub(inner, { bar: 'given' }))
+    this.groupEnd = true
+    this.funcCand = false
   }
 
   // `\\{ … \\}` is a set: "the set 1, 2, 3", and a bar inside it is "such that".
@@ -287,6 +318,9 @@ class Parser {
 
   private paren(): void {
     const wasFunc = this.funcCand
+    // 0.4(0.2) and (a)(b): a group with no operator before it multiplies.
+    const last = this.out[this.out.length - 1] ?? ''
+    if (!wasFunc && (this.groupEnd || /^\d[\d.,]*$/.test(last))) this.push('times')
     const content = this.readParen()
     this.skipSpaces()
     if (this.peek() === '^') {
@@ -303,6 +337,7 @@ class Parser {
     } else {
       this.push(this.sub(content))
     }
+    this.groupEnd = true
     this.funcCand = false
   }
 
@@ -322,7 +357,11 @@ class Parser {
 
   private letter(): void {
     // Read single letters so each variable is spoken as a letter ("x y", not "ksy").
-    this.push(this.s[this.i++])
+    const ch = this.s[this.i]
+    const differential = ch === 'd' && /[A-Za-z]/.test(this.s[this.i + 1] ?? '')
+    if (this.groupEnd && !differential) this.push('times')
+    this.push(ch)
+    this.i++
     this.funcCand = true
   }
 
@@ -399,6 +438,7 @@ function preclean(s: string): string {
     .replace(/\\right\b\.?/g, '')
     .replace(/\\(displaystyle|textstyle|scriptstyle|scriptscriptstyle|limits|nolimits)\b/g, '')
     .replace(/\\(biggl|biggr|bigl|bigr|Biggl|Biggr|Bigl|Bigr|bigg|big|Bigg|Big)\b/g, '')
+    .replace(/\\\\\s*\[[0-9.]+\s*(pt|em|ex|mm|cm)\]/g, ' , ')
     .replace(/\\\\/g, ' , ')
     .replace(/\\[,;:!> ]/g, ' ')
     .replace(/\\(quad|qquad|hspace|vspace)\b/g, ' ')

@@ -17,11 +17,19 @@
 //       MCP connector), from a word-level transcript of it — Scribe's `words`
 //       ({text, start}) — which is lined up with the script word by word.
 //
-// Both write quiz/public/listen/<slug>.mp3 and <slug>.json. The manifest carries
-// a hash of the script it was made from; edit the page and the recording is
-// ignored (the live voices read the page instead) until it is made again.
+//   node scripts/listen-recording.mjs upload  ["Probability"]
+//       Put what the two commands above wrote into object storage — the public
+//       Supabase Storage bucket `listen` — all of it, or one concept's. Needs
+//       SUPABASE_URL (or VITE_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY.
+//
+// `generate` and `build` write quiz/public/listen/<slug>-<hash>.mp3 and <slug>.json
+// — a folder git ignores: recordings live in object storage, not the repo. The
+// manifest carries a hash of the script it was made from; edit the page and the
+// recording is ignored (the live voices read the page instead) until it is made
+// again. The audio's name carries the hash too, so a re-recording is a new URL
+// and the old one can be cached for good.
 
-import { copyFile, mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, mkdtemp, readdir, readFile, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -39,7 +47,7 @@ async function loadApp() {
     stdin: {
       contents: `
         export { buildListenContent, toSegments } from '@/lib/listenTokens'
-        export { alignTranscript, buildNarration, listenSlug, marksFromCharacterAlignment, narrationHash } from '@/lib/listenNarration'
+        export { alignTranscript, buildNarration, listenSlug, marksFromCharacterAlignment, narrationHash, recordingAudioFile, recordingManifestFile } from '@/lib/listenNarration'
       `,
       resolveDir: ROOT,
       loader: 'ts',
@@ -84,28 +92,66 @@ async function narrationFor(app, name) {
 async function writeRecording(app, name, narration, audioFile, marks, extra) {
   const slug = app.listenSlug(name)
   await mkdir(OUT_DIR, { recursive: true })
-  const audio = `${slug}.mp3`
+  const hash = app.narrationHash(narration.text)
+  const audio = app.recordingAudioFile(slug, hash)
   await copyFile(audioFile, path.join(OUT_DIR, audio))
   const manifest = {
     v: 1,
-    hash: app.narrationHash(narration.text),
+    hash,
     audio,
     duration: extra.duration,
     voice: extra.voice,
     model: extra.model,
     marks,
   }
-  await writeFile(path.join(OUT_DIR, `${slug}.json`), JSON.stringify(manifest) + '\n')
-  console.log(`Wrote public/listen/${slug}.mp3 and ${slug}.json (${marks.length} tokens, ${extra.duration.toFixed(1)} s)`)
+  await writeFile(path.join(OUT_DIR, app.recordingManifestFile(slug)), JSON.stringify(manifest) + '\n')
+  console.log(`Wrote public/listen/${audio} and ${app.recordingManifestFile(slug)} (${marks.length} tokens, ${extra.duration.toFixed(1)} s)`)
+  console.log('Not in git: `node scripts/listen-recording.mjs upload` puts it in object storage.')
+}
+
+// Supabase Storage: POST /storage/v1/object/<bucket>/<path>, service role, upsert.
+// Audio is named by its script hash, so it is cached for a year; the manifest is
+// the one file that changes under a name, so it is cached for a minute.
+async function uploadObject(base, key, file, contentType, cacheControl) {
+  const res = await fetch(`${base}/storage/v1/object/listen/${file}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${key}`,
+      apikey: key,
+      'Content-Type': contentType,
+      'Cache-Control': cacheControl,
+      'x-upsert': 'true',
+    },
+    body: await readFile(path.join(OUT_DIR, file)),
+  })
+  if (!res.ok) throw new Error(`Upload of ${file} failed: ${res.status} ${await res.text()}`)
+  console.log(`Uploaded ${file}`)
+}
+
+async function upload(app, name) {
+  const base = (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '').replace(/\/+$/, '')
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!base || !key) throw new Error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to upload.')
+  const only = name ? app.recordingManifestFile(app.listenSlug(name)) : null
+  const manifests = (await readdir(OUT_DIR).catch(() => [])).filter(f => f.endsWith('.json') && (!only || f === only))
+  if (!manifests.length) throw new Error(`Nothing to upload in public/listen/${only ? ` for ${name}` : ''} — make a recording first.`)
+  for (const file of manifests) {
+    const manifest = JSON.parse(await readFile(path.join(OUT_DIR, file), 'utf8'))
+    // Audio first: a manifest must never name a file that isn't there yet.
+    await uploadObject(base, key, manifest.audio, 'audio/mpeg', 'public, max-age=31536000, immutable')
+    await uploadObject(base, key, file, 'application/json', 'public, max-age=60')
+  }
+  console.log(`Done. Served from ${base}/storage/v1/object/public/listen/`)
 }
 
 async function main() {
   const { command, name, flags } = parseArgs(process.argv.slice(2))
-  if (!command || !name) {
-    console.error('Usage: listen-recording.mjs <script|generate|build> "<Concept Name>" [--flag value …]')
+  if (!command || (!name && command !== 'upload')) {
+    console.error('Usage: listen-recording.mjs <script|generate|build> "<Concept Name>" [--flag value …]\n       listen-recording.mjs upload ["<Concept Name>"]')
     process.exit(2)
   }
   const app = await loadApp()
+  if (command === 'upload') { await upload(app, name); return }
   const narration = await narrationFor(app, name)
 
   if (command === 'script') {

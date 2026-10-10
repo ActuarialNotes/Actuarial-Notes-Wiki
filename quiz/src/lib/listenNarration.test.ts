@@ -3,7 +3,9 @@ import { buildListenContent, toSegments } from './listenTokens'
 import {
   buildNarration,
   alignTranscript,
+  listenBaseUrl,
   listenSlug,
+  recordingAudioFile,
   marksFromCharacterAlignment,
   marksFromWordTranscript,
   narrationHash,
@@ -150,7 +152,7 @@ describe('listenSlug', () => {
 describe('readRecording', () => {
   const n = narrationOf('One two three.')
   const good = {
-    v: 1, hash: narrationHash(n.text), audio: 'x.mp3', duration: 3,
+    v: 1, hash: narrationHash(n.text), audio: 'one-two.mp3', duration: 3,
     voice: { id: 'v', name: 'V' }, model: 'm', marks: [[0, 0], [1, 1], [2, 2]],
   }
 
@@ -164,5 +166,32 @@ describe('readRecording', () => {
     expect(readRecording({ ...good, marks: [[0, 0], [1, 2], [2, 1]] }, n)).toBeNull()
     expect(readRecording('<!doctype html>', n)).toBeNull()
     expect(readRecording(null, n)).toBeNull()
+  })
+})
+
+describe('where recordings live', () => {
+  it('defaults to the public Supabase Storage bucket', () => {
+    expect(listenBaseUrl({ VITE_SUPABASE_URL: 'https://abc.supabase.co' })).toBe(
+      'https://abc.supabase.co/storage/v1/object/public/listen',
+    )
+  })
+
+  it('can be pointed elsewhere, and ignores a trailing slash', () => {
+    expect(listenBaseUrl({ VITE_LISTEN_BASE_URL: '/listen/', VITE_SUPABASE_URL: 'https://abc.supabase.co' })).toBe('/listen')
+  })
+
+  it('has no recordings with nowhere to look', () => {
+    expect(listenBaseUrl({})).toBe('')
+  })
+
+  it('names audio by the script it was made from', () => {
+    expect(recordingAudioFile('probability', '2lgxonud1b')).toBe('probability-2lgxonud1b.mp3')
+  })
+
+  it('refuses a manifest whose audio is not a plain file name', () => {
+    const n = narrationOf('One two three.')
+    const bad = { v: 1, hash: narrationHash(n.text), audio: '../../evil.mp3', duration: 3, voice: { id: '', name: '' }, model: '', marks: [[0, 0], [1, 1], [2, 2]] }
+    expect(readRecording(bad, n)).toBeNull()
+    expect(readRecording({ ...bad, audio: 'https://evil.example/x.mp3' }, n)).toBeNull()
   })
 })

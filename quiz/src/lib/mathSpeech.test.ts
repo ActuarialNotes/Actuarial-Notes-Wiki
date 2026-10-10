@@ -49,7 +49,7 @@ describe('latexToSpeech', () => {
 
   it('handles Greek letters and relations', () => {
     expect(latexToSpeech('\\sigma^2')).toBe('sigma squared')
-    expect(latexToSpeech('\\mu = E[X]')).toBe('mu equals E X')
+    expect(latexToSpeech('\\mu = E[X]')).toBe('mu equals E of X')
     expect(latexToSpeech('x \\le y')).toBe('x is less than or equal to y')
     expect(latexToSpeech('n \\to \\infty')).toBe('n approaches infinity')
   })
@@ -90,5 +90,30 @@ describe('latexToSpeech — probability notation', () => {
 
   it('keeps thousands separators and decimals inside a number', () => {
     expect(latexToSpeech('1,000 + 0.5')).toBe('1,000 plus 0.5')
+  })
+})
+
+describe('latexToSpeech — brackets, groups and environments', () => {
+  it('reads square brackets after a function name as its argument', () => {
+    expect(latexToSpeech('E[X]')).toBe('E of X')
+    expect(latexToSpeech('E[(X-\\mu)^n]')).toBe('E of the quantity X minus mu to the power of n')
+    expect(latexToSpeech('E[X \\mid Y]')).toBe('E of X given Y')
+  })
+
+  it('says "times" between factors that have no operator between them', () => {
+    expect(latexToSpeech('(0.40)(0.20)')).toBe('0.40 times 0.20')
+    expect(latexToSpeech('0(0.5) + 100(0.3)')).toBe('0 times 0.5 plus 100 times 0.3')
+    expect(latexToSpeech('P(E \\mid H)\\,P(H)')).toBe('P of E given H times P of H')
+  })
+
+  it('does not put a "times" before a differential', () => {
+    expect(latexToSpeech('\\int x\\, f(x)\\, dx')).toBe('the integral of x f of x d x')
+  })
+
+  it('does not spell out an environment, nor its row spacing', () => {
+    expect(latexToSpeech('\\begin{cases} a & \\text{(first)} \\\\[6pt] b & \\text{(second)} \\end{cases}')).toBe(
+      'a (first), b (second)',
+    )
+    expect(latexToSpeech('\\begin{array}{cc} a & b \\end{array}')).toBe('a b')
   })
 })

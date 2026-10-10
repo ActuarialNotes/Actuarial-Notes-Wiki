@@ -28,7 +28,7 @@ describe('buildListenContent', () => {
     const { tokens } = buildListenContent('The mean is $\\mu = E[X]$ today.')
     const math = tokens.find(t => t.type === 'math')
     expect(math).toBeTruthy()
-    expect(math!.type === 'math' && math!.speech).toBe('mu equals E X')
+    expect(math!.type === 'math' && math!.speech).toBe('mu equals E of X')
   })
 
   it('renders a standalone display equation as a centered math block', () => {
@@ -65,5 +65,18 @@ describe('callouts', () => {
     const { blocks } = buildListenContent('> [!tip] Common Trap\n> Always verify the sample space first.\n')
     const segs = toSegments(blocks).map(s => s.text)
     expect(segs).toEqual(['Tip: Common Trap', 'Always verify the sample space first.'])
+  })
+})
+
+describe('spoken punctuation', () => {
+  it('reads an escaped dollar amount as dollars', () => {
+    const segs = toSegments(buildListenContent('The insurer pays \\$130 per claim.').blocks).map(s => s.text)
+    expect(segs).toEqual(['The insurer pays 130 dollars per claim.'])
+  })
+
+  it('ends the sentence at a display equation the paragraph carries on after', () => {
+    const md = '> > First step:\n> > $$a = b$$\n> > Now the next step.\n'
+    const segs = toSegments(buildListenContent(md).blocks).map(s => s.text)
+    expect(segs).toEqual(['First step: a equals b. Now the next step.'])
   })
 })

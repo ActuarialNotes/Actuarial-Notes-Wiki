@@ -393,8 +393,9 @@ before touching that area**:
   word-by-word highlight (read off the audio clock from per-token start times). One script —
   `lib/listenTokens.ts` → `lib/mathSpeech.ts` (equations in spoken English) →
   `lib/listenNarration.ts` — feeds every voice; `scripts/listen-recording.mjs` makes
-  `public/listen/<slug>.{mp3,json}`, and a recording whose script hash no longer matches the
-  page is ignored. Read before touching `useListenSpeech`, `mathSpeech.ts` or that script.
+  `public/listen/<slug>-<hash>.mp3` + `<slug>.json` (git-ignored) and `upload`s them to the public
+  Supabase Storage bucket `listen` — recordings are never committed — and a recording whose script
+  hash no longer matches the page is ignored. Read before touching `useListenSpeech`, `mathSpeech.ts` or that script.
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
   page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
   calculators — thirty-two so far across reserving, ratemaking, loss distributions, credibility

@@ -2,6 +2,13 @@
 
 interface ImportMetaEnv {
   /**
+   * Where Listen's recorded voice-overs are served from. Unset, they come from the
+   * project's public Supabase Storage bucket `listen`; set it (`/listen`) to play
+   * what scripts/listen-recording.mjs wrote to public/listen/ on a dev server.
+   * See docs/listen-recordings.md.
+   */
+  readonly VITE_LISTEN_BASE_URL?: string
+  /**
    * Optional error-monitoring collector endpoint. When set, captured errors are
    * beacon-POSTed here (a Sentry tunnel or any custom collector). See
    * lib/errorMonitoring.ts. Left unset, errors go to console + the GA4

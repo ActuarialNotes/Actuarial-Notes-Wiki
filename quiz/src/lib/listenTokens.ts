@@ -50,6 +50,7 @@ const MATH_SPLIT_RE = /(\$\$[\s\S]*?\$\$|\$(?!\s)(?:\\\$|[^$\n])*?(?<!\s)\$)/g
 
 function stripInlineMarkup(text: string): string {
   return text
+    .replace(/\\\$(\d[\d,]*(?:\.\d+)?)/g, '$1 dollars') // an escaped dollar amount, \$130
     .replace(/`([^`]*)`/g, '$1')   // inline code
     .replace(/[*~]/g, '')          // bold / italic / strikethrough markers
     .replace(/<[^>]+>/g, '')       // stray inline HTML
@@ -215,9 +216,13 @@ export function toSegments(blocks: ListenBlock[]): SpeechSegment[] {
   for (const block of blocks) {
     const ranges: SpeechSegment['ranges'] = []
     let text = ''
-    for (const token of block.tokens) {
-      const speech = token.speech.trim()
+    const lastSpoken = block.tokens.reduce((n, t, i) => (t.speech.trim() ? i : n), -1)
+    for (const [i, token] of block.tokens.entries()) {
+      let speech = token.speech.trim()
       if (!speech) continue
+      // A display equation that the paragraph carries on after is a sentence of
+      // its own; without the stop a voice runs it into the next one.
+      if (token.type === 'math' && token.display && i < lastSpoken && !/[.!?:;]$/.test(speech)) speech += '.'
       if (text) text += ' '
       const start = text.length
       text += speech

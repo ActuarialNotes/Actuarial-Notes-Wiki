@@ -66,9 +66,23 @@ export function listenSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }
 
-/** Where a concept's recording manifest is served from. */
-export function recordingManifestUrl(slug: string): string {
-  return `/listen/${slug}.json`
+/**
+ * Where recordings are served from: a public Supabase Storage bucket (`listen`,
+ * created by `supabase/migrations/20261011_listen_recordings_bucket.sql`), or
+ * `VITE_LISTEN_BASE_URL` when set — `/listen` serves what the recording script
+ * wrote to `public/listen/` during development.
+ */
+export function listenBaseUrl(env: { VITE_LISTEN_BASE_URL?: string; VITE_SUPABASE_URL?: string }): string {
+  const base = env.VITE_LISTEN_BASE_URL || (env.VITE_SUPABASE_URL ? `${env.VITE_SUPABASE_URL}/storage/v1/object/public/listen` : '')
+  return base.replace(/\/+$/, '')
+}
+
+/** A recording's files: the manifest by concept, the audio by script — so a re-recording is a new URL. */
+export function recordingManifestFile(slug: string): string {
+  return `${slug}.json`
+}
+export function recordingAudioFile(slug: string, hash: string): string {
+  return `${slug}-${hash}.mp3`
 }
 
 /** The recording manifest — `public/listen/<slug>.json`, beside `<slug>.mp3`. */
@@ -76,7 +90,7 @@ export interface ListenRecording {
   v: 1
   /** `narrationHash` of the script this audio was made from. */
   hash: string
-  /** Audio file, relative to the manifest. */
+  /** Audio file name in the same place as the manifest: `<slug>-<hash>.mp3`. */
   audio: string
   duration: number
   voice: { id: string; name: string }
@@ -207,7 +221,7 @@ export function alignTranscript(
 export function readRecording(raw: unknown, narration: Pick<Narration, 'text' | 'tokens'>): ListenRecording | null {
   if (!raw || typeof raw !== 'object') return null
   const r = raw as Partial<ListenRecording>
-  if (r.v !== 1 || typeof r.audio !== 'string' || typeof r.hash !== 'string' || !Array.isArray(r.marks)) return null
+  if (r.v !== 1 || typeof r.audio !== 'string' || !/^[a-z0-9][a-z0-9.-]*\.mp3$/.test(r.audio) || typeof r.hash !== 'string' || !Array.isArray(r.marks)) return null
   if (r.hash !== narrationHash(narration.text)) return null
   if (r.marks.length !== narration.tokens.length) return null
   let prev = 0

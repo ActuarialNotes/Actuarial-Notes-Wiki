@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import type { SpeechSegment } from '@/lib/listenTokens'
 import {
   buildNarration,
+  listenBaseUrl,
   readRecording,
-  recordingManifestUrl,
+  recordingManifestFile,
   type ListenRecording,
   type Narration,
 } from '@/lib/listenNarration'
@@ -23,11 +24,12 @@ export type ListenRecordingState =
 // One request per concept per page load; a miss is remembered too, so flipping
 // Listen on and off doesn't ask the server again.
 const manifests = new Map<string, Promise<unknown>>()
+const BASE_URL = listenBaseUrl(import.meta.env)
 
 function fetchManifest(slug: string): Promise<unknown> {
   let pending = manifests.get(slug)
   if (!pending) {
-    pending = fetch(recordingManifestUrl(slug))
+    pending = fetch(`${BASE_URL}/${recordingManifestFile(slug)}`)
       .then(res => (res.ok ? res.json() : null))
       .catch(() => null) // not found, or the SPA's index.html answering for a missing file
     manifests.set(slug, pending)
@@ -45,7 +47,7 @@ export function useListenRecording(slug: string | undefined, segments: SpeechSeg
   const [raw, setRaw] = useState<{ slug: string; manifest: unknown } | null>(null)
 
   useEffect(() => {
-    if (!slug) return
+    if (!slug || !BASE_URL) return
     let cancelled = false
     fetchManifest(slug).then(manifest => {
       if (!cancelled) setRaw({ slug, manifest })
@@ -54,10 +56,10 @@ export function useListenRecording(slug: string | undefined, segments: SpeechSeg
   }, [slug])
 
   return useMemo<ListenRecordingState>(() => {
-    if (!slug) return { status: 'none' }
+    if (!slug || !BASE_URL) return { status: 'none' }
     if (!raw || raw.slug !== slug) return { status: 'checking' }
     const recording = readRecording(raw.manifest, narration)
     if (!recording) return { status: 'none' }
-    return { status: 'ready', recording, narration, audioUrl: `/listen/${recording.audio}` }
+    return { status: 'ready', recording, narration, audioUrl: `${BASE_URL}/${recording.audio}` }
   }, [slug, raw, narration])
 }

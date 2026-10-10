@@ -23,6 +23,8 @@ verification:
 - **Reserving practice (Friedland):** group claims that share coverage (the same laws, policy terms and claims handling), with enough claim counts, and similar reporting patterns, ability to set case reserves, settlement patterns, reopening likelihood and severity; policy limits are another useful cut. Do not combine segments whose relative volume is changing — see [[Mix of Business]] and [[Reserving Data Organization]].
 - **Practical limits:** a segment needs a field the systems actually capture; separate analyses cost time; and a small, stable component may not justify its own study. Friedland quotes Longley-Cook's image of a crumbly cake that can be sliced only one way at a time — slice it several ways at once and only crumbs are left. Multivariate models such as a [[Generalized Linear Model|GLM]] are the ratemaking answer: they use all the data to estimate each variable's effect.
 
+- **Segments from the data:** When the groups are not given in advance, [[Clustering|cluster analysis]] can propose them: it groups risks whose features are similar under a chosen [[Similarity and Distance Measures|distance measure]], without using the loss outcome. Clustering is used for policyholder segmentation and territory grouping, but it will find clusters in any data, so a proposed segment still has to pass the tests above, such as homogeneity, credibility and stability.
+
 > [!example]- Is a Sprinkler Split Worth Making? {Example}
 > A commercial property class, three years' experience:
 >
@@ -71,3 +73,11 @@ verification:
 > > $$
 > >
 > > With $12\%$ credibility per cell, the $640$-cell table is almost entirely complement — it looks detailed and says very little. Each variable on its own is credible, but one-way analyses of correlated variables double-count. The standard resolution is a multivariate model, which estimates each variable's effect from all $9{,}600$ claims at once instead of from one cell's $15$.
+
+> [!tip]- How it appears on the exam
+> - **Exam 5:** Questions ask how to group data for ratemaking or reserving, such as which coverages to analyze separately or whether a split is credible enough to use, as in the examples above.
+> - **DISC-DA:** Section 8.4 covers segmenting data with cluster analysis. Questions ask what makes a good segment and how cluster analysis forms one from data with no target.
+
+> [!warning]- Exam traps
+> - **Finer is not always better:** Each further split makes groups more alike but less credible; many small cells can say less than a few large ones.
+> - **Clusters are not validated segments:** A clustering algorithm always returns groups. Whether they differ in expected cost is a separate question.

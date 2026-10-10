@@ -37,6 +37,8 @@ verification:
 
 - Clustering requires a **dissimilarity measure** (e.g., Euclidean distance, correlation-based distance); whether to **standardize** the variables (to standard deviation one) depends on the application: it gives every variable equal weight, and is advisable when they are measured on different scales
 - Used in actuarial science for **policyholder segmentation** and **territory grouping**
+- **Choices that change the answer** (James et al., §12.4.3): whether to standardize, which dissimilarity measure and linkage to use, where to cut the dendrogram, and how many clusters to ask $K$-means for. Each can change the clusters, so try several and keep the most useful and interpretable result. See [[Similarity and Distance Measures]]
+- **Clusters are always found:** Clustering returns clusters whether or not the data contain real subgroups. Whether they would reappear in an independent sample is a hard question, so clusters used as [[Data Segmentation|segments]] should be checked on other data and against what the business knows
 
 ![[Media/Figures/Clustering.svg|340]]
 
@@ -45,3 +47,12 @@ verification:
 >
 > > [!answer]-
 > > A large gap in the dendrogram between merging 4 clusters into 3 indicates that those 4 clusters are naturally distinct — merging them requires combining very dissimilar groups. This suggests **$K = 4$ clusters** is a natural choice.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.4 covers segmenting data with cluster analysis. Questions describe policyholder or claim data with no target and ask which technique groups them, what standardizing the features would change, or how to read a dendrogram or choose the number of clusters.
+> - **MAS-II:** Questions apply $K$-means and hierarchical clustering mechanics, such as linkage choices and the effect of scaling, from James et al. Chapter 12.
+
+> [!warning]- Exam traps
+> - **Clustering is not classification:** There is no response variable. A method trained on labeled outcomes is supervised, not cluster analysis.
+> - **Unscaled features:** On raw data, the feature with the largest numbers dominates the distances and so the clusters.
+> - **Single linkage chains:** It tends to string observations into long, unbalanced clusters; average and complete linkage give more balanced ones.

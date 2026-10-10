@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:59bae946f4349e76c83fe9b69c0c9cba1d4ec1c6c6c8e6fa7b6a9ddea4ebea06
-  sources: []
+  sources:
+    - "ISO CP 00 90 07 88 Commercial Property Conditions (specimen), §I.1–2 (post-loss waiver only for an insured, affiliated business or tenant), sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-626.md

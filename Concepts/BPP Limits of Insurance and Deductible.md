@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:adac2e6a0e0dab8031a3a224454b421dea37799afc9f8d3353af57651695054d
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §C, D (Examples 1–2), E.6.b(1)(c), E.7.d pp.9–13, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), §F.3, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/BPP Limits of Insurance and Deductible.md

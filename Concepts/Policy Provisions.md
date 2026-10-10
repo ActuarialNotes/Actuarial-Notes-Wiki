@@ -31,7 +31,7 @@ verification:
 > An HO-3 insured spends a winter month away and turns off the heat without shutting off and draining the water. A pipe freezes and bursts, causing \$14,000 of damage to the floors and walls and \$6,000 to furniture. The deductible is \$1,000. Is the loss covered? What would the insurer pay if the insured had kept the heat on and a pipe had burst anyway?
 >
 > > [!answer]-
-> > The dwelling is insured on an open perils basis, so its insuring agreement applies. The HO-3 excludes freezing of the plumbing in an unoccupied dwelling unless the insured used reasonable care to maintain heat or to shut off the water and drain the system. The furniture's named peril, freezing, carries the same qualification, so $\mathbb{1}_{\text{Ex}} = 1$ for both and the insurer pays nothing. With the heat maintained, the exclusion doesn't apply and the loss is covered.
+> > The dwelling is insured on an open perils basis, so its insuring agreement applies. The HO-3 excludes freezing of the plumbing unless the insured used reasonable care to maintain heat or to shut off the water and drain the system. The furniture's named peril, freezing, carries the same qualification, so $\mathbb{1}_{\text{Ex}} = 1$ for both and the insurer pays nothing. With the heat maintained, the exclusion doesn't apply and the loss is covered.
 > > $$
 > > \begin{align*}
 > > \text{Pay} &= 1 \times (1 - 0) \times 1 \times (14{,}000 + 6{,}000 - 1{,}000) \\

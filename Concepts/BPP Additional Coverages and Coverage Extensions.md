@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c2fb9dee6ba8fbe284f29ef41f8277688273bab31aaaee00033645b7d76236a4
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §A.4.a–f, A.5 preamble and a–g, C pp.3–10, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/BPP Additional Coverages and Coverage Extensions.md

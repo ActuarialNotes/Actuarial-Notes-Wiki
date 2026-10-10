@@ -58,7 +58,7 @@ verification:
 > > \text{CV}_{\text{flood}} &= 9.95
 > > \end{align*}
 > > $$
-> > The flood's expected cost is only \$800 a home a year, so the premium is affordable. The problem is the catastrophe: in a flood year the insurer owes \$800,000,000, a hundred times the expected annual flood loss, and writing more valley homes would not reduce that. The fire pool's annual loss has a standard deviation under a quarter of its \$4,000,000 mean, and doubling the pool would cut that share by about 30%.
+> > The flood's expected cost is only \$2,000 a valley home a year, so the premium is affordable. The problem is the catastrophe: in a flood year the insurer owes \$800,000,000, a hundred times the expected annual flood loss, and writing more valley homes would not reduce that. The fire pool's annual loss has a standard deviation under a quarter of its \$4,000,000 mean, and doubling the pool would cut that share by about 30%.
 
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The objective is to describe the characteristics of an ideally insurable loss exposure. Questions ask for the list, or give an exposure, such as flood, earthquake, war, a business's market losses or wear and tear, and ask which characteristics it fails and why.

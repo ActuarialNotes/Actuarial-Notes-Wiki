@@ -11,12 +11,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e3dad8e836a1b65c92068d1f4bf4002fddbb7f3a69a116ff504bb951960f9b90
-  sources: []
+  sources:
+    - "ISO CP 00 90 07 88 Commercial Property Conditions (specimen), §G.1: 150,000×300/500=90,000, sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-625.md

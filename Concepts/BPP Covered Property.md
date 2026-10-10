@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4aa8a09b3c8372fec56b643d43d133f769c708a29744f8bd7b3798859438a487
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §A.1.a–c, A.2.a–q, A.5.b, H.3 pp.1–3, 8, 16, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "Insurer crime coverage rule page naming the ISO CR 00 21 insuring agreements (fmic.com), insuring agreement list, sha256:ab1f7eae07652ed20e337d1669744afe3f65e75ab7d3abfdde83abfedf8c8451 — https://fmic.com/sites/default/files/2020-12/crime.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/BPP Covered Property.md

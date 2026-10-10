@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:074a589451845fbe9622fc8961bd878264ea0c51dc0542754f24c0fc00f06a57
-  sources: []
+  sources:
+    - "ISO CP 00 90 07 88 Commercial Property Conditions (specimen), Conditions A–I pp.1–2, sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88 (The Nationwide forms host regenerates its PDFs per request: bytes differ from the writer's copies, extracted text identical.)"
+    - "ISO IL 00 17 11 98 Common Policy Conditions (specimen), §A, sha256:965a8a0deb36ac7fcb29ae356d89b1ca01776dd99b1aae2a22cf46bb13611db2 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=IL+00+17&ed=11-98"
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.2, E.6, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "IRMI glossary, 'bailee' (rank 3), definition, sha256:05deaf62465a792bc05b1ea08e7ee790693b03bc439e2e37ed2bab9af03e4a47 — https://www.irmi.com/term/insurance-definitions/bailee"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Commercial Property Conditions.md

@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:03192346a89f23b0c5fc3006effdebde80bca29f8cce845dbe8cb569fbed616f
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO IL 00 17 11 98 Common Policy Conditions (specimen), §A–F p.1, sha256:965a8a0deb36ac7fcb29ae356d89b1ca01776dd99b1aae2a22cf46bb13611db2 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=IL+00+17&ed=11-98 (The Nationwide forms host regenerates its PDFs per request: bytes differ from the writer's copies, extracted text identical.)"
+    - "New York Insurance Law §3426(b)–(c) (NY Senate official text, read via WebFetch, no digest), (b), (c) — https://www.nysenate.gov/legislation/laws/ISC/3426"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Common Policy Conditions.md
 ---

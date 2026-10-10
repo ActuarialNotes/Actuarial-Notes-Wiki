@@ -11,12 +11,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6e288e2bed76c5061114d1a3b44c04d8d9eb246934383e3b37d61575b1f79e2d
-  sources: []
+  sources:
+    - "ISO CP 10 10 10 12 Causes of Loss – Basic Form (specimen), CP 10 10 §A.4.c, A.6, A.8; CP 00 10 §A.2.a, sha256:14aea49e74f393f8370fa78a89f12e99a9f4927dc704bd386fc7e41a9223f5b4 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+10+10&ed=10-12"
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), (as cited in checks), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-608.md

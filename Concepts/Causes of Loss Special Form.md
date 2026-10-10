@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bc4db78160e0f6888b779773deccd0a190e3e96482a93dfc0775e86f9fa7a81d
-  sources: []
+  sources:
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), §A, B.1–B.5, C.1–C.4, D, E, F.1–F.3, G.2 pp.1–10, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
+    - "Saxe Doernberger & Vita, 'Whose Burden is It Anyway: All Risk vs. Covered Peril Policies' (law-firm publication, rank 3), burden-of-proof paragraph, sha256:9cf2c29c7cf0c376d6551a6d00f279616e5ff0b0435a688d8d792b2cdacca718 — https://www.sdvlaw.com/publications/whose-burden-is-it-anyway-all-risk-vs-covered-peril-policies/"
+    - "Adelstein, 'Proving and Challenging Causation Under Named Perils Property Insurance Policy' (Florida Construction Legal Updates, 2020, citing Citizens v. Kings Creek South Condo, Fla. 3d DCA 2020; rank 3), first paragraph, sha256:16e95d4f02d6f3b7e73c2f7d64601ad26d7d75e7eeca3fdcdc4c0a12ab157432 — https://floridaconstructionlegalupdates.com/?p=5789"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Causes of Loss Special Form.md

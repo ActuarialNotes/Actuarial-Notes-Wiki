@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:765ac5a487b807c4dafd7f2aecc6360f8bdf31c094be0b4bcb97ed1dce71f0a7
-  sources: []
+  sources:
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), §B.2.d(1)–(2), §C.1.c, §B.1.g, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-612.md

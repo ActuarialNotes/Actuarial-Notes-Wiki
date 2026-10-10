@@ -11,12 +11,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0fe93a6465386ae3605cc6a7b585ddd06a4e81858f2734ec26bad82685d21e2e
-  sources: []
+  sources:
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), §C.3.a, b, d: 2,500+2,500+900+250+2,000=8,150; distractors 7,250/8,900/11,000 reproduced, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-610.md

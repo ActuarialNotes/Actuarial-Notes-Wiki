@@ -12,12 +12,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:229585f6aab01b3d26896ab043df2511b0f6a86dd1c1f1112a340be94fd095cc
-  sources: []
+  sources:
+    - "ISO CP 10 20 10 12 Causes of Loss – Broad Form (specimen), CP 10 20 §C.2.e (weight of rain), A.13; CP 10 10 §A.4.c; CP 10 30 §B.2.k(b)(iii), sha256:fde6a92d0aabc909a84622d0588db0ac570c564ced0c056fa7efbcb454768207 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+10+20&ed=10-12"
+    - "ISO CP 10 10 10 12 Causes of Loss – Basic Form (specimen), (as cited in checks), sha256:14aea49e74f393f8370fa78a89f12e99a9f4927dc704bd386fc7e41a9223f5b4 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+10+10&ed=10-12"
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), (as cited in checks), sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-609.md

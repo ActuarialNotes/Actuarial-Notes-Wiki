@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ef6e0237e0806498b73233cef7cf941a55654ccbd51e3a8cbc995a1519eb7d57
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §E.1–E.7, F.1 (Examples 1–3), F.2 pp.10–14, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/BPP Loss Conditions and Additional Conditions.md
 ---

@@ -12,12 +12,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:76f17b00f7bdcaab2e6ce8f5d12b10433b6820d4555310fe84a92064532371c4
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), CP 00 10 §A.1.c, §H.3 'stock'; IRMI 'bailee' and 'bailee coverage' (dry cleaners), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "IRMI glossary, 'bailee' (rank 3), (as cited in checks), sha256:05deaf62465a792bc05b1ea08e7ee790693b03bc439e2e37ed2bab9af03e4a47 — https://www.irmi.com/term/insurance-definitions/bailee"
+    - "IRMI glossary, 'bailee coverage' (rank 3), (as cited in checks), sha256:b1afbd3f01aaf0ce0a377ff652baf16368a9e7cbce08c3122089bc49b3b02dcc — https://www.irmi.com/term/insurance-definitions/bailee-coverage"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-631.md

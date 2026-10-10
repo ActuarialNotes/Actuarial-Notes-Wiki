@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fb5e2f0b069b1dbd0884e6f3d908fbbf08c76758669675e86c67c4fd501d57d6
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §F.1.b Example 3, A.4.e(6), G.1, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 16 15 07 88 Statement of Values (specimen, Big I), pp.1–3, Notes 5–8, sha256:e6597a69a240b732ec8575524a4c640d76d15af8e2fb0e72fc1e2d1401dc31e2 — https://www.independentagent.com/wp-content/uploads/2024/04/CP16150788.pdf"
+    - "IRMI glossary, 'blanket limit' (rank 3), definition, sha256:10e936de05e54dee3eff832fb3c8d6582234245f2d79ea9e0b96eabbb227d04d — https://www.irmi.com/term/insurance-definitions/blanket-limit"
+    - "IRMI glossary, 'margin clause' (rank 3), definition, sha256:6c64d369833da5734c72797b5e5e8d857bc193011e708edd4d85da3cd98a806d — https://www.irmi.com/term/insurance-definitions/margin-clause"
+    - "Big \"I\" Virtual University, Mike Edwards, 'Margin Clauses and Blanket Insurance' (2013; rank 3), Response, sha256:5a05d40fb33c46a533c031bf0ad1af312a83ab3b5a47beb50bad1b2632cb91ad — https://www.independentagent.com/vu_resource/margin-clauses-and-blanket-insurance/"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Blanket Insurance.md
 ---

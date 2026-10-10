@@ -4,15 +4,17 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:330effd9552a24d6424e0c3ea8dcfdcba3fa13997062164c55ac69d713f50764
+  content_hash: sha256:9cbd8045e71a2b069311d7008ee258afbe260eda2649b03e5494833a95f2fa75
   sources:
     - "IRMI Glossary, 'capacity', entry, sha256:a21b8c9f170b484498d12e8c2f5152feb16596960b298365c36d227ee54b91bd — https://www.irmi.com/term/insurance-definitions/capacity"
     - "IRMI Glossary, 'underwriting capacity', entry, sha256:2ebab1745fa85c796d55db07af95f952f3954ba6d1539cede8f126bd6feab02e — https://www.irmi.com/term/insurance-definitions/underwriting-capacity"
     - "IRMI Glossary, 'surplus relief', entry, sha256:a566036b62b517dad05c5eb731c16cdeb11a341f9d702ad7aecaa373fe995610 — https://www.irmi.com/term/insurance-definitions/surplus-relief"
+    - "IRMI Glossary, 'underwriting guidelines', entry, sha256:0ebdd2f245496dfc1f32b8a478a7daf0a89ee1494cda4ffa445471b5d33ac113 — https://www.irmi.com/term/insurance-definitions/underwriting-guidelines"
     - "IRMI Glossary, 'staff underwriter', entry, sha256:b2d2b0aacfead61f6ee5debe5c8f13fdd6475253d2bba76b5ee7a148cf45b632 — https://www.irmi.com/term/insurance-definitions/staff-underwriter"
     - "NAIC, IRIS Ratios Means and Medians (2025), P&C ratio 2 Net Premium to Surplus, 'Unusual if Equal to or Over' 300, P&C ratio 2 threshold, sha256:0cb14c7a1f73bee94056296833cce0b70659e23b43842df033819fb962fde0ba — https://content.naic.org/sites/default/files/publication-iris-means-median-2025.pdf"
     - "NAIC Accounting Practices and Procedures Manual (Mar 2025, Indiana DOI copy), SSAP No. 71 ¶2, SSAP No. 71 ¶2, PDF p.525, sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
-  open_findings: 1
+    - "SOA Exam GIINT Introduction to General Insurance, February 10, 2014, with answers (NAIC-hosted copy), Q11 and Q12 (p.7), answer key p.32: Q11 A, Q12 D, sha256:7e0e508af4eb9322d2b05593cb8c1eca3e43a8838e3ea10fdb51b923bdfde7f3 — https://content.naic.org/sites/default/files/inline-files/committees_c_catf_related_five.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Underwriting Policy.md
 ---

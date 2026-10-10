@@ -1,13 +1,13 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fae03c88ed17b5f142dc2139de4ca1ab6dcdf5e24b598030c7fd7c34afb5197b
+  content_hash: sha256:a6251c1e328150863ffddf5579f7f3ffc8b010fb922724a1a0c0f1d4d96f9ff5
   sources:
     - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.3 'period of restoration' (p.9); A.5.c Extended Business Income 60 days; G.4 Extended Period of Indemnity, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Period of Restoration.md
 ---

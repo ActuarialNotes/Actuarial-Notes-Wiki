@@ -17,11 +17,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eec91375307b5f0a1daef20487e91eb56254e98bae400c665fb9cd328ea11029
+  content_hash: sha256:538f19678723c3b13f427a468acc4e486f1cda607e069bc3414ae936651a8947
   sources:
-    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, Cov A 2.b insured contract; II additional insureds by endorsement, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, Cov A 2.b insured contract; II, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
     - "LII Wex, 'independent contractor', entry, sha256:dc17e9075951c353b9492692ee72547cc0cbbe07870a3733fb30938519d41dc6 — https://www.law.cornell.edu/wex/independent_contractor"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-223.md
 ---

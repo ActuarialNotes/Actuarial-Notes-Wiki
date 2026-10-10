@@ -27,3 +27,23 @@ created: 2026-10-10
 - checks_run: blind recomputation from the stem with key and explanation stripped (agrees with the key); every distractor's rationale checked; wiki_link tags and learning_objective checked against the exam page; blind C (I MPL, II MFL, III PML) matches the key under IRMI's bare definitions; see F-001
 - sources_checked: IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss; IRMI Glossary, 'maximum foreseeable loss (MFL)', entry, sha256:ac6a852f104fe279e0909ec10a83934963490673519be7caa5ceef6192b7151c — https://www.irmi.com/term/insurance-definitions/maximum-foreseeable-loss; IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss; Risk & Insurance Education Alliance, Insurance Glossary, 'Probable Maximum Loss (PML)', entry, sha256:5afb6a900dd760a9c0b0b5488990f7f36ec8779ac2ff1b18bf67d4918d6e9b14 — https://www.riskeducation.org/insurance-glossary/probable-maximum-loss-pml/; M. Korn, '6 Fire Loss Scenarios to Review Before It's Too Late', Risk & Insurance (NLE/PML/MFL/EML/MPL definitions), entry, sha256:63e30fa759800ffc8283e3d82f56542677192cac9820af605fb5fbcc8a88319c — https://riskandinsurance.com/6-fire-loss-scenarios-to-review-before-its-too-late/
 - note: Blind answer C matches the key on IRMI's bare definitions, but two references define PML with sprinkler impairment and call the protection-working figure the normal loss expectancy; the keyed mapping of (II) and (III) then fails. F-001 (critical) open: the answer itself is in question, so not fixed here. Disputed until the stem is rewritten.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv04
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Rewritten (lead-authorised): the stem now states NLE, PML and MFL as the National Alliance glossary and Korn define them (NLE all protection working; PML some impairment, normally one sprinkler system; MFL no sprinklers and no effective fire department, stopped by fire walls/separation) and asks the candidate to apply them to three figures; re-keyed A (I NLE, II PML, III MFL); bloom apply. Exactly one option fits the stated definitions.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv04
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: blind recomputation of the rewritten stem with key and explanation stripped: (I) all protection = NLE, (II) one valve closed = PML, (III) free burn stopped by fire wall = MFL -> A, agrees with the new key; distractors B, C, D each misapply a stated definition; MPL remark against IRMI; tags and objective unchanged
+- sources_checked: Risk & Insurance Education Alliance, Insurance Glossary, 'Probable Maximum Loss (PML)', entry, sha256:5afb6a900dd760a9c0b0b5488990f7f36ec8779ac2ff1b18bf67d4918d6e9b14 — https://www.riskeducation.org/insurance-glossary/probable-maximum-loss-pml/; M. Korn, '6 Fire Loss Scenarios to Review Before It's Too Late', Risk & Insurance (NLE/PML/MFL/EML/MPL definitions), entry, sha256:63e30fa759800ffc8283e3d82f56542677192cac9820af605fb5fbcc8a88319c — https://riskandinsurance.com/6-fire-loss-scenarios-to-review-before-its-too-late/; IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss
+- note: Vault-written; definitions stated in the stem follow two agreeing rank-3 references, so the question no longer turns on a contested definition. Medium.

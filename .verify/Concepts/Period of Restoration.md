@@ -51,3 +51,23 @@ created: 2026-10-10
 - checks_run: definition (72 hours / immediately; reasonable speed; new permanent location; expiration does not cut it short), ordinance-or-law and pollutant exclusions, EBI 60 days and the extended period of indemnity option against CP 00 30 10 12; both examples recomputed blind (37 weeks; 256 days; 1,705,714; recovery triangle 144,000, covered 112,959, uncovered 31,041; 120 days covers the 112-day recovery)
 - sources_checked: ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.3 'period of restoration' (p.9); A.5.c Extended Business Income 60 days; G.4 Extended Period of Indemnity, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12
 - note: F-001 (critical) fixed in place from the form. F-002 (major, open) — the first example's reasoning about code weeks needs reworking. Endorsement claims (waiting-period buy-back; dependent property PoR) were not checked against the endorsements. In review until F-002 is resolved.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv04
+- date: 2026-10-10
+- resolves: F-002
+- status: resolved
+- note: Rewritten (lead-authorised): the example now states the unendorsed CP 00 30 and leaves the 4 code weeks out of the building path (29 weeks); the machinery path (33) governs, t_R = 37 weeks, T_max = 256 days, PML 1,705,714 unchanged; the 'paths tie' reasoning is replaced: with a spare line the period would be 29 + 4 = 33 weeks, the code weeks falling outside the period.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv04
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: re-verify after the F-002 rewrite: building path 3+6+20 = 29, machine 3+30 = 33, t_R = max + 4 = 37 weeks, T 256 days, PML 45,000 x 256/7 + 60,000 = 1,705,714; spare-line case 33 weeks; rest of page as in the earlier pass today
+- sources_checked: ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.3 'period of restoration' (p.9); A.5.c Extended Business Income 60 days; G.4 Extended Period of Indemnity, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12
+- note: F-001 (critical) and F-002 (major) both fixed against CP 00 30 10 12. Endorsement remarks (waiting-period buy-back, dependent property) remain unchecked against endorsement text. Medium.

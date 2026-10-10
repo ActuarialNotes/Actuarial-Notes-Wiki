@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7edf238ef268b4f3b76a401a70622879da8afa72735feefcca0e7fa4f3bfa317
-  sources: []
+  sources:
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §1 'unstructured data' has no clear, semantically overt, easy-for-a-computer structure; opposite of structured data (relational database), sha256:2536b9352416ca671cd66b93bd5878c85d7461d479dc730c2f79687e69dd0e65 — https://nlp.stanford.edu/IR-book/html/htmledition/boolean-retrieval-1.html"
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §6.2.1 idf = log(N/df): rare terms high, frequent terms low, sha256:d41ee146d453cfb74d5f9f57e3c536e551201d5cb12da0aed889892e6f6b5c6f — https://nlp.stanford.edu/IR-book/html/htmledition/inverse-document-frequency-1.html"
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §6.2.2 tf-idf weight, highest for a term frequent in few documents, sha256:79ac59cc29b8fa1e2ba827f4a992d39e16c7b54e7f60162774098a68f86feaba — https://nlp.stanford.edu/IR-book/html/htmledition/tf-idf-weighting-1.html"
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §2.2.2 stop words, sha256:f0fd00d1b4a82db0dbaba96e1d87ceb9565f479b3ea68dabeab8197e1963f825 — https://nlp.stanford.edu/IR-book/html/htmledition/dropping-common-terms-stop-words-1.html"
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §10 semistructured retrieval of XML, sha256:6ad525b29d7965f8216806084a9bceb4bf533ad0533acc017fb58ac9724fb5df — https://nlp.stanford.edu/IR-book/html/htmledition/xml-retrieval-1.html"
+    - "SOA Exam PA syllabus, October 2026, Topic 2 'Data Exploration and Visualization', objective a) 'Identify structured and unstructured data types', PDF p.2, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Unstructured Data.md

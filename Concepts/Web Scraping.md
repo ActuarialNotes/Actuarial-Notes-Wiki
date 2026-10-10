@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b26262aa9e33b311fab2a02ab576bd1856790cf41d539850e8c65fc559a2cb2f
-  sources: []
-  open_findings: 0
+  sources:
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.24 'Web scraping', §24.1 (use an API where possible: more reliable data), §24.2 ethics and legalities (terms of service, PII, copyright; public, non-personal, factual data; wait between requests), §24.3-24.4 (HTML elements, id/class attributes, CSS selectors), §24.6 (if the structure of the site changes, the scraping code must change), sha256:460c5ef7b2c93b577eb9edf35c23ac336e97c997fbaf552e08e9df004ec5c817 — https://r4ds.hadley.nz/webscraping.html"
+    - "IETF RFC 9309, Robots Exclusion Protocol (Sept. 2022), §2.2 the protocol defines allow/disallow rules for paths; §2.2.4 records that are not part of the protocol (e.g. Sitemaps) MAY be interpreted by crawlers; §2.1 rules are not a form of access authorization, sha256:bbaa280636d3e38f0a1a130a5ce40e9753db1ed18c860945b0bf795ff8dc1a87 — https://www.rfc-editor.org/rfc/rfc9309.html"
+    - "NIST SP 811, Guide for the Use of the SI, Appendix B.9, B.9 conversion factors: square foot (ft2) to square meter (m2) 9.290 304E-02, sha256:64d01ada3f09299eeaa3eab7fbb6a6fa78438aa35813cafdbb6b7f2b829371c9 — https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9"
+    - "Vermont DFR Insurance Bulletin No. 229 (Mar. 12, 2024), adopting the NAIC Model Bulletin on Use of AI Systems by Insurers: unfair discrimination, bias analysis, data lineage/currency, third-party data and AI systems (§§3-4), sha256:0fa2eb6c77c4fad493df0b53612e9fd4cb815834300d37433713caaa70c215a5 — https://dfr.vermont.gov/sites/finreg/files/regbul/dfr-insurance-bulletin-229-ai.pdf"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Web Scraping.md
 ---

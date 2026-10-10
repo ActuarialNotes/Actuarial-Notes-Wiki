@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:05058169428bca1e76397ed2550010ef0168de61644dc8cb334c0134623a3609
-  sources: []
+  sources:
+    - "Oracle Business Intelligence Standard Edition One Tutorial 10.1.3, Data Mart Concepts, Appendix A, A.1-A.3 (data mart = single subject, often one department; data warehouse = multiple subjects; dependent marts draw from a central warehouse, independent marts directly from operational or external sources; ETL), sha256:2cdad56cd480d46df69d46bddc08c7cc0c7790ddc43a03622ff2fb2d0e667575 — https://docs.oracle.com/cd/E10352_01/doc/bi.1013/e10312/dm_concepts.htm"
+    - "Kimball Group, Dimensional Modeling Techniques, Grain: what a single fact table row represents; declared first; atomic vs rolled-up grain, sha256:389b0d59da62943d4b303319f34832d42e196009a383db5796d0e06d8a28d394 — https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/grain/"
+    - "Kimball Group, Dimensional Modeling Techniques, Star schemas: fact tables linked to dimension tables via primary/foreign keys; measurements vs descriptive context, sha256:7b5cf3beea426d7b5e83f4bb693a5e1de1debbe479913b278cdb547afd0cfedd — https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/star-schema-olap-cube/"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 Internal Data, printed p.36 (PDF p.48): some actuaries have a data mart designed for ratemaking, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Data Mart.md

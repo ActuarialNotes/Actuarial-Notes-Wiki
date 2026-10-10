@@ -33,12 +33,12 @@ verification:
 > On the SULT at $5\%$, $A_{50} = 0.18931$, $A_{60} = 0.29028$, ${}^2A_{50} = 0.05108$, ${}^2A_{60} = 0.10834$, ${}_{10}E_{50} = 0.60182$, $\ddot{a}_{50} = 17.0245$ and $\ddot{a}_{60} = 14.9041$. For a 10-year term insurance of \$100,000 on $(50)$, paid at the end of the year of death, find the EPV, the standard deviation of the present value, and the net annual premium payable for 10 years.
 >
 > > [!answer]-
-> > Here $v^{10} = 0.613913$, so the second-moment deferral factor is $0.613913(0.60182) = 0.369466$.
+> > Here $v^{10} = 0.613913$, so the second-moment deferral factor is $0.613913(0.60182) = 0.369465$.
 > > $$
 > > \begin{align*}
 > > A^{1}_{50:\overline{10}|} &= 0.18931 - 0.60182(0.29028) \\
 > > &= 0.014614 \\
-> > {}^2A^{1}_{50:\overline{10}|} &= 0.05108 - 0.369466(0.10834) \\
+> > {}^2A^{1}_{50:\overline{10}|} &= 0.05108 - 0.369465(0.10834) \\
 > > &= 0.011052 \\
 > > \text{Var}(Z) &= 0.011052 - 0.014614^2 \\
 > > &= 0.010838 \\

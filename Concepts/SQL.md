@@ -1,12 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cba09a70f5b2945150b30f09fbf51fe83c87b2f7d2ea0e096103463a5df1efbb
-  sources: []
-  open_findings: 0
+  sources:
+    - "PostgreSQL 17 Documentation, Description (general processing of SELECT, steps 1-8); WHERE Clause; SELECT List (output names in ORDER BY/GROUP BY, not WHERE/HAVING), sha256:16d6c1ac8132a80f1a157883d3fae1c07fca9196b44e76c4574027f13d830a7f — https://www.postgresql.org/docs/17/sql-select.html"
+    - "PostgreSQL 17 Documentation, §2.7 WHERE selects input rows before aggregates, HAVING groups after; WHERE must not contain aggregates; condition without aggregate more efficient in WHERE, sha256:df158bcbc7924e1fbe49821aab78e37df53a7e14ac4cc8befdc480fee72b7e35 — https://www.postgresql.org/docs/17/tutorial-agg.html"
+    - "PostgreSQL 17 Documentation, §7.3 SELECT *, value expressions per row, column labels, sha256:253982a077881262613e8fbabcef62a96d0bb6126212348fca17e527e533f8a6 — https://www.postgresql.org/docs/17/queries-select-lists.html"
+    - "PostgreSQL 17 Documentation, §7.2 table aliases, self-join, sha256:69486ac181f941b65eb886f28d243b950ba891431dee9efada046a430ae2a566 — https://www.postgresql.org/docs/17/queries-table-expressions.html"
+    - "PostgreSQL 17 Documentation, §7.5 unspecified order without ORDER BY; tie-breaking; ASC default; ORDER BY x, y DESC, sha256:efe155210f5dddb504fc919b8abbfe5866e2ac22c0dab8704488c7bd64fa176d — https://www.postgresql.org/docs/17/queries-order.html"
+    - "PostgreSQL 17 Documentation, §9.21 count(*) / count(expr) non-null; avg etc. of non-null inputs; null when no rows except count, sha256:42dc684319f61831aa4fbb2cec8af602a22aadb72eb92eb784bb84ed1a98c076 — https://www.postgresql.org/docs/17/functions-aggregate.html"
+    - "PostgreSQL 17 Documentation, §9.2 comparison with null yields null; IS NULL, sha256:7c49c06dfe1ddba8fa5e113dc4f0a3541e7e9534916aa0aaffb02f5da91030b2 — https://www.postgresql.org/docs/17/functions-comparison.html"
+    - "PostgreSQL 17 Documentation, §9.18 COALESCE, sha256:30ef51aafd582617bbc6b538f21fb77149001f937cc795e23f54b4501db45146 — https://www.postgresql.org/docs/17/functions-conditional.html"
+    - "MySQL 8.4 Reference Manual §15.2.13 SELECT Statement, alias 'can be used in GROUP BY, ORDER BY, or HAVING clauses'; not permissible in WHERE, sha256:94ac7713ee060fc295f2258a235fc52352ae1f395f396fdd2f8853e7711ca129 — https://dev.mysql.com/doc/refman/8.4/en/select.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/SQL.md
 ---

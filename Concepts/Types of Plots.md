@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:184061bc72b234cd1f35f6d4a10ae03f2da704fcd20b8dd519a3ffa2413f26a4
-  sources: []
+  sources:
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.1 'Data visualization', §1.4.1 bar chart, reorder by frequency; §1.4.2 histogram (equally spaced bins; binwidth too narrow/too wide), density plot (modes, skewness, fewer details); §1.5.1 box plot anatomy (IQR 25th-75th, median, points beyond 1.5 IQR, whisker to farthest non-outlier); §1.5.2 stacked/filled bars; §1.5.3 scatterplot, sha256:871721caf69ea711517d9a4f0f627806da4200f6f7fd0068aa89530943339ad4 — https://r4ds.hadley.nz/data-visualize.html"
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.10 'Exploratory data analysis', §10.5.1 density = count standardized so the area is one; boxplots compact with less information; fct_reorder by median; §10.5.2 geom_tile; §10.5.3 overplotting, geom_bin2d/geom_hex, sha256:ab13c323616810e786eb9f6298ed5d4b9bc50d1cebfb753d2725f91684553432 — https://r4ds.hadley.nz/EDA.html"
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.9 Layers, §9.4 facet_wrap/facet_grid; facets share scales by default, free scales show within-facet detail, sha256:da70e620cf22ecb2faa7a31e0fd7b9be8e7621ecbcacabf0db7169c462bb19c3 — https://r4ds.hadley.nz/layers.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.25 Run-Sequence Plot: y(i) vs i; shifts in location and scale; outliers, sha256:3de6be786eb2ab529c8fa7c5e2c9c70501478bfdbf2cd7c735673b179f0b0e26 — https://www.itl.nist.gov/div898/handbook/eda/section3/runseqpl.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.3.3.14 Histogram (count and relative/density normalisation), sha256:8505d865ba5c787e3179e903ad98276d05386fab18449eb3b554d12b271b58d5 — https://www.itl.nist.gov/div898/handbook/eda/section3/histogra.htm"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Types of Plots.md

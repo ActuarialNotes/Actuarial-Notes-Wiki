@@ -8,7 +8,6 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Commercial+Property+Conditions
-  - Concepts/Common+Policy+Conditions
 answer: "D"
 points: 1
 verification:
@@ -16,10 +15,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c3b795c5f2b7f3db11fc30b58a252075518784c89d5fa0bccbdfc965cd766a72
+  content_hash: sha256:c9acae2a72f45942c230efee4ead94ef04325b92356106a9b7d7a9c0b1a9286d
   sources:
+    - "ISO CP 00 90 07 88 Commercial Property Conditions (specimen), §A, B, D, E (delta re-check of the retag), sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88"
     - "ISO CP 00 90 07 88 Commercial Property Conditions (specimen), §A, B, D, E, sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-627.md
 ---

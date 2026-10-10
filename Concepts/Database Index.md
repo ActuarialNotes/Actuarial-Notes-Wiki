@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a608677531dbe8ad247de5d573f2e9035548c8f00882be7e0c46261aaeae30b
-  sources: []
+  sources:
+    - "PostgreSQL 17 Documentation, §11.1 index like a book index; system keeps it synchronized, adding overhead to data manipulation; planner uses it when more efficient than a sequential scan, sha256:b219b13fcf65d35c8e57807d74748dc57041a7275dc7e531c82d226df937208e — https://www.postgresql.org/docs/17/indexes-intro.html"
+    - "PostgreSQL 17 Documentation, §11.2.1 B-tree default, equality and range on sortable data, sha256:e8a6dbd4c0f3eb97b50d916d4b9bc6fc38329b0827e015ce929f66a0f6fad3d5 — https://www.postgresql.org/docs/17/indexes-types.html"
+    - "PostgreSQL 17 Documentation, §11.3 multicolumn index most efficient with constraints on leading (leftmost) columns, sha256:a65316abe78b1d29e58bf8da90e7993c967758a10c085cdd8deb168cf366aabf — https://www.postgresql.org/docs/17/indexes-multicolumn.html"
+    - "PostgreSQL 17 Documentation, §11.7 index on an expression needed to index a function of a column, sha256:fd3493d2effa9046566d392567b4790e94614cd2d0e869034286bcf5b2568738 — https://www.postgresql.org/docs/17/indexes-expressional.html"
+    - "PostgreSQL 17 Documentation, §11.13 selectivity decides whether an index beats a sequential scan, sha256:7953c0e55f8e7fe508d28151fb30629509f288a181d642b1255370563a3f4b8e — https://www.postgresql.org/docs/17/indexes-examine.html"
+    - "PostgreSQL 17 Documentation, §5.5.4 primary key unique and not null, creates a unique B-tree index; a table has at most one primary key, sha256:f3797f1e000c84ee57bcb411cbffa458be90b2adb69889d243abfa090b0b8224 — https://www.postgresql.org/docs/17/ddl-constraints.html"
+    - "MySQL 8.4 Reference Manual §17.6.2.1 Clustered and Secondary Indexes, clustered index stores row data, typically the primary key; all other indexes are secondary indexes, sha256:542622d6a2ee72ee2b714af2d13dac62107187c3460678191300976e6935d3e1 — https://dev.mysql.com/doc/refman/8.4/en/innodb-index-types.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Database Index.md

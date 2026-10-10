@@ -19,7 +19,7 @@ verification:
 
 - $P_t$ is the premium (the policyholder chooses it, within limits), $EC_t$ the expense charge, $i^c_t$ the credited rate, $q^{*}$ the cost-of-insurance mortality rate and $v_q = 1/(1+i_q)$ the CoI discount factor. $DB_t - AV_t$ is the additional death benefit, the insurer's net amount at risk
 - **Type A:** $DB_t = FA$, the face amount, so $CoI_t$ depends on $AV_t$ and the recursion is solved for $AV_t$. **Type B:** $DB_t = FA + AV_t$, so $CoI_t = q^{*}_{x+t-1}\,v_q\,FA$ directly
-- **Corridor:** to keep its tax status as insurance, the death benefit must be at least $(1 + \gamma_t)AV_t$; when this binds, $DB_t = (1+\gamma_t)AV_t$ replaces $FA$. A surrender pays the cash value $AV_t - SC_t$, after a surrender charge
+- **Corridor:** to keep its tax status as insurance, the death benefit must be at least $c_t\,AV_t$, where $c_t$ is the corridor factor; when this binds, $DB_t = c_t\,AV_t$ replaces $FA$. A surrender pays the cash value $AV_t - SC_t$, after a surrender charge
 - **As a product:** Universal life is a cash value policy whose premiums and face amount are both flexible. The owner may pay on any pattern, so long as enough is paid to keep the policy in force: if the account value falls too low to cover the charges, the coverage ends unless the owner pays more or reduces the benefits. Increasing the face amount may require new evidence that the insured qualifies. This flexibility is the key difference from [[Whole Life Insurance|whole life]], whose premiums follow a set schedule.
 - The insurer's own profit test projects the account alongside its own interest, mortality and expense assumptions; a **no-lapse guarantee** keeps the cover in force when the account value runs out and needs a [[Reserve|reserve]] of its own
 
@@ -44,7 +44,7 @@ verification:
 > > The death benefit is $100{,}000 + 6{,}798.13 = 106{,}798.13$: under Type B the amount at risk stays at the face amount, whatever the account does.
 
 > [!example]- Type A Account Value With the Corridor Check {Example}
-> A Type A UL policy has face amount $150{,}000$ and $AV_{t-1} = 20{,}000$. The premium is $3{,}000$, the expense charge is $100$ plus $2\%$ of premium, $q^{*}_{x+t-1} = 0.006$, $i_q = 5\%$, $i^c = 4\%$ and the corridor factor is $\gamma_t = 1.5$. Find $AV_t$ and $CoI_t$.
+> A Type A UL policy has face amount $150{,}000$ and $AV_{t-1} = 20{,}000$. The premium is $3{,}000$, the expense charge is $100$ plus $2\%$ of premium, $q^{*}_{x+t-1} = 0.006$, $i_q = 5\%$, $i^c = 4\%$ and the corridor factor is $c_t = 2.5$. Find $AV_t$ and $CoI_t$.
 >
 > > [!answer]-
 > > $EC = 160$ and $k = q^{*}v_q = 0.006/1.05 = 0.0057143$. Assuming the corridor does not bind, $CoI_t = k(150{,}000 - AV_t)$, so
@@ -61,7 +61,7 @@ verification:
 > > &= 725.72
 > > \end{align*}
 > > $$
-> > Check: $(1 + 1.5)(22{,}998.85) = 57{,}497 < 150{,}000$, so the death benefit stays at the face amount and the assumption holds. Had the corridor bound, $DB_t = 2.5\,AV_t$ and the CoI would have been recomputed on $1.5\,AV_t$.
+> > Check: $2.5(22{,}998.85) = 57{,}497 < 150{,}000$, so the death benefit stays at the face amount and the assumption holds. Had the corridor bound, $DB_t = 2.5\,AV_t$ and the CoI would have been recomputed on $1.5\,AV_t$.
 
 > [!tip]- How it appears on the exam
 > - **ALTAM** gives the charges, credited rate and premium pattern and asks for the account value, cost of insurance, death benefit and cash value year by year for a Type A or Type B policy, including the corridor test, usually in a spreadsheet layout.

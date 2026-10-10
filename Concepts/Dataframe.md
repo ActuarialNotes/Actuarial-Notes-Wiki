@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7dba9db66315e115437b13109a2c36c4abacf913de31fd654628c59f56d6d8f1
-  sources: []
+  sources:
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.1 'Data visualization', §1.2.1 data frame = rectangular collection of variables (columns) and observations (rows); tidy data definition, sha256:871721caf69ea711517d9a4f0f627806da4200f6f7fd0068aa89530943339ad4 — https://r4ds.hadley.nz/data-visualize.html"
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.3 'Data transformation', §3.1.3 column types <int>/<dbl>/<chr>/<dttm>, dplyr never modifies inputs; §3.2.1-3.2.4 filter/arrange/distinct; §3.3 mutate/select; §3.5 group_by/summarize, mean() returns NA without na.rm; §3.6 include a count, sha256:7ecfc380d9ba22575657e2e0ea5b16d9a2c7a235f5cfd2a3ad860bf6bbf745de — https://r4ds.hadley.nz/data-transform.html"
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.19 Joins, Ch.19 left_join and other join verbs, sha256:27708095875a55fe556f715fa31bef17d6c0bfdf5b8f6b36d1c1cafdce46dd21 — https://r4ds.hadley.nz/joins.html"
+    - "pandas 3.0.6 User Guide, Intro to data structures, DataFrame: '2-dimensional labeled data structure with columns of potentially different types ... like a spreadsheet or SQL table', sha256:d5af0fa791e879285aff87a158e00b3e1cca8b1030f4d1b8870a6d2fa8eb56ca — https://pandas.pydata.org/docs/user_guide/dsintro.html"
+    - "pandas 3.0.6, Comparison with SQL, copies vs in place; SELECT/assign(); WHERE/boolean indexing; isna()/notna(); GROUP BY size() vs count() (NOT NULL records); JOIN via merge(); sort_values(), sha256:9fb10fe945e08662d043b8aba3f413b9accef4d652c153329fadbe7a17ea52da — https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Dataframe.md

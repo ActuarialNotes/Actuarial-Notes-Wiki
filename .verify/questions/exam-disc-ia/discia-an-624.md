@@ -28,3 +28,23 @@ created: 2026-10-10
 - checks_run: Blind recompute from the stem before reading the key (keys all agreed); every option's rationale and arithmetic re-worked; learning_objective matches the DISC-IA page's section title exactly; wiki_link targets exist and are U.S. pages; facts checked against: §G.2.b and its example: 1,500,000×0.04×146/365=24,000 → 1,524,000
 - sources_checked: ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b and its example: 1,500,000×0.04×146/365=24,000 → 1,524,000, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf
 - note: Vault-written question with no publisher's key: medium per the MAS-I / Exam P precedent. One minor finding open on option D's rationale.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv10
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Applied in this run. Option D's rationale now gives the arithmetic that produces it: 1,500,000×0.04×(365+146)/365 = 84,000 → 1,584,000. Key unchanged (B).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv10
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: Delta re-check of option D's rationale: 60,000×511/365 = 84,000, 1,500,000+84,000 = 1,584,000; key B = 1,524,000 per CP 00 10 10 12 §G.2.b.
+- sources_checked: ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b (delta re-check of option D), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf; ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b and its example: 1,500,000×0.04×146/365=24,000 → 1,524,000, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf
+- note: Vault-written question: medium per precedent.

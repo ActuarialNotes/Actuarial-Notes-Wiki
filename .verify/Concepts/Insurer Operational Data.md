@@ -1,0 +1,15 @@
+---
+target: Concepts/Insurer Operational Data.md
+created: 2026-10-10
+---
+
+## [C-001] Validation pass
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv01
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Every claim checked against Werner & Modlin ch.3 (rank 2): two types of internal data (risk information record level; accounting information aggregate) p.36; ratemaking data mart vs transactional databases p.36; policy database records depend on exposure measure (HO home-year, WC classification, PA coverage/car/operator) p.37; fields (policy id, risk ids, original effective/termination and transaction dates, written premium/exposure by coverage, characteristics) pp.37-38; mid-term changes create records, earned/in-force premium calculated from records p.38; characteristics in multiple databases hard to merge, date of birth vs age p.38; claims database transaction records and listed fields incl. reopened status, event id, paid ALAE, salvage/subrogation linked to claim, claim characteristics only usable in rating if known at quotation p.40; UW expenses and ULAE aggregate, tracked by calendar year, line/state approximated p.42; CY/AY/PY/RY aggregation and CY reported = paid + change in case p.42-43; external data as benchmark when internal data sparse/unstable, new products p.36. Examples recomputed first: X ran Mar 1-Dec 1 = 9 months, reversal 0.25 x 900 = 225, net 0.75 / 675; Y reversal 0.5 x 800 = 400 and new 0.5 x 700 = 350, net 1.00 / 750 (same mechanics as Werner's Policies B and C, Table 3.1); claim: reported 12/31/24 = 12,000, 12/31/25 = 3,000 + 8,000 + 0 = 11,000, CY 2025 reported = 11,000 + (0 - 12,000) = -1,000, 4 records — all match. Tip: DISC-DA 2.a 'Insurer Operational Data' beside 2.b and 2.c; topic 9 datasets for claims and underwriting models = syllabus. Links resolve.
+- sources_checked: Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 Ratemaking Data, printed pp.36-47 (PDF pp.48-59): Internal Data; Policy Database (Table 3.1); Claims Database (Table 3.2); Accounting Information; Data Aggregation; External Data intro, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf
+- note: High: every substantive claim checks against Werner & Modlin (a CAS syllabus text, rank 2) read this run. 'Insurer operational data' is The Institutes' label; the page maps it to Werner's internal data, which is consistent with the DISC syllabus's split of operational data, statistical plans and external data. The tip's description of DISC-DA question shapes is study guidance (the only public statement of question form is CAS's 'application-based multiple-choice'); its topic placement was checked against the DISC DA syllabus.

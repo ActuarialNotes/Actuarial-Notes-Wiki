@@ -4,11 +4,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:03192346a89f23b0c5fc3006effdebde80bca29f8cce845dbe8cb569fbed616f
+  content_hash: sha256:5cda5b5550630c24a5015b825ae81ef9720c6273872668d12c11bc6a29a74680
   sources:
     - "ISO IL 00 17 11 98 Common Policy Conditions (specimen), §A–F p.1, sha256:965a8a0deb36ac7fcb29ae356d89b1ca01776dd99b1aae2a22cf46bb13611db2 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=IL+00+17&ed=11-98 (The Nationwide forms host regenerates its PDFs per request: bytes differ from the writer's copies, extracted text identical.)"
     - "New York Insurance Law §3426(b)–(c) (NY Senate official text, read via WebFetch, no digest), (b), (c) — https://www.nysenate.gov/legislation/laws/ISC/3426"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Common Policy Conditions.md
 ---
@@ -26,7 +26,7 @@ verification:
 - **Changes:** The policy contains all the agreements between the parties. The first named insured is authorized to request changes with the insurer's consent, and the terms can be amended or waived only by an [[Endorsement|endorsement]] issued by the insurer.
 - **Examination of books and records:** The insurer may examine and audit the named insured's books and records as they relate to the policy, at any time during the policy period and up to three years afterward. This supports the [[Premium Audit|premium audit]] of policies rated on payroll, sales or other exposures known only after the fact.
 - **Inspections and surveys:** The insurer has the right, but not the duty, to inspect the insured's premises and operations, give reports and recommend changes. By doing so it does not undertake to make the premises safe or to certify that they comply with laws, which protects it from being sued over an inspection that missed a hazard. The same protection extends to rating and advisory organizations, but not to inspections the insurer makes to certify boilers, pressure vessels or elevators under state or municipal law.
-- **Premiums:** The first named insured is responsible for paying all premiums and is the one who receives any return premium. Other named insureds are covered but do not owe the premium.
+- **Premiums:** The first named insured is responsible for paying all premiums and is the one who receives any return premium.
 - **Transfer of rights and duties:** The insured's rights and duties under the policy cannot be transferred without the insurer's written consent, because the insurer underwrote this insured and not a buyer of its business. The exception is the death of an individual named insured, whose legal representative takes over the rights and duties while acting within that role, and until one is appointed, a person with proper temporary custody of the property has them for that property only.
 - **The first named insured:** Several conditions single out the first named insured, the one listed first in the declarations, as the party who cancels, requests changes, pays premiums and receives refunds and notices. This avoids conflicting instructions when one policy names several related businesses.
 

@@ -16,10 +16,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ab86aeca747c9aaf63d73280ac7563d5d1c2a072f4b249fd557689474564cdbe
+  content_hash: sha256:8454627f8fcc1aac2ebafd47a31e1ccc1e32bae3575ac9d11e729bf8733b3666
   sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b (delta re-check of option D), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b and its example: 1,500,000×0.04×146/365=24,000 → 1,524,000, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-624.md
 ---
@@ -48,4 +49,4 @@ The answer is **B**.
 
 - **A** — Treats the increase as taking effect only at the anniversary; it accrues daily.
 - **C** — Applies the whole year's 4% on day 146.
-- **D** — Applies 4% twice, as if it were a two-year increase.
+- **D** — Adds a full year's 4% on top of the 146-day increase: $1{,}500{,}000 \times 0.04 \times (365 + 146)/365 = 84{,}000$.

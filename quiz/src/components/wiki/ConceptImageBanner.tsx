@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight, ChevronsDownUp, ChevronsUpDown, ImageIcon, SlidersHorizontal } from 'lucide-react'
+import { ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react'
 import {
   defaultParams,
   distributionForImage,
@@ -9,6 +9,7 @@ import { buildContinuousCurve, buildMassPoints } from '@/lib/distributionPlot'
 import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
 import { useTheme } from '@/hooks/useTheme'
 import { isThemedFigure, themedFigureSrc } from '@/lib/figureTheme'
+import { pictureImages } from '@/lib/conceptFigures'
 
 /**
  * A concept's figure, shown at the top of the concept popup.
@@ -37,15 +38,14 @@ import { isThemedFigure, themedFigureSrc } from '@/lib/figureTheme'
  * picture to look at. The two are counted separately: the Previous/Next pager
  * and the collapse control belong to the pictures alone.
  *
- * A picture starts folded away, leaving nothing behind but the corner control
- * (an image icon and an expand icon) that brings it back — not a full-width
- * strip, which would read as content where there is none. The popup opens on a
- * definition and a figure above it pushes that definition below the fold, so
- * the reader asks for the picture rather than scrolling past it. Unfolded with
- * that control, a picture takes the collapse control in its own top-right
- * corner. The state is global and persisted (`hooks/useFiguresCollapsed`), so
- * it holds as the reader pages through concepts and only changes when they use
- * one of those two controls. The simulator card is
+ * A picture starts folded away, leaving nothing behind it: the control that
+ * brings it back is the **figures button in the popup's header**
+ * (`ConceptPagePanel`), beside Listen, and it glows rainbow while the figures
+ * are showing. The popup opens on a definition and a figure above it pushes
+ * that definition below the fold, so the reader asks for the picture rather
+ * than scrolling past it. The state is global and persisted
+ * (`hooks/useFiguresCollapsed`), so it holds as the reader pages through
+ * concepts and only changes when they use that button. The simulator card is
  * not collapsible: it is already a single row, and folding a live control away
  * behind another control buys nothing.
  */
@@ -137,7 +137,7 @@ function DistributionPreview({ spec }: { spec: DistributionSpec }) {
 
 export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBannerProps) {
   const [index, setIndex] = useState(0)
-  const [collapsed, setCollapsed] = useFiguresCollapsed()
+  const [collapsed] = useFiguresCollapsed()
   const { theme } = useTheme()
   // A figure whose file 404s is dropped rather than left as a broken frame the
   // Previous/Next counter still counts.
@@ -162,7 +162,7 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
   const simulators = entries.filter(
     (entry): entry is { img: BannerImage; spec: DistributionSpec } => entry.spec !== null,
   )
-  const pictures = entries.filter(entry => entry.spec === null).map(entry => entry.img)
+  const pictures = pictureImages(usable)
 
   const safe = Math.min(index, Math.max(pictures.length - 1, 0))
   const current: BannerImage | undefined = pictures[safe]
@@ -178,9 +178,6 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
   // instead of a generated figure has no edge of its own and still takes one.
   const cardClass =
     'group block w-full rounded-lg text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-
-  // Only pictures fold away — the simulator card is a single row already.
-  const figureLabel = pictures.length > 1 ? `${pictures.length} figures` : 'figure'
 
   return (
     <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
@@ -210,66 +207,30 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
         </button>
       ))}
 
-      {current && (collapsed ? (
-        // Folded away, the figure leaves no strip across the page — only the
-        // control that brings it back, in the corner the collapse control sits
-        // in. A full-width bar reads as content; this reads as chrome.
-        <div className="flex justify-end">
-          <button
-            type="button"
-            data-sound="toggleOn"
-            onClick={() => setCollapsed(false)}
-            aria-expanded={false}
-            title={`Show ${figureLabel}`}
-            aria-label={`Show ${figureLabel}`}
-            className="inline-flex h-7 items-center gap-1 rounded-md border border-border bg-card/90 px-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <ImageIcon className="h-4 w-4 shrink-0" aria-hidden />
-            <ChevronsUpDown className="h-4 w-4 shrink-0" aria-hidden />
-          </button>
-        </div>
-      ) : (
-        // The collapse control has to be a *sibling* of the card, not a child:
-        // the card is itself a button, and a button inside a button is invalid
-        // markup that swallows the inner click.
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => onOpen(images.indexOf(current))}
-            data-sound="open"
-            className={`${cardClass} overflow-hidden p-2${
-              isThemedFigure(current.src) ? '' : ' border border-border'
-            }`}
-            aria-label={`View ${current.alt || 'figure'} full screen`}
-          >
-            <img
-              key={current.src}
-              // The figure carries both palettes; the URL says which one this
-              // reader is in (`lib/figureTheme.ts`). Without it an OS-light
-              // reader on the default dark app got a white panel on a black card.
-              src={themedFigureSrc(current.src, theme)}
-              alt={current.alt}
-              // Concept figures are near-square (see docs/concept-figures.md), so a
-              // landscape-era height cap would shrink them to an unreadable column.
-              className="mx-auto max-h-80 w-full object-contain"
-              onError={() => setFailed(prev => new Set(prev).add(current.src))}
-            />
-          </button>
-          {/* Sits over the card's top-right corner. It carries the card's own
-              background so it stays legible over a light figure in dark mode. */}
-          <button
-            type="button"
-            data-sound="toggleOff"
-            onClick={() => setCollapsed(true)}
-            aria-expanded
-            title={`Hide ${figureLabel}`}
-            aria-label={`Hide ${figureLabel}`}
-            className="absolute right-1.5 top-1.5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-border bg-card/90 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <ChevronsDownUp className="h-4 w-4" />
-          </button>
-        </div>
-      ))}
+      {current && !collapsed && (
+        <button
+          type="button"
+          onClick={() => onOpen(images.indexOf(current))}
+          data-sound="open"
+          className={`${cardClass} overflow-hidden p-2${
+            isThemedFigure(current.src) ? '' : ' border border-border'
+          }`}
+          aria-label={`View ${current.alt || 'figure'} full screen`}
+        >
+          <img
+            key={current.src}
+            // The figure carries both palettes; the URL says which one this
+            // reader is in (`lib/figureTheme.ts`). Without it an OS-light
+            // reader on the default dark app got a white panel on a black card.
+            src={themedFigureSrc(current.src, theme)}
+            alt={current.alt}
+            // Concept figures are near-square (see docs/concept-figures.md), so a
+            // landscape-era height cap would shrink them to an unreadable column.
+            className="mx-auto max-h-80 w-full object-contain"
+            onError={() => setFailed(prev => new Set(prev).add(current.src))}
+          />
+        </button>
+      )}
 
       {current && !collapsed && current.caption && (
         <p className="mt-1.5 text-center text-xs italic text-muted-foreground">{current.caption}</p>

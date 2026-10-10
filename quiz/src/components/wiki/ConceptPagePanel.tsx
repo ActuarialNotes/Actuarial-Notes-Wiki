@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Headphones, Loader2, X } from 'lucide-react'
+import { Headphones, ImageIcon, Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
@@ -12,10 +12,12 @@ import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptActionMenu } from '@/components/ConceptActionMenu'
 import type { PdfReaderDoc } from '@/hooks/usePdfReader'
+import { useFiguresCollapsed } from '@/hooks/useFiguresCollapsed'
+import { figureLabel, pictureImages } from '@/lib/conceptFigures'
 
 /**
  * The open page of the concept popup's stack: its header (the title, which is
- * the action menu's one trigger, plus Listen) and its body (the article or the
+ * the action menu's one trigger, plus the figures toggle and Listen) and its body (the article or the
  * Listen view), with the gallery it opens.
  *
  * The actions themselves are `components/ConceptActionMenu.tsx` — the same menu
@@ -58,6 +60,9 @@ export interface ConceptPagePanelProps {
   onGalleryOpenChange?: (open: boolean) => void
 }
 
+const HEADER_BUTTON = 'inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors'
+const HEADER_BUTTON_IDLE = 'text-muted-foreground hover:text-foreground hover:bg-accent'
+
 export function ConceptPagePanel({
   entry,
   focusMode,
@@ -78,6 +83,7 @@ export function ConceptPagePanel({
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [listenView, setListenView] = useState(false)
+  const [figuresCollapsed, setFiguresCollapsed] = useFiguresCollapsed()
   const titleBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
 
@@ -167,6 +173,13 @@ export function ConceptPagePanel({
   // reading the page.
   const hasActions = entry.kind !== 'guide'
 
+  // The figures toggle only means something on a page that has a picture to
+  // fold (a distribution illustration is the simulator card, always shown), and
+  // not in Listen, where the article — and its figure — isn't on screen.
+  const figureCount = pictureImages(images).length
+  const figuresShown = !figuresCollapsed
+  const figuresName = figureLabel(figureCount)
+
   return (
     <>
       {/* Header. Focus mode spans the full viewport, so the header and the body
@@ -210,16 +223,34 @@ export function ConceptPagePanel({
             />
           )}
         </div>
+        {/* Figures toggle — the page's picture, folded away until asked for
+            (hooks/useFiguresCollapsed, shared by every page). A header button
+            like Listen, and for the same reason: it is a view switch, not an
+            action. Glows rainbow while the figures are showing. */}
+        {figureCount > 0 && !listenView && (
+          <button
+            type="button"
+            data-sound={figuresShown ? 'toggleOff' : 'toggleOn'}
+            onClick={() => setFiguresCollapsed(!figuresCollapsed)}
+            aria-pressed={figuresShown}
+            className={`${HEADER_BUTTON} ${figuresShown ? 'rainbow-glow text-foreground' : HEADER_BUTTON_IDLE}`}
+            title={figuresShown ? `Hide ${figuresName}` : `Show ${figuresName}`}
+            aria-label={figuresShown ? `Hide ${figuresName}` : `Show ${figuresName}`}
+          >
+            <ImageIcon className="h-5 w-5" />
+          </button>
+        )}
         {/* Listen toggle — a permanent control, sitting left of the expand
             toggle rather than on the action menu, since it's a view switch like
             focus mode, not an action. Survives focus mode for the same reason
             that toggle does: Listen is most useful with the page full-screen,
-            so there has to be a way in and out of it there. */}
+            so there has to be a way in and out of it there. Glows rainbow while
+            Listen is on. */}
         <button
           type="button"
           onClick={() => setListenView(!listenView)}
           aria-pressed={listenView}
-          className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
+          className={`${HEADER_BUTTON} ${listenView ? 'rainbow-glow text-foreground' : HEADER_BUTTON_IDLE}`}
           title={listenView ? 'Exit Listen' : 'Listen'}
           aria-label={listenView ? 'Exit Listen' : 'Listen'}
         >
@@ -231,7 +262,7 @@ export function ConceptPagePanel({
             type="button"
             onClick={onClose}
             data-sound="none"
-            className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            className={`${HEADER_BUTTON} ${HEADER_BUTTON_IDLE}`}
             title="Close page"
             aria-label={`Close ${entry.name}`}
           >

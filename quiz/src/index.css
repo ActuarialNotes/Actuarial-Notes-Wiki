@@ -2211,3 +2211,40 @@ summary .katex-display,
 
 /* Fortune-sheet sizes itself to its parent; give it the whole pane. */
 .pcpa-sheet > div { height: 100%; }
+
+/* A header button that is switched on — the concept popup's figures toggle and
+   Listen. The same sky→fuchsia→gold foil as the simulator card's edge, as a
+   travelling ring plus a soft blurred wash of it behind the button, so "on"
+   reads from across the header without a fill that would hide the icon. The
+   button is its own stacking context so the wash can sit under the icon but
+   over the popup. */
+.rainbow-glow {
+  position: relative;
+  isolation: isolate;
+}
+.rainbow-glow::before,
+.rainbow-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  background-size: 300% 100%;
+  animation: flashcard-foil-shift 3s linear infinite;
+  pointer-events: none;
+}
+.rainbow-glow::before {
+  padding: 1.5px;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.rainbow-glow::after {
+  z-index: -1;
+  filter: blur(7px);
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rainbow-glow::before,
+  .rainbow-glow::after { animation: none; }
+}

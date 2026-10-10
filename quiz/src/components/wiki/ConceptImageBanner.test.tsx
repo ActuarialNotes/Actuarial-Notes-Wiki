@@ -28,8 +28,9 @@ describe('ConceptImageBanner', () => {
     const html = renderToStaticMarkup(
       <Fresh images={[img('Media/Figures/One.svg')]} onOpen={() => {}} />,
     )
-    expect(html).toContain('Show figure')
     expect(html).not.toContain('<img')
+    // The control that unfolds it lives in the popup header, not the banner.
+    expect(html).toBe('<div class="not-prose mb-4"></div>')
   })
 
   it('renders nothing when the concept has no figures', () => {
@@ -84,14 +85,10 @@ describe('ConceptImageBanner', () => {
     expect(html).not.toContain('border-border')
   })
 
-  it('offers a collapse control on a picture', () => {
-    const html = render([img('Media/Figures/One.svg')])
-    expect(html).toContain('Hide figure')
-  })
-
-  it('names the whole set on the collapse control when there are several', () => {
+  it('leaves the fold control to the popup header', () => {
     const html = render([img('Media/Figures/One.svg'), img('Media/Figures/Two.svg')])
-    expect(html).toContain('Hide 2 figures')
+    expect(html).not.toContain('Hide figure')
+    expect(html).not.toContain('Show figure')
   })
 
   it('shows the concept figure beneath the simulator card', () => {
@@ -113,12 +110,13 @@ describe('ConceptImageBanner', () => {
       img('Media/Figures/Poisson_Distribution.svg'),
     ])
     expect(html).not.toContain('Next figure')
-    expect(html).toContain('Hide figure')
   })
 
-  it('leaves the simulator card uncollapsible', () => {
+  it('draws no picture at all behind a simulator card once folded', async () => {
+    setFiguresCollapsed(true)
     const html = render([img('Media/Normal_distribution_pdf.svg')])
-    expect(html).not.toContain('Hide figure')
+    expect(html).toContain('Open the Normal Distribution simulator')
+    expect(html).not.toContain('<img')
   })
 
   it('previews a discrete distribution as stems rather than a curve', () => {

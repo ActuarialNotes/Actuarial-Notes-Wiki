@@ -99,7 +99,7 @@ make sure the true set is one of A–D, or that E is genuinely the answer.
 Determine which of the following statements about the Kolmogorov-Smirnov test are true.
 
 - I. The statistic is the largest absolute difference between the empirical and the hypothesized distribution functions.
-- II. When the hypothesized distribution's parameters are estimated from the same data, the tabled critical values make the test reject too often.
+- II. When the hypothesized distribution's parameters are estimated from the same data, the tabled critical values are too large, so the test rejects less often than its stated level.
 - III. For a continuous hypothesized distribution, the difference must be checked just before and just after each data point.
 
 - A) I only
@@ -109,6 +109,8 @@ Determine which of the following statements about the Kolmogorov-Smirnov test ar
 - E) The answer is not given by (A), (B), (C), or (D)
 ```
 
+All three statements above are true, so the key is **E** — the fixed key has no
+"I, II and III" option, which is what makes E a live answer rather than a filler.
 Note the statement list is `- I.` (not `- A)`), so the parser does not read the
 statements as options. In the explanation, take each numeral in turn — true or
 false, and why.

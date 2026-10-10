@@ -54,7 +54,7 @@
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The Insurance Regulation section asks how insurers and insurance personnel are licensed. Questions classify an insurer as domestic, foreign or alien and as admitted or nonadmitted, ask when surplus lines may be used, or ask what a producer must do to be licensed and what can cost a license.
 > - **Personnel scenarios:** A question describes a person's job and pay and asks whether a producer license is needed, as in the third example, or contrasts a public adjuster with an insurer's adjuster.
-> - **Related objectives:** Licensing sits alongside [[Solvency Monitoring]], [[Rate Regulation]], [[Policy Form Regulation]] and [[Market Conduct Regulation]] as one of the regulator's tools.
+> - **Related objectives:** Licensing sits alongside [[Solvency Monitoring]], [[State Rating Laws]], [[Policy Form Regulation]] and [[State Market Conduct Regulation]] as one of the regulator's tools.
 
 > [!warning]- Exam traps
 > - **Foreign is another state, alien is another country:** A Canadian insurer licensed in New York is alien there, not foreign. A New Jersey insurer is foreign in New York.

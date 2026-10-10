@@ -52,7 +52,7 @@
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The Insurance Regulation section asks how regulators control insurance policies: legislative requirements such as standard forms and mandatory provisions, the filing and approval of forms, the role of the courts, and readability standards.
 > - **Applied questions:** A question describes a form and a state's filing law and asks whether the form can be used before approval, or describes a disputed clause and asks how a court will read it.
-> - **Neighbours:** Form regulation is paired with [[Rate Regulation]] in the same filings, and with [[Insurance Licensing]], [[Solvency Monitoring]] and [[Market Conduct Regulation]] as the regulator's tools.
+> - **Neighbours:** Form regulation is paired with [[State Rating Laws]] in the same filings, and with [[Insurance Licensing]], [[Solvency Monitoring]] and [[State Market Conduct Regulation]] as the regulator's tools.
 
 > [!warning]- Exam traps
 > - **File and use is not prior approval:** Under file and use an insurer may use a filed form without waiting for approval, and the department can still disapprove it later. Under prior approval it waits for approval or the deemer period.

@@ -93,7 +93,7 @@ The Institutes gives the topics no exam weights.
 > 2. Factors that Influence the [[Period of Restoration|Maximum Period of Restoration]]
 > 3. Factors that Influence the [[Business Income Coverage|Maximum Loss]] During the [[Period of Restoration]]
 > 4. [[Insurance to Value]] for [[Business Income Coverage]]
-> 5. Classifying [[Commercial General Liability|General Liability]] Accounts
+> 5. [[General Liability Classification|Classifying General Liability Accounts]]
 > 6. [[Commercial General Liability]] [[Exposure Base|Premium Bases]]
 > 7. [[Underwriting]] [[Premises and Operations Liability]]
 > 8. [[Underwriting]] [[Products and Completed Operations Liability]]
@@ -102,9 +102,9 @@ The Institutes gives the topics no exam weights.
 > [!example]- 11. Underwriting Other Types of Coverage
 > 1. [[Business Auto Coverage|Business Auto]] [[Underwriting]] Considerations – [[Liability Insurance|Liability Coverage]]
 > 2. [[Business Auto Coverage|Business Auto]] [[Underwriting]] Considerations – [[Auto Physical Damage Coverage|Physical Damage Coverage]]
-> 3. [[Workers Compensation Insurance|Workers Compensation]] [[Underwriting]] Considerations
+> 3. [[Workers Compensation Underwriting|Workers Compensation Underwriting Considerations]]
 > 4. [[Underwriting]] [[Umbrella Liability Insurance|Commercial Umbrella]] and [[Excess Insurance|Excess Liability Insurance]]
-> 5. [[Underwriting]] [[Personal Auto Policy|Personal Auto Insurance]]
+> 5. [[Personal Auto Underwriting|Underwriting Personal Auto Insurance]]
 
 > [!example]- 12. Risk Control and Premium Auditing
 > 1. [[Risk Control|Insurer Risk Control Goals]]

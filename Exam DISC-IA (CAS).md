@@ -58,7 +58,7 @@ The Institutes gives the topics no exam weights.
 > 7. Factors Affecting [[Liability Claim Valuation]]
 
 > [!example]- 4. Personal Auto Policy
-> 1. The [[Personal Auto Policy|Personal Vehicle Risk Management Environment]]
+> 1. The [[Personal Auto Insurance Laws|Personal Vehicle Risk Management Environment]]
 > 2. Understanding the [[Personal Auto Policy]]
 > 3. Examining [[PAP Liability Coverage|Personal Auto Liability Coverage]]
 > 4. PAP [[Medical Payments Coverage]] and [[Uninsured Motorists Coverage]]

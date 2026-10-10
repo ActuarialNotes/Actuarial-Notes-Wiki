@@ -46,4 +46,4 @@ verification:
 
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The Insurance Regulation section asks who the insurance regulators are. Questions ask what a state insurance department and its commissioner do, why the NAIC is not itself a regulator, and which state regulates a given activity of a multistate insurer, as in the first example.
-> - **Related objectives:** What the regulators do is spread over [[Insurance Licensing]], [[Solvency Monitoring]], [[Rate Regulation]], [[Policy Form Regulation]] and [[Market Conduct Regulation]].
+> - **Related objectives:** Why they regulate is on [[Reasons for Insurance Regulation]]; what they do is spread over [[Insurance Licensing]], [[Solvency Monitoring]], [[State Rating Laws]], [[Policy Form Regulation]] and [[State Market Conduct Regulation]].

@@ -13,8 +13,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { ProBadge } from '@/components/ProBadge'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
-import { StreakNavBadge } from '@/components/StreakBadge'
-import { STREAK_ENABLED } from '@/lib/featureFlags'
+import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
@@ -246,6 +245,50 @@ function StudyGuideRadial({
   )
 }
 
+// ── Mini readiness ring ────────────────────────────────────────────────────────
+//
+// The readiness square's ring: the Study Guide ring's arcs drawn thin around the
+// score, with nothing else — no labels, no legend, no hover. The full ring is a
+// tap away in the popup the square opens.
+
+const MINI_OUTER_R = RING_OUTER_R + 8
+const MINI_INNER_R = RING_OUTER_R - 14
+
+function MiniReadinessRing({ segments, pct, flash }: { segments: RingSegment[]; pct: number; flash?: boolean }) {
+  return (
+    <svg
+      viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`}
+      className="h-full max-h-full w-full"
+      aria-hidden="true"
+      style={{
+        filter: flash ? 'drop-shadow(0 0 8px rgba(34,197,94,0.55))' : 'none',
+        transition: 'filter 0.5s ease-out',
+      }}
+    >
+      <circle
+        cx={RING_CX} cy={RING_CY}
+        r={(MINI_OUTER_R + MINI_INNER_R) / 2}
+        fill="none"
+        strokeWidth={MINI_OUTER_R - MINI_INNER_R}
+        stroke="rgba(34,197,94,0.06)"
+      />
+      {segments.map((seg, i) => (
+        <path key={i} d={ringArcPath(seg.startDeg, seg.endDeg, MINI_OUTER_R, MINI_INNER_R)} fill={masteryFill(seg.state)} />
+      ))}
+      <text
+        x={RING_CX} y={RING_CY + 12} textAnchor="middle" fontSize={68} fontWeight="800"
+        fill={flash ? '#22c55e' : 'currentColor'}
+        style={{ transition: 'fill 0.8s ease-out' }}
+      >
+        {pct}%
+      </text>
+      <text x={RING_CX} y={RING_CY + 52} textAnchor="middle" fontSize={30} fill="currentColor" opacity={0.6}>
+        Ready
+      </text>
+    </svg>
+  )
+}
+
 // ── Study-plan sub-components ──────────────────────────────────────────────────
 
 function ReviewModeNote({ concepts }: { concepts: string[] }) {
@@ -322,6 +365,11 @@ export function ReadinessCard({
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
+  const readinessSquareRef = useRef<HTMLButtonElement>(null)
+  // The Study Guide popup the readiness square opens.
+  const [ringOpen, setRingOpen] = useState(false)
+  const ringOpenRef = useRef(false)
+  ringOpenRef.current = ringOpen
   const studyPlanCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
@@ -503,6 +551,24 @@ export function ReadinessCard({
     () => masteryRecords.filter(r => r.exam_id === progressKey),
     [masteryRecords, progressKey],
   )
+
+  // The arcs the readiness square's mini ring draws — the same segments as the
+  // Study Guide ring in the popup, so the two can't disagree.
+  const ringSegments = useMemo(
+    () => buildRingSegments(syllabus, examRecords, now),
+    [syllabus, examRecords, now],
+  )
+
+  // Esc closes the Study Guide popup — unless a concept is open over it, in
+  // which case that Esc belongs to the concept popup (one layer at a time).
+  useEffect(() => {
+    if (!ringOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !useConceptPopup.getState().open) setRingOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [ringOpen])
 
   // The one readiness score (docs/exam-readiness.md): syllabus coverage.
   // Computed once here and read by both halves of the card below — the ring
@@ -781,7 +847,7 @@ export function ReadinessCard({
 
   useEffect(() => {
     if (!scrollToRadialTrigger) return
-    studyGuideCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    readinessSquareRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     setFlashRadial(true)
     const t = setTimeout(() => setFlashRadial(false), 1200)
     return () => clearTimeout(t)
@@ -799,6 +865,9 @@ export function ReadinessCard({
     const fromRadial = popupFromRadial
 
     if (fromRadial) {
+      // The ring lives in the Study Guide popup, which ends where the concept
+      // popup begins — it is always in view, so there is nothing to scroll.
+      if (ringOpenRef.current) return
       // On every concept change, re-check whether the study guide card is still
       // visible above the popup. If it has scrolled out of view, bring it back.
       // The effect cleanup cancels a pending timeout on re-run, so rapid Next/Prev
@@ -886,25 +955,25 @@ export function ReadinessCard({
           <CardContent className="p-6 space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <h3 className="text-lg font-semibold">Today's Study Plan</h3>
                 <ProBadge />
               </div>
 
               {/* Progress pills — shown when there's activity today */}
               {todayQuestionsAnswered > 0 && !allConceptsDone && (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
                     <CheckMark className="h-3.5 w-3.5" />
                     {todayGemsEarned}/{todayQuestionsAnswered} correct
                   </span>
                   {todayGemsEarned > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
                       <Gem className="h-3 w-3 text-cyan-400" />
                       {todayGemsEarned} gems
                     </span>
                   )}
                   {todayLevelUps > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-sm font-medium">
                       <ArrowUp className="h-3 w-3 text-primary" />
                       {todayLevelUps} levelled up
                     </span>
@@ -922,7 +991,7 @@ export function ReadinessCard({
                       className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'plan-foil-ring bg-gradient-to-br from-sky-400/10 via-fuchsia-400/10 to-amber-300/10' : ''}`}
                     >
                       {/* Topic heading */}
-                      <p className="text-xs font-semibold text-muted-foreground truncate">
+                      <p className="text-sm font-semibold text-muted-foreground truncate">
                         {group.topicName}
                       </p>
                       {/* Concepts */}
@@ -934,18 +1003,18 @@ export function ReadinessCard({
                         return (
                           <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                             {isCompleted
-                              ? <CheckMark className="h-4 w-4" />
-                              : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                              ? <CheckMark className="h-5 w-5" />
+                              : <Circle className="h-5 w-5 text-muted-foreground shrink-0" />}
                             {/* Concept name — opens popup */}
                             <button
                               type="button"
                               data-study-concept={name.toLowerCase()}
                               onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
-                              className={`flex-1 text-left text-sm py-1 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                              className={`flex-1 text-left text-base py-1.5 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
                             >
                               {name}
                             </button>
-                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
+                            <span className={`text-sm shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
                           </div>
                         )
                       })}
@@ -958,7 +1027,7 @@ export function ReadinessCard({
                   <>
                     <div className="flex items-center gap-2 pt-1">
                       <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                      <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
+                      <span className="text-sm text-muted-foreground shrink-0">Also completed today</span>
                       <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
                     </div>
                     {bonusConcepts.map(lu => {
@@ -972,10 +1041,10 @@ export function ReadinessCard({
                           className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
                         >
                           <CheckMark className="h-4 w-4" />
-                          <span className="text-xs py-1 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
+                          <span className="text-base py-1.5 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
                             {lu.conceptSlug}
                           </span>
-                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                          <span className="text-sm text-green-600 dark:text-green-400 shrink-0 font-medium">
                             → {MASTERY_LABEL[lu.to]}
                           </span>
                         </button>
@@ -1011,7 +1080,7 @@ export function ReadinessCard({
             <div className="h-full bg-card rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                  <h3 className="text-lg font-semibold">Today's Study Plan</h3>
                   <ProBadge />
                 </div>
                 <Settings2 className="h-4 w-4 text-muted-foreground" />
@@ -1023,8 +1092,8 @@ export function ReadinessCard({
                 ].map((c, i) => (
                   <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
                     <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
-                    <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+                    <span className="text-base flex-1 min-w-0 truncate">{c.name}</span>
+                    <span className="text-sm text-muted-foreground shrink-0">→ Level 1</span>
                   </div>
                 ))}
               </div>
@@ -1059,33 +1128,19 @@ export function ReadinessCard({
     </>
   )
 
-  // The three cards the Dashboard leads with, in this order:
+  // What the Dashboard leads with, in this order:
   //
-  //   1. **Exam readiness** — led by the calendar, a full-width section of its
-  //      own rather than a card: the exam date the score is racing and the
-  //      days left, then the schedule strip (`examScheduleBlock`, with `dayDetailPanel` for whichever day is
-  //      tapped). Then the card — the exam's logo, the score as "X% Ready", and
-  //      how many concepts today's plan still asks for — and under it,
-  //      bare on the page, the primary actions (`actions`) that move the score.
-  //   2. **Today's Study Plan** (`studyPlanCardContent`) — what to do about that
-  //      score today. It follows the number rather than the ring: the reader who
-  //      has just read "Not started" is looking for the next step, not for a
-  //      breakdown.
-  //   3. **Study Guide** — the ring (one arc per syllabus concept) beside the
-  //      criterion the score is made of. The score is printed in the ring's
-  //      middle too — by the time the reader reaches it the KPI two cards up has
-  //      scrolled off, so the ring has to say what it measures.
+  //   1. **Three squares** — the exam date, the days left, and the readiness
+  //      score inside a mini copy of the Study Guide ring. The readiness square
+  //      opens the full ring and its criteria in a popup (`studyGuideModal`).
+  //   2. **The calendar** — the schedule strip (`examScheduleBlock`, with
+  //      `dayDetailPanel` for whichever day is tapped), then the primary
+  //      actions (`actions`) bare on the page.
+  //   3. **Today's Study Plan** (`studyPlanCardContent`) — what to do about the
+  //      score today.
   //
-  // All three portal into `readinessSlot` when the Dashboard supplies one.
+  // All of it portals into `readinessSlot` when the Dashboard supplies one.
   const readinessPct = readiness.counts.total > 0 ? Math.round(readiness.overallPct) : 0
-
-  // The card's line under the verdict: how many of today's planned concepts
-  // are still to study. Null without a plan to count from.
-  const todayLine = isPro && displayConcepts.length > 0
-    ? (incompleteOriginalConcepts.length > 0
-        ? `${incompleteOriginalConcepts.length} concept${incompleteOriginalConcepts.length === 1 ? '' : 's'} to ${plan?.status === 'review_mode' ? 'review' : 'study'} today`
-        : 'Today\'s concepts are done')
-    : null
 
   // The dates block inside that card. Two facts, in the order a candidate asks
   // for them: the day they are sitting — with how many days that leaves — and
@@ -1112,40 +1167,9 @@ export function ReadinessCard({
   // schedule-forming sweep — happens in this block. The target-ready date has
   // no row of its own here: the strip marks its day in amber, and the Study
   // Plan modal is where it is set.
+  const openExamDateStep = () => { setConfigInitialStep(examDateStep); setShowConfig(true) }
   const examScheduleBlock = (
     <div ref={studyScheduleCardRef} className="space-y-1">
-      <button
-        type="button"
-        onClick={() => { setConfigInitialStep(examDateStep); setShowConfig(true) }}
-        className="-mx-2 flex w-[calc(100%+1rem)] flex-col gap-1 rounded-lg px-2 py-2 text-left transition-colors hover:bg-accent/60"
-        aria-label={examDate
-          ? `Exam date ${formatReadableDate(examDate)}${countdownLabel ? `, ${countdownLabel}` : ''} — change it`
-          : 'Set your exam date'}
-      >
-        <span className="flex w-full items-center gap-2">
-          <CalendarDays className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate text-lg font-semibold">
-            {examDate ? formatReadableDate(examDate) : 'Set your exam date'}
-          </span>
-          {countdownLabel && (
-            <span
-              className={
-                'shrink-0 text-lg font-semibold tabular-nums ' +
-                (daysToExam !== null && daysToExam < 0 ? 'text-muted-foreground' : '')
-              }
-            >
-              {countdownLabel}
-            </span>
-          )}
-        </span>
-        {showNextSitting && nextSitting && (
-          <span className="flex w-full items-center gap-2 pl-7 text-sm text-muted-foreground">
-            <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
-            <span className="shrink-0 font-medium">{nextSitting.format}</span>
-          </span>
-        )}
-      </button>
-
       <div className="space-y-2">
         {/* Schedule-forming status — only while the sweep is running */}
         {playback.active && (
@@ -1354,92 +1378,143 @@ export function ReadinessCard({
     </>
   )
 
+  // The squares are buttons on a card surface — the same face `Card` paints.
+  const squareClass =
+    'flex aspect-square min-w-0 flex-col items-center justify-center gap-1 rounded-xl bg-card p-2 text-center text-card-foreground shadow-sm transition-colors hover:bg-accent/60'
+  const examDay = examDate ? new Date(examDate + 'T00:00:00') : null
+
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-4">
-      {/* The calendar leads the group: the date the score is racing, the
-          days left, and the schedule under both — a
-          full-width section of its own rather than a card. A
-          readiness percentage only means something against a deadline, so
-          this carries the day itself, how far off it is, and — when no date
-          is set, or the one set isn't a real sitting — the next published
-          sitting window for this exam (data/examSittings.ts). Under those
-          lines is the timeline, laid out linear so it spans exactly the
-          stretch they name; tapping a day on it opens that day in
-          `dayDetailPanel` below. */}
+      {/* Three squares in one line, the three numbers the dashboard is about:
+          the day of the exam, how far off it is, and how ready the reader is
+          for it. The first two open the Study Plan modal on its exam-date
+          step; the third opens the Study Guide ring (`ringOpen`). */}
+      <div className="grid grid-cols-3 gap-3">
+        <button
+          type="button"
+          onClick={openExamDateStep}
+          className={squareClass}
+          aria-label={examDate ? `Exam date ${formatReadableDate(examDate)} — change it` : 'Set your exam date'}
+        >
+          <CalendarDays className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+          {examDay ? (
+            <>
+              <span className="text-2xl font-bold leading-none tracking-tight">
+                {examDay.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              </span>
+              <span className="text-sm tabular-nums text-muted-foreground">{examDay.getFullYear()}</span>
+            </>
+          ) : (
+            <span className="text-base font-semibold leading-tight">Set date</span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={openExamDateStep}
+          className={squareClass}
+          aria-label={countdownLabel ?? 'Set your exam date'}
+        >
+          {daysToExam !== null && daysToExam > 1 ? (
+            <>
+              <span className="text-3xl font-bold leading-none tabular-nums tracking-tight">{daysToExam}</span>
+              <span className="text-sm text-muted-foreground">days left</span>
+            </>
+          ) : (
+            <span className={'text-xl font-bold leading-tight ' + (daysToExam === null || daysToExam < 0 ? 'text-muted-foreground' : '')}>
+              {countdownLabel ?? 'No date'}
+            </span>
+          )}
+        </button>
+
+        <button
+          ref={readinessSquareRef}
+          type="button"
+          onClick={() => setRingOpen(true)}
+          className={squareClass + ' relative'}
+          aria-haspopup="dialog"
+          aria-label={`Exam readiness: ${readinessPct}% — open the study guide`}
+        >
+          <MiniReadinessRing segments={ringSegments} pct={readinessPct} flash={flashRadial} />
+          {/* What today did to the score — green up, red down, absent when it
+              hasn't moved (docs/exam-readiness.md). */}
+          {readinessMoveToday !== 0 && (
+            <span
+              className={
+                'absolute right-1.5 top-1.5 flex items-center text-xs font-semibold tabular-nums ' +
+                (readinessMoveToday > 0
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400')
+              }
+              title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+            >
+              {readinessMoveToday > 0
+                ? <ArrowUp className="h-3 w-3" aria-hidden="true" />
+                : <ArrowDown className="h-3 w-3" aria-hidden="true" />}
+              {Math.abs(readinessMoveToday)}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* The next published sitting, only when it says something the date
+          square doesn't: no date chosen yet, or one outside every known window. */}
+      {showNextSitting && nextSitting && (
+        <button
+          type="button"
+          onClick={openExamDateStep}
+          className="-mt-1 flex w-full items-center gap-2 text-left text-sm text-muted-foreground hover:text-foreground"
+        >
+          <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
+          <span className="shrink-0 font-medium">{nextSitting.format}</span>
+        </button>
+      )}
+
+      {/* The calendar: the schedule strip, and the day it opens below it. */}
       <section aria-label="Study schedule" className="space-y-1">
         {examScheduleBlock}
         {dayDetailPanel}
       </section>
 
-      <Card className="border-0">
-        <CardContent className="p-6 space-y-4">
-          {/* The exam's logo, then the score as "X% Ready" — no title, verdict
-              or insight: the number is the card's one statement, and the line
-              under it is what to do about it today. */}
-          <div className="flex items-center gap-3">
-            {/* The exam's own logo leads the card. The card is scoped to one
-                exam and the tabs above it switch which — the tile is what says
-                *which* without re-printing the name, and its accent puts the
-                exam on the ladder (lib/examColors.ts). Branding, so the tile
-                itself is aria-hidden and the heading carries the meaning. */}
-            <ExamLogo examKey={progressKey} size="lg" />
-            <h3
-              className="min-w-0 flex-1 text-3xl font-bold tracking-tight leading-none"
-              aria-label={`Exam readiness: ${readinessPct}%`}
-            >
-              <span
-                className="tabular-nums"
-                style={{
-                  color: flashRadial ? '#22c55e' : undefined,
-                  transition: 'color 0.8s ease-out',
-                }}
-              >
-                {readinessPct}%
-              </span>{' '}
-              Ready
-            </h3>
-            {/* What today did to the score. The only thing on the card that
-                reports *change* rather than state — green up, red down, and
-                absent entirely when the number hasn't budged, so it stays a
-                signal. Its label (screen readers, hover) says "today" without
-                spending a grey line on it (docs/visual-noise-review.md). */}
-            {readinessMoveToday !== 0 && (
-              <span
-                className={
-                  'flex shrink-0 items-center gap-0.5 text-sm font-semibold tabular-nums ' +
-                  (readinessMoveToday > 0
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400')
-                }
-                title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
-                aria-label={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} percentage point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
-              >
-                {readinessMoveToday > 0
-                  ? <ArrowUp className="h-4 w-4" aria-hidden="true" />
-                  : <ArrowDown className="h-4 w-4" aria-hidden="true" />}
-                {Math.abs(readinessMoveToday)}
-              </span>
-            )}
-            {/* The study streak — renders nothing without a live streak. */}
-            {STREAK_ENABLED && user && <StreakNavBadge />}
-          </div>
-
-          {/* What today asks for: the concepts left on today's plan. Only
-              where there is a plan to count (Pro, with concepts scheduled). */}
-          {todayLine && <p className="text-base font-medium leading-snug">{todayLine}</p>}
-        </CardContent>
-      </Card>
-
-      {/* The ways to act on this score, straight under it and bare on the
-          page — no card around them. */}
+      {/* The ways to act on the score, bare on the page — no card around them. */}
       {actions}
 
-
       {studyPlanCardContent}
+    </div>
+  )
 
-      <Card ref={studyGuideCardRef} className="border-0">
-        <CardContent className="p-6 space-y-6">
-          <h3 className="text-sm font-semibold">Study Guide</h3>
+  // The Study Guide — the ring (one arc per syllabus concept) beside the
+  // criterion the score is made of — in a popup the readiness square opens.
+  // It sits *under* the concept popup (z-40) and ends where that pane begins
+  // (`--concept-split-height`), so tapping an arc opens the concept below the
+  // ring and the arc stays highlighted while the reader walks the syllabus.
+  const studyGuideModal = ringOpen && (
+    <OverlayPortal>
+      <div
+        className="fixed inset-x-0 top-0 z-[38] flex items-start justify-center overflow-y-auto bg-background/80 p-4 pt-16 backdrop-blur-sm paper-scrim sm:items-center lg:left-[var(--sidebar-width,16rem)] lg:pt-4"
+        style={{ bottom: 'var(--concept-split-height, 0px)' }}
+        onClick={() => setRingOpen(false)}
+      >
+        <div
+          ref={studyGuideCardRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Study Guide"
+          className="relative w-full max-w-2xl rounded-xl bg-card p-6 text-card-foreground shadow-xl"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="mb-4 flex items-center gap-3">
+            <ExamLogo examKey={progressKey} size="md" />
+            <h3 className="min-w-0 flex-1 text-lg font-semibold">Study Guide</h3>
+            <button
+              type="button"
+              onClick={() => setRingOpen(false)}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-muted/50 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:gap-8">
             <div className="w-full max-w-[280px] shrink-0 sm:w-[250px]">
@@ -1473,8 +1548,8 @@ export function ReadinessCard({
                       aria-label={`${criterion.label}: ${pct}%, ${Math.round(criterion.weight * 100)}% of the readiness score`}
                     >
                       <div className="flex items-baseline justify-between gap-2">
-                        <span className="text-xs font-medium">{criterion.label}</span>
-                        <span className="text-xs tabular-nums text-muted-foreground">{pct}%</span>
+                        <span className="text-sm font-medium">{criterion.label}</span>
+                        <span className="text-sm tabular-nums text-muted-foreground">{pct}%</span>
                       </div>
                       <div
                         className="w-full rounded-full bg-secondary overflow-hidden"
@@ -1491,9 +1566,9 @@ export function ReadinessCard({
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </OverlayPortal>
   )
 
   return (
@@ -1509,6 +1584,7 @@ export function ReadinessCard({
           `readinessSlot` when the Dashboard supplies one, otherwise render inline
           here (`order-none`, so they stay first). */}
       {readinessSlot ? createPortal(readinessCardContent, readinessSlot) : readinessCardContent}
+      {studyGuideModal}
 
       {/* Warnings — `order-3` sits them below the primary actions; `empty:hidden`
           drops the flex gap when the note isn't shown. */}

@@ -395,6 +395,158 @@ CHECKS.push(
   })),
 )
 
+// Werner & Modlin's ratemaking exhibits: Appendix A's (semi-annual auto) rate
+// level, trend and expense exhibits, Appendix B's (annual homeowners) pure
+// premium indication and loss trend, and Chapter 4's example policies. Each
+// appendix's assumptions — the policy term, the effective date, how long the
+// rates will be in effect — are read off its first page with the rest.
+const FOUR = 0.00005 + 1e-9
+const A1 = W.a1_assumptions
+const B1 = W.b1_assumptions
+
+CHECKS.push(
+  {
+    tool: 'ratemaking.pure_premium_method',
+    source: wernerRef(W.b5_pp_indication),
+    cases: [{
+      // Row (16)'s total pure premium carries row (17)'s reinsurance cost per exposure, as row (22) adds it.
+      name: 'Rows (21) and (22), the variable permissible loss ratio and indicated rate',
+      input: {
+        pure_premium: row(W.b5_pp_indication, 16) + row(W.b5_pp_indication, 17),
+        fixed: row(W.b5_pp_indication, 18),
+        variable: row(W.b5_pp_indication, 19),
+        profit: row(W.b5_pp_indication, 20),
+      },
+      expect: [
+        { what: 'variable permissible loss ratio', printed: row(W.b5_pp_indication, 21), tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.variable_permissible_loss_ratio) },
+        // Three inputs printed to the cent, divided by the permissible loss ratio, beside the rate's own half cent.
+        { what: 'indicated rate', printed: row(W.b5_pp_indication, 22), tolerance: 0.005 + 0.015 / row(W.b5_pp_indication, 21), actual: (r: ToolResult) => Number(r.values.indicated_rate) },
+      ],
+    }],
+  },
+  ...[
+    { exhibit: W.a7_lr_indication, fixed: 12 as number | null, variable: 13, profit: 14, plr: 15, key: 'variable_permissible_loss_ratio' },
+    { exhibit: W.b5_pp_indication, fixed: null, variable: 19, profit: 20, plr: 21, key: 'variable_permissible_loss_ratio' },
+    // Appendix C treats every expense, ULAE included, as variable.
+    { exhibit: W.c7_lr_indication, fixed: null, variable: 9, profit: 10, plr: 11, key: 'permissible_loss_ratio' },
+  ].map(({ exhibit, fixed, variable, profit, plr, key }) => ({
+    tool: 'ratemaking.permissible_loss_ratio',
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Row (${plr}), the ${key === 'permissible_loss_ratio' ? '' : 'variable '}permissible loss ratio`,
+      input: { fixed: fixed === null ? 0 : row(exhibit, fixed), variable: row(exhibit, variable), profit: row(exhibit, profit) },
+      expect: [{ what: 'permissible loss ratio', printed: row(exhibit, plr), tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values[key]) }],
+    }],
+  })),
+  {
+    tool: 'ratemaking.expense_ratios',
+    source: wernerRef(W.a21_expenses),
+    cases: [{
+      // Each type's three years, summed: the exhibit's three-year weighted average.
+      name: 'Rows (1)–(5) c, e and f, and the provisions (6) and (7)',
+      input: {
+        rows: W.a21_expenses.types.map(t => ({
+          type: t.type,
+          expenses: t.expenses.reduce((a, b) => a + b, 0),
+          premium: t.premium.reduce((a, b) => a + b, 0),
+          fixed_share: t.fixed_share,
+        })),
+      },
+      expect: [
+        ...W.a21_expenses.types.flatMap((t, k) => [
+          { what: `${t.type}, three-year ratio`, printed: t.weighted, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'ratio')[k] },
+          { what: `${t.type}, fixed`, printed: t.fixed, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'fixed')[k] },
+          { what: `${t.type}, variable`, printed: t.variable, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'variable')[k] },
+        ]),
+        { what: 'fixed expense provision', printed: W.a21_expenses.fixed_provision, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.fixed_provision) },
+        { what: 'variable expense provision', printed: W.a21_expenses.variable_provision, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.variable_provision) },
+      ],
+    }],
+  },
+  {
+    tool: 'ratemaking.trend_fit',
+    source: wernerRef(W.a11_premium_trend),
+    // The fits are of the printed averages, column (3), as the exhibit's own are.
+    cases: Object.entries(W.a11_premium_trend.fits).map(([n, printed]) => ({
+      name: `the ${n}-point exponential fit to average written premium at current rate level`,
+      input: { per_year: 4, latest: Number(n), points: W.a11_premium_trend.points.map(p => ({ period: p.quarter, value: p.average })) },
+      expect: [{ what: `${n}-point annual trend`, printed, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.trend) }],
+    })),
+  },
+  {
+    tool: 'ratemaking.trend_fit',
+    source: wernerRef(W.a15_loss_trend),
+    cases: (['frequency', 'severity', 'pure_premium'] as const).flatMap(measure => Object.entries(W.a15_loss_trend.fits).map(([n, fits]) => ({
+      name: `the ${n}-point exponential fit to ${measure.replace('_', ' ')}`,
+      input: { per_year: 4, latest: Number(n), points: W.a15_loss_trend.points.map(p => ({ period: p.quarter, value: p[measure] })) },
+      expect: [{ what: `${n}-point ${measure.replace('_', ' ')} trend`, printed: fits[measure], tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.trend) }],
+    }))),
+  },
+  ...[
+    { exhibit: W.a19_loss_trend_periods, assumptions: A1, periodTolerance: 0.005 + 1e-9 },
+    // Appendix B prints the period to one decimal.
+    { exhibit: W.b12_loss_trend_periods, assumptions: B1, periodTolerance: 0.05 + 1e-9 },
+  ].map(({ exhibit, assumptions, periodTolerance }) => {
+    const latest = exhibit.rows[exhibit.rows.length - 1]
+    return {
+      tool: 'ratemaking.trend_factor',
+      source: wernerRef(exhibit),
+      cases: [{
+        name: `Columns (5) and (6), the projected trend period and factor for accident year ${latest.year}`,
+        input: { trend: latest.projected_trend, basis: 'accident', year: Number(latest.year), effective: assumptions.effective, in_effect: assumptions.in_effect_months, term: assumptions.term_months },
+        expect: [
+          { what: 'projected trend period', printed: latest.projected_period, tolerance: periodTolerance, actual: (r: ToolResult) => Number(r.values.period) },
+          { what: 'projected trend factor', printed: latest.projected_factor, tolerance: FOUR, actual: (r: ToolResult) => Number(r.values.factor) },
+        ],
+      }],
+    }
+  }),
+  {
+    tool: 'ratemaking.on_level_factors',
+    source: wernerRef(W.a10_rate_level_factors),
+    cases: [{
+      // The exhibit weights the cumulative rate levels as Current Rate Level - 1 prints them, to four decimals.
+      name: 'Columns (1a), (2) and (4), by the parallelogram method on Current Rate Level - 1\'s history',
+      input: {
+        changes: W.a9_rate_changes.groups.filter(g => g.date !== null).map(g => ({ date: g.date, change: g.change })),
+        term: A1.term_months,
+        basis: 'calendar',
+        first: Number(W.a10_rate_level_factors.rows[0].year),
+        last: Number(W.a10_rate_level_factors.rows[W.a10_rate_level_factors.rows.length - 1].year),
+        rounding: 'four',
+      },
+      expect: W.a10_rate_level_factors.rows.flatMap((y, k) => [
+        ...y.portions.map((p, g) => ({ what: `${y.year}, group ${W.a9_rate_changes.groups[g].group}`, printed: p, tolerance: FOUR, actual: (r: ToolResult) => (r.values.portions as number[][])[k][g] })),
+        { what: `${y.year} average rate level`, printed: y.average, tolerance: FOUR, actual: (r: ToolResult) => values(r, 'averages')[k] },
+        { what: `${y.year} on-level factor`, printed: y.factor, tolerance: FOUR, actual: (r: ToolResult) => values(r, 'factors')[k] },
+      ]),
+    }],
+  },
+  ...[
+    { exhibit: W.ch4_annual_written, written: '4.7', earned: null as string | null, earnedExhibit: null as typeof W.ch4_annual_earned | null, term: 12, basis: 'calendar' },
+    { exhibit: W.ch4_annual_earned, written: null, earned: '4.11', earnedExhibit: null, term: 12, basis: 'calendar' },
+    { exhibit: W.ch4_annual_earned, written: '4.13', earned: '4.13', earnedExhibit: null, term: 12, basis: 'policy' },
+    { exhibit: W.ch4_semiannual, written: '4.18', earned: '4.19', earnedExhibit: null, term: 6, basis: 'calendar' },
+    { exhibit: W.ch4_semiannual, written: '4.20', earned: '4.21', earnedExhibit: null, term: 6, basis: 'policy' },
+  ].map(({ exhibit, written, earned, term, basis }) => {
+    const tables = exhibit.tables as Record<string, { years: string[]; policies: { policy: string; effective: string; exposure: number }[]; by_year: number[] }>
+    const table = tables[(written ?? earned)!]
+    const asOf = Number(table.years[table.years.length - 1].slice(3))
+    return {
+      tool: 'ratemaking.earned_premium',
+      source: wernerRef({ ...exhibit, locator: `Chapter 4, Table ${[written, earned].filter((t, i, all) => t && all.indexOf(t) === i).join(' and ')}` }),
+      cases: [{
+        name: `${basis === 'policy' ? 'policy' : 'calendar'} year exposures of ${term}-month policies, as of 12/31/${asOf}`,
+        input: { term, basis, as_of: asOf, policies: table.policies.map(p => ({ policy: p.policy, effective: p.effective, amount: p.exposure })) },
+        expect: [
+          ...(written ? tables[written].by_year.map((v, k) => ({ what: `${tables[written].years[k]} written`, printed: v, tolerance: 0.005 + 1e-9, actual: (r: ToolResult) => values(r, 'written')[k] })) : []),
+          ...(earned ? tables[earned].by_year.map((v, k) => ({ what: `${tables[earned].years[k]} earned`, printed: v, tolerance: 0.005 + 1e-9, actual: (r: ToolResult) => values(r, 'earned')[k] })) : []),
+        ],
+      }],
+    }
+  }),
+)
+
 /** Run one check: every printed value the tool doesn't reproduce at the source's precision. */
 export function verifyCheck(check: ToolCheck): CheckMismatch[] {
   const spec = toolById(check.tool)

@@ -18,6 +18,13 @@ import { benktander } from './reserving/benktander'
 import { capeCod } from './reserving/capeCod'
 import { ratioTriangle } from './reserving/ratioTriangle'
 import { lossRatioMethod } from './ratemaking/lossRatioMethod'
+import { earnedPremium } from './ratemaking/earnedPremium'
+import { onLevelFactors } from './ratemaking/onLevelFactors'
+import { trendFit } from './ratemaking/trendFit'
+import { trendFactor } from './ratemaking/trendFactor'
+import { expenseRatios } from './ratemaking/expenseRatios'
+import { permissibleLossRatio } from './ratemaking/permissibleLossRatio'
+import { purePremiumMethod } from './ratemaking/purePremiumMethod'
 import { fullCredibilityStandard } from './credibility/fullCredibility'
 import { partialCredibility } from './credibility/partialCredibility'
 import { buhlmannCredibility } from './credibility/buhlmann'
@@ -47,7 +54,14 @@ export const TOOLS: ToolSpec[] = [
   bornhuetterFerguson,
   benktander,
   capeCod,
+  earnedPremium,
+  onLevelFactors,
+  trendFit,
+  trendFactor,
+  expenseRatios,
+  permissibleLossRatio,
   lossRatioMethod,
+  purePremiumMethod,
   distribution,
   limitedExpectedValue,
   expectedPayment,

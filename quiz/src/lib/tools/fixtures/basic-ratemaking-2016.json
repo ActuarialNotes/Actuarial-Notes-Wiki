@@ -243,6 +243,1376 @@
         }
       },
       "pdf_page": 380
+    },
+    "a1_assumptions": {
+      "locator": "Appendix A, Auto Indication",
+      "printed_page": "A-1",
+      "term_months": 6,
+      "effective": "2017-01-01",
+      "in_effect_months": 12,
+      "quote": "All policies are semi-annual, and the proposed effective date for the revised rates is January 1, 2017. Rates are expected to be in effect for one year.",
+      "pdf_page": 338
+    },
+    "b1_assumptions": {
+      "locator": "Appendix B, Homeowners Indication",
+      "printed_page": "B-1",
+      "term_months": 12,
+      "effective": "2017-01-01",
+      "in_effect_months": 12,
+      "quote": "All policies are annual, and the proposed effective date for new rates in State XX is January 1, 2017. Rates are expected to be in effect for one year.",
+      "pdf_page": 359
+    },
+    "a9_rate_changes": {
+      "locator": "Appendix A, Current Rate Level - 1",
+      "printed_page": "A-9",
+      "groups": [
+        {
+          "group": "A",
+          "date": null,
+          "change": null,
+          "index": 1.0,
+          "cumulative": 1.0
+        },
+        {
+          "group": "B",
+          "date": "04/01/2011",
+          "change": -0.05,
+          "index": 0.95,
+          "cumulative": 0.95
+        },
+        {
+          "group": "C",
+          "date": "07/01/2012",
+          "change": 0.1,
+          "index": 1.1,
+          "cumulative": 1.045
+        },
+        {
+          "group": "D",
+          "date": "10/01/2013",
+          "change": 0.05,
+          "index": 1.05,
+          "cumulative": 1.0973
+        },
+        {
+          "group": "E",
+          "date": "07/01/2014",
+          "change": -0.02,
+          "index": 0.98,
+          "cumulative": 1.0754
+        },
+        {
+          "group": "F",
+          "date": "10/01/2015",
+          "change": 0.05,
+          "index": 1.05,
+          "cumulative": 1.1292
+        },
+        {
+          "group": "G",
+          "date": "01/01/2016",
+          "change": 0.05,
+          "index": 1.05,
+          "cumulative": 1.1857
+        }
+      ],
+      "pdf_page": 346
+    },
+    "a10_rate_level_factors": {
+      "locator": "Appendix A, Current Rate Level - 2",
+      "printed_page": "A-10",
+      "rows": [
+        {
+          "year": "2011",
+          "portions": [
+            0.5,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "average": 0.975,
+          "current": 1.1857,
+          "factor": 1.2161
+        },
+        {
+          "year": "2012",
+          "portions": [
+            0.0,
+            0.75,
+            0.25,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "average": 0.9738,
+          "current": 1.1857,
+          "factor": 1.2176
+        },
+        {
+          "year": "2013",
+          "portions": [
+            0.0,
+            0.0,
+            0.9375,
+            0.0625,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "average": 1.0483,
+          "current": 1.1857,
+          "factor": 1.1311
+        },
+        {
+          "year": "2014",
+          "portions": [
+            0.0,
+            0.0,
+            0.0625,
+            0.6875,
+            0.25,
+            0.0,
+            0.0
+          ],
+          "average": 1.0886,
+          "current": 1.1857,
+          "factor": 1.0892
+        },
+        {
+          "year": "2015",
+          "portions": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.9375,
+            0.0625,
+            0.0
+          ],
+          "average": 1.0788,
+          "current": 1.1857,
+          "factor": 1.0991
+        }
+      ],
+      "pdf_page": 347
+    },
+    "a11_premium_trend": {
+      "locator": "Appendix A, Premium Trend - 1",
+      "printed_page": "A-11",
+      "points": [
+        {
+          "quarter": "2010 - 2",
+          "written": 1314117,
+          "exposure": 12752,
+          "average": 103.05
+        },
+        {
+          "quarter": "2010 - 3",
+          "written": 1323381,
+          "exposure": 12776,
+          "average": 103.58
+        },
+        {
+          "quarter": "2010 - 4",
+          "written": 1333726,
+          "exposure": 12806,
+          "average": 104.15
+        },
+        {
+          "quarter": "2011 - 1",
+          "written": 1343014,
+          "exposure": 12825,
+          "average": 104.72
+        },
+        {
+          "quarter": "2011 - 2",
+          "written": 1354391,
+          "exposure": 12863,
+          "average": 105.29
+        },
+        {
+          "quarter": "2011 - 3",
+          "written": 1364644,
+          "exposure": 12893,
+          "average": 105.84
+        },
+        {
+          "quarter": "2011 - 4",
+          "written": 1374283,
+          "exposure": 12917,
+          "average": 106.39
+        },
+        {
+          "quarter": "2012 - 1",
+          "written": 1384951,
+          "exposure": 12953,
+          "average": 106.92
+        },
+        {
+          "quarter": "2012 - 2",
+          "written": 1393570,
+          "exposure": 12973,
+          "average": 107.42
+        },
+        {
+          "quarter": "2012 - 3",
+          "written": 1403987,
+          "exposure": 13005,
+          "average": 107.96
+        },
+        {
+          "quarter": "2012 - 4",
+          "written": 1415881,
+          "exposure": 13044,
+          "average": 108.55
+        },
+        {
+          "quarter": "2013 - 1",
+          "written": 1428087,
+          "exposure": 13082,
+          "average": 109.16
+        },
+        {
+          "quarter": "2013 - 2",
+          "written": 1438647,
+          "exposure": 13108,
+          "average": 109.75
+        },
+        {
+          "quarter": "2013 - 3",
+          "written": 1448311,
+          "exposure": 13128,
+          "average": 110.32
+        },
+        {
+          "quarter": "2013 - 4",
+          "written": 1458540,
+          "exposure": 13155,
+          "average": 110.87
+        },
+        {
+          "quarter": "2014 - 1",
+          "written": 1468617,
+          "exposure": 13183,
+          "average": 111.4
+        },
+        {
+          "quarter": "2014 - 2",
+          "written": 1479666,
+          "exposure": 13217,
+          "average": 111.95
+        },
+        {
+          "quarter": "2014 - 3",
+          "written": 1492537,
+          "exposure": 13262,
+          "average": 112.54
+        },
+        {
+          "quarter": "2014 - 4",
+          "written": 1503294,
+          "exposure": 13292,
+          "average": 113.1
+        },
+        {
+          "quarter": "2015 - 1",
+          "written": 1514903,
+          "exposure": 13325,
+          "average": 113.69
+        },
+        {
+          "quarter": "2015 - 2",
+          "written": 1524242,
+          "exposure": 13341,
+          "average": 114.25
+        },
+        {
+          "quarter": "2015 - 3",
+          "written": 1536215,
+          "exposure": 13383,
+          "average": 114.79
+        },
+        {
+          "quarter": "2015 - 4",
+          "written": 1547368,
+          "exposure": 13414,
+          "average": 115.35
+        }
+      ],
+      "fits": {
+        "20": 0.021,
+        "16": 0.021,
+        "12": 0.02,
+        "8": 0.02,
+        "6": 0.02,
+        "4": 0.019
+      },
+      "pdf_page": 348
+    },
+    "a15_loss_trend": {
+      "locator": "Appendix A, Loss Trend - 1",
+      "printed_page": "A-15",
+      "points": [
+        {
+          "quarter": "2011 - 1",
+          "exposure": 131911,
+          "counts": 7745,
+          "losses": 8220899,
+          "frequency": 0.0587,
+          "severity": 1061.45,
+          "pure_premium": 62.32
+        },
+        {
+          "quarter": "2011 - 2",
+          "exposure": 132700,
+          "counts": 7785,
+          "losses": 8381016,
+          "frequency": 0.0587,
+          "severity": 1076.56,
+          "pure_premium": 63.16
+        },
+        {
+          "quarter": "2011 - 3",
+          "exposure": 133602,
+          "counts": 7917,
+          "losses": 8594389,
+          "frequency": 0.0593,
+          "severity": 1085.56,
+          "pure_premium": 64.33
+        },
+        {
+          "quarter": "2011 - 4",
+          "exposure": 135079,
+          "counts": 7928,
+          "losses": 8705108,
+          "frequency": 0.0587,
+          "severity": 1098.02,
+          "pure_premium": 64.44
+        },
+        {
+          "quarter": "2012 - 1",
+          "exposure": 137384,
+          "counts": 7997,
+          "losses": 8816379,
+          "frequency": 0.0582,
+          "severity": 1102.46,
+          "pure_premium": 64.17
+        },
+        {
+          "quarter": "2012 - 2",
+          "exposure": 138983,
+          "counts": 8037,
+          "losses": 8901163,
+          "frequency": 0.0578,
+          "severity": 1107.52,
+          "pure_premium": 64.04
+        },
+        {
+          "quarter": "2012 - 3",
+          "exposure": 140396,
+          "counts": 7939,
+          "losses": 8873491,
+          "frequency": 0.0565,
+          "severity": 1117.71,
+          "pure_premium": 63.2
+        },
+        {
+          "quarter": "2012 - 4",
+          "exposure": 140997,
+          "counts": 7831,
+          "losses": 8799730,
+          "frequency": 0.0555,
+          "severity": 1123.7,
+          "pure_premium": 62.41
+        },
+        {
+          "quarter": "2013 - 1",
+          "exposure": 140378,
+          "counts": 7748,
+          "losses": 8736859,
+          "frequency": 0.0552,
+          "severity": 1127.63,
+          "pure_premium": 62.24
+        },
+        {
+          "quarter": "2013 - 2",
+          "exposure": 139682,
+          "counts": 7719,
+          "losses": 8676220,
+          "frequency": 0.0553,
+          "severity": 1124.01,
+          "pure_premium": 62.11
+        },
+        {
+          "quarter": "2013 - 3",
+          "exposure": 138982,
+          "counts": 7730,
+          "losses": 8629925,
+          "frequency": 0.0556,
+          "severity": 1116.42,
+          "pure_premium": 62.09
+        },
+        {
+          "quarter": "2013 - 4",
+          "exposure": 138984,
+          "counts": 7790,
+          "losses": 8642835,
+          "frequency": 0.056,
+          "severity": 1109.48,
+          "pure_premium": 62.19
+        },
+        {
+          "quarter": "2014 - 1",
+          "exposure": 139155,
+          "counts": 7782,
+          "losses": 8602105,
+          "frequency": 0.0559,
+          "severity": 1105.38,
+          "pure_premium": 61.82
+        },
+        {
+          "quarter": "2014 - 2",
+          "exposure": 139618,
+          "counts": 7741,
+          "losses": 8535327,
+          "frequency": 0.0554,
+          "severity": 1102.61,
+          "pure_premium": 61.13
+        },
+        {
+          "quarter": "2014 - 3",
+          "exposure": 139996,
+          "counts": 7720,
+          "losses": 8466272,
+          "frequency": 0.0551,
+          "severity": 1096.67,
+          "pure_premium": 60.48
+        },
+        {
+          "quarter": "2014 - 4",
+          "exposure": 140141,
+          "counts": 7691,
+          "losses": 8412159,
+          "frequency": 0.0549,
+          "severity": 1093.77,
+          "pure_premium": 60.03
+        },
+        {
+          "quarter": "2015 - 1",
+          "exposure": 140754,
+          "counts": 7735,
+          "losses": 8513679,
+          "frequency": 0.055,
+          "severity": 1100.67,
+          "pure_premium": 60.49
+        },
+        {
+          "quarter": "2015 - 2",
+          "exposure": 141534,
+          "counts": 7769,
+          "losses": 8614224,
+          "frequency": 0.0549,
+          "severity": 1108.79,
+          "pure_premium": 60.86
+        },
+        {
+          "quarter": "2015 - 3",
+          "exposure": 141800,
+          "counts": 7755,
+          "losses": 8702135,
+          "frequency": 0.0547,
+          "severity": 1122.13,
+          "pure_premium": 61.37
+        },
+        {
+          "quarter": "2015 - 4",
+          "exposure": 142986,
+          "counts": 7778,
+          "losses": 8761588,
+          "frequency": 0.0544,
+          "severity": 1126.46,
+          "pure_premium": 61.28
+        }
+      ],
+      "fits": {
+        "20": {
+          "frequency": -0.017,
+          "severity": 0.005,
+          "pure_premium": -0.012
+        },
+        "16": {
+          "frequency": -0.013,
+          "severity": -0.001,
+          "pure_premium": -0.014
+        },
+        "12": {
+          "frequency": -0.007,
+          "severity": -0.002,
+          "pure_premium": -0.009
+        },
+        "8": {
+          "frequency": -0.012,
+          "severity": 0.012,
+          "pure_premium": -0.001
+        },
+        "6": {
+          "frequency": -0.009,
+          "severity": 0.025,
+          "pure_premium": 0.016
+        },
+        "4": {
+          "frequency": -0.015,
+          "severity": 0.033,
+          "pure_premium": 0.019
+        }
+      },
+      "pdf_page": 352
+    },
+    "a19_loss_trend_periods": {
+      "locator": "Appendix A, Loss Trend - 5",
+      "printed_page": "A-19",
+      "projected_from": "07/01/2015",
+      "projected_to": "09/30/2017",
+      "rows": [
+        {
+          "year": "2011",
+          "current_trend": -0.005,
+          "current_period": 4.0,
+          "current_factor": 0.9801,
+          "projected_trend": 0.005,
+          "projected_period": 2.25,
+          "projected_factor": 1.0113,
+          "total": 0.9912
+        },
+        {
+          "year": "2012",
+          "current_trend": -0.005,
+          "current_period": 3.0,
+          "current_factor": 0.9851,
+          "projected_trend": 0.005,
+          "projected_period": 2.25,
+          "projected_factor": 1.0113,
+          "total": 0.9962
+        },
+        {
+          "year": "2013",
+          "current_trend": -0.005,
+          "current_period": 2.0,
+          "current_factor": 0.99,
+          "projected_trend": 0.005,
+          "projected_period": 2.25,
+          "projected_factor": 1.0113,
+          "total": 1.0012
+        },
+        {
+          "year": "2014",
+          "current_trend": -0.005,
+          "current_period": 1.0,
+          "current_factor": 0.995,
+          "projected_trend": 0.005,
+          "projected_period": 2.25,
+          "projected_factor": 1.0113,
+          "total": 1.0062
+        },
+        {
+          "year": "2015",
+          "current_trend": -0.005,
+          "current_period": 0.0,
+          "current_factor": 1.0,
+          "projected_trend": 0.005,
+          "projected_period": 2.25,
+          "projected_factor": 1.0113,
+          "total": 1.0113
+        }
+      ],
+      "pdf_page": 356
+    },
+    "b12_loss_trend_periods": {
+      "locator": "Appendix B, Loss Trend - 3",
+      "printed_page": "B-12",
+      "projected_from": "07/01/2015",
+      "projected_to": "01/01/2018",
+      "rows": [
+        {
+          "year": "2011",
+          "current_trend": 0.02,
+          "current_period": 4.0,
+          "current_factor": 1.0824,
+          "projected_trend": 0.04,
+          "projected_period": 2.5,
+          "projected_factor": 1.103,
+          "total": 1.1939
+        },
+        {
+          "year": "2012",
+          "current_trend": 0.02,
+          "current_period": 3.0,
+          "current_factor": 1.0612,
+          "projected_trend": 0.04,
+          "projected_period": 2.5,
+          "projected_factor": 1.103,
+          "total": 1.1705
+        },
+        {
+          "year": "2013",
+          "current_trend": 0.02,
+          "current_period": 2.0,
+          "current_factor": 1.0404,
+          "projected_trend": 0.04,
+          "projected_period": 2.5,
+          "projected_factor": 1.103,
+          "total": 1.1476
+        },
+        {
+          "year": "2014",
+          "current_trend": 0.02,
+          "current_period": 1.0,
+          "current_factor": 1.02,
+          "projected_trend": 0.04,
+          "projected_period": 2.5,
+          "projected_factor": 1.103,
+          "total": 1.1251
+        },
+        {
+          "year": "2015",
+          "current_trend": 0.02,
+          "current_period": 0.0,
+          "current_factor": 1.0,
+          "projected_trend": 0.04,
+          "projected_period": 2.5,
+          "projected_factor": 1.103,
+          "total": 1.103
+        }
+      ],
+      "pdf_page": 370
+    },
+    "a21_expenses": {
+      "locator": "Appendix A, Expense",
+      "printed_page": "A-21",
+      "types": [
+        {
+          "type": "General Expenses",
+          "expenses": [
+            29143368,
+            29940978,
+            30763160
+          ],
+          "premium": [
+            466001205,
+            478971842,
+            491904082
+          ],
+          "premium_basis": "Countrywide Earned Premium",
+          "ratios": [
+            0.063,
+            0.063,
+            0.063
+          ],
+          "weighted": 0.063,
+          "selected": 0.063,
+          "fixed_share": 0.75,
+          "fixed": 0.047,
+          "variable": 0.016
+        },
+        {
+          "type": "Other Acquisition",
+          "expenses": [
+            40158296,
+            40912479,
+            41652543
+          ],
+          "premium": [
+            468850020,
+            482345783,
+            495356701
+          ],
+          "premium_basis": "Countrywide Written Premium",
+          "ratios": [
+            0.086,
+            0.085,
+            0.084
+          ],
+          "weighted": 0.085,
+          "selected": 0.085,
+          "fixed_share": 0.75,
+          "fixed": 0.064,
+          "variable": 0.021
+        },
+        {
+          "type": "Licenses and Fees",
+          "expenses": [
+            3124,
+            3190,
+            3229
+          ],
+          "premium": [
+            1289484,
+            1380129,
+            1407811
+          ],
+          "premium_basis": "State Written Premium",
+          "ratios": [
+            0.002,
+            0.002,
+            0.002
+          ],
+          "weighted": 0.002,
+          "selected": 0.002,
+          "fixed_share": 1.0,
+          "fixed": 0.002,
+          "variable": 0.0
+        },
+        {
+          "type": "Commission and Brokerage",
+          "expenses": [
+            145073,
+            154235,
+            158712
+          ],
+          "premium": [
+            1289484,
+            1380129,
+            1407811
+          ],
+          "premium_basis": "State Written Premium",
+          "ratios": [
+            0.113,
+            0.112,
+            0.113
+          ],
+          "weighted": 0.112,
+          "selected": 0.112,
+          "fixed_share": 0.0,
+          "fixed": 0.0,
+          "variable": 0.112
+        },
+        {
+          "type": "Taxes",
+          "expenses": [
+            27338,
+            27549,
+            29853
+          ],
+          "premium": [
+            1289484,
+            1380129,
+            1407811
+          ],
+          "premium_basis": "State Written Premium",
+          "ratios": [
+            0.021,
+            0.02,
+            0.021
+          ],
+          "weighted": 0.021,
+          "selected": 0.021,
+          "fixed_share": 0.0,
+          "fixed": 0.0,
+          "variable": 0.021
+        }
+      ],
+      "fixed_provision": 0.113,
+      "variable_provision": 0.17,
+      "pdf_page": 358
+    },
+    "ch4_annual_written": {
+      "locator": "Chapter 4, Tables 4.7",
+      "printed_page": "54",
+      "tables": {
+        "4.7": {
+          "title": "4.7 Calendar Year Written Exposures a/o 12/31/12",
+          "years": [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "09/30/11",
+              "exposure": 1.0,
+              "by_year": [
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "12/31/11",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "03/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "06/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "09/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "12/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "total": 6.0,
+          "by_year": [
+            1.0,
+            4.0,
+            1.0
+          ]
+        }
+      },
+      "pdf_page": 66
+    },
+    "ch4_annual_earned": {
+      "locator": "Chapter 4, Tables 4.11, 4.13",
+      "printed_page": "56",
+      "tables": {
+        "4.11": {
+          "title": "4.11 Calendar Year Earned Exposures a/o 12/31/12",
+          "years": [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "09/30/11",
+              "exposure": 1.0,
+              "by_year": [
+                0.25,
+                0.75,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "12/31/11",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "03/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.75,
+                0.25
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "06/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "09/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.25,
+                0.75
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "12/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "total": 6.0,
+          "by_year": [
+            0.25,
+            3.25,
+            2.5
+          ]
+        },
+        "4.13": {
+          "title": "4.13 Policy Year Earned  Exposures a/o 12/31/12",
+          "years": [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "09/30/11",
+              "exposure": 1.0,
+              "by_year": [
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "12/31/11",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "03/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "06/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "09/30/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                1.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "12/31/12",
+              "exposure": 1.0,
+              "by_year": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "total": 6.0,
+          "by_year": [
+            1.0,
+            4.0,
+            1.0
+          ]
+        }
+      },
+      "pdf_page": 68
+    },
+    "ch4_semiannual": {
+      "locator": "Chapter 4, Tables 4.18, 4.19, 4.20, 4.21",
+      "printed_page": "59",
+      "tables": {
+        "4.18": {
+          "title": "4.18 Calendar Year Written Exposures a/o 12/31/12",
+          "years": [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "03/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.5,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "06/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "09/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "12/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "03/31/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "06/30/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.0,
+                0.5
+              ]
+            }
+          ],
+          "total": 3.0,
+          "by_year": [
+            0.5,
+            2.0,
+            0.5
+          ]
+        },
+        "4.19": {
+          "title": "4.19 Calendar Year Earned Exposures a/o 12/31/12",
+          "years": [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "03/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.25,
+                0.25,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "06/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "09/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "12/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "03/31/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.25,
+                0.25
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "06/30/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.0,
+                0.5
+              ]
+            }
+          ],
+          "total": 3.0,
+          "by_year": [
+            0.25,
+            2.0,
+            0.75
+          ]
+        },
+        "4.20": {
+          "title": "4.20 Policy Year Written Exposures a/o 12/31/12",
+          "years": [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "03/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.5,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "06/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "09/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "12/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "03/31/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "06/30/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.0,
+                0.5
+              ]
+            }
+          ],
+          "total": 3.0,
+          "by_year": [
+            0.5,
+            2.0,
+            0.5
+          ]
+        },
+        "4.21": {
+          "title": "4.21 Policy Year Earned Exposures a/o 12/31/12",
+          "years": [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          "policies": [
+            {
+              "policy": "A",
+              "effective": "10/01/10",
+              "expiration": "03/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.5,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "policy": "B",
+              "effective": "01/01/11",
+              "expiration": "06/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "C",
+              "effective": "04/01/11",
+              "expiration": "09/30/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "D",
+              "effective": "07/01/11",
+              "expiration": "12/31/11",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "E",
+              "effective": "10/01/11",
+              "expiration": "03/31/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.5,
+                0.0
+              ]
+            },
+            {
+              "policy": "F",
+              "effective": "01/01/12",
+              "expiration": "06/30/12",
+              "exposure": 0.5,
+              "by_year": [
+                0.0,
+                0.0,
+                0.5
+              ]
+            }
+          ],
+          "total": 3.0,
+          "by_year": [
+            0.5,
+            2.0,
+            0.5
+          ]
+        }
+      },
+      "pdf_page": 71
     }
   }
 }

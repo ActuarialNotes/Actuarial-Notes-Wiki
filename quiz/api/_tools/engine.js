@@ -1913,6 +1913,602 @@ var lossRatioMethod = {
   }
 };
 
+// src/lib/tools/dates.ts
+var daysIn = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+function parseDate(text) {
+  const t = String(text ?? "").trim();
+  let y, m, d;
+  const iso = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(t);
+  const us = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(t);
+  if (iso) {
+    ;
+    [y, m, d] = [Number(iso[1]), Number(iso[2]), Number(iso[3])];
+  } else if (us) {
+    ;
+    [m, d, y] = [Number(us[1]), Number(us[2]), Number(us[3])];
+    if (us[3].length === 2) y += y < 70 ? 2e3 : 1900;
+  } else {
+    return null;
+  }
+  if (m < 1 || m > 12 || d < 1 || d > daysIn(y, m)) return null;
+  return { y, m, d };
+}
+function decimalYear({ y, m, d }) {
+  return y + (m - 1) / 12 + (d - 1) / (daysIn(y, m) * 12);
+}
+function isoDate({ y, m, d }) {
+  return `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+function dateOfYear(t) {
+  const y = Math.floor(t + 1e-9);
+  const months = (t - y) * 12;
+  const m = Math.min(12, Math.floor(months + 1e-9) + 1);
+  const d = Math.min(daysIn(y, m), Math.round((months - (m - 1)) * daysIn(y, m)) + 1);
+  return isoDate({ y, m, d });
+}
+
+// src/lib/tools/ratemaking/earnedPremium.ts
+var earnedPremium = {
+  id: "ratemaking.earned_premium",
+  version: "1.0.0",
+  name: "Earned Premium",
+  area: "ratemaking",
+  answers: "How much of this premium is written, earned and unearned in each year?",
+  fields: [
+    {
+      kind: "table",
+      key: "policies",
+      label: "Policies",
+      minRows: 1,
+      maxRows: 2e3,
+      description: "Each policy (or block written on one date): its effective date and its written premium or exposure. It earns evenly over its term.",
+      columns: [
+        { key: "policy", label: "Policy", kind: "text" },
+        { key: "effective", label: "Effective", kind: "text" },
+        { key: "amount", label: "Written", kind: "number", unit: "money" }
+      ],
+      default: [
+        { policy: "A", effective: "2023-10-01", amount: 1e3 },
+        { policy: "B", effective: "2024-01-01", amount: 1e3 },
+        { policy: "C", effective: "2024-04-01", amount: 1e3 },
+        { policy: "D", effective: "2024-07-01", amount: 1e3 }
+      ]
+    },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: "The policy term in months." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Aggregation",
+      description: "Calendar year: what happens in the year. Policy year: everything about the policies written in the year.",
+      options: [{ value: "calendar", label: "Calendar year" }, { value: "policy", label: "Policy year" }],
+      default: "calendar"
+    },
+    { kind: "number", key: "as_of", label: "As of the end of", symbol: "Y", unit: "count", integer: true, min: 0, max: 2200, sliderMax: 2030, step: 1, default: 0, zeroLabel: "All earned", description: "The year whose 31 December the figures are valued at (0: once every policy has expired)." }
+  ],
+  notation: (input) => input.basis === "policy" ? "PY earned = \u03A3 W \xB7 min(1, (as-of \u2212 effective)/T)" : "CY earned = \u03A3 W \xB7 |year \u2229 term| / T",
+  view: "table",
+  compute: (input) => {
+    const T = Number(input.term) / 12;
+    const policies = input.policies.map((r, k) => {
+      const parts = parseDate(r.effective);
+      if (!parts) throw new ToolInputError("policies", `Policy ${r.policy || k + 1}'s effective date "${r.effective}" isn't a date: write 2016-01-01 or 01/01/2016.`);
+      return { e: decimalYear(parts), w: Number(r.amount) };
+    });
+    const firstYear = Math.floor(Math.min(...policies.map((p2) => p2.e)));
+    const lastExpiry = Math.max(...policies.map((p2) => p2.e + T));
+    const asOfYear = Number(input.as_of) || Math.ceil(lastExpiry - 1e-9) - 1;
+    const asOf = asOfYear + 1;
+    if (asOfYear < firstYear) throw new ToolInputError("as_of", `Value as of a year on or after the first policy's, ${firstYear}.`);
+    const policyYear = input.basis === "policy";
+    const years = Array.from({ length: asOfYear - firstYear + 1 }, (_, k) => firstYear + k);
+    const earnedBy = (p2, t) => p2.w * Math.min(1, Math.max(0, (t - p2.e) / T));
+    const rows = years.map((y) => {
+      if (policyYear) {
+        const inYear = policies.filter((p2) => Math.floor(p2.e + 1e-9) === y && p2.e < asOf);
+        const written2 = inYear.reduce((s, p2) => s + p2.w, 0);
+        const earned2 = inYear.reduce((s, p2) => s + earnedBy(p2, asOf), 0);
+        return { year: String(y), written: written2, earned: earned2, unearned: written2 - earned2 };
+      }
+      const written = policies.filter((p2) => Math.floor(p2.e + 1e-9) === y).reduce((s, p2) => s + p2.w, 0);
+      const earned = policies.reduce((s, p2) => s + earnedBy(p2, y + 1) - earnedBy(p2, y), 0);
+      const unearned = policies.filter((p2) => p2.e < y + 1).reduce((s, p2) => s + p2.w - earnedBy(p2, y + 1), 0);
+      return { year: String(y), written, earned, unearned };
+    });
+    const total = (key) => rows.reduce((s, r) => s + r[key], 0);
+    return {
+      tiles: [
+        { symbol: "EP", label: `Earned, ${asOfYear}`, value: rows[rows.length - 1].earned, unit: "money" },
+        { symbol: "WP", label: `Written, ${asOfYear}`, value: rows[rows.length - 1].written, unit: "money" },
+        { symbol: "UEP", label: policyYear ? `Unearned a/o ${asOfYear}` : `Unearned at end ${asOfYear}`, value: rows[rows.length - 1].unearned, unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "year", label: policyYear ? "Policy year" : "Calendar year", kind: "text" },
+          { key: "written", label: "Written", kind: "number", unit: "money", computed: true },
+          { key: "earned", label: "Earned", kind: "number", unit: "money", computed: true },
+          { key: "unearned", label: policyYear ? "Unearned" : "Unearned at year end", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { year: "Total", written: total("written"), earned: total("earned"), unearned: null }
+      },
+      trace: rows.map((r) => ({ label: `Earned, ${r.year}`, formula: policyYear ? `policies written in ${r.year}, earned to 31 Dec ${asOfYear}` : `each policy's share of its term inside ${r.year}`, result: r.earned, unit: "money" })),
+      warnings: [],
+      values: { years, written: rows.map((r) => r.written), earned: rows.map((r) => r.earned), unearned: rows.map((r) => r.unearned) },
+      summary: `${policyYear ? "Policy" : "Calendar"} year earned ${rows.map((r) => `${r.year}: ${formatValue(r.earned, "money")}`).join(", ")}, as of 31 December ${asOfYear}.`
+    };
+  },
+  method: {
+    concepts: ["Earned Premium", "Earned Exposure"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 4\u20135" }]
+  }
+};
+
+// src/lib/tools/ratemaking/onLevelFactors.ts
+function shareFrom(s, a, b, T, basis) {
+  if (basis === "policy") return Math.min(1, Math.max(0, (b - s) / (b - a)));
+  const g = (u) => {
+    const x = u - s;
+    if (x <= 0) return 0;
+    return x < T ? x * x / (2 * T) : T / 2 + (x - T);
+  };
+  return (g(b) - g(a)) / (b - a);
+}
+var round4 = (x) => Math.round(x * 1e4 + 1e-8) / 1e4;
+var onLevelFactors = {
+  id: "ratemaking.on_level_factors",
+  version: "1.0.0",
+  name: "On-Level Factors",
+  area: "ratemaking",
+  answers: "What brings each year's premium to current rates?",
+  fields: [
+    {
+      kind: "table",
+      key: "changes",
+      label: "Rate changes",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each rate change, oldest first: the date it took effect for new and renewal policies, and the overall change as a decimal (\u22120.05 for a 5% decrease).",
+      columns: [
+        { key: "date", label: "Effective", kind: "text" },
+        { key: "change", label: "Change", kind: "number", unit: "percent" }
+      ],
+      default: [
+        { date: "2021-07-01", change: 0.05 },
+        { date: "2022-10-01", change: -0.02 },
+        { date: "2023-04-01", change: 0.04 }
+      ]
+    },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 60, sliderMax: 24, step: 1, default: 12, description: "The policy term in months: rate changes earn in over one term." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Premium",
+      description: "Calendar year earned premium is a mix of rate levels; a policy year's premium is written at the level in force when each policy was.",
+      options: [{ value: "calendar", label: "Calendar year" }, { value: "policy", label: "Policy year" }],
+      default: "calendar"
+    },
+    { kind: "number", key: "first", label: "First year", symbol: "Y\u2081", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2021, description: "The first year to bring on level." },
+    { kind: "number", key: "last", label: "Last year", symbol: "Y\u2099", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: "The last year to bring on level." },
+    {
+      kind: "choice",
+      key: "rounding",
+      label: "Rate level indices",
+      judgment: true,
+      description: "Whether the rate levels are carried unrounded, or rounded to four decimals as Werner & Modlin's exhibits print and use them: each cumulative level at each step of the product, and each year's average level before the factor is taken.",
+      options: [{ value: "none", label: "Unrounded" }, { value: "four", label: "4 decimals" }],
+      default: "none"
+    }
+  ],
+  notation: () => "OLF = current rate level / average rate level, by the parallelogram method",
+  view: "table",
+  compute: (input) => {
+    const changes = input.changes.map((r, k) => {
+      const parts = parseDate(r.date);
+      if (!parts) throw new ToolInputError("changes", `Rate change ${k + 1}'s date "${r.date}" isn't a date: write 2016-01-01 or 01/01/2016.`);
+      return { label: String(r.date), at: decimalYear(parts), change: Number(r.change) };
+    });
+    for (let k = 1; k < changes.length; k++) {
+      if (changes[k].at <= changes[k - 1].at) throw new ToolInputError("changes", "List the rate changes oldest first, each on its own date.");
+    }
+    const first = Number(input.first);
+    const last2 = Number(input.last);
+    if (last2 < first) throw new ToolInputError("last", "The last year must be on or after the first.");
+    const T = Number(input.term) / 12;
+    const basis = String(input.basis);
+    const round = input.rounding === "four" ? round4 : (x) => x;
+    const levels = [1];
+    for (const c of changes) levels.push(round(levels[levels.length - 1] * (1 + c.change)));
+    const used = levels;
+    const current = used[used.length - 1];
+    const years = Array.from({ length: last2 - first + 1 }, (_, k) => first + k);
+    const rows = years.map((y) => {
+      const after = [1, ...changes.map((c) => shareFrom(c.at, y, y + 1, T, basis)), 0];
+      const portions = levels.map((_, k) => after[k] - after[k + 1]);
+      const average = round(portions.reduce((s, p2, k) => s + p2 * used[k], 0));
+      return { y, portions, average, factor: current / average };
+    });
+    const levelKey = (k) => `level_${k}`;
+    const levelLabel = (k) => k === 0 ? "Before" : changes[k - 1].label;
+    const columns = [
+      { key: "year", label: basis === "policy" ? "Policy year" : "Calendar year", kind: "text" },
+      ...levels.map((_, k) => ({ key: levelKey(k), label: levelLabel(k), kind: "number", unit: "percent" })),
+      { key: "average", label: "Average level", kind: "number", unit: "factor" },
+      { key: "factor", label: "OLF", kind: "number", unit: "factor" }
+    ];
+    return {
+      tiles: [
+        { symbol: "OLF", label: `${last2}`, value: rows[rows.length - 1].factor, unit: "factor" },
+        { symbol: "OLF", label: `${first}`, value: rows[0].factor, unit: "factor" },
+        { symbol: "CRL", label: "Current rate level", value: current, unit: "factor" }
+      ],
+      table: {
+        columns: columns.map((c, k) => k === 0 ? c : { ...c, computed: true }),
+        rows: rows.map((r) => Object.assign({ year: String(r.y), average: r.average, factor: r.factor }, Object.fromEntries(r.portions.map((p2, k) => [levelKey(k), p2]))))
+      },
+      trace: [
+        ...used.map((l, k) => ({ label: `Cumulative rate level, ${levelLabel(k)}`, formula: k === 0 ? "1" : `\xD7 (1 + ${changes[k - 1].change})`, result: l, unit: "factor" })),
+        ...rows.map((r) => ({ label: `Average rate level, ${r.y}`, formula: "\u03A3 share \xD7 level, the parallelogram's areas", result: r.average, unit: "factor" }))
+      ],
+      warnings: [],
+      values: {
+        years,
+        factors: rows.map((r) => r.factor),
+        averages: rows.map((r) => r.average),
+        portions: rows.map((r) => r.portions),
+        levels: used,
+        current
+      },
+      summary: `On-level factors ${rows.map((r) => `${r.y}: ${formatValue(r.factor, "factor")}`).join(", ")}, to a current rate level of ${formatValue(current, "factor")}.`
+    };
+  },
+  method: {
+    concepts: ["Parallelogram Method", "On-Leveling"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 5" }]
+  }
+};
+
+// src/lib/tools/ratemaking/trendFit.ts
+var PERIOD = { key: "period", label: "Period", kind: "text" };
+var VALUE = { key: "value", label: "Value", kind: "number", unit: "plain" };
+function leastSquares(x, y) {
+  const n = x.length;
+  const mx = x.reduce((s, v) => s + v, 0) / n;
+  const my = y.reduce((s, v) => s + v, 0) / n;
+  let sxy = 0;
+  let sxx = 0;
+  let syy = 0;
+  for (let k = 0; k < n; k++) {
+    sxy += (x[k] - mx) * (y[k] - my);
+    sxx += (x[k] - mx) ** 2;
+    syy += (y[k] - my) ** 2;
+  }
+  const slope = sxy / sxx;
+  return { intercept: my - slope * mx, slope, r2: syy === 0 ? 1 : sxy * sxy / (sxx * syy) };
+}
+var trendFit = {
+  id: "ratemaking.trend_fit",
+  version: "1.0.0",
+  name: "Trend Fit",
+  area: "ratemaking",
+  answers: "What annual trend do these data show?",
+  fields: [
+    {
+      kind: "choice",
+      key: "model",
+      label: "Fit",
+      description: "Exponential fits ln(value) on time, a constant rate of change; linear fits the value itself, a constant amount.",
+      options: [{ value: "exponential", label: "Exponential" }, { value: "linear", label: "Linear" }],
+      default: "exponential"
+    },
+    { kind: "number", key: "per_year", label: "Points a year", symbol: "m", unit: "count", integer: true, min: 1, max: 365, sliderMax: 12, step: 1, default: 4, description: "How many points make a year: 4 for quarters (year-ending quarterly figures), 1 for years." },
+    {
+      kind: "number",
+      key: "latest",
+      label: "Points fitted",
+      symbol: "n",
+      unit: "count",
+      integer: true,
+      judgment: true,
+      min: 0,
+      max: 1e3,
+      sliderMax: 20,
+      step: 1,
+      default: 0,
+      zeroLabel: "All",
+      description: "Fit only the latest n points (0 for all of them): a judgment of how far back the trend still holds."
+    },
+    {
+      kind: "table",
+      key: "points",
+      label: "Points",
+      minRows: 2,
+      maxRows: 1e3,
+      description: "The series, oldest first, evenly spaced: each period's label and its value (average premium, frequency, severity or pure premium).",
+      columns: [PERIOD, VALUE],
+      default: [
+        { period: "2022 Q1", value: 100 },
+        { period: "2022 Q2", value: 101.2 },
+        { period: "2022 Q3", value: 101.9 },
+        { period: "2022 Q4", value: 103.1 },
+        { period: "2023 Q1", value: 104 },
+        { period: "2023 Q2", value: 104.9 },
+        { period: "2023 Q3", value: 106.2 },
+        { period: "2023 Q4", value: 107.1 }
+      ]
+    }
+  ],
+  notation: (input) => input.model === "linear" ? "y = a + b\xB7t,  annual change = m\xB7b" : "ln y = a + b\xB7t,  trend = e^(m\xB7b) \u2212 1",
+  view: "table",
+  grid: "points",
+  compute: (input) => {
+    const points = input.points;
+    const m = Number(input.per_year);
+    const exponential2 = input.model !== "linear";
+    const n = Number(input.latest) === 0 ? points.length : Math.min(Number(input.latest), points.length);
+    if (n < 2) throw new ToolInputError("latest", "Fit at least two points.");
+    const first = points.length - n;
+    const fitted = points.slice(first);
+    const x = fitted.map((_, k) => k);
+    const ys = fitted.map((r) => Number(r.value));
+    if (exponential2 && ys.some((y) => !(y > 0))) throw new ToolInputError("points", "An exponential fit needs every value above zero; fit these linearly instead.");
+    const fit = leastSquares(x, exponential2 ? ys.map(Math.log) : ys);
+    const at2 = (k) => exponential2 ? Math.exp(fit.intercept + fit.slope * k) : fit.intercept + fit.slope * k;
+    const trend = exponential2 ? Math.exp(m * fit.slope) - 1 : m * fit.slope / at2(n - 1);
+    const rows = points.map((r, k) => Object.assign({}, r, { fitted: k >= first ? at2(k - first) : null }));
+    return {
+      tiles: [
+        { symbol: "\u0394", label: exponential2 ? "Annual trend" : "Annual change \xF7 latest fit", value: trend, unit: "percent" },
+        ...exponential2 ? [] : [{ symbol: "m\xB7b", label: "Annual change", value: m * fit.slope, unit: "plain" }],
+        { symbol: "R\xB2", label: `${n}-point fit`, value: fit.r2, unit: "plain" }
+      ],
+      table: {
+        columns: [PERIOD, VALUE, { key: "fitted", label: "Fitted", kind: "number", unit: "plain", computed: true }],
+        rows
+      },
+      trace: [
+        { label: "Points fitted", formula: `the latest ${n} of ${points.length}`, result: n, unit: "count" },
+        { label: "Slope per period", formula: exponential2 ? "least squares of ln y on t" : "least squares of y on t", result: fit.slope, unit: "plain" },
+        { label: exponential2 ? "Annual trend" : "Annual change as a share of the latest fitted value", formula: exponential2 ? `e^(${m} \xD7 b) \u2212 1` : `${m} \xD7 b / \u0177`, result: trend, unit: "percent" },
+        { label: "R\xB2", formula: "share of the variation the fit explains", result: fit.r2, unit: "plain" }
+      ],
+      warnings: [],
+      values: { trend, slope: fit.slope, intercept: fit.intercept, r2: fit.r2, points: n, annual_change: exponential2 ? null : m * fit.slope },
+      summary: `${n}-point ${exponential2 ? "exponential" : "linear"} fit: ${exponential2 ? "annual trend" : "annual change"} ${formatValue(trend, "percent")}${exponential2 ? "" : " of the latest fitted value"}, R\xB2 ${formatValue(fit.r2, "plain")}.`
+    };
+  },
+  method: {
+    concepts: ["Exponential Trend", "Linear Trend", "Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 5\u20136" }]
+  },
+  next: [
+    { tool: "ratemaking.trend_factor", label: "Trend Factor", build: (_input, output) => ({ trend: output.values.trend }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/trendFactor.ts
+var trendFactor = {
+  id: "ratemaking.trend_factor",
+  version: "1.0.0",
+  name: "Trend Factor",
+  area: "ratemaking",
+  answers: "How far do these losses trend to the period the rates will cover?",
+  fields: [
+    { kind: "number", key: "trend", label: "Annual trend", symbol: "t", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The selected annual trend, as a decimal (from Trend Fit, or chosen)." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Experience period",
+      description: "Accident year losses occur, on average, mid-year; a policy year's, half a term later.",
+      options: [{ value: "accident", label: "Accident year" }, { value: "policy", label: "Policy year" }],
+      default: "accident"
+    },
+    { kind: "number", key: "year", label: "Experience year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMax: 2030, step: 1, default: 2023, description: "The accident or policy year being trended." },
+    { kind: "date", key: "effective", label: "Rates effective", symbol: "E", default: "2025-01-01", description: "The date the new rates take effect." },
+    { kind: "number", key: "in_effect", label: "Rates in effect (months)", symbol: "R", unit: "count", integer: true, min: 1, max: 120, sliderMax: 36, step: 1, default: 12, description: "How long the rates will be in effect, in months." },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: "The policy term in months (6 for six-month auto policies)." }
+  ],
+  notation: () => "factor = (1 + t)^(future average accident date \u2212 experience average accident date)",
+  view: "none",
+  compute: (input) => {
+    const t = Number(input.trend);
+    const Y = Number(input.year);
+    const T = Number(input.term) / 12;
+    const R = Number(input.in_effect) / 12;
+    const E = decimalYear(parseDate(input.effective));
+    const from = input.basis === "policy" ? Y + 0.5 + T / 2 : Y + 0.5;
+    const to = E + R / 2 + T / 2;
+    const period = to - from;
+    const factor = (1 + t) ** period;
+    return {
+      tiles: [
+        { symbol: "(1+t)^p", label: "Trend factor", value: factor, unit: "factor" },
+        { symbol: "p", label: "Trend period (years)", value: period, unit: "years" }
+      ],
+      trace: [
+        { label: `Average accident date, ${input.basis === "policy" ? "policy" : "accident"} year ${Y}`, formula: `${dateOfYear(from)}${input.basis === "policy" ? ": mid-year plus half a term" : ": mid-year"}`, result: from, unit: "years" },
+        { label: "Average accident date under the new rates", formula: `${dateOfYear(to)}: the effective date, plus half the time in effect and half a term`, result: to, unit: "years" },
+        { label: "Trend period", formula: `${dateOfYear(from)} to ${dateOfYear(to)}`, result: period, unit: "years" },
+        { label: "Trend factor", formula: `(1 + ${t})^${formatValue(period, "years")}`, result: factor, unit: "factor" }
+      ],
+      warnings: period < 0 ? ["The experience period is later than the period the rates cover: the trend runs backwards."] : [],
+      values: { factor, period, from: dateOfYear(from), to: dateOfYear(to) },
+      summary: `Trend factor ${formatValue(factor, "factor")} over ${formatValue(period, "years")} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`
+    };
+  },
+  method: {
+    concepts: ["Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 6" }]
+  }
+};
+
+// src/lib/tools/ratemaking/expenseRatios.ts
+var TYPE = { key: "type", label: "Expense", kind: "text" };
+var EXPENSES = { key: "expenses", label: "Expenses", kind: "number", unit: "money" };
+var PREMIUM = { key: "premium", label: "Premium", kind: "number", unit: "money" };
+var FIXED_SHARE = { key: "fixed_share", label: "% fixed", kind: "number", unit: "percent" };
+var expenseRatios = {
+  id: "ratemaking.expense_ratios",
+  version: "1.0.0",
+  name: "Expense Ratios",
+  area: "ratemaking",
+  answers: "What are the fixed and variable expense provisions?",
+  fields: [
+    {
+      kind: "table",
+      key: "rows",
+      label: "Expense types",
+      minRows: 1,
+      maxRows: 50,
+      description: "Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees \u2014 over the same years), and the share of it treated as fixed (a judgment).",
+      columns: [TYPE, EXPENSES, PREMIUM, FIXED_SHARE],
+      default: [
+        { type: "General expenses", expenses: 9e5, premium: 14e6, fixed_share: 0.75 },
+        { type: "Other acquisition", expenses: 12e5, premium: 145e5, fixed_share: 0.75 },
+        { type: "Commission and brokerage", expenses: 16e5, premium: 145e5, fixed_share: 0 },
+        { type: "Taxes, licenses and fees", expenses: 34e4, premium: 145e5, fixed_share: 0 }
+      ]
+    }
+  ],
+  notation: () => "F = \u03A3 (E\u209C/P\u209C)\xB7f\u209C,  V = \u03A3 (E\u209C/P\u209C)\xB7(1 \u2212 f\u209C)",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const out = rows.map((r) => {
+      const premium = Number(r.premium);
+      if (!(premium > 0)) throw new ToolInputError("rows", `"${r.type}" needs a premium above zero to measure its expenses against.`);
+      const share = Number(r.fixed_share);
+      if (share < 0 || share > 1) throw new ToolInputError("rows", `"${r.type}": the fixed share must be between 0 and 1 (a decimal, or "75%").`);
+      const ratio = Number(r.expenses) / premium;
+      return Object.assign({}, r, { ratio, fixed: ratio * share, variable: ratio * (1 - share) });
+    });
+    const F2 = out.reduce((s, r) => s + r.fixed, 0);
+    const V = out.reduce((s, r) => s + r.variable, 0);
+    return {
+      tiles: [
+        { symbol: "F", label: "Fixed provision", value: F2, unit: "percent" },
+        { symbol: "V", label: "Variable provision", value: V, unit: "percent" },
+        { symbol: "F + V", label: "Total", value: F2 + V, unit: "percent" }
+      ],
+      table: {
+        columns: [
+          TYPE,
+          EXPENSES,
+          PREMIUM,
+          FIXED_SHARE,
+          { key: "ratio", label: "Ratio", kind: "number", unit: "percent", computed: true },
+          { key: "fixed", label: "Fixed", kind: "number", unit: "percent", computed: true },
+          { key: "variable", label: "Variable", kind: "number", unit: "percent", computed: true }
+        ],
+        rows: out,
+        footer: { type: "Provision", expenses: null, premium: null, fixed_share: null, ratio: F2 + V, fixed: F2, variable: V }
+      },
+      trace: out.map((r) => ({ label: String(r.type), formula: `${formatValue(Number(r.expenses), "money")} / ${formatValue(Number(r.premium), "money")}`, result: r.ratio, unit: "percent" })),
+      warnings: [],
+      values: { fixed_provision: F2, variable_provision: V, ratio: out.map((r) => r.ratio), fixed: out.map((r) => r.fixed), variable: out.map((r) => r.variable) },
+      summary: `Fixed expense provision ${formatValue(F2, "percent")}, variable ${formatValue(V, "percent")} of premium.`
+    };
+  },
+  method: {
+    concepts: ["Expense Provisions", "Fixed Expenses"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 7" }]
+  },
+  next: [
+    { tool: "ratemaking.loss_ratio_method", label: "Loss Ratio Method", build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) },
+    { tool: "ratemaking.permissible_loss_ratio", label: "Permissible Loss Ratio", build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/permissibleLossRatio.ts
+var permissibleLossRatio = {
+  id: "ratemaking.permissible_loss_ratio",
+  version: "1.0.0",
+  name: "Permissible Loss Ratio",
+  area: "ratemaking",
+  answers: "What loss ratio do the rates allow?",
+  fields: [
+    { kind: "number", key: "fixed", label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
+    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
+  ],
+  notation: () => "PLR = 1 \u2212 F \u2212 V \u2212 Q,  VPLR = 1 \u2212 V \u2212 Q",
+  view: "none",
+  compute: (input) => {
+    const F2 = Number(input.fixed);
+    const V = Number(input.variable);
+    const Q = Number(input.profit);
+    const vplr = 1 - V - Q;
+    const plr = vplr - F2;
+    if (vplr <= 0) throw new ToolInputError("variable", "V + Q must be below 100%.");
+    return {
+      tiles: [
+        { symbol: "PLR", label: "Permissible", value: plr, unit: "percent" },
+        { symbol: "VPLR", label: "Variable permissible", value: vplr, unit: "percent" }
+      ],
+      trace: [
+        { label: "Variable permissible loss ratio", formula: `1 \u2212 ${V} \u2212 ${Q}`, result: vplr, unit: "percent" },
+        { label: "Permissible loss ratio", formula: `1 \u2212 ${F2} \u2212 ${V} \u2212 ${Q}`, result: plr, unit: "percent" }
+      ],
+      warnings: plr <= 0 ? ["Expenses and profit take the whole premium: no loss ratio is permissible."] : [],
+      values: { permissible_loss_ratio: plr, variable_permissible_loss_ratio: vplr }
+    };
+  },
+  method: {
+    concepts: ["Permissible Loss Ratio"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 7" }]
+  },
+  next: [
+    { tool: "ratemaking.loss_ratio_method", label: "Loss Ratio Method", build: (input) => ({ fixed: input.fixed, variable: input.variable, profit: input.profit }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/purePremiumMethod.ts
+var purePremiumMethod = {
+  id: "ratemaking.pure_premium_method",
+  version: "1.0.0",
+  name: "Pure Premium Method",
+  area: "ratemaking",
+  answers: "What's the indicated average rate?",
+  fields: [
+    { kind: "number", key: "pure_premium", label: "Pure premium", symbol: "PP", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 300, description: "Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in)." },
+    { kind: "number", key: "fixed", label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
+    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." },
+    { kind: "number", key: "current", label: "Current average rate", symbol: "R\u2080", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 0, zeroLabel: "Not given", description: "The current average rate per exposure, for the indicated change (0 to leave it out)." }
+  ],
+  notation: () => "R = (PP + F) / (1 \u2212 V \u2212 Q)",
+  view: "none",
+  compute: (input) => {
+    const PP = Number(input.pure_premium);
+    const F2 = Number(input.fixed);
+    const V = Number(input.variable);
+    const Q = Number(input.profit);
+    const current = Number(input.current);
+    const plr = 1 - V - Q;
+    if (plr <= 0) throw new ToolInputError("variable", "V + Q must be below 100%: nothing would be left for losses and fixed expenses.");
+    const rate = (PP + F2) / plr;
+    const change = current > 0 ? rate / current - 1 : null;
+    return {
+      tiles: [
+        { symbol: "R", label: "Indicated rate", value: rate, unit: "money" },
+        { symbol: "PLR", label: "1 \u2212 V \u2212 Q", value: plr, unit: "percent" },
+        ...change === null ? [] : [{ symbol: "\u0394R", label: "Indicated change", value: change, unit: "percent" }]
+      ],
+      trace: [
+        { label: "Variable permissible loss ratio", formula: `1 \u2212 ${V} \u2212 ${Q}`, result: plr, unit: "percent" },
+        { label: "Indicated average rate", formula: `(${PP} + ${F2}) / ${plr.toFixed(4)}`, result: rate, unit: "money" },
+        ...change === null ? [] : [{ label: "Indicated change", formula: `${formatValue(rate, "money")} / ${current} \u2212 1`, result: change, unit: "percent" }]
+      ],
+      warnings: [],
+      values: { indicated_rate: rate, variable_permissible_loss_ratio: plr, indicated_change: change }
+    };
+  },
+  method: {
+    concepts: ["Pure Premium Method", "Overall Rate Level Indication"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 8" }]
+  }
+};
+
 // src/lib/tools/credibility/fullCredibility.ts
 var BASES = [
   { value: "frequency", label: "Frequency" },
@@ -2793,7 +3389,14 @@ var TOOLS = [
   bornhuetterFerguson,
   benktander,
   capeCod,
+  earnedPremium,
+  onLevelFactors,
+  trendFit,
+  trendFactor,
+  expenseRatios,
+  permissibleLossRatio,
   lossRatioMethod,
+  purePremiumMethod,
   distribution,
   limitedExpectedValue,
   expectedPayment,
@@ -2973,6 +3576,11 @@ function choiceField(f, raw) {
   if (!hit) throw new ToolInputError(f.key, `"${f.key}" must be one of: ${f.options.map((o) => o.value).join(", ")}.`);
   return hit.value;
 }
+function dateField(f, raw) {
+  const parts = parseDate(raw);
+  if (!parts) throw new ToolInputError(f.key, `"${f.key}" must be a date: "2017-01-01" or "01/01/2017".`);
+  return isoDate(parts);
+}
 function tableField(f, raw) {
   if (!Array.isArray(raw)) throw new ToolInputError(f.key, `"${f.key}" must be an array of rows, each with ${f.columns.map((c) => c.key).join(", ")}.`);
   if (raw.length < f.minRows || raw.length > f.maxRows) {
@@ -3044,6 +3652,8 @@ function readField(field, raw) {
       return numberField(field, raw);
     case "choice":
       return choiceField(field, raw);
+    case "date":
+      return dateField(field, raw);
     case "table":
       return tableField(field, raw);
     case "triangle":
@@ -6416,6 +7026,1376 @@ var basic_ratemaking_2016_default = {
         }
       },
       pdf_page: 380
+    },
+    a1_assumptions: {
+      locator: "Appendix A, Auto Indication",
+      printed_page: "A-1",
+      term_months: 6,
+      effective: "2017-01-01",
+      in_effect_months: 12,
+      quote: "All policies are semi-annual, and the proposed effective date for the revised rates is January 1, 2017. Rates are expected to be in effect for one year.",
+      pdf_page: 338
+    },
+    b1_assumptions: {
+      locator: "Appendix B, Homeowners Indication",
+      printed_page: "B-1",
+      term_months: 12,
+      effective: "2017-01-01",
+      in_effect_months: 12,
+      quote: "All policies are annual, and the proposed effective date for new rates in State XX is January 1, 2017. Rates are expected to be in effect for one year.",
+      pdf_page: 359
+    },
+    a9_rate_changes: {
+      locator: "Appendix A, Current Rate Level - 1",
+      printed_page: "A-9",
+      groups: [
+        {
+          group: "A",
+          date: null,
+          change: null,
+          index: 1,
+          cumulative: 1
+        },
+        {
+          group: "B",
+          date: "04/01/2011",
+          change: -0.05,
+          index: 0.95,
+          cumulative: 0.95
+        },
+        {
+          group: "C",
+          date: "07/01/2012",
+          change: 0.1,
+          index: 1.1,
+          cumulative: 1.045
+        },
+        {
+          group: "D",
+          date: "10/01/2013",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.0973
+        },
+        {
+          group: "E",
+          date: "07/01/2014",
+          change: -0.02,
+          index: 0.98,
+          cumulative: 1.0754
+        },
+        {
+          group: "F",
+          date: "10/01/2015",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.1292
+        },
+        {
+          group: "G",
+          date: "01/01/2016",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.1857
+        }
+      ],
+      pdf_page: 346
+    },
+    a10_rate_level_factors: {
+      locator: "Appendix A, Current Rate Level - 2",
+      printed_page: "A-10",
+      rows: [
+        {
+          year: "2011",
+          portions: [
+            0.5,
+            0.5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          average: 0.975,
+          current: 1.1857,
+          factor: 1.2161
+        },
+        {
+          year: "2012",
+          portions: [
+            0,
+            0.75,
+            0.25,
+            0,
+            0,
+            0,
+            0
+          ],
+          average: 0.9738,
+          current: 1.1857,
+          factor: 1.2176
+        },
+        {
+          year: "2013",
+          portions: [
+            0,
+            0,
+            0.9375,
+            0.0625,
+            0,
+            0,
+            0
+          ],
+          average: 1.0483,
+          current: 1.1857,
+          factor: 1.1311
+        },
+        {
+          year: "2014",
+          portions: [
+            0,
+            0,
+            0.0625,
+            0.6875,
+            0.25,
+            0,
+            0
+          ],
+          average: 1.0886,
+          current: 1.1857,
+          factor: 1.0892
+        },
+        {
+          year: "2015",
+          portions: [
+            0,
+            0,
+            0,
+            0,
+            0.9375,
+            0.0625,
+            0
+          ],
+          average: 1.0788,
+          current: 1.1857,
+          factor: 1.0991
+        }
+      ],
+      pdf_page: 347
+    },
+    a11_premium_trend: {
+      locator: "Appendix A, Premium Trend - 1",
+      printed_page: "A-11",
+      points: [
+        {
+          quarter: "2010 - 2",
+          written: 1314117,
+          exposure: 12752,
+          average: 103.05
+        },
+        {
+          quarter: "2010 - 3",
+          written: 1323381,
+          exposure: 12776,
+          average: 103.58
+        },
+        {
+          quarter: "2010 - 4",
+          written: 1333726,
+          exposure: 12806,
+          average: 104.15
+        },
+        {
+          quarter: "2011 - 1",
+          written: 1343014,
+          exposure: 12825,
+          average: 104.72
+        },
+        {
+          quarter: "2011 - 2",
+          written: 1354391,
+          exposure: 12863,
+          average: 105.29
+        },
+        {
+          quarter: "2011 - 3",
+          written: 1364644,
+          exposure: 12893,
+          average: 105.84
+        },
+        {
+          quarter: "2011 - 4",
+          written: 1374283,
+          exposure: 12917,
+          average: 106.39
+        },
+        {
+          quarter: "2012 - 1",
+          written: 1384951,
+          exposure: 12953,
+          average: 106.92
+        },
+        {
+          quarter: "2012 - 2",
+          written: 1393570,
+          exposure: 12973,
+          average: 107.42
+        },
+        {
+          quarter: "2012 - 3",
+          written: 1403987,
+          exposure: 13005,
+          average: 107.96
+        },
+        {
+          quarter: "2012 - 4",
+          written: 1415881,
+          exposure: 13044,
+          average: 108.55
+        },
+        {
+          quarter: "2013 - 1",
+          written: 1428087,
+          exposure: 13082,
+          average: 109.16
+        },
+        {
+          quarter: "2013 - 2",
+          written: 1438647,
+          exposure: 13108,
+          average: 109.75
+        },
+        {
+          quarter: "2013 - 3",
+          written: 1448311,
+          exposure: 13128,
+          average: 110.32
+        },
+        {
+          quarter: "2013 - 4",
+          written: 1458540,
+          exposure: 13155,
+          average: 110.87
+        },
+        {
+          quarter: "2014 - 1",
+          written: 1468617,
+          exposure: 13183,
+          average: 111.4
+        },
+        {
+          quarter: "2014 - 2",
+          written: 1479666,
+          exposure: 13217,
+          average: 111.95
+        },
+        {
+          quarter: "2014 - 3",
+          written: 1492537,
+          exposure: 13262,
+          average: 112.54
+        },
+        {
+          quarter: "2014 - 4",
+          written: 1503294,
+          exposure: 13292,
+          average: 113.1
+        },
+        {
+          quarter: "2015 - 1",
+          written: 1514903,
+          exposure: 13325,
+          average: 113.69
+        },
+        {
+          quarter: "2015 - 2",
+          written: 1524242,
+          exposure: 13341,
+          average: 114.25
+        },
+        {
+          quarter: "2015 - 3",
+          written: 1536215,
+          exposure: 13383,
+          average: 114.79
+        },
+        {
+          quarter: "2015 - 4",
+          written: 1547368,
+          exposure: 13414,
+          average: 115.35
+        }
+      ],
+      fits: {
+        "20": 0.021,
+        "16": 0.021,
+        "12": 0.02,
+        "8": 0.02,
+        "6": 0.02,
+        "4": 0.019
+      },
+      pdf_page: 348
+    },
+    a15_loss_trend: {
+      locator: "Appendix A, Loss Trend - 1",
+      printed_page: "A-15",
+      points: [
+        {
+          quarter: "2011 - 1",
+          exposure: 131911,
+          counts: 7745,
+          losses: 8220899,
+          frequency: 0.0587,
+          severity: 1061.45,
+          pure_premium: 62.32
+        },
+        {
+          quarter: "2011 - 2",
+          exposure: 132700,
+          counts: 7785,
+          losses: 8381016,
+          frequency: 0.0587,
+          severity: 1076.56,
+          pure_premium: 63.16
+        },
+        {
+          quarter: "2011 - 3",
+          exposure: 133602,
+          counts: 7917,
+          losses: 8594389,
+          frequency: 0.0593,
+          severity: 1085.56,
+          pure_premium: 64.33
+        },
+        {
+          quarter: "2011 - 4",
+          exposure: 135079,
+          counts: 7928,
+          losses: 8705108,
+          frequency: 0.0587,
+          severity: 1098.02,
+          pure_premium: 64.44
+        },
+        {
+          quarter: "2012 - 1",
+          exposure: 137384,
+          counts: 7997,
+          losses: 8816379,
+          frequency: 0.0582,
+          severity: 1102.46,
+          pure_premium: 64.17
+        },
+        {
+          quarter: "2012 - 2",
+          exposure: 138983,
+          counts: 8037,
+          losses: 8901163,
+          frequency: 0.0578,
+          severity: 1107.52,
+          pure_premium: 64.04
+        },
+        {
+          quarter: "2012 - 3",
+          exposure: 140396,
+          counts: 7939,
+          losses: 8873491,
+          frequency: 0.0565,
+          severity: 1117.71,
+          pure_premium: 63.2
+        },
+        {
+          quarter: "2012 - 4",
+          exposure: 140997,
+          counts: 7831,
+          losses: 8799730,
+          frequency: 0.0555,
+          severity: 1123.7,
+          pure_premium: 62.41
+        },
+        {
+          quarter: "2013 - 1",
+          exposure: 140378,
+          counts: 7748,
+          losses: 8736859,
+          frequency: 0.0552,
+          severity: 1127.63,
+          pure_premium: 62.24
+        },
+        {
+          quarter: "2013 - 2",
+          exposure: 139682,
+          counts: 7719,
+          losses: 8676220,
+          frequency: 0.0553,
+          severity: 1124.01,
+          pure_premium: 62.11
+        },
+        {
+          quarter: "2013 - 3",
+          exposure: 138982,
+          counts: 7730,
+          losses: 8629925,
+          frequency: 0.0556,
+          severity: 1116.42,
+          pure_premium: 62.09
+        },
+        {
+          quarter: "2013 - 4",
+          exposure: 138984,
+          counts: 7790,
+          losses: 8642835,
+          frequency: 0.056,
+          severity: 1109.48,
+          pure_premium: 62.19
+        },
+        {
+          quarter: "2014 - 1",
+          exposure: 139155,
+          counts: 7782,
+          losses: 8602105,
+          frequency: 0.0559,
+          severity: 1105.38,
+          pure_premium: 61.82
+        },
+        {
+          quarter: "2014 - 2",
+          exposure: 139618,
+          counts: 7741,
+          losses: 8535327,
+          frequency: 0.0554,
+          severity: 1102.61,
+          pure_premium: 61.13
+        },
+        {
+          quarter: "2014 - 3",
+          exposure: 139996,
+          counts: 7720,
+          losses: 8466272,
+          frequency: 0.0551,
+          severity: 1096.67,
+          pure_premium: 60.48
+        },
+        {
+          quarter: "2014 - 4",
+          exposure: 140141,
+          counts: 7691,
+          losses: 8412159,
+          frequency: 0.0549,
+          severity: 1093.77,
+          pure_premium: 60.03
+        },
+        {
+          quarter: "2015 - 1",
+          exposure: 140754,
+          counts: 7735,
+          losses: 8513679,
+          frequency: 0.055,
+          severity: 1100.67,
+          pure_premium: 60.49
+        },
+        {
+          quarter: "2015 - 2",
+          exposure: 141534,
+          counts: 7769,
+          losses: 8614224,
+          frequency: 0.0549,
+          severity: 1108.79,
+          pure_premium: 60.86
+        },
+        {
+          quarter: "2015 - 3",
+          exposure: 141800,
+          counts: 7755,
+          losses: 8702135,
+          frequency: 0.0547,
+          severity: 1122.13,
+          pure_premium: 61.37
+        },
+        {
+          quarter: "2015 - 4",
+          exposure: 142986,
+          counts: 7778,
+          losses: 8761588,
+          frequency: 0.0544,
+          severity: 1126.46,
+          pure_premium: 61.28
+        }
+      ],
+      fits: {
+        "20": {
+          frequency: -0.017,
+          severity: 5e-3,
+          pure_premium: -0.012
+        },
+        "16": {
+          frequency: -0.013,
+          severity: -1e-3,
+          pure_premium: -0.014
+        },
+        "12": {
+          frequency: -7e-3,
+          severity: -2e-3,
+          pure_premium: -9e-3
+        },
+        "8": {
+          frequency: -0.012,
+          severity: 0.012,
+          pure_premium: -1e-3
+        },
+        "6": {
+          frequency: -9e-3,
+          severity: 0.025,
+          pure_premium: 0.016
+        },
+        "4": {
+          frequency: -0.015,
+          severity: 0.033,
+          pure_premium: 0.019
+        }
+      },
+      pdf_page: 352
+    },
+    a19_loss_trend_periods: {
+      locator: "Appendix A, Loss Trend - 5",
+      printed_page: "A-19",
+      projected_from: "07/01/2015",
+      projected_to: "09/30/2017",
+      rows: [
+        {
+          year: "2011",
+          current_trend: -5e-3,
+          current_period: 4,
+          current_factor: 0.9801,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 0.9912
+        },
+        {
+          year: "2012",
+          current_trend: -5e-3,
+          current_period: 3,
+          current_factor: 0.9851,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 0.9962
+        },
+        {
+          year: "2013",
+          current_trend: -5e-3,
+          current_period: 2,
+          current_factor: 0.99,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0012
+        },
+        {
+          year: "2014",
+          current_trend: -5e-3,
+          current_period: 1,
+          current_factor: 0.995,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0062
+        },
+        {
+          year: "2015",
+          current_trend: -5e-3,
+          current_period: 0,
+          current_factor: 1,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0113
+        }
+      ],
+      pdf_page: 356
+    },
+    b12_loss_trend_periods: {
+      locator: "Appendix B, Loss Trend - 3",
+      printed_page: "B-12",
+      projected_from: "07/01/2015",
+      projected_to: "01/01/2018",
+      rows: [
+        {
+          year: "2011",
+          current_trend: 0.02,
+          current_period: 4,
+          current_factor: 1.0824,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1939
+        },
+        {
+          year: "2012",
+          current_trend: 0.02,
+          current_period: 3,
+          current_factor: 1.0612,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1705
+        },
+        {
+          year: "2013",
+          current_trend: 0.02,
+          current_period: 2,
+          current_factor: 1.0404,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1476
+        },
+        {
+          year: "2014",
+          current_trend: 0.02,
+          current_period: 1,
+          current_factor: 1.02,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1251
+        },
+        {
+          year: "2015",
+          current_trend: 0.02,
+          current_period: 0,
+          current_factor: 1,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.103
+        }
+      ],
+      pdf_page: 370
+    },
+    a21_expenses: {
+      locator: "Appendix A, Expense",
+      printed_page: "A-21",
+      types: [
+        {
+          type: "General Expenses",
+          expenses: [
+            29143368,
+            29940978,
+            30763160
+          ],
+          premium: [
+            466001205,
+            478971842,
+            491904082
+          ],
+          premium_basis: "Countrywide Earned Premium",
+          ratios: [
+            0.063,
+            0.063,
+            0.063
+          ],
+          weighted: 0.063,
+          selected: 0.063,
+          fixed_share: 0.75,
+          fixed: 0.047,
+          variable: 0.016
+        },
+        {
+          type: "Other Acquisition",
+          expenses: [
+            40158296,
+            40912479,
+            41652543
+          ],
+          premium: [
+            468850020,
+            482345783,
+            495356701
+          ],
+          premium_basis: "Countrywide Written Premium",
+          ratios: [
+            0.086,
+            0.085,
+            0.084
+          ],
+          weighted: 0.085,
+          selected: 0.085,
+          fixed_share: 0.75,
+          fixed: 0.064,
+          variable: 0.021
+        },
+        {
+          type: "Licenses and Fees",
+          expenses: [
+            3124,
+            3190,
+            3229
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            2e-3,
+            2e-3,
+            2e-3
+          ],
+          weighted: 2e-3,
+          selected: 2e-3,
+          fixed_share: 1,
+          fixed: 2e-3,
+          variable: 0
+        },
+        {
+          type: "Commission and Brokerage",
+          expenses: [
+            145073,
+            154235,
+            158712
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            0.113,
+            0.112,
+            0.113
+          ],
+          weighted: 0.112,
+          selected: 0.112,
+          fixed_share: 0,
+          fixed: 0,
+          variable: 0.112
+        },
+        {
+          type: "Taxes",
+          expenses: [
+            27338,
+            27549,
+            29853
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            0.021,
+            0.02,
+            0.021
+          ],
+          weighted: 0.021,
+          selected: 0.021,
+          fixed_share: 0,
+          fixed: 0,
+          variable: 0.021
+        }
+      ],
+      fixed_provision: 0.113,
+      variable_provision: 0.17,
+      pdf_page: 358
+    },
+    ch4_annual_written: {
+      locator: "Chapter 4, Tables 4.7",
+      printed_page: "54",
+      tables: {
+        "4.7": {
+          title: "4.7 Calendar Year Written Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            1,
+            4,
+            1
+          ]
+        }
+      },
+      pdf_page: 66
+    },
+    ch4_annual_earned: {
+      locator: "Chapter 4, Tables 4.11, 4.13",
+      printed_page: "56",
+      tables: {
+        "4.11": {
+          title: "4.11 Calendar Year Earned Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                0.25,
+                0.75,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.75,
+                0.25
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.25,
+                0.75
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            0.25,
+            3.25,
+            2.5
+          ]
+        },
+        "4.13": {
+          title: "4.13 Policy Year Earned  Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            1,
+            4,
+            1
+          ]
+        }
+      },
+      pdf_page: 68
+    },
+    ch4_semiannual: {
+      locator: "Chapter 4, Tables 4.18, 4.19, 4.20, 4.21",
+      printed_page: "59",
+      tables: {
+        "4.18": {
+          title: "4.18 Calendar Year Written Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        },
+        "4.19": {
+          title: "4.19 Calendar Year Earned Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.25,
+                0.25,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.25,
+                0.25
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.25,
+            2,
+            0.75
+          ]
+        },
+        "4.20": {
+          title: "4.20 Policy Year Written Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        },
+        "4.21": {
+          title: "4.21 Policy Year Earned Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        }
+      },
+      pdf_page: 71
     }
   }
 };
@@ -7096,6 +9076,151 @@ CHECKS.push(
     }]
   }))
 );
+var FOUR = 5e-5 + 1e-9;
+var A1 = W.a1_assumptions;
+var B1 = W.b1_assumptions;
+CHECKS.push(
+  {
+    tool: "ratemaking.pure_premium_method",
+    source: wernerRef(W.b5_pp_indication),
+    cases: [{
+      // Row (16)'s total pure premium carries row (17)'s reinsurance cost per exposure, as row (22) adds it.
+      name: "Rows (21) and (22), the variable permissible loss ratio and indicated rate",
+      input: {
+        pure_premium: row(W.b5_pp_indication, 16) + row(W.b5_pp_indication, 17),
+        fixed: row(W.b5_pp_indication, 18),
+        variable: row(W.b5_pp_indication, 19),
+        profit: row(W.b5_pp_indication, 20)
+      },
+      expect: [
+        { what: "variable permissible loss ratio", printed: row(W.b5_pp_indication, 21), tolerance: PERCENT, actual: (r) => Number(r.values.variable_permissible_loss_ratio) },
+        // Three inputs printed to the cent, divided by the permissible loss ratio, beside the rate's own half cent.
+        { what: "indicated rate", printed: row(W.b5_pp_indication, 22), tolerance: 5e-3 + 0.015 / row(W.b5_pp_indication, 21), actual: (r) => Number(r.values.indicated_rate) }
+      ]
+    }]
+  },
+  ...[
+    { exhibit: W.a7_lr_indication, fixed: 12, variable: 13, profit: 14, plr: 15, key: "variable_permissible_loss_ratio" },
+    { exhibit: W.b5_pp_indication, fixed: null, variable: 19, profit: 20, plr: 21, key: "variable_permissible_loss_ratio" },
+    // Appendix C treats every expense, ULAE included, as variable.
+    { exhibit: W.c7_lr_indication, fixed: null, variable: 9, profit: 10, plr: 11, key: "permissible_loss_ratio" }
+  ].map(({ exhibit, fixed, variable, profit, plr, key }) => ({
+    tool: "ratemaking.permissible_loss_ratio",
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Row (${plr}), the ${key === "permissible_loss_ratio" ? "" : "variable "}permissible loss ratio`,
+      input: { fixed: fixed === null ? 0 : row(exhibit, fixed), variable: row(exhibit, variable), profit: row(exhibit, profit) },
+      expect: [{ what: "permissible loss ratio", printed: row(exhibit, plr), tolerance: PERCENT, actual: (r) => Number(r.values[key]) }]
+    }]
+  })),
+  {
+    tool: "ratemaking.expense_ratios",
+    source: wernerRef(W.a21_expenses),
+    cases: [{
+      // Each type's three years, summed: the exhibit's three-year weighted average.
+      name: "Rows (1)\u2013(5) c, e and f, and the provisions (6) and (7)",
+      input: {
+        rows: W.a21_expenses.types.map((t) => ({
+          type: t.type,
+          expenses: t.expenses.reduce((a, b) => a + b, 0),
+          premium: t.premium.reduce((a, b) => a + b, 0),
+          fixed_share: t.fixed_share
+        }))
+      },
+      expect: [
+        ...W.a21_expenses.types.flatMap((t, k) => [
+          { what: `${t.type}, three-year ratio`, printed: t.weighted, tolerance: PERCENT, actual: (r) => values(r, "ratio")[k] },
+          { what: `${t.type}, fixed`, printed: t.fixed, tolerance: PERCENT, actual: (r) => values(r, "fixed")[k] },
+          { what: `${t.type}, variable`, printed: t.variable, tolerance: PERCENT, actual: (r) => values(r, "variable")[k] }
+        ]),
+        { what: "fixed expense provision", printed: W.a21_expenses.fixed_provision, tolerance: PERCENT, actual: (r) => Number(r.values.fixed_provision) },
+        { what: "variable expense provision", printed: W.a21_expenses.variable_provision, tolerance: PERCENT, actual: (r) => Number(r.values.variable_provision) }
+      ]
+    }]
+  },
+  {
+    tool: "ratemaking.trend_fit",
+    source: wernerRef(W.a11_premium_trend),
+    // The fits are of the printed averages, column (3), as the exhibit's own are.
+    cases: Object.entries(W.a11_premium_trend.fits).map(([n, printed]) => ({
+      name: `the ${n}-point exponential fit to average written premium at current rate level`,
+      input: { per_year: 4, latest: Number(n), points: W.a11_premium_trend.points.map((p2) => ({ period: p2.quarter, value: p2.average })) },
+      expect: [{ what: `${n}-point annual trend`, printed, tolerance: PERCENT, actual: (r) => Number(r.values.trend) }]
+    }))
+  },
+  {
+    tool: "ratemaking.trend_fit",
+    source: wernerRef(W.a15_loss_trend),
+    cases: ["frequency", "severity", "pure_premium"].flatMap((measure) => Object.entries(W.a15_loss_trend.fits).map(([n, fits]) => ({
+      name: `the ${n}-point exponential fit to ${measure.replace("_", " ")}`,
+      input: { per_year: 4, latest: Number(n), points: W.a15_loss_trend.points.map((p2) => ({ period: p2.quarter, value: p2[measure] })) },
+      expect: [{ what: `${n}-point ${measure.replace("_", " ")} trend`, printed: fits[measure], tolerance: PERCENT, actual: (r) => Number(r.values.trend) }]
+    })))
+  },
+  ...[
+    { exhibit: W.a19_loss_trend_periods, assumptions: A1, periodTolerance: 5e-3 + 1e-9 },
+    // Appendix B prints the period to one decimal.
+    { exhibit: W.b12_loss_trend_periods, assumptions: B1, periodTolerance: 0.05 + 1e-9 }
+  ].map(({ exhibit, assumptions, periodTolerance }) => {
+    const latest = exhibit.rows[exhibit.rows.length - 1];
+    return {
+      tool: "ratemaking.trend_factor",
+      source: wernerRef(exhibit),
+      cases: [{
+        name: `Columns (5) and (6), the projected trend period and factor for accident year ${latest.year}`,
+        input: { trend: latest.projected_trend, basis: "accident", year: Number(latest.year), effective: assumptions.effective, in_effect: assumptions.in_effect_months, term: assumptions.term_months },
+        expect: [
+          { what: "projected trend period", printed: latest.projected_period, tolerance: periodTolerance, actual: (r) => Number(r.values.period) },
+          { what: "projected trend factor", printed: latest.projected_factor, tolerance: FOUR, actual: (r) => Number(r.values.factor) }
+        ]
+      }]
+    };
+  }),
+  {
+    tool: "ratemaking.on_level_factors",
+    source: wernerRef(W.a10_rate_level_factors),
+    cases: [{
+      // The exhibit weights the cumulative rate levels as Current Rate Level - 1 prints them, to four decimals.
+      name: "Columns (1a), (2) and (4), by the parallelogram method on Current Rate Level - 1's history",
+      input: {
+        changes: W.a9_rate_changes.groups.filter((g) => g.date !== null).map((g) => ({ date: g.date, change: g.change })),
+        term: A1.term_months,
+        basis: "calendar",
+        first: Number(W.a10_rate_level_factors.rows[0].year),
+        last: Number(W.a10_rate_level_factors.rows[W.a10_rate_level_factors.rows.length - 1].year),
+        rounding: "four"
+      },
+      expect: W.a10_rate_level_factors.rows.flatMap((y, k) => [
+        ...y.portions.map((p2, g) => ({ what: `${y.year}, group ${W.a9_rate_changes.groups[g].group}`, printed: p2, tolerance: FOUR, actual: (r) => r.values.portions[k][g] })),
+        { what: `${y.year} average rate level`, printed: y.average, tolerance: FOUR, actual: (r) => values(r, "averages")[k] },
+        { what: `${y.year} on-level factor`, printed: y.factor, tolerance: FOUR, actual: (r) => values(r, "factors")[k] }
+      ])
+    }]
+  },
+  ...[
+    { exhibit: W.ch4_annual_written, written: "4.7", earned: null, earnedExhibit: null, term: 12, basis: "calendar" },
+    { exhibit: W.ch4_annual_earned, written: null, earned: "4.11", earnedExhibit: null, term: 12, basis: "calendar" },
+    { exhibit: W.ch4_annual_earned, written: "4.13", earned: "4.13", earnedExhibit: null, term: 12, basis: "policy" },
+    { exhibit: W.ch4_semiannual, written: "4.18", earned: "4.19", earnedExhibit: null, term: 6, basis: "calendar" },
+    { exhibit: W.ch4_semiannual, written: "4.20", earned: "4.21", earnedExhibit: null, term: 6, basis: "policy" }
+  ].map(({ exhibit, written, earned, term, basis }) => {
+    const tables = exhibit.tables;
+    const table = tables[written ?? earned];
+    const asOf = Number(table.years[table.years.length - 1].slice(3));
+    return {
+      tool: "ratemaking.earned_premium",
+      source: wernerRef({ ...exhibit, locator: `Chapter 4, Table ${[written, earned].filter((t, i, all) => t && all.indexOf(t) === i).join(" and ")}` }),
+      cases: [{
+        name: `${basis === "policy" ? "policy" : "calendar"} year exposures of ${term}-month policies, as of 12/31/${asOf}`,
+        input: { term, basis, as_of: asOf, policies: table.policies.map((p2) => ({ policy: p2.policy, effective: p2.effective, amount: p2.exposure })) },
+        expect: [
+          ...written ? tables[written].by_year.map((v, k) => ({ what: `${tables[written].years[k]} written`, printed: v, tolerance: 5e-3 + 1e-9, actual: (r) => values(r, "written")[k] })) : [],
+          ...earned ? tables[earned].by_year.map((v, k) => ({ what: `${tables[earned].years[k]} earned`, printed: v, tolerance: 5e-3 + 1e-9, actual: (r) => values(r, "earned")[k] })) : []
+        ]
+      }]
+    };
+  })
+);
 function verifyCheck(check) {
   const spec = toolById(check.tool);
   if (!spec) throw new Error(`No tool ${check.tool}`);
@@ -7156,6 +9281,8 @@ function fieldSchema(f) {
       };
     case "choice":
       return { type: "string", enum: f.options.map((o) => o.value), default: f.default, description: `${f.description}${judgment}` };
+    case "date":
+      return { type: "string", format: "date", default: f.default, description: `${f.description} As YYYY-MM-DD.${judgment}` };
     case "table":
       return {
         type: "array",

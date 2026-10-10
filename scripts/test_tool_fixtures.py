@@ -92,5 +92,18 @@ class ScenariosAndTextTables(unittest.TestCase):
         self.assertEqual(table['values'][-1], [7, None, None, None, None, None, None])
 
 
+class WernerExhibits(unittest.TestCase):
+    def test_rate_changes_keep_the_first_group_without_a_date(self):
+        text = '\n'.join(['Cumulative', 'Rate Level', 'Index', 'A', '1.0000', '1.0000', 'B', '04/01/2011', '-5.0%', '0.9500', '0.9500', '(3) = 1.0 + (2)', 'A - 9'])
+        groups = tf.werner_rate_changes(text)['groups']
+        self.assertEqual(groups[0], {'group': 'A', 'date': None, 'change': None, 'index': 1.0, 'cumulative': 1.0})
+        self.assertEqual(groups[1]['change'], -0.05)
+
+    def test_assumptions_read_the_term_date_and_period(self):
+        text = '\n'.join(['Appendix A:  Auto Indication', 'A-1', 'All policies are semi-annual, and the proposed effective date for the revised rates is January 1, 2017.', 'Rates are expected to be in effect for one year.'])
+        a = tf.werner_assumptions('Appendix A')(text)
+        self.assertEqual((a['term_months'], a['effective'], a['in_effect_months']), (6, '2017-01-01', 12))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -43,6 +43,12 @@ export interface NumberField extends FieldBase {
   integer?: boolean
 }
 
+/** A date, held as 'YYYY-MM-DD' (an effective date, a valuation date). */
+export interface DateField extends FieldBase {
+  kind: 'date'
+  default: string
+}
+
 export interface ChoiceField extends FieldBase {
   kind: 'choice'
   options: { value: string; label: string }[]
@@ -73,7 +79,7 @@ export interface TriangleField extends FieldBase {
   default: Triangle
 }
 
-export type ToolField = NumberField | ChoiceField | TableField | TriangleField
+export type ToolField = NumberField | ChoiceField | DateField | TableField | TriangleField
 
 export type TableRow = Record<string, string | number | null>
 

@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { existsSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import {
   AREAS,
   TOOLS,
@@ -16,7 +19,10 @@ import { canonicalJson, sha256Hex } from './hash'
 import { averageFactor, factorsAt } from './reserving/ageToAge'
 import { inverseNormalCdf } from './numeric'
 import { lossModel } from './distributions/lossModels'
+import { dateOfYear, decimalYear, parseDate } from './dates'
 import { standardNormalCdf } from '../distributionMath'
+
+const VAULT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..')
 
 const tool = (id: string): ToolSpec => {
   const spec = toolById(id)
@@ -45,7 +51,7 @@ describe('the registry holds every tool to one job (R9)', () => {
     // made, counting a field only while its `showWhen` draws it — and at most
     // three headline results.
     for (const setting of choiceSettings(spec)) {
-      const shown = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
+      const shown = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
       expect(shown.length, JSON.stringify(setting)).toBeLessThanOrEqual(6)
     }
     const result = runTool(spec, {})
@@ -60,6 +66,13 @@ describe('the registry holds every tool to one job (R9)', () => {
     }
     // The method names concept pages.
     expect(spec.method.concepts.length).toBeGreaterThan(0)
+  })
+
+  it('names concept pages and readings the vault has', () => {
+    for (const t of TOOLS) {
+      for (const c of t.method.concepts) expect(existsSync(path.join(VAULT, 'Concepts', `${c}.md`)), `${t.id}: Concepts/${c}.md`).toBe(true)
+      for (const r of t.method.readings) expect(existsSync(path.join(VAULT, 'Resources/Books', `${r.resource}.md`)), `${t.id}: ${r.resource}`).toBe(true)
+    }
   })
 
   it('has unique ids and slugs that find their tool', () => {
@@ -438,6 +451,72 @@ describe('Loss Ratio Method', () => {
 
   it('refuses expenses and profit that leave no room', () => {
     expect(() => run('ratemaking.loss_ratio_method', { variable: 0.6, profit: 0.4 })).toThrow(/below 100%/)
+  })
+})
+
+describe('dates', () => {
+  it('reads ISO, US and the texts\' two-digit years, and refuses what is not a date', () => {
+    expect(parseDate('2017-01-01')).toEqual({ y: 2017, m: 1, d: 1 })
+    expect(parseDate('04/01/2011')).toEqual({ y: 2011, m: 4, d: 1 })
+    expect(parseDate('10/01/10')).toEqual({ y: 2010, m: 10, d: 1 })
+    expect(parseDate('02/30/2016')).toBeNull()
+    expect(parseDate('soon')).toBeNull()
+  })
+
+  it('measures time in months, as the ratemaking texts do', () => {
+    expect(decimalYear(parseDate('2011-04-01')!)).toBe(2011.25)
+    expect(decimalYear(parseDate('2015-07-01')!)).toBe(2015.5)
+    expect(dateOfYear(2017.75)).toBe('2017-10-01')
+  })
+})
+
+describe('Ratemaking', () => {
+  it('earns a calendar year\'s premium by the parallelogram', () => {
+    // A 5% change on 1 April, annual policies: 0.75² / 2 of the year's premium earns at the new rate.
+    const out = run('ratemaking.on_level_factors', { changes: [{ date: '2023-04-01', change: 0.05 }], term: 12, first: 2023, last: 2024 }).values
+    expect((out.portions as number[][])[0][1]).toBeCloseTo(0.75 ** 2 / 2, 12)
+    expect((out.factors as number[])[0]).toBeCloseTo(1.05 / (1 - 0.75 ** 2 / 2 + 1.05 * (0.75 ** 2 / 2)), 12)
+    // By policy year the change is in for the policies written after it: three-quarters of the year.
+    const py = run('ratemaking.on_level_factors', { changes: [{ date: '2023-04-01', change: 0.05 }], basis: 'policy', first: 2023, last: 2023 }).values
+    expect((py.portions as number[][])[0][1]).toBeCloseTo(0.75, 12)
+  })
+
+  it('splits written premium into earned and unearned, year by year', () => {
+    const out = run('ratemaking.earned_premium', { term: 12, policies: [{ policy: 'A', effective: '2023-07-01', amount: 1200 }] }).values
+    expect(out.years).toEqual([2023, 2024])
+    expect(out.earned).toEqual([600, 600])
+    expect(out.unearned).toEqual([600, 0])
+  })
+
+  it('fits an exponential trend exactly to a series growing at a constant rate', () => {
+    const points = Array.from({ length: 8 }, (_, k) => ({ period: `Q${k}`, value: 100 * 1.04 ** (k / 4) }))
+    const out = run('ratemaking.trend_fit', { points }).values
+    expect(out.trend as number).toBeCloseTo(0.04, 12)
+    expect(out.r2 as number).toBeCloseTo(1, 12)
+    expect(run('ratemaking.trend_fit', { points, latest: 4 }).values.points).toBe(4)
+  })
+
+  it('trends from the experience period\'s average accident date to the future one', () => {
+    const ay = run('ratemaking.trend_factor', { trend: 0.05, year: 2023, effective: '2025-01-01', in_effect: 12, term: 12 }).values
+    expect(ay.period).toBeCloseTo(2.5, 12)
+    expect(ay.factor as number).toBeCloseTo(1.05 ** 2.5, 12)
+    // A policy year's losses happen half a term later than the year's middle.
+    expect(run('ratemaking.trend_factor', { trend: 0.05, basis: 'policy', year: 2023, effective: '2025-01-01', in_effect: 12, term: 12 }).values.period).toBeCloseTo(2, 12)
+  })
+
+  it('splits each expense type into its fixed and variable provisions', () => {
+    const out = run('ratemaking.expense_ratios', { rows: [{ type: 'a', expenses: 10, premium: 100, fixed_share: 0.75 }, { type: 'b', expenses: 5, premium: 50, fixed_share: 0 }] }).values
+    expect(out.fixed_provision as number).toBeCloseTo(0.075, 12)
+    expect(out.variable_provision as number).toBeCloseTo(0.125, 12)
+  })
+
+  it('agrees with the Loss Ratio Method on the permissible loss ratio, and prices by the pure premium', () => {
+    const plr = run('ratemaking.permissible_loss_ratio', { fixed: 0.05, variable: 0.2, profit: 0.05 }).values
+    expect(plr.variable_permissible_loss_ratio).toBeCloseTo(run('ratemaking.loss_ratio_method', { variable: 0.2, profit: 0.05 }).values.variable_permissible_loss_ratio as number, 12)
+    expect(plr.permissible_loss_ratio as number).toBeCloseTo(0.7, 12)
+    const pp = run('ratemaking.pure_premium_method', { pure_premium: 300, fixed: 50, variable: 0.2, profit: 0.05, current: 400 }).values
+    expect(pp.indicated_rate as number).toBeCloseTo(350 / 0.75, 12)
+    expect(pp.indicated_change as number).toBeCloseTo(350 / 0.75 / 400 - 1, 12)
   })
 })
 

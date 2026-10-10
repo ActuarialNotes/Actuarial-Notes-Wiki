@@ -4,9 +4,11 @@
  * tool computes, and anything that can't be read is an error naming the field.
  */
 
+import { isoDate, parseDate } from './dates'
 import {
   ToolInputError,
   type ChoiceField,
+  type DateField,
   type FieldValue,
   type NumberField,
   type TableField,
@@ -56,6 +58,12 @@ function choiceField(f: ChoiceField, raw: unknown): string {
   const hit = f.options.find(o => o.value.toLowerCase() === text || o.label.toLowerCase() === text)
   if (!hit) throw new ToolInputError(f.key, `"${f.key}" must be one of: ${f.options.map(o => o.value).join(', ')}.`)
   return hit.value
+}
+
+function dateField(f: DateField, raw: unknown): string {
+  const parts = parseDate(raw)
+  if (!parts) throw new ToolInputError(f.key, `"${f.key}" must be a date: "2017-01-01" or "01/01/2017".`)
+  return isoDate(parts)
 }
 
 function tableField(f: TableField, raw: unknown): TableRow[] {
@@ -139,6 +147,7 @@ function readField(field: ToolField, raw: unknown): FieldValue {
   switch (field.kind) {
     case 'number': return numberField(field, raw)
     case 'choice': return choiceField(field, raw)
+    case 'date': return dateField(field, raw)
     case 'table': return tableField(field, raw)
     case 'triangle': return triangleField(field, raw)
   }

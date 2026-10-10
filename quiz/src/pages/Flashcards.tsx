@@ -52,7 +52,7 @@ import { useTodayPlanCardNames } from '@/hooks/useTodayPlanCardNames'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
-import { entryRefToRepoPath } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, examDisplayName } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { latestMasteryStates, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { ACTION_MENU_ROW_CLASS, ConceptActionMenu } from '@/components/ConceptActionMenu'
@@ -68,6 +68,10 @@ import {
 import { buildCollectedList } from '@/lib/collectedList'
 import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
 import { completedTodayConcepts, flashcardShelfExams } from '@/lib/flashcardShelf'
+import { resourceStripExams } from '@/lib/resourceFilters'
+import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
+import { ExamStrip } from '@/components/ExamStrip'
+import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -204,7 +208,7 @@ const COLLECTED_FILTER_ID = '__collected__'
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const { progress: examProgress, examVariants } = useExamProgress()
+  const { progress: examProgress, examVariants, selectedTrack } = useExamProgress()
   const collectedCards = useCollectedCards(s => s.cards)
 
   const collectedSet = useMemo(
@@ -249,63 +253,107 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   )
   const hasCollected = collectedConcepts.length > 0
 
+  // The exams as the Study Guides tab shows them: the SOA/CAS picker (the same
+  // stored choice, lib/bodyFilter.ts) over that body's ladder of exam logos.
+  const strips = useMemo(() => {
+    // A strip exam is labelled by its page's display name; key it back to the shelf's id.
+    const idByLabel = new Map<string, string>()
+    const names = examGroups.map(g => {
+      const name = g.syllabus.fileName ?? g.examLabel
+      idByLabel.set(examDisplayName(name), g.examId)
+      return name
+    })
+    const strip = (body: ExamBody) => resourceStripExams(names, body).flatMap(e => {
+      const examId = idByLabel.get(e.label)
+      return examId ? [{ examId, label: e.label, key: e.key }] : []
+    })
+    return { SOA: strip('SOA'), CAS: strip('CAS') }
+  }, [examGroups])
+  const studyingIds = useMemo(
+    () => new Set(examGroups.filter(g => g.studying).map(g => g.examId)),
+    [examGroups],
+  )
+
   // Which filter's packs are on screen. Kept as an id (not an index) so it
-  // survives the groups being rebuilt, and clamped back to the first group
-  // whenever the selection disappears (e.g. the exam was marked completed, or
-  // the last collected card was removed).
+  // survives the groups being rebuilt. With no choice (or one that has gone),
+  // the shelf opens on the first exam being studied in the picked body's
+  // ladder, else that ladder's first exam.
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [bodyOverride, setBodyOverride] = useState<ExamBody | null>(loadBody)
+  const pickedBody = bodyOverride ?? defaultBody(selectedTrack)
+  const selectedBody = (['SOA', 'CAS'] as const).find(b => strips[b].some(e => e.examId === selectedId))
+  const body: ExamBody = selectedBody && !strips[pickedBody].some(e => e.examId === selectedId) ? selectedBody : pickedBody
+  const strip = strips[body]
   const activeId =
     (selectedId === COLLECTED_FILTER_ID && hasCollected ? COLLECTED_FILTER_ID : null)
-    ?? examGroups.find(g => g.examId === selectedId)?.examId
-    ?? examGroups[0]?.examId
+    ?? strip.find(e => e.examId === selectedId)?.examId
+    ?? strip.find(e => studyingIds.has(e.examId))?.examId
+    ?? strip[0]?.examId
     ?? (hasCollected ? COLLECTED_FILTER_ID : null)
   const showCollected = activeId === COLLECTED_FILTER_ID
   const activeGroup = showCollected ? null : examGroups.find(g => g.examId === activeId) ?? null
+
+  function chooseBody(next: ExamBody) {
+    saveBody(next)
+    setBodyOverride(next)
+    if (selectedId !== COLLECTED_FILTER_ID) setSelectedId(null)
+  }
 
   const isLoading = masteryLoading || syllabiLoading
   const hasContent = examGroups.length > 0 || hasCollected
 
   return (
     <div className="space-y-4">
-      {/* Exam filter — the Dashboard's exam header, same pill strip and same
-          active/inactive treatment, so switching exams feels identical in both
-          places. Sticky to the top of the sheet's scroll area; the negative
+      {/* Exam filter — the Study Guides tab's: the SOA/CAS picker and the
+          body's ladder of exam logos, so an exam is picked the same way here.
+          "Collected" is cross-exam, so it sits beside the picker rather than in
+          the ladder. Sticky to the top of the sheet's scroll area; the negative
           margins let the background span the container's padding. */}
       {(examGroups.length > 0 || hasCollected) && (
-        <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 px-4 sm:px-6 pt-4 pb-1.5 bg-background/95 backdrop-blur-sm">
-          <div className="exam-tab-strip flex min-w-0 gap-1.5 overflow-x-auto">
-            {examGroups.map(group => (
-              <button
-                key={group.examId}
-                type="button"
-                onClick={() => setSelectedId(group.examId)}
-                className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
-                  group.examId === activeId
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {group.examLabel}
-              </button>
-            ))}
-            {/* Cross-exam, so it trails the exams rather than joining them. */}
-            {hasCollected && (
-              <button
-                type="button"
-                onClick={() => setSelectedId(COLLECTED_FILTER_ID)}
-                className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors inline-flex items-center gap-1.5 ${
-                  showCollected
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Collected
-                <span className={`text-xs tabular-nums ${showCollected ? 'opacity-80' : 'opacity-70'}`}>
-                  {collectedConcepts.length}
-                </span>
-              </button>
-            )}
+        <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 space-y-3 px-4 sm:px-6 pt-4 pb-1.5 bg-background/95 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1">
+              {hasCollected && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(showCollected ? null : COLLECTED_FILTER_ID)}
+                  aria-pressed={showCollected}
+                  className={`h-10 px-4 rounded-full text-base font-semibold transition-colors inline-flex items-center gap-1.5 ${
+                    showCollected
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Collected
+                  <span className={`text-xs tabular-nums ${showCollected ? 'opacity-80' : 'opacity-70'}`}>
+                    {collectedConcepts.length}
+                  </span>
+                </button>
+              )}
+            </div>
+            <SegmentedControl
+              label="Examining body"
+              size="lg"
+              pill
+              value={body}
+              onChange={chooseBody}
+              options={[
+                { value: 'SOA', label: 'SOA' },
+                { value: 'CAS', label: 'CAS' },
+              ]}
+              className="shrink-0"
+            />
           </div>
+          {strip.length > 0 && (
+            <ExamStrip
+              exams={strip.map(e => ({ value: e.examId, name: e.label, logoKey: e.key }))}
+              value={showCollected ? null : activeId}
+              studying={studyingIds}
+              showAll={false}
+              onChange={id => { if (id) setSelectedId(id) }}
+              className="sm:-mx-6 sm:px-6"
+            />
+          )}
         </div>
       )}
 

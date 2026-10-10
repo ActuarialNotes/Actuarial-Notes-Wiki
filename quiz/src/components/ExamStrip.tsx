@@ -27,17 +27,20 @@ export function ExamStrip({
   value,
   studying,
   onChange,
+  showAll = true,
   className,
 }: {
   exams: readonly ExamStripItem[]
   value: string | null
   studying?: ReadonlySet<string>
   onChange: (value: string | null) => void
+  /** Leads with **All**. Off for a shelf that is always one exam's (the add-flashcards sheet). */
+  showAll?: boolean
   /** Overrides the bleed into the page gutter (`-mx-4 px-4`) where the page's gutter differs. */
   className?: string
 }) {
   const groupRef = useRef<HTMLDivElement>(null)
-  const choices: (string | null)[] = [null, ...exams.map(e => e.value)]
+  const choices: (string | null)[] = [...(showAll ? [null] : []), ...exams.map(e => e.value)]
 
   function onKeyDown(e: ReactKeyboardEvent) {
     const delta = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0
@@ -72,21 +75,25 @@ export function ExamStrip({
         className,
       )}
     >
-      <ExamChoice id="all" ariaLabel="All exams" active={value === null} onSelect={() => onChange(null)}>
-        <LogoTile size="md" className="bg-foreground text-[13px] font-bold text-background shadow-sm">
-          All
-        </LogoTile>
-      </ExamChoice>
-      {exams.map(exam => (
+      {showAll && (
+        <ExamChoice id="all" ariaLabel="All exams" active={value === null} onSelect={() => onChange(null)}>
+          <LogoTile size="md" className="bg-foreground text-[13px] font-bold text-background shadow-sm">
+            All
+          </LogoTile>
+        </ExamChoice>
+      )}
+      {exams.map((exam, i) => (
         <ExamChoice
           key={exam.value}
           id={exam.value}
           ariaLabel={exam.name}
           active={value === exam.value}
+          // With no All and nothing chosen, the first exam keeps the strip reachable by Tab.
+          tabbable={!showAll && i === 0 && !exams.some(e => e.value === value)}
           dimmed={value !== null && value !== exam.value}
           studying={studying?.has(exam.value)}
           accent={exam.logoKey}
-          onSelect={() => onChange(value === exam.value ? null : exam.value)}
+          onSelect={() => onChange(value === exam.value && showAll ? null : exam.value)}
         >
           <ExamLogo examKey={exam.logoKey} size="md" />
         </ExamChoice>
@@ -102,12 +109,14 @@ function ExamChoice({
   dimmed,
   studying,
   accent,
+  tabbable,
   onSelect,
   children,
 }: {
   id: string
   ariaLabel: string
   active: boolean
+  tabbable?: boolean
   dimmed?: boolean
   studying?: boolean
   accent?: string
@@ -121,7 +130,7 @@ function ExamChoice({
       aria-checked={active}
       aria-label={`${ariaLabel}${studying ? ' (studying)' : ''}`}
       title={ariaLabel}
-      tabIndex={active ? 0 : -1}
+      tabIndex={active || tabbable ? 0 : -1}
       data-exam={id}
       onClick={onSelect}
       style={accent ? examAccentStyle(accent) : undefined}

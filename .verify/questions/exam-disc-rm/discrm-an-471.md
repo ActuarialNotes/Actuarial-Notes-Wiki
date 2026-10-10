@@ -42,3 +42,10 @@ created: 2026-10-10
 - status_set: in_review
 - checks_run: blind recomputation from the stem with key and explanation withheld (matched key); key and every distractor rationale checked; arithmetic re-worked; wiki_link targets exist and fit; learning_objective equals the DISC-RM section title; facts checked against the sources listed
 - note: Left in_review pending D6 (see comment).
+
+## [C-003] D6 note
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv13
+- date: 2026-10-10
+- note: D6: the essential/desirable/available split this question tests was deleted from Concepts/Insurance as a Risk Management Technique in dv13 because no independent source states it (only Bonga lecture notes). No vault page now teaches the content. Stays in_review until D6 is decided (source found and content restored, or question retired).

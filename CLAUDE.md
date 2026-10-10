@@ -161,6 +161,13 @@ before touching that area**:
   against a *citable external source*, and `verify_record.py` refuses otherwise) and P4
   (verification is bound to the file's bytes, so any edit downgrades it to `stale`). Read
   before touching a `verification:` block, a log, or anything under `scripts/verify_*`.
+- `.claude/skills/question-writer/` — how the vault writes its **own** practice questions
+  (the converters below only ever transcribe): every question aligned to an exam objective,
+  written to one level of **Bloom's taxonomy** (recorded as `bloom:` in its frontmatter — the
+  parser ignores it; it is for auditing the mix), built on a misconception "fork", and
+  explained option by option. `references/formats.md` maps every format — I/II/III, matching,
+  ordering, numeric and written answers — onto the parser's three `type`s, and
+  `scripts/audit_questions.py` reports a batch's level/format spread and the authoring tells.
 - `docs/pdf-question-pipeline.md` — the **PDF → question bank** pipeline behind the
   `soa-exam-converter` / `cas-exam-converter` skills: the four stages that turn an
   examiner's report or a sample-question booklet into `questions/<bank>/*.md`, and which
@@ -679,12 +686,14 @@ Other important `lib/` modules:
   body of `originally_exam` when the material has moved — `EXAM_BODIES`, held to
   `scripts/exam_catalog.json`'s `body` by `examCatalog.test.ts`); the undated Exam P / FM
   questions are the SOA's sample sets, filed as `p-<n>` / `fm-<n>` for sample question n;
-  and the vault's own questions are listed by id (`VAULT_QUESTION_IDS`, `p-901`–`p-964`)
-  rather than given a frontmatter key, which would stale every fact check on them (P4).
-  `questionPublisher.test.ts` holds the list to the bank both ways: every listed id is an
-  undated question not checked as the SOA's, and every unlisted undated question with a
-  fact check cites the SOA sample question its id numbers. Write a new original question
-  under a `p-9xx` id and add it to the list.
+  and the vault's own questions are known by id rather than by a frontmatter key, which
+  would stale every fact check on them (P4): the first Exam P set by list
+  (`VAULT_QUESTION_IDS`, `p-901`–`p-964`), everything since by shape — the bank's prefix,
+  `-an-`, a number (`masi-an-001`, `VAULT_QUESTION_ID_RE`). `questionPublisher.test.ts`
+  holds the list to the bank both ways (every listed id is an undated question not checked
+  as the SOA's, and every unlisted undated question with a fact check cites the SOA sample
+  question its id numbers) and fails a dated `-an-` question. Write a new original question
+  with the **question-writer** skill (`.claude/skills/question-writer/`), under an `-an-` id.
 - `questionSource.ts` — where a question came from, for the quiz's **Info** button
   (`components/QuestionInfoButton.tsx`, in the question bar beside the flag): the sitting it
   was sat on, the published paper behind it (`data/examPdfLinks.ts`), and its vault file —

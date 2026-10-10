@@ -22,7 +22,8 @@ import type { Question } from './parser'
 //    no examining body. Listed below by id, because a file that names no
 //    sitting reads the same either way and the frontmatter can't be given a
 //    new key without staling every fact check on it (`docs/verification.md`,
-//    P4). `questionPublisher.test.ts` holds the list to the vault both ways.
+//    P4) — the first Exam P set by a list, everything since by an `-an-` id.
+//    `questionPublisher.test.ts` holds both to the vault.
 
 export type QuestionPublisher = ExamBody | 'Actuarial Notes'
 
@@ -54,11 +55,23 @@ export const VAULT_QUESTION_IDS: ReadonlySet<string> = new Set(
   Array.from({ length: 64 }, (_, i) => `p-${901 + i}`),
 )
 
+/**
+ * Every question written for Actuarial Notes since: the bank's own id prefix,
+ * then `an-` and a number (`masi-an-001`) — the shape the `question-writer`
+ * skill files them under, so a new one needs no entry here.
+ */
+export const VAULT_QUESTION_ID_RE = /^[a-z0-9]+-an-\d+$/
+
+/** Whether a question id is one the vault wrote rather than a body published. */
+export function isVaultQuestionId(id: string): boolean {
+  return VAULT_QUESTION_IDS.has(id) || VAULT_QUESTION_ID_RE.test(id)
+}
+
 /** The publisher of a question, or null for an exam this module doesn't know. */
 export function questionPublisher(
   q: Pick<Question, 'id' | 'exam' | 'originally_exam'>,
 ): QuestionPublisher | null {
-  if (VAULT_QUESTION_IDS.has(q.id)) return 'Actuarial Notes'
+  if (isVaultQuestionId(q.id)) return 'Actuarial Notes'
   const paperExam = q.originally_exam?.trim() || q.exam
   const examId = EXAM_LABEL_TO_ID[paperExam]
   return (examId && EXAM_BODIES[examId]) || null

@@ -9,6 +9,10 @@ description: Write the single "quick comprehension check" question for a concept
 > collected when its concept first reaches Level 1, and no surface renders these
 > checks (see `docs/flashcard-collection.md`). Keep authoring to the rules below
 > only if the user asks; mention that the checks are currently unused.
+>
+> For practice questions in the bank (`questions/<exam-id>/`) — any format, at
+> any Bloom level — use **question-writer**, which grew out of this skill and
+> keeps its fork and distractor rules.
 
 ## Why this exists
 

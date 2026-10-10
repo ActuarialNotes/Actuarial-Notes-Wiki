@@ -43,6 +43,7 @@ var interestConverter = {
   name: "Interest Converter",
   area: "finance",
   answers: "What's this rate in another form?",
+  aka: ["nominal rate", "force of interest", "discount rate", "effective rate"],
   fields: [
     { kind: "choice", key: "form", label: "Given as", description: "Which form the rate is given in.", options: FORMS, default: "effective_interest" },
     { kind: "number", key: "rate", label: "Rate", symbol: "r", unit: "percent", min: 0, max: 1, step: 5e-4, default: 0.05, description: "The rate, as a decimal (0.05 for 5%)." },
@@ -145,6 +146,7 @@ var annuity = {
   name: "Annuity",
   area: "finance",
   answers: "What's a level annuity worth today, and when it ends?",
+  aka: ["annuity immediate", "annuity due", "perpetuity"],
   fields: [
     {
       kind: "choice",
@@ -203,6 +205,7 @@ var presentValue = {
   name: "Present Value",
   area: "finance",
   answers: "What are these cash flows worth today?",
+  aka: ["NPV", "PV", "discount", "accumulated value", "FV"],
   fields: [
     { kind: "number", key: "i", label: "Rate", symbol: "i", unit: "percent", min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective annual rate, as a decimal." },
     {
@@ -522,6 +525,7 @@ var internalRateOfReturn = {
   name: "Internal Rate of Return",
   area: "finance",
   answers: "What rate makes these cash flows worth zero?",
+  aka: ["IRR", "yield rate", "dollar-weighted"],
   fields: [
     {
       kind: "table",
@@ -601,6 +605,7 @@ var loanSchedule = {
   name: "Loan Schedule",
   area: "finance",
   answers: "How is this loan repaid, payment by payment?",
+  aka: ["amortization", "outstanding balance", "mortgage"],
   fields: [
     { kind: "number", key: "amount", label: "Amount borrowed", symbol: "L", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e5, step: 100, default: 1e4, description: "The loan amount at time 0." },
     { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04)." },
@@ -749,6 +754,7 @@ var bondPrice = {
   name: "Bond Price",
   area: "finance",
   answers: "What's this bond worth at this yield?",
+  aka: ["bond", "price"],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
   notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A,  at j = i\u207D\u1D50\u207E/m",
   view: "none",
@@ -802,6 +808,7 @@ var bondYield = {
   name: "Bond Yield",
   area: "finance",
   answers: "What yield does this price give?",
+  aka: ["YTM", "yield to maturity"],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE],
   notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for j",
   view: "none",
@@ -847,6 +854,7 @@ var bondAmortization = {
   name: "Bond Amortization",
   area: "finance",
   answers: "How does the book value move to redemption?",
+  aka: ["book value", "premium", "discount", "write-down"],
   fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
   notation: () => "I\u2096 = j \xB7 BV\u2096\u208B\u2081,  BV\u2096 = BV\u2096\u208B\u2081 \u2212 (Fr/m \u2212 I\u2096)",
   view: "table",
@@ -922,6 +930,7 @@ var durationConvexity = {
   name: "Duration & Convexity",
   area: "finance",
   answers: "How sensitive is the value of these cash flows to the rate?",
+  aka: ["Macaulay", "modified duration", "convexity"],
   fields: [
     { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The annual effective rate (the yield), as a decimal. Times are in years." },
     {
@@ -993,6 +1002,7 @@ var redingtonImmunization = {
   name: "Redington Immunization",
   area: "finance",
   answers: "Are these assets Redington-immunized against these liabilities?",
+  aka: ["immunization", "ALM", "asset liability matching"],
   fields: [
     { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The flat annual effective rate both sides are valued at. Times are in years." },
     {
@@ -1135,6 +1145,7 @@ var ageToAgeFactors = {
   name: "Age-to-Age Factors",
   area: "reserving",
   answers: "How has each origin developed between ages, and what is the average at each age?",
+  aka: ["LDF", "link ratio", "development factor", "ATA"],
   fields: [
     {
       kind: "triangle",
@@ -1254,6 +1265,7 @@ var developmentToUltimate = {
   name: "Development to Ultimate",
   area: "reserving",
   answers: "What are the cumulative development factors to ultimate?",
+  aka: ["CDF", "LDF to ultimate", "percent reported", "percent developed"],
   fields: [
     { kind: "number", key: "tail", label: "Tail factor", symbol: "T", unit: "factor", judgment: true, min: 0.5, max: 5, sliderMax: 1.5, step: 1e-3, default: 1, description: "Development beyond the last age. 1 assumes none." },
     {
@@ -1359,6 +1371,7 @@ var chainLadder = {
   name: "Chain Ladder",
   area: "reserving",
   answers: "What's the ultimate by development?",
+  aka: ["CL", "development method", "IBNR"],
   fields: [
     BASIS_FIELD,
     {
@@ -1425,6 +1438,7 @@ var expectedClaims = {
   name: "Expected Claims",
   area: "reserving",
   answers: "What's the a priori ultimate?",
+  aka: ["ELR", "a priori", "expected loss ratio"],
   fields: [
     { kind: "number", key: "elr", label: "Expected loss ratio", symbol: "ELR", unit: "percent", judgment: true, min: 0, max: 3, sliderMax: 1.5, step: 5e-3, default: 0.65, description: "The a priori expected claim ratio, as a decimal." },
     {
@@ -1492,6 +1506,7 @@ var bornhuetterFerguson = {
   name: "Bornhuetter-Ferguson",
   area: "reserving",
   answers: "What's the Bornhuetter-Ferguson ultimate?",
+  aka: ["BF", "B-F", "IBNR"],
   fields: [
     BASIS_FIELD,
     {
@@ -1577,6 +1592,7 @@ var benktander = {
   name: "Benktander",
   area: "reserving",
   answers: "What's the iterated Bornhuetter-Ferguson ultimate?",
+  aka: ["iterated BF", "GB"],
   fields: [
     BASIS_FIELD,
     {
@@ -1684,6 +1700,7 @@ var capeCod = {
   name: "Cape Cod",
   area: "reserving",
   answers: "What expected claim ratio do the data imply, and what ultimate follows?",
+  aka: ["Stanard-B\xFChlmann", "Stanard-Buhlmann", "used-up premium"],
   fields: [
     BASIS_FIELD,
     {
@@ -1782,6 +1799,7 @@ var ratioTriangle = {
   name: "Ratio Triangle",
   area: "reserving",
   answers: "How does one triangle compare with another, cell by cell?",
+  aka: ["paid to reported", "closed to reported", "average case"],
   fields: [
     {
       kind: "triangle",
@@ -1866,6 +1884,7 @@ var lossRatioMethod = {
   name: "Loss Ratio Method",
   area: "ratemaking",
   answers: "What's the indicated rate change?",
+  aka: ["indicated rate change", "rate indication", "LR method"],
   fields: [
     {
       kind: "number",
@@ -1954,6 +1973,7 @@ var earnedPremium = {
   name: "Earned Premium",
   area: "ratemaking",
   answers: "How much of this premium is written, earned and unearned in each year?",
+  aka: ["EP", "unearned premium", "earned exposure"],
   fields: [
     {
       kind: "table",
@@ -2060,6 +2080,7 @@ var onLevelFactors = {
   name: "On-Level Factors",
   area: "ratemaking",
   answers: "What brings each year's premium to current rates?",
+  aka: ["OLF", "parallelogram method", "current rate level"],
   fields: [
     {
       kind: "table",
@@ -2191,6 +2212,7 @@ var trendFit = {
   name: "Trend Fit",
   area: "ratemaking",
   answers: "What annual trend do these data show?",
+  aka: ["exponential trend", "linear trend", "loss trend", "premium trend"],
   fields: [
     {
       kind: "choice",
@@ -2292,6 +2314,7 @@ var trendFactor = {
   name: "Trend Factor",
   area: "ratemaking",
   answers: "How far do these losses trend to the period the rates will cover?",
+  aka: ["trend period", "projected trend"],
   fields: [
     { kind: "number", key: "trend", label: "Annual trend", symbol: "t", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The selected annual trend, as a decimal (from Trend Fit, or chosen)." },
     {
@@ -2352,6 +2375,7 @@ var expenseRatios = {
   name: "Expense Ratios",
   area: "ratemaking",
   answers: "What are the fixed and variable expense provisions?",
+  aka: ["fixed expense", "variable expense", "expense provision"],
   fields: [
     {
       kind: "table",
@@ -2426,6 +2450,7 @@ var permissibleLossRatio = {
   name: "Permissible Loss Ratio",
   area: "ratemaking",
   answers: "What loss ratio do the rates allow?",
+  aka: ["PLR", "target loss ratio"],
   fields: [
     { kind: "number", key: "fixed", label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
     { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
@@ -2469,6 +2494,7 @@ var purePremiumMethod = {
   name: "Pure Premium Method",
   area: "ratemaking",
   answers: "What's the indicated average rate?",
+  aka: ["indicated rate", "PP method"],
   fields: [
     { kind: "number", key: "pure_premium", label: "Pure premium", symbol: "PP", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 300, description: "Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in)." },
     { kind: "number", key: "fixed", label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
@@ -2521,6 +2547,7 @@ var fullCredibilityStandard = {
   name: "Full Credibility Standard",
   area: "credibility",
   answers: "How many expected claims make full credibility?",
+  aka: ["full credibility", "limited fluctuation"],
   fields: [
     { kind: "choice", key: "basis", label: "Estimating", description: "What is being estimated. Frequency assumes Poisson claim counts.", options: BASES, default: "frequency" },
     { kind: "number", key: "p", label: "Probability", symbol: "p", unit: "percent", judgment: true, min: 0.5, max: 0.9999, step: 5e-3, default: 0.9, description: "The probability of being within k of the true value, as a decimal." },
@@ -2585,6 +2612,7 @@ var partialCredibility = {
   name: "Partial Credibility",
   area: "credibility",
   answers: "How much credibility does this experience get?",
+  aka: ["square root rule", "Z"],
   fields: [
     { kind: "number", key: "claims", label: "Observed claims", symbol: "n", unit: "count", min: 0, max: 1e9, sliderMax: 2e3, step: 1, default: 300, description: "The number of claims in the experience." },
     { kind: "number", key: "standard", label: "Full standard", symbol: "N", unit: "count", judgment: true, min: 1, max: 1e9, sliderMax: 5e3, step: 1, default: 1082, description: "The number of claims for full credibility." }
@@ -2619,6 +2647,7 @@ var buhlmannCredibility = {
   name: "B\xFChlmann Credibility",
   area: "credibility",
   answers: "What's the credibility estimate from the structural parameters?",
+  aka: ["Buhlmann", "EPV", "VHM", "Z", "k"],
   fields: [
     { kind: "number", key: "epv", label: "Expected process variance", symbol: "EPV", unit: "plain", min: 0, max: 1e18, sliderMax: 1e3, step: 1, default: 100, description: "The expected value of the process variance, per unit of exposure: E[Var(X | \u0398)]." },
     { kind: "number", key: "vhm", label: "Variance of hypothetical means", symbol: "VHM", unit: "plain", min: 1e-18, max: 1e18, sliderMax: 100, step: 0.1, default: 10, description: "The variance of the hypothetical means: Var(E[X | \u0398])." },
@@ -3087,6 +3116,7 @@ var distribution = {
   name: "Distribution",
   area: "distributions",
   answers: "What's the probability, quantile or moment?",
+  aka: ["probability", "quantile", "percentile", "PDF", "moments"],
   fields: [
     {
       kind: "choice",
@@ -3276,6 +3306,7 @@ var limitedExpectedValue = {
   name: "Limited Expected Value",
   area: "distributions",
   answers: "What's the expected loss, capped at u?",
+  aka: ["LEV", "limited expected value", "LER", "loss elimination ratio"],
   fields: [
     FAMILY,
     ...PARAMETERS,
@@ -3319,6 +3350,7 @@ var expectedPayment = {
   name: "Expected Payment",
   area: "distributions",
   answers: "What does the insurer expect to pay, per loss and per payment?",
+  aka: ["deductible", "per payment", "per loss", "coinsurance", "franchise deductible"],
   fields: [
     FAMILY,
     ...PARAMETERS,
@@ -3423,6 +3455,10 @@ function toolSlug(spec) {
 }
 function toolBySlug(slug) {
   return TOOLS.find((t) => toolSlug(t) === slug) ?? BY_ID.get(slug);
+}
+function toolSearchText(spec) {
+  const area = AREAS.find((a) => a.id === spec.area)?.label ?? spec.area;
+  return [spec.name, ...spec.aka ?? [], spec.answers, ...spec.method.concepts, area];
 }
 
 // src/lib/tools/hash.ts
@@ -9410,6 +9446,7 @@ export {
   sourceLine,
   toolById,
   toolBySlug,
+  toolSearchText,
   toolSlug,
   toolSummary,
   verifyCheck

@@ -1,12 +1,12 @@
-import { useEffect, useRef, type ReactNode } from 'react'
-import { ArrowRight, BookOpen, Link2, Trash2, X } from 'lucide-react'
+import { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import { ArrowRight, BookOpen, Trash2, X } from 'lucide-react'
 import { ToolCard } from '@/components/tools/ToolCard'
-import type { ToolResult } from '@/lib/tools'
+import type { ToolResult, ToolSpec } from '@/lib/tools'
 import {
   CUSTOM_DATA,
-  EDGE_LABEL,
   KIND_LABEL,
   edgeKind,
+  edgeLabel,
   stepName,
   stepOwnInput,
   stepTool,
@@ -114,7 +114,7 @@ function ConnectionList({
                 className="flex w-full items-center gap-2 rounded-lg bg-muted/60 px-3 py-2 text-left text-sm transition-colors hover:bg-accent"
               >
                 <span className="min-w-0 flex-1 truncate">{stepName(other)}</span>
-                <span className="shrink-0 text-xs text-muted-foreground">{EDGE_LABEL[edgeKind(workflow, e)]}</span>
+                <span className="shrink-0 text-xs text-muted-foreground">{edgeLabel(edgeKind(workflow, e))}</span>
               </button>
             </li>
           )
@@ -135,6 +135,7 @@ export function StepPanel({
   onRead,
   onConnectFrom,
   onSelectEdge,
+  onSelectStep,
 }: {
   workflow: Workflow
   node: WorkflowNode
@@ -146,6 +147,8 @@ export function StepPanel({
   onRead: (concept: string) => void
   onConnectFrom: () => void
   onSelectEdge: (e: WorkflowEdge) => void
+  /** Open another step's panel — the step a linked value comes from. */
+  onSelectStep: (id: string) => void
 }) {
   const spec = stepTool(node)
   const name = stepName(node)
@@ -153,6 +156,16 @@ export function StepPanel({
   const pipedKey = JSON.stringify(run?.piped.map(p => [p.from, p.fields]) ?? [])
   // The card restarts when what its connections carry changes, so it shows the new values.
   const carried = JSON.stringify(piped.map(f => run?.input?.[f]))
+
+  const linkedFields = useMemo(() => new Set(piped), [piped.join(',')]) // eslint-disable-line react-hooks/exhaustive-deps
+  const cardRef = useRef<HTMLDivElement>(null)
+  // A linked field named in the note: bring it into view on the card, and into the hand.
+  const showField = (key: string) => {
+    const el = cardRef.current?.querySelector<HTMLElement>(`[data-field="${key}"]`)
+    if (!el) return
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    el.querySelector<HTMLElement>('input, select, button')?.focus({ preventScroll: true })
+  }
 
   const latest = useRef({ node, onUpdate, piped })
   latest.current = { node, onUpdate, piped }
@@ -214,30 +227,20 @@ export function StepPanel({
       )}
 
       {spec && (
-        <div className="space-y-2">
-          {run?.piped.length ? (
-            <p className="flex items-start gap-2 rounded-lg bg-primary/10 px-3 py-2 text-xs text-foreground" data-testid="workflow-piped">
-              <Link2 className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-              <span>
-                {run.piped.map((p, i) => {
-                  const from = workflow.nodes.find(n => n.id === p.from)
-                  return (
-                    <span key={p.from}>
-                      {i > 0 && '; '}
-                      <strong>{p.fields.join(', ')}</strong> from {from ? stepName(from) : p.from}
-                    </span>
-                  )
-                })}
-                {' '}— set by the connection, so a change here gives way to it.
-              </span>
-            </p>
-          ) : null}
+        <div ref={cardRef} className="space-y-2">
+          {run?.piped.map(p => {
+            const from = workflow.nodes.find(n => n.id === p.from)
+            return from ? (
+              <LinkNote key={p.from} spec={spec} fields={p.fields} from={from} onField={showField} onStep={onSelectStep} />
+            ) : null
+          })}
           <ToolCard
             key={`${node.id}:${pipedKey}:${carried}`}
             spec={spec}
             initialInput={run?.input ?? node.input}
             onResult={onResult}
             embedded
+            linked={linkedFields}
           />
         </div>
       )}
@@ -276,6 +279,44 @@ export function StepPanel({
   )
 }
 
+/**
+ * A linked field, said in one line: "**Annual trend** linked to **Trend
+ * Fit**" — the field brings itself into view on the card below, the step
+ * opens its own panel. On a tint of the primary colour, because colour is
+ * what a link is: the field's value on the card wears the full colour.
+ */
+function LinkNote({
+  spec,
+  fields,
+  from,
+  onField,
+  onStep,
+}: {
+  spec: ToolSpec
+  fields: string[]
+  from: WorkflowNode
+  onField: (key: string) => void
+  onStep: (id: string) => void
+}) {
+  const link = 'font-semibold underline decoration-primary/50 underline-offset-2 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm'
+  return (
+    <p className="rounded-lg bg-primary/10 px-3 py-2 text-sm ring-1 ring-primary/20" data-testid="workflow-link-note">
+      {fields.map((key, i) => (
+        <span key={key}>
+          {i > 0 && (i === fields.length - 1 ? ' and ' : ', ')}
+          <button type="button" onClick={() => onField(key)} className={link} data-testid="workflow-link-field">
+            {spec.fields.find(f => f.key === key)?.label ?? key}
+          </button>
+        </span>
+      ))}
+      {' linked to '}
+      <button type="button" onClick={() => onStep(from.id)} className={link} data-testid="workflow-link-step">
+        {stepName(from)}
+      </button>
+    </p>
+  )
+}
+
 export function EdgePanel({
   workflow,
   edge,
@@ -304,9 +345,9 @@ export function EdgePanel({
   const b = stepName(to)
   const says = {
     handoff: fields.length
-      ? `The engine hands ${fields.join(', ')} from ${a} to ${b}, which fills itself in and runs live.`
-      : `${a} hands its result to ${b} — once ${a} runs cleanly.`,
-    feeds: `${b} uses what ${a} gives. No tool wires these two together, so say what passes along it: an AI deploying the workflow carries it across.`,
+      ? `${b} is linked to ${a}: ${fields.join(', ')} ${fields.length === 1 ? 'comes' : 'come'} from it, and it runs live.`
+      : `${b} is linked to ${a}, once ${a} runs cleanly.`,
+    feeds: `${b} uses what ${a} gives. No tool wires these two together, so say what passes along it: Claude carries it across when you run the workflow.`,
     informs: `${a} is the method or idea ${b} rests on.`,
     applies: `${a} is a worked instance of ${b}.`,
   }[kind]
@@ -319,7 +360,7 @@ export function EdgePanel({
     <PanelShell
       label={`Connection from ${a} to ${b}`}
       layout={layout}
-      kicker={`Connection · ${EDGE_LABEL[kind]}`}
+      kicker={edgeLabel(kind) ? `Connection · ${edgeLabel(kind)}` : kind === 'handoff' ? 'Link' : 'Connection'}
       title={(
         <span>
           {stepButton(from.id, a)}

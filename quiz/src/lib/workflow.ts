@@ -17,8 +17,8 @@
  * engine already hands one's result to the other (`ToolSpec.next`, the card's
  * *Send to…*) carries those values — `evaluateWorkflow` runs the chain live,
  * the way each tool card does. Any other connection is descriptive: it says
- * what the step is for, and an AI deploying the workflow carries the values
- * across (`lib/workflowAgent.ts`).
+ * what the step is for, and Claude carries the values across when the reader
+ * runs the workflow through the connector (`lib/workflowBrief.ts`).
  *
  * Nothing here is invented: a step's figures are what its tool computes from
  * what the reader typed or the connection carried, and a judgment left at its
@@ -26,7 +26,7 @@
  */
 
 import { defaultInput, runTool, toolById, ToolInputError, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
-import { cellKey, freeCellNear, type Cell } from './workflowGrid'
+import { STEP, fits, freeCellNear, nearestFit, type Cell } from './workflowGrid'
 
 export type StepKind = 'data' | 'tool' | 'concept'
 
@@ -60,17 +60,24 @@ export interface WorkflowEdge {
 export interface Workflow {
   id: string
   title: string
-  /** What the workflow is for — the brief an AI deploying it is given. */
+  /** What the workflow is for — the goal the brief for Claude opens with. */
   goal: string
   nodes: WorkflowNode[]
   edges: WorkflowEdge[]
   updatedAt: number
+  /**
+   * Which grid the steps' positions are in. 2 is the fine grid
+   * (`lib/workflowGrid.ts`); a workflow saved before it had none, and its
+   * coarse cells are spread onto the fine grid as it is read (`parseWorkflow`).
+   */
+  grid: typeof GRID_VERSION
 }
 
 export const EMPTY_TITLE = 'Untitled workflow'
+export const GRID_VERSION = 2
 
 export function newWorkflow(id: string, now: number, title = EMPTY_TITLE): Workflow {
-  return { id, title, goal: '', nodes: [], edges: [], updatedAt: now }
+  return { id, title, goal: '', nodes: [], edges: [], updatedAt: now, grid: GRID_VERSION }
 }
 
 // ─── What a step is ──────────────────────────────────────────────────────────
@@ -113,8 +120,9 @@ export function nextNodeId(wf: Workflow): string {
   return `n${max + 1}`
 }
 
-export function takenCells(wf: Workflow): Set<string> {
-  return new Set(wf.nodes.map(cellKey))
+/** Where every card but `except` sits — what a move or a new step must keep clear of. */
+export function otherCards(wf: Workflow, except?: string): Cell[] {
+  return wf.nodes.filter(n => n.id !== except)
 }
 
 export interface NewStep {
@@ -124,21 +132,21 @@ export interface NewStep {
 }
 
 /**
- * Put a step on the board: after `after` (in the column to its right, level
- * with it or as near as that column has room, and connected from it, when that
- * connection is allowed), or else at the top of a new column at the board's
- * right edge.
+ * Put a step on the board: after `after` (a `STEP` to its right, level with it
+ * or as near as there is room, and connected from it, when that connection is
+ * allowed), or else beside the board's right edge, level with its top.
  */
 export function addStep(wf: Workflow, step: NewStep, now: number, after?: string | null): { workflow: Workflow; id: string } {
   const id = nextNodeId(wf)
-  const taken = takenCells(wf)
+  const cards = otherCards(wf)
   const prev = after ? wf.nodes.find(n => n.id === after) : undefined
   let cell: Cell
-  if (prev) cell = freeCellNear(taken, { col: prev.col + 1, row: prev.row })
+  if (prev) cell = freeCellNear(cards, { col: prev.col + STEP.cols, row: prev.row })
   else if (wf.nodes.length === 0) cell = { col: 0, row: 0 }
   else {
     const right = Math.max(...wf.nodes.map(n => n.col))
-    cell = freeCellNear(taken, { col: right + 1, row: 0 })
+    const top = Math.min(...wf.nodes.map(n => n.row))
+    cell = freeCellNear(cards, { col: right + STEP.cols, row: top })
   }
   const node: WorkflowNode = { id, kind: step.kind, ref: step.ref, col: cell.col, row: cell.row }
   if (step.label) node.label = step.label
@@ -147,13 +155,21 @@ export function addStep(wf: Workflow, step: NewStep, now: number, after?: string
   return { workflow: next, id }
 }
 
-/** Move a step to another cell — only an empty one. Returns the workflow unchanged otherwise. */
+/** Where a step dropped at `at` lands: there, or the nearest place clear of every other card. */
+export function landingCell(wf: Workflow, id: string, at: Cell): Cell {
+  return nearestFit(otherCards(wf, id), at)
+}
+
+/**
+ * Move a step anywhere on the board. A drop on top of another card lands in
+ * the nearest place clear of it (`landingCell`), so a move is never refused.
+ */
 export function moveStep(wf: Workflow, id: string, to: Cell, now: number): Workflow {
-  if (to.col < 0 || to.row < 0) return wf
   const node = wf.nodes.find(n => n.id === id)
-  if (!node || (node.col === to.col && node.row === to.row)) return wf
-  if (wf.nodes.some(n => n.id !== id && n.col === to.col && n.row === to.row)) return wf
-  return touched(wf, { nodes: wf.nodes.map(n => (n.id === id ? { ...n, col: to.col, row: to.row } : n)) }, now)
+  if (!node) return wf
+  const at = landingCell(wf, id, to)
+  if (node.col === at.col && node.row === at.row) return wf
+  return touched(wf, { nodes: wf.nodes.map(n => (n.id === id ? { ...n, col: at.col, row: at.row } : n)) }, now)
 }
 
 /** Take a step off the board, with every connection to or from it. */
@@ -224,11 +240,11 @@ export const edgeKey = (e: Pick<WorkflowEdge, 'from' | 'to'>) => `${e.from}>${e.
 
 /**
  * - `handoff`: tool to tool, along a hand-off the engine defines — the values
- *   flow, and the next card fills itself in;
+ *   flow, and the next card fills itself in (the step is *linked*);
  * - `informs`: a concept to a step — the method or judgment it rests on;
  * - `applies`: a step to a concept — where it is the worked instance of one;
  * - `feeds`: anything else — a step whose result the next one uses, said in
- *   words, which an AI deploying the workflow carries across.
+ *   words, which Claude carries across when the workflow is run.
  */
 export type EdgeKind = 'handoff' | 'informs' | 'applies' | 'feeds'
 
@@ -248,11 +264,13 @@ export function edgeKind(wf: Workflow, e: Pick<WorkflowEdge, 'from' | 'to'>): Ed
   return handoffFor(from, to) ? 'handoff' : 'feeds'
 }
 
-export const EDGE_LABEL: Record<EdgeKind, string> = {
-  handoff: 'sends values',
-  informs: 'informs',
-  applies: 'applies',
-  feeds: 'feeds',
+/**
+ * What a connection is called on the board. Only a concept's says anything:
+ * values moving from one step to the next are the line itself, and need no
+ * word on it.
+ */
+export function edgeLabel(kind: EdgeKind): string | null {
+  return kind === 'informs' || kind === 'applies' ? kind : null
 }
 
 // ─── Running it ──────────────────────────────────────────────────────────────
@@ -354,6 +372,18 @@ export function stepOwnInput(spec: ToolSpec, input: ToolInput, piped: readonly s
   return out
 }
 
+/**
+ * Which of an upstream step's headline figures a connection carries: the tile
+ * whose value is one the hand-off put into the next step's input (`input`, the
+ * fields named). The board marks it on the upstream card while the step it
+ * feeds is open, so the reader sees where the linked value came from. -1 when
+ * no headline figure is carried — a hand-off of a whole table, say.
+ */
+export function carriedTile(upstream: ToolResult, input: ToolInput, fields: readonly string[]): number {
+  const carried = fields.map(f => input[f]).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
+  return upstream.tiles.findIndex(t => carried.some(v => Math.abs(t.value - v) <= 1e-9 * Math.max(1, Math.abs(v))))
+}
+
 // ─── Reading it back ─────────────────────────────────────────────────────────
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
@@ -362,21 +392,22 @@ const KINDS: StepKind[] = ['data', 'tool', 'concept']
 /**
  * A stored workflow, read field by field: localStorage is the reader's own,
  * but a page must open whatever an older version or a hand edit left there.
- * Steps that can't be placed and connections to nowhere are dropped, and so
- * is any connection that would close a loop.
+ * A workflow from before the fine grid has its cells spread onto it; a step
+ * that lands on another is moved to the nearest place clear of it; connections
+ * to nowhere are dropped, and so is any connection that would close a loop.
  */
 export function parseWorkflow(raw: unknown): Workflow | null {
   if (!isObject(raw) || typeof raw.id !== 'string') return null
+  // The first grid was coarse: a cell a card wide and a card high.
+  const spread = raw.grid === GRID_VERSION ? { cols: 1, rows: 1 } : STEP
   const nodes: WorkflowNode[] = []
-  const cells = new Set<string>()
   for (const n of Array.isArray(raw.nodes) ? raw.nodes : []) {
     if (!isObject(n) || typeof n.id !== 'string' || typeof n.ref !== 'string') continue
     if (!KINDS.includes(n.kind as StepKind)) continue
-    const col = Number(n.col)
-    const row = Number(n.row)
-    if (!Number.isInteger(col) || !Number.isInteger(row) || col < 0 || row < 0) continue
-    if (cells.has(`${col},${row}`) || nodes.some(m => m.id === n.id)) continue
-    cells.add(`${col},${row}`)
+    if (nodes.some(m => m.id === n.id)) continue
+    const stored = { col: Number(n.col) * spread.cols, row: Number(n.row) * spread.rows }
+    if (!Number.isInteger(stored.col) || !Number.isInteger(stored.row)) continue
+    const { col, row } = fits(nodes, stored) ? stored : nearestFit(nodes, stored)
     const node: WorkflowNode = { id: n.id, kind: n.kind as StepKind, ref: n.ref, col, row }
     if (typeof n.note === 'string') node.note = n.note
     if (typeof n.label === 'string') node.label = n.label
@@ -391,6 +422,7 @@ export function parseWorkflow(raw: unknown): Workflow | null {
     nodes,
     edges: [],
     updatedAt: typeof raw.updatedAt === 'number' ? raw.updatedAt : 0,
+    grid: GRID_VERSION,
   }
   for (const e of Array.isArray(raw.edges) ? raw.edges : []) {
     if (!isObject(e) || typeof e.from !== 'string' || typeof e.to !== 'string') continue
@@ -407,7 +439,7 @@ export interface WorkflowTemplate {
   id: string
   title: string
   goal: string
-  /** Steps in reading order, each at its cell. */
+  /** Steps in reading order, each placed in `STEP`s — a card and a gutter. */
   steps: (NewStep & Cell & { note?: string })[]
   /** Connections, by index into `steps`. */
   edges: [number, number][]
@@ -467,7 +499,7 @@ export function fromTemplate(t: WorkflowTemplate, id: string, now: number): Work
     ...newWorkflow(id, now, t.title),
     goal: t.goal,
     nodes: t.steps.map((s, i) => {
-      const node: WorkflowNode = { id: `n${i + 1}`, kind: s.kind, ref: s.ref, col: s.col, row: s.row }
+      const node: WorkflowNode = { id: `n${i + 1}`, kind: s.kind, ref: s.ref, col: s.col * STEP.cols, row: s.row * STEP.rows }
       if (s.note) node.note = s.note
       if (s.label) node.label = s.label
       return node

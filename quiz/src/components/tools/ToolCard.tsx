@@ -53,6 +53,7 @@ export function ToolCard({
   onOpenMethod,
   onResult,
   embedded = false,
+  linked,
 }: {
   spec: ToolSpec
   initialInput?: unknown
@@ -61,6 +62,11 @@ export function ToolCard({
   onResult?: (result: ToolResult | null) => void
   /** Drawn inside another card's source sheet: no sources of its own, no Send to… */
   embedded?: boolean
+  /**
+   * Fields another step fills (the Workflow Builder's links): their values are
+   * drawn on the primary colour, the colour of a link (docs/workflow-builder.md).
+   */
+  linked?: ReadonlySet<string>
 }) {
   const navigate = useNavigate()
   const [draft, setDraft] = useState<Draft>(() => initialDraft(spec, initialInput))
@@ -206,19 +212,20 @@ export function ToolCard({
       ))}
 
       {triangles.map(t => (
-        <InputBlock key={t.key} label={labelled ? t.label : null}>
-          <TriangleGrid value={valueOf(t) as DraftTriangle} onChange={v => set(t.key, v)} />
+        <InputBlock key={t.key} field={t.key} label={labelled ? t.label : null}>
+          <TriangleGrid value={valueOf(t) as DraftTriangle} onChange={v => set(t.key, v)} linked={linked?.has(t.key)} />
         </InputBlock>
       ))}
       {tables.map(t => (
-        <InputBlock key={t.key} label={labelled ? t.label : null}>
-          <EditableTable field={t} rows={valueOf(t) as DraftRow[]} onChange={rows => set(t.key, rows)} />
+        <InputBlock key={t.key} field={t.key} label={labelled ? t.label : null}>
+          <EditableTable field={t} rows={valueOf(t) as DraftRow[]} onChange={rows => set(t.key, rows)} linked={linked?.has(t.key)} />
         </InputBlock>
       ))}
       {grid ? (
-        <InputBlock label={labelled ? grid.label : null}>
+        <InputBlock field={grid.key} label={labelled ? grid.label : null}>
           <EditableTable
             field={grid}
+            linked={linked?.has(grid.key)}
             rows={valueOf(grid) as DraftRow[]}
             result={stale ? undefined : result?.table}
             onChange={rows => set(grid.key, rows)}
@@ -252,6 +259,7 @@ export function ToolCard({
                 field={f}
                 value={Number(valueOf(f))}
                 chosen={draft[f.key] !== undefined}
+                linked={linked?.has(f.key)}
                 onChange={v => set(f.key, v)}
                 sources={embedded ? [] : scalarSources(spec.id, f.key).map(source => ({
                   label: toolById(source.tool)?.name ?? source.tool,
@@ -272,9 +280,9 @@ export function ToolCard({
                 }))}
               />
             ) : f.kind === 'date' ? (
-              <DateControl key={f.key} field={f} value={String(valueOf(f))} onChange={v => set(f.key, v)} />
+              <DateControl key={f.key} field={f} value={String(valueOf(f))} linked={linked?.has(f.key)} onChange={v => set(f.key, v)} />
             ) : (
-              <ChoiceControl key={f.key} field={f} value={String(valueOf(f))} chosen={draft[f.key] !== undefined} onChange={v => set(f.key, v)} />
+              <ChoiceControl key={f.key} field={f} value={String(valueOf(f))} chosen={draft[f.key] !== undefined} linked={linked?.has(f.key)} onChange={v => set(f.key, v)} />
             ),
           )}
         </div>
@@ -382,10 +390,10 @@ function Notation({ text }: { text: string }) {
 }
 
 /** One of several grid inputs, named, so a card with two triangles says which is which. */
-function InputBlock({ label, children }: { label: string | null; children: ReactNode }) {
-  if (!label) return <>{children}</>
+function InputBlock({ field, label, children }: { field: string; label: string | null; children: ReactNode }) {
+  if (!label) return <div data-field={field}>{children}</div>
   return (
-    <section className="space-y-1" aria-label={label}>
+    <section className="space-y-1" aria-label={label} data-field={field}>
       <h3 className="text-sm text-muted-foreground">{label}</h3>
       {children}
     </section>
@@ -393,10 +401,13 @@ function InputBlock({ label, children }: { label: string | null; children: React
 }
 
 /** A date input: the browser's own picker, holding the ISO date the engine reads. */
-function DateControl({ field, value, onChange }: { field: DateField; value: string; onChange: (v: string) => void }) {
+/** A linked value's paint: the primary colour, which is what a link is (docs/workflow-builder.md). */
+const LINKED = 'border-primary bg-primary text-primary-foreground'
+
+function DateControl({ field, value, linked = false, onChange }: { field: DateField; value: string; linked?: boolean; onChange: (v: string) => void }) {
   const id = `tool-${field.key}`
   return (
-    <div className="flex items-center justify-between gap-3 py-1">
+    <div className="flex items-center justify-between gap-3 py-1" data-field={field.key} data-linked={linked || undefined}>
       <label htmlFor={id} className="text-sm">
         {field.symbol && <span className="font-semibold">{field.symbol}</span>}
         <span className="text-muted-foreground">{field.symbol ? ' — ' : ''}{field.label}</span>
@@ -406,7 +417,7 @@ function DateControl({ field, value, onChange }: { field: DateField; value: stri
         type="date"
         value={value}
         onChange={e => { if (e.target.value) onChange(e.target.value) }}
-        className="h-9 rounded-lg border border-border bg-background px-2 text-sm tabular-nums"
+        className={cn('h-9 rounded-lg border border-border bg-background px-2 text-sm tabular-nums', linked && LINKED)}
       />
     </div>
   )
@@ -424,12 +435,15 @@ function NumberControl({
   field,
   value,
   chosen,
+  linked = false,
   onChange,
   sources = [],
 }: {
   field: NumberField
   value: number
   chosen: boolean
+  /** Filled by another step: the value is drawn on the primary colour. */
+  linked?: boolean
   onChange: (v: number) => void
   /** The tools this value can be taken from (§6.6), each opening in the source sheet. */
   sources?: { label: string; open: () => void }[]
@@ -440,7 +454,7 @@ function NumberControl({
   const sliderMin = Math.min(field.sliderMin ?? field.min, Math.max(value, field.min))
   const id = `tool-${field.key}`
   return (
-    <div>
+    <div data-field={field.key} data-linked={linked || undefined}>
       <div className="flex items-center justify-between gap-2">
         <label htmlFor={id} className="text-sm">
           {field.symbol && <span className="font-semibold">{field.symbol}</span>}
@@ -463,7 +477,9 @@ function NumberControl({
           <input
             aria-label={`${field.label} value`}
             inputMode="decimal"
-            value={text ?? (field.zeroLabel && value === 0 ? field.zeroLabel : String(shown))}
+            // A linked value arrives at the precision it was computed to: shown to
+            // four places so it fits, and in full once it is being edited.
+            value={text ?? (field.zeroLabel && value === 0 ? field.zeroLabel : String(linked ? Number(shown.toFixed(4)) : shown))}
             onFocus={() => setText(String(shown))}
             onChange={e => {
               setText(e.target.value)
@@ -471,7 +487,11 @@ function NumberControl({
               if (e.target.value.trim() !== '' && Number.isFinite(n)) onChange(fromDisplay(n, field.unit))
             }}
             onBlur={() => setText(null)}
-            className="w-24 rounded-md border border-transparent bg-transparent px-1.5 py-0.5 text-right text-base font-semibold tabular-nums outline-none hover:border-border focus:border-border focus:bg-background"
+            className={cn(
+              'w-24 rounded-md border border-transparent bg-transparent px-1.5 py-0.5 text-right text-base font-semibold tabular-nums outline-none hover:border-border focus:border-border focus:bg-background',
+              linked && cn(LINKED, 'focus:bg-primary'),
+            )}
+            data-testid={linked ? 'tool-linked-value' : undefined}
           />
           {field.unit === 'percent' && <span className="text-sm text-muted-foreground">%</span>}
         </span>
@@ -490,7 +510,7 @@ function NumberControl({
   )
 }
 
-function ChoiceControl({ field, value, chosen, onChange }: { field: ChoiceField; value: string; chosen: boolean; onChange: (v: string) => void }) {
+function ChoiceControl({ field, value, chosen, linked = false, onChange }: { field: ChoiceField; value: string; chosen: boolean; linked?: boolean; onChange: (v: string) => void }) {
   const label = (
     <span className="text-sm text-muted-foreground">
       {field.label}
@@ -501,19 +521,19 @@ function ChoiceControl({ field, value, chosen, onChange }: { field: ChoiceField;
   // a select once they would wrap.
   if (field.options.length <= 3 && field.options.reduce((n, o) => n + o.label.length, 0) <= 20) {
     return (
-      <div className="flex items-center justify-between gap-3 py-1">
+      <div className={cn('flex items-center justify-between gap-3 py-1', linked && 'rounded-lg bg-primary/15 px-1.5')} data-field={field.key} data-linked={linked || undefined}>
         {label}
         <SegmentedControl size="sm" label={field.label} value={value} onChange={onChange} options={field.options.map(o => ({ value: o.value, label: o.label }))} />
       </div>
     )
   }
   return (
-    <label className="flex items-center justify-between gap-3 py-1">
+    <label className="flex items-center justify-between gap-3 py-1" data-field={field.key} data-linked={linked || undefined}>
       {label}
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="h-9 max-w-[60%] rounded-lg border border-border bg-background px-2 text-sm"
+        className={cn('h-9 max-w-[60%] rounded-lg border border-border bg-background px-2 text-sm', linked && LINKED)}
       >
         {field.options.map(o => (
           <option key={o.value} value={o.value}>{o.label}</option>

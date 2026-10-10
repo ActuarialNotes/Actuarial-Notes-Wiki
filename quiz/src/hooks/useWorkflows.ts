@@ -18,8 +18,13 @@ import {
  */
 
 const STORAGE_KEY = 'actuarial_workflows_v1'
-/** Where the reader's own API key is kept — this browser only (docs/workflow-builder.md). */
-const KEY_STORAGE = 'actuarial_anthropic_api_key'
+/**
+ * Where the first Workflow Builder kept a reader's own Anthropic API key. The
+ * in-browser deploy that used it is gone (docs/workflow-builder.md, "Running it
+ * in Claude"); a key left behind is a secret no page should hold, so it is
+ * deleted on the next visit.
+ */
+const RETIRED_KEY_STORAGE = 'actuarial_anthropic_api_key'
 
 interface Saved {
   workflows: Workflow[]
@@ -52,6 +57,7 @@ export function parseSaved(raw: string | null): Saved {
 
 function load(): Saved {
   try {
+    localStorage.removeItem(RETIRED_KEY_STORAGE)
     return parseSaved(localStorage.getItem(STORAGE_KEY))
   } catch {
     return { workflows: [], currentId: null }
@@ -109,20 +115,4 @@ export const useWorkflows = create<WorkflowsState>((set, get) => {
 /** The open workflow, if any. */
 export function useCurrentWorkflow(): Workflow | null {
   return useWorkflows(s => s.workflows.find(w => w.id === s.currentId) ?? null)
-}
-
-/** The reader's Anthropic API key, if they have saved one in this browser. */
-export function readApiKey(): string {
-  try {
-    return localStorage.getItem(KEY_STORAGE) ?? ''
-  } catch {
-    return ''
-  }
-}
-
-export function saveApiKey(key: string) {
-  try {
-    if (key) localStorage.setItem(KEY_STORAGE, key)
-    else localStorage.removeItem(KEY_STORAGE)
-  } catch { /* private mode: the key lasts this visit only */ }
 }

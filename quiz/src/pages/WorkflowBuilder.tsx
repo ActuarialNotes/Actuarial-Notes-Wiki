@@ -1,16 +1,16 @@
 // The Workflow Builder (`/tools/workflow`, docs/workflow-builder.md): data,
 // calculations and concepts as steps locked on a grid, joined by directed
-// connections, run live on the Actuarial Tools engine — and deployed with
-// Claude on the reader's own API key. Concept Craft's board, with the
-// physics taken out.
+// connections, run live on the Actuarial Tools engine — and handed to Claude
+// as a brief for the Actuarial Notes connector. Concept Craft's board, with
+// the physics taken out.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, ChevronLeft, Maximize, Plus, Rocket, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ClipboardCopy, Maximize, Plus, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { ClearButton, ControlGroup, MapButton } from '@/components/craft/CraftControls'
 import { WorkflowAddMenu, type ConceptShelf } from '@/components/workflow/WorkflowAddMenu'
 import { WorkflowBoard, type WorkflowBoardCommands } from '@/components/workflow/WorkflowBoard'
-import { WorkflowDeployPanel } from '@/components/workflow/WorkflowDeployPanel'
+import { WorkflowClaudePanel } from '@/components/workflow/WorkflowClaudePanel'
 import { WorkflowLogo } from '@/components/workflow/WorkflowLogo'
 import { EdgePanel, StepPanel, type PanelLayout } from '@/components/workflow/WorkflowPanels'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -23,12 +23,13 @@ import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useCurrentWorkflow, useWorkflows } from '@/hooks/useWorkflows'
 import { craftTopics } from '@/lib/conceptCraft'
 import { setWikiContentLookup } from '@/lib/github'
-import { setWikiIndexBundle, type WikiIndexItem } from '@/lib/wikiIndex'
+import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import {
   REFUSAL_TEXT,
   TEMPLATES,
   addStep,
+  carriedTile,
   connect,
   connectReason,
   disconnect,
@@ -38,7 +39,6 @@ import {
   removeStep,
   runOrder,
   stepName,
-  takenCells,
   updateEdge,
   updateStep,
   type NewStep,
@@ -46,20 +46,18 @@ import {
   type WorkflowEdge,
   type WorkflowTemplate,
 } from '@/lib/workflow'
-import { cellKey, type Cell } from '@/lib/workflowGrid'
+import type { Cell } from '@/lib/workflowGrid'
 import { cn } from '@/lib/utils'
 
 const HEAD = {
   title: 'Workflow Builder | Actuarial Notes',
-  description: 'Chain data, calculations and concepts into an actuarial workflow, run it live, and deploy it with Claude.',
+  description: 'Chain data, calculations and concepts into an actuarial workflow, run it live, and run it in Claude.',
   noindex: true,
 }
 
 // ─── The notes ───────────────────────────────────────────────────────────────
 
 interface Notes {
-  files: Record<string, string>
-  index: WikiIndexItem[]
   shelves: ConceptShelf[]
   concepts: string[]
 }
@@ -89,7 +87,7 @@ function useNotes(): Notes | null {
         if (shelf !== last) shelves.push(shelf)
         shelf.sections.push({ id: topic.id, title: topic.title, concepts: topic.concepts })
       }
-      notesRead = { files: bundle.files, index: bundle.index, shelves, concepts: [...pages.values()].sort((a, b) => a.localeCompare(b)) }
+      notesRead = { shelves, concepts: [...pages.values()].sort((a, b) => a.localeCompare(b)) }
       if (live) setNotes(notesRead)
     })
     return () => { live = false }
@@ -97,14 +95,9 @@ function useNotes(): Notes | null {
   return notes
 }
 
-const conceptPage = (name: string) => {
-  const item = notesRead?.index.find(i => i.category === 'concept' && i.name.toLowerCase() === name.toLowerCase())
-  return item ? notesRead?.files[item.path] : undefined
-}
-
 // ─── The page ────────────────────────────────────────────────────────────────
 
-type Panel = { kind: 'step'; id: string } | { kind: 'edge'; key: string } | { kind: 'deploy' } | null
+type Panel = { kind: 'step'; id: string } | { kind: 'edge'; key: string } | { kind: 'claude' } | null
 
 export default function WorkflowBuilder() {
   usePageHead(HEAD)
@@ -123,7 +116,7 @@ export default function WorkflowBuilder() {
       className="dark relative flex flex-col overflow-hidden bg-background text-foreground"
       style={{ colorScheme: 'dark', height: 'calc(100dvh - var(--concept-split-height, 0px))' }}
     >
-      {workflow ? <Builder workflow={workflow} /> : <Header workflow={null} onDeploy={() => {}} />}
+      {workflow ? <Builder workflow={workflow} /> : <Header workflow={null} onClaude={() => {}} />}
       <ConceptPopup />
     </div>
   )
@@ -145,7 +138,6 @@ function Builder({ workflow }: { workflow: Workflow }) {
   const [addOpen, setAddOpen] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
   const [announce, setAnnounce] = useState('')
-  const [active, setActive] = useState<ReadonlySet<string>>(new Set())
 
   // Every calculation, run live: what each card shows and each panel opens on.
   const runs = useMemo(() => evaluateWorkflow(workflow), [workflow])
@@ -190,15 +182,8 @@ function Builder({ workflow }: { workflow: Workflow }) {
     window.setTimeout(() => boardRef.current?.reveal(added), 60)
   }
 
-  const onMove = (id: string, to: Cell): boolean => {
-    if (takenCells(workflow).has(cellKey(to)) || to.col < 0 || to.row < 0) {
-      const node = workflow.nodes.find(n => n.id === id)
-      if (node && cellKey(node) !== cellKey(to)) say('That cell is taken')
-      return false
-    }
-    update((wf, now) => moveStep(wf, id, to, now))
-    return true
-  }
+  // A card goes wherever it is dropped — beside another, if dropped on one.
+  const onMove = (id: string, to: Cell) => update((wf, now) => moveStep(wf, id, to, now))
 
   const onConnect = (from: string, to: string) => {
     setLinking(null)
@@ -237,7 +222,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
       setLinking(null)
       return
     }
-    setPanel(p => (p?.kind === 'deploy' ? p : null))
+    setPanel(p => (p?.kind === 'claude' ? p : null))
     setCursor(null)
   }
 
@@ -274,9 +259,20 @@ function Builder({ workflow }: { workflow: Workflow }) {
   // ── Layout ───────────────────────────────────────────────────────────────
   const openStep = panel?.kind === 'step' ? workflow.nodes.find(n => n.id === panel.id) ?? null : null
   const openEdge = panel?.kind === 'edge' ? workflow.edges.find(e => edgeKey(e) === panel.key) ?? null : null
-  const deploying = panel?.kind === 'deploy'
-  const panelOpen = !!openStep || !!openEdge || deploying
-  const panelRem = openStep ? (openStep.kind !== 'concept' && openStep.ref !== 'custom' ? 30 : 22) : deploying ? 26 : 22
+  const forClaude = panel?.kind === 'claude'
+  const panelOpen = !!openStep || !!openEdge || forClaude
+  const panelRem = openStep ? (openStep.kind !== 'concept' && openStep.ref !== 'custom' ? 30 : 22) : forClaude ? 26 : 22
+  // The open step's links: each step it is linked to, and the figure it carries — marked on that card.
+  const marked = useMemo(() => {
+    const out = new Map<string, number>()
+    const run = openStep ? runs.get(openStep.id) : undefined
+    if (!run?.input) return out
+    for (const p of run.piped) {
+      const upstream = runs.get(p.from)?.result
+      out.set(p.from, upstream ? carriedTile(upstream, run.input, p.fields) : -1)
+    }
+    return out
+  }, [openStep, runs])
   const insets = useMemo(
     () => (isPhone ? { top: 16, right: 0, bottom: 8, left: 0 } : { top: 16, right: panelOpen ? panelRem * 16 + 24 : 84, bottom: 8, left: 0 }),
     [isPhone, panelOpen, panelRem],
@@ -308,6 +304,10 @@ function Builder({ workflow }: { workflow: Workflow }) {
       onRead={read}
       onConnectFrom={() => onLink(openStep.id)}
       onSelectEdge={selectEdge}
+      onSelectStep={id => {
+        select(id)
+        boardRef.current?.reveal(id)
+      }}
     />
   ) : openEdge ? (
     <EdgePanel
@@ -324,14 +324,12 @@ function Builder({ workflow }: { workflow: Workflow }) {
       }}
       onSelectStep={select}
     />
-  ) : deploying ? (
-    <WorkflowDeployPanel
+  ) : forClaude ? (
+    <WorkflowClaudePanel
       workflow={workflow}
       runs={runs}
       layout={layout}
-      readConcept={conceptPage}
       onGoal={goal => update((wf, now) => ({ ...wf, goal, updatedAt: now }))}
-      onActive={ids => setActive(new Set(ids))}
       onClose={() => setPanel(null)}
     />
   ) : null
@@ -340,11 +338,11 @@ function Builder({ workflow }: { workflow: Workflow }) {
     <>
       <Header
         workflow={workflow}
-        onDeploy={() => {
-          setPanel(p => (p?.kind === 'deploy' ? null : { kind: 'deploy' }))
+        onClaude={() => {
+          setPanel(p => (p?.kind === 'claude' ? null : { kind: 'claude' }))
           if (isPhone) useConceptPopup.getState().close()
         }}
-        deploying={deploying}
+        forClaude={forClaude}
         onTemplate={startFrom}
       />
 
@@ -357,7 +355,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
           selected={openStep?.id ?? after}
           selectedEdge={openEdge ? edgeKey(openEdge) : null}
           linking={linking}
-          active={active}
+          marked={marked}
           insets={insets}
           onSelect={select}
           onSelectEdge={selectEdge}
@@ -483,13 +481,13 @@ function Builder({ workflow }: { workflow: Workflow }) {
 
 function Header({
   workflow,
-  onDeploy,
-  deploying = false,
+  onClaude,
+  forClaude = false,
   onTemplate,
 }: {
   workflow: Workflow | null
-  onDeploy: () => void
-  deploying?: boolean
+  onClaude: () => void
+  forClaude?: boolean
   onTemplate?: (t: WorkflowTemplate) => void
 }) {
   const back = useBack({ to: '/tools', label: 'Tools' })
@@ -533,17 +531,18 @@ function Header({
       </div>
       <button
         type="button"
-        onClick={onDeploy}
+        onClick={onClaude}
         disabled={!workflow}
-        aria-pressed={deploying}
+        aria-pressed={forClaude}
         className={cn(
           'flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-          deploying ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground ring-1 ring-border hover:bg-accent',
+          forClaude ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground ring-1 ring-border hover:bg-accent',
         )}
-        data-testid="workflow-open-deploy"
+        data-testid="workflow-open-claude"
+        aria-label="Run in Claude"
       >
-        <Rocket className="h-4 w-4" aria-hidden />
-        <span className="hidden sm:inline">Deploy</span>
+        <ClipboardCopy className="h-4 w-4" aria-hidden />
+        <span className="hidden sm:inline">Run in Claude</span>
       </button>
     </header>
   )

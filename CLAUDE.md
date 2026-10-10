@@ -310,22 +310,24 @@ before touching that area**:
   re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
   named `craft*`, `conceptCraft` or `conceptGraph`.
 - `docs/workflow-builder.md` — the **Workflow Builder** (`/tools/workflow`, the row at the top of
-  the Tools catalogue): data, calculations and concepts as steps **locked on a grid**
-  (`lib/workflowGrid.ts`) — Concept Craft's board with the physics taken out, sharing its
-  camera (`lib/craftLayout.ts`), its map buttons (`components/craft/CraftControls.tsx`) and its
-  panels' shape — joined by **directed** connections dragged from a card's port. A workflow
-  never loops (`connectReason`), so it has a run order (`runOrder`); a connection along a hand-off
-  the engine already defines (`ToolSpec.next`) **sends values**, and `evaluateWorkflow` runs the
-  chain live, while any other connection is descriptive (`edgeKind`). The **+** is a menu of pages
-  (kind → area or exam → item). A tool step's panel embeds its `ToolCard` and stores only the
-  fields moved off their defaults (`stepOwnInput`), so judgments still read as defaulted.
-  **Deploy** runs the workflow with Claude on the reader's **own** API key — kept in localStorage,
-  sent only to Anthropic through the SDK in the browser (a lazy chunk) — as a manual tool-use loop
-  (`lib/workflowAgent.ts`) whose `run_tool` / `describe_tool` / `read_concept` run here, on the
-  engine, over only what is on the workflow; *Copy for Claude* gives a keyless reader the same brief
-  for the MCP connector. All of `lib/workflow*.ts` is pure and tested; the flows (deployment
-  against a stubbed API included) are `e2e/workflow.spec.ts`. Read before touching anything named
-  `workflow*` or `Workflow`.
+  the Tools catalogue): data, calculations and concepts as steps that **stay where they are put**,
+  snapped to a fine 24 px grid on an unbounded board (`lib/workflowGrid.ts` — a card dropped on
+  another lands in the nearest place it fits, `nearestFit`; workflows saved on the first, coarse grid
+  are spread onto it by `parseWorkflow`) — Concept Craft's board with the physics taken out, sharing
+  its camera (`lib/craftLayout.ts`), its map buttons (`components/craft/CraftControls.tsx`) and its
+  panels' shape — joined by **directed** connections dragged from a card's port. A workflow never
+  loops (`connectReason`), so it has a run order (`runOrder`); a connection along a hand-off the
+  engine already defines (`ToolSpec.next`) is a **link** and `evaluateWorkflow` runs the chain live,
+  while any other is descriptive (`edgeKind`). Only a concept's connection carries a word
+  (`edgeLabel`); a line is tapped for its panel. **Colour is a link**: with a step open, the fields a
+  link fills wear the primary colour on its embedded `ToolCard` (`linked`), the figure they came from
+  wears it on the upstream card (`carriedTile`), and one tinted line says "**Annual trend** linked to
+  **Trend Fit**". The **+** is a menu of pages (kind → area or exam → item). A tool step stores only
+  the fields moved off their defaults (`stepOwnInput`). **The app calls no model and holds no key**:
+  *Run in Claude* copies the workflow as a brief for the MCP connector (`lib/workflowBrief.ts`) — an
+  earlier in-browser deploy on the reader's own API key was removed as a security risk. All of
+  `lib/workflow*.ts` is pure and tested; the flows are `e2e/workflow.spec.ts`. Read before touching
+  anything named `workflow*` or `Workflow`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**

@@ -36,7 +36,7 @@
 > A business has a building at Location 1 worth \$75,000, a building at Location 2 worth \$100,000 and personal property at Location 2 worth \$75,000. It can insure them under one blanket limit of \$225,000, or under specific limits of \$67,500, \$90,000 and \$67,500. Each option meets a 90% coinsurance requirement, and the deductible is \$1,000. Fire destroys the Location 2 building. Compare the payments.
 >
 > > [!answer]-
-> > Under the blanket limit, coinsurance is tested on the total value covered, $0.90 \times 250{,}000 = 225{,}000$, which the limit meets, so $R = 1$.
+> > Under the blanket limit, coinsurance is tested on the total value covered: 90% of \$250,000 is \$225,000, which the limit meets, so $R = 1$.
 > > $$
 > > \begin{align*}
 > > \text{Pay}_{\text{blanket}} &= \min(100{,}000 - 1{,}000,\ 225{,}000) \\
@@ -53,7 +53,7 @@
 > (b) A business has a \$5,000 per-occurrence deductible with a \$12,000 annual aggregate deductible. It has three covered losses during the year, in this order: \$4,000, \$7,000 and \$12,000. What does the insurer pay on each?
 >
 > > [!answer]-
-> > (a) The hurricane deductible is $0.02 \times 400{,}000 = 8{,}000$.
+> > (a) The hurricane deductible is 2% of the \$400,000 insured value, or \$8,000.
 > > $$
 > > \begin{align*}
 > > \text{Pay}_{\text{hurricane}} &= 30{,}000 - 8{,}000 \\

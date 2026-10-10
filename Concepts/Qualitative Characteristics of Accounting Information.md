@@ -31,7 +31,7 @@
 > An insurer writes a one-year policy for \$1,200 and pays a \$180 commission on day 1. Under GAAP the commission is deferred and expensed as the premium is earned; under SAP it is expensed immediately while the full \$1,200 is held as unearned premium. Find the effect on GAAP equity and statutory surplus at inception, and name the concept that explains the statutory answer.
 >
 > > [!answer]-
-> > The insurer holds $1{,}200 - 180 = 1{,}020$ of cash against an unearned premium of \$1,200.
+> > The insurer holds \$1,020 of cash, the premium less the commission, against an unearned premium of \$1,200.
 > > $$
 > > \begin{align*}
 > > \Delta\text{Surplus}_{\text{SAP}} &= 1{,}020 - 1{,}200 \\

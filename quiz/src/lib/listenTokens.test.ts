@@ -59,3 +59,11 @@ describe('buildListenContent', () => {
     expect(ssml).toContain('squared')
   })
 })
+
+describe('callouts', () => {
+  it('reads a callout title as its own paragraph', () => {
+    const { blocks } = buildListenContent('> [!tip] Common Trap\n> Always verify the sample space first.\n')
+    const segs = toSegments(blocks).map(s => s.text)
+    expect(segs).toEqual(['Tip: Common Trap', 'Always verify the sample space first.'])
+  })
+})

@@ -64,3 +64,31 @@ describe('latexToSpeech', () => {
     expect(latexToSpeech('   ')).toBe('')
   })
 })
+
+describe('latexToSpeech — probability notation', () => {
+  it('reads |E| as the size of a set and |x| as an absolute value', () => {
+    expect(latexToSpeech('P(E) = \\frac{|E|}{|S|}')).toBe('P of E equals the size of E over the size of S')
+    expect(latexToSpeech('|A \\cup B|')).toBe('the size of A union B')
+    expect(latexToSpeech('|x - 1|')).toBe('the absolute value of x minus 1')
+  })
+
+  it('reads the conditioning bar as "given"', () => {
+    expect(latexToSpeech('P(A \\mid B)')).toBe('P of A given B')
+    expect(latexToSpeech('P(A | B) = \\frac{P(A \\cap B)}{P(B)}')).toBe(
+      'P of A given B equals P of A intersection B over P of B',
+    )
+  })
+
+  it('reads a braced set as "the set" and keeps its commas', () => {
+    expect(latexToSpeech('\\{1, 2, 3\\}')).toBe('the set 1, 2, 3')
+    expect(latexToSpeech('\\{x \\mid x > 0\\}')).toBe('the set x such that x is greater than 0')
+  })
+
+  it('reads a right arrow as "gives", not as a limit', () => {
+    expect(latexToSpeech('E \\rightarrow \\{2, 4, 6\\}')).toBe('E gives the set 2, 4, 6')
+  })
+
+  it('keeps thousands separators and decimals inside a number', () => {
+    expect(latexToSpeech('1,000 + 0.5')).toBe('1,000 plus 0.5')
+  })
+})

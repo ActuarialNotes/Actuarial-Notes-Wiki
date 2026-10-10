@@ -25,8 +25,8 @@ const WORDS: Record<string, string> = {
   ne: 'is not equal to', neq: 'is not equal to', equiv: 'is equivalent to',
   approx: 'is approximately', sim: 'is distributed as', simeq: 'is approximately',
   propto: 'is proportional to', cong: 'is congruent to',
-  to: 'approaches', rightarrow: 'approaches', longrightarrow: 'approaches',
-  Rightarrow: 'implies', Leftrightarrow: 'if and only if', mapsto: 'maps to',
+  to: 'approaches', rightarrow: 'gives', longrightarrow: 'gives',
+  Rightarrow: 'implies', mid: 'given', Leftrightarrow: 'if and only if', mapsto: 'maps to',
   infty: 'infinity', in: 'in', notin: 'is not in', ni: 'contains',
   subset: 'subset of', subseteq: 'subset of', supset: 'superset of',
   cup: 'union', cap: 'intersection', emptyset: 'the empty set', varnothing: 'the empty set',
@@ -54,12 +54,17 @@ const OPERATORS: Record<string, string> = {
   '%': 'percent', '|': '', ':': '', ';': ';', ',': ',', '.': '',
 }
 
+interface ParserOptions {
+  /** What a lone `|` (and `\\mid`) is called here — "given" inside P(A | B), "such that" in a set. */
+  bar?: string
+}
+
 class Parser {
   private out: string[] = []
   private i = 0
   private funcCand = false
 
-  constructor(private readonly s: string) {}
+  constructor(private readonly s: string, private readonly opts: ParserOptions = {}) {}
 
   parse(): string {
     while (this.i < this.s.length) this.step()
@@ -67,8 +72,8 @@ class Parser {
   }
 
   // Convert a raw LaTeX fragment in a nested context (sub/superscripts, args).
-  private sub(raw: string): string {
-    return new Parser(raw).parse()
+  private sub(raw: string, opts: ParserOptions = this.opts): string {
+    return new Parser(raw, opts).parse()
   }
 
   // Like sub(), but a purely-alphabetic multi-letter group is a label
@@ -99,6 +104,7 @@ class Parser {
     if (c === '}') { this.i++; return }
     if (c === '(') { this.paren(); return }
     if (c === ')' || c === '[' || c === ']') { this.i++; return }
+    if (c === '|') { this.bar(); return }
     if (c === '_') { this.i++; this.push('sub'); this.push(this.speakArg(this.readArg())); this.funcCand = false; return }
     if (c === '^') { this.i++; this.power(); return }
     if (/[0-9]/.test(c)) { this.number(); return }
@@ -115,6 +121,8 @@ class Parser {
       while (/[A-Za-z]/.test(this.peek())) name += this.s[this.i++]
     } else {
       name = this.s[this.i++] ?? ''
+      if (name === '{') { this.set(); return }
+      if (name === '|') { this.bar(); return }
       this.push(SYMBOLS[name] ?? '')
       this.funcCand = false
       return
@@ -148,6 +156,9 @@ class Parser {
         this.funcCand = false
         return
       }
+      case 'lvert': case 'lVert': { this.pair(/\\r[vV]ert/); return }
+      case 'vert': case 'Vert': this.bar(); return
+      case 'mid': this.push(this.opts.bar ?? 'given'); this.funcCand = false; return
       case 'sum': this.bigOp('the sum'); return
       case 'prod': this.bigOp('the product'); return
       case 'int': this.bigOp('the integral'); return
@@ -182,6 +193,57 @@ class Parser {
         return
       }
     }
+  }
+
+  // `\\{ … \\}` is a set: "the set 1, 2, 3", and a bar inside it is "such that".
+  private set(): void {
+    const start = this.i
+    let depth = 0
+    let end = -1
+    for (let j = this.i; j < this.s.length; j++) {
+      if (this.s[j] === '\\' && this.s[j + 1] === '{') { depth++; j++ }
+      else if (this.s[j] === '\\' && this.s[j + 1] === '}') {
+        if (depth === 0) { end = j; break }
+        depth--; j++
+      }
+    }
+    const inner = end < 0 ? this.s.slice(start) : this.s.slice(start, end)
+    this.i = end < 0 ? this.s.length : end + 2
+    this.push('the set')
+    this.push(this.sub(inner, { bar: 'such that' }))
+    this.funcCand = false
+  }
+
+  // A bar is one of a pair — |E| the size of a set, |x| an absolute value — or,
+  // alone, the conditioning bar. Without a partner it is "given" where the
+  // caller says so (inside P( )), and silent otherwise (n̅| in annuity notation).
+  private bar(): void {
+    if (this.s[this.i] === '|') this.i++
+    const close = this.s.indexOf('|', this.i)
+    if (close < 0) {
+      this.push(this.opts.bar ?? '')
+      this.funcCand = false
+      return
+    }
+    const inner = this.s.slice(this.i, close)
+    this.i = close + 1
+    this.speakBars(inner)
+  }
+
+  private pair(close: RegExp): void {
+    const rest = this.s.slice(this.i)
+    const m = close.exec(rest)
+    const inner = m ? rest.slice(0, m.index) : rest
+    this.i += m ? m.index + m[0].length : rest.length
+    this.speakBars(inner)
+  }
+
+  private speakBars(inner: string): void {
+    // A set's size is its cardinality; anything else between bars is a magnitude.
+    const isSet = /[A-Z]|\\(cup|cap|setminus|mathcal)\b/.test(inner)
+    this.push(isSet ? 'the size of' : 'the absolute value of')
+    this.push(this.sub(inner))
+    this.funcCand = false
   }
 
   // Sum / product / integral with optional lower (_) and upper (^) bounds.
@@ -237,7 +299,7 @@ class Parser {
       this.power()
     } else if (wasFunc) {
       this.push('of')
-      this.push(this.sub(content))
+      this.push(this.sub(content, { bar: 'given' }))
     } else {
       this.push(this.sub(content))
     }
@@ -246,9 +308,14 @@ class Parser {
 
   private number(): void {
     let n = ''
-    while (this.i < this.s.length && /[0-9.,]/.test(this.s[this.i])) n += this.s[this.i++]
-    // Drop a trailing separator that was really punctuation, not part of the number.
-    n = n.replace(/[.,]+$/, '')
+    // A comma or point belongs to the number only with a digit after it (1,000 · 0.5);
+    // otherwise it is punctuation — the commas in {1, 2, 3} must survive.
+    while (this.i < this.s.length) {
+      const ch = this.s[this.i]
+      if (/[0-9]/.test(ch) || (/[.,]/.test(ch) && /[0-9]/.test(this.s[this.i + 1] ?? ''))) n += ch
+      else break
+      this.i++
+    }
     this.push(n)
     this.funcCand = false
   }

@@ -388,6 +388,13 @@ before touching that area**:
   `initialize`-handshake ones before it), and the mirrors kept in step with the app by tests. Read
   before touching anything under `quiz/api/_mcp/`, `quiz/api/mcp.js`, `lib/knowledgeBase.ts` or
   `quiz/skills/`.
+- `docs/listen-recordings.md` — **Listen recordings**: a pre-made ElevenLabs voice-over for a
+  concept page that the Listen view plays instead of the browser voice, with the same
+  word-by-word highlight (read off the audio clock from per-token start times). One script —
+  `lib/listenTokens.ts` → `lib/mathSpeech.ts` (equations in spoken English) →
+  `lib/listenNarration.ts` — feeds every voice; `scripts/listen-recording.mjs` makes
+  `public/listen/<slug>.{mp3,json}`, and a recording whose script hash no longer matches the
+  page is ignored. Read before touching `useListenSpeech`, `mathSpeech.ts` or that script.
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
   page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
   calculators — thirty-two so far across reserving, ratemaking, loss distributions, credibility

@@ -141,11 +141,13 @@ function parseBlocks(lines: string[], out: InlineToken[], next: () => number, de
       }
       i--
       // Turn a callout header into readable prose: "Example: Title".
-      const dequoted = quoted.map(l => {
+      // The header is its own paragraph (the blank line after it), so a title
+      // like "Tip: Common Trap" is not run into the first sentence beneath it.
+      const dequoted = quoted.flatMap(l => {
         const m = l.match(CALLOUT_RE)
-        if (!m) return l
+        if (!m) return [l]
         const title = m[2].replace(/\{[^}]*\}/g, '').trim()
-        return title ? `${capitalize(m[1])}: ${title}` : `${capitalize(m[1])}.`
+        return [title ? `${capitalize(m[1])}: ${title}` : `${capitalize(m[1])}.`, '']
       })
       blocks.push(...parseBlocks(dequoted, out, next, depthBase))
       continue

@@ -5,7 +5,7 @@ topic: "Compensatory Damages"
 learning_objective: "Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
-bloom: apply
+bloom: understand
 wiki_link:
   - Concepts/Compensatory+Damages
   - Concepts/Punitive+Damages

@@ -1,13 +1,13 @@
 ---
 id: "discia-an-245"
 exam: "Exam DISC-IA"
-topic: "Rate Regulation"
+topic: "State Rating Laws"
 learning_objective: "Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: understand
 wiki_link:
-  - Concepts/Rate+Regulation
+  - Concepts/State+Rating+Laws
   - Concepts/Unfair+Discrimination
 answer: "D"
 points: 1
@@ -22,7 +22,7 @@ To win market share, an insurer files homeowners rates that its own actuaries pr
 
 ## Explanation
 
-Rates must be **not excessive, not inadequate and not unfairly discriminatory**. A rate is reasonable and meets all three standards if it is an actuarially sound estimate of the expected value of all future costs of the risk transfer. A rate set below expected costs is **inadequate**, and inadequate rates threaten the insurer's solvency.
+Rates must be **not excessive, not inadequate and not unfairly discriminatory**. A rate is reasonable and meets all three standards if it is an actuarially sound estimate of the expected value of all future costs of the risk transfer. A rate clearly insufficient to sustain projected losses and expenses in its class is **inadequate**, and inadequate rates threaten the insurer's solvency.
 
 - **A** is the opposite failing: a rate above expected costs and a reasonable profit.
 - **B** concerns differences in rates between risks with the same expected cost, not the overall level.

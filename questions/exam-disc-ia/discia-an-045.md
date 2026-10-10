@@ -26,10 +26,14 @@ The business keeps up to \$10,000 of each loss until its deductibles for the yea
 
 $$
 \begin{align*}
-\text{Loss 1} &= \min(8{,}000,\ 10{,}000) = 8{,}000 \\
-\text{Loss 2} &= \min(15{,}000,\ 10{,}000) = 10{,}000 \\
-\text{Loss 3} &= \min(10{,}000,\ 25{,}000 - 18{,}000) = 7{,}000 \\
-\text{Loss 4} &= 25{,}000 - 25{,}000 = 0
+\text{Loss 1} &= \min(8{,}000,\ 10{,}000) \\
+&= 8{,}000 \\
+\text{Loss 2} &= \min(15{,}000,\ 10{,}000) \\
+&= 10{,}000 \\
+\text{Loss 3} &= \min(10{,}000,\ 25{,}000 - 18{,}000) \\
+&= 7{,}000 \\
+\text{Loss 4} &= \min(10{,}000,\ 25{,}000 - 25{,}000) \\
+&= 0
 \end{align*}
 $$
 

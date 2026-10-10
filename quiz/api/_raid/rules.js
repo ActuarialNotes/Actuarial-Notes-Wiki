@@ -10,11 +10,13 @@ export const RAID_DRAW_SIZE = 5
 
 /**
  * An exam_progress key as the vault export keys its bank: `P`, `FM`, `MAS-I`
- * as they are, `CAS-5` → `5`, and `CAS-6` → `6C`, the one variant with a bank.
+ * as they are, `CAS-5` → `5`, `CAS-6` → `6C`, the one variant with a bank, and
+ * the DISC courses by their page ids, `CAS-DA` → `DISC-DA`.
  */
 export function kbExamKey(progressKey) {
   const key = String(progressKey ?? '')
   if (key === 'CAS-6') return '6C'
+  if (/^CAS-(DA|RM|IA)$/.test(key)) return key.replace(/^CAS-/, 'DISC-')
   return key.replace(/^CAS-/, '')
 }
 

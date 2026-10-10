@@ -9,7 +9,7 @@ bloom: apply
 wiki_link:
   - Concepts/Insurance+Regulator
   - Concepts/Solvency+Monitoring
-  - Concepts/Rate+Regulation
+  - Concepts/State+Rating+Laws
 answer: "C"
 points: 1
 ---

@@ -41,5 +41,5 @@ The answer is **C**.
 **Why not the others**
 
 - **A** — \$900 ignores the endorsement.
-- **B** — \$975 earns the endorsement over twelve months ($300 \times \tfrac{3}{12}$) although it covers only six.
+- **B** — \$975 earns the endorsement premium over twelve months, three twelfths of \$300, although it covers only six.
 - **D** — \$1,200 treats the endorsement premium as fully earned when it is written.

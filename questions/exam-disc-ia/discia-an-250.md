@@ -1,13 +1,13 @@
 ---
 id: "discia-an-250"
 exam: "Exam DISC-IA"
-topic: "Market Conduct Regulation"
+topic: "State Market Conduct Regulation"
 learning_objective: "Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: apply
 wiki_link:
-  - Concepts/Market+Conduct+Regulation
+  - Concepts/State+Market+Conduct+Regulation
   - Concepts/Insurance+Producer
 answer: "D"
 points: 1

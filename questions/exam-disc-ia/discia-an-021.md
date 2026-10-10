@@ -23,7 +23,7 @@ An insurer wrote an annual homeowners policy on July 1 for \$1,800. A covered fi
 
 ## Explanation
 
-The unearned premium reserve is for the unexpired coverage, six of twelve months: $1{,}800 \times \tfrac{6}{12} = 900$. The fire is a covered event that has occurred, so under SSAP No. 55 it is recognized as a loss, and the unpaid part, $10{,}000 - 4{,}000 = 6{,}000$, is a loss reserve. The two liabilities cover different things: losses that have occurred, and coverage still to be provided. The answer is **D**.
+The unearned premium reserve is for the unexpired coverage, six of twelve months, or \$900 of the \$1,800 premium. The fire is a covered event that has occurred, so under SSAP No. 55 it is recognized as a loss, and the unpaid part, \$10,000 less the \$4,000 paid, or \$6,000, is a loss reserve. The two liabilities cover different things: losses that have occurred, and coverage still to be provided. The answer is **D**.
 
 **Why not the others**
 

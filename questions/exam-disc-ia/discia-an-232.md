@@ -1,13 +1,12 @@
 ---
 id: "discia-an-232"
 exam: "Exam DISC-IA"
-topic: "Tort Litigation"
+topic: "Compensatory Damages"
 learning_objective: "Insurance Law Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
 wiki_link:
-  - Concepts/Tort+Litigation
   - Concepts/Compensatory+Damages
   - Concepts/Punitive+Damages
   - Concepts/Negligence

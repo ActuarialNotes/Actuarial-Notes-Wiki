@@ -39,6 +39,6 @@ The answer is **A**. Accounting depreciation follows a schedule, not the machine
 
 **Why not the others**
 
-- **B** — \$41,000 depreciates the purchase price over the physical life, $70{,}000 \times \tfrac{9}{15} - 1{,}000$, mixing the two bases.
-- **C** — \$53,000 is actual cash value, $90{,}000 \times \tfrac{9}{15} = 54{,}000$, less the deductible.
+- **B** — \$41,000 depreciates the purchase price over the physical life, nine fifteenths of \$70,000 less the deductible, mixing the two bases.
+- **C** — \$53,000 is actual cash value, nine fifteenths of \$90,000 or \$54,000, less the deductible.
 - **D** — \$89,000 is replacement cost less the deductible.

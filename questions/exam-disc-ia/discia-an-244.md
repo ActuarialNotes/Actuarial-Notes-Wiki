@@ -1,13 +1,13 @@
 ---
 id: "discia-an-244"
 exam: "Exam DISC-IA"
-topic: "Rate Regulation"
+topic: "State Rating Laws"
 learning_objective: "Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
 wiki_link:
-  - Concepts/Rate+Regulation
+  - Concepts/State+Rating+Laws
   - Concepts/Policy+Form+Regulation
 answer: "C"
 points: 1

@@ -28,5 +28,5 @@ Under contributory negligence a plaintiff who contributed in any way to the harm
 **Why not the others**
 
 - **B** — \$100,000 is the pedestrian's own share of fault applied to the damages, the wrong direction.
-- **C** — \$150,000 is the pure or modified comparative negligence result, $(1 - 0.40) \times 250{,}000$, which Virginia does not use.
+- **C** — \$150,000 is the comparative negligence result, 60% of \$250,000, which Virginia does not use.
 - **D** — \$250,000 ignores the pedestrian's fault altogether.

@@ -18,7 +18,7 @@ Two bodily injury claims involve the same injury, equally clear liability and th
 
 - A) One claimant's medical bills were paid by her health insurer
 - B) One claimant reduced her losses by following her doctor's advice
-- C) One case would be tried before a jury pool more distrustful of large corporations
+- C) One case would go to a jury pool more distrustful of big companies
 - D) One defendant carries a lower liability limit than the other
 
 ## Explanation

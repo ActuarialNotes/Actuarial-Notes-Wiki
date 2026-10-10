@@ -23,7 +23,7 @@ A claimant injured by the insured has \$40,000 of medical bills, all paid by her
 
 ## Explanation
 
-Special damages are those that can actually be ascertained, here medical bills and lost wages: $40{,}000 + 15{,}000 = 55{,}000$. Pain and suffering is a general, noneconomic damage. Under the collateral source rule, damages are not reduced by compensation the plaintiff received from other sources such as health insurance. The answer is **B**.
+Special damages are those that can actually be ascertained, here the \$40,000 of medical bills and the \$15,000 of lost wages, a total of \$55,000. Pain and suffering is a general, noneconomic damage. Under the collateral source rule, damages are not reduced by compensation the plaintiff received from other sources such as health insurance. The answer is **B**.
 
 **Why not the others**
 

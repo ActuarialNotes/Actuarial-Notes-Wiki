@@ -1,13 +1,13 @@
 ---
 id: "discia-an-236"
 exam: "Exam DISC-IA"
-topic: "Insurance Regulation"
+topic: "Reasons for Insurance Regulation"
 learning_objective: "Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: understand
 wiki_link:
-  - Concepts/Insurance+Regulation
+  - Concepts/Reasons+for+Insurance+Regulation
   - Concepts/Solvency+Monitoring
   - Concepts/Insurance+Regulator
 answer: "B"

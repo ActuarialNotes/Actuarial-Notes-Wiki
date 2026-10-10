@@ -38,6 +38,6 @@ The \$250,000 limit meets the \$240,000 requirement, so the repair cost is paid 
 
 **Why not the others**
 
-- **A** — \$27,500 pays actual cash value, $40{,}000 \times 0.70 - 500$, which applies only if the insurance were well below the requirement.
+- **A** — \$27,500 pays actual cash value, 70% of \$40,000 less the deductible, which the form pays only when that exceeds its proportional amount for an insured below the requirement.
 - **B** — \$32,833 applies a proportion of $\tfrac{250}{300}$, as if the requirement were 100% of replacement cost.
 - **D** — \$40,000 forgets the deductible.

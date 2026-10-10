@@ -3,6 +3,8 @@ import { ChevronLeft, Search, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
+import { backLabel, type Back } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { cn } from '@/lib/utils'
 import type { ExamStatus } from '@/lib/examStatus'
 
@@ -190,32 +192,37 @@ export function ExamStatusBanner({ status }: { status: ExamStatus }) {
 }
 
 /**
- * The way back at the head of a strip — the study guide's "All exams" and the
- * quiz builder's "Change exam" are the same chevron, at the same size, so it
- * is drawn once. A 36px target with a 24px chevron: it is the one control on
- * the strip a thumb reaches for most.
+ * The way back at the head of a strip — the study guide's and the quiz
+ * builder's are the same chevron, at the same size, so it is drawn once. A
+ * 36px target with a 24px chevron: it is the one control on the strip a thumb
+ * reaches for most.
+ *
+ * A page passes `back` (`hooks/useBack.ts`): the chevron then leads to the
+ * page the reader came from, and names it, and only up to the page's parent
+ * for a reader who arrived from outside the app. `onClick` is for a change of
+ * screen the address doesn't show.
  */
 export function FloatingSearchBack({
+  back,
   label,
-  to,
-  state,
   onClick,
 }: {
-  label: string
-  /** A link up the tab… */
-  to?: string
-  state?: unknown
-  /** …or a change of screen the address doesn't show. */
+  back?: Back
+  label?: string
   onClick?: () => void
 }) {
   const className =
     'not-prose -ml-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
   const chevron = <ChevronLeft className="h-6 w-6" aria-hidden />
-  return to ? (
-    <Link to={to} state={state} aria-label={label} title={label} className={className}>
-      {chevron}
-    </Link>
-  ) : (
+  if (back) {
+    const name = backLabel(back)
+    return (
+      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={name} title={name} className={className}>
+        {chevron}
+      </Link>
+    )
+  }
+  return (
     <button type="button" onClick={onClick} aria-label={label} title={label} className={className}>
       {chevron}
     </button>

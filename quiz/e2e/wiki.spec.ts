@@ -19,7 +19,7 @@ test.describe('wiki', () => {
   })
 
   // Leaving a page and coming back returns to where it was left — by Back, or
-  // by the exam page's "All exams" arrow — while a new page opens at its top.
+  // by the exam page's back arrow — while a new page opens at its top.
   // lib/routeScrollMemory.ts; the router records the place as the page is left.
   test('keeps the Study Guides list where it was left', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 600 })
@@ -43,9 +43,37 @@ test.describe('wiki', () => {
 
     await exam9.click()
     await expect(page).toHaveURL(/\/wiki\/exam\//)
-    await page.getByRole('link', { name: 'All exams' }).click()
+    await page.getByRole('link', { name: 'Back to Study Guides' }).click()
     await expect(page).toHaveURL(/\/wiki$/)
     await expect.poll(scrollY).toBe(listY)
+  })
+
+  // Every way back leads to the page the reader came from, and names it; a
+  // reader who came in from outside the app is led up to the page's parent
+  // instead (lib/navTrail.ts, hooks/useBack.ts).
+  test('leads back to the page the reader came from', async ({ page }) => {
+    // Straight onto an exam page: nothing of the app's behind it, so up.
+    await page.goto('/wiki/exam/Exam+P-1+(SOA)')
+    await page.getByRole('link', { name: 'All exams' }).click()
+    await expect(page).toHaveURL(/\/wiki$/)
+  })
+
+  test('walks back the way the reader came, into the quiz builder as it was left', async ({ page }) => {
+    // From the Quiz tab's Exam P builder, through Study Guides to the exam:
+    // the arrow names Study Guides and returns there, and the browser's Back
+    // walks on the same way — into the builder as it was left, not the list.
+    await page.goto('/')
+    await page.locator('button[data-tour="quiz-exam-p"]').click()
+    await page.getByRole('link', { name: 'Study Guides' }).first().click()
+    await page.locator('a[data-tour="exam-p"]').click()
+    const back = page.getByRole('link', { name: 'Back to Study Guides' })
+    await back.click()
+    await expect(page).toHaveURL(/\/wiki$/)
+    await page.goBack()
+    await expect(page).toHaveURL(/\?topic=/)
+    await expect(page.getByRole('button', { name: 'Change exam' })).toBeVisible()
+    await page.goBack()
+    await expect(page.locator('button[data-tour="quiz-exam-p"]')).toBeVisible()
   })
 
   // Resources is the tab's second page: listed under Study Guides in the

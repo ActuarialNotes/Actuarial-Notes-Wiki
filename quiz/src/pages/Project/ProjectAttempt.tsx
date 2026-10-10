@@ -142,7 +142,7 @@ export default function ProjectAttemptPage() {
     <div className="flex h-[100dvh] flex-col">
       <ProjectTopBar
         backTo="/project"
-        backLabel="Back to Projects"
+        backLabel="Projects"
         title={projectCase.title}
         subtitle={`PCPA Project · ${projectCase.company}`}
         right={<WindowPill attempt={attempt} now={now} compact />}

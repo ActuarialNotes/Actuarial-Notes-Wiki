@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { backLabel as backName, useBack } from '@/hooks/useBack'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ChevronDown, ChevronLeft, ChevronRight, Globe, Loader2, LogIn, Play, Shuffle, Timer, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -240,6 +241,11 @@ function BattlePage({
 }) {
   const skin = useBattleSkin()
   const navigate = useNavigate()
+  // Out of Quiz Battle the way the reader came in — the Quiz tab, a study
+  // guide, the Dashboard. Actuaria's station is a tab of its own world, and
+  // its exit always leads to the map.
+  const back = useBack({ to: skin.home.path, label: 'Quiz' })
+  const inWorld = skin.id === 'actuaria'
   const [params, setParams] = useSearchParams()
   const { user } = useAuth()
   const { questions, loading } = useAllQuestions()
@@ -483,7 +489,10 @@ function BattlePage({
     <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6">
       {screen.kind === 'home' && (
         <>
-          <PageTitle onBack={() => navigate(skin.home.path)} backLabel={skin.home.label}>{skin.title}</PageTitle>
+          <PageTitle
+            onBack={inWorld ? () => navigate(skin.home.path) : back.go}
+            backLabel={inWorld ? skin.home.label : backName(back)}
+          >{skin.title}</PageTitle>
           <div className="flex items-center gap-3 rounded-xl bg-card p-5">
             <SkinLogo size="lg" />
             <p className="text-sm text-muted-foreground">

@@ -5,11 +5,18 @@ import { MobileNavButton } from '@/components/MobileNavButton'
 import { CheckMark } from '@/components/CheckMark'
 import { attemptPhase, timeLeft, type ProjectAttempt } from '@/lib/pcpaAttempt'
 import { cn } from '@/lib/utils'
+import { backLabel as backLabelOf, useBack, usePageLabel } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 
 /**
  * The project pages' one row of chrome: the drawer button below `lg` (these
  * routes host it — `lib/mobileNavHost.ts`), the way back, the title, whatever
  * the page puts in the middle, and the window's countdown on the right.
+ *
+ * The way back leads to the page the reader came from (the PCPA study guide,
+ * the Dashboard), and up to `backTo` for one who came in from outside the app
+ * — `hooks/useBack.ts`. The title names this page's own history entry, so
+ * whatever is opened from here can say its way back.
  */
 export function ProjectTopBar({
   backTo,
@@ -19,17 +26,21 @@ export function ProjectTopBar({
   children,
   right,
 }: {
+  /** The page's parent, for a reader who came in from outside the app. */
   backTo: string
+  /** The parent's name. */
   backLabel: string
   title: string
   subtitle?: string
   children?: ReactNode
   right?: ReactNode
 }) {
+  const back = useBack({ to: backTo, label: backLabel })
+  usePageLabel(title)
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background/95 px-2 backdrop-blur-sm sm:px-3">
       <MobileNavButton />
-      <Link to={backTo} aria-label={backLabel} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
+      <Link to={back.to} state={RESTORE_SCROLL} onClick={back.onLinkClick} aria-label={backLabelOf(back)} title={backLabelOf(back)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground">
         <ChevronLeft className="h-5 w-5" />
       </Link>
       <div className={cn('min-w-0', children ? 'hidden flex-1 md:block' : 'flex-1')}>

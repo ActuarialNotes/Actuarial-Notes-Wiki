@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { backLabel as backName, useBack } from '@/hooks/useBack'
+import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { BookOpen, ChevronLeft, LineChart, Loader2, Play, Radio, Swords } from 'lucide-react'
 import { CredibilityBar } from '@/components/actuaria/CredibilityBar'
@@ -52,6 +54,8 @@ export function SectorView({ world, battleCounts }: { world: ActuariaWorld; batt
 }
 
 function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: ActuariaWorld; battleCount: number }) {
+  // Back the way the reader came, or up to the map this sector is a sheet over.
+  const back = useBack({ to: '/actuaria/map', label: 'Star map' })
   const navigate = useNavigate()
   const openLandmark = useOpenLandmark()
   const records = world.recordsFor(sector.key)
@@ -71,10 +75,13 @@ function SectorDetail({ sector, world, battleCount }: { sector: Sector; world: A
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-4 sm:px-6 lg:py-6">
       <Link
-        to="/actuaria/map"
+        to={back.to}
+        state={RESTORE_SCROLL}
+        onClick={back.onLinkClick}
+        aria-label={backName(back)}
         className="-ml-1.5 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <ChevronLeft className="h-4 w-4" aria-hidden /> Star map
+        <ChevronLeft className="h-4 w-4" aria-hidden /> {back.label}
       </Link>
 
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center">

@@ -29,9 +29,11 @@ export interface SourcePageProps {
   entityId: string
   onOpenResource: (resource: SourceResource) => void
   onBack: () => void
+  /** Where `onBack` leads, named. */
+  backLabel?: string
 }
 
-export default function SourcePage({ entityId, onOpenResource, onBack }: SourcePageProps) {
+export default function SourcePage({ entityId, onOpenResource, onBack, backLabel = 'Sources' }: SourcePageProps) {
   const library = useCoworkLibrary()
   const covers = useCoworkCovers()
   const entity = useMemo(() => entityById(COWORK_ENTITIES, entityId), [entityId])
@@ -54,7 +56,7 @@ export default function SourcePage({ entityId, onOpenResource, onBack }: SourceP
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
-          Sources
+          {backLabel}
         </button>
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           That source is no longer in the catalogue.

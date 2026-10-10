@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { usePageLabel } from '@/hooks/useBack'
 import { ArrowLeft, Pencil, Plus } from 'lucide-react'
 import {
   STATUS_LABEL,
@@ -37,6 +38,8 @@ import { cn } from '@/lib/utils'
 export interface DeliverableDetailProps {
   deliverableId: string
   onBack: () => void
+  /** Where `onBack` leads, named. */
+  backLabel?: string
   onOpenResource: (resource: SourceResource) => void
   /** Sends the reader to the Sources tab to add something to their library. */
   onBrowseSources: () => void
@@ -45,6 +48,7 @@ export interface DeliverableDetailProps {
 export default function DeliverableDetail({
   deliverableId,
   onBack,
+  backLabel = 'Deliverables',
   onOpenResource,
   onBrowseSources,
 }: DeliverableDetailProps) {
@@ -54,6 +58,8 @@ export default function DeliverableDetail({
   const [editingTitle, setEditingTitle] = useState(false)
 
   const deliverable = deliverables.find(d => d.id === deliverableId)
+  // Named on its history entry, so a document opened from here says its way back.
+  usePageLabel(deliverable ? deliverableDisplayTitle(deliverable) : undefined)
 
   const steps = useMemo(() => (deliverable ? stepsFor(deliverable.type) : []), [deliverable])
 
@@ -83,7 +89,7 @@ export default function DeliverableDetail({
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
-          Deliverables
+          {backLabel}
         </button>
         <p className="rounded-lg border border-dashed px-4 py-10 text-center text-sm text-muted-foreground">
           That deliverable no longer exists.
@@ -116,7 +122,7 @@ export default function DeliverableDetail({
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden />
-          Deliverables
+          {backLabel}
         </button>
 
         <div className="mt-2 flex items-start gap-2">

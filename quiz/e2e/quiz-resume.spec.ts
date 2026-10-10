@@ -72,6 +72,29 @@ test.describe('quiz in progress', () => {
     await expect(page.getByRole('button', { name: /Next Question/ })).toHaveCount(0)
   })
 
+  // Quit leads back to where the quiz was started — here, Exam P's builder,
+  // still open — rather than the exam list (lib/navTrail.ts).
+  test('quitting returns to the builder the quiz was started from', async ({ page }) => {
+    const examP = page.locator('button[data-tour="quiz-exam-p"]')
+    const changeExam = page.getByRole('button', { name: 'Change exam' })
+    const start = page.locator('[data-tour="start-quiz"]')
+
+    await page.goto('/')
+    await examP.click()
+    await start.click()
+    await page.waitForURL('**/quiz?**')
+    const startQuiz = page.getByRole('button', { name: 'Start Quiz' })
+    const optionA = page.getByRole('button', { name: 'Option A' })
+    await expect(startQuiz.or(optionA).first()).toBeVisible()
+    if (await startQuiz.isVisible()) await startQuiz.click()
+    await expect(optionA).toBeVisible()
+    await page.getByRole('button', { name: /Quit quiz/ }).click()
+    await page.getByRole('dialog').getByRole('button', { name: /Quit quiz/ }).click()
+    await page.waitForURL(url => url.pathname === '/' && url.searchParams.has('topic'))
+    await expect(changeExam).toBeVisible()
+    await expect(pill(page)).toHaveCount(0)
+  })
+
   test.describe('with page moves animated', () => {
     // The route change after Quit is a view transition, which lands a frame or
     // two after the store resets; the quiz page must not start a new quiz in

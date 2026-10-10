@@ -347,16 +347,19 @@ before touching that area**:
   `quiz/skills/`.
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
   page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
-  calculators — eleven so far across reserving, ratemaking, credibility and financial maths —
+  calculators — thirty-two so far across reserving, ratemaking, loss distributions, credibility
+  and financial maths —
   that people use as a card (`components/tools/ToolCard.tsx`) and AI agents use through the
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
   `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
   **after any change under `lib/tools/`, run `npm run tools:bundle`** — `bundle.test.ts` fails
-  on a stale copy. Nine tools reproduce published worked examples in CI (§17): Friedland's and
-  Werner & Modlin's exhibits, read off the CAS PDFs by `scripts/tool_fixtures.py` into
-  `lib/tools/fixtures/*.json`, and SOA FM sample questions whose keyed answers `checks.test.ts`
-  reads from the bank. `lib/tools/checks.ts` is both the test list and what the card's "Tested
-  against" says, so nothing is claimed that doesn't pass. Each tool does one thing (one question, one method; bigger
+  on a stale copy. Every tool reproduces published work in CI (§17): Friedland's and Werner &
+  Modlin's exhibits, read off the CAS PDFs by `scripts/tool_fixtures.py` into
+  `lib/tools/fixtures/*.json`, and SOA FM / Exam P sample questions and CAS MAS-I/MAS-II past
+  papers whose keyed answers (a value, or a range) `checks.test.ts` reads from the bank — a
+  question check may chain tools, as Interest Converter → Annuity. `lib/tools/checks.ts` and
+  `questionChecks.ts` are both the test lists and what the card's "Tested against" says, so
+  nothing is claimed that doesn't pass. Each tool does one thing (one question, one method; bigger
   jobs chain tools), and each is one small live card in the distribution simulator's shape
   (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
@@ -1166,7 +1169,7 @@ Other important `lib/` modules:
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **202 test files /
-~3570 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~3790 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

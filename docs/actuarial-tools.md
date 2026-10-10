@@ -1,7 +1,8 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-09 · Status: **first set built** — eleven tools on the Tools page and in the
-MCP connector. §16 says what is built and what of this plan is still to do._
+_Last updated: 2026-10-10 · Status: **Phase 1 nearly built** — thirty-two tools on the Tools page
+and in the MCP connector, each checked against a published source. §16 says what is built and
+§15 what of Phase 1 is still to do._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -893,24 +894,46 @@ previous phase's tools pass R6.
 
 ## 15. Immediate next steps
 
-1. **Check the last two tools (R6).** Nine of the eleven reproduce a published example (§17).
-   Interest Converter and Annuity don't yet: the SOA FM sample set has no question either
-   answers on its own. Candidates are a textbook worked example (a Resources/Books FM text with
-   a free copy) or a chained check once Interest Converter can hand its rate to Annuity.
-2. Map more bank questions to tools (§9.2), so explanations gain **Work it in a tool** and the
-   agent eval has its set. Exam 5's reserving and ratemaking questions are the richest seam.
-3. Build the rest of Phase 1 (§11) on the card that now exists.
+1. **Finish Phase 1's tools (§11).** One tool is left, **Tail Factor**, waiting on a source
+   that prints a fitted tail to check it against (R6): Friedland's Chapter 7 discusses the
+   curves but its exhibits select the tail by judgment. Two parts of built tools are left too:
+   the callable bond's yield-to-worst (SOA FM sample questions 41, 136 and 292 would check it),
+   and Annuity solving for whichever of PV, payment, *n* or *i* is unknown.
+2. The Phase 1 workflow pieces: the MCP prompts `reserve_analysis` / `rate_indication` /
+   `check_my_work`, the `%%tool%%` marker on concept pages and the concept-menu row, saved runs,
+   and the OpenAPI export (§7.2).
+3. Map more bank questions to tools (§9.2) — now 46 — toward the 50 Phase 1's exit asks for,
+   and give the question explanations a **Work it in a tool** link. Exam 5's own past papers are
+   the richest seam left.
+4. The agent eval (§9.4): with 32 checked tools and their questions, the eval set exists.
 
-## 16. What's built (2026-10-09)
+## 16. What's built (2026-10-10)
 
-**Eleven tools**, each in its own file under `quiz/src/lib/tools/<area>/`:
+**Thirty-two tools**, each in its own file under `quiz/src/lib/tools/<area>/`, every one
+reproducing a published worked example or exam question in CI (§17):
 
 | Area | Tools |
 |---|---|
-| Reserving | Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson |
-| Ratemaking | Loss Ratio Method (with the variable permissible loss ratio as a tile) |
-| Credibility | Full Credibility Standard, Partial Credibility |
-| Financial mathematics | Interest Converter, Annuity, Present Value |
+| Reserving | Ratio Triangle, Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson, Benktander, Cape Cod |
+| Ratemaking | Earned Premium, On-Level Factors, Trend Fit, Trend Factor, Expense Ratios, Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method |
+| Loss distributions | Distribution, Limited Expected Value, Expected Payment |
+| Credibility | Full Credibility Standard, Partial Credibility, Bühlmann Credibility |
+| Financial mathematics | Interest Converter, Annuity, Present Value, Internal Rate of Return, Loan Schedule, Bond Price, Bond Yield, Bond Amortization, Duration & Convexity, Redington Immunization |
+
+Where the build departs from the §4 catalogue, it is to keep a tool to one job (R9) or to what a
+source can check:
+- **Bond Price ↔ Yield** is two tools, Bond Price and Bond Yield: one card with both a yield and
+  a price input would carry eight scalar inputs. Callable bonds wait (§15).
+- **Earned Premium** takes policies with their effective dates, as Werner & Modlin's Chapter 4
+  examples do, and aggregates by calendar or policy year as of a year end.
+- **Trend Factor** is the one-step trend from an accident or policy year's average accident date
+  to the future one; the two-step trend is Phase 2's.
+- **Limited Expected Value** and **Expected Payment** run seven loss models in closed form
+  (`distributions/lossModels.ts`: exponential, uniform, Pareto, single-parameter Pareto, gamma,
+  lognormal, Weibull), each tested against ∫ S(x) dx. Coinsurance multiplies both expected
+  payments, so it is said in the field's description rather than added as a seventh input.
+- **Distribution** is the simulators' catalogue (`lib/distributions.ts`), its parameters drawn
+  only for the family chosen (`showWhen`); R9's six-input rule counts what a card draws at once.
 
 **The engine** (`quiz/src/lib/tools/`): `types.ts` (the spec and the result envelope),
 `input.ts` (lenient in, strict out: `"5%"`, `"$1,200"`, a bare matrix for a triangle, rows as
@@ -942,52 +965,97 @@ method's concept pages in the concept popup, loading the wiki bundle on that fir
 `e2e/tools.spec.ts` covers the sidebar, a live recompute, an error kept to one line, Send to…,
 a run link and the phone fit.
 
-**Not built yet**, from §3–§11: published checks for Interest Converter and Annuity (§15);
-the agent eval (§9.4); `POST /api/tools/{id}` and the OpenAPI
-export (§7.2); the MCP prompts `reserve_analysis` / `rate_indication` / `check_my_work`; the
-`%%tool%%` marker on concept pages and the concept-menu row (§6.4); saved runs and Analyses
-(§6.5, §8.5); analytics events (§8.6); the notation and working as KaTeX rather than plain
-text.
+**Not built yet**, from §3–§11: the six Phase 1 tools and pieces in §15; the agent eval (§9.4);
+`POST /api/tools/{id}` and the OpenAPI export (§7.2); saved runs and Analyses (§6.5, §8.5);
+analytics events (§8.6); the notation and working as KaTeX rather than plain text.
+
+**The card's new shapes.** A tool may take several grids: Ratio Triangle's two triangles, each
+named, or On-Level Factors' rate changes beside the factors they produce. A `date` field (an
+effective date) is the browser's date picker over an ISO date; `lib/tools/dates.ts` reads the
+texts' `01/01/17` too, and measures time in months as Werner & Modlin do. A number field may
+set `sliderMin` where its valid range starts far below where values live (a year, a mean).
 
 ## 17. Tested against (R6)
 
-Nine tools reproduce published worked examples, value for value, in CI. One list,
-`quiz/src/lib/tools/checks.ts`, is both what `checks.test.ts` runs and what the card's ⋯ menu,
-the catalogue's tick and the connector's `tested_against` say, so a tool can only claim a check
-that passes.
+All thirty-two tools reproduce published work in CI: 495 printed values across 33 exhibits of the
+two Exam 5 texts, and 46 published exam questions. One pair of lists — `CHECKS` in
+`quiz/src/lib/tools/checks.ts` and `QUESTION_CHECKS` in `questionChecks.ts` — is both what
+`checks.test.ts` runs and what the card's ⋯ menu, the catalogue's tick and the connector's
+`tested_against` say, so a tool can only claim a check that passes.
 
 **Published documents (§9.1).** `scripts/tool_fixtures.py` reads the exhibits off the CAS's free
-copies of the two Exam 5 texts, mechanically, with no model retyping a number: the same rule as
-the question pipeline. It refuses a PDF whose sha256 isn't the printing it was written for, and
-records each exhibit's PDF page and printed page. The output is
-`quiz/src/lib/tools/fixtures/*.json`, committed. `scripts/test_tool_fixtures.py` tests its parsers.
+copies of Friedland and Werner & Modlin, mechanically, with no model retyping a number: the same
+rule as the question pipeline. It refuses a PDF whose sha256 isn't the printing it was written
+for, and records each exhibit's PDF page and printed page. Even an appendix's assumptions — the
+policy term, the effective date, how long rates are in effect — are read off its first page by a
+pattern, not typed. The output is `quiz/src/lib/tools/fixtures/*.json`, committed;
+`scripts/test_tool_fixtures.py` tests the parsers.
 
 | Tool | Source | Held to |
 |---|---|---|
-| Age-to-Age Factors | Friedland (2010), Ch. 7, Exhibit I, Sheet 1 | the 45 age-to-age factors, and all six rows of averages: simple, medial and volume-weighted over the latest 3 or 5, geometric over the latest 4 |
+| Ratio Triangle | Friedland (2010), Ch. 6, Tables 2, 3, 6, 8–10 | 56 ratios: paid-to-reported (Table 3 over Table 2) and closed-to-reported counts (Table 9 over Table 8) |
+| Age-to-Age Factors | Ch. 7, Exhibit I, Sheet 1 | the 45 age-to-age factors, and all six rows of averages: simple, medial and volume-weighted over the latest 3 or 5, geometric over the latest 4 |
 | Development to Ultimate | the same sheet, Part 4 | 10 CDFs and 10 percents reported, from the selected factors |
 | Chain Ladder | Ch. 7, Exhibit I, Sheet 3 | 20 ultimates, reported and paid |
 | Expected Claims | Ch. 8, Exhibit II, Sheet 1 | 10 expected claims, at each year's own ELR |
 | Bornhuetter-Ferguson | Ch. 9, Exhibit I, Sheet 1 | 60 values: percent unreported, expected unreported and ultimate, reported and paid |
-| Loss Ratio Method | Werner & Modlin (2016), Appendix A, LR Indication; Appendix C, LR Indication | the variable permissible loss ratio and indicated change, with and without a fixed provision |
+| Benktander | Ch. 9, Exhibits III and V | 60 ultimates under the changing-conditions scenarios, from Exhibit III's expected claims |
+| Cape Cod | Ch. 10, Exhibit I, Sheets 1–2 | the used-up premium, the 69.5% claim ratio, and 30 expected claims, IBNR and ultimates |
+| Earned Premium | Werner & Modlin (2016), Ch. 4, Tables 4.7, 4.11, 4.13, 4.18–4.21 | 24 written and earned exposures, annual and six-month policies, calendar and policy year |
+| On-Level Factors | Appendix A, Current Rate Level - 1 and - 2 | 35 shares of earned premium by rate level group, 5 average rate levels, 5 on-level factors |
+| Trend Fit | Appendix A, Premium Trend - 1; Loss Trend - 1 | 24 exponential fits: average premium, frequency, severity and pure premium over 20, 16, 12, 8, 6 and 4 points |
+| Trend Factor | Appendix A, Loss Trend - 5; Appendix B, Loss Trend - 3 | the projected trend periods (2.25 and 2.5 years) and factors |
+| Expense Ratios | Appendix A, Expense | each type's three-year ratio, fixed and variable share, and the 11.3% and 17.0% provisions |
+| Permissible Loss Ratio | Appendices A-7, B-5, C-7 | the (variable) permissible loss ratio of each indication |
+| Loss Ratio Method | Appendix A, LR Indication; Appendix C, LR Indication | the variable permissible loss ratio and indicated change, with and without a fixed provision |
+| Pure Premium Method | Appendix B, PP Indication | the 81.2% permissible loss ratio and the $850.76 indicated rate |
 | Full Credibility Standard | Werner & Modlin, Ch. 12, p. 218 | z and the 1,082-claim standard at p = 90%, k = 5% |
 | Partial Credibility | Werner & Modlin, Ch. 12, p. 219; Appendices A-8, B-5, C-7 | Z for 100, 3,612, 683 and 283 claims |
 
-Each value is compared at the precision the source prints: three decimals for factors, a tenth of
-a percent for percentages, a dollar for amounts.
+Each value is compared at the precision the source prints: three decimals for factors, four for
+rate levels, a tenth of a percent for percentages, a dollar or a cent for amounts. Where an
+exhibit's own inputs are printed rounded, the tolerance carries that rounding through the
+formula — ½(1 + q + q²) dollars for a Benktander ultimate, ½(1 + a/b)/b for a ratio of two
+amounts in $000 — and the comment beside the check says so.
 
-**Published questions (§9.2).** Present Value reproduces six SOA Exam FM sample questions (26, 71,
-82, 225, 245, 281). The official answer is never copied into the check: the test reads the keyed
-option from the bank, and requires the tool to land within its printed precision *and* nearer it
-than any other option. Every input's printed form is quoted from the question's stem, and the
-test finds each quote there.
+**Published questions (§9.2).** The official answer is never copied into a check: the test reads
+the keyed option from the bank and requires the tool to land within its printed precision *and*
+nearer it than any other option — or, for a CAS question answered by a range ("At least 21, but
+less than 23"), inside the keyed range. Every input's printed form is quoted from the question's
+stem, and the test finds each quote there. A check is a **chain** of runs, as a person or an agent
+would work the question, and every tool in the chain counts it — which is how Interest Converter
+and Annuity, which no question asks about alone, are checked.
 
-**Two conventions the checks surfaced**, now explicit options rather than silent choices (§13):
+| Tool | Questions |
+|---|---|
+| Present Value | SOA FM 26, 71, 82, 225, 245, 281 |
+| Interest Converter | SOA FM 90, 291, 367, 370 (chained) |
+| Annuity | SOA FM 334, 367 (chained) |
+| Internal Rate of Return | SOA FM 291, 334, 370 (chained) |
+| Loan Schedule | SOA FM 90, 190, 212, 232, 380 |
+| Bond Price, Bond Yield, Bond Amortization | SOA FM 71; 213, 325; 7, 281 |
+| Duration & Convexity, Redington Immunization | SOA FM 50, 101, 165, 183, 228, 372, 409, 429; 219 |
+| Distribution | SOA P 66, 124, 158, 164, 327, 355, 390, 670 |
+| Limited Expected Value, Expected Payment | SOA P 48, 50, 563; 337, 601, and CAS MAS-I Fall 2019 questions 1 and 23 |
+| Bühlmann Credibility | CAS MAS-II Fall 2018 questions 4 and 5 |
+
+**Conventions the checks surfaced**, now explicit options rather than silent choices (§13):
 - *Latest n.* Friedland averages the latest 3 or 5 years, and the geometric mean over 4. Age-to-Age
-  Factors' average is now two judgments, the method and the latest years (0 for all), and
-  Expected Claims takes an optional ELR per origin, as Friedland's Chapter 8 sets 75% and 65%.
+  Factors' average is two judgments, the method and the latest years (0 for all), and Expected
+  Claims takes an optional ELR per origin, as Friedland's Chapter 8 sets 75% and 65%.
 - *Rounded CDFs.* Friedland rounds each CDF to three decimals, and takes percent reported and the
   ultimates from the rounded CDF: unrounded, 1/1.0508 is 95.2% where the book prints 95.1%.
   Development to Ultimate has a **CDFs: Unrounded / 3 decimals** choice. The Chain Ladder and B-F
   checks take the printed CDFs as inputs, as a reader working the exhibit would.
-
+- *Rounded rate levels.* Werner & Modlin round each cumulative rate level to four decimals at
+  every step of the product (1.0973 × 0.98 → 1.0754, and on to 1.1857 where unrounded gives
+  1.1855), and the average level before dividing. On-Level Factors has a **Rate level indices:
+  Unrounded / 4 decimals** choice, half-up as a spreadsheet's ROUND.
+- *Percentages, not CDFs.* Friedland's changing-conditions scenarios are built from percentages
+  unreported (1.0%, 23.0%), and his Benktander arithmetic uses them, so that check gives the
+  CDF as 1 / (1 − the printed percentage). Exhibit V's reported claims under case strengthening
+  develop on averages printed only rounded, both ways, so those two scenarios aren't held to the
+  dollar; their paid claims are.
+- *Fits of printed figures.* Appendix A's trend fits reproduce from the averages and frequencies
+  the exhibit prints, not from the totals behind them (the 4-point premium fit is 1.95% from the
+  totals, 1.947% from the printed averages, and the exhibit prints 1.9%).

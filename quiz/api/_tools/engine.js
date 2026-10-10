@@ -9209,7 +9209,10 @@ CHECKS.push(
     const asOf = Number(table.years[table.years.length - 1].slice(3));
     return {
       tool: "ratemaking.earned_premium",
-      source: wernerRef({ ...exhibit, locator: `Chapter 4, Table ${[written, earned].filter((t, i, all) => t && all.indexOf(t) === i).join(" and ")}` }),
+      source: (() => {
+        const named = [written, earned].filter((t, i, all) => t && all.indexOf(t) === i);
+        return wernerRef({ ...exhibit, locator: `Chapter 4, Table${named.length > 1 ? "s" : ""} ${named.join(" and ")}` });
+      })(),
       cases: [{
         name: `${basis === "policy" ? "policy" : "calendar"} year exposures of ${term}-month policies, as of 12/31/${asOf}`,
         input: { term, basis, as_of: asOf, policies: table.policies.map((p2) => ({ policy: p2.policy, effective: p2.effective, amount: p2.exposure })) },

@@ -472,7 +472,7 @@ describe('the calculators — list_tools, describe_tool, run_tool', () => {
     const reserving = JSON.parse((await tool('list_tools', { area: 'reserving' })).text).tools
     expect(reserving.every((t: { area: string }) => t.area === 'Reserving')).toBe(true)
     const found = JSON.parse((await tool('list_tools', { query: 'credibility' })).text).tools
-    expect(found.map((t: { id: string }) => t.id)).toEqual(['credibility.full_credibility_standard', 'credibility.partial_credibility'])
+    expect(found.map((t: { id: string }) => t.id)).toEqual(['credibility.full_credibility_standard', 'credibility.partial_credibility', 'credibility.buhlmann_credibility'])
   })
 
   it('describes a tool with its schema and its method pages, linked where the notes have them', async () => {

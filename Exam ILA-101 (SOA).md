@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1d70adf0a2d537b240f8c2b5f4db076fcc33747407499de7cc455f28a420a23a
+  content_hash: sha256:699e03ee30b2ff0397941034d381267a2c273bd88d253576b9aa416b6664acae
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-101, all pages, sha256:6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf"
   open_findings: 0
@@ -112,7 +112,7 @@ verification:
 > The candidate will understand various techniques for addressing the mitigation of [[Risk|risk]] within a [[Life Insurance|life insurance]] and [[Annuity Contract|annuity context]].
 >
 > 1. Describe and evaluate approaches for [[Asset-Liability Management|integrating ALM]] into an [[Enterprise's Risk|enterprise's risk]] and financial management framework
-> 2. Describe and apply the basic concepts of [[Cash Flow Matching|cash flow matching]], [[Immunization|immunization]], [[Duration-convexity Matching|duration/convexity matching]], segmentation
+> 2. Describe and apply the basic concepts of [[Cash Flow Matching|cash flow matching]], [[Immunization|immunization]], [[Redington Immunization|duration/convexity matching]], segmentation
 > 3. Describe how [[Embedded Option|common insurance guarantees generate embedded options]] and calculate the value of these options
 > 4. Explain the function and attributes of [[Common Asset|common assets]] used to support [[Life Insurance|life insurance]] and [[Annuity Contract|annuity liabilities]]
 > 5. Describe basic terms, concepts, and types of [[Reinsurance Transaction|life insurance reinsurance arrangements]]

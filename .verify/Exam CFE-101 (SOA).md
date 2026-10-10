@@ -46,3 +46,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (Phase D alias table: variant spellings now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified before it (same source PDF, same sha256).
 - sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.
+
+## [C-005] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T09:03Z/80ef
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Re-check after a link-only regeneration (Phase D alias table, slash-separated phrases such as "legal cases/issues" now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified before it (same source PDF, same sha256).
+- sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

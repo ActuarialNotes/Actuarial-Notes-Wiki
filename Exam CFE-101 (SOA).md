@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:05f52a3c4baa65287ae980a284c1c120a15dbcd1485e0ff9c8410cbdf17f92c9
+  content_hash: sha256:078904a0a457388e030d79f23ba9a8325cc96014fe949715efeb8f5054f6b6d1
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf"
   open_findings: 0
@@ -149,7 +149,7 @@ verification:
 > 2. Demonstrate a conceptual understanding of economic measures of value and [[Regulatory Capital|capital requirements]] (e.g., EVA, embedded value, [[Economic Capital|economic capital]], regulatory measures, and accounting measures) and their uses in [[Decision-Making|decision-making processes]]
 > 3. Apply [[Risk|risk]] measures (such as VaR and TVaR) and demonstrate how to use them in value and [[Economic Capital|capital assessment]]
 > 4. Demonstrate the use of techniques to allocate [[Risk|risk]] once aggregated
-> 5. Propose techniques of attributing the “cost” of [[Risk-capital Strategy|risk/capital strategies]] to [[Business Unit|business units]] in order to [[Risk-Adjusted Performance|gauge performance]] (e.g. returns on [[Risk Capital|marginal capital]])
+> 5. Propose techniques of attributing the “cost” of [[Risk Capital|risk/capital strategies]] to [[Business Unit|business units]] in order to [[Risk-Adjusted Performance|gauge performance]] (e.g. returns on [[Risk Capital|marginal capital]])
 >
 > **Readings:**
 > - CFE101-103-25: ORSA and the Regulator (3.1a, 3.3b, 3.3c)

@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:de66bad933388cf8de15d3189c03344fd52a2ae9fa733a219a0c7a60c2fee825
+  content_hash: sha256:ad898081a0fe94c049fc95b9c0f9dc7ead65991c583ec4d0150b443c6b676887
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   open_findings: 1
@@ -82,12 +82,12 @@ verification:
 > 1. Describe and interpret the key elements of [[Tort Law|tort law]] and the underlying principles of [[Insurance Law|insurance law]].
 > 2. Discuss the issues of [[Social Inflation|tort trends]] and [[Tort Reform|tort reform]] as it applies to the general [[Insurance Industry|insurance industry]].
 > 3. Understand the effects of [[Transnational Tort Litigation|transnational tort litigation]].
-> 4. Understand [[Mass Torts-class Action Suit|mass torts/class action suits]] and discuss their effect on the general [[Insurance Industry|insurance industry]].
+> 4. Understand [[Mass Tort|mass torts/class action suits]] and discuss their effect on the general [[Insurance Industry|insurance industry]].
 > 5. Understand the use of [[No-Fault Insurance|no-fault insurance]].
 > 6. Understand the [[International Legal Environment|international legal environment]] as it relates to general insurance.
 > 7. Discuss the influence of the U.S. [[Transnational Tort Litigation|tort law environment]] in other countries.
 > 8. Discuss the issue of [[Social Inflation|social inflation]] and its effect on general insurance.
-> 9. Describe and interpret [[Legal Cases-issue|legal cases/issues]] included in the [[Syllabus Resource|syllabus resources]].
+> 9. Describe and interpret [[Court Case|legal cases/issues]] included in the [[Syllabus Resource|syllabus resources]].
 >
 > **Readings:**
 > - Excerpts from Business Law for Insurance Professionals, Assignments 1 & 2 (3a, 3i)

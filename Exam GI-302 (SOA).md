@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fc18bac2aad40ba7baaab8da17e79f412c50202c9894af17754f61600de178a1
+  content_hash: sha256:32c3a0a6c2e17a551b698a5cfa3f068e87a9b939682e6154992e9bb23426dcc4
   sources:
     - "SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf"
   open_findings: 0
@@ -78,7 +78,7 @@ verification:
 >
 > 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. statutory accounting and U.S. tax accounting for general [[Insurer|insurance companies]].
 > 2. Describe the elements of the [[NAIC Annual Statement]].
-> 3. Complete and interpret [[NAIC Annual Statement Pages-schedule|NAIC Annual Statement pages/schedules]] (as referenced in the resources).
+> 3. Complete and interpret [[Annual Statement Schedules|NAIC Annual Statement pages/schedules]] (as referenced in the resources).
 > 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[Risk-Based Capital|NAIC RBC]] and IRIS Ratios).
 >
 > **Readings:**

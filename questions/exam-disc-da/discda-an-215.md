@@ -32,10 +32,14 @@ Each row holds only the part of a term that falls in 2025, and only the claims w
 
 $$
 \begin{align*}
-e_{Q1} &= \tfrac{9}{12} = 0.75 \\
-e_{Q2} &= \tfrac{9}{12} = 0.75 \\
-e_{Q3} &= \tfrac{6}{12} = 0.50 \\
-e_{\text{total}} &= 2.00
+e_{Q1} &= \tfrac{9}{12} \\
+&= 0.75 \\
+e_{Q2} &= \tfrac{9}{12} \\
+&= 0.75 \\
+e_{Q3} &= \tfrac{6}{12} \\
+&= 0.50 \\
+e_{\text{total}} &= 0.75 + 0.75 + 0.50 \\
+&= 2.00
 \end{align*}
 $$
 

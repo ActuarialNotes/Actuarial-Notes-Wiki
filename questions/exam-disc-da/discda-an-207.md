@@ -34,9 +34,12 @@ In the training data, driver age has a standard deviation of 10 years and vehicl
 
 $$
 \begin{align*}
-d(R1) &= \sqrt{2^2 + 10{,}000^2} = 10{,}000.0 \\
-d(R2) &= \sqrt{20^2 + 1{,}000^2} = 1{,}000.2 \\
-d(R3) &= \sqrt{5^2 + 6{,}000^2} = 6{,}000.0
+d(R1) &= \sqrt{2^2 + 10{,}000^2} \\
+&= 10{,}000.0 \\
+d(R2) &= \sqrt{20^2 + 1{,}000^2} \\
+&= 1{,}000.2 \\
+d(R3) &= \sqrt{5^2 + 6{,}000^2} \\
+&= 6{,}000.0
 \end{align*}
 $$
 
@@ -46,9 +49,12 @@ R2 is nearest, although its driver is 20 years older.
 
 $$
 \begin{align*}
-d(R1) &= \sqrt{0.2^2 + 1.25^2} = 1.266 \\
-d(R2) &= \sqrt{2.0^2 + 0.125^2} = 2.004 \\
-d(R3) &= \sqrt{0.5^2 + 0.75^2} = 0.901
+d(R1) &= \sqrt{0.2^2 + 1.25^2} \\
+&= 1.266 \\
+d(R2) &= \sqrt{2.0^2 + 0.125^2} \\
+&= 2.004 \\
+d(R3) &= \sqrt{0.5^2 + 0.75^2} \\
+&= 0.901
 \end{align*}
 $$
 

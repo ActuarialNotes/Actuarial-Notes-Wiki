@@ -37,5 +37,5 @@ The answer is **D**.
 **Why not the others**
 
 - **A** — 0.125 sums only the two numeric contributions, 0.50, but divides by all four features, dropping the alarm mismatch.
-- **B** — 0.167 drops the alarm feature and averages the other three, $0.50 / 3$. The binary mismatch counts as 1.
+- **B** — 0.167 drops the alarm feature and averages the other three, $\tfrac{0.50}{3}$. The binary mismatch counts as 1.
 - **C** — 0.250 averages only the numeric features, ignoring both categorical ones.

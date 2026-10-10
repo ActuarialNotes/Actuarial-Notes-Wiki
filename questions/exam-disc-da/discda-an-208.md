@@ -12,7 +12,7 @@ answer: "B"
 points: 1
 ---
 
-Two claim records are compared on three standardized features. Their differences on the three features are 1.2, −0.5 and 0.9. What are the Euclidean and Manhattan distances between them?
+Two claim records are compared on three standardized features. Their differences on the three features are 1.2, -0.5 and 0.9. What are the Euclidean and Manhattan distances between them?
 
 - A) Euclidean 1.58 and Manhattan 1.58
 - B) Euclidean 1.58 and Manhattan 2.60
@@ -39,4 +39,4 @@ The answer is **B**.
 
 - **A** — gives the Euclidean value for both, as if the two measures were the same. Manhattan does not square or take a root.
 - **C** — 2.50 is the sum of squares before the square root is taken.
-- **D** — 1.60 adds the signed differences, $1.2 - 0.5 + 0.9$. A distance uses absolute values, so a negative difference still adds to it.
+- **D** — 1.60 adds the signed differences, 1.2 - 0.5 + 0.9. A distance uses absolute values, so a negative difference still adds to it.

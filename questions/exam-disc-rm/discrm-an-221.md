@@ -1,0 +1,32 @@
+---
+id: "discrm-an-221"
+exam: "Exam DISC-RM"
+topic: "Commercial General Liability"
+learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/Commercial+General+Liability
+  - Concepts/Products+and+Completed+Operations+Liability
+  - Concepts/Premises+and+Operations+Liability
+answer: "A"
+points: 1
+---
+
+A deck builder's CGL policy has a \$1,000,000 general aggregate and a \$1,000,000 products-completed operations aggregate. In one policy year: (1) a passer-by is hit by lumber falling from a deck the builder is still building; (2) a deck the builder finished and handed over last year collapses at a party, injuring guests. Which aggregate does each claim reduce?
+
+- A) (1) the general aggregate; (2) the products-completed operations aggregate
+- B) (1) the products-completed operations aggregate; (2) the general aggregate
+- C) Both reduce the general aggregate, because both arise from the builder's work
+- D) Both reduce the products-completed operations aggregate, because both involve decks
+
+## Explanation
+
+Injury during work in progress falls under premises and operations and is paid from the general aggregate. Injury away from the insured's premises arising from work it has completed falls within the products-completed operations hazard, which has its own aggregate. The answer is **A**. For an underwriter classifying a contractor, the two hazards are rated and limited separately for this reason.
+
+**Why not the others**
+
+- **B** — Reverses the two: the falling lumber is ongoing operations, and the collapse is completed work.
+- **C** — Charging a completed-work claim to the general aggregate understates what remains for later premises claims.
+- **D** — The hazard turns on whether the work was finished, not on the type of work.

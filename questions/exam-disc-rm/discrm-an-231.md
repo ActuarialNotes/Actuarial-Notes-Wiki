@@ -1,0 +1,41 @@
+---
+id: "discrm-an-231"
+exam: "Exam DISC-RM"
+topic: "Excess Insurance"
+learning_objective: "Underwriting Other Types of Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/Excess+Insurance
+  - Concepts/Umbrella+Liability+Insurance
+answer: "B"
+points: 1
+---
+
+An insured has a \$1,000,000 primary liability policy and a \$4,000,000 excess of \$1,000,000 excess liability policy. A single occurrence settles for \$6,500,000. How much does the excess policy pay?
+
+- A) \$1,500,000
+- B) \$4,000,000
+- C) \$5,500,000
+- D) \$6,500,000
+
+## Explanation
+
+The excess policy pays the part of the loss above its attachment point, up to its limit:
+
+$$
+\begin{align*}
+Y &= \min\big(\max(6{,}500{,}000 - 1{,}000{,}000,\ 0),\ 4{,}000{,}000\big) \\
+&= \min(5{,}500{,}000,\ 4{,}000{,}000) \\
+&= 4{,}000{,}000
+\end{align*}
+$$
+
+The primary pays \$1,000,000, the excess \$4,000,000, and the insured retains \$1,500,000. The answer is **B**.
+
+**Why not the others**
+
+- **A** — Is the amount above both layers, which the insured bears.
+- **C** — Forgets the excess limit.
+- **D** — Treats the excess policy as if it paid from the first dollar.

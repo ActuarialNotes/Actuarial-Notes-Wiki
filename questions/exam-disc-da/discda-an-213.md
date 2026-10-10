@@ -42,5 +42,5 @@ Three rows, two positive. The answer is **D**.
 **Why not the others**
 
 - **A** — uses incurred at the valuation date for every claim, including K3, mixing claims of different ages.
-- **B** — includes the immature K3 and labels K2 by its current value while labeling K3 by its current value too; the target is not consistent.
+- **B** — measures the mature claims at 18 months but keeps K3 with its current \$80,000 as a positive. K3 has not reached 18 months, so its target does not exist yet.
 - **C** — drops K3 correctly but labels K2 by its current \$70,000 rather than its 18-month value.

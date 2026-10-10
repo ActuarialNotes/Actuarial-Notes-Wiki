@@ -1,0 +1,43 @@
+---
+id: "discrm-an-220"
+exam: "Exam DISC-RM"
+topic: "Business Income Coverage"
+learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/Business+Income+Coverage
+  - Concepts/Insurance+to+Value
+  - Concepts/Coinsurance
+answer: "B"
+points: 1
+---
+
+A manufacturer buys business income coverage with a \$1,000,000 limit and a 50% coinsurance percentage. Its net income and operating expenses for the 12 months after the policy's inception, less the expenses the form deducts, are projected at \$2,400,000. A covered fire causes a business income loss of \$300,000. Ignoring the waiting period, how much does the insurer pay?
+
+- A) \$125,000
+- B) \$250,000
+- C) \$300,000
+- D) \$360,000
+
+## Explanation
+
+The insured needed $0.50 \times 2{,}400{,}000 = 1{,}200{,}000$ of insurance:
+
+$$
+\begin{align*}
+R &= \min\left(\frac{1{,}000{,}000}{0.50 \times 2{,}400{,}000},\ 1\right) \\
+&= 0.8333 \\
+\text{Paid} &= \min(0.8333 \times 300{,}000,\ 1{,}000{,}000) \\
+&= 250{,}000
+\end{align*}
+$$
+
+The answer is **B**. Insurance to value for business income is tested against projected income and expenses, not property values.
+
+**Why not the others**
+
+- **A** — Leaves the coinsurance percentage out of the denominator: $\frac{1{,}000{,}000}{2{,}400{,}000} \times 300{,}000$.
+- **C** — Ignores the coinsurance condition.
+- **D** — Inverts the ratio, which can never pay more than the loss.

@@ -50,10 +50,10 @@
 > > The deductible applies once to the total loss. The fire department charge is capped at \$500 and takes no deductible.
 
 > [!example]- Is It Covered Property? {Example}
-> Decide which coverage, if any, insures each item: (a) a detached garage the insured rents to a neighbor to store his boat; (b) a guest's suitcase damaged in a fire in the insured's home; (c) the insured's car, parked in the attached garage when it burns; (d) a riding mower used only to maintain the yard; (e) furniture the insured keeps in a self-storage unit, when Coverage C is \$200,000.
+> Decide which coverage, if any, insures each item: (a) a detached cottage on the residence premises that the insured rents to a college student; (b) a guest's suitcase damaged in a fire in the insured's home; (c) the insured's car, parked in the attached garage when it burns; (d) a riding mower used only to maintain the yard; (e) furniture the insured keeps in a self-storage unit, when Coverage C is \$200,000.
 >
 > > [!answer]-
-> > - **(a) Not covered:** Coverage B excludes a structure rented to someone who isn't a tenant of the dwelling, unless it is used solely as a private garage, and boat storage for a neighbor is not that.
+> > - **(a) Not covered:** Coverage B excludes a structure rented or held for rental to someone who isn't a tenant of the dwelling, unless it is used solely as a private garage.
 > > - **(b) Coverage C**, at the named insured's request after the loss, because a guest's property in a residence an insured occupies can be covered.
 > > - **(c) Not covered:** Motor vehicles are property not covered; the car belongs on the [[Auto Physical Damage Coverage|auto policy's physical damage coverage]]. The attached garage itself is Coverage A.
 > > - **(d) Coverage C:** An unregistered motor vehicle used solely to service the residence is an exception to the motor vehicle exclusion.

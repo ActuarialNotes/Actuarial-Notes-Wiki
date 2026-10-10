@@ -26,9 +26,11 @@ From the counts: $TP = 90$, $FP = 120 - 90 = 30$, $FN = 150 - 90 = 60$ and $TN =
 
 $$
 \begin{align*}
-\text{Precision} &= \frac{TP}{TP + FP} = \frac{90}{120} \\
+\text{Precision} &= \frac{TP}{TP + FP} \\
+&= \frac{90}{120} \\
 &= 0.75 \\
-\text{Recall} &= \frac{TP}{TP + FN} = \frac{90}{150} \\
+\text{Recall} &= \frac{TP}{TP + FN} \\
+&= \frac{90}{150} \\
 &= 0.60
 \end{align*}
 $$
@@ -39,4 +41,4 @@ Three of every four flagged claims recover, and the model finds 60% of all recov
 
 - **B** — swaps the denominators. Precision divides by what was flagged, recall by what was actually positive.
 - **C** — 0.91 is accuracy, $(90 + 820) / 1{,}000$, not precision.
-- **D** — 0.96 is specificity, $820 / 850$, the share of non-recoveries correctly left unflagged, not recall.
+- **D** — 0.96 is specificity, $\tfrac{820}{850}$, the share of non-recoveries correctly left unflagged, not recall.

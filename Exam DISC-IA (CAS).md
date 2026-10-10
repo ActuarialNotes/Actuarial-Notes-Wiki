@@ -144,17 +144,17 @@ The Institutes gives the topics no exam weights.
 > [!example]- 15. Insurance Law Part 2
 > 1. [[Strict Liability|Liability in Extraordinary Circumstances]]
 > 2. [[Products Liability]]
-> 3. [[Compensatory Damages|Damages]] in [[Tort Litigation|Tort Suits]]
+> 3. [[Compensatory Damages|Damages]] in Tort Suits
 > 4. [[Tort Law|Liability Concepts Affecting Tort Claims]]
 
 > [!example]- 16. Insurance Regulation
-> 1. Reasons for [[Insurance Regulation|Insurance Regulations]]
+> 1. [[Reasons for Insurance Regulation|Reasons for Insurance Regulations]]
 > 2. [[Insurance Regulator|Insurance Regulators]]
 > 3. [[Insurance Licensing|Licensing]] [[Insurer|Insurers]] and [[Insurance Producer|Insurance Personnel]]
 > 4. [[Solvency Monitoring|Monitoring Insurer Solvency]]
-> 5. [[Rate Regulation|Regulating Insurance Rates]]
+> 5. [[State Rating Laws|Regulating Insurance Rates]]
 > 6. [[Policy Form Regulation|Regulating Insurance Policies]]
-> 7. [[Market Conduct Regulation|Market Conduct and Consumer Protection]]
+> 7. [[State Market Conduct Regulation|Market Conduct and Consumer Protection]]
 
 ## Source Material
 > [!answer]- Source Material

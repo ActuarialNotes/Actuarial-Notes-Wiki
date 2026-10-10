@@ -39,6 +39,15 @@ verification:
 - **Log transforms** of skewed positive variables (claim sizes, exposures) are common in actuarial EDA
 - EDA informs feature engineering, transformation choices, and the selection of an appropriate [[Generalized Linear Model]] family and [[Link Function]]
 
+**Planning an exploration:**
+
+- **An iterative cycle:** EDA is not a fixed procedure. The analyst generates questions about the data, searches for answers by visualizing, transforming and modelling it, and uses what is learned to refine the questions or ask new ones. Each question focuses attention on one part of the data set and decides which graph, summary or transformation to make next
+- **Two questions are always useful:** what *variation* occurs within each variable (its typical values, rare values, clusters and unusual values), and what *covariation* occurs between variables (whether two or more tend to vary together). [[Exploratory Data Visualization]] and [[Types of Plots]] cover the plots that answer each
+- **Data quality comes first:** Even when the analysis's main questions are set in advance, EDA is needed to check whether the data meet expectations. Data cleaning is one application of it: an impossible value, a zero standing in for a missing value, or a duplicated record is found by looking ([[Data Validation]], [[Data Issues]])
+- **Goals:** The NIST handbook lists what EDA is for: to maximize insight into a data set, uncover its structure, extract the important variables, detect outliers and anomalies, test the assumptions a model will rely on, and develop parsimonious models. The analyst also needs to know what is *not* in the data
+- **Patterns lead to questions:** When a plot shows a pattern, ask whether it could be chance, how to describe the relationship and how strong it is, what other variable might affect it, and whether it holds within subgroups. A model can then remove a strong known relationship so that subtler ones show in the residuals
+- **Summaries alongside plots:** [[Summary Statistics]] such as counts, means, quantiles and the share of missing values support the plots, and every group summary should carry its count, so that a striking average resting on a few records is recognised
+
 ![[Media/Figures/Exploratory_Data_Analysis.svg|340]]
 
 > [!example]- Using a Box Plot to Detect Group Differences {Example}
@@ -46,3 +55,21 @@ verification:
 >
 > > [!answer]-
 > > The luxury class likely warrants a separate rating factor in the model (or a distinct coefficient). The high outliers suggest right-skewness; a **Gamma GLM with log link** may be more appropriate than ordinary linear regression. A log transformation of severity should also be considered for EDA plots to reduce the visual influence of extremes.
+
+> [!example]- Planning the First Questions for a Claims Data Set {Example}
+> An analyst receives a commercial auto claims file of 80,000 claims for a severity model, with paid amount, accident date, report date, vehicle class, driver age and state. Frame the first round of exploration.
+>
+> > [!answer]-
+> > Start with variation, one variable at a time: a histogram of paid amounts (and of their logarithm), a bar chart of vehicle class and state with counts, the range of driver ages, and the share of missing values in each field. Check the data's expectations as it goes: no report date before its accident date, no driver aged 0, no duplicated claim numbers.
+> >
+> > Then covariation: box plots of paid amount by vehicle class and by state, a scatter plot of paid amount against driver age, and a line chart of claim counts by accident month to see whether the volume shifts. Each answer suggests the next question: a state with unusually high severity leads to checking how many claims it has and whether one large loss drives it.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA** opens its topic on analyzing data with visualizations with planning an effective data exploration and data exploration fundamentals. Application questions describe a data set and a business question and ask what to explore first, which question about variation or covariation a plot answers, or what a finding implies for the next step.
+> - **MAS-I** asks candidates to interpret EDA plots for different data types, and **PA** and **PCPA** ask for the exploration of a data set before it is modelled.
+
+> [!warning]- Exam traps
+> - **EDA has no fixed script:** An answer that runs a set checklist and stops misses that each finding should generate the next question.
+> - **Exploration is not confirmation:** A pattern found while exploring is a hypothesis. It still has to be tested, and a relationship that disappears within subgroups was driven by something else.
+> - **Cleaning is part of EDA:** Data problems, such as missing values coded as zero, are found by exploring the data, not only by validation rules written in advance.
+

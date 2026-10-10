@@ -52,3 +52,12 @@ verification:
 > > \end{align*}
 > > $$
 > > The model forces every territory to be $e^{0.05} = 1.051$ times the one numbered below it — a smooth, monotone trend across labels whose order was set by whoever assigned the codes. Territory $5$ cannot be the worst unless $6$ to $8$ are worse still. Declared categorical, territory costs $7$ coefficients instead of $1$, but each is estimated from its own territory's data.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA** covers data classifications in its first topic, planning an insurer data modeling project. Application questions describe the columns of an insurance data set and ask how a field should be classified, or what goes wrong when a code stored as a number is treated as a measurement. The same course later classifies data by structure ([[Structured Data|structured]] or [[Unstructured Data|unstructured]]) and by source ([[Insurer Operational Data|insurer operational data]] or [[External Data|external data]]).
+> - **MAS-I** asks candidates to distinguish categorical, ordinal and continuous predictors in a GLM, so a question may give a variable and ask how it should enter the model.
+
+> [!warning]- Exam traps
+> - **A number is not always numeric:** Territory codes, class codes and ZIP codes are labels. Averaging them or fitting them as a single slope treats an arbitrary numbering as a measurement.
+> - **Ordinal is not interval:** An ordinal variable's levels are ordered, but the steps between them need not be equal, so coding credit tiers as 1 to 5 and fitting one slope assumes equal steps.
+> - **Count versus continuous:** A claim count is a non-negative integer and calls for a bar chart and a count model, not a histogram of a continuous variable.

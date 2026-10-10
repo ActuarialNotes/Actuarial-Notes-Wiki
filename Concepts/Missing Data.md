@@ -25,6 +25,12 @@ verification:
   - For a [[Categorical Predictor|categorical predictor]], an explicit **"Unknown" level** lets the GLM estimate the effect of missingness directly.
   - For a continuous predictor, impute the value **and** add a missing-value indicator.
 - Whatever is chosen has to be stated in the report, and it must be applied in exactly the same way when the model is used to score new business
+- **Null values in a database:** In [[SQL]] a missing value is a **null**, an unknown value, and it behaves differently from zero or a blank:
+  - A comparison with a null, such as `deductible = NULL` or `deductible <> 500`, gives null rather than true or false, so a `WHERE` condition never keeps the null rows. Test for them with `IS NULL` and `IS NOT NULL`.
+  - `COUNT(*)` counts every row, while `COUNT(column)` counts only the non-null values, and `SUM`, `AVG`, `MIN` and `MAX` use only the non-null values. A sum over no rows is null, not zero.
+  - `COALESCE(column, value)` returns the first of its arguments that is not null, which substitutes a default where the value is missing.
+  - A null key never matches in a [[Table Join|join]], so rows with null keys drop out of an inner join.
+  - In R a missing value is `NA`: `mean()` and `sum()` return `NA` unless told to remove missing values (`na.rm = TRUE`), and a [[Dataframe|dataframe]] in pandas tests for nulls with `isna()` and `notna()`.
 
 > [!example]- Missing as Its Own Level {Example}
 > In a homeowners frequency GLM (log link), roof age is missing for $9\%$ of policies. Binned roof age is fitted with an "Unknown" level, which gets a coefficient of $0.18$ relative to the base level (roofs $0$–$10$ years old). How should this be interpreted?
@@ -40,3 +46,14 @@ verification:
 > > Here missingness is tied to tenure, and tenure is tied to risk, so this is **not MCAR**. Dropping the rows removes all first-year business, and with it the higher-frequency risks. The model then understates the overall level, and it can never price a new customer.
 > >
 > > The better treatment keeps the rows and codes prior history as "none on file," a level of its own. Then the model can price new business, and the difference between a new customer and a claim-free renewal becomes a coefficient the actuary can inspect.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA** covers null values with indexes and user-defined functions in its topic on preparing data for analysis. Application questions give a table with nulls and a query and ask what it returns, such as a count or average with some values missing, or which condition finds the missing rows. Its topic on working with different types of data returns to missing values among the common data issues.
+> - **PCPA** asks candidates to identify and appropriately manage missing data in the project's data set, and **ATPA** to handle it by choosing among deleting the record, imputation and adding a missing-value flag, which turns on the type of missingness.
+
+> [!warning]- Exam traps
+> - **Null is not zero:** `AVG` ignores nulls, so it divides by the number of non-null values. Treating a null paid amount as zero lowers the average; dropping the row changes the count.
+> - **`= NULL` finds nothing:** Use `IS NULL`. A `<>` condition also silently drops the null rows.
+> - **Missing in disguise:** A $0$ age or a `9999` year built will not be found by a search for nulls. Look at each variable's distribution for impossible values.
+> - **Dropping rows is a choice with a bias:** Complete-case analysis is unbiased only when the values are missing completely at random. When missingness is tied to the risk, keep the rows and model the missingness.
+

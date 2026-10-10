@@ -19,6 +19,11 @@ verification:
 - **Friedland's verification checklist** (not an audit — see [[Data Quality]]): *consistency with financial statement data*; *consistency with the prior analysis's data*, with any difference explained; *reasonableness* — questionable values such as large negative paid claims or fields that contradict each other are investigated, though not presumed wrong; and *definitions* — know what each field means (incurred, reserves and paid all mean different things to different departments) and how often default values stand in for missing information.
 - **Typical errors:** transactions coded to the wrong accident period, line or coverage; payments not yet allocated to an accident period; impossible dates (a claim reported before it occurred, a policy effective after it expires); zero or negative exposure; duplicated or missing months; catastrophes and large losses flagged inconsistently.
 - **Definitional changes** masquerade as trends: counting per claimant instead of per occurrence, treating reopened claims as new, including ALAE, recording claims net or gross of [[Recoveries|recoveries]]. See [[Claims Coding Changes]] and [[Changing Conditions]].
+- **In a modelling data set** (the record-level data behind a predictive model), the common issues are found by looking at each variable and are handled case by case:
+  - *Unusual values:* an outlier may be a data entry error, a genuine extreme or a real discovery. Repeat the analysis with and without it; if it changes the result, find its cause before dropping it and disclose the removal. A value that cannot be true is better replaced by a missing value than deleted with its whole row ([[Outlier]]).
+  - *Missing values in disguise:* an impossible zero, such as a zero dimension, is often a missing value coded as zero, which a search for missing values will not find ([[Missing Data]]).
+  - *Duplicates:* a record loaded twice, or a [[Table Join|join]] on a key that repeats, inflates counts and totals. Counting occurrences of each key finds them.
+  - *Inconsistent coding and definitions:* the same quantity in different units, formats or bases across sources has to be put on one basis, as described under [[Data Documentation]] and [[Data Validation]].
 - **Exam 7 — issues in a stochastic triangle model** (Shapland's ODP bootstrap): *negative incremental values* (a modified log link handles them unless a whole column sums negative, which needs a constant shift; or model salvage and subrogation separately); *missing values* (estimate from surrounding cells, or exclude from the factors and residuals); *outliers* (exclude with care — skewed residuals are expected); *heteroscedasticity* (group development periods and adjust residuals, or sample within groups); *heteroecthesious data* — a partial first development period or partial last diagonal; and *exposure changes* (model losses per exposure). See [[Data Diagnostic Analysis]], [[Stochastic Reserving]], [[Missing Data]], [[Outlier]].
 - The end-of-analysis counterpart is [[Reasonableness Testing|reasonableness testing]] of the results: implied frequencies, severities, loss ratios and average unpaid per open claim by year.
 
@@ -68,3 +73,13 @@ verification:
 > > (The keyed value at $24$ months was $6{,}560 + 9 \times 580 = 11{,}780$.) Left in, the error would add $4{,}300 \times (1.905 - 1.644) = \$1{,}122$k at the $12$–$24$ step alone for AY $2024$, before the rest of the CDF compounds it; it would also depress AY $2021$'s later factors, since its base is inflated.
 > >
 > > Correcting the record is better than excluding the cell: exclusion loses a genuine observation, and in an ODP bootstrap an error left in the triangle becomes an extreme residual that is resampled into every other cell's variability.
+
+> [!tip]- How it appears on the exam
+> - **Exam 5** and **Exam 7** test data issues in reserving and ratemaking data: reconciling a triangle to the financial statements, spotting a keying error through an anomalous development factor, and recognising a definitional change that looks like a trend.
+> - **DISC-DA** covers addressing common data issues in its topic on working with different types of data, after [[Structured Data|structured]] and [[Unstructured Data|unstructured]] data. Application questions describe a problem in a modelling data set (an outlier, a duplicated record, an impossible value, inconsistent units) and ask how to detect it or what to do about it.
+
+> [!warning]- Exam traps
+> - **Investigate before deleting:** An extreme value that is genuine carries information. Dropping it without a cause, or without disclosing it, biases the data.
+> - **Drop the value, not the row:** Replacing one impossible value with a missing value keeps the rest of the record's information; deleting the row loses it.
+> - **A definitional change is not a trend:** A shift caused by counting claims differently, or by including ALAE, moves the data without any change in the underlying losses.
+

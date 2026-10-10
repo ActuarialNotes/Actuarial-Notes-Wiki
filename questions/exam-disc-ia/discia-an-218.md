@@ -11,13 +11,16 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4acfc13d60068184074effc273c1f5903c95f94983c1e26c133da23efe6f11f3
-  sources: []
-  open_findings: 0
+  sources:
+    - "Swiss Re Corporate Solutions, 'The importance of DIC, DIL and Financial Interest Coverage in international programs' (CMP = master policy in home country + local admitted policies; DIC/DIL respond only where a local policy exists; FINC reimburses the parent where non-admitted cover is not permitted; admitted vs non-admitted definitions), sha256:2252d9392876610ffb97be28f59f5d0f2f21de8237a33926e1dbf0bca3977c77 — https://corporatesolutions.swissre.com/insights/knowledge/importance-difference-conditions-difference-limits-financial-interest-coverage-international-programs.html"
+    - "Swiss Re Corporate Solutions, 'Understanding your insurance options as a multinational' (master policy fills gaps by DIC/DIL; FINC paid to parent), sha256:8406248fd1870138166482694739422df199a0ec1e40f1faf747cfae9ba66de2 — https://corporatesolutions.swissre.com/insights/knowledge/multinational-benefits-international-program.html"
+    - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-218.md
 ---

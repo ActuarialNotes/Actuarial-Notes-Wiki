@@ -13,12 +13,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2da5a67395a62e4104b4ce379301db84a3c3a40f6d7f3bc55c2f57c01b7513d8
-  sources: []
+  sources:
+    - "IRMI glossary, 'facultative reinsurance', sha256:35c79f8facd9aa07f36a730f73ab5f787ee1eb89c17d9385eb087734baeb822d — https://www.irmi.com/term/insurance-definitions/facultative-reinsurance"
+    - "IRMI glossary, 'treaty reinsurance', sha256:2ea6c4c63cd94dae4d5233cc2c30dd2524e3f201e938cebb96b290b1170b1cca — https://www.irmi.com/term/insurance-definitions/treaty-reinsurance"
+    - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-250.md

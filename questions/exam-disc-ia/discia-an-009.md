@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1558cafeb427ca6b97364753b77bab54420dbd57dc0649a24261b96364132938
-  sources: []
+  sources:
+    - "FASB Statement No. 168, The FASB Accounting Standards Codification and the Hierarchy of GAAP (June 2009), Summary, ¶6, ¶10-11 (PDF pp.3, 10-11), sha256:b0e4014d4ff284e082ac858fc585d9e39a364b30fa53354c472542105f5e6360 — https://storage.fasb.org/fas168.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-009.md

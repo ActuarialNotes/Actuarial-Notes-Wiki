@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:05d7996dfd1e68fa33b040e8790a961722c4065f094fb2b82dcdbb0991c53606
-  sources: []
+  sources:
+    - "Fla. Admin. Code R. 69O-189.003(4)(b) and (f) (via Cornell LII), voluntary-market minimum audit requirements, records examined, classification audits, sha256:a361d22c0e135409ed917b6df625d654dda03db24afd8fbd17602e93d6fff80f — https://www.law.cornell.edu/regulations/florida/Fla-Admin-Code-Ann-R-69O-189-003"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-237.md

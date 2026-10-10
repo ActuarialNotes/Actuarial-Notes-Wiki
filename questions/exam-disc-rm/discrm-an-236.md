@@ -12,12 +12,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:451ae0f7ef0207d33c8fea8a6c0016d1bbc96adfc5b73b39fee8d5a6648bdf80
-  sources: []
+  sources:
+    - "IRMI glossary, 'premium audit', sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit"
+    - "AF Group / Accident Fund, Premium Audit Process (web page, read 2026-10-10): estimate vs actual exposures and classifications, online/mail/phone/virtual/physical audits, audit noncompliance charge varies by state, sha256:bb3f82a60aebdb65467e3bf0144b0406cce6742e2713a6ea2c3df00b3f096259 — https://accidentfund.com/ph/premium-audit-process"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-236.md

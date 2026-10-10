@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:84781cad1ecd1234943bef213184e9e2c7f07b4f7e4efdf2108762539291506f
-  sources: []
+  sources:
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Condition L (p.16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "IRMI Insurance Glossary, 'mortgagee clause' (fetched 2026-10-10), sha256:cf74e45616f1ee2dec958c4f6eb9d8be1f8a676a89d5df0a72b2102b10fad1ed — https://www.irmi.com/term/insurance-definitions/mortgagee-clause"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-036.md

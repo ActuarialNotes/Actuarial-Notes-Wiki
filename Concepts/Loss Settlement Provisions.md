@@ -1,12 +1,18 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:da9dc0f21c213bdad171e9c21a960ebe6ff7b0d2f6260116cbaf2eef925ae3ff
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, E.7.c, G.1 (pp.13-15), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Condition E (p.15), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "IRMI Insurance Glossary, 'functional replacement cost' (fetched 2026-10-10), sha256:70469cded69b4322209026dd5af195bbe8ca95463f05dff062fad72e57a93e55 — https://www.irmi.com/term/insurance-definitions/functional-replacement-cost"
+    - "IRMI Insurance Glossary, 'pair or set clause' (fetched 2026-10-10), sha256:c1324d6e8a72839b73a5191202c6aa4ef2210a0cd3430f3733da6e982bf5b81e — https://www.irmi.com/term/insurance-definitions/pair-or-set-clause"
+    - "IRMI Insurance Glossary, 'book value' (fetched 2026-10-10), sha256:999cbf0ed845b3971668eaae1867ff6c90fd4249a091042c256f9f2d13fccd3a — https://www.irmi.com/term/insurance-definitions/book-value"
+    - "IRMI Insurance Glossary, 'actual cash value (ACV)' (fetched 2026-10-10), sha256:5f284ad72439afe65429eed3341df2aa74bdea4fe89c9f1835b801646fc5053a — https://www.irmi.com/term/insurance-definitions/actual-cash-value"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Loss Settlement Provisions.md
 ---

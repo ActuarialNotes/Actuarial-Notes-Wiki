@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cc2db9d948468b0397b12e56270e930094f7526e4f266ab03c7c64ac1a2ed8bc
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, D with Examples 1-2 (p.10), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-042.md

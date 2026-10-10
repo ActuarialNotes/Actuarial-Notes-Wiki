@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9714fb86621547b10c5fb797de79e7f6fedfcb50c3afeef44a5b0aa7855138b0
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7868fe2cf52e6a6b5f46af919e68d529ab5e701227bea761e5df70e0f3bf5490
+  sources:
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Exclusions A.3 water/flood, A.6 war (pp.12-13), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "Brainscape flashcards 'Assignment 5: Insurance as a Risk Management Technique' (CAS Online Course 1 pack), card 5, read via WebFetch 2026-10-10, no digest — https://brainscape.com/flashcards/assignment-5-insurance-as-a-risk-managem-12871202/packs/21196986"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurable Risk.md
 ---

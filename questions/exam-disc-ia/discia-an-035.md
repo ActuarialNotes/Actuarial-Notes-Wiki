@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8af385231d34677d3199b3f5d1b93285d0a56be537201fff6cddc09fa6885d9f
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'policy conditions' (fetched 2026-10-10), sha256:ab5225f0b2d79a69ce4994722a3f9db6e1b18a0820b75e48ea47fa46c0bae80f — https://www.irmi.com/term/insurance-definitions/policy-conditions"
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, E.3.a(2), (7) (p.11), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-035.md

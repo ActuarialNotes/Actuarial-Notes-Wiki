@@ -14,12 +14,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:64ae508e6218897df9923fa516d88186dcbcfe4cf0c8906eab2ffb8a2e6f6c6f
-  sources: []
+  sources:
+    - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), lead line, A, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-032.md

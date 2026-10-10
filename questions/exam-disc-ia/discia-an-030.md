@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aa04869ac5f89e37a6470937bdcdce91c21dd6ecb509c0bfc7d57f79fb7e85c7
-  sources: []
+  sources:
+    - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), F, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-030.md

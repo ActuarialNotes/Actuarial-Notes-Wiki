@@ -1,13 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:7ab96caff916014696504c66082568650d5e9ab1199868c5f9b07daf0593c071
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 80-81 (PDF pp. 92-93), Premium Development — incl. the workers compensation policy-year audit example and the 24-36 month factor 6.48/6.24 = 1.0385, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 p. 52 fn. 9 (PDF p. 64) and Ch. 5 p. 65 fn. 11 (PDF p. 77), policies subject to audit as the exception to CY = AY equivalence, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "AF Group / Accident Fund, Premium Audit Process (web page, read 2026-10-10): estimate vs actual exposures and classifications, online/mail/phone/virtual/physical audits, audit noncompliance charge varies by state, sha256:bb3f82a60aebdb65467e3bf0144b0406cce6742e2713a6ea2c3df00b3f096259 — https://accidentfund.com/ph/premium-audit-process"
+    - "Fla. Admin. Code R. 69O-189.003(4)(b) and (f) (via Cornell LII), voluntary-market minimum audit requirements, records examined, classification audits, sha256:a361d22c0e135409ed917b6df625d654dda03db24afd8fbd17602e93d6fff80f — https://www.law.cornell.edu/regulations/florida/Fla-Admin-Code-Ann-R-69O-189-003"
+    - "IRMI glossary, 'premium audit', sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Premium Audit.md

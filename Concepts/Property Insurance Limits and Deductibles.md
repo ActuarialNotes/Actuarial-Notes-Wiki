@@ -1,11 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5fb9389f2d69f6c433ecc44098ebb24390df32e96443d36a77b9e76548a50e77
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, C, D with Examples 1-2, F.1.b with Example 3, G.2 (pp.9-10, 14-15), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Condition B (p.13), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "ISO CP 00 30 04 02, Business Income (and Extra Expense) Coverage Form, Section F 'period of restoration' 3.a, sha256:d59821e8f40529ea18efd2ba10a26de2d12cc6c4fb49c68aefb4ef027ae2adfa — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2023/12/CP-00-30-04-02-Business-Income-And-Extra-Expense-Coverage-Form.pdf"
+    - "Insurance Information Institute, 'Background on: Hurricane and windstorm deductibles' (fetched 2026-10-10), sha256:ecec57ab215f3b39db8e058e8d5b1ad756bc8122ca381fa5191ac89655245b7c — https://www.iii.org/article/background-on-hurricane-and-windstorm-deductibles"
+    - "IRMI Insurance Glossary, 'blanket limit' (fetched 2026-10-10), sha256:10e936de05e54dee3eff832fb3c8d6582234245f2d79ea9e0b96eabbb227d04d — https://www.irmi.com/term/insurance-definitions/blanket-limit"
+    - "IRMI Insurance Glossary, 'schedule' (fetched 2026-10-10), sha256:1476b885c04ea1dd47c2c94e7d336e6255dcb183f602280bf70ac907e691b57c — https://www.irmi.com/term/insurance-definitions/schedule"
+    - "IRMI Insurance Glossary, 'sublimit' (fetched 2026-10-10), sha256:2ace12ec3200b909032cea6e33b019720321e96bc15899d9a1e63b6e3c4d1a4c — https://www.irmi.com/term/insurance-definitions/sublimit"
+    - "IRMI Insurance Glossary, 'margin clause' (fetched 2026-10-10), sha256:6c64d369833da5734c72797b5e5e8d857bc193011e708edd4d85da3cd98a806d — https://www.irmi.com/term/insurance-definitions/margin-clause"
+    - "IRMI Insurance Glossary, 'aggregate deductible' (fetched 2026-10-10), sha256:c4f3577bed73877f73ac0a44887f24e297649abb4e379b3052bc0c30ebf0dd36 — https://www.irmi.com/term/insurance-definitions/aggregate-deductible"
+    - "IRMI Insurance Glossary, 'franchise deductible' (fetched 2026-10-10), sha256:05a29aef8daf770696dd123bc6dbb5bc1622db43d10b995383537136da47bd57 — https://www.irmi.com/term/insurance-definitions/franchise-deductible"
+    - "IRMI Insurance Glossary, 'disappearing deductible' (fetched 2026-10-10), sha256:d318c5b3c31c516b27d9d86847c722c6209638fab9b271c0dfbb81dccdbd384d — https://www.irmi.com/term/insurance-definitions/disappearing-deductible"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Property Insurance Limits and Deductibles.md

@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aed889dbc669c594893eabe6df55e3c66c7f5526811479e1585266f885a73456
-  sources: []
+  sources:
+    - "Mastering Strategic Management (Saylor), §2.1 'Vision, Mission, and Goals' (SMART: specific, measurable, aggressive, realistic, time-bound), sha256:ce2ca9f214ccae5e2720019b07e6df2f3a792ffba13cbb8b019d2202bcd9ed4e — https://saylordotorg.github.io/text_mastering-strategic-management/s06-01-vision-mission-and-goals.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-258.md

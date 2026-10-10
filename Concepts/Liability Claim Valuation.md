@@ -1,11 +1,25 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9e98c68eeeedb6a8d5ecfbf9b735a21e9eb4140f490797dcaed1d848b209c7ee
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:741562629d41aa7456230859e21c14f3cf04310f9e1baa733a617372c57971af
+  sources:
+    - "Cornell LII Wex, 'comparative negligence' (fetched 2026-10-10), sha256:2f19566fa7f19db3c57ce3d0147aeaeebb7535d5e7d45ea9e111281973b8a240 — https://www.law.cornell.edu/wex/comparative_negligence"
+    - "Cornell LII Wex, 'contributory negligence' (fetched 2026-10-10), sha256:43c1fd0c3cba3b96f36050e083387b1fef7a79d117cc943b600de65e130958b6 — https://www.law.cornell.edu/wex/contributory_negligence"
+    - "Cornell LII Wex, 'joint and several liability' (fetched 2026-10-10), sha256:907bf1f785eab437a0b3da0331f065d205461aad65c49955408c9687146bdf55 — https://www.law.cornell.edu/wex/joint_and_several_liability"
+    - "Cornell LII Wex, 'liability' (fetched 2026-10-10), sha256:5e5133629e30514829c097894862e195692f293ec1d6328976c8c51f9299084b — https://www.law.cornell.edu/wex/liability"
+    - "Cornell LII Wex, 'special damages' (fetched 2026-10-10), sha256:50a0d567faf8e938120a8709acd04442ee0437f98dc5e175332ffb6f96c4f848 — https://www.law.cornell.edu/wex/special_damages"
+    - "Cornell LII Wex, 'general damages' (fetched 2026-10-10), sha256:73b3dfcd9c5034fa1de640407d282759b73b3c8dd99c158ba6bee25aec98467d — https://www.law.cornell.edu/wex/general_damages"
+    - "Cornell LII Wex, 'pain and suffering' (fetched 2026-10-10), sha256:8bebda58f72744ca76736c295defa015303743f52b27e54eb56af05443504a8f — https://www.law.cornell.edu/wex/pain_and_suffering"
+    - "Cornell LII Wex, 'compensatory damages' (fetched 2026-10-10), sha256:92774229ad1d9384ec8fcb5661d421edc88df5736e2e901f042c3cf93c07a4d5 — https://www.law.cornell.edu/wex/compensatory_damages"
+    - "Cornell LII Wex, 'punitive damages' (fetched 2026-10-10), sha256:d7d3c177c6bb8aff7989985bdb69ed4452bf7457888735cde1ebf97b7586b7ec — https://www.law.cornell.edu/wex/punitive_damages"
+    - "Cornell LII Wex, 'collateral source rule' (fetched 2026-10-10), sha256:68039d6a72a6692b38df2497943d4749ae907b17351045a558d3eb2577fc71c6 — https://www.law.cornell.edu/wex/collateral_source_rule"
+    - "Cornell LII Wex, 'mitigation of damages' (fetched 2026-10-10), sha256:bbeb6c3bbe7435cfc3bdde7b4b9c37374d4021ec944f3544c3213d37b070ce4e — https://www.law.cornell.edu/wex/mitigation_of_damages"
+    - "Cornell LII Wex, 'venue' (fetched 2026-10-10), sha256:e5b2203bc173822a183dbf32b045ef06fad619404c8cbf8f6e99b9e033e92881 — https://www.law.cornell.edu/wex/venue"
+    - "NAIC, Insurance Topics: Social Inflation (Last Updated 12/19/2025), read via WebFetch 2026-10-10 (host refuses scripted fetch, no digest) — https://content.naic.org/insurance-topics/social-inflation"
+    - "ISO CG 00 01 04 13, Commercial General Liability Coverage Form (Cooper & Scully copy), Coverage A 1.a(2); Supplementary Payments 1.a-g (pp.1, 8-9), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Liability Claim Valuation.md
@@ -25,7 +39,7 @@ verification:
 - **Several defendants:** Where defendants are jointly and severally liable, the plaintiff can collect the whole judgment from any one of them, who must then seek contribution from the others and bears the loss if they cannot pay. In a state with several liability only, each defendant pays only its own share. An insured co-defendant in a joint and several state can therefore be worth far more to the claimant than its share of fault ([[Joint and Several Liability]]).
 - **Special and general damages:** Special damages can actually be ascertained, such as medical expenses or the cost of repairing a dented car. General damages have no set monetary cost, such as pain and suffering, the physical discomfort and emotional distress that accompany an injury, which are noneconomic damages. Courts measuring compensatory damages look at the market value of damaged property, lost wages and necessarily incurred expenses, and may include emotional distress, though its application is inconsistent because it is hard to price.
 - **Punitive damages:** Punitive damages are awarded in addition to compensatory damages when the defendant's conduct was particularly harmful, for example an intentional tort or wanton and willful misconduct. They punish rather than compensate, so they are not part of $S + G$, and whether a liability policy pays them depends on the policy and on the law that applies to it.
-- **Rules that adjust the award:** The claimant cannot recover damages that reasonable efforts would have avoided (mitigation). Under the **collateral source rule**, damages are generally not reduced by compensation the claimant received from others, such as health insurance or workers compensation, and the defendant may not tell the jury about it, though there are exceptions ([[Collateral Benefits]]).
+- **Rules that adjust the award:** The claimant cannot recover damages that reasonable efforts would have avoided (mitigation). Under the **collateral source rule**, damages are generally not reduced by compensation the claimant received from others, such as health insurance or workers compensation, and the defendant may not tell the jury about it, though there are exceptions.
 - **The claimant and the jurisdiction:** Venue, the place of trial, is set by statute, and a claim can often be brought in more than one place. The NAIC notes that the demographic makeup of jury pools, public distrust of large corporations, and social media and legal marketing can all influence jury verdicts and awards, and that third-party litigation funding lets investors finance plaintiffs' suits for a share of the settlement. Verdicts above \$10 million are called [[Nuclear Verdicts|nuclear verdicts]], and claim costs rising faster than general inflation for these reasons are [[Social Inflation|social inflation]].
 - **Defense costs and limits:** Under the ISO CGL form (CG 00 01 04 13), the insurer's own claim expenses, certain bond costs, the insured's reasonable expenses at the insurer's request, court costs and interest are supplementary payments that do not reduce the limits ([[CGL Supplementary Payments]]). Damages are paid only up to the limit, and the duty to defend ends when the limit is used up in judgments or settlements. A claim worth more than the limit leaves the excess with the insured, or with an [[Umbrella Liability Insurance|umbrella policy]].
 

@@ -1,12 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:564c5dae981708e01cbdba02ba806761afe49c319e8efbecddd4d78939005b45
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Coverage Analysis.md
 ---

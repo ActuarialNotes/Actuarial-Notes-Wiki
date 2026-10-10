@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:96a1886b7a2e3516bf33561efcb75e092719eb811fdc07e252b877da85285284
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, F.1.b with Example 3, G.1 (pp.14-15), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "IRMI Insurance Glossary, 'blanket limit' (fetched 2026-10-10), sha256:10e936de05e54dee3eff832fb3c8d6582234245f2d79ea9e0b96eabbb227d04d — https://www.irmi.com/term/insurance-definitions/blanket-limit"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-044.md

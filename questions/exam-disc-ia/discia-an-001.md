@@ -11,12 +11,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6e9592f8f1d5d5373f0b0e5f879d88cf5aaf7bbbafdea2d186d115fc967e7012
-  sources: []
+  sources:
+    - "FASB, Concepts Statement No. 8, Conceptual Framework for Financial Reporting (as amended), QC29 timeliness, QC14 neutrality, QC20-QC23 comparability, QC26 verifiability (PDF pp.28-31), sha256:30fc0735a3362490d5708953fbbb78ee9e6baf2e05fa02efd1e753d5aa2effae — https://storage.fasb.org/Concepts_Statement_No._8_(As_Amended).pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-001.md

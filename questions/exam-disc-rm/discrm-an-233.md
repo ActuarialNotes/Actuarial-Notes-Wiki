@@ -12,13 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9c9c85966774a68ef165cdd2d6759cadfefc37e59a803b0722bc581b50d55d0d
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-233.md
 ---

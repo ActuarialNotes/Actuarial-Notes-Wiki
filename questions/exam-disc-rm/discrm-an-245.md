@@ -12,13 +12,15 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:41741446cf5429e75d7ac182087195d6eb08696754824f43e8a73c211392833d
-  sources: []
-  open_findings: 0
+  sources:
+    - "Dunn & Fencl, Reservation of Rights 101 (ALFA International), §§1, 3: ROR generally unilateral, non-waiver agreement sometimes bilateral, untimely ROR risks waiver/estoppel, jurisdictional variation, sha256:bcfbba032e5df89d121c693bc0226a8b0c8e9f90c9f3d8a84ef46879cc162d08 — https://www.alfainternational.com/publications_news/reservation-of-rights-101/"
+    - "IRMI glossary, 'reservation of rights', sha256:ada48198a157a8c1c8d24b80c061118d4ac01e8fdc21df0f28d2cba0746333b4 — https://www.irmi.com/term/insurance-definitions/reservation-of-rights"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-245.md
 ---

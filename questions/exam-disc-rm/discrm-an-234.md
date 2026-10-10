@@ -13,12 +13,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8010d495dc7c2e49f25dd00c8f38f514ec030b11d7165be74ea5dcb380212293
-  sources: []
+  sources:
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor), §7.1, 'engineering and loss control' services, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
+    - "IRMI glossary, 'risk control', sha256:d1e631a123ad2a66372fb3e2404d1aff925e3588718b570ffbb1fb22c3aaeb61 — https://www.irmi.com/term/insurance-definitions/risk-control"
+    - "Risk & Insurance Education Alliance, 'Six Steps of the Underwriting Process' (30 Jan 2023): underwriters order loss control inspections; follow-up on loss control recommendations, sha256:ee0156096b5f8c331aae216b138dcade35da2127854d0bee28423df26c0d2ba0 — https://www.riskeducation.org/six-steps-of-the-underwriting-process/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-234.md

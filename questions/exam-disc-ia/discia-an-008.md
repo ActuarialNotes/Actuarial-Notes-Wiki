@@ -9,16 +9,16 @@ bloom: understand
 wiki_link:
   - Concepts/Accounting+Rule+Hierarchy
   - Concepts/Statutory+Accounting+Principles
-  - Concepts/Notes+to+Financial+Statements
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:59250273e702d2f17be27a42eaef7c76534b8baafa5c5e02c52f99ed2ad6523c
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d350953c09d47de23c375fabc7960d945111882bbc5b70d5821d457ac07efedf
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble Q&A Q2 (PDF p.44); SSAP No. 1 ¶7 (PDF p.48), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-008.md

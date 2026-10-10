@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ce861b2f2d37005df4e92a765d4831758f7b73ab01351dbdd1a4628c39ec87f4
-  sources: []
-  open_findings: 0
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), §1A pp.3–4, §1B pp.9–12, §2A pp.14–15, casualty layers pp.22–23, 27, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
+    - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
+    - "IRMI glossary, 'surplus share', sha256:ed71737b7b895e79a3c5a11fdd70d35675c6d78baf97a62dd3ae544c84f66d13 — https://www.irmi.com/term/insurance-definitions/surplus-share"
+    - "IRMI glossary, 'ceding commission', sha256:88a3389009b6868cb1b320484faec2ea1d2e744f5e74e14631b2cebe31600323 — https://www.irmi.com/term/insurance-definitions/ceding-commission"
+    - "IRMI glossary, 'pro rata reinsurance', sha256:87029130ba567ffc15e84988e1569b5582477b2cb4c4f27db17e5717c4a85c6f — https://www.irmi.com/term/insurance-definitions/pro-rata-reinsurance"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Pro Rata Reinsurance.md
 ---

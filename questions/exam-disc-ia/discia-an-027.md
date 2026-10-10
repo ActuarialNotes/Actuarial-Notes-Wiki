@@ -12,12 +12,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:155bc4944355c1fdfe1f2258ea33f441f3d1e7e387969a7bc9229ea6815023d3
-  sources: []
+  sources:
+    - "Cornell LII Wex, 'contra proferentem' (fetched 2026-10-10), sha256:e17e688d536be7c5603d1061dd780ba795f218487fddb7b78bff817bb6f654f1 — https://www.law.cornell.edu/wex/contra_proferentem"
+    - "Cornell LII Wex, 'adhesion contract (contract of adhesion)' (fetched 2026-10-10), sha256:6cb7999ec8c8f828d339722af1b7e4a3944886565464c14ef86ac9571e590b6f — https://www.law.cornell.edu/wex/adhesion_contract_(contract_of_adhesion)"
+    - "IRMI Insurance Glossary, 'contract of adhesion' (fetched 2026-10-10), sha256:64f617126822d706a84424cebea9fe563ab5dc025514a2d384cfc3ff3049cc2b — https://www.irmi.com/term/insurance-definitions/contract-of-adhesion"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-027.md

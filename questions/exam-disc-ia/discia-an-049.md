@@ -9,16 +9,18 @@ bloom: apply
 wiki_link:
   - Concepts/Liability+Claim+Valuation
   - Concepts/Compensatory+Damages
-  - Concepts/Collateral+Benefits
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9841490dc382995f1dc410389d67423957b828b7acb6a95db4dca2caa4b1e694
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:45ff837bdae0cffa7343fbc05499d2a5b26704cacceb17eaefdf8f946686351d
+  sources:
+    - "Cornell LII Wex, 'special damages' (fetched 2026-10-10), sha256:50a0d567faf8e938120a8709acd04442ee0437f98dc5e175332ffb6f96c4f848 — https://www.law.cornell.edu/wex/special_damages"
+    - "Cornell LII Wex, 'pain and suffering' (fetched 2026-10-10), sha256:8bebda58f72744ca76736c295defa015303743f52b27e54eb56af05443504a8f — https://www.law.cornell.edu/wex/pain_and_suffering"
+    - "Cornell LII Wex, 'collateral source rule' (fetched 2026-10-10), sha256:68039d6a72a6692b38df2497943d4749ae907b17351045a558d3eb2577fc71c6 — https://www.law.cornell.edu/wex/collateral_source_rule"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-049.md

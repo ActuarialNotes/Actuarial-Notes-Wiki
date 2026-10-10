@@ -12,12 +12,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e3a8776df0ab84c9baef4e58ebcc508af849e42ab0a8c0348820b4ba8f57b2ec
-  sources: []
+  sources:
+    - "Wollner, 'A Vote Against Broker-Drafted Manuscript Policies (in Most Cases)', IRMI Expert Commentary, April 2003 (fetched 2026-10-10), sha256:1f2013a05d6dce9552c6be284676609dfeb4b93f96402d918d29bc1419175407 — https://www.irmi.com/articles/expert-commentary/a-vote-against-broker-drafted-manuscript-policies-in-most-cases"
+    - "IRMI Insurance Glossary, 'manuscript form or policy' (fetched 2026-10-10), sha256:d5cb32be678fc42bc2d7a367be03e7046cb8a470cd2b332eb72ee9d7eb9a9775 — https://www.irmi.com/term/insurance-definitions/manuscript-form-or-policy"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-033.md

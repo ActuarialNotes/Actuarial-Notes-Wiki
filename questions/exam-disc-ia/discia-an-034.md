@@ -11,12 +11,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b8d4529a52511cdeac479f555a70ed11f18a1b066c72f3e9c10e3ba855a43f36
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'pure risk' (fetched 2026-10-10), sha256:53c02db03b0c4161afef15f3c858c900ee18e236a7a33bad7d389f085eabe39d — https://www.irmi.com/term/insurance-definitions/pure-risk"
+    - "IRMI Insurance Glossary, 'speculative risk' (fetched 2026-10-10), sha256:33cd8e29012019052d89c1dafc07296e1b395ae4bb0addc4f1e6b9d23ade348e — https://www.irmi.com/term/insurance-definitions/speculative-risk"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-034.md

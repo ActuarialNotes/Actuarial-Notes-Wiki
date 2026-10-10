@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c87342b6d361de906bf497d4b3b8f048e3cbab9055b00ecaa705d10a970f963d
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'actual cash value (ACV)' (fetched 2026-10-10), sha256:5f284ad72439afe65429eed3341df2aa74bdea4fe89c9f1835b801646fc5053a — https://www.irmi.com/term/insurance-definitions/actual-cash-value"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-038.md

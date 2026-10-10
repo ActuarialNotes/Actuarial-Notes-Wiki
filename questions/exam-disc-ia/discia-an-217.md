@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a8a998e6fbb02e87a2cabe7508a155eb0a36d86ef28f9430cc6e726c4a4ba8ad
-  sources: []
+  sources:
+    - "Beazley Breach Response policy (Certain Underwriters at Lloyd's, US, NAPA program copy), Declarations pp.1-2 (aggregate limit with regulatory sublimit; breach response services limits; retentions), Insuring Agreements A-E pp.5-7 (privacy & security liability claims-made, breach response services, regulatory, website media, PCI), Exclusion T war p.14, First Party Computer Security endorsement p.37 (cyber extortion, data protection, business interruption; 12-hour waiting period; electrical/telecom infrastructure exclusion), sha256:f37a11b2fd6e195a777b8487c8d2bdc7c044b8c33e50092b9c71d6bf88598acb — https://www.napa-benefits.org/assets/pdf/policy/cyber/cyber-1m.pdf"
+    - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-217.md

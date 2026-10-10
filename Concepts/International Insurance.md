@@ -2,13 +2,18 @@
 aliases:
   - International Business
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:310e2ddad33f4faf7003598c23fe4cea1bd0976219759d7b666f9f602fef4ac8
-  sources: []
-  open_findings: 0
+  sources:
+    - "Swiss Re Corporate Solutions, 'The importance of DIC, DIL and Financial Interest Coverage in international programs' (CMP = master policy in home country + local admitted policies; DIC/DIL respond only where a local policy exists; FINC reimburses the parent where non-admitted cover is not permitted; admitted vs non-admitted definitions), sha256:2252d9392876610ffb97be28f59f5d0f2f21de8237a33926e1dbf0bca3977c77 — https://corporatesolutions.swissre.com/insights/knowledge/importance-difference-conditions-difference-limits-financial-interest-coverage-international-programs.html"
+    - "Swiss Re Corporate Solutions, 'Understanding your insurance options as a multinational' (master policy fills gaps by DIC/DIL; FINC paid to parent), sha256:8406248fd1870138166482694739422df199a0ec1e40f1faf747cfae9ba66de2 — https://corporatesolutions.swissre.com/insights/knowledge/multinational-benefits-international-program.html"
+    - "Chubb, Global Risk Spotlight: Navigating the Nuances of DIC and DIL Clauses (Canada), pp.2-4 (CMP; BRIC countries prohibit non-admitted insurance; penalties for unlicensed carriers paying claims locally), sha256:a74697f7fd3f83b2c85ed987fc15e2c260f6d5d6833eaf493b6fbf46fef63d61 — https://www.chubb.com/content/dam/chubb-sites/chubb-com/ca-en/hosted-docs/multinational-page/global-risk-spotlight-navigating-the-nuances-of-dic-and-dil-clauses-canada.pdf"
+    - "SOA GI-201 Syllabus (2026-2027), outcome 1j (issues regarding international business) and reading 'Financial Considerations in International Business' (Business Law for Insurance Professionals, Assignment 3, pp.3.29-3.39), PDF pp.2,5, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
+    - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/International Insurance.md
 ---

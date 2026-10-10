@@ -16,12 +16,19 @@ wiki_link:
   - Concepts/Pareto+Distribution
 points: 4
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fa454c3125e2127c8eebe4f4cdd36d74c7052d26532f265c3e6aebc44aa81ce8
-  sources: []
+  content_hash: sha256:385fd2f9f959834cbef7d3d4c8319927aa886d068c07c3050c2eadfa6bda45be
+  sources:
+    - "Brunner, \"Exploring the hazard function of the gamma distribution\", STA312 F23 lecture notes (U. Toronto, CC BY-SA), p.1 (alpha=1: exponential, hazard constant at lambda); p.12 (alpha > 1: h(t) increasing and bounded above by lambda; alpha < 1: decreasing), rate lambda = 1/theta, sha256:af161497b7e389ccd381754c64741ddf7ef2209e9702094ce9c08906a6572428 — https://utstat.utoronto.ca/~brunner/oldclass/312f23/lectures/312f23Hazardplots.pdf"
+    - "\"Some Ageing Properties of Dynamic Additive Mean Residual Life Model\" (arXiv:1705.10238), p.5 proof: \"since X is IFR, it is also DMRL, so that m_X(t) is decreasing in t\" (increasing failure rate implies decreasing mean residual life), sha256:8bd0d6953690e43efe9ac7b128dd543bb801ff3c0e8ae036aec408dffdf04205 — https://arxiv.org/pdf/1705.10238"
+    - "Ghosh & Resnick, \"A Discussion on Mean Excess Plots\" (arXiv:0907.5236v2), pp.1-2 (Pareto/GPD mean excess linear; exponential constant), p.19 (lognormal mean excess ~ u/ln u, rising), sha256:5ae739d69bff50980752dc2c83c3c5d952464e245d3f0ee9bbe097306cbbfbed — https://arxiv.org/pdf/0907.5236"
+    - "Siegrist, randomservices.org, ch.5 The Weibull Distribution, failure rate r(t) = k t^(k-1): decreasing for k < 1, increasing without bound for k > 1; ln(-ln S) linear in ln t, sha256:d673ebeb4242d5daa56d213fd6245374f7ead872173ad01ad58e5e74ee4bc57f — https://www.randomservices.org/random/special/Weibull.html"
+    - "Frees et al., Loss Data Analytics (open text), ch.3 Modeling Loss Severity, 3.2.2 Pareto hazard function decreasing (heavy tail), sha256:263021bf543b04b2881284b38b7dcbd0586b78daec371b88a1eefcd362dff732 — https://openacttexts.github.io/Loss-Data-Analytics/ChapSeverity.html"
+    - "CAS Exam MAS-I Tables, A.3.2.3 Weibull F(x) = 1 - exp(-(x/theta)^tau), PDF p.12, sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "CAS Exam MAS-I Content Outline 2026, Domain B tasks and readings (Tse 2.2-2.5), PDF pp.4, 6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-072.md
@@ -87,4 +94,4 @@ The empirical hazard rate rises with claim size and then levels off, and the mea
 B
 
 ### Explanation
-A gamma with shape $\alpha > 1$ has an increasing hazard rate that approaches $\theta^{-1}$ from below, so its tail behaves ever more like an exponential with mean $\theta$; its mean excess loss accordingly falls toward $\theta$. A Weibull with shape above 1 also has a rising hazard, but it keeps rising without limit — and that option is not offered. **A** has a constant hazard from the start; **C**, **D** and **E** have hazards that eventually fall.
+A gamma with shape $\alpha > 1$ has an increasing hazard rate, bounded above by $\theta^{-1}$, and an increasing hazard rate makes the mean excess loss decrease. A Weibull with shape above 1 also has a rising hazard, but it keeps rising without limit — and that option is not offered. **A** has a constant hazard from the start; **C** and **D** have falling hazards, and **E**'s mean excess keeps rising.

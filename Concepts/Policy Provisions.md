@@ -1,12 +1,19 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1d5e851e91f82c6d0d0d88edb386177949ba496fb30ac9bc184b452b73fad656
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5bcd1a6e6ea1f2137736b17009d1d3ac45871e0aac1ae3a6feb46ae2c494191e
+  sources:
+    - "ISO CG 00 01 04 13, Commercial General Liability Coverage Form (Cooper & Scully copy), Coverage A 1.a-b, Exclusions 2.e and 2.j, Supplementary Payments (pp.1-2, 8-9), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Perils Insured Against A.2.c(1), Coverage C peril 14, Section I Conditions C.8 (pp.8, 12, 14), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "IRMI Insurance Glossary, 'declarations' (fetched 2026-10-10), sha256:4a5f12e7b5f4f9eabf5b519cee03f5b46cdbd6d2f69e544e4c3f89afe40db29c — https://www.irmi.com/term/insurance-definitions/declarations"
+    - "IRMI Insurance Glossary, 'insuring agreement' (fetched 2026-10-10), sha256:9edf607fea438a90ad44c611deee77d7866d809a96088da7ebc810860a49975f — https://www.irmi.com/term/insurance-definitions/insuring-agreement"
+    - "IRMI Insurance Glossary, 'exclusion' (fetched 2026-10-10), sha256:97f68148c1497de089ad8471d0f95ee3f74ec75db149c52761f1382183cb64e7 — https://www.irmi.com/term/insurance-definitions/exclusion"
+    - "IRMI Insurance Glossary, 'policy conditions' (fetched 2026-10-10), sha256:ab5225f0b2d79a69ce4994722a3f9db6e1b18a0820b75e48ea47fa46c0bae80f — https://www.irmi.com/term/insurance-definitions/policy-conditions"
+    - "Cornell LII Wex, 'contra proferentem' (fetched 2026-10-10), sha256:e17e688d536be7c5603d1061dd780ba795f218487fddb7b78bff817bb6f654f1 — https://www.law.cornell.edu/wex/contra_proferentem"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Policy Provisions.md
 ---

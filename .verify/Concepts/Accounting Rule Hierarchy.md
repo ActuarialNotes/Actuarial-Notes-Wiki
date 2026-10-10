@@ -37,3 +37,18 @@ created: 2026-10-10
 - checks_run: GAAP: Codification the source of authoritative GAAP for nongovernmental entities, periods ending after September 15, 2009; SEC rules authoritative for registrants; all content equal authority, two levels, replaces Statement 162; ASUs not authoritative in their own right — FAS 168 Summary, ¶3, ¶6, ¶11. Order when silent (similar transactions in authoritative GAAP first, unless they prohibit analogy, then nonauthoritative) — ¶9. Nonauthoritative list and the four weighing factors — ¶10, matched item by item (practices, Concepts Statements, AICPA Issues Papers, IFRS, professional associations/regulators, TIS Technical Practice Aids, textbooks). Topic 105 — PDF p.21. SAP: Manual does not preempt state authority, applies where not in conflict or silent — Preamble ¶12, ¶24; prescribed vs permitted definitions — Q&A Q2; Levels 1-5 — ¶42, matched level by level; Level 2 over 3, analogy, other literature with the Statement of Concepts most authoritative — ¶43-44; GAAP enters only when adopted — ¶27. Disclosure of departures (description, statement of difference, monetary effect on net income and surplus, RBC event) in Note 1 — SSAP No. 1 ¶7. Both examples' rankings follow ¶43 and FAS 168 ¶9-10. One nit (F-001) fixed.
 - sources_checked: FASB Statement No. 168, The FASB Accounting Standards Codification and the Hierarchy of GAAP (June 2009), Summary, ¶1-11 (PDF pp.3, 9-11); Topic 105 (PDF p.21), sha256:b0e4014d4ff284e082ac858fc585d9e39a364b30fa53354c472542105f5e6360 — https://storage.fasb.org/fas168.pdf; NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶12, ¶24, ¶27, ¶42-44 and footnotes 3-4 (PDF pp.34, 36-40); Preamble Q&A Q2-Q3 (PDF p.44); SSAP No. 1 ¶7 (PDF p.48), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf
 - note: One nit opened and fixed.
+
+## [F-002] 'Note 1' link lands on an IFRS 17-only notes page
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv06
+- date: 2026-10-10
+- severity: minor
+- status: open
+- locus: bullet 'Disclosure of departures', link '[[Notes to Financial Statements|notes]]'
+- claim: 'These disclosures are in Note 1 of the [[Notes to Financial Statements|notes]]'
+- evidence: The sentence is right (SSAP No. 1 ¶7, AP&P March 2025 PDF p.48: 'These disclosures shall be disclosed in Note 1 as illustrated in Appendix A-205'), but Concepts/Notes to Financial Statements.md (rank 4) opens 'Under IFRS 17 ...' and contains no mention of statutory notes, SSAP No. 1, Note 1 or prescribed and permitted practices, so a DISC-IA reader following the link finds Canadian IFRS content only.
+- source_rank: 1
+- proposed_action: Add the U.S. statutory notes (Note 1, SSAP No. 1) to the Notes page or link a U.S. page; the lead decides.
+- applied: false
+- fingerprint: ea84d8028ed0

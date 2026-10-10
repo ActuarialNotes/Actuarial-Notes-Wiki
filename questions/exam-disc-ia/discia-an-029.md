@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:80164730dd84a485fa18e0feed802bd56611a333e93e1faacc2fb10d1b029745
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'aleatory contract' (fetched 2026-10-10), sha256:a85361edb18a507fb12307f74ddb29cd41f2d625d7503090f00e142fd13a8aa5 — https://www.irmi.com/term/insurance-definitions/aleatory-contract"
+    - "Cornell LII Wex, 'aleatory' (fetched 2026-10-10), sha256:b85e5fb892ab6e88039ef28d735867e7b8997b8f5c27ced1a03a1fdc2535a374 — https://www.law.cornell.edu/wex/aleatory"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-029.md

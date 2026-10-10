@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:21c624454a0f643f2a1225404a2a996dc19ebb39599a9dcde7e821aa10298b65
-  sources: []
+  sources:
+    - "NAIC, Insurance Topics: Social Inflation (Last Updated 12/19/2025), read via WebFetch 2026-10-10 (host refuses scripted fetch, no digest) — https://content.naic.org/insurance-topics/social-inflation"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-051.md

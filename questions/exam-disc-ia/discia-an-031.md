@@ -12,12 +12,16 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cf14d2b3e63d1fd7420c2c01bd05c674deb2666416a96fe07b8b5e15c3365e7f
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'self contained policy' (fetched 2026-10-10), sha256:bf6aa36ad95643301e5205ea7339da26516fab9d72645a0998e4d30bab7e0fa1 — https://www.irmi.com/term/insurance-definitions/self-contained-policy"
+    - "IRMI Insurance Glossary, 'coverage form' (fetched 2026-10-10), sha256:3b2efd2d9b604968430343a2504e9a7c8e0baecb929ceb1d67ab2fa7065a2744 — https://www.irmi.com/term/insurance-definitions/coverage-form"
+    - "IRMI Insurance Glossary, 'manuscript form or policy' (fetched 2026-10-10), sha256:d5cb32be678fc42bc2d7a367be03e7046cb8a470cd2b332eb72ee9d7eb9a9775 — https://www.irmi.com/term/insurance-definitions/manuscript-form-or-policy"
+    - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), lead line, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-031.md

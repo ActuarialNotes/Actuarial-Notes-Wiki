@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:72b2f1b868b36f76041967e1587a96bf9b82c9ea53742f0f00c84ff39a6932a1
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'aggregate deductible' (fetched 2026-10-10), sha256:c4f3577bed73877f73ac0a44887f24e297649abb4e379b3052bc0c30ebf0dd36 — https://www.irmi.com/term/insurance-definitions/aggregate-deductible"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-045.md

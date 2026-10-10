@@ -1,12 +1,27 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2f62ae6dc6bd3c5bfbff86d9a2d0b6e852f19a67f329361a74f33d77b11294b4
-  sources: []
-  open_findings: 0
+  sources:
+    - "IRMI Insurance Glossary, 'manuscript form or policy' (fetched 2026-10-10), sha256:d5cb32be678fc42bc2d7a367be03e7046cb8a470cd2b332eb72ee9d7eb9a9775 — https://www.irmi.com/term/insurance-definitions/manuscript-form-or-policy"
+    - "IRMI Insurance Glossary, 'self contained policy' (fetched 2026-10-10), sha256:bf6aa36ad95643301e5205ea7339da26516fab9d72645a0998e4d30bab7e0fa1 — https://www.irmi.com/term/insurance-definitions/self-contained-policy"
+    - "IRMI Insurance Glossary, 'coverage form' (fetched 2026-10-10), sha256:3b2efd2d9b604968430343a2504e9a7c8e0baecb929ceb1d67ab2fa7065a2744 — https://www.irmi.com/term/insurance-definitions/coverage-form"
+    - "IRMI Insurance Glossary, 'endorsement' (fetched 2026-10-10), sha256:5806986e590bb3829918bbb5b020492be72a4e695df5a5d4cd2762d56f6240d9 — https://www.irmi.com/term/insurance-definitions/endorsement"
+    - "IRMI Insurance Glossary, 'declarations' (fetched 2026-10-10), sha256:4a5f12e7b5f4f9eabf5b519cee03f5b46cdbd6d2f69e544e4c3f89afe40db29c — https://www.irmi.com/term/insurance-definitions/declarations"
+    - "IRMI Insurance Glossary, 'insuring agreement' (fetched 2026-10-10), sha256:9edf607fea438a90ad44c611deee77d7866d809a96088da7ebc810860a49975f — https://www.irmi.com/term/insurance-definitions/insuring-agreement"
+    - "IRMI Insurance Glossary, 'exclusion' (fetched 2026-10-10), sha256:97f68148c1497de089ad8471d0f95ee3f74ec75db149c52761f1382183cb64e7 — https://www.irmi.com/term/insurance-definitions/exclusion"
+    - "IRMI Insurance Glossary, 'policy conditions' (fetched 2026-10-10), sha256:ab5225f0b2d79a69ce4994722a3f9db6e1b18a0820b75e48ea47fa46c0bae80f — https://www.irmi.com/term/insurance-definitions/policy-conditions"
+    - "IRMI Insurance Glossary, 'package policy' (fetched 2026-10-10), sha256:0a3dba9b9d2eae68d1c37976d43e2812dfae52ed5ad7f4c8e597d5ede04dea75 — https://www.irmi.com/term/insurance-definitions/package-policy"
+    - "IRMI Insurance Glossary, 'commercial package policy' (fetched 2026-10-10), sha256:46474c11ca899048a7e0c6159ebc1a01886a105ee593f8454a76002acd44098f — https://www.irmi.com/term/insurance-definitions/commercial-package-policy"
+    - "Wollner, 'A Vote Against Broker-Drafted Manuscript Policies (in Most Cases)', IRMI Expert Commentary, April 2003 (fetched 2026-10-10), sha256:1f2013a05d6dce9552c6be284676609dfeb4b93f96402d918d29bc1419175407 — https://www.irmi.com/articles/expert-commentary/a-vote-against-broker-drafted-manuscript-policies-in-most-cases"
+    - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), lead line, A, B, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, A.3, B, E/F introductions, D (pp.2, 9-10, 13), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), form structure, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "open-exam-prep.com, '1.4 Policy Structure: Declarations, Insuring Agreement, Conditions, Exclusions' (fetched 2026-10-10), sha256:2b7bcfec7d59f90616547bf8b1178af9a72663c9b646180b6d4e3bff4ac229f1 — https://open-exam-prep.com/study-guides/il-property-casualty/national-pc-fundamentals/pcnat-1-4-policy-structure-components"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurance Policy Structure.md
 ---

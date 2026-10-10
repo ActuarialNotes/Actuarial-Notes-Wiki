@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:727fa805148a42a18abfc12a78d40a761e61dde1194d9f2d2ee207ba25337dc0
-  sources: []
+  sources:
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Conditions A, L (pp.13, 16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, F.2 Mortgageholders (p.14), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "IRMI Insurance Glossary, 'insurable interest' (fetched 2026-10-10), sha256:2b0775a9e7247c71bd5e88ff280d1b912360a4baac367db45704da4bb476fb73 — https://www.irmi.com/term/insurance-definitions/insurable-interest"
+    - "IRMI Insurance Glossary, 'mortgagee clause' (fetched 2026-10-10), sha256:cf74e45616f1ee2dec958c4f6eb9d8be1f8a676a89d5df0a72b2102b10fad1ed — https://www.irmi.com/term/insurance-definitions/mortgagee-clause"
+    - "IRMI Insurance Glossary, 'loss payable clause' (fetched 2026-10-10), sha256:b6f98f37316d5d3d544dfda955e9d95413c762706326f120885d88ef16b2fb25 — https://www.irmi.com/term/insurance-definitions/loss-payable-clause"
+    - "IRMI Insurance Glossary, 'additional insured' (fetched 2026-10-10), sha256:409eb538c47c34793c3c490ff42d783b8e4f8501278141539fb8f4cd62e8299e — https://www.irmi.com/term/insurance-definitions/additional-insured"
+    - "Kramer v. Phoenix Life Ins. Co., 15 N.Y.3d 539 (2010), 2010 NY Slip Op 08376 (fetched 2026-10-10), sha256:955277c231faa2de50826179adc62246af0dd86d1c1093f5a5c569c546bc5db7 — https://nycourts.gov/reporter/3dseries/2010/2010_08376.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurable Interest.md

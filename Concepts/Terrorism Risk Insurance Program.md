@@ -1,12 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d9aa0f65bc8448c9c5ecb3f72ca7c7afe664563cfde6fb05aec0ef9a2ac32a3a
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:67083528d52b5cadd34baf22c633eae98f22dd6c6ec26e0e20d0b00ebede267e
+  sources:
+    - "Terrorism Risk Insurance Act of 2002 as amended, 15 U.S.C. 6701 note (LII): §102(1)(A) certification by the Secretary in consultation with DHS and the Attorney General; §102(6) insurer includes affiliates; §102(7) deductible 20% of prior-year DEP; §103(a) Secretary administers; §103(b)-(c) disclosure and make available; §103(e)(1) federal share 80%, trigger $200M from 2020; §103(e)(2)-(3) $100B cap, pro rata, notice to Congress; §103(e)(6)-(8) IMARA, mandatory recoupment at 140%, discretionary recoupment, policyholder surcharge collected and remitted; §108(a) termination Dec. 31, 2027, sha256:ab50d06aef460fe2adc0d74c45beb59bece7c4f966777cbcf9af2714ad29f0b6 — https://www.law.cornell.edu/uscode/text/15/6701"
+    - "31 C.F.R. part 50 (eCFR, read 2026-10-10): §50.4(q) mandatory recoupment amount; §50.90 140% and discretionary recoupment; §50.94(c)(3) 'The Federal terrorism policy surcharge is not considered premium', sha256:f283053648fa0161e09f5741e242364bf2025cd1e3b58939edace0dcd04ac0c5 — https://www.ecfr.gov/current/title-31/part-50"
+    - "U.S. Treasury, Terrorism Risk Insurance Program page (Secretary administers with the assistance of FIO; TRIEA 2005 to 2007, TRIPRA 2007 to 2014, 2015 Act to 2020, 2019 Act to 2027), sha256:77d334948b2f89aeabe7679a53269fd8269bf52d8ad862767bc2c6a01ab8096e — https://home.treasury.gov/policy-issues/financial-markets-financial-institutions-and-fiscal-service/federal-insurance-office/terrorism-risk-insurance-program"
+    - "Pub. L. 110-160 (TRIPRA 2007), §§2-5, 121 Stat. 1839-1841, sha256:541366d8707b0160ed0d4fad9d6c7190e8bbae12cf73647d76fa668a2558f53d — https://www.govinfo.gov/content/pkg/PLAW-110publ160/pdf/PLAW-110publ160.pdf"
+    - "Pub. L. 116-94, div. I, title V, §§501-502 (TRIP Reauthorization Act of 2019), PDF pp.494-495, sha256:d724cc183016bdd5408a523a4fbed5326399decae4e50a4315cead2475c47aa8 — https://www.congress.gov/116/plaws/publ94/PLAW-116publ94.pdf"
+    - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Terrorism Risk Insurance Program.md
 ---

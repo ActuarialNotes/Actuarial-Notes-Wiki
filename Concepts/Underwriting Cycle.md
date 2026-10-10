@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:95a79528f9133bdc8369e2f38c5299c8a74e5bdfcc94f3d1a7f9defb48d3a7af
-  sources: []
+  sources:
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor), §8.1 'Insurance Market Conditions': soft/hard markets, capacity, combined ratio, cash flow underwriting, sha256:7e7830b39c5a0cd17f75dbfeb2f0d2abe4e422df2b92c3f0218097ca48411d3d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-01-insurance-market-conditions.html"
+    - "Feldblum, Underwriting Cycles and Business Strategies (PCAS 2001), pp.175–185: interpretations of the cycle (ratemaking lag, underwriting philosophy, interest rates and cash flow underwriting, competition), sha256:02e494fce1810157e17d5f634338c6f803d29536b990661173966bd38c90faa1 — https://casact.org/sites/default/files/database/proceed_proceed01_01175.pdf"
+    - "IRMI glossary, 'cash flow underwriting', sha256:261314799aa69fc69faf80bb4164e110df8b3079005b42c8aba4b7f384813152 — https://www.irmi.com/term/insurance-definitions/cash-flow-underwriting"
+    - "IRMI glossary, 'hard market', sha256:50ebcc651210de2c80575a8daddd519e69cfddb04262c4921ff364c9cd4336d3 — https://www.irmi.com/term/insurance-definitions/hard-market"
+    - "IRMI glossary, 'soft market', sha256:960a6b97f4b798dc8fbfbb7682f8735267be18f9c528b6beca2c3e4de1c6cf60 — https://www.irmi.com/term/insurance-definitions/soft-market"
+    - "IRMI glossary, 'capacity', sha256:a21b8c9f170b484498d12e8c2f5152feb16596960b298365c36d227ee54b91bd — https://www.irmi.com/term/insurance-definitions/capacity"
+    - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Underwriting Cycle.md

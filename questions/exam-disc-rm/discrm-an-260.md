@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a84c0108c21b68f679767dd95736081e440fd5300259cc213bacea50e67fe0d
-  sources: []
+  sources:
+    - "Mastering Strategic Management (Saylor), §3.3 'Evaluating the Industry' (five forces), sha256:0236a5741a5c24f68527dbb1e5ece70c2dd5afb9c91ab6a1de346c781f0c2ef0 — https://saylordotorg.github.io/text_mastering-strategic-management/s07-03-evaluating-the-industry.html"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor), §8.1 'Insurance Market Conditions': soft/hard markets, capacity, combined ratio, cash flow underwriting, sha256:7e7830b39c5a0cd17f75dbfeb2f0d2abe4e422df2b92c3f0218097ca48411d3d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-01-insurance-market-conditions.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-260.md

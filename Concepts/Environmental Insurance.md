@@ -1,12 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7c3308efb7fbf2be9c21ad30324dad34c3dc5d8798bd9208defc54570df721a7
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, exclusion f. Pollution (pp.3-4: heating-equipment and hostile-fire exceptions; clean-up costs), g. Aircraft, p. Electronic Data (p.5); no employment-related practices, professional services or data-disclosure exclusion in the base form, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form, Additional Coverage d. Pollutant Clean-up and Removal ($10,000; only if release caused by a Covered Cause of Loss), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 10 30 10 12 Causes of Loss - Special Form, exclusion l. (release of pollutants unless caused by a specified cause of loss), sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
+    - "Northern Kentucky University for U.S. EPA, Environmental Insurance Products Available for Brownfields Redevelopment (2006), Executive Summary pp.1-2 (PL: third-party cleanup, BI/PD, defense, on-site cleanup; 1-10 year terms; ERPs) and ch.3 p.28 (cost cap: costs above estimated cleanup per remediation plan; SIR 10-30%; co-insurance 10-30%), sha256:7b8050d35d9a7e61d642e75339446ea3d81912fdcb8a221b83640ff83a2b5178 — https://www.clu-in.org/download/btsc/enviro_insurance_2006.pdf"
+    - "U.S. EPA, Superfund Liability page (strict, joint and several, retroactive), read 2026-10-10, sha256:134a0cd82aaeec64157164312a766363c67b6be1c2a20e45cada6a39a770cd4f — https://www.epa.gov/enforcement/superfund-liability"
+    - "40 C.F.R. part 280 subpart H, §280.93 (petroleum UST owners must demonstrate financial responsibility for corrective action and third-party BI/PD) and §280.97 (insurance), eCFR read 2026-10-10, sha256:37e032194b8ed36fbcc4c38f53f962a257ba51448ebbffbb6db37cef1dcdd0a4 — https://www.ecfr.gov/current/title-40/part-280"
+    - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Environmental Insurance.md
 ---

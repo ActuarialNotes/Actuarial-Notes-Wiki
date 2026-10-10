@@ -13,12 +13,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:eb4cb40961be2c24f3c629d8484e51d3290ec39718dbabc3fd3204992fcb6bd7
-  sources: []
+  sources:
+    - "Cornell LII Wex, 'comparative negligence' (fetched 2026-10-10), sha256:2f19566fa7f19db3c57ce3d0147aeaeebb7535d5e7d45ea9e111281973b8a240 — https://www.law.cornell.edu/wex/comparative_negligence"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-047.md

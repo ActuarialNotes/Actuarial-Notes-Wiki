@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5b372326da442927f51a31ee9675576e95cda401e2c083bae62fbf341ddf304e
-  sources: []
+  sources:
+    - "Mastering Strategic Management (Saylor), §5.1 generic strategies, sha256:b1d6cffee58ce0f293707e6d2918e12f550d6f19eca0aeb3a03eabc13b1f2b5a — https://saylordotorg.github.io/text_mastering-strategic-management/s09-01-understanding-business-level-s.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-259.md

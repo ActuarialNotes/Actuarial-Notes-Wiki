@@ -2,13 +2,13 @@
 aliases:
   - Porter's Five Force
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:65d2f36bb424e45319672d9dd552e6c18ba15eca759c96db3880dc96108e645f
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: ".verify/Concepts/Porter's Five Forces.md"
 ---

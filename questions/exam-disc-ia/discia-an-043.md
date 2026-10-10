@@ -13,12 +13,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:280aee772fde7a89ae29e595b82bb2544c2eaab525f34f0a81b4088661553e33
-  sources: []
+  sources:
+    - "Insurance Information Institute, 'Background on: Hurricane and windstorm deductibles' (fetched 2026-10-10), sha256:ecec57ab215f3b39db8e058e8d5b1ad756bc8122ca381fa5191ac89655245b7c — https://www.iii.org/article/background-on-hurricane-and-windstorm-deductibles"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-043.md

@@ -11,12 +11,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:224c381ea7143b2d40ebb9ca6727cb7092b3793530e7b4fd18d697a0a8db49da
-  sources: []
+  sources:
+    - "FASB, Concepts Statement No. 8, Conceptual Framework for Financial Reporting (as amended), QC6-QC10, QC15, QC26 (PDF pp.27-30), sha256:30fc0735a3362490d5708953fbbb78ee9e6baf2e05fa02efd1e753d5aa2effae — https://storage.fasb.org/Concepts_Statement_No._8_(As_Amended).pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-003.md

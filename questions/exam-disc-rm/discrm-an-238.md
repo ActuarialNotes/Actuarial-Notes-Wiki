@@ -12,12 +12,16 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:47881ae99679655d1ad1b9dfb691169945ae062c05bec50845c77b59b99a1cbd
-  sources: []
+  sources:
+    - "IRMI glossary, 'public adjuster', sha256:6934eb75ad50a658e817742bdf8d2aa93c6639db79c1b978efeeeede59f5fe9b — https://www.irmi.com/term/insurance-definitions/public-adjuster"
+    - "IRMI glossary, 'independent adjuster', sha256:387b879559e3a86f84b47d427855060a9b79408697bdd304ce0ec924e92e04b7 — https://www.irmi.com/term/insurance-definitions/independent-adjuster"
+    - "IRMI glossary, 'third party administrator', sha256:e4af3726554996be51cc3d5c9be30579346c584daa43e4438b5ade6f01d735e5 — https://www.irmi.com/term/insurance-definitions/third-party-administrator"
+    - "Thompson, Insurance Operations – Claim Procedures and the Claim Adjustment Process (University of Northern Iowa course handout), pp.1–6: two goals of the claim function, users of claim information, regulators and market conduct, centralized/decentralized structure, settlement authority, staff/independent/public adjusters, producers, sha256:5ed85a349071117ddd86bbc495947689c0893f562bc2ada8c6e3db160fd42663 — https://sites.uni.edu/thompsona/Claims%20Settlement.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-238.md

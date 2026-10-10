@@ -14,12 +14,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:eedcf3733e07d2b8d25587c0b0c11902baad44e17eb0fbaf16de58e5c6181331
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'book value' (fetched 2026-10-10), sha256:999cbf0ed845b3971668eaae1867ff6c90fd4249a091042c256f9f2d13fccd3a — https://www.irmi.com/term/insurance-definitions/book-value"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-039.md

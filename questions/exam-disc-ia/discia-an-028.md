@@ -11,12 +11,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:84bb008bdd605ae54129d2c56175f67e4697d8f1ef27cdf5924a89e49c721b08
-  sources: []
+  sources:
+    - "IRMI Insurance Glossary, 'unilateral contract' (fetched 2026-10-10), sha256:4d3ff47c332dff164e2b8ad69d448686ad51373afb5e2bb43c300ef59e503890 — https://www.irmi.com/term/insurance-definitions/unilateral-contract"
+    - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), A, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-028.md

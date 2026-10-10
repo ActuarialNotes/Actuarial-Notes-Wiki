@@ -50,14 +50,18 @@ export interface PdfPageRef {
   url: string
   /** Which work or paper it belongs to, under the title in its header. */
   subtitle?: string
+  /** The page a citation points to, which the document opens at. */
+  page?: number
 }
 
 /** Anything the stack can hold: a wiki page, or a document opened from one. */
 export type StackPageRef = WikiEntryRef | PdfPageRef
 
 /** The stack's page for a document a PDF button asked to read. */
-export function pdfPage(doc: { url: string; title: string; subtitle?: string }): PdfPageRef {
-  return { kind: 'pdf', name: doc.title, url: doc.url, subtitle: doc.subtitle }
+export function pdfPage(doc: { url: string; title: string; subtitle?: string; page?: number }): PdfPageRef {
+  const ref: PdfPageRef = { kind: 'pdf', name: doc.title, url: doc.url, subtitle: doc.subtitle }
+  if (doc.page) ref.page = doc.page
+  return ref
 }
 
 export interface PageStack {

@@ -208,6 +208,7 @@ function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
                 label={s.label}
                 title={s.title}
                 subtitle={s.subtitle}
+                page={s.page}
                 chip={false}
                 onOpen={onRead}
                 className="text-left text-xs"

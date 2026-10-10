@@ -27,6 +27,8 @@ export interface SourceRef {
   locator: string
   /** The page the source prints: a number, or an appendix exhibit's own ('A-7'). */
   page?: number | string
+  /** The same page as the PDF numbers it (1-based), which the reader opens at. */
+  pdfPage?: number
 }
 
 /** One printed value the tool must reproduce. */
@@ -60,21 +62,23 @@ export interface CheckMismatch {
 }
 
 const F = friedland.exhibits
-const friedlandRef = (exhibit: { locator: string; printed_page: number }): SourceRef => ({
+const friedlandRef = (exhibit: { locator: string; printed_page: number; pdf_page: number }): SourceRef => ({
   resource: friedland.source.resource,
   title: friedland.source.title,
   url: friedland.source.url,
   locator: exhibit.locator,
   page: exhibit.printed_page,
+  pdfPage: exhibit.pdf_page,
 })
 
 const W = werner.exhibits
-const wernerRef = (exhibit: { locator: string; printed_page: string }): SourceRef => ({
+const wernerRef = (exhibit: { locator: string; printed_page: string; pdf_page: number }): SourceRef => ({
   resource: werner.source.resource,
   title: werner.source.title,
   url: werner.source.url,
   locator: exhibit.locator,
   page: exhibit.printed_page,
+  pdfPage: exhibit.pdf_page,
 })
 /** A Werner exhibit's numbered row, as printed. */
 const row = (exhibit: { rows: Record<string, { value: number }> }, n: number) => exhibit.rows[String(n)].value

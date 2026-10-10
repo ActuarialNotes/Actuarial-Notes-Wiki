@@ -2337,7 +2337,8 @@ var friedlandRef = (exhibit) => ({
   title: friedland_2010_default.source.title,
   url: friedland_2010_default.source.url,
   locator: exhibit.locator,
-  page: exhibit.printed_page
+  page: exhibit.printed_page,
+  pdfPage: exhibit.pdf_page
 });
 var W = basic_ratemaking_2016_default.exhibits;
 var wernerRef = (exhibit) => ({
@@ -2345,7 +2346,8 @@ var wernerRef = (exhibit) => ({
   title: basic_ratemaking_2016_default.source.title,
   url: basic_ratemaking_2016_default.source.url,
   locator: exhibit.locator,
-  page: exhibit.printed_page
+  page: exhibit.printed_page,
+  pdfPage: exhibit.pdf_page
 });
 var row = (exhibit, n) => exhibit.rows[String(n)].value;
 var FACTOR = 5e-4 + 1e-9;

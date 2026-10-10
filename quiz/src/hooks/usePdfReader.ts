@@ -43,6 +43,8 @@ export interface PdfReaderDoc {
   title: string
   /** Which paper it belongs to, e.g. "Exam 5 · Spring 2019". */
   subtitle?: string
+  /** The page to open at (1-based, as the PDF numbers it), when one is cited. */
+  page?: number
 }
 
 interface PdfReaderState {

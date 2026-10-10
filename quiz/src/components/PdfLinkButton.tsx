@@ -34,6 +34,8 @@ interface PdfLinkButtonProps {
   title?: string
   /** The reader's subtitle — which paper or work this belongs to. */
   subtitle?: string
+  /** The page the citation points at (1-based, as the PDF numbers it); the reader opens there. */
+  page?: number
   /**
    * Read the document here rather than in the app's reader. The concept popup
    * passes this for the pages of its stack, so a PDF opened from one of them
@@ -91,6 +93,7 @@ export function PdfLinkButton({
   label,
   title,
   subtitle,
+  page,
   onRead,
   linkOnly = false,
   onOpen,
@@ -106,7 +109,7 @@ export function PdfLinkButton({
   const readsHere = opensInReader(url, PLAIN_CLICK, linkOnly)
   return (
     <a
-      href={url}
+      href={page ? `${url}#page=${page}` : url}
       target="_blank"
       rel="noreferrer"
       title={tooltip}
@@ -115,7 +118,7 @@ export function PdfLinkButton({
         if (!opensInReader(url, e, linkOnly)) return
         e.preventDefault()
         onOpen?.()
-        const doc = { url, title: title ?? label, subtitle }
+        const doc = { url, title: title ?? label, subtitle, page }
         if (onRead) onRead(doc)
         else openPdfReader(doc)
       }}

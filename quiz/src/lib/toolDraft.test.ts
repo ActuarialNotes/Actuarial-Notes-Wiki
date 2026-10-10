@@ -41,6 +41,12 @@ describe('what a card says it was tested against', () => {
     expect(lines).toEqual([expect.objectContaining({ kind: 'document', label: 'Werner (2016), pp. 219, A-8, B-5, C-7' })])
   })
 
+  it('opens the reader at the PDF page the exhibit is on, not the page number it prints', () => {
+    // Friedland's p. 142 is the PDF's 148th page — the front matter is unnumbered.
+    expect(groupSources(checksFor('reserving.expected_claims'))[0]).toMatchObject({ kind: 'document', page: 148 })
+    expect(groupSources(checksFor('credibility.partial_credibility'))[0]).toMatchObject({ page: 231 })
+  })
+
   it('gives one exhibit its locator, and folds exam questions into one link to the quiz', () => {
     expect(groupSources(checksFor('reserving.bornhuetter_ferguson'))[0].label).toBe('Friedland (2010), Ch. 9, Exhibit I, Sheet 1, p. 162')
     const [questions] = groupSources(checksFor('finance.present_value'))

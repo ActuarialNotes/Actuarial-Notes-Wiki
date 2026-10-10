@@ -3,11 +3,12 @@ import { examRowAction, examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 describe('examStatus', () => {
-  it('treats P, FM, MAS-I and DISC-DA as ready — no status label', () => {
+  it('treats P, FM, MAS-I, DISC-DA and DISC-IA as ready — no status label', () => {
     expect(examStatus('P')).toBe('ready')
     expect(examStatus('FM')).toBe('ready')
     expect(examStatus('MAS-I')).toBe('ready')
     expect(examStatus('CAS-DA')).toBe('ready')
+    expect(examStatus('CAS-IA')).toBe('ready')
     expect(EXAM_STATUS_LABEL[examStatus('P')]).toBeNull()
   })
 
@@ -20,8 +21,8 @@ describe('examStatus', () => {
     }
   })
 
-  it('treats DISC-RM and DISC-IA as beta: written section by section, a bank each, fact check under way', () => {
-    for (const key of ['CAS-RM', 'CAS-IA']) {
+  it('treats DISC-RM as beta: written section by section, its own bank, fact check under way', () => {
+    for (const key of ['CAS-RM']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamInDevelopment(key)).toBe(false)
       expect(isExamBeta(key)).toBe(true)

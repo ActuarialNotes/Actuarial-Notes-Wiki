@@ -54,6 +54,8 @@ export type FigureSpec =
       yUnit: NumberUnit
       /** Points are discrete: draw the curve as stems. */
       stems?: boolean
+      /** The y values are log10 of the quantity (a mortality curve): labels print 10^y. */
+      yLog?: boolean
     }
   | { kind: 'heat'; rows: (number | null)[][] }
   | { kind: 'flows'; items: { t: number; amount: number; pv: number }[] }
@@ -118,6 +120,63 @@ function presentValues(flows: { time: number; amount: number }[], i: number): nu
 type Builder = (result: ToolResult) => FigureSpec | null
 
 const BUILDERS: Record<string, Builder> = {
+  // ── Data Sources ─────────────────────────────────────────────────────────
+  // Mortality over the whole table on a log scale (it rises roughly
+  // exponentially with age), the ages read highlighted.
+  'data.life_table': r => {
+    const ages = r.values.all_ages as number[]
+    const qx = r.values.all_qx as number[]
+    const read = new Set(r.values.ages as number[])
+    const log = (q: number) => Math.log10(Math.max(q, 1e-6))
+    const x = num(r.input.x)
+    return {
+      kind: 'lines',
+      series: [
+        { name: 'qₓ', points: ages.map((a, k) => ({ x: a, y: log(qx[k]) })), role: 'base' },
+        { name: 'qₓ, the ages read', points: ages.flatMap((a, k) => (read.has(a) ? [{ x: a, y: log(qx[k]) }] : [])), role: 'result' },
+      ],
+      point: { x, y: log(qx[ages.indexOf(x)]), name: `q${x}`, drag: { field: 'x' } },
+      xTicks: [0, 20, 40, 60, 80, 100].filter(a => a <= ages[ages.length - 1]).map(a => ({ x: a, label: String(a) })),
+      yLog: true,
+      xUnit: 'count',
+      yUnit: 'plain',
+    }
+  },
+
+  'data.price_index': r => {
+    const index = r.values.index as number[]
+    const periods = r.values.periods as string[]
+    const n = index.length
+    // The first and last values the change is measured between, joined.
+    const line = [{ x: 0, y: index[0] }, { x: n - 1, y: index[n - 1] }]
+    const step = Math.max(1, Math.ceil(n / 5))
+    return {
+      kind: 'lines',
+      series: [
+        { name: 'Index', points: index.map((y, k) => ({ x: k, y })), role: 'base' },
+        { name: 'Annualised change', points: line, role: 'result' },
+      ],
+      xTicks: periods.flatMap((p, k) => (k % step === 0 ? [{ x: k, label: p.slice(0, 4) }] : [])),
+      xUnit: 'plain',
+      yUnit: 'plain',
+    }
+  },
+
+  'data.yield_curve': r => {
+    const terms = r.values.terms as number[]
+    const yields = r.values.yields as number[]
+    const term = num(r.values.term)
+    return {
+      kind: 'lines',
+      series: [{ name: 'Par yield', points: terms.map((t, k) => ({ x: t, y: yields[k] })), role: 'base' }],
+      dots: terms.map((t, k) => ({ x: t, y: yields[k], role: 'muted' as Role, name: `${(r.values.term_labels as string[])[k]}` })),
+      point: { x: term, y: num(r.values.yield), name: String(r.input.term) },
+      xTicks: [1, 5, 10, 20, 30].map(t => ({ x: t, label: `${t}y` })),
+      xUnit: 'years',
+      yUnit: 'percent',
+    }
+  },
+
   // ── Reserving ────────────────────────────────────────────────────────────
   'reserving.ratio_triangle': r => ({ kind: 'heat', rows: r.values.ratios as (number | null)[][] }),
 

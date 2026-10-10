@@ -160,3 +160,16 @@ describe('the selection grid', () => {
     ])
   })
 })
+
+describe('data sources as sources', () => {
+  it('takes a trend from a price index and a rate from the yield curve, through the engine', async () => {
+    const { SCALAR_SOURCES } = await import('./toolColumns')
+    const [, fromIndex] = SCALAR_SOURCES['ratemaking.trend_factor:trend']
+    const idx = runTool(toolById('data.price_index')!, {})
+    expect(fromIndex.take(idx)).toBe(idx.values.annual_change)
+    const [fromCurve] = SCALAR_SOURCES['finance.present_value:i']
+    const curve = runTool(toolById('data.yield_curve')!, {})
+    const y = Number(curve.values.yield)
+    expect(fromCurve.take(curve)).toBeCloseTo((1 + y / 2) ** 2 - 1, 12)
+  })
+})

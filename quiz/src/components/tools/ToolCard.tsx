@@ -12,10 +12,11 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowDownToLine, BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
+import { ArrowDownToLine, BadgeCheck, Database, ListChecks, RotateCcw } from 'lucide-react'
 import {
   ToolInputError,
   checksFor,
+  datasetsFor,
   formatValue,
   runPath,
   runTool,
@@ -310,9 +311,27 @@ const SELECTING_TOOL = 'reserving.age_to_age_factors'
  */
 function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
   const sources = checksFor(spec.id)
+  const datasets = datasetsFor(spec.id)
   return (
     <div className="space-y-2">
       <p>{spec.answers}</p>
+      {datasets.length > 0 && (
+        // A Data Source names what it reads (§4.11): the table, its edition, who publishes it, and the licence.
+        <div className="space-y-1.5" data-testid="dataset-sources">
+          <p className="flex items-center gap-1 font-medium text-foreground">
+            <Database className="h-3.5 w-3.5" aria-hidden /> Reads
+          </p>
+          {datasets.map(ds => (
+            <p key={ds.id} className="leading-snug">
+              <a href={ds.report} target="_blank" rel="noreferrer" className="text-foreground hover:underline">{ds.title}</a>
+              <span className="block text-xs">
+                {ds.publisher} · edition {ds.edition} · read {ds.sources.map(s => s.read).sort().pop()} ·{' '}
+                <a href={ds.licence.url} target="_blank" rel="noreferrer" className="hover:underline">{ds.licence.name}</a>
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
       {sources.length > 0 && (
         <div className="space-y-1">
           <p className="flex items-center gap-1 font-medium text-foreground">

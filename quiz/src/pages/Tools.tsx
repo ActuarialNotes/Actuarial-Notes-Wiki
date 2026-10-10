@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect, useMemo } from 'react'
 import { Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
-import { Calculator, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
+import { Calculator, Database, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
 import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea, type ToolSpec } from '@/lib/tools'
 import { searchTools } from '@/lib/toolSearch'
 import { highlightMatch } from '@/components/SearchHighlight'
@@ -30,6 +30,7 @@ import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { TOOLS_HEAD, toolHead } from '@/lib/seo'
 
 const AREA_ICON: Record<PracticeArea, LucideIcon> = {
+  data: Database,
   reserving: Landmark,
   ratemaking: TrendingUp,
   distributions: Sigma,

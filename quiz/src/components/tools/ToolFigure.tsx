@@ -104,6 +104,7 @@ export function ToolFigure({
       const inset = figure.xTicks?.length && !compact ? 18 : 4
       const x = scale(ext.x[0], ext.x[1], pad.l + inset, W - pad.r - inset)
       const y = scale(ext.y[0], ext.y[1], H - pad.b, pad.t)
+      const fy = (v: number) => (figure.yLog ? formatValue(10 ** v, figure.yUnit) : formatValue(v, figure.yUnit))
       const path = (pts: Point[]) => pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.x).toFixed(1)},${y(p.y).toFixed(1)}`).join('')
       const shade = figure.shade && figure.series[figure.shade.series]
         ? (() => {
@@ -122,7 +123,7 @@ export function ToolFigure({
       body = (
         <>
           {figure.level && (
-            <line x1={pad.l} x2={W - pad.r} y1={y(figure.level.y)} y2={y(figure.level.y)} stroke="currentColor" strokeOpacity={0.35} strokeDasharray="4 3" {...name(`${figure.level.name}: ${formatValue(figure.level.y, figure.yUnit)}`)} />
+            <line x1={pad.l} x2={W - pad.r} y1={y(figure.level.y)} y2={y(figure.level.y)} stroke="currentColor" strokeOpacity={0.35} strokeDasharray="4 3" {...name(`${figure.level.name}: ${fy(figure.level.y)}`)} />
           )}
           {shade}
           {figure.series.map((s, k) =>
@@ -142,10 +143,10 @@ export function ToolFigure({
             return <line x1={x(ext.x[0])} x2={x(ext.x[1])} y1={y(at(ext.x[0]))} y2={y(at(ext.x[1]))} stroke="hsl(var(--primary))" strokeOpacity={0.6} strokeDasharray="5 3" {...name('Duration’s tangent')} />
           })()}
           {(figure.dots ?? []).map((d, k) => (
-            <circle key={k} cx={x(d.x)} cy={y(d.y)} r={compact ? 1.5 : 3} {...FILL[d.role]} fillOpacity={d.role === 'muted' ? 0.55 : FILL[d.role].fillOpacity} {...name(`${d.name}: ${formatValue(d.y, figure.yUnit)}`)} />
+            <circle key={k} cx={x(d.x)} cy={y(d.y)} r={compact ? 1.5 : 3} {...FILL[d.role]} fillOpacity={d.role === 'muted' ? 0.55 : FILL[d.role].fillOpacity} {...name(`${d.name}: ${fy(d.y)}`)} />
           ))}
           {figure.point && (
-            <circle cx={x(figure.point.x)} cy={y(figure.point.y)} r={compact ? 2.5 : 5.5} fill="hsl(var(--primary))" stroke="hsl(var(--card))" strokeWidth={2} {...name(`${figure.point.name} at ${formatValue(figure.point.x, figure.xUnit)}: ${formatValue(figure.point.y, figure.yUnit)}`)} />
+            <circle cx={x(figure.point.x)} cy={y(figure.point.y)} r={compact ? 2.5 : 5.5} fill="hsl(var(--primary))" stroke="hsl(var(--card))" strokeWidth={2} {...name(`${figure.point.name} at ${formatValue(figure.point.x, figure.xUnit)}: ${fy(figure.point.y)}`)} />
           )}
           {!compact && (figure.xTicks ?? []).map(t => (
             <text key={t.label} x={x(t.x)} y={H - 4} textAnchor="middle" fontSize={9} fill="currentColor" fillOpacity={0.6}>{t.label}</text>

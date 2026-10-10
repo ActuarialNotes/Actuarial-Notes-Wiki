@@ -335,7 +335,14 @@ function GridCell({
       onChange={e => onChange(e.target.value)}
       onPaste={onPaste}
       onKeyDown={onKeyDown}
-      onFocus={() => {
+      onFocus={e => {
+        // Swap the printed number for what was typed, and select it, in the
+        // focus event itself: left to the re-render, the swap lands after the
+        // selection, and typing appends to "1,700" instead of replacing it.
+        if (number) {
+          e.currentTarget.value = raw
+          e.currentTarget.select()
+        }
         setEditing(true)
         onFocus()
       }}

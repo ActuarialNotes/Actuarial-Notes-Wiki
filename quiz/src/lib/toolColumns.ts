@@ -233,8 +233,35 @@ export const COLUMN_SOURCES: Record<string, ColumnSource[]> = {
 }
 
 /** Keyed `toolId:fieldKey`: a scalar input another tool computes. */
+/**
+ * A par yield (nominal, convertible semiannually) as the effective annual rate
+ * a cash-flow tool takes — converted by Interest Converter's own engine, not
+ * by a formula here.
+ */
+function effectiveFromParYield(r: ToolResult): number | null {
+  try {
+    const converted = runTool(toolById('finance.interest_converter')!, { form: 'nominal_interest', m: 2, rate: Number(r.values.yield) })
+    return Number(converted.values.i)
+  } catch {
+    return null
+  }
+}
+
+const FROM_YIELD_CURVE: ScalarSource = {
+  tool: 'data.yield_curve',
+  how: 'The par yield at the chosen term, converted to an effective annual rate (it is nominal, convertible semiannually).',
+  take: effectiveFromParYield,
+}
+
 export const SCALAR_SOURCES: Record<string, ScalarSource[]> = {
-  'ratemaking.trend_factor:trend': [{ tool: 'ratemaking.trend_fit', how: 'The fitted annual trend.', take: r => Number(r.values.trend) }],
+  'ratemaking.trend_factor:trend': [
+    { tool: 'ratemaking.trend_fit', how: 'The fitted annual trend.', take: r => Number(r.values.trend) },
+    { tool: 'data.price_index', how: 'The index’s annualised change over the window chosen.', take: r => Number(r.values.annual_change) },
+  ],
+  'finance.present_value:i': [FROM_YIELD_CURVE],
+  'finance.duration_convexity:i': [FROM_YIELD_CURVE],
+  'finance.redington_immunization:i': [FROM_YIELD_CURVE],
+  'finance.annuity:i': [FROM_YIELD_CURVE],
   'ratemaking.loss_ratio_method:fixed': [{ tool: 'ratemaking.expense_ratios', how: 'The fixed expense provision.', take: r => Number(r.values.fixed_provision) }],
   'ratemaking.loss_ratio_method:variable': [{ tool: 'ratemaking.expense_ratios', how: 'The variable expense provision.', take: r => Number(r.values.variable_provision) }],
   'ratemaking.permissible_loss_ratio:fixed': [{ tool: 'ratemaking.expense_ratios', how: 'The fixed expense provision.', take: r => Number(r.values.fixed_provision) }],

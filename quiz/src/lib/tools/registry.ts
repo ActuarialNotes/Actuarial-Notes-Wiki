@@ -31,12 +31,17 @@ import { buhlmannCredibility } from './credibility/buhlmann'
 import { distribution } from './distributions/distribution'
 import { limitedExpectedValue } from './distributions/limitedExpectedValue'
 import { expectedPayment } from './distributions/expectedPayment'
+import { lifeTable } from './data/lifeTable'
+import { priceIndex } from './data/priceIndex'
+import { yieldCurve } from './data/yieldCurve'
 
 /** Bumped whenever the engine's shared behaviour (input reading, the envelope) changes. */
 export const ENGINE_VERSION = '0.1.0'
 
 /** The practice areas in the order the catalogue lists them, with their names. */
 export const AREAS: { id: PracticeArea; label: string }[] = [
+  // First: a chain starts from its data (docs/actuarial-tools.md §4.11).
+  { id: 'data', label: 'Data Sources' },
   { id: 'reserving', label: 'Reserving' },
   { id: 'ratemaking', label: 'Ratemaking' },
   { id: 'distributions', label: 'Loss distributions' },
@@ -46,6 +51,9 @@ export const AREAS: { id: PracticeArea; label: string }[] = [
 
 /** Every tool, in the order a chain runs within each area. */
 export const TOOLS: ToolSpec[] = [
+  lifeTable,
+  priceIndex,
+  yieldCurve,
   ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,

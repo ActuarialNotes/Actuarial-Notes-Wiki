@@ -3,15 +3,16 @@ import { examRowAction, examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 describe('examStatus', () => {
-  it('treats P, FM and DISC-DA as ready — no status label', () => {
+  it('treats P, FM, MAS-I and DISC-DA as ready — no status label', () => {
     expect(examStatus('P')).toBe('ready')
     expect(examStatus('FM')).toBe('ready')
+    expect(examStatus('MAS-I')).toBe('ready')
     expect(examStatus('CAS-DA')).toBe('ready')
     expect(EXAM_STATUS_LABEL[examStatus('P')]).toBeNull()
   })
 
   it('treats the exams that are usable but unfinished as beta', () => {
-    for (const key of ['MAS-I', 'MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+    for (const key of ['MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)
       expect(isExamInDevelopment(key)).toBe(false)

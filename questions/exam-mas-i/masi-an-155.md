@@ -14,12 +14,17 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b03a008fe55b4eb21a48bceea3429e3c68a959b86559545cf73d073b991e10f0
-  sources: []
+  sources:
+    - "Rodriguez, Lecture Notes on Generalized Linear Models (Princeton), Models for Count Data With Overdispersion (rev. 2022), §1 The Over-Dispersed Poisson Model, PDF pp.1-2 (var(Y) = phi mu; quasi-likelihood estimates equal the Poisson ones; var(beta-hat) = phi (X'WX)^-1; phi-hat = Pearson chi-square / (n - p); standard errors multiplied by sqrt(phi-hat)), sha256:956c3ad4849787d3a60c6d0f42b8c7e60d23e80be1da988417f9e9a42c73121e — https://grodri.github.io/glms/notes/c4a.pdf"
+    - "Roback & Legler, Beyond Multiple Linear Regression, Ch.4 Poisson Regression (bookdown), §4.9 overdispersion: phi-hat = sum of squared Pearson residuals / (n - p); SE_Q = sqrt(phi-hat) SE; t tests; drop-in-deviance F = (drop in deviance / difference in df) / phi-hat, sha256:55079c7b837d6207e55badacb0258e26d6c8f07ee731d11db0878b2d6a4982d4 — https://bookdown.org/roback/bookdown-BeyondMLR/ch-poissonreg.html"
+    - "R documentation, stats::summary.glm, Details: dispersion taken as 1 for binomial and Poisson, otherwise residual chi-squared statistic / residual df; column labelled t ratio if dispersion is estimated, z ratio if known, two-tailed p-values from Student t or Normal, sha256:c7cf5a73225bd54cad2584cf31b1155884c4d359a14de4048b6e11a7acfe9e2d — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/summary.glm.html"
+    - "Larsen, Generalized Linear Models, CAS Study Note (rev. 6/29/2016; MAS-I reading), 'Quasi-Likelihood' PDF p.1 (constant of proportionality between mean and variance solved for with the betas; over-dispersion), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-155.md

@@ -22,6 +22,7 @@ verification:
 
 - **The four phases.** *Diagnose*: a high-level assessment of the risks that could seriously threaten the firm's value — general environment, industry and firm-specific. *Analyze*: model the critical risks as probability distributions of outcomes, with their correlations, and rank what drives the bad outcomes. *Implement*: treat each risk — avoid it, reduce its frequency or severity, transfer it, retain it, or exploit it ([[Risk Mitigation]]). *Monitor*: compare results with expectations and update. ERM is a continuing cycle, not a project.
 - **What makes it "enterprise".** Every [[Risk Taxonomies|category]] — insurance hazard, [[Financial Risk|financial]], [[Operational Risk|operational]] and strategic — is managed as one portfolio, so correlations and concentrations that no silo sees become visible, and upside is exploited as well as downside controlled. That is its link to the overall [[Business Risk|risk of the business]] and to [[Business Strategy|strategy]].
+- **Treating risk holistically.** Treatment under ERM is chosen for the organization's net position, not risk by risk. The CAS overview lists the responses as avoiding, retaining (and financing), reducing, transferring or exploiting a risk, and stresses that portfolio risk is not the simple sum of the parts: exposures that offset each other are natural hedges, such as one division long and another short in the same currency, and hedging each separately wastes money. COSO's 2017 framework makes developing a portfolio view one of its principles, after risks are prioritized against the [[Risk Appetite|risk appetite]] and responses chosen. See [[Risk Treatment]].
 - **The internal risk model is its engine.** A realistic program needs an internal model ([[Risk Modeling]]) of underwriting, reserve, catastrophe and asset risk with their dependencies, used for capital adequacy, capital allocation, reinsurance, asset allocation and planning. Brehm's implementation issues are practical: staffing and scope; [[Model Selection|model choice]] and parameter development, much of it expert opinion, with correlations sensitive enough to need executive ownership; and integration into the planning and reinsurance-buying calendar so the output is actually used.
 - **It is anchored by [[Risk Appetite|risk appetite]]** and expressed through [[Risk Measure|risk measures]] (VaR, TVaR, expected policyholder deficit) that turn the model's output into capital targets and limits. Regulators — OSFI in Canada, Solvency II in Europe, and the NAIC for U.S. insurers above a size threshold — now expect insurers to document it in an [[ORSA]].
 
@@ -54,3 +55,13 @@ verification:
 > > $$
 > >
 > > At the stressed correlation — a hurricane forcing asset sales in a falling market — the enterprise is **short of capital although neither unit breached its own limit**. The diversification benefit — $\$110\text{M} - \$95.4\text{M} = \$14.6\text{M}$ at $\rho = 0.5$ — is real, but it rests on the parameter hardest to estimate and most likely to rise in a crisis. (The square-root rule is exact for standard-deviation-based capital, and an approximation for VaR.)
+
+> [!tip]- How it appears on the exam
+> - **DISC-RM:** The section on treating risk ends with treating risk holistically, and the introduction contrasts ERM with the traditional insurance-buying approach ([[Risk Management]]). Questions ask what makes an approach enterprise-wide, why managing risks in silos can cost more or miss a concentration, and how a natural hedge changes the treatment.
+> - **Exam 9:** ERM frames the internal model, capital and risk appetite questions: the phases of a program, the risk measures and correlations that drive aggregate capital, and the regulatory expectation of an ORSA.
+
+> [!warning]- Exam traps
+> - **Holistic does not mean one technique:** ERM still uses avoidance, control, retention and transfer. What changes is that the choice is made for the whole portfolio, with the interactions between risks in view.
+> - **Silo limits can all be met while the total is breached:** Each unit inside its own limit says nothing about the enterprise unless the correlations are counted.
+> - **Exploiting is a response too:** ERM can keep or seek out a risk the organization is well placed to manage. Answers that list only ways to reduce risk leave it out.
+

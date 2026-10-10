@@ -1,15 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:4be3bf759df1dffb069e1b5dc8c5e64f0e787f46ac257cf4577d67e699712a3d
   sources:
     - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8 (p.1 duration 4 hours; p.3 domains, weights, A1-A6 and readings Daniel/Ross/Struppeck; p.4 B1-B9; p.5 C1-C9; p.6 Complete Text References: Ross 4.1-4.8 for A1-A6, Dobson & Barnett Ch 1-9, Hogg Domain C 9.1-9.6, Larsen for C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS, 2026 Syllabus of Basic Education, pp.7-8 (prior-knowledge table: Exam MAS-I assumes Exams 1 and 2), sha256:f0ce0da128368cedb6ca35ac139ca0357e159a983dcf94e4275e32fa44530038 — https://www.casact.org/sites/default/files/2025-01/2025_SOBE.pdf"
-    - "CAS, Credential Requirements page (copy fetched 2026-10-04, re-read 2026-10-05): MAS-I Prior Knowledge (Assumed) Exam 1 - Probability, Exam 2 - Financial Mathematics; Exams 1 and 2 via the equivalent exam of SOA, IFoA, IAI, IAA, CAA or ASSA, 'Credit through other organizations', sha256:53c285ffbbe390a21e4c20f733269c5cdfaca53a091b770efb77d24943d4c088 — https://www.casact.org/credential-requirements"
-    - "CAS, Exam 1 page ('Exam 1/P'), sha256:2fb9813a1e233fa4d1264e2bf003900356384b6d848840c2a29918bd1f16e9c6 — https://www.casact.org/exam/exam-1-probability; and Exam 2 page ('Exam 2/FM'; 'Credit will be given for SOA exam FM ...'), sha256:f3a2d16129e4eb36b35705b52d7a49ac0df256dc39bc304a1c8f5578a3620241 — https://www.casact.org/exam/exam-2-financial-mathematics"
+    - "CAS, Credential Requirements page, copy fetched 2026-10-10: MAS-I Prior Knowledge (Assumed) Exam 1 - Probability, Exam 2 - Financial Mathematics; Exams 1 and 2 'Credit through other organizations', sha256:c4896c994fdb693de6e209ad731de1815e6af4d0ee540bed0e1c35c273df4774 — https://www.casact.org/credential-requirements"
+    - "CAS, Exam 1 page, 'Exam 1/P' (copy fetched 2026-10-10), sha256:f435668770d6b83d2067828decc1467d10f7a8ee2715a9814f341b4e76367fd1 — https://www.casact.org/exam/exam-1-probability; and Exam 2 page, 'Exam 2/FM'; 'Credit will be given for SOA exam FM ...' (copy fetched 2026-10-10), sha256:eb3154928d7bb306eb757f8df38ee27419a8c15ea93f8d4643ed16ac33e77496 — https://www.casact.org/exam/exam-2-financial-mathematics"
     - "SOA, Probability Exam syllabus, November 2026, pp.2-3, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; SOA, Financial Mathematics Exam syllabus, December 2026, p.2 (Time Value of Money), sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
     - "CAS, Exam MAS-II Content Outline 2026, PDF pp.2, 4 (B. Linear Mixed Models 10-20%; West, Welsh & Galecki), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
     - "Ross, Introduction to Probability Models, 12th ed. (Academic Press 2019), printed Contents, library scan (TU Ilmenau via GBV), PDF pp.3-7 (Ch 4: 4.1-4.4, 4.3 Classification of States, 4.5.1 The Gambler's Ruin Problem, 4.6 Mean Time Spent in Transient States, 4.7 Branching Processes, 4.8 Time Reversible Markov Chains; Ch 5 5.2-5.4; Ch 9 9.1-9.6; Ch 11 11.1-11.2.2), sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"

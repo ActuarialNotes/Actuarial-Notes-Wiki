@@ -24,6 +24,10 @@ verification:
 - **Supervised learning**: a labeled response $Y$ is available (e.g., regression, classification)
 - **Unsupervised learning**: no labeled response; the goal is to find structure in $\mathbf{X}$ (e.g., [[Clustering]], [[Principal Components Analysis]])
 
+**Regression vs. Classification** (James et al., §2.1.5):
+- A problem with a **quantitative** response (claim severity, pure premium) is a **regression** problem; one with a **qualitative** response taking one of $K$ classes (fraud or not, renew or lapse) is a **classification** problem
+- The line is not crisp: [[Logistic Regression]] classifies a binary response but estimates class probabilities, and [[K-Nearest Neighbors]] and boosting handle either kind of response
+
 **Prediction vs. Inference:**
 - **Prediction**: minimize test error; interpretability may be sacrificed
 - **Inference**: understand which predictors affect $Y$ and how; interpretability is essential
@@ -71,3 +75,12 @@ verification:
 > > [!answer]-
 > > **$K=1$**: very flexible — low bias, high variance (each prediction depends only on the single nearest neighbor, so it overfits noise).
 > > **$K=100$**: very rigid — high bias, low variance (predictions are averaged over many neighbors, smoothing out local patterns but potentially missing fine structure).
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 7.1 covers basic data modeling techniques. Questions describe an insurance problem and ask whether it is supervised or unsupervised, a regression or a classification problem, or a prediction or an inference task, and which kind of technique fits, such as a [[Classification Tree|classification tree]] for a yes/no outcome or [[Clustering|clustering]] for segments with no target. Section 10.2 links here for how regulation and professional codes bear on data modeling.
+> - **MAS-II and SRM:** Questions compare methods on flexibility and interpretability and apply the bias-variance trade-off, as in the examples above.
+
+> [!warning]- Exam traps
+> - **"Logistic regression" is a classifier:** Its name says regression, but it is used for a qualitative response.
+> - **Unsupervised has no target:** If the data include the outcome to be predicted, the task is supervised, even if clustering is used along the way.
+> - **Flexibility is not accuracy:** A more flexible method has lower bias but higher variance; on new data it can predict worse than a simpler one.

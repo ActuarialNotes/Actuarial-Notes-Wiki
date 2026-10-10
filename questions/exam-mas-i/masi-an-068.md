@@ -61,7 +61,7 @@ $$
 D = 1 - F^*(2{,}250) = e^{-0.75} = 0.472
 $$
 
-**Common wrong entries:** **0.372** checks only the before-the-jump side, $F^* - (i-1)/10$, missing every gap here; **0.528** is $F^*(2{,}250)$ itself, the model's CDF rather than its distance from the empirical one.
+**Common wrong entries:** **0.372** checks only the before-the-jump side, $\lvert F^* - (i-1)/10 \rvert$, missing every gap here; **0.528** is $F^*(2{,}250)$ itself, the model's CDF rather than its distance from the empirical one.
 
 ## Part b (1 point)
 Using your result from part (a), which conclusion follows?

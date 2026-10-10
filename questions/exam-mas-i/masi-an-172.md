@@ -13,12 +13,15 @@ wiki_link:
   - Concepts/F-Distribution
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:401e432ed533aa4660b26794d2213d63db2d3fbdf42849c693eeef233dbf3a56
-  sources: []
+  sources:
+    - "Levine, STAT 517 (Purdue) Lecture 24 'Noncentral chi^2 and F-distributions' (Hogg-Craig notation), PDF pp.2-5 (sum X_i^2/sigma^2 ~ chi-square_n(sum mu_i^2/sigma^2); noncentrality = the quadratic form evaluated at the means / sigma^2; noncentral F), sha256:f84259546359e3b92d9a0e6f2de41a7f4b445a3063739fdbefe1047f5a9214ae — https://www.stat.purdue.edu/~mlevins/docs/stat517/Lecture24_STAT517.pdf"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7.2 Scheffe's method (all contrasts; C-hat +/- sqrt((r-1) F_{alpha; r-1, N-r}) s_C, s_C^2 = sigma-hat^2 sum c_i^2/n_i), sha256:25e822151f4f779425f69dea32f1f44450a2355e22e576bfc43dbbcd8db2e532 — https://www.itl.nist.gov/div898/handbook/prc/section4/prc472.htm"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-172.md

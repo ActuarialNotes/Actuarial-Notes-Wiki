@@ -22,6 +22,11 @@ verification:
 - Risk transfer is assessed on the **contract as a whole**, including side letters and undocumented understandings — which is the point at which it becomes a governance and professionalism issue rather than a technical one.
 - Beyond reinsurance, risk is transferred through catastrophe bonds and insurance-linked securities, and **retained** through captives, self-insurance and [[Deductible|deductibles]] — the alternatives against which a transfer's cost is judged.
 
+- **Insurance as a risk management technique.** For the organization buying it, insurance combines two things: *transfer* of the financial consequences of a loss to an insurer, and *pooling* of many similar exposures by that insurer, which makes losses predictable through the [[Law of Large Numbers|law of large numbers]]. It suits exposures that are low in frequency and high in severity and have the characteristics of an [[Insurable Risk|insurable risk]]; it cannot replace sentimental value, and a premium for frequent small losses would be large next to the losses themselves, which is why [[Deductible|deductibles]] retain them ([[Risk Treatment]]).
+- **Using insurance in a program.** The risk manager selects the coverages, sorting them into *essential* insurance (required by law or contract, such as workers compensation, or protecting against a loss that threatens survival), *desirable* insurance (losses that would cause financial difficulty but not bankruptcy) and *available* insurance (slight losses that would only be an inconvenience). The manager then selects insurers by financial strength, services and cost, negotiates the terms, tells the organization what is covered and what records to keep, and reviews the program periodically.
+- **Advantages and disadvantages for the buyer.** After a loss the firm is indemnified and can keep operating; uncertainty and worry are reduced; insurers provide services such as loss control and claims adjusting; and premiums are deductible as a business expense. Against this, premiums are a major cost paid in advance, money that could otherwise stay in the business; negotiating coverage takes time and effort; and an insured may take less care over loss control ([[Moral Hazard]]).
+- **Noninsurance transfer.** Risk also moves by contract without insurance: hold-harmless and indemnity clauses in leases and service contracts, warranties, and surety bonds. These shift the loss to another party but depend on that party's ability to pay.
+
 ![[Media/Figures/Risk_Transfer.svg|340]]
 
 > [!example]- Does This Contract Transfer Risk? {Example}
@@ -41,3 +46,23 @@ verification:
 > > **What the [[Appointed Actuary]] should do.** Say so, in writing, before the contract is booked as reinsurance. If it is booked as reinsurance, the ceded premium improperly reduces the loss ratio, the [[MCT]] ratio is overstated through improper credit for ceded liabilities, and the financial statements are misstated. That is a matter with material adverse effects on financial condition, engaging the [[Duty to Report]] escalation under the [[Insurance Companies Act]].
 > >
 > > **What would fix it:** lower the attachment to a level the cedant's experience can plausibly reach, widen the layer, and remove or sharply reduce the profit commission. Any one of those changes the answer; all three together make it plainly reinsurance.
+
+> [!example]- Sorting a Contractor's Insurance Needs {Example}
+> A small building contractor has a limited insurance budget. Its exposures are: injuries to its employees, in a state that requires workers compensation; a liability claim from a collapsed structure that could exceed the firm's net worth; theft of hand tools worth a few hundred dollars at a time; and damage to its \$400,000 equipment yard, which would be a serious setback but not fatal. Its bank requires property insurance on the equipment it finances. Sort the coverages into essential, desirable and available insurance.
+>
+> > [!answer]-
+> > - **Essential:** Workers compensation, because the law requires it; liability insurance, because a large claim threatens the firm's survival; and property insurance on the financed equipment, because the loan contract requires it.
+> > - **Desirable:** Property insurance on the rest of the equipment yard, whose loss would cause financial difficulty but not bankruptcy.
+> > - **Available:** Coverage for theft of hand tools, a frequent, small loss better retained and controlled, for example with locked storage.
+> >
+> > The ranking follows the post-loss objectives: coverage that protects survival and meets external obligations comes first.
+
+> [!tip]- How it appears on the exam
+> - **DISC-RM:** The section on insurance as a risk management technique opens with using insurance to treat risk. Questions ask what makes insurance suitable for an exposure, how a risk manager selects coverages and insurers, and what the advantages and disadvantages of insurance are compared with retention or noninsurance transfer.
+> - **Exams 6, 7 and 9:** In reinsurance accounting, the question is whether a contract transfers significant insurance risk; cases describe contract features and ask whether risk transfer is met and how the contract must be accounted for.
+
+> [!warning]- Exam traps
+> - **Transfer is not the same as insurance:** Hold-harmless clauses, warranties and surety bonds transfer risk without an insurance policy, and hedges transfer financial risk through the capital markets.
+> - **Insure the large, retain the small:** Insuring frequent, small losses costs more in premium and expense than the losses themselves. Essential insurance protects against what the organization could not survive or is required to carry.
+> - **A contract that moves only timing is not reinsurance:** Without underwriting risk the arrangement is financing, and it is accounted for as a deposit.
+

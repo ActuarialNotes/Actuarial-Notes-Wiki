@@ -3,15 +3,20 @@ import { buildConceptGraph, type GraphQuestion } from './conceptGraph'
 import {
   EMPTY_PROGRESS,
   MIN_TOPIC_CONCEPTS,
+  FLOOR_STRENGTH,
   boardState,
   combine,
+  connectionFor,
+  connectionPoints,
   craftGraph,
+  craftScore,
   craftTopics,
   madeBy,
   mergeGraphs,
   objectiveBlocks,
   objectiveTitle,
   packSeeds,
+  practicePoints,
   practiceQuestions,
   PRACTICE_FALLBACK,
   recipesOf,
@@ -154,9 +159,70 @@ describe('combine', () => {
     expect(combine(GRAPH, one, 'Fire', 'Water').kind).toBe('known')
   })
 
-  it('finds nothing between unconnected concepts, or a concept and itself', () => {
-    expect(combine(GRAPH, one, 'Fire', 'Earth').kind).toBe('none')
+  it('connects any two concepts — an inferred connection, making nothing — but not a concept and itself', () => {
+    const outcome = combine(GRAPH, one, 'Fire', 'Earth')
+    expect(outcome).toMatchObject({ kind: 'new', made: [] })
+    expect(outcome.kind === 'new' && outcome.connection.inferred).toBe(true)
     expect(combine(GRAPH, one, 'Fire', 'fire').kind).toBe('none')
+    expect(combine(GRAPH, one, 'Fire', 'Nowhere').kind).toBe('none')
+  })
+})
+
+describe('connectionFor', () => {
+  it('is the graph’s own connection where it has one', () => {
+    expect(connectionFor(GRAPH, 'water', 'Fire')).toBe(GRAPH.byKey.get('fire|water'))
+  })
+
+  it('reads any other pair through the concept tied most strongly to both', () => {
+    // Fire — Water — Earth, both at 20: 0.5 × 20 × 20 / 100 = 2.
+    const c = connectionFor(GRAPH, 'Fire', 'Earth')!
+    expect(c).toMatchObject({ key: 'earth|fire', a: 'Earth', b: 'Fire', strength: 2, inferred: true })
+    expect(['Water', 'Air']).toContain(c.via)
+    expect(connectionFor(GRAPH, 'Earth', 'Fire')).toBe(c)
+  })
+
+  it('never reads a pair as nothing at all', () => {
+    expect(connectionFor(GRAPH, 'Lone', 'Fire')?.strength).toBe(FLOOR_STRENGTH)
+  })
+
+  it('reads two concepts from different packs off their own pages', () => {
+    const pages: Record<string, string> = {
+      Rain: '**Rain** falls from a [[Cloud]].',
+      Cloud: '**Cloud** is vapour.',
+      Sun: '**Sun** shines.',
+    }
+    const page = (n: string) => pages[n]
+    const left = craftGraph(buildConceptGraph({ concepts: ['Rain', 'Sun'], page, questions: [], lines: [] }), page)
+    const right = craftGraph(buildConceptGraph({ concepts: ['Cloud', 'Sun'], page, questions: [], lines: [] }), page)
+    const c = connectionFor(mergeGraphs([left, right]), 'Rain', 'Cloud')!
+    expect(c.strength).toBe(40)
+    expect(c.mentions[0]).toMatchObject({ from: 'Rain', linked: true })
+  })
+
+  it('keeps an inferred connection on the board', () => {
+    const state = boardState(GRAPH, SEEDS, found(['Fire', 'Earth']))
+    expect(state.found.map(c => c.key)).toEqual(['earth|fire'])
+  })
+})
+
+describe('the score', () => {
+  it('rewards a strong connection far more than a faint one', () => {
+    expect(connectionPoints(90)).toBe(81)
+    expect(connectionPoints(50)).toBe(25)
+    expect(connectionPoints(20)).toBe(4)
+    expect(connectionPoints(2)).toBe(1)
+  })
+
+  it('rewards practice far more again, per question right', () => {
+    expect(practicePoints(90, 0)).toBe(0)
+    expect(practicePoints(90, 5)).toBe(550)
+    expect(practicePoints(90, 1)).toBeGreaterThan(connectionPoints(90))
+  })
+
+  it('adds up every connection found and its best practice', () => {
+    const state = boardState(GRAPH, SEEDS, found(['Fire', 'Water'], ['Fire', 'Earth']))
+    expect(craftScore(state)).toEqual({ total: 5, found: 5, practice: 0 })
+    expect(craftScore(state, { 'fire|water': 2, 'gone|nowhere': 9 })).toEqual({ total: 5 + 80, found: 5, practice: 80 })
   })
 })
 
@@ -201,8 +267,13 @@ describe('starter packs', () => {
 describe('topicTally', () => {
   it('counts what is in hand and what is found', () => {
     expect(topicTally(GRAPH, boardState(GRAPH, SEEDS, found(['Fire', 'Water'])))).toEqual({
-      held: 6, concepts: 8, found: 1, connections: 11, complete: false,
+      held: 6, concepts: 8, found: 1, connections: 11, links: 1, complete: false,
     })
+  })
+
+  it('counts an inferred connection among the links, not among the graph’s own', () => {
+    const tally = topicTally(GRAPH, boardState(GRAPH, SEEDS, found(['Fire', 'Water'], ['Fire', 'Earth'])))
+    expect(tally).toMatchObject({ found: 1, links: 2 })
   })
 
   it('is complete once every connection is found', () => {

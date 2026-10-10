@@ -31,6 +31,8 @@ import { useSoundEffects } from '@/hooks/useSoundEffects'
 import {
   boardState,
   combine,
+  connectionPoints,
+  craftScore,
   craftTopics,
   mergeGraphs,
   packSeeds,
@@ -41,10 +43,14 @@ import {
   topicTally,
   type CraftGraph,
   type CraftProgress,
+  type CraftScore,
   type CraftTopic,
   type TopicTally,
 } from '@/lib/conceptCraft'
-import { STRENGTH_TIERS, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
+import { MIN_STRENGTH, STRENGTH_TIERS, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
+import { relationOf, relationSentence, type Placement, type Relation, type WrittenRelations } from '@/lib/conceptRelations'
+import { clearPracticeScores, readPracticeScores, startCraftPractice, type CraftPracticeScores } from '@/lib/craftPractice'
+import writtenRelations from '@/data/craftRelations.json'
 import { examAccentStyle } from '@/lib/examColors'
 import { setWikiContentLookup } from '@/lib/github'
 import { filterQuestions } from '@/lib/parser'
@@ -129,6 +135,26 @@ function AddPack({ topicId }: { topicId: string }) {
 /** "Exam P", "Exam MAS-I", "Exam 5" — a topic's exam, as the ladder names it. */
 function examName(topic: CraftTopic): string {
   return examDisplayName(topic.examPage).replace(/-\d+$/, '')
+}
+
+const WRITTEN: WrittenRelations = writtenRelations
+
+let placementRead: Map<string, Placement> | null = null
+/** Where each concept sits: the sections (topic ids) and exams that name it — for a relation with nothing closer to say. */
+function placementOf(name: string): Placement | undefined {
+  if (!placementRead) {
+    const out = new Map<string, { topics: string[]; exams: string[] }>()
+    for (const t of allTopics()) {
+      for (const c of t.concepts) {
+        const p = out.get(c.toLowerCase()) ?? { topics: [], exams: [] }
+        p.topics.push(t.id)
+        if (!p.exams.includes(examName(t))) p.exams.push(examName(t))
+        out.set(c.toLowerCase(), p)
+      }
+    }
+    placementRead = out
+  }
+  return placementRead.get(name.toLowerCase())
 }
 
 let groupsRead: PackGroup[] | null = null
@@ -261,7 +287,24 @@ function CraftPlay({
   const [fresh, setFresh] = useState<{ made: string[]; connection: string | null }>({ made: [], connection: null })
   const [flash, setFlash] = useState<string | null>(null)
   const [openKey, setOpenKey] = useState<string | null>(null)
-    const [packsOpen, setPacksOpen] = useState(false)
+  const [packsOpen, setPacksOpen] = useState(false)
+  // What each connection's practice earned — re-read whenever the board opens,
+  // which is how a practice quiz's result comes back (lib/craftPractice.ts).
+  const [practiced, setPracticed] = useState<CraftPracticeScores>(readPracticeScores)
+  const score = useMemo(() => craftScore(state, practiced), [state, practiced])
+
+  // What every connection says (lib/conceptRelations.ts), read once a board.
+  const relate = useMemo(() => {
+    const cache = new Map<string, Relation>()
+    return (c: Connection): Relation => {
+      let r = cache.get(c.key)
+      if (!r) {
+        r = relationOf(graph, c, { written: WRITTEN, placement: placementOf })
+        cache.set(c.key, r)
+      }
+      return r
+    }
+  }, [graph])
 
   // The concept the popup is showing, while it is open — lit on the board.
   const reading = useConceptPopup(s => {
@@ -340,16 +383,20 @@ function CraftPlay({
       play('complete')
       for (const t of completed) trackCraftTopicCompleted({ exam: t.exam, topic: t.id })
     } else {
-      // A card landing is `collect`; a line alone, a right answer.
-      play(made.length > 0 ? 'collect' : 'correct')
+      // A card landing is `collect`; a line the notes draw, a right answer; a
+      // faint inferred one, barely a click.
+      play(made.length > 0 ? 'collect' : connection.strength >= MIN_STRENGTH ? 'correct' : 'select')
     }
-    // No card, no toast: the map is the answer. Assistive tech is told what changed.
+    // What it scored and what it says, in one line; the map is the rest.
+    const points = connectionPoints(connection.strength)
+    const sentence = relationSentence(relate(connection))
+    setNotice(`+${points} · ${sentence}`)
     setAnnounce(
-      `Connected ${connection.a} and ${connection.b}, strength ${connection.strength}.`
+      `Connected ${connection.a} and ${connection.b}, strength ${connection.strength}: ${sentence}. Plus ${points} points.`
       + (made.length > 0 ? ` New: ${made.join(', ')}.` : ''),
     )
     trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'new', strength: connection.strength, made: made.length })
-  }, [progress, addConnection, packs, packGraphs, packOf, play])
+  }, [progress, addConnection, packs, packGraphs, packOf, play, relate])
 
   const onCombine = useCallback((a: string, b: string): DropVerdict => {
     setHeld(null)
@@ -361,18 +408,15 @@ function CraftPlay({
       trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'known', strength: outcome.connection.strength })
       return 'stay'
     }
+    // Every pair connects; only a card dropped on itself, or one no longer in
+    // play, goes back — silently (docs/sound-design.md).
     if (outcome.kind === 'none') {
-      // Mistakes are silent (docs/sound-design.md); the card going back and
-      // one line of text are the whole of it.
       resetCombo('correct')
-      setNotice('No connection between these two')
-      const topic = packs[packs.length - 1]
-      if (topic) trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'none' })
       return 'bounce'
     }
     commit(outcome.connection, outcome.made)
     return 'stay'
-  }, [graph, state, packs, packOf, commit, resetCombo])
+  }, [graph, state, packOf, commit, resetCombo])
 
   // ── The deck's hands ─────────────────────────────────────────────────────
   const tapDeck = useCallback((name: string) => {
@@ -420,7 +464,9 @@ function CraftPlay({
     if (isPhone) useConceptPopup.getState().close()
   }, [isPhone])
 
-  const practice = useCallback((ids: string[]) => {
+  const practice = useCallback((key: string, ids: string[]) => {
+    // Leave a note for the quiz, so what it scores comes back to this connection.
+    startCraftPractice(key, ids)
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
     } catch { /* private mode: the quiz falls back to its own draw */ }
@@ -445,6 +491,8 @@ function CraftPlay({
 
   const startOver = () => {
     resetBoard()
+    clearPracticeScores()
+    setPracticed({})
     setHeld(null)
     setOpenKey(null)
   }
@@ -487,7 +535,7 @@ function CraftPlay({
 
   return (
     <>
-      <BoardHeader tally={empty ? null : tally} />
+      <BoardHeader tally={empty ? null : tally} score={empty ? null : score} />
 
       <div className="relative min-h-0 flex-1">
         <CraftBoard
@@ -504,6 +552,7 @@ function CraftPlay({
           freshConnection={fresh.connection}
           flashConnection={flash}
           openConnection={openKey}
+          relationOf={relate}
           onOpen={read}
           onCombine={onCombine}
           onConnection={showConnection}
@@ -526,8 +575,8 @@ function CraftPlay({
               <div className="space-y-1.5">
                 <h2 className="text-lg font-semibold">Start with a starter pack</h2>
                 <p className="text-sm text-muted-foreground">
-                  Add any exam section and its first concepts land here. Drop one on another: where the notes connect
-                  them, a line joins them, and what they make appears.
+                  Add any exam section and its first concepts land here. Drop one on another: every pair connects,
+                  and the stronger the connection, the more it scores. Practise a connection to score far more.
                 </p>
               </div>
               <button
@@ -622,10 +671,12 @@ function CraftPlay({
               connection={open}
               practice={practiceIds}
               makes={openMakes}
+              relation={relate(open)}
+              practiced={practiced[open.key] ?? 0}
               layout="drawer"
               onClose={() => setOpenKey(null)}
               onRead={read}
-              onPractice={practice}
+              onPractice={ids => practice(open.key, ids)}
             />
           </div>
         )}
@@ -638,10 +689,12 @@ function CraftPlay({
             connection={open}
             practice={practiceIds}
             makes={openMakes}
+            relation={relate(open)}
+            practiced={practiced[open.key] ?? 0}
             layout="sheet"
             onClose={() => setOpenKey(null)}
             onRead={read}
-            onPractice={practice}
+            onPractice={ids => practice(open.key, ids)}
           />
         </div>
       )}
@@ -659,7 +712,7 @@ function CraftPlay({
   )
 }
 
-function BoardHeader({ tally }: { tally: TopicTally | null }) {
+function BoardHeader({ tally, score = null }: { tally: TopicTally | null; score?: CraftScore | null }) {
   // Back where the board was opened from — the Quiz tab, or a study guide.
   const back = useBack({ to: '/', label: 'Quiz' })
   return (
@@ -680,10 +733,20 @@ function BoardHeader({ tally }: { tally: TopicTally | null }) {
         {tally && (
           <p className="truncate text-xs tabular-nums text-muted-foreground" data-testid="craft-tally">
             {tally.held} of {tally.concepts} concepts
-            <span className="hidden sm:inline"> · {tally.found} of {tally.connections} connections</span>
+            <span className="hidden sm:inline"> · {tally.found} of {tally.connections} key connections</span>
           </p>
         )}
       </div>
+      {score && (
+        <div
+          className="shrink-0 text-right"
+          title={`${score.found.toLocaleString()} from connections found, ${score.practice.toLocaleString()} from practice`}
+          data-testid="craft-score"
+        >
+          <p className="text-lg font-bold tabular-nums leading-none sm:text-xl">{score.total.toLocaleString()}</p>
+          <p className="text-[11px] text-muted-foreground">Score</p>
+        </div>
+      )}
     </header>
   )
 }

@@ -270,14 +270,19 @@ before touching that area**:
   opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
   logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
   (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
-  drops one card on another: where the vault ties them together, a line joins them carrying
-  the connection's **strength**, 0–100, and the connection **makes** what is built from the
-  pair, cause and effect — the concepts whose own pages define them by the two
+  drops one card on another: **any two connect** — a line joins them carrying the
+  connection's **strength**, 0–100, drawn as its thickness, and what one is to the other in
+  1–5 words (`lib/conceptRelations.ts`: a label written for each of the graph's connections in
+  `data/craftRelations.json`, else one read off the vault for any pair); the board **scores**
+  each find by its strength (squared) and a connection's practice far more
+  (`craftScore`, `lib/craftPractice.ts`). Where the vault ties them together, the connection
+  also **makes** what is built from the pair, cause and effect — the concepts whose own pages define them by the two
   (`Pure Premium = Frequency × Severity`; the recipes are read off the made concept's page by
   `lib/conceptRecipes.ts`) — landing beside the pair filled with the exam's accent, a dashed
-  line to them from the line that made them; where nothing ties the two, the card goes back.
+  line to them from the line that made them; a pair the notes barely tie is an *inferred*
+  connection (`connectionFor`) that makes nothing.
   Nothing opens on a find (the map is the answer), and there is no prompt or challenge: the
-  reader builds and discovers on their own. Nothing is authored either — a topic is an exam
+  reader builds and discovers on their own. Nothing is authored but the relation labels — a topic is an exam
   page's learning objective (`craftTopics`, thirty boards), and every connection is
   **derived** (`lib/conceptGraph.ts`) from what the pages say about each other (links, and
   names written out — a common name discounted by how many of the topic's pages write it),

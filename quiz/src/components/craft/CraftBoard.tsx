@@ -9,7 +9,8 @@ import {
   useState,
 } from 'react'
 import type { BoardState } from '@/lib/conceptCraft'
-import { strengthTier, type Connection } from '@/lib/conceptGraph'
+import type { Relation } from '@/lib/conceptRelations'
+import { MIN_STRENGTH, strengthTier, type Connection } from '@/lib/conceptGraph'
 import {
   ALPHA_MIN,
   bodyAt,
@@ -18,6 +19,7 @@ import {
   cool,
   fitView,
   lineLabelPoint,
+  lineWidth,
   makeBody,
   seedPositions,
   spawnBeside,
@@ -100,6 +102,8 @@ export interface CraftBoardProps {
   flashConnection: string | null
   /** The connection whose card is open. */
   openConnection: string | null
+  /** What a connection says, in 1–5 words — written under a lit line's strength. */
+  relationOf?: (connection: Connection) => Relation
   onOpen: (name: string) => void
   onCombine: (a: string, b: string) => DropVerdict
   onConnection: (connection: Connection) => void
@@ -148,13 +152,18 @@ const ACCENT = 'var(--exam-accent, hsl(var(--primary)))'
 const ACCENT_FILL = 'var(--exam-accent-vivid, hsl(var(--primary)))'
 const ACCENT_HALO = 'var(--exam-accent-soft, hsl(var(--primary) / 0.15))'
 
-/** A line's weight and ink, from its connection's strength. */
-function edgeStyle(strength: number, lit: boolean): { width: number; color: string } {
-  const s = strength / 100
-  if (lit) return { width: 1.5 + 2.5 * s, color: ACCENT }
+/**
+ * A line's weight and ink, from its connection's strength (`lineWidth`): a
+ * hairline for a faint pair, a thick cord for a strong one. A connection under
+ * `MIN_STRENGTH` — one the notes don't tie directly — is dashed as well as thin.
+ */
+function edgeStyle(strength: number, lit: boolean): { width: number; color: string; dash?: string } {
+  const width = lineWidth(strength)
+  const dash = strength < MIN_STRENGTH ? '2 5' : undefined
+  if (lit) return { width: width + 1, color: ACCENT, dash }
   const tier = strengthTier(strength)
-  const alpha = tier === 'strong' ? 0.85 : tier === 'moderate' ? 0.55 : 0.3
-  return { width: 0.75 + 2.75 * s, color: `hsl(var(--foreground) / ${alpha})` }
+  const alpha = tier === 'strong' ? 0.85 : tier === 'moderate' ? 0.6 : strength < MIN_STRENGTH ? 0.3 : 0.4
+  return { width, color: `hsl(var(--foreground) / ${alpha})`, dash }
 }
 
 export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function CraftBoard(
@@ -171,6 +180,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     freshConnection,
     flashConnection,
     openConnection,
+    relationOf,
     onOpen,
     onCombine,
     onConnection,
@@ -202,8 +212,10 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
   const placed = state.held
   const connections = state.found
 
+  // Only what the notes tie together pulls on the map; an inferred pair is
+  // drawn but leaves the layout alone, or every faint pair would knot it up.
   const springs = useMemo<Spring[]>(
-    () => connections.map(c => connectionSpring(
+    () => connections.filter(c => c.strength >= MIN_STRENGTH).map(c => connectionSpring(
       conceptKey(c.a),
       conceptKey(c.b),
       c.strength,
@@ -703,7 +715,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
             const b = all[conceptKey(c.b)]
             if (!a || !b) return null
             const lit = isLit(c)
-            const { width, color } = edgeStyle(c.strength, lit)
+            const { width, color, dash } = edgeStyle(c.strength, lit)
             const fresh = freshConnection === c.key
             return (
               <g
@@ -717,7 +729,10 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
                   fill="none"
                   stroke={color}
                   strokeWidth={width}
+                  strokeDasharray={fresh ? undefined : dash}
                   strokeLinecap="round"
+                  data-testid="craft-line"
+                  data-strength={c.strength}
                 />
               </g>
             )
@@ -755,45 +770,67 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
           const b = all[conceptKey(c.b)]
           if (!a || !b) return null
           const lit = isLit(c)
+          const fresh = freshConnection === c.key
           // A busy board, or one zoomed out, shows only the numbers of what is being looked at.
-          if ((anyLit || !zoomedIn) && !lit) return null
+          if ((anyLit || !zoomedIn) && !lit && !fresh) return null
           const scale = lit ? badgeScale : 1
           const w = BADGE.w * scale
           const h = BADGE.h * scale
           const { x, y } = lineLabelPoint(a, b)
           const tier = strengthTier(c.strength)
+          // What the connection says, under its strength — for the line being looked at, or just found.
+          const relation = (lit || fresh) && relationOf ? relationOf(c) : null
+          // An arrow says which way the phrase reads, from the card it is about.
+          let label: string | null = null
+          if (relation) {
+            const from = all[conceptKey(relation.from)]
+            const to = all[conceptKey(relation.to)]
+            const leftward = !!from && !!to && from.x > to.x
+            label = relation.symmetric ? relation.label : leftward ? `← ${relation.label}` : `${relation.label} →`
+          }
           return (
-            <button
-              key={c.key}
-              type="button"
-              data-sound="none"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={() => onConnection(c)}
-              className={cn(
-                'absolute left-0 top-0 flex items-center justify-center rounded-full text-[10px] font-semibold leading-none tabular-nums transition-colors',
-                // What is being looked at is never under a card.
-                lit ? 'z-[15]' : 'z-[5]',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                lit
-                  ? 'text-white'
-                  : tier === 'strong'
-                    ? 'bg-foreground text-background hover:opacity-90'
-                    : 'bg-muted text-muted-foreground ring-1 ring-border hover:text-foreground',
-                freshConnection === c.key && 'craft-node-pop',
+            <div key={c.key} className={cn('pointer-events-none absolute left-0 top-0', lit || fresh ? 'z-[15]' : 'z-[5]')}>
+              <button
+                type="button"
+                data-sound="none"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={() => onConnection(c)}
+                className={cn(
+                  'pointer-events-auto absolute left-0 top-0 flex items-center justify-center rounded-full text-[10px] font-semibold leading-none tabular-nums transition-colors',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  lit
+                    ? 'text-white'
+                    : tier === 'strong'
+                      ? 'bg-foreground text-background hover:opacity-90'
+                      : 'bg-muted text-muted-foreground ring-1 ring-border hover:text-foreground',
+                  freshConnection === c.key && 'craft-node-pop',
+                )}
+                style={{
+                  width: w,
+                  height: h,
+                  fontSize: 10 * scale,
+                  transform: `translate(${x - w / 2}px, ${y - h / 2}px)`,
+                  background: lit ? ACCENT_FILL : undefined,
+                }}
+                title={`${c.a} and ${c.b}: ${tier} connection, ${c.strength} of 100`}
+                aria-label={`${c.a} and ${c.b}: ${tier} connection, strength ${c.strength}`}
+                data-testid="craft-strength"
+              >
+                {c.strength}
+              </button>
+              {label && (
+                <span
+                  className="absolute left-0 top-0 whitespace-nowrap rounded-md bg-card/95 px-1.5 py-0.5 font-medium leading-tight text-foreground shadow-[var(--shadow-card)]"
+                  style={{
+                    fontSize: 11 * scale,
+                    transform: `translate(${x}px, ${y + h / 2 + 3 * scale}px) translateX(-50%)`,
+                  }}
+                  data-testid="craft-relation"
+                >
+                  {label}
+                </span>
               )}
-              style={{
-                width: w,
-                height: h,
-                fontSize: 10 * scale,
-                transform: `translate(${x - w / 2}px, ${y - h / 2}px)`,
-                background: lit ? ACCENT_FILL : undefined,
-              }}
-              title={`${c.a} and ${c.b}: ${tier} connection, ${c.strength} of 100`}
-              aria-label={`${c.a} and ${c.b}: ${tier} connection, strength ${c.strength}`}
-              data-testid="craft-strength"
-            >
-              {c.strength}
-            </button>
+            </div>
           )
         })}
 

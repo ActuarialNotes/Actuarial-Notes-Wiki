@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { ArrowRight, Play, X } from 'lucide-react'
 import { MarkdownText } from '@/components/MarkdownText'
-import { STRENGTH_TIERS, strengthTier, type Connection } from '@/lib/conceptGraph'
+import { MIN_STRENGTH, STRENGTH_TIERS, strengthTier, type Connection } from '@/lib/conceptGraph'
+import { connectionPoints, practicePoints } from '@/lib/conceptCraft'
 import type { Recipe } from '@/lib/conceptRecipes'
+import { relationSentence, type Relation } from '@/lib/conceptRelations'
 import { cn } from '@/lib/utils'
 
 /**
@@ -13,8 +15,11 @@ import { cn } from '@/lib/utils'
  * the connection **makes** — each concept with its own page's words for how
  * the two build it (`lib/conceptRecipes.ts`) — then what each page says about
  * the other, transcribed from the graph (`lib/conceptGraph.ts`), each naming
- * its page. The concepts themselves are read in the app's popup, which their
- * names open. A drawer on the right of a wide board, a sheet over a phone's.
+ * its page. Its title is the connection as a sentence — the two names and
+ * what one is to the other (`lib/conceptRelations.ts`) — and under the meter,
+ * what it scored and what its practice can still score. The concepts
+ * themselves are read in the app's popup, which their names open. A drawer on
+ * the right of a wide board, a sheet over a phone's.
  */
 export interface CraftConnectionProps {
   connection: Connection
@@ -22,6 +27,10 @@ export interface CraftConnectionProps {
   practice: readonly string[]
   /** What the connection makes. */
   makes: readonly Recipe[]
+  /** What the connection says, 1–5 words between the two names. */
+  relation: Relation
+  /** Questions right on this connection's best practice run so far. */
+  practiced: number
   layout: 'drawer' | 'sheet'
   onClose: () => void
   /** Open a concept in the app's popup. */
@@ -32,9 +41,13 @@ export interface CraftConnectionProps {
 
 const TIER_WORD = { weak: 'Weak connection', moderate: 'Moderate connection', strong: 'Strong connection' } as const
 
-export function CraftConnection({ connection, practice, makes, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
-  const { a, b, strength, mentions } = connection
+export function CraftConnection({ connection, practice, makes, relation, practiced, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
+  const { strength, mentions } = connection
   const tier = strengthTier(strength)
+  const faint = strength < MIN_STRENGTH
+  const found = connectionPoints(strength)
+  const earned = practicePoints(strength, practiced)
+  const perRight = practicePoints(strength, 1)
   const practiceRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   // A card opened by a tap takes the focus — on its one action, when it has one.
@@ -54,7 +67,7 @@ export function CraftConnection({ connection, practice, makes, layout, onClose, 
 
   return (
     <aside
-      aria-label={`Connection: ${a} and ${b}`}
+      aria-label={`Connection: ${relationSentence(relation)}`}
       className={cn(
         'flex flex-col bg-card text-card-foreground shadow-2xl',
         layout === 'drawer' ? 'craft-drawer-in h-full w-[22rem] rounded-xl' : 'craft-sheet-in max-h-[70dvh] w-full rounded-t-2xl',
@@ -62,10 +75,24 @@ export function CraftConnection({ connection, practice, makes, layout, onClose, 
       data-testid="craft-connection"
     >
       <div className="flex items-start gap-2 px-4 pb-2 pt-4">
+        {/* The connection as a sentence: subject, what it is to the other, object. */}
         <h2 className="min-w-0 flex-1 text-lg">
-          {name(a)}
-          <span className="mx-1.5 font-normal text-muted-foreground">and</span>
-          {name(b)}
+          {name(relation.from)}
+          {/* Said of both: "A and B together make C". */}
+          {relation.symmetric && (
+            <>
+              <span className="mx-1.5 font-normal text-muted-foreground">and</span>
+              {name(relation.to)}
+            </>
+          )}
+          <span
+            className="mx-1.5 font-normal"
+            style={{ color: 'var(--exam-accent, hsl(var(--primary)))' }}
+            data-testid="craft-connection-relation"
+          >
+            {relation.label}
+          </span>
+          {!relation.symmetric && name(relation.to)}
         </h2>
         <button
           ref={closeRef}
@@ -82,7 +109,7 @@ export function CraftConnection({ connection, practice, makes, layout, onClose, 
         <section aria-label="Strength" className="space-y-2">
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold tabular-nums leading-none" data-testid="craft-connection-strength">{strength}</span>
-            <span className="text-sm font-medium">{TIER_WORD[tier]}</span>
+            <span className="text-sm font-medium">{faint ? 'Faint connection' : TIER_WORD[tier]}</span>
           </div>
           {/* The measure, 0–100, with the two places its bands start. */}
           <div className="relative h-1.5 rounded-full bg-muted" role="img" aria-label={`${strength} out of 100`}>
@@ -94,6 +121,18 @@ export function CraftConnection({ connection, practice, makes, layout, onClose, 
               <span key={t} aria-hidden className="absolute top-0 h-full w-px bg-card" style={{ left: `${t}%` }} />
             ))}
           </div>
+          <p className="text-xs tabular-nums text-muted-foreground" data-testid="craft-connection-points">
+            +{found} for finding it
+            {earned > 0 ? ` · +${earned.toLocaleString()} from practice (${practiced} right)` : ''}
+            {practice.length > 0 ? ` · +${perRight} for each question right` : ''}
+          </p>
+          {faint && (
+            <p className="text-xs text-muted-foreground">
+              {connection.via
+                ? `The notes don't tie these two directly; they meet through ${connection.via}.`
+                : `The notes don't tie these two directly.`}
+            </p>
+          )}
         </section>
 
         {practice.length > 0 && (

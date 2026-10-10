@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { EMPTY_PROGRESS, boardState, craftTopics, madeBy, seedConcepts, topicGraph, withConnection, type CraftGraph, type CraftProgress } from './conceptCraft'
+import { EMPTY_PROGRESS, boardState, connectionFor, craftTopics, madeBy, seedConcepts, topicGraph, withConnection, type CraftGraph, type CraftProgress } from './conceptCraft'
+import { relationOf, writtenRelation, type WrittenRelations } from './conceptRelations'
+import written from '../data/craftRelations.json'
 import { pageMentions } from './conceptGraph'
 import { filterQuestions, parseQuestion, type Question } from './parser'
 import { examPageIdFromFile } from './examMenu'
@@ -132,5 +134,47 @@ describe('Concept Craft over the vault', () => {
         }
       }
     }
+  })
+
+  describe('what every connection says', () => {
+    const WRITTEN: WrittenRelations = written
+    const words = (label: string, names: readonly string[]) => {
+      let rest = label.toLowerCase()
+      for (const n of [...names].sort((x, y) => y.length - x.length)) rest = rest.split(n.toLowerCase()).join('X')
+      return rest.split(/\s+/).filter(Boolean).length
+    }
+    const allNames = [...pages.values()].map(p => p.name)
+
+    it('writes labels only for two concept pages, one to five words, naming neither', () => {
+      for (const [key, value] of Object.entries(WRITTEN)) {
+        const [a, b] = key.split('|')
+        expect(pages.has(a) && pages.has(b), key).toBe(true)
+        const r = writtenRelation(WRITTEN, a, b)
+        expect(r, key).not.toBeNull()
+        const n = r!.label.split(/\s+/).length
+        expect(n >= 1 && n <= 5, `${key}: ${value}`).toBe(true)
+        for (const name of [a, b]) expect(r!.label.toLowerCase().includes(name), `${key}: ${value}`).toBe(false)
+      }
+    })
+
+    it.each(graphs.map(([t, g]) => [t.id, g] as const))('%s: nearly every connection has a written label', (_, graph) => {
+      const missing = graph.connections.filter(c => !WRITTEN[c.key])
+      expect(missing.length, missing.slice(0, 10).map(c => c.key).join(', ')).toBeLessThanOrEqual(Math.ceil(graph.connections.length / 20))
+    })
+
+    it('says something in one to five words about any pair, written or not', () => {
+      for (const [topic, graph] of graphs) {
+        const names = graph.concepts
+        for (let i = 0; i < names.length; i += 3) {
+          for (let j = i + 1; j < names.length; j += 5) {
+            const c = connectionFor(graph, names[i], names[j])!
+            const r = relationOf(graph, c)
+            expect(r.label.length, `${topic.id}: ${c.key}`).toBeGreaterThan(0)
+            expect(words(r.label, allNames), `${topic.id}: ${c.key} → ${r.label}`).toBeLessThanOrEqual(5)
+            expect(c.strength).toBeGreaterThanOrEqual(1)
+          }
+        }
+      }
+    })
   })
 })

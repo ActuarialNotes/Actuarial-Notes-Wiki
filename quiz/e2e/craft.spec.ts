@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 
 // Concept Craft (docs/concept-craft.md): the way in from the Quiz tab onto an
 // empty board, a starter pack added from the + menu, a connection found by dropping one concept on another — new concepts made,
-// and nothing to close afterwards — a pair nothing connects going back, the
+// and nothing to close afterwards — any pair connecting and scoring, the
 // tap-then-tap way in, the app's concept popup a card opens, and a
 // connection's own card down to its quiz. Every flow is signed out, so the
 // board lives in localStorage alone, which is also what it does for a reader.
@@ -75,7 +75,7 @@ test.describe('concept craft', () => {
     await menu.getByTestId('craft-pack').filter({ hasText: 'General Probability' }).click()
     await expect(menu).toHaveCount(0)
     await expect(page.getByTestId('craft-empty')).toHaveCount(0)
-    await expect(page.getByTestId('craft-tally')).toContainText(/^\d+ of \d+ concepts · 0 of \d+ connections$/)
+    await expect(page.getByTestId('craft-tally')).toContainText(/^\d+ of \d+ concepts · 0 of \d+ key connections$/)
     // A hand, not the deck: a few cards to make the rest from.
     const cards = await inHand(page)
     expect(cards.length).toBeGreaterThanOrEqual(2)
@@ -96,7 +96,7 @@ test.describe('concept craft', () => {
     await drop(page, a, b)
 
     await expect(strength(page, a, b)).toHaveText(/^\d+$/)
-    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ connections$/)
+    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ key connections$/)
     // What the pair made lands on the board, in the exam's colour, drawn from
     // the line that made it — cause to effect.
     await expect.poll(() => page.locator('[data-craft-node]').count()).toBeGreaterThan(before)
@@ -108,31 +108,38 @@ test.describe('concept craft', () => {
 
     const made = await page.locator('[data-craft-node]').count()
     await page.reload()
-    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ connections$/)
+    await expect(page.getByTestId('craft-tally')).toContainText(/· 1 of \d+ key connections$/)
     await expect(page.locator('[data-craft-node]')).toHaveCount(made)
     await expect(strength(page, a, b)).toBeVisible()
   })
 
-  test('sends back a pair nothing connects', async ({ page }) => {
+  test('connects any pair, says how they relate, and scores the stronger more', async ({ page }) => {
     // PCPA's *Dealing with Data* is loosely knit — nothing in it is built from
     // anything else, so all nine of its cards are dealt — and its hand holds
-    // pairs nothing connects. Try them, tapping one deck card then another,
-    // until one goes back.
+    // pairs the notes barely tie. Every one of them still connects.
     await page.goto('/craft/exam-pcpa-dealing-with-data')
     await expect(page).toHaveURL(/\/craft$/)
     const cards = await inHand(page)
     const tiles = page.getByTestId('craft-deck-tile')
-    const notice = page.getByTestId('craft-notice').filter({ hasText: 'No connection between these two' })
-    let sentBack = false
-    for (let i = 0; i < cards.length && !sentBack; i++) {
-      for (let j = i + 1; j < cards.length && !sentBack; j++) {
-        if (await strength(page, cards[i], cards[j]).count()) continue
-        await tiles.nth(i).click()
-        await tiles.nth(j).click()
-        sentBack = await notice.waitFor({ state: 'visible', timeout: 1000 }).then(() => true, () => false)
-      }
+    const score = page.getByTestId('craft-score')
+    await expect(score).toContainText(/^0Score$/)
+    const points: number[] = []
+    for (const [i, j] of [[0, cards.length - 1], [1, cards.length - 2]]) {
+      await tiles.nth(i).click()
+      await tiles.nth(j).click()
+      await expect(strength(page, cards[i], cards[j])).toBeVisible()
+      // What it scored and what the two are to each other, in one line.
+      const notice = page.getByTestId('craft-notice')
+      await expect(notice).toHaveText(/^\+\d+ · .+$/)
+      points.push(Number((await notice.textContent())?.match(/^\+(\d+)/)?.[1]))
+      await expect(notice).toHaveCount(0, { timeout: 5000 })
     }
-    expect(sentBack).toBe(true)
+    await expect(score).toContainText(new RegExp(`^${points[0] + points[1]}Score$`))
+    // The line carries its weight: a stronger connection is drawn thicker.
+    const widths = await page.getByTestId('craft-line').evaluateAll(lines =>
+      lines.map(l => ({ s: Number(l.getAttribute('data-strength')), w: Number(l.getAttribute('stroke-width')) })))
+    const [weak, strong] = [...widths].sort((x, y) => x.s - y.s)
+    if (strong.s > weak.s) expect(strong.w).toBeGreaterThan(weak.w)
   })
 
   test('connects by tapping a deck card, then a card on the board', async ({ page }) => {
@@ -165,6 +172,8 @@ test.describe('concept craft', () => {
     const card = page.getByTestId('craft-connection')
     await expect(card).toBeVisible()
     await expect(card.getByTestId('craft-connection-strength')).toHaveText(/^\d+$/)
+    // What one is to the other, between their names.
+    await expect(card.getByTestId('craft-connection-relation')).not.toBeEmpty()
     // What the connection made, with its page's words for why.
     await expect(card.getByTestId('craft-makes').first()).toContainText(`Makes${made}`)
     const practice = card.getByRole('button', { name: /^Practice \d+ questions?$/ })

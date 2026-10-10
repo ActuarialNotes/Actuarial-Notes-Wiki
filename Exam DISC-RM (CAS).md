@@ -108,7 +108,7 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 12. Risk Control and Premium Auditing
 > 1. [[Risk Control|Insurer Risk Control Goals]]
-> 2. [[Risk Control|Risk Control Services]] Provided by [[Insurer|Insurers]]
+> 2. [[Risk Control|Risk Control Services]] Provided by Insurers
 > 3. Cooperation Between [[Risk Control]] and Other [[Insurance Operations|Insurer Functions]]
 > 4. Reasons for [[Premium Audit|Premium Auditing]]
 > 5. [[Premium Audit|Premium Auditing Process]]

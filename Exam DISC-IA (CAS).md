@@ -150,7 +150,7 @@ The Institutes gives the topics no exam weights.
 > [!example]- 16. Insurance Regulation
 > 1. [[Reasons for Insurance Regulation|Reasons for Insurance Regulations]]
 > 2. [[Insurance Regulator|Insurance Regulators]]
-> 3. [[Insurance Licensing|Licensing]] [[Insurer|Insurers]] and [[Insurance Producer|Insurance Personnel]]
+> 3. [[Insurance Licensing|Licensing]] Insurers and [[Insurance Producer|Insurance Personnel]]
 > 4. [[Solvency Monitoring|Monitoring Insurer Solvency]]
 > 5. [[State Rating Laws|Regulating Insurance Rates]]
 > 6. [[Policy Form Regulation|Regulating Insurance Policies]]

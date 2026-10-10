@@ -145,7 +145,7 @@ The overview pages stay, and they link down to the specific ones.
 After the re-link, G3 passes on all three DISCs. G2 then listed the new pages as missing, which made
 it the writing worklist.
 
-### 3.2 Writing the pages (in progress)
+### 3.2 Writing the pages (done, 10 Oct 2026)
 
 Every new page is written to the `actuarial-concept-definitions` standard. Every fact must come
 from a **free primary source** that a fact checker can fetch later. The course text belongs to The
@@ -162,7 +162,33 @@ Institutes and isn't available, so the sources are the documents the course itse
 Writers paraphrase the forms and never copy them; ISO holds the copyright. Each writer keeps a
 source note per page, which the fact checker starts from.
 
-### 3.3 Banks (in progress)
+**What writing found: the wrong country.** The writers turned up a second class of wrong link,
+which G3 can't see: pages written for **Canada** standing in for a U.S. course.
+
+- *Insurance Regulation*, *Rate Regulation*, *Market Conduct Regulation*, *Tort Litigation*,
+  *Workers Compensation Insurance*, *Uninsured Automobile Coverage*, *Unfair Discrimination*,
+  *Compulsory Auto Insurance*, *No-Fault Insurance* and *Residual Market* are all written for
+  Canada. That is right for Exam 6C and wrong for the DISCs.
+- The DISC sections that leaned on them now link new U.S. pages: *Reasons for Insurance
+  Regulation*, *State Rating Laws*, *State Market Conduct Regulation*, *Workers Compensation
+  Underwriting*, *Uninsured Motorists Coverage* and *Personal Auto Insurance Laws*.
+- Each new page links its Canadian counterpart in one line, and the Canadian pages are untouched.
+- Questions about U.S. rules no longer tag the Canadian pages.
+
+**Lesson for 6U.** Exam 6U is the U.S. variant of Exam 6. Its links need the same review for
+country before any of its pages are fact checked.
+
+In all, **74 specific pages** were written for the DISCs: the 67 from the first re-link, three
+U.S. regulation pages, and four more where a section still pointed at an overview (*General
+Liability Classification*, *Personal Auto Underwriting*, *Workers Compensation Underwriting* and
+*Personal Auto Insurance Laws*). About 70 existing pages gained the DISC material their sections
+needed: U.S. statutory accounting in the premium and reserve pages, PAP Part D in full, the
+property coinsurance clause, and others. Adding that material made **15 pages that had already
+been verified for other exams stale**, among them *Data Types*, *Earned Premium*, *Unearned
+Premium* and *Whole Life Insurance*. Each now needs a delta check, a cost to remember when one
+exam's campaign edits a page another exam shares.
+
+### 3.3 Banks (done, 10 Oct 2026: 70 / 131 / 221 questions)
 
 Each DISC gets a bank of the vault's own questions:
 
@@ -179,7 +205,11 @@ are mostly four-option multiple choice on a short insurance scenario, written wi
 it, and at least two for every new specific page. No published DISC questions exist to convert:
 The Institutes sells its course guide and publishes no samples.
 
-### 3.4 Fact check, then promote
+### 3.4 Fact check, then promote (DISCs promoted to beta 10 Oct 2026; fact check running)
+
+G2, G3 and G6 pass on all three DISCs, so they moved from development to beta and joined the
+DEFAULT track. The fact check runs as twelve packets, one per writer's area plus one for the
+study guides and the course pages (runs `2026-10-10T21:00Z/dv01`–`dv12`).
 
 A DISC page, reading or question can't be checked against the course, because the course isn't
 available. It is checked against the primary documents above. Those are what the course teaches,

@@ -2,7 +2,7 @@
 id: "discia-an-609"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Basic and Broad Forms"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Causes+of+Loss+Special+Form
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:229585f6aab01b3d26896ab043df2511b0f6a86dd1c1f1112a340be94fd095cc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-609.md
 ---
 After a downpour, water ponds on a warehouse's flat roof and its weight causes part of the roof to fall in, ruining stock below. Wind did not damage the roof. Which statement is correct?
 

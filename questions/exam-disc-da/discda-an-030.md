@@ -2,7 +2,7 @@
 id: "discda-an-030"
 exam: "Exam DISC-DA"
 topic: "Exploratory Data Visualization"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Scatter+Plot
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d3dbe23d9344b8d81954e2fe350f9e5deb1f379b4c420370f22f5ddd7a073e44
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-030.md
 ---
 
 A scatter plot of claim severity against coverage limit for 300,000 claims is a solid black mass in its lower left corner, so the analyst cannot tell where most claims lie. Which change best restores what the plot can show?

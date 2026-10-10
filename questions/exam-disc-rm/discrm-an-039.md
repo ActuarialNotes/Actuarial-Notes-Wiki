@@ -2,7 +2,7 @@
 id: "discrm-an-039"
 exam: "Exam DISC-RM"
 topic: "Liability Loss Exposure"
-learning_objective: "Analyzing Commercial Liability Loss Exposures"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Liability+Loss+Exposure
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c86a849cd678566a95016e57be212f57c7ae80abd7bef1f99b17b93b7201865c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-039.md
 ---
 
 A store expects 20 premises liability claims a year. Each claim costs an average of \$5,000 to defend, whether or not it results in a payment. Thirty percent of claims result in damages, which average \$40,000 when paid. What is the store's expected annual cost of these claims?

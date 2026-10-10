@@ -2,7 +2,7 @@
 id: "discia-an-027"
 exam: "Exam DISC-IA"
 topic: "Insurance Contract Characteristics"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:155bc4944355c1fdfe1f2258ea33f441f3d1e7e387969a7bc9229ea6815023d3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-027.md
 ---
 
 A homeowners policy excludes damage caused by "surface water" without defining the term. After a mudslide set off by a rainstorm, the insurer and the insured read the word differently, and the court finds both readings reasonable. Which characteristic of insurance contracts most directly leads the court to adopt the insured's reading?

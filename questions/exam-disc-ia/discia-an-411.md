@@ -2,7 +2,7 @@
 id: "discia-an-411"
 exam: "Exam DISC-IA"
 topic: "PAP Endorsements"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Medical+Payments+Coverage
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e5f388a31fc2fd6ff84d08dadce7919e698841b82f32ca021b7dfbe8143adf81
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-411.md
 ---
 A named insured buys a motorcycle and asks his agent to add it to his personal auto policy (ISO PP 00 01 09 18), which insures his sedan. Why does he need the miscellaneous type vehicle endorsement (PP 03 23) rather than simply listing the motorcycle in the declarations?
 

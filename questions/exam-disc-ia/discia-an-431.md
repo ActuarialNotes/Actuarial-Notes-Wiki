@@ -2,7 +2,7 @@
 id: "discia-an-431"
 exam: "Exam DISC-IA"
 topic: "HO-3 Coverage Conditions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3b40afe5217e8f9d0967b32c52ca7fe05eb7ed77450f51a58e1544d4cedb28a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-431.md
 ---
 An insurer issued a new one-year HO-3 (HO 00 03 05 11) five months ago, and the premium is paid. Which action does the policy allow the insurer to take now?
 

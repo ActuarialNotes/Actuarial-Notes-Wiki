@@ -2,7 +2,7 @@
 id: "discia-an-405"
 exam: "Exam DISC-IA"
 topic: "Uninsured Motorists Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/PAP+Endorsements
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:05f39a0c16c2fadc3350956b1b0ea1733ff1765f2e2fd6219356e456edca2448
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-405.md
 ---
 A named insured's PAP carries ISO's underinsured motorists endorsement (PP 03 11) with a \$25,000 limit. An at-fault driver whose bodily injury liability limit is \$25,000 injures her, causing \$60,000 of damages, and that driver's insurer pays its \$25,000 limit. What does her underinsured motorists coverage pay?
 

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bc4db78160e0f6888b779773deccd0a190e3e96482a93dfc0775e86f9fa7a81d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Causes of Loss Special Form.md
+---
+
 **The Causes of Loss – Special Form** (ISO CP 10 30) is the open perils option of the commercial property program: when "Special" is shown in the declarations, covered causes of loss means direct physical loss unless the loss is excluded or limited in the policy. Attached to a coverage form such as the [[Building and Personal Property Coverage Form|BPP]], it covers every cause the [[Causes of Loss Basic and Broad Forms|basic and broad forms]] name and more, theft included, so the work of reading it lies in its exclusions, its limitations and the exceptions that give coverage back.
 
 > $$\text{Covered}(c) \iff c \notin E \ \text{and}\ c \notin \Lambda$$

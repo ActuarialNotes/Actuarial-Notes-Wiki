@@ -2,7 +2,7 @@
 id: "discia-an-402"
 exam: "Exam DISC-IA"
 topic: "PAP Liability Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:709b8b127c358a0a4d600c3e9ec1b7fa776e9d5633d183d168cdccff808fcfd1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-402.md
 ---
 While her own car is in the shop for repairs, a named insured drives a loaner car that the dealer's policy insures for liability up to \$50,000. She injures a cyclist whose damages are \$120,000. Her own PAP has a \$250,000 each person limit. How much does her own PAP pay?
 

@@ -2,7 +2,7 @@
 id: "discrm-an-216"
 exam: "Exam DISC-RM"
 topic: "Insurance to Value"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+Property+Insurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e18dda88c3bd09e8c0a4a3754221d3f8ffa847cd269eab9e259648462c56a4f2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-216.md
 ---
 
 A building is insured for \$1,200,000 under a commercial property policy with an 80% coinsurance clause and a \$5,000 deductible. At the time of a fire, the building's value on the policy's valuation basis is \$2,000,000, and the loss is \$400,000. How much does the insurer pay?

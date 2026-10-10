@@ -2,7 +2,7 @@
 id: "discrm-an-016"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Unique Factors in the Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Investment+Income
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1ed2ed84953e494e69c8bf9ad9fccdd959a52ae33cc24359dc245d04811ad341
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-016.md
 ---
 
 With illustrative figures, an insurer sets next year's rates for a line expecting losses of \$120 million and expenses of \$60 million on premium of \$200 million. During the year, storms push incurred losses to \$150 million; expenses come in as planned, and investment income on the line's funds is \$16 million. Which statement is correct?

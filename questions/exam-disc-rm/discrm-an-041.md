@@ -2,7 +2,7 @@
 id: "discrm-an-041"
 exam: "Exam DISC-RM"
 topic: "Insurer Goals and Constraints"
-learning_objective: "Insurer Goals and Constraints"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Insurer+Goals+and+Constraints
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12b839d3a36c513616f45865ec32cd134dec1d603b3e0d84a4d1edfb12bc3cec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-041.md
 ---
 
 An insurer plans to expand into commercial auto insurance and faces four obstacles. Which is an internal constraint?

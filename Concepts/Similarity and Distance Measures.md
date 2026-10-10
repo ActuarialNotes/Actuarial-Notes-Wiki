@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:431ec1b75f65e5d7991d7e8e3583060c089d8b9427e1c8e82ba7f454bc2946a5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Similarity and Distance Measures.md
+---
+
 A **distance** (or dissimilarity) **measure** turns the difference between two observations' features into one number, small when the observations are alike and large when they differ; a **similarity measure** runs the other way. Methods that work by "nearness", such as [[K-Nearest Neighbors|nearest-neighbor]] prediction and [[Clustering|clustering]], depend on the measure chosen and on how the features are scaled before it is applied.
 
 > $$d_{\text{Euc}}(\mathbf{u}, \mathbf{v}) = \sqrt{\sum_{j=1}^{p} (u_j - v_j)^2}$$

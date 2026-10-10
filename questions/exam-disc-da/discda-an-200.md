@@ -2,7 +2,7 @@
 id: "discda-an-200"
 exam: "Exam DISC-DA"
 topic: "Presentation Visualization"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Presentation+Visualization
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:11e597878dc8feb3882b9883c641e5d4258761f791552cfd5934cce986b6f07f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-200.md
 ---
 A commercial lines actuary has finished three weeks of exploratory analysis of workers compensation claims and found that claims from one newly acquired book are settling 40% slower than the rest. She has been given ten minutes at the next underwriting leadership meeting. What should she do **first** in preparing her presentation visualization?
 

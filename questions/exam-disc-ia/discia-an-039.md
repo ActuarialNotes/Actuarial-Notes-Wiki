@@ -2,7 +2,7 @@
 id: "discia-an-039"
 exam: "Exam DISC-IA"
 topic: "Loss Settlement Provisions"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Replacement+Cost
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eedcf3733e07d2b8d25587c0b0c11902baad44e17eb0fbaf16de58e5c6181331
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-039.md
 ---
 
 A business's property policy, by endorsement, settles losses to its machinery at book value: cost less accumulated straight-line depreciation on the insured's books, with no salvage value. A machine bought six years ago for \$70,000 and written off over a 10-year accounting life is destroyed. A machine of like kind and quality costs \$90,000 today, with a physical useful life of 15 years. With a \$1,000 deductible, what does the insurer pay?

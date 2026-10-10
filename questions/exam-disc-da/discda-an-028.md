@@ -2,7 +2,7 @@
 id: "discda-an-028"
 exam: "Exam DISC-DA"
 topic: "Exploratory Data Visualization"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Exploratory+Data+Visualization
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef8aa30cd2c27d6f97034206d26b1c62ce6c76bee008ea0f45daf1ac1256c811
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-028.md
 ---
 
 Which description fits an exploratory visualization rather than a presentation visualization?

@@ -2,7 +2,7 @@
 id: "discrm-an-214"
 exam: "Exam DISC-RM"
 topic: "COPE"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Control
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2c0741485ece8665973d9c1645b435c6334571896ef521b1b073fe6d38da7d3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-214.md
 ---
 
 A warehouse submission says the building is fully sprinklered. In NFPA's data, most sprinkler systems that failed to operate in fires large enough to activate them failed for one reason. Given that finding, which question should the underwriter ask first?

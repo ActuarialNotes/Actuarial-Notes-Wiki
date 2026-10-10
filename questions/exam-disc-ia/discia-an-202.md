@@ -2,7 +2,7 @@
 id: "discia-an-202"
 exam: "Exam DISC-IA"
 topic: "Universal Life Insurance"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7e24b1fff6730c3dbac57ddfbabdc117e824dc194ae7072ed4627f3eb83fee1e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-202.md
 ---
 
 A universal life policyholder loses her job and pays no premiums for three years. Her account value at the start of that period is \$18,000, and the monthly expense and cost of insurance charges total about \$400. What happens to the policy?

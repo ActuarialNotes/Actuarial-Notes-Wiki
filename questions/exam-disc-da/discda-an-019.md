@@ -2,7 +2,7 @@
 id: "discda-an-019"
 exam: "Exam DISC-DA"
 topic: "User-Defined Function"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:58109c26c28f6da144a5fa82b58567b442e493f8b123358ba320c2263a0cf980
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-019.md
 ---
 
 An analyst defines a SQL function `age_band(age)` that returns '16-24' for ages 16 to 24, '25-64' for 25 to 64 and '65+' for 65 and over, using a `CASE` expression with no `ELSE`. A driver table holds ages 15, 17, 30, 64, 70 and one NULL. The analyst runs

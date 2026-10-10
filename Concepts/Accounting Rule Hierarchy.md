@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b7287ffce7d16291b848e87a53d8256703ae03c6a384a44dd34d1960b43b685
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Accounting Rule Hierarchy.md
+---
+
 An **Accounting Rule Hierarchy** ranks the sources of accounting guidance within one [[Accounting Frameworks|framework]], so a preparer knows which source governs when two of them disagree and where to look when none of them addresses a transaction. U.S. [[GAAP]] has two levels, authoritative and nonauthoritative, with the FASB Accounting Standards Codification as its single authoritative source. U.S. [[Statutory Accounting Principles|statutory accounting]] rests on state law, then the NAIC's five-level statutory hierarchy.
 
 > $$\text{GAAP:}\quad \text{Codification (+ SEC rules)} \succ \text{Nonauthoritative}$$

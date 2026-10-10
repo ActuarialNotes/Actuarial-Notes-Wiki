@@ -2,7 +2,7 @@
 id: "discia-an-422"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Conditions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Insurance+to+Value
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e72d75da3e161f0309e772f1cb91f24c394aaad5bdf01cb1bc4083614cff684c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-422.md
 ---
 A house with a full replacement cost of \$500,000 is insured under an HO-3 (HO 00 03 05 11) for \$300,000 with a \$1,000 deductible. Hail damages the roof; replacement costs \$40,000, and the damaged roof's actual cash value is \$25,000. The roof has been replaced. How much does the insurer pay?
 

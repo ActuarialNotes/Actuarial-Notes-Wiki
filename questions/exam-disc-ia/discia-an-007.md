@@ -2,7 +2,7 @@
 id: "discia-an-007"
 exam: "Exam DISC-IA"
 topic: "Accounting Rule Hierarchy"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Statutory+Accounting+Principles
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6287dd4b7c2bbd206599a9d0e8739d0af9237f5e546b0040d1fe0f2ed47ef5ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-007.md
 ---
 
 No SSAP addresses a particular transaction. The NAIC *Annual Statement Instructions* call for one treatment, an interpretation (INT) adopted by the NAIC's Statutory Accounting Principles Working Group calls for a different one, and FASB Concepts Statement No. 8 suggests a third. The insurer's domiciliary state has no prescribed practice on the point and has granted no permitted practice. Under the statutory hierarchy, which treatment should the insurer follow?

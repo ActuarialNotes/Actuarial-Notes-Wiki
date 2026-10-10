@@ -2,7 +2,7 @@
 id: "discia-an-210"
 exam: "Exam DISC-IA"
 topic: "Umbrella Liability Insurance"
-learning_objective: "Specialty Coverages Part 1"
+learning_objective: "12. Specialty Coverages Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3fa7ec4506dc326841c0c5ab453bf83674f8f43b34f7ee440a7a6ba5b5abd1cc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-210.md
 ---
 
 A manufacturer's CGL policy has a \$1,000,000 each occurrence limit and a \$2,000,000 general aggregate, and earlier claims this policy year have reduced the remaining aggregate to \$400,000. Its umbrella has a \$5,000,000 limit, a \$25,000 self-insured retention and drops down over reduced or exhausted aggregates. A covered bodily injury claim now settles for \$1,500,000. How much does the umbrella pay?

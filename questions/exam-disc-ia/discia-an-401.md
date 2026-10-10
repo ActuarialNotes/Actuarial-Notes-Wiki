@@ -2,7 +2,7 @@
 id: "discia-an-401"
 exam: "Exam DISC-IA"
 topic: "PAP Liability Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:263ac607068b30fe5c9589d11110050f46581363a18234c2c56ea483d204abca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-401.md
 ---
 A named insured's PAP (ISO PP 00 01 09 18) lists the family sedan. Which of these claims does Part A cover?
 

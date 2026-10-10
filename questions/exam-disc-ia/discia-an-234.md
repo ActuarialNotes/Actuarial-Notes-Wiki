@@ -2,7 +2,7 @@
 id: "discia-an-234"
 exam: "Exam DISC-IA"
 topic: "Vicarious Liability"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Tort+Law
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4c220b1f57f57ea7de91ac07f7825a8f639c11310adf73ba74aed1c9a26df0a8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-234.md
 ---
 
 A furniture store's employee, driving the store's truck on a delivery route, negligently rear-ends a car. The same day, an independent courier the store hired to deliver a lamp, who drives her own van and sets her own methods, negligently hits a cyclist. Is the store liable for either accident under respondeat superior?

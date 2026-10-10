@@ -2,7 +2,7 @@
 id: "discrm-an-008"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Plan"
-learning_objective: "Business Continuity Planning"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Continuity+Management
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c768a2c378d063f7de51b99c3f603adbf53ccfed262ce550e5dcefe3b04fd26d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-008.md
 ---
 
 A claims department backs up its claim files every night at midnight. Its business continuity plan restores the claims system at a warm site within 20 hours, against a recovery time objective (RTO) of 24 hours, and its business impact analysis sets a recovery point objective (RPO) of 2 hours. Which statement best describes the plan?

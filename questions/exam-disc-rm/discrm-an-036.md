@@ -2,7 +2,7 @@
 id: "discrm-an-036"
 exam: "Exam DISC-RM"
 topic: "Risk Transfer"
-learning_objective: "Using Insurance to Treat Risk"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c343ab62a03e397b46e4a795987c868376e227605138130c2f01a11db7fc7516
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-036.md
 ---
 
 Compared with retaining a risk, which is a disadvantage of transferring it by insurance?

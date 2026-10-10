@@ -2,7 +2,7 @@
 id: "discia-an-013"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unearned+Premium
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:11ee1f66078c985e6b617551981fb8c7f1c20056ae4e953b7675b6e7e494fc51
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-013.md
 ---
 
 On December 20, 2025, an insurer receives full payment of \$6,000 for an annual policy that takes effect January 1, 2026. How does the payment appear in the insurer's December 31, 2025 statutory statements?

@@ -2,7 +2,7 @@
 id: "discia-an-425"
 exam: "Exam DISC-IA"
 topic: "HO-3 Liability Coverages"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:745847fafc52bd9a930dcb01b5e33cecce082f176dcf35347109e538224ec257
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-425.md
 ---
 Under an HO-3 (HO 00 03 05 11), whose medical expenses does Coverage F, medical payments to others, pay?
 

@@ -2,7 +2,7 @@
 id: "discia-an-404"
 exam: "Exam DISC-IA"
 topic: "Uninsured Motorists Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96c7c6444d16ec7c53cb1ccfd8195ad5b1815fb13f526a18d4dd6099650b3a08
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-404.md
 ---
 A named insured is a passenger in a friend's car when an uninsured driver runs a red light and crashes into it. Her bodily injury damages are \$80,000. The friend's PAP has uninsured motorists limits of 25/50 on that car, and her own PAP has uninsured motorists limits of 100/300. How much does her own policy pay?
 

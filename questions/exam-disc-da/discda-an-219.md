@@ -2,7 +2,7 @@
 id: "discda-an-219"
 exam: "Exam DISC-DA"
 topic: "Insurance Data Regulation"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Unfair+Discrimination
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:45eb6b833d64ddf25c2a79771714fe3c89bc8f346f5c2093cea0b4418690d1a6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-219.md
 ---
 
 Colorado's SB21-169 (C.R.S. §10-3-1104.9) restricts insurers' use of external consumer data and information sources, and of algorithms and predictive models that use them. Which of the following uses falls within the statute?

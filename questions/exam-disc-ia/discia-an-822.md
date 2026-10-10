@@ -2,7 +2,7 @@
 id: "discia-an-822"
 exam: "Exam DISC-IA"
 topic: "CGL Conditions"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0051ad731b7b77b8c069b18fcb5fce62aca711237f1f13a04b0397417f0439f1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-822.md
 ---
 An insured has two primary liability policies covering the same \$1,200,000 loss: Policy X with a \$500,000 limit (an ISO CGL) and Policy Y with a \$1,500,000 limit. Both permit contribution by equal shares. How much does Policy X pay?
 

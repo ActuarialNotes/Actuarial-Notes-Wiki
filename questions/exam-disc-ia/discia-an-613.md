@@ -2,7 +2,7 @@
 id: "discia-an-613"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Special Form"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Coverage+Analysis
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a6cd98c1b9f5040c09df45322a3ac27e98d8fe65203256e95ba07cf5a6c0f94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-613.md
 ---
 An electrician wires a new kitchen in a restaurant incorrectly. Months later the faulty wiring starts a fire that damages the kitchen. The restaurant is insured under the BPP with the causes of loss special form. How does the form treat the loss?
 

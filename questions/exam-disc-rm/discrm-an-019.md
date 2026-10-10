@@ -2,7 +2,7 @@
 id: "discrm-an-019"
 exam: "Exam DISC-RM"
 topic: "Risk Management"
-learning_objective: "The Risk Management Environment"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Enterprise+Risk+Management
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c363bba44088e819fbecd906f54039141d113186d93a82bc4e26d50a0153d02e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-019.md
 ---
 
 A manufacturer's two divisions each plan to buy a currency hedge. One will receive about €5 million next year, and the other will pay about €5 million for components in the same month. The new chief risk officer cancels both hedges. Which of the forces behind the move to enterprise risk management does this decision reflect?

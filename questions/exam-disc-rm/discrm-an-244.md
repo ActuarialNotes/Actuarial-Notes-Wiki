@@ -2,7 +2,7 @@
 id: "discrm-an-244"
 exam: "Exam DISC-RM"
 topic: "Claims Handling Process"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: easy
 type: multiple-choice
 bloom: remember
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4ea3153593104edf6869bec328b55fc8931d5e3dcea679dafb105e321d562ac7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-244.md
 ---
 
 Which order of claims handling activities is correct?

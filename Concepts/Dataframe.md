@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7dba9db66315e115437b13109a2c36c4abacf913de31fd654628c59f56d6d8f1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Dataframe.md
+---
+
 A **Dataframe** (data frame) is a rectangular table that holds a data set in memory for analysis, with **variables in columns** and **observations in rows**: every value in a column has the same type, while different columns can have different types. It is the central structure of R (`data.frame`, and the tidyverse's tibble) and of Python's pandas library (`DataFrame`), which describes it as a two-dimensional labelled structure that can be thought of like a spreadsheet or an SQL table.
 
 > $$D = \big[\,x_{ij}\,\big]_{n \times p}$$

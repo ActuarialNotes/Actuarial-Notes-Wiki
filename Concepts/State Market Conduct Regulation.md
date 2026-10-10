@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:03cb5c63f14dbd115ca2e00fa22c363bb2d52802541f1d7078bbaa1228350949
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/State Market Conduct Regulation.md
+---
+
 **State Market Conduct Regulation** is the U.S. states' supervision of how insurers and producers deal with consumers: how they advertise and sell, whom they insure and on what terms, how they handle complaints and how they settle claims. Its main statutes are the state versions of the NAIC Unfair Trade Practices Act and Unfair Claims Settlement Practices Act, and its tools are market analysis, consumer complaints and market conduct examinations, backed by cease and desist orders, fines and license action. The Canadian counterpart is [[Market Conduct Regulation]].
 
 > $$P = \min\big(1{,}000\,n,\ 100{,}000\big)$$

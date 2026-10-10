@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:edfd6e71dfb189b96937feb81ae9cf507b254abf4de6d08fa329420903c0a1d7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Claims Handling Process.md
+---
+
 The **Claims Handling Process** is the sequence of activities by which an insurer moves a [[Claim|claim]] from first report to conclusion: acknowledge the claim and assign it, identify the policy, contact the insured, investigate and document the loss, determine the cause of loss, liability and amount, and conclude the claim by payment or denial. Each activity answers a question the next one depends on, and each is subject to the minimum standards of the state's [[Unfair Claims Settlement Practices|unfair claims settlement practices]] law.
 
 > $$\text{Payment} = \min\big(\max(L - D,\ 0),\ \text{Limit}\big)$$

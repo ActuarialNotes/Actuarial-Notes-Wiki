@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c775ffb9aa52ab7ed740318eadf76845ae013d885b0b951e66f23a8fb5e69aec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Who Is an Insured.md
+---
+
 **CGL Who Is an Insured** is Section II of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition), which decides which persons and organizations the policy protects and for what conduct. The named insured is covered according to its form of organization, its owners, officers and employees are covered only in their roles for it, a few others are covered in narrow circumstances, and newly acquired organizations are covered for a short time.
 
 > $$t_{\text{end}} = \min\left(t_{\text{acq}} + 90,\ t_1\right)$$

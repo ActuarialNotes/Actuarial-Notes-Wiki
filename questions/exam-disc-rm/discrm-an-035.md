@@ -2,7 +2,7 @@
 id: "discrm-an-035"
 exam: "Exam DISC-RM"
 topic: "Risk Transfer"
-learning_objective: "Using Insurance to Treat Risk"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:21af7fa53b6660e6f9809b6963857ca8ad1ea511d5df79a6905371d4f765893e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-035.md
 ---
 
 A small manufacturer with a limited insurance budget sorts its possible coverages into essential, desirable and available insurance. Which coverage belongs in the essential category?

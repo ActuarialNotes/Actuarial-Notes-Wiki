@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f5ed408f5df282533606b79653b0564d4b209db349ad9b9978495fb0297dc762
+  content_hash: sha256:cc0afb39c0dde59a549b6ab635d88c8e588f3cfe2821e02c3516c5c80aced58d
   sources:
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Section C task 5 'Distinguish among categorical, ordinal, and continuous predictors and their interactions…', PDF p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), §2.1.5 'Regression Versus Classification Problems' (quantitative vs qualitative, also known as categorical), printed p.28 (PDF p.39), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"

@@ -2,7 +2,7 @@
 id: "discda-an-032"
 exam: "Exam DISC-DA"
 topic: "Types of Plots"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exploratory+Data+Visualization
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dcd954c3f739e16b9e286619aa243935e19da6755667d3676abc1027dba98bfa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-032.md
 ---
 
 An analyst draws a heat map of auto claim frequency (claims per car-year) by territory and vehicle use. The data are:

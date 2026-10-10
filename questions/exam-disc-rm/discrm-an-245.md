@@ -2,7 +2,7 @@
 id: "discrm-an-245"
 exam: "Exam DISC-RM"
 topic: "Claims Handling Process"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:41741446cf5429e75d7ac182087195d6eb08696754824f43e8a73c211392833d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-245.md
 ---
 
 A liability insurer receives a suit against its insured whose allegations include conduct that may fall under an exclusion. It wants to defend the insured while it investigates, without giving up its right to deny coverage later. Which statement about its options is correct?

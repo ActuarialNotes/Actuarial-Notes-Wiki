@@ -2,7 +2,7 @@
 id: "discrm-an-024"
 exam: "Exam DISC-RM"
 topic: "Risk Taxonomies"
-learning_objective: "Classifications and Categories"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Law+of+Large+Numbers
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2b1fe48fc0f26b8bf49fd43cb3fd67451ffab0949b0b653bc2ffd22d1d6c16c4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-024.md
 ---
 
 An insurer writes homeowners policies in many states. Determine which of the following risks the insurer can reduce, per policy, by writing more policies in more independent locations.

@@ -2,7 +2,7 @@
 id: "discia-an-818"
 exam: "Exam DISC-IA"
 topic: "CGL Who Is an Insured"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0f93a0020d69b62258ba428f2e7037763c657ec8e416a581f39e17909bd1c73
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-818.md
 ---
 A charity's CGL (CG 00 01 04 13) has Coverage C. At its fundraising run, an unpaid volunteer who was directing traffic at the charity's request trips over a cable and is hurt; she also, while directing traffic, accidentally knocks over and injures a spectator. Which statement is correct?
 

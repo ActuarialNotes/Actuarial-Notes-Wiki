@@ -2,7 +2,7 @@
 id: "discrm-an-032"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Management"
-learning_objective: "Business Continuity Management"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Continuity+Plan
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9555f147c5b6cf8576a72ed9ff4d4ff815bbb8cca3ca7a7a4da7aa364841a747
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-032.md
 ---
 
 As part of business continuity management, a company estimates how quickly the cost of losing its order-processing activity would grow over hours and days, whatever caused the outage, and which resources the activity depends on. What is this analysis?

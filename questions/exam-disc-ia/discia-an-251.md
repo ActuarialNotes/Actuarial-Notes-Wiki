@@ -2,7 +2,7 @@
 id: "discia-an-251"
 exam: "Exam DISC-IA"
 topic: "Reasons for Insurance Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/State+and+Federal+Insurance+Regulation
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a7f1516b084192fc56f1900fe45c79e86382e807aaea4ef10de9b46c54830314
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-251.md
 ---
 
 Congress passes a statute of general application on business recordkeeping that does not mention insurance. Read literally, it conflicts with a state law that regulates how insurers keep policyholder records. Which law governs the insurers' records in that state?

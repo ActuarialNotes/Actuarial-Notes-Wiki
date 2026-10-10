@@ -2,7 +2,7 @@
 id: "discrm-an-018"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Unique Factors in the Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: remember
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Property-Casualty+Insurance+Marketplace
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:877bb4d90a5bc704e038e782164d3a7da8279620a2d415f97f66bee8ba72a578
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-018.md
 ---
 
 In a state that regulates personal auto rates under a file-and-use system, when may an insurer begin charging a new rate?

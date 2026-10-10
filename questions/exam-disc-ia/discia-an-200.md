@@ -2,7 +2,7 @@
 id: "discia-an-200"
 exam: "Exam DISC-IA"
 topic: "Term Life Insurance"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Universal+Life+Insurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a28dfff50c9a42f91a78291e5e528caf0ee38ec18971f4b03115cc6080a98d6e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-200.md
 ---
 
 A 35-year-old parent has a 20-year mortgage and two young children. She wants the largest death benefit her budget allows until the mortgage is paid off, and she would like the option of keeping some coverage for life later without having to prove she is still in good health. Which policy best fits these needs?

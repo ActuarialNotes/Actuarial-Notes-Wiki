@@ -2,7 +2,7 @@
 id: "discrm-an-242"
 exam: "Exam DISC-RM"
 topic: "Unfair Claims Settlement Practices"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Unfair+Claims+Settlement+Practices
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f3b736909e66b690cd83729713540245235ecf7e589dfae17e2f022c2f2e1b6f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-242.md
 ---
 
 After a hearing, a commissioner finds that an insurer committed 130 violations of the state's version of the NAIC Unfair Claims Settlement Practices Act, none of them flagrant or in conscious disregard of the act. The state uses the model act's penalty amounts. What is the largest monetary penalty the commissioner may impose?

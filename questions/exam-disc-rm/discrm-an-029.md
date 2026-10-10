@@ -2,7 +2,7 @@
 id: "discrm-an-029"
 exam: "Exam DISC-RM"
 topic: "Risk Assessment"
-learning_objective: "Assessment Tools and Techniques"
+learning_objective: "2. Identifying Risk"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Assessment
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e129f1c76ce78990e5c8a7e3edc66d2c9fefedc92bd96c838b8fc10b1003155
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-029.md
 ---
 
 A warehouse has had several forklift collisions, each recorded as "driver error." An analyst asks why each happened, and then why again, and finds that drivers rush because the shift schedule leaves too little time to load trucks before their departure times. Which assessment technique has the analyst used, and what should be treated?

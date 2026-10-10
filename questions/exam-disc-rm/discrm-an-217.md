@@ -2,7 +2,7 @@
 id: "discrm-an-217"
 exam: "Exam DISC-RM"
 topic: "Probable Maximum Loss"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+Property+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:62510b3ed723412c7213f4d2a5b1275ec527408500af42716b351829bd61941f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-217.md
 ---
 
 A fire-resistive office building is valued at \$40 million. For a fire, the underwriter estimates three figures: (I) \$40 million, the loss if the building were completely destroyed; (II) \$22 million, the worst loss likely from a single fire if the sprinklers were impaired; (III) \$6 million, the largest loss expected from a fire with the building's protection working as intended. Which figure is which?

@@ -2,7 +2,7 @@
 id: "discia-an-237"
 exam: "Exam DISC-IA"
 topic: "Insurance Regulator"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/State+Rating+Laws
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d40a3c55c2c8e3fa655307c8c9fafa2e00805553169b0f6726da3ede1430ae3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-237.md
 ---
 
 An insurer domiciled in Iowa writes personal auto insurance in Iowa, Illinois and Texas. Which regulator leads its periodic financial examination, and which reviews a rate increase for its Texas policies?

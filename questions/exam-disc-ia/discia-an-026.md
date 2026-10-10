@@ -2,7 +2,7 @@
 id: "discia-an-026"
 exam: "Exam DISC-IA"
 topic: "Deposit Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Risk+Transfer
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:564e2829836cd930dccb9dbd714e847f1165a5fc0da9f13626317be0d42c3ac9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-026.md
 ---
 
 A ceding insurer's contract with a reinsurer does not, despite its form, transfer both underwriting risk and timing risk. Under SSAP No. 62R, how does the ceding insurer account for it?

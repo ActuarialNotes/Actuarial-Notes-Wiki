@@ -2,7 +2,7 @@
 id: "discia-an-835"
 exam: "Exam DISC-IA"
 topic: "Coverage Analysis"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:612265a473b589cb7b750e6ebf06afed86c8198e799fe01437d615c0cac88cea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-835.md
 ---
 A heating contractor's own crew installed a furnace in a customer's home last year. This year, during the contractor's occurrence CGL policy period, the furnace overheats and starts a fire that does \$300,000 of damage to the house and \$20,000 of damage to the furnace itself. The customer sues; the insurer spends \$40,000 defending. The policy's each occurrence limit is \$1,000,000 and its aggregates are unused. How much does the insurer pay toward the damages, excluding defense?
 

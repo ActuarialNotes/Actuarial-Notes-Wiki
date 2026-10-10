@@ -2,7 +2,7 @@
 id: "discrm-an-021"
 exam: "Exam DISC-RM"
 topic: "Risk Measure"
-learning_objective: "Basic Risk Measures"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Standard+Deviation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dfbd8422674878c5d0d690425235c29d435d5c389338d3d9dc9761c3134d7d93
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-021.md
 ---
 
 A risk manager compares annual property losses at two plants. Plant X's losses have a mean of \$200,000 and a standard deviation of \$50,000. Plant Y's losses have a mean of \$800,000 and a standard deviation of \$120,000. Which plant's losses are relatively more variable, and why?

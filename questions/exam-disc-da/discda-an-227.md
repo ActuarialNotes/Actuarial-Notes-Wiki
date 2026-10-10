@@ -2,7 +2,7 @@
 id: "discda-an-227"
 exam: "Exam DISC-DA"
 topic: "Clustering"
-learning_objective: "Basic Data Analysis"
+learning_objective: "8. Basic Data Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/K-Means+Clustering
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a726be6d7c1768b31f5343b3383998b2de8efecff195a8fafb34666f9f29a21f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-227.md
 ---
 
 An analyst clusters small commercial policies on two features: annual payroll, ranging from \$50,000 to \$5,000,000, and number of locations, ranging from 1 to 6. The features are not standardized, and Euclidean distance is used. What is the most likely result?

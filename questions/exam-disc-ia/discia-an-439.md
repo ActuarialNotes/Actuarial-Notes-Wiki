@@ -2,7 +2,7 @@
 id: "discia-an-439"
 exam: "Exam DISC-IA"
 topic: "Liability Loss Exposure"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/PAP+Liability+Coverage
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7466c91af570c13ce0ff45073903b97d9ee3f20dec395ef90e4c82a11d46476e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-439.md
 ---
 A household's members drive two registered cars, own a 30-foot sailboat, rent a second house they own to a tenant, and keep a dog at home. Which of these personal liability exposures does the family's HO-3 Section II cover without an endorsement or another policy?
 

@@ -2,7 +2,7 @@
 id: "discrm-an-256"
 exam: "Exam DISC-RM"
 topic: "Strategic Management Process"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Strategy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8273fc0a996115cdf4dac4236e9a7ea4b90672951c399fdd7f845b22d09aa288
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-256.md
 ---
 
 A mutual insurer's board approves three statements: (1) "To be the insurer every small-town family trusts first"; (2) "We protect the homes, farms and cars of rural families through local agents who live where they do"; (3) "Raise our policy retention rate from 84% to 88% by the end of next year." Which classification is correct?

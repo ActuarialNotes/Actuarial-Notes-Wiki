@@ -2,7 +2,7 @@
 id: "discia-an-803"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Exclusions"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eba93ccda8f4757356196187b768e47802b92d5b66a56f478126714fe3c58af2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-803.md
 ---
 A general contractor completed an office building last year; its own crew built the walls, and an electrical subcontractor installed the wiring. This year faulty wiring starts a fire that damages the walls, the wiring itself and a tenant's computers. The owner and tenant sue the contractor. Under the contractor's CGL (CG 00 01 04 13), which damage does the "damage to your work" exclusion remove?
 

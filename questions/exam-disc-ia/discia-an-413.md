@@ -2,7 +2,7 @@
 id: "discia-an-413"
 exam: "Exam DISC-IA"
 topic: "Auto Physical Damage Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7207d1d93a3197f87361ef3d61d51fb8f832a5f8c3319d35cf5e9277bff02ee1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-413.md
 ---
 A named insured's car, which carries other than collision coverage under an ISO PAP (PP 00 01 09 18), is stolen. She rents a car for \$40 a day for the 10 days until the police recover hers undamaged. How much does Part D pay for her transportation expenses?
 

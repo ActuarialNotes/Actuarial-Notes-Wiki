@@ -2,7 +2,7 @@
 id: "discda-an-229"
 exam: "Exam DISC-DA"
 topic: "Data Ethics"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Data+Ethics+Checklist
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2cf8c5c279da922239e5c1d7fa6a4955f0045ab19bcebd5acbe3bbd0f7ec5254
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-229.md
 ---
 
 An insurer collected detailed home-inspection photographs from policyholders to settle property claims. The marketing department now wants to run an image model over the photographs to target policyholders for home-improvement loan offers from a partner bank. Which data ethics principle is most directly at issue?

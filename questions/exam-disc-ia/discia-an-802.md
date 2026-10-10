@@ -2,7 +2,7 @@
 id: "discia-an-802"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Insuring Agreement"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bd4cc70b1d119d45b84fff5ac9e0e36730e445ea2d51380016b1a2bef99099b0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-802.md
 ---
 A sign contractor carries consecutive one-year occurrence CGL policies with different insurers: Policy 1 for 2025 and Policy 2 for 2026. On December 30, 2025 the contractor's crane falls across a street, blocking the entrance of a restaurant for the first ten days of January 2026. Nothing at the restaurant is physically damaged, but it loses ten days of business. Which policy's Coverage A applies to the restaurant's claim, and why?
 

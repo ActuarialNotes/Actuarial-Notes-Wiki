@@ -1,15 +1,26 @@
 ---
 id: "discrm-an-232"
 exam: "Exam DISC-RM"
-topic: "Personal Auto Policy"
-learning_objective: "Underwriting Other Types of Coverage"
+topic: "Personal Auto Underwriting"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: understand
 wiki_link:
+  - Concepts/Personal+Auto+Underwriting
   - Concepts/Personal+Auto+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7f19d0833878b92a833e207582e7f930419784538d4278a7f77d63dd47a7c685
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-232.md
 ---
 
 A personal auto underwriter wants an applicant's history of traffic convictions and accidents. Which source provides it?

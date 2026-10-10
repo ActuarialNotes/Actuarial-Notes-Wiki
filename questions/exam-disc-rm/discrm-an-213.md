@@ -2,7 +2,7 @@
 id: "discrm-an-213"
 exam: "Exam DISC-RM"
 topic: "COPE"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/COPE
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8bac9da51351d7f1001b3105a48d86fd6cdac717e5f5f0a09aa4594736e6412e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-213.md
 ---
 
 A town meets ISO's minimum criteria for a Public Protection Classification and scores 57.20 points under the Fire Suppression Rating Schedule. Its classification is split for properties far from water. What class applies to a store 3 road miles from the nearest fire station and 1,800 feet from the nearest creditable water supply?

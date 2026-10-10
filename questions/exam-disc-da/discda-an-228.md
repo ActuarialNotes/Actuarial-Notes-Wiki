@@ -2,7 +2,7 @@
 id: "discda-an-228"
 exam: "Exam DISC-DA"
 topic: "Data Preparation"
-learning_objective: "Preparing Data for Insurance Applications"
+learning_objective: "9. Preparing Data for Insurance Applications"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Underwriting+Modeling+Dataset
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6efcc7de3728640d350be29545c1157dcb691306cb5a17440fcc016e0958912a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-228.md
 ---
 
 An analyst needs one row per policy term with its claim count. The tables are `policy_term` (one row per term) and `claim` (one row per claim, with the term it belongs to). Which approach produces the right data set?

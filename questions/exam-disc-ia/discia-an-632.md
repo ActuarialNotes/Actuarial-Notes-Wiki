@@ -2,7 +2,7 @@
 id: "discia-an-632"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Causes+of+Loss+Basic+and+Broad+Forms
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bd0b393ee6b508cde113a0a28c8249e0ccfc4e76f551673a041f6d80f7e44566
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-632.md
 ---
 A building owner compares a named perils causes of loss form with the open perils special form. Which statement correctly describes how the two differ in deciding a claim?
 

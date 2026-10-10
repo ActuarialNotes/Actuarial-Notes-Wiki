@@ -2,7 +2,7 @@
 id: "discrm-an-001"
 exam: "Exam DISC-RM"
 topic: "Risk Management Objectives"
-learning_objective: "Objectives and Benefits"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Management+Objectives
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9e1ab266d22cef7138010ad4df375c2331e3be309018c42652be6aa19a92c6a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-001.md
 ---
 
 A printing company's risk management policy states: "After a major fire, the company must be able to resume at least some printing within 45 days." Which risk management objective does this statement express?

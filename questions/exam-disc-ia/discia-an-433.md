@@ -2,7 +2,7 @@
 id: "discia-an-433"
 exam: "Exam DISC-IA"
 topic: "HO-3 Coverage Conditions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Liability+Coverages
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:62354777c10947e2865ae074bf9ef9fd94a65b1b9096bdb9dcc30a12abe9264e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-433.md
 ---
 A guest injured at an HO-3 (HO 00 03 05 11) insured's home wants compensation quickly. Under the Section II conditions, which statement is correct?
 

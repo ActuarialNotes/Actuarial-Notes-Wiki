@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d7e40bf0a58be66e14ab75f5de5531174fbf95dbd887b6955afaf66d1a5ab8d4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Premium Accounting.md
+---
+
 **Premium Accounting** is how an insurer records premium as written, recognizes it as revenue as the coverage is provided, and carries the related balances: the unearned premium reserve, premiums receivable, estimated audit and retrospective adjustments, and any premium deficiency. For a U.S. property-casualty insurer's statutory statements the rules are in SSAP No. 53, with SSAP No. 6 for receivables, SSAP No. 66 for retrospectively rated policies and SSAP No. 62R for reinsurance premium.
 
 > $$\text{EP} = \text{WP} - \Delta\text{UPR}$$

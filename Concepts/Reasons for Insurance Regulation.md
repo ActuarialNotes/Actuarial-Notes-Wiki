@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:15ac594b767791e02024d221c4ea7a65447229617409cb11a69eb7810c2f948d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Reasons for Insurance Regulation.md
+---
+
 **The Reasons for Insurance Regulation** in the United States come down to protecting consumers: an insurance policy is a promise to pay later, written by the insurer, that the buyer can't easily evaluate, so the states supervise insurers' solvency, how they sell, what their policies say, what they charge and how they settle claims. The states do this under the McCarran-Ferguson Act, which leaves the business of insurance to state law, and they coordinate through the NAIC. The Canadian counterpart, with its federal and provincial split, is [[Insurance Regulation]].
 
 > $$\text{A federal act overrides state insurance law} \iff \text{it specifically relates to the business of insurance}$$

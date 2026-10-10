@@ -2,7 +2,7 @@
 id: "discia-an-227"
 exam: "Exam DISC-IA"
 topic: "Intentional Tort"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Compensatory+Damages
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f47544e1ab89428c42bc8725cd191713a86430e40bd073955d53a1e6f8669351
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-227.md
 ---
 
 A neighbor takes a homeowner's riding mower from her garage without permission and sells it at a flea market. Which tort has the neighbor committed, and what is the usual measure of recovery?

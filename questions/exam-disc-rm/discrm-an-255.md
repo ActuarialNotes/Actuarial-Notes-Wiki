@@ -2,7 +2,7 @@
 id: "discrm-an-255"
 exam: "Exam DISC-RM"
 topic: "Insurance-Linked Securities"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Reinsurance
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:53d5c60ba9ffa12f7af7531bbc69720addd3cd295c01714cb663d8ecf0b8a0ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-255.md
 ---
 
 An insurer buys a \$50 million industry loss warranty in reinsurance form. It pays the full limit if U.S. hurricane industry losses reach \$30 billion and the insurer's own loss exceeds \$1 million. A hurricane causes \$26 billion of industry losses and \$400 million of losses to the insurer. What does the warranty pay, and why?

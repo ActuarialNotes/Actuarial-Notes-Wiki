@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6d959e3aa47017b04c1ea964ed4479930ec5ccb900091dcba0ffaa5bb554e9dd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Underwriting Guidelines.md
+---
+
 **Underwriting Guidelines** are the rules, standards and practices an insurer gives its underwriters and agents for deciding whether to accept, modify or reject an applicant for insurance, and how to classify an accepted risk for rating. They are how [[Underwriting Policy|underwriting policy]], which senior management sets, reaches the line underwriter who decides each account. Texas law defines an underwriting guideline as any such rule, standard, guideline or practice, whether written, oral or electronic, used to accept or reject an application or to classify the accepted risks for the purpose of determining a rate.
 
 > $$d(s) = \begin{cases} \text{accept} & s \in \mathcal{A} \\[4pt] \text{accept modified} & s \notin \mathcal{A},\ m(s) \in \mathcal{A} \text{ for some } m \in \mathcal{M} \\[4pt] \text{decline} & \text{otherwise} \end{cases}$$

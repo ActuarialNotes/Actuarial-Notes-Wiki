@@ -2,7 +2,7 @@
 id: "discia-an-811"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage C"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:85811f9eb0a4dd72d75a5cef6841106b11a4a84e18612ebda3359650f0815f50
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-811.md
 ---
 A display collapses in a garden center during the policy period. The CGL has a \$5,000 Medical Expense limit. Within a year of the accident, the center's insurer receives these reasonable medical expenses: customer 1, \$3,200; customer 2, \$7,500; and a self-employed electrician the center had hired to rewire the lighting, \$4,000. Customer 1 also reports another \$1,000 of expenses 13 months after the accident. What does Coverage C pay?
 

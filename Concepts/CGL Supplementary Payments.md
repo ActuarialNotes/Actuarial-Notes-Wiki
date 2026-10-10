@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:354026f9115bf361ed6960bc65393f27f4f6d3d9d1587107736d412c2631e4d1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Supplementary Payments.md
+---
+
 **CGL Supplementary Payments** are the costs the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition) pays, in addition to its limits, when the insurer investigates or settles a claim or defends a suit under Coverages A and B: its own expenses, certain bonds, the insured's expenses in helping, court costs and interest. They also include, on strict conditions, the defense of an indemnitee whose liability the insured assumed in an "insured contract". These payments do not reduce the limits of insurance.
 
 > $$C_{\text{insurer}} = \min\left(D,\ L\right) + S$$

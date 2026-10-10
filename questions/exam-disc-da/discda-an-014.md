@@ -2,7 +2,7 @@
 id: "discda-an-014"
 exam: "Exam DISC-DA"
 topic: "SQL"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d52e9e334f46248bc06d15477671c5e5d676ff0bbc79ec0e28748ecf3192022
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-014.md
 ---
 
 A claim table has four rows for territory T2, with `paid` values of 3,000, NULL, 5,000 and 7,000. What does the following query return?

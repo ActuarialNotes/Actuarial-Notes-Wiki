@@ -2,7 +2,7 @@
 id: "discda-an-225"
 exam: "Exam DISC-DA"
 topic: "Linear Regression"
-learning_objective: "Basic Data Analysis"
+learning_objective: "8. Basic Data Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Linear+Regression
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:79a8625b295e2a1dce7c53d29c535c16cd57b7a22a0a6ca46306dd87b13f4699
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-225.md
 ---
 
 A linear model for auto physical damage severity is fitted as

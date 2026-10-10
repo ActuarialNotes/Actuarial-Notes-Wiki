@@ -2,7 +2,7 @@
 id: "discda-an-206"
 exam: "Exam DISC-DA"
 topic: "Visualization Design Principles"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Presentation+Visualization
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7625b322b0a6761362b1c08a4dcf8f63f0518d67650b51e2f7d2c6365a95c789
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-206.md
 ---
 A claims dashboard chart shows monthly average severity for 10 regions as 10 lines, each a different saturated color from a rainbow palette, with Region 4 in red and Region 6 in green. The legend is alphabetical. The message for the audience is that Region 4's severity has jumped since June. Which redesign best applies sound design principles?
 

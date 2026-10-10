@@ -2,7 +2,7 @@
 id: "discia-an-428"
 exam: "Exam DISC-IA"
 topic: "HO-3 Liability Exclusions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Liability+Coverages
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:884c8dc559c82d78aed5e37c4498026174d6e9cce1af646ceb4b3b5d6e49ab78
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-428.md
 ---
 Under an HO-3 (HO 00 03 05 11), which watercraft accident does Section II personal liability cover? None of the boats is being raced, rented to others, used for a charge or used in a business.
 

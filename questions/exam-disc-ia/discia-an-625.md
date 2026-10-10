@@ -2,7 +2,7 @@
 id: "discia-an-625"
 exam: "Exam DISC-IA"
 topic: "Commercial Property Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Commercial+Property+Conditions
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e3dad8e836a1b65c92068d1f4bf4002fddbb7f3a69a116ff504bb951960f9b90
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-625.md
 ---
 A building is covered by two commercial property policies written on the same plan, terms, conditions and provisions: Policy A with a \$300,000 limit and Policy B with a \$200,000 limit. A covered fire causes a \$150,000 loss. Under the other insurance condition of the commercial property conditions, how much does Policy A pay?
 

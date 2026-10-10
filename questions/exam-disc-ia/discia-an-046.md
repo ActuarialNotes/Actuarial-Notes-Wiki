@@ -2,7 +2,7 @@
 id: "discia-an-046"
 exam: "Exam DISC-IA"
 topic: "Claim"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Loss+Settlement+Provisions
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:80e6400eb9e9f9452aacb4551aff91c0b8d20e9796ba1a1b4d508a1103e5ca0f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-046.md
 ---
 
 Under the ISO homeowners form (HO 00 03), which statement about settling a property damage claim is correct?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:074a589451845fbe9622fc8961bd878264ea0c51dc0542754f24c0fc00f06a57
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Commercial Property Conditions.md
+---
+
 **The Commercial Property Conditions** (ISO form CP 00 90) are the nine conditions that apply to every coverage form in a commercial property coverage part, such as the [[Building and Personal Property Coverage Form|BPP]] and [[Business Income Coverage|business income]] forms: concealment, misrepresentation or fraud; control of property; insurance under two or more coverages; legal action against the insurer; liberalization; no benefit to bailee; other insurance; policy period and coverage territory; and transfer of rights of recovery against others to the insurer. They sit between the [[Common Policy Conditions]], which apply to every coverage part of the policy, and the loss and additional conditions in each coverage form ([[BPP Loss Conditions and Additional Conditions]]). The description below follows the 07 88 edition.
 
 > $$\text{Share}_i = L \times \frac{C_i}{\sum_j C_j}$$

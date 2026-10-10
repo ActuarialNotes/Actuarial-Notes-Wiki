@@ -2,7 +2,7 @@
 id: "discia-an-017"
 exam: "Exam DISC-IA"
 topic: "Accounting Standards"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Reinsurance+Accounting
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42a7837f901b7eaf51a56962ef7559eada60026abb5bd70c0a9d30fa29af9051
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-017.md
 ---
 
 Accounting differences can concern recognition (whether an item appears), measurement (the amount) or presentation (where and how it is shown). Which difference between statutory accounting and GAAP is a difference in presentation?

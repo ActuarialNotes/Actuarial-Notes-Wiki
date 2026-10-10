@@ -2,7 +2,7 @@
 id: "discda-an-231"
 exam: "Exam DISC-DA"
 topic: "Unfair Discrimination"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Credit-Based+Insurance+Scoring
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6d8d36db77b0b5897266e4aaa44b4079ec24ce12c0c6af3b93e6fd35c4ea77b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-231.md
 ---
 
 An insurer's new homeowners pricing model does not use race or any other protected characteristic as an input. An outside test finds that, for households in predominantly minority neighborhoods, average premiums are 12% above what their average loss costs would support, while for other households premiums and loss costs are in line. Which conclusion is best supported?

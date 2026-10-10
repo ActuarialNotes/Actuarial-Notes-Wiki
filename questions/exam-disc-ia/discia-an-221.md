@@ -2,7 +2,7 @@
 id: "discia-an-221"
 exam: "Exam DISC-IA"
 topic: "Defenses Against Negligence"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Tort+Law
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b0f6bceaa2afd24eb4b92c1d3aceae8ebf06e3df1795b82bf5b4200e59111f34
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-221.md
 ---
 
 A pedestrian is struck by a speeding driver and proves damages of \$250,000. The jury finds the pedestrian 50% at fault for crossing against the signal and the driver 50% at fault. What does she recover in State X, which uses the 50% bar rule of modified comparative negligence, and in State Y, which uses the 51% bar rule?

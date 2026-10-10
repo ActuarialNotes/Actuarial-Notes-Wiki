@@ -2,7 +2,7 @@
 id: "discia-an-628"
 exam: "Exam DISC-IA"
 topic: "Common Policy Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6d84e1fa95791286c8fbd4d3396542becb7c0e7b078fca11a48cbee2210ffd6d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-628.md
 ---
 A commercial package policy includes a commercial property coverage part with a mortgageholder shown in the declarations. The first named insured has not paid the premium, and the insurer decides to cancel. Under the Common Policy Conditions (IL 00 17) and the BPP's mortgageholders condition, what is the least notice the insurer must give?
 

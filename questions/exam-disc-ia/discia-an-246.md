@@ -2,7 +2,7 @@
 id: "discia-an-246"
 exam: "Exam DISC-IA"
 topic: "Policy Form Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Policy+Form+Regulation
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0eb19005a5100187ff25ac610d6d019cb2808d142907dde0e72c194ee500bae2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-246.md
 ---
 
 An insurer's personal auto policy form for New York has 4,000 words of countable text in 160 sentences, with 6,400 syllables. The Flesch reading ease score is $F = 206.835 - 1.015\,(W/S) - 84.6\,(Y/W)$. New York requires a score of at least 45 for these policies, and the NAIC's life and health model requires at least 40. Which statement is correct?

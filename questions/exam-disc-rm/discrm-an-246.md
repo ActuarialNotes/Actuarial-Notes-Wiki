@@ -2,7 +2,7 @@
 id: "discrm-an-246"
 exam: "Exam DISC-RM"
 topic: "Claims Handling Process"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Coverage+Analysis
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d66c4b37d57cfca15d6f0fbf0ab33b102120bb0e18d780880270a9ab558a6df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-246.md
 ---
 
 A covered fire causes \$62,000 of damage to a business's personal property, valued as the policy requires. The policy's business personal property limit is \$50,000 and its deductible is \$2,500. The insured is not underinsured under the coinsurance condition. How much does the insurer pay?

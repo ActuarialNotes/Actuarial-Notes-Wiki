@@ -2,7 +2,7 @@
 id: "discia-an-615"
 exam: "Exam DISC-IA"
 topic: "BPP Limits of Insurance and Deductible"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:be70c2e4ae5b70f78970b5d16648d807c57bd9aa523805d32dfd6cb8e2dc13cb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-615.md
 ---
 A building worth \$400,000 at the time of loss is insured for \$200,000 under the BPP with an 80% coinsurance percentage and a \$1,500 deductible. A vandal causes \$2,400 of damage. How much does the insurer pay?
 

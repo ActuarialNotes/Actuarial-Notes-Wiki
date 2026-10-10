@@ -2,7 +2,7 @@
 id: "discia-an-023"
 exam: "Exam DISC-IA"
 topic: "Unpaid Claims"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Occurrence+Coverage
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:074d33e0f0206ea5664205d3581486af09cc874f14c1105a9a31c0ed874d5c52
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-023.md
 ---
 
 A physician's negligent treatment injures a patient in November 2025, and the patient first reports a claim to the physician's insurer in February 2026. Under SSAP No. 55, in which year does the insurer recognize the loss if the policy is written on an occurrence basis, and if it is written on a claims-made basis?

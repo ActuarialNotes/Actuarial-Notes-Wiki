@@ -2,7 +2,7 @@
 id: "discda-an-201"
 exam: "Exam DISC-DA"
 topic: "Presentation Visualization"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exploratory+Data+Visualization
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b0c4b20943279aabea02eb85df1fdbfae1df4d44e1674392baa77cde6f2d042f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-201.md
 ---
 An analyst produces four graphics while studying homeowners water damage claims:
 

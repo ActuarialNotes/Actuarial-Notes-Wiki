@@ -2,7 +2,7 @@
 id: "discrm-an-053"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Plan"
-learning_objective: "Business Continuity Planning"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Continuity+Management
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:735c2a67d65f872114206fd29012da240c17c889f518279efcb967f25cca81bb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-053.md
 ---
 
 A business impact analysis sets a recovery time objective of 24 hours for an insurer's policy administration system. With illustrative figures, four alternate-site options are available: a cold site that recovers in about 10 days for \$20,000 a year; a warm site that recovers in about 48 hours for \$70,000 a year; a hot site that recovers in about 4 hours for \$200,000 a year; and a mirrored site that recovers almost at once for \$500,000 a year. Which option should the plan adopt?

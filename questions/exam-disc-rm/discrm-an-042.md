@@ -2,7 +2,7 @@
 id: "discrm-an-042"
 exam: "Exam DISC-RM"
 topic: "Types of Insurers"
-learning_objective: "Classification of Insurers"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Types+of+Insurers
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8f729abd4ba52906dadc8f3bda3eeff01d0c34a05809a27cf7a8c07e556831f1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-042.md
 ---
 
 In an insurance arrangement, the members, called subscribers, insure one another. A corporation manages the arrangement for them in return for a percentage of premium, handling underwriting, claims and investments. What type of insurer is this?

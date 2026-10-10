@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6eeb5dc0dcedda6b8c78f5db2c497538fbc50496cd481c03960eea56c26d9d2d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Property Coverages.md
+---
+
 **HO-3 Property Coverages** are the four coverages and twelve additional coverages of Section I of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition): Coverage A for the dwelling, Coverage B for other structures, Coverage C for personal property, Coverage D for loss of use, and additional coverages such as debris removal, trees, collapse and ordinance or law. Together they define *what* property and expense the [[Homeowners Policy|homeowners policy]] insures; the perils and the conditions decide when and how much it pays.
 
 > $$B_{\max} = 0.10 \times A$$

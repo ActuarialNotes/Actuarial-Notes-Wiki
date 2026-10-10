@@ -2,7 +2,7 @@
 id: "discrm-an-254"
 exam: "Exam DISC-RM"
 topic: "Excess of Loss"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Types+of+Reinsurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b5c82df001f1b0f9b640f3fbde657a121be60c6a56c7e6e35729b0c3dd1048ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-254.md
 ---
 
 An insurer buys a per-risk excess of loss treaty of \$800,000 excess of \$200,000. In one year it has three losses, on three different risks, of \$150,000, \$600,000 and \$1,500,000. How much does the reinsurer pay in total?

@@ -2,7 +2,7 @@
 id: "discia-an-008"
 exam: "Exam DISC-IA"
 topic: "Accounting Rule Hierarchy"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Notes+to+Financial+Statements
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:59250273e702d2f17be27a42eaef7c76534b8baafa5c5e02c52f99ed2ad6523c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-008.md
 ---
 
 A state's insurance regulation requires every insurer domiciled in the state to admit a type of asset that the NAIC *Accounting Practices and Procedures Manual* would nonadmit. How is this practice classified, and what must a domestic insurer that follows it disclose?

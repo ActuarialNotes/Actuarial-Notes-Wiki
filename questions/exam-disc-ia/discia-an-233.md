@@ -2,7 +2,7 @@
 id: "discia-an-233"
 exam: "Exam DISC-IA"
 topic: "Tort Law"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Strict+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:06c817db6d8cdd42c7fbc2d0f6a6dd9d9cbc612edb4d8e655fca2e856080ffd7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-233.md
 ---
 
 Match each suit to the basis of liability it rests on: (1) a driver who ran a red light while texting; (2) a homeowner who punched a delivery driver during an argument; (3) a fireworks company whose display exploded in spite of every precaution.

@@ -2,7 +2,7 @@
 id: "discrm-an-028"
 exam: "Exam DISC-RM"
 topic: "Risk Assessment"
-learning_objective: "Assessment Tools and Techniques"
+learning_objective: "2. Identifying Risk"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:688260b4a67e704edd1536639547daa796d77241ae818e7f0705a3be75b78da7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-028.md
 ---
 
 A retailer rates its risks on scales of 1 to 5 and multiplies likelihood by impact. Shoplifting has likelihood 5 and impact 1. A flood at its only distribution center has likelihood 1 and impact 5. Both score 5. What does plotting them on a risk map show that the score hides?

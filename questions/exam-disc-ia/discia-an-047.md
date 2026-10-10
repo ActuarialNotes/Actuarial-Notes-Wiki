@@ -2,7 +2,7 @@
 id: "discia-an-047"
 exam: "Exam DISC-IA"
 topic: "Liability Claim Valuation"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Compensatory+Damages
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eb4cb40961be2c24f3c629d8484e51d3290ec39718dbabc3fd3204992fcb6bd7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-047.md
 ---
 
 A pedestrian suffers \$250,000 of damages in an accident with the insured's car, and the jury finds the pedestrian 40% at fault. The case is tried in Virginia, which applies contributory negligence. How much can the pedestrian recover?

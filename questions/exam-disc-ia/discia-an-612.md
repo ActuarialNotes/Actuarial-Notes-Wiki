@@ -2,7 +2,7 @@
 id: "discia-an-612"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Special Form"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Coverage+Analysis
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:765ac5a487b807c4dafd7f2aecc6360f8bdf31c094be0b4bcb97ed1dce71f0a7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-612.md
 ---
 A store is insured under the BPP with the causes of loss special form. During a rainstorm with no damaging wind, water enters through roof flashing that has deteriorated over many years and ruins \$12,000 of ceiling tiles and stock. Why is the loss **not** covered?
 

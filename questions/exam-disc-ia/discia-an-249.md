@@ -2,7 +2,7 @@
 id: "discia-an-249"
 exam: "Exam DISC-IA"
 topic: "State Market Conduct Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Claims+Handling
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7aea3f7eaaec16a8ab79fd415a4c01623de41a21a0f402016352762b4df5a8ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-249.md
 ---
 
 A state has enacted the NAIC Unfair Claims Settlement Practices Act. Which finding would most clearly support charging an insurer with an unfair claims settlement practice?

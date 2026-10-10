@@ -2,7 +2,7 @@
 id: "discia-an-004"
 exam: "Exam DISC-IA"
 topic: "Accounting Frameworks"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: remember
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Insurance+Income+Tax
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e56fe441b417d9de8c6d258fda46e38527ef5ecee1c30b85792052ccc9be9207
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-004.md
 ---
 
 For a U.S. property-casualty insurer, which basis is the starting point for computing its federal taxable income?

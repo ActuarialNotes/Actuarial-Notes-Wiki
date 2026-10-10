@@ -2,7 +2,7 @@
 id: "discia-an-231"
 exam: "Exam DISC-IA"
 topic: "Compensatory Damages"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Punitive+Damages
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c9813a202fb879677a9853e084ca53925847e785973adfac38c7fc6e1dce502
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-231.md
 ---
 
 A jury awards a plaintiff \$40,000 for medical expenses, \$25,000 for lost wages, \$10,000 for damage to her car, \$120,000 for pain and suffering and \$200,000 in punitive damages. What are her total compensatory damages?

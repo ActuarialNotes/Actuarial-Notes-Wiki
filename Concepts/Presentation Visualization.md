@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:737480f720fb777103371b2b245a0048fa3e3944261d18e0be7acd992b77f113
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Presentation Visualization.md
+---
+
 A **presentation visualization** is a graphic built to tell a particular audience one finding that the analyst has already established, as opposed to an exploratory graphic made to find that finding. Knaflic calls the two *explanatory* and *exploratory* analysis, and the work of a presentation graphic is to make its one message obvious to someone who did not do the analysis.
 
 - **Exploratory vs. explanatory:** [[Exploratory Data Visualization|Exploratory graphics]] are made quickly, for the analyst, in large numbers. *R for Data Science* notes that an analysis produces tens or hundreds of plots, most of them thrown away at once. Knaflic likens exploration to turning over 100 rocks to find one or two gemstones, and explanation to showing someone those gemstones. A presentation graphic is one of the few that survive, rebuilt for a reader.

@@ -2,7 +2,7 @@
 id: "discia-an-214"
 exam: "Exam DISC-IA"
 topic: "Fiduciary Liability Insurance"
-learning_objective: "Specialty Coverages Part 1"
+learning_objective: "12. Specialty Coverages Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Directors+and+Officers+Liability+Insurance
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:68e960c4027fd87df9b56b0c99ab25583b3076dcd54b242ac9e48390dae16306
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-214.md
 ---
 
 Two problems arise at a company's 401(k) plan. Participants sue the plan's investment committee, alleging it kept high-fee funds when cheaper identical funds were available. Separately, the plan's bookkeeper is found to have stolen \$50,000 from the plan. Which coverage responds to each?

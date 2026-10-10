@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:afa5eb209799e47a87d52a76bab3688251fd23c2500d2dfe26c6de71f3d58b8a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Coverage A Insuring Agreement.md
+---
+
 The **CGL Coverage A insuring agreement** is the grant of bodily injury and property damage liability coverage in the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition). The insurer promises to pay the damages an insured becomes legally obligated to pay because of "bodily injury" or "property damage" to which the insurance applies, and to defend the insured against any "suit" seeking those damages, provided the injury or damage is caused by an "occurrence" in the coverage territory, happens during the policy period and was not known to certain insureds before the policy began.
 
 > $$t_0 \le t_{\text{inj}} \le t_1$$

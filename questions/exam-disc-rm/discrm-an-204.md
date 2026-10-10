@@ -2,7 +2,7 @@
 id: "discrm-an-204"
 exam: "Exam DISC-RM"
 topic: "Underwriting Guidelines"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Underwriting+Authority
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de74cc5b6a0f4a8e1a8e4df4873057f776c6d4daeb1693278bda84e33a681f4a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-204.md
 ---
 
 An insurer's guideline for small office buildings says:

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b4a0b2aff3cc3b774d6dd6f59535a1c85c5879651976e7e59f651bb57693ed53
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Property-Casualty Insurance Marketplace.md
+---
+
 The **property-casualty insurance marketplace** is where buyers of property and liability insurance meet the [[Insurer|insurers]] that sell it, usually through producers, with reinsurers behind the insurers and state regulators overseeing the whole. It is divided into the admitted market of licensed insurers, the surplus lines market of nonadmitted insurers for risks the admitted market will not write, and the residual market for risks no insurer will write voluntarily. Three features set the product apart from most others: its price is set before its cost is known, its price and policy wording are regulated, and its prices and availability swing through the underwriting cycle.
 
 > $$\text{Rate} \approx E[\text{future costs}] \ \text{(estimated before the policy period)}$$

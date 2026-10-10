@@ -2,7 +2,7 @@
 id: "discia-an-600"
 exam: "Exam DISC-IA"
 topic: "BPP Covered Property"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Building+and+Personal+Property+Coverage+Form
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2257e55cec402eb28dd2c9f6fce1282b6e7c387ae7a070c20503ecedbbdf9f18
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-600.md
 ---
 A bakery leases its shop. At its own expense it installed a walk-in cooler built into the walls and new flooring, neither of which it may remove when the lease ends. The landlord insures the building. The bakery's BPP shows limits for Your Business Personal Property only. A fire destroys the cooler and the flooring. Under which part of the bakery's BPP, if any, is this damage covered?
 

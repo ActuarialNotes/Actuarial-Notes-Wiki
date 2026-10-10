@@ -2,7 +2,7 @@
 id: "discia-an-631"
 exam: "Exam DISC-IA"
 topic: "Property Loss Exposure"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Covered+Property
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:76f17b00f7bdcaab2e6ce8f5d12b10433b6820d4555310fe84a92064532371c4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-631.md
 ---
 A dry cleaner is analyzing its commercial property loss exposures. Customers' garments in its care are often worth more than its own equipment. Which statement best describes this exposure and how the BPP can address it?
 

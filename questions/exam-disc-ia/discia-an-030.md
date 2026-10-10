@@ -2,7 +2,7 @@
 id: "discia-an-030"
 exam: "Exam DISC-IA"
 topic: "Insurance Contract Characteristics"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Common+Policy+Conditions
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa04869ac5f89e37a6470937bdcdce91c21dd6ecb509c0bfc7d57f79fb7e85c7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-030.md
 ---
 
 Under the ISO Common Policy Conditions (IL 00 17), in which situation do the named insured's rights and duties under the policy pass to another person without the insurer's written consent?

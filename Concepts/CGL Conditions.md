@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:34b883f32a6507e3d2e9bf662826d2918c7ddb60e4e07300aa06c20080f0ca40
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Conditions.md
+---
+
 **CGL Conditions** are the nine provisions in Section IV of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition) that set the insured's and the insurer's duties after the policy is bought: what the insured must do after an occurrence, offense, claim or suit, when the insurer can be sued, how it shares a loss with other insurance, how the premium is audited, and how it treats several insureds. They sit beside the [[Common Policy Conditions]] that apply to every coverage part of a commercial package.
 
 > $$\text{Share}_1^{\text{equal}} = \min\left(\frac{X}{2},\ L_1\right)$$

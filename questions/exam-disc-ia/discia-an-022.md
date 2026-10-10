@@ -2,7 +2,7 @@
 id: "discia-an-022"
 exam: "Exam DISC-IA"
 topic: "Unearned Premium"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Premium+Accounting
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8028f9fb7889a4d9adf9374f280394152f6de3e82fa9d4a0974879bfacbbee12
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-022.md
 ---
 
 For one group of policies at year end, an insurer has unearned premium of \$6.0 million and \$0.5 million of future installment premiums on those policies. For the remaining coverage it expects \$5.6 million of losses, \$0.7 million of loss adjustment expense and \$0.4 million of maintenance costs. Commissions of \$0.9 million were paid and expensed at issue. A separately marketed group is expected to earn a \$0.3 million profit. Under SSAP No. 53, what premium deficiency reserve is required for the first group?

@@ -2,7 +2,7 @@
 id: "discia-an-012"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Reinsurance+Accounting
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:186657a46ac15b95ccf7037534502ec19754b345280309686844815ae3f170ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-012.md
 ---
 
 During a year an insurer writes \$80 million of direct premium, assumes \$12 million of premium from other insurers under reinsurance treaties, and cedes \$25 million of premium to its reinsurers. What is its net written premium?

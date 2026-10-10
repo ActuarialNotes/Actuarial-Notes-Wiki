@@ -2,7 +2,7 @@
 id: "discrm-an-252"
 exam: "Exam DISC-RM"
 topic: "Pro Rata Reinsurance"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Quota+Share
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eb56f488a261a3b5f8bf3e80c8cd0464f2001f9e5e10c5bd34ab1df99911c943
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-252.md
 ---
 
 An insurer cedes 25% of a book with \$20 million of written premium under a quota share with a 30% ceding commission. Losses on the book are \$12 million. Ignoring the reinsurer's own expenses and investment income, what is the reinsurer's underwriting result on the treaty?

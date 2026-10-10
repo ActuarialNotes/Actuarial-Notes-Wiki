@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:243c6672e0f25223781105da5a4f62bafbc5c7322f45af5a84f7ed93aff6a138
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/PAP Duties and General Provisions.md
+---
+
 **PAP Duties and General Provisions** are Parts E and F of the ISO [[Personal Auto Policy|personal auto policy]] (PP 00 01, 09 18 edition). Part E lists what a person seeking coverage must do after an accident or loss, and Part F holds the conditions that apply to the whole policy: changes, fraud, legal action, the insurer's right of recovery, the policy period and territory, termination, transfer, and the limit when two of the insurer's policies apply.
 
 > $$\text{Paid}_{\text{all policies}} \le \max_k L_k$$

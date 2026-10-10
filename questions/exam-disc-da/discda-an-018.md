@@ -2,7 +2,7 @@
 id: "discda-an-018"
 exam: "Exam DISC-DA"
 topic: "Missing Data"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/SQL
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8ff06e3a9704deed1ddbd9058ab5ff13bce480b37c7ed98b55e9264a497d67d1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-018.md
 ---
 
 A policy table holds four policies with deductibles of 500, 1,000, NULL and 1,500. The underwriting manager wants the average deductible with an unrecorded deductible counted at the company's \$500 default. Which expression returns that figure?

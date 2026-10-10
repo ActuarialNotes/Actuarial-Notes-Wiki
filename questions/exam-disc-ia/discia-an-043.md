@@ -2,7 +2,7 @@
 id: "discia-an-043"
 exam: "Exam DISC-IA"
 topic: "Property Insurance Limits and Deductibles"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Deductible
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:280aee772fde7a89ae29e595b82bb2544c2eaab525f34f0a81b4088661553e33
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-043.md
 ---
 
 A home is insured for \$350,000 under a homeowners policy with a \$1,000 deductible for all perils and a 3% hurricane deductible. A hurricane causes \$40,000 of covered damage. How much of the loss does the homeowner bear?

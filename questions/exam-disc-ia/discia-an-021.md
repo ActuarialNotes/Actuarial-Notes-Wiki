@@ -2,7 +2,7 @@
 id: "discia-an-021"
 exam: "Exam DISC-IA"
 topic: "Unearned Premium"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Earned+Premium
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2b8a60130166f74abdc0c6acd707c48001058b730c6b35335f20e47631cf9c77
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-021.md
 ---
 
 An insurer wrote an annual homeowners policy on July 1 for \$1,800. A covered fire occurred on December 10; by December 31 the insurer has paid \$4,000 of a loss it estimates at \$10,000. What statutory liabilities does the insurer carry for this policy at December 31?

@@ -2,7 +2,7 @@
 id: "discia-an-203"
 exam: "Exam DISC-IA"
 topic: "Types of Annuities"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Annuity+Contract
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:06871ef29c3e385706a635a1cb9ff5c747b6db8462332e44d8f3ef0b40eeb44e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-203.md
 ---
 
 A buyer pays a single premium of \$50,000 into a fixed deferred annuity. The insurer credits an initial rate of 3.5% for the first two years, and the contract guarantees a minimum rate of 1.5%. For the third year the insurer declares a renewal rate of 1.0%. What is the account value at the end of year 3, before any charges?

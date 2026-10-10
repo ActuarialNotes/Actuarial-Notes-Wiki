@@ -2,7 +2,7 @@
 id: "discia-an-248"
 exam: "Exam DISC-IA"
 topic: "Policy Form Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Policy+Form+Regulation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:43e4d06921bb43c8d39d43524aa09ffdb6f57ff387019fedc8fe1174c55c6383
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-248.md
 ---
 
 A state has adopted the NAIC Property and Casualty Commercial Rate and Policy Form Model Law, and the commissioner has found the commercial auto market not reasonably competitive. An insurer files a new commercial auto endorsement. The 30-day waiting period passes without the commissioner disapproving the filing, extending the period or asking for more information. What is the status of the endorsement?

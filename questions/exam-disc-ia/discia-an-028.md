@@ -2,7 +2,7 @@
 id: "discia-an-028"
 exam: "Exam DISC-IA"
 topic: "Insurance Contract Characteristics"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Insurance+Contract+Characteristics
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84bb008bdd605ae54129d2c56175f67e4697d8f1ef27cdf5924a89e49c721b08
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-028.md
 ---
 
 Why are most property-casualty insurance policies described as unilateral contracts?

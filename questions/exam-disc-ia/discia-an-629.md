@@ -2,7 +2,7 @@
 id: "discia-an-629"
 exam: "Exam DISC-IA"
 topic: "Blanket Insurance"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c5b229fa1a999c50c6e3e12e521bf6870f0ca8ab694b758f263d2d00c47f9172
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-629.md
 ---
 One blanket limit of \$900,000 covers two buildings, valued at \$600,000 and \$500,000 at the time of loss, with a 90% coinsurance percentage and a \$2,000 deductible. A fire causes a \$220,000 loss to the second building. How much does the insurer pay?
 

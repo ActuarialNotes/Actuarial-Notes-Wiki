@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e1205084098aced348714d576f3e74abf4eeae103fbdd44abbbed3baca82b0f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Section I Perils Insured Against and Exclusions.md
+---
+
 **HO-3 Section I Perils Insured Against and Exclusions** are the provisions of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition) that decide which causes of loss Section I covers. The dwelling and other structures (Coverages A and B) are insured on an open perils basis, against any direct physical loss that isn't excluded, while personal property (Coverage C) is insured only against sixteen named perils; the Section I exclusions then remove causes of loss from both.
 
 > $$\text{Covered}_{A,B} = \{\text{direct physical loss}\} \setminus \text{Excluded}_{A,B}$$

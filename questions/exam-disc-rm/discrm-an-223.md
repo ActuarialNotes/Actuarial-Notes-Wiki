@@ -2,7 +2,7 @@
 id: "discrm-an-223"
 exam: "Exam DISC-RM"
 topic: "Premises and Operations Liability"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Endorsement
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eec91375307b5f0a1daef20487e91eb56254e98bae400c665fb9cd328ea11029
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-223.md
 ---
 
 A general contractor applying for CGL coverage subcontracts about 60% of its work, including all of its electrical and roofing work. Which request best addresses the exposure the subcontracting creates?

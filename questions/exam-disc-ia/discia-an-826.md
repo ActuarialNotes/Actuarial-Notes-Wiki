@@ -2,7 +2,7 @@
 id: "discia-an-826"
 exam: "Exam DISC-IA"
 topic: "CGL Endorsements"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ba04861eee11de0359bfad3e2293908a74ecb1603eba0e96df37ffc36d717314
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-826.md
 ---
 A contractor's claims-made CGL (ISO CG 00 02) runs from January 1 to December 31, 2025, with a retroactive date of January 1, 2024, and is not renewed. No supplemental extended reporting period is bought. Which claim is covered?
 

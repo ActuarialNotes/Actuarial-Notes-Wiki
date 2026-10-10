@@ -2,7 +2,7 @@
 id: "discia-an-627"
 exam: "Exam DISC-IA"
 topic: "Commercial Property Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Common+Policy+Conditions
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3b795c5f2b7f3db11fc30b58a252075518784c89d5fa0bccbdfc965cd766a72
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-627.md
 ---
 After a covered fire, a shop owner adds invented stock to the inventory submitted with the claim, intending to collect more. Which commercial property condition addresses this, and with what effect?
 

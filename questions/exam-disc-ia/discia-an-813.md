@@ -2,7 +2,7 @@
 id: "discia-an-813"
 exam: "Exam DISC-IA"
 topic: "CGL Supplementary Payments"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:27dbcad9b40e79e6af9aa28ee638fd2b0c5b1c3c3740b0a114d110b5f741276d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-813.md
 ---
 A court enters a \$2,000,000 bodily injury judgment against an insured whose CGL has a \$1,000,000 each occurrence limit. The court also awards \$160,000 of prejudgment interest, calculated on the full judgment. The insurer spent \$70,000 on defense counsel and pays its limit immediately after the judgment, so no post-judgment interest is owed by it. How much does the insurer pay in total?
 

@@ -2,7 +2,7 @@
 id: "discrm-an-210"
 exam: "Exam DISC-RM"
 topic: "Causes of Loss"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Catastrophe+Risk
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac249d817c76368df08c1836c3c6902293b6b99177fe503323bcfc51346e2322
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-210.md
 ---
 
 An underwriter is reviewing a commercial property account with twelve warehouses, eight of them within a few miles of each other on the Gulf Coast. Which cause of loss does that concentration of value most affect in the underwriter's evaluation?

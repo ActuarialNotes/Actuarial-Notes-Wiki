@@ -2,7 +2,7 @@
 id: "discia-an-020"
 exam: "Exam DISC-IA"
 topic: "Written Premium"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Endorsement
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:490d833f92755b8ce40e1c9689c9be37d8fd77caaed5f3e9a1c68ad78064bdb1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-020.md
 ---
 
 Which of the following is recorded as statutory written premium of calendar year 2025?

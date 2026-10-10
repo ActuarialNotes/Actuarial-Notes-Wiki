@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5fb9389f2d69f6c433ecc44098ebb24390df32e96443d36a77b9e76548a50e77
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Property Insurance Limits and Deductibles.md
+---
+
 **Property Insurance Limits and Deductibles** are the provisions that cap what a property policy pays and set the part of each loss the insured keeps. A limit can be **specific** to one item, **blanket** over several items or locations, **scheduled** item by item, or a **sublimit** inside a larger limit. A deductible can be a **flat** dollar amount, a **percentage** of the insured value, applied **per occurrence** or capped in the **aggregate**, or, in time element coverage, a **waiting period**. The loss-model mathematics of these modifications is on [[Coverage Modifications]], [[Policy Limit]] and [[Deductible]]; this page is how the policy forms apply them.
 
 > $$\text{Payment} = \min\big(\max(R \times L - D,\ 0),\ C\big)$$

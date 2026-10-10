@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5c3593f552e5926a69ed32a8508278fc0efd85c27bab17160efd20f58b00a0b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Strategic Management Process.md
+---
+
 The **Strategic Management Process** is the process by which an organization manages the formulation and implementation of its strategy: it sets its direction in a vision, a mission and goals, analyzes its external environment and its own resources, formulates a strategy, implements it, and evaluates the results to start the cycle again. For an insurer, the [[Business Strategy|strategy]] it produces decides which lines, markets and customers to write and how to compete for them, and [[Underwriting Policy|underwriting policy]] is one of the ways that strategy reaches daily decisions.
 
 - **Vision:** A vision describes what the organization hopes to become in the future. It looks forward and aims to inspire.

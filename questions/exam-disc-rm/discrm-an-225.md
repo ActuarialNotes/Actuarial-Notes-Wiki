@@ -2,7 +2,7 @@
 id: "discrm-an-225"
 exam: "Exam DISC-RM"
 topic: "Commercial Crime Insurance"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Moral+Hazard
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:867fc54fb438823f288354bc8ca28b15e8ac3bda8223a7023f7a33734da300b5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-225.md
 ---
 
 An underwriter is evaluating employee theft coverage for a distributor. Which practice at the distributor most reduces the employee theft exposure?

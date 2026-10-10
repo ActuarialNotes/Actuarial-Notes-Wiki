@@ -2,7 +2,7 @@
 id: "discda-an-002"
 exam: "Exam DISC-DA"
 topic: "Data Quality"
-learning_objective: "Planning an Insurer Data Modeling Project"
+learning_objective: "1. Planning an Insurer Data Modeling Project"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bac4c0e14cf7e5bdf7614890310e07a4a098feb4b9e9c692cb7e378b6b5b2766
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-002.md
 ---
 
 Reviewing a homeowners extract for a pricing model, an actuary finds that 1,200 of 48,000 policies show a year built of 1900. The data owner confirms that 1900 is the value the policy system writes when the field is left blank. Following ASOP No. 23, what should the actuary do?

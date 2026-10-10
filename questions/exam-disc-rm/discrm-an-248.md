@@ -2,7 +2,7 @@
 id: "discrm-an-248"
 exam: "Exam DISC-RM"
 topic: "Reinsurance"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Types+of+Reinsurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:faad3d6a9f728b5256b3acef69895d2f780518f40800c990f3606790be5dec1b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-248.md
 ---
 
 Match each insurer's need to the function of reinsurance it calls for: (1) an insurer wants to stop writing in a state and transfer its remaining policies until they expire; (2) a fast-growing insurer's premium and unearned premium are outrunning its surplus; (3) a regional insurer wants help from its reinsurer's specialists in launching a cyber liability product.

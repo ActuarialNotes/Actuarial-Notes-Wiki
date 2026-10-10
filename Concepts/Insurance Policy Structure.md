@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2f62ae6dc6bd3c5bfbff86d9a2d0b6e852f19a67f329361a74f33d77b11294b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance Policy Structure.md
+---
+
 **Insurance Policy Structure** is the way a policy is physically put together: which documents make it up, who drafted them, and where each kind of provision is found. A policy can be built from **preprinted** standard forms or written as a **manuscript** for one insured, and it can be **self-contained**, one document holding every insuring agreement, or **modular**, assembled from a declarations page, coverage forms, conditions forms and [[Endorsement|endorsements]]. Knowing the structure tells a reader where to look for the [[Policy Provisions|provisions]] that decide a claim.
 
 > $$\text{Policy} = \text{Declarations} + \text{Form(s)} + \text{Endorsements}$$

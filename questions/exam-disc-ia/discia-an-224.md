@@ -2,7 +2,7 @@
 id: "discia-an-224"
 exam: "Exam DISC-IA"
 topic: "Defenses Against Negligence"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Tort+Law
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:45c46c094793cb62be3bd07a9a38ceed8130ee4f9c59f6470b8a2af7797e97a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-224.md
 ---
 
 Which statement about tort immunities in the United States today is correct?

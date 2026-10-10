@@ -2,7 +2,7 @@
 id: "discrm-an-258"
 exam: "Exam DISC-RM"
 topic: "Strategic Management Process"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Strategic+Management+Process
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aed889dbc669c594893eabe6df55e3c66c7f5526811479e1585266f885a73456
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-258.md
 ---
 
 An insurer's strategic plan lists four proposed goals. Which one best meets the SMART test (specific, measurable, aggressive, realistic and time-bound)?

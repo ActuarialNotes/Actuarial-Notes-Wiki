@@ -2,7 +2,7 @@
 id: "discrm-an-241"
 exam: "Exam DISC-RM"
 topic: "Unfair Claims Settlement Practices"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Unfair+Claims+Settlement+Practices
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fce69a25447bcf5e5c561f98dc6fcd687892d3149cdc5e147e869eeba4eed824
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-241.md
 ---
 
 A regulator finds that an insurer, once, took 20 days to acknowledge a claim through an adjuster's oversight. Under the NAIC Unfair Claims Settlement Practices Act, when does such an act become an improper claims practice?

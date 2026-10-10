@@ -2,7 +2,7 @@
 id: "discia-an-011"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unearned+Premium
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4bca55f3b022eb270b96881c2942396154c0cb6b37d078c6a6681e52fe8c9602
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-011.md
 ---
 
 An insurer writes \$2,400,000 of one-year policies during October and computes its unearned premium reserve by the monthly pro rata method. How much of this October business is earned by December 31 of the same year?

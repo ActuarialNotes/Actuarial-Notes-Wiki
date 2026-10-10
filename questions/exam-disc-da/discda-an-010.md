@@ -2,7 +2,7 @@
 id: "discda-an-010"
 exam: "Exam DISC-DA"
 topic: "Dataframe"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Dataframe
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:000f240878db9ea27ecd27f53bdd22d13ac7de9523ae600de104f92805ee8865
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-010.md
 ---
 
 An analyst works with a dataframe of 25,000 claims in R. Which dplyr step changes the number of columns but never the number of rows?

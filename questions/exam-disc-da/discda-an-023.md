@@ -2,7 +2,7 @@
 id: "discda-an-023"
 exam: "Exam DISC-DA"
 topic: "Structured Data"
-learning_objective: "Working With Different Types of Data"
+learning_objective: "4. Working With Different Types of Data"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Unstructured+Data
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f3356b7547947b091107ad111690812be7f49520ac78bbc7550dc0886c15e942
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-023.md
 ---
 
 An insurer's analytics team has four new data sources. Which one is structured data, ready to be filtered and summarized with SQL as it stands?

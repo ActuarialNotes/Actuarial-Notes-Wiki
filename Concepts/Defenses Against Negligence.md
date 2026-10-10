@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0d1bb591e1dda321eb8242db11250a9af019c8025f8130648007eb8a4f9914f6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Defenses Against Negligence.md
+---
+
 **Defenses Against Negligence** are the grounds on which a defendant who is otherwise liable in [[Negligence|negligence]] avoids or reduces paying damages. Some turn on the plaintiff's own conduct (contributory negligence, comparative negligence, assumption of risk), some on the defendant's status (immunities), and some on time (statutes of limitations and repose). They are state law, so the same accident can be worth the full damages, a reduced amount or nothing depending on where it happened.
 
 > $$R = \begin{cases} D & \text{no plaintiff fault} \\ (1-p)\,D & \text{pure comparative} \\ (1-p)\,D \cdot \mathbf{1}\{p < 0.50\} & \text{modified, 50\% bar} \\ (1-p)\,D \cdot \mathbf{1}\{p < 0.51\} & \text{modified, 51\% bar} \\ D \cdot \mathbf{1}\{p = 0\} & \text{contributory} \end{cases}$$

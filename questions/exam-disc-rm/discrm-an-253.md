@@ -2,7 +2,7 @@
 id: "discrm-an-253"
 exam: "Exam DISC-RM"
 topic: "Pro Rata Reinsurance"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Reinsurance+Contract+Provisions
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:26e0f389165a10540e9afd7551c07c8601f3932aaf8c73589d75d60080ab20a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-253.md
 ---
 
 A proportional treaty has a sliding scale ceding commission: a minimum of 25% at a 65% loss ratio, rising one point for each point the loss ratio falls to 35% at a 55% loss ratio, then half a point for each point it falls, to a maximum of 45% at a 35% loss ratio. The provisional commission is 30%. If the treaty's loss ratio turns out to be 50%, what is the final commission?

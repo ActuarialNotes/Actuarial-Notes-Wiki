@@ -2,7 +2,7 @@
 id: "discrm-an-218"
 exam: "Exam DISC-RM"
 topic: "Business Income Coverage"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Period+of+Restoration
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:975e2f95734a7a807f413a8652df39e4cd1af41781c8cb144f768bb733ba123d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-218.md
 ---
 
 A garden center's net income plus continuing operating expenses is \$260,000 a month from March through June and \$90,000 in each other month. The underwriter judges that a total loss would take at most 4 months to restore, and that extra expense would be about \$50,000. Ignoring the waiting period, what is the probable maximum loss of business income?

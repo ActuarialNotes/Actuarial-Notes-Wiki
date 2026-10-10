@@ -2,7 +2,7 @@
 id: "discia-an-223"
 exam: "Exam DISC-IA"
 topic: "Defenses Against Negligence"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Products+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0392196c944250286cc33365bbd52312e96042523e0fa1bb6b8a5fc3c8e8e6c2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-223.md
 ---
 
 A worker is injured in 2025 by a press that its manufacturer sold in 2012. The state has a two-year statute of limitations for personal injury, running from the injury, and a ten-year statute of repose for products, running from the sale. The worker sues the manufacturer three months after the injury. What is the result?

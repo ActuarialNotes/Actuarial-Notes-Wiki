@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5ca392ad75ea8d614cb92093164a296173f1b7747d6eb3df0326ea28c4df7f2c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance Data Regulation.md
+---
+
 **Insurance data regulation** is the body of U.S. federal and state law that governs what data an insurer may use about consumers, how it must protect and share that data, and what the models built on it may do to rates, underwriting and claims. The main pieces are the state rating and unfair trade practices laws, the federal Fair Credit Reporting Act and Gramm-Leach-Bliley Act, state laws based on the NAIC Insurance Data Security Model Law, and newer state rules on artificial intelligence and external data. Insurance is regulated mainly by the states, so what applies depends on which state's law governs and on what that state has adopted.
 
 > $$\text{Notify the commissioner within 72 hours} \iff D \lor \big(n \ge 250 \land (R \lor H)\big)$$

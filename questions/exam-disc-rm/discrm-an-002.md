@@ -2,7 +2,7 @@
 id: "discrm-an-002"
 exam: "Exam DISC-RM"
 topic: "Risk Management Objectives"
-learning_objective: "Objectives and Benefits"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Management
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a00534d3d9615a9915e018ff4897a952233272599d821a8151bf77db06df17de
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-002.md
 ---
 
 With illustrative figures in thousands of dollars, a firm has annual revenue of \$5,000, salaries of \$3,000, other operating costs of \$1,200 and interest of \$300. Its owners value it at 10 times its annual profit. The firm adopts a safety and insurance program that costs \$100 a year. As a result, customers buy more, raising revenue by \$60; employees accept \$40 less in total pay; and lenders cut its interest by \$20. The owners keep the multiple of 10. What is the firm's value after the program?

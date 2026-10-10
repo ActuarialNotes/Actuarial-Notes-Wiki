@@ -2,7 +2,7 @@
 id: "discia-an-608"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Basic and Broad Forms"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Causes+of+Loss+Basic+and+Broad+Forms
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e288e2bed76c5061114d1a3b44c04d8d9eb246934383e3b37d61575b1f79e2d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-608.md
 ---
 A hardware store's building is insured under the BPP with the causes of loss basic form. Which loss is covered?
 

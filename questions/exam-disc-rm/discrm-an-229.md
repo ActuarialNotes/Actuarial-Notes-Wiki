@@ -1,17 +1,27 @@
 ---
 id: "discrm-an-229"
 exam: "Exam DISC-RM"
-topic: "Workers Compensation Insurance"
-learning_objective: "Underwriting Other Types of Coverage"
+topic: "Workers Compensation Underwriting"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
 wiki_link:
-  - Concepts/Workers+Compensation+Insurance
+  - Concepts/Workers+Compensation+Underwriting
   - Concepts/Premium+Audit
   - Concepts/Exposure+Base
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca3b9fcaf4b883f12dd08b4cf5aef3d11cc71cb5a0e5455e08914dd0f475b847
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-229.md
 ---
 
 An employer's U.S. workers compensation policy was written on estimated payroll of \$1,500,000, all in a clerical classification with a rate of \$0.30 per \$100 of payroll. The final audit finds actual payroll of \$1,600,000, of which \$400,000 was paid to employees who load trucks in the warehouse, a classification rated at \$4.20 per \$100. What is the audit adjustment?

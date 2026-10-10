@@ -2,7 +2,7 @@
 id: "discda-an-033"
 exam: "Exam DISC-DA"
 topic: "Types of Plots"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exploratory+Data+Analysis
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c5d6beac6e0507796709c08643d0522a0e6fbe95b3e4f7db9d4bf264b7a5c136
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-033.md
 ---
 
 An insurer replaced its claims system in July 2024. An analyst wants to see whether the number of claims reported each month shifted after the change. Which plot answers this most directly?

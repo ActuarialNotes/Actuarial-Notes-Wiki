@@ -2,7 +2,7 @@
 id: "discia-an-618"
 exam: "Exam DISC-IA"
 topic: "BPP Loss Conditions and Additional Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8edbb1c98c7362664e501ac66a016aa079a1dd39e187e04be7999138bc734e9b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-618.md
 ---
 The owner of a building insured under the BPP has used only 25% of its total square footage for 70 days, with the rest empty and no renovation under way. A fire then causes \$100,000 of covered damage. The deductible is \$1,000. How much does the insurer pay?
 

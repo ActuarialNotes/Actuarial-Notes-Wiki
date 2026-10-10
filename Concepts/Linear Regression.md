@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4414c708b5f9d1dfbf3a25220b397c7e6fffe1199c496d7d587fc9fe39bb4524
+  content_hash: sha256:feace85b1d0a2b45fd6161aa732763bd72bd5a515ce0203eebd491bf4929f713
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.1.1 RSS (3.3) and least-squares estimates (3.4) printed p.62 (PDF p.72); §3.2.2 F-statistic (3.23) printed p.76 (PDF p.86), RSE = sqrt(RSS/(n-p-1)) (3.25) printed p.80 (PDF p.90), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.2.1-2.2.3 normal equations, (X'X)^-1 X'y, unbiasedness, BLUE for uncorrelated constant-variance observations, normality only for small-sample inference, PDF pp.6-8, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"

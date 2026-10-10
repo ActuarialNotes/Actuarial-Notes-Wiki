@@ -2,7 +2,7 @@
 id: "discrm-an-251"
 exam: "Exam DISC-RM"
 topic: "Pro Rata Reinsurance"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Surplus+Share
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b07afa8fec4771387488600644d3e33cefe9553eccf5c3d7ef0c10141ea5fd1b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-251.md
 ---
 
 An insurer has a surplus share treaty with a retained line of \$200,000 and 5 lines. It insures a building valued at \$900,000, which suffers a \$180,000 fire loss. How much of the loss does the reinsurer pay?

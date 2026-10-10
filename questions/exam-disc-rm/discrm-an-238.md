@@ -2,7 +2,7 @@
 id: "discrm-an-238"
 exam: "Exam DISC-RM"
 topic: "Claims Handling"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: easy
 type: multiple-choice
 bloom: remember
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling+Process
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:47881ae99679655d1ad1b9dfb691169945ae062c05bec50845c77b59b99a1cbd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-238.md
 ---
 
 After a hailstorm, a homeowner hires an adjuster who, for a fee, prepares and negotiates the claim against the homeowner's insurer. What kind of adjuster is this?

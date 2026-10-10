@@ -2,7 +2,7 @@
 id: "discia-an-622"
 exam: "Exam DISC-IA"
 topic: "BPP Optional Coverages"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dd32ee9b6642314d87759b1d2f2c8d26f109341b817b59ea7b5768564d50cbbc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-622.md
 ---
 A building is insured for \$750,000 with a 90% coinsurance percentage and a \$2,500 deductible. The declarations also show the agreed value optional coverage with an agreed value of \$750,000, in effect at the time of loss. By then the building's value has risen to \$1,000,000. A fire causes a \$200,000 loss. How much does the insurer pay?
 

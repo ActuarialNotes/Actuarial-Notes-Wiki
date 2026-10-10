@@ -2,7 +2,7 @@
 id: "discda-an-026"
 exam: "Exam DISC-DA"
 topic: "Exploratory Data Analysis"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exploratory+Data+Visualization
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:91e2a830f02a2865a648559ad8dab2b8bc10177b511b33bea338b48ff7192ee0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-026.md
 ---
 
 An analyst receives a new commercial property claims file for a severity study, with paid amount, cause of loss, construction class and state. Which first step fits exploratory data analysis?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a7fbfcc665da5e2e78e59eb29eb46d5c879c55d5bc83cf2d3a7febf3633ec878
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Model Training and Evaluation.md
+---
+
 **Model training and evaluation** is the process of fitting a predictive model on one part of the data and judging it on data it has not seen. The available records are split into a **training** set used to build the model, often a **validation** set used to refine and compare candidates, and a **test** (holdout) set kept back to estimate how the final model will perform on new business. Performance is measured with metrics suited to the target: prediction error and lift for a numeric target, and the confusion matrix, ROC curve and related rates for a yes/no target.
 
 > $$\text{MSE}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i \in \text{test}} \big(y_i - \hat{f}(x_i)\big)^2$$

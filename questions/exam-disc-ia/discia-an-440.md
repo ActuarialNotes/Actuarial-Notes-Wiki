@@ -2,7 +2,7 @@
 id: "discia-an-440"
 exam: "Exam DISC-IA"
 topic: "Auto Physical Damage Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b62a998630b98051aa1cf87fcbb7cf7290e74eb378cc41a53498ffa2d23c170
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-440.md
 ---
 A named insured's PAP (ISO PP 00 01 09 18) carries collision coverage with a \$1,000 deductible and other than collision coverage with a \$250 deductible. Driving at night, she swerves to avoid a deer, misses it, and hits a tree, causing \$3,000 of damage to her car, whose actual cash value is \$15,000. How much does Part D pay?
 

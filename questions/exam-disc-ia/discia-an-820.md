@@ -2,7 +2,7 @@
 id: "discia-an-820"
 exam: "Exam DISC-IA"
 topic: "CGL Limits of Insurance"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de605aa7cb130eeb02282d6b5bddcbd606fc8a084a06d3be92357d2f7fd90ecd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-820.md
 ---
 A CGL policy with a \$2,000,000 general aggregate is issued for January 1 to December 31. In November the insurer agrees to extend it to March 31 of the next year. By then \$1,700,000 of general-aggregate claims have been paid. How much general aggregate is available for claims in the extension?
 

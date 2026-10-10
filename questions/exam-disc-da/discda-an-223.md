@@ -2,7 +2,7 @@
 id: "discda-an-223"
 exam: "Exam DISC-DA"
 topic: "Summary Statistics"
-learning_objective: "Basic Data Analysis"
+learning_objective: "8. Basic Data Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Frequency
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bedfd786bce9dfc3631ecb34b2503c6c8d414495438353198fdcc6a66927ad6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-223.md
 ---
 
 A one-way table of personal auto experience by vehicle use shows:

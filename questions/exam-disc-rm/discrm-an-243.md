@@ -2,7 +2,7 @@
 id: "discrm-an-243"
 exam: "Exam DISC-RM"
 topic: "Unfair Claims Settlement Practices"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling+Process
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1eb490d8dedb48a708d9b95137861ffbc089130ddb920a4ebc00c92066b12bd3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-243.md
 ---
 
 Which practice, if it were the insurer's general business practice, breaches the NAIC model act or its property/casualty model regulation?

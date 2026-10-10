@@ -2,7 +2,7 @@
 id: "discrm-an-249"
 exam: "Exam DISC-RM"
 topic: "Reinsurance"
-learning_objective: "Understanding Reinsurance"
+learning_objective: "14. Understanding Reinsurance"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Reinsurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c24bf106892a837dba1cd86fe681e3a76e44e49c8de599623d5fa32378bdc302
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-249.md
 ---
 
 A small mutual insurer places its reinsurance directly with a reinsurer whose own salaried employees negotiate with the insurer, with no broker involved. Which description fits that reinsurer?

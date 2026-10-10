@@ -2,7 +2,7 @@
 id: "discrm-an-027"
 exam: "Exam DISC-RM"
 topic: "Risk Identification"
-learning_objective: "Risk Identification as a Team"
+learning_objective: "2. Identifying Risk"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Identification
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d58646eabc88c7b63c71235bff3c178321372fbb9ec4433a88c17c3f45bc69ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-027.md
 ---
 
 A company's risk identification team consists of the risk manager, the chief financial officer and a finance analyst who works from the same reports as the CFO. The risk manager can add one more member. Which addition would most improve the team's chance of finding exposures it would otherwise miss?

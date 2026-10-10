@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:894f6aac8b090508d63c7ef25cd8aa42fe7a2e5bcc7533cbb34c33a68c593d43
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Uninsured Motorists Coverage.md
+---
+
 **Uninsured Motorists Coverage** (UM) is Part C of the ISO [[Personal Auto Policy|personal auto policy]] (PP 00 01, 09 18 edition). It pays the compensatory damages an insured is legally entitled to recover from the owner or operator of an uninsured motor vehicle because of bodily injury caused by an accident, so the insured's own insurer stands in for the liability insurer the at-fault driver didn't have. Underinsured motorists coverage (UIM), added by endorsement, does the same when the at-fault driver is insured for too little. Canada's statutory counterpart is [[Uninsured Automobile Coverage]].
 
 > $$\text{UM} = \min\Big(\sum_i \min(D_i - R_i,\ L_{\text{pp}}),\ L_{\text{acc}}\Big)$$

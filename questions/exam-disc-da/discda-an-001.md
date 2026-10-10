@@ -2,7 +2,7 @@
 id: "discda-an-001"
 exam: "Exam DISC-DA"
 topic: "Data Analytics"
-learning_objective: "Planning an Insurer Data Modeling Project"
+learning_objective: "1. Planning an Insurer Data Modeling Project"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Analytics
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa7928ffdb503eb28f399ebe52b30326e475525b4179a8972e24a9162d554fa9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-001.md
 ---
 
 A personal auto insurer's fraud model already gives every open claim a probability of being fraudulent. The special investigations unit can examine only 40 claims a week, and each investigation costs about \$1,500. The claims director asks for a tool that combines the scores, the investigation cost and the unit's capacity to choose which claims to refer each week. Which type of analytics is the requested tool?

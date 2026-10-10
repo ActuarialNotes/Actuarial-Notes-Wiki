@@ -2,7 +2,7 @@
 id: "discia-an-252"
 exam: "Exam DISC-IA"
 topic: "State Rating Laws"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/State+Rating+Laws
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:519b90b6a957b6fcdf1fdf8814a4f62c32216ab436c40a51468cdfc8176dd575
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-252.md
 ---
 
 A state regulates homeowners rates under a prior approval law with a 30-day deemer provision. An insurer files a rate increase, and the insurance department neither approves nor disapproves it. When may the insurer use the new rates?

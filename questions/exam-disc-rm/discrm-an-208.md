@@ -2,7 +2,7 @@
 id: "discrm-an-208"
 exam: "Exam DISC-RM"
 topic: "Underwriting Process"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Guidelines
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2e4893af69a35c3169277fe71c4563deb680355230cfa69cbe14eaaed52e1d64
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-208.md
 ---
 
 A homeowners underwriter and a commercial property underwriter each think an applicant's property is better maintained than average. Which describes how each can usually reflect that in the premium?

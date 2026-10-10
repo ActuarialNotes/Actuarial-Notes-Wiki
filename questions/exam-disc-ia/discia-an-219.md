@@ -2,7 +2,7 @@
 id: "discia-an-219"
 exam: "Exam DISC-IA"
 topic: "Terrorism Risk Insurance Program"
-learning_objective: "Specialty Coverages Part 2"
+learning_objective: "13. Specialty Coverages Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Terrorism+Risk+Insurance+Program
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:88aa2db2dd152cf5088a43427479df0377a7a55461b4bcdb1ae90d50e0215769
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-219.md
 ---
 
 An insurer group's prior-year direct earned premium in the lines covered by the Terrorism Risk Insurance Program was \$500,000,000. This year it pays \$180,000,000 of insured losses from certified acts of terrorism, and industry losses exceed the program trigger. The deductible is 20% of prior-year premium and the federal share is 80%. How much does the federal government pay the group?

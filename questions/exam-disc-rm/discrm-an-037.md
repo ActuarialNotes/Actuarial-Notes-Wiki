@@ -2,7 +2,7 @@
 id: "discrm-an-037"
 exam: "Exam DISC-RM"
 topic: "Property Loss Exposure"
-learning_objective: "Analyzing Commercial Property Loss Exposures"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Replacement+Cost
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d5d267fcb7c47caedb6abc35b030ddf5826b6aa2ba2b125dca4f51aa661f2e8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-037.md
 ---
 
 A bakery's building is damaged by fire. Repairing it with materials of like kind and quality would cost \$250,000, and depreciation on the damaged parts is \$70,000. While the bakery is closed it loses \$60,000 of income, and it spends \$15,000 extra to rent a temporary kitchen for its key orders. Measuring the property damage at actual cash value, what is the total financial consequence of the fire?

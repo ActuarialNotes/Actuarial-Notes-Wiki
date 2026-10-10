@@ -2,7 +2,7 @@
 id: "discia-an-801"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Insuring Agreement"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:789d9dbdebf280fb7948cc88f10c85f692c82f48a88ec10889c837101f6c9946
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-801.md
 ---
 A U.S. manufacturer of space heaters sells them only through U.S. retailers. A buyer takes one to Spain, where it catches fire and injures her. She sues the manufacturer in a Spanish court and wins a judgment there, without the insurer agreeing to any settlement. Is the injury within the coverage territory of the manufacturer's ISO CGL (CG 00 01 04 13)?
 

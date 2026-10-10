@@ -2,7 +2,7 @@
 id: "discia-an-033"
 exam: "Exam DISC-IA"
 topic: "Insurance Policy Structure"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Contract+Characteristics
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e3a8776df0ab84c9baef4e58ebcc508af849e42ab0a8c0348820b4ba8f57b2ec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-033.md
 ---
 
 A large manufacturer's broker drafts a manuscript property policy for it, which an insurer accepts. In a later dispute a term proves ambiguous. Compared with the same dispute under a standard ISO form, what is the most likely difference?

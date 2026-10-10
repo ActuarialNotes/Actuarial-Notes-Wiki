@@ -2,7 +2,7 @@
 id: "discrm-an-239"
 exam: "Exam DISC-RM"
 topic: "Claims Handling"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Claims+Handling
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f042b036503d7de31a5c8f37d6030cf857d46bd00d28c61e6a3dd0b505be149a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-239.md
 ---
 
 Two claims offices handle the same line. Office X had 800 claims reported, closed 760 of them and paid \$3,800,000 on the closed claims. Office Y had 900 reported, closed 630 and paid \$2,520,000. Which conclusion is best supported?

@@ -2,7 +2,7 @@
 id: "discrm-an-261"
 exam: "Exam DISC-RM"
 topic: "SWOT Analysis"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Cycle
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f1dadd12b5ed1d32b1f27b67a959e8e618dabae4feaca5467db69440da7dd7e4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-261.md
 ---
 
 A commercial lines insurer's SWOT analysis finds: its policy systems are outdated and its expense ratio is high, and the market is softening as new competitors cut rates on small accounts. Which strategic option belongs to the weakness-threat (WT) quadrant?

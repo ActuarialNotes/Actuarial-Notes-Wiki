@@ -2,7 +2,7 @@
 id: "discda-an-226"
 exam: "Exam DISC-DA"
 topic: "Data Segmentation"
-learning_objective: "Basic Data Analysis"
+learning_objective: "8. Basic Data Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Clustering
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9481a76a11a9e5c6164e3599f6c33a94fd774243c6e0560a8abf315fbd9d513d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-226.md
 ---
 
 A homeowners analyst runs K-means clustering on policy characteristics (dwelling age, square footage, construction, distance to coast and protection class), with no loss data, and gets five well-separated clusters. She proposes using the five clusters as new rating segments. What should be done before the clusters are used as segments?

@@ -2,7 +2,7 @@
 id: "discda-an-204"
 exam: "Exam DISC-DA"
 topic: "Chart Selection"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Chart+Selection
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7695fabaaef0bd35f7d143057f9b4512248ca8fc40109689cfc8de746d6d7359
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-204.md
 ---
 An actuary is preparing two exhibits for a rate filing. Exhibit 1 must let a regulator look up the exact base rate and factor for each of 30 rating classes. Exhibit 2 must show that average claim severity has risen steadily over the last 40 quarters. Which pairing of displays is best?
 

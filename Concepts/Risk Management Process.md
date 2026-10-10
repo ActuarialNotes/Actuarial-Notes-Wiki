@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:50ce4f09d8732c16d29b3a202b87f531f1bdb589a9cfe039a85edbda4e4116c3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Risk Management Process.md
+---
+
 The **risk management process** is the repeating sequence of steps by which an organization manages its risks: establish the context and the criteria risks will be judged by, identify the risks, analyze and evaluate them, treat them, and monitor and review the results, with communication and consultation running through every step. Standards and frameworks word the steps differently, ISO 31000 in six process elements, the CAS's ERM framework in seven steps and COSO through its components, but each describes the same cycle, and each feeds what monitoring learns back into the first step.
 
 > $$\sigma_{A+B} = \sqrt{\sigma_A^2 + \sigma_B^2 + 2\rho\,\sigma_A\,\sigma_B}$$

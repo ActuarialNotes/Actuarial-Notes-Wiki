@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7bdf692b022c2b5b0cdb47c4bf2ccae306d419a54f930c78718006d3df804ca3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Limits of Insurance.md
+---
+
 **CGL Limits of Insurance** is Section III of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition): six limits shown in the declarations, and the rules for stacking them, that fix the most the insurer will pay however many insureds, claims, suits or claimants there are. Two aggregates cap the policy year, and four per-event limits sit inside them.
 
 > $$\text{Paid}_k = \min\left(X_k,\ L_k,\ G_{k-1}\right)$$

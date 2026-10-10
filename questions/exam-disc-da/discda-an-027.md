@@ -2,7 +2,7 @@
 id: "discda-an-027"
 exam: "Exam DISC-DA"
 topic: "Exploratory Data Analysis"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Box+Plot
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:adc5083074b77ba64dd32f8fc581033bf8706e5a4cffdde86dc9449ec1431acb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-027.md
 ---
 
 Exploring a personal auto severity file, an analyst sees in side-by-side box plots that one state's median severity is twice that of the others. Which follow-up best fits exploratory data analysis?

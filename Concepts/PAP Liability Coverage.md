@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b49b486f1aab6e679baf0c4b82d5d529a39bd81f5118a84c47f1ebdc4457e09
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/PAP Liability Coverage.md
+---
+
 **PAP Liability Coverage** is Part A of the ISO [[Personal Auto Policy|personal auto policy]] (PP 00 01, 09 18 edition). It pays the damages for bodily injury or property damage that an insured becomes legally responsible for because of an auto accident, and it settles or defends claims for those damages, paying defense costs in addition to the limit.
 
 > $$\text{BI} = \min\Big(\sum_i \min(D_i,\ L_{\text{pp}}),\ L_{\text{acc}}\Big)$$

@@ -2,7 +2,7 @@
 id: "discia-an-815"
 exam: "Exam DISC-IA"
 topic: "CGL Supplementary Payments"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:722da3ddc51fa7111952b58b5efa97f9a628022796a9a97dfe53b84ae6068797
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-815.md
 ---
 A subcontractor's written contract assumes the project owner's tort liability for injuries arising from the subcontractor's work and also its cost of defense. An injured worker of another trade sues both, and the subcontractor's CGL insurer defends the subcontractor. Which fact, on its own, means the insurer need **not** defend the owner as a supplementary payment?
 

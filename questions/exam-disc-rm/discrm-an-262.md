@@ -2,7 +2,7 @@
 id: "discrm-an-262"
 exam: "Exam DISC-RM"
 topic: "Business Strategy"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Strategic+Management+Process
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c84ad4621b3bbabd7bbc8c4e3cfb14e218da9f366bbc4ba1cc41fa538eea480d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-262.md
 ---
 
 An insurance holding company decides to sell its life insurance subsidiary and buy a specialty property-casualty insurer. At which level of strategy is this decision made?

@@ -2,7 +2,7 @@
 id: "discia-an-049"
 exam: "Exam DISC-IA"
 topic: "Liability Claim Valuation"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Collateral+Benefits
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9841490dc382995f1dc410389d67423957b828b7acb6a95db4dca2caa4b1e694
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-049.md
 ---
 
 A claimant injured by the insured has \$40,000 of medical bills, all paid by her own health insurer, and \$15,000 of lost wages; a jury values her pain and suffering at \$60,000. The state follows the traditional collateral source rule, and no exception applies. What are her special damages, and are they reduced for the health insurer's payments?

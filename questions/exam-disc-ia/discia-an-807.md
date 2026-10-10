@@ -2,7 +2,7 @@
 id: "discia-an-807"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Exclusions"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6c887816154333bbda3e227063618196ec5ab300d8d48adff0ef3d554b5d7ff2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-807.md
 ---
 Which of these claims against a hotel is covered by the hotel's CGL despite the aircraft, auto or watercraft exclusion (CG 00 01 04 13)?
 

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ee2fda39e89cb7302402766ee0068874aee73e8068eddb46bf4a000d6bb8d773
+  content_hash: sha256:aeb88f13834f1bce62c146eaea5063046975d810bfefcb0777ff346b03f7c141
   sources:
     - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), PDF pp.1-3, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
     - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
@@ -63,7 +63,7 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 7. Understanding Fundamental Modeling Concepts
 > 1. Basic [[Statistical Learning|Data Modeling Techniques]]
-> 2. [[Similarity and Distance Measures|Similarity and Distance]] in Data Modeling
+> 2. [[Similarity and Distance Measures|Similarity and Distance]] in [[Statistical Learning|Data Modeling]]
 > 3. [[Model Training and Evaluation|Predictive Model Training and Evaluation]]
 
 > [!example]- 8. Basic Data Analysis
@@ -79,8 +79,8 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 10. Ethical and Societal Considerations of Data Analytics
 > 1. Using [[Data Ethics|Data Ethically]]
-> 2. How [[Insurance Data Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect Data Modeling
-> 3. Applying [[Data Ethics Checklist|Ethics Checklists]] to Insurance Data Modeling
+> 2. How [[Insurance Data Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect [[Predictive Analytics|Data Modeling]]
+> 3. Applying [[Data Ethics Checklist|Ethics Checklists]] to [[Predictive Analytics|Insurance Data Modeling]]
 > 4. Societal Impact of [[Credit-Based Insurance Scoring|Credit-Based Insurance Scores]]
 
 ## Source Material

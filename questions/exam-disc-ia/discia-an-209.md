@@ -2,7 +2,7 @@
 id: "discia-an-209"
 exam: "Exam DISC-IA"
 topic: "Excess Insurance"
-learning_objective: "Specialty Coverages Part 1"
+learning_objective: "12. Specialty Coverages Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Umbrella+Liability+Insurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:149d0a3684e2599b137982bb80fe33e76b03dc57bc6f9d83771f5dcf3607077d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-209.md
 ---
 
 A contractor has a CGL policy with a \$1,000,000 each occurrence limit and a \$5,000,000 following form excess liability policy above it. A \$300,000 claim arises from a job abroad, outside the CGL's coverage territory, so the CGL does not cover it. Which statement about the excess policy is correct?

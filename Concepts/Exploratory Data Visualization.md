@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:851141db3629c3f3cba49df8aeb392ed3995e7205027bf6bc5f62201dd141ac7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Exploratory Data Visualization.md
+---
+
 **Exploratory Data Visualization** is the use of quick plots, made by an analyst for their own understanding, to see how each variable is distributed and how variables relate to one another, to find unusual values and data problems, and to raise the next question. It is the graphical core of [[Exploratory Data Analysis]], and it differs from a [[Presentation Visualization|presentation graphic]], which is polished so that an audience can understand a finding the analyst already has.
 
 > $$\text{plot}(X) = \begin{cases} \text{bar chart} & X \text{ categorical} \\ \text{histogram or density} & X \text{ numerical} \end{cases}$$

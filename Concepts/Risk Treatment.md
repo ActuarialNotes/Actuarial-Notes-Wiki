@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8749742e666f07d3d272be1f9f4c8690a8f77a3ed75d1be7f3f5a4e99f74250c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Risk Treatment.md
+---
+
 **Risk treatment** is the step of the [[Risk Management Process|risk management process]] that selects and carries out the techniques for dealing with each risk that has been identified and assessed. The techniques fall into two groups: [[Risk Control|risk control]], which changes the frequency, severity or predictability of losses (avoidance, loss prevention, loss reduction, separation, duplication and diversification), and risk financing, which pays for the losses that still occur (retention, and [[Risk Transfer|transfer]] by insurance or by noninsurance means). [[Enterprise Risk Management|Enterprise risk management]] adds a fifth response for risks with an upside: exploiting them.
 
 > $$S_{\text{ret}} = \min(S, d) + \max(S - d - \ell,\ 0)$$

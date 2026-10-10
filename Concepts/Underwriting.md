@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7e889f7459d232c0dacf09c8d7d8c64c562dfe7e5ef72a7b8e631a47c58d99fa
+  content_hash: sha256:f03a2f5e1e614fd7b646c1356785bf5d96f9c230ac1b41b4e2324a80f11a3382
   sources: []
   open_findings: 0
   open_critical: 0
@@ -19,6 +19,7 @@ verification:
 
 - $E[L_i]$ is the underwriter's estimate of expected losses for risk $i$, $P_i$ the premium it would be written at, and $\text{PLR}$ the permissible [[Loss Ratio|loss ratio]] — one minus the expense and profit provisions. A risk whose expected loss ratio at the offered price exceeds the PLR is declined, re-priced or written on different terms (a higher deductible, a sublimit, required risk control).
 - **The P&C process** (DISC-RM, GI-201) runs in six steps: evaluate the submission (physical, moral and morale hazards, [[COPE]] for property, loss history), develop alternatives, select one, set the premium, implement, and monitor — see [[Underwriting Process]], and [[Underwriting Guidelines]] for the rules each decision applies. Results are measured by [[Underwriting Profit|underwriting profit]]; [[Underwriting Changes|changes in underwriting]] shift the mix of risks and distort loss development and trend.
+- **By line, in DISC-RM:** [[Workers Compensation Underwriting]], [[General Liability Classification]] and [[Personal Auto Underwriting]] apply the process to particular coverages.
 - **Life underwriting** (ILA-101) classifies individual applicants by mortality: full medical, simplified issue, guaranteed issue and data-driven accelerated programs trade underwriting cost and speed against [[Mortality|mortality]] slippage. Underwritten lives show **select** mortality, lower than ultimate, that wears off with duration.
 - **Group health underwriting** (GH-101, CP-321) looks at the group rather than the person: size, industry, participation and contribution rules, prior claims experience and its [[Credibility|credibility]], large claimants and pooling levels. Where law forbids health-status underwriting — the ACA individual and small group markets — risk adjustment (GH-301) transfers money between insurers for the risks underwriting can no longer price.
 

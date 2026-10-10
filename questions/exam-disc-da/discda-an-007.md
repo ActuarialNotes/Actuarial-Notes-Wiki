@@ -2,7 +2,7 @@
 id: "discda-an-007"
 exam: "Exam DISC-DA"
 topic: "Insurer Operational Data"
-learning_objective: "Collecting Data for Insurer Models"
+learning_objective: "2. Collecting Data for Insurer Models"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Calendar+Year
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:26fe2f565e613ef84aa7c9c6bd8ee08211b113aa082110de69e3663d938ca859
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-007.md
 ---
 
 A homeowners claim occurs on December 2, 2024 and is reported on December 10, 2024, when a case reserve of \$20,000 is set. On February 1, 2025 the insurer pays \$5,000 and lowers the reserve to \$12,000. On August 15, 2025 it pays \$14,000 and closes the claim. By how much does this claim change calendar year 2025 reported losses, which are the payments made in 2025 plus the change in case reserves during 2025?

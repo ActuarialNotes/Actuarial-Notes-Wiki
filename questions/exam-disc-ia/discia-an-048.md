@@ -2,7 +2,7 @@
 id: "discia-an-048"
 exam: "Exam DISC-IA"
 topic: "Liability Claim Valuation"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Joint+and+Several+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0fee30ee33971152265b35b1b85b3fde7cf4163e19d735a92aef3cb009f461fd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-048.md
 ---
 
 A plaintiff wins a \$900,000 judgment against two defendants. The jury assigns 20% of the fault to the insured and 80% to a co-defendant with no insurance and no assets. In a state with joint and several liability, how much of the judgment can the plaintiff collect from the insured?

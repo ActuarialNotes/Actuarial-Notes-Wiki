@@ -2,7 +2,7 @@
 id: "discia-an-204"
 exam: "Exam DISC-IA"
 topic: "Types of Annuities"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Types+of+Annuities
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e7513e8dc41ebdf1703b87424b3feeed35240c327ccbdc29892653175b102fe8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-204.md
 ---
 
 A deferred annuity is in the third year of its surrender charge period, when the charge is 5% of any amount withdrawn above a free withdrawal of 10% of the account value. The account value is \$80,000, and the owner withdraws \$20,000. What is the surrender charge?

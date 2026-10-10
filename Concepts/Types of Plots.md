@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:184061bc72b234cd1f35f6d4a10ae03f2da704fcd20b8dd519a3ffa2413f26a4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Types of Plots.md
+---
+
 **Types of Plots** are the standard graphics an analyst chooses among when creating a plot, each built to show one kind of pattern for variables of particular [[Data Types|types]]: a bar chart, histogram or density plot for one variable; a box plot, scatter plot, stacked bar chart or heat map for two; a line chart for a variable over time; and faceting to split any of them by a further variable. Choosing well means matching the plot to the number and type of variables and to the question being asked.
 
 > $$\text{density height}_j = \frac{n_j}{n \, w}$$

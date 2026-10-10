@@ -2,7 +2,7 @@
 id: "discia-an-208"
 exam: "Exam DISC-IA"
 topic: "Health Insurance Plans"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Health+Insurance+Plans
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c02740f80e7d97e6412e3ad5e0fd53af93db254262911654afe6ab33fc02f8cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-208.md
 ---
 
 A member's health plan has a \$1,000 annual deductible, 20% coinsurance after the deductible and a \$4,000 out-of-pocket maximum. The plan has no copayments. During the year the member has \$12,000 of allowed charges, all subject to the deductible. How much does the member pay in cost sharing for the year?

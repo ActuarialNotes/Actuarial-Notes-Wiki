@@ -2,7 +2,7 @@
 id: "discia-an-229"
 exam: "Exam DISC-IA"
 topic: "Strict Liability"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Negligence
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd8a22a653dfa0eaf9a3d6ebe3ce8d3f3fec98f1fa1bfc9c5b51b581990c9967
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-229.md
 ---
 
 A contractor blasting rock for a highway cut uses every precaution the industry recognizes, but the vibration still cracks the foundation of a house nearby. The homeowner cannot show any carelessness. Is the contractor liable?

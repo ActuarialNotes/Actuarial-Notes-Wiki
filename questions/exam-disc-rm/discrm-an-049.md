@@ -2,7 +2,7 @@
 id: "discrm-an-049"
 exam: "Exam DISC-RM"
 topic: "Insurance Distribution Systems"
-learning_objective: "Insurance Distribution Systems and Channels"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Producer
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d72101a3015a1f65e687b9c423e7264370c7de56dccf60a68cdc4fec4c6a2939
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-049.md
 ---
 
 Under which distribution system does the producer, rather than the insurer, usually own the expirations, so that the producer can move an account to another insurer at renewal?

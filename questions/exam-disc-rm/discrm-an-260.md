@@ -2,7 +2,7 @@
 id: "discrm-an-260"
 exam: "Exam DISC-RM"
 topic: "Porter's Five Forces"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Cycle
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5a84c0108c21b68f679767dd95736081e440fd5300259cc213bacea50e67fe0d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-260.md
 ---
 
 During a hard market, several large commercial buyers leave the insurance market and form captives and risk retention groups to finance their liability losses. In Porter's five forces, which force does this movement illustrate?

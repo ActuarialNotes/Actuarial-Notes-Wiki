@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a4b9833b569cf33389ff9fb2866be70d29ea26afb72c4e85aac9c4f94fa90212
+  content_hash: sha256:508353e80fe44d8fd8c7a059fec98abe26e567110857f3188ac9a622fd912e84
   sources:
     - "The Institutes, CAS DISC IA – Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation Course Syllabus (© 2023), PDF pp.1-4, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
     - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
@@ -144,7 +144,7 @@ The Institutes gives the topics no exam weights.
 > [!example]- 15. Insurance Law Part 2
 > 1. [[Strict Liability|Liability in Extraordinary Circumstances]]
 > 2. [[Products Liability]]
-> 3. [[Compensatory Damages|Damages]] in Tort Suits
+> 3. [[Compensatory Damages|Damages]] in [[Tort Law|Tort Suits]]
 > 4. [[Tort Law|Liability Concepts Affecting Tort Claims]]
 
 > [!example]- 16. Insurance Regulation

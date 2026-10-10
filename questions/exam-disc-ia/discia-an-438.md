@@ -2,7 +2,7 @@
 id: "discia-an-438"
 exam: "Exam DISC-IA"
 topic: "Property Loss Exposure"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Property+Coverages
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:14515e98a951d1576b4e31b94cd0a862d96de693cd89a7e0055037c34f4f416c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-438.md
 ---
 A fire makes a family's home unlivable for four months. Their mortgage payment of \$2,500 a month continues, they rent a comparable house for \$3,000 a month, and their commuting costs rise by \$200 a month; their utility bills of \$300 a month at the damaged house stop. In measuring the family's property loss exposure, what is the additional living expense, and which HO-3 coverage pays it?
 

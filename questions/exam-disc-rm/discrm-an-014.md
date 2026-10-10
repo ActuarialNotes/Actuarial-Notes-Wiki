@@ -2,7 +2,7 @@
 id: "discrm-an-014"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Excess+and+Surplus+Lines
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:639e73d66331a97d9c0882b3448370a71ad92cddad7cdfe1dbb1eb18c871e611
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-014.md
 ---
 
 A start-up that rents out a new kind of personal flying drone seeks liability insurance. Admitted insurers decline it because the exposure has no loss history. Through which part of the property-casualty marketplace is the coverage most likely to be placed?

@@ -2,7 +2,7 @@
 id: "discia-an-217"
 exam: "Exam DISC-IA"
 topic: "Cyber Insurance"
-learning_objective: "Specialty Coverages Part 2"
+learning_objective: "13. Specialty Coverages Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Cyber+Insurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a8a998e6fbb02e87a2cabe7508a155eb0a36d86ef28f9430cc6e726c4a4ba8ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-217.md
 ---
 
 A ransomware attack shuts down an online retailer's systems for 20 hours. Its lost net income plus continuing expenses run at \$10,000 an hour, and it spends \$15,000 of extra expense restoring operations. Its cyber policy's network business interruption coverage has an 8-hour waiting period, a \$100,000 sublimit and the event's \$25,000 retention applies to it. How much does the business interruption coverage pay?

@@ -2,7 +2,7 @@
 id: "discia-an-254"
 exam: "Exam DISC-IA"
 topic: "State Market Conduct Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Unfair+Discrimination
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ddbee50f757dc469869875f08c85af0dc4383cb20fa7af7f0c6daa24137de557
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-254.md
 ---
 
 An insurer decides not to renew any homeowners policy on a house built before 1960, whatever the house's condition, wiring or loss history. Under a state law based on the NAIC Unfair Trade Practices Act, this practice is

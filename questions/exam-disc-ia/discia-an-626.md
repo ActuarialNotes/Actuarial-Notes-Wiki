@@ -2,7 +2,7 @@
 id: "discia-an-626"
 exam: "Exam DISC-IA"
 topic: "Commercial Property Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Salvage+and+Subrogation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:59bae946f4349e76c83fe9b69c0c9cba1d4ec1c6c6c8e6fa7b6a9ddea4ebea06
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-626.md
 ---
 A fire caused by a party's negligence damages a landlord's building, and the landlord's insurer pays the claim under a commercial property coverage part. In which situation has the landlord **not** impaired its insurer's right of recovery?
 

@@ -2,7 +2,7 @@
 id: "discia-an-828"
 exam: "Exam DISC-IA"
 topic: "CGL Endorsements"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ba4463af25b067d4effb1d41481427c2f3b9d4f9ee4ff6ae21287ce5b1d29602
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-828.md
 ---
 A shopping-mall owner's contract with a cleaning company requires that (1) the cleaner's CGL respond to claims against the mall owner first, without seeking contribution from the mall owner's own liability policy, and (2) the cleaner's insurer give up any right to recover from the mall owner what it pays. The cleaner's CGL already has the mall owner as an additional insured. Which two ISO endorsements meet these requirements?
 

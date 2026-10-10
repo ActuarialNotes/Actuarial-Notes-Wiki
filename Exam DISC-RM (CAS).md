@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1776e5673c88a2f38f18a574345f671876b1e509aead2644a276e9c0c9653b76
+  content_hash: sha256:f4ca8796d5344d0563db650973171af63ed22e11c49f6407c325002f64c82acf
   sources:
     - "The Institutes, CAS DISC RM – Risk Management and Insurance Operations Course Syllabus (© 2023), PDF pp.1-4, sha256:34fbee38024d3433de5d84c09138114c56edfb0336468dfefefdc78e23f67eac — https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf"
     - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
@@ -75,14 +75,14 @@ The Institutes gives the topics no exam weights.
 > [!example]- 8. The Underwriting Function
 > 1. [[Underwriting|Underwriting Activities]]
 > 2. [[Underwriting Authority]]
-> 3. Constraints in Establishing [[Underwriting Policy]]
+> 3. [[Underwriting Policy|Constraints in Establishing Underwriting Policy]]
 > 4. Implementing [[Underwriting Guidelines|Underwriting Policy]]
 > 5. Steps in the [[Underwriting Process]]
 > 6. Measuring [[Underwriting Profit|Underwriting Results]]
 
 > [!example]- 9. Underwriting Commercial Property Coverage
 > 1. Identifying the [[Causes of Loss|Causes of Commercial Property Loss]]
-> 2. Analyzing [[COPE|Fire Exposure]]: The Greatest Threat
+> 2. Analyzing [[COPE|Fire Exposure: The Greatest Threat]]
 > 3. Evaluating [[Commercial Property Insurance|Commercial Property Provisions Affecting the Amount of Loss]]
 > 4. Verifying [[Insurance to Value|Property Values]]
 > 5. Determining [[Probable Maximum Loss|Potential Loss Severity]]
@@ -108,7 +108,7 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 12. Risk Control and Premium Auditing
 > 1. [[Risk Control|Insurer Risk Control Goals]]
-> 2. [[Risk Control|Risk Control Services]] Provided by Insurers
+> 2. [[Risk Control|Risk Control Services]] Provided by [[Types of Insurers|Insurers]]
 > 3. Cooperation Between [[Risk Control]] and Other [[Insurance Operations|Insurer Functions]]
 > 4. Reasons for [[Premium Audit|Premium Auditing]]
 > 5. [[Premium Audit|Premium Auditing Process]]
@@ -117,7 +117,7 @@ The Institutes gives the topics no exam weights.
 > [!example]- 13. The Claims Function
 > 1. Overview of the [[Claims Handling|Claims Function]]
 > 2. [[Claims Handling|Claims Department Structure, Personnel, and Performance]]
-> 3. Claims Measures Used to Ensure [[Unfair Claims Settlement Practices|Regulatory Compliance]]
+> 3. [[Unfair Claims Settlement Practices|Claims Measures Used to Ensure Regulatory Compliance]]
 > 4. The [[Claims Handling Process]]
 > 5. Framework for [[Coverage Analysis]]
 > 6. Applying the [[Claims Handling Process]] and the Framework for [[Coverage Analysis]]

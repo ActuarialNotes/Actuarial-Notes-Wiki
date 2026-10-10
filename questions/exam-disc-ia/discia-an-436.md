@@ -2,7 +2,7 @@
 id: "discia-an-436"
 exam: "Exam DISC-IA"
 topic: "Homeowners Endorsements"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Replacement+Cost
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1096457900650f0aa1dd23484b416d87dbb06bde99b51375df6459437704e198
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-436.md
 ---
 A homeowner's HO-3 carries a personal property replacement cost endorsement. A fire destroys her television, which would cost \$2,000 to replace and had an actual cash value of \$900. She has not yet bought a new one. Which statement describes her settlement, before the deductible?
 

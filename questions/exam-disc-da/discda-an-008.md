@@ -2,7 +2,7 @@
 id: "discda-an-008"
 exam: "Exam DISC-DA"
 topic: "Statistical Plan"
-learning_objective: "Collecting Data for Insurer Models"
+learning_objective: "2. Collecting Data for Insurer Models"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/External+Data
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:030fa972eb984f5036344c2307567d3087bde8739e81aa772e21e1d848f4520d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-008.md
 ---
 
 A small insurer plans to start writing commercial auto in a state where it has never written the line, so it has no premium or loss history there. Which source best supports its initial loss costs by class and territory?

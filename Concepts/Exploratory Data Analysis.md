@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-04
   last_checked_by: agent:validate-v1
-  content_hash: sha256:68bcd1d00bd4ba0796f5bf66574bd0d6d3513ee0725e684377311fe57d8bf532
+  content_hash: sha256:74a174ef6353665d260441bafee19696a471e6ebdb1583d185166a7043e76195
   sources:
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.1.1 'What is EDA?', sha256:47f8a33abaed0922021846f17e816d673d7ce695064c6981716d441a63207580 — https://www.itl.nist.gov/div898/handbook/eda/section1/eda11.htm"
     - "NIST/SEMATECH e-Handbook of Statistical Methods, §1.1.2 'How does EDA differ from classical data analysis?', sha256:41e20f106ae18b182b99d1d61001e0f1c8a69a32fa4f294082f615c1fbd77f12 — https://www.itl.nist.gov/div898/handbook/eda/section1/eda12.htm"

@@ -2,7 +2,7 @@
 id: "discrm-an-034"
 exam: "Exam DISC-RM"
 topic: "Enterprise Risk Management"
-learning_objective: "Treating Risk Holistically"
+learning_objective: "4. Treating Risk"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Correlation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2701ccbcd858ec10fbbdedeb21a5164bf482e9e20d3b7acf6585789a6f54610a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-034.md
 ---
 
 Each of an insurer's business units stays inside its own risk limit, set as if the units' results were independent. Yet the enterprise's total risk exceeds what its capital can support. What most likely explains this?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:be89155e30b19a09020424bd187196005260f27830e357515d3a59b72507acdc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Property Conditions.md
+---
+
 **HO-3 Property Conditions** are the Section I conditions of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition): the rules that decide how much a covered property loss is worth and how it is paid. They cover insurable interest, the deductible, the insured's duties after a loss, [[Loss Settlement Provisions|loss settlement]] including the 80% replacement cost rule, pairs and sets, appraisal, other insurance, suits against the insurer, the mortgage clause and the other conditions that finish Section I.
 
 > $$\text{Paid}_{\ge 80\%} = \min(L,\ \text{RC}_{\text{loss}},\ \text{Spent})$$

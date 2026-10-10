@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef6e0237e0806498b73233cef7cf941a55654ccbd51e3a8cbc995a1519eb7d57
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BPP Loss Conditions and Additional Conditions.md
+---
+
 **The loss conditions and additional conditions** of the [[Building and Personal Property Coverage Form|BPP]] are the rules that decide how a covered loss is reported, valued, settled and shared. The seven loss conditions are abandonment, appraisal, duties in the event of loss or damage, loss payment, recovered property, vacancy and valuation; the two additional conditions are coinsurance and mortgageholders. Both sets apply alongside the [[Common Policy Conditions]] and the [[Commercial Property Conditions]]. The provisions below are sections E and F of ISO CP 00 10 10 12.
 
 > $$\text{Paid} = \min\left(\frac{C}{p\,V} \times L - D,\ C\right)$$

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0446cfc5f30369c0efdf8466e15a8dfeaa10ff4567dc8967410add2bf9be6956
+  content_hash: sha256:2f3fb9494bac8830c2fad1147aa883865cb743c7caa6003375d9e16e5d0aae4f
   sources:
     - "Friedland, Reserving for Reinsurance (CAS Exam 7 study note), Ch.1 printed pp.6-22 (PDF pp.8-24), Ch.3 printed pp.48-49, 53 (PDF pp.50-51, 55), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"

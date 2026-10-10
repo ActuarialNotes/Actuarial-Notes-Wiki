@@ -2,7 +2,7 @@
 id: "discia-an-400"
 exam: "Exam DISC-IA"
 topic: "PAP Liability Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f297deece60c9467f280063cfc14c9e7ac74d11acdf09f28cfdd761ca9809465
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-400.md
 ---
 A named insured's personal auto policy has liability limits of 100/300/50. She causes an accident that injures three people in the other car, whose bodily injury damages are \$150,000, \$120,000 and \$60,000. How much does Part A pay for bodily injury?
 

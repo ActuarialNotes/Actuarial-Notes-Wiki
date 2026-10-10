@@ -2,7 +2,7 @@
 id: "discia-an-232"
 exam: "Exam DISC-IA"
 topic: "Compensatory Damages"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Negligence
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84e90cf93f8480342ca51cef94e8b718e8a3e6a328440925fce3455192870b15
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-232.md
 ---
 
 In a tort suit in a pure comparative negligence state, the jury assesses the plaintiff's special damages at \$80,000 and general damages at \$120,000, finds the plaintiff 25% at fault, and also awards \$100,000 of punitive damages against the defendant. The state prohibits insuring punitive damages. The defendant's liability insurer covers the compensatory award, with ample limits. How much does the insurer pay?

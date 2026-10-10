@@ -2,7 +2,7 @@
 id: "discia-an-003"
 exam: "Exam DISC-IA"
 topic: "Qualitative Characteristics of Accounting Information"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Qualitative+Characteristics+of+Accounting+Information
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:224c381ea7143b2d40ebb9ca6727cb7092b3793530e7b4fd18d697a0a8db49da
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-003.md
 ---
 
 An insurer discloses that its loss reserve is an actuarial estimate, explains the methods and the main sources of uncertainty, and applied those methods without error. Two years later the reserve proves to have been 8% too low. Which statement is consistent with FASB Concepts Statement No. 8?

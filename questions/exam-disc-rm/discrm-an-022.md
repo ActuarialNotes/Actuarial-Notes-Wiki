@@ -2,7 +2,7 @@
 id: "discrm-an-022"
 exam: "Exam DISC-RM"
 topic: "Risk Measure"
-learning_objective: "Basic Risk Measures"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Solvency
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc517c260dc7d199c94e7042243d513482f8d7b71f84cd231ca0f1517bb517c5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-022.md
 ---
 
 The CAS's 2003 overview of enterprise risk management splits risk measures into solvency-related measures, which concentrate on the adverse tail, and performance-related measures, which concentrate on volatility near the mean. An insurance regulator wants a measure of how likely an insurer is to exhaust its capital. Which measure is designed for that concern?

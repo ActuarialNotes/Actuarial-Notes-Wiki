@@ -2,7 +2,7 @@
 id: "discia-an-424"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Conditions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurable+Interest
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:07773be188137bc925205d84af78d735f8343ea169ef156c8bc82f5ef7f1f193
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-424.md
 ---
 An HO-3 (HO 00 03 05 11) names a bank as mortgagee. The named insured deliberately sets fire to his house, and the insurer denies his claim. The bank has reported everything it knew about the property and submits a sworn statement of loss on time. What happens?
 

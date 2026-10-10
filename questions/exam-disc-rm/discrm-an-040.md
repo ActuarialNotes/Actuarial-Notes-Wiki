@@ -2,7 +2,7 @@
 id: "discrm-an-040"
 exam: "Exam DISC-RM"
 topic: "Liability Loss Exposure"
-learning_objective: "Managing Personal Liability Exposures"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Umbrella+Liability+Insurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca47c494dabf882f0664dea1a1f3297572d66592067809835004f157632fddff
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-040.md
 ---
 
 A homeowner's dog bites a neighbor's child, and the child's parents claim damages for her medical bills and pain and suffering. Which describes the exposure and how an individual usually treats it?

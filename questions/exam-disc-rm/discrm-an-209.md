@@ -2,7 +2,7 @@
 id: "discrm-an-209"
 exam: "Exam DISC-RM"
 topic: "Underwriting Profit"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Combined+Ratio
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b9ea4a037ce520306f2b0aaf5768674a807d438f97228c659a8fcc752752981c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-209.md
 ---
 
 For its commercial property line last year, an insurer reports earned premium of \$50 million, incurred losses and LAE of \$33 million, and underwriting expenses of \$15.5 million. Using earned premium as the base for both ratios, what are the line's underwriting profit and combined ratio?

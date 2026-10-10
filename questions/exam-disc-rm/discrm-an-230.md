@@ -2,7 +2,7 @@
 id: "discrm-an-230"
 exam: "Exam DISC-RM"
 topic: "Umbrella Liability Insurance"
-learning_objective: "Underwriting Other Types of Coverage"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Business+Auto+Coverage
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73424643371dba7253fced612901ce47139383afe523597e27bbb83e37a56eb0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-230.md
 ---
 
 A commercial umbrella with a \$5,000,000 limit schedules business auto liability with a \$1,000,000 limit as required underlying insurance. To save premium, the insured reduces its auto liability limit to \$500,000 without telling the umbrella insurer. A covered auto accident then produces a \$1,800,000 judgment. How much does the umbrella pay?

@@ -2,7 +2,7 @@
 id: "discrm-an-201"
 exam: "Exam DISC-RM"
 topic: "Underwriting Authority"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Guidelines
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1c4c7c5c2242ef18701ad996dd0cf3461b514e8b1effe5f5e1fd8d2c68917ea3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-201.md
 ---
 
 An insurer's commercial property guide grants this authority:

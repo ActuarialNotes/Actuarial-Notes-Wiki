@@ -2,7 +2,7 @@
 id: "discda-an-005"
 exam: "Exam DISC-DA"
 topic: "Insurer Operational Data"
-learning_objective: "Collecting Data for Insurer Models"
+learning_objective: "2. Collecting Data for Insurer Models"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Written+Premium
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ccf93c27e83f9edf4040817821408e9578ca39c10b1db3ef31f8afb4a944600e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-005.md
 ---
 
 On January 1, 2025 an insurer writes an annual personal auto policy covering one car for \$1,200 (1.00 car-year). The insured cancels on October 1, 2025. Premium and exposure are earned evenly by month, and the policy database records transactions rather than overwriting records. Which records does the database hold for this policy?

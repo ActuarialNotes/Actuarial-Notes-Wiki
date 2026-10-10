@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:24e149d419daa92b94ed5363ac2f8238e97009bb6dec1c6da554b054da919b99
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Risk Management Objectives.md
+---
+
 **Risk management objectives** are the goals an organization sets for its [[Risk Management|risk management]] program. They are usually split into **pre-loss objectives**, which the program pursues before any loss happens (economy, reduction of anxiety and meeting externally imposed obligations), and **post-loss objectives**, which it must be able to meet after a loss (survival, continued operation, stable earnings, continued growth and social responsibility). The objectives tie the program to the organization's own goals, and they are what the benefits of risk management are measured against.
 
 > $$V = m \times \bar{\pi}$$

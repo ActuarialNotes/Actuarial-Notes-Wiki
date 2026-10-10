@@ -2,7 +2,7 @@
 id: "discda-an-213"
 exam: "Exam DISC-DA"
 topic: "Claims Modeling Dataset"
-learning_objective: "Preparing Data for Insurance Applications"
+learning_objective: "9. Preparing Data for Insurance Applications"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Claims+Modeling+Dataset
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37a9702f08faaf2a9082716ab46e437960c26f6dd47aa8611e4ee5acd5e256ed
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-213.md
 ---
 
 A claims model will flag, at first report, claims likely to exceed \$50,000 incurred within 18 months of report. The extract is valued at 2025-06-30.

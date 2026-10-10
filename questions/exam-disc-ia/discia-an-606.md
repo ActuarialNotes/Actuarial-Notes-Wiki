@@ -2,7 +2,7 @@
 id: "discia-an-606"
 exam: "Exam DISC-IA"
 topic: "BPP Additional Coverages and Coverage Extensions"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Covered+Property
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:faacabef192f0d41ba8f220d7e37ef09555656e428e387e4122e8fe8e759c55f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-606.md
 ---
 A distributor's BPP covers its building and business personal property at one described location, with a 70% coinsurance percentage. Twenty days after buying a second warehouse across town, which it has not yet reported to the insurer, a fire destroys the warehouse. What does the BPP pay for the warehouse?
 

@@ -2,7 +2,7 @@
 id: "discia-an-429"
 exam: "Exam DISC-IA"
 topic: "HO-3 Liability Exclusions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Liability+Coverages
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1047b054d82a3bae3bb61d62f1b69f61132167655c472579f2a22d19d7fa074e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-429.md
 ---
 Which claim against an HO-3 (HO 00 03 05 11) insured is **not** removed by the Section II business exclusion?
 

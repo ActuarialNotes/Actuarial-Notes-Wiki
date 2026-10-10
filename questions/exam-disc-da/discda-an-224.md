@@ -2,7 +2,7 @@
 id: "discda-an-224"
 exam: "Exam DISC-DA"
 topic: "Classification Tree"
-learning_objective: "Basic Data Analysis"
+learning_objective: "8. Basic Data Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Classification+Tree
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b0f68fa8fda31110c78289fbce420f17eccb7c1c6e0acc5e81b87811d28b7230
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-224.md
 ---
 
 A classification tree for renewal lapse, fitted to 700 policies, has three leaves:

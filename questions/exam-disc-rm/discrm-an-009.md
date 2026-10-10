@@ -2,7 +2,7 @@
 id: "discrm-an-009"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Plan"
-learning_objective: "Business Continuity Planning"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Business+Continuity+Plan
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:92322a8674955729482116bd1974fa72e656328e9cfadc200da7571bdc765f22
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-009.md
 ---
 
 A business continuity coordinator wants to confirm that the company's order system will actually fail over to its alternate data center and run there, with staff carrying out their recovery roles as they would in a real outage. Which kind of exercise fits this purpose?

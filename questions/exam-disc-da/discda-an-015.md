@@ -2,7 +2,7 @@
 id: "discda-an-015"
 exam: "Exam DISC-DA"
 topic: "SQL"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:22a7d30980e245e0c2a73717194c6b0354574f25eb3db7ab596575e9c68110b5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-015.md
 ---
 
 A policy table has 10 rows: 6 with `state = 'NY'`, 3 with `state = 'NJ'` and 1 whose state is NULL. How many rows does this query count?

@@ -2,7 +2,7 @@
 id: "discda-an-221"
 exam: "Exam DISC-DA"
 topic: "Data Ethics Checklist"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Confusion+Matrix
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ada46c86614aaba367576fb4c69f3ab6d2296be079b5712fd1a58a57664687e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-221.md
 ---
 
 After launch, an insurer's claims fraud triage model is found to refer legitimate claims for investigation, delaying payment, at twice the rate in one group of neighborhoods as in others, although confirmed fraud rates are similar across the neighborhoods. Which Deon checklist item addresses the test that should have caught this before launch?

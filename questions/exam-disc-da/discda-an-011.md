@@ -2,7 +2,7 @@
 id: "discda-an-011"
 exam: "Exam DISC-DA"
 topic: "Dataframe"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3737d3b751a36e44bf61488c9c4811de2d449e06afe196884cc0bb80bcd49867
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-011.md
 ---
 
 A dataframe `pol` has columns `terr` and `prem`. Territory T2 has three rows, with premiums 900, `NA` and 1,500. An analyst runs

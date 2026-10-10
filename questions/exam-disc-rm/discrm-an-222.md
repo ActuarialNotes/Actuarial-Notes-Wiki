@@ -2,7 +2,7 @@
 id: "discrm-an-222"
 exam: "Exam DISC-RM"
 topic: "Exposure Base"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Premises+and+Operations+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e7a7a51b3e6a77f56b18f4f53966538d5606ab1826c8e9bceea8d1defdcb67a9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-222.md
 ---
 
 An underwriter is setting up four general liability accounts. Which pairing of account and premium base follows the logic of ISO's general liability bases?

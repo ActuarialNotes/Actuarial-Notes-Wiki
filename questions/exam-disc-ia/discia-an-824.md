@@ -2,7 +2,7 @@
 id: "discia-an-824"
 exam: "Exam DISC-IA"
 topic: "CGL Conditions"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d918fbba2740aa090a4a808fd4d20fcad4db2c6cc7c9a6f478af6418daa4fa71
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-824.md
 ---
 A contractor's CGL shows an advance premium of \$18,000 based on estimated payroll. At the end of the audit period the insurer computes the earned premium from the actual payroll as \$15,500, and the contractor has paid the full \$18,000. Under the premium audit condition, what happens?
 

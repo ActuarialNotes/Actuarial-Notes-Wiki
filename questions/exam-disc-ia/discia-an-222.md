@@ -2,7 +2,7 @@
 id: "discia-an-222"
 exam: "Exam DISC-IA"
 topic: "Defenses Against Negligence"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Negligence
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc81aedeae381adb65ba56c929275d05e2a4c6fb1a8aa4a3fe004d10e1ac5338
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-222.md
 ---
 
 A player in a recreational ice hockey league is hurt by an opponent's body check that was within the league's rules. He sues the opponent for negligence. Which defense is the opponent most likely to win on?

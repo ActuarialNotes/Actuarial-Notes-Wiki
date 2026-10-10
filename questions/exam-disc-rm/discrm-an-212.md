@@ -2,7 +2,7 @@
 id: "discrm-an-212"
 exam: "Exam DISC-RM"
 topic: "COPE"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/COPE
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2e045462c16b3e2496e730b0df797c8b12b8689a9d9017e4656995c775011933
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-212.md
 ---
 
 Rank these four buildings from **least** to **most** fire resistive under ISO's construction classes: (W) concrete block walls with a steel deck roof and noncombustible floors; (X) wood frame with stucco on the exterior; (Y) concrete walls, floors and roof rated for two hours; (Z) brick walls with wood joists and a wood roof deck.

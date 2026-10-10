@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9192d99a4f26174ff8d339bf359eafefd4ead5ff6a146d55e8393f6e8188e478
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Homeowners Endorsements.md
+---
+
 **Homeowners Endorsements** are the ISO forms attached to a [[Homeowners Policy|homeowners policy]] to cover what the HO-3 excludes or limits: valuable articles held to small special limits, contents settled at actual cash value, earthquake, water that backs up through sewers, the cost of meeting building codes after a loss, a business run from home, and liability for offenses such as libel rather than accidents. Each answers a specific gap in the HO 00 03 form, so recommending one starts from the gap.
 
 > $$\text{EQ deductible} = \max\big(p \times \max(A,\ C),\ 250\big)$$

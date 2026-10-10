@@ -2,7 +2,7 @@
 id: "discrm-an-033"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Management"
-learning_objective: "Business Continuity Management"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Business+Continuity+Management
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4e909d7cd8bbcd847ed180227e4b5392ab6c1742d262ede290e290c2a8b7f308
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-033.md
 ---
 
 Losing a firm's claims payment activity would cost \$50,000 a day for the first 3 days, then \$150,000 a day as complaints and regulatory pressure build. The firm can tolerate a total impact of \$450,000. What is the maximum tolerable period of disruption for the activity?

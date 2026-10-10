@@ -2,7 +2,7 @@
 id: "discrm-an-211"
 exam: "Exam DISC-RM"
 topic: "COPE"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+Property+Insurance
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d828ecc773b9c991602a840f9736f6e8c4f70109e7f2816765ed1169ef873065
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-211.md
 ---
 
 An underwriter's inspection report on a furniture store notes: (1) the building has a wood roof deck over brick walls; (2) the store refinishes furniture in a back room using solvents; (3) the town has a paid fire department 2 miles away; (4) a fireworks wholesaler occupies the building next door. Which pairing of facts with COPE elements is correct?

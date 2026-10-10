@@ -2,7 +2,7 @@
 id: "discrm-an-233"
 exam: "Exam DISC-RM"
 topic: "Risk Control"
-learning_objective: "Risk Control and Premium Auditing"
+learning_objective: "12. Risk Control and Premium Auditing"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurer
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9c9c85966774a68ef165cdd2d6759cadfefc37e59a803b0722bc581b50d55d0d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-233.md
 ---
 
 An insurer's risk control representatives inspect boilers and pressure vessels for policyholders in a jurisdiction that requires such inspections, and also run free driver-safety seminars that reduce injuries on the road. Which pair of insurer risk control goals do these two services serve?

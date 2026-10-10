@@ -2,7 +2,7 @@
 id: "discia-an-408"
 exam: "Exam DISC-IA"
 topic: "PAP Duties and General Provisions"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2c02a3042049c8310d44334982980be76080ca4d78a17dd1a3d1bbf1b4c243a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-408.md
 ---
 A family insured under an unendorsed ISO PAP (PP 00 01 09 18) takes a summer road trip in its covered auto. Where on the trip is an accident within the policy territory?
 

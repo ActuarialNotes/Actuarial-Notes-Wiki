@@ -2,7 +2,7 @@
 id: "discrm-an-056"
 exam: "Exam DISC-RM"
 topic: "Risk Management"
-learning_objective: "The Risk Management Environment"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Enterprise+Risk+Management
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:19c054975d78e5d44d73a525bbf07f1aea8bac5d0b0087b9949615500899821c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-056.md
 ---
 
 Determine which of the following statements about the environment of modern risk management are true.

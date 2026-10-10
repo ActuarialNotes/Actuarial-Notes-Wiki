@@ -2,7 +2,7 @@
 id: "discia-an-633"
 exam: "Exam DISC-IA"
 topic: "Building and Personal Property Coverage Form"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Causes+of+Loss
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3208b46638f4f4e3d26fbdf217f8a004ebdaadc4c2816391dcdd244949889e6a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-633.md
 ---
 An underwriter is reviewing a commercial property policy built on the BPP (CP 00 10). Where in the policy are the exclusions that decide whether a windstorm or flood loss to covered property is covered?
 

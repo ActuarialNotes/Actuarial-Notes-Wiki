@@ -2,7 +2,7 @@
 id: "discia-an-211"
 exam: "Exam DISC-IA"
 topic: "Professional Liability Insurance"
-learning_objective: "Specialty Coverages Part 1"
+learning_objective: "12. Specialty Coverages Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Professional+Liability+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca30e6af85b9bec470b3f707716c7e1165d46c2c346c2cbd203da6b32a3d46a4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-211.md
 ---
 
 An engineering firm's professional liability policy has a \$1,000,000 limit with defense costs inside the limit and a soft hammer clause under which the insurer pays 50% of loss and defense incurred after a refused settlement. After \$100,000 of defense, the insurer recommends settling for \$250,000, and the firm refuses. The case goes to trial, with \$200,000 more of defense costs, and ends in a \$600,000 judgment. How much does the insurer pay?

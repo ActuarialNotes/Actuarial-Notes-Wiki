@@ -2,7 +2,7 @@
 id: "discda-an-209"
 exam: "Exam DISC-DA"
 topic: "Similarity and Distance Measures"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Clustering
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2bcffd40e6e290421a81201ccd2d0d5e8a7d46b4535715533bc9410cfe8b9f9c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-209.md
 ---
 
 Two commercial property risks are compared with Gower's coefficient, using equal weights on four features: occupancy class (nominal), whether a central-station alarm is installed (binary), building age and total insured value (TIV). Both risks have the same occupancy class; one has an alarm and the other does not; their building ages differ by 15 years, where ages in the portfolio range over 60 years; and their TIVs differ by \$3 million, where TIV ranges over \$12 million. What is the Gower dissimilarity between the two risks?

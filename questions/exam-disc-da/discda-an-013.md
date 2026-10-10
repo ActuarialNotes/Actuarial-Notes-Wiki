@@ -2,7 +2,7 @@
 id: "discda-an-013"
 exam: "Exam DISC-DA"
 topic: "SQL"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/SQL
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac6203c21162de4f2b2b5ab9ba95a64d42ccc351486a076311f5ca7378216fc2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-013.md
 ---
 
 An analyst needs the territories whose accident year 2024 claims have total paid losses over \$1,000,000. The query already has `FROM claim`, `WHERE acc_year = 2024` and `GROUP BY terr`. Where must the condition `SUM(paid) > 1000000` go?

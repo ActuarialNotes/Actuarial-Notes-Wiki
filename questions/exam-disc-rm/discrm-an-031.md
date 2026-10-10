@@ -2,7 +2,7 @@
 id: "discrm-an-031"
 exam: "Exam DISC-RM"
 topic: "Organizational Resilience"
-learning_objective: "Organizational Resiliency"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Organizational+Resilience
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a8e91496962bdb47098dbf777107392ff4d9125a0e9e9d2a481aaf933fc3f25
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-031.md
 ---
 
 A distributor normally earns gross profit of \$40,000 a day. After a cyber attack, its output falls at once to 50% of normal and then recovers in a straight line to 100% over 20 days. What gross profit does it lose over those 20 days?

@@ -2,7 +2,7 @@
 id: "discda-an-214"
 exam: "Exam DISC-DA"
 topic: "Claims Modeling Dataset"
-learning_objective: "Preparing Data for Insurance Applications"
+learning_objective: "9. Preparing Data for Insurance Applications"
 difficulty: easy
 type: multiple-choice
 bloom: analyze
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Claims+Modeling+Dataset
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:14a47b301085f04ae1b9de7551fb0dac6852b506230783c3b1059af835f8efdb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-214.md
 ---
 
 A personal auto insurer is building a model to predict, at first notice of loss, which bodily injury claims will become severe. Which candidate feature from the claims data warehouse would introduce data leakage?

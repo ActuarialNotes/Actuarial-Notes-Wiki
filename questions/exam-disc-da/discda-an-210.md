@@ -2,7 +2,7 @@
 id: "discda-an-210"
 exam: "Exam DISC-DA"
 topic: "Model Training and Evaluation"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Confusion+Matrix
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:97111dfca54a5a92dc9c8c6ebe3bd228f758d18b6160355fcef8eda3a1630785
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-210.md
 ---
 
 A subrogation model is tested on 1,000 closed claims, of which 150 produced a recovery. The model flags 120 claims as likely recoveries, and 90 of the flagged claims did produce one. What are the model's precision and recall?

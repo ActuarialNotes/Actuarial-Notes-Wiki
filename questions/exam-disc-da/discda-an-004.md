@@ -2,7 +2,7 @@
 id: "discda-an-004"
 exam: "Exam DISC-DA"
 topic: "Data Types"
-learning_objective: "Planning an Insurer Data Modeling Project"
+learning_objective: "1. Planning an Insurer Data Modeling Project"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Types
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c8292ba49fde9c2cb25ccc773efb7ced7cd1bde27fb35fcacc0732a1a062d305
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-004.md
 ---
 
 A commercial auto file stores each vehicle's class as a four-digit integer taken from a class table, such as 2111, 3141 and 7398. A modeler plans to enter `class_code` in a GLM as a single numeric predictor. How should the field be classified?

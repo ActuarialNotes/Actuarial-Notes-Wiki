@@ -2,7 +2,7 @@
 id: "discrm-an-215"
 exam: "Exam DISC-RM"
 topic: "Commercial Property Insurance"
-learning_objective: "Underwriting Commercial Property Coverage"
+learning_objective: "9. Underwriting Commercial Property Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Deductible
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0c7cc054fc52dfc62e0e86edf400198784983893dea266b8bace12401538b08a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-215.md
 ---
 
 An underwriter evaluating a commercial property account reviews the provisions that affect the amount the insurer pays on a loss. Which of these is **not** one of those provisions?

@@ -2,7 +2,7 @@
 id: "discda-an-029"
 exam: "Exam DISC-DA"
 topic: "Exploratory Data Visualization"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Types+of+Plots
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0e9d289c5311a477deb4b53257a623603c73f76a64457179e45650c7f75b3a05
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-029.md
 ---
 
 Channel A has 40,000 policies, 8,000 of them with a prior claim. Channel B has 10,000 policies, 3,000 of them with a prior claim. A stacked bar chart of counts shows Channel A's prior-claim segment far taller than Channel B's. What share of each channel's policies has a prior claim?

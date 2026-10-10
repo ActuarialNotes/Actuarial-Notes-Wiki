@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa6a224e774cecb4fc79eb5253829b61cb18da5134a9576df07137d1b3f65b5c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Endorsements.md
+---
+
 **CGL endorsements** are the ISO forms attached to the [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01) that change what it covers: adding insureds, restricting or broadening coverage, changing how limits or other insurance apply, or waiving the insurer's rights. An [[Endorsement|endorsement]] overrides the printed form, so a coverage question about a CGL is answered from the form as endorsed. The same coverage part can also be written on ISO's claims-made form, CG 00 02, instead of the occurrence form.
 
 > $$\text{Paid}_{\text{AI}} = \min\left(D_{\text{AI}},\ L_{\text{contract}},\ L_{\text{policy}}\right)$$

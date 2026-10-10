@@ -2,7 +2,7 @@
 id: "discrm-an-011"
 exam: "Exam DISC-RM"
 topic: "Risk Treatment"
-learning_objective: "Risk Treat Fundamentals"
+learning_objective: "4. Treating Risk"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Transfer
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:39cc229ec71d85b485e1804bf7bae77a3f14ef93ba3651a89cddc73fb95108f4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-011.md
 ---
 
 A distributor insures its warehouse with a \$100,000 deductible and a \$5,000,000 limit that applies above the deductible. A fire causes a \$6,500,000 loss. How much of the loss does the distributor retain?

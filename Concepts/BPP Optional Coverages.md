@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8f23247efe3aae8d7b367e70982f751c5074d8c84c365757ea707a7dda012531
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BPP Optional Coverages.md
+---
+
 **The optional coverages** of the [[Building and Personal Property Coverage Form|BPP]] are four provisions that apply only when the declarations show them, separately for each item of property: agreed value, which suspends the coinsurance condition; inflation guard, which raises the limit automatically through the year; replacement cost, which replaces actual cash value as the valuation basis; and the extension of replacement cost to personal property of others. They are section G of ISO CP 00 10 10 12, and they change the result of the [[BPP Loss Conditions and Additional Conditions|loss conditions and additional conditions]] rather than the property or perils covered.
 
 > $$\text{Paid}_{\text{AV}} = \min\left(\min\left(\frac{C}{A},\ 1\right) L - D,\ C\right)$$

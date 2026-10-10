@@ -2,7 +2,7 @@
 id: "discia-an-623"
 exam: "Exam DISC-IA"
 topic: "BPP Optional Coverages"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Replacement+Cost
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6df8a5c1dd9ac865cd1b0281388924a5c442d9cf5dae87f73ccf587734fa3815
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-623.md
 ---
 A fire damages a shop insured under the BPP with the replacement cost optional coverage. The owner has not yet decided whether to rebuild and asks how the claim can be settled. Which statement is consistent with the optional coverage?
 

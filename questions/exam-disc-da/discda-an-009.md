@@ -2,7 +2,7 @@
 id: "discda-an-009"
 exam: "Exam DISC-DA"
 topic: "External Data"
-learning_objective: "Collecting Data for Insurer Models"
+learning_objective: "2. Collecting Data for Insurer Models"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Missing+Data
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a218c91b11a1a72c983a62980e399454d0c775ce1cba17b658676b0d1d1afe8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-009.md
 ---
 
 An insurer sends its 20,000 homeowners policies to a vendor for a wildfire-risk score. Of 4,000 rural policies, 2,000 are matched; of the 16,000 other policies, 15,600 are matched. The modeler proposes dropping the unmatched policies before fitting the model. What is the main problem with the proposal?

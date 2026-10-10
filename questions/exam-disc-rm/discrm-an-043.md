@@ -2,7 +2,7 @@
 id: "discrm-an-043"
 exam: "Exam DISC-RM"
 topic: "Basic Insurance Ratios"
-learning_objective: "Measuring Insurer Performance"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Insurance+Operations
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4130a1fad57547e0c84cbd396ea12c5ce4df03df2176806ecb6561cf8f72ec95
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-043.md
 ---
 
 An insurer has earned premium of \$800 million, incurred losses and loss adjustment expenses of \$560 million, underwriting expenses of \$248 million and investment income of \$72 million. Using earned premium for every ratio, what is its operating ratio?

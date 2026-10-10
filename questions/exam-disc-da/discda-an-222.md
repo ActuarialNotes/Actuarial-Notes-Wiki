@@ -2,7 +2,7 @@
 id: "discda-an-222"
 exam: "Exam DISC-DA"
 topic: "Statistical Learning"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Logistic+Regression
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:44d5b7bd09859a3dca5516483f1907deb77095ace9a83a2a14ddbae1e2dac4cb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-222.md
 ---
 
 An insurer has five years of renewal offers, each recorded with the policy's characteristics and whether the policyholder renewed or lapsed. It wants a model that estimates, for each upcoming renewal, whether the policy will lapse. What kind of statistical learning problem is this?

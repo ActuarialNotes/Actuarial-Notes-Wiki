@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e7f569286616d3b149007fcc7bd3b0d702ea17864187f9bb074d6552ff1ce983
+  content_hash: sha256:b92d962835445df0201a1539e48846315ab8fc1f912c5e585795b69cb56ef78e
   sources:
     - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), contents/bookmarks (chapter titles, §4.4.3-4.4.4, §6.4, §7.5, §7.7), §2.1 eq. 2.1, §2.1.1 (PDF p.28), §2.1.4 (PDF p.37), §2.2.2 eq. 2.7 and flexibility vs bias/variance (PDF pp.45-46), §2.2.3 KNN (PDF pp.50-52), §4.4.3-4.4.4 (PDF pp.162-163), §5.1/§5.2 (PDF pp.206-207, 218), §7.5.1-7.5.2 (PDF pp.310-311), §7.7.2 (PDF p.318), §12.4 (PDF pp.522-523), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list Ch 1, 2 excl. §2.2.3, 3 §§3.1-3.3, 4 §§4.1-4.4 (LDA not tested), 5, 6, 7 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"

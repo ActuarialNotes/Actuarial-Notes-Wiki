@@ -2,7 +2,7 @@
 id: "discia-an-602"
 exam: "Exam DISC-IA"
 topic: "BPP Covered Property"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Additional+Coverages+and+Coverage+Extensions
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c1bdd93c3a1a703d4690b94da77d6a861a18e66a37897edef562835ca9bf131a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-602.md
 ---
 A garden center insures its business personal property under the BPP, with no Personal Property of Others limit and a 70% coinsurance percentage. A grass fire spreads from a neighboring lot. Which loss is covered under the business personal property limit?
 

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ce861b2f2d37005df4e92a765d4831758f7b73ab01351dbdd1a4628c39ec87f4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Pro Rata Reinsurance.md
+---
+
 **Pro Rata Reinsurance** (proportional reinsurance) is reinsurance in which the reinsurer takes a stated percentage of the premium on the business reinsured and pays the same percentage of every loss on it, usually returning part of the premium to the ceding insurer as a ceding commission. Its two main forms are [[Quota Share|quota share]], where the percentage is the same for every policy, and [[Surplus Share|surplus share]], where the percentage depends on how far each risk's value exceeds the cedant's retained line.
 
 > $$\text{Ceded}_{\text{QS}} = a \times X$$

@@ -2,7 +2,7 @@
 id: "discia-an-226"
 exam: "Exam DISC-IA"
 topic: "Intentional Tort"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Intentional+Tort
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69642d004d666ee82477d6e4a810eae44a411c2ebc3e74349bd86e936223de8e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-226.md
 ---
 
 In a bar, a patron swings a bottle at another customer, who ducks, so the bottle touches no one. The bouncer then locks the patron in a storeroom for three hours, with no legal authority, until he agrees to pay his tab. Which intentional torts have been committed?

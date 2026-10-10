@@ -2,7 +2,7 @@
 id: "discda-an-020"
 exam: "Exam DISC-DA"
 topic: "Web Scraping"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/External+Data
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:466e35848bb3d27e097b8c092abfb789360ff2098220757b8e7502935ae4662d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-020.md
 ---
 
 An insurer wants year built and square footage for its homeowners book. A property-data provider offers both fields through an API under a licence, with documented definitions. The same fields also appear on a public real estate listing site whose terms of use prohibit automated collection. Which course is better?

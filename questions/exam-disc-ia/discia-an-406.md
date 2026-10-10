@@ -2,7 +2,7 @@
 id: "discia-an-406"
 exam: "Exam DISC-IA"
 topic: "Medical Payments Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:08283f84fdafbb1a8313c3c28cac42fd594f8af7d779ccc33c55af077c03d327
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-406.md
 ---
 A named insured has Part B medical payments coverage on his PAP (ISO PP 00 01 09 18). In separate accidents during the year, each of these people is hurt. Whose medical expenses does his Part B pay?
 

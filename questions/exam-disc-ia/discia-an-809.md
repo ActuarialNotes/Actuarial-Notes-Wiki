@@ -2,7 +2,7 @@
 id: "discia-an-809"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage B"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Occurrence+Coverage
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:25c3e9b3ee2cd3f2f20d79eb5f7f30f7648301061f18524206a15ce48b75a2e0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-809.md
 ---
 A trade association's CGL policy (CG 00 01 04 13) runs from January 1 to December 31, 2026. In November 2025 the association posted an article on its website stating, without knowing it was untrue, that a member firm had been fined for fraud. It reposted the article in its March 2026 newsletter. The firm sues in May 2026 for libel arising from both publications. How does Coverage B respond?
 

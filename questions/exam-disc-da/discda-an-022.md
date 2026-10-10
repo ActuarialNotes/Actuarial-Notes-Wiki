@@ -2,7 +2,7 @@
 id: "discda-an-022"
 exam: "Exam DISC-DA"
 topic: "Data Validation"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Data+Validation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cf4d39d1fa4b585840ac94c83c7714279688dfe0dfe6f7ea9cc7b240e58a5153
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-022.md
 ---
 
 A claim file has a record whose report date, 2025-03-02, is earlier than its accident date, 2025-03-09. Both fields hold valid dates and no field on the record is blank. Which validation check flags the record?

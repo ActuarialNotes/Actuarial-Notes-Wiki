@@ -2,7 +2,7 @@
 id: "discda-an-202"
 exam: "Exam DISC-DA"
 topic: "Chart Selection"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Presentation+Visualization
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d54afb53897fe9c581eef27c025af8a057c94853d30698b4c319b63cbd315a00
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-202.md
 ---
 A pricing actuary wants to show the pricing committee which 8 of the company's 45 territories have the highest loss ratios, so that the committee can see at a glance which territory is worst and how far down the list the problem extends. Territory names are long. Which display best suits this message?
 

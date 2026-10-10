@@ -2,7 +2,7 @@
 id: "discda-an-025"
 exam: "Exam DISC-DA"
 topic: "Data Issues"
-learning_objective: "Working With Different Types of Data"
+learning_objective: "4. Working With Different Types of Data"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Data+Validation
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:72f8b3a642bec4265d6e4809eb023a667e6845ba05c43874a85eb265b2ee3cd5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-025.md
 ---
 
 In a homeowners severity data set of 60,000 claims, one claim shows a paid loss of \$2,400,000 on a dwelling with a \$240,000 coverage limit, and nothing else on the policy could explain the amount. The analyst suspects a keying error. What should be done?

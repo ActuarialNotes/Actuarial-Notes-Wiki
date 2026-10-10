@@ -2,7 +2,7 @@
 id: "discrm-an-055"
 exam: "Exam DISC-RM"
 topic: "Organizational Resilience"
-learning_objective: "Organizational Resiliency"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Continuity+Management
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5653ec2a39d7a4be6c68326e5b3e1c746a86620fc1d5c07472f20f5c46819802
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-055.md
 ---
 
 A regional insurer outsources first notice of loss for all its auto claims to a single vendor. After a ransomware attack takes the vendor offline for nine days during a hailstorm, claims pile up and complaints to the regulator rise. Which response would most improve the insurer's resilience to a similar event?

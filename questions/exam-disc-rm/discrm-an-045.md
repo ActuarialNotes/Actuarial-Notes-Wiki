@@ -2,7 +2,7 @@
 id: "discrm-an-045"
 exam: "Exam DISC-RM"
 topic: "Insurance Operations"
-learning_objective: "Functional View of Insurance"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Underwriting
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9c849655137d1d11b3da02717cd04bd2e4c952ae55da7c137eae09ba4d814ff
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-045.md
 ---
 
 A risk control representative surveys a restaurant that has applied for coverage, finds that the kitchen hood lacks a fire suppression system, and recommends one be installed as a condition of coverage. The underwriter then accepts the account. Which describes how the insurer's functions cooperated?

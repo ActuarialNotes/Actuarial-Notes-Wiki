@@ -2,7 +2,7 @@
 id: "discrm-an-046"
 exam: "Exam DISC-RM"
 topic: "Insurtech"
-learning_objective: "The Digitization of Insurance"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Adverse+Selection
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b06e3c62cccc9a258b5e479c58593791add01339cd6c344a42b1cd14fc223ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-046.md
 ---
 
 A competitor begins using telematics data to offer lower prices to the safest drivers in a market. An insurer that keeps pricing without such data is most at risk of which outcome?

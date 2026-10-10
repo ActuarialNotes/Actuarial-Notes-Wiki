@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8fee1ee0a42118e66f366fb22ec1676ce9e49057c4307b1d3d0b07ee7f1dcaad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Accounting Frameworks.md
+---
+
 **Accounting Frameworks** are the distinct sets of rules under which an insurer measures and reports the same transactions, each built for a different user. A U.S. property-casualty insurer reports to state regulators under [[Statutory Accounting Principles|statutory accounting (SAP)]], to investors and lenders under [[GAAP]] if it issues GAAP statements, to a foreign parent or market under [[IFRS]], and to the IRS on a tax basis, while management also works from internal figures of its own.
 
 > $$\text{Statutory surplus} = \text{Admitted assets} - \text{Liabilities}$$

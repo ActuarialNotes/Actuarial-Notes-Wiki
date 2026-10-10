@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9839eaff17f1771d8083b604d517e9422f55e9908228bf0e5ada32195f0d0a7e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurer Operational Data.md
+---
+
 **Insurer Operational Data** is the internal data an insurer's own systems record as it writes and services policies and settles claims: a **policy database** of exposures, premium and risk characteristics, a **claims database** of every payment and reserve change, and **accounting** records of expenses that belong to no single policy. It is the main source for pricing and modelling an existing product, because it describes the insurer's own book at the level of the individual policy and claim.
 
 > $$\text{WP}_p = \sum_{r \in p} \text{WP}_r$$

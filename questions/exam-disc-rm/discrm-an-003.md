@@ -2,7 +2,7 @@
 id: "discrm-an-003"
 exam: "Exam DISC-RM"
 topic: "Risk Management Objectives"
-learning_objective: "Objectives and Benefits"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:15b71df5510fb061791883b41e90db544d7bff65408c8141ce1cbce1dd16604b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-003.md
 ---
 
 A family-owned manufacturer's risk manager shows that retaining its product liability exposure would cost less, on average, than the premium for insuring it. The owners decide to keep buying the insurance anyway, because a single large verdict would worry them constantly and could force the company to close. Which risk management objectives outweigh economy in this decision?

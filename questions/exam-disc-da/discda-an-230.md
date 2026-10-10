@@ -2,7 +2,7 @@
 id: "discda-an-230"
 exam: "Exam DISC-DA"
 topic: "Professional Responsibilities of the Actuary"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Rating+Variable
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6ad2673868f86382d6e450fc00f635d78ac063d64faa5b7a7ee1011e91a582df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-230.md
 ---
 
 A pricing actuary finds that a new rating characteristic is strongly correlated with loss costs in several years of data, but no one can explain why it should cause losses. The characteristic is not prohibited by any applicable law. Under ASOP No. 12, *Risk Classification*, what is the actuary's position?

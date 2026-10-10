@@ -2,7 +2,7 @@
 id: "discia-an-823"
 exam: "Exam DISC-IA"
 topic: "CGL Conditions"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Duty+to+Defend
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:654346dec9a9577ab9abd4c30b85ab245bc80ff638e7105f93373b6a36d883bb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-823.md
 ---
 A diner's customer burns her hand on a coffee pot. The owner immediately applies first aid and, wanting to keep her goodwill, promises to pay her \$5,000 for her trouble. The owner notifies the insurer the next day. Two months later the customer sues the diner and, in the same suit, names the diner's insurer as a defendant. Which statement is correct under the CGL conditions (CG 00 01 04 13)?
 

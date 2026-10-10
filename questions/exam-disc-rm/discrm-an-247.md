@@ -2,7 +2,7 @@
 id: "discrm-an-247"
 exam: "Exam DISC-RM"
 topic: "Coverage Analysis"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling+Process
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:02079779913b993e6cff7c2a43dfa15f0697e04d4ee230566f83f24db414d021
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-247.md
 ---
 
 An adjuster is applying the framework for coverage analysis to a commercial property claim. The loss fits the insuring agreement, the conditions were met, and an exclusion in the causes-of-loss form appears to apply, but the exclusion contains an exception for an ensuing loss by fire, which is what damaged the property. What should the adjuster conclude?

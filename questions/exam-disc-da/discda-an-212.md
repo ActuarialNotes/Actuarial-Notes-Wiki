@@ -2,7 +2,7 @@
 id: "discda-an-212"
 exam: "Exam DISC-DA"
 topic: "Model Training and Evaluation"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Holdout+Sample
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa70e5accbab558d20de52460253fd0e90f3d1c81060aabeaa7d81cb8aa0ca6e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-212.md
 ---
 
 A homeowners wind model is built on five accident years of policy data, including a year with one large hurricane that produced thousands of claims. The analyst splits the records 70/30 at random into training and test sets, and the test-set lift is excellent. The chief actuary doubts the result. Which concern is most valid, and what should be done?

@@ -2,7 +2,7 @@
 id: "discia-an-238"
 exam: "Exam DISC-IA"
 topic: "Insurer"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Excess+and+Surplus+Lines
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:31b7b0d3b437fc1f6e7fe5d0c84f19dc5b03692009a4777fafc214cc55e26cb3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-238.md
 ---
 
 An insurer domiciled and licensed in Nebraska wants to sell homeowners insurance to Kansas residents on an admitted basis. Which statement is correct?

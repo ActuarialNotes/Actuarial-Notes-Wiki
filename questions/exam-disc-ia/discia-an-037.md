@@ -2,7 +2,7 @@
 id: "discia-an-037"
 exam: "Exam DISC-IA"
 topic: "Replacement Cost"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Actual+Cash+Value
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:698de55cbd8848dbcde937e06c91426adfc11d7c224270c93b1494ee3f2024e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-037.md
 ---
 
 A house with a full replacement cost of \$300,000 is insured under an HO-3 for \$250,000, with a \$500 deductible. A kitchen fire causes damage that costs \$40,000 to repair with materials of like kind and quality; depreciation on the damaged part is 30%. The insured completes the repairs for \$40,000. What does the insurer pay?

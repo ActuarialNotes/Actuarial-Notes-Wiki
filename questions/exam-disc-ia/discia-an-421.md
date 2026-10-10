@@ -2,7 +2,7 @@
 id: "discia-an-421"
 exam: "Exam DISC-IA"
 topic: "HO-3 Section I Perils Insured Against and Exclusions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Property+Coverages
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:78c7783af07df539af1748af006d549d32ceb2e445e410d63be49d7dcecb0c96
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-421.md
 ---
 In an HO-3 (HO 00 03 05 11) insured's home a corroded water supply pipe inside a wall bursts, soaking the walls, the floor and a sofa. Mold later grows inside the wall cavity. Which part of the loss is **not** covered?
 

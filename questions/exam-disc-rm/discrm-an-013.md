@@ -2,7 +2,7 @@
 id: "discrm-an-013"
 exam: "Exam DISC-RM"
 topic: "Risk Treatment"
-learning_objective: "The Evolution of Risk Treatment"
+learning_objective: "4. Treating Risk"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Risk+Management
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2e57a8171ec4e014f65428f7d419191bdb44136aec162da3d62aa1b5614770e1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-013.md
 ---
 
 Which statement best describes how risk treatment has evolved from the traditional approach to enterprise risk management?

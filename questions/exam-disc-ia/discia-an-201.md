@@ -2,7 +2,7 @@
 id: "discia-an-201"
 exam: "Exam DISC-IA"
 topic: "Whole Life Insurance"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:25a6cb5714dc7a0eeed704361c603fe395f105930c8bfb3b021ad95848dba950
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-201.md
 ---
 
 The owner of a whole life policy has paid level annual premiums for six years and now stops paying. Under a state law based on the NAIC Standard Nonforfeiture Law for Life Insurance, what must the policy provide?

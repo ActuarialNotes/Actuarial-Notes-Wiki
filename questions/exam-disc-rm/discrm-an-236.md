@@ -2,7 +2,7 @@
 id: "discrm-an-236"
 exam: "Exam DISC-RM"
 topic: "Premium Audit"
-learning_objective: "Risk Control and Premium Auditing"
+learning_objective: "12. Risk Control and Premium Auditing"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Exposure+Base
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:451ae0f7ef0207d33c8fea8a6c0016d1bbc96adfc5b73b39fee8d5a6648bdf80
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-236.md
 ---
 
 A retailer's general liability policy is rated at \$2.50 per \$1,000 of gross sales. The deposit premium was based on estimated sales of \$3,200,000, and the final audit finds actual sales of \$2,800,000. What is the result of the audit?

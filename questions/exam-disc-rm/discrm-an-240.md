@@ -2,7 +2,7 @@
 id: "discrm-an-240"
 exam: "Exam DISC-RM"
 topic: "Unfair Claims Settlement Practices"
-learning_objective: "The Claims Function"
+learning_objective: "13. The Claims Function"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Claims+Handling+Process
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69a928b7ad6d3e138d064ba8c537f6cc7d27db3451634db951c9818103d066f3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-240.md
 ---
 
 Under the periods in the NAIC Unfair Property/Casualty Claims Settlement Practices Model Regulation, consider this first-party claim file. The insured reported the loss to the insurer's agent on day 0. The insurer acknowledged it on day 12. A properly executed proof of loss arrived on day 30. The insurer accepted the claim and affirmed liability for an undisputed \$18,000 on day 55, and paid it on day 80. It sent no letter asking for more time. Which step was late?

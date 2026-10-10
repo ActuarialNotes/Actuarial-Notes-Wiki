@@ -2,17 +2,26 @@
 id: "discia-an-832"
 exam: "Exam DISC-IA"
 topic: "Liability Loss Exposure"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
 wiki_link:
   - Concepts/Liability+Loss+Exposure
   - Concepts/Commercial+General+Liability
-  - Concepts/Workers+Compensation+Insurance
   - Concepts/Business+Auto+Coverage
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6461902faef83d520013a79758af0c1a33586f79dc1f4eca98460f0346bc1b68
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-832.md
 ---
 A food distributor reviews its commercial liability loss exposures: (1) customers who visit its warehouse showroom; (2) its delivery trucks on public roads; (3) injuries to its warehouse employees; (4) illness caused by contaminated food it has already sold and delivered. Which of these does a standard CGL policy treat, with the others sent to other policies?
 

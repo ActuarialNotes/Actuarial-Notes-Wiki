@@ -2,7 +2,7 @@
 id: "discia-an-006"
 exam: "Exam DISC-IA"
 topic: "Accounting Frameworks"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/GAAP
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cf157de26f84ac217a207e1885a499d4f2504d5e9c8dadad325314998eba88ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-006.md
 ---
 
 According to FASB Concepts Statement No. 8, to whom are general purpose financial reports prepared under GAAP primarily directed?

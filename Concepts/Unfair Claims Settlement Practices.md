@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:04f7e4924fd93988f7aaea44673cde26acdace8b3c10cc583276b6fc4ea76543
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Unfair Claims Settlement Practices.md
+---
+
 **Unfair Claims Settlement Practices** are claim-handling acts that state law prohibits, such as misrepresenting policy provisions, refusing to pay without a reasonable investigation, or failing to settle in good faith once liability is reasonably clear. Most states base their rules on the NAIC's Unfair Claims Settlement Practices Act (model #900) and its Unfair Property/Casualty Claims Settlement Practices Model Regulation (model #902), which set minimum standards for investigating and disposing of claims and give the insurance commissioner the power to examine claim files and penalize violations.
 
 > $$t_{\text{ack}} \le t_{\text{notice}} + 15$$

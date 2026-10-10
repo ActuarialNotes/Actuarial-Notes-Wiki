@@ -2,7 +2,7 @@
 id: "discda-an-218"
 exam: "Exam DISC-DA"
 topic: "Insurance Data Regulation"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Credit-Based+Insurance+Scoring
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46cb5bee8823376cd435371282f5401604a4957affebaca244614df8a3aa17c7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-218.md
 ---
 
 A personal auto insurer orders a consumer report on an applicant and, based partly on the credit information in it, places her in a rating tier with a higher premium. Under the Fair Credit Reporting Act, which of the following must the insurer do?

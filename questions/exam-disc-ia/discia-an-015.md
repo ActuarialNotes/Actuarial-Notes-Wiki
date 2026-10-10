@@ -2,7 +2,7 @@
 id: "discia-an-015"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unearned+Premium
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:66cef233b1710a424f9f7c20ffdeedb79885a2a0479fcfb45ee52d57de8a7e70
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-015.md
 ---
 
 At year end an insurer estimates that its retrospectively rated workers compensation policies will produce \$250,000 of return premium for the expired part of their terms. How does SSAP No. 66 have it record the estimate?

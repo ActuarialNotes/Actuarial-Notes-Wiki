@@ -2,7 +2,7 @@
 id: "discia-an-220"
 exam: "Exam DISC-IA"
 topic: "Negligence"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Premises+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af34c5d0d584e12ec71137b83c3cacbde672e99a485add68fb439cd020fb4165
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-220.md
 ---
 
 A grocery clerk mops an aisle and leaves it wet with no warning sign. A customer slips but catches herself on a shelf and is not hurt in any way. Angry, she sues the store for negligence. Which element of negligence will she fail to prove?

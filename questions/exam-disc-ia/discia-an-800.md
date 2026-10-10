@@ -2,7 +2,7 @@
 id: "discia-an-800"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Insuring Agreement"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/CGL+Who+Is+an+Insured
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef68feeab051b15f2904daa28d49df8ee3e3b75e97ea9c6d107beecd64d7ff03
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-800.md
 ---
 A warehouse company's occurrence CGL policy (ISO CG 00 01 04 13) incepts on July 1. In May, a forklift operator noticed that a slow leak from the company's chemical drums was staining a tenant's goods next door and mentioned it to a co-worker; neither is authorized to give or receive notice of occurrences or claims, and no one else at the company knew. The leak continues into August, when the tenant demands payment. Under the new policy, how does paragraph b(3) of the Coverage A insuring agreement, the known injury condition, treat this damage?
 

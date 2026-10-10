@@ -2,7 +2,7 @@
 id: "discrm-an-005"
 exam: "Exam DISC-RM"
 topic: "Risk Management Process"
-learning_objective: "Process for Managing Risk"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Risk+Identification
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96a34697f68e6c902e5bfc27704a2d80c44d7731eb3c7bbbc2636c2fcc0b2e1b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-005.md
 ---
 
 In the risk management process described by ISO 31000 (2018), which activities make up risk assessment?

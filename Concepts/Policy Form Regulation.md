@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af3f4d68f3d36c1815645c42f8160ec518e58d2517e571358377463cfcc1c8fa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Policy Form Regulation.md
+---
+
 **Policy Form Regulation** is the states' control over the wording of insurance contracts: legislatures prescribe standard policies and required provisions, insurance departments review the forms insurers file before or after use, courts interpret disputed wording against the insurer that wrote it, and readability laws require consumer policies to be written so a buyer can understand them. It exists because an insurance policy is a contract the insurer drafts and the buyer accepts or rejects as a whole, so the buyer can't bargain over its terms.
 
 > $$F = 206.835 - 1.015\,\frac{W}{S} - 84.6\,\frac{Y}{W}$$

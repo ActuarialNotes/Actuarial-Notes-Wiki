@@ -2,7 +2,7 @@
 id: "discia-an-205"
 exam: "Exam DISC-IA"
 topic: "Types of Annuities"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Indexed+Annuity
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ed991ed267e16ab756c101cde0b5653a22ed838a9987d34603f7433fb325bb4d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-205.md
 ---
 
 A 58-year-old has \$150,000 to set aside for retirement in ten years. She will not accept any loss of principal from a market decline, but she wants her money to earn more than a fixed rate when the stock market rises, and she accepts that her share of a rise may be capped. Which annuity best fits her?

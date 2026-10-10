@@ -2,7 +2,7 @@
 id: "discia-an-018"
 exam: "Exam DISC-IA"
 topic: "Financial Statements"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Capital+and+Surplus
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd31405b79388f96a45bcf8cbf26f932114589b3af9896151f6e7c8f7af88ff7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-018.md
 ---
 
 Under statutory accounting, which item is charged or credited directly to surplus rather than passing through statutory net income?

@@ -2,7 +2,7 @@
 id: "discia-an-617"
 exam: "Exam DISC-IA"
 topic: "BPP Loss Conditions and Additional Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+to+Value
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b3090b71942251a408b717d918d3a5fed983c9e18e18bb935d1d937c50068670
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-617.md
 ---
 A building worth \$800,000 at the time of loss is insured for \$500,000 under the BPP with an 80% coinsurance percentage and a \$1,000 deductible. A fire causes a \$64,000 loss. How much does the insurer pay?
 

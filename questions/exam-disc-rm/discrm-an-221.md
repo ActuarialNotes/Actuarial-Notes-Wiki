@@ -2,7 +2,7 @@
 id: "discrm-an-221"
 exam: "Exam DISC-RM"
 topic: "Commercial General Liability"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Premises+and+Operations+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ced2325c1d8bea89f85e68647c377722208e0eecbd80295cac048224ec1fef0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-221.md
 ---
 
 A deck builder's CGL policy has a \$1,000,000 general aggregate and a \$1,000,000 products-completed operations aggregate. In one policy year: (1) a passer-by is hit by lumber falling from a deck the builder is still building; (2) a deck the builder finished and handed over last year collapses at a party, injuring guests. Which aggregate does each claim reduce?

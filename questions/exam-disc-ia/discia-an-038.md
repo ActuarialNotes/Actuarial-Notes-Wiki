@@ -2,7 +2,7 @@
 id: "discia-an-038"
 exam: "Exam DISC-IA"
 topic: "Actual Cash Value"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Replacement+Cost
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c87342b6d361de906bf497d4b3b8f048e3cbab9055b00ecaa705d10a970f963d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-038.md
 ---
 
 A restaurant's oven was bought four years ago for \$18,000. An oven of like kind and quality costs \$24,000 today, and the oven's useful life is 12 years. Measuring actual cash value as replacement cost less straight-line depreciation, what is the oven's ACV?

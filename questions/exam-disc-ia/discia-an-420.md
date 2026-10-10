@@ -2,7 +2,7 @@
 id: "discia-an-420"
 exam: "Exam DISC-IA"
 topic: "HO-3 Section I Perils Insured Against and Exclusions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9d93eeaf32db9a926e0cba2816223d371ff8116761e3db3a2ad7681bf22e7427
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-420.md
 ---
 An earthquake cracks an HO-3 (HO 00 03 05 11) insured's foundation and ruptures a gas line, and the resulting fire burns the house and its contents. The insured has no earthquake endorsement. What does Section I cover?
 

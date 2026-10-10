@@ -2,7 +2,7 @@
 id: "discia-an-009"
 exam: "Exam DISC-IA"
 topic: "Accounting Rule Hierarchy"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: remember
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/GAAP
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1558cafeb427ca6b97364753b77bab54420dbd57dc0649a24261b96364132938
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-009.md
 ---
 
 A privately held insurer prepares financial statements under U.S. GAAP. Which source is authoritative GAAP for it?

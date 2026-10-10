@@ -2,7 +2,7 @@
 id: "discrm-an-202"
 exam: "Exam DISC-RM"
 topic: "Underwriting Policy"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurer+Goals+and+Constraints
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:60b599fa753b131e62e966838d478dd59eb9fde534fcaeb2bee95f1015b24805
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-202.md
 ---
 
 An insurer's underwriting policy caps net written premium at 3 times policyholders' surplus. Surplus is \$300 million, and it expects to renew \$820 million of net written premium next year. New business carries acquisition expenses of 25% of premium, charged against surplus when the business is written. Assuming surplus changes only by that expense, about how much new net premium can the insurer write and still meet the cap?

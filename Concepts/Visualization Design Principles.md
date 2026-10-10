@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d33552f55b13176ce67d51f13d39a4346f550c50a5fe0d9939f72b51b77b2157
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Visualization Design Principles.md
+---
+
 **Visualization design principles** are the rules that make a chosen chart communicate its message quickly and honestly: remove what does not inform, use the eye's preattentive attributes to direct attention to the point, keep shaded areas proportional to the values, use color sparingly and so that color-blind readers can follow it, and give the chart a title that states its finding.
 
 > $$\text{Data-ink ratio} = \frac{\text{ink devoted to the non-redundant display of data}}{\text{total ink used in the graphic}}$$

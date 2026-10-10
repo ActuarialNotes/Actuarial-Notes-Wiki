@@ -2,7 +2,7 @@
 id: "discia-an-241"
 exam: "Exam DISC-IA"
 topic: "Insurance Licensing"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Producer
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:da1bb613d71b3a0b8bd4456b39bb557cd96ab31457c4a4b01bda8dd7da88922f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-241.md
 ---
 
 Under a state law based on the NAIC Producer Licensing Model Act, which of these people needs an insurance producer license?

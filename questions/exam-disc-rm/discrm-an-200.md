@@ -2,7 +2,7 @@
 id: "discrm-an-200"
 exam: "Exam DISC-RM"
 topic: "Underwriting"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Underwriting
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:56efcf3ea531f8b26c7ff9862c9ee2744786824bc4654f23e8fd1230d53bc6c1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-200.md
 ---
 
 An insurer's homeowners rates assume that the risks in each rating class have about the class's average expected loss. A new agent starts sending the insurer many older homes with deferred maintenance, which the rates for their class did not contemplate, and the underwriters accept them all at the class rate. What is the most likely effect?

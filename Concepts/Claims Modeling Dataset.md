@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:10e2999a238522a72887075ebe9125aef0f67478413bb8b4d61a416d36270287
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Claims Modeling Dataset.md
+---
+
 A **claims modeling dataset** is the table a claims model is trained on: one row per claim, holding the features that are known at the moment the model will score a claim, such as at first report, and a target that records the claim's outcome measured the same way for every claim, at a fixed age or valuation date. Claims models answer questions about claims already reported, such as whether a claim is fraudulent, whether a newly opened claim will exceed a large-loss threshold, or whether a subrogation opportunity will be realized (Goldburd et al., CAS Monograph 5, §2.8 and §7.3.1).
 
 > $$y_i = \mathbf{1}\big\{\, L_i(r_i + m) > T \,\big\}$$

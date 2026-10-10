@@ -2,7 +2,7 @@
 id: "discia-an-434"
 exam: "Exam DISC-IA"
 topic: "Homeowners Endorsements"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Section+I+Perils+Insured+Against+and+Exclusions
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4b7d484a99a37aa47b83456b1693808616df1bb77210deff602fb6ba36a9eceb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-434.md
 ---
 An HO-3 with Coverage A of \$300,000 and Coverage C of \$150,000 carries ISO's earthquake endorsement (HO 04 54 10 00) with a 5% deductible and the exterior masonry veneer exclusion in force. An earthquake does \$60,000 of damage to the dwelling, of which \$10,000 is exterior brick veneer. How much does the insurer pay for the dwelling damage?
 

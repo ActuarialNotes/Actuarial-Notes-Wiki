@@ -2,7 +2,7 @@
 id: "discia-an-829"
 exam: "Exam DISC-IA"
 topic: "Specialty General Liability Forms"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:18a352bc72a5b50e3e5341938a2089cf2fec84d57cddb36cc49ccd188965a538
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-829.md
 ---
 A highway contractor will replace a culvert 20 feet from a freight railroad's tracks. The railroad requires a policy in its own name protecting it from liability arising from the contractor's work at the job site. Which ISO general liability coverage form fits, and who is its named insured?
 

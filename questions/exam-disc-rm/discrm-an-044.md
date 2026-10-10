@@ -2,7 +2,7 @@
 id: "discrm-an-044"
 exam: "Exam DISC-RM"
 topic: "Basic Insurance Ratios"
-learning_objective: "Measuring Insurer Performance"
+learning_objective: "6. Overview of Insurance Operations"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurer+Goals+and+Constraints
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:739567cb52d134857de8760e1bae66bf4a9403b50e831e16eb6fc3a1b2715839
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-044.md
 ---
 
 In one state, an insurer writes 10% of the homeowners premium and received 45 of the 900 homeowners complaints filed with the insurance department last year. What is its complaint index, and what does it indicate?

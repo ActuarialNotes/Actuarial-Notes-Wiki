@@ -2,7 +2,7 @@
 id: "discia-an-616"
 exam: "Exam DISC-IA"
 topic: "BPP Limits of Insurance and Deductible"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/BPP+Limits+of+Insurance+and+Deductible
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2feee7f0ecab43dfb0daa0af767d98ee5e09c184aeebae3cec0a7012474aa9b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-616.md
 ---
 A windstorm destroys a dental office's \$6,000 lighted sign, which stands on a post near the street. The office's BPP (ISO CP 00 10 10 12) has a building limit of \$800,000 and the causes of loss special form. Ignoring the deductible, what is the most the BPP pays for the sign?
 

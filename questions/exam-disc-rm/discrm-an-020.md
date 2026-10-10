@@ -2,7 +2,7 @@
 id: "discrm-an-020"
 exam: "Exam DISC-RM"
 topic: "Risk Management"
-learning_objective: "The Risk Management Environment"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69d755fe0642cdc81cecc264cf8e0cb3c6c1f3813b8155d9013aaf11a4152ac7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-020.md
 ---
 
 Which description best fits the traditional risk management function, before the move to enterprise risk management?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:24ea344484872cf178d1584fb381561df4f8eaf8e5fbc54f46d305e92467cfc5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/State Rating Laws.md
+---
+
 **State Rating Laws** are the statutes under which each U.S. state regulates property and casualty insurance rates: they hold every rate to the standard that it be **not excessive, not inadequate and not unfairly discriminatory**, and they set the filing method that decides whether an insurer may use a rate before the insurance department has reviewed it. The method ranges from state-made rates and prior approval, through file and use and use and file, to no filing at all, and it can differ by line within one state. The Canadian counterpart is [[Rate Regulation]].
 
 > $$R = m \cdot LC + e$$

@@ -2,7 +2,7 @@
 id: "discrm-an-257"
 exam: "Exam DISC-RM"
 topic: "Strategic Management Process"
-learning_objective: "Insurer Strategic Management"
+learning_objective: "15. Insurer Strategic Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Porter's+Five+Forces
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b519ffff9493ff5eea62899d000e3ac48681d5f951fe3ce27daa1edb15e523df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-257.md
 ---
 
 Over one year, a regional insurer's management (1) studies new competitors entering its market and its own claims capabilities; (2) decides to concentrate on small commercial accounts and compete on service; (3) reorganizes its underwriting teams around that segment; (4) reviews the segment's growth and loss ratio against its targets at year end. Which steps of the strategic management process are these, in order?

@@ -2,7 +2,7 @@
 id: "discia-an-806"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage A Exclusions"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c9d0fb5c08a8527abfada27e6a0d1a6a41cc80a73cb7a645daeb850cd270d546
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-806.md
 ---
 A manufacturer makes hydraulic valves that a customer installs in its packaging machines. Consider three losses under the manufacturer's CGL: (1) a batch of valves turns out to be defective, so the customer's machines run at half speed until the valves are swapped, and the customer claims its lost output; (2) the manufacturer withdraws the whole batch from the market and spends \$200,000 replacing valves; (3) after a machine has been in normal use for a month, one valve suddenly bursts, shutting the customer's line for two days, and the customer claims its lost output. Which loss does Coverage A cover?
 

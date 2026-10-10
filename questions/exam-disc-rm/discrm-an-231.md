@@ -2,7 +2,7 @@
 id: "discrm-an-231"
 exam: "Exam DISC-RM"
 topic: "Excess Insurance"
-learning_objective: "Underwriting Other Types of Coverage"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Umbrella+Liability+Insurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c63cd78d1278fcec9b8907a646ef6f415693860047f5ba3fca4566685bbb50c6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-231.md
 ---
 
 An insured has a \$1,000,000 primary liability policy and a \$4,000,000 excess of \$1,000,000 excess liability policy. A single occurrence settles for \$6,500,000. How much does the excess policy pay?

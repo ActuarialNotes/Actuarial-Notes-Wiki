@@ -2,7 +2,7 @@
 id: "discia-an-825"
 exam: "Exam DISC-IA"
 topic: "CGL Endorsements"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4d000a3e41de9d7c10806f7d87c21caefb59ebf4ef24595c69d6387cd96d6c41
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-825.md
 ---
 A painting contractor's CGL has a \$1,000,000 each occurrence limit and CG 20 10 04 13 (Additional Insured – Owners, Lessees or Contractors – Scheduled Person or Organization) scheduling a building owner. The painting contract requires the contractor to insure the owner for \$500,000. While the painting is under way, a visitor trips over the contractor's drop cloth and sues the owner for \$800,000. What does the contractor's CGL pay on the owner's behalf?
 

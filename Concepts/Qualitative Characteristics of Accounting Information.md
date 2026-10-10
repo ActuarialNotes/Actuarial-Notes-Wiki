@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c0be458285c654e016013273d65a0e1d202bcd8bff16bf189e84ab8bd9195cae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Qualitative Characteristics of Accounting Information.md
+---
+
 **Qualitative Characteristics of Accounting Information** are the qualities that make financial information useful to the people who rely on it. Under FASB Concepts Statement No. 8, Chapter 3, which the FASB developed jointly with the IASB, the two fundamental characteristics are **relevance** and **faithful representation**, and comparability, verifiability, timeliness and understandability enhance information that already has both. For an insurer's statutory statements, the NAIC adds its own concepts of **conservatism**, **consistency** and **recognition** ([[Statutory Accounting Principles]]).
 
 > $$\text{Useful} = \text{Relevant} \;\wedge\; \text{Faithfully represented}$$

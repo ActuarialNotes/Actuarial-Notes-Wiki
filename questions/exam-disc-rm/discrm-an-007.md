@@ -2,7 +2,7 @@
 id: "discrm-an-007"
 exam: "Exam DISC-RM"
 topic: "Business Continuity Plan"
-learning_objective: "Business Continuity Planning"
+learning_objective: "3. Managing Business Continuity Risk"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Continuity+Management
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f4d92cbb159c657a941de44d420eea17aa8da2b2059d2831a411e216b5dfd52c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-007.md
 ---
 
 An insurer's business impact analysis sets a maximum tolerable downtime (MTD) of 72 hours for its policy billing process. Once the billing system is restored after an outage, the invoices the outage held up take about 12 hours to reprocess. What is the longest recovery time objective (RTO) for the billing system that keeps the process within its MTD?

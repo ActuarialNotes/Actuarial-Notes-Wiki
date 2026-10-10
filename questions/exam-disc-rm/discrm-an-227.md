@@ -2,7 +2,7 @@
 id: "discrm-an-227"
 exam: "Exam DISC-RM"
 topic: "Liability Insurance"
-learning_objective: "Underwriting Other Types of Coverage"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Business+Auto+Coverage
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4f9d9d55f3780439525c0f3b30434835a3ba1986cb5740cb7d9c80da6dedaf16
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-227.md
 ---
 
 A plumbing contractor's business auto liability losses have risen, and the underwriter learns that the contractor lets any employee drive its vans without checking their driving histories. Which condition of renewal most directly addresses the cause?

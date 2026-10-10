@@ -2,7 +2,7 @@
 id: "discia-an-235"
 exam: "Exam DISC-IA"
 topic: "Joint and Several Liability"
-learning_objective: "Insurance Law Part 2"
+learning_objective: "15. Insurance Law Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Tort+Law
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69edc1c9e917a7e9cb95bf069f42a57dbec636f75fb52a55514d6b93ecdb5389
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-235.md
 ---
 
 A plaintiff free of fault proves \$500,000 of damages against two defendants. Defendant A is 80% at fault and is insolvent and uninsured. Defendant B is 20% at fault and insured. The state applies joint and several liability. How much can the plaintiff collect from B?

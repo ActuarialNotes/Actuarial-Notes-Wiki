@@ -2,7 +2,7 @@
 id: "discda-an-016"
 exam: "Exam DISC-DA"
 topic: "Table Join"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/SQL
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8c676b03569a434eaeb3ed7d527334f243b6b9aacfe02200bfc37b1e783bd98b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-016.md
 ---
 
 A policy table has 1,000 rows, each with a unique `policy_id`. A claim table has 150 rows: 145 claims on 120 distinct policies that are in the policy table, and 5 orphan claims whose `policy_id` is not in the policy table. How many rows does this query return?

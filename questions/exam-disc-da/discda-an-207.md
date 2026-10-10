@@ -2,7 +2,7 @@
 id: "discda-an-207"
 exam: "Exam DISC-DA"
 topic: "Similarity and Distance Measures"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/K-Nearest+Neighbors
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:30869ed36ec1c7607e68312d6ac7abff8ca304ff83a91de2bb4144484b9a7674
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-207.md
 ---
 
 A nearest-neighbor model for auto physical damage describes each policy by driver age (years) and vehicle value (dollars). A new policy has driver age 40 and vehicle value \$30,000. Three training records are:

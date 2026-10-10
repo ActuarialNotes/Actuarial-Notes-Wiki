@@ -2,7 +2,7 @@
 id: "discrm-an-025"
 exam: "Exam DISC-RM"
 topic: "Risk Identification"
-learning_objective: "Risk Identification as a Team"
+learning_objective: "2. Identifying Risk"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Identification
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:44ffa89d1b67ee111e3e7fd056a9aa0043d50ade5a436f5cb19c56a1c5dbe8c5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-025.md
 ---
 
 A risk manager forms a team to identify a company's exposures. Working alone, the risk manager would find a particular dependence on one supplier with probability 0.6, the purchasing director with probability 0.3, and the plant manager with probability 0.25. If each member misses the exposure independently of the others, what is the probability that at least one of them finds it?

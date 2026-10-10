@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d6fa1da533992815efc61033717082cf8218da8cb527a07f02fed6a64abfb315
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Liability Exclusions.md
+---
+
 **HO-3 Liability Exclusions** are the Section II exclusions of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition). They remove from [[HO-3 Liability Coverages|personal liability (Coverage E) and medical payments to others (Coverage F)]] the exposures that belong on other policies or are uninsurable: motor vehicles, watercraft, aircraft and hovercraft (each with carefully drawn exceptions), injury the insured expected or intended, business and professional activities, and a further list that applies to one coverage only.
 
 > $$\text{E covers } \text{Occ} \setminus (A \cup B \cup C \cup D \cup E \cup F)$$

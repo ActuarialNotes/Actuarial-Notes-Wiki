@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:26f772daedc3e029ce58c90d04abe1692d45c49edd216b817a74069ae638a20d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance Contract Characteristics.md
+---
+
 **Insurance Contract Characteristics** are the legal features that set an [[Insurance Policy|insurance policy]] apart from an ordinary commercial contract and that courts rely on when they interpret one. A property-casualty policy is a contract of **indemnity**, made in **utmost good faith**, **conditional**, **aleatory**, a **contract of adhesion**, **nontransferable** without the insurer's consent, and **unilateral**. Each feature explains a provision found in the forms, such as the concealment or fraud condition, the assignment condition, or the limit of recovery to the insured's interest.
 
 > $$\text{Recovery} \leq \min\big(\text{Loss to the insured's interest},\ \text{Limit}\big)$$

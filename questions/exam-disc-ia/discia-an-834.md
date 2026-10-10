@@ -2,7 +2,7 @@
 id: "discia-an-834"
 exam: "Exam DISC-IA"
 topic: "Coverage Analysis"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a6a7238b13d57aab38a0bec0133dd8f530c2a591483f3e02919108e20e506557
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-834.md
 ---
 An adjuster reviewing a CGL claim writes: "A customer's guest was injured by a product we sold. Exclusion k, damage to your product, applies, so the claim is denied." Which criticism of this coverage analysis is most accurate?
 

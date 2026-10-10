@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ff7fb9f631291949010b8c395fdf1a0a6e9101d5c6f6100664fb9c2f5ec70695
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Specialty General Liability Forms.md
+---
+
 **Specialty general liability forms** are the coverage forms ISO publishes in its commercial general liability program beside the [[Commercial General Liability|CGL coverage form]], each insuring one exposure the CGL excludes or is not built for: the protective liability of a project owner or a railroad for a contractor's work, liquor liability, products and completed operations written on their own, and pollution liability at designated sites. Each is written as a separate coverage part with its own declarations, limits and premium.
 
 - **The ISO coverage forms:** Alongside the occurrence CGL (CG 00 01) and the claims-made CGL (CG 00 02), the general liability coverage forms are the Owners and Contractors Protective Liability Coverage Form (CG 00 09); the Liquor Liability Coverage Forms, occurrence (CG 00 33) and claims-made (CG 00 34); the Railroad Protective Liability Coverage Form (CG 00 35); and the Products/Completed Operations Liability Coverage Forms, occurrence (CG 00 37) and claims-made (CG 00 38). ISO also publishes Pollution Liability Coverage Forms for designated sites (CG 00 39, and a limited version, CG 00 40). All were issued in 04 13 editions in ISO's 2013 revision.

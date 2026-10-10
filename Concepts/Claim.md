@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-09-28
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f92f1fd51cad706fad8beb9f379b5d038e2ed6faaa0c3864f43febd77836b8a1
+  content_hash: sha256:e17cc04edadc658bfd9839ad54a1dab9b238798bc5d3d48f89c1bb9266fab8f1
   sources:
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II claim payment PDF p.2; §III frequency and severity PDF p.3; §VI losses vs claim payments PDF p.7"
     - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim, claimant, accident date PDF p.14; loss, losses and claims used interchangeably PDF p.15, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"

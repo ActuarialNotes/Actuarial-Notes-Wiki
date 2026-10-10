@@ -2,7 +2,7 @@
 id: "discia-an-225"
 exam: "Exam DISC-IA"
 topic: "Premises Liability"
-learning_objective: "Insurance Law Part 1"
+learning_objective: "14. Insurance Law Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Negligence
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa59d1254bbfa81de7cdd675b2da559f01b4c97b0cdcb3cb7627861447d49542
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-225.md
 ---
 
 A homeowner invites a friend to dinner. A stair tread has worked loose, but the homeowner has not used those stairs in months and does not know about it. The friend falls and is hurt. Under the traditional entrant categories, is the homeowner likely to be liable?

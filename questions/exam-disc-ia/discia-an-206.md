@@ -2,7 +2,7 @@
 id: "discia-an-206"
 exam: "Exam DISC-IA"
 topic: "Types of Annuities"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Life+Annuity
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ebeff541db588f861b0f8f530acdf9c12b7afcfbe0da81d178e1f2b8c6785d8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-206.md
 ---
 
 At age 66 a retiree annuitizes under the life with 20-year period certain option, at \$1,200 a month. He dies 12 years after payments begin. Which statement is correct?

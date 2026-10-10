@@ -2,7 +2,7 @@
 id: "discia-an-403"
 exam: "Exam DISC-IA"
 topic: "Uninsured Motorists Coverage"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:25d0f4f106aa3658929fd62e4cb770b9618635d55a692a4889d53cbd417b336b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-403.md
 ---
 A named insured with Part C (ISO PP 00 01 09 18) swerves to avoid a car that crosses into her lane, hits a guardrail and is injured. The other car never touches her and speeds away, and its driver is never identified. She reports it to the police at once. Why does Part C not pay her bodily injury claim?
 

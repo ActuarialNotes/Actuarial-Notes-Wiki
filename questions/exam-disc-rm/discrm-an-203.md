@@ -2,7 +2,7 @@
 id: "discrm-an-203"
 exam: "Exam DISC-RM"
 topic: "Underwriting Guidelines"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:383404d6f9e66140d6e2a872d10dab89c59277cdc309f4abb0936e589df8fabc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-203.md
 ---
 
 A Texas insurer writes personal auto and homeowners insurance. Which statement about its underwriting guidelines is consistent with the Texas Insurance Code?

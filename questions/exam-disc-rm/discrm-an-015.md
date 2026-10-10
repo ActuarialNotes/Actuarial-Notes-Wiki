@@ -2,7 +2,7 @@
 id: "discrm-an-015"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Guaranty+Funds
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1eb957055c013252819b6c5156754a63f7b8ebca35855c0865518dc82e6ceacc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-015.md
 ---
 
 Which statement about a policy placed with a nonadmitted insurer through a surplus lines broker is accurate?

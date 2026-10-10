@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:adac2e6a0e0dab8031a3a224454b421dea37799afc9f8d3353af57651695054d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BPP Limits of Insurance and Deductible.md
+---
+
 **The limits of insurance and deductible** of the [[Building and Personal Property Coverage Form|BPP]] set the most the insurer pays and the part of each loss the insured keeps. The limit shown in the declarations is the most paid for loss in any one occurrence, with a separate cap on outdoor signs and four additional coverages paid outside it. The deductible is applied once per occurrence, after any coinsurance or agreed value reduction, by subtracting it from the loss and then paying the lesser of the result and the limit. The provisions below are sections C and D of ISO CP 00 10 10 12.
 
 > $$L^{*} = R \times L$$

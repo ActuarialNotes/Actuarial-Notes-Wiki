@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cba09a70f5b2945150b30f09fbf51fe83c87b2f7d2ea0e096103463a5df1efbb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/SQL.md
+---
+
 **SQL** (Structured Query Language) is the language used to retrieve and manipulate data held in the tables of a [[Relational Database|relational database]]. A query is a `SELECT` statement that names the columns or calculations wanted, the tables to read (`FROM`), the rows to keep (`WHERE`), how to group them (`GROUP BY`), which groups to keep (`HAVING`) and the order of the result (`ORDER BY`); the database decides how to carry it out.
 
 > $$\begin{aligned} &1.\ \texttt{FROM} \text{ (with any joins)} \\ &2.\ \texttt{WHERE} \\ &3.\ \texttt{GROUP BY} \text{ and aggregates} \\ &4.\ \texttt{HAVING} \\ &5.\ \texttt{SELECT} \text{ list} \\ &6.\ \texttt{DISTINCT} \\ &7.\ \texttt{ORDER BY} \end{aligned}$$

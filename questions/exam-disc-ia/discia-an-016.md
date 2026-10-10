@@ -2,7 +2,7 @@
 id: "discia-an-016"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Statutory+Accounting+Principles
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4965e87d1b3c1b24f5d01d56ab6911ecaf1708214a20ea39fc19a09264ee4369
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-016.md
 ---
 
 A workers compensation policy written January 1 for \$24,000 is billed in twelve monthly installments of \$2,000 at the end of each month. The insured pays nothing. At June 30, the six billed installments are unpaid, and the six not yet due are matched by \$12,000 of unearned premium. Under SSAP No. 6, how much of the premium receivable is nonadmitted at June 30?

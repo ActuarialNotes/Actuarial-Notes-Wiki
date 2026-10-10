@@ -2,7 +2,7 @@
 id: "discrm-an-234"
 exam: "Exam DISC-RM"
 topic: "Insurer"
-learning_objective: "Risk Control and Premium Auditing"
+learning_objective: "12. Risk Control and Premium Auditing"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Underwriting
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8010d495dc7c2e49f25dd00c8f38f514ec030b11d7165be74ea5dcb380212293
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-234.md
 ---
 
 An insurer offers its commercial policyholders loss control surveys and safety training at no separate charge. Which reason is most consistent with the insurer's own interests?

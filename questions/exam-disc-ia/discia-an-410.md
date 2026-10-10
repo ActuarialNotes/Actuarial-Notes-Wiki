@@ -2,7 +2,7 @@
 id: "discia-an-410"
 exam: "Exam DISC-IA"
 topic: "PAP Endorsements"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/PAP+Liability+Coverage
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38690612c8d0a9d0f0a06bdac8d6f4dab7601a7df62d1458710158c4aec37243
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-410.md
 ---
 A city resident sold her car and now owns no vehicle, but she rents cars several weekends a year and sometimes borrows her brother's. She wants personal auto liability, medical payments and uninsured motorists coverage that follows her. Which ISO endorsement fits?
 

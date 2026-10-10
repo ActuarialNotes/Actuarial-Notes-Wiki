@@ -2,7 +2,7 @@
 id: "discia-an-830"
 exam: "Exam DISC-IA"
 topic: "Specialty General Liability Forms"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6dae455b33a62bfb456af44580ad37e18ae31435578a88f138e9d53e56a56c91
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-830.md
 ---
 A city hires a contractor to repave a street and requires the contractor to buy an Owners and Contractors Protective (OCP) liability policy (ISO CG 00 09). A pedestrian is injured by the contractor's equipment and sues both the city and the contractor. Which statement about the OCP policy is correct?
 

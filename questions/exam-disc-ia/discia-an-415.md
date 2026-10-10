@@ -2,7 +2,7 @@
 id: "discia-an-415"
 exam: "Exam DISC-IA"
 topic: "Personal Auto Policy"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Auto+Physical+Damage+Coverage
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:21b534048596f6bdeb611327d40198ab5aaa1f93b8cc18bd579f1f9a4a349647
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-415.md
 ---
 A named insured carries Parts A, B and D of the ISO personal auto policy. She causes an accident that injures her own passenger, a friend, damages the other driver's car and damages her own car. Which pairing of loss and part is correct?
 

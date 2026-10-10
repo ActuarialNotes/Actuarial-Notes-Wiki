@@ -2,7 +2,7 @@
 id: "discrm-an-006"
 exam: "Exam DISC-RM"
 topic: "Risk Management Process"
-learning_objective: "Process for Managing Risk"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Management
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:92e5c4f809e20ebc4c840689c8b9eb4c595c033e4566a09ec847858794c9a595
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-006.md
 ---
 
 A hospital board asks its new chief risk officer to start an enterprise risk management program. The CRO proposes four activities. Under the CAS's ERM framework, which should come first?

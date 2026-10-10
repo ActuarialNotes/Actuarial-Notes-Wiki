@@ -2,7 +2,7 @@
 id: "discia-an-417"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Coverages"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f461ba5e7613ce87d095f0ca6746a06ef0ce69882fd6897ffbcdec9ed3dea3ec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-417.md
 ---
 A fire on the residence premises of an HO-3 (HO 00 03 05 11) damages several items. Which is covered under Section I?
 

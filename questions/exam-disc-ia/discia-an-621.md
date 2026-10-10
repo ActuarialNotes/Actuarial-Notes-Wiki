@@ -2,7 +2,7 @@
 id: "discia-an-621"
 exam: "Exam DISC-IA"
 topic: "BPP Loss Conditions and Additional Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Covered+Property
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:90c0a2a455ac64edb11da5791bd15f09f14ce58a006ff04cfd64159def105b32
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-621.md
 ---
 A tenant installed improvements and betterments costing \$120,000. Its lease runs 2,190 days from the installation, with a renewal option for a further 1,095 days. A fire destroys the improvements 730 days before the lease's original expiration, and the tenant decides not to repair them. How does the BPP value them?
 

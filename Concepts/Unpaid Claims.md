@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-09-13
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c63ccfd4b911968212129fd54469ecdea21c1546a0216776fe6a1ada004f7825
+  content_hash: sha256:b3fcf7c7e9b2b5e4fe6d3310786ea4d77f8172fc825d800be97ac00373512f1b
   sources:
     - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), sections 2.1, 2.11, 3.3, 3.6.4-3.6.5, standard pp.2-4 and 7, sha256:b921a3c59038fcb748214ed127e97dfe9df2111c97ac1223f8cf9952c16304e9"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 'Key Terminology', printed pp.13-14 (PDF pp.19-20), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"

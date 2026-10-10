@@ -2,7 +2,7 @@
 id: "discia-an-041"
 exam: "Exam DISC-IA"
 topic: "Insurance to Value"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Coinsurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b6948615558dd45ab85728344b643ec35f2b200942b90c0d15e114e52099021a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-041.md
 ---
 
 When a commercial building's policy began, its limit was exactly 80% of the building's value, with an 80% coinsurance clause. Construction costs then rose 10% before a partial fire loss in the tenth month. Which statement about the coinsurance clause is correct?

@@ -2,7 +2,7 @@
 id: "discia-an-412"
 exam: "Exam DISC-IA"
 topic: "PAP Endorsements"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Auto+Physical+Damage+Coverage
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3a109883d40f6dee3228eca8c3d1afa32a9cf88ecf0b6cb25b78e4a811ec998
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-412.md
 ---
 A collector insures his classic convertible under ISO's coverage for damage to your auto (maximum limit of liability) endorsement, PP 03 08, at a scheduled amount of \$25,000 with a \$500 deductible. Which statement about how a loss to the car is settled is correct?
 

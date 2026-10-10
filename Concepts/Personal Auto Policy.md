@@ -8,7 +8,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0b55c306a718ddd73c9b3cf39a90991e14f4d5b24c5a9265db1d6962bff6ae0b
+  content_hash: sha256:d8bd4aa2fc39915908e800c6b7e72140768da3bd507dc947bca51756cdbb991c
   sources: []
   open_findings: 0
   open_critical: 0
@@ -30,7 +30,7 @@ The **Personal Auto Policy** (PAP) is the Insurance Services Office (ISO) form m
 - **Part D, damage to your auto:** Part D covers direct and accidental loss to the covered auto and to a non-owned auto the insured drives, under collision and other than collision. The payment rules, the coverage for transportation expenses and the exclusions are on the [[Auto Physical Damage Coverage]] page.
 - **Parts E and F:** Part E lists the insured's duties after a loss: prompt notice, cooperation, sending legal papers, medical examinations, and reporting a theft or a hit-and-run to the police. Part F holds the conditions, including the policy territory, the insurer's [[Salvage and Subrogation|right of recovery]], cancellation and nonrenewal, and the rule that an insured covered by two or more auto policies issued by the same insurer can't collect more than the highest single limit.
 - **Each part in depth:** Part A is worked through on [[PAP Liability Coverage]], Part B on [[Medical Payments Coverage]], Part C and underinsured motorists on [[Uninsured Motorists Coverage]], Part D on [[Auto Physical Damage Coverage]], Parts E and F on [[PAP Duties and General Provisions]], and the endorsements for other vehicles and added coverages on [[PAP Endorsements]].
-- **Underwriting:** A personal auto underwriter weighs the drivers' ages, experience and driving records, how the auto is used and how far it is driven, where it is garaged, the [[Vehicle Make and Model|vehicle]] and its value, prior insurance and, where permitted, [[Credit-Based Insurance Scoring|credit-based insurance scores]]. Most are also [[Rating Variable|rating variables]].
+- **Underwriting:** A personal auto underwriter weighs the drivers' ages, experience and driving records, how the auto is used and how far it is driven, where it is garaged, the [[Vehicle Make and Model|vehicle]] and its value, prior insurance and, where permitted, [[Credit-Based Insurance Scoring|credit-based insurance scores]]. Most are also [[Rating Variable|rating variables]]. See [[Personal Auto Underwriting]], and for the state laws the policy is written to meet, [[Personal Auto Insurance Laws]].
 - **Beyond the ISO form:** [[Usage-Based Insurance|Usage-based insurance]] prices the policy on measured driving collected by telematics, which raises the privacy, data-use and fairness questions GI-201 asks about. In Canada auto coverage is not written on the ISO form at all, and its minimum contents are set by statute ([[Compulsory Auto Insurance]]).
 
 > [!example]- One Accident Across Parts A, B and D {Example}

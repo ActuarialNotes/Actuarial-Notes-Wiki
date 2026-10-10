@@ -2,7 +2,7 @@
 id: "discia-an-816"
 exam: "Exam DISC-IA"
 topic: "CGL Who Is an Insured"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b0fe7b8ad9bc62cc389ff4ccc93b641b3218ac09e56276cac17ed205eed82ec2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-816.md
 ---
 A limited liability company is the named insured on a CGL (CG 00 01 04 13). For which claim is the person described an insured?
 

@@ -2,7 +2,7 @@
 id: "discia-an-605"
 exam: "Exam DISC-IA"
 topic: "BPP Additional Coverages and Coverage Extensions"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Covered+Property
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b0d2bacdc4d4f815fe2acdccab623cb8c53d34cb00a7ff76c8996cc6688fa56b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-605.md
 ---
 An office's BPP has a 90% coinsurance percentage. A fire spreads from a trash bin and destroys five ornamental shrubs worth \$300 each and a rooftop satellite dish worth \$700. The shrubs and the dish are not stock. What does the outdoor property coverage extension pay?
 

@@ -2,7 +2,7 @@
 id: "discia-an-603"
 exam: "Exam DISC-IA"
 topic: "BPP Additional Coverages and Coverage Extensions"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Limits+of+Insurance+and+Deductible
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:155e51845a509e27d14ff1711de88954a26c9ccf20be9224076f21e0600593df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-603.md
 ---
 A building is insured under the BPP for \$120,000 with a \$1,000 deductible, and there is no coinsurance penalty. A fire causes \$100,000 of direct damage, and removing the debris costs \$60,000. How much does the insurer pay for debris removal?
 

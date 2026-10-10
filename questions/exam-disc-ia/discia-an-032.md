@@ -2,7 +2,7 @@
 id: "discia-an-032"
 exam: "Exam DISC-IA"
 topic: "Insurance Policy Structure"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Building+and+Personal+Property+Coverage+Form
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:64ae508e6218897df9923fa516d88186dcbcfe4cf0c8906eab2ffb8a2e6f6c6f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-032.md
 ---
 
 A retailer's commercial package policy contains a commercial property coverage part and a commercial general liability coverage part. Where would you find how many days' notice the insurer must give before cancelling the whole policy for nonpayment of premium?

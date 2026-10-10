@@ -2,7 +2,7 @@
 id: "discia-an-435"
 exam: "Exam DISC-IA"
 topic: "Homeowners Endorsements"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Section+I+Perils+Insured+Against+and+Exclusions
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0850f61fd523c94c4042fcce6255e4e14ba64f2c5be307aa32e1cc2c8ada26fd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-435.md
 ---
 A homeowner with an unendorsed HO-3 (HO 00 03 05 11) has a finished basement, and twice in recent years heavy rain has made the municipal sewer back up into neighbors' basements. Which endorsement would most directly treat this exposure?
 

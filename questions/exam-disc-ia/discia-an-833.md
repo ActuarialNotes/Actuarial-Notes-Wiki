@@ -2,7 +2,7 @@
 id: "discia-an-833"
 exam: "Exam DISC-IA"
 topic: "Liability Loss Exposure"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Duty+to+Defend
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d8cc5702be507fe94b8deccf885c139ceda68123696d2552c22e5d073100ea23
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-833.md
 ---
 A contractor expects 5 premises and operations liability claims a year. With illustrative figures, 30% of claims result in a payment averaging \$40,000, and defending a claim costs \$8,000 on average whether or not it results in a payment. What is the expected annual cost of this liability loss exposure, including defense?
 

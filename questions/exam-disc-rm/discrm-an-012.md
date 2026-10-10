@@ -2,7 +2,7 @@
 id: "discrm-an-012"
 exam: "Exam DISC-RM"
 topic: "Risk Treatment"
-learning_objective: "Risk Treat Fundamentals"
+learning_objective: "4. Treating Risk"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Transfer
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a0851d4b520393e222fcd18061c0d51a13eb0cf64e735bfa90b193d53acf0473
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-012.md
 ---
 
 A caterer signs a contract to serve at a museum's annual gala. The contract requires the caterer to indemnify the museum for any claims arising from the caterer's use of the museum's premises. From the museum's point of view, which risk treatment technique does this clause use?

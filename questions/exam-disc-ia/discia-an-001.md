@@ -2,7 +2,7 @@
 id: "discia-an-001"
 exam: "Exam DISC-IA"
 topic: "Qualitative Characteristics of Accounting Information"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Qualitative+Characteristics+of+Accounting+Information
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e9592f8f1d5d5373f0b0e5f879d88cf5aaf7bbbafdea2d186d115fc967e7012
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-001.md
 ---
 
 A regional insurer's statements for the year ended December 31, 2025 are complete, unbiased and correctly prepared, but they do not reach the bank that lends to it until October 2026, after the bank has renewed the loan. Under FASB Concepts Statement No. 8, which qualitative characteristic do these statements most clearly lack?

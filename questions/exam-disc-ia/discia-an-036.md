@@ -2,7 +2,7 @@
 id: "discia-an-036"
 exam: "Exam DISC-IA"
 topic: "Insurable Interest"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84781cad1ecd1234943bef213184e9e2c7f07b4f7e4efdf2108762539291506f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-036.md
 ---
 
 A homeowner whose house carries a \$180,000 mortgage, with the lender named under the HO-3's mortgage clause, deliberately burns the house down, and the insurer denies the homeowner's claim. The lender knew of no change in risk, the premium was paid up, and the lender files a signed, sworn statement of loss within 60 days of the insurer's notice. What does the mortgage clause provide?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4aa8a09b3c8372fec56b643d43d133f769c708a29744f8bd7b3798859438a487
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BPP Covered Property.md
+---
+
 **Covered property** under the [[Building and Personal Property Coverage Form|building and personal property coverage form]] (BPP) is the property the form insures: the building, your business personal property and personal property of others, each covered only if a limit of insurance is shown for it in the declarations, and each cut back by the form's list of property not covered. The ISO form (CP 00 10 10 12) sets these out in its Coverage section as A.1 Covered Property and A.2 Property Not Covered.
 
 > $$\text{Covered}(x) \iff t(x) \in \{\text{Bldg},\ \text{BPP},\ \text{PPO}\},\ C_{t(x)} > 0,\ x \notin \text{NC}$$

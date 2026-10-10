@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:306e1b82e0f2fb2a5e716ef5111ba82f149fa6985b134ddec45573952ecc710a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Coverage A Exclusions.md
+---
+
 The **CGL Coverage A exclusions** are the seventeen exclusions, lettered a through q, that remove bodily injury and property damage from the [[CGL Coverage A Insuring Agreement|Coverage A insuring agreement]] of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition). Most of them send a loss to the policy built for it, such as [[Workers Compensation Insurance|workers compensation]], [[Business Auto Coverage|business auto]] or a liquor or pollution form, or remove business risks the insured controls, such as faulty work and recalls. Many end with an exception that gives some of the coverage back.
 
 > $$\text{Paid}_{\text{fire}} = \min\left(D,\ L_{\text{rent}}\right)$$

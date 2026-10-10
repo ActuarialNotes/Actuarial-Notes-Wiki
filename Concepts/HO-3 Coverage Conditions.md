@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:76bdc68944f68e3036238e01eedd73360a9341cd75795819eb18b87ff449d971
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Coverage Conditions.md
+---
+
 **HO-3 Coverage Conditions** are the Section II conditions and the Sections I and II conditions of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition). The Section II conditions govern the liability coverages — the limit per occurrence, severability, the insured's duties after an occurrence, suits against the insurer and other insurance — and the Sections I and II conditions govern the whole policy: liberalization, waiver, cancellation, nonrenewal, assignment, subrogation and death.
 
 > $$\text{Refund} = P \times \frac{n_{\text{remaining}}}{n_{\text{term}}}$$

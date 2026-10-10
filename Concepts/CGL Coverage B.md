@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f2571bbb0dec31265441cd5be8a7118d2ed2e357847f72074ead5615dc4ef04
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Coverage B.md
+---
+
 **CGL Coverage B** is the personal and advertising injury liability coverage of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition). It pays the damages an insured becomes legally obligated to pay because of "personal and advertising injury", meaning injury arising from a listed set of offenses such as false arrest, libel or using another's advertising idea, and it defends suits seeking those damages, provided the offense arises out of the named insured's business and is committed in the coverage territory during the policy period.
 
 > $$t_0 \le t_{\text{offense}} \le t_1$$

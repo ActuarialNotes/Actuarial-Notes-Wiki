@@ -2,7 +2,7 @@
 id: "discrm-an-052"
 exam: "Exam DISC-RM"
 topic: "Risk Treatment"
-learning_objective: "Risk Treatment Applications"
+learning_objective: "4. Treating Risk"
 difficulty: hard
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Risk+Transfer
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e968a5662f82afcd0bf5dced7527162d3cccd43ebdecd7231645b841ca5d82a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-052.md
 ---
 
 A large, financially strong retailer owns a headquarters building in an earthquake zone. A major earthquake is unlikely in any year but would cause a loss the retailer could not absorb in full. The insurance market is hard, and earthquake premiums have risen sharply. Which treatment is most appropriate?

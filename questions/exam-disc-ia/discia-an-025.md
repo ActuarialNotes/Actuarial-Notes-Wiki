@@ -2,7 +2,7 @@
 id: "discia-an-025"
 exam: "Exam DISC-IA"
 topic: "Reinsurance Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Unpaid+Claims
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4a3f560402482802bc5ccde04f1a65847133faeb1a2b6d81f8f4255e811dc42a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-025.md
 ---
 
 An insurer buys per-occurrence excess of loss reinsurance of \$1,000,000 excess of \$500,000 from an authorized reinsurer. At year end it has three open claims, none yet paid, with incurred losses of \$450,000, \$900,000 and \$1,800,000. Under SSAP No. 62R, how much reinsurance recoverable on unpaid losses does it net against its loss reserves?

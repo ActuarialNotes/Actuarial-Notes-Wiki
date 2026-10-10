@@ -2,7 +2,7 @@
 id: "discrm-an-226"
 exam: "Exam DISC-RM"
 topic: "Business Auto Coverage"
-learning_objective: "Underwriting Other Types of Coverage"
+learning_objective: "11. Underwriting Other Types of Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Liability+Insurance
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc3af730dfee601ee646567f1b281f55a3491d54e0b1c62c69fe0949216e0716
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-226.md
 ---
 
 Four business auto submissions have the same number of vehicles and similar loss records. Which presents the most severe liability exposure for the underwriter?

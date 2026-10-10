@@ -2,7 +2,7 @@
 id: "discia-an-821"
 exam: "Exam DISC-IA"
 topic: "CGL Limits of Insurance"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d11706d202d45f3ccd11223f4baeadb3bfa7bd9b14de7ef02cf1d3cd38e42f85
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-821.md
 ---
 A customer is hurt by a falling shelf in a store. The store's CGL has a \$500,000 each occurrence limit and a \$10,000 Medical Expense limit, with ample aggregate. The insurer first pays \$10,000 of her medical expenses under Coverage C. She then sues and is awarded \$520,000 of damages under Coverage A. How much more does the insurer pay on the award?
 

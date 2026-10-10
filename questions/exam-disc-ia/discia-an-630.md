@@ -2,7 +2,7 @@
 id: "discia-an-630"
 exam: "Exam DISC-IA"
 topic: "Coverage Analysis"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/BPP+Additional+Coverages+and+Coverage+Extensions
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3eaecbb1ed2c75e43bec741d8ddbf38bdb30663d96d08022de37d1ed56ae0e8d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-630.md
 ---
 A shop is insured under the BPP with the causes of loss special form, ample building and business personal property limits, 80% coinsurance (met) and a \$1,000 deductible. A windstorm tears off part of the roof (\$40,000). Rain pours through the opening and ruins \$25,000 of stock. The wind also blows over \$1,500 of ornamental trees, and rain soaks \$2,000 of cash in the register. How much does the insurer pay?
 

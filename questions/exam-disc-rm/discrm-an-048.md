@@ -2,7 +2,7 @@
 id: "discrm-an-048"
 exam: "Exam DISC-RM"
 topic: "Insurance Distribution Systems"
-learning_objective: "Selecting Distribution Systems and Channels"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Producer
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f34ced58ab2fcfd713c93d2276d3af77afa75c8487e3454784bc6921debec321
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-048.md
 ---
 
 A regional insurer plans to launch a specialized liability product for large construction contractors, a segment in which it has no producers. The buyers need advice on complex coverage and are spread across several states. Which distribution approach best fits?

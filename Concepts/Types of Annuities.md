@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa39d3cc31127925a910fc4854b101eefc5da2de2801cc7b117096a502e1aa43
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Types of Annuities.md
+---
+
 An **annuity** is a contract with an insurance company in which the buyer pays a single premium or a series of premiums and the insurer promises to make income payments at regular intervals, for a period the buyer chooses or for life. Annuities are classified along several independent lines: **fixed, indexed or variable** (how the value grows), **immediate or deferred** (when income starts), **single or flexible premium** (how it is paid for), the **payout option** chosen, and whether it is held in a **qualified** retirement plan. This page is the product view a buyer or producer uses; the pricing view is [[Life Annuity]].
 
 > $$AV_t = \big(AV_{t-1} + P_t\big)\big(1 + \max(r_t,\ g)\big)$$

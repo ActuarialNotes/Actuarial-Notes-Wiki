@@ -2,7 +2,7 @@
 id: "discia-an-418"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Coverages"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:753efb8909191c870ef4d17868e257c0da7357d3dea156fc55c8b8fc0bd86a77
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-418.md
 ---
 A gas explosion destroys the house next door to an HO-3 (HO 00 03 05 11) insured. The insured's house is undamaged, but the fire department and city order the street closed and bar residents from their homes for three weeks. The family's living costs rise by \$150 a day while they stay in a hotel. How much does Coverage D pay?
 

@@ -2,7 +2,7 @@
 id: "discda-an-217"
 exam: "Exam DISC-DA"
 topic: "Insurance Data Regulation"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Insurance+Data+Regulation
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e4305868d449e86a5768a95d4fedec1c3cc78bc3a02fc6a46e6b6f8cc36e94d5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-217.md
 ---
 
 An insurer domiciled in State P determines that an intruder accessed a database holding names and Social Security numbers. The data cover 300 residents of State Q and 200 residents of State R, and in both states the breach has a reasonable likelihood of materially harming the affected residents. States P, Q and R have all enacted the NAIC Insurance Data Security Model Law as written. Under the model law's notification test, which commissioners must the insurer notify within 72 hours of its determination?

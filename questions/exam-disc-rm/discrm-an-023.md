@@ -2,7 +2,7 @@
 id: "discrm-an-023"
 exam: "Exam DISC-RM"
 topic: "Risk Taxonomies"
-learning_objective: "Classifications and Categories"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Taxonomies
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:02d3c849ae8cdac3cfc8fd59aa0c5a56175193f493af437126c494789d16c3ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-023.md
 ---
 
 Which of the following is a speculative risk for a manufacturer?

@@ -2,7 +2,7 @@
 id: "discda-an-234"
 exam: "Exam DISC-DA"
 topic: "Similarity and Distance Measures"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Clustering
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a19bd09bc5e05391c7a0221c56b87072bd4d0c76b5572af7f3268d88d29eabbc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-234.md
 ---
 
 An analyst describes small business policies by 40 yes/no indicators, one for each optional endorsement; any one policy carries only two or three endorsements. She wants to cluster policies whose endorsement choices are alike. Why is the Jaccard dissimilarity a better choice here than simple matching (the share of the 40 indicators on which two policies disagree)?

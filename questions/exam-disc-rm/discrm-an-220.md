@@ -2,7 +2,7 @@
 id: "discrm-an-220"
 exam: "Exam DISC-RM"
 topic: "Business Income Coverage"
-learning_objective: "Underwriting Business Income and Commercial Liability Coverage"
+learning_objective: "10. Underwriting Business Income and Commercial Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Coinsurance
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8e9c67b39b1b8cddb030230912452093ca3a286513aedb619d15d2a9ec5114df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-220.md
 ---
 
 A manufacturer buys business income coverage with a \$1,000,000 limit and a 50% coinsurance percentage. Its net income and operating expenses for the 12 months after the policy's inception, less the expenses the form deducts, are projected at \$2,400,000. A covered fire causes a business income loss of \$300,000. Ignoring the waiting period, how much does the insurer pay?

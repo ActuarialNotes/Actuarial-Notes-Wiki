@@ -2,7 +2,7 @@
 id: "discrm-an-004"
 exam: "Exam DISC-RM"
 topic: "Risk Management Process"
-learning_objective: "Process for Managing Risk"
+learning_objective: "1. Introduction to Risk Management"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Enterprise+Risk+Management
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f12acb2bf0cc86cf0c4ec42a044dcd747459ce96b5e7b529fddafdc115108d9a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-004.md
 ---
 
 Under the CAS's enterprise risk management framework, a risk committee has built a probability distribution for each of its material risks. It now combines them in a single simulation model that reflects their correlations, so that it can express the results as an effect on the company's key performance indicators. Which step of the process is the committee carrying out?

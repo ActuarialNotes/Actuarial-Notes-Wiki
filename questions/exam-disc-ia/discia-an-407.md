@@ -2,7 +2,7 @@
 id: "discia-an-407"
 exam: "Exam DISC-IA"
 topic: "PAP Duties and General Provisions"
-learning_objective: "Personal Auto Policy"
+learning_objective: "4. Personal Auto Policy"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Personal+Auto+Policy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:99e7526dc95c9a277cf5e510ad69437e64cb287ada34e1f047f77dcf8c7cd439
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-407.md
 ---
 An insurer's new six-month PAP (ISO PP 00 01 09 18), not a renewal, has been in force for 90 days, and the premium is paid. Which reason allows the insurer to cancel it now, and with how much notice?
 

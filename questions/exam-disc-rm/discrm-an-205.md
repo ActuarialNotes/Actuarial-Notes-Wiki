@@ -2,7 +2,7 @@
 id: "discrm-an-205"
 exam: "Exam DISC-RM"
 topic: "Underwriting Guidelines"
-learning_objective: "The Underwriting Function"
+learning_objective: "8. The Underwriting Function"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Underwriting+Policy
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4aa56217f64e2cb94629e8fd0237a154f9fa2d2a8ba9f52da89a7bf9ca1a2fd1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-205.md
 ---
 
 At a commercial insurer, which person is most likely to analyze a line's loss experience, conduct underwriting audits, and recommend changes to the line's eligibility rules and authority levels?

@@ -2,7 +2,7 @@
 id: "discia-an-808"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage B"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9e6cd32df7be5b49e8a999f1ce8eca9cd09d8cb20c008c74a6be1efa19a72e22
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-808.md
 ---
 During the policy period a bicycle retailer runs an online advertisement. Four suits follow. Which one is covered under Coverage B of its CGL (CG 00 01 04 13)?
 

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:91dddccf8d57a9bdcbe59593a45408eb2a32de3875f045e36ad7be69e4c68338
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/HO-3 Liability Coverages.md
+---
+
 **HO-3 Liability Coverages** are the coverages of Section II of the ISO Homeowners 3 – Special Form (HO 00 03, 05 11 edition): Coverage E, personal liability, which pays damages an insured is legally liable for because of bodily injury or property damage caused by an occurrence and defends the insured; Coverage F, medical payments to others, which pays others' medical expenses without regard to fault; and four additional coverages paid on top of the limits — claim expenses, first aid, damage to property of others and loss assessment.
 
 > $$E = \min(D,\ L_E)$$

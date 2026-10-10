@@ -2,7 +2,7 @@
 id: "discia-an-423"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Conditions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Actual+Cash+Value
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d97a2dffd2d2fde505975ef6cd1b928151ba82626114f342d39bb8a9e388793c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-423.md
 ---
 A dwelling is insured under an HO-3 (HO 00 03 05 11) for \$200,000, more than 80% of its replacement cost. A windstorm causes damage costing \$4,000 to repair, with an actual cash value of \$2,800. The insured has not yet made the repair. Before the deductible, what can the insured collect now?
 

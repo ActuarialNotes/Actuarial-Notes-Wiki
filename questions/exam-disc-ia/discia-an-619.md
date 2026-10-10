@@ -2,7 +2,7 @@
 id: "discia-an-619"
 exam: "Exam DISC-IA"
 topic: "BPP Loss Conditions and Additional Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Coverage+Analysis
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d98c6e58aa56fab5bb67c71227c5703ccd6d5b61cd57a744767492b85f09cfdb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-619.md
 ---
 A building owner sets fire to its insured building, and the insurer denies the owner's claim. A bank holds a \$300,000 mortgage on the building and is shown in the declarations. The bank pays a premium installment the owner had skipped when the insurer asks, files a sworn proof of loss within 60 days of the insurer's notice, and had no knowledge of any change in risk. What does the mortgageholders condition provide?
 

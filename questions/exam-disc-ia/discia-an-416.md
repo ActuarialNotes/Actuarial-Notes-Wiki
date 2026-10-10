@@ -2,7 +2,7 @@
 id: "discia-an-416"
 exam: "Exam DISC-IA"
 topic: "HO-3 Property Coverages"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b28e7d32649eb2a8541075f7775dc7d45147413f8a3cb24edc5121228748eab4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-416.md
 ---
 Burglars take the following from an HO-3 (HO 00 03 05 11) insured's home: \$500 in cash, gold coins worth \$800, jewelry worth \$4,000, a camera worth \$900 and a rifle worth \$1,200. Every amount is the actual cash value, and the deductible is \$500. How much does the insurer pay?
 

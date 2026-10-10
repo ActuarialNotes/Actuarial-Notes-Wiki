@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c5315052fe249492cba1a2b8756ef0beed42d9e49caa40779702917e07bb6a65
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Underwriting Process.md
+---
+
 The **Underwriting Process** is the sequence an underwriter follows to decide a submission: evaluate it against the [[Underwriting Guidelines|underwriting guidelines]], develop the alternatives, select one, determine the premium, implement the decision, and monitor the result. It applies to new business and to renewals, and its purpose is to write the risks the insurer's [[Underwriting Policy|underwriting policy]] wants at a premium that matches their exposure, and to keep the book within the insurer's risk appetite.
 
 > $$P = P_{\text{manual}} \times (1 + c)$$

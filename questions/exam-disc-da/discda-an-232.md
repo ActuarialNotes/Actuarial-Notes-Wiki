@@ -2,7 +2,7 @@
 id: "discda-an-232"
 exam: "Exam DISC-DA"
 topic: "Credit-Based Insurance Scoring"
-learning_objective: "Ethical and Societal Considerations of Data Analytics"
+learning_objective: "10. Ethical and Societal Considerations of Data Analytics"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Unfair+Discrimination
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8382f6842392992fc0fdf57686b2fb1eb788ef153fb90822f4bc6932ddb17afd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-232.md
 ---
 
 In an auto insurer's experience, drivers with high credit-based insurance scores have a loss ratio relativity of 0.80 and drivers with low scores a relativity of 1.25, relative to rates that do not use credit. The state then bans the use of credit, so every driver pays the same relativity of 1.00. Relative to the rate their own expected losses indicate, how much do high-score drivers pay under the ban?

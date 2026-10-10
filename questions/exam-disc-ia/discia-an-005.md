@@ -2,7 +2,7 @@
 id: "discia-an-005"
 exam: "Exam DISC-IA"
 topic: "Accounting Frameworks"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Unpaid+Claims
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2df28a2f98fcbd268ab962fe703e8202a3b03c81a6d3f064ba30bfb9927f6fb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-005.md
 ---
 
 At year end an insurer's gross loss and LAE reserves are \$64 million, and \$15 million of that is recoverable from authorized reinsurers on unpaid losses. What amount does the insurer report as its loss and LAE reserve liability on the statutory balance sheet?

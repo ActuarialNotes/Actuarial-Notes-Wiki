@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aafdb9d4cb6ee3b316b2259960ed33f7f063072328d10d6ac1e0d25c95024f3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Business Continuity Plan.md
+---
+
 A **business continuity plan** (BCP) is the documented set of procedures, teams and resources an organization will use to keep or restore its critical functions after a disruption, within recovery times set in advance from a business impact analysis. It is the main product of [[Business Continuity Management|business continuity management]]: the plan records who leads the response, which functions are restored first, the strategies and resources for restoring them, how the plan is activated, and how it will be tested and kept up to date.
 
 > $$\text{RTO} + t_{\text{reprocess}} \le \text{MTD}$$

@@ -2,15 +2,25 @@
 id: "discrm-an-017"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: easy
 type: multiple-choice
 bloom: apply
 wiki_link:
   - Concepts/Property-Casualty+Insurance+Marketplace
-  - Concepts/Residual+Market
+  - Concepts/Personal+Auto+Underwriting
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dd059e2ea714d24146818da961f070117014f25d42e861e1064153c507a517b9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-017.md
 ---
 
 A driver with several at-fault accidents has been declined by every auto insurer he has approached, but his state requires auto liability insurance. How is he most likely to obtain coverage?

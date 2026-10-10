@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dfd41681299e6fad75749795c78cecf13f5907865499c5fca466840e39c7d6c3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance Licensing.md
+---
+
 **Insurance Licensing** is the state's control over who may transact insurance: an [[Insurer|insurer]] may not do business in a state without a license from its insurance department, and the people who sell insurance or adjust claims for the public must hold licenses of their own. It is the regulator's first line of consumer protection, admitting only insurers that meet capital and other standards and only [[Insurance Producer|producers]] who have passed an examination, and giving the regulator a licence to suspend or revoke when the rules are broken.
 
 > $$\text{Admitted} \iff \text{licensed in the state where the risk is}$$

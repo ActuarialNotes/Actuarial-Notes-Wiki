@@ -2,7 +2,7 @@
 id: "discia-an-242"
 exam: "Exam DISC-IA"
 topic: "Insurance Producer"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Licensing
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2103df084dcf12aa044a5496e7b527cd10abaae2a259a1573237c6c19a9ee9e2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-242.md
 ---
 
 A producer licensed and in good standing in Georgia wants to sell to clients in Alabama, while continuing to live in Georgia. Under the NAIC Producer Licensing Model Act, what does Alabama require?

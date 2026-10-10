@@ -2,7 +2,7 @@
 id: "discia-an-611"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Special Form"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Commercial+Crime+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dca4c4f02916e37bc618639d89ba0a91eb0e13d58d5f6e2b52f49fd03d35ad24
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-611.md
 ---
 A restaurant insures its building and business personal property under the BPP with the causes of loss special form. In one month, a server takes \$3,000 of wine home, and a cook who has just been fired smashes \$5,000 of kitchen equipment on his way out. What does the special form cover?
 

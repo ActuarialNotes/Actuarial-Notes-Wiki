@@ -2,7 +2,7 @@
 id: "discia-an-243"
 exam: "Exam DISC-IA"
 topic: "Solvency Monitoring"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: hard
 type: multiple-choice
 bloom: evaluate
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Insurance+Regulator
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3e7baffdefd36ee2833810b2ad132db118aac441b6101c4256c15657c09aa460
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-243.md
 ---
 
 An insurer's risk-based capital ratio is 340% of Authorized Control Level, above every action level. Its quarterly filings show premium up 60% in a year, after it began writing commercial auto through a managing general agent, and its liabilities are rising faster than its liquid assets. What can its domiciliary regulator do?

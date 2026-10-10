@@ -2,7 +2,7 @@
 id: "discda-an-031"
 exam: "Exam DISC-DA"
 topic: "Types of Plots"
-learning_objective: "Analyzing Data With Visualizations"
+learning_objective: "5. Analyzing Data With Visualizations"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Box+Plot
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d34fb1a1bacbe235385f8e084b3ee8fc9d13d915e4fbf40fe8366be9f5980512
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-031.md
 ---
 
 An analyst wants to compare the distribution of claim severity across six vehicle classes in one compact view. Which plot fits?

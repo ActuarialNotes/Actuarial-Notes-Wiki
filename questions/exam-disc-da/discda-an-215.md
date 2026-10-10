@@ -2,7 +2,7 @@
 id: "discda-an-215"
 exam: "Exam DISC-DA"
 topic: "Underwriting Modeling Dataset"
-learning_objective: "Preparing Data for Insurance Applications"
+learning_objective: "9. Preparing Data for Insurance Applications"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Earned+Exposure
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:939cac2751c7d10163bd57775cfcf9baf7bbbde125146bb79803c7cdfa1406d6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-215.md
 ---
 
 An analyst builds calendar-year 2025 rows for an auto frequency model, measuring exposure in months / 12:

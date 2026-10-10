@@ -2,7 +2,7 @@
 id: "discia-an-432"
 exam: "Exam DISC-IA"
 topic: "HO-3 Coverage Conditions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Property+Conditions
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aab6c33ff2a64e6ba99b64ec45649701b3a548abdb3d0dcd46495156ef4a8da0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-432.md
 ---
 A married couple are both insureds under an HO-3 (HO 00 03 05 11). After a burglary, the husband, without his wife's knowledge, inflates the claim with items they never owned. The same month a guest is injured at the house and sues both spouses. How do the concealment or fraud conditions apply?
 

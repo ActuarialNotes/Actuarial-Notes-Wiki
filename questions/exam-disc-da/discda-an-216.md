@@ -2,7 +2,7 @@
 id: "discda-an-216"
 exam: "Exam DISC-DA"
 topic: "Underwriting Modeling Dataset"
-learning_objective: "Preparing Data for Insurance Applications"
+learning_objective: "9. Preparing Data for Insurance Applications"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Generalized+Linear+Model
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:66f1e82ea5e2227afc51bd23e0db6701045d692e3639184edb37d9fdb2e61f8e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-216.md
 ---
 
 An underwriting dataset has one row per territory and class, with earned car-years and claim frequency (claims per car-year). The analyst will fit a Poisson GLM with a log link using claim frequency as the target. How should exposure enter the model?

@@ -2,7 +2,7 @@
 id: "discia-an-244"
 exam: "Exam DISC-IA"
 topic: "State Rating Laws"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Policy+Form+Regulation
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4d401e49ada04f5ea32364d330834eebe6ee70834cdd5d7b101fb6c22801ab39
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-244.md
 ---
 
 A state regulates homeowners rates under a flex rating law, requiring prior approval of any rate change of more than 7% above or below the rates on file. An insurer plans a 5% increase in one territory and a 10% increase in another. Which changes need prior approval?

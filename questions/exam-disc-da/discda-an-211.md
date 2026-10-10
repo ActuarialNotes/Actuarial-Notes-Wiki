@@ -2,7 +2,7 @@
 id: "discda-an-211"
 exam: "Exam DISC-DA"
 topic: "Model Training and Evaluation"
-learning_objective: "Understanding Fundamental Modeling Concepts"
+learning_objective: "7. Understanding Fundamental Modeling Concepts"
 difficulty: easy
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Holdout+Sample
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4082abc17fd2a75844949130c54a2c4f078b02145170d59ae65a717daddd0e5d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-211.md
 ---
 
 An analyst fits four frequency models of increasing complexity on a training set and scores each on a separate validation set:

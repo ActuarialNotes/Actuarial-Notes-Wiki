@@ -2,7 +2,7 @@
 id: "discia-an-607"
 exam: "Exam DISC-IA"
 topic: "Causes of Loss Basic and Broad Forms"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Causes+of+Loss
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e5c48898ddfeb251a8c45cdfcbee606139d4fe6e90f035654a4560cba7cd9321
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-607.md
 ---
 A retailer is choosing between the causes of loss basic form and broad form. Which loss would be covered under the broad form but **not** under the basic form?
 

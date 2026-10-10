@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c2fb9dee6ba8fbe284f29ef41f8277688273bab31aaaee00033645b7d76236a4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/BPP Additional Coverages and Coverage Extensions.md
+---
+
 **Additional coverages and coverage extensions** are the parts of the [[Building and Personal Property Coverage Form|building and personal property coverage form]] (BPP) that pay for costs and property the main insuring agreement leaves out. The six additional coverages (debris removal, preservation of property, fire department service charge, pollutant clean-up and removal, increased cost of construction and electronic data) apply on every BPP. The seven coverage extensions apply only when the declarations show a coinsurance percentage of 80% or more, or a value reporting period symbol, and each carries a small limit of its own. The provisions below follow ISO CP 00 10 10 12, sections A.4 and A.5.
 
 > $$B = \min\big(0.25\,(P + d),\ C - P,\ E\big)$$

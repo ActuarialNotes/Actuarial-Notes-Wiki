@@ -2,7 +2,7 @@
 id: "discrm-an-051"
 exam: "Exam DISC-RM"
 topic: "Insurance Producer"
-learning_objective: "Functions of Insurance Producers"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Property-Casualty+Insurance+Marketplace
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:06c3100afdb0a5e758ce9463f13ad5e20703cf60e0289713d278b9c9c6eec038
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-051.md
 ---
 
 Which statement about agents and brokers is accurate?

@@ -2,7 +2,7 @@
 id: "discrm-an-054"
 exam: "Exam DISC-RM"
 topic: "Property-Casualty Insurance Marketplace"
-learning_objective: "Unique Factors in the Property-Casualty Insurer Marketplace"
+learning_objective: "7. Insurance Marketing and Distribution"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Underwriting+Cycle
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c07ee6cab4b097d9e1ee2454a96ce89f12b66938817162b028cbae2458127573
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-054.md
 ---
 
 Determine which of the following statements about the property-casualty insurance marketplace are true.

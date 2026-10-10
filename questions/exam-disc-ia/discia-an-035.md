@@ -2,7 +2,7 @@
 id: "discia-an-035"
 exam: "Exam DISC-IA"
 topic: "Policy Provisions"
-learning_objective: "Insurance Policy Analysis"
+learning_objective: "2. Insurance Policy Analysis"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Policy+Structure
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8af385231d34677d3199b3f5d1b93285d0a56be537201fff6cddc09fa6885d9f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-035.md
 ---
 
 A commercial property policy requires the insured to give the insurer prompt notice of a loss and a signed, sworn proof of loss. In which category of policy provisions does this requirement belong?

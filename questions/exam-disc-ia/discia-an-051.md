@@ -2,7 +2,7 @@
 id: "discia-an-051"
 exam: "Exam DISC-IA"
 topic: "Liability Claim Valuation"
-learning_objective: "Common Policy Concepts"
+learning_objective: "3. Common Policy Concepts"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Nuclear+Verdicts
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:21c624454a0f643f2a1225404a2a996dc19ebb39599a9dcde7e821aa10298b65
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-051.md
 ---
 
 Two bodily injury claims involve the same injury, equally clear liability and the same medical bills. According to the NAIC's description of social inflation, which difference would most likely make one claim worth more than the other?

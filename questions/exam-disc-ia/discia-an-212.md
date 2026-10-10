@@ -2,7 +2,7 @@
 id: "discia-an-212"
 exam: "Exam DISC-IA"
 topic: "Directors and Officers Liability Insurance"
-learning_objective: "Specialty Coverages Part 1"
+learning_objective: "12. Specialty Coverages Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Directors+and+Officers+Liability+Insurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6018ec604f5bab0b957243fde80e29ac47cf30da2e2ff3c41425fb5be2cb2ec1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-212.md
 ---
 
 A company has filed for bankruptcy and cannot indemnify its former directors. Creditors sue the directors personally, alleging they misled lenders about the company's finances, and \$800,000 of defense costs are incurred before any finding of fraud. The company's D&O policy has a \$10,000,000 limit, a \$500,000 Side B retention and a \$1,000,000 Side C retention. Under which part of the policy are the directors' defense costs paid, and how much does the insurer pay toward them?

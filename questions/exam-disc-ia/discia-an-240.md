@@ -2,7 +2,7 @@
 id: "discia-an-240"
 exam: "Exam DISC-IA"
 topic: "Insurance Licensing"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Excess+and+Surplus+Lines
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b61446d503b260654bc35d3261fdef060bffc2782224be48e0f730c4c982b71
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-240.md
 ---
 
 A state has adopted the NAIC Nonadmitted Insurance Model Act, and its minimum capital and surplus for a licensed property and casualty insurer is \$3,000,000. A surplus lines broker wants to place a risk with a nonadmitted insurer domiciled in another state, authorized there for the line, which holds capital and surplus of \$9,000,000. Is the insurer eligible?

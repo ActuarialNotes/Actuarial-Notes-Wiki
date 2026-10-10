@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9e98c68eeeedb6a8d5ecfbf9b735a21e9eb4140f490797dcaed1d848b209c7ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Liability Claim Valuation.md
+---
+
 **Liability Claim Valuation** is estimating what a third-party liability claim is worth: the amount the insured is likely to be found legally obligated to pay, and the cost to the insurer of resolving it. The value turns on whether and how far the insured is liable, which rules the jurisdiction applies to shared fault and multiple defendants, the claimant's [[Compensatory Damages|compensatory damages]], special and general, any [[Punitive Damages|punitive damages]], who the claimant is and where the case would be tried, the cost of defense, and the policy limits.
 
 > $$V = q \times W(p) \times (S + G)$$

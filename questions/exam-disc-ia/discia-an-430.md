@@ -2,7 +2,7 @@
 id: "discia-an-430"
 exam: "Exam DISC-IA"
 topic: "HO-3 Liability Exclusions"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Liability+Coverages
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:822cc2a5c65450c953eb31fe62bccef5f047d5c5bbc9dda9ddc1fded8f803a2a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-430.md
 ---
 An HO-3 (HO 00 03 05 11) insured rents a lake cabin for a week of vacation, which makes it an insured location. While there, he causes \$40,000 of damage to the cabin when he leaves a pan unattended and starts a kitchen fire, and separately spills bleach on the owner's \$2,000 rug. How does Section II respond?
 

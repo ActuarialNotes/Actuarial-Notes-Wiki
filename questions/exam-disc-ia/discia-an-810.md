@@ -2,7 +2,7 @@
 id: "discia-an-810"
 exam: "Exam DISC-IA"
 topic: "CGL Coverage B"
-learning_objective: "Commercial General Liability Insurance Part 1"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8de772ca68d6593cd42dbc4305fe9b6bdcebff4dfadae54f2e9c52715ecb6403
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-810.md
 ---
 A department store's CGL has a \$1,000,000 Personal and Advertising Injury limit and a \$2,000,000 general aggregate, of which \$500,000 has already been paid this year on a premises bodily injury claim. Its security staff then wrongly detain two shoppers in separate incidents. One recovers \$1,250,000 and the other \$600,000. What does Coverage B pay in total?
 

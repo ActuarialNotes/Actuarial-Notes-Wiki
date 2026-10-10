@@ -2,7 +2,7 @@
 id: "discia-an-604"
 exam: "Exam DISC-IA"
 topic: "BPP Additional Coverages and Coverage Extensions"
-learning_objective: "Commercial Property Insurance Part 1"
+learning_objective: "8. Commercial Property Insurance Part 1"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/BPP+Limits+of+Insurance+and+Deductible
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a91324cad77e51dabd64518a8385443f423c86a52ddef03fce2a11c0318afe2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-604.md
 ---
 A restaurant's BPP shows no higher limit for the fire department service charge additional coverage and a \$1,000 deductible. A kitchen fire is put out by two fire departments, and under a local ordinance the restaurant is billed \$2,200 for their service. How much does the BPP pay toward the bill?
 

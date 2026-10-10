@@ -2,7 +2,7 @@
 id: "discda-an-205"
 exam: "Exam DISC-DA"
 topic: "Visualization Design Principles"
-learning_objective: "Presenting Data Effectively"
+learning_objective: "6. Presenting Data Effectively"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Chart+Selection
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:59deaf9bff63fa92df10ac5d9ad9fc85989d4c9582b0755830795370040e38c7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-205.md
 ---
 A bar chart compares the pure premium relativities of two territories, 0.90 and 1.20. The chart's vertical axis starts at 0.80. How many times as long as the first bar does the second bar appear?
 

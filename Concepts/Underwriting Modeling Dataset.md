@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:485b8c5e4bf7bf0165f7defc813b8f5d5cad35e9b6fc0f02626dd35c5ea0a0bd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Underwriting Modeling Dataset.md
+---
+
 An **underwriting modeling dataset** is the table an underwriting or pricing model is trained on: one row per risk per time period, such as a policy, vehicle or location for a calendar year, holding the characteristics known when the risk was quoted or underwritten, its exposure for the period, and the claims experience attached to it. Goldburd et al. call the ideal "a dataset with one record for each risk and each time period of interest" (CAS Monograph 5, §4.1).
 
 > $$e_i = \frac{\text{days of row } i\text{'s term inside the period}}{\text{days in the period}}$$

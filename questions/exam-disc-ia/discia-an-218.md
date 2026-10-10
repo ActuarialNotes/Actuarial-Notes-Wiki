@@ -2,7 +2,7 @@
 id: "discia-an-218"
 exam: "Exam DISC-IA"
 topic: "International Insurance"
-learning_objective: "Specialty Coverages Part 2"
+learning_objective: "13. Specialty Coverages Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/International+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4acfc13d60068184074effc273c1f5903c95f94983c1e26c133da23efe6f11f3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-218.md
 ---
 
 A U.S. company's global program has a controlled master policy with a \$10,000,000 limit and broad terms, and a local admitted policy in a country where its factory sits. The local policy excludes flood. A flood causes \$6,000,000 of damage to the factory, a loss the master policy's terms cover. Local law allows the master policy's payment to reach the parent. How much does the master policy pay?

@@ -2,7 +2,7 @@
 id: "discia-an-419"
 exam: "Exam DISC-IA"
 topic: "HO-3 Section I Perils Insured Against and Exclusions"
-learning_objective: "Homeowners Property Coverage"
+learning_objective: "5. Homeowners Property Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: analyze
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/HO-3+Property+Coverages
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ee51ae27a286b5bff018ed14501305f225c9a347a367ae237060d1df05299014
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-419.md
 ---
 During a windstorm an HO-3 (HO 00 03 05 11) insured leaves a window open. Rain blows in, damaging the drywall beneath the window and ruining an upholstered chair. The wind does not damage the house. What does Section I cover?
 

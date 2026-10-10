@@ -2,7 +2,7 @@
 id: "discrm-an-235"
 exam: "Exam DISC-RM"
 topic: "Risk Control"
-learning_objective: "Risk Control and Premium Auditing"
+learning_objective: "12. Risk Control and Premium Auditing"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Underwriting+Process
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:39e5f6da128df5a7de40c1ae51d634e230883cbe97f796d1e291058d9dfddc1d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-235.md
 ---
 
 During a survey of a machine shop insured for general liability and workers compensation, the risk control representative finds that the shop has added a welding operation that wasn't on its application. Which other functions most need this finding?

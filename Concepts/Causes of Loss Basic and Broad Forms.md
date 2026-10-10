@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1aaa96f7f57e90d375be069287fd51292664fde18fb9de404a509d5adc5da8ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Causes of Loss Basic and Broad Forms.md
+---
+
 **The Causes of Loss – Basic Form and Broad Form** are the two named perils options of the ISO commercial property program (CP 10 10 and CP 10 20). Attached to a coverage form such as the [[Building and Personal Property Coverage Form|BPP]], each defines the covered causes of loss as a list: the basic form names eleven perils, and the broad form names the same eleven plus falling objects, weight of snow, ice or sleet, and water damage, and adds an additional coverage for collapse. Both then exclude a common set of causes and add limited coverage for fungus, wet rot, dry rot and bacteria.
 
 > $$\begin{aligned} N_{\text{basic}} = \{&\text{fire, lightning, explosion, windstorm or hail,} \\ &\text{smoke, aircraft or vehicles, riot or civil commotion,} \\ &\text{vandalism, sprinkler leakage, sinkhole collapse,} \\ &\text{volcanic action}\} \end{aligned}$$

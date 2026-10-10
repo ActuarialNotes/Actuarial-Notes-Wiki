@@ -2,7 +2,7 @@
 id: "discia-an-819"
 exam: "Exam DISC-IA"
 topic: "CGL Limits of Insurance"
-learning_objective: "Commercial General Liability Insurance Part 2"
+learning_objective: "11. Commercial General Liability Insurance Part 2"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Commercial+General+Liability
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0cfdc715752c4f10c939cd7e0ce33858942a58afa5891341ede0b1107bb7707d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-819.md
 ---
 A CGL policy has these limits: each occurrence \$1,000,000; general aggregate \$2,000,000; products-completed operations aggregate \$1,000,000; personal and advertising injury \$1,000,000. In one policy year, in this order, the insured incurs: two separate products claims of \$700,000 and \$600,000; a premises bodily injury claim of \$1,200,000; a libel claim by one person of \$400,000; and a second premises bodily injury claim of \$900,000. How much does the insurer pay on the last claim?
 

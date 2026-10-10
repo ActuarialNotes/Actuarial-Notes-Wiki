@@ -2,7 +2,7 @@
 id: "discia-an-620"
 exam: "Exam DISC-IA"
 topic: "BPP Loss Conditions and Additional Conditions"
-learning_objective: "Commercial Property Insurance Part 2"
+learning_objective: "9. Commercial Property Insurance Part 2"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2486c4a99e3cb8d0f599936ecf73eaeb6f47bf72458be1842d4206bba119c101
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-620.md
 ---
 After a fire, the insured and the insurer agree the loss is covered but disagree by \$90,000 on the amount. The insured demands an appraisal in writing under the BPP. Which statement about the appraisal is correct?
 

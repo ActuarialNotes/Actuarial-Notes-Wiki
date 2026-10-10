@@ -2,7 +2,7 @@
 id: "discda-an-006"
 exam: "Exam DISC-DA"
 topic: "Insurer Operational Data"
-learning_objective: "Collecting Data for Insurer Models"
+learning_objective: "2. Collecting Data for Insurer Models"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Table+Join
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37c8492a995e4660355c7df517640bc7c746f2c60a8cac046ec01b3543075705
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-006.md
 ---
 
 An analyst joins a personal auto insurer's claims database to its policy database to look for new rating variables for a claim frequency model. Which field could be used in the rating algorithm?

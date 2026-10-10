@@ -2,7 +2,7 @@
 id: "discia-an-024"
 exam: "Exam DISC-IA"
 topic: "Loss and Loss Adjustment Expense"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Duty+to+Defend
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9be757bf39671a91a6f82e345e2e967d92869e5b2b55d882d0135096cd04087a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-024.md
 ---
 
 Under SSAP No. 55, which cost is classified as adjusting and other (AO) expense rather than defense and cost containment (DCC)?

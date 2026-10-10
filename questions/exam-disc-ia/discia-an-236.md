@@ -2,7 +2,7 @@
 id: "discia-an-236"
 exam: "Exam DISC-IA"
 topic: "Reasons for Insurance Regulation"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Insurance+Regulator
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6fd06db07484094631ead5daa7d4ca4b9e43c3f2e984641025511e3d8e778d10
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-236.md
 ---
 
 A state legislator argues that insurance buyers can protect themselves by shopping around, so insurance needs no more regulation than any other product. State insurance regulators answer that regulation exists to protect consumers. What do they identify as the most important protection it provides?

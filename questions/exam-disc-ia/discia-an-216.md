@@ -2,7 +2,7 @@
 id: "discia-an-216"
 exam: "Exam DISC-IA"
 topic: "Aircraft Insurance"
-learning_objective: "Specialty Coverages Part 2"
+learning_objective: "13. Specialty Coverages Part 2"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Aircraft+Insurance
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d9570e5bea162ffcb56d3eb2764dd5f214f4589aa34368790b2d12ef2a0c7e67
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-216.md
 ---
 
 A business owner's aircraft policy has a pilot warranty requiring a current medical certificate. His certificate expired two weeks before he flew to a client meeting. During the flight the engine fails from a manufacturing defect, and the aircraft is destroyed in the forced landing. His health played no part in the accident. Is the hull loss covered?

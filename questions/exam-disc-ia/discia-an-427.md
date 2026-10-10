@@ -2,7 +2,7 @@
 id: "discia-an-427"
 exam: "Exam DISC-IA"
 topic: "HO-3 Liability Coverages"
-learning_objective: "Homeowners Liability Coverage"
+learning_objective: "6. Homeowners Liability Coverage"
 difficulty: hard
 type: multiple-choice
 bloom: apply
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Homeowners+Policy
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b502d7b37959c8710e45bd5ad27da4ebab55e3c7e567a990152925c39927c18
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-427.md
 ---
 An HO-3 (HO 00 03 05 11) has a \$100,000 Coverage E limit and a \$5,000 Coverage F limit. A guest falls on an icy walk at the insured's home. The insurer pays \$2,000 of the guest's medical bills under Coverage F, spends \$25,000 defending the guest's suit, and the suit ends in a \$130,000 judgment, which the insurer pays up to its limit. How much does the insurer pay in total?
 

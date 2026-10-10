@@ -2,7 +2,7 @@
 id: "discrm-an-038"
 exam: "Exam DISC-RM"
 topic: "Property Loss Exposure"
-learning_objective: "Managing Personal Property Exposures"
+learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Property+Loss+Exposure
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8520a40e88171d82709f5adbe4995383d355d1472822976094112cd2f49bdafe
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-038.md
 ---
 
 A homeowner has a mortgage on her house. She rents the basement apartment to a tenant, who has paid for and installed his own kitchen cabinets there. If fire destroys the house, which parties have a financial interest in property exposed to loss?

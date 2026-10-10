@@ -2,7 +2,7 @@
 id: "discia-an-207"
 exam: "Exam DISC-IA"
 topic: "Types of Annuities"
-learning_objective: "Life and Health Insurance"
+learning_objective: "7. Life and Health Insurance"
 difficulty: hard
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurance+Producer
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e3c45c748808b6223f705e3f788b89e8f7c5dc1416d9383e31304f2c28d290dd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-207.md
 ---
 
 A producer recommends a flexible premium variable deferred annuity to a 40-year-old client. Which statement in the producer's sales presentation is accurate?

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01c837af9de5263bb6547411114e0c7806b321751d30eae95b5c26882dc05d23
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/PAP Endorsements.md
+---
+
 **PAP Endorsements** are the ISO forms that modify the [[Personal Auto Policy|personal auto policy]] (PP 00 01) for exposures the unendorsed policy leaves out or covers too narrowly. One group extends the policy to vehicles other than private passenger autos, such as motorcycles, motor homes, trailers and snowmobiles; another adds coverages, such as underinsured motorists, towing and non-owner coverage, or changes how a limit or a loss settlement works.
 
 > $$\text{Payment} = \min(S,\ \text{ACV},\ \text{Repair}) - d$$

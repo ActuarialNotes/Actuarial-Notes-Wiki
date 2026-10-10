@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d9b2831fe13a4719ce533d343fb380c5adcef51c2c29fc2c86b453bba9974d3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/COPE.md
+---
+
 **COPE** stands for construction, occupancy, protection and exposure, the four characteristics of a property an underwriter reviews when evaluating a submission for property insurance. Together they describe how likely a fire is to start, how fast it would spread, how quickly it would be put out, and what could reach the building from outside, which is why underwriters use COPE to analyze a property's fire exposure alongside its other [[Causes of Loss|causes of loss]].
 
 > $$\text{PPC} = \begin{cases} 1 & S \ge 90 \\[4pt] 10 - \lfloor S/10 \rfloor & 0 \le S < 90 \end{cases}$$

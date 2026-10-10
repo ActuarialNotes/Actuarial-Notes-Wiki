@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bf98e5ed6f979493937db3fded21d9835749d58ead72cf2206e2d1621e9a9528
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/CGL Coverage C.md
+---
+
 **CGL Coverage C** is the medical payments coverage of the ISO [[Commercial General Liability|Commercial General Liability Coverage Form]] (CG 00 01, 04 13 edition). It pays reasonable medical expenses for bodily injury caused by an accident on premises the named insured owns or rents, on the ways next to them, or because of its operations, regardless of fault, provided the accident happens in the coverage territory during the policy period and the expenses are incurred and reported within one year. Unlike Coverages A and B, it requires no proof that the insured is legally liable.
 
 > $$\text{Paid}_i = \min\left(E_i^{(1)},\ M\right)$$

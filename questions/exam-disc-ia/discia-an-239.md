@@ -2,7 +2,7 @@
 id: "discia-an-239"
 exam: "Exam DISC-IA"
 topic: "Insurance Licensing"
-learning_objective: "Insurance Regulation"
+learning_objective: "16. Insurance Regulation"
 difficulty: easy
 type: multiple-choice
 bloom: understand
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Insurer
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4b0ffc28249c5b02c76355eeccea934e2094395d50858653327ae026712a638e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-239.md
 ---
 
 An insurance company incorporated under the laws of Ontario, Canada holds a license from the New York Department of Financial Services and writes commercial property business there. From New York's point of view, how is the company classified?

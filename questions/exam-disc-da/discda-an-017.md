@@ -2,7 +2,7 @@
 id: "discda-an-017"
 exam: "Exam DISC-DA"
 topic: "Database Index"
-learning_objective: "Preparing Data for Analysis"
+learning_objective: "3. Preparing Data for Analysis"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Table+Join
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:234dd36d60c765a25ee009d17e2559859bacc991558b83a34ad5594020c4e9b7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-da/discda-an-017.md
 ---
 
 A claim table of 3,000,000 rows is loaded nightly and queried all day. Most queries join it to the policy table on `policy_id`; some filter on `claim_status`, which takes three values (open, closed, reopened). The table already has its primary key on `claim_id`. Which additional index is most likely to repay its cost?

@@ -2,7 +2,7 @@
 id: "discrm-an-026"
 exam: "Exam DISC-RM"
 topic: "Risk Identification"
-learning_objective: "Holistic Risk Identification"
+learning_objective: "2. Identifying Risk"
 difficulty: easy
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Financial+Risk
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:34f350a25bd6b23966d11c4ecd26a0961929a4a5a3d779fae2d76df2a47fa572
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-026.md
 ---
 
 While reviewing a wholesaler's balance sheet to identify risks, a risk manager notes a large balance of accounts receivable owed by a handful of retail customers. Which risk does this item most directly point to, and in which category?

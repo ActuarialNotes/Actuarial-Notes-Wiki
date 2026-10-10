@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:961dc93fd5d54c61c4b6dd789d5e763f14acdff71f9c648dbd356ee91cf0a86f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Data Ethics Checklist.md
+---
+
 A **data ethics checklist** is a list of questions a data team works through at each stage of a project, from collecting data to running a model in production, so that the ethical risks of the work are discussed, decided and documented before they cause harm. It turns the principles of [[Data Ethics]] into prompts tied to specific steps; the best-known public example is **Deon**, DrivenData's default Data Science Ethics Checklist.
 
 - **What a checklist is for:** Deon's authors state that the main benefit of a checklist is making sure important work is not overlooked under deadline pressure. Its items are prompts for discussion among people acting in good faith, not rules that dictate an action such as "remove variable X", and the discussions and decisions should be documented. Teams are expected to drop items that do not apply, mark them N/A, or write custom checklists for their domain. Deon leaves out pure statistical best practice so it can focus on what needs attention beyond it.

@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b26c0cdffba43761ccd6b785e6c27f7f17e2c426071f003433de8bc601647d7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Chart Selection.md
+---
+
 **Chart selection** is choosing the display, a table or a particular type of graph, that makes a presentation's message easiest to see. The choice follows from the kind of comparison the message makes: Few sorts almost every quantitative message into seven relationship types, each with its own best encoding, and the wrong chart can hide the message or distort it.
 
 - **Table or graph:** Tables work best when the reader will look up individual values or needs them precisely. Graphs work best when the message lives in the shape of the data, in patterns, trends and exceptions (Few, *Effectively Communicating Numbers*). A rating manual's factor table is a table; the fact that the factors rise with driving record is a graph.

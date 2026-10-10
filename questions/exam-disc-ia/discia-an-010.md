@@ -2,7 +2,7 @@
 id: "discia-an-010"
 exam: "Exam DISC-IA"
 topic: "Premium Accounting"
-learning_objective: "Introductory Insurance Accounting"
+learning_objective: "1. Introductory Insurance Accounting"
 difficulty: medium
 type: multiple-choice
 bloom: apply
@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unearned+Premium
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1676b1fe6f0dd384433cfbf71168e2cf1cb455c166ad2ee69bd67188c57fed67
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-010.md
 ---
 
 An insurer writes a one-year policy with an annual premium of \$3,650, effective August 1, 2025. Using the daily pro rata method, what earned premium does this policy contribute to calendar year 2025?

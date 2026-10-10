@@ -29,9 +29,11 @@ const PER_TOPIC_KEY = 'craft.v3'
 /**
  * Earlier saves: the first version's recipes from an authored book, and the
  * second's concepts placed by hand. Neither means anything to a board whose
- * concepts are made, so they are cleared rather than read.
+ * concepts are made, so they are cleared rather than read. Nor do the scores
+ * a connection's practice used to earn, and the note it left for its quiz:
+ * practice scores nothing now.
  */
-const RETIRED_KEYS = ['craft.v1', 'craft.v2']
+const RETIRED_KEYS = ['craft.v1', 'craft.v2', 'craft.practice.v1', 'craft.practice.pending']
 
 /** Which connections the board draws: all of them, or only the moderate and strong, or only the strong. */
 export type StrengthFilter = 'all' | 'moderate' | 'strong'

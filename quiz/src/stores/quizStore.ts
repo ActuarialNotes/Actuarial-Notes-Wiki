@@ -12,7 +12,6 @@ import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
 import { recordQuestProgress } from '@/lib/questStore'
 import { recordLeagueXp } from '@/lib/leagueStore'
-import { settleCraftPractice } from '@/lib/craftPractice'
 import type { QuestAnswer } from '@/lib/quests'
 import { LEAGUES_ENABLED, QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
@@ -658,8 +657,6 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }).map(q => q.id)
     const correctCount = correctIds.length
 
-    // A Concept Craft connection's Practice scores on the board (lib/craftPractice.ts).
-    settleCraftPractice(questions.map(q => q.id), correctIds)
 
     if (!userId) {
       // Unauthenticated: no DB to fetch from, so compute transitions from the

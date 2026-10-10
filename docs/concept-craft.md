@@ -9,7 +9,8 @@ Where the vault ties the pair together, the connection also **makes** what is bu
 from it — cause and effect: the concepts whose own pages define them by the two, the
 way frequency and severity make the pure premium. Those land on the board beside the
 pair in the exam's colour. Every connection scores, the strong far more than the
-faint, and practising one scores far more again (**Score**, below). Every connection
+faint (**Score**, below), and most of a board's score is in a few of its connections:
+find 80% of it within your first 20% of its pairs for **gold** (**Medals**). Every connection
 found stays on the board, so a topic ends as a map of how its concepts relate — the
 strongly connected drawn close together, the loosely connected further out.
 
@@ -80,12 +81,16 @@ The fifth version — this one — lets **any two concepts connect**. A reader d
 cards together and being told *no connection* learned nothing, and the connections
 that were found didn't say what they were. Now every pair connects, with a strength
 read for it however faint (*Any pair*, below), the board **scores** what is found —
-the stronger the connection the more, and a connection's practice far more — and every
+the stronger the connection the more, popping off the line that scored it — and every
 connection says, in one to five words, **what one concept is to the other**
 (*Relations*): written for the vault's 5,587 connections, and read off the vault for
 any other pair. The graph's own connections — the ones the notes tie together — still
 make concepts and still count toward a pack being complete; a pair the notes barely
-tie makes nothing, scores little and is drawn as a dashed hairline.
+tie makes nothing, scores little and is drawn as a dashed hairline. Since every pair
+connects, finding them all is a matter of time; the **medals** make it a matter of
+judgment — the Pareto rule as a win condition: most of the score is in a few
+connections, and a medal is for finding those few first. Practising a connection
+scores nothing on the board: it is an ordinary quiz, and earns what a quiz earns.
 
 ## The pieces
 
@@ -93,17 +98,17 @@ tie makes nothing, scores little and is drawn as a dashed hairline.
 |---|---|
 | `quiz/src/lib/conceptGraph.ts` | **The graph**, pure and tested: what a page says about other concepts (`pageMentions` — links, and names written out), the strength formula (`connectionStrength`, `STRENGTH_WEIGHTS`, `MIN_STRENGTH`, `STRENGTH_TIERS`) and `buildConceptGraph`. |
 | `quiz/src/lib/conceptRecipes.ts` | **The recipes**, pure and tested: what a page's opening names and where (`openingNames`, `pageOpening`, `beforeAside`, `abbreviationOf`), each concept's best recipes (`buildRecipes`, `RECIPES`, `PLACE`) and what each connection makes (`recipesByPair`). |
-| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), any pair's connection (`connectionFor`, `PATH_WEIGHT`, `FLOOR_STRENGTH`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), starter packs on one board (`mergeGraphs`, `packSeeds`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`), the score (`connectionPoints`, `practicePoints`, `craftScore`, `SCORE`) and a connection's practice (`practiceQuestions`). |
+| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), any pair's connection (`connectionFor`, `PATH_WEIGHT`, `FLOOR_STRENGTH`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), starter packs on one board (`mergeGraphs`, `packSeeds`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`), the score (`connectionPoints`, `craftScore`) and a connection's practice (`practiceQuestions`). |
 | `quiz/src/lib/conceptRelations.ts` | **What a connection says**, pure and tested: a written label (`writtenRelation`), else one read off the vault — recipes, the pages' own verb phrases (`phraseBetween`), the names (`nameRelation`), what the pair shares, the evidence, a path, where the two sit (`relationOf`) — and the sentence it makes (`relationSentence`). |
 | `quiz/src/data/craftRelations.json` | **The written labels**: one per connection of the graph, keyed by `pairKey`, the direction first (`>` from the key's first name, `<` from its second, `=` either way). |
-| `quiz/src/lib/craftPractice.ts` | **What practice scored**: the note a connection's Practice leaves for the quiz (`startCraftPractice`) and the quiz's right answers coming back (`settleCraftPractice`, from `completeQuiz`), best run per connection. Standalone — localStorage only — so the quiz store doesn't pull the graph into the main bundle. |
+| `quiz/src/lib/craftMedals.ts` | **The medals**, pure and tested: the rules (`MEDALS`), the least each pair of a board scores (`leastPoints`), the best a play from the seeds reaches in so many connections (`bestPlay`), what each medal asks of a board (`medalPlan`), where the connections found stand against it (`medalStanding`) and what a find won (`medalsWon`). |
 | `quiz/src/lib/craftLayout.ts` | The board's physics and geometry, pure and tested: bodies, strength-weighted springs, collision, seeding, where a made card lands (`spawnBeside`), the camera, hit-testing, where a line's label goes. |
 | `quiz/src/hooks/useConceptCraft.ts` | The reader's board — localStorage, pack ids and pair keys only — and which connections the board shows. |
 | `quiz/src/hooks/useConceptLevels.ts` | A concept's level and collected state for drawing its card — shared with Quiz Battle's topic pick. |
 | `quiz/src/pages/Craft.tsx` | The board's screen: top bar, the empty board's invitation, deck, board, the bottom-right controls (**+**, zoom, fit, tidy, filter, clear), connection card. Lazy (`lazyRoute`). |
-| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck` (a side panel on a wide board only — a phone has no deck, every card being on its board), `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftLogo`. |
-| `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), no quoted sentence cuts a formula in half — and the written labels: each names two concept pages in one to five words naming neither, nearly every connection of every topic has one, and any pair at all gets a relation of five words or fewer. |
-| `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, any pair connecting and scoring with its line's weight its strength, tap-then-tap, the concept popup, and a connection's card: what one concept is to the other and what it made, down to its quiz. |
+| `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck` (a side panel on a wide board only — a phone has no deck, every card being on its board), `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftScoreboard` (the header's medals and score, and the medals' panel), `CraftLogo`. |
+| `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, every medal of every topic can be won (its plays replayed by the board's own rules), a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), no quoted sentence cuts a formula in half — and the written labels: each names two concept pages in one to five words naming neither, nearly every connection of every topic has one, and any pair at all gets a relation of five words or fewer. |
+| `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, any pair connecting and scoring — the points popping off its line, the score counting up to them — with its line's weight its strength, the medals and what a connection spends of them, tap-then-tap, the concept popup, and a connection's card: what one concept is to the other and what it made, down to its quiz. |
 
 ## Topics
 
@@ -250,22 +255,90 @@ them), write them, and add them to the file in the same shape.
 
 ## Score
 
-The board keeps a **score**, top right (`craftScore`):
+The board keeps a **score**, top right (`craftScore`). **A connection found** scores
+its strength squared over 100, at least 1 (`connectionPoints`): 90 scores 81, 50
+scores 25, 20 scores 4, a faint inferred pair 1. Every pair connects; the score is
+what says which connections were worth finding. The connection's card says what it
+scored.
 
-- **A connection found** scores its strength squared over 100, at least 1
-  (`connectionPoints`): 90 scores 81, 50 scores 25, 20 scores 4, a faint inferred pair
-  1. Every pair connects; the score is what says which connections were worth finding.
-- **A connection practised** scores each question answered right on its best run at
-  20 plus the connection's strength (`practicePoints`, `SCORE`) — five right on a
-  90-strength connection is 550, many times the find. The connection's card says what
-  it scored and what each right answer is worth.
+Every find is shown scoring. Its points **pop off its line** — from the middle of the
+line, where its strength sits — rise and are gone, bigger the more they are (16 to 38
+pixels, held at one size on screen whatever the zoom), with a ring in the exam's
+colour flaring behind a strong find. The score in the header **counts up** to its new
+total with a bump, the points flying off it, and the line at the bottom reads the
+find as a sentence (*+81 · Frequency multiplies with Severity*). Reduced motion keeps
+the numbers and drops the movement.
 
-Practice is an ordinary quiz on another page, so the board can't watch it: the card's
-**Practice** leaves a note — the connection and its questions — and `completeQuiz`
-hands the quiz's right answers to `settleCraftPractice`, which scores them against the
-note if the quiz was that practice, keeping the better of the old and new runs
-(`lib/craftPractice.ts`). Practising again earns more only by getting more right.
-Clearing the board clears the score.
+Practice scores nothing. It once did — each right answer on a connection's best run,
+many times the find — but that made the score a count of quizzes taken, and the board
+a long way round to the quiz tab. A connection's **Practice** is an ordinary quiz, and
+what it earns is what any quiz earns: mastery, XP, the streak. The old practice keys
+(`craft.practice.v1`, `craft.practice.pending`) are removed on load.
+
+## Medals
+
+Every pair connects, so finding them all is only a matter of time. What isn't is
+finding the right ones: a board's score is concentrated — the notes tie some pairs
+strongly and most faintly, and a connection's points grow with the square of its
+strength — so most of it is in a few connections. The **medals** are the Pareto rule
+as a win condition (`lib/craftMedals.ts`):
+
+| Medal | Score | Within the first |
+|---|---|---|
+| **Gold** | 80% of the board's | 20% of its pairs |
+| **Silver** | 70% | 30% |
+| **Bronze** | 60% | 40% |
+
+A board of *n* concepts has *n*(*n*−1)/2 pairs — ten concepts, 45 pairs, so gold is
+80% of the score those 45 pairs hold, in the first 9 connections found. Shares of the
+pairs round down, to at least one (`MEDALS`, `medalPlan`). The board's concepts are all
+of its packs' concepts, made or not, and adding a pack makes a new board to medal on.
+
+**Capped at what can be done.** A board whose score is spread thin may hold no 20% of
+its pairs worth 80% of it — and every board starts from its seeds, so a pair can only
+be found once both its cards have been made. So each medal's target is the lesser of
+its share of the score and the most a play that keeps to the rules reaches in that
+many connections (`bestPlay`). That play is three greedy plays from the seeds — the
+pair worth most each time; a pair that makes something weighed by what it and its
+cards' best pairs then score; and the same per connection spent — and the best of
+them at each length is the cap. Each is a real play, so a capped target can always
+be met; `conceptCraftVault.test.ts` replays them on every topic by the board's own
+rules to check it. The medals' panel says when a target is capped (*the most any play
+can reach*).
+
+Over the vault, most topics' gold is capped: their score is less concentrated than
+80/20 — a topic's faint pairs are many, and each still scores at least 1 — so gold is
+the best a play can do, and asks for the strongest connections first, nearly without a
+miss. Silver and bronze are rarely capped.
+
+**Counted on the least each pair scores.** The graph's own connections count at
+their strength; any other pair at the least `connectionFor` can give it — its path
+through a concept tied to both (`leastPoints`) — because reading each such pair's pages
+takes half a millisecond and a board has thousands (Exam 6C's financial reporting
+alone, 4,656). A pair can only read stronger when found, so the estimate never puts a
+medal out of reach; on a board of several packs a pair across two of them may score
+well above its estimate, which only helps. Working a board out takes a few
+milliseconds — about fifty for the largest topic — so nothing is precomputed.
+
+**What counts is the order.** A medal looks only at the first connections found, as
+many as its share — so a find spends one connection of each medal still in play.
+Once a medal's connections are spent short of its target, it is **gone** for this
+board: clear it, or add a pack, to play again. A medal won stays won. Nothing is
+stored; where the board stands is re-read from the connections found, like the board
+(`medalStanding`).
+
+On the board:
+
+- **The header** shows the three medals as discs — filled when won, a ring while in
+  play, faint when gone — and, for the best medal still in play, what it needs: *138 to
+  go · in 6 for Gold*. Tapping it opens **the panel**: how many pairs the board holds
+  and what they are worth, and for each medal its target, its connections, a meter of
+  how far the connections counted have got, and where it stands (*won with …*, *… to
+  go · … connections left*, *missed*).
+- **A medal won** spins in at the top of the board, ringed in its colour (*Gold medal! ·
+  80% of the score in 7 connections*), and plays `complete`. A medal gone says so, and
+  what is still in play (*Gold is out of reach · Silver: 92 to go in 3*). Screen readers
+  hear both through the board's live region.
 
 ## Making concepts
 
@@ -366,19 +439,21 @@ and something it plainly makes: *Spot Rate* and *Yield Rate*, the *Yield Curve*.
 
 When a pair connects — and any pair does — **nothing opens**. The line draws in
 between the two cards, its strength pops onto it with what the two are to each other
-under it, one line at the bottom says what it scored and reads the relation as a
-sentence (*+81 · Frequency multiplies with Severity*), the tally and score move, and
+under it, its points pop off it, one line at the bottom says what it scored and reads
+the relation as a sentence (*+81 · Frequency multiplies with Severity*), the tally and
+score move — the score counting up — the medals spend a connection, and
 what it made lands beside the pair
 (brought into view if that is at the edge), a dashed line in the exam's colour drawn
 to it from the line that made it — cause, then effect. Screen readers are told what was found
 and made through a live region. A find that makes a card plays `collect`, a line
 the notes draw `correct`, a faint inferred one `select`, a topic's last connection
-`complete`. A pair found before pulses its line. Only a card dropped on itself goes
+or a medal won `complete`. A pair found before pulses its line. Only a card dropped on itself goes
 back, silently.
 
-There is nothing else to do: no prompt, no target, no timer. The tally across the
-top — *12 of 19 concepts · 14 of 61 key connections* — and the score beside it are
-the whole of it, and a topic is finished when every key connection is found.
+There is no prompt and no timer. The tally across the top — *12 of 19 concepts · 14 of
+61 key connections* — the medals and the score beside it are the whole of it: a topic
+is finished when every key connection is found, and won when its best ones were
+found first.
 
 ## The board
 
@@ -492,9 +567,8 @@ pack's add button is in that exam's colour (`ExamLogo`).
 localStorage only (`craft.v4`), the way Cowork's stores are: one board — the packs
 added (topic ids, in order), the connections found, as pair keys in the order found
 (inferred ones included — any two names on the board), and where each card was left —
-plus the filter. What practice scored is its own key (`craft.practice.v1`, pair key →
-best run), with the note a practice leaves for its quiz (`craft.practice.pending`). Nothing else is stored — the cards in hand, which find made each and
-which are new are all re-read from that one list against the graph (`boardState`:
+plus the filter. Nothing else is stored — the cards in hand, which find made each,
+which are new and where the medals stand are all re-read from that one list against the graph (`boardState`:
 every pack's seeds, then each connection in order, kept only while both its ends were in hand
 when it was found). So a vault edit that drops a concept or a connection takes it off
 the board rather than breaking it, and one that changes what a pair makes — or a
@@ -517,6 +591,8 @@ Two analytics events (`docs/analytics-and-monitoring.md`):
 - `craft_combined` — `exam`, `topic`, `outcome` (`new` or `known` — every pair connects now), for a pair
   that connects its `strength`, and for a new one how many concepts it `made`.
 - `craft_topic_completed` — `exam`, `topic`: every connection in a topic found.
+- `craft_medal_won` — `medal`, and how many `connections` it was won in on a board of
+  how many `concepts`.
 
 ## Tuning the measure
 

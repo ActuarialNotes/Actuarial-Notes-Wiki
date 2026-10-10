@@ -81,6 +81,8 @@ export interface AnalyticsEventMap {
   craft_combined: { exam: string; topic: string; outcome: string; strength?: number; made?: number }
   /** Every connection in a Concept Craft topic found. */
   craft_topic_completed: { exam: string; topic: string }
+  /** A Concept Craft medal won — its share of the board's score in its share of the pairs. */
+  craft_medal_won: { medal: string; connections: number; concepts: number }
   upgrade_clicked: Record<string, never>
   /** A Store product's link to its seller — the Store sells nothing itself (docs/store.md). */
   store_outbound_clicked: { product: string; seller: string; aisle: string }
@@ -480,6 +482,11 @@ export function trackCraftCombined(params: AnalyticsEventMap['craft_combined']) 
 /** Every connection in a Concept Craft topic found. */
 export function trackCraftTopicCompleted(params: AnalyticsEventMap['craft_topic_completed']) {
   track('craft_topic_completed', params)
+}
+
+/** A Concept Craft medal won (lib/craftMedals.ts). */
+export function trackCraftMedalWon(params: AnalyticsEventMap['craft_medal_won']) {
+  track('craft_medal_won', params)
 }
 
 /** A project attempt is created on the Projects tab (the PCPA simulator). */

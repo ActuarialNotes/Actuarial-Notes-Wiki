@@ -529,49 +529,20 @@ export function topicTally(graph: ConceptGraph, state: BoardState): TopicTally {
 
 // ─── Score ───────────────────────────────────────────────────────────────────
 
-export const SCORE = {
-  /** A connection's practice earns this much per question answered right… */
-  practiceBase: 20,
-  /** …plus this much of the connection's strength. */
-  practiceStrength: 1,
-} as const
-
 /**
  * What finding a connection scores: its strength squared over 100, at least 1
  * — so a strong connection is worth far more than a faint one (90 scores 81,
  * 50 scores 25, 20 scores 4). Any pair connects; the score is what says which
- * connections were worth finding.
+ * connections were worth finding, and the medals (`lib/craftMedals.ts`) what
+ * share of a board's score is in its best few.
  */
 export function connectionPoints(strength: number): number {
   return Math.max(1, Math.round((strength * strength) / 100))
 }
 
-/**
- * What a connection's **Practice** scores: each question answered right on its
- * best run earns `practiceBase` plus the connection's strength — so a few right
- * answers outweigh the find itself many times over.
- */
-export function practicePoints(strength: number, correct: number): number {
-  return Math.max(0, Math.floor(correct)) * (SCORE.practiceBase + SCORE.practiceStrength * strength)
-}
-
-export interface CraftScore {
-  total: number
-  /** From the connections found. */
-  found: number
-  /** From their practice. */
-  practice: number
-}
-
-/** The board's score: every connection found, and the best practice run on each (`lib/craftPractice.ts`). */
-export function craftScore(state: BoardState, practiced: Readonly<Record<string, number>> = {}): CraftScore {
-  let found = 0
-  let practice = 0
-  for (const c of state.found) {
-    found += connectionPoints(c.strength)
-    practice += practicePoints(c.strength, practiced[c.key] ?? 0)
-  }
-  return { total: found + practice, found, practice }
+/** The board's score: every connection found. Practice scores nothing — it is an ordinary quiz. */
+export function craftScore(state: BoardState): number {
+  return state.found.reduce((sum, c) => sum + connectionPoints(c.strength), 0)
 }
 
 // ─── Practice ────────────────────────────────────────────────────────────────

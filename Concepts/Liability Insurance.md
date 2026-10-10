@@ -2,12 +2,15 @@
 aliases:
   - Liability Coverage
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6a68f57804df2b040e53f47e127c56386fe28c3c4ba90b346fda80bf544ab519
-  sources: []
+  sources:
+    - "ISO CA 00 01 10 13 Business Auto Coverage Form, II.A insuring agreement and duty to defend; supplementary payments 'will not reduce the Limit of Insurance', sha256:b8e36d4e31f05a7eaad97cba8b091f8a45cf1ea302e616bad96b4c132c1457e8 — https://assets.touchpointmarkets.com/80/d7/be854d714678be5fefc9d17cc365/ca-00-01-10-13-business-auto-coverage-form.pdf"
+    - "CAS MAS-I tables (Pareto limited expected value), Pareto E[X^x], sha256:cb5674138a67f7a498b8cc90357144fd121cbcbbc7487f214557b105611a69b4 — https://www.casact.org/sites/default/files/2021-03/masi_tables.pdf"
+    - "LII Wex, 'independent contractor', entry, sha256:dc17e9075951c353b9492692ee72547cc0cbbe07870a3733fb30938519d41dc6 — https://www.law.cornell.edu/wex/independent_contractor"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Liability Insurance.md

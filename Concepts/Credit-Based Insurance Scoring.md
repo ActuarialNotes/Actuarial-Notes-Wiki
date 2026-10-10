@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:4bd5ba43710b6e1728e3f58100e1c1d5c25c602b992d9dad576235ae25fcfc2a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:be705fa8c8696aebf10f0d038f2dba40c71fc769ae6f221b6c4188c70e4cf3e7
+  sources:
+    - "FTC, Credit-Based Insurance Scores: Impacts on Consumers of Automobile Insurance (Report to Congress, July 2007), PDF pp.13-14, 29, 48-49, sha256:4ab0292ce105ff017feb03304dd6f89120b87fa76f8afea1594d7f2c7cbeb05d — https://www.ftc.gov/sites/default/files/documents/reports/credit-based-insurance-scores-impacts-consumers-automobile-insurance-report-congress-federal-trade/p044804facta_report_credit-based_insurance_scores.pdf"
+    - "NCOIL Model Act Regarding Use of Credit Information in Personal Insurance (2025 readoption text), §5A-B, §5E, §6, re-rating at renewal, sha256:77244865a5db8d1912cec5675aa3e089e5f7c42114fe2b179919a79beadb4f3f — https://ncoil.org/wp-content/uploads/2025/12/NCOIL-Credit-Model-July-2025.pdf"
+    - "Safeco Ins. Co. of America v. Burr, 551 U.S. 47 (2007), syllabus (Cornell LII), syllabus, sha256:1a96e589293bc167f65cec575a3318a6fa61a1b4eb4191f84c7eb573cd2eaee5 — https://www.law.cornell.edu/supct/html/06-84.ZS.html"
+    - "15 U.S.C. §1681b (Cornell LII), (a)(3)(C), sha256:6a76f86911643b4584aa96bbce68bbfcf097b5295d6c90e236c8256d16a02c1f — https://www.law.cornell.edu/uscode/text/15/1681b"
+    - "15 U.S.C. §1681m (Cornell LII), (a), sha256:328c82a65f0c1484276bdcc5f8ef2e0175a70a94491a87aa4a01abe456c03f06 — https://www.law.cornell.edu/uscode/text/15/1681m"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.10 operational criteria PDF p.168, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "The Institutes, CAS DISC DA Course Syllabus (© 2023), PDF pp.1-3, section 10.a-d titles, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Credit-Based Insurance Scoring.md
@@ -19,7 +26,7 @@ verification:
 - **The insurance score is not the lending score.** It is built to predict insurance loss, not default, and state laws based on the NCOIL model bar income, gender, address, ethnic group, religion, marital status and nationality from its inputs.
 - **Federal law.** The Fair Credit Reporting Act gives insurers a permissible purpose to obtain credit reports for underwriting and requires an **adverse action notice** when a consumer is charged more or refused coverage because of information in the report; the Supreme Court addressed what triggers that notice in *Safeco v. Burr* (2007). The FTC's 2007 study for Congress found scores to be effective predictors of auto claim risk, and also that scores differ markedly across racial and ethnic groups.
 - **State regulation.** Many states follow the NCOIL model act on credit in personal insurance: credit may not be the sole basis to decline, cancel or non-renew; a thin or missing credit file must be treated neutrally or on a filed, supported basis; the consumer can ask to be re-scored at renewal; and exceptions apply for extraordinary life circumstances such as serious illness, death of a spouse, divorce, job loss, identity theft or military deployment. A few states go further — California, Hawaii and Massachusetts bar credit in private passenger auto rating.
-- **The debate, as the syllabus frames it.** *For:* strong, validated predictive power; cheap, objective and hard to manipulate; its use lowers premiums for most insureds. *Against:* no agreed causal mechanism; disparate impact on minority and low-income consumers; penalising people for medical debt, recession job loss or other hardship; errors in credit files. This is a live case of [[Unfair Discrimination]] and proxy discrimination — see also [[Predictive Analytics]] and [[Emerging Regulatory Issues]].
+- **The debate.** *For:* strong, validated predictive power; cheap, objective and hard to manipulate; its use lowers premiums for most insureds. *Against:* no agreed causal mechanism; disparate impact on minority and low-income consumers; penalising people for medical debt, recession job loss or other hardship; errors in credit files. This is a live case of [[Unfair Discrimination]] and proxy discrimination — see also [[Predictive Analytics]] and [[Emerging Regulatory Issues]].
 
 > [!example]- Testing Credit as a Rating Variable {Example}
 > An auto insurer that does not yet use credit reviews a year of experience at current rates, grouped by insurance score:
@@ -67,3 +74,13 @@ verification:
 > > - **Not the sole reason.** The insurer could not non-renew her solely because of the credit change.
 > >
 > > The provisions mark the line regulators have drawn: credit is admissible as a statistical predictor, but not where the credit damage reflects a misfortune rather than the behaviour the score is taken to measure.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 10.4 covers the societal impact of credit-based insurance scores. Questions ask for the arguments for and against their use, what the FCRA requires when a score raises a premium ([[Insurance Data Regulation]]), how state rules such as the extraordinary life circumstances exception work, and why the scores raise questions of proxy discrimination.
+> - **Exam 6U:** Questions apply the loss ratio relativity test and the state regulatory framework, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Predictive is not the same as permitted:** The FTC found scores predictive of auto claims and also found they differ across racial and ethnic groups; both findings matter to the policy question.
+> - **The insurance score is not the lending score:** It is built to predict insurance loss, and state laws based on the NCOIL model bar certain inputs such as income and ethnic group.
+> - **A ban moves cost, it does not remove it:** Prohibiting credit shifts premium from low-score to high-score insureds.
+

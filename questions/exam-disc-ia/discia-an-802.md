@@ -1,0 +1,42 @@
+---
+id: "discia-an-802"
+exam: "Exam DISC-IA"
+topic: "CGL Coverage A Insuring Agreement"
+learning_objective: "10. Commercial General Liability Insurance Part 1"
+difficulty: hard
+type: multiple-choice
+bloom: analyze
+wiki_link:
+  - Concepts/CGL+Coverage+A+Insuring+Agreement
+  - Concepts/Occurrence+Coverage
+  - Concepts/Commercial+General+Liability
+answer: "D"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bd4cc70b1d119d45b84fff5ac9e0e36730e445ea2d51380016b1a2bef99099b0
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section V def 17.b (p.15), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-802.md
+---
+A sign contractor carries consecutive one-year occurrence CGL policies with different insurers: Policy 1 for 2025 and Policy 2 for 2026. On December 30, 2025 the contractor's crane falls across a street, blocking the entrance of a restaurant for the first ten days of January 2026. Nothing at the restaurant is physically damaged, but it loses ten days of business. Which policy's Coverage A applies to the restaurant's claim, and why?
+
+- A) Policy 2, because the restaurant's loss of business was actually suffered in January 2026
+- B) Policy 2, because loss of use of tangible property is deemed to occur when the claim is made
+- C) Neither, because loss of use of property that is not physically injured is not property damage at all
+- D) Policy 1, because such loss of use is deemed to occur when the occurrence causing it happened
+
+## Explanation
+
+"Property damage" includes loss of use of tangible property that is not physically injured, and the definition says all such loss of use is deemed to occur at the time of the "occurrence" that caused it. The occurrence, the crane's fall, happened on December 30, 2025, during Policy 1's period. The answer is **D**.
+
+**Why not the others**
+
+- **A** dates the damage by when the loss was felt. The definition fixes the date at the occurrence for loss of use of undamaged property.
+- **B** applies a claims-made idea. On an occurrence form the date of the claim does not set the trigger.
+- **C** reads only the first half of the definition (physical injury). Loss of use of property that is not physically injured is expressly property damage.

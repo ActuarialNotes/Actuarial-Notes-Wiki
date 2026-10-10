@@ -1,0 +1,43 @@
+---
+id: "discia-an-036"
+exam: "Exam DISC-IA"
+topic: "Insurable Interest"
+learning_objective: "3. Common Policy Concepts"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/Insurable+Interest
+  - Concepts/Homeowners+Policy
+answer: "C"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:84781cad1ecd1234943bef213184e9e2c7f07b4f7e4efdf2108762539291506f
+  sources:
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Condition L (p.16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "IRMI Insurance Glossary, 'mortgagee clause' (fetched 2026-10-10), sha256:cf74e45616f1ee2dec958c4f6eb9d8be1f8a676a89d5df0a72b2102b10fad1ed — https://www.irmi.com/term/insurance-definitions/mortgagee-clause"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-036.md
+---
+
+A homeowner whose house carries a \$180,000 mortgage, with the lender named under the HO-3's mortgage clause, deliberately burns the house down, and the insurer denies the homeowner's claim. The lender knew of no change in risk, the premium was paid up, and the lender files a signed, sworn statement of loss within 60 days of the insurer's notice. What does the mortgage clause provide?
+
+- A) The lender recovers nothing, because the owner's act voids the policy for all
+- B) The lender recovers the full value of the house, whatever its loan balance
+- C) The lender's claim is paid despite the denial, and the insurer is subrogated
+- D) The lender and the owner share the payment as their interests appear
+
+## Explanation
+
+Under the HO-3 mortgage clause, a denial of the insured's claim does not apply to a valid claim of the mortgagee that notifies the insurer of known changes in ownership, occupancy or risk, pays premium due if the insured has not, and submits a sworn statement of loss within 60 days of notice. If the insurer pays the mortgagee and denies payment to the insured, it is subrogated to the mortgagee's rights under the mortgage. The lender's recovery is for its interest. The answer is **C**.
+
+**Why not the others**
+
+- **A** — the clause exists to protect the lender from the insured's acts; without it lenders would be unlikely to lend.
+- **B** — the lender's insurable interest is its loan, not the whole value of the house.
+- **D** — the owner, who caused the loss, recovers nothing.

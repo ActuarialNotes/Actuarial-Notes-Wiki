@@ -2,12 +2,14 @@
 aliases:
   - CGL
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7ad1c14a1ce9bdc1d0f786411e1469b6d92a7362dd693bb93179878be59161cf
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0e5db715d46b2c0a431daac8eb4157fa4f0294b97ab72b18b5b96371d21e9160
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, I Cov A 1.a-b, 2.j-n; Cov B 1, Cov C 1-2; Supplementary Payments; II; III; V.13 occurrence, V.14 P&AI, V.16 PCOH, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "FC&S Editors, 'Bases of Liability Premium', PropertyCasualty360, 9 Oct 2012, entry, sha256:3098468d31acf87f67490601c66a720666953277f266b0692ff23c3d387ab3ed — https://www.propertycasualty360.com/fcs/2012/10/09/bases-of-liability-premium/"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Commercial General Liability.md
@@ -29,6 +31,7 @@ verification:
 - **Exclusions:** Most exclusions move a loss to the policy designed for it. Injury to employees goes to [[Workers Compensation Insurance|workers compensation]], auto accidents go to a business auto policy, and pollution and liquor liability have their own forms. The "business risk" exclusions remove damage to the insured's own product or work and product recalls, because the CGL insures liability to others, not the quality of what the insured makes.
 - **Who is an insured:** The named insured is covered according to its form of organization, and its employees and volunteer workers are covered while acting for it. Others, such as a project owner a contractor works for, are added as additional insureds by [[Endorsement|endorsement]].
 - **Occurrence and claims-made versions:** ISO publishes the form in an [[Occurrence Coverage|occurrence]] version and a [[Claims Made Coverage|claims-made]] version, which adds a retroactive date and extended reporting periods.
+- **The form, part by part:** Coverage A's [[CGL Coverage A Insuring Agreement|insuring agreement]] and [[CGL Coverage A Exclusions|exclusions]], [[CGL Coverage B]], [[CGL Coverage C]], [[CGL Supplementary Payments]], [[CGL Who Is an Insured]], [[CGL Limits of Insurance]] and [[CGL Conditions]] each have their own page, as do the [[CGL Endorsements|endorsements]] that modify the form and the [[Specialty General Liability Forms|other ISO general liability coverage forms]].
 
 > [!example]- Applying the Limits Across One Policy Year {Example}
 > A retailer's CGL policy has an each occurrence limit of \$1,000,000, a personal and advertising injury limit of \$1,000,000, a general aggregate of \$2,000,000 and a products-completed operations aggregate of \$2,000,000. During the year, in this order:

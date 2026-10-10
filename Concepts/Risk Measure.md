@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6a5913df81efdb65fce6b783046f0fb82f5db4c1ad203dffdf32555efa63a4ff
-  sources: []
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e4be686e38e726cff79a0a26ac5ba65b5255e479e1ffac018ff5c120b837bb6f
+  sources:
+    - "Hardy, An Introduction to Risk Measures for Actuarial Applications (SOA/CAS study note C-25-07, 2006), pp.3, 8-9, 15-23, sha256:9d0c40a0b4cb1e1e68e68744c096dd36e7422560e9eabe4ee89e539443bcddc7 — https://www.soa.org/globalassets/assets/files/edu/c-25-07.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06-02 measures, sha256:2cd18f66c1d1d9bc8162fb93bce73ddf75b766f3363ac06e3ec20e165d473773 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-02-measures-of-risk-putting-it-to.html"
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.117-118 (PDF p.19), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Directive 2009/138/EC (Solvency II), Art. 101(3), Art.101(3), sha256:17c8dd8d2f06a8d8881bfd4b031fcf662ff59f68ce5ff43f716451a4a906af94 — https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0138"
+    - "FINMA (Federal Office of Private Insurance), Technical Document on the Swiss Solvency Test (2006), pp.9-11 (expected shortfall at 99%), sha256:fdcde2ada75dc3ad2b1dd6d379ccf94af4a58f53c97d54f020c8ea06695d8137 — https://finma.ch/FinmaArchiv/bpv/download/e/SST_techDok_061002_E_wo_Li_20070118.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Measure.md
@@ -30,6 +35,8 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 
   TVaR has all four. VaR fails subadditivity. The standard deviation principle fails monotonicity (with $k = 2$, a 50/50 chance of $0$ or $10$ scores $15$ — more than a certain loss of $10$); the variance principle fails positive homogeneity and subadditivity; $(1+\theta)E[X]$ fails translation invariance.
 - **Distortion (spectral) risk measures** weight each layer of loss by $g(S(x))$, where $S = 1 - F$ and $g:[0,1] \to [0,1]$ is increasing with $g(0) = 0$, $g(1) = 1$. Those conditions make $\rho_g$ monotone and translation invariant; a **concave** $g$ also makes it subadditive, hence coherent (and comonotonic additive). Examples: proportional hazard $s^{\alpha}$ ($0 < \alpha \leq 1$), Wang $\Phi(\Phi^{-1}(s) + \lambda)$, dual $1 - (1-s)^m$ ($m \geq 1$), TVaR $\min(1, s/(1-p))$ and constant cost of capital $\nu s + \delta$ for $s > 0$. VaR is the distortion equal to $1$ for $s > 1-p$ and $0$ otherwise — a step, not concave.
+- **Basic measures for any organization.** Before tail measures come the descriptive ones. [[Frequency]] is how often losses occur and [[Severity]] how large they are; the [[Expected Value|expected value]] is the central tendency. The *range*, highest outcome minus lowest, is a rough measure that ignores how likely the extremes are. [[Variance]] and [[Standard Deviation|standard deviation]] average the deviations from the mean, treating favourable and unfavourable surprises alike. The [[Coefficient of Variation|coefficient of variation]], $\sigma / \mu$, compares risk between distributions with different means. *Semivariance* and downside standard deviation count only unfavourable deviations, and *shortfall risk* is the probability of falling below a target, with the probability of ruin the case where the target is the point capital runs out.
+- **Two families.** The CAS's 2003 ERM overview splits ERM measures into *solvency-related* measures, which look at the adverse tail (probability of ruin, shortfall risk, VaR, EPD, TVaR) and concern customers and their proxies, regulators and rating agencies; and *performance-related* measures, which look at volatility near the mean (variance, standard deviation, semi-variance, below-target risk) and concern owners and their proxies, such as stock analysts.
 - **Strategic effect.** The measure adopted for capital, limits and reinsurance shapes behaviour: a target at one return period can be met by piling risk just beyond it, while TVaR charges for the whole tail but is harder to estimate and does not exist when the mean is infinite. Solvency II uses a 99.5% one-year VaR ([[Solvency II]]); the Swiss Solvency Test uses 99% TVaR. See [[Risk Taxonomies]], [[Risk Modeling]] and [[Risk Capital]].
 
 > [!example]- VaR, TVaR and CTE for a Catastrophe Portfolio {Example}
@@ -108,3 +115,39 @@ A **Risk Measure** $\rho$ assigns a single number $\rho(X)$ to a random loss $X$
 > > $$
 > >
 > > (a) reproduces $\text{TVaR}_{0.95} = 70$, and $g(s) = s$ would return $E[X] = 10(0.20) + 40(0.08) + 50(0.02) = 6.2$. The proportional hazard premium of $22.86$ carries a margin of $16.66$ over expected loss, most of it on the remote layers, where $\sqrt{s}$ is many times $s$.
+
+> [!example]- Comparing Two Locations With Basic Measures {Example}
+> A retailer's annual property losses (\$000s) over five years were 40, 55, 60, 45 and 50 at Location A and 70, 130, 100, 90 and 110 at Location B. Treating each year equally, find the mean, range, standard deviation and coefficient of variation for each. Which location's losses are relatively more variable?
+>
+> > [!answer]-
+> > $$
+> > \begin{align*}
+> > \mu_A &= 50, \quad \text{range}_A = 60 - 40 = 20 \\
+> > \sigma_A &= \sqrt{\tfrac{(-10)^2 + 5^2 + 10^2 + (-5)^2 + 0^2}{5}} \\
+> > &= \sqrt{50} \\
+> > &= 7.07 \\
+> > \text{CV}_A &= 7.07 / 50 \\
+> > &= 0.141
+> > \end{align*}
+> > $$
+> > $$
+> > \begin{align*}
+> > \mu_B &= 100, \quad \text{range}_B = 130 - 70 = 60 \\
+> > \sigma_B &= \sqrt{\tfrac{(-30)^2 + 30^2 + 0^2 + (-10)^2 + 10^2}{5}} \\
+> > &= \sqrt{400} \\
+> > &= 20 \\
+> > \text{CV}_B &= 20 / 100 \\
+> > &= 0.200
+> > \end{align*}
+> > $$
+> > Location B's standard deviation is almost three times A's, but its average loss is twice as large. The coefficient of variation adjusts for that: 0.20 against 0.14, so B's losses are still relatively more variable, and harder to budget for as a share of their expected cost.
+
+> [!tip]- How it appears on the exam
+> - **DISC-RM:** The introduction to risk management covers basic risk measures. Questions ask what a measure shows, such as why the coefficient of variation is used to compare exposures of different sizes, which measure looks only at unfavourable outcomes, or what a VaR figure means, and may ask for a simple calculation of a mean, a standard deviation or a coefficient of variation.
+> - **Exam 9:** Risk measures set capital and premiums, so questions compute VaR, TVaR and distortion measures for a loss distribution, test coherence, and ask how the choice of measure shapes decisions, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Standard deviation needs a common scale:** Comparing standard deviations of exposures with different means overstates the risk of the larger one. Use the coefficient of variation.
+> - **The range ignores probability:** Two exposures can have the same range while one reaches its extreme far more often. The range is a rough first look, not a measure of likelihood.
+> - **VaR is not the worst case:** A 99% VaR is the loss exceeded 1% of the time, and it says nothing about how large the losses beyond it are. TVaR averages those tail losses.
+

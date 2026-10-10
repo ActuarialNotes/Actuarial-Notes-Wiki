@@ -5,13 +5,21 @@ import type { ItemStatus } from '@/data/tracks'
 // (`P`, `FM`, `MAS-I`, `CAS-5`, `CAS-7`, … — see `wikiExamIdToProgressKey`).
 //
 // Three states:
-//   'ready'       — a mature syllabus page plus a full question bank (P, FM)
-//   'beta'        — usable, still being filled out (MAS-I, MAS-II, Exams 5,
+//   'ready'       — a mature syllabus page plus a full question bank, all of it
+//                   fact checked (P, FM, MAS-I, DISC-DA and DISC-IA — the CAS exams
+//                   that pass every gate of `scripts/publication_readiness.py`)
+//   'beta'        — usable, still being filled out (MAS-II, Exams 5,
 //                   6C, 7, 8 and 9 — their banks converted from the released
-//                   papers — and PCPA, which has no paper to convert)
+//                   papers — PCPA, which has no paper to convert, and DISC-RM,
+//                   whose pages and bank are the vault's own)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
-//                   study from yet (the DISCs, Exam 6U, the SOA exams past FM).
+//                   study from yet (Exam 6U, the SOA exams past FM).
+//
+// An exam moves up when `scripts/publication_readiness.py --check` says so:
+// development → beta once every objective links a written, specific page and
+// every concept has a question; beta → ready once all of it is fact checked
+// (docs/cas-publication-plan.md).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // exam rows on the Study Guides and Quiz tabs (`components/ExamRow.tsx`, its
@@ -20,24 +28,23 @@ import type { ItemStatus } from '@/data/tracks'
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all. */
-const READY_EXAMS = new Set(['P', 'FM'])
+const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-IA'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they
  * are listed — they are visible so candidates can see what is coming, not
  * because they are usable.
  */
-// The three DISC courses have no bank because The Institutes sells their
-// sample questions in a course guide and publishes none, so their pages
-// transcribe the course syllabi. (PCPA has none either — CAS releases no PCPA
-// paper or sample questions to convert — but it is beta: its page and the
-// Projects tab's simulator are material to study from.)
+// (PCPA has no bank — CAS releases no PCPA paper or sample questions to
+// convert — but it is beta: its page and the Projects tab's simulator are
+// material to study from. The three DISCs left this set once their pages were
+// written section by section and their banks — the vault's own questions,
+// since The Institutes publishes none — covered every concept.)
 // The SOA exams past FM — FAM, SRM, PA, ALTAM, ASTAM, the ATPA assessment and
 // the FSA pathway's fellowship exams — have pages transcribed from their
 // syllabi by the syllabus pipeline (docs/syllabus-pipeline.md), and nothing else
 // yet: no question bank, concept pages mostly unwritten.
 const IN_DEVELOPMENT_EXAMS = new Set([
-  'CAS-DA', 'CAS-RM', 'CAS-IA',
   'FAM', 'SRM', 'PA', 'ALTAM', 'ASTAM', 'ATPA',
   'FSA-CFE101', 'FSA-CFE201',
   'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351',
@@ -72,7 +79,7 @@ export function examStatus(progressKey: string | null | undefined, examId?: stri
   return 'beta'
 }
 
-/** True for the exams that are still scaffolding (the DISCs, Exam 6U). */
+/** True for the exams that are still scaffolding (Exam 6U, the SOA exams past FM). */
 export function isExamInDevelopment(progressKey: string | null | undefined, examId?: string | null): boolean {
   return examStatus(progressKey, examId) === 'development'
 }

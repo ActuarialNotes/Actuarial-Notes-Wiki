@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7485d2b023756e920654ec3300cebd3254e843f900f9372669331045a73304cd
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a1919820c1c69ce28216515e3f661451ab6a224a74784054b0572624b82a1924
+  sources:
+    - "Carpenter, Bauer & Erdogan, Principles of Management v1.1 (Saylor, CC BY-NC-SA), §5.2 'Strategic Management in the P-O-L-C Framework': formulation and implementation, corporate vs business strategy, SWOT and SO/ST/WO/WT, value chain, VRIO, PESTEL, sha256:f8b7b28801d9bdb61effb2c7e7ed4269d9bf3831502508d2ddfb0688bcda5890 — https://saylordotorg.github.io/text_principles-of-management-v1.1/s09-02-strategic-management-in-the-p-.html"
+    - "Mastering Strategic Management (Saylor), §4.5 'SWOT Analysis', sha256:d6752e321fdf92132768a4b85f17be669789b83daac40c4f375c4c2bb549d974 — https://saylordotorg.github.io/text_mastering-strategic-management/s08-05-swot-analysis.html"
+    - "Mastering Strategic Management (Saylor 2012, CC BY-NC-SA 3.0), §1.4 'Understanding the Strategic Management Process', sha256:9a18fcba4b6d25aeff350c1e05a8c9beec1482af1500cb9953d940cd88b719b4 — https://saylordotorg.github.io/text_mastering-strategic-management/s05-04-understanding-the-strategic-ma.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/SWOT Analysis.md
@@ -22,7 +25,7 @@ verification:
 - **Opportunities and threats:** These come from the [[External Environment|external environment]]: customers, competitors, regulation, the economy, technology, society and the physical environment. The organization can't control them, only respond to them. The five forces give a structured way to find them in the industry, and a scan of the wider environment finds the rest.
 - **Matching the lists:** Pairing the quadrants turns a SWOT into strategic options, sometimes called a TOWS matrix. Strength-opportunity options use a strength to pursue an opportunity, strength-threat options use a strength to defend against a threat, weakness-opportunity options fix a weakness so as to pursue an opportunity, and weakness-threat options limit exposure where a weakness meets a threat.
 - **Place in strategic management:** The SWOT comes after the insurer sets its mission and goals and before it chooses a strategy. Its results feed the choice of [[Business Strategy|strategy]] at the corporate and business levels ([[Corporate-Level Strategy]], [[Business-Level Strategy]]), and it is repeated as conditions change.
-- **Limits:** A SWOT is only as good as the honesty of its inputs and the analysis that follows. Lists that are long, vague or unranked give little guidance, so a useful SWOT names the few factors that matter most and states the evidence for each.
+- **Limits:** Internal and external factors must not be confused, so a strength is not listed as an opportunity, and an opportunity must not be confused with the strategic move that would exploit it: an untapped market is the opportunity, and entering it is the move. SWOT is a relatively simple tool, best used to generate ideas rather than as a rigorous method for selecting strategies, so its results are a starting point for crafting strategy, not an ending point.
 
 > [!example]- A SWOT for a Regional Homeowners Insurer {Example}
 > A regional mutual insurer writes homeowners insurance in one western state through independent agents. With illustrative facts: it has a 70-year reputation for fair claims handling, a strong surplus and loyal agents. Its policy administration system is outdated, it has little catastrophe modelling expertise, and 40% of its policies are in areas exposed to wildfire. National insurers are withdrawing from wildfire-exposed areas, demand for homeowners coverage there is unmet, regulators are allowing wildfire mitigation discounts, reinsurance for wildfire is getting more expensive, and an insurtech is offering instant online quotes in the state. Prepare a SWOT and one option from each pairing.

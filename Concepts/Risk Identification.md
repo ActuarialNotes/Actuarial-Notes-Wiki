@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:29770408ad5e0997c5a9c4d08190c1589b0ebb2716fece99700a1b7f700c61f0
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:850a72cc72f86b3adff9b17c3d0ae6031e62e01605b35190cac92d8395849d28
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 54, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf"
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.111-112 (PDF pp.13-14), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Identification.md
@@ -20,9 +23,9 @@ verification:
 - **Holistic identification:** In [[Enterprise Risk Management|enterprise risk management]], identification covers risks that offer gain as well as loss, and it looks for connections, such as a supplier failure that is at once an operational, a financial and a reputational event. Identifying risks one department at a time misses these connections and the concentrations they create.
 - **Document analysis:** Risk assessment questionnaires and checklists list the exposures common to similar organizations. Financial statements and accounting records point to exposures, since each asset on the balance sheet can be damaged or lost and each item of revenue or expense on the income statement can fall or rise. Contracts, insurance policies, loss histories, organizational policies, flowcharts and organizational charts each show where an exposure is created, assumed or concentrated.
 - **Other methods:** A compliance review checks the organization against the laws and regulations that apply to it, which reveals legal exposures. Personal inspections of facilities and operations find hazards that documents never mention. Expertise within the organization, such as plant managers and engineers, and beyond it, such as lawyers, consultants and insurers' risk control staff, fills in what the risk manager does not know.
-- **Structured techniques:** Brainstorming, interviews, workshops and scenario analysis draw out risks that have no loss history, including emerging and strategic risks. [[Stress Testing|Stress testing]] and [[Reverse Stress Testing|reverse stress testing]] work backward from an outcome to the events that could cause it.
-- **Identification as a team:** A cross-functional team brings operations, finance, legal, sales, IT and frontline staff together, because the people closest to a process know where it fails. A team also guards against blind spots and [[Bias|bias]], though it needs a facilitator to keep a senior voice or groupthink from narrowing the list. Each risk identified is assigned an owner, who is accountable for it in the steps that follow.
-- **Output:** Identification produces a register of risks, each described by its source, the event and its consequences. The register is the input to [[Risk Assessment|risk assessment]], which measures each risk, and to treatment through [[Risk Control|risk control]] and risk financing ([[Risk Mitigation]]). It is updated as the organization and its environment change, and a [[Risk Aware Culture|risk-aware culture]] keeps new risks reaching it.
+- **Structured techniques:** Brainstorming, interviews, workshops and scenario analysis draw out risks that have no loss history, including emerging and strategic risks.
+- **Identification as a team:** A cross-functional team brings operations, finance, legal, sales, IT and frontline staff together, because the people closest to a process know where it fails. A team also guards against blind spots and [[Bias|bias]].
+- **Output:** Identification documents the conditions and events that represent material threats to the organization's objectives, or areas to exploit for competitive advantage. That record is the input to [[Risk Assessment|risk assessment]], which measures each risk, and to treatment through [[Risk Control|risk control]] and risk financing ([[Risk Mitigation]]). It is updated as the organization and its environment change, and a [[Risk Aware Culture|risk-aware culture]] keeps new risks reaching it.
 
 > [!example]- Why the Team Finds More {Example}
 > A manufacturer wants to know how likely its review is to find a given exposure, such as dependence on a single overseas supplier. With illustrative figures, the risk manager working alone finds an exposure like this with probability 0.5. The plant manager finds it with probability 0.4, the sales director with probability 0.3, and a finance analyst with probability 0.2. Find the probability the team finds it if the four miss things independently. Then suppose the finance analyst works from the same documents as the risk manager and finds nothing the risk manager would miss.

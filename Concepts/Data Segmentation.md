@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ccbc28890c94fb800ab39f54ed83309f8c1075de0b6fdacd847c00472e9992bd
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3d34f222a8e740b305644ea4503fa941997f1c96d77a155b820527d68540e827
+  sources:
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.10 statistical and operational criteria PDF pp.167-168; full credibility 1,082 and square-root rule PDF p.230, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS 2010), ch.3 homogeneity and credibility, Longley-Cook cake, changing mix PDF pp.35-36, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §12.4.3 PDF p.537 (clusters always found), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Data Segmentation.md
@@ -22,6 +25,7 @@ verification:
 - **Ratemaking practice:** develop and trend losses on homogeneous bodies of claims — property and liability separately, coverages within a line where they behave differently, jurisdictions where laws or volume warrant. The overall indication is normally produced for each jurisdiction and line whose rates are filed separately.
 - **Reserving practice (Friedland):** group claims that share coverage (the same laws, policy terms and claims handling), with enough claim counts, and similar reporting patterns, ability to set case reserves, settlement patterns, reopening likelihood and severity; policy limits are another useful cut. Do not combine segments whose relative volume is changing — see [[Mix of Business]] and [[Reserving Data Organization]].
 - **Practical limits:** a segment needs a field the systems actually capture; separate analyses cost time; and a small, stable component may not justify its own study. Friedland quotes Longley-Cook's image of a crumbly cake that can be sliced only one way at a time — slice it several ways at once and only crumbs are left. Multivariate models such as a [[Generalized Linear Model|GLM]] are the ratemaking answer: they use all the data to estimate each variable's effect.
+- **Segments from the data:** When the groups are not given in advance, [[Clustering|cluster analysis]] can propose them: it groups risks whose features are similar under a chosen [[Similarity and Distance Measures|distance measure]], without using the loss outcome. Clustering is used for policyholder segmentation and territory grouping, but it will find clusters in any data, so a proposed segment still has to pass the tests above, such as homogeneity, credibility and stability.
 
 > [!example]- Is a Sprinkler Split Worth Making? {Example}
 > A commercial property class, three years' experience:
@@ -71,3 +75,11 @@ verification:
 > > $$
 > >
 > > With $12\%$ credibility per cell, the $640$-cell table is almost entirely complement — it looks detailed and says very little. Each variable on its own is credible, but one-way analyses of correlated variables double-count. The standard resolution is a multivariate model, which estimates each variable's effect from all $9{,}600$ claims at once instead of from one cell's $15$.
+
+> [!tip]- How it appears on the exam
+> - **Exam 5:** Questions ask how to group data for ratemaking or reserving, such as which coverages to analyze separately or whether a split is credible enough to use, as in the examples above.
+> - **DISC-DA:** Section 8.4 covers segmenting data with cluster analysis. Questions ask what makes a good segment and how cluster analysis forms one from data with no target.
+
+> [!warning]- Exam traps
+> - **Finer is not always better:** Each further split makes groups more alike but less credible; many small cells can say less than a few large ones.
+> - **Clusters are not validated segments:** A clustering algorithm always returns groups. Whether they differ in expected cost is a separate question.

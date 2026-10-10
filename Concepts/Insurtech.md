@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:910e18aba562917258f2ece74090585b6a57b8e9e0334e3d6f063a1d4b5f524e
-  sources: []
+  sources:
+    - "IRMI Glossary, \"InsurTech\", definition, sha256:ae3f4ceef56193ec758a516763ace35e031c385ee96b926ce556b5fbc4258081 — https://www.irmi.com/term/insurance-definitions/insurtech"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.9 (PDF p.163) adverse selection, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurtech.md

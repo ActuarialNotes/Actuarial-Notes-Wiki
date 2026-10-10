@@ -1,0 +1,15 @@
+---
+target: Concepts/Claims Handling Process.md
+created: 2026-10-10
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv05
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: Order of activities against Tokio Marine HCC's published claims workflow (receipt; assignment/acknowledgement; coverage; contact with insured, liability-damages; resolution; closure) and Baranoff §7.3 (adjuster investigates, decides coverage, amount, pays valid claims, resists invalid); deadlines and file rules against NAIC #902 §§4-7; good-faith settlement #900 §4D; reservation of rights and non-waiver agreement against IRMI and ALFA; payment formula against CP 00 10 10 12 §D (deductible subtracted, then the lesser of that or the limit). Recomputed both examples (min(86,000-5,000, 500,000)=81,000; 70-60=10 days).
+- sources_checked: Tokio Marine HCC, Public Risk Claims — 'typical claims management process and workflow' (receipt; review/assignment/acknowledgement; coverage determination; contact with insured, liability-damages determination; resolution; closure), sha256:64a1ae6e60ed41927cd63a32887e9088e1d7f10e11237e6411b14a66077c83e4 — https://tmhcc.com/en-us/claims/public-risk-claims; Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), §7.3 'Claims Adjusting', sha256:85078f2f0eb5eeae7a77d336f6f5ff14be25519272bfc27d528e037c21424877 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-03-insurance-operations-reinsuran.html; NAIC Unfair Property/Casualty Claims Settlement Practices Model Regulation, Model #902 (Jul 1997 printing), §§2–9, pp.1–9, sha256:f33578860a5603a165819316747c996514340f371ca42f77f00621e3b3d41f55 — https://content.naic.org/sites/default/files/model-law-902.pdf; NAIC Unfair Claims Settlement Practices Act, Model #900 (Jan 1997 printing), §§1, 3, 4A–N, 5, 6A–B, 7, prefatory note, pp.1–4, sha256:ba1d03c3819ae83500abaa0d6f50bba07a896d4be0ba26b84405095c131f6ba2 — https://content.naic.org/sites/default/files/model-law-900.pdf; IRMI glossary, 'reservation of rights', sha256:ada48198a157a8c1c8d24b80c061118d4ac01e8fdc21df0f28d2cba0746333b4 — https://www.irmi.com/term/insurance-definitions/reservation-of-rights; Dunn & Fencl, Reservation of Rights 101 (ALFA International), §§1, 3: ROR generally unilateral, non-waiver agreement sometimes bilateral, untimely ROR risks waiver/estoppel, jurisdictional variation, sha256:bcfbba032e5df89d121c693bc0226a8b0c8e9f90c9f3d8a84ef46879cc162d08 — https://www.alfainternational.com/publications_news/reservation-of-rights-101/; ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), A.2.a property not covered (money), D. Deductible, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf
+- note: Medium: the six named activities are The Institutes' labels; the order is confirmed by an insurer's published workflow and Baranoff (rank 3), the compliance content by the NAIC models (rank 1).

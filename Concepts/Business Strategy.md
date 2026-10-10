@@ -1,10 +1,10 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3579d5edd9f47da964867a08a850877cf8ce161367b5261b1d8dd19c78cc1b56
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2360d5c9cb9913122de18d043db4e7e263275c4b55de6f7bc2f9da8b13e871eb
   sources: []
   open_findings: 0
   open_critical: 0
@@ -20,6 +20,7 @@ verification:
 - **Risk capital** comes from the ERM model through a [[Risk Measure|risk measure]], such as VaR or TVaR at a chosen level ([[Risk Capital]]). $r_h$ is the hurdle rate, the [[Cost of Capital|cost of capital]]. A strategy adds value when RAROC exceeds $r_h$, or equivalently when EVA (economic value added) is positive ([[Risk-Adjusted Performance]]). Ranking by RAROC and by EVA can disagree: the ratio can favour a smaller business, while EVA measures the value actually added.
 - **How risk measures and models shape strategy (Exam 9).** The ERM model turns strategic questions into comparable distributions of results. Those questions include capital adequacy, allocating capital to lines and units, reinsurance ([[Reinsurance Strategy]]), asset mix and planned growth. Plotting the alternatives by risk and return traces an **efficient frontier**, and the insurer picks a point on it within its [[Risk Appetite|risk appetite]].
 - **The choice of risk measure matters.** Changing the measure, its confidence level or the allocation method changes each unit's capital, and so its measured return and which lines look worth growing.
+- **Strategic management and levels of strategy (DISC-RM).** The [[Strategic Management Process]] sets a vision, mission and goals, analyzes the environment, formulates, implements and evaluates. Strategy is set at more than one level: [[Corporate-Level Strategy|corporate strategy]] chooses which businesses to be in, and [[Business-Level Strategy|business strategy]] chooses how each one competes, for example by cost leadership or differentiation.
 - **Strategic risk.** The risk of choosing the wrong strategy, or executing it badly, is a risk category in its own right ([[Risk Taxonomies]], [[Business Risk]]).
 - **Business goals in a model (PCPA).** The goal sets the target (loss cost, retention, litigation), the unit of analysis and the success metric. The [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)|GLM monograph]] names lack of stakeholder alignment on goals and outcomes as one of the most common reasons modelling projects fail or fall behind. Results are reported as business outcomes, such as premium movements, expected loss ratio and retention ([[Actuarial Communication]]).
 

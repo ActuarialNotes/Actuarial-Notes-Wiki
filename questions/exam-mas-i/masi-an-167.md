@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Normal+Distribution
 points: 5
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7c06fe1183fa136de4f75b2e45e85a994c4c240cef38cf99e7d74dcf5b7197b6
-  sources: []
+  sources:
+    - "Siegrist, Random, 'Special Properties of Normal Samples', n W^2/sigma^2 ~ chi-square(n); (n-1)S^2/sigma^2 ~ chi-square(n-1), independent of the sample mean; T = (M - mu)/(S/sqrt n) ~ t(n-1); F = (U/j)/(V/k); chi-square(k) mean k, variance 2k, sha256:d9a62017ae3a8488aedac3eceedb15d8b68243ae60894104ab88564ace25ff79 — https://www.randomservices.org/random/sample/Normal.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-167.md

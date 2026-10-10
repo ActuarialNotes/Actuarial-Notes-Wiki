@@ -2,13 +2,13 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-05
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e7f569286616d3b149007fcc7bd3b0d702ea17864187f9bb074d6552ff1ce983
+  content_hash: sha256:8ad16689febf773ab0c6ec668cd217f811b83e5bfdf01194e1dc5e30948c3041
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), contents/bookmarks (chapter titles, §4.4.3-4.4.4, §6.4, §7.5, §7.7), §2.1 eq. 2.1, §2.1.1 (PDF p.28), §2.1.4 (PDF p.37), §2.2.2 eq. 2.7 and flexibility vs bias/variance (PDF pp.45-46), §2.2.3 KNN (PDF pp.50-52), §4.4.3-4.4.4 (PDF pp.162-163), §5.1/§5.2 (PDF pp.206-207, 218), §7.5.1-7.5.2 (PDF pp.310-311), §7.7.2 (PDF p.318), §12.4 (PDF pp.522-523), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list Ch 1, 2 excl. §2.2.3, 3 §§3.1-3.3, 4 §§4.1-4.4 (LDA not tested), 5, 6, 7 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
-    - "CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 1-11 (PDF p.3) and James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §2.1.4-2.1.5 PDF pp.37-40 (delta: regression vs classification, logistic regression, KNN and boosting); prior-pass sections §2.1-2.2.3, §4.4.3-4.4.4, §5.1-5.2, §7.5, §7.7.2, §12.4, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "CAS Exam MAS-II Content Outline 2026, Domain C and James reading list PDF pp.3-4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Statistical Learning.md
@@ -23,6 +23,10 @@ verification:
 **Supervised vs. Unsupervised:**
 - **Supervised learning**: a labeled response $Y$ is available (e.g., regression, classification)
 - **Unsupervised learning**: no labeled response; the goal is to find structure in $\mathbf{X}$ (e.g., [[Clustering]], [[Principal Components Analysis]])
+
+**Regression vs. Classification** (James et al., §2.1.5):
+- A problem with a **quantitative** response (claim severity, pure premium) is a **regression** problem; one with a **qualitative** response taking one of $K$ classes (fraud or not, renew or lapse) is a **classification** problem
+- The line is not crisp: [[Logistic Regression]] classifies a binary response but estimates class probabilities, and [[K-Nearest Neighbors]] and boosting handle either kind of response
 
 **Prediction vs. Inference:**
 - **Prediction**: minimize test error; interpretability may be sacrificed
@@ -71,3 +75,12 @@ verification:
 > > [!answer]-
 > > **$K=1$**: very flexible — low bias, high variance (each prediction depends only on the single nearest neighbor, so it overfits noise).
 > > **$K=100$**: very rigid — high bias, low variance (predictions are averaged over many neighbors, smoothing out local patterns but potentially missing fine structure).
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 7.1 covers basic data modeling techniques. Questions describe an insurance problem and ask whether it is supervised or unsupervised, a regression or a classification problem, or a prediction or an inference task, and which kind of technique fits, such as a [[Classification Tree|classification tree]] for a yes/no outcome or [[Clustering|clustering]] for segments with no target.
+> - **MAS-II and SRM:** Questions compare methods on flexibility and interpretability and apply the bias-variance trade-off, as in the examples above.
+
+> [!warning]- Exam traps
+> - **"Logistic regression" is a classifier:** Its name says regression, but it is used for a qualitative response.
+> - **Unsupervised has no target:** If the data include the outcome to be predicted, the task is supervised, even if clustering is used along the way.
+> - **Flexibility is not accuracy:** A more flexible method has lower bias but higher variance; on new data it can predict worse than a simpler one.

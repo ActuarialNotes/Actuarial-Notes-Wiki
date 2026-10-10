@@ -2,14 +2,13 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:fc6151a204f99ea5939e6f084899bdea3f6e419714f532f08fc7fed69905b4bb
+  content_hash: sha256:ab8925b2cf6df7fab07d5957541d1f50dcc52b39fbd07b8b5c212c10cc003482
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.49-51, 61-62 (PDF pp.61-63, 73-74), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 pp.17, 23 (PDF pp.29, 35), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.2, 8 (PDF pp.14, 20), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.135 (PDF p.147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base"
+    - "IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.4 pp.49-51 (PDF pp.61-63) — hash reconfirmed, unchanged since the 2026-10-09 pass, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Exposure Base.md
@@ -30,6 +29,7 @@ Werner & Modlin give three criteria for choosing one:
 Further properties:
 
 - Common bases: earned car-years (personal auto), earned house-years (homeowners), payroll — in hundreds of dollars in the U.S. — (workers compensation), sales revenue, payroll, square footage or number of units (commercial general liability), amount of insurance (commercial business property).
+- **In underwriting (DISC-RM):** the premium base for a general liability account follows its classification. IRMI lists payroll, receipts, sales, square footage, area or man-hours for general liability, units for auto and value per \$1,000 for property, and a [[Premium Audit|premium audit]] verifies the base after the policy ends ([[Commercial General Liability]]).
 - Exposures come in the same four flavours as premium — **written**, [[Earned Exposure|earned]], unearned and [[In-Force|in-force]]; which one is used depends on the analysis, and pure premium is typically calculated on earned exposures.
 - Some bases, such as payroll and sales revenue, are highly influenced by inflation, which is what [[Exposure Trend]] measures; count-based bases (car-years, house-years) are not.
 - Where no single base is proportional to loss across the whole book, the shortfall is picked up by rating variables instead: this is the boundary between the exposure base and [[Classification Ratemaking|classification]].

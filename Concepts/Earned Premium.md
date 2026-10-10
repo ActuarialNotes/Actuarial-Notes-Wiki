@@ -2,11 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6547e0917e217955261662b748a7696a25fe09f65cc4924e04e2c005c1ad32c0
+  content_hash: sha256:2b77fb6e204a6780b1a2cf0539dacd74417a5947f79ebc2b20d5792a9148dd41
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21); Ch. 4 p.56 (PDF p.68); Ch. 5 pp.64, 68-72 (PDF pp.76, 80-84), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶38 (P-7); SSAP No. 53 ¶7-8 (53-2 to 53-3, PDF pp.348-349), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 p.9, Ch.4 p.56, Ch.5 pp.64, 68-72 (PDF pp.21, 68, 76, 80-84) — prior-pass source, re-fetched this run, hash unchanged, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Earned Premium.md
@@ -23,6 +24,7 @@ verification:
 - **Policy year** earned premium comes from one cohort only, and is fully earned $24$ months after the policy year begins (for annual policies).
 - Earning is pro rata *by default*, but the pattern must match the exposure. Werner & Modlin note that an even earning pattern does not hold for lines such as warranty, or for lines with seasonal writings such as boat owners insurance, and actuaries specify other earning patterns for them from historical experience.
 - The premium the ratemaking analysis actually uses is historical earned premium after three successive adjustments, each addressing a different distortion: brought to the **current rate level** ([[On-Leveling]]) for rate changes during and after the experience period, **developed to ultimate** where it is still changing (incomplete policy years, premium awaiting audit), and **trended** for the change in average premium from shifts in the mix of business ([[Premium Trend]]).
+- **Statutory revenue recognition:** In a U.S. insurer's statutory statements, SSAP No. 53 recognizes premium as earned by the daily pro rata or monthly pro rata method, because the exposure under most property-casualty policies does not vary much over the term; where the period of risk differs significantly from the contract period, premium is earned in proportion to the protection provided. Revenue is recognized only as the underwriting earnings process is completed, which is the NAIC's recognition concept ([[Premium Accounting]]).
 
 ![[Media/Figures/Earned_Premium.svg|340]]
 
@@ -70,3 +72,12 @@ verification:
 > > \end{align*}$$
 > >
 > > Earned premium lags written premium by $\$3{,}000{,}000$ — exactly the growth in the unearned reserve, and exactly the amount by which written premium would overstate the denominator of the loss ratio.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The revenue recognition objective asks how much of a policy's premium is earned in a period. Expect a policy written partway through a year, possibly with a mid-term endorsement or cancellation, and a question asking for the earned premium in each calendar year.
+> - **Exam 5:** Ratemaking questions build calendar year and policy year earned premium for a book and bring it to current rate level.
+
+> [!warning]- Exam traps
+> - **Earned is not collected:** Premium earns with the passage of time, whether or not the insured has paid it.
+> - **Monthly pro rata assumes mid-month:** A one-year policy written in January is $23/24$ earned by December 31 under the monthly method, not $12/12$.
+> - **Calendar year mixes cohorts:** Calendar year earned premium includes the unearned premium carried in from the prior year's writings.

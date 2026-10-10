@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b726f0d07b269ac1102045dbeb1a9e3d7d2150ac53f0590368319845c181ba57
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6dddf2eb2a3f7ec113e50c8a23ef11b995009cd4cd111aef79777accbe13b16d
+  sources:
+    - "Few, 'Effectively Communicating Numbers' (Perceptual Edge 2005), PDF p.6 (tables for look-up, graphs for shape), sha256:4de4c11e00faec2ea5fb3f4f31e240908e8356808a0253938d268359144f3a4e — https://www.perceptualedge.com/articles/Whitepapers/Communicating_Numbers.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. 2016), Ch.10 PDF p.187 (univariate results distorted), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "SAS/STAT 9.3 User's Guide, PROC MIXED 'Mixed Models Theory', Model Selection: LRT with ML or REML; boundary mixture (Self and Liang), sha256:00898035ad108f69d9ec64c3803312516f8413b9ed5e4970fa25d816fbe40edd — https://support.sas.com/documentation/cdl/en/statug/63962/HTML/default/statug_mixed_sect025.htm"
+    - "Bates, Maechler, Bolker & Walker, Fitting Linear Mixed-Effects Models Using lme4 (vignette), PDF p.35 (refit with ML for models differing in fixed effects), sha256:60474d07bdb3a511f804a6cd2e73494fd8eb5713f532e2382f69c5dea2e8782e — https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf"
+    - "R documentation AIC {stats}, Description and Details (-2 logLik + k npar, k = log(n) for BIC), sha256:f55c97cef5d53ab762953509b4e5c4da1e8891b8263ce021ef04dcb27c81b8df — https://stat.ethz.ch/R-manual/R-devel/library/stats/html/AIC.html"
+    - "Bolker et al., GLMM FAQ, LRT on the boundary: p-value approx. twice as large in the single-variance case (Pinheiro and Bates 2000), sha256:53ab8a0c586ae5893841de85a84585e1cb46e79852c7c349c9e5bedb5c63d231 — https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Summary Statistics.md
@@ -73,3 +79,13 @@ verification:
 > > \end{align*}
 > > $$
 > > The LRT of $11.4$ on $2$ degrees of freedom exceeds $\chi^2_{0.05,\,2} = 5.99$; because the slope variance is tested on its boundary, the true p-value is smaller still than the naive one, so the conclusion only strengthens. AIC also prefers Model 2. BIC, charging $\ln 500 = 6.21$ per parameter rather than $2$, narrowly prefers Model 1. When the criteria split, look at the size of the estimated slope variance and at the residual plots by policyholder before adding structure.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.1 covers traditional data analysis. Questions give a small table of policy or claim data and ask for a mean, median, standard deviation or a one-way frequency, severity or pure premium, or ask what a gap between mean and median says about skewness.
+> - **MAS-II:** Questions compare fitted mixed models by log-likelihood, AIC and BIC, as in the second example.
+
+> [!warning]- Exam traps
+> - **Average of ratios:** An overall frequency is total claims over total exposure, not the average of the levels' frequencies.
+> - **Mean of skewed losses:** For right-skewed severity the mean sits well above the median; reporting only the mean overstates the typical claim.
+> - **One-way tables confound:** A level's relativity in a one-way table includes the effect of everything correlated with it.
+

@@ -11,12 +11,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e319046a0616e7bec60d55dab03a194c0726b2db85165f9e57fff2a85cd3f59b
-  sources: []
+  sources:
+    - "Siegrist, Probability, Mathematical Statistics, and Stochastic Processes (LibreTexts/Random), 'The Student t Distribution', Var(T) = n/(n - 2) for n > 2, tending to 1, sha256:6ff2ac51f78d5041cdf14dc24203650bbb08a608351a120f40e498876fd660c7 — https://www.randomservices.org/random/special/Student.html"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-169.md

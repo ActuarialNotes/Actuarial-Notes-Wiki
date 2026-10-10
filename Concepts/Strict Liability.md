@@ -1,11 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:cb1f1f3390fa926cfb1a7a5771460259ea8220f1159bfa1f2b3793c306cc1cd2
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c32c503ff0fb43cbe2e4282c85d46b47db9a52fdad93aed51a4333836bf2f281
+  sources:
+    - "Cornell LII Wex, \"strict liability\", whole entry, sha256:d45534046effd9edd7fcb7e68b0aaaef40a26a3ae15af3dd8ab480d5ad557a06 — https://www.law.cornell.edu/wex/strict_liability"
+    - "Cornell LII Wex, \"abnormally dangerous activity\", whole entry, sha256:ebfe3cfce29c1f965f9ce4d508c731258c0a87db6b6117d516da3277fbae14ba — https://www.law.cornell.edu/wex/abnormally_dangerous_activity"
+    - "Cornell LII Wex, \"ultrahazardous activity\", whole entry, sha256:086f2b99ee5e944f2c3823938b5caf0a021fb147b60fd99ea5b5b5e689fa10ef — https://www.law.cornell.edu/wex/ultrahazardous_activity"
+    - "Cornell LII Wex, \"one-bite rule\", whole entry, sha256:83c3e494197219e1a5fe968f1117bf9880ccf680744f0c0d879135ac1feaef61 — https://www.law.cornell.edu/wex/one-bite_rule"
+    - "Cornell LII Wex, \"dram shop rule\", whole entry, sha256:702e3e7b3943a2c88ebb6dad17f2967257cdedeeabfbc765a87cdb4fb22a54bf — https://www.law.cornell.edu/wex/dram_shop_rule"
+    - "Cornell LII Wex, \"workers compensation\", whole entry, sha256:8195d152ed7e85da8dc69b09e5ec3f1ed7bf35c4ef9ba7571a60a3b87cb33718 — https://www.law.cornell.edu/wex/workers_compensation"
+    - "Cornell LII Wex, \"vicarious liability\", whole entry, sha256:57fcdf516d60286d1e2944aa84388f6fc92233e4e3400316d9881acafbc27856 — https://www.law.cornell.edu/wex/vicarious_liability"
+    - "Cornell LII Wex, \"respondeat superior\", whole entry, sha256:fd77a3983e2353c2f15adffd48d82d032d09d3a1ab40c5c752bfb4140e2baf02 — https://www.law.cornell.edu/wex/respondeat_superior"
+    - "42 U.S.C. s.9607 (CERCLA liability), via LII, section text, sha256:44d4821fc4607bf9e56abf0eb70b7b5966b58fa03e5e2e4b081c321b7fe4e1f0 — https://www.law.cornell.edu/uscode/text/42/9607"
+    - "Webb v. Zern, 422 Pa. 424 (1966) (Caselaw Access Project), quotation of Restatement (Second) s.402A, sha256:eac448a0817d7253681fb5fd8506c8b786db8c6c360e2609148f256d0947c5f0 — https://static.case.law/pa/422/cases/0424-01.json"
+    - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), exclusions c (liquor liability) and f (pollution), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Strict Liability.md
@@ -19,9 +30,9 @@ verification:
 
 - **Symbols:** $D$ is the damages assessed, $p$ the plaintiff's share of fault, and $\mathbf{1}\{\cdot\}$ equals 1 when the condition holds. The difference between the two lines is the breach: a negligence plaintiff must prove the defendant fell below reasonable care, and a strict liability plaintiff need only prove the activity caused the harm. Many comparative fault states now also reduce a strict liability award by the plaintiff's share of fault, while the traditional rule allowed only knowing assumption of the risk as a defence.
 - **Abnormally dangerous activities:** The doctrine traces to the English case *Rylands v. Fletcher* (1868), on water escaping from a reservoir. Restatement (Second) of Torts Section 520 weighs whether the activity carries a high risk of serious harm, whether reasonable care can eliminate that risk, whether it is a matter of common usage, and whether it suits the place where it is carried on. Blasting, storing explosives, transporting hazardous chemicals and fumigation are standard examples.
-- **Animals:** The keeper of a wild animal, such as a tiger or a venomous snake, is strictly liable for harm from its dangerous propensities. The keeper of a domestic animal is strictly liable only if it knew of that animal's dangerous tendency (the so-called "one-bite" rule), though many states' dog-bite statutes impose strict liability regardless. Owners of livestock are traditionally strictly liable when their animals trespass on others' land.
-- **Statutory strict liability:** Legislatures impose liability without fault in several areas. [[Workers Compensation Insurance|Workers compensation]] makes an employer pay for work injuries regardless of fault, in exchange for the employee giving up the right to sue in tort. *Dram shop* acts make a seller of alcohol liable to third parties injured by a customer it served while visibly intoxicated, or to a minor. Federal environmental law (CERCLA, the Superfund law) makes responsible parties liable for the cost of cleaning up hazardous waste sites without regard to fault.
-- **Vicarious liability:** [[Vicarious Liability]] makes one person answer for another's tort because of their relationship, such as an employer for an employee acting within the scope of employment (*respondeat superior*), or in some states a vehicle owner for a permissive driver. It is strict as to the vicariously liable party, who need not be at fault at all, even though the underlying tort may be negligence.
+- **Animals:** The keeper of a wild animal, such as a tiger or a venomous snake, is strictly liable for harm from its dangerous propensities. The keeper of a domestic animal is strictly liable only if it knew of that animal's dangerous tendency (the so-called "one-bite" rule), though many states' dog-bite statutes impose strict liability regardless.
+- **Statutory strict liability:** Legislatures impose liability without fault in several areas. [[Workers Compensation Underwriting|Workers compensation]] makes an employer pay for work injuries regardless of fault, in exchange for the employee giving up the right to sue in tort. *Dram shop* laws make a seller of alcohol liable when it serves a visibly intoxicated or underage customer who then causes harm. They are usually based on negligence rather than strict liability, but some states impose the liability without proof of fault. Federal environmental law (CERCLA, the Superfund law) makes responsible parties liable for the cost of cleaning up hazardous waste sites without regard to fault.
+- **Vicarious liability:** Vicarious liability makes one person answer for another's tort because of their relationship, such as an employer for an employee acting within the scope of employment (*respondeat superior*), or in some states a vehicle owner for a permissive driver. It is strict as to the vicariously liable party, who need not be at fault at all, even though the underlying tort may be negligence.
 - **Products:** Since the 1960s, a seller of a product in a defective condition unreasonably dangerous to the user has been strictly liable for the harm it causes, under Restatement (Second) of Torts Section 402A. This branch is covered on [[Products Liability]], and it is what made [[Asbestos]] and most [[Mass Tort|mass tort]] litigation possible.
 - **Insurance:** A strict liability judgment is a sum the insured is legally obligated to pay, so a liability policy covers it unless an exclusion applies. Several exclusions are aimed at strict liability exposures, such as the CGL's pollution exclusion and its liquor liability exclusion for insureds in the business of selling or serving alcohol, which push those risks to [[Environmental Insurance|environmental]] and liquor liability policies. Insurers also rate strictly liable classes, such as blasting contractors, much higher than ordinary contractors.
 
@@ -46,7 +57,7 @@ verification:
 > A bar keeps serving a customer who is visibly intoxicated. On the way home he runs a red light and injures another driver, whose damages are \$500,000. The drunk driver's auto policy has a \$100,000 bodily injury limit, and the state's dram shop act caps recovery against a seller at \$150,000 per person (illustrative). The bar's CGL has the standard liquor liability exclusion, but it also buys a separate liquor liability policy with a \$1,000,000 limit. How much does the injured driver collect from insurance?
 >
 > > [!answer]-
-> > The bar's liability under the dram shop act requires no proof of negligence, only that it served a visibly intoxicated customer who then caused the injury. Its CGL excludes the claim because the bar is in the business of serving alcohol, so the liquor liability policy responds, up to the statutory cap.
+> > Assume the state's dram shop act is one of those that impose liability without proof of fault, so the bar is liable because it served a visibly intoxicated customer who then caused the injury. (In most states dram shop liability is negligence-based, and the injured driver would also have to prove the bar's negligence.) Its CGL excludes the claim because the bar is in the business of serving alcohol, so the liquor liability policy responds, up to the statutory cap.
 > > $$
 > > \begin{align*}
 > > \text{Insured recovery} &= \$100{,}000 + \$150{,}000 \\
@@ -58,7 +69,7 @@ verification:
 > > The remaining \$250,000 can be pursued only against the drunk driver personally, or through the injured driver's own [[Uninsured Automobile Coverage|underinsured motorists coverage]] if it has any.
 
 > [!tip]- How it appears on the exam
-> - **DISC-IA:** Questions describe an activity and ask whether strict liability, negligence or an intentional tort governs it, or list the factors that make an activity abnormally dangerous. Others test the animal rules, the statutory examples (workers compensation, dram shop acts) and how vicarious liability relates to fault.
+> - **DISC-IA:** Questions describe an activity and ask whether strict liability, negligence or an intentional tort governs it, or list the factors that make an activity abnormally dangerous. Others test the animal rules, the statutory examples (workers compensation, CERCLA, and dram shop acts where a state imposes them without fault) and how vicarious liability relates to fault.
 > - **Coverage link:** A question may ask why a strictly liable defendant's CGL might still not pay, which points to the pollution or liquor liability exclusion and the specialty policy that fills the gap.
 
 > [!warning]- Exam traps

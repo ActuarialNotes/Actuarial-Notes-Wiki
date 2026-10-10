@@ -3,14 +3,17 @@ import { examRowAction, examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 describe('examStatus', () => {
-  it('treats P and FM as ready — no status label', () => {
+  it('treats P, FM, MAS-I, DISC-DA and DISC-IA as ready — no status label', () => {
     expect(examStatus('P')).toBe('ready')
     expect(examStatus('FM')).toBe('ready')
+    expect(examStatus('MAS-I')).toBe('ready')
+    expect(examStatus('CAS-DA')).toBe('ready')
+    expect(examStatus('CAS-IA')).toBe('ready')
     expect(EXAM_STATUS_LABEL[examStatus('P')]).toBeNull()
   })
 
   it('treats the exams that are usable but unfinished as beta', () => {
-    for (const key of ['MAS-I', 'MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+    for (const key of ['MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)
       expect(isExamInDevelopment(key)).toBe(false)
@@ -18,12 +21,12 @@ describe('examStatus', () => {
     }
   })
 
-  it('treats the DISCs as in development, never beta', () => {
-    for (const key of ['CAS-DA', 'CAS-RM', 'CAS-IA']) {
-      expect(examStatus(key)).toBe('development')
-      expect(isExamInDevelopment(key)).toBe(true)
-      expect(isExamBeta(key)).toBe(false)
-      expect(EXAM_STATUS_LABEL[examStatus(key)]).toBe('In Development')
+  it('treats DISC-RM as beta: written section by section, its own bank, fact check under way', () => {
+    for (const key of ['CAS-RM']) {
+      expect(examStatus(key)).toBe('beta')
+      expect(isExamInDevelopment(key)).toBe(false)
+      expect(isExamBeta(key)).toBe(true)
+      expect(EXAM_STATUS_LABEL[examStatus(key)]).toBe('Beta')
     }
   })
 
@@ -41,10 +44,10 @@ describe('examStatus', () => {
 
   it('matches the progress keys the exam pages resolve to', () => {
     // The vault's file names, cleaned the way WikiHome/WikiExam clean them.
-    for (const id of ['DISC-DA', 'DISC-RM', 'DISC-IA', '6U']) {
+    for (const id of ['6U']) {
       expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(true)
     }
-    for (const id of ['P-1', 'MAS-II', '5', 'PCPA', '6C', '7', '8', '9']) {
+    for (const id of ['P-1', 'MAS-II', 'DISC-DA', 'DISC-RM', 'DISC-IA', '5', 'PCPA', '6C', '7', '8', '9']) {
       expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(false)
     }
   })

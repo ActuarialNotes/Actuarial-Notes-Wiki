@@ -1,0 +1,70 @@
+---
+verification:
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6c8081f816232b8a216715fa1ec252e99a9c75f37de6305d1ffe7d77b215e513
+  sources:
+    - "NAIC Insurance Data Security Model Law (#668, 4th Qtr 2017), §4B-I, §5D, §6A, §9A(1), sha256:761e268abebbe55d4612b406d1ea1cfcba23b86264da2255ef15134da601e45f — https://content.naic.org/sites/default/files/model-law-668.pdf"
+    - "NAIC Unfair Trade Practices Act (#880), PDF with Spring 2024 text and appended Summer 2008 text, Spring 2024 §4H(3),(5) PDF pp.4-5; Summer 2008 §4G PDF pp.23-24, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
+    - "NAIC Model Bulletin: Use of Artificial Intelligence Systems by Insurers (adopted Dec 4, 2023), PDF pp.1-9, sha256:d260c950d67fa0cc60cfcabf7df9f8de1dcff0ba84b32b6a711bd5c0b76d28f8 — https://content.naic.org/sites/default/files/cmte-h-big-data-artificial-intelligence-wg-ai-model-bulletin.pdf.pdf"
+    - "Vermont DFR Insurance Bulletin No. 229 (Mar 12, 2024), PDF pp.1-11, sha256:0fa2eb6c77c4fad493df0b53612e9fd4cb815834300d37433713caaa70c215a5 — https://dfr.vermont.gov/sites/finreg/files/regbul/dfr-insurance-bulletin-229-ai.pdf"
+    - "Colorado SB21-169 as signed (C.R.S. 10-3-1104.9), (1), (3)(b), (6), (7)(a), (8)(b), PDF pp.2-8, sha256:7fda1f5b30f27b3908e2f2f35e008babcf71235bbfcb905fb7d4627174a5942b — https://leg.colorado.gov/sites/default/files/2021a_169_signed.pdf"
+    - "CAS Statement of Principles Regarding P&C Insurance Ratemaking (1988; reinstated May 2021 for U.S. reference), Principle 4, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+    - "15 U.S.C. §1681b (Cornell LII), (a)(3)(C), sha256:6a76f86911643b4584aa96bbce68bbfcf097b5295d6c90e236c8256d16a02c1f — https://www.law.cornell.edu/uscode/text/15/1681b"
+    - "15 U.S.C. §1681a (Cornell LII), (k)(1)(B)(i), sha256:d9b556114b94811875c7ebf82b608df90cf08a16f1d78eb8fc5f5bf50c4b7843 — https://www.law.cornell.edu/uscode/text/15/1681a"
+    - "15 U.S.C. §1681m (Cornell LII), (a), sha256:328c82a65f0c1484276bdcc5f8ef2e0175a70a94491a87aa4a01abe456c03f06 — https://www.law.cornell.edu/uscode/text/15/1681m"
+    - "15 U.S.C. §6801 (Cornell LII), (a), sha256:6d20f4d14fd1556205e6328722784d5ee0f923f49ceb29a586d241f7865144bc — https://www.law.cornell.edu/uscode/text/15/6801"
+    - "15 U.S.C. §6802 (Cornell LII), (a)-(b), sha256:3fca2e8411b1bad536f5fe8ef6f197c521f95a16ecc96af2419d6af0a039dc51 — https://www.law.cornell.edu/uscode/text/15/6802"
+    - "15 U.S.C. §6805 (Cornell LII), (a)(6), sha256:d3e91ba88c61fc329bf0157643eb24fbc458c0e1087beef5a86c28bf6ece1b05 — https://www.law.cornell.edu/uscode/text/15/6805"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance Data Regulation.md
+---
+
+**Insurance data regulation** is the body of U.S. federal and state law that governs what data an insurer may use about consumers, how it must protect and share that data, and what the models built on it may do to rates, underwriting and claims. The main pieces are the state rating and unfair trade practices laws, the federal Fair Credit Reporting Act and Gramm-Leach-Bliley Act, state laws based on the NAIC Insurance Data Security Model Law, and newer state rules on artificial intelligence and external data. Insurance is regulated mainly by the states, so what applies depends on which state's law governs and on what that state has adopted.
+
+> $$\text{Notify the commissioner within 72 hours} \iff D \lor \big(n \ge 250 \land (R \lor H)\big)$$
+
+- **Symbols:** This is the notification test in Section 6A of the NAIC Insurance Data Security Model Law (#668, 2017), where it has been enacted. After a licensee determines that a cybersecurity event has occurred, it must notify the state's commissioner within 72 hours if $D$, the state is its state of domicile (or home state, for a producer), or if the nonpublic information of $n \ge 250$ of the state's residents is involved and either $R$, the event requires notice to some government body under other law, or $H$, it has a reasonable likelihood of materially harming a resident or a material part of the licensee's operations.
+- **Rating laws:** State rating laws require that rates not be excessive, inadequate or unfairly discriminatory. A rate meets that standard, in the CAS *Statement of Principles Regarding Property and Casualty Insurance Ratemaking*, if it is an actuarially sound estimate of the expected value of all future costs of the risk transfer. The standard applies whatever the method: an insurer is responsible for rates developed with AI and predictive models meeting it (NAIC model bulletin, as adopted in Vermont Bulletin 229). See [[Rate Regulation]] and [[Unfair Discrimination]].
+- **Unfair trade practices:** The NAIC Unfair Trade Practices Act (#880, §4H) defines unfair discrimination to include refusing to insure, refusing to continue to insure or limiting coverage because of an individual's sex, marital status, race, religion or national origin, and refusing, canceling or limiting a property or casualty risk solely because of its geographic location, unless based on sound underwriting and actuarial principles related to actual or reasonably anticipated loss experience. States adopt their own versions.
+- **Fair Credit Reporting Act (FCRA):** A consumer reporting agency may furnish a consumer report to a person who intends to use it in underwriting insurance involving the consumer (15 U.S.C. §1681b(a)(3)(C)). An "adverse action" includes denying or canceling insurance, increasing any charge for it, or reducing coverage, in connection with underwriting (§1681a(k)). An insurer that takes adverse action based even partly on a consumer report must notify the consumer, disclose any credit score used, name the reporting agency and say it did not make the decision, and tell the consumer of the right to a free copy of the report within 60 days and to dispute its accuracy (§1681m(a)).
+- **Gramm-Leach-Bliley Act (GLBA):** Financial institutions, insurers included, have "an affirmative and continuing obligation" to respect customers' privacy and protect their nonpublic personal information (15 U.S.C. §6801). An institution may not disclose that information to a nonaffiliated third party without first giving the consumer a privacy notice and a chance to opt out, with an exception for service providers bound by a confidentiality contract (§6802). For insurers it is enforced by the state insurance authorities (§6805(a)(6)).
+- **Insurance Data Security Model Law (#668):** A licensee must keep a written information security program based on a risk assessment, with administrative, technical and physical safeguards, including encryption of nonpublic information sent over external networks or held on portable devices, oversight of third-party service providers, a schedule for retaining and destroying data, cybersecurity awareness training and a written incident response plan. Its board must oversee the program and receive a written report at least annually, and a domestic insurer certifies compliance to its commissioner each year by February 15. Licensees with fewer than ten employees are exempt from the program requirements.
+- **NAIC AI model bulletin (December 2023):** Adopted state by state, it reminds insurers that decisions made or supported by AI systems must comply with existing law and expects a written **AIS Program** to mitigate the risk of "Adverse Consumer Outcomes". The program covers governance with senior management accountable to the board, risk management including data lineage, quality, bias analysis and model drift, validation and testing, and due diligence and audit rights for third-party data and models. Regulators may ask for the program, model inventories and documentation in an investigation or market conduct examination.
+- **Colorado SB21-169 (C.R.S. §10-3-1104.9):** Prohibits insurers from unfairly discriminating based on race, color, national or ethnic origin, religion, sex, sexual orientation, disability, gender identity or gender expression, and from using external consumer data and information sources, or algorithms and predictive models that use them, in a way that does so. The commissioner adopts rules by type of insurance and insurance practice; insurers must disclose the external data they use, keep a risk management framework to test for unfair discrimination, and have an officer attest to it. Commercial insurance is outside the law except businessowners and commercial general liability policies with annual premiums of \$10,000 or less.
+- **Professional standards:** Beyond the law, an actuary's data modeling is held to the Code of Professional Conduct and the ASOPs on data quality, risk classification and modeling ([[Professional Responsibilities of the Actuary]]). Ethics asks what is right beyond what is legal ([[Data Ethics]], [[Data Ethics Checklist]]).
+
+> [!example]- Does This Breach Require Notice to the Commissioner? {Example}
+> An insurer domiciled in State D, which has enacted the Data Security Model Law, determines on Monday at 9 a.m. that an attacker copied a claims file. The file holds names with Social Security numbers for 400 residents of State X and 180 residents of State Y. Both X and Y have enacted the model law, and State X's breach-notification statute requires notice to its attorney general for this event. Which commissioners must be notified, and by when?
+>
+> > [!answer]-
+> > Names combined with Social Security numbers are nonpublic information under the model law.
+> >
+> > - **State D:** It is the insurer's state of domicile, so notice is required whatever the number of residents.
+> > - **State X:** 400 residents is at least 250, and notice to a government body is required under another law, so $R$ holds and notice is required.
+> > - **State Y:** 180 residents is below 250 and Y is not the domicile, so the model law's test is not met. Other State Y laws may still apply.
+> >
+> > Notice to D and X is due as promptly as possible and no later than 72 hours from the determination, so by Thursday at 9 a.m. The insurer must also investigate the event and keep records of it for at least five years.
+
+> [!example]- A Credit-Based Renewal Increase {Example}
+> A homeowners insurer re-scores a policyholder at renewal using a credit-based insurance score obtained from a consumer reporting agency. Her score has fallen and her premium rises 12%. What does federal law require, and what else applies if she lives in Colorado?
+>
+> > [!answer]-
+> > - **Permissible purpose:** Underwriting insurance involving the consumer is a permissible purpose for obtaining the report.
+> > - **Adverse action:** An increase in any charge for insurance, based in whole or in part on a consumer report, is an adverse action under the FCRA.
+> > - **Notice:** The insurer must notify her, disclose the score used, give the name, address and telephone number of the reporting agency with a statement that the agency did not make the decision, and tell her she may obtain a free copy of her report within 60 days and dispute its accuracy.
+> > - **Colorado:** Credit scores are listed as external consumer data and information sources, so the insurer's use of them in homeowners pricing is subject to SB21-169 and the commissioner's rules for that line: it must be able to show its use does not unfairly discriminate by a protected class.
+> > - **State credit laws:** Many states also regulate credit in personal lines directly ([[Credit-Based Insurance Scoring]]); these vary by state.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 10.2 covers how regulations and professional codes affect data modeling. Questions give a data or modeling practice and ask which law it engages, what a law requires the insurer to do (an adverse action notice, a privacy notice and opt-out, a breach notification), or which practice a regulator would challenge.
+> - Expect scenarios on external data and AI: what the NAIC bulletin expects of an insurer using a vendor's model, or why a model that omits protected classes may still need testing under Colorado's law.
+
+> [!warning]- Exam traps
+> - **Federal vs. state:** Insurance is regulated by the states. The FCRA and GLBA are federal, but GLBA is enforced for insurers by state insurance authorities, and the NAIC documents are models that apply only where a state has adopted them.
+> - **Notice to whom:** FCRA adverse action notice goes to the consumer; the model law's 72-hour notice goes to the commissioner. They answer different events.
+> - **Leaving out the protected class is not enough:** Colorado's law reaches external data and models whose *use* results in unfair discrimination, which is tested on outcomes, not on the input list.
+> - **Legal is the floor:** A practice can comply with every law here and still fail an ethics review. Questions asking what the analyst *should* do may go further than what the law requires.

@@ -2,12 +2,17 @@
 aliases:
   - ISO Commercial Property
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9e18cf8eeeecbc6d1a1fc0b24b07119399be9782fd48cc73de650b148c40bdf6
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form, A.1.a-c covered property; A.5 PPO extension $2,500; D deductible once per occurrence; F.1 coinsurance, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 00 90 07 88 Commercial Property Conditions, A concealment; C control of property; D legal action 2 years; E other insurance; F policy period/territory; I transfer of rights, sha256:3f8eba686357a15901c6ca7fc2b6999b01ac63ae5525b60a4e9597e6f39d12d5 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+90&ed=07-88"
+    - "ISO IL 00 17 11 98 Common Policy Conditions, A-F, sha256:965a8a0deb36ac7fcb29ae356d89b1ca01776dd99b1aae2a22cf46bb13611db2 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=IL+00+17&ed=11-98"
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, A.1-2, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form, A, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Commercial Property Insurance.md

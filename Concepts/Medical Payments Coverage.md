@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b972ff836eb6d934ee08d74671a1b753d2eeb511e416cb1024ed96100997da3c
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c4e95348db4575fad6f2052703a7c2324bbdf8746952e38b26321b9df9f6ce15
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part B, pp.5–6; Part A Limit of Liability B, p.4, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part B Insuring Agreement A, p.5 (re-check of the F-001 fix), sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Medical Payments Coverage.md
@@ -19,9 +21,9 @@ verification:
 
 - **Symbols:** $E_i^{(3)}$ is person $i$'s reasonable expenses for necessary medical and funeral services rendered within three years of the accident, $M$ is the Part B limit shown in the declarations, and $\mathcal{I}$ is the set of injured people who qualify as insureds. The limit applies to each person in each accident, with no per-accident aggregate.
 - **Who is an insured:** The named insured and family members are covered while occupying any motor vehicle designed mainly for use on public roads, or a trailer, and while a pedestrian struck by one. Any other person is covered only while occupying the named insured's covered auto. A pedestrian the insured strikes is not an insured under Part B and must claim under Part A liability.
-- **What counts as an expense:** Covered services include medical, surgical, X-ray, dental, ambulance, hospital and professional nursing services, prosthetic devices and funeral services. The expenses must be reasonable and the services necessary, and services after the three-year window are not paid however reasonable.
+- **What counts as an expense:** The form pays reasonable expenses incurred for necessary medical and funeral services; it does not list particular kinds of service. The expenses must be reasonable and the services necessary, and services after the three-year window are not paid however reasonable.
 - **No-fault:** Part B pays whether or not the named insured was at fault, which is its value to a passenger who would otherwise have to sue the driver, often a friend or relative, under Part A. Payment under Part B does not bar a liability claim, but the policy will not pay the same expense twice under Parts A, B and C.
-- **Exclusions:** Part B does not cover injury while occupying a motorized vehicle with fewer than four wheels, while the covered auto is used to carry people or property for a fee, other than in a share-the-expense car pool, or while occupying a vehicle used as a residence or premises. It also excludes injury in the course of employment where [[Workers Compensation Insurance|workers compensation]] benefits are required or available, injury in a vehicle the insured owns or regularly uses that is not a covered auto, and injury from war, nuclear hazards or organized racing.
+- **Exclusions:** In the ISO PP 00 01 09 18 edition, Part B does not cover bodily injury sustained (1) occupying a motorized vehicle with fewer than four wheels; (2) occupying the covered auto while it is used as a public or livery conveyance, including while the driver is logged into a transportation network platform, except a share-the-expense car pool or volunteer or charitable use; (3) occupying a vehicle located for use as a residence or premises; (4) in the course of employment if [[Workers Compensation Insurance|workers compensation]] benefits are required or available; (5) occupying or struck by a vehicle, other than the covered auto, that the named insured owns or has available for regular use; (6) occupying or struck by a vehicle, other than the covered auto, that a family member owns or has available for regular use, though this one does not apply to the named insured; (7) occupying a vehicle without a reasonable belief of being entitled to, except a family member in the named insured's owned covered auto; (8) occupying a vehicle used in an insured's business, unless it is a private passenger auto, pickup, van or a trailer used with one; (9) from war or nuclear weapons, or (10) from nuclear reaction, radiation or radioactive contamination; (11) occupying a vehicle in a racing facility for racing, a speed contest or a driver skill event; (12) occupying or struck by the covered auto while it is in a personal vehicle sharing program and used by someone else; or (13) occupying or struck by a vehicle that can fly.
 - **Limit of liability:** The limit is the most paid for each person injured in one accident, whatever the number of insureds, claims, vehicles or premiums shown. Insuring two cars does not double it.
 - **Other insurance:** For an owned vehicle, Part B shares with other applicable auto medical payments coverage in proportion to the limits. For a vehicle the insured does not own, it is excess over any other collectible auto medical payments coverage, so a passenger in someone else's car is paid first by that car's policy.
 
@@ -50,7 +52,7 @@ verification:
 > > - **(d) Covered:** Any person occupying the covered auto is an insured, so the neighbor is paid up to the per-person limit, without proving the named insured was at fault.
 
 > [!tip]- How it appears on the exam
-> - **DISC-IA:** The objective covers PAP medical payments coverage alongside [[Uninsured Automobile Coverage|uninsured motorists coverage]]. Questions describe an accident and ask who is an insured, which expenses are covered, how the per-person limit applies, and whether an exclusion removes coverage.
+> - **DISC-IA:** The objective covers PAP medical payments coverage alongside [[Uninsured Motorists Coverage|uninsured motorists coverage]]. Questions describe an accident and ask who is an insured, which expenses are covered, how the per-person limit applies, and whether an exclusion removes coverage.
 > - **Combined PAP questions:** A full PAP question asks what each of Parts A to D pays for one accident, so Part B is worked alongside the liability limits and the physical damage deductible ([[Personal Auto Policy]]).
 > - **Other insurance:** A question can place an insured in a non-owned vehicle and ask which policy's medical payments coverage pays first.
 

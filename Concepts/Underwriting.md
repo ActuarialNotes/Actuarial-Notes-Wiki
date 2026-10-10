@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7e889f7459d232c0dacf09c8d7d8c64c562dfe7e5ef72a7b8e631a47c58d99fa
-  sources: []
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f03a2f5e1e614fd7b646c1356785bf5d96f9c230ac1b41b4e2324a80f11a3382
+  sources:
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), ch. 7 'Insurance Operations' §7.1, §7.1 'Underwriting', sha256:ca16a568fa570ed4aade53cffc55f5c3eba724e809d13c0a24a8f1edddeb56f5 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-insurance-operations.html"
+    - "Risk & Insurance Education Alliance (National Alliance), 'Six Steps of the Underwriting Process' (Research Academy, 30 Jan 2023), Steps 1-6, sha256:ee0156096b5f8c331aae216b138dcade35da2127854d0bee28423df26c0d2ba0 — https://www.riskeducation.org/six-steps-of-the-underwriting-process/"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), permissible loss ratio, PDF p.151; schedule rating, PDF pp.39-45, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "42 U.S.C. §300gg-1 guaranteed availability (LII), (a), sha256:781a602e3d157aa9b24f335a56689aa8bc4226ee8b43bb2fe96eddaadbfd4977 — https://www.law.cornell.edu/uscode/text/42/300gg-1"
+    - "42 U.S.C. §300gg fair health insurance premiums (LII), (a)(1), sha256:dde28caaab7c36bb6496f4a69905a9a8664ed6ff4949fa98c24f13394b77b6e8 — https://www.law.cornell.edu/uscode/text/42/300gg"
+    - "42 U.S.C. §18063 risk adjustment (LII), (a)-(b), sha256:9cddbe7ffedcd439f672ffffe462725bd2623d9ce16c49377c23e9839767dd6b — https://www.law.cornell.edu/uscode/text/42/18063"
+    - "SOA Product Matters!, 'Accelerated Underwriting: Mortality Slippage Study and Monitoring Best Practices' (Aug 2024), whole article, sha256:c2f42898e75af19b0fc7cc05cbd4be683e7da784e00b1da9a85dc94e7c9c00c1 — https://soa.org/sections/product-dev/product-dev-newsletter/2024/august/pm-2024-08-seeman"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Underwriting.md
@@ -18,7 +25,8 @@ verification:
 > $$P_i^{\text{req}} = \frac{E[L_i]}{\text{PLR}}$$
 
 - $E[L_i]$ is the underwriter's estimate of expected losses for risk $i$, $P_i$ the premium it would be written at, and $\text{PLR}$ the permissible [[Loss Ratio|loss ratio]] — one minus the expense and profit provisions. A risk whose expected loss ratio at the offered price exceeds the PLR is declined, re-priced or written on different terms (a higher deductible, a sublimit, required risk control).
-- **The P&C process** (DISC-RM, GI-201) runs in six steps: evaluate the submission (physical, moral and morale hazards, COPE for property, loss history), develop alternatives, select one, set the premium, implement, and monitor. Results are measured by [[Underwriting Profit|underwriting profit]]; [[Underwriting Changes|changes in underwriting]] shift the mix of risks and distort loss development and trend.
+- **The P&C process** (DISC-RM, GI-201) runs in six steps: evaluate the submission (physical, moral and morale hazards, [[COPE]] for property, loss history), develop alternatives, select one, set the premium, implement, and monitor — see [[Underwriting Process]], and [[Underwriting Guidelines]] for the rules each decision applies. Results are measured by [[Underwriting Profit|underwriting profit]]; [[Underwriting Changes|changes in underwriting]] shift the mix of risks and distort loss development and trend.
+- **By line, in DISC-RM:** [[Workers Compensation Underwriting]], [[General Liability Classification]] and [[Personal Auto Underwriting]] apply the process to particular coverages.
 - **Life underwriting** (ILA-101) classifies individual applicants by mortality: full medical, simplified issue, guaranteed issue and data-driven accelerated programs trade underwriting cost and speed against [[Mortality|mortality]] slippage. Underwritten lives show **select** mortality, lower than ultimate, that wears off with duration.
 - **Group health underwriting** (GH-101, CP-321) looks at the group rather than the person: size, industry, participation and contribution rules, prior claims experience and its [[Credibility|credibility]], large claimants and pooling levels. Where law forbids health-status underwriting — the ACA individual and small group markets — risk adjustment (GH-301) transfers money between insurers for the risks underwriting can no longer price.
 

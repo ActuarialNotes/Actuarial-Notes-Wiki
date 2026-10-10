@@ -2,7 +2,7 @@
 id: "masi-an-013"
 exam: "Exam MAS-I"
 topic: "Insurance Portfolio"
-learning_objective: "Probability Models (Stochastic Processes and Survival Models)"
+learning_objective: "Statistics"
 difficulty: medium
 type: multiple-choice
 bloom: evaluate
@@ -14,12 +14,14 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:0e5bd82e3dae83eca010497fbe5a486fe1fcf8585e22849cb1acdf1ec20bbdfd
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a899c78ffea8f50297bc84f90faaad79f2449cf876d34ddbe2cebbd058f3ab03
+  sources:
+    - "Siegrist, Probability, Mathematical Statistics, Stochastic Processes (randomservices.org), ch.4 Covariance and Correlation, The Variance of a Sum (variance of a sum = sum of pairwise covariances), sha256:23ef4758146296b9865ca3f82f0e849934a667dcc8643afaa28147ad146feef7 — https://www.randomservices.org/random/expect/Covariance.html"
+    - "CAS Exam MAS-I Content Outline 2026, domain titles (B. Statistics) and Domain B tasks, PDF pp.3-4; text references (Hogg B sections incl. 2.8 linear combinations), PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-013.md

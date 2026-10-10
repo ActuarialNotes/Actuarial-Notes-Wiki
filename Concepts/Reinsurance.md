@@ -2,13 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0446cfc5f30369c0efdf8466e15a8dfeaa10ff4567dc8967410add2bf9be6956
+  content_hash: sha256:2f3fb9494bac8830c2fad1147aa883865cb743c7caa6003375d9e16e5d0aae4f
   sources:
-    - "Friedland, Reserving for Reinsurance (CAS Exam 7 study note), Ch.1 printed pp.6-22 (PDF pp.8-24), Ch.3 printed pp.48-49, 53 (PDF pp.50-51, 55), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.14 pp.330-332 (PDF pp.336-338), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.6 p.99 (PDF p.111), Ch.7 p.137 (PDF p.149), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), §7.3 'Claims Adjusting', sha256:85078f2f0eb5eeae7a77d336f6f5ff14be25519272bfc27d528e037c21424877 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-03-insurance-operations-reinsuran.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance.md
@@ -33,6 +32,8 @@ verification:
 
 Further points:
 
+- **Functions (DISC-RM).** Reinsurance gives the cedant **capacity**, both to write a single large risk and to write more premium than its surplus alone supports; **stability**, by taking out the peaks in its loss results; **catastrophe protection** against the accumulation of losses from one event; **surplus relief** while premium and unearned premium grow; **services** such as underwriting, claims and actuarial reviews and help with new products; and a way to **withdraw** from a territory or line, through a 100% quota share or portfolio reinsurance that carries the policies until they run off. See [[Pro Rata Reinsurance]] and [[Excess of Loss]] for how each form delivers them.
+- **Sources (DISC-RM).** Reinsurance is bought from professional reinsurers, from the reinsurance departments or subsidiaries of primary insurers, from Lloyd's syndicates and the Bermuda and international market, and from pools, which may be intercompany, voluntary (nuclear, aviation) or involuntary (FAIR plans, coastal pools). It is placed either through a reinsurance broker or intermediary, paid by the reinsurer, or directly with a direct-writing reinsurer whose own employees produce the business.
 - **Gross and ceded develop differently.** Excess cessions attach only to large claims, which report late and settle slowly, so the ceded pattern is longer-tailed and far more volatile than gross. Friedland's basic text prescribes no single route: some actuaries analyze gross and ceded and derive net, others gross and net, depending on data availability, the reinsurance programme and preference, with gross, ceded and net kept consistent throughout (net IBNR generally no greater than gross). Her reinsurance study note adds that ceded data often have limited credibility — low volume, large-loss and catastrophe volatility, frequent changes in terms — so actuaries typically select patterns and expected loss ratios gross and net, and take ceded as the difference.
 - Net experience is **smoother than gross**, because reinsurance caps exactly the large losses that drive volatility; net development patterns are frequently at or below gross ones.
 - In **ratemaking**, Werner reduces projected losses by the expected non-proportional recoveries and premium by the amount ceded — or, alternatively, includes the **net cost of reinsurance** (the cost of the reinsurance minus the expected recoveries) as an expense item in the indication. Proportional reinsurance may need no explicit treatment. See [[Net of Reinsurance]].

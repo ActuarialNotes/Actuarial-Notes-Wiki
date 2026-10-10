@@ -1,0 +1,52 @@
+---
+id: "discia-an-402"
+exam: "Exam DISC-IA"
+topic: "PAP Liability Coverage"
+learning_objective: "4. Personal Auto Policy"
+difficulty: hard
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/PAP+Liability+Coverage
+  - Concepts/Personal+Auto+Policy
+answer: "B"
+points: 1
+verification:
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:709b8b127c358a0a4d600c3e9ec1b7fa776e9d5633d183d168cdccff808fcfd1
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Definition J.4, p.1; Part A Other Insurance, p.4, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-402.md
+---
+While her own car is in the shop for repairs, a named insured drives a loaner car that the dealer's policy insures for liability up to \$50,000. She injures a cyclist whose damages are \$120,000. Her own PAP has a \$250,000 each person limit. How much does her own PAP pay?
+
+- A) \$0
+- B) \$70,000
+- C) \$100,000
+- D) \$120,000
+
+## Explanation
+
+The loaner is a temporary substitute for her car while it is out of normal use for repair, so it is "your covered auto" and she is an insured. But it is a vehicle she does not own, and for such a vehicle Part A is **excess** over any other collectible insurance:
+
+$$
+\begin{align*}
+\text{Dealer's policy} &= \min(120{,}000,\ 50{,}000) \\
+&= 50{,}000 \\
+\text{Her PAP} &= 120{,}000 - 50{,}000 \\
+&= 70{,}000
+\end{align*}
+$$
+
+The answer is **B**.
+
+**Why not the others**
+
+- **A** treats the loaner as uncovered. A temporary substitute is part of the definition of "your covered auto".
+- **C** shares the loss pro rata by limits, \$120,000 times 250/300, which is the rule for an owned auto, not a non-owned one.
+- **D** makes her own policy primary, ignoring the dealer's policy on the car.

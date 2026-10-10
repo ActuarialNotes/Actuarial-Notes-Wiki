@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b6e95e50c8c08bf4448a973867d060c074d3e47869030e182969a2c9eecd87bb
-  sources: []
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form, F.1 coinsurance steps (1)-(4); G.1 Agreed Value; G.2 Inflation Guard, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.1 coinsurance base; G optional coverages, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
+    - "ISO HO 00 03 05 11 Homeowners 3 – Special Form (Maine BOI copy), Section I Conditions, Loss Settlement 80%, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 'Coinsurance Clause', PDF pp.220-222, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance to Value.md

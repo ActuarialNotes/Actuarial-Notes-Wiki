@@ -1,0 +1,41 @@
+---
+id: "discia-an-431"
+exam: "Exam DISC-IA"
+topic: "HO-3 Coverage Conditions"
+learning_objective: "6. Homeowners Liability Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/HO-3+Coverage+Conditions
+  - Concepts/Homeowners+Policy
+answer: "B"
+points: 1
+verification:
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3b40afe5217e8f9d0967b32c52ca7fe05eb7ed77450f51a58e1544d4cedb28a3
+  sources:
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Sections I and II Conditions C–D, p.23, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-431.md
+---
+An insurer issued a new one-year HO-3 (HO 00 03 05 11) five months ago, and the premium is paid. Which action does the policy allow the insurer to take now?
+
+- A) Cancel because the insured made two small claims, with 30 days' notice
+- B) Cancel because the insured hid a prior fire that would have stopped issue; 30 days' notice
+- C) Cancel because the roof is older than the insurer's guidelines allow, with 10 days' notice
+- D) Decline to renew at expiration, with 10 days' notice before the expiration date
+
+## Explanation
+
+After the policy has been in effect 60 days (and it is not a renewal), the insurer may cancel only for nonpayment, or for a material misrepresentation of fact which, if known, would have stopped it issuing the policy, or for a substantial change in the risk since issue, with **30 days' notice** for the last two. Concealing a prior fire is such a misrepresentation. The answer is **B**.
+
+**Why not the others**
+
+- **A** — claims are not a ground for mid-term cancellation after 60 days; the insurer could decline to renew instead.
+- **C** — the roof's age is not a substantial change since issue, and 10 days' notice applies only to nonpayment or the first 60 days.
+- **D** — nonrenewal is allowed, but the notice is at least 30 days before the expiration date.

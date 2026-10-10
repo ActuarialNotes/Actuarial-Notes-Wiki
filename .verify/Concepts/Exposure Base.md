@@ -95,3 +95,14 @@ created: 2026-09-12
 - checks_run: F-001 re-checked against Werner Ch.4 p.49 and Ch.2 pp.17, 23 and fixed; every remaining sentence diffed against Werner Ch.1, Ch.2 and Ch.4; both examples recomputed (payroll 2.0M/1.0M; pure premiums 600/900/1,400; ratio 2.33).
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 4 pp.49-51, 61-62 (PDF pp.61-63, 73-74), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 2 pp.17, 23 (PDF pp.29, 35), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 pp.2, 8 (PDF pp.14, 20), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 7 p.135 (PDF p.147), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
 - note: The critical (AOI as the homeowners base) is fixed: house-years is the base, AOI a rating variable, per Werner. Two minor findings opened, applied and resolved. Confidence medium: vault-authored examples.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv04
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: delta check: git diff since the 2026-10-09 verified pass (commit 90f8c02d7) adds one bullet ('In underwriting (DISC-RM)'); its IRMI list (payroll, receipts, sales, square footage, area, man-hours for GL; per unit auto; per $1,000 property) diffed against IRMI 'exposure base', and premium audit verifying the base against IRMI 'premium audit'; Werner re-fetched, sha256 6b214d4d... unchanged
+- sources_checked: IRMI Glossary, 'exposure base', entry, sha256:47e94e12e79df29163b37da0ab98b8194ba29990c124768a2200b11b65f9b3d0 — https://www.irmi.com/term/insurance-definitions/exposure-base; IRMI Glossary, 'premium audit', entry, sha256:4d303e9e2670eb03ca6e5050b336726d99d40c4294ec4a273a9a9f79a6b79909 — https://www.irmi.com/term/insurance-definitions/premium-audit; Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.4 pp.49-51 (PDF pp.61-63) — hash reconfirmed, unchanged since the 2026-10-09 pass, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Only the DISC-RM bullet changed since the last pass, and it matches IRMI word for word in substance. The rest of the page stands on the 2026-10-09 pass against Werner. Medium, as before.

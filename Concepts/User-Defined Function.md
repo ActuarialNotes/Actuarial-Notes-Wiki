@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:9d405d4a165c805193a4480dec2a83cffda686bf3cc828766925ae1e3f64bf50
-  sources: []
+  sources:
+    - "Microsoft Learn, SQL Server: User-defined functions, Types of functions: scalar functions return a single value; table-valued functions return a table, sha256:941f4f09b6fa447e13911f0e67beaf0af3b11bb0e9a3e3107f25b0683a3d637b — https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/user-defined-functions"
+    - "Microsoft Learn, SQL Server: Scalar UDF inlining, 'Performance of scalar UDFs': iterative invocation, once per qualifying tuple, sha256:92e7c2723f681df926fffedee54758093b6c9def70f3b6986ef46c4d2a581ec4 — https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/scalar-udf-inlining"
+    - "MySQL 8.4 Reference Manual §15.1.17 CREATE PROCEDURE and CREATE FUNCTION, CREATE FUNCTION syntax: RETURNS type, [NOT] DETERMINISTIC, RETURN body, sha256:5b29ff65a71e8d62639fc9a578e82e8abe906fec9e2bfe5c81352970219b8384 — https://dev.mysql.com/doc/refman/8.4/en/create-procedure.html"
+    - "PostgreSQL 17 Documentation, §9.18 CASE: if the ELSE clause is omitted and no condition is true, the result is null, sha256:30ef51aafd582617bbc6b538f21fb77149001f937cc795e23f54b4501db45146 — https://www.postgresql.org/docs/17/functions-conditional.html"
+    - "PostgreSQL 17 Documentation, CREATE FUNCTION: RETURNS / RETURNS TABLE, IMMUTABLE/STABLE/VOLATILE, sha256:66c343eafe0f954058bf093fe5e5bf42777f7da017baa805848924a2e1568024 — https://www.postgresql.org/docs/17/sql-createfunction.html"
+    - "PostgreSQL 17 Documentation, SQL functions; functions returning sets / RETURNS TABLE used as table sources in FROM, sha256:95abe7b3a4aeb7a06cb4e3070a9dd0af02907728d0b6685379a2fe668ace8b22 — https://www.postgresql.org/docs/17/xfunc-sql.html"
+    - "PostgreSQL 17 Documentation, §11.7 index on expression, sha256:fd3493d2effa9046566d392567b4790e94614cd2d0e869034286bcf5b2568738 — https://www.postgresql.org/docs/17/indexes-expressional.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/User-Defined Function.md

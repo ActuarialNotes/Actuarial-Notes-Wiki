@@ -9,6 +9,7 @@ import { pageMentions } from './conceptGraph'
 import { filterQuestions, parseQuestion, type Question } from './parser'
 import { examPageIdFromFile } from './examMenu'
 import { examStatus } from './examStatus'
+import { examHue } from './examColors'
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 const VAULT = resolve(__dirname, '../../..')
@@ -59,9 +60,11 @@ function playEverything(graph: CraftGraph, seeds: string[]) {
  */
 describe('Concept Craft over the vault', () => {
   it('gives every exam that can be studied a board', () => {
+    // Requirements that are not rungs of the ladder (the DISCs) have no hue,
+    // and so no board — the map is the ladder.
     const studiable = Object.keys(examPages)
       .map(f => ({ id: examPageIdFromFile(f), key: wikiExamIdToProgressKey(examPageIdFromFile(f)) }))
-      .filter(e => examStatus(e.key, e.id) !== 'development')
+      .filter(e => examStatus(e.key, e.id) !== 'development' && examHue(e.key) !== undefined)
     for (const e of studiable) expect(topics.some(t => t.exam === e.key), e.id).toBe(true)
   })
 

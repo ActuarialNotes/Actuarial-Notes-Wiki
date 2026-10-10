@@ -14,12 +14,17 @@ wiki_link:
   - Concepts/Type+I+Error
 points: 3
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:954e868c874fbcce4ce6a43cbe3388720de7f5548c7a002d132352bbda45240e
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:61771c13d7ae1b386667798e065a1543673665615f26bf3deebb379b99560c43
+  sources:
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7.2 Scheffe's method (all contrasts; C-hat +/- sqrt((r-1) F_{alpha; r-1, N-r}) s_C, s_C^2 = sigma-hat^2 sum c_i^2/n_i), sha256:25e822151f4f779425f69dea32f1f44450a2355e22e576bfc43dbbcd8db2e532 — https://www.itl.nist.gov/div898/handbook/prc/section4/prc472.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7.1 Tukey's method (all pairwise comparisons, exact 1 - alpha for equal n; limits +/- q/sqrt(2) sigma-hat sqrt(2/n)), sha256:8e7fc4947d95379aaae75b31fefc4b6f7dbf0c1604f3132ca27ae8238e4f77a9 — https://www.itl.nist.gov/div898/handbook/prc/section4/prc471.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7.3 Bonferroni's method (g statements chosen in advance; t_{1-alpha/(2g), N-r} s_C; at least 1 - alpha), sha256:891d83c90afee1c86a6f33623ffcc5825833a236cc12b89776a755f694ef72f9 — https://www.itl.nist.gov/div898/handbook/prc/section4/prc473.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §7.4.7 How can we make multiple comparisons? (pairwise tests repeated over all pairs do not hold the overall significance level), sha256:eec606ca847e4f22c97e8c440d0b7033e0fd7362f3f5830a7ea48dee47cc8d32 — https://www.itl.nist.gov/div898/handbook/prc/section4/prc47.htm"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-166.md
@@ -66,7 +71,7 @@ $$
 **Common wrong entries**
 
 - **2.05** — leaves out the factor $k - 1$, using $\sqrt{F}$ alone.
-- **16.57** — forgets the square root, using $(k - 1)F$ as the multiplier.
+- **16.58** — forgets the square root, using $(k - 1)F$ as the multiplier.
 - **3.24** — uses $\sqrt{\hat\sigma^2/n}$, the standard error of one mean, instead of the standard error of a difference.
 
 ## Part b (1 point)

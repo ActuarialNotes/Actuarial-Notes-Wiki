@@ -1,17 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9714fb86621547b10c5fb797de79e7f6fedfcb50c3afeef44a5b0aa7855138b0
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a4bc9d9b6cbc049dfd9ba689edffde887113531e1f4872decb2d9641b82459c7
+  sources:
+    - "Wikipedia, 'Insurability' (fetched 2026-10-10), sha256:68a5a12ac2c667fd605a4bb9c343733bee449dc6a0d6e8c1adc8928182da0233 — https://en.wikipedia.org/wiki/Insurability"
+    - "IRMI Insurance Glossary, 'pure risk' (fetched 2026-10-10), sha256:53c02db03b0c4161afef15f3c858c900ee18e236a7a33bad7d389f085eabe39d — https://www.irmi.com/term/insurance-definitions/pure-risk"
+    - "IRMI Insurance Glossary, 'speculative risk' (fetched 2026-10-10), sha256:33cd8e29012019052d89c1dafc07296e1b395ae4bb0addc4f1e6b9d23ade348e — https://www.irmi.com/term/insurance-definitions/speculative-risk"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Exclusions A.3 water/flood, A.6 war (pp.12-13), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "Brainscape flashcards 'Assignment 5: Insurance as a Risk Management Technique' (CAS Online Course 1 pack), card 5, read via WebFetch 2026-10-10, no digest — https://brainscape.com/flashcards/assignment-5-insurance-as-a-risk-managem-12871202/packs/21196986"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurable Risk.md
 ---
 
-**Insurable Risk** is a [[Loss Exposure|loss exposure]] that private insurers can cover on a sound commercial basis because it has the characteristics of an ideally insurable loss exposure. The Institutes list six: it involves pure risk, its losses are accidental, they are definite and measurable, it is one of a large number of similar exposure units, it is independent of the others and not catastrophic, and it can be covered for an economically feasible premium. Few real exposures meet all six, so the list is a benchmark for judging how well, and on what terms, an exposure can be insured.
+**Insurable Risk** is a [[Loss Exposure|loss exposure]] that private insurers can cover on a sound commercial basis because it has the characteristics of an ideally insurable loss exposure. Six characteristics are commonly listed: it involves pure risk, its losses are accidental, they are definite and measurable, it is one of a large number of similar exposure units, it is independent of the others and not catastrophic, and it can be covered for an economically feasible premium. Few real exposures meet all six, so the list is a benchmark for judging how well, and on what terms, an exposure can be insured.
 
 > $$\text{CV}\big(\bar X_n\big) = \frac{\sigma}{\mu}\sqrt{\frac{1 + (n-1)\rho}{n}}$$
 
@@ -58,7 +63,7 @@ verification:
 > > \text{CV}_{\text{flood}} &= 9.95
 > > \end{align*}
 > > $$
-> > The flood's expected cost is only \$800 a home a year, so the premium is affordable. The problem is the catastrophe: in a flood year the insurer owes \$800,000,000, a hundred times the expected annual flood loss, and writing more valley homes would not reduce that. The fire pool's annual loss has a standard deviation under a quarter of its \$4,000,000 mean, and doubling the pool would cut that share by about 30%.
+> > The flood's expected cost is only \$2,000 a valley home a year, so the premium is affordable. The problem is the catastrophe: in a flood year the insurer owes \$800,000,000, a hundred times the expected annual flood loss, and writing more valley homes would not reduce that. The fire pool's annual loss has a standard deviation under a quarter of its \$4,000,000 mean, and doubling the pool would cut that share by about 30%.
 
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The objective is to describe the characteristics of an ideally insurable loss exposure. Questions ask for the list, or give an exposure, such as flood, earthquake, war, a business's market losses or wear and tear, and ask which characteristics it fails and why.

@@ -1,15 +1,15 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-10-09
+  confidence: medium
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1776e5673c88a2f38f18a574345f671876b1e509aead2644a276e9c0c9653b76
+  content_hash: sha256:479557bf74c864b5bdf3e9b840f1c711ba85bc2987068ce9c6d8cf369bc30459
   sources:
     - "The Institutes, CAS DISC RM – Risk Management and Insurance Operations Course Syllabus (© 2023), PDF pp.1-4, sha256:34fbee38024d3433de5d84c09138114c56edfb0336468dfefefdc78e23f67eac — https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf"
-    - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
-    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced', sha256:a84507a4d89728d73d486a1baae822d65d097911608d6cb7f89be5470e5f3e3d — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
-    - "CAS, 'CAS and The Institutes Announce Refresh of Data Insurance Series Courses (DISCs)' (04/21/2023): Online Course 1 and Online Course 2 refreshed to DISC RM and DISC IA, sha256:51266be995b266f7112f32ceb54cebc9ce93888e78d20669f3e783b4b5b3d687 — https://casact.org/article/cas-and-institutes-announce-refresh-data-insurance-series-courses-discs"
+    - "CAS, CAS Data and Insurance Series Courses page, copy fetched 2026-10-10 (browser user agent; the cache fetcher got HTTP 504): 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)', each linking its 2022-12 syllabus PDF; 'Each course itself contains learning objectives and all the educational material to meet these objectives and successfully complete the exam. The course fee includes one attempt at the exam.'; Textbook 'identical to the online course', Review Notes 'a condensed version of the textbook', Course Guide 'sample questions and answers', Flashcards — 'supplemental ... but are not required'; 'Register for CAS DISCs' links https://web.theinstitutes.org/casualty-actuarial-society, sha256:da8a31d8a4e331bb240d5924a56b3eb1f037469fc043f20151abbe63020ae947 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
+    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced'; 'Candidates must pass a final course exam to receive course credit', copy fetched 2026-10-10, sha256:95547588717fc74e8126c8154fbe114d253140cd8aca54fee99ffefcbf0f6768 — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
+    - "CAS, 'CAS and The Institutes Announce Refresh of Data Insurance Series Courses (DISCs)' (04/21/2023): Online Course 1 and Online Course 2 refreshed to DISC RM and DISC IA, copy fetched 2026-10-10, sha256:07a842f4507364406fbe810ff0eb24801db515324e504c16b18cfac0ba933383 — https://www.casact.org/article/cas-and-institutes-announce-refresh-data-insurance-series-courses-discs"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam DISC-RM (CAS).md
@@ -29,10 +29,10 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 1. Introduction to Risk Management
 > 1. The [[Risk Management|Risk Management Environment]]
-> 2. [[Risk Management|Objectives and Benefits]]
-> 3. Basic [[Risk Measure|Risk Measures]]
-> 4. [[Risk Taxonomies|Classifications and Categories]]
-> 5. [[Risk Management|Process for Managing Risk]]
+> 2. [[Risk Management Objectives|Objectives and Benefits]]
+> 3. [[Basic Risk Measures]]
+> 4. [[Risk Classifications|Classifications and Categories]]
+> 5. [[Risk Management Process|Process for Managing Risk]]
 
 > [!example]- 2. Identifying Risk
 > 1. [[Risk Identification|Holistic Risk Identification]]
@@ -42,16 +42,16 @@ The Institutes gives the topics no exam weights.
 > [!example]- 3. Managing Business Continuity Risk
 > 1. [[Organizational Resilience|Organizational Resiliency]]
 > 2. [[Business Continuity Management]]
-> 3. [[Business Continuity Management|Business Continuity Planning]]
+> 3. [[Business Continuity Plan|Business Continuity Planning]]
 
 > [!example]- 4. Treating Risk
-> 1. [[Risk Mitigation|Risk Treat Fundamentals]]
-> 2. The Evolution of [[Risk Mitigation|Risk Treatment]]
-> 3. [[Risk Mitigation|Risk Treatment]] Applications
-> 4. [[Enterprise Risk Management|Treating Risk Holistically]]
+> 1. [[Risk Treatment|Risk Treat Fundamentals]]
+> 2. The Evolution of [[Risk Treatment]]
+> 3. [[Risk Treatment]] Applications
+> 4. [[Holistic Risk Treatment|Treating Risk Holistically]]
 
 > [!example]- 5. Insurance as a Risk Management Technique
-> 1. Using [[Risk Transfer|Insurance to Treat Risk]]
+> 1. Using [[Insurance as a Risk Management Technique|Insurance to Treat Risk]]
 > 2. Managing [[Property Loss Exposure|Personal Property Exposures]]
 > 3. Managing [[Liability Loss Exposure|Personal Liability Exposures]]
 > 4. Analyzing [[Property Loss Exposure|Commercial Property Loss Exposures]]
@@ -65,19 +65,19 @@ The Institutes gives the topics no exam weights.
 > 5. The [[Insurtech|Digitization of Insurance]]
 
 > [!example]- 7. Insurance Marketing and Distribution
-> 1. [[Insurance Industry|Property-Casualty Insurer Marketplace]]
-> 2. Unique Factors in the [[Insurance Industry|Property-Casualty Insurer Marketplace]]
+> 1. [[Property-Casualty Insurance Marketplace|Property-Casualty Insurer Marketplace]]
+> 2. Unique Factors in the [[Property-Casualty Insurance Marketplace|Property-Casualty Insurer Marketplace]]
 > 3. [[Insurance Marketing|Insurer Marketing Activities]]
 > 4. [[Insurance Distribution Systems|Insurance Distribution Systems and Channels]]
 > 5. [[Insurance Producer|Functions of Insurance Producers]]
 > 6. Selecting [[Insurance Distribution Systems|Distribution Systems and Channels]]
 
 > [!example]- 8. The Underwriting Function
-> 1. [[Underwriting|Underwriting Activities]]
+> 1. [[Underwriting Authority|Underwriting Activities]]
 > 2. [[Underwriting Authority]]
 > 3. [[Underwriting Policy|Constraints in Establishing Underwriting Policy]]
-> 4. Implementing [[Underwriting Policy]]
-> 5. Steps in the [[Underwriting|Underwriting Process]]
+> 4. Implementing [[Underwriting Guidelines|Underwriting Policy]]
+> 5. Steps in the [[Underwriting Process]]
 > 6. Measuring [[Underwriting Profit|Underwriting Results]]
 
 > [!example]- 9. Underwriting Commercial Property Coverage
@@ -93,22 +93,22 @@ The Institutes gives the topics no exam weights.
 > 2. Factors that Influence the [[Period of Restoration|Maximum Period of Restoration]]
 > 3. Factors that Influence the [[Business Income Coverage|Maximum Loss]] During the [[Period of Restoration]]
 > 4. [[Insurance to Value]] for [[Business Income Coverage]]
-> 5. Classifying [[Commercial General Liability|General Liability]] Accounts
+> 5. [[General Liability Classification|Classifying General Liability Accounts]]
 > 6. [[Commercial General Liability]] [[Exposure Base|Premium Bases]]
-> 7. [[Underwriting]] [[Premises and Operations Liability]]
-> 8. [[Underwriting]] [[Products and Completed Operations Liability]]
-> 9. [[Underwriting]] [[Commercial Crime Insurance]]
+> 7. [[Underwriting Process|Underwriting]] [[Premises and Operations Liability]]
+> 8. [[Underwriting Process|Underwriting]] [[Products and Completed Operations Liability]]
+> 9. [[Underwriting Process|Underwriting]] [[Commercial Crime Insurance]]
 
 > [!example]- 11. Underwriting Other Types of Coverage
-> 1. [[Business Auto Coverage|Business Auto]] [[Underwriting]] Considerations – [[Liability Insurance|Liability Coverage]]
-> 2. [[Business Auto Coverage|Business Auto]] [[Underwriting]] Considerations – [[Auto Physical Damage Coverage|Physical Damage Coverage]]
-> 3. [[Workers Compensation Insurance|Workers Compensation]] [[Underwriting]] Considerations
-> 4. [[Underwriting]] [[Umbrella Liability Insurance|Commercial Umbrella]] and [[Excess Insurance|Excess Liability Insurance]]
-> 5. [[Underwriting]] [[Personal Auto Policy|Personal Auto Insurance]]
+> 1. [[Business Auto Coverage|Business Auto]] [[Underwriting Process|Underwriting]] Considerations – [[Liability Insurance|Liability Coverage]]
+> 2. [[Business Auto Coverage|Business Auto]] [[Underwriting Process|Underwriting]] Considerations – [[Auto Physical Damage Coverage|Physical Damage Coverage]]
+> 3. [[Workers Compensation Underwriting|Workers Compensation Underwriting Considerations]]
+> 4. [[Underwriting Process|Underwriting]] [[Umbrella Liability Insurance|Commercial Umbrella]] and [[Excess Insurance|Excess Liability Insurance]]
+> 5. [[Personal Auto Underwriting|Underwriting Personal Auto Insurance]]
 
 > [!example]- 12. Risk Control and Premium Auditing
 > 1. [[Risk Control|Insurer Risk Control Goals]]
-> 2. [[Risk Control|Risk Control Services]] Provided by [[Insurer|Insurers]]
+> 2. [[Risk Control|Risk Control Services]] Provided by [[Types of Insurers|Insurers]]
 > 3. Cooperation Between [[Risk Control]] and Other [[Insurance Operations|Insurer Functions]]
 > 4. Reasons for [[Premium Audit|Premium Auditing]]
 > 5. [[Premium Audit|Premium Auditing Process]]
@@ -117,24 +117,24 @@ The Institutes gives the topics no exam weights.
 > [!example]- 13. The Claims Function
 > 1. Overview of the [[Claims Handling|Claims Function]]
 > 2. [[Claims Handling|Claims Department Structure, Personnel, and Performance]]
-> 3. [[Claims Handling|Claims Measures]] Used to Ensure [[Market Conduct Regulation|Regulatory Compliance]]
-> 4. The [[Claims Handling|Claims Handling Process]]
+> 3. [[Unfair Claims Settlement Practices|Claims Measures Used to Ensure Regulatory Compliance]]
+> 4. The [[Claims Handling Process]]
 > 5. Framework for [[Coverage Analysis]]
-> 6. Applying the [[Claims Handling|Claims Handling Process]] and the Framework for [[Coverage Analysis]]
+> 6. Applying the [[Claims Handling Process]] and the Framework for [[Coverage Analysis]]
 
 > [!example]- 14. Understanding Reinsurance
 > 1. [[Reinsurance]] and its Functions
 > 2. [[Reinsurance]] Sources
 > 3. [[Types of Reinsurance|Reinsurance Transactions]]
-> 4. Types of [[Types of Reinsurance|Pro Rata Reinsurance]]
+> 4. Types of [[Pro Rata Reinsurance]]
 > 5. Types of [[Excess of Loss|Excess of Loss Reinsurance]]
 > 6. [[Insurance-Linked Securities|Alternatives to Traditional Reinsurance]]
 
 > [!example]- 15. Insurer Strategic Management
-> 1. [[Business Strategy|Strategic Management Process]]
-> 2. The [[Porter's Five Forces|Five Forces]] and [[SWOT Analysis|SWOT]] Methods of Analyzing the [[Business Strategy|Environment]]
-> 3. Determining [[Business Strategy|Strategy at Different Organizational Levels]]
-> 4. [[Business Strategy|Strategic Management]] Case
+> 1. [[Strategic Management Process]]
+> 2. The [[Porter's Five Forces|Five Forces]] and [[SWOT Analysis|SWOT]] Methods of Analyzing the Environment
+> 3. Determining [[Levels of Strategy|Strategy at Different Organizational Levels]]
+> 4. [[Strategic Management Process|Strategic Management]] Case
 > 5. The [[Underwriting Cycle|Insurance Underwriting Cycle]]
 
 ## Source Material

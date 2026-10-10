@@ -1,0 +1,43 @@
+---
+id: "discia-an-020"
+exam: "Exam DISC-IA"
+topic: "Written Premium"
+learning_objective: "1. Introductory Insurance Accounting"
+difficulty: medium
+type: multiple-choice
+bloom: understand
+wiki_link:
+  - Concepts/Written+Premium
+  - Concepts/Premium+Accounting
+  - Concepts/Endorsement
+answer: "A"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:490d833f92755b8ce40e1c9689c9be37d8fd77caaed5f3e9a1c68ad78064bdb1
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 53 ¶6 and fn.1, ¶9, ¶15 (PDF pp.348-350); SSAP No. 62R ¶49 (PDF p.446), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-020.md
+---
+
+Which of the following is recorded as statutory written premium of calendar year 2025?
+
+- A) Additional premium for an endorsement effective November 15, 2025
+- B) Premium received in December 2025 for a policy effective January 15, 2026
+- C) A flat service charge for paying a 2025 policy's premium in installments
+- D) A ceding commission received in 2025 from a quota share reinsurer
+
+## Explanation
+
+Additional premium for an endorsement is recorded on the endorsement's effective date, so an endorsement effective November 15, 2025 adds to 2025 written premium, with its unexpired part held as unearned premium. The answer is **A**.
+
+**Why not the others**
+
+- **B** — premium paid before the policy's effective date is an advance premium liability, excluded from written premium until the coverage begins in 2026.
+- **C** — a flat installment service charge that meets SSAP No. 53's conditions is reported as other income, not premium.
+- **D** — a ceding commission is an allowance from the reinsurer, netted against ceded premium payable; it is not premium the insurer writes.

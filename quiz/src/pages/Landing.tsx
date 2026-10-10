@@ -70,6 +70,9 @@ const EXAMS = [
   { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'] as const, progressKey: 'FM' },
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'] as const, progressKey: 'MAS-I' },
   { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'] as const, progressKey: 'MAS-II' },
+  { value: 'Exam DISC-DA', label: 'DISC-DA', tracks: ['ACAS'] as const, progressKey: 'CAS-DA' },
+  { value: 'Exam DISC-RM', label: 'DISC-RM', tracks: ['ACAS'] as const, progressKey: 'CAS-RM' },
+  { value: 'Exam DISC-IA', label: 'DISC-IA', tracks: ['ACAS'] as const, progressKey: 'CAS-IA' },
   { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
   // Exam 6 is sat in regional variants sharing `CAS-6`; this card is the
   // Canadian one's, so `examId` says which syllabus it answers to.

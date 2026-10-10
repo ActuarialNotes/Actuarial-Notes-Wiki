@@ -1,0 +1,52 @@
+---
+id: "discia-an-624"
+exam: "Exam DISC-IA"
+topic: "BPP Optional Coverages"
+learning_objective: "9. Commercial Property Insurance Part 2"
+difficulty: easy
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/BPP+Optional+Coverages
+  - Concepts/Insurance+to+Value
+answer: "B"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8454627f8fcc1aac2ebafd47a31e1ccc1e32bae3575ac9d11e729bf8733b3666
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b (delta re-check of option D), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), §G.2.b and its example: 1,500,000×0.04×146/365=24,000 → 1,524,000, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-ia/discia-an-624.md
+---
+A building's limit of insurance at the start of the policy year is \$1,500,000, and the declarations show the inflation guard optional coverage at 4% a year. There has been no change to the limit since the policy year began. What is the limit 146 days into the policy year?
+
+- A) \$1,500,000
+- B) \$1,524,000
+- C) \$1,560,000
+- D) \$1,584,000
+
+## Explanation
+
+The increase is the limit at the start of the policy year times the annual percentage times the days since then divided by 365:
+
+$$
+\begin{align*}
+\Delta C &= 1{,}500{,}000 \times 0.04 \times \frac{146}{365} \\
+&= 24{,}000 \\
+C_{146} &= 1{,}524{,}000
+\end{align*}
+$$
+
+The answer is **B**.
+
+**Why not the others**
+
+- **A** — Treats the increase as taking effect only at the anniversary; it accrues daily.
+- **C** — Applies the whole year's 4% on day 146.
+- **D** — Adds a full year's 4% on top of the 146-day increase: $1{,}500{,}000 \times 0.04 \times (365 + 146)/365 = 84{,}000$.

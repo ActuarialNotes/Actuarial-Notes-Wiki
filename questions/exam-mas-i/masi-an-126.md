@@ -13,12 +13,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7b1674680901157c9eb2d0b6f4e07c27feabe0cef40dc42a7b3e43ef8a413191
-  sources: []
+  sources:
+    - "Wikipedia, 'Partial regression plot' (citing Velleman & Welsch 1981), Properties: least squares fit has intercept 0 and slope beta_i; its residuals equal the full model's; used to identify high-leverage and influential points; distinct from partial residual plots, sha256:5e487cf1309ebc972337649354fe46b8d2a604bdc44dce7534091ed5683fec72 — https://en.wikipedia.org/wiki/Partial_regression_plot"
+    - "StataCorp, Stata Base Reference Manual, regress postestimation diagnostic plots, avplot Remarks, PDF p.5 (same coefficient and SE as in the original regression; coordinates cannot be used to identify functional form, or not well), sha256:2b6a9b898c73d0657d3ce7fbf18a7a23c507d01ad9c1d0543cf7689dc6aa734f — https://www.stata.com/manuals/rregresspostestimationdiagnosticplots.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C 'Extended Linear Models' tasks 1-9 (PDF p.5); Complete Text References: Dobson & Barnett Ch 1-9, Hogg 9.1-9.6, James et al. Ch 1-7 as limited, Larsen (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-126.md

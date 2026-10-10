@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6ace852ae4c2bd8c4a2fbf3a08bd0bf27adbb6830c551dd3de6f4178318b6a4e
+  content_hash: sha256:18e38e51fc415ac8b014abb158c3dce1640fa99f506a89ec2b7f047f8b4f8501
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ verification:
 - **Proxy discrimination** is the live issue. A model that omits a prohibited variable can still reproduce its effect through correlated permitted variables, especially in high-dimensional models. Testing for it means measuring the model's output across the protected groups, not only checking that the variable is absent from the input — see [[Bias in Actuarial Practice]].
 - Under the [[Standards of Practice]] and the [[Market Conduct Regulation|fair treatment of customers]] framework, the actuary is expected to be able to **explain** a rate difference in cost terms. A relativity that cannot be explained is a conduct exposure whatever its lift.
 - Human rights legislation supplies the outer boundary; insurance statutes and rate filings supply the operational one, and the two are not the same list in every province.
+- **United States:** State rating laws require rates that are not excessive, inadequate or unfairly discriminatory, and the CAS *Statement of Principles* calls a rate that meets all three an actuarially sound estimate of expected future costs. The NAIC Unfair Trade Practices Act (§4H) lists, among unfair discrimination, refusing or limiting coverage because of sex, marital status, race, religion or national origin, and refusing or limiting a property or casualty risk solely for its geographic location unless sound underwriting and actuarial principles support it; states adopt their own versions. Colorado's SB21-169 extends the prohibition to external consumer data and predictive models whose use unfairly discriminates by protected class, which reaches the proxy problem directly ([[Insurance Data Regulation]]). [[Credit-Based Insurance Scoring|Credit-based insurance scores]] are the leading U.S. case.
 
 ![[Media/Figures/Unfair_Discrimination.svg|340]]
 
@@ -38,3 +39,11 @@ verification:
 > > 3. **Prohibited though cost-based** in provinces that ban sex as a rating variable. The data supports the difference; the law forbids using it. The predictable consequence is a cross-subsidy from young women to young men, and the honest filing states that rather than concealing it in a "years licensed" proxy.
 > >
 > > Case 3 is where candidates lose marks by arguing the statistics. The statistics are not in dispute; the question is whether the variable is permitted, and it is not.
+
+> [!tip]- How it appears on the exam
+> - **Exam 6C:** The example above is framed in Canadian terms: whether a rate difference is cost-based, and whether a cost-based variable is prohibited by the province.
+
+> [!warning]- Exam traps
+> - **Cost-based and prohibited are different failures:** A rate difference can be fully supported by losses and still be unlawful because the variable is prohibited.
+> - **Omission is not fairness:** A model with no protected variable can reproduce its effect through correlated inputs; the test is on outcomes by group.
+

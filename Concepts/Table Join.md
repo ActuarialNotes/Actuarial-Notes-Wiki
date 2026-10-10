@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f388b0aca4e871eb36f79553af5f4a5d6624b7d2d6d47922492f2f3b67c3692e
-  sources: []
+  sources:
+    - "PostgreSQL 17 Documentation, §7.2.1.1 Joined Tables: CROSS JOIN N x M rows; INNER; LEFT OUTER (inner join then a row with nulls for each unmatched T1 row); RIGHT; FULL; ON vs WHERE restriction with outer joins, sha256:69486ac181f941b65eb886f28d243b950ba891431dee9efada046a430ae2a566 — https://www.postgresql.org/docs/17/queries-table-expressions.html"
+    - "PostgreSQL 17 Documentation, §9.2 null = null yields null, sha256:7c49c06dfe1ddba8fa5e113dc4f0a3541e7e9534916aa0aaffb02f5da91030b2 — https://www.postgresql.org/docs/17/functions-comparison.html"
+    - "PostgreSQL 17 Documentation, §5.5.5 foreign keys and referential integrity, sha256:f3797f1e000c84ee57bcb411cbffa458be90b2adb69889d243abfa090b0b8224 — https://www.postgresql.org/docs/17/ddl-constraints.html"
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.19 Joins, §19.2 primary and foreign keys; §19.3.1 mutating joins (left_join etc.); §19.3.3 filtering joins (anti_join); §19.4 row matching (many-to-many), sha256:27708095875a55fe556f715fa31bef17d6c0bfdf5b8f6b36d1c1cafdce46dd21 — https://r4ds.hadley.nz/joins.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Table Join.md

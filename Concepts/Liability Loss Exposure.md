@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b34c3f3186fdbca1e3a3e695bb48c19b4ed438d1845d675fa8cbde1a4f44a42d
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:95cbe9ab28e6652554f3a394b521626fcbadfc2c9a407c678a3b496a6f38c990
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.19 pp.406-412, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "ISO HO 00 03 05 11, Homeowners 3 - Special Form (specimen, Maine BOI), Section I Coverage D; Section II Coverage E, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 51, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Liability Loss Exposure.md
@@ -20,10 +23,10 @@ A **liability loss exposure** is any condition or situation that presents the po
 - **Symbols:** $L$ is the cost of one claim, made up of the damages $D$ the party is held liable for and the defense costs $C_{\text{def}}$. In the expected cost, $f$ is the expected number of claims a year, $p$ is the probability that a claim results in a payment, $\bar{D}$ is the average damages when one does, and $\bar{C}_{\text{def}}$ is the average cost of defending a claim, which applies to every claim.
 - **Torts:** A tort is a civil wrong other than a breach of contract, and [[Tort Law|tort law]] is the main source of liability claims. Negligence requires a duty owed to the claimant, a breach of that duty, an injury, and the breach being the proximate cause of the injury. Intentional torts, such as assault, libel and trespass, require intent to act rather than carelessness. Strict liability attaches without fault to activities such as using explosives, keeping wild animals and selling defective products.
 - **Contracts and statutes:** A party can be liable for breaching a contract or a warranty, and it can take on another party's liability by contract, through a hold harmless or indemnity agreement in a lease or a construction contract. Statutes create liability as well, as workers compensation laws do for employers and environmental laws do for polluters.
-- **Damages:** Compensatory damages are special damages, which are measurable economic losses such as medical expenses and lost wages, and general damages, which compensate for losses with no market price, such as pain and suffering. [[Punitive Damages|Punitive damages]] punish especially reckless or malicious conduct, and their insurability varies by jurisdiction.
-- **Liability without one's own fault:** [[Vicarious Liability|Vicarious liability]] makes an employer answer for an employee's torts committed at work, and [[Joint and Several Liability|joint and several liability]] can make one defendant pay the whole of an award that several caused. Both widen an exposure beyond the party's own conduct.
-- **Personal exposures:** An individual faces liability from owning or renting a home, from personal activities such as sports, from pets, and from owning or driving autos and watercraft. The homeowners policy's liability section, the [[Personal Auto Policy|personal auto policy]] and an [[Umbrella Liability Insurance|umbrella policy]] above them treat these exposures.
-- **Commercial exposures:** A business faces liability from its premises and operations, from the products it sells and the work it has completed, from autos, from injuries to its employees, from pollution, from professional services, and from the decisions of its directors and officers. The CGL covers the first two, and the others call for business auto, [[Workers Compensation Insurance|workers compensation]] and employers liability, pollution, [[Professional Liability Insurance|professional liability]] and management liability coverage.
+- **Damages:** Compensatory damages are special damages, which are measurable economic losses such as medical expenses and lost wages, and general damages, which compensate for losses with no market price, such as pain and suffering. Punitive damages punish especially reckless or malicious conduct, and their insurability varies by jurisdiction.
+- **Liability without one's own fault:** Vicarious liability makes an employer answer for an employee's torts committed at work, and [[Joint and Several Liability|joint and several liability]] can make one defendant pay the whole of an award that several caused. Both widen an exposure beyond the party's own conduct.
+- **Personal exposures:** An individual faces liability from owning or renting a home, from personal activities such as sports, from pets, and from owning or driving autos and watercraft. The homeowners policy's liability section ([[HO-3 Liability Coverages]], narrowed by the [[HO-3 Liability Exclusions]], which send motor vehicles, larger watercraft and business activities elsewhere), the [[Personal Auto Policy|personal auto policy]] ([[PAP Liability Coverage]]) and an [[Umbrella Liability Insurance|umbrella policy]] above them treat these exposures.
+- **Commercial exposures:** A business faces liability from its premises and operations, from the products it sells and the work it has completed, from autos, from injuries to its employees, from pollution, from professional services, and from the decisions of its directors and officers. The CGL covers the first two, and the others call for business auto, [[Workers Compensation Underwriting|workers compensation]] and employers liability, pollution, [[Professional Liability Insurance|professional liability]] and management liability coverage.
 - **Managing the exposure:** [[Risk Control|Risk control]] reduces the chance and size of claims through safe premises, product testing, warnings, training and careful contract wording. Noninsurance transfer moves liability to another party through a hold harmless agreement, and insurance pays for what remains, with defense costs usually paid in addition to the limits.
 
 > [!example]- Expected Cost of Premises Claims for a Store {Example}

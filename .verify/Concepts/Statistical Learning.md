@@ -107,3 +107,38 @@ created: 2026-10-05
 - checks_run: second run-3707 pass, superseding the one above it: F-003 (QDA and naive Bayes missing from the MAS-I Ch 4 row) applied and resolved after the first re-pass; the changed row re-read against the outline and ISLR §4.4; the rest of the page unchanged since the first re-pass (all run-3707 edits re-read there); 23 wiki links and the figure embed resolve
 - sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning with Applications in R, 2nd ed. (Springer 2021, CAS-hosted copy), contents/bookmarks (chapter titles, §4.4.3-4.4.4, §6.4, §7.5, §7.7), §2.1 eq. 2.1, §2.1.1 (PDF p.28), §2.1.4 (PDF p.37), §2.2.2 eq. 2.7 and flexibility vs bias/variance (PDF pp.45-46), §2.2.3 KNN (PDF pp.50-52), §4.4.3-4.4.4 (PDF pp.162-163), §5.1/§5.2 (PDF pp.206-207, 218), §7.5.1-7.5.2 (PDF pp.310-311), §7.7.2 (PDF p.318), §12.4 (PDF pp.522-523), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list Ch 1, 2 excl. §2.2.3, 3 §§3.1-3.3, 4 §§4.1-4.4 (LDA not tested), 5, 6, 7 (PDF p.6), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06), Domain C tasks 1-11 (PDF p.3) and James reading list (PDF p.4), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
 - note: Supersedes this run's earlier pass on the page; the only change since is the Ch 4 row.
+
+## [F-004] Tip says DISC-DA 10.2 links the page; it does not
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv02
+- date: 2026-10-10
+- severity: nit
+- status: open
+- locus: How it appears on the exam, DISC-DA bullet, last sentence
+- claim: Section 10.2 links here for how regulation and professional codes bear on data modeling.
+- evidence: Exam DISC-DA (CAS).md links [[Statistical Learning]] only from objectives 7.1 and 7.2; objective 10.2 links [[Predictive Analytics|Data Modeling]]. Rank 4 (vault cross-reference), consistency only; the syllabus PDF (DISC_DA.pdf, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16) gives section titles only.
+- source_rank: 4
+- proposed_action: Delete the sentence.
+- applied: true
+- fingerprint: 1c0580cac10f
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv02
+- date: 2026-10-10
+- resolves: F-004
+- status: resolved
+- note: Deleted the sentence in this run; the tip now cites only 7.1.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv02
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: delta check: diffed c6dc6efc9^ (last verified bytes, run 3707) to HEAD; additions are the 'Regression vs. Classification' block and the tip/trap callouts; each checked against ISLR §2.1.4-2.1.5 and §2.2; F-004 (wrong DISC section reference) applied; prior-pass sources re-fetched, hashes unchanged
+- sources_checked: James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §2.1.4-2.1.5 PDF pp.37-40 (delta: regression vs classification, logistic regression, KNN and boosting); prior-pass sections §2.1-2.2.3, §4.4.3-4.4.4, §5.1-5.2, §7.5, §7.7.2, §12.4, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), James reading list PDF p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf; CAS Exam MAS-II Content Outline 2026, Domain C and James reading list PDF pp.3-4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: Unchanged content carries run 3707's verification (same source bytes).

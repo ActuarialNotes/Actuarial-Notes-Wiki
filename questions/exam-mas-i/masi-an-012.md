@@ -15,12 +15,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:37704c8f6075ba9062f3f282942bc6f6673a74452304d951f6ab96ed4cb2720a
-  sources: []
+  sources:
+    - "Mahler & Dean, \"Credibility\", ch.8 of Foundations of Casualty Actuarial Science (SOA study note C-21-01), 5.3 conjugate priors: gamma posterior alpha+C, lambda+Y; posterior mean (alpha+C)/(lambda+Y), PDF pp.101-102, sha256:bccdb7968ae276e041bf7f6eb5aea3aea473f1dc7739bc64352419c8a6a0f3c5 — https://www.soa.org/globalassets/assets/files/edu/C-21-01.pdf"
+    - "CAS Exam MAS-I Content Outline 2026, Domain A tasks 1-3 and readings (Daniel, Ross, Struppeck), PDF p.3, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-i/masi-an-012.md

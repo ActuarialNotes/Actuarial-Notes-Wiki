@@ -2,11 +2,13 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-09-12
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:616fb7c42d77d95a7c960355ad713c94acd559823b9e9d949d7916e273ede80a
+  content_hash: sha256:757b8958314ef12521fbc780b41b580f3f1c020b57fe4a8050c8c772e71a6b84
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14), Ch. 5 pp.66-70 (PDF pp.78-82) and Ch. 5 premium trend pp.78-79 (PDF pp.90-91), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 53 ¶3-4, 6, 12, 14-15 (PDF pp.347-350); SSAP No. 62R ¶30 (62-8, PDF p.441), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), U&IE Part 1B columns, pp.82-83, 218 (printed 81-82, 217), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 p.2, Ch.5 pp.66-70, 78-79 (PDF pp.14, 78-82, 90-91) — prior-pass source, re-fetched this run, hash unchanged, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Written Premium.md
@@ -23,6 +25,7 @@ verification:
 - Written premium is the right measure for production, market share, commission (paid on writings) and for the **average written premium** series used in [[Premium Trend|premium trend]] analysis — trend is a written-level phenomenon, since it is driven by what is being sold today.
 - It is the *wrong* denominator for a [[Loss Ratio|loss ratio]]: losses in the period arise from coverage provided in the period, which is earned premium.
 - Written premium may still change after issuance — endorsements, cancellations and [[Premium Audit|audits]] all book additional or return premium into a later period, so "written premium" for a policy year keeps moving until the audits close.
+- **Statutory definition and types:** SSAP No. 53 defines written premium as the contractually determined amount charged to the policyholder for the policy's effective period, recorded on the effective date. An insurer's written premium is **direct** (its own policies), **assumed** (reinsurance it accepts) or **ceded** (reinsurance it buys, which reduces its written and earned premium), and **net** written premium is direct plus assumed less ceded ([[Premium Accounting]]).
 
 ![[Media/Figures/Written_Premium.svg|340]]
 
@@ -66,3 +69,12 @@ verification:
 > > The loss ratio did not improve at all — it is flat at $72\%$. The apparent improvement is entirely an artefact of $30\%$ written-premium growth outrunning $19\%$ earned-premium growth: losses emerge on *earned* exposure, so a fast-growing book always looks better on a written basis than it is.
 > >
 > > This is one of the standard data-reasonableness checks: any loss ratio quoted against written premium in a growing book should be recomputed before it is believed.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The objective on types of written premium asks how direct, assumed, ceded and net written premium relate, and when a transaction, such as an endorsement, an audit adjustment or premium paid before the effective date, counts as written premium.
+> - **Exam 5:** Written premium feeds premium trend and the bridge to earned premium through the change in the unearned premium reserve.
+
+> [!warning]- Exam traps
+> - **Net is after ceding:** Net written premium subtracts ceded premium from direct plus assumed; leaving out assumed business understates it.
+> - **Advance premium is not written:** Premium paid before the policy's effective date is a liability, not written premium, until coverage begins.
+> - **Written on the effective date:** Written premium is recorded when the policy takes effect, not when it is collected.

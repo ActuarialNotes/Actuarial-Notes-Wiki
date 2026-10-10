@@ -1,0 +1,42 @@
+---
+id: "discrm-an-208"
+exam: "Exam DISC-RM"
+topic: "Underwriting Process"
+learning_objective: "8. The Underwriting Function"
+difficulty: easy
+type: multiple-choice
+bloom: understand
+wiki_link:
+  - Concepts/Underwriting+Process
+  - Concepts/Underwriting+Guidelines
+answer: "A"
+points: 1
+verification:
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2e4893af69a35c3169277fe71c4563deb680355230cfa69cbe14eaaed52e1d64
+  sources:
+    - "Risk & Insurance Education Alliance (National Alliance), 'Six Steps of the Underwriting Process' (Research Academy, 30 Jan 2023), Step 4 (commodity lines class-rated, no deviations), sha256:ee0156096b5f8c331aae216b138dcade35da2127854d0bee28423df26c0d2ba0 — https://www.riskeducation.org/six-steps-of-the-underwriting-process/"
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-208.md
+---
+
+A homeowners underwriter and a commercial property underwriter each think an applicant's property is better maintained than average. Which describes how each can usually reflect that in the premium?
+
+- A) Only the commercial underwriter can usually credit the account; the homeowners policy is class-rated
+- B) Both can apply discretionary credits of the same size, because both lines are property insurance
+- C) Only the homeowners underwriter can credit the account, because personal lines are less regulated
+- D) Neither can reflect it, because premium is set entirely by the actuarial department
+
+## Explanation
+
+Some commercial lines let an underwriter credit or debit an account on its merits, within limits the guidelines set. Commodity lines such as homeowners and private passenger auto are usually class-rated with no deviation allowed, so the homeowners underwriter's job is to place the risk in the right class or tier. The answer is **A**.
+
+**Why not the others**
+
+- **B** — Being property insurance doesn't give both lines the same pricing latitude; personal lines are usually class-rated.
+- **C** — Reverses the two. Personal lines are heavily regulated, which is one reason they allow no deviations.
+- **D** — Rates come from the actuaries, but commercial underwriters often have discretionary pricing within the guidelines.

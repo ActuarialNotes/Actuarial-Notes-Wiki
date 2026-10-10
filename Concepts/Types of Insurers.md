@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8685d6506fcb900d8aa53636c91f6c67d5978a542bac81e9ffa53c7236f628e0
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:07d0e0250d555c1bbbf3fdc40ce130f1ccb89db4e47882793dd9b39d84731000
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 pp.88-99; Ch.8 p.146; Ch.3 pp.49-50, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "IRMI Glossary, \"risk retention group\", definition, sha256:b3713c667bb71b1dd4918edaa779232f5130cebe7371cf30e878d177abbb6856 — https://www.irmi.com/term/insurance-definitions/risk-retention-group"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Types of Insurers.md
@@ -24,7 +26,7 @@ verification:
 - **Lloyd's:** Lloyd's of London is a marketplace, not an insurer. Members, both individual Names and corporations, supply the capital through syndicates, each run by a managing agent, and the syndicates underwrite the risks. Business reaches the syndicates mostly through brokers.
 - **Captives and risk retention groups:** A captive is an insurer formed to insure the risks of its parent, or of a group of related owners, rather than the public. A [[Risk Retention Groups|risk retention group]] is a U.S. form of group captive that writes liability insurance for owners in a similar business and can operate in every state with only its domicile's licence.
 - **Government insurers:** Governments insure what the private market won't or can't, such as flood, crop and nuclear risks, and run residual markets and, in some places, workers compensation funds. Some Canadian provinces sell [[Public Auto Insurance|public auto insurance]] through crown corporations. See [[Government and Industry Insurance Programs]] and [[Social Insurance]].
-- **Licensing status:** An admitted insurer is licensed in the state and subject to its rate, form and solvency rules, and its policyholders are protected by the state's [[Guaranty Funds|guaranty fund]]. A non-admitted insurer is not licensed there but may write risks the admitted market declines through a surplus lines broker ([[Excess and Surplus Lines]]); it has more freedom of rate and form, and its policyholders usually lack guaranty fund protection.
+- **Licensing status:** An admitted insurer is licensed in the state and subject to its rate, form and solvency rules, and its policyholders are protected by the state's guaranty fund. A non-admitted insurer is not licensed there but may write risks the admitted market declines through a surplus lines broker ([[Excess and Surplus Lines]]); it has more freedom of rate and form, and its policyholders usually lack guaranty fund protection.
 - **Distribution:** Insurers are also grouped by how they sell: through independent agents and brokers, exclusive agents, their own sales employees (direct writers), or by direct response without a producer. See [[Insurance Distribution Systems]].
 
 > [!example]- Classifying Several Insurers {Example}
@@ -41,7 +43,7 @@ verification:
 > > 2. A mutual insurer, foreign in Ohio (incorporated in another state) and admitted there, using the exclusive agency system.
 > > 3. Ownership isn't stated. It is alien (incorporated in another country) and non-admitted, writing as an eligible surplus lines insurer.
 > > 4. A reciprocal exchange, foreign in Ohio and admitted there.
-> > 5. A risk retention group, foreign in Ohio. It is licensed only in Vermont, its domicile, and may write in Ohio after registering there, so its Ohio insureds have no guaranty fund protection.
+> > 5. A risk retention group, foreign in Ohio. It is licensed only in Vermont, its domicile.
 
 > [!example]- Net Cost Under a Participating Mutual Policy {Example}
 > A business owner is offered two commercial property policies for the same coverage. A stock insurer quotes a nonparticipating premium of \$24,000. A mutual quotes a participating premium of \$25,500 and has paid policyholder dividends of 8% of premium in each of the last five years. With illustrative figures, compare the expected net costs and say what the owner gives up by choosing the mutual.

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:54e4fe21b7f7904a929dc69fa034d4465974a66fffe337f82677d15d47ee89fd
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9b34bfb59bdf55d7d07725cc5df8a14710dc8f0a5e2371cc2a7c172fa5ce0e65
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶10-13, ¶40-41, ¶127 (PDF pp.438, 444-445, 460), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Hasnani, 'Insurance and Reinsurance Without Risk Transfer: implementation guidance on SOP 98-7', Journal of Accountancy, March 1999 (fetched 2026-10-10), sha256:c067928007c79ab2d9766cbf61f21baf1d3c21a4c140f1250a1949fb6918e4a7 — https://www.journalofaccountancy.com/issues/1999/mar/hasnani.html"
+    - "New York DFS, Supplement No. 1 to Circular Letter No. 8 (2005) (fetched 2026-10-10), sha256:946c7dd59fe5af9ddae6a278946d1bce9a3a5598827464c0b07c1e29a2bf47a6 — https://www.dfs.ny.gov/industry_guidance/circular_letters/cl2005_08_s01"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Deposit Accounting.md
@@ -69,3 +72,12 @@ verification:
 > > **As a deposit:** loss ratio $210/300 = 70.0\%$ and premium to surplus $300/150 = 2.00$, with a $\$30$M deposit asset that the $\$27$M of recoveries will draw down.
 > >
 > > Booking a failed contract as reinsurance would flatter the loss ratio by $2.2$ points and leverage by $0.2$ — improvements with no risk behind them. That is precisely the misstatement the risk transfer test and the CEO/CFO attestation exist to prevent.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The deposit accounting objective asks when a reinsurance contract must be accounted for as a deposit and what that changes: no ceded premium, no ceded losses, no reduction of the loss reserves, and interest income or expense on the deposit.
+> - **Exams 6C and 6U:** Risk transfer testing and the effective-yield method, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Both components of risk:** A contract must transfer both underwriting risk and timing risk to escape deposit accounting under SSAP No. 62R.
+> - **Recoveries are not ceded losses:** Under deposit accounting a recovery draws down the deposit; it never reduces incurred losses or the loss ratio.
+

@@ -2,18 +2,15 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-05
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4414c708b5f9d1dfbf3a25220b397c7e6fffe1199c496d7d587fc9fe39bb4524
+  content_hash: sha256:feace85b1d0a2b45fd6161aa732763bd72bd5a515ce0203eebd491bf4929f713
   sources:
-    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning (2nd ed., Springer 2021), §3.1.1 RSS (3.3) and least-squares estimates (3.4) printed p.62 (PDF p.72); §3.2.2 F-statistic (3.23) printed p.76 (PDF p.86), RSE = sqrt(RSS/(n-p-1)) (3.25) printed p.80 (PDF p.90), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
-    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.2 'Linear Models for Continuous Data', §2.2.1-2.2.3 normal equations, (X'X)^-1 X'y, unbiasedness, BLUE for uncorrelated constant-variance observations, normality only for small-sample inference, PDF pp.6-8, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
-    - "Wikipedia, 'Gauss–Markov theorem' (lead: OLS has the lowest sampling variance among linear unbiased estimators if the errors are uncorrelated, have equal variances and expectation zero), retrieved 2026-10-05, sha256:d0a00c2b0a3843ccffd22e29a13c62beeec71e4d43cfa0d9e97aef357149cd3a — https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem"
-    - "Rodríguez, G., Lecture Notes on Generalized Linear Models (Princeton WWS 509), Ch.4 'Poisson Models for Count Data', §4.2 log link, §4.3.2 offset = log of exposure, PDF pp.5-10, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 4 §4.2-4.6 residuals vs fits, residuals vs order, normal probability plot of residuals, sha256:af097ae3a85c7cacb40f3a05735bfda4f6a46a26ad26bed95556e7457ac58b6c — https://online.stat.psu.edu/stat501/Lesson04.html"
-    - "Penn State STAT 501 Regression Methods (online course notes), Lesson 12 §12.3-12.4 holding correlated predictors fixed; variance inflation factors, sha256:f67694d5ded5e449996b5fde9068686e916b9c1c5cd9245c02badb257c72bc8e — https://online.stat.psu.edu/stat501/Lesson12.html"
-    - "Larsen, Generalized Linear Models, CAS Study Note (rev. 6/29/2016), PDF p.1 'Regression Through the Origin' (the intercept is zero or left out of the equation; the test of significance for the intercept could show it is not significantly different from zero and the modeler could drop it; then if all explanatory variables are zero the dependent variable will be zero), sha256:5c4ed4e8eacf72624f38c5313eb6903f57d627b6ac81ce52e0a5a69404af90bd — https://www.casact.org/sites/default/files/2021-03/MAS-I_Larsen.pdf"
-    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C tasks 4 and 7, p.5; Larsen for C1-C9, p.6, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §3.2 PDF p.82 (delta: beta_j holding all other predictors fixed); prior-pass sections §3.1-3.3, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Rodriguez, Lecture Notes on GLMs (Princeton WWS 509), ch.2, §2.2.1-2.2.3, sha256:b9fae913696a54bb97a9a0f60cdddd8a5c72c9e9cf0451e503a0043d888edf1f — https://grodri.github.io/glms/notes/c2.pdf"
+    - "Rodriguez, Lecture Notes on GLMs, App. B, §B.1, sha256:92bc67a6a2fc52a0ffa2babfd7a13e175b2babb52dd28f778d5e307cc65aa286 — https://grodri.github.io/glms/notes/a2.pdf"
+    - "Rodriguez, Lecture Notes on GLMs, ch.4, §4.2-4.3, sha256:1caaa05c152c35d73ab90400c526e871016283aade13ee812c40032f6dfa8fbe — https://grodri.github.io/glms/notes/c4.pdf"
+    - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06), Domain C, p.5, sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Linear Regression.md
@@ -48,3 +45,12 @@ verification:
 >
 > > [!answer]-
 > > Two assumptions fail at once. A count response has variance that **grows with the mean**, breaking constant variance, and the identity link lets the linear predictor run below zero, producing impossible negative expected counts. The fix is a **Poisson GLM with a log link** ([[Poisson Regression]]), with log exposure as an [[Offset Variable|offset]] — the log link keeps $\hat\mu > 0$ and the Poisson variance function $V(\mu) = \mu$ matches the observed spread.
+
+> [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.3 covers analyzing data with linear functions. Questions give a fitted line or a short coefficient table and ask for a prediction, the meaning of a slope holding the other predictors fixed, or whether a linear model suits the response, as in the claim-count example above.
+> - **MAS-I and MAS-II:** Linear regression is the base case of the linear model family: least squares estimates, $R^2$, the $F$ test and the diagnostic plots that check its assumptions.
+
+> [!warning]- Exam traps
+> - **Slope without "holding the others fixed":** In a multiple regression, $\hat\beta_j$ is the change in the mean response for a unit change in $x_j$ with the other predictors unchanged, not the one-variable relationship.
+> - **Counts and skewed losses:** A Normal linear model can predict negative claim counts and ignores variance that grows with the mean; a GLM is the usual fix.
+

@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5f0eb61b2388fbfd8e1203ff53a1334261e3cf08c839842efab91a0d4d01b433
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b8499e2947221fcf5266348a65946f81fdd67f37814a79385e81fcfc521da1ca
+  sources:
+    - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (PML500, gross/net PML, models), definitions of PML, PML500, gross/net PML; models, sha256:e826e5e04f4c4170671288527ae7bebd0ace06ac940254e7d5ecd3adbe92f37e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
+    - "OSFI, Minimum Capital Test Guideline (2026), ch.1 (100% minimum, 150% supervisory target), ch.1 100% minimum, 150% supervisory target, sha256:80450516aa1bb0a7534ceedcf50e39966406ecdcd52d0109af4a94d3439959ce — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2026"
+    - "IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss"
+    - "IRMI Glossary, 'maximum foreseeable loss (MFL)', entry, sha256:ac6a852f104fe279e0909ec10a83934963490673519be7caa5ceef6192b7151c — https://www.irmi.com/term/insurance-definitions/maximum-foreseeable-loss"
+    - "IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Probable Maximum Loss.md
@@ -15,6 +20,7 @@ verification:
 
 > $$\text{PML}_{p} = \text{VaR}_{p}(\text{Portfolio catastrophe loss})$$
 
+- **In property underwriting the term is used per location.** Underwriters and loss control staff use probable maximum loss for one location: the largest loss expected there from a fire, stated in dollars or as a percentage of the location's total values. It sits between two neighbours: the maximum foreseeable loss (MFL), the worst loss likely from a single event, and the maximum possible loss (MPL), the worst that could possibly occur. DISC-RM uses it to determine the potential loss severity of a commercial property, and for business income it is the income lost over the longest probable [[Period of Restoration|period of restoration]] ([[Business Income Coverage]], [[COPE]]).
 - **It is a modelled quantity, not an observed one.** PMLs come from catastrophe models built on hazard science (fault maps, ground motion, wind fields), an exposure database (location, construction, occupancy, height, age), a vulnerability function linking hazard intensity to damage, and the financial terms (limits, deductibles, reinsurance).
 - **Return period language is often misread.** A $1$-in-$500$ event has a $0.2\%$ annual probability; over $30$ years the probability of at least one such event is $1 - 0.998^{30} \approx 5.8\%$. "Once in $500$ years" does not mean "not in our lifetime."
 - **Gross and net PML are different questions.** Gross PML sizes the reinsurance programme; net PML — after reinsurance and after any reinstatement premiums — is what actually hits capital. OSFI's earthquake requirements test whether the insurer's financial resources cover the net exposure.
@@ -49,7 +55,7 @@ verification:
 > >
 > > **What to consider:**
 > >
-> > - **Buy the top layer.** Extending cover from $\$350$M to $\$430$M removes the $\$80$M excess exposure. The question is whether that layer's premium is worth the $17$ points of post-event MCT ratio it protects.
+> > - **Buy the top layer.** Extending cover from $\$350$M to $\$430$M removes the $\$80$M excess exposure. The question is whether that layer's premium is worth the roughly $26$ points of post-event MCT ratio it protects.
 > > - **Check reinstatements.** If the programme has limited reinstatements and a foreshock or a second event occurs, the analysis above is optimistic.
 > > - **Check the model.** A single model's $1$-in-$500$ figure carries real uncertainty; a second model might put it at $\$550$ million, at which point the retained loss is $\$240$ million and the conclusion changes entirely.
 > > - **Reinsurer credit.** A $\$310$ million recovery is only worth what the reinsurers pay. Their [[Credit Risk Margin|credit standing]] and any [[Concentration Risk|concentration]] among them is part of the assessment, and it matters most in exactly the scenario where every cedant is claiming at once.

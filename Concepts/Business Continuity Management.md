@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5a08d123b36cccd91bbafc2e051a29499b3becbebcaeb7321b2e2487ed729786
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:40e3f95eb621eb21474b13c0fda5eca244ff870f1337a9d2ce7c66c5bab16c96
+  sources:
+    - "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems (2010), ES-1 (policy), §3.2 BIA, §3.2.1 RTO/MTD, §3.4.2 sites, §3.5.3 exercises, §3.6 maintenance, sha256:476f04d4c60b0770c1ac8b2720551972074ce78e936a3e7a535048416111d0df — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf"
+    - "Mid Sussex District Council, Business Continuity Policy Appendix A: Terms & Definitions (2019, citing ISO 22301), p.2, sha256:3550ebea9d87cf22770286c01a673a36a75c26d93818bfb7dfbac85a7ccb9315 — https://www.midsussex.gov.uk/media/4134/business-continuity-policy-appendix-a.pdf"
+    - "Ready.gov (FEMA), Business Impact Analysis page, read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://www.ready.gov/business-impact-analysis"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Business Continuity Management.md
@@ -22,8 +25,8 @@ verification:
 - **Symbols:** $\ell(s)$ is the rate at which an interruption of an activity costs the organization, per hour or per day, at time $s$ after it starts. It counts lost revenue, extra expense, regulatory penalties and harm to reputation, and it usually rises over time. $I(t)$ is the cumulative impact of an interruption lasting $t$, and $T$ is the most impact the organization can tolerate. The maximum tolerable period of disruption (MTPD) is how long the activity can be down before the impact becomes unacceptable.
 - **Business impact analysis:** The BIA lists the organization's activities, the resources each depends on (people, premises, systems, data and suppliers), and how the impact of losing each grows over time. It ranks activities by urgency, so the most time-critical are recovered first. A [[Risk Assessment|risk assessment]] sits beside it, judging which threats could cause an interruption and how likely they are.
 - **Recovery time objective:** The RTO is the target time to resume an activity after a disruption. It is set inside the MTPD, leaving a margin for detecting the problem, deciding to invoke the plan and checking that recovery worked. The recovery point objective (RPO) is the most data the organization can afford to lose, measured as time back to the last usable copy, and it decides how often data is backed up or replicated.
-- **Strategy:** Strategies are chosen to meet the RTO at acceptable cost. They include alternate work sites, staff working from home, backup data centres (a hot site running in parallel, a warm site with equipment ready, a cold site with space only), extra suppliers, stockpiles, and [[Risk Transfer|insurance]] such as [[Business Income Coverage|business income coverage]] for the loss that can't be avoided.
-- **The plan:** The business continuity plan says who declares an incident, who does what, how staff, customers, regulators and the media are told, and the step-by-step procedures for recovering each activity. Disaster recovery plans for information technology are part of it.
+- **Strategy:** Strategies are chosen to meet the RTO at acceptable cost. They include alternate work sites, staff working from home, backup data centres (a hot site, a warm site with equipment ready, a cold site with space only), extra suppliers, stockpiles, and [[Risk Transfer|insurance]] such as [[Business Income Coverage|business income coverage]] for the loss that can't be avoided.
+- **The plan:** The [[Business Continuity Plan|business continuity plan]] says who declares an incident, who does what, how staff, customers, regulators and the media are told, and the step-by-step procedures for recovering each activity. Disaster recovery plans for information technology are part of it.
 - **Testing and maintenance:** A plan nobody has tested often fails when needed. Testing ranges from a desk check of the plan and a tabletop walkthrough of a scenario, through simulations, to a full switch of operations to the backup site. Each test, and each real incident, is followed by a review that updates the plan, and the plan is reviewed again whenever the business changes.
 - **Policy and embedding:** BCM starts with a policy, approved by senior management, that sets its scope and assigns responsibility. Training and awareness embed it, so that continuity is part of how the organization works rather than a binder on a shelf.
 

@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:898d86e5a20a00ea415ee11e9418151979d67415bc1e2ffea417f7f5f445b407
-  sources: []
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c4285c1676a8751b98b2a6ae3093d4d20f72bf65109a30985748a6302c3aaad3
+  sources:
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), p.111 (PDF p.13), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s05-04 Tables 1.2-1.3, sha256:4d894cf157c8f6b7a4c620f551f76e788a2b6fb98bf979d3cbe23c3f32071592 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s05-04-types-of-risks-risk-exposures.html"
+    - "Odomirok et al., Financial Reporting Through the Lens of a Property/Casualty Actuary v4 (CAS), RBC chapter, PDF pp.230-231 (R0-R5), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "NAIC Insurance Topics: Risk-Based Capital (last updated 06/30/2026; 'catastrophe risk is included only in the P/C formula'), read via WebFetch 2026-10-10 (no hash) — https://content.naic.org/insurance-topics/risk-based-capital"
+    - "Directive 2009/138/EC (Solvency II), Art. 101(3), Art.101(3), sha256:17c8dd8d2f06a8d8881bfd4b031fcf662ff59f68ce5ff43f716451a4a906af94 — https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0138"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Taxonomies.md
@@ -25,6 +30,10 @@ verification:
   - **[[Operational Risk|Operational risk]]** — failed processes, people and systems, and external events.
   - **Strategic or [[Business Risk|business]] risk** — competition, the underwriting cycle, regulation, reputation, the wrong strategy.
 - **Frameworks slice it differently.** The CAS ERM framework uses four types — hazard, financial, operational and strategic — and Brehm et al. use the insurer's version (insurance hazard in place of hazard). The NAIC [[Risk-Based Capital|RBC]] formula charges separately for asset, credit, reserve, premium and catastrophe risk; [[Solvency II]] has modules for non-life underwriting, market, counterparty default and operational risk, among others. The exact slotting matters less than covering every material risk exactly once.
+- **The four types for any organization:** The CAS's 2003 ERM overview sorts the risks of any enterprise, not only an insurer, into four types. **Hazard risks** come from fire and other property damage, windstorm and other natural perils, theft and other crime, personal injury, business interruption, disease and disability (including work-related injury) and liability claims. **Financial risks** come from prices (asset values, interest rates, foreign exchange, commodities), liquidity, credit, inflation and hedging or basis risk. **Operational risks** come from business operations (human resources, product development, capacity, supply chain, product failure), empowerment and leadership, information technology, and information and business reporting. **Strategic risks** come from reputational damage, competition, customer wants, demographic and social trends, technological innovation, capital availability, and regulatory and political trends.
+- **Pure versus speculative risk:** A pure risk offers only a chance of loss or no loss, such as fire, flood or a liability claim. A speculative risk offers a chance of gain as well as loss, such as an investment, a new product or a change in exchange rates. Traditional risk management and insurance deal with pure risk ([[Insurable Risk]]); [[Enterprise Risk Management|ERM]] considers both. Some risks can be slotted either way depending on how narrowly they are defined, such as operational risk.
+- **Diversifiable versus nondiversifiable risk:** A diversifiable, or idiosyncratic, risk is particular to one firm or exposure, so holding many independent exposures makes the average loss predictable, as with fires at homes in different places. A nondiversifiable, or systemic, risk is shared by every exposure, such as an economy-wide recession or inflation, and adding more exposures does not reduce it.
+- **Fundamental versus particular risk:** A fundamental risk, such as a flood or hurricane striking many homes in one area, affects a large number of exposures at once and is generally systemic; private insurers often cannot take it on alone. A particular risk, such as a single house fire, affects one exposure accidentally and is usually insurable.
 - A taxonomy is the first step in choosing a [[Risk Measure|risk measure]] and a model for each category — the "diverse risks" that [[Risk Modeling]] must integrate.
 
 > [!example]- Selecting a Model for Each Category {Example}
@@ -66,3 +75,25 @@ verification:
 > > $$
 > >
 > > One correlation assumption moves the requirement by $\$13.7$M and cuts the diversification benefit to $\$37.4$M. The taxonomy tells you which pairs exist; the capital depends on how honestly their dependence is estimated.
+
+> [!example]- Classifying a Restaurant Chain's Risks {Example}
+> A restaurant chain lists these risks: (a) a kitchen fire; (b) a rise in interest rates on its floating-rate loan; (c) a point-of-sale system outage; (d) a food critic's viral review that drives customers away; (e) a recession that cuts restaurant spending everywhere. Classify each by the four types, as pure or speculative, and as diversifiable or not.
+>
+> > [!answer]-
+> > - **(a) Hazard, pure, diversifiable:** A fire can only cause a loss, and fires at different restaurants are largely independent.
+> > - **(b) Financial, speculative, nondiversifiable:** Rates can fall as well as rise, and they move for every borrower at once.
+> > - **(c) Operational, pure as defined here, diversifiable:** An outage causes only loss and is particular to the chain's systems.
+> > - **(d) Strategic, speculative, diversifiable:** Reputation is particular to the firm, and a review can help as well as hurt.
+> > - **(e) Strategic, speculative, nondiversifiable:** A recession is systemic, affecting every business, and spending can recover as well as fall.
+> >
+> > Only (a), and (c) to a degree, would be covered by traditional insurance. The others need financial, operational or strategic responses, which is why holistic identification looks beyond insurable exposures.
+
+> [!tip]- How it appears on the exam
+> - **DISC-RM:** The introduction to risk management covers classifications and categories of risk. Questions give a risk and ask whether it is pure or speculative, diversifiable or not, or hazard, financial, operational or strategic, or ask why a classification matters for treating it.
+> - **Exam 9:** The insurer's version of the taxonomy (underwriting, reserve, catastrophe, market, credit, operational and strategic risk) frames the internal-model and capital questions, where the categories are aggregated with their correlations, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Pure is not the same as hazard:** Hazard risks are pure, but operational risks can be pure too. A speculative risk is defined by the possibility of gain, not by its category.
+> - **Diversifiable is about correlation:** A risk is diversifiable when losses are independent across exposures. A rare, severe event that strikes many exposures together, such as a hurricane, is not diversified away by writing more of them.
+> - **The slotting is less important than the coverage:** Frameworks place some risks differently, such as reputation as strategic or operational. What matters is that every material risk is captured once.
+

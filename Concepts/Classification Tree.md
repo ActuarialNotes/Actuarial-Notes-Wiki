@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:796ee075c0b35807412fb2e510904cded229bfcb9933c8c67806e2d7a6d72bb5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6dea5faa008599b73fad382feb0db99dd070d1843f4c32a2d65359682643e4eb
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021, CAS-hosted copy), §8.1.2 PDF pp.343-345 (eq. 8.5-8.7, error rate not sensitive enough, prune with error rate for accuracy, qualitative splits, same-class leaves), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Classification Tree.md
@@ -91,6 +92,7 @@ A **classification tree** is a [[Decision Tree]] for a qualitative [[Response Va
 > > against $8{,}000 \times 59 = \$472{,}000$ when nothing is referred. The referral rule's error rate is $(255 + 14)/1{,}000 = 26.9\%$ — far worse — yet it saves \$210,000. The tree's leaf proportions, not its majority vote, are what a business decision should use.
 
 > [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.2 covers analyzing data with classification trees. Questions give a small fitted tree for an insurance yes/no outcome, such as lapse, fraud or a large loss, and ask for the class or probability predicted for a new record, which split separates the classes better, or how to evaluate the tree on holdout data with a [[Confusion Matrix|confusion matrix]] ([[Model Training and Evaluation]]).
 > - **SRM** (multiple choice): compute the Gini index, entropy or error rate of a node or a split from class counts and pick the best split; or judge statements on which measure suits growing and which pruning.
 > - **SRM**: read a fitted tree — follow a new observation to its leaf and give the predicted class or probability — and compare trees with linear models (interpretability, interactions, variance).
 > - **PA** (written): construct, prune and validate a classification tree for a business problem — interpret its splits, justify the pruned size from CV error, and evaluate it on held-out data with a [[Confusion Matrix]] or [[AUROC]] at a cutoff suited to the problem.

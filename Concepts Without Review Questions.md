@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-10 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **787 of 2022 syllabus concept entries (39%)** have at least one question in their exam's own bank.
+> **991 of 2066 syllabus concept entries (48%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -42,9 +42,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam RET-301 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
 | [[Exam MAS-II (CAS)]] | `exam-mas-ii` (146) | 79 / 109 | 72% | 0 / 4 |
-| [[Exam DISC-DA (CAS)]] | none | 0 / 35 | 0% | 10 / 10 |
-| [[Exam DISC-RM (CAS)]] | none | 0 / 57 | 0% | 15 / 15 |
-| [[Exam DISC-IA (CAS)]] | none | 0 / 68 | 0% | 16 / 16 |
+| [[Exam DISC-DA (CAS)]] | `exam-disc-da` (70) | 42 / 42 | 100% | 0 / 10 |
+| [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (146) | 65 / 65 | 100% | 0 / 15 |
+| [[Exam DISC-IA (CAS)]] | `exam-disc-ia` (221) | 97 / 97 | 100% | 0 / 16 |
 | [[Exam 5 (CAS)]] | `exam-5` (349) | 129 / 138 | 93% | 0 / 2 |
 | [[Exam PCPA (CAS)]] | none | 0 / 30 | 0% | 3 / 3 |
 | [[Exam 6C (CAS)]] | `exam-6c` (321) | 137 / 159 | 86% | 0 / 3 |
@@ -52,9 +52,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (118) | 20 / 30 | 67% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (132) | 32 / 38 | 84% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **787 / 2022** | **39%** | |
+| **Total** | | **991 / 2066** | **48%** | |
 
-106 concept pages are linked from no exam's learning objectives and are not counted.
+108 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
 
@@ -73,9 +73,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *4 of 36 uncovered*
 
 - [[Random Variable]] — tagged in another bank (2)
-- [[Insurer]]
+- [[Insurer]] — tagged in another bank (4)
 - [[Policyholder]]
-- [[Claim]] — tagged in another bank (2)
+- [[Claim]] — tagged in another bank (4)
 
 ### Multivariate Random Variables {23–30%}
 
@@ -1957,26 +1957,26 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *4 of 20 uncovered*
 
-- [[Frequency]] — tagged in another bank (19)
-- [[Severity]] — tagged in another bank (26)
+- [[Frequency]] — tagged in another bank (21)
+- [[Severity]] — tagged in another bank (27)
 - [[Risk Experience]] — tagged in another bank (3)
-- [[Exposure Base]] — tagged in another bank (19)
+- [[Exposure Base]] — tagged in another bank (25)
 
 ### B. Linear Mixed Models {10–20%}
 
 *5 of 27 uncovered*
 
 - [[Variance]] — tagged in another bank (61)
-- [[Expected Value]] — tagged in another bank (101)
+- [[Expected Value]] — tagged in another bank (102)
 - [[Residual]] — tagged in another bank (3)
 - [[BIC]] — tagged in another bank (3)
-- [[Summary Statistics]]
+- [[Summary Statistics]] — tagged in another bank (1)
 
 ### C. Statistical Learning {40–50%}
 
 *19 of 46 uncovered*
 
-- [[Statistical Learning]] — tagged in another bank (3)
+- [[Statistical Learning]] — tagged in another bank (4)
 - [[Sampling Distribution]] — tagged in another bank (1)
 - [[Bootstrap]] — tagged in another bank (17)
 - [[Residual Sum of Squares]] — tagged in another bank (9)
@@ -1990,11 +1990,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Predictive Accuracy]] — tagged in another bank (2)
 - [[Lift]] — tagged in another bank (3)
 - [[AUROC]] — tagged in another bank (2)
-- [[Confusion Matrix]] — tagged in another bank (2)
+- [[Confusion Matrix]] — tagged in another bank (4)
 - [[Double Lift Chart]] — tagged in another bank (1)
 - [[Quantile Plot]] — tagged in another bank (2)
 - [[Mean Square Error]] — tagged in another bank (10)
-- [[Standard Deviation]] — tagged in another bank (20)
+- [[Standard Deviation]] — tagged in another bank (23)
 
 ### D. Time Series with Constant Variance {15–25%}
 
@@ -2006,404 +2006,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam DISC-DA (CAS)
 
-*No question bank yet — all 35 syllabus concepts are uncovered.*
-
-### 1. Planning an Insurer Data Modeling Project
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Data Analytics]]
-- [[Data Quality]]
-- [[Data Documentation]]
-- [[Data Types]]
-
-### 2. Collecting Data for Insurer Models
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Ratemaking Data Organization]]
-- [[Statistical Plan]]
-- [[External Data]]
-
-### 3. Preparing Data for Analysis
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Tidy Data]]
-- [[Table Join]]
-- [[Database Index]]
-- [[Missing Data]]
-- [[User-Defined Function]]
-- [[Web Scraping]]
-- [[Data Mart]]
-- [[Data Validation]]
-
-### 4. Working With Different Types of Data
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Structured Data]]
-- [[Unstructured Data]]
-- [[Data Issues]]
-
-### 5. Analyzing Data With Visualizations
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Exploratory Data Analysis]]
-- [[Data Visualization]]
-
-### 6. Presenting Data Effectively
-
-*1 of 1 uncovered — **no questions at all***
-
-- [[Data Visualization]]
-
-### 7. Understanding Fundamental Modeling Concepts
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Statistical Learning]]
-- [[K-Nearest Neighbors]]
-- [[Predictive Analytics]]
-- [[Holdout Sample]]
-
-### 8. Basic Data Analysis
-
-*6 of 6 uncovered — **no questions at all***
-
-- [[Summary Statistics]]
-- [[Data Analytics]]
-- [[Decision Tree]]
-- [[Linear Regression]]
-- [[Data Segmentation]]
-- [[Clustering]]
-
-### 9. Preparing Data for Insurance Applications
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Data Preparation]]
-- [[Tidy Data]]
-- [[Predictive Analytics]]
-
-### 10. Ethical and Societal Considerations of Data Analytics
-
-*7 of 7 uncovered — **no questions at all***
-
-- [[Data Ethics]]
-- [[Insurance Regulation]]
-- [[Professional Responsibilities of the Actuary]]
-- [[Statistical Learning]]
-- [[Predictive Analytics]]
-- [[Unfair Discrimination]]
-- [[Credit-Based Insurance Scoring]]
+*Every syllabus concept has at least one question.*
 
 ## Exam DISC-RM (CAS)
 
-*No question bank yet — all 57 syllabus concepts are uncovered.*
-
-### 1. Introduction to Risk Management
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Risk Management]]
-- [[Risk Measure]]
-- [[Risk Taxonomies]]
-
-### 2. Identifying Risk
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Risk Identification]]
-- [[Risk Assessment]]
-
-### 3. Managing Business Continuity Risk
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Organizational Resilience]]
-- [[Business Continuity Management]]
-
-### 4. Treating Risk
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Risk Mitigation]]
-- [[Enterprise Risk Management]]
-
-### 5. Insurance as a Risk Management Technique
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Risk Transfer]]
-- [[Property Loss Exposure]]
-- [[Liability Loss Exposure]]
-
-### 6. Overview of Insurance Operations
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Insurer Goals and Constraints]]
-- [[Types of Insurers]]
-- [[Basic Insurance Ratios]]
-- [[Insurance Operations]]
-- [[Insurtech]]
-
-### 7. Insurance Marketing and Distribution
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Insurance Industry]]
-- [[Insurance Marketing]]
-- [[Insurance Distribution Systems]]
-- [[Insurance Producer]]
-
-### 8. The Underwriting Function
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Underwriting]]
-- [[Underwriting Authority]]
-- [[Underwriting Policy]]
-- [[Underwriting Profit]]
-
-### 9. Underwriting Commercial Property Coverage
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Causes of Loss]]
-- [[Commercial Property Insurance]]
-- [[Insurance to Value]]
-- [[Probable Maximum Loss]]
-
-### 10. Underwriting Business Income and Commercial Liability Coverage
-
-*10 of 10 uncovered — **no questions at all***
-
-- [[Probable Maximum Loss]]
-- [[Business Income Coverage]]
-- [[Period of Restoration]]
-- [[Insurance to Value]]
-- [[Commercial General Liability]]
-- [[Exposure Base]]
-- [[Underwriting]]
-- [[Premises and Operations Liability]]
-- [[Products and Completed Operations Liability]]
-- [[Commercial Crime Insurance]]
-
-### 11. Underwriting Other Types of Coverage
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Business Auto Coverage]]
-- [[Underwriting]]
-- [[Liability Insurance]]
-- [[Auto Physical Damage Coverage]]
-- [[Workers Compensation Insurance]]
-- [[Umbrella Liability Insurance]]
-- [[Excess Insurance]]
-- [[Personal Auto Policy]]
-
-### 12. Risk Control and Premium Auditing
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Risk Control]]
-- [[Insurer]]
-- [[Insurance Operations]]
-- [[Premium Audit]]
-
-### 13. The Claims Function
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Claims Handling]]
-- [[Market Conduct Regulation]]
-- [[Coverage Analysis]]
-
-### 14. Understanding Reinsurance
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Reinsurance]]
-- [[Types of Reinsurance]]
-- [[Excess of Loss]]
-- [[Insurance-Linked Securities]]
-
-### 15. Insurer Strategic Management
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Business Strategy]]
-- [[Porter's Five Forces]]
-- [[SWOT Analysis]]
-- [[Underwriting Cycle]]
+*Every syllabus concept has at least one question.*
 
 ## Exam DISC-IA (CAS)
 
-*No question bank yet — all 68 syllabus concepts are uncovered.*
-
-### 1. Introductory Insurance Accounting
-
-*10 of 10 uncovered — **no questions at all***
-
-- [[Accounting Standards]]
-- [[Financial Statements]]
-- [[Insurance Premium]]
-- [[Earned Premium]]
-- [[Written Premium]]
-- [[Unearned Premium]]
-- [[Unpaid Claims]]
-- [[Loss and Loss Adjustment Expense]]
-- [[Reinsurance Accounting]]
-- [[Deposit Accounting]]
-
-### 2. Insurance Policy Analysis
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Insurable Risk]]
-- [[Insurance Policy]]
-- [[Policy Provisions]]
-
-### 3. Common Policy Concepts
-
-*10 of 10 uncovered — **no questions at all***
-
-- [[Insurable Interest]]
-- [[Replacement Cost]]
-- [[Actual Cash Value]]
-- [[Loss Settlement Provisions]]
-- [[Coinsurance]]
-- [[Insurance to Value]]
-- [[Coverage Modifications]]
-- [[Deductible]]
-- [[Claim]]
-- [[Compensatory Damages]]
-
-### 4. Personal Auto Policy
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Personal Auto Policy]]
-- [[Medical Payments Coverage]]
-- [[Uninsured Automobile Coverage]]
-- [[Auto Physical Damage Coverage]]
-- [[Endorsement]]
-
-### 5. Homeowners Property Coverage
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Property Loss Exposure]]
-- [[Liability Loss Exposure]]
-- [[Homeowners Policy]]
-- [[Causes of Loss]]
-- [[Policy Provisions]]
-
-### 6. Homeowners Liability Coverage
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Homeowners Policy]]
-- [[Endorsement]]
-
-### 7. Life and Health Insurance
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Term Life Insurance]]
-- [[Whole Life Insurance]]
-- [[Universal Life Insurance]]
-- [[Life Annuity]]
-- [[Health Insurance Plans]]
-
-### 8. Commercial Property Insurance Part 1
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Property Loss Exposure]]
-- [[Building and Personal Property Coverage Form]]
-- [[Causes of Loss]]
-- [[Coverage Modifications]]
-- [[Deductible]]
-
-### 9. Commercial Property Insurance Part 2
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Building and Personal Property Coverage Form]]
-- [[Commercial Property Insurance]]
-- [[Common Policy Conditions]]
-- [[Blanket Insurance]]
-- [[Coverage Analysis]]
-
-### 10. Commercial General Liability Insurance Part 1
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Liability Loss Exposure]]
-- [[Commercial General Liability]]
-- [[Policy Provisions]]
-
-### 11. Commercial General Liability Insurance Part 2
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Commercial General Liability]]
-- [[Coverage Analysis]]
-
-### 12. Specialty Coverages Part 1
-
-*7 of 7 uncovered — **no questions at all***
-
-- [[Excess Insurance]]
-- [[Umbrella Liability Insurance]]
-- [[Professional Liability Insurance]]
-- [[Directors and Officers Liability Insurance]]
-- [[Employment Practices Liability Insurance]]
-- [[Fiduciary Liability Insurance]]
-- [[Environmental Insurance]]
-
-### 13. Specialty Coverages Part 2
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Aircraft Insurance]]
-- [[Cyber Insurance]]
-- [[International Insurance]]
-- [[Terrorism Risk Insurance Program]]
-
-### 14. Insurance Law Part 1
-
-*3 of 3 uncovered — **no questions at all***
-
-- [[Negligence]]
-- [[Premises Liability]]
-- [[Intentional Tort]]
-
-### 15. Insurance Law Part 2
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Strict Liability]]
-- [[Products Liability]]
-- [[Compensatory Damages]]
-- [[Tort Litigation]]
-- [[Tort Law]]
-
-### 16. Insurance Regulation
-
-*7 of 7 uncovered — **no questions at all***
-
-- [[Insurance Regulation]]
-- [[Insurance Regulator]]
-- [[Insurer]]
-- [[Insurance Producer]]
-- [[Solvency Monitoring]]
-- [[Rate Regulation]]
-- [[Market Conduct Regulation]]
+*Every syllabus concept has at least one question.*
 
 ## Exam 5 (CAS)
 
@@ -2414,14 +2025,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *3 of 80 uncovered*
 
 - [[Close Year]]
-- [[Data Quality]]
+- [[Data Quality]] — tagged in another bank (1)
 - [[Linear Trend]]
 
 ### B. Estimating Claim Liabilities (Reserving) {45–55%}
 
 *6 of 76 uncovered*
 
-- [[Insurer]]
+- [[Insurer]] — tagged in another bank (4)
 - [[Risk]]
 - [[Underwriting Year]]
 - [[Types of Insurance]]
@@ -2516,7 +2127,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Insurance Finance Income or Expenses]]
 - [[Other Comprehensive Income Option]]
 - [[Transition to IFRS 17]]
-- [[Insurer]]
+- [[Insurer]] — tagged in another bank (4)
 - [[Base Solvency Buffer]]
 - [[Climate Risk]]
 - [[Educational Note]]
@@ -2641,14 +2252,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 - [[Actuarial Principles]]
 - [[Actuarial Standards of Practice]] — tagged in another bank (1)
-- [[Risk Transfer]] — tagged in another bank (11)
+- [[Risk Transfer]] — tagged in another bank (17)
 - [[Premium Reserve]]
 - [[Parameter Estimation]] — tagged in another bank (1)
 - [[Moment]] — tagged in another bank (3)
-- [[Expected Value]] — tagged in another bank (101)
+- [[Expected Value]] — tagged in another bank (102)
 - [[Range of Indications]]
 - [[Ceded Loss Reserve]]
-- [[Types of Reinsurance]] — tagged in another bank (4)
+- [[Types of Reinsurance]] — tagged in another bank (7)
 
 ## Exam 8 (CAS)
 
@@ -2667,7 +2278,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 - [[Line of Business]] — tagged in another bank (8)
 - [[Risk]]
-- [[Insurance Policy]] — tagged in another bank (5)
+- [[Insurance Policy]] — tagged in another bank (6)
 - [[Reasonableness Testing]] — tagged in another bank (13)
 
 ## Exam 9 (CAS)
@@ -2678,7 +2289,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *2 of 24 uncovered*
 
-- [[Facultative Reinsurance]] — tagged in another bank (1)
+- [[Facultative Reinsurance]] — tagged in another bank (2)
 - [[Ratemaking]] — tagged in another bank (6)
 
 ### B. Risk and Return {20–30%}
@@ -2694,9 +2305,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *4 of 22 uncovered*
 
-- [[Insurer]]
+- [[Insurer]] — tagged in another bank (4)
 - [[Insurance Pricing]]
-- [[Insurance Policy]] — tagged in another bank (5)
+- [[Insurance Policy]] — tagged in another bank (6)
 - [[Prepayment Risk]]
 
 ### D. Enterprise Risk Management (ERM) {15–25%}

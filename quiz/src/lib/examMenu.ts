@@ -37,7 +37,7 @@ export function examProgressKeyFromFile(fileName: string): string {
  * The question bank an exam page's **Start Quiz** row draws from — the `exam:`
  * label its questions carry and the quiz builder's `topic` ("Exam P-1 (SOA)" →
  * `Probability`, "Exam 6C (CAS)" → `Exam 6C`) — or undefined for an exam with
- * no bank (6U, PCPA, the DISCs), whose row is greyed out. Read through
+ * no bank (6U, PCPA), whose row is greyed out. Read through
  * `bankLabelFor`, so 6U doesn't borrow 6C's questions through their shared key.
  */
 export function examQuizTopic(fileName: string): string | undefined {

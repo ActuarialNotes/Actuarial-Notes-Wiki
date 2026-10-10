@@ -4,12 +4,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8a732e009913b4eaa44ee3f477c53216f94da4fce42b33073911a0470645d7f8
+  content_hash: sha256:8f874b4f19ebe6bc65915bc3c12e40ab84cb9a5df5eff6b450f8a895d4af6530
   sources:
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.6 pp.104-118 (PDF pp.123-137): ratemaking, underwriting, production, claims, reinsurance, investments, other functions incl. loss control, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.7 p.129: operating ratio, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.1, Ch.8 (permissible loss ratio), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-  open_findings: 1
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.6 pp.104-118; Ch.7 p.129, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.1; Ch.4-5 (PDF pp.63, 81) premium audits; Ch.8, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Operations.md
 ---
@@ -28,7 +27,7 @@ verification:
 - **Claims:** [[Claims Handling|Claims handling]] keeps the insurer's promise by investigating and paying covered losses, and it controls what the losses and LAE cost. Paying too little breaks the promise and exposes the insurer to regulators and courts, while paying too much erodes profit.
 - **Risk control and premium auditing:** Risk control representatives inspect accounts and recommend loss-reducing measures, which lowers expected losses. Premium auditors verify exposures after the policy period on auditable lines, so that the premium collected matches the exposure actually insured.
 - **Actuarial, reinsurance and investments:** Actuaries set rates and reserves, measure results and support planning, so their estimates determine both the price and the losses reported. Reinsurance transfers part of the risk and frees capacity to write more business. The investment function manages the assets that back reserves and surplus and earns the investment income in the profit identity.
-- **How the functions cooperate:** Risk control helps marketing by offering services that attract and keep customers, and it gives underwriters the survey information they need to accept, modify or decline an account. Claims data shows risk control where losses occur and which measures would prevent them, and risk control findings can help claims representatives investigate. Premium auditors and risk control representatives both visit the insured's premises, so each can pass on what they see about operations and classifications.
+- **How the functions cooperate:** Loss-control specialists provide services such as advice on sprinklers, alarms and fire prevention, and they also assist underwriters with information about the accounts they inspect.
 - **Goals and conflicts:** The functions share the insurer's goals of earning a profit and meeting customers' needs, but they can pull in different directions. Marketing wants more accounts accepted, underwriting wants the right ones, and claims wants fair settlements while the insurer wants losses kept in check, so the results are only good when the functions work together.
 
 > [!example]- Tracing Each Function to the Income Statement {Example}

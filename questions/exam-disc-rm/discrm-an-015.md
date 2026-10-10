@@ -16,10 +16,10 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1eb957055c013252819b6c5156754a63f7b8ebca35855c0865518dc82e6ceacc
+  content_hash: sha256:66d7e1a1257febd5bedd7f5adc4d31d74c467c511ecd3af891ca834c6d597a40
   sources:
     - "NAIC Insurance Topics: Surplus Lines (last updated 10/27/2025), read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://content.naic.org/insurance-topics/surplus-lines"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-015.md
 ---

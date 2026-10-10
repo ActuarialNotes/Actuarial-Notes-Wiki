@@ -4,13 +4,13 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:24e149d419daa92b94ed5363ac2f8238e97009bb6dec1c6da554b054da919b99
+  content_hash: sha256:2588e7e4316a988aae67ed967323da6bad29296ee92aff582a4fc949d99199ce
   sources:
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.44-45, 54-55 (PDF pp.63-64, 73-74): pre-/post-loss objectives, policy statement, benefits, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s09-01 Tables 5.1-5.2 value model (Doherty), sha256:fb6132c902587c0b9c1303ce5a29fa0cb6addb19de40716dfcbec5dee0779559 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s09-01-enterprise-risk-management-wit.html"
-    - "COSO, Enterprise Risk Management: Integrating with Strategy and Performance, Executive Summary (June 2017), pp.4-5 benefits of ERM, sha256:2d4809dd09687d701944987f65ca6ddc39074a00236abebfd436d79f4563abd1 — https://www.coso.org/_files/ugd/3059fc_61ea5985b03c4293960642fdce408eaa.pdf"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.44-45, 54-55, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s09-01 Tables 5.1-5.2, sha256:fb6132c902587c0b9c1303ce5a29fa0cb6addb19de40716dfcbec5dee0779559 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s09-01-enterprise-risk-management-wit.html"
+    - "COSO, Enterprise Risk Management: Integrating with Strategy and Performance, Executive Summary (June 2017), pp.4-5, sha256:2d4809dd09687d701944987f65ca6ddc39074a00236abebfd436d79f4563abd1 — https://www.coso.org/_files/ugd/3059fc_61ea5985b03c4293960642fdce408eaa.pdf"
     - "Biniam G., Bonga University, Risk Management and Insurance Chapter Two (lecture notes, 2020), pp.2-3, 10, sha256:37410f48587eebe39188d15f5aa51af832d85f8179229edc0b3d9dd322165f01 — http://ndl.ethernet.edu.et/bitstream/123456789/79433/7/RISK-%20Ch@2.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Management Objectives.md
 ---
@@ -25,7 +25,7 @@ verification:
 - **Why the formula matters:** Spending on risk management adds $C_{\text{rm}}$ to the costs, so with everything else fixed it lowers profit and value. It raises value only by changing the other terms: customers who prefer a secure supplier buy more ($R$ rises), employees accept less to work for a safer firm ($W$ falls), lenders charge less ($I$ falls), and owners may accept a higher multiple $m$ for a less risky firm. This is the sense in which risk management benefits stakeholders other than the owners.
 - **Economy:** Before a loss, the organization should prepare for potential losses in the most economical way. That means comparing the cost of safety programs, insurance premiums and the other techniques for handling losses, rather than buying every protection available.
 - **Reduction of anxiety:** Some exposures, such as the chance of a major lawsuit, cause more worry for the risk manager, executives and owners than others. A pre-loss objective is to reduce that anxiety to a tolerable level, which can justify protection that economy alone would not.
-- **Externally imposed obligations:** Laws, regulations and contracts impose obligations that must be met whatever they cost, such as installing safety devices to protect workers, disposing of hazardous materials properly and labeling consumer products. Lenders and other contracting parties can impose insurance requirements of their own.
+- **Externally imposed obligations:** Laws and regulations impose obligations that must be met whatever they cost, such as installing safety devices to protect workers, disposing of hazardous materials properly and labeling consumer products.
 - **Survival and continued operation:** The first post-loss objective is survival: after a loss, the organization can resume at least partial operation within a reasonable time. For some organizations, the ability to keep operating after a severe loss is itself an extremely important objective, a stricter goal than survival.
 - **Stability of earnings and continued growth:** After a loss, the organization wants to maintain its earnings, such as earnings per share, and to continue growing, so the risk manager considers how a loss would interrupt both.
 - **Social responsibility:** The organization seeks to limit the effect a loss has on other people and on society, such as employees who lose work, customers who lose a supplier and a community that loses a major employer.

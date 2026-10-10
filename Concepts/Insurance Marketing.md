@@ -4,9 +4,11 @@ verification:
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e6415fd998cd6e3ba7acdcdc6fe6b46d76e5630e7db52b94fac0ac7f3f6fd34
-  sources: []
-  open_findings: 2
+  content_hash: sha256:d07251df969838adc46867d9d3cdb56e5cc24bd3d1a1448f92a446bf0f1fed7f
+  sources:
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 Internet marketing; mass merchandising, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), table of contents, chapters 4-12, sha256:b9329afa59c3f4ccbe1d34f742ce4d05b9557a8e95bcbf473b10fcd23a7a6d48 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/index.html"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurance Marketing.md
 ---

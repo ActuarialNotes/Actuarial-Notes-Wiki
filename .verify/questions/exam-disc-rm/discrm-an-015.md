@@ -28,3 +28,23 @@ created: 2026-10-10
 - proposed_action: Retag to a U.S. guaranty-fund page once one exists, or drop the tag.
 - applied: false
 - fingerprint: 4bb3c95d31ee
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv03
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Per lead decision: removed the Concepts/Guaranty+Funds tag from wiki_link.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv03
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: re-check after retagging: wiki_link targets exist and fit; content unchanged since this run's verification
+- sources_checked: NAIC Insurance Topics: Surplus Lines (last updated 10/27/2025), read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://content.naic.org/insurance-topics/surplus-lines
+- note: Re-verified after the retag that closed F-001. Vault-written question: medium.

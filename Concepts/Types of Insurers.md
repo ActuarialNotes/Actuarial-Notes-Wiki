@@ -4,13 +4,11 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8685d6506fcb900d8aa53636c91f6c67d5978a542bac81e9ffa53c7236f628e0
+  content_hash: sha256:07d0e0250d555c1bbbf3fdc40ce130f1ccb89db4e47882793dd9b39d84731000
   sources:
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 pp.88-99 (PDF pp.107-118): stock, mutual, demutualization, mutual holding company, Lloyd's, reciprocal, agents/brokers, surplus lines, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.8 p.146 (PDF p.165): domestic, foreign, alien, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.49-50: captives, RRGs, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 pp.88-99; Ch.8 p.146; Ch.3 pp.49-50, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
     - "IRMI Glossary, \"risk retention group\", definition, sha256:b3713c667bb71b1dd4918edaa779232f5130cebe7371cf30e878d177abbb6856 — https://www.irmi.com/term/insurance-definitions/risk-retention-group"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Types of Insurers.md
 ---
@@ -45,7 +43,7 @@ verification:
 > > 2. A mutual insurer, foreign in Ohio (incorporated in another state) and admitted there, using the exclusive agency system.
 > > 3. Ownership isn't stated. It is alien (incorporated in another country) and non-admitted, writing as an eligible surplus lines insurer.
 > > 4. A reciprocal exchange, foreign in Ohio and admitted there.
-> > 5. A risk retention group, foreign in Ohio. It is licensed only in Vermont, its domicile, and may write in Ohio after registering there, so its Ohio insureds have no guaranty fund protection.
+> > 5. A risk retention group, foreign in Ohio. It is licensed only in Vermont, its domicile.
 
 > [!example]- Net Cost Under a Participating Mutual Policy {Example}
 > A business owner is offered two commercial property policies for the same coverage. A stock insurer quotes a nonparticipating premium of \$24,000. A mutual quotes a participating premium of \$25,500 and has paid policyholder dividends of 8% of premium in each of the last five years. With illustrative figures, compare the expected net costs and say what the owner gives up by choosing the mutual.

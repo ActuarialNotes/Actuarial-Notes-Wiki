@@ -28,3 +28,23 @@ created: 2026-10-10
 - checks_run: every definition, list, rule and attribution checked against the sources listed; every worked example recomputed; all [[links]] resolve; U.S. framing reviewed
 - sources_checked: Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 54 (PDF pp.65, 73): identification sources; cooperation with other departments, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0; Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf; CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.111-112 (PDF pp.13-14): four risk types; identification by committee, surveys, workshops, brainstorming, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf
 - note: Four categories, document analysis (financial statements, contracts, policies, loss histories, flowcharts, org charts), compliance review, inspections and internal/external expertise, holistic and cross-functional identification all confirmed. The P(found) formula is the page's own illustration (independence rule per OpenStax 3.1-3.2); example recomputed (0.832, 0.79). Minor finding open for unsourced stress-test/facilitator/owner sentences.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv03
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Deleted the stress-testing sentence, the facilitator/groupthink clause and the risk-owner sentence; restated the output to CAS-ERM p.112's wording (identification documents the conditions and events that are material threats or areas to exploit).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv03
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: re-check after this run's authorized edits: every changed sentence checked against the sources listed; links resolve; earlier checks of unchanged content carried forward
+- sources_checked: Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.46, 54, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0; Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf; CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.111-112 (PDF pp.13-14), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf
+- note: Re-verified after the edit that closed F-001.

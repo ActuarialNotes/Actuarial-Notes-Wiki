@@ -37,9 +37,12 @@
 > > Notice to the agent is notice to the insurer, so the clock starts on day 0.
 > > $$
 > > \begin{align*}
-> > t_{\text{ack}} &\le 0 + 15 = 15 \\
-> > t_{\text{decision}} &\le 40 + 21 = 61 \\
-> > t_{\text{pay}} &\le 66 + 30 = 96
+> > t_{\text{ack}} &\le 0 + 15 \\
+> > &= 15 \\
+> > t_{\text{decision}} &\le 40 + 21 \\
+> > &= 61 \\
+> > t_{\text{pay}} &\le 66 + 30 \\
+> > &= 96
 > > \end{align*}
 > > $$
 > > - **Acknowledgment late:** day 18 is after day 15, and no payment was made in that time.
@@ -54,9 +57,12 @@
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{(a)}\quad &\min(40 \times 1{,}000,\ 100{,}000) = 40{,}000 \\
-> > \text{(b)}\quad &\min(160 \times 1{,}000,\ 100{,}000) = 100{,}000 \\
-> > \text{(c)}\quad &\min(15 \times 25{,}000,\ 250{,}000) = 250{,}000
+> > \text{(a)}\quad &\min(40 \times 1{,}000,\ 100{,}000) \\
+> > &= 40{,}000 \\
+> > \text{(b)}\quad &\min(160 \times 1{,}000,\ 100{,}000) \\
+> > &= 100{,}000 \\
+> > \text{(c)}\quad &\min(15 \times 25{,}000,\ 250{,}000) \\
+> > &= 250{,}000
 > > \end{align*}
 > > $$
 > > The commissioner can also order the insurer to cease and desist and, where it knew or should have known of the violation, suspend or revoke its license. State versions of the act often set different amounts.

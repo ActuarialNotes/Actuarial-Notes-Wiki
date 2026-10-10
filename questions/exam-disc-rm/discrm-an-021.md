@@ -40,4 +40,4 @@ Plant X's losses vary more relative to their average. The answer is **A**.
 
 - **B** — Plant Y's larger standard deviation mostly reflects its larger losses; comparing standard deviations across different means overstates the risk of the bigger exposure.
 - **C** — 6.67 and 4.00 are the means divided by the standard deviations, the inverse of the coefficient of variation, which reverses the ranking.
-- **D** — Variance has the same problem as the standard deviation, in squared units: $120{,}000^2 / 50{,}000^2 = 5.76$ reflects size, not relative variability.
+- **D** — Variance has the same problem as the standard deviation, in squared units: Plant Y's variance is $(120{,}000 / 50{,}000)^2 = 5.76$ times Plant X's, which reflects size, not relative variability.

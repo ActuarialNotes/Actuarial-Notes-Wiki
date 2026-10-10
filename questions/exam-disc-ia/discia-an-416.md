@@ -1,0 +1,41 @@
+---
+id: "discia-an-416"
+exam: "Exam DISC-IA"
+topic: "HO-3 Property Coverages"
+learning_objective: "Homeowners Property Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/HO-3+Property+Coverages
+  - Concepts/Homeowners+Policy
+answer: "B"
+points: 1
+---
+Burglars take the following from an HO-3 (HO 00 03 05 11) insured's home: \$500 in cash, gold coins worth \$800, jewelry worth \$4,000, a camera worth \$900 and a rifle worth \$1,200. Every amount is the actual cash value, and the deductible is \$500. How much does the insurer pay?
+
+- A) \$1,800
+- B) \$3,300
+- C) \$3,500
+- D) \$6,900
+
+## Explanation
+
+Cash and coins are in one special limit category, \$200 in total for the loss. Theft of jewelry is limited to \$1,500, and theft of firearms to \$2,500, which the rifle doesn't reach. The camera has no special limit. The deductible applies once to the total:
+
+$$
+\begin{align*}
+\text{Loss payable} &= 200 + 1{,}500 + 900 + 1{,}200 \\
+&= 3{,}800 \\
+\text{Paid} &= 3{,}800 - 500 \\
+&= 3{,}300
+\end{align*}
+$$
+
+The answer is **B**.
+
+**Why not the others**
+
+- **A** subtracts a \$500 deductible from each of the four categories instead of once from the total loss.
+- **C** gives the cash and the coins \$200 each, but the \$200 is the total for the whole category.
+- **D** ignores the special limits.

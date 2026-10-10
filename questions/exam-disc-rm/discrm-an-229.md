@@ -27,7 +27,8 @@ The audit checks the classification of each employee's duties as well as the tot
 
 $$
 \begin{align*}
-\text{Deposit} &= \frac{1{,}500{,}000}{100} \times 0.30 = 4{,}500 \\
+\text{Deposit} &= \frac{1{,}500{,}000}{100} \times 0.30 \\
+&= 4{,}500 \\
 \text{Audited} &= \frac{1{,}200{,}000}{100} \times 0.30 + \frac{400{,}000}{100} \times 4.20 \\
 &= 3{,}600 + 16{,}800 \\
 &= 20{,}400 \\

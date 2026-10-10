@@ -56,7 +56,7 @@
 > (a) A fire destroys one of a pair of antique lamps. The pair's actual cash value was \$1,800 and the surviving lamp alone is worth \$600. (b) The named insured burns down his own house; the bank holds a mortgage and has met the mortgage clause's conditions. (c) A \$50,000 Coverage A loss is covered by this policy with a \$300,000 limit and another with a \$200,000 limit. What does the insurer pay in each case?
 >
 > > [!answer]-
-> > - **(a) \$1,200:** The insurer may pay the difference between the pair's actual cash value before and after the loss, \$1,800 − \$600.
+> > - **(a) \$1,200:** The insurer may pay the difference between the pair's actual cash value before and after the loss, \$1,800 minus \$600.
 > > - **(b) The mortgagee is paid; the insured is not.** Intentional loss bars the insured, but the denial does not apply to the mortgagee's valid claim. Having paid the bank, the insurer is subrogated to the bank's rights under the mortgage against the insured.
 > > - **(c) \$30,000:** The policy pays its pro rata share, \$50,000 × 300/500, and the other insurer pays \$20,000.
 

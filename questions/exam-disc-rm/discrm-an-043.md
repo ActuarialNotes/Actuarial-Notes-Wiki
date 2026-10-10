@@ -38,6 +38,6 @@ The insurer loses money on underwriting but is profitable after investment incom
 
 **Why not the others**
 
-- **A** — 70% is the loss and LAE ratio alone, $560/800$.
+- **A** — 70% is the loss and LAE ratio alone, \$560 million divided by \$800 million.
 - **C** — 101% is the combined ratio, which leaves out investment income.
 - **D** — 110% adds the investment income ratio instead of subtracting it.

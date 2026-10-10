@@ -1,0 +1,31 @@
+---
+id: "discia-an-423"
+exam: "Exam DISC-IA"
+topic: "HO-3 Property Conditions"
+learning_objective: "Homeowners Property Coverage"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/HO-3+Property+Conditions
+  - Concepts/Replacement+Cost
+  - Concepts/Actual+Cash+Value
+answer: "D"
+points: 1
+---
+A dwelling is insured under an HO-3 (HO 00 03 05 11) for \$200,000, more than 80% of its replacement cost. A windstorm causes damage costing \$4,000 to repair, with an actual cash value of \$2,800. The insured has not yet made the repair. Before the deductible, what can the insured collect now?
+
+- A) \$4,000, because the loss is less than 5% of the amount of insurance
+- B) \$4,000, because the dwelling is insured for at least 80% of replacement cost
+- C) Nothing, because the insurer pays only once the repair is complete
+- D) \$2,800 now, and the \$1,200 balance once the repair is complete
+
+## Explanation
+
+Until the repair is complete the insurer pays no more than actual cash value, unless the cost is **both** less than 5% of the insurance on the building and less than \$2,500. Here \$4,000 is under 5% of \$200,000 (\$10,000) but not under \$2,500, so only the \$2,800 actual cash value is payable now. The insured can collect the remaining \$1,200 after repairing, having told the insurer within 180 days of the loss of its intent to repair. The answer is **D**.
+
+**Why not the others**
+
+- **A** applies only one of the two tests; both must be met.
+- **B** — meeting the 80% condition earns replacement cost settlement, but payment beyond ACV still waits for the repair.
+- **C** — the actual cash value is payable before the repair; only the difference waits.

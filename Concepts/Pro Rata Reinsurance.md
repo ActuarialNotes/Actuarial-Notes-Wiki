@@ -23,9 +23,12 @@
 > > The treaty's capacity is $4 \times 250{,}000 = 1{,}000{,}000$, so it covers risks up to \$1,250,000 in full.
 > > $$
 > > \begin{align*}
-> > s_A &= \frac{\max(200{,}000 - 250{,}000,\ 0)}{200{,}000} = 0 \\
-> > s_B &= \frac{750{,}000 - 250{,}000}{750{,}000} = 66.67\% \\
-> > s_C &= \frac{\min(1{,}750{,}000,\ 1{,}000{,}000)}{2{,}000{,}000} = 50\%
+> > s_A &= \frac{\max(200{,}000 - 250{,}000,\ 0)}{200{,}000} \\
+> > &= 0 \\
+> > s_B &= \frac{750{,}000 - 250{,}000}{750{,}000} \\
+> > &= 66.67\% \\
+> > s_C &= \frac{\min(1{,}750{,}000,\ 1{,}000{,}000)}{2{,}000{,}000} \\
+> > &= 50\%
 > > \end{align*}
 > > $$
 > > - **A:** below the retained line, so nothing is ceded and the cedant keeps the \$50,000 loss.
@@ -40,10 +43,14 @@
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Ceded premium} &= 0.30 \times 40{,}000{,}000 = 12{,}000{,}000 \\
-> > \text{Commission} &= 0.32 \times 12{,}000{,}000 = 3{,}840{,}000 \\
-> > \text{Ceded losses} &= 0.30 \times 0.62 \times 40{,}000{,}000 = 7{,}440{,}000 \\
-> > \text{Net premium} &= 40{,}000{,}000 - 12{,}000{,}000 = 28{,}000{,}000
+> > \text{Ceded premium} &= 0.30 \times 40{,}000{,}000 \\
+> > &= 12{,}000{,}000 \\
+> > \text{Commission} &= 0.32 \times 12{,}000{,}000 \\
+> > &= 3{,}840{,}000 \\
+> > \text{Ceded losses} &= 0.30 \times 0.62 \times 40{,}000{,}000 \\
+> > &= 7{,}440{,}000 \\
+> > \text{Net premium} &= 40{,}000{,}000 - 12{,}000{,}000 \\
+> > &= 28{,}000{,}000
 > > \end{align*}
 > > $$
 > > The premium-to-surplus ratio falls from $40/12 = 3.33$ to $28/12 = 2.33$, so the same surplus now supports more new writing. The \$3.84 million commission offsets the expenses the insurer paid to write the ceded share. The price is that 30% of the book's expected profit goes to the reinsurer too.

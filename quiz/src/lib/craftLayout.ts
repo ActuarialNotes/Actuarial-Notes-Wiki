@@ -94,6 +94,17 @@ export function connectionSpring(a: string, b: string, strength: number, reach =
   return { a, b, length: reach + 150 - 100 * s, k: 0.25 + 0.75 * s }
 }
 
+/**
+ * How thick a connection's line is drawn, in board units: the strength to the
+ * power 1.5 over a wide range — 0.6 for nothing, about 4.5 at 50, 11.6 at 100 —
+ * so how strong a connection is reads at a glance, before any number does, and
+ * the strong lines stand out of a busy board rather than merely darker.
+ */
+export function lineWidth(strength: number): number {
+  const s = Math.min(100, Math.max(0, strength)) / 100
+  return 0.6 + 11 * Math.pow(s, 1.5)
+}
+
 export function makeBody(at: Point, size: { w: number; h: number }): Body {
   return { x: at.x, y: at.y, vx: 0, vy: 0, w: size.w, h: size.h, pinned: false }
 }

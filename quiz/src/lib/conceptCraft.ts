@@ -31,6 +31,7 @@ import {
   linkTargetName,
   flattenLine,
   pairKey,
+  readPair,
   tagName,
   type ConceptGraph,
   type Connection,
@@ -169,7 +170,7 @@ export function topicGraph(
   page: (name: string) => string | undefined,
   questions: readonly GraphQuestion[],
 ): CraftGraph {
-  return craftGraph(buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines }), page)
+  return craftGraph(buildConceptGraph({ concepts: topic.concepts, page, questions, lines: topic.lines }), page, questions)
 }
 
 // ─── Making concepts ─────────────────────────────────────────────────────────
@@ -178,15 +179,99 @@ export function topicGraph(
 export interface CraftGraph extends ConceptGraph {
   /** What each connection makes, keyed by `pairKey`, the best explained first (`recipesByPair`). */
   makes: Map<string, Recipe[]>
+  /**
+   * Where a pair outside `connections` is read from (`connectionFor`) — the
+   * pages and the quiz pool. Without it such a pair still connects, on what
+   * the graph says about its neighbours alone.
+   */
+  source?: {
+    page: (name: string) => string | undefined
+    questions: readonly GraphQuestion[]
+  }
 }
 
 /** A graph made playable: the recipes its pages give (`lib/conceptRecipes.ts`). */
-export function craftGraph(graph: ConceptGraph, page: (name: string) => string | undefined): CraftGraph {
-  return { ...graph, makes: recipesByPair(buildRecipes(graph, page)) }
+export function craftGraph(graph: ConceptGraph, page: (name: string) => string | undefined, questions: readonly GraphQuestion[] = []): CraftGraph {
+  return { ...graph, makes: recipesByPair(buildRecipes(graph, page)), source: { page, questions } }
 }
 
 const norm = (name: string) => name.trim().toLowerCase()
 const otherEnd = (c: Connection, name: string) => (norm(c.a) === name ? norm(c.b) : norm(c.a))
+
+// ─── Any pair ────────────────────────────────────────────────────────────────
+
+/**
+ * How much a path through one other concept counts toward a pair the notes
+ * don't tie directly: the strongest `a — c — b`, its two strengths multiplied
+ * (as fractions of 100) and scaled by this. Two strong connections through a
+ * shared concept make a faint one; two faint ones make next to nothing.
+ */
+export const PATH_WEIGHT = 0.5
+
+/** The faintest a connection can be: any two concepts of a syllabus are related somehow. */
+export const FLOOR_STRENGTH = 1
+
+const inferredCache = new WeakMap<CraftGraph, Map<string, Connection>>()
+
+/**
+ * **The connection between any two concepts on a board.** Every pair connects:
+ * the graph's own connection where it has one (`graph.byKey`); otherwise the
+ * pair read on its own (`readPair` — the pages and the questions, as the graph
+ * reads a topic, with no cut-off), lifted by the strongest path through a
+ * concept tied to both (`PATH_WEIGHT`), and never below `FLOOR_STRENGTH`. Such
+ * a connection is `inferred`: drawn and scored like any other, it makes
+ * nothing. Null for a concept paired with itself or one not on the board.
+ * Read once per graph and pair.
+ */
+export function connectionFor(graph: CraftGraph, a: string, b: string): Connection | null {
+  const x = norm(a)
+  const y = norm(b)
+  if (x === y) return null
+  const key = pairKey(a, b)
+  const known = graph.byKey.get(key)
+  if (known) return known
+  let cache = inferredCache.get(graph)
+  if (!cache) inferredCache.set(graph, (cache = new Map()))
+  const hit = cache.get(key)
+  if (hit) return hit
+  const names = new Map(graph.concepts.map(c => [norm(c), c]))
+  const nameA = names.get(x)
+  const nameB = names.get(y)
+  if (!nameA || !nameB) return null
+
+  const direct = graph.source
+    ? readPair({ a: nameA, b: nameB, ...graph.source, share: n => graph.share.get(norm(n)) ?? 0 })
+    : null
+  let via: string | undefined
+  let path = 0
+  for (const c of graph.neighbours.get(x) ?? []) {
+    const mid = otherEnd(c, x)
+    const onward = graph.byKey.get(pairKey(mid, y))
+    if (!onward) continue
+    const through = c.strength * onward.strength / 100
+    if (through > path) {
+      path = through
+      via = names.get(mid) ?? mid
+    }
+  }
+  const [first, second] = x < y ? [nameA, nameB] : [nameB, nameA]
+  const connection: Connection = {
+    ...(direct ?? {
+      evidence: { ab: { links: 0, texts: 0, share: 0 }, ba: { links: 0, texts: 0, share: 0 }, questionWeight: 0, lineSize: 0 },
+      mentions: [],
+      questions: [],
+      lines: [],
+    }),
+    key,
+    a: first,
+    b: second,
+    strength: Math.max(FLOOR_STRENGTH, direct?.strength ?? 0, Math.round(PATH_WEIGHT * path)),
+    inferred: true,
+    via,
+  }
+  cache.set(key, connection)
+  return connection
+}
 
 /** What finding the connection between `a` and `b` makes — whether or not it is already in hand. */
 export function madeBy(graph: CraftGraph, a: string, b: string): string[] {
@@ -295,6 +380,7 @@ export function mergeGraphs(graphs: readonly CraftGraph[]): CraftGraph {
   const byKey = new Map<string, Connection>()
   const share = new Map<string, number>()
   const makes = new Map<string, Recipe[]>()
+  let source: CraftGraph['source']
   for (const g of graphs) {
     for (const c of g.concepts) {
       if (names.has(norm(c))) continue
@@ -306,6 +392,7 @@ export function mergeGraphs(graphs: readonly CraftGraph[]): CraftGraph {
       if (!known || c.strength > known.strength) byKey.set(c.key, c)
     }
     for (const [k, v] of g.share) if (!share.has(k)) share.set(k, v)
+    source ??= g.source
     for (const [key, recipes] of g.makes) {
       const kept = makes.get(key) ?? []
       for (const r of recipes) if (!kept.some(x => norm(x.makes) === norm(r.makes))) kept.push(r)
@@ -321,7 +408,7 @@ export function mergeGraphs(graphs: readonly CraftGraph[]): CraftGraph {
       else neighbours.set(end, [c])
     }
   }
-  return { concepts, connections, byKey, neighbours, share, makes }
+  return { concepts, connections, byKey, neighbours, share, makes, source }
 }
 
 /** The cards a board deals: each pack's seeds, pack by pack in the order added, none twice. */
@@ -381,7 +468,8 @@ export function boardState(graph: CraftGraph, seeds: readonly string[], progress
   const madeFrom = new Map<string, Connection>()
   const seen = new Set<string>()
   for (const key of progress.found) {
-    const c = graph.byKey.get(key)
+    const bar = key.indexOf('|')
+    const c = graph.byKey.get(key) ?? (bar > 0 ? connectionFor(graph, key.slice(0, bar), key.slice(bar + 1)) : null)
     if (!c || seen.has(key) || !inHand.has(norm(c.a)) || !inHand.has(norm(c.b))) continue
     seen.add(key)
     found.push(c)
@@ -400,7 +488,7 @@ export function withConnection(progress: CraftProgress, connection: Pick<Connect
 
 /** What happens when `a` is dropped on `b`. */
 export type CombineOutcome =
-  /** Nothing in the vault ties the two together. */
+  /** A card dropped on itself, or on one not in play. */
   | { kind: 'none' }
   /** Found before: the line between them lights up. */
   | { kind: 'known'; connection: Connection }
@@ -408,8 +496,7 @@ export type CombineOutcome =
   | { kind: 'new'; connection: Connection; made: string[] }
 
 export function combine(graph: CraftGraph, state: BoardState, a: string, b: string): CombineOutcome {
-  if (norm(a) === norm(b)) return { kind: 'none' }
-  const connection = graph.byKey.get(pairKey(a, b))
+  const connection = connectionFor(graph, a, b)
   if (!connection) return { kind: 'none' }
   if (state.found.some(c => c.key === connection.key)) return { kind: 'known', connection }
   const inHand = new Set(state.held.map(norm))
@@ -419,20 +506,72 @@ export function combine(graph: CraftGraph, state: BoardState, a: string, b: stri
 export interface TopicTally {
   held: number
   concepts: number
+  /** The graph's own connections found — the ones the notes tie together. */
   found: number
   connections: number
-  /** Every connection found. */
+  /** Every connection found, inferred ones included. */
+  links: number
+  /** Every one of the graph's own connections found. */
   complete: boolean
 }
 
 export function topicTally(graph: ConceptGraph, state: BoardState): TopicTally {
+  const found = state.found.filter(c => graph.byKey.has(c.key)).length
   return {
     held: state.held.length,
     concepts: graph.concepts.length,
-    found: state.found.length,
+    found,
     connections: graph.connections.length,
-    complete: graph.connections.length > 0 && state.found.length === graph.connections.length,
+    links: state.found.length,
+    complete: graph.connections.length > 0 && found === graph.connections.length,
   }
+}
+
+// ─── Score ───────────────────────────────────────────────────────────────────
+
+export const SCORE = {
+  /** A connection's practice earns this much per question answered right… */
+  practiceBase: 20,
+  /** …plus this much of the connection's strength. */
+  practiceStrength: 1,
+} as const
+
+/**
+ * What finding a connection scores: its strength squared over 100, at least 1
+ * — so a strong connection is worth far more than a faint one (90 scores 81,
+ * 50 scores 25, 20 scores 4). Any pair connects; the score is what says which
+ * connections were worth finding.
+ */
+export function connectionPoints(strength: number): number {
+  return Math.max(1, Math.round((strength * strength) / 100))
+}
+
+/**
+ * What a connection's **Practice** scores: each question answered right on its
+ * best run earns `practiceBase` plus the connection's strength — so a few right
+ * answers outweigh the find itself many times over.
+ */
+export function practicePoints(strength: number, correct: number): number {
+  return Math.max(0, Math.floor(correct)) * (SCORE.practiceBase + SCORE.practiceStrength * strength)
+}
+
+export interface CraftScore {
+  total: number
+  /** From the connections found. */
+  found: number
+  /** From their practice. */
+  practice: number
+}
+
+/** The board's score: every connection found, and the best practice run on each (`lib/craftPractice.ts`). */
+export function craftScore(state: BoardState, practiced: Readonly<Record<string, number>> = {}): CraftScore {
+  let found = 0
+  let practice = 0
+  for (const c of state.found) {
+    found += connectionPoints(c.strength)
+    practice += practicePoints(c.strength, practiced[c.key] ?? 0)
+  }
+  return { total: found + practice, found, practice }
 }
 
 // ─── Practice ────────────────────────────────────────────────────────────────

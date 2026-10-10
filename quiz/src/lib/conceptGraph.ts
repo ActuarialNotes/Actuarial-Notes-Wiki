@@ -355,6 +355,15 @@ export interface Connection {
   questions: string[]
   /** Syllabus lines naming both, as written. */
   lines: string[]
+  /**
+   * Read for the pair on its own (`readPair`), not found among the topic's
+   * connections: the two are on one board but the notes tie them weakly, or
+   * they come from different starter packs. Such a connection is real — it is
+   * drawn and scored — but it makes nothing.
+   */
+  inferred?: boolean
+  /** For an inferred connection, the concept that ties the two most strongly through itself. */
+  via?: string
 }
 
 export interface GraphQuestion {
@@ -544,6 +553,77 @@ export function buildConceptGraph({ concepts, page, questions, lines }: GraphInp
     }
   }
   return { concepts: names, connections, byKey, neighbours, share: new Map(names.map(n => [n.toLowerCase(), share(n)])) }
+}
+
+// ─── One pair, on its own ────────────────────────────────────────────────────
+
+/** Each question's tags, read once per pool: lower-cased concept → the questions tagged with it and their weight. */
+const tagIndexes = new WeakMap<readonly GraphQuestion[], Map<string, Map<string, number>>>()
+function tagIndex(questions: readonly GraphQuestion[]): Map<string, Map<string, number>> {
+  let index = tagIndexes.get(questions)
+  if (!index) {
+    index = new Map()
+    for (const q of questions) {
+      const tags = new Set(q.links.map(tagName).filter(Boolean))
+      if (tags.size < 2) continue
+      const weight = 1 / (tags.size - 1)
+      for (const t of tags) {
+        const list = index.get(t) ?? new Map<string, number>()
+        list.set(q.id, weight)
+        index.set(t, list)
+      }
+    }
+    tagIndexes.set(questions, index)
+  }
+  return index
+}
+
+export interface PairInput {
+  a: string
+  b: string
+  page: (name: string) => string | undefined
+  questions: readonly GraphQuestion[]
+  /** How common each name is across its topic (`ConceptGraph.share`); a name not listed counts as uncommon. */
+  share?: (name: string) => number
+}
+
+/**
+ * Any two concepts read as `buildConceptGraph` reads a topic's pairs — what
+ * each page says about the other and the questions tagged with both — but on
+ * their own, with no cut-off: the pair two starter packs bring together, or
+ * one the graph left out as too faint to count. No syllabus line ties a pair
+ * read this way (lines are a topic's), so the strength rests on the pages and
+ * the questions alone, and may be anything from 0 up.
+ */
+export function readPair({ a, b, page, questions, share = () => 0 }: PairInput): Connection {
+  const [x, y] = a.toLowerCase() < b.toLowerCase() ? [a, b] : [b, a]
+  const side = (from: string, to: string): { evidence: PageEvidence; mentions: Mention[] } => {
+    const markdown = page(from)
+    const mentions = markdown
+      ? pageMentions(from, markdown, [to]).filter(m => m.to.toLowerCase() === to.toLowerCase()).map(m => ({ ...m, to }))
+      : []
+    return {
+      evidence: { links: mentions.filter(m => m.linked).length, texts: mentions.filter(m => !m.linked).length, share: share(to) },
+      mentions,
+    }
+  }
+  const ab = side(x, y)
+  const ba = side(y, x)
+  const index = tagIndex(questions)
+  const withX = index.get(x.toLowerCase()) ?? new Map<string, number>()
+  const withY = index.get(y.toLowerCase()) ?? new Map<string, number>()
+  const both: string[] = []
+  let questionWeight = 0
+  for (const [id, weight] of withX) {
+    if (!withY.has(id)) continue
+    both.push(id)
+    questionWeight += weight
+  }
+  const evidence: StrengthEvidence = { ab: ab.evidence, ba: ba.evidence, questionWeight, lineSize: 0 }
+  const ranked = [...ab.mentions, ...ba.mentions].sort((m, n) => mentionRank(m) - mentionRank(n))
+  const mentions: Mention[] = []
+  for (const m of ranked) if (mentions.length < MAX_MENTIONS_KEPT && !mentions.some(k => k.text === m.text)) mentions.push(m)
+  return { key: pairKey(x, y), a: x, b: y, strength: connectionStrength(evidence), evidence, mentions, questions: both, lines: [] }
 }
 
 /** The other end of a connection. */

@@ -11,6 +11,7 @@ import {
   edgeToBox,
   fitView,
   lineLabelPoint,
+  lineWidth,
   makeBody,
   seedPositions,
   separate,
@@ -242,5 +243,19 @@ describe('edgeToBox and lineLabelPoint', () => {
     const narrow = { x: 300, y: 0, w: 60, h: 40 }
     // The gap runs from x = 100 to x = 270, so its middle is 185, not the centres' 150.
     expect(lineLabelPoint(wide, narrow)).toEqual({ x: 185, y: 0 })
+  })
+})
+
+describe('lineWidth', () => {
+  it('draws a strong connection many times thicker than a faint one', () => {
+    expect(lineWidth(0)).toBeCloseTo(0.6)
+    expect(lineWidth(100)).toBeCloseTo(11.6)
+    expect(lineWidth(90) / lineWidth(10)).toBeGreaterThan(8)
+    for (let s = 0; s < 100; s += 10) expect(lineWidth(s + 10)).toBeGreaterThan(lineWidth(s))
+  })
+
+  it('stays in range', () => {
+    expect(lineWidth(-5)).toBe(lineWidth(0))
+    expect(lineWidth(250)).toBe(lineWidth(100))
   })
 })

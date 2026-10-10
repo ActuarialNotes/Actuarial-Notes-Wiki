@@ -2,14 +2,16 @@
 
 A topic crafted out of its building blocks. A topic is one learning objective of an
 exam page; the reader starts with the concepts nothing else in it is made from, and
-drops one on another. Where the vault ties the two together a line is drawn between
-them carrying the connection's **strength**, 0–100, and the connection **makes** what
-is built from the pair — cause and effect: the concepts whose own pages define them by
-the two, the way frequency and severity make the pure premium. Those land on the
-board beside the pair in the exam's colour. Where nothing ties the two the card goes
-back. Every connection found stays on the board, so a topic
-ends as a map of how its concepts relate — the strongly connected drawn close
-together, the loosely connected further out.
+drops one on another. **Any two connect**: a line is drawn between them carrying the
+connection's **strength**, 0–100 — its thickness is the strength — and what the two
+are to each other in one to five words (*Frequency* **multiplies with** *Severity*).
+Where the vault ties the pair together, the connection also **makes** what is built
+from it — cause and effect: the concepts whose own pages define them by the two, the
+way frequency and severity make the pure premium. Those land on the board beside the
+pair in the exam's colour. Every connection scores, the strong far more than the
+faint, and practising one scores far more again (**Score**, below). Every connection
+found stays on the board, so a topic ends as a map of how its concepts relate — the
+strongly connected drawn close together, the loosely connected further out.
 
 It lives at **`/craft`** — one board, opened from the **Concept Craft** row at the
 top of the Quiz tab, beside Quiz Battle: a way of studying, not an exam. The board
@@ -65,7 +67,7 @@ What a pair made was read off the same graph — the concepts tied most strongly
 their own. New cards are drawn in the exam's colour, and a connection's card is pared
 down to its strength, its **Practice** button and what the pages say.
 
-The fourth version — this one — changes *what* a pair makes. "Tied to both" made
+The fourth version changes *what* a pair makes. "Tied to both" made
 concepts that were only related: Frequency and Severity made the Pure Premium, but
 also the Basic Insurance Ratios that list them; Set Theory and the Law of Total
 Probability made Conditional Probability, which the law is built *on*. Now a pair makes
@@ -74,20 +76,34 @@ makes (`lib/conceptRecipes.ts`, below): `Pure Premium = Frequency × Severity` i
 recipe; a list naming both is not. A topic starts from its building blocks, and a
 connection's card says what it made and quotes the page that says why.
 
+The fifth version — this one — lets **any two concepts connect**. A reader dropping two
+cards together and being told *no connection* learned nothing, and the connections
+that were found didn't say what they were. Now every pair connects, with a strength
+read for it however faint (*Any pair*, below), the board **scores** what is found —
+the stronger the connection the more, and a connection's practice far more — and every
+connection says, in one to five words, **what one concept is to the other**
+(*Relations*): written for the vault's 5,587 connections, and read off the vault for
+any other pair. The graph's own connections — the ones the notes tie together — still
+make concepts and still count toward a pack being complete; a pair the notes barely
+tie makes nothing, scores little and is drawn as a dashed hairline.
+
 ## The pieces
 
 | | |
 |---|---|
 | `quiz/src/lib/conceptGraph.ts` | **The graph**, pure and tested: what a page says about other concepts (`pageMentions` — links, and names written out), the strength formula (`connectionStrength`, `STRENGTH_WEIGHTS`, `MIN_STRENGTH`, `STRENGTH_TIERS`) and `buildConceptGraph`. |
 | `quiz/src/lib/conceptRecipes.ts` | **The recipes**, pure and tested: what a page's opening names and where (`openingNames`, `pageOpening`, `beforeAside`, `abbreviationOf`), each concept's best recipes (`buildRecipes`, `RECIPES`, `PLACE`) and what each connection makes (`recipesByPair`). |
-| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), starter packs on one board (`mergeGraphs`, `packSeeds`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`) and a connection's practice (`practiceQuestions`). |
+| `quiz/src/lib/conceptCraft.ts` | **The rules**, pure and tested: topics read off the exam pages (`objectiveBlocks`, `craftTopics`), a topic's graph with its recipes (`topicGraph`, `craftGraph`), any pair's connection (`connectionFor`, `PATH_WEIGHT`, `FLOOR_STRENGTH`), what a connection makes (`madeBy`, `recipesOf`), the starting hand (`seedConcepts`), starter packs on one board (`mergeGraphs`, `packSeeds`), a reader's board (`boardState`, `combine`, `withConnection`, `topicTally`), the score (`connectionPoints`, `practicePoints`, `craftScore`, `SCORE`) and a connection's practice (`practiceQuestions`). |
+| `quiz/src/lib/conceptRelations.ts` | **What a connection says**, pure and tested: a written label (`writtenRelation`), else one read off the vault — recipes, the pages' own verb phrases (`phraseBetween`), the names (`nameRelation`), what the pair shares, the evidence, a path, where the two sit (`relationOf`) — and the sentence it makes (`relationSentence`). |
+| `quiz/src/data/craftRelations.json` | **The written labels**: one per connection of the graph, keyed by `pairKey`, the direction first (`>` from the key's first name, `<` from its second, `=` either way). |
+| `quiz/src/lib/craftPractice.ts` | **What practice scored**: the note a connection's Practice leaves for the quiz (`startCraftPractice`) and the quiz's right answers coming back (`settleCraftPractice`, from `completeQuiz`), best run per connection. Standalone — localStorage only — so the quiz store doesn't pull the graph into the main bundle. |
 | `quiz/src/lib/craftLayout.ts` | The board's physics and geometry, pure and tested: bodies, strength-weighted springs, collision, seeding, where a made card lands (`spawnBeside`), the camera, hit-testing, where a line's label goes. |
 | `quiz/src/hooks/useConceptCraft.ts` | The reader's board — localStorage, pack ids and pair keys only — and which connections the board shows. |
 | `quiz/src/hooks/useConceptLevels.ts` | A concept's level and collected state for drawing its card — shared with Quiz Battle's topic pick. |
 | `quiz/src/pages/Craft.tsx` | The board's screen: top bar, the empty board's invitation, deck, board, the bottom-right controls (**+**, zoom, fit, tidy, filter, clear), connection card. Lazy (`lazyRoute`). |
 | `quiz/src/components/craft/` | `CraftBoard` (the canvas), `CraftDeck` (a side panel on a wide board only — a phone has no deck, every card being on its board), `CraftConnection` (a connection's card), `CraftPackMenu` (the starter packs the **+** opens), `CraftLogo`. |
-| `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), and no quoted sentence cuts a formula in half. |
-| `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, a pair sent back, tap-then-tap, the concept popup, and a connection's card: what it made, down to its quiz. |
+| `quiz/src/lib/conceptCraftVault.test.ts` | The topics, graphs and recipes over the real vault: every studiable exam has a board, ids are url-safe, nearly every concept is connected, every topic can be made in full from its seeds and no seed from the others, most of the vault is made rather than dealt, a handful of recipes it must keep (*Frequency* and *Severity* make the *Pure Premium*), no quoted sentence cuts a formula in half — and the written labels: each names two concept pages in one to five words naming neither, nearly every connection of every topic has one, and any pair at all gets a relation of five words or fewer. |
+| `quiz/e2e/craft.spec.ts` | The way in onto an empty board, starter packs added from the **+**, a connection found that makes new cards — drawn from the line that made them — with nothing to close, any pair connecting and scoring with its line's weight its strength, tap-then-tap, the concept popup, and a connection's card: what one concept is to the other and what it made, down to its quiz. |
 
 ## Topics
 
@@ -164,6 +180,92 @@ links nothing to it, and the LEV's page never mentions the LER — so the pair r
 
 Each connection keeps at most three sentences, best first: prose before callouts and
 tables, links before names, and each page's best before a second from either.
+
+## Any pair
+
+Every two concepts on a board connect (`connectionFor`). Where the graph has the pair
+— the notes tie the two at `MIN_STRENGTH` or more — that is its connection. Any other
+pair is **inferred**:
+
+- **Read on its own** (`readPair` in `lib/conceptGraph.ts`): what each page says about
+  the other and the questions tagged with both, weighed exactly as the graph weighs a
+  topic's pairs, with no cut-off — and no syllabus line, since lines are a topic's. Two
+  concepts from different starter packs whose pages link each other read at full
+  strength this way, quoted sentences and all.
+- **Lifted by a path**: the strongest `a — c — b` through a concept connected to both,
+  its two strengths multiplied (as fractions of 100) and halved (`PATH_WEIGHT`). Two
+  strong connections through a shared concept make a faint one; two faint ones, next to
+  nothing. The concept is kept (`via`), for the card and the relation.
+- **Never nothing**: at least `FLOOR_STRENGTH` (1) — any two concepts of an actuarial
+  syllabus are related somehow, and the score says how little.
+
+An inferred connection is drawn, scored and kept like any other, but it **makes
+nothing**, pulls on no spring (only connections at `MIN_STRENGTH` or more shape the
+map, or every faint pair would knot it up), and doesn't count toward a pack's
+complete. The tally counts the graph's own connections (*14 of 61 key connections*);
+the score counts everything.
+
+## Relations
+
+Every connection says what one concept is to the other in **one to five words**, so
+the line between two cards reads as a sentence: *Expected Loss Ratio* **is the a
+priori in** *Bornhuetter-Ferguson Method*; *Credibility* **trades off against**
+*Homogeneity*. A relation said of both reads with both names first: *Frequency* and
+*Severity* **together make Pure Premium** (`relationSentence`). `relationOf` takes the
+first of these that says something:
+
+1. **Written** — `data/craftRelations.json`, one label for each of the graph's 5,587
+   connections across the thirty topics, keyed by `pairKey` with its direction first.
+   Written by Claude for this board from the pair's quoted sentence and what it makes,
+   **not yet reviewed** — like any AI-written vault content they want a human read,
+   and a wrong one is a one-line fix in the file.
+2. **A recipe** — the pair makes a third (`together make …`), or one is an ingredient of
+   the other (`is a building block of`).
+3. **The pages' own words** — a quoted sentence naming both, read for the phrase written
+   between the names (`phraseBetween`): five words or fewer, one clause (no comma,
+   dash, bracket, formula, *and*, *or*, *which*…), opening on a verb, comparison or
+   operation and ending on something that leads into the other name — "is a special
+   case of", "is multiplied by", "offsets"; never "is the assumption".
+4. **The names** — one inside the other (*Expected Loss Ratio* **is a kind of** *Loss
+   Ratio*; *Loss Ratio Method* **is built around** it), or one head word
+   (**both are methods**; the head of "Complement of Credibility" is *complement*, and
+   a field or a quantity — *credibility*, *probability*, *data* — is no head to share).
+5. **What they share** — a concept both help build, or one both are built from.
+6. **The evidence** — pages linking each other (`cross-reference each other`),
+   questions testing both (`are tested together`), one page pointing at the other
+   (`draws on`), a syllabus line (`share a syllabus line`).
+7. **A path** — `linked through …` the concept tied most strongly to both.
+8. **Where they sit** — the same syllabus section, the same exam (`both on Exam P`),
+   two exams (`bridge Exam P and Exam 5`).
+
+Written labels cover the pairs that matter most; the reading below them is what keeps
+a pair no one wrote for — two packs' concepts brought together, a faint pair — from
+going unlabelled. A label lives with the pair, not the topic, so a pair two topics
+share says one thing. `conceptCraftVault.test.ts` holds the file to the vault: both
+names are concept pages, one to five words naming neither, and at most one in twenty
+of any topic's connections without one — a page edit that makes new connections can
+add a few before it fails. To write labels for new connections, dump the topic's
+missing pairs with their quoted sentence and what they make (as the vault test reads
+them), write them, and add them to the file in the same shape.
+
+## Score
+
+The board keeps a **score**, top right (`craftScore`):
+
+- **A connection found** scores its strength squared over 100, at least 1
+  (`connectionPoints`): 90 scores 81, 50 scores 25, 20 scores 4, a faint inferred pair
+  1. Every pair connects; the score is what says which connections were worth finding.
+- **A connection practised** scores each question answered right on its best run at
+  20 plus the connection's strength (`practicePoints`, `SCORE`) — five right on a
+  90-strength connection is 550, many times the find. The connection's card says what
+  it scored and what each right answer is worth.
+
+Practice is an ordinary quiz on another page, so the board can't watch it: the card's
+**Practice** leaves a note — the connection and its questions — and `completeQuiz`
+hands the quiz's right answers to `settleCraftPractice`, which scores them against the
+note if the quiz was that practice, keeping the better of the old and new runs
+(`lib/craftPractice.ts`). Practising again earns more only by getting more right.
+Clearing the board clears the score.
 
 ## Making concepts
 
@@ -255,24 +357,28 @@ and something it plainly makes: *Spot Rate* and *Yield Rate*, the *Yield Curve*.
   the popup's syllabus-filter picker — and never a concept not yet made), the board
   gives up that room (`--concept-split-height`), and
   the card being read is lit with its connections.
-- **Tap a strength** on a line to open that connection's card.
+- **Tap a strength** on a line to open that connection's card. The line being looked
+  at, or the one just found, carries its relation under its strength, an arrow saying
+  which way the phrase reads.
 - **No drag?** Tap a card in the deck to hold it; the next card tapped, in the deck
   or on the board, is tried against it — the way to play from a keyboard or a
   switch. `Esc` puts a held card back, then closes a connection's card.
 
-When a pair connects, **nothing opens**. The line draws in between the two cards,
-its strength pops onto it, the tally moves, and what it made lands beside the pair
+When a pair connects — and any pair does — **nothing opens**. The line draws in
+between the two cards, its strength pops onto it with what the two are to each other
+under it, one line at the bottom says what it scored and reads the relation as a
+sentence (*+81 · Frequency multiplies with Severity*), the tally and score move, and
+what it made lands beside the pair
 (brought into view if that is at the edge), a dashed line in the exam's colour drawn
 to it from the line that made it — cause, then effect. Screen readers are told what was found
 and made through a live region. A find that makes a card plays `collect`, a line
-alone `correct`, a topic's last connection `complete`. A pair found before pulses
-its line. A pair nothing connects goes back, with one line of text — *No connection
-between these two* — and no sound (mistakes are silent, `docs/sound-design.md`
-rule 7).
+the notes draw `correct`, a faint inferred one `select`, a topic's last connection
+`complete`. A pair found before pulses its line. Only a card dropped on itself goes
+back, silently.
 
 There is nothing else to do: no prompt, no target, no timer. The tally across the
-top — *12 of 19 concepts · 14 of 61 connections* — is the whole of the scoring, and
-a topic is finished when every connection is found.
+top — *12 of 19 concepts · 14 of 61 key connections* — and the score beside it are
+the whole of it, and a topic is finished when every key connection is found.
 
 ## The board
 
@@ -314,8 +420,10 @@ card before its first move is heard, and the drag is lost.
 
 A well-played topic has dozens of lines. Three things keep it readable:
 
-- **Ink by strength.** A line's weight and opacity rise with its strength; strong
-  lines are drawn nearly solid, weak ones faint.
+- **Weight by strength.** A line's thickness is its strength to the power 1.5, from a
+  hairline (0.6) to a cord (11.6 at 100) — `lineWidth` in `lib/craftLayout.ts` — and its
+  ink rises with it, so how strong a connection is reads before any number does. A
+  connection under `MIN_STRENGTH` is dashed as well.
 - **Focus.** The card under the pointer, the card being read in the popup, or the
   connection whose card is open is **lit** — its lines and their strengths in the
   exam's colour, the strengths drawn above the cards — and every other line steps
@@ -382,8 +490,10 @@ pack's add button is in that exam's colour (`ExamLogo`).
 ## Storage
 
 localStorage only (`craft.v4`), the way Cowork's stores are: one board — the packs
-added (topic ids, in order), the connections found, as pair keys in the order found,
-and where each card was left — plus the filter. Nothing else is stored — the cards in hand, which find made each and
+added (topic ids, in order), the connections found, as pair keys in the order found
+(inferred ones included — any two names on the board), and where each card was left —
+plus the filter. What practice scored is its own key (`craft.practice.v1`, pair key →
+best run), with the note a practice leaves for its quiz (`craft.practice.pending`). Nothing else is stored — the cards in hand, which find made each and
 which are new are all re-read from that one list against the graph (`boardState`:
 every pack's seeds, then each connection in order, kept only while both its ends were in hand
 when it was found). So a vault edit that drops a concept or a connection takes it off
@@ -404,7 +514,7 @@ to it — and a connection's **Practice** is an ordinary quiz, which does.
 
 Two analytics events (`docs/analytics-and-monitoring.md`):
 
-- `craft_combined` — `exam`, `topic`, `outcome` (`new`, `known` or `none`), for a pair
+- `craft_combined` — `exam`, `topic`, `outcome` (`new` or `known` — every pair connects now), for a pair
   that connects its `strength`, and for a new one how many concepts it `made`.
 - `craft_topic_completed` — `exam`, `topic`: every connection in a topic found.
 

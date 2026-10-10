@@ -11,15 +11,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:0b29f5d1e173bd45eafb7fe093c0c2f4eaa4ff9c9ce5a0a5b747c770255839e7
   sources:
     - "Cornell LII Wex, \"respondeat superior\", whole entry, sha256:fd77a3983e2353c2f15adffd48d82d032d09d3a1ab40c5c752bfb4140e2baf02 — https://www.law.cornell.edu/wex/respondeat_superior"
     - "Cornell LII Wex, \"vicarious liability\", whole entry, sha256:57fcdf516d60286d1e2944aa84388f6fc92233e4e3400316d9881acafbc27856 — https://www.law.cornell.edu/wex/vicarious_liability"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-234.md
 ---

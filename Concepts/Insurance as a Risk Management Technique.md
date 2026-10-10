@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7e22b208b41df1c6c3c78cc64276cf2acb4c18f8640fec4f08a0d54afcd8b6c8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Insurance as a Risk Management Technique.md
+---
+
 **Insurance as a risk management technique** is the use of insurance to finance the losses an organization or person cannot avoid or reduce to an acceptable level. It combines two things: [[Risk Transfer|transfer]] of the financial consequences of a loss to an insurer, in return for a premium, and the insurer's *pooling* of many similar exposures, which makes the losses of the group predictable. It fits best the exposures with a low [[Frequency|frequency]] and a high [[Severity|severity]] of loss.
 
 > $$\text{Expected cost per insured} = \frac{n\,p\,s}{n} = p\,s$$

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f838136603e38bbbe7643a8f6a5190eb81bd2bb06c4b5d20433925914bab07c1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-467.md
 ---
 An insurer sells both life insurance and annuities to similar customers. If its customers live longer than expected, the life block gains and the annuity block loses by a similar amount; if they die sooner, the reverse happens. The two product managers each propose buying reinsurance against their own block's mortality risk. Which treatment best reflects treating the risk holistically?
 

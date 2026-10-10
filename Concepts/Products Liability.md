@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:8d473e6aa777b172bbf7f57c421f3a2d827cba375aefb351bdf0a114af724f89
@@ -20,7 +20,7 @@ verification:
     - "The Indiana Lawyer (DTCI), \"Are sellers safe from strict liability under the IPLA?\" (rank 3), quotation of Ind. Code 34-20-2-3, read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://theindianalawyer.com/?p=138294"
     - "IRMI Glossary, \"vendors endorsement\", whole entry, sha256:74b815c93094a19b5557fdbb7832aef01914bde7af83cb952b0467fdba111fdc — https://www.irmi.com/term/insurance-definitions/vendors-endorsement"
     - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), s.V def. 16 products-completed operations hazard; exclusions k and n, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Products Liability.md
 ---

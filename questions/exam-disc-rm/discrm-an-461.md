@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Median
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ee83d4697e62b773e7b0e0eacc029397335459e09d3c4acf2376eddde7a806b7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-461.md
 ---
 A risk manager estimates a store's annual theft and vandalism loss as \$0 with probability 0.70, \$5,000 with probability 0.20, \$20,000 with probability 0.08 and \$200,000 with probability 0.02. What are the expected annual loss and the median annual loss?
 

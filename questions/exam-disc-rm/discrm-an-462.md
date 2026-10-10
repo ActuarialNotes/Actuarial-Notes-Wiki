@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Standard+Deviation
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b15572638af58f79190fedc0d26c19db387588920e879683c1354449734b8baf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-462.md
 ---
 Two of a company's exposures can each produce an annual loss anywhere from \$0 to \$1,000,000. For Exposure X a loss of \$1,000,000 has a probability of 0.001 a year; for Exposure Y it has a probability of 0.10. A junior analyst reports that the two exposures are equally risky because their ranges are equal. Which statement best evaluates the analyst's conclusion?
 

@@ -11,14 +11,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:3e877c98407b69007fca42b04f363adf99104c2976568bdc35de85ee35c6ad55
   sources:
     - "Cornell LII Wex, \"joint and several liability\", whole entry, sha256:907bf1f785eab437a0b3da0331f065d205461aad65c49955408c9687146bdf55 — https://www.law.cornell.edu/wex/joint_and_several_liability"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-235.md
 ---

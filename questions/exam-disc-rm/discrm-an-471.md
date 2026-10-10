@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Workers+Compensation+Insurance
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7417a94e56206de1912a5e827a407f1e128805b346e5a3078bca1372ceff5594
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-471.md
 ---
 A landscaping company with a limited insurance budget ranks its coverages as essential, desirable or available. Which coverage is **desirable** insurance?
 

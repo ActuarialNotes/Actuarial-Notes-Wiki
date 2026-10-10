@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:49df6c2e97ccb4b10ca579577e9d33201f7c7b6557a009955241cd8863c26374
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Basic Risk Measures.md
+---
+
 **Basic risk measures** are the descriptive figures a risk manager uses to size up a loss exposure before deciding how to treat it: how many units are exposed, how often losses happen ([[Frequency|frequency]] and [[Probability|probability]]), how large they are ([[Severity|severity]], or consequence), what outcome is typical (central tendency) and how far outcomes stray from it (dispersion, or volatility).
 
 > $$\text{Frequency} = \frac{\text{number of losses}}{\text{number of exposure units}}$$
@@ -17,7 +30,8 @@
 - **Central tendency:** The expected value is the long-run average of all outcomes over many repetitions, so it may not be a possible outcome at all. The [[Median|median]] is the 50 percent mark, with half the outcomes above and half below, and the [[Mode|mode]] is the single most likely value. For a loss distribution with rare large losses the three differ widely, and the expected value says nothing about the risk.
 - **Dispersion, or volatility:** Risk is the deviation of actual outcomes from the expected value, the potential for surprise. The *range*, highest outcome minus lowest, is a rough measure of the worst-case spread, but it ignores how likely the extremes are. The [[Variance|variance]] averages the squared deviations, weighting each by its probability, and is in squared units; the standard deviation returns to the original units. When two exposures have different means, the coefficient of variation compares their risk relative to their size.
 - **How a risk manager uses them:** Frequency and severity over a stated period are usually the measures that matter most, and treatment aims to lower one or both: physical construction, backup systems, hedging and insurance all work on them. The frequency-severity pair places an exposure in the risk management matrix that points towards retention, loss control, insurance or avoidance ([[Risk Treatment]]), and on a risk map of all the organization's risks ([[Risk Assessment]]). Which measure to use depends on the question: a concern with insolvency calls for a different measure than sensitivity to moderate interest rate changes.
-- **Beyond the basic measures:** Measures that look only at unfavourable outcomes (semivariance) or at the tail, such as value at risk and tail value at risk, are the actuarial / Exam 9 treatment in [[Risk Measure]].
+- **Solvency versus performance:** The CAS's 2003 ERM overview sorts the measures used in ERM into two groups. *Solvency-related* measures look at the adverse tail of the distribution, such as the probability of ruin (the chance that capital is exhausted) and shortfall risk (the chance of falling below a threshold), and they concern customers and their proxies, such as regulators and rating agencies. *Performance-related* measures look at the region near the mean, such as the variance, the standard deviation and the semivariance, which counts only unfavourable deviations, and they concern owners and their proxies, such as stock analysts.
+- **Beyond the basic measures:** Tail measures such as value at risk and tail value at risk, and the properties that make a risk measure coherent, are the actuarial / Exam 9 treatment in [[Risk Measure]].
 
 > [!example]- Central Tendency and Dispersion for a Warehouse's Fire Losses {Example}
 > A distributor estimates its warehouse's annual fire loss as follows: no loss with probability 0.80, \$10,000 with probability 0.12, \$50,000 with probability 0.06 and \$400,000 with probability 0.02. Find the expected value, median, mode, range, standard deviation and coefficient of variation. Why would budgeting the expected value each year not settle the risk?

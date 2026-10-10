@@ -1,23 +1,24 @@
 ---
 id: "discrm-an-021"
 exam: "Exam DISC-RM"
-topic: "Risk Measure"
+topic: "Basic Risk Measures"
 learning_objective: "1. Introduction to Risk Management"
 difficulty: medium
 type: multiple-choice
 bloom: apply
 wiki_link:
+  - Concepts/Basic+Risk+Measures
   - Concepts/Risk+Measure
   - Concepts/Coefficient+of+Variation
   - Concepts/Standard+Deviation
 answer: "A"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:dfbd8422674878c5d0d690425235c29d435d5c389338d3d9dc9761c3134d7d93
+  content_hash: sha256:b056d9035f5a37b45f6856db8459dfab52d0b69226f9b36bff3061761aaa6963
   sources:
     - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06-02 coefficient of variation, sha256:2cd18f66c1d1d9bc8162fb93bce73ddf75b766f3363ac06e3ec20e165d473773 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-02-measures-of-risk-putting-it-to.html"
   open_findings: 0

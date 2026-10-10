@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:5ac603448dd99d4add590cccc73beab16ddcc94f73194958e90fb14af199e5e3
@@ -16,7 +16,7 @@ verification:
     - "Cornell LII Wex, \"punitive damages\", whole entry, sha256:d7d3c177c6bb8aff7989985bdb69ed4452bf7457888735cde1ebf97b7586b7ec — https://www.law.cornell.edu/wex/punitive_damages"
     - "State Farm v. Campbell, 538 U.S. 408 (2003), syllabus via LII, syllabus point (2), sha256:1aa5960343fff7c168cb91204ea8295eab0b0edd9a87e3cc63b1eb3aad1853a8 — https://www.law.cornell.edu/supct/html/01-1289.ZS.html"
     - "PPG Industries v. Transamerica, 20 Cal. 4th 310 (1999) (Caselaw Access Project), public-policy discussion of insuring punitive damages, sha256:ef2c38bf2ecf125988034d0e1094372fb85140e3e5deb61d5912f8b7b556536d — https://static.case.law/cal-4th/20/cases/0310-01.json"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Compensatory Damages.md
 ---

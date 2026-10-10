@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:3a180fac0099ab977e399fe1c76d8c5dda6d98edcec59fac5b454304a101811e
@@ -22,7 +22,7 @@ verification:
     - "United States v. Carroll Towing Co., 159 F.2d 169 (2d Cir. 1947) (Caselaw Access Project), Hand formula passage, sha256:2c13a0d99f6fad58ed353a70bc9d5c8d4d4f9d9be29526c74fa6b48d58681ef6 — https://static.case.law/f2d/159/cases/0169-01.json"
     - "CTS Corp. v. Waldburger, 573 U.S. 1 (2014), via LII, opinion Part II-A, sha256:30cdfdc9b2ea45f8b22dcd057cefa53457c2de03c06a56fc95ae8f3182caab7c — https://www.law.cornell.edu/supremecourt/text/13-339"
     - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), s.V def. 13 \"occurrence\"; s.I Coverage A exclusion 2.a, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Negligence.md
 ---

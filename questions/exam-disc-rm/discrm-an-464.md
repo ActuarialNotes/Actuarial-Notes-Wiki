@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Enterprise+Risk+Management
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c2ed9724d4f4a4e5b3b15370eb922fb3012e53097fa2d7213873bc0022ef1a13
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-464.md
 ---
 Under the CAS's four types of risk for an enterprise (hazard, financial, operational and strategic), which of the following is a strategic risk for a furniture manufacturer?
 

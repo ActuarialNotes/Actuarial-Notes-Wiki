@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:5f58e731a278ba63faaa133f5dbb972e3ddf7bce8e0ab94b86236e15e73c8fea
@@ -28,7 +28,7 @@ verification:
     - "IRMI Glossary, \"duty to defend\", whole entry, sha256:a300b15f90422dda94e7921eb0cc3100fc480b28c99906387d2fa318781680fa — https://www.irmi.com/term/insurance-definitions/duty-to-defend"
     - "Katko v. Briney, 183 N.W.2d 657 (Iowa 1971) (Caselaw Access Project), instructions 2, 5 and 6, sha256:db0baf0b78caa8615295b5b37ca669f9da0f03c07d1cc814470080147ca83c31 — https://static.case.law/nw2d/183/cases/0657-01.json"
     - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), Coverage A excl. 2.a (expected or intended, reasonable-force exception); Coverage B exclusions 2.a-2.b; s.V def. 14 personal and advertising injury, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Intentional Tort.md
 ---

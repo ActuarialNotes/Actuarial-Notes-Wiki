@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3011000d6cb4655b95a27d05ba5bda9344ad1bb6ded3a6e03d6a819b00bcaaf5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Holistic Risk Treatment.md
+---
+
 **Holistic risk treatment** chooses how to treat an organization's risks by looking at all of them together, as one portfolio across every unit and category, instead of treating each risk separately in its own department or "silo". It is how [[Enterprise Risk Management|enterprise risk management]] carries out the treatment step of the [[Risk Management Process|risk management process]]: the treatment is judged by its effect on the whole organization's risk, measured against the [[Risk Appetite|risk appetite]] the board has set.
 
 > $$\sigma_P = \sqrt{\sigma_1^2 + \sigma_2^2 + 2\rho\,\sigma_1\sigma_2}$$

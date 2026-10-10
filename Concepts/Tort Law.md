@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:3a84e3e2e6c819dd20d16bf943f03cbfb6a9bf85ee6c32cc4aec1918d552b7bc
@@ -16,7 +16,7 @@ verification:
     - "Cornell LII Wex, \"contingency fee\", whole entry, sha256:552acce77d4446d301041c9ed79862d310562c183f51bc39ac025dffc7ecc718 — https://www.law.cornell.edu/wex/contingency_fee"
     - "Fla. Stat. s.768.81 (2024), subsections (3) and (6); history note ch. 2023-15, sha256:16124ee06032d6f8ec2bed0cf4921c7791efb85e497a4985eee532154cee2407 — https://www.flsenate.gov/Laws/Statutes/2024/768.81"
     - "Cornell LII Wex, \"products liability\", whole entry, sha256:3932a61c3a07202fd010d53a48a95868ba5ce8965c19b11890b41f59b224daf5 — https://www.law.cornell.edu/wex/products_liability"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Tort Law.md
 ---

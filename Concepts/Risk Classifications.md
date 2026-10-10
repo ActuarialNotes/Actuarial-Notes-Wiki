@@ -1,3 +1,16 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3976580c3ca5b55632ab4fb4bec124d482992cb1b0cce66010e445d42cea01f5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Risk Classifications.md
+---
+
 **Risk classifications** sort an organization's risks by their nature so that each can be matched to a suitable treatment: whether a risk offers a chance of gain (pure or speculative), whether it is a perception or a measurable variation (subjective or objective), whether pooling reduces it (diversifiable or nondiversifiable), and where it comes from (hazard, operational, financial or strategic).
 
 > $$\text{Objective risk} = \frac{\sigma}{\mu} = \frac{\sqrt{n p q}}{n p}$$

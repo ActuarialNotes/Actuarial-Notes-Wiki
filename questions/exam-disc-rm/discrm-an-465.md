@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Coefficient+of+Variation
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f7ee9812d6356f48b266a2bedac8a960b52aa33c2f777999f07bc8ff26907bd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-465.md
 ---
 Insurer A pools 900 similar homes and Insurer B pools 3,600. Each home has an independent probability of 0.02 of a fire claim in a year. Measuring objective risk as the standard deviation of the number of claims divided by the expected number, how does Insurer B's objective risk compare with Insurer A's?
 

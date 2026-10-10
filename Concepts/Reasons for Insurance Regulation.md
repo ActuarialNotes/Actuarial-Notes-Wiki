@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:a135e0eb8f0248246dec66bc725c332b987fad8d817763a04330c2379af4e4fa
@@ -16,7 +16,7 @@ verification:
     - "Cornell LII Wex, \"contra proferentem\", whole entry, sha256:e17e688d536be7c5603d1061dd780ba795f218487fddb7b78bff817bb6f654f1 — https://www.law.cornell.edu/wex/contra_proferentem"
     - "Cornell LII Wex, \"adhesion contract\", whole entry, sha256:6cb7999ec8c8f828d339722af1b7e4a3944886565464c14ef86ac9571e590b6f — https://www.law.cornell.edu/wex/adhesion_contract_(contract_of_adhesion)"
     - "NAIC Unfair Trade Practices Act (#880, Spring 2024), ss.1, 4A, 4B, 4D-4F, 4H, 4I, 4K-4M, 6, 8A, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reasons for Insurance Regulation.md
 ---

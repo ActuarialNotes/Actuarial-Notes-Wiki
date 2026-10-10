@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Severity
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:274038c9627b5dc6b2399e98b687927f5e68d1b8fb5e567f4006c5b14605b4cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-460.md
 ---
 A manufacturing plant with 250 employees recorded 15 workplace injuries last year, costing \$180,000 in total. Measuring frequency per employee, what were the frequency and the severity of the plant's injuries?
 
@@ -37,6 +47,6 @@ The answer is **B**: 6 injuries per 100 employees a year, at an average of \$12,
 
 **Why not the others**
 
-- **A** — \$720 is the loss per employee, $180{,}000 / 250$, which is frequency times severity, not severity.
+- **A** — \$720 is the loss per employee, \$180,000 divided by 250, which is frequency times severity, not severity.
 - **C** — 15 is the raw count of injuries. Without dividing by the 250 employees it cannot be compared with a plant of a different size.
 - **D** — 16.67 is employees per injury, the base divided by the count, and \$720 again confuses loss per employee with severity.

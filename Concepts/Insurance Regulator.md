@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:c3608b73fbb7efdff518ebcd26c1d78ed13d0106bfeda9b4669ca63e61a11efa
@@ -19,7 +19,7 @@ verification:
     - "CCIR, About, whole page, sha256:ae0d1b2e5c6521cb423a1785ca96dfb7b38931fcc97a9bd5399089a8bae1c94c — https://www.ccir-ccrra.org/AboutCCIR"
     - "S. Harrington, testimony to Senate Banking Committee, July 18 2006, PDF pp.3-4, 9, sha256:b9f8f73ee163f8da541f0b1eac83254cafbcf66cdd8e508c0fb8e770a7fcf20c — https://www.banking.senate.gov/download/harrington-july-18-2006&download=1"
     - "NAIC testimony (Csiszar), Senate Commerce Committee, Oct 22 2003, PDF p.3 (\"one overriding reason\"); p.5 (UCAA), sha256:b465c2a47d11ff54d304ff2c91a26987265d74208a77e37fdb2c6c65157c1d1a — https://content.naic.org/sites/default/files/naic_archive/testimony_0310_csiszar.pdf"
-  open_findings: 3
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Regulator.md
 ---

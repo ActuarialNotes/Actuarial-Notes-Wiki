@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:699b80e588c25fbfeadd41f14b465f1ba1ff5bd413249afa03db0df55a1183f7
@@ -18,7 +18,7 @@ verification:
     - "IRMI Glossary, \"charitable immunity\", whole entry, sha256:47ebf562ed2ec4097fd4bc0536f6cab0fdaf2f5a419d9b0f82903cbf112fe6c1 — https://www.irmi.com/term/insurance-definitions/charitable-immunity"
     - "Wikipedia, \"Charitable immunity\" (rank 3), lead, sha256:c5c858f200396511907d662f8c47c5fade366dea21cdf8cffb637848e3235084 — https://en.wikipedia.org/wiki/Charitable_immunity"
     - "Heino v. Harper, 306 Or. 347 (1988) (Caselaw Access Project), Restatement s.895F discussion, sha256:da9c72437d9d8a0b53f37086f9e6e6a6d03bea17d44f218c15ac0d68f4a76e5c — https://static.case.law/or/306/cases/0347-01.json"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Defenses Against Negligence.md
 ---

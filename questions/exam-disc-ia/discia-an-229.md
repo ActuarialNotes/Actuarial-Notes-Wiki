@@ -12,8 +12,8 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:6690d431a287213fdb06b30881836a6421767a4410a29fed10369846bd9867c3
@@ -22,7 +22,7 @@ verification:
     - "Cornell LII Wex, \"ultrahazardous activity\", whole entry, sha256:086f2b99ee5e944f2c3823938b5caf0a021fb147b60fd99ea5b5b5e689fa10ef — https://www.law.cornell.edu/wex/ultrahazardous_activity"
     - "Cornell LII Wex, \"workers compensation\", whole entry, sha256:8195d152ed7e85da8dc69b09e5ec3f1ed7bf35c4ef9ba7571a60a3b87cb33718 — https://www.law.cornell.edu/wex/workers_compensation"
     - "Cornell LII Wex, \"dram shop rule\", whole entry, sha256:702e3e7b3943a2c88ebb6dad17f2967257cdedeeabfbc765a87cdb4fb22a54bf — https://www.law.cornell.edu/wex/dram_shop_rule"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-229.md
 ---

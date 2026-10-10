@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3a48e37feb47ceda422de9aef3a95838f7f184ae29122ef31960132d4e568774
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-469.md
 ---
 Using the traditional risk management matrix, which of a bakery chain's exposures is best suited to treatment by insurance?
 

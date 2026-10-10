@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6dffaa7e2661b098f9a8137698b67ec4aae9c741db9b9b9c2c2a1a23960f10ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-472.md
 ---
 A property owner hires a small contractor to repair its roof. The contract's hold-harmless clause makes the contractor responsible for any injury claims arising from the work. A passer-by is injured by falling debris and recovers \$300,000 from the property owner, and the contractor, which has few assets, cannot reimburse it. Which disadvantage of noninsurance transfer does this illustrate?
 

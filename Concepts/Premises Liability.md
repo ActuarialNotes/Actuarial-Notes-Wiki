@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:45433bb8fd057620b849b0c2606d28a7dd63612168239a8228ef3aed6eb090b4
@@ -18,7 +18,7 @@ verification:
     - "Sargent v. Ross, 113 N.H. 388 (1973) (Caselaw Access Project), landlord exceptions, Restatement ss.358-62, sha256:b07612aa291c0ae00e53ad4ba7df85cfd02d3584966480af9bb6404731c50f09 — https://static.case.law/nh/113/cases/0388-01.json"
     - "Wikipedia, \"Invitee\" (rank 3), scope of invitation paragraph, sha256:768ff583937f2cd6528372280b7c5f028e6c5a68ae57603de3e52257d0349f78 — https://en.wikipedia.org/wiki/Invitee"
     - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), Coverage C insuring agreement and regardless-of-fault clause, p.8, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
-  open_findings: 2
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Premises Liability.md
 ---

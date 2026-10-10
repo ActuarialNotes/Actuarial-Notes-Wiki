@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:f0b5f58208f9bb9900096ee403d42cc477c69a90054fd141296868dbb53d2374
@@ -16,7 +16,7 @@ verification:
     - "NAIC 2025 Property and Casualty IRIS Ratios (means/medians and results), PDF p.2 (ratio list), p.5 (unusual-value row), sha256:0cb14c7a1f73bee94056296833cce0b70659e23b43842df033819fb962fde0ba — https://content.naic.org/sites/default/files/publication-iris-means-median-2025.pdf"
     - "NAMIC Issue Analysis, \"The Financial Examination\" (Dec 2019, rank 3), pp.4-6 (3-5 year cycle, risk-focused, controls, prospective), sha256:677c4dbbb2e5d4dba57816c5ccadf95831810b80b1360ba5d714ec22417b72c6 — https://www.NAMIC.org/pdf/publicpolicy/191218_financial_exam_v2.pdf"
     - "S. Harrington, testimony to Senate Banking Committee, July 18 2006, PDF pp.3-4, 9, sha256:b9f8f73ee163f8da541f0b1eac83254cafbcf66cdd8e508c0fb8e770a7fcf20c — https://www.banking.senate.gov/download/harrington-july-18-2006&download=1"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Solvency Monitoring.md
 ---

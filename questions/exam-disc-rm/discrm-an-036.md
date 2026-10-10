@@ -1,22 +1,23 @@
 ---
 id: "discrm-an-036"
 exam: "Exam DISC-RM"
-topic: "Risk Transfer"
+topic: "Insurance as a Risk Management Technique"
 learning_objective: "5. Insurance as a Risk Management Technique"
 difficulty: easy
 type: multiple-choice
 bloom: understand
 wiki_link:
+  - Concepts/Insurance+as+a+Risk+Management+Technique
   - Concepts/Risk+Transfer
   - Concepts/Risk+Treatment
 answer: "B"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c343ab62a03e397b46e4a795987c868376e227605138130c2f01a11db7fc7516
+  content_hash: sha256:153673af094a4c1ee1ca0973953b6bbd805a21079e1dfdf6fd837e8680c6326e
   sources:
     - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 p.53 (PDF p.72): disadvantages of insurance, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
   open_findings: 0

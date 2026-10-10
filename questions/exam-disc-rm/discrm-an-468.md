@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Risk+Appetite
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:325a27dfc82761e32ffedd08b949390b09e7c93caa00c88b7ceb18099e27bbd8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-468.md
 ---
 A regional insurer's risk documents contain the four statements below. Which one is a **risk tolerance** rather than a statement of risk appetite?
 

@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Law+of+Large+Numbers
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:885cf5fba0ee8d28de92cfdba3196f46d742add3304d231a3db8c126efa56db5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-470.md
 ---
 Twelve independent bakeries agree that whenever one of them suffers an equipment breakdown, all twelve will share the repair cost equally. No insurer is involved. Which description fits this arrangement?
 

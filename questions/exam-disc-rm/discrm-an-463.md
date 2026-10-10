@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Risk+Classifications
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37095d1f4b73d373b99a292a5c998efa2d61a168f0673fb468e0de5ffbce3275
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-disc-rm/discrm-an-463.md
 ---
 After a fire destroys a neighboring warehouse, the owner of a similar warehouse feels much more at risk and asks for higher property limits. The insurer's data on warehouses of this construction and occupancy show no change in the probability of fire. Which statement describes the change?
 
@@ -26,4 +36,4 @@ After a fire destroys a neighboring warehouse, the owner of a similar warehouse 
 
 - **A** — A single nearby loss does not change the measured probability or the variation of losses for this class of warehouse.
 - **B** — A fire still offers only a chance of loss or no loss, so it remains a pure risk.
-- **D** — One fire at another warehouse does not make fire losses strike exposures together. Separate warehouse fires remain largely independent, so the risk stays diversifiable.
+- **D** — Fire at an individual warehouse is a particular, diversifiable risk. One fire at a neighbor does not turn it into a systemic risk shared by every exposure, as inflation is.

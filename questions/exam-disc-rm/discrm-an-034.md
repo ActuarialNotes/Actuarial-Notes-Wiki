@@ -1,23 +1,24 @@
 ---
 id: "discrm-an-034"
 exam: "Exam DISC-RM"
-topic: "Enterprise Risk Management"
+topic: "Holistic Risk Treatment"
 learning_objective: "4. Treating Risk"
 difficulty: medium
 type: multiple-choice
 bloom: analyze
 wiki_link:
+  - Concepts/Holistic+Risk+Treatment
   - Concepts/Enterprise+Risk+Management
   - Concepts/Risk+Treatment
   - Concepts/Correlation
 answer: "A"
 points: 1
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2701ccbcd858ec10fbbdedeb21a5164bf482e9e20d3b7acf6585789a6f54610a
+  content_hash: sha256:a0b424375254895413e14798f5fcc6620737c1b0a72cfbc06a8f6f4b22c53920
   sources:
     - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), p.105 (PDF p.7): portfolio view, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
   open_findings: 0

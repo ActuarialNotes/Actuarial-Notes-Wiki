@@ -35,7 +35,7 @@ A general contractor applying for CGL coverage subcontracts about 60% of its wor
 
 ## Explanation
 
-A general contractor is liable for injuries caused by its subcontractors' work. The underwriter needs to know whether each subcontractor carries its own liability insurance with adequate limits, and whether the subcontracts transfer liability back to the subcontractor and add the general contractor as an additional insured. Certificates of insurance and the contracts are the evidence. The answer is **B**.
+A hirer is usually not liable for an independent contractor's torts, but a general contractor can be liable for its subcontractors' work where the duty is non-delegable, such as inherently dangerous work or duties owed to the public, and it is often sued with them. The underwriter needs to know whether each subcontractor carries its own liability insurance with adequate limits, and whether the subcontracts transfer liability back to the subcontractor and add the general contractor as an additional insured. Certificates of insurance and the contracts are the evidence. The answer is **B**.
 
 **Why not the others**
 

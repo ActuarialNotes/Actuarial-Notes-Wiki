@@ -58,6 +58,13 @@ describe('what a card says it was tested against', () => {
   })
 })
 
+describe('questions from several papers', () => {
+  it('gives each paper or sample set its own line', () => {
+    const lines = groupSources(checksFor('distributions.expected_payment'))
+    expect(lines.map(l => l.label)).toEqual(['SOA Exam P sample questions 337, 601', 'CAS Exam MAS-I, Fall 2019, questions 1, 23'])
+  })
+})
+
 describe('pasting from Excel', () => {
   it('reads a tab-separated block, and leaves a single value to the browser', () => {
     expect(parseClipboardBlock('1\t2\r\n3\t4\n')).toEqual([['1', '2'], ['3', '4']])

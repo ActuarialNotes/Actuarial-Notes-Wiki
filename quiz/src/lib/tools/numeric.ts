@@ -27,3 +27,48 @@ export function inverseNormalCdf(p: number): number {
   for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p) / standardNormalPdf(x)
   return x
 }
+
+/**
+ * A root of f between lo and hi, where f changes sign: bisection to machine
+ * precision, which is slow beside Newton but can't step out of the bracket.
+ */
+export function bisect(f: (x: number) => number, lo: number, hi: number): number {
+  let flo = f(lo)
+  if (flo === 0) return lo
+  for (let k = 0; k < 200; k++) {
+    const mid = (lo + hi) / 2
+    if (mid === lo || mid === hi) return mid
+    const fm = f(mid)
+    if (fm === 0) return mid
+    if (Math.sign(fm) === Math.sign(flo)) {
+      lo = mid
+      flo = fm
+    } else {
+      hi = mid
+    }
+  }
+  return (lo + hi) / 2
+}
+
+/** Every root of f on a grid's span: each sign change between neighbouring grid points, bisected. */
+export function rootsOn(f: (x: number) => number, grid: number[]): number[] {
+  const out: number[] = []
+  let prev = f(grid[0])
+  if (prev === 0) out.push(grid[0])
+  for (let k = 1; k < grid.length; k++) {
+    const cur = f(grid[k])
+    if (cur === 0) out.push(grid[k])
+    else if (prev !== 0 && Number.isFinite(prev) && Number.isFinite(cur) && Math.sign(cur) !== Math.sign(prev)) out.push(bisect(f, grid[k - 1], grid[k]))
+    prev = cur
+  }
+  return out
+}
+
+/** The rates a cash-flow root search scans: fine near zero, coarser out to 1,000%. */
+export const RATE_GRID: number[] = (() => {
+  const grid: number[] = []
+  for (let i = -0.99; i < -0.2; i += 0.01) grid.push(i)
+  for (let i = -0.2; i < 0.5; i += 0.0025) grid.push(i)
+  for (let i = 0.5; i <= 10; i += 0.05) grid.push(i)
+  return grid
+})()

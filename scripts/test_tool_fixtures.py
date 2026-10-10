@@ -73,5 +73,37 @@ class Exhibits(unittest.TestCase):
         self.assertEqual(sheet['printed_page'], 106)
 
 
+class ScenariosAndTextTables(unittest.TestCase):
+    def test_scenario_blocks_split_on_each_heading(self):
+        lines = ['Steady-State', '1999', '1', '2', '2000', '3', '4', 'Total', '9', '9',
+                 'Increasing', '1999', '5', '6', '2000', '7', '8', 'Total', '9']
+        blocks = tf.scenario_blocks(lines, 2, ['a', 'b'])
+        self.assertEqual(list(blocks), ['Steady-State', 'Increasing'])
+        self.assertEqual(blocks['Increasing'][1], {'origin': '2000', 'a': 7, 'b': 8})
+
+    def test_text_table_stops_at_the_triangle_edge(self):
+        # The page number after the last row is not part of the table.
+        lines = ['Table 8 – Reported Claim Count Development Triangle', 'Accident', 'Year',
+                 *['12', '24', '36', '48', '60', '72', '84'],
+                 '2002', *['1'] * 7, '2003', *['2'] * 6, '2004', *['3'] * 5, '2005', *['4'] * 4,
+                 '2006', *['5'] * 3, '2007', '6', '6', '2008', '7', '69']
+        table = tf.text_table(lines, 'Table 8')
+        self.assertEqual(table['origins'][-1], '2008')
+        self.assertEqual(table['values'][-1], [7, None, None, None, None, None, None])
+
+
+class WernerExhibits(unittest.TestCase):
+    def test_rate_changes_keep_the_first_group_without_a_date(self):
+        text = '\n'.join(['Cumulative', 'Rate Level', 'Index', 'A', '1.0000', '1.0000', 'B', '04/01/2011', '-5.0%', '0.9500', '0.9500', '(3) = 1.0 + (2)', 'A - 9'])
+        groups = tf.werner_rate_changes(text)['groups']
+        self.assertEqual(groups[0], {'group': 'A', 'date': None, 'change': None, 'index': 1.0, 'cumulative': 1.0})
+        self.assertEqual(groups[1]['change'], -0.05)
+
+    def test_assumptions_read_the_term_date_and_period(self):
+        text = '\n'.join(['Appendix A:  Auto Indication', 'A-1', 'All policies are semi-annual, and the proposed effective date for the revised rates is January 1, 2017.', 'Rates are expected to be in effect for one year.'])
+        a = tf.werner_assumptions('Appendix A')(text)
+        self.assertEqual((a['term_months'], a['effective'], a['in_effect_months']), (6, '2017-01-01', 12))
+
+
 if __name__ == '__main__':
     unittest.main()

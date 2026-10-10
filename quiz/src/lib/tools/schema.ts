@@ -31,6 +31,8 @@ export function fieldSchema(f: ToolField): Record<string, unknown> {
       }
     case 'choice':
       return { type: 'string', enum: f.options.map(o => o.value), default: f.default, description: `${f.description}${judgment}` }
+    case 'date':
+      return { type: 'string', format: 'date', default: f.default, description: `${f.description} As YYYY-MM-DD.${judgment}` }
     case 'table':
       return {
         type: 'array',

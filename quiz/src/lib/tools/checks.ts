@@ -15,6 +15,7 @@ import werner from './fixtures/basic-ratemaking-2016.json'
 import { runTool } from './run'
 import { toolById } from './registry'
 import type { ToolResult } from './types'
+import { QUESTION_CHECKS, questionRef, type QuestionCheck } from './questionChecks'
 
 export interface SourceRef {
   /** The vault's Resources/Books page, for a published document. */
@@ -230,6 +231,114 @@ export const CHECKS: ToolCheck[] = [
   },
 ]
 
+// Friedland's Cape Cod (Chapter 10, Exhibit I): the expected claim ratio from
+// used-up premium on Sheet 1, and the expected claims, IBNR and ultimates on Sheet 2.
+const ch10 = F.ch10_exhibit1_sheet1
+const ch10Projection = F.ch10_exhibit1_sheet2
+const capeCodInput = { rows: ch10.rows.map(r => ({ origin: r.origin, premium: r.premium, latest: r.reported, cdf: r.cdf })) }
+CHECKS.push(
+  {
+    tool: 'reserving.cape_cod',
+    source: friedlandRef(ch10),
+    cases: [{
+      name: 'Columns (7) and (8), used-up premium and the total expected claim ratio',
+      input: capeCodInput,
+      expect: [
+        ...ch10.rows.map((r, k) => ({ what: `${r.origin} used-up premium`, printed: r.used_up, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'used_up')[k] })),
+        { what: 'expected claim ratio', printed: ch10.total.claim_ratio, tolerance: PERCENT, actual: (res: ToolResult) => Number(res.values.elr) },
+      ],
+    }],
+  },
+  {
+    tool: 'reserving.cape_cod',
+    source: friedlandRef(ch10Projection),
+    cases: [{
+      name: 'Columns (4), (7) and (9), expected claims, IBNR and ultimate claims',
+      input: capeCodInput,
+      expect: ch10Projection.rows.flatMap((r, k) => [
+        { what: `${r.origin} expected claims`, printed: r.expected, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'expected')[k] },
+        { what: `${r.origin} IBNR`, printed: r.ibnr, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'reserve')[k] },
+        { what: `${r.origin} ultimate`, printed: r.ultimate, tolerance: DOLLAR, actual: (res: ToolResult) => values(res, 'ultimate')[k] },
+      ]),
+    }],
+  },
+)
+
+// Friedland's Benktander (Chapter 9, Exhibit V) under the changing conditions,
+// from Exhibit III's expected claims. These scenarios are built from their
+// percentages unreported (1.0%, 2.0% …), which the CDFs print rounded (1.010),
+// and the exhibit's arithmetic uses the percentage: so the CDF given is
+// 1 / (1 − the printed percentage), as a reader working the exhibit would.
+// Not the reported claims of Sheet 2's case-strengthening scenarios: those
+// develop on five-year averages, which the exhibit prints only rounded both as
+// CDFs and as percentages, so no printed input reproduces them to the dollar.
+//
+// The inputs are themselves printed to the dollar, and U = L + q(L + qE) carries
+// their rounding through: the tolerance is the output's half-dollar plus that,
+// ½(1 + q + q²).
+CHECKS.push(
+  ...([['ch9_exhibit3_sheet1', 'ch9_exhibit5_sheet1'], ['ch9_exhibit3_sheet2', 'ch9_exhibit5_sheet2']] as const).flatMap(([bfKey, gbKey]) => {
+    const bf = F[bfKey]
+    const gb = F[gbKey]
+    return [{
+      tool: 'reserving.benktander',
+      source: friedlandRef(gb),
+      cases: Object.entries(gb.scenarios).flatMap(([scenario, rows]) => (['reported', 'paid'] as const).filter(basis => basis === 'paid' || gbKey === 'ch9_exhibit5_sheet1').map(basis => {
+        const reported = basis === 'reported'
+        // The two sheets name different scenarios; each Exhibit V scenario has its namesake on the matching Exhibit III sheet.
+        const prior = (bf.scenarios as unknown as Record<string, { origin: string; expected: number; reported: number; paid: number; unreported: number; unpaid: number }[]>)[scenario]
+        return {
+          name: `${scenario}, column (${reported ? 11 : 12}), the Benktander ultimate with ${basis} claims`,
+          input: {
+            basis,
+            iterations: 2,
+            rows: prior.map(r => ({ origin: r.origin, latest: r[basis], cdf: 1 / (1 - (reported ? r.unreported : r.unpaid)), expected: r.expected })),
+          },
+          expect: rows.map((r, k) => {
+            const q = reported ? r.unreported : r.unpaid
+            return {
+              what: `${r.origin} ultimate`,
+              printed: reported ? r.ultimate_reported : r.ultimate_paid,
+              tolerance: DOLLAR + 0.5 * (1 + q + q * q),
+              actual: (res: ToolResult) => values(res, 'ultimate')[k],
+            }
+          }),
+        }
+      })),
+    }]
+  }),
+)
+
+// Friedland's Chapter 6 diagnostics: Table 6 is Table 3 over Table 2, and
+// Table 10 is Table 9 over Table 8. The claims are printed in $000, so each
+// ratio carries their rounding: ½(1 + a/b)/b on top of the ratio's own.
+const ch6 = (key: 'ch6_tables_2_3' | 'ch6_table_6' | 'ch6_table_8' | 'ch6_table_9' | 'ch6_table_10', table: string) => {
+  const t = (F[key].tables as Record<string, { origins: string[]; ages: number[]; values: (number | null)[][] }>)[table]
+  return { origins: t.origins, ages: t.ages, values: t.values }
+}
+CHECKS.push(
+  ...[
+    { key: 'ch6_table_6' as const, table: 'table_6', numerator: ch6('ch6_tables_2_3', 'table_3'), denominator: ch6('ch6_tables_2_3', 'table_2'), what: 'paid-to-reported' },
+    { key: 'ch6_table_10' as const, table: 'table_10', numerator: ch6('ch6_table_9', 'table_9'), denominator: ch6('ch6_table_8', 'table_8'), what: 'closed-to-reported counts' },
+  ].map(({ key, table, numerator, denominator, what }) => {
+    const printed = ch6(key, table)
+    return {
+      tool: 'reserving.ratio_triangle',
+      source: friedlandRef(F[key]),
+      cases: [{
+        name: `${table.replace('table_', 'Table ')}, the ratio of ${what}`,
+        input: { numerator, denominator },
+        expect: printed.values.flatMap((row, i) => row.flatMap((value, j) => (value === null ? [] : [{
+          what: `${printed.origins[i]} at ${printed.ages[j]}`,
+          printed: value,
+          tolerance: FACTOR + (0.5 * (1 + numerator.values[i][j]! / denominator.values[i][j]!)) / denominator.values[i][j]!,
+          actual: (res: ToolResult) => (res.values.ratios as (number | null)[][])[i][j] ?? NaN,
+        }]))),
+      }],
+    }
+  }),
+)
+
 // Werner & Modlin: the loss ratio method's two worked indications, and the
 // classical credibility standard and square-root rule — the chapter's own
 // example and the three appendix exhibits that apply it.
@@ -287,113 +396,160 @@ CHECKS.push(
   })),
 )
 
-/**
- * Published exam questions a tool answers outright (docs/actuarial-tools.md
- * §9.2). The official answer is *not* here: `checks.test.ts` reads it from the
- * question bank — the keyed option's printed value — and requires the tool to
- * land within that value's printed precision and closer to it than to any
- * other option. Each input's printed form is quoted from the stem, and the test
- * finds every quote there, so an input can't be mistyped unnoticed.
- */
-export interface QuestionCheck {
-  tool: string
-  /** The bank id; the file is questions/<bank>/<id>.md. */
-  question: string
-  bank: string
-  /** Who published it and as what: "SOA Exam FM sample question 26". */
-  label: string
-  quotes: string[]
-  input: Record<string, unknown>
-  /** Half a unit of the keyed option's last printed digit. */
-  tolerance: number
-  value: (result: ToolResult) => number
-}
+// Werner & Modlin's ratemaking exhibits: Appendix A's (semi-annual auto) rate
+// level, trend and expense exhibits, Appendix B's (annual homeowners) pure
+// premium indication and loss trend, and Chapter 4's example policies. Each
+// appendix's assumptions — the policy term, the effective date, how long the
+// rates will be in effect — are read off its first page with the rest.
+const FOUR = 0.00005 + 1e-9
+const A1 = W.a1_assumptions
+const B1 = W.b1_assumptions
 
-const pv = (r: ToolResult) => Number(r.values.present_value)
-const flows = (n: number, from: number, amount: (k: number) => number) =>
-  Array.from({ length: n }, (_, k) => ({ time: from + k, amount: amount(k) }))
-
-export const QUESTION_CHECKS: QuestionCheck[] = [
+CHECKS.push(
   {
-    tool: 'finance.present_value',
-    question: 'fm-026',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 26',
-    quotes: ['5000', '7% per year', '20 payments', 'one year from today', '5%'],
-    input: { i: 0.05, flows: flows(20, 1, k => 5000 * 1.07 ** (k + 1)) },
-    tolerance: 50,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-071',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 71',
-    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
-    quotes: ['1000 par value 20-year bond', '10% convertible semiannually', '9% coupons payable semiannually', 'redemption value of 1200'],
-    input: { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] },
-    tolerance: 0.5,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-082',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 82',
-    quotes: ['30-year annuity', '5% annual effective', 'first payment of the annuity is due in ten years in the amount of 1,000', 'increase by 500 each year'],
-    input: { i: 0.05, flows: flows(30, 10, k => 1000 + 500 * k) },
-    tolerance: 0.5,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-225',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 225',
-    quotes: ['| 1 | 10 | 4.0% |', '| 2 | 12 | 4.5% |', '| 3 | 15 | 5.5% |', '| 4 | 20 | 7.0% |'],
-    input: {
-      flows: [
-        { time: 1, amount: 10, spot: 0.04 },
-        { time: 2, amount: 12, spot: 0.045 },
-        { time: 3, amount: 15, spot: 0.055 },
-        { time: 4, amount: 20, spot: 0.07 },
+    tool: 'ratemaking.pure_premium_method',
+    source: wernerRef(W.b5_pp_indication),
+    cases: [{
+      // Row (16)'s total pure premium carries row (17)'s reinsurance cost per exposure, as row (22) adds it.
+      name: 'Rows (21) and (22), the variable permissible loss ratio and indicated rate',
+      input: {
+        pure_premium: row(W.b5_pp_indication, 16) + row(W.b5_pp_indication, 17),
+        fixed: row(W.b5_pp_indication, 18),
+        variable: row(W.b5_pp_indication, 19),
+        profit: row(W.b5_pp_indication, 20),
+      },
+      expect: [
+        { what: 'variable permissible loss ratio', printed: row(W.b5_pp_indication, 21), tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.variable_permissible_loss_ratio) },
+        // Three inputs printed to the cent, divided by the permissible loss ratio, beside the rate's own half cent.
+        { what: 'indicated rate', printed: row(W.b5_pp_indication, 22), tolerance: 0.005 + 0.015 / row(W.b5_pp_indication, 21), actual: (r: ToolResult) => Number(r.values.indicated_rate) },
       ],
-    },
-    tolerance: 0.005,
-    value: pv,
+    }],
   },
-]
-
-QUESTION_CHECKS.push(
+  ...[
+    { exhibit: W.a7_lr_indication, fixed: 12 as number | null, variable: 13, profit: 14, plr: 15, key: 'variable_permissible_loss_ratio' },
+    { exhibit: W.b5_pp_indication, fixed: null, variable: 19, profit: 20, plr: 21, key: 'variable_permissible_loss_ratio' },
+    // Appendix C treats every expense, ULAE included, as variable.
+    { exhibit: W.c7_lr_indication, fixed: null, variable: 9, profit: 10, plr: 11, key: 'permissible_loss_ratio' },
+  ].map(({ exhibit, fixed, variable, profit, plr, key }) => ({
+    tool: 'ratemaking.permissible_loss_ratio',
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Row (${plr}), the ${key === 'permissible_loss_ratio' ? '' : 'variable '}permissible loss ratio`,
+      input: { fixed: fixed === null ? 0 : row(exhibit, fixed), variable: row(exhibit, variable), profit: row(exhibit, profit) },
+      expect: [{ what: 'permissible loss ratio', printed: row(exhibit, plr), tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values[key]) }],
+    }],
+  })),
   {
-    tool: 'finance.present_value',
-    question: 'fm-245',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 245',
-    quotes: ['annual effective interest rate of 5%', '10-year annuity-immediate', 'annual payment of 100', 'increases each year by 15%'],
-    input: { i: 0.05, flows: flows(10, 1, k => 100 * 1.15 ** k) },
-    tolerance: 0.5,
-    value: pv,
+    tool: 'ratemaking.expense_ratios',
+    source: wernerRef(W.a21_expenses),
+    cases: [{
+      // Each type's three years, summed: the exhibit's three-year weighted average.
+      name: 'Rows (1)–(5) c, e and f, and the provisions (6) and (7)',
+      input: {
+        rows: W.a21_expenses.types.map(t => ({
+          type: t.type,
+          expenses: t.expenses.reduce((a, b) => a + b, 0),
+          premium: t.premium.reduce((a, b) => a + b, 0),
+          fixed_share: t.fixed_share,
+        })),
+      },
+      expect: [
+        ...W.a21_expenses.types.flatMap((t, k) => [
+          { what: `${t.type}, three-year ratio`, printed: t.weighted, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'ratio')[k] },
+          { what: `${t.type}, fixed`, printed: t.fixed, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'fixed')[k] },
+          { what: `${t.type}, variable`, printed: t.variable, tolerance: PERCENT, actual: (r: ToolResult) => values(r, 'variable')[k] },
+        ]),
+        { what: 'fixed expense provision', printed: W.a21_expenses.fixed_provision, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.fixed_provision) },
+        { what: 'variable expense provision', printed: W.a21_expenses.variable_provision, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.variable_provision) },
+      ],
+    }],
   },
   {
-    tool: 'finance.present_value',
-    question: 'fm-281',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 281',
-    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
-    quotes: ['1000 par value ten-year bond', '7.6% semiannual coupons', '6.0% convertible semiannually', 'end of year six'],
-    input: { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1000 }] },
-    tolerance: 0.5,
-    value: pv,
+    tool: 'ratemaking.trend_fit',
+    source: wernerRef(W.a11_premium_trend),
+    // The fits are of the printed averages, column (3), as the exhibit's own are.
+    cases: Object.entries(W.a11_premium_trend.fits).map(([n, printed]) => ({
+      name: `the ${n}-point exponential fit to average written premium at current rate level`,
+      input: { per_year: 4, latest: Number(n), points: W.a11_premium_trend.points.map(p => ({ period: p.quarter, value: p.average })) },
+      expect: [{ what: `${n}-point annual trend`, printed, tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.trend) }],
+    })),
   },
+  {
+    tool: 'ratemaking.trend_fit',
+    source: wernerRef(W.a15_loss_trend),
+    cases: (['frequency', 'severity', 'pure_premium'] as const).flatMap(measure => Object.entries(W.a15_loss_trend.fits).map(([n, fits]) => ({
+      name: `the ${n}-point exponential fit to ${measure.replace('_', ' ')}`,
+      input: { per_year: 4, latest: Number(n), points: W.a15_loss_trend.points.map(p => ({ period: p.quarter, value: p[measure] })) },
+      expect: [{ what: `${n}-point ${measure.replace('_', ' ')} trend`, printed: fits[measure], tolerance: PERCENT, actual: (r: ToolResult) => Number(r.values.trend) }],
+    }))),
+  },
+  ...[
+    { exhibit: W.a19_loss_trend_periods, assumptions: A1, periodTolerance: 0.005 + 1e-9 },
+    // Appendix B prints the period to one decimal.
+    { exhibit: W.b12_loss_trend_periods, assumptions: B1, periodTolerance: 0.05 + 1e-9 },
+  ].map(({ exhibit, assumptions, periodTolerance }) => {
+    const latest = exhibit.rows[exhibit.rows.length - 1]
+    return {
+      tool: 'ratemaking.trend_factor',
+      source: wernerRef(exhibit),
+      cases: [{
+        name: `Columns (5) and (6), the projected trend period and factor for accident year ${latest.year}`,
+        input: { trend: latest.projected_trend, basis: 'accident', year: Number(latest.year), effective: assumptions.effective, in_effect: assumptions.in_effect_months, term: assumptions.term_months },
+        expect: [
+          { what: 'projected trend period', printed: latest.projected_period, tolerance: periodTolerance, actual: (r: ToolResult) => Number(r.values.period) },
+          { what: 'projected trend factor', printed: latest.projected_factor, tolerance: FOUR, actual: (r: ToolResult) => Number(r.values.factor) },
+        ],
+      }],
+    }
+  }),
+  {
+    tool: 'ratemaking.on_level_factors',
+    source: wernerRef(W.a10_rate_level_factors),
+    cases: [{
+      // The exhibit weights the cumulative rate levels as Current Rate Level - 1 prints them, to four decimals.
+      name: 'Columns (1a), (2) and (4), by the parallelogram method on Current Rate Level - 1\'s history',
+      input: {
+        changes: W.a9_rate_changes.groups.filter(g => g.date !== null).map(g => ({ date: g.date, change: g.change })),
+        term: A1.term_months,
+        basis: 'calendar',
+        first: Number(W.a10_rate_level_factors.rows[0].year),
+        last: Number(W.a10_rate_level_factors.rows[W.a10_rate_level_factors.rows.length - 1].year),
+        rounding: 'four',
+      },
+      expect: W.a10_rate_level_factors.rows.flatMap((y, k) => [
+        ...y.portions.map((p, g) => ({ what: `${y.year}, group ${W.a9_rate_changes.groups[g].group}`, printed: p, tolerance: FOUR, actual: (r: ToolResult) => (r.values.portions as number[][])[k][g] })),
+        { what: `${y.year} average rate level`, printed: y.average, tolerance: FOUR, actual: (r: ToolResult) => values(r, 'averages')[k] },
+        { what: `${y.year} on-level factor`, printed: y.factor, tolerance: FOUR, actual: (r: ToolResult) => values(r, 'factors')[k] },
+      ]),
+    }],
+  },
+  ...[
+    { exhibit: W.ch4_annual_written, written: '4.7', earned: null as string | null, earnedExhibit: null as typeof W.ch4_annual_earned | null, term: 12, basis: 'calendar' },
+    { exhibit: W.ch4_annual_earned, written: null, earned: '4.11', earnedExhibit: null, term: 12, basis: 'calendar' },
+    { exhibit: W.ch4_annual_earned, written: '4.13', earned: '4.13', earnedExhibit: null, term: 12, basis: 'policy' },
+    { exhibit: W.ch4_semiannual, written: '4.18', earned: '4.19', earnedExhibit: null, term: 6, basis: 'calendar' },
+    { exhibit: W.ch4_semiannual, written: '4.20', earned: '4.21', earnedExhibit: null, term: 6, basis: 'policy' },
+  ].map(({ exhibit, written, earned, term, basis }) => {
+    const tables = exhibit.tables as Record<string, { years: string[]; policies: { policy: string; effective: string; exposure: number }[]; by_year: number[] }>
+    const table = tables[(written ?? earned)!]
+    const asOf = Number(table.years[table.years.length - 1].slice(3))
+    return {
+      tool: 'ratemaking.earned_premium',
+      source: (() => {
+        const named = [written, earned].filter((t, i, all) => t && all.indexOf(t) === i)
+        return wernerRef({ ...exhibit, locator: `Chapter 4, Table${named.length > 1 ? 's' : ''} ${named.join(' and ')}` })
+      })(),
+      cases: [{
+        name: `${basis === 'policy' ? 'policy' : 'calendar'} year exposures of ${term}-month policies, as of 12/31/${asOf}`,
+        input: { term, basis, as_of: asOf, policies: table.policies.map(p => ({ policy: p.policy, effective: p.effective, amount: p.exposure })) },
+        expect: [
+          ...(written ? tables[written].by_year.map((v, k) => ({ what: `${tables[written].years[k]} written`, printed: v, tolerance: 0.005 + 1e-9, actual: (r: ToolResult) => values(r, 'written')[k] })) : []),
+          ...(earned ? tables[earned].by_year.map((v, k) => ({ what: `${tables[earned].years[k]} earned`, printed: v, tolerance: 0.005 + 1e-9, actual: (r: ToolResult) => values(r, 'earned')[k] })) : []),
+        ],
+      }],
+    }
+  }),
 )
-
-const questionRef = (q: QuestionCheck): SourceRef => ({
-  question: q.question,
-  title: q.label,
-  url: `/quiz?ids=${q.question}`,
-  locator: q.label,
-})
 
 /** Run one check: every printed value the tool doesn't reproduce at the source's precision. */
 export function verifyCheck(check: ToolCheck): CheckMismatch[] {
@@ -416,11 +572,22 @@ export function verifyCheck(check: ToolCheck): CheckMismatch[] {
 export function checksFor(toolId: string): SourceRef[] {
   return [
     ...CHECKS.filter(c => c.tool === toolId).map(c => c.source),
-    ...QUESTION_CHECKS.filter(q => q.tool === toolId).map(questionRef),
+    ...QUESTION_CHECKS.filter(q => q.steps.some(s => s.tool === toolId)).map(questionRef),
   ]
 }
 
 /** How many printed values a tool's checks hold it to. */
 export function checkedValueCount(toolId: string): number {
   return CHECKS.filter(c => c.tool === toolId).reduce((n, c) => n + c.cases.reduce((m, k) => m + k.expect.length, 0), 0)
+}
+
+/** Work one published question through its chain of tools; the number it comes to. */
+export function runQuestionCheck(q: QuestionCheck): number {
+  const results: ToolResult[] = []
+  for (const step of q.steps) {
+    const spec = toolById(step.tool)
+    if (!spec) throw new Error(`No tool ${step.tool}`)
+    results.push(runTool(spec, step.input(results)))
+  }
+  return q.value(results)
 }

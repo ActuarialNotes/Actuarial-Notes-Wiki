@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { existsSync } from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import {
   AREAS,
   TOOLS,
@@ -15,7 +18,11 @@ import {
 import { canonicalJson, sha256Hex } from './hash'
 import { averageFactor, factorsAt } from './reserving/ageToAge'
 import { inverseNormalCdf } from './numeric'
+import { lossModel } from './distributions/lossModels'
+import { dateOfYear, decimalYear, parseDate } from './dates'
 import { standardNormalCdf } from '../distributionMath'
+
+const VAULT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..')
 
 const tool = (id: string): ToolSpec => {
   const spec = toolById(id)
@@ -24,14 +31,29 @@ const tool = (id: string): ToolSpec => {
 }
 const run = (id: string, input: unknown = {}) => runTool(tool(id), input)
 
+/** Every combination of a tool's choice fields' values (each choice's options, crossed). */
+function choiceSettings(spec: ToolSpec): Record<string, string>[] {
+  let settings: Record<string, string>[] = [{}]
+  for (const f of spec.fields) {
+    if (f.kind !== 'choice') continue
+    settings = settings.flatMap(s => f.options.map(o => ({ ...s, [f.key]: o.value })))
+  }
+  return settings
+}
+
 describe('the registry holds every tool to one job (R9)', () => {
   it.each(TOOLS.map(t => [t.id, t] as const))('%s', (_id, spec) => {
     expect(spec.id).toMatch(/^[a-z]+\.[a-z_]+$/)
     expect(AREAS.map(a => a.id)).toContain(spec.area)
     // One question, asked as a question.
     expect(spec.answers.trim().endsWith('?')).toBe(true)
-    // At most six scalar inputs, at most three headline results.
-    expect(spec.fields.filter(f => f.kind === 'number' || f.kind === 'choice').length).toBeLessThanOrEqual(6)
+    // At most six scalar inputs on the card at once — whichever choices are
+    // made, counting a field only while its `showWhen` draws it — and at most
+    // three headline results.
+    for (const setting of choiceSettings(spec)) {
+      const shown = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice' || f.kind === 'date') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
+      expect(shown.length, JSON.stringify(setting)).toBeLessThanOrEqual(6)
+    }
     const result = runTool(spec, {})
     expect(result.tiles.length).toBeLessThanOrEqual(3)
     // A grid tool's grid is one of its table fields.
@@ -44,6 +66,13 @@ describe('the registry holds every tool to one job (R9)', () => {
     }
     // The method names concept pages.
     expect(spec.method.concepts.length).toBeGreaterThan(0)
+  })
+
+  it('names concept pages and readings the vault has', () => {
+    for (const t of TOOLS) {
+      for (const c of t.method.concepts) expect(existsSync(path.join(VAULT, 'Concepts', `${c}.md`)), `${t.id}: Concepts/${c}.md`).toBe(true)
+      for (const r of t.method.readings) expect(existsSync(path.join(VAULT, 'Resources/Books', `${r.resource}.md`)), `${t.id}: ${r.resource}`).toBe(true)
+    }
   })
 
   it('has unique ids and slugs that find their tool', () => {
@@ -152,6 +181,142 @@ describe('Present Value', () => {
   })
 })
 
+describe('Internal Rate of Return', () => {
+  it('finds the rate that zeroes the flows, and inverts Present Value', () => {
+    const flows = [{ time: 0, amount: -1000 }, { time: 1, amount: 300 }, { time: 2, amount: 400 }, { time: 3, amount: 500 }]
+    const irr = run('finance.internal_rate_of_return', { flows }).values.irr as number
+    const pv = run('finance.present_value', { i: irr, flows: flows.slice(1) }).values.present_value as number
+    expect(pv).toBeCloseTo(1000, 8)
+  })
+
+  it('names every root when there is more than one', () => {
+    // −100, +230, −132: NPV = 0 at 10% and at 20%.
+    const out = run('finance.internal_rate_of_return', { flows: [{ time: 0, amount: -100 }, { time: 1, amount: 230 }, { time: 2, amount: -132 }] })
+    expect((out.values.rates as number[]).map(r => Number(r.toFixed(10)))).toEqual([0.1, 0.2])
+    expect(out.warnings[0]).toMatch(/2 rates/)
+  })
+
+  it('refuses flows all one way', () => {
+    expect(() => run('finance.internal_rate_of_return', { flows: [{ time: 0, amount: 100 }, { time: 1, amount: 100 }] })).toThrow(/at least one payment out/)
+  })
+})
+
+describe('Loan Schedule', () => {
+  it('repays a level loan to exactly zero, the principal summing to the loan', () => {
+    const out = run('finance.loan_schedule', { amount: 10000, i: 0.05, n: 10 })
+    expect(out.values.payment as number).toBeCloseTo(10000 / ((1 - 1.05 ** -10) / 0.05), 9)
+    expect((out.values.balance as number[])[9]).toBe(0)
+    expect((out.values.principal as number[]).reduce((s, p) => s + p, 0)).toBeCloseTo(10000, 8)
+  })
+
+  it('ends a given payment with a drop payment, and refuses one below the interest', () => {
+    const out = run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 300, n: 0 })
+    expect(out.values.final_payment as number).toBeLessThan(300)
+    expect(() => run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 100, n: 0 })).toThrow(/never repaid/)
+  })
+})
+
+describe('Bonds', () => {
+  const terms = { face: 1000, coupon: 0.06, redemption: 1000, years: 10, m: 2 }
+
+  it('prices a bond at par when it yields its coupon rate', () => {
+    expect(run('finance.bond_price', { ...terms, yield: 0.06 }).values.price as number).toBeCloseTo(1000, 9)
+  })
+
+  it('finds the yield a price gives, inverting Bond Price', () => {
+    const price = run('finance.bond_price', { ...terms, yield: 0.0725 }).values.price as number
+    expect(run('finance.bond_yield', { ...terms, price }).values.nominal_yield as number).toBeCloseTo(0.0725, 10)
+  })
+
+  it('amortizes the book value from the price to the redemption value', () => {
+    const out = run('finance.bond_amortization', { ...terms, yield: 0.05 })
+    const book = out.values.book_value as number[]
+    expect(book[book.length - 1]).toBe(1000)
+    expect(out.values.price as number).toBeCloseTo(run('finance.bond_price', { ...terms, yield: 0.05 }).values.price as number, 9)
+  })
+
+  it('refuses a term that is not a whole number of coupons', () => {
+    expect(() => run('finance.bond_price', { ...terms, years: 10.25 })).toThrow(/whole number of coupons/)
+  })
+})
+
+describe('Duration & Convexity, and Redington Immunization', () => {
+  it('gives a zero-coupon bond its maturity as duration', () => {
+    const out = run('finance.duration_convexity', { i: 0.05, flows: [{ time: 7, amount: 100 }] })
+    expect(out.values.macaulay as number).toBeCloseTo(7, 12)
+    expect(out.values.modified as number).toBeCloseTo(7 / 1.05, 12)
+    expect(out.values.convexity as number).toBeCloseTo((7 * 8) / 1.05 ** 2, 12)
+  })
+
+  it('finds the default portfolio immunized, and says which condition fails when it is not', () => {
+    expect(run('finance.redington_immunization').values.immunized).toBe(true)
+    const off = run('finance.redington_immunization', { flows: [{ time: 2, asset: 10000, liability: 10000 }] })
+    expect(off.values.immunized).toBe(false)
+    expect(off.warnings[0]).toMatch(/convexity/)
+  })
+})
+
+describe('Loss distributions', () => {
+  /** ∫₀ᵘ S(x) dx by composite Simpson: the definition the closed forms must agree with. */
+  const integrate = (S: (x: number) => number, u: number, n = 20000) => {
+    const h = u / n
+    let sum = S(0) + S(u)
+    for (let k = 1; k < n; k++) sum += S(k * h) * (k % 2 ? 4 : 2)
+    return (sum * h) / 3
+  }
+  const models: Record<string, Record<string, number | string>> = {
+    exponential: { family: 'exponential', theta: 1000 },
+    uniform: { family: 'uniform', a: 200, b: 1800 },
+    pareto: { family: 'pareto', alpha: 3, theta: 2000 },
+    single_pareto: { family: 'single_pareto', alpha: 2.5, theta: 300 },
+    gamma: { family: 'gamma', alpha: 2.5, theta: 400 },
+    lognormal: { family: 'lognormal', mu: 6.5, sigma: 0.8 },
+    weibull: { family: 'weibull', tau: 1.7, theta: 900 },
+  }
+
+  it.each(Object.entries(models))('holds the %s limited expected value to ∫ S(x) dx', (_name, params) => {
+    const spec = tool('distributions.limited_expected_value')
+    const model = lossModel(normalizeInput(spec, params).input)
+    for (const u of [150, 700, 2500]) {
+      expect(run('distributions.limited_expected_value', { ...params, u }).values.lev as number).toBeCloseTo(integrate(model.survival, u), 2)
+    }
+  })
+
+  it('pays a franchise deductible back on every paid loss', () => {
+    const base = { family: 'exponential', theta: 1000, deductible: 500 }
+    const ordinary = run('distributions.expected_payment', base).values
+    const franchise = run('distributions.expected_payment', { ...base, type: 'franchise' }).values
+    expect(franchise.per_loss as number).toBeCloseTo((ordinary.per_loss as number) + 500 * Math.exp(-0.5), 9)
+    // Memoryless: the ordinary per-payment mean is the mean itself.
+    expect(ordinary.per_payment as number).toBeCloseTo(1000, 9)
+  })
+
+  it('caps the payment at the maximum covered loss, and refuses one below the deductible', () => {
+    const capped = run('distributions.expected_payment', { family: 'uniform', a: 0, b: 1000, deductible: 200, limit: 600 }).values
+    // ∫₂₀₀⁶⁰⁰ (1000 − x)/1000 dx = 400 − (600² − 200²)/2000 = 240.
+    expect(capped.per_loss as number).toBeCloseTo(240, 9)
+    expect(() => run('distributions.expected_payment', { deductible: 500, limit: 400 })).toThrow(/above the deductible/)
+  })
+
+  it('inverts the distribution function for its quantile', () => {
+    for (const input of [{ family: 'normal', mu: 3, sigma: 2 }, { family: 'gamma', alpha: 3, theta: 2 }, { family: 'lognormal', mu: 0, sigma: 1 }]) {
+      const q = run('distributions.distribution', { ...input, q: 0.9 }).values.quantile as number
+      expect(run('distributions.distribution', { ...input, x: q }).values.cdf as number).toBeCloseTo(0.9, 9)
+    }
+    // A count's quantile is the smallest k with F(k) ≥ q.
+    expect(run('distributions.distribution', { family: 'binomial', n: 2, p: 0.5, q: 0.75 }).values.quantile).toBe(1)
+  })
+})
+
+describe('Bühlmann Credibility', () => {
+  it('weights the risk by n / (n + EPV / VHM)', () => {
+    const out = run('credibility.buhlmann_credibility', { epv: 100, vhm: 25, exposure: 4, observed: 80, prior: 50 }).values
+    expect(out.k).toBe(4)
+    expect(out.z).toBe(0.5)
+    expect(out.estimate).toBe(65)
+  })
+})
+
 describe('Age-to-Age Factors', () => {
   const triangle = {
     origins: ['2021', '2022', '2023'],
@@ -246,6 +411,37 @@ describe('Chain Ladder, Expected Claims and Bornhuetter-Ferguson', () => {
   })
 })
 
+describe('Benktander, Cape Cod and Ratio Triangle', () => {
+  const rows = [
+    { origin: '2021', latest: 1650, cdf: 1, expected: 1700, premium: 2500 },
+    { origin: '2022', latest: 1700, cdf: 1.1, expected: 1850, premium: 2600 },
+    { origin: '2023', latest: 1200, cdf: 1.6, expected: 1950, premium: 2700 },
+  ]
+
+  it('is the B-F after one iteration, and approaches the chain ladder after many', () => {
+    const bf = run('reserving.bornhuetter_ferguson', { rows }).values.ultimate as number[]
+    const one = run('reserving.benktander', { rows, iterations: 1 }).values.ultimate as number[]
+    one.forEach((u, k) => expect(u).toBeCloseTo(bf[k], 9))
+    const cl = run('reserving.chain_ladder', { rows }).values.ultimate as number[]
+    const many = run('reserving.benktander', { rows, iterations: 100 }).values.ultimate as number[]
+    many.forEach((u, k) => expect(u).toBeCloseTo(cl[k], 6))
+  })
+
+  it('takes its claim ratio from the data: latest claims over used-up premium', () => {
+    const out = run('reserving.cape_cod', { rows }).values
+    const elr = (1650 + 1700 + 1200) / (2500 + 2600 / 1.1 + 2700 / 1.6)
+    expect(out.elr as number).toBeCloseTo(elr, 12)
+    expect((out.ultimate as number[])[2]).toBeCloseTo(1200 + elr * 2700 * (1 - 1 / 1.6), 9)
+  })
+
+  it('divides two triangles of one shape cell by cell, and refuses two of different shapes', () => {
+    const out = run('reserving.ratio_triangle')
+    expect((out.values.ratios as (number | null)[][])[0][0]).toBeCloseTo(0.4, 12)
+    expect((out.values.ratios as (number | null)[][])[2][1]).toBeNull()
+    expect(() => run('reserving.ratio_triangle', { numerator: [[1, 2], [3, null]], denominator: [[1, 2, 3], [4, 5, null], [6, null, null]] })).toThrow(/same shape/)
+  })
+})
+
 describe('Loss Ratio Method', () => {
   it('indicates the change from the loss, expense and profit ratios', () => {
     const out = run('ratemaking.loss_ratio_method', { loss_ratio: 0.65, fixed: 0.05, variable: 0.2, profit: 0.05 })
@@ -255,6 +451,72 @@ describe('Loss Ratio Method', () => {
 
   it('refuses expenses and profit that leave no room', () => {
     expect(() => run('ratemaking.loss_ratio_method', { variable: 0.6, profit: 0.4 })).toThrow(/below 100%/)
+  })
+})
+
+describe('dates', () => {
+  it('reads ISO, US and the texts\' two-digit years, and refuses what is not a date', () => {
+    expect(parseDate('2017-01-01')).toEqual({ y: 2017, m: 1, d: 1 })
+    expect(parseDate('04/01/2011')).toEqual({ y: 2011, m: 4, d: 1 })
+    expect(parseDate('10/01/10')).toEqual({ y: 2010, m: 10, d: 1 })
+    expect(parseDate('02/30/2016')).toBeNull()
+    expect(parseDate('soon')).toBeNull()
+  })
+
+  it('measures time in months, as the ratemaking texts do', () => {
+    expect(decimalYear(parseDate('2011-04-01')!)).toBe(2011.25)
+    expect(decimalYear(parseDate('2015-07-01')!)).toBe(2015.5)
+    expect(dateOfYear(2017.75)).toBe('2017-10-01')
+  })
+})
+
+describe('Ratemaking', () => {
+  it('earns a calendar year\'s premium by the parallelogram', () => {
+    // A 5% change on 1 April, annual policies: 0.75² / 2 of the year's premium earns at the new rate.
+    const out = run('ratemaking.on_level_factors', { changes: [{ date: '2023-04-01', change: 0.05 }], term: 12, first: 2023, last: 2024 }).values
+    expect((out.portions as number[][])[0][1]).toBeCloseTo(0.75 ** 2 / 2, 12)
+    expect((out.factors as number[])[0]).toBeCloseTo(1.05 / (1 - 0.75 ** 2 / 2 + 1.05 * (0.75 ** 2 / 2)), 12)
+    // By policy year the change is in for the policies written after it: three-quarters of the year.
+    const py = run('ratemaking.on_level_factors', { changes: [{ date: '2023-04-01', change: 0.05 }], basis: 'policy', first: 2023, last: 2023 }).values
+    expect((py.portions as number[][])[0][1]).toBeCloseTo(0.75, 12)
+  })
+
+  it('splits written premium into earned and unearned, year by year', () => {
+    const out = run('ratemaking.earned_premium', { term: 12, policies: [{ policy: 'A', effective: '2023-07-01', amount: 1200 }] }).values
+    expect(out.years).toEqual([2023, 2024])
+    expect(out.earned).toEqual([600, 600])
+    expect(out.unearned).toEqual([600, 0])
+  })
+
+  it('fits an exponential trend exactly to a series growing at a constant rate', () => {
+    const points = Array.from({ length: 8 }, (_, k) => ({ period: `Q${k}`, value: 100 * 1.04 ** (k / 4) }))
+    const out = run('ratemaking.trend_fit', { points }).values
+    expect(out.trend as number).toBeCloseTo(0.04, 12)
+    expect(out.r2 as number).toBeCloseTo(1, 12)
+    expect(run('ratemaking.trend_fit', { points, latest: 4 }).values.points).toBe(4)
+  })
+
+  it('trends from the experience period\'s average accident date to the future one', () => {
+    const ay = run('ratemaking.trend_factor', { trend: 0.05, year: 2023, effective: '2025-01-01', in_effect: 12, term: 12 }).values
+    expect(ay.period).toBeCloseTo(2.5, 12)
+    expect(ay.factor as number).toBeCloseTo(1.05 ** 2.5, 12)
+    // A policy year's losses happen half a term later than the year's middle.
+    expect(run('ratemaking.trend_factor', { trend: 0.05, basis: 'policy', year: 2023, effective: '2025-01-01', in_effect: 12, term: 12 }).values.period).toBeCloseTo(2, 12)
+  })
+
+  it('splits each expense type into its fixed and variable provisions', () => {
+    const out = run('ratemaking.expense_ratios', { rows: [{ type: 'a', expenses: 10, premium: 100, fixed_share: 0.75 }, { type: 'b', expenses: 5, premium: 50, fixed_share: 0 }] }).values
+    expect(out.fixed_provision as number).toBeCloseTo(0.075, 12)
+    expect(out.variable_provision as number).toBeCloseTo(0.125, 12)
+  })
+
+  it('agrees with the Loss Ratio Method on the permissible loss ratio, and prices by the pure premium', () => {
+    const plr = run('ratemaking.permissible_loss_ratio', { fixed: 0.05, variable: 0.2, profit: 0.05 }).values
+    expect(plr.variable_permissible_loss_ratio).toBeCloseTo(run('ratemaking.loss_ratio_method', { variable: 0.2, profit: 0.05 }).values.variable_permissible_loss_ratio as number, 12)
+    expect(plr.permissible_loss_ratio as number).toBeCloseTo(0.7, 12)
+    const pp = run('ratemaking.pure_premium_method', { pure_premium: 300, fixed: 50, variable: 0.2, profit: 0.05, current: 400 }).values
+    expect(pp.indicated_rate as number).toBeCloseTo(350 / 0.75, 12)
+    expect(pp.indicated_change as number).toBeCloseTo(350 / 0.75 / 400 - 1, 12)
   })
 })
 

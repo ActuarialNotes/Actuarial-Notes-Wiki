@@ -2,14 +2,35 @@ import type { PracticeArea, ToolSpec } from './types'
 import { interestConverter } from './finance/interestConverter'
 import { annuity } from './finance/annuity'
 import { presentValue } from './finance/presentValue'
+import { internalRateOfReturn } from './finance/internalRateOfReturn'
+import { loanSchedule } from './finance/loanSchedule'
+import { bondPrice } from './finance/bondPrice'
+import { bondYield } from './finance/bondYield'
+import { bondAmortization } from './finance/bondAmortization'
+import { durationConvexity } from './finance/durationConvexity'
+import { redingtonImmunization } from './finance/redingtonImmunization'
 import { ageToAgeFactors } from './reserving/ageToAge'
 import { developmentToUltimate } from './reserving/developmentToUltimate'
 import { chainLadder } from './reserving/chainLadder'
 import { expectedClaims } from './reserving/expectedClaims'
 import { bornhuetterFerguson } from './reserving/bornhuetterFerguson'
+import { benktander } from './reserving/benktander'
+import { capeCod } from './reserving/capeCod'
+import { ratioTriangle } from './reserving/ratioTriangle'
 import { lossRatioMethod } from './ratemaking/lossRatioMethod'
+import { earnedPremium } from './ratemaking/earnedPremium'
+import { onLevelFactors } from './ratemaking/onLevelFactors'
+import { trendFit } from './ratemaking/trendFit'
+import { trendFactor } from './ratemaking/trendFactor'
+import { expenseRatios } from './ratemaking/expenseRatios'
+import { permissibleLossRatio } from './ratemaking/permissibleLossRatio'
+import { purePremiumMethod } from './ratemaking/purePremiumMethod'
 import { fullCredibilityStandard } from './credibility/fullCredibility'
 import { partialCredibility } from './credibility/partialCredibility'
+import { buhlmannCredibility } from './credibility/buhlmann'
+import { distribution } from './distributions/distribution'
+import { limitedExpectedValue } from './distributions/limitedExpectedValue'
+import { expectedPayment } from './distributions/expectedPayment'
 
 /** Bumped whenever the engine's shared behaviour (input reading, the envelope) changes. */
 export const ENGINE_VERSION = '0.1.0'
@@ -18,23 +39,45 @@ export const ENGINE_VERSION = '0.1.0'
 export const AREAS: { id: PracticeArea; label: string }[] = [
   { id: 'reserving', label: 'Reserving' },
   { id: 'ratemaking', label: 'Ratemaking' },
+  { id: 'distributions', label: 'Loss distributions' },
   { id: 'credibility', label: 'Credibility' },
   { id: 'finance', label: 'Financial mathematics' },
 ]
 
 /** Every tool, in the order a chain runs within each area. */
 export const TOOLS: ToolSpec[] = [
+  ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
   chainLadder,
   expectedClaims,
   bornhuetterFerguson,
+  benktander,
+  capeCod,
+  earnedPremium,
+  onLevelFactors,
+  trendFit,
+  trendFactor,
+  expenseRatios,
+  permissibleLossRatio,
   lossRatioMethod,
+  purePremiumMethod,
+  distribution,
+  limitedExpectedValue,
+  expectedPayment,
   fullCredibilityStandard,
   partialCredibility,
+  buhlmannCredibility,
   interestConverter,
   annuity,
   presentValue,
+  internalRateOfReturn,
+  loanSchedule,
+  bondPrice,
+  bondYield,
+  bondAmortization,
+  durationConvexity,
+  redingtonImmunization,
 ]
 
 const BY_ID = new Map(TOOLS.map(t => [t.id, t]))

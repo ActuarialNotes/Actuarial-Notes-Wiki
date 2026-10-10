@@ -11,7 +11,7 @@ test.describe('tools', () => {
     await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Tools' }).click()
     await expect(page).toHaveURL(/\/tools$/)
     await expect(page.getByRole('heading', { name: 'Tools', exact: true })).toBeVisible()
-    for (const area of ['Reserving', 'Ratemaking', 'Credibility', 'Financial mathematics']) {
+    for (const area of ['Reserving', 'Ratemaking', 'Loss distributions', 'Credibility', 'Financial mathematics']) {
       await expect(page.getByRole('heading', { name: area, exact: true })).toBeVisible()
     }
     await expect(page.getByTestId('tool-row').first()).toBeVisible()
@@ -56,6 +56,43 @@ test.describe('tools', () => {
     const fragment = Buffer.from(JSON.stringify(input)).toString('base64url')
     await page.goto(`/tools/annuity#input=${fragment}`)
     await expect(page.getByTestId('tool-tile').first()).toHaveText('1,000.00')
+  })
+
+  test('draws two triangles, named, and divides them', async ({ page }) => {
+    await page.goto('/tools/ratio-triangle')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByRole('region', { name: 'Numerator' })).toBeVisible()
+    await expect(card.getByRole('region', { name: 'Denominator' })).toBeVisible()
+    const latest = card.getByTestId('tool-tile').first()
+    await expect(latest).toHaveText('0.4167')
+    await card.getByRole('region', { name: 'Numerator' }).getByLabel('Origin 2023, age 12').fill('600')
+    await expect(latest).toHaveText('0.5000')
+  })
+
+  test('takes rate changes beside the factors they produce', async ({ page }) => {
+    await page.goto('/tools/on-level-factors')
+    const card = page.getByTestId('tool-card')
+    const latest = card.getByTestId('tool-tile').first()
+    const before = await latest.textContent()
+    await card.getByLabel('Change, row 3').fill('0.10')
+    await expect(latest).not.toHaveText(before ?? '')
+    await expect(card.getByRole('columnheader', { name: 'OLF' })).toBeVisible()
+  })
+
+  test('draws only the parameters the chosen distribution takes', async ({ page }) => {
+    await page.goto('/tools/distribution')
+    const card = page.getByTestId('tool-card')
+    await expect(card.getByLabel('Mean value')).toBeVisible()
+    await card.getByRole('combobox').selectOption('poisson')
+    await expect(card.getByLabel('Mean count value')).toBeVisible()
+    await expect(card.getByLabel('Mean value')).toHaveCount(0)
+  })
+
+  test('reads an effective date from the date control', async ({ page }) => {
+    await page.goto('/tools/trend-factor')
+    const card = page.getByTestId('tool-card')
+    await card.getByLabel(/Rates effective/).fill('2026-01-01')
+    await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
   })
 
   test('fits a scalar card on a phone without scrolling', async ({ page }) => {

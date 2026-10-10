@@ -165,7 +165,7 @@ var annuity = {
   view: "none",
   compute: (input) => {
     const due = input.timing === "due";
-    const P = Number(input.payment);
+    const P2 = Number(input.payment);
     const n = Number(input.n);
     const i = Number(input.i);
     const v = 1 / (1 + i);
@@ -177,20 +177,20 @@ var annuity = {
     const ssymbol = due ? "s\u0308" : "s";
     return {
       tiles: [
-        { symbol: "PV", label: "Today", value: P * factor, unit: "money" },
-        { symbol: "FV", label: "At n", value: P * accumulation, unit: "money" },
+        { symbol: "PV", label: "Today", value: P2 * factor, unit: "money" },
+        { symbol: "FV", label: "At n", value: P2 * accumulation, unit: "money" },
         { symbol: `${symbol}\u2309n`, label: "Factor", value: factor, unit: "factor" }
       ],
       trace: [
         { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
         { label: "Annuity-immediate factor", formula: i === 0 ? "a\u2309n = n" : `a\u2309n = (1 \u2212 v^${n}) / ${i}`, result: an, unit: "factor" },
         ...due ? [{ label: "Annuity-due factor", formula: "\xE4\u2309n = a\u2309n \xB7 (1 + i)", result: factor, unit: "factor" }] : [],
-        { label: "Present value", formula: `PV = ${P} \xD7 ${symbol}\u2309n`, result: P * factor, unit: "money" },
-        { label: "Accumulated value", formula: `FV = ${P} \xD7 ${ssymbol}\u2309n`, result: P * accumulation, unit: "money" }
+        { label: "Present value", formula: `PV = ${P2} \xD7 ${symbol}\u2309n`, result: P2 * factor, unit: "money" },
+        { label: "Accumulated value", formula: `FV = ${P2} \xD7 ${ssymbol}\u2309n`, result: P2 * accumulation, unit: "money" }
       ],
       warnings: [],
-      values: { present_value: P * factor, accumulated_value: P * accumulation, annuity_factor: factor, accumulation_factor: accumulation },
-      summary: `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(P * factor, "money")}, accumulated value ${formatValue(P * accumulation, "money")} at the end of period ${n} (factor ${formatValue(factor, "factor")}).`
+      values: { present_value: P2 * factor, accumulated_value: P2 * accumulation, annuity_factor: factor, accumulation_factor: accumulation },
+      summary: `Annuity-${due ? "due" : "immediate"}: present value ${formatValue(P2 * factor, "money")}, accumulated value ${formatValue(P2 * accumulation, "money")} at the end of period ${n} (factor ${formatValue(factor, "factor")}).`
     };
   },
   method: { concepts: ["Annuity Immediate", "Annuity Due"], readings: [] }
@@ -240,12 +240,12 @@ var presentValue = {
       const discount = r.spot == null ? v ** t : (1 + Number(r.spot)) ** -t;
       return Object.assign({}, r, { discount, pv: amount * discount });
     });
-    const pv2 = rows.reduce((s, r) => s + r.pv, 0);
+    const pv = rows.reduce((s, r) => s + r.pv, 0);
     const total = rows.reduce((s, r) => s + Number(r.amount), 0);
     const warnings = flows2.some((r) => Number(r.time) < 0) ? ["A cash flow has a negative time: it is accumulated to today, not discounted."] : [];
     return {
       tiles: [
-        { symbol: "PV", label: "Today", value: pv2, unit: "money" },
+        { symbol: "PV", label: "Today", value: pv, unit: "money" },
         { symbol: "\u03A3CF", label: "Undiscounted", value: total, unit: "money" }
       ],
       table: {
@@ -257,7 +257,7 @@ var presentValue = {
           { key: "pv", label: "PV", kind: "number", unit: "money", computed: true }
         ],
         rows,
-        footer: { time: "Total", amount: total, spot: null, discount: null, pv: pv2 }
+        footer: { time: "Total", amount: total, spot: null, discount: null, pv }
       },
       trace: [
         { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
@@ -267,14 +267,820 @@ var presentValue = {
           result: r.pv,
           unit: "money"
         })),
-        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv2, unit: "money" }
+        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv, unit: "money" }
       ],
       warnings,
-      values: { present_value: pv2, undiscounted: total, v },
-      summary: `Present value ${formatValue(pv2, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
+      values: { present_value: pv, undiscounted: total, v },
+      summary: `Present value ${formatValue(pv, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
     };
   },
   method: { concepts: ["Present Value", "Discount Function"], readings: [] }
+};
+
+// src/lib/distributionMath.ts
+var LANCZOS_COEFFS = [
+  676.5203681218851,
+  -1259.1392167224028,
+  771.3234287776531,
+  -176.6150291621406,
+  12.507343278686905,
+  -0.13857109526572012,
+  9984369578019572e-21,
+  15056327351493116e-23
+];
+function logGamma(x) {
+  if (x < 0.5) {
+    return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - logGamma(1 - x);
+  }
+  const z = x - 1;
+  let a = 0.9999999999998099;
+  for (let i = 0; i < LANCZOS_COEFFS.length; i++) a += LANCZOS_COEFFS[i] / (z + i + 1);
+  const t = z + LANCZOS_COEFFS.length - 0.5;
+  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(a);
+}
+function gammaFn(x) {
+  if (x < 0.5) return Math.PI / (Math.sin(Math.PI * x) * gammaFn(1 - x));
+  return Math.exp(logGamma(x));
+}
+function logBeta(a, b) {
+  return logGamma(a) + logGamma(b) - logGamma(a + b);
+}
+function logBinomialCoefficient(n, k) {
+  if (k < 0 || k > n) return -Infinity;
+  return logGamma(n + 1) - logGamma(k + 1) - logGamma(n - k + 1);
+}
+var EPS = 1e-14;
+var TINY = 1e-300;
+var MAX_ITER = 500;
+function gammaPSeries(a, x) {
+  let ap = a;
+  let sum = 1 / a;
+  let del = sum;
+  for (let n = 0; n < MAX_ITER; n++) {
+    ap += 1;
+    del *= x / ap;
+    sum += del;
+    if (Math.abs(del) < Math.abs(sum) * EPS) break;
+  }
+  return sum * Math.exp(-x + a * Math.log(x) - logGamma(a));
+}
+function gammaQContinuedFraction(a, x) {
+  let b = x + 1 - a;
+  let c = 1 / TINY;
+  let d = 1 / b;
+  let h = d;
+  for (let i = 1; i <= MAX_ITER; i++) {
+    const an = -i * (i - a);
+    b += 2;
+    d = an * d + b;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = b + an / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < EPS) break;
+  }
+  return Math.exp(-x + a * Math.log(x) - logGamma(a)) * h;
+}
+function regularizedGammaP(a, x) {
+  if (a <= 0 || !(x >= 0)) return NaN;
+  if (x === 0) return 0;
+  return x < a + 1 ? gammaPSeries(a, x) : 1 - gammaQContinuedFraction(a, x);
+}
+function betaContinuedFraction(a, b, x) {
+  const qab = a + b;
+  const qap = a + 1;
+  const qam = a - 1;
+  let c = 1;
+  let d = 1 - qab * x / qap;
+  if (Math.abs(d) < TINY) d = TINY;
+  d = 1 / d;
+  let h = d;
+  for (let m = 1; m <= MAX_ITER; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < EPS) break;
+  }
+  return h;
+}
+function regularizedIncompleteBeta(a, b, x) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const front = Math.exp(a * Math.log(x) + b * Math.log1p(-x) - logBeta(a, b));
+  return x < (a + 1) / (a + b + 2) ? front * betaContinuedFraction(a, b, x) / a : 1 - front * betaContinuedFraction(b, a, 1 - x) / b;
+}
+function erf(x) {
+  if (x === 0) return 0;
+  const p2 = regularizedGammaP(0.5, x * x);
+  return x > 0 ? p2 : -p2;
+}
+function standardNormalPdf(z) {
+  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+}
+function standardNormalCdf(z) {
+  return 0.5 * (1 + erf(z / Math.SQRT2));
+}
+function openUnit(rng) {
+  const u = rng();
+  return u > 0 ? u : Number.MIN_VALUE;
+}
+function sampleStandardNormal(rng) {
+  const u = openUnit(rng);
+  const v = rng();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function sampleGamma(shape, scale, rng) {
+  if (shape < 1) {
+    const u = openUnit(rng);
+    return sampleGamma(shape + 1, scale, rng) * Math.pow(u, 1 / shape);
+  }
+  const d = shape - 1 / 3;
+  const c = 1 / Math.sqrt(9 * d);
+  for (; ; ) {
+    let x;
+    let v;
+    do {
+      x = sampleStandardNormal(rng);
+      v = 1 + c * x;
+    } while (v <= 0);
+    v = v * v * v;
+    const u = openUnit(rng);
+    const x2 = x * x;
+    if (u < 1 - 0.0331 * x2 * x2) return d * v * scale;
+    if (Math.log(u) < 0.5 * x2 + d * (1 - v + Math.log(v))) return d * v * scale;
+  }
+}
+function sampleBeta(alpha, beta2, rng) {
+  const a = sampleGamma(alpha, 1, rng);
+  const b = sampleGamma(beta2, 1, rng);
+  const sum = a + b;
+  return sum > 0 ? a / sum : 0.5;
+}
+function sampleGeometricTrials(p2, rng) {
+  if (p2 >= 1) return 1;
+  return Math.ceil(Math.log(openUnit(rng)) / Math.log1p(-p2));
+}
+function sampleBinomial(n, p2, rng) {
+  let successes = 0;
+  for (let i = 0; i < n; i++) if (rng() < p2) successes++;
+  return successes;
+}
+function samplePoisson(lambda, rng) {
+  const limit = Math.exp(-lambda);
+  let k = 0;
+  let product = rng();
+  while (product > limit) {
+    k++;
+    product *= rng();
+    if (k > 1e4) break;
+  }
+  return k;
+}
+
+// src/lib/tools/numeric.ts
+function inverseNormalCdf(p2) {
+  if (!(p2 > 0 && p2 < 1)) return p2 === 0 ? -Infinity : p2 === 1 ? Infinity : NaN;
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const low = 0.02425;
+  let x;
+  if (p2 < low) {
+    const q = Math.sqrt(-2 * Math.log(p2));
+    x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  } else if (p2 <= 1 - low) {
+    const q = p2 - 0.5;
+    const r = q * q;
+    x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  } else {
+    const q = Math.sqrt(-2 * Math.log(1 - p2));
+    x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  }
+  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p2) / standardNormalPdf(x);
+  return x;
+}
+function bisect(f, lo, hi) {
+  let flo = f(lo);
+  if (flo === 0) return lo;
+  for (let k = 0; k < 200; k++) {
+    const mid = (lo + hi) / 2;
+    if (mid === lo || mid === hi) return mid;
+    const fm2 = f(mid);
+    if (fm2 === 0) return mid;
+    if (Math.sign(fm2) === Math.sign(flo)) {
+      lo = mid;
+      flo = fm2;
+    } else {
+      hi = mid;
+    }
+  }
+  return (lo + hi) / 2;
+}
+function rootsOn(f, grid) {
+  const out = [];
+  let prev = f(grid[0]);
+  if (prev === 0) out.push(grid[0]);
+  for (let k = 1; k < grid.length; k++) {
+    const cur = f(grid[k]);
+    if (cur === 0) out.push(grid[k]);
+    else if (prev !== 0 && Number.isFinite(prev) && Number.isFinite(cur) && Math.sign(cur) !== Math.sign(prev)) out.push(bisect(f, grid[k - 1], grid[k]));
+    prev = cur;
+  }
+  return out;
+}
+var RATE_GRID = (() => {
+  const grid = [];
+  for (let i = -0.99; i < -0.2; i += 0.01) grid.push(i);
+  for (let i = -0.2; i < 0.5; i += 25e-4) grid.push(i);
+  for (let i = 0.5; i <= 10; i += 0.05) grid.push(i);
+  return grid;
+})();
+
+// src/lib/tools/finance/internalRateOfReturn.ts
+var TIME = { key: "time", label: "Time t", kind: "number", unit: "years" };
+var AMOUNT = { key: "amount", label: "Amount", kind: "number", unit: "money" };
+var npvAt = (flows2, i) => flows2.reduce((s, r) => s + Number(r.amount) * (1 + i) ** -Number(r.time), 0);
+var internalRateOfReturn = {
+  id: "finance.internal_rate_of_return",
+  version: "1.0.0",
+  name: "Internal Rate of Return",
+  area: "finance",
+  answers: "What rate makes these cash flows worth zero?",
+  fields: [
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 2,
+      maxRows: 500,
+      description: "Each cash flow: its time (in years, or in whatever period the rate is to be per) and its amount, negative for money paid out and positive for money received.",
+      columns: [TIME, AMOUNT],
+      default: [
+        { time: 0, amount: -1e3 },
+        { time: 1, amount: 300 },
+        { time: 2, amount: 400 },
+        { time: 3, amount: 500 }
+      ]
+    }
+  ],
+  notation: () => "\u03A3 CF\u209C (1 + i)\u207B\u1D57 = 0",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const flows2 = input.flows;
+    const amounts = flows2.map((r) => Number(r.amount));
+    if (!amounts.some((a) => a > 0) || !amounts.some((a) => a < 0)) {
+      throw new ToolInputError("flows", "The flows need at least one payment out (negative) and one receipt (positive): otherwise no rate makes them worth zero.");
+    }
+    if (flows2.some((r) => Number(r.time) < 0)) throw new ToolInputError("flows", "A cash flow has a negative time; measure every time from the first flow.");
+    const roots = rootsOn((i) => npvAt(flows2, i), RATE_GRID);
+    if (roots.length === 0) throw new ToolInputError("flows", "No rate between \u221299% and 1,000% makes these flows worth zero.");
+    const irr = [...roots].sort((a, b) => Math.abs(a) - Math.abs(b))[0];
+    const v = 1 / (1 + irr);
+    const rows = flows2.map((r) => {
+      const discount = v ** Number(r.time);
+      return Object.assign({}, r, { discount, pv: Number(r.amount) * discount });
+    });
+    const warnings = roots.length > 1 ? [`${roots.length} rates make these flows worth zero: ${roots.map((r) => formatValue(r, "percent")).join(", ")}. No one of them is the yield; the one nearest zero is shown.`] : [];
+    return {
+      tiles: [
+        { symbol: "i", label: "Yield rate", value: irr, unit: "percent" },
+        { symbol: "\u03B4", label: "Force", value: Math.log(1 + irr), unit: "percent" }
+      ],
+      table: {
+        columns: [
+          TIME,
+          AMOUNT,
+          { key: "discount", label: "v\u1D57", kind: "number", unit: "factor", computed: true },
+          { key: "pv", label: "PV at i", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", amount: amounts.reduce((s, a) => s + a, 0), discount: null, pv: rows.reduce((s, r) => s + r.pv, 0) }
+      },
+      trace: [
+        { label: "Sign changes in the flows", formula: "Descartes: at most this many positive roots in v", result: signChanges(flows2), unit: "count" },
+        { label: "Yield rate", formula: "the i where \u03A3 CF\u209C v\u1D57 = 0, by bisection", result: irr, unit: "percent" },
+        { label: "Net present value at i", formula: "\u03A3 CF\u209C (1 + i)\u207B\u1D57", result: npvAt(flows2, irr), unit: "money" }
+      ],
+      warnings,
+      values: { irr, rates: roots, force: Math.log(1 + irr) },
+      summary: `Internal rate of return ${formatValue(irr, "percent")} per unit of time${roots.length > 1 ? ` (one of ${roots.length} roots)` : ""}.`
+    };
+  },
+  method: { concepts: ["Internal Rate of Return", "Yield Rate"], readings: [] },
+  next: [
+    { tool: "finance.interest_converter", label: "Interest Converter", build: (_input, output) => ({ form: "effective_interest", rate: Math.max(0, Number(output.values.irr)) }) }
+  ]
+};
+function signChanges(flows2) {
+  const signs = [...flows2].sort((a, b) => Number(a.time) - Number(b.time)).map((r) => Math.sign(Number(r.amount))).filter((s) => s !== 0);
+  return signs.reduce((n, s, k) => k > 0 && s !== signs[k - 1] ? n + 1 : n, 0);
+}
+
+// src/lib/tools/finance/loanSchedule.ts
+var MAX_PAYMENTS = 1200;
+var loanSchedule = {
+  id: "finance.loan_schedule",
+  version: "1.0.0",
+  name: "Loan Schedule",
+  area: "finance",
+  answers: "How is this loan repaid, payment by payment?",
+  fields: [
+    { kind: "number", key: "amount", label: "Amount borrowed", symbol: "L", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e5, step: 100, default: 1e4, description: "The loan amount at time 0." },
+    { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04)." },
+    {
+      kind: "number",
+      key: "payment",
+      label: "Payment",
+      symbol: "P",
+      unit: "money",
+      min: 0,
+      max: 1e12,
+      sliderMax: 1e4,
+      step: 10,
+      default: 0,
+      zeroLabel: "Level",
+      description: "The payment each period. 0 means the level payment that repays the loan in n payments; any other amount is paid as given."
+    },
+    {
+      kind: "number",
+      key: "n",
+      label: "Payments",
+      symbol: "n",
+      unit: "count",
+      integer: true,
+      min: 0,
+      max: MAX_PAYMENTS,
+      sliderMax: 60,
+      step: 1,
+      default: 10,
+      zeroLabel: "As needed",
+      description: `How many payments. With a payment given, 0 means as many as it takes, the last a smaller drop payment; at most ${MAX_PAYMENTS}.`
+    }
+  ],
+  notation: (input) => Number(input.payment) === 0 ? "P = L / a\u2309n,  B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P" : "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P",
+  view: "table",
+  compute: (input) => {
+    const L = Number(input.amount);
+    const i = Number(input.i);
+    const given = Number(input.payment);
+    const n = Number(input.n);
+    const level = given === 0;
+    if (level && n === 0) throw new ToolInputError("n", "Give the number of payments, or a payment: with neither there is no schedule.");
+    if (!level && n === 0 && given <= L * i) {
+      throw new ToolInputError("payment", `A payment of ${formatValue(given, "money")} doesn't cover the first period's interest of ${formatValue(L * i, "money")}, so the loan is never repaid.`);
+    }
+    const an = i === 0 ? n : (1 - (1 + i) ** -n) / i;
+    const P2 = level ? L / an : given;
+    const rows = [];
+    let balance = L;
+    for (let k = 1; k <= (n || MAX_PAYMENTS); k++) {
+      const interest = balance * i;
+      const payment = !level && n === 0 && balance + interest <= P2 ? balance + interest : P2;
+      balance = balance + interest - payment;
+      if (level && k === n) balance = 0;
+      rows.push({ k, payment, interest, principal: payment - interest, balance });
+      if (!level && n === 0 && balance <= 1e-9) {
+        balance = 0;
+        break;
+      }
+    }
+    if (!level && n === 0 && balance > 0) throw new ToolInputError("payment", `The loan isn't repaid within ${MAX_PAYMENTS} payments.`);
+    const totalPaid = rows.reduce((s, r) => s + r.payment, 0);
+    const totalInterest = rows.reduce((s, r) => s + r.interest, 0);
+    const last2 = rows[rows.length - 1];
+    const warnings = !level && n > 0 && balance < -1e-9 ? [`The payments overpay the loan: the balance after payment ${n} is negative.`] : [];
+    return {
+      tiles: [
+        level ? { symbol: "P", label: "Level payment", value: P2, unit: "money" } : n === 0 ? { symbol: "P\u2099", label: `Final (no. ${last2.k})`, value: last2.payment, unit: "money" } : { symbol: `B${n}`, label: `Balance after ${n}`, value: balance, unit: "money" },
+        { symbol: "\u03A3I", label: "Total interest", value: totalInterest, unit: "money" },
+        { symbol: "\u03A3P", label: "Total paid", value: totalPaid, unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "k", label: "k", kind: "number", unit: "count" },
+          { key: "payment", label: "Payment", kind: "number", unit: "money", computed: true },
+          { key: "interest", label: "Interest", kind: "number", unit: "money", computed: true },
+          { key: "principal", label: "Principal", kind: "number", unit: "money", computed: true },
+          { key: "balance", label: "Balance", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { k: "Total", payment: totalPaid, interest: totalInterest, principal: totalPaid - totalInterest, balance: null }
+      },
+      trace: [
+        ...level ? [{ label: "Annuity factor", formula: `a\u2309${n} at ${i}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P2, unit: "money" }] : [],
+        { label: "Interest in payment 1", formula: `${L} \xD7 ${i}`, result: rows[0].interest, unit: "money" },
+        { label: "Principal in payment 1", formula: "P \u2212 I\u2081", result: rows[0].principal, unit: "money" },
+        { label: `Balance after payment ${last2.k}`, formula: "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P\u2096", result: balance, unit: "money" }
+      ],
+      warnings,
+      values: {
+        payment: P2,
+        payments: rows.map((r) => r.payment),
+        interest: rows.map((r) => r.interest),
+        principal: rows.map((r) => r.principal),
+        balance: rows.map((r) => r.balance),
+        final_payment: last2.payment,
+        count: rows.length,
+        total_interest: totalInterest
+      },
+      summary: level ? `Level payment ${formatValue(P2, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.` : `${rows.length} payments, the last ${formatValue(last2.payment, "money")}; balance after them ${formatValue(balance, "money")}; total interest ${formatValue(totalInterest, "money")}.`
+    };
+  },
+  method: { concepts: ["Loan Amortization", "Amortization Schedule", "Outstanding Balance"], readings: [] }
+};
+
+// src/lib/tools/finance/bondTerms.ts
+var FACE = { kind: "number", key: "face", label: "Face amount", symbol: "F", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e4, step: 100, default: 1e3, description: "The face (par) amount coupons are paid on." };
+var COUPON = { kind: "number", key: "coupon", label: "Coupon rate", symbol: "r", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.06, description: "The annual coupon rate, nominal: 0.08 with two coupons a year pays 4% of face each half-year." };
+var REDEMPTION = { kind: "number", key: "redemption", label: "Redemption value", symbol: "C", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 100, default: 1e3, description: "What the bond pays at maturity (the face amount, for a bond redeemable at par)." };
+var YEARS = { kind: "number", key: "years", label: "Years to maturity", symbol: "T", unit: "years", min: 0.01, max: 200, sliderMax: 40, step: 0.5, default: 10, description: "The term in years; with m coupons a year, T \xD7 m must be a whole number of coupons." };
+var FREQUENCY = { kind: "number", key: "m", label: "Coupons a year", symbol: "m", unit: "count", integer: true, min: 1, max: 12, sliderMax: 12, step: 1, default: 2, description: "How many coupons a year (2 for semiannual)." };
+var YIELD = {
+  kind: "number",
+  key: "yield",
+  label: "Yield, convertible m-thly",
+  symbol: "i\u207D\u1D50\u207E",
+  unit: "percent",
+  min: -0.5,
+  max: 2,
+  sliderMax: 0.2,
+  step: 25e-4,
+  default: 0.05,
+  description: "The annual nominal yield, convertible as often as the coupons are paid: 0.10 with two coupons a year is 5% a half-year. For an annual effective yield i, give m[(1 + i)^(1/m) \u2212 1]."
+};
+function bondTerms(input) {
+  const F2 = Number(input.face);
+  const r = Number(input.coupon);
+  const m = Number(input.m);
+  const years = Number(input.years);
+  const N = Math.round(years * m);
+  if (Math.abs(years * m - N) > 1e-9 || N < 1) {
+    throw new ToolInputError("years", `${years} years at ${m} coupon${m === 1 ? "" : "s"} a year isn't a whole number of coupons.`);
+  }
+  return { F: F2, r, C: Number(input.redemption), m, N, coupon: F2 * r / m };
+}
+function bondPriceAt(t, j) {
+  const v = 1 / (1 + j);
+  const a = j === 0 ? t.N : (1 - v ** t.N) / j;
+  return t.coupon * a + t.C * v ** t.N;
+}
+
+// src/lib/tools/finance/bondPrice.ts
+var bondPrice = {
+  id: "finance.bond_price",
+  version: "1.0.0",
+  name: "Bond Price",
+  area: "finance",
+  answers: "What's this bond worth at this yield?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
+  notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A,  at j = i\u207D\u1D50\u207E/m",
+  view: "none",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const j = Number(input.yield) / t.m;
+    const P2 = bondPriceAt(t, j);
+    const premium = P2 - t.C;
+    const pvCoupons = P2 - t.C * (1 + j) ** -t.N;
+    return {
+      tiles: [
+        { symbol: "P", label: "Price", value: P2, unit: "money" },
+        { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium" : "Discount", value: Math.abs(premium), unit: "money" },
+        { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
+      ],
+      trace: [
+        { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
+        { label: "Yield per coupon period", formula: `j = ${Number(input.yield)} / ${t.m}`, result: j, unit: "percent" },
+        { label: "Present value of the coupons", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} at j`, result: pvCoupons, unit: "money" },
+        { label: "Present value of the redemption", formula: `${t.C} \xD7 v^${t.N}`, result: t.C * (1 + j) ** -t.N, unit: "money" },
+        { label: "Price", formula: "sum of the two", result: P2, unit: "money" }
+      ],
+      warnings: [],
+      values: { price: P2, premium, coupon: t.coupon, periods: t.N, yield_per_period: j, effective_yield: (1 + j) ** t.m - 1 },
+      summary: `Price ${formatValue(P2, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
+    };
+  },
+  method: { concepts: ["Bond Price", "Bonds"], readings: [] },
+  next: [
+    { tool: "finance.bond_amortization", label: "Bond Amortization", build: (input) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: input.yield }) },
+    {
+      tool: "finance.duration_convexity",
+      label: "Duration & Convexity",
+      build: (input) => {
+        const t = bondTerms(input);
+        const j = Number(input.yield) / t.m;
+        return {
+          i: (1 + j) ** t.m - 1,
+          flows: Array.from({ length: t.N }, (_, k) => ({ time: (k + 1) / t.m, amount: t.coupon + (k === t.N - 1 ? t.C : 0) }))
+        };
+      }
+    }
+  ]
+};
+
+// src/lib/tools/finance/bondYield.ts
+var PRICE = { kind: "number", key: "price", label: "Price", symbol: "P", unit: "money", min: 0.01, max: 1e12, sliderMax: 2e3, step: 1, default: 950, description: "The price paid for the bond, on a coupon date." };
+var bondYield = {
+  id: "finance.bond_yield",
+  version: "1.0.0",
+  name: "Bond Yield",
+  area: "finance",
+  answers: "What yield does this price give?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE],
+  notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for j",
+  view: "none",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const P2 = Number(input.price);
+    const f = (j2) => bondPriceAt(t, j2) - P2;
+    if (f(-0.99) < 0) throw new ToolInputError("price", `No yield gives a price of ${formatValue(P2, "money")}: it's more than every coupon and the redemption together, undiscounted, would be worth even at \u221299%.`);
+    let hi = 1;
+    while (f(hi) > 0 && hi < 1e6) hi *= 2;
+    if (f(hi) > 0) throw new ToolInputError("price", "The price is too low for any yield to give it.");
+    const j = bisect(f, -0.99, hi);
+    const nominal = j * t.m;
+    const effective = (1 + j) ** t.m - 1;
+    return {
+      tiles: [
+        { symbol: "i\u207D\u1D50\u207E", label: "Nominal yield", value: nominal, unit: "percent" },
+        { symbol: "i", label: "Effective yield", value: effective, unit: "percent" },
+        { symbol: "j", label: "Per coupon", value: j, unit: "percent" }
+      ],
+      trace: [
+        { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
+        { label: "Yield per coupon period", formula: `the j where ${formatValue(t.coupon, "money")} a\u2309${t.N} + ${t.C} v^${t.N} = ${P2}, by bisection`, result: j, unit: "percent" },
+        { label: "Nominal yield", formula: `i\u207D\u1D50\u207E = ${t.m} \xD7 j`, result: nominal, unit: "percent" },
+        { label: "Effective annual yield", formula: `(1 + j)^${t.m} \u2212 1`, result: effective, unit: "percent" }
+      ],
+      warnings: [],
+      values: { yield_per_period: j, nominal_yield: nominal, effective_yield: effective, periods: t.N },
+      summary: `Yield ${formatValue(nominal, "percent")} convertible ${t.m === 1 ? "annually" : `${t.m} times a year`} (${formatValue(effective, "percent")} effective).`
+    };
+  },
+  method: { concepts: ["Bond Price", "Yield Rate"], readings: [] },
+  next: [
+    { tool: "finance.bond_price", label: "Bond Price", build: (input, output) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: output.values.nominal_yield }) }
+  ]
+};
+
+// src/lib/tools/finance/bondAmortization.ts
+var MAX_ROWS = 2400;
+var bondAmortization = {
+  id: "finance.bond_amortization",
+  version: "1.0.0",
+  name: "Bond Amortization",
+  area: "finance",
+  answers: "How does the book value move to redemption?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
+  notation: () => "I\u2096 = j \xB7 BV\u2096\u208B\u2081,  BV\u2096 = BV\u2096\u208B\u2081 \u2212 (Fr/m \u2212 I\u2096)",
+  view: "table",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const j = Number(input.yield) / t.m;
+    const price = bondPriceAt(t, j);
+    let bv = price;
+    const rows = Array.from({ length: Math.min(t.N, MAX_ROWS) }, (_, n) => {
+      const interest = bv * j;
+      const amortized = t.coupon - interest;
+      bv -= amortized;
+      if (n === t.N - 1) bv = t.C;
+      return { k: n + 1, coupon: t.coupon, interest, amortized, book: bv };
+    });
+    const premium = price - t.C;
+    return {
+      tiles: [
+        { symbol: "BV\u2080", label: "Price", value: price, unit: "money" },
+        { symbol: "\u03A3I", label: "Interest earned", value: rows.reduce((s, r) => s + r.interest, 0), unit: "money" },
+        { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium written down" : "Discount accumulated", value: Math.abs(premium), unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "k", label: "Coupon", kind: "number", unit: "count" },
+          { key: "coupon", label: "Paid", kind: "number", unit: "money" },
+          { key: "interest", label: "Interest", kind: "number", unit: "money", computed: true },
+          { key: "amortized", label: premium >= 0 ? "Premium amortized" : "Discount accumulated", kind: "number", unit: "money", computed: true },
+          { key: "book", label: "Book value", kind: "number", unit: "money", computed: true }
+        ],
+        rows
+      },
+      trace: [
+        { label: "Price (BV\u2080)", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} + ${t.C} \xD7 v^${t.N} at j = ${j}`, result: price, unit: "money" },
+        { label: "Interest in coupon 1", formula: `${formatValue(price, "money")} \xD7 ${j}`, result: rows[0].interest, unit: "money" },
+        { label: "Amortization in coupon 1", formula: `${formatValue(t.coupon, "money")} \u2212 I\u2081`, result: rows[0].amortized, unit: "money" }
+      ],
+      warnings: t.N > MAX_ROWS ? [`Only the first ${MAX_ROWS} coupons are scheduled.`] : [],
+      values: {
+        price,
+        interest: rows.map((r) => r.interest),
+        amortized: rows.map((r) => r.amortized),
+        book_value: rows.map((r) => r.book),
+        yield_per_period: j
+      },
+      summary: `Bought at ${formatValue(price, "money")}, the book value moves to ${formatValue(t.C, "money")} over ${t.N} coupons; the first coupon carries ${formatValue(rows[0].interest, "money")} of interest.`
+    };
+  },
+  method: { concepts: ["Bond Amortization", "Book Value", "Amortization of Premium"], readings: [] }
+};
+
+// src/lib/tools/finance/durationConvexity.ts
+var TIME2 = { key: "time", label: "Time t", kind: "number", unit: "years" };
+var AMOUNT2 = { key: "amount", label: "Amount", kind: "number", unit: "money" };
+function flowMeasures(flows2, i, amountKey = "amount") {
+  const v = 1 / (1 + i);
+  let pv = 0;
+  let weighted = 0;
+  let second = 0;
+  for (const r of flows2) {
+    const t = Number(r.time);
+    const cf = Number(r[amountKey] ?? 0);
+    pv += cf * v ** t;
+    weighted += t * cf * v ** t;
+    second += t * (t + 1) * cf * v ** (t + 2);
+  }
+  const macaulay = weighted / pv;
+  return { pv, macaulay, modified: macaulay * v, convexity: second / pv };
+}
+var durationConvexity = {
+  id: "finance.duration_convexity",
+  version: "1.0.0",
+  name: "Duration & Convexity",
+  area: "finance",
+  answers: "How sensitive is the value of these cash flows to the rate?",
+  fields: [
+    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The annual effective rate (the yield), as a decimal. Times are in years." },
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 1,
+      maxRows: 1200,
+      description: "Each cash flow: its time in years and its amount. A semiannual coupon at the end of year 1\xBD has time 1.5.",
+      columns: [TIME2, AMOUNT2],
+      default: [
+        { time: 1, amount: 60 },
+        { time: 2, amount: 60 },
+        { time: 3, amount: 60 },
+        { time: 4, amount: 1060 }
+      ]
+    }
+  ],
+  notation: () => "D = \u03A3 t\xB7CF\u209Cv\u1D57 / P,  D_mod = D\xB7v,  C = P\u2033/P",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const i = Number(input.i);
+    const flows2 = input.flows;
+    const m = flowMeasures(flows2, i);
+    if (!(Math.abs(m.pv) > 1e-12)) throw new ToolInputError("flows", "The flows are worth nothing at this rate, so their duration is undefined.");
+    const v = 1 / (1 + i);
+    const rows = flows2.map((r) => {
+      const pv = Number(r.amount) * v ** Number(r.time);
+      return Object.assign({}, r, { pv, weight: pv / m.pv });
+    });
+    const warnings = flows2.some((r) => Number(r.amount) < 0) ? ["Some flows are negative: the duration is a net figure and may lie outside the span of the flows."] : [];
+    return {
+      tiles: [
+        { symbol: "D", label: "Macaulay", value: m.macaulay, unit: "years" },
+        { symbol: "D_mod", label: "Modified", value: m.modified, unit: "years" },
+        { symbol: "C", label: "Convexity", value: m.convexity, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          TIME2,
+          AMOUNT2,
+          { key: "pv", label: "PV", kind: "number", unit: "money", computed: true },
+          { key: "weight", label: "Weight", kind: "number", unit: "percent", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", amount: flows2.reduce((s, r) => s + Number(r.amount), 0), pv: m.pv, weight: 1 }
+      },
+      trace: [
+        { label: "Present value", formula: "P = \u03A3 CF\u209C v\u1D57", result: m.pv, unit: "money" },
+        { label: "Macaulay duration", formula: "\u03A3 t \xB7 CF\u209C v\u1D57 / P", result: m.macaulay, unit: "years" },
+        { label: "Modified duration", formula: `D / (1 + ${i})`, result: m.modified, unit: "years" },
+        { label: "Convexity", formula: "\u03A3 t(t + 1) CF\u209C v^(t+2) / P", result: m.convexity, unit: "plain" },
+        { label: "First-order change for +1%", formula: "\u2212D_mod \xD7 0.01 \xD7 P", result: -m.modified * 0.01 * m.pv, unit: "money" }
+      ],
+      warnings,
+      values: { present_value: m.pv, macaulay: m.macaulay, modified: m.modified, convexity: m.convexity },
+      summary: `Macaulay duration ${formatValue(m.macaulay, "years")} years, modified ${formatValue(m.modified, "years")}, convexity ${formatValue(m.convexity, "plain")}, on a present value of ${formatValue(m.pv, "money")} at ${formatValue(i, "percent")}.`
+    };
+  },
+  method: { concepts: ["Macaulay Duration", "Modified Duration", "Convexity"], readings: [] }
+};
+
+// src/lib/tools/finance/redingtonImmunization.ts
+var MATCH = 1e-4;
+var redingtonImmunization = {
+  id: "finance.redington_immunization",
+  version: "1.0.0",
+  name: "Redington Immunization",
+  area: "finance",
+  answers: "Are these assets Redington-immunized against these liabilities?",
+  fields: [
+    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The flat annual effective rate both sides are valued at. Times are in years." },
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 1,
+      maxRows: 1200,
+      description: "Each time in years with the asset cash flow and the liability cash flow due then (0 where there is none).",
+      columns: [
+        { key: "time", label: "Time t", kind: "number", unit: "years" },
+        { key: "asset", label: "Asset", kind: "number", unit: "money" },
+        { key: "liability", label: "Liability", kind: "number", unit: "money" }
+      ],
+      default: [
+        // At 5%, assets matching the liability's value and duration: 10,000v − 5,250v² at 1, and 5,250 at 3.
+        { time: 1, asset: 4761.9, liability: 0 },
+        { time: 2, asset: 0, liability: 1e4 },
+        { time: 3, asset: 5250, liability: 0 }
+      ]
+    }
+  ],
+  notation: () => "P_A = P_L,  D_A = D_L,  C_A > C_L",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const i = Number(input.i);
+    const flows2 = input.flows;
+    const A = flowMeasures(flows2, i, "asset");
+    const L = flowMeasures(flows2, i, "liability");
+    if (!(A.pv > 0) || !(L.pv > 0)) throw new ToolInputError("flows", "Both the assets and the liabilities need a positive present value.");
+    const v = 1 / (1 + i);
+    const rows = flows2.map((r) => Object.assign({}, r, {
+      pv_asset: Number(r.asset) * v ** Number(r.time),
+      pv_liability: Number(r.liability) * v ** Number(r.time)
+    }));
+    const pvMatch = Math.abs(A.pv - L.pv) <= MATCH * L.pv;
+    const durationMatch = Math.abs(A.modified - L.modified) <= MATCH * Math.max(L.modified, 1);
+    const convexityHolds = A.convexity > L.convexity;
+    const immunized = pvMatch && durationMatch && convexityHolds;
+    const failed = [
+      !pvMatch && `present values differ (${formatValue(A.pv, "money")} against ${formatValue(L.pv, "money")})`,
+      !durationMatch && `modified durations differ (${formatValue(A.modified, "years")} against ${formatValue(L.modified, "years")})`,
+      !convexityHolds && `the assets' convexity (${formatValue(A.convexity, "plain")}) doesn't exceed the liabilities' (${formatValue(L.convexity, "plain")})`
+    ].filter(Boolean);
+    return {
+      tiles: [
+        { symbol: "P_A \u2212 P_L", label: "Surplus", value: A.pv - L.pv, unit: "money" },
+        { symbol: "D_A \u2212 D_L", label: "Duration gap", value: A.modified - L.modified, unit: "years" },
+        { symbol: "C_A \u2212 C_L", label: "Convexity gap", value: A.convexity - L.convexity, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          { key: "time", label: "Time t", kind: "number", unit: "years" },
+          { key: "asset", label: "Asset", kind: "number", unit: "money" },
+          { key: "liability", label: "Liability", kind: "number", unit: "money" },
+          { key: "pv_asset", label: "PV asset", kind: "number", unit: "money", computed: true },
+          { key: "pv_liability", label: "PV liability", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", asset: null, liability: null, pv_asset: A.pv, pv_liability: L.pv }
+      },
+      trace: [
+        { label: "PV of assets", formula: "\u03A3 A\u209C v\u1D57", result: A.pv, unit: "money" },
+        { label: "PV of liabilities", formula: "\u03A3 L\u209C v\u1D57", result: L.pv, unit: "money" },
+        { label: "Macaulay duration, assets", formula: "\u03A3 t A\u209C v\u1D57 / P_A", result: A.macaulay, unit: "years" },
+        { label: "Macaulay duration, liabilities", formula: "\u03A3 t L\u209C v\u1D57 / P_L", result: L.macaulay, unit: "years" },
+        { label: "Modified duration, assets", formula: "D_A \xB7 v", result: A.modified, unit: "years" },
+        { label: "Modified duration, liabilities", formula: "D_L \xB7 v", result: L.modified, unit: "years" },
+        { label: "Convexity, assets", formula: "\u03A3 t(t + 1) A\u209C v^(t+2) / P_A", result: A.convexity, unit: "plain" },
+        { label: "Convexity, liabilities", formula: "\u03A3 t(t + 1) L\u209C v^(t+2) / P_L", result: L.convexity, unit: "plain" }
+      ],
+      warnings: immunized ? [] : [`Not Redington-immunized: ${failed.join("; ")}.`],
+      values: {
+        immunized,
+        pv_assets: A.pv,
+        pv_liabilities: L.pv,
+        macaulay_assets: A.macaulay,
+        macaulay_liabilities: L.macaulay,
+        modified_assets: A.modified,
+        modified_liabilities: L.modified,
+        convexity_assets: A.convexity,
+        convexity_liabilities: L.convexity
+      },
+      summary: immunized ? `Redington-immunized at ${formatValue(i, "percent")}: present values and durations match, and the assets are more convex.` : `Not Redington-immunized at ${formatValue(i, "percent")}: ${failed.join("; ")}.`
+    };
+  },
+  method: { concepts: ["Redington Immunization", "Immunization"], readings: [] }
 };
 
 // src/lib/tools/reserving/ageToAge.ts
@@ -308,7 +1114,7 @@ function factorsAt(tri, j) {
 function averageFactor(pairs, method, latest = 0) {
   const ps = latest > 0 ? pairs.slice(-latest) : pairs;
   if (!ps.length) return null;
-  const simple = (xs) => xs.reduce((s, p) => s + p.factor, 0) / xs.length;
+  const simple = (xs) => xs.reduce((s, p2) => s + p2.factor, 0) / xs.length;
   switch (method) {
     case "simple":
       return simple(ps);
@@ -318,9 +1124,9 @@ function averageFactor(pairs, method, latest = 0) {
       return simple(sorted.slice(1, -1));
     }
     case "geometric":
-      return Math.exp(ps.reduce((s, p) => s + Math.log(p.factor), 0) / ps.length);
+      return Math.exp(ps.reduce((s, p2) => s + Math.log(p2.factor), 0) / ps.length);
     default:
-      return ps.reduce((s, p) => s + p.to, 0) / ps.reduce((s, p) => s + p.from, 0);
+      return ps.reduce((s, p2) => s + p2.to, 0) / ps.reduce((s, p2) => s + p2.from, 0);
   }
 }
 var ageToAgeFactors = {
@@ -763,6 +1569,296 @@ var bornhuetterFerguson = {
   }
 };
 
+// src/lib/tools/reserving/benktander.ts
+var EXPECTED_COLUMN2 = { key: "expected", label: "Expected", kind: "number", unit: "money" };
+var benktander = {
+  id: "reserving.benktander",
+  version: "1.0.0",
+  name: "Benktander",
+  area: "reserving",
+  answers: "What's the iterated Bornhuetter-Ferguson ultimate?",
+  fields: [
+    BASIS_FIELD,
+    {
+      kind: "number",
+      key: "iterations",
+      label: "Iterations",
+      symbol: "k",
+      unit: "count",
+      integer: true,
+      judgment: true,
+      min: 1,
+      max: 100,
+      sliderMax: 10,
+      step: 1,
+      default: 2,
+      description: "How many times the B-F is applied, each time to the last ultimate: 1 is the B-F itself, 2 the Benktander (Mack 2000), and many approach the chain ladder."
+    },
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its latest cumulative value, the CDF to ultimate at its age, and its a priori expected claims.",
+      columns: [ORIGIN_COLUMN, LATEST_COLUMN, CDF_COLUMN, EXPECTED_COLUMN2],
+      default: [
+        { origin: "2020", latest: 1700, cdf: 1, expected: 1690 },
+        { origin: "2021", latest: 1850, cdf: 1.03, expected: 1820 },
+        { origin: "2022", latest: 1800, cdf: 1.133, expected: 1950 },
+        { origin: "2023", latest: 1300, cdf: 1.6995, expected: 1950 }
+      ]
+    }
+  ],
+  notation: (input) => `U\u207D\u2070\u207E = E,  U\u207D\u02B2\u207E = L + U\u207D\u02B2\u207B\xB9\u207E \xB7 (1 \u2212 1/CDF),  j = 1\u2026${input.iterations}`,
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const k = Number(input.iterations);
+    const warnings = checkCdfs(rows);
+    const reserve = reserveLabel(input.basis);
+    const out = rows.map((r) => {
+      const q = 1 - 1 / Number(r.cdf);
+      let u = Number(r.expected);
+      let bf = u;
+      for (let j = 1; j <= k; j++) {
+        u = Number(r.latest) + u * q;
+        if (j === 1) bf = u;
+      }
+      return Object.assign({}, r, { bf, ultimate: u, reserve: u - Number(r.latest), unreported: q });
+    });
+    const ult = out.reduce((s, r) => s + r.ultimate, 0);
+    const res = out.reduce((s, r) => s + r.reserve, 0);
+    return {
+      tiles: [
+        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
+        { symbol: reserve, label: "Total", value: res, unit: "money" }
+      ],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          LATEST_COLUMN,
+          CDF_COLUMN,
+          EXPECTED_COLUMN2,
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
+        ],
+        rows: out,
+        footer: {
+          origin: "Total",
+          latest: out.reduce((s, r) => s + Number(r.latest), 0),
+          cdf: null,
+          expected: out.reduce((s, r) => s + Number(r.expected), 0),
+          ultimate: ult,
+          reserve: res
+        }
+      },
+      trace: out.flatMap((r) => [
+        { label: `B-F ultimate, ${r.origin}`, formula: `${r.latest} + ${r.expected} \xD7 ${r.unreported.toFixed(4)}`, result: r.bf, unit: "money" },
+        { label: `After ${k} iteration${k === 1 ? "" : "s"}, ${r.origin}`, formula: `${r.latest} + U\u207D${k - 1}\u207E \xD7 ${r.unreported.toFixed(4)}`, result: r.ultimate, unit: "money" }
+      ]),
+      warnings,
+      values: {
+        ultimate: out.map((r) => r.ultimate),
+        reserve: out.map((r) => r.reserve),
+        bf_ultimate: out.map((r) => r.bf),
+        total_ultimate: ult,
+        total_reserve: res,
+        reserve_label: reserve
+      },
+      summary: `After ${k} B-F iteration${k === 1 ? "" : "s"}: ultimate ${formatValue(ult, "money")}, ${reserve} ${formatValue(res, "money")}.`
+    };
+  },
+  method: {
+    concepts: ["Benktander Method", "Bornhuetter-Ferguson Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 9" }]
+  }
+};
+
+// src/lib/tools/reserving/capeCod.ts
+var PREMIUM_COLUMN = { key: "premium", label: "Premium", kind: "number", unit: "money" };
+var capeCod = {
+  id: "reserving.cape_cod",
+  version: "1.0.0",
+  name: "Cape Cod",
+  area: "reserving",
+  answers: "What expected claim ratio do the data imply, and what ultimate follows?",
+  fields: [
+    BASIS_FIELD,
+    {
+      kind: "table",
+      key: "rows",
+      label: "Origins",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each origin with its premium (on-level, and trended if claims are), its latest cumulative claims and the CDF to ultimate at its age.",
+      columns: [ORIGIN_COLUMN, PREMIUM_COLUMN, LATEST_COLUMN, CDF_COLUMN],
+      default: [
+        { origin: "2020", premium: 2600, latest: 1700, cdf: 1 },
+        { origin: "2021", premium: 2800, latest: 1850, cdf: 1.03 },
+        { origin: "2022", premium: 3e3, latest: 1800, cdf: 1.133 },
+        { origin: "2023", premium: 3e3, latest: 1300, cdf: 1.6995 }
+      ]
+    }
+  ],
+  notation: () => "ELR = \u03A3 L / \u03A3 (EP / CDF),  U = L + ELR \xB7 EP \xB7 (1 \u2212 1/CDF)",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const warnings = checkCdfs(rows);
+    const reserve = reserveLabel(input.basis);
+    const usedUp = rows.map((r) => Number(r.premium) / Number(r.cdf));
+    const totalUsed = usedUp.reduce((s, u) => s + u, 0);
+    const totalLatest = rows.reduce((s, r) => s + Number(r.latest), 0);
+    if (!(totalUsed > 0)) throw new ToolInputError("rows", "The used-up premium is zero: give each origin its premium.");
+    const elr = totalLatest / totalUsed;
+    const out = rows.map((r, k) => {
+      const expected = elr * Number(r.premium);
+      const unreported = 1 - 1 / Number(r.cdf);
+      const res2 = expected * unreported;
+      return Object.assign({}, r, { used: usedUp[k], expected, reserve: res2, ultimate: Number(r.latest) + res2 });
+    });
+    const ult = out.reduce((s, r) => s + r.ultimate, 0);
+    const res = out.reduce((s, r) => s + r.reserve, 0);
+    return {
+      tiles: [
+        { symbol: "ELR", label: "Cape Cod claim ratio", value: elr, unit: "percent" },
+        { symbol: "U", label: "Ultimate", value: ult, unit: "money" },
+        { symbol: reserve, label: "Total", value: res, unit: "money" }
+      ],
+      table: {
+        columns: [
+          ORIGIN_COLUMN,
+          PREMIUM_COLUMN,
+          LATEST_COLUMN,
+          CDF_COLUMN,
+          { key: "used", label: "Used-up premium", kind: "number", unit: "money", computed: true },
+          { key: "ultimate", label: "Ultimate", kind: "number", unit: "money", computed: true },
+          { key: "reserve", label: reserve, kind: "number", unit: "money", computed: true }
+        ],
+        rows: out,
+        footer: {
+          origin: "Total",
+          premium: rows.reduce((s, r) => s + Number(r.premium), 0),
+          latest: totalLatest,
+          cdf: null,
+          used: totalUsed,
+          ultimate: ult,
+          reserve: res
+        }
+      },
+      trace: [
+        { label: "Used-up premium", formula: "\u03A3 EP / CDF", result: totalUsed, unit: "money" },
+        { label: "Cape Cod claim ratio", formula: `${formatValue(totalLatest, "money")} / ${formatValue(totalUsed, "money")}`, result: elr, unit: "percent" },
+        ...out.map((r) => ({ label: `${reserve}, ${r.origin}`, formula: `${formatValue(elr, "percent")} \xD7 ${r.premium} \xD7 (1 \u2212 1/${Number(r.cdf).toFixed(4)})`, result: r.reserve, unit: "money" }))
+      ],
+      warnings,
+      values: {
+        elr,
+        used_up: usedUp,
+        expected: out.map((r) => r.expected),
+        reserve: out.map((r) => r.reserve),
+        ultimate: out.map((r) => r.ultimate),
+        total_ultimate: ult,
+        total_reserve: res,
+        reserve_label: reserve
+      },
+      summary: `The data imply an expected claim ratio of ${formatValue(elr, "percent")}; ultimate ${formatValue(ult, "money")}, ${reserve} ${formatValue(res, "money")}.`
+    };
+  },
+  method: {
+    concepts: ["Cape Cod Method"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 10" }]
+  }
+};
+
+// src/lib/tools/reserving/ratioTriangle.ts
+var example = (values2) => ({ origins: ["2021", "2022", "2023"], ages: [12, 24, 36], values: values2 });
+var ratioTriangle = {
+  id: "reserving.ratio_triangle",
+  version: "1.0.0",
+  name: "Ratio Triangle",
+  area: "reserving",
+  answers: "How does one triangle compare with another, cell by cell?",
+  fields: [
+    {
+      kind: "triangle",
+      key: "numerator",
+      label: "Numerator",
+      description: "The triangle on top: paid claims for paid-to-reported, closed counts for closed-to-reported, case outstanding for the average case.",
+      default: example([[400, 1e3, 1500], [450, 1100, null], [500, null, null]])
+    },
+    {
+      kind: "triangle",
+      key: "denominator",
+      label: "Denominator",
+      description: "The triangle beneath, of the same shape: reported claims, reported counts, open counts.",
+      default: example([[1e3, 1500, 1650], [1100, 1700, null], [1200, null, null]])
+    }
+  ],
+  notation: () => "R\u1D62\u2C7C = A\u1D62\u2C7C / B\u1D62\u2C7C",
+  view: "table",
+  compute: (input) => {
+    const A = input.numerator;
+    const B = input.denominator;
+    if (A.values.length !== B.values.length || A.values.some((r, i) => r.length !== B.values[i].length)) {
+      throw new ToolInputError("denominator", `The two triangles must be the same shape: ${A.values.length} origins by ${A.values[0].length} ages, and ${B.values.length} by ${B.values[0].length}.`);
+    }
+    const warnings = [];
+    const ratios = A.values.map((row2, i) => row2.map((a, j) => {
+      const b = B.values[i][j];
+      if (a === null || b === null) {
+        if (a !== b) throw new ToolInputError("denominator", `Origin ${A.origins[i]} has a value at ${A.ages[j]} in one triangle and not the other.`);
+        return null;
+      }
+      if (b === 0) {
+        warnings.push(`Origin ${A.origins[i]} at ${A.ages[j]}: the denominator is 0, so the ratio is left blank.`);
+        return null;
+      }
+      return a / b;
+    }));
+    const ageKey = (age) => String(age);
+    const columns = [
+      { key: "origin", label: "Origin", kind: "text" },
+      ...A.ages.map((age) => ({ key: ageKey(age), label: String(age), kind: "number", unit: "factor" }))
+    ];
+    const rows = A.origins.map((origin, i) => Object.assign({ origin }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), ratios[i][j]]))));
+    const pooled = A.ages.map((_, j) => {
+      let a = 0;
+      let b = 0;
+      A.values.forEach((row2, i) => {
+        if (row2[j] !== null && B.values[i][j] !== null) {
+          a += row2[j];
+          b += B.values[i][j];
+        }
+      });
+      return b === 0 ? null : a / b;
+    });
+    const latest = ratios.map((row2) => [...row2].reverse().find((r) => r !== null) ?? null);
+    return {
+      tiles: [
+        { symbol: "R", label: `Latest, ${A.origins[A.origins.length - 1]}`, value: latest[latest.length - 1] ?? NaN, unit: "factor" },
+        { symbol: "R\u0304", label: `All origins at ${A.ages[0]}`, value: pooled[0] ?? NaN, unit: "factor" }
+      ],
+      table: {
+        columns: columns.map((c, k) => k === 0 ? c : { ...c, computed: true }),
+        rows,
+        footer: Object.assign({ origin: "All origins" }, Object.fromEntries(A.ages.map((age, j) => [ageKey(age), pooled[j]])))
+      },
+      trace: A.ages.map((age, j) => ({ label: `All origins at ${age}`, formula: "\u03A3 A / \u03A3 B down the column", result: pooled[j] ?? NaN, unit: "factor" })),
+      warnings,
+      values: { ratios, pooled, latest },
+      summary: `Ratio triangle of ${A.origins.length} origins; the latest origin's ratio is ${formatValue(latest[latest.length - 1] ?? NaN, "factor")}.`
+    };
+  },
+  method: {
+    concepts: ["Development Triangle", "Data Diagnostic Analysis"],
+    readings: [{ resource: "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)", locator: "Ch. 6" }]
+  }
+};
+
 // src/lib/tools/ratemaking/lossRatioMethod.ts
 var lossRatioMethod = {
   id: "ratemaking.loss_ratio_method",
@@ -817,101 +1913,601 @@ var lossRatioMethod = {
   }
 };
 
-// src/lib/distributionMath.ts
-var LANCZOS_COEFFS = [
-  676.5203681218851,
-  -1259.1392167224028,
-  771.3234287776531,
-  -176.6150291621406,
-  12.507343278686905,
-  -0.13857109526572012,
-  9984369578019572e-21,
-  15056327351493116e-23
-];
-function logGamma(x) {
-  if (x < 0.5) {
-    return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - logGamma(1 - x);
+// src/lib/tools/dates.ts
+var daysIn = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+function parseDate(text) {
+  const t = String(text ?? "").trim();
+  let y, m, d;
+  const iso = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(t);
+  const us = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(t);
+  if (iso) {
+    ;
+    [y, m, d] = [Number(iso[1]), Number(iso[2]), Number(iso[3])];
+  } else if (us) {
+    ;
+    [m, d, y] = [Number(us[1]), Number(us[2]), Number(us[3])];
+    if (us[3].length === 2) y += y < 70 ? 2e3 : 1900;
+  } else {
+    return null;
   }
-  const z = x - 1;
-  let a = 0.9999999999998099;
-  for (let i = 0; i < LANCZOS_COEFFS.length; i++) a += LANCZOS_COEFFS[i] / (z + i + 1);
-  const t = z + LANCZOS_COEFFS.length - 0.5;
-  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(a);
+  if (m < 1 || m > 12 || d < 1 || d > daysIn(y, m)) return null;
+  return { y, m, d };
 }
-var EPS = 1e-14;
-var TINY = 1e-300;
-var MAX_ITER = 500;
-function gammaPSeries(a, x) {
-  let ap = a;
-  let sum = 1 / a;
-  let del = sum;
-  for (let n = 0; n < MAX_ITER; n++) {
-    ap += 1;
-    del *= x / ap;
-    sum += del;
-    if (Math.abs(del) < Math.abs(sum) * EPS) break;
-  }
-  return sum * Math.exp(-x + a * Math.log(x) - logGamma(a));
+function decimalYear({ y, m, d }) {
+  return y + (m - 1) / 12 + (d - 1) / (daysIn(y, m) * 12);
 }
-function gammaQContinuedFraction(a, x) {
-  let b = x + 1 - a;
-  let c = 1 / TINY;
-  let d = 1 / b;
-  let h = d;
-  for (let i = 1; i <= MAX_ITER; i++) {
-    const an = -i * (i - a);
-    b += 2;
-    d = an * d + b;
-    if (Math.abs(d) < TINY) d = TINY;
-    c = b + an / c;
-    if (Math.abs(c) < TINY) c = TINY;
-    d = 1 / d;
-    const del = d * c;
-    h *= del;
-    if (Math.abs(del - 1) < EPS) break;
-  }
-  return Math.exp(-x + a * Math.log(x) - logGamma(a)) * h;
+function isoDate({ y, m, d }) {
+  return `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
-function regularizedGammaP(a, x) {
-  if (a <= 0 || !(x >= 0)) return NaN;
-  if (x === 0) return 0;
-  return x < a + 1 ? gammaPSeries(a, x) : 1 - gammaQContinuedFraction(a, x);
-}
-function erf(x) {
-  if (x === 0) return 0;
-  const p = regularizedGammaP(0.5, x * x);
-  return x > 0 ? p : -p;
-}
-function standardNormalPdf(z) {
-  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
-}
-function standardNormalCdf(z) {
-  return 0.5 * (1 + erf(z / Math.SQRT2));
+function dateOfYear(t) {
+  const y = Math.floor(t + 1e-9);
+  const months = (t - y) * 12;
+  const m = Math.min(12, Math.floor(months + 1e-9) + 1);
+  const d = Math.min(daysIn(y, m), Math.round((months - (m - 1)) * daysIn(y, m)) + 1);
+  return isoDate({ y, m, d });
 }
 
-// src/lib/tools/numeric.ts
-function inverseNormalCdf(p) {
-  if (!(p > 0 && p < 1)) return p === 0 ? -Infinity : p === 1 ? Infinity : NaN;
-  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
-  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
-  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
-  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
-  const low = 0.02425;
-  let x;
-  if (p < low) {
-    const q = Math.sqrt(-2 * Math.log(p));
-    x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-  } else if (p <= 1 - low) {
-    const q = p - 0.5;
-    const r = q * q;
-    x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
-  } else {
-    const q = Math.sqrt(-2 * Math.log(1 - p));
-    x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+// src/lib/tools/ratemaking/earnedPremium.ts
+var earnedPremium = {
+  id: "ratemaking.earned_premium",
+  version: "1.0.0",
+  name: "Earned Premium",
+  area: "ratemaking",
+  answers: "How much of this premium is written, earned and unearned in each year?",
+  fields: [
+    {
+      kind: "table",
+      key: "policies",
+      label: "Policies",
+      minRows: 1,
+      maxRows: 2e3,
+      description: "Each policy (or block written on one date): its effective date and its written premium or exposure. It earns evenly over its term.",
+      columns: [
+        { key: "policy", label: "Policy", kind: "text" },
+        { key: "effective", label: "Effective", kind: "text" },
+        { key: "amount", label: "Written", kind: "number", unit: "money" }
+      ],
+      default: [
+        { policy: "A", effective: "2023-10-01", amount: 1e3 },
+        { policy: "B", effective: "2024-01-01", amount: 1e3 },
+        { policy: "C", effective: "2024-04-01", amount: 1e3 },
+        { policy: "D", effective: "2024-07-01", amount: 1e3 }
+      ]
+    },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: "The policy term in months." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Aggregation",
+      description: "Calendar year: what happens in the year. Policy year: everything about the policies written in the year.",
+      options: [{ value: "calendar", label: "Calendar year" }, { value: "policy", label: "Policy year" }],
+      default: "calendar"
+    },
+    { kind: "number", key: "as_of", label: "As of the end of", symbol: "Y", unit: "count", integer: true, min: 0, max: 2200, sliderMax: 2030, step: 1, default: 0, zeroLabel: "All earned", description: "The year whose 31 December the figures are valued at (0: once every policy has expired)." }
+  ],
+  notation: (input) => input.basis === "policy" ? "PY earned = \u03A3 W \xB7 min(1, (as-of \u2212 effective)/T)" : "CY earned = \u03A3 W \xB7 |year \u2229 term| / T",
+  view: "table",
+  compute: (input) => {
+    const T = Number(input.term) / 12;
+    const policies = input.policies.map((r, k) => {
+      const parts = parseDate(r.effective);
+      if (!parts) throw new ToolInputError("policies", `Policy ${r.policy || k + 1}'s effective date "${r.effective}" isn't a date: write 2016-01-01 or 01/01/2016.`);
+      return { e: decimalYear(parts), w: Number(r.amount) };
+    });
+    const firstYear = Math.floor(Math.min(...policies.map((p2) => p2.e)));
+    const lastExpiry = Math.max(...policies.map((p2) => p2.e + T));
+    const asOfYear = Number(input.as_of) || Math.ceil(lastExpiry - 1e-9) - 1;
+    const asOf = asOfYear + 1;
+    if (asOfYear < firstYear) throw new ToolInputError("as_of", `Value as of a year on or after the first policy's, ${firstYear}.`);
+    const policyYear = input.basis === "policy";
+    const years = Array.from({ length: asOfYear - firstYear + 1 }, (_, k) => firstYear + k);
+    const earnedBy = (p2, t) => p2.w * Math.min(1, Math.max(0, (t - p2.e) / T));
+    const rows = years.map((y) => {
+      if (policyYear) {
+        const inYear = policies.filter((p2) => Math.floor(p2.e + 1e-9) === y && p2.e < asOf);
+        const written2 = inYear.reduce((s, p2) => s + p2.w, 0);
+        const earned2 = inYear.reduce((s, p2) => s + earnedBy(p2, asOf), 0);
+        return { year: String(y), written: written2, earned: earned2, unearned: written2 - earned2 };
+      }
+      const written = policies.filter((p2) => Math.floor(p2.e + 1e-9) === y).reduce((s, p2) => s + p2.w, 0);
+      const earned = policies.reduce((s, p2) => s + earnedBy(p2, y + 1) - earnedBy(p2, y), 0);
+      const unearned = policies.filter((p2) => p2.e < y + 1).reduce((s, p2) => s + p2.w - earnedBy(p2, y + 1), 0);
+      return { year: String(y), written, earned, unearned };
+    });
+    const total = (key) => rows.reduce((s, r) => s + r[key], 0);
+    return {
+      tiles: [
+        { symbol: "EP", label: `Earned, ${asOfYear}`, value: rows[rows.length - 1].earned, unit: "money" },
+        { symbol: "WP", label: `Written, ${asOfYear}`, value: rows[rows.length - 1].written, unit: "money" },
+        { symbol: "UEP", label: policyYear ? `Unearned a/o ${asOfYear}` : `Unearned at end ${asOfYear}`, value: rows[rows.length - 1].unearned, unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "year", label: policyYear ? "Policy year" : "Calendar year", kind: "text" },
+          { key: "written", label: "Written", kind: "number", unit: "money", computed: true },
+          { key: "earned", label: "Earned", kind: "number", unit: "money", computed: true },
+          { key: "unearned", label: policyYear ? "Unearned" : "Unearned at year end", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { year: "Total", written: total("written"), earned: total("earned"), unearned: null }
+      },
+      trace: rows.map((r) => ({ label: `Earned, ${r.year}`, formula: policyYear ? `policies written in ${r.year}, earned to 31 Dec ${asOfYear}` : `each policy's share of its term inside ${r.year}`, result: r.earned, unit: "money" })),
+      warnings: [],
+      values: { years, written: rows.map((r) => r.written), earned: rows.map((r) => r.earned), unearned: rows.map((r) => r.unearned) },
+      summary: `${policyYear ? "Policy" : "Calendar"} year earned ${rows.map((r) => `${r.year}: ${formatValue(r.earned, "money")}`).join(", ")}, as of 31 December ${asOfYear}.`
+    };
+  },
+  method: {
+    concepts: ["Earned Premium", "Earned Exposure"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 4\u20135" }]
   }
-  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p) / standardNormalPdf(x);
-  return x;
+};
+
+// src/lib/tools/ratemaking/onLevelFactors.ts
+function shareFrom(s, a, b, T, basis) {
+  if (basis === "policy") return Math.min(1, Math.max(0, (b - s) / (b - a)));
+  const g = (u) => {
+    const x = u - s;
+    if (x <= 0) return 0;
+    return x < T ? x * x / (2 * T) : T / 2 + (x - T);
+  };
+  return (g(b) - g(a)) / (b - a);
 }
+var round4 = (x) => Math.round(x * 1e4 + 1e-8) / 1e4;
+var onLevelFactors = {
+  id: "ratemaking.on_level_factors",
+  version: "1.0.0",
+  name: "On-Level Factors",
+  area: "ratemaking",
+  answers: "What brings each year's premium to current rates?",
+  fields: [
+    {
+      kind: "table",
+      key: "changes",
+      label: "Rate changes",
+      minRows: 1,
+      maxRows: 100,
+      description: "Each rate change, oldest first: the date it took effect for new and renewal policies, and the overall change as a decimal (\u22120.05 for a 5% decrease).",
+      columns: [
+        { key: "date", label: "Effective", kind: "text" },
+        { key: "change", label: "Change", kind: "number", unit: "percent" }
+      ],
+      default: [
+        { date: "2021-07-01", change: 0.05 },
+        { date: "2022-10-01", change: -0.02 },
+        { date: "2023-04-01", change: 0.04 }
+      ]
+    },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 60, sliderMax: 24, step: 1, default: 12, description: "The policy term in months: rate changes earn in over one term." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Premium",
+      description: "Calendar year earned premium is a mix of rate levels; a policy year's premium is written at the level in force when each policy was.",
+      options: [{ value: "calendar", label: "Calendar year" }, { value: "policy", label: "Policy year" }],
+      default: "calendar"
+    },
+    { kind: "number", key: "first", label: "First year", symbol: "Y\u2081", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2021, description: "The first year to bring on level." },
+    { kind: "number", key: "last", label: "Last year", symbol: "Y\u2099", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The last year to bring on level." },
+    {
+      kind: "choice",
+      key: "rounding",
+      label: "Rate level indices",
+      judgment: true,
+      description: "Whether the rate levels are carried unrounded, or rounded to four decimals as Werner & Modlin's exhibits print and use them: each cumulative level at each step of the product, and each year's average level before the factor is taken.",
+      options: [{ value: "none", label: "Unrounded" }, { value: "four", label: "4 decimals" }],
+      default: "none"
+    }
+  ],
+  notation: () => "OLF = current rate level / average rate level, by the parallelogram method",
+  view: "table",
+  compute: (input) => {
+    const changes = input.changes.map((r, k) => {
+      const parts = parseDate(r.date);
+      if (!parts) throw new ToolInputError("changes", `Rate change ${k + 1}'s date "${r.date}" isn't a date: write 2016-01-01 or 01/01/2016.`);
+      return { label: String(r.date), at: decimalYear(parts), change: Number(r.change) };
+    });
+    for (let k = 1; k < changes.length; k++) {
+      if (changes[k].at <= changes[k - 1].at) throw new ToolInputError("changes", "List the rate changes oldest first, each on its own date.");
+    }
+    const first = Number(input.first);
+    const last2 = Number(input.last);
+    if (last2 < first) throw new ToolInputError("last", "The last year must be on or after the first.");
+    const T = Number(input.term) / 12;
+    const basis = String(input.basis);
+    const round = input.rounding === "four" ? round4 : (x) => x;
+    const levels = [1];
+    for (const c of changes) levels.push(round(levels[levels.length - 1] * (1 + c.change)));
+    const used = levels;
+    const current = used[used.length - 1];
+    const years = Array.from({ length: last2 - first + 1 }, (_, k) => first + k);
+    const rows = years.map((y) => {
+      const after = [1, ...changes.map((c) => shareFrom(c.at, y, y + 1, T, basis)), 0];
+      const portions = levels.map((_, k) => after[k] - after[k + 1]);
+      const average = round(portions.reduce((s, p2, k) => s + p2 * used[k], 0));
+      return { y, portions, average, factor: current / average };
+    });
+    const levelKey = (k) => `level_${k}`;
+    const levelLabel = (k) => k === 0 ? "Before" : changes[k - 1].label;
+    const columns = [
+      { key: "year", label: basis === "policy" ? "Policy year" : "Calendar year", kind: "text" },
+      ...levels.map((_, k) => ({ key: levelKey(k), label: levelLabel(k), kind: "number", unit: "percent" })),
+      { key: "average", label: "Average level", kind: "number", unit: "factor" },
+      { key: "factor", label: "OLF", kind: "number", unit: "factor" }
+    ];
+    return {
+      tiles: [
+        { symbol: "OLF", label: `${last2}`, value: rows[rows.length - 1].factor, unit: "factor" },
+        { symbol: "OLF", label: `${first}`, value: rows[0].factor, unit: "factor" },
+        { symbol: "CRL", label: "Current rate level", value: current, unit: "factor" }
+      ],
+      table: {
+        columns: columns.map((c, k) => k === 0 ? c : { ...c, computed: true }),
+        rows: rows.map((r) => Object.assign({ year: String(r.y), average: r.average, factor: r.factor }, Object.fromEntries(r.portions.map((p2, k) => [levelKey(k), p2]))))
+      },
+      trace: [
+        ...used.map((l, k) => ({ label: `Cumulative rate level, ${levelLabel(k)}`, formula: k === 0 ? "1" : `\xD7 (1 + ${changes[k - 1].change})`, result: l, unit: "factor" })),
+        ...rows.map((r) => ({ label: `Average rate level, ${r.y}`, formula: "\u03A3 share \xD7 level, the parallelogram's areas", result: r.average, unit: "factor" }))
+      ],
+      warnings: [],
+      values: {
+        years,
+        factors: rows.map((r) => r.factor),
+        averages: rows.map((r) => r.average),
+        portions: rows.map((r) => r.portions),
+        levels: used,
+        current
+      },
+      summary: `On-level factors ${rows.map((r) => `${r.y}: ${formatValue(r.factor, "factor")}`).join(", ")}, to a current rate level of ${formatValue(current, "factor")}.`
+    };
+  },
+  method: {
+    concepts: ["Parallelogram Method", "On-Leveling"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 5" }]
+  }
+};
+
+// src/lib/tools/ratemaking/trendFit.ts
+var PERIOD = { key: "period", label: "Period", kind: "text" };
+var VALUE = { key: "value", label: "Value", kind: "number", unit: "plain" };
+function leastSquares(x, y) {
+  const n = x.length;
+  const mx = x.reduce((s, v) => s + v, 0) / n;
+  const my = y.reduce((s, v) => s + v, 0) / n;
+  let sxy = 0;
+  let sxx = 0;
+  let syy = 0;
+  for (let k = 0; k < n; k++) {
+    sxy += (x[k] - mx) * (y[k] - my);
+    sxx += (x[k] - mx) ** 2;
+    syy += (y[k] - my) ** 2;
+  }
+  const slope = sxy / sxx;
+  return { intercept: my - slope * mx, slope, r2: syy === 0 ? 1 : sxy * sxy / (sxx * syy) };
+}
+var trendFit = {
+  id: "ratemaking.trend_fit",
+  version: "1.0.0",
+  name: "Trend Fit",
+  area: "ratemaking",
+  answers: "What annual trend do these data show?",
+  fields: [
+    {
+      kind: "choice",
+      key: "model",
+      label: "Fit",
+      description: "Exponential fits ln(value) on time, a constant rate of change; linear fits the value itself, a constant amount.",
+      options: [{ value: "exponential", label: "Exponential" }, { value: "linear", label: "Linear" }],
+      default: "exponential"
+    },
+    { kind: "number", key: "per_year", label: "Points a year", symbol: "m", unit: "count", integer: true, min: 1, max: 365, sliderMax: 12, step: 1, default: 4, description: "How many points make a year: 4 for quarters (year-ending quarterly figures), 1 for years." },
+    {
+      kind: "number",
+      key: "latest",
+      label: "Points fitted",
+      symbol: "n",
+      unit: "count",
+      integer: true,
+      judgment: true,
+      min: 0,
+      max: 1e3,
+      sliderMax: 20,
+      step: 1,
+      default: 0,
+      zeroLabel: "All",
+      description: "Fit only the latest n points (0 for all of them): a judgment of how far back the trend still holds."
+    },
+    {
+      kind: "table",
+      key: "points",
+      label: "Points",
+      minRows: 2,
+      maxRows: 1e3,
+      description: "The series, oldest first, evenly spaced: each period's label and its value (average premium, frequency, severity or pure premium).",
+      columns: [PERIOD, VALUE],
+      default: [
+        { period: "2022 Q1", value: 100 },
+        { period: "2022 Q2", value: 101.2 },
+        { period: "2022 Q3", value: 101.9 },
+        { period: "2022 Q4", value: 103.1 },
+        { period: "2023 Q1", value: 104 },
+        { period: "2023 Q2", value: 104.9 },
+        { period: "2023 Q3", value: 106.2 },
+        { period: "2023 Q4", value: 107.1 }
+      ]
+    }
+  ],
+  notation: (input) => input.model === "linear" ? "y = a + b\xB7t,  annual change = m\xB7b" : "ln y = a + b\xB7t,  trend = e^(m\xB7b) \u2212 1",
+  view: "table",
+  grid: "points",
+  compute: (input) => {
+    const points = input.points;
+    const m = Number(input.per_year);
+    const exponential2 = input.model !== "linear";
+    const n = Number(input.latest) === 0 ? points.length : Math.min(Number(input.latest), points.length);
+    if (n < 2) throw new ToolInputError("latest", "Fit at least two points.");
+    const first = points.length - n;
+    const fitted = points.slice(first);
+    const x = fitted.map((_, k) => k);
+    const ys = fitted.map((r) => Number(r.value));
+    if (exponential2 && ys.some((y) => !(y > 0))) throw new ToolInputError("points", "An exponential fit needs every value above zero; fit these linearly instead.");
+    const fit = leastSquares(x, exponential2 ? ys.map(Math.log) : ys);
+    const at2 = (k) => exponential2 ? Math.exp(fit.intercept + fit.slope * k) : fit.intercept + fit.slope * k;
+    const trend = exponential2 ? Math.exp(m * fit.slope) - 1 : m * fit.slope / at2(n - 1);
+    const rows = points.map((r, k) => Object.assign({}, r, { fitted: k >= first ? at2(k - first) : null }));
+    return {
+      tiles: [
+        { symbol: "\u0394", label: exponential2 ? "Annual trend" : "Annual change \xF7 latest fit", value: trend, unit: "percent" },
+        ...exponential2 ? [] : [{ symbol: "m\xB7b", label: "Annual change", value: m * fit.slope, unit: "plain" }],
+        { symbol: "R\xB2", label: `${n}-point fit`, value: fit.r2, unit: "plain" }
+      ],
+      table: {
+        columns: [PERIOD, VALUE, { key: "fitted", label: "Fitted", kind: "number", unit: "plain", computed: true }],
+        rows
+      },
+      trace: [
+        { label: "Points fitted", formula: `the latest ${n} of ${points.length}`, result: n, unit: "count" },
+        { label: "Slope per period", formula: exponential2 ? "least squares of ln y on t" : "least squares of y on t", result: fit.slope, unit: "plain" },
+        { label: exponential2 ? "Annual trend" : "Annual change as a share of the latest fitted value", formula: exponential2 ? `e^(${m} \xD7 b) \u2212 1` : `${m} \xD7 b / \u0177`, result: trend, unit: "percent" },
+        { label: "R\xB2", formula: "share of the variation the fit explains", result: fit.r2, unit: "plain" }
+      ],
+      warnings: [],
+      values: { trend, slope: fit.slope, intercept: fit.intercept, r2: fit.r2, points: n, annual_change: exponential2 ? null : m * fit.slope },
+      summary: `${n}-point ${exponential2 ? "exponential" : "linear"} fit: ${exponential2 ? "annual trend" : "annual change"} ${formatValue(trend, "percent")}${exponential2 ? "" : " of the latest fitted value"}, R\xB2 ${formatValue(fit.r2, "plain")}.`
+    };
+  },
+  method: {
+    concepts: ["Exponential Trend", "Linear Trend", "Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 5\u20136" }]
+  },
+  next: [
+    { tool: "ratemaking.trend_factor", label: "Trend Factor", build: (_input, output) => ({ trend: output.values.trend }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/trendFactor.ts
+var trendFactor = {
+  id: "ratemaking.trend_factor",
+  version: "1.0.0",
+  name: "Trend Factor",
+  area: "ratemaking",
+  answers: "How far do these losses trend to the period the rates will cover?",
+  fields: [
+    { kind: "number", key: "trend", label: "Annual trend", symbol: "t", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.15, step: 25e-4, default: 0.03, description: "The selected annual trend, as a decimal (from Trend Fit, or chosen)." },
+    {
+      kind: "choice",
+      key: "basis",
+      label: "Experience period",
+      description: "Accident year losses occur, on average, mid-year; a policy year's, half a term later.",
+      options: [{ value: "accident", label: "Accident year" }, { value: "policy", label: "Policy year" }],
+      default: "accident"
+    },
+    { kind: "number", key: "year", label: "Experience year", symbol: "Y", unit: "count", integer: true, min: 1900, max: 2200, sliderMin: 2e3, sliderMax: 2030, step: 1, default: 2023, description: "The accident or policy year being trended." },
+    { kind: "date", key: "effective", label: "Rates effective", symbol: "E", default: "2025-01-01", description: "The date the new rates take effect." },
+    { kind: "number", key: "in_effect", label: "Rates in effect (months)", symbol: "R", unit: "count", integer: true, min: 1, max: 120, sliderMax: 36, step: 1, default: 12, description: "How long the rates will be in effect, in months." },
+    { kind: "number", key: "term", label: "Policy term (months)", symbol: "T", unit: "count", integer: true, min: 1, max: 120, sliderMax: 24, step: 1, default: 12, description: "The policy term in months (6 for six-month auto policies)." }
+  ],
+  notation: () => "TF = (1 + t)\u1D56, p = average accident date under the new rates \u2212 in the experience",
+  view: "none",
+  compute: (input) => {
+    const t = Number(input.trend);
+    const Y = Number(input.year);
+    const T = Number(input.term) / 12;
+    const R = Number(input.in_effect) / 12;
+    const E = decimalYear(parseDate(input.effective));
+    const from = input.basis === "policy" ? Y + 0.5 + T / 2 : Y + 0.5;
+    const to = E + R / 2 + T / 2;
+    const period = to - from;
+    const factor = (1 + t) ** period;
+    return {
+      tiles: [
+        { symbol: "TF", label: "Trend factor", value: factor, unit: "factor" },
+        { symbol: "p", label: "Years", value: period, unit: "years" }
+      ],
+      trace: [
+        { label: `Average accident date, ${input.basis === "policy" ? "policy" : "accident"} year ${Y}`, formula: `${dateOfYear(from)}${input.basis === "policy" ? ": mid-year plus half a term" : ": mid-year"}`, result: from, unit: "years" },
+        { label: "Average accident date under the new rates", formula: `${dateOfYear(to)}: the effective date, plus half the time in effect and half a term`, result: to, unit: "years" },
+        { label: "Trend period", formula: `${dateOfYear(from)} to ${dateOfYear(to)}`, result: period, unit: "years" },
+        { label: "Trend factor", formula: `(1 + ${t})^${formatValue(period, "years")}`, result: factor, unit: "factor" }
+      ],
+      warnings: period < 0 ? ["The experience period is later than the period the rates cover: the trend runs backwards."] : [],
+      values: { factor, period, from: dateOfYear(from), to: dateOfYear(to) },
+      summary: `Trend factor ${formatValue(factor, "factor")} over ${formatValue(period, "years")} years, from ${dateOfYear(from)} to ${dateOfYear(to)}.`
+    };
+  },
+  method: {
+    concepts: ["Loss Trend"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 6" }]
+  }
+};
+
+// src/lib/tools/ratemaking/expenseRatios.ts
+var TYPE = { key: "type", label: "Expense", kind: "text" };
+var EXPENSES = { key: "expenses", label: "Expenses", kind: "number", unit: "money" };
+var PREMIUM = { key: "premium", label: "Premium", kind: "number", unit: "money" };
+var FIXED_SHARE = { key: "fixed_share", label: "% fixed", kind: "number", unit: "percent" };
+var expenseRatios = {
+  id: "ratemaking.expense_ratios",
+  version: "1.0.0",
+  name: "Expense Ratios",
+  area: "ratemaking",
+  answers: "What are the fixed and variable expense provisions?",
+  fields: [
+    {
+      kind: "table",
+      key: "rows",
+      label: "Expense types",
+      minRows: 1,
+      maxRows: 50,
+      description: "Each expense type with its expenses and the premium they are measured against (earned premium for general expenses, written for acquisition costs, taxes, licenses and fees \u2014 over the same years), and the share of it treated as fixed (a judgment).",
+      columns: [TYPE, EXPENSES, PREMIUM, FIXED_SHARE],
+      default: [
+        { type: "General expenses", expenses: 9e5, premium: 14e6, fixed_share: 0.75 },
+        { type: "Other acquisition", expenses: 12e5, premium: 145e5, fixed_share: 0.75 },
+        { type: "Commission and brokerage", expenses: 16e5, premium: 145e5, fixed_share: 0 },
+        { type: "Taxes, licenses and fees", expenses: 34e4, premium: 145e5, fixed_share: 0 }
+      ]
+    }
+  ],
+  notation: () => "F = \u03A3 (E\u209C/P\u209C)\xB7f\u209C,  V = \u03A3 (E\u209C/P\u209C)\xB7(1 \u2212 f\u209C)",
+  view: "table",
+  grid: "rows",
+  compute: (input) => {
+    const rows = input.rows;
+    const out = rows.map((r) => {
+      const premium = Number(r.premium);
+      if (!(premium > 0)) throw new ToolInputError("rows", `"${r.type}" needs a premium above zero to measure its expenses against.`);
+      const share = Number(r.fixed_share);
+      if (share < 0 || share > 1) throw new ToolInputError("rows", `"${r.type}": the fixed share must be between 0 and 1 (a decimal, or "75%").`);
+      const ratio = Number(r.expenses) / premium;
+      return Object.assign({}, r, { ratio, fixed: ratio * share, variable: ratio * (1 - share) });
+    });
+    const F2 = out.reduce((s, r) => s + r.fixed, 0);
+    const V = out.reduce((s, r) => s + r.variable, 0);
+    return {
+      tiles: [
+        { symbol: "F", label: "Fixed provision", value: F2, unit: "percent" },
+        { symbol: "V", label: "Variable provision", value: V, unit: "percent" },
+        { symbol: "F + V", label: "Total", value: F2 + V, unit: "percent" }
+      ],
+      table: {
+        columns: [
+          TYPE,
+          EXPENSES,
+          PREMIUM,
+          FIXED_SHARE,
+          { key: "ratio", label: "Ratio", kind: "number", unit: "percent", computed: true },
+          { key: "fixed", label: "Fixed", kind: "number", unit: "percent", computed: true },
+          { key: "variable", label: "Variable", kind: "number", unit: "percent", computed: true }
+        ],
+        rows: out,
+        footer: { type: "Provision", expenses: null, premium: null, fixed_share: null, ratio: F2 + V, fixed: F2, variable: V }
+      },
+      trace: out.map((r) => ({ label: String(r.type), formula: `${formatValue(Number(r.expenses), "money")} / ${formatValue(Number(r.premium), "money")}`, result: r.ratio, unit: "percent" })),
+      warnings: [],
+      values: { fixed_provision: F2, variable_provision: V, ratio: out.map((r) => r.ratio), fixed: out.map((r) => r.fixed), variable: out.map((r) => r.variable) },
+      summary: `Fixed expense provision ${formatValue(F2, "percent")}, variable ${formatValue(V, "percent")} of premium.`
+    };
+  },
+  method: {
+    concepts: ["Expense Provisions", "Fixed Expenses"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 7" }]
+  },
+  next: [
+    { tool: "ratemaking.loss_ratio_method", label: "Loss Ratio Method", build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) },
+    { tool: "ratemaking.permissible_loss_ratio", label: "Permissible Loss Ratio", build: (_input, output) => ({ fixed: output.values.fixed_provision, variable: output.values.variable_provision }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/permissibleLossRatio.ts
+var permissibleLossRatio = {
+  id: "ratemaking.permissible_loss_ratio",
+  version: "1.0.0",
+  name: "Permissible Loss Ratio",
+  area: "ratemaking",
+  answers: "What loss ratio do the rates allow?",
+  fields: [
+    { kind: "number", key: "fixed", label: "Fixed expense ratio", symbol: "F", unit: "percent", min: 0, max: 1, sliderMax: 0.3, step: 25e-4, default: 0, description: "Fixed expenses as a share of premium (0 when every expense is treated as variable)." },
+    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.25, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." }
+  ],
+  notation: () => "PLR = 1 \u2212 F \u2212 V \u2212 Q,  VPLR = 1 \u2212 V \u2212 Q",
+  view: "none",
+  compute: (input) => {
+    const F2 = Number(input.fixed);
+    const V = Number(input.variable);
+    const Q = Number(input.profit);
+    const vplr = 1 - V - Q;
+    const plr = vplr - F2;
+    if (vplr <= 0) throw new ToolInputError("variable", "V + Q must be below 100%.");
+    return {
+      tiles: [
+        { symbol: "PLR", label: "Permissible", value: plr, unit: "percent" },
+        { symbol: "VPLR", label: "Variable permissible", value: vplr, unit: "percent" }
+      ],
+      trace: [
+        { label: "Variable permissible loss ratio", formula: `1 \u2212 ${V} \u2212 ${Q}`, result: vplr, unit: "percent" },
+        { label: "Permissible loss ratio", formula: `1 \u2212 ${F2} \u2212 ${V} \u2212 ${Q}`, result: plr, unit: "percent" }
+      ],
+      warnings: plr <= 0 ? ["Expenses and profit take the whole premium: no loss ratio is permissible."] : [],
+      values: { permissible_loss_ratio: plr, variable_permissible_loss_ratio: vplr }
+    };
+  },
+  method: {
+    concepts: ["Permissible Loss Ratio"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 7" }]
+  },
+  next: [
+    { tool: "ratemaking.loss_ratio_method", label: "Loss Ratio Method", build: (input) => ({ fixed: input.fixed, variable: input.variable, profit: input.profit }) }
+  ]
+};
+
+// src/lib/tools/ratemaking/purePremiumMethod.ts
+var purePremiumMethod = {
+  id: "ratemaking.pure_premium_method",
+  version: "1.0.0",
+  name: "Pure Premium Method",
+  area: "ratemaking",
+  answers: "What's the indicated average rate?",
+  fields: [
+    { kind: "number", key: "pure_premium", label: "Pure premium", symbol: "PP", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 300, description: "Projected ultimate loss and LAE per exposure (any per-exposure cost, such as net reinsurance, added in)." },
+    { kind: "number", key: "fixed", label: "Fixed expense per exposure", symbol: "F", unit: "money", min: 0, max: 1e12, sliderMax: 500, step: 1, default: 50, description: "Projected fixed expenses per exposure." },
+    { kind: "number", key: "variable", label: "Variable expense ratio", symbol: "V", unit: "percent", min: 0, max: 1, sliderMax: 0.5, step: 25e-4, default: 0.2, description: "Variable expenses as a share of premium." },
+    { kind: "number", key: "profit", label: "Profit & contingency", symbol: "Q", unit: "percent", judgment: true, min: -0.5, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The target underwriting profit and contingency provision, as a share of premium." },
+    { kind: "number", key: "current", label: "Current average rate", symbol: "R\u2080", unit: "money", min: 0, max: 1e12, sliderMax: 2e3, step: 1, default: 0, zeroLabel: "Not given", description: "The current average rate per exposure, for the indicated change (0 to leave it out)." }
+  ],
+  notation: () => "R = (PP + F) / (1 \u2212 V \u2212 Q)",
+  view: "none",
+  compute: (input) => {
+    const PP = Number(input.pure_premium);
+    const F2 = Number(input.fixed);
+    const V = Number(input.variable);
+    const Q = Number(input.profit);
+    const current = Number(input.current);
+    const plr = 1 - V - Q;
+    if (plr <= 0) throw new ToolInputError("variable", "V + Q must be below 100%: nothing would be left for losses and fixed expenses.");
+    const rate = (PP + F2) / plr;
+    const change = current > 0 ? rate / current - 1 : null;
+    return {
+      tiles: [
+        { symbol: "R", label: "Indicated rate", value: rate, unit: "money" },
+        { symbol: "PLR", label: "1 \u2212 V \u2212 Q", value: plr, unit: "percent" },
+        ...change === null ? [] : [{ symbol: "\u0394R", label: "Indicated change", value: change, unit: "percent" }]
+      ],
+      trace: [
+        { label: "Variable permissible loss ratio", formula: `1 \u2212 ${V} \u2212 ${Q}`, result: plr, unit: "percent" },
+        { label: "Indicated average rate", formula: `(${PP} + ${F2}) / ${plr.toFixed(4)}`, result: rate, unit: "money" },
+        ...change === null ? [] : [{ label: "Indicated change", formula: `${formatValue(rate, "money")} / ${current} \u2212 1`, result: change, unit: "percent" }]
+      ],
+      warnings: [],
+      values: { indicated_rate: rate, variable_permissible_loss_ratio: plr, indicated_change: change }
+    };
+  },
+  method: {
+    concepts: ["Pure Premium Method", "Overall Rate Level Indication"],
+    readings: [{ resource: "Basic Ratemaking (Werner - 2016)", locator: "Ch. 8" }]
+  }
+};
 
 // src/lib/tools/credibility/fullCredibility.ts
 var BASES = [
@@ -947,10 +2543,10 @@ var fullCredibilityStandard = {
   notation: (input) => input.basis === "severity" ? "N = (z/k)\xB2 \xB7 CV\xB2" : input.basis === "pure_premium" ? "N = (z/k)\xB2 \xB7 (1 + CV\xB2)" : "N = (z/k)\xB2",
   view: "none",
   compute: (input) => {
-    const p = Number(input.p);
+    const p2 = Number(input.p);
     const k = Number(input.k);
     const cv = Number(input.cv);
-    const z = inverseNormalCdf((1 + p) / 2);
+    const z = inverseNormalCdf((1 + p2) / 2);
     const n0 = (z / k) ** 2;
     const multiplier = input.basis === "severity" ? cv ** 2 : input.basis === "pure_premium" ? 1 + cv ** 2 : 1;
     const standard = n0 * multiplier;
@@ -960,7 +2556,7 @@ var fullCredibilityStandard = {
         { symbol: "z", label: "Quantile", value: z, unit: "plain" }
       ],
       trace: [
-        { label: "Standard normal quantile", formula: `z = \u03A6\u207B\xB9((1 + ${p})/2)`, result: z, unit: "plain" },
+        { label: "Standard normal quantile", formula: `z = \u03A6\u207B\xB9((1 + ${p2})/2)`, result: z, unit: "plain" },
         { label: "Frequency standard", formula: `n\u2080 = (${z.toFixed(4)} / ${k})\xB2`, result: n0, unit: "count" },
         ...multiplier !== 1 ? [{ label: "Full standard", formula: input.basis === "severity" ? `n\u2080 \xD7 ${cv}\xB2` : `n\u2080 \xD7 (1 + ${cv}\xB2)`, result: standard, unit: "count" }] : []
       ],
@@ -1016,26 +2612,807 @@ var partialCredibility = {
   }
 };
 
+// src/lib/tools/credibility/buhlmann.ts
+var buhlmannCredibility = {
+  id: "credibility.buhlmann_credibility",
+  version: "1.0.0",
+  name: "B\xFChlmann Credibility",
+  area: "credibility",
+  answers: "What's the credibility estimate from the structural parameters?",
+  fields: [
+    { kind: "number", key: "epv", label: "Expected process variance", symbol: "EPV", unit: "plain", min: 0, max: 1e18, sliderMax: 1e3, step: 1, default: 100, description: "The expected value of the process variance, per unit of exposure: E[Var(X | \u0398)]." },
+    { kind: "number", key: "vhm", label: "Variance of hypothetical means", symbol: "VHM", unit: "plain", min: 1e-18, max: 1e18, sliderMax: 100, step: 0.1, default: 10, description: "The variance of the hypothetical means: Var(E[X | \u0398])." },
+    { kind: "number", key: "exposure", label: "Exposure", symbol: "n", unit: "count", min: 0, max: 1e12, sliderMax: 100, step: 1, default: 5, description: "The risk's exposure in the experience: years for B\xFChlmann, the summed exposure units for B\xFChlmann-Straub." },
+    { kind: "number", key: "observed", label: "Observed mean", symbol: "X\u0304", unit: "plain", min: -1e18, max: 1e18, sliderMax: 1e3, step: 1, default: 60, description: "The risk's own mean per unit of exposure." },
+    { kind: "number", key: "prior", label: "Overall mean", symbol: "\u03BC", unit: "plain", min: -1e18, max: 1e18, sliderMax: 1e3, step: 1, default: 50, description: "The complement: the mean over all risks, E[X]." }
+  ],
+  notation: () => "k = EPV / VHM,  Z = n / (n + k),  P = Z\xB7X\u0304 + (1 \u2212 Z)\xB7\u03BC",
+  view: "none",
+  compute: (input) => {
+    const epv = Number(input.epv);
+    const vhm = Number(input.vhm);
+    const n = Number(input.exposure);
+    const xbar = Number(input.observed);
+    const mu = Number(input.prior);
+    if (!(vhm > 0)) throw new ToolInputError("vhm", "The VHM must be positive: with no difference between risks, Z is 0.");
+    const k = epv / vhm;
+    const Z = n / (n + k);
+    const estimate = Z * xbar + (1 - Z) * mu;
+    return {
+      tiles: [
+        { symbol: "P", label: "Credibility estimate", value: estimate, unit: "plain" },
+        { symbol: "Z", label: "Credibility", value: Z, unit: "percent" },
+        { symbol: "k", label: "EPV / VHM", value: k, unit: "plain" }
+      ],
+      trace: [
+        { label: "B\xFChlmann k", formula: `${epv} / ${vhm}`, result: k, unit: "plain" },
+        { label: "Credibility", formula: `${n} / (${n} + ${formatValue(k, "plain")})`, result: Z, unit: "percent" },
+        { label: "Credibility estimate", formula: `${formatValue(Z, "plain")} \xD7 ${xbar} + (1 \u2212 Z) \xD7 ${mu}`, result: estimate, unit: "plain" }
+      ],
+      warnings: [],
+      values: { k, z: Z, estimate },
+      summary: `Z = ${formatValue(Z, "percent")} (k = ${formatValue(k, "plain")}); credibility estimate ${formatValue(estimate, "plain")} per unit of exposure.`
+    };
+  },
+  method: { concepts: ["B\xFChlmann Credibility", "B\xFChlmann-Straub Credibility"], readings: [] }
+};
+
+// src/lib/distributions.ts
+function moments(mean, variance, extra = {}) {
+  return {
+    mean,
+    variance,
+    sd: Math.sqrt(Math.max(variance, 0)),
+    skewness: extra.skewness ?? null,
+    mode: extra.mode ?? null,
+    median: extra.median ?? null
+  };
+}
+function isInteger(x) {
+  return Math.abs(x - Math.round(x)) < 1e-9;
+}
+function discreteCdf(k, lo, pmf) {
+  const top = Math.floor(k + 1e-9);
+  if (top < lo) return 0;
+  let total = 0;
+  for (let i = lo; i <= top; i++) {
+    total += pmf(i);
+    if (total >= 1) return 1;
+  }
+  return Math.min(1, total);
+}
+function clipWindow(lo, hi, minLo, maxHi) {
+  const l = Math.max(minLo, Math.floor(lo));
+  const h = Math.min(maxHi, Math.ceil(hi));
+  return h > l ? [l, h] : [minLo, Math.max(minLo + 1, maxHi)];
+}
+var normal = {
+  key: "normal",
+  name: "Normal",
+  title: "Normal Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x \u2208 (\u2212\u221E, \u221E)",
+  params: [
+    { key: "mu", symbol: "\u03BC", label: "mean", min: -10, max: 10, step: 0.1, default: 0 },
+    { key: "sigma", symbol: "\u03C3", label: "standard deviation", min: 0.1, max: 5, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ N(\u03BC = ${fmt(p2.mu)}, \u03C3\xB2 = ${fmt(p2.sigma * p2.sigma)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => standardNormalPdf((x - p2.mu) / p2.sigma) / p2.sigma,
+  cdf: (x, p2) => standardNormalCdf((x - p2.mu) / p2.sigma),
+  moments: (p2) => moments(p2.mu, p2.sigma * p2.sigma, { skewness: 0, mode: p2.mu, median: p2.mu }),
+  range: (p2) => [p2.mu - 4 * p2.sigma, p2.mu + 4 * p2.sigma],
+  sample: (p2, rng) => p2.mu + p2.sigma * sampleStandardNormal(rng)
+};
+var lognormal = {
+  key: "lognormal",
+  name: "Lognormal",
+  title: "Lognormal Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "mu", symbol: "\u03BC", label: "log-mean", min: -2, max: 3, step: 0.05, default: 0 },
+    { key: "sigma", symbol: "\u03C3", label: "log-standard deviation", min: 0.05, max: 2, step: 0.05, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ Lognormal(\u03BC = ${fmt(p2.mu)}, \u03C3\xB2 = ${fmt(p2.sigma * p2.sigma)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0) return 0;
+    const z = (Math.log(x) - p2.mu) / p2.sigma;
+    return standardNormalPdf(z) / (x * p2.sigma);
+  },
+  cdf: (x, p2) => x <= 0 ? 0 : standardNormalCdf((Math.log(x) - p2.mu) / p2.sigma),
+  moments: (p2) => {
+    const s2 = p2.sigma * p2.sigma;
+    const mean = Math.exp(p2.mu + s2 / 2);
+    const variance = (Math.exp(s2) - 1) * Math.exp(2 * p2.mu + s2);
+    return moments(mean, variance, {
+      skewness: (Math.exp(s2) + 2) * Math.sqrt(Math.exp(s2) - 1),
+      mode: Math.exp(p2.mu - s2),
+      median: Math.exp(p2.mu)
+    });
+  },
+  // The mean + 4σ window is unusable once σ grows (the tail runs to hundreds),
+  // so cut at roughly the 99th percentile of the underlying normal instead.
+  range: (p2) => [0, Math.exp(p2.mu + 2.5 * p2.sigma)],
+  sample: (p2, rng) => Math.exp(p2.mu + p2.sigma * sampleStandardNormal(rng))
+};
+var exponential = {
+  key: "exponential",
+  name: "Exponential",
+  title: "Exponential Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "theta", symbol: "\u03B8", label: "scale (the mean)", min: 0.1, max: 10, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ Exp(\u03B8 = ${fmt(p2.theta)}), rate 1/\u03B8 = ${fmt(1 / p2.theta)}`,
+  normalize: (p2) => p2,
+  density: (x, p2) => x < 0 ? 0 : Math.exp(-x / p2.theta) / p2.theta,
+  cdf: (x, p2) => x <= 0 ? 0 : 1 - Math.exp(-x / p2.theta),
+  moments: (p2) => moments(p2.theta, p2.theta * p2.theta, {
+    skewness: 2,
+    mode: 0,
+    median: p2.theta * Math.LN2
+  }),
+  range: (p2) => [0, 6 * p2.theta],
+  sample: (p2, rng) => -p2.theta * Math.log(openUnit(rng))
+};
+var gamma = {
+  key: "gamma",
+  name: "Gamma",
+  title: "Gamma Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "x > 0",
+  params: [
+    { key: "alpha", symbol: "\u03B1", label: "shape", min: 0.2, max: 20, step: 0.1, default: 2 },
+    { key: "theta", symbol: "\u03B8", label: "scale", min: 0.1, max: 10, step: 0.1, default: 1 }
+  ],
+  notation: (p2) => `X ~ Gamma(\u03B1 = ${fmt(p2.alpha)}, \u03B8 = ${fmt(p2.theta)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0) return p2.alpha < 1 ? Infinity : p2.alpha === 1 ? 1 / p2.theta : 0;
+    const logF = (p2.alpha - 1) * Math.log(x) - x / p2.theta - p2.alpha * Math.log(p2.theta) - logGamma(p2.alpha);
+    return Math.exp(logF);
+  },
+  cdf: (x, p2) => x <= 0 ? 0 : regularizedGammaP(p2.alpha, x / p2.theta),
+  moments: (p2) => moments(p2.alpha * p2.theta, p2.alpha * p2.theta * p2.theta, {
+    skewness: 2 / Math.sqrt(p2.alpha),
+    mode: p2.alpha >= 1 ? (p2.alpha - 1) * p2.theta : null
+  }),
+  range: (p2) => [0, p2.theta * (p2.alpha + 4 * Math.sqrt(p2.alpha))],
+  sample: (p2, rng) => sampleGamma(p2.alpha, p2.theta, rng)
+};
+var beta = {
+  key: "beta",
+  name: "Beta",
+  title: "Beta Distribution",
+  kind: "continuous",
+  xLabel: "x",
+  yLabel: "f(x)",
+  support: "0 < x < 1",
+  params: [
+    { key: "alpha", symbol: "\u03B1", label: "shape", min: 0.1, max: 10, step: 0.1, default: 2 },
+    { key: "beta", symbol: "\u03B2", label: "shape", min: 0.1, max: 10, step: 0.1, default: 5 }
+  ],
+  notation: (p2) => `X ~ Beta(\u03B1 = ${fmt(p2.alpha)}, \u03B2 = ${fmt(p2.beta)})`,
+  normalize: (p2) => p2,
+  density: (x, p2) => {
+    if (x <= 0 || x >= 1) return p2.alpha < 1 || p2.beta < 1 ? Infinity : 0;
+    return Math.exp((p2.alpha - 1) * Math.log(x) + (p2.beta - 1) * Math.log1p(-x) - logBeta(p2.alpha, p2.beta));
+  },
+  cdf: (x, p2) => regularizedIncompleteBeta(p2.alpha, p2.beta, x),
+  moments: (p2) => {
+    const a = p2.alpha;
+    const b = p2.beta;
+    const s = a + b;
+    const mean = a / s;
+    const variance = a * b / (s * s * (s + 1));
+    return moments(mean, variance, {
+      skewness: 2 * (b - a) * Math.sqrt(s + 1) / ((s + 2) * Math.sqrt(a * b)),
+      mode: a > 1 && b > 1 ? (a - 1) / (s - 2) : null
+    });
+  },
+  range: () => [0, 1],
+  sample: (p2, rng) => sampleBeta(p2.alpha, p2.beta, rng)
+};
+var binomial = {
+  key: "binomial",
+  name: "Binomial",
+  title: "Binomial Distribution",
+  kind: "discrete",
+  xLabel: "k",
+  yLabel: "P(X = k)",
+  support: "k = 0, 1, \u2026, n",
+  params: [
+    { key: "n", symbol: "n", label: "trials", min: 1, max: 100, step: 1, default: 20, integer: true },
+    { key: "p", symbol: "p", label: "success probability", min: 0.01, max: 0.99, step: 0.01, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ Bin(n = ${p2.n}, p = ${fmt(p2.p)})`,
+  normalize: (p2) => ({ ...p2, n: Math.round(p2.n) }),
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 0 || k > p2.n) return 0;
+    const i = Math.round(k);
+    return Math.exp(
+      logBinomialCoefficient(p2.n, i) + i * Math.log(p2.p) + (p2.n - i) * Math.log1p(-p2.p)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, 0, (i) => binomial.density(i, p2)),
+  moments: (p2) => {
+    const mean = p2.n * p2.p;
+    const variance = p2.n * p2.p * (1 - p2.p);
+    return moments(mean, variance, {
+      skewness: (1 - 2 * p2.p) / Math.sqrt(variance),
+      mode: Math.floor((p2.n + 1) * p2.p)
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt(p2.n * p2.p * (1 - p2.p));
+    return clipWindow(p2.n * p2.p - 4 * sd, p2.n * p2.p + 4 * sd, 0, p2.n);
+  },
+  sample: (p2, rng) => sampleBinomial(p2.n, p2.p, rng)
+};
+var poisson = {
+  key: "poisson",
+  name: "Poisson",
+  title: "Poisson Distribution",
+  kind: "discrete",
+  xLabel: "k",
+  yLabel: "P(X = k)",
+  support: "k = 0, 1, 2, \u2026",
+  params: [
+    { key: "lambda", symbol: "\u03BB", label: "rate (mean count)", min: 0.1, max: 30, step: 0.1, default: 4 }
+  ],
+  notation: (p2) => `X ~ Poisson(\u03BB = ${fmt(p2.lambda)})`,
+  normalize: (p2) => p2,
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 0) return 0;
+    const i = Math.round(k);
+    return Math.exp(-p2.lambda + i * Math.log(p2.lambda) - logGamma(i + 1));
+  },
+  // P(X ≤ k) = Q(k+1, λ): the regularized upper incomplete gamma.
+  cdf: (k, p2) => k < 0 ? 0 : 1 - regularizedGammaP(Math.floor(k + 1e-9) + 1, p2.lambda),
+  moments: (p2) => moments(p2.lambda, p2.lambda, {
+    skewness: 1 / Math.sqrt(p2.lambda),
+    mode: Math.floor(p2.lambda)
+  }),
+  range: (p2) => {
+    const sd = Math.sqrt(p2.lambda);
+    return clipWindow(p2.lambda - 4 * sd, p2.lambda + 4 * sd + 2, 0, Number.MAX_SAFE_INTEGER);
+  },
+  sample: (p2, rng) => samplePoisson(p2.lambda, rng)
+};
+var geometric = {
+  key: "geometric",
+  name: "Geometric",
+  title: "Geometric Distribution",
+  kind: "discrete",
+  xLabel: "k (trial of first success)",
+  yLabel: "P(X = k)",
+  support: "k = 1, 2, 3, \u2026",
+  params: [
+    { key: "p", symbol: "p", label: "success probability", min: 0.02, max: 0.95, step: 0.01, default: 0.25 }
+  ],
+  notation: (p2) => `X ~ Geom(p = ${fmt(p2.p)})`,
+  normalize: (p2) => p2,
+  density: (k, p2) => {
+    if (!isInteger(k) || k < 1) return 0;
+    return Math.pow(1 - p2.p, Math.round(k) - 1) * p2.p;
+  },
+  cdf: (k, p2) => k < 1 ? 0 : 1 - Math.pow(1 - p2.p, Math.floor(k + 1e-9)),
+  moments: (p2) => {
+    const mean = 1 / p2.p;
+    const variance = (1 - p2.p) / (p2.p * p2.p);
+    return moments(mean, variance, {
+      skewness: (2 - p2.p) / Math.sqrt(1 - p2.p),
+      mode: 1,
+      median: Math.ceil(-1 / Math.log2(1 - p2.p))
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt((1 - p2.p) / (p2.p * p2.p));
+    return clipWindow(1, 1 / p2.p + 4 * sd, 1, 200);
+  },
+  sample: (p2, rng) => sampleGeometricTrials(p2.p, rng)
+};
+var negativeBinomial = {
+  key: "negativeBinomial",
+  name: "Negative Binomial",
+  title: "Negative Binomial Distribution",
+  kind: "discrete",
+  xLabel: "k (total trials)",
+  yLabel: "P(X = k)",
+  support: "k = r, r+1, r+2, \u2026",
+  params: [
+    { key: "r", symbol: "r", label: "successes required", min: 1, max: 20, step: 1, default: 3, integer: true },
+    { key: "p", symbol: "p", label: "success probability", min: 0.05, max: 0.95, step: 0.01, default: 0.5 }
+  ],
+  notation: (p2) => `X ~ NegBin(r = ${p2.r}, p = ${fmt(p2.p)})`,
+  normalize: (p2) => ({ ...p2, r: Math.round(p2.r) }),
+  density: (k, p2) => {
+    if (!isInteger(k) || k < p2.r) return 0;
+    const i = Math.round(k);
+    return Math.exp(
+      logBinomialCoefficient(i - 1, p2.r - 1) + p2.r * Math.log(p2.p) + (i - p2.r) * Math.log1p(-p2.p)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, p2.r, (i) => negativeBinomial.density(i, p2)),
+  moments: (p2) => {
+    const mean = p2.r / p2.p;
+    const variance = p2.r * (1 - p2.p) / (p2.p * p2.p);
+    return moments(mean, variance, {
+      skewness: (2 - p2.p) / Math.sqrt(p2.r * (1 - p2.p)),
+      mode: p2.r === 1 ? 1 : Math.floor((p2.r - 1) / p2.p) + 1
+    });
+  },
+  range: (p2) => {
+    const sd = Math.sqrt(p2.r * (1 - p2.p) / (p2.p * p2.p));
+    return clipWindow(p2.r, p2.r / p2.p + 4 * sd, p2.r, 400);
+  },
+  sample: (p2, rng) => {
+    let trials = 0;
+    for (let i = 0; i < p2.r; i++) trials += sampleGeometricTrials(p2.p, rng);
+    return trials;
+  }
+};
+var hypergeometric = {
+  key: "hypergeometric",
+  name: "Hypergeometric",
+  title: "Hypergeometric Distribution",
+  kind: "discrete",
+  xLabel: "k (successes drawn)",
+  yLabel: "P(X = k)",
+  support: "max(0, n+K\u2212N) \u2264 k \u2264 min(n, K)",
+  params: [
+    { key: "N", symbol: "N", label: "population size", min: 5, max: 200, step: 1, default: 50, integer: true },
+    { key: "K", symbol: "K", label: "successes in population", min: 0, max: (p2) => p2.N, step: 1, default: 15, integer: true },
+    { key: "n", symbol: "n", label: "sample size (no replacement)", min: 1, max: (p2) => p2.N, step: 1, default: 10, integer: true }
+  ],
+  notation: (p2) => `X ~ HG(N = ${p2.N}, K = ${p2.K}, n = ${p2.n})`,
+  // K and n can't exceed the population, so a shrinking N drags them down.
+  normalize: (p2) => {
+    const N = Math.max(1, Math.round(p2.N));
+    return { N, K: clamp(Math.round(p2.K), 0, N), n: clamp(Math.round(p2.n), 1, N) };
+  },
+  density: (k, p2) => {
+    if (!isInteger(k)) return 0;
+    const i = Math.round(k);
+    if (i < Math.max(0, p2.n + p2.K - p2.N) || i > Math.min(p2.n, p2.K)) return 0;
+    return Math.exp(
+      logBinomialCoefficient(p2.K, i) + logBinomialCoefficient(p2.N - p2.K, p2.n - i) - logBinomialCoefficient(p2.N, p2.n)
+    );
+  },
+  cdf: (k, p2) => discreteCdf(k, Math.max(0, p2.n + p2.K - p2.N), (i) => hypergeometric.density(i, p2)),
+  moments: (p2) => {
+    const { N, K: K2, n } = p2;
+    const mean = n * K2 / N;
+    const variance = N > 1 ? n * K2 * (N - K2) * (N - n) / (N * N * (N - 1)) : 0;
+    const skewness = N > 2 && variance > 0 ? (N - 2 * K2) * Math.sqrt(N - 1) * (N - 2 * n) / (Math.sqrt(n * K2 * (N - K2) * (N - n)) * (N - 2)) : null;
+    return moments(mean, variance, {
+      skewness,
+      mode: Math.floor((n + 1) * (K2 + 1) / (N + 2))
+    });
+  },
+  range: (p2) => {
+    const lo = Math.max(0, p2.n + p2.K - p2.N);
+    const hi = Math.min(p2.n, p2.K);
+    if (hi - lo <= 60) return [lo, Math.max(hi, lo + 1)];
+    const { mean, sd } = hypergeometric.moments(p2);
+    return clipWindow(mean - 4 * sd, mean + 4 * sd, lo, hi);
+  },
+  sample: (p2, rng) => {
+    let remaining = p2.N;
+    let successes = p2.K;
+    let drawn = 0;
+    for (let i = 0; i < p2.n; i++) {
+      if (rng() < successes / remaining) {
+        drawn++;
+        successes--;
+      }
+      remaining--;
+    }
+    return drawn;
+  }
+};
+function clamp(x, lo, hi) {
+  return Math.max(lo, Math.min(hi, x));
+}
+function fmt(x) {
+  if (!Number.isFinite(x)) return "\u2014";
+  if (Number.isInteger(x)) return String(x);
+  return Math.abs(x) >= 100 ? x.toFixed(0) : Math.abs(x) >= 1 ? x.toFixed(2) : x.toFixed(3).replace(/0+$/, "");
+}
+var DISTRIBUTIONS = {
+  normal,
+  lognormal,
+  exponential,
+  gamma,
+  beta,
+  binomial,
+  poisson,
+  geometric,
+  negativeBinomial,
+  hypergeometric
+};
+
+// src/lib/tools/distributions/distribution.ts
+var KEYS = Object.keys(DISTRIBUTIONS);
+var takes = (param2) => KEYS.filter((k) => DISTRIBUTIONS[k].params.some((p2) => p2.key === param2));
+var param = (key, f) => ({ kind: "number", key, showWhen: { field: "family", in: takes(key) }, ...f });
+var PARAMS = [
+  param("mu", { label: "Mean", symbol: "\u03BC", unit: "plain", min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 0, description: "\u03BC: the normal mean; for the lognormal, the mean of ln X." }),
+  param("sigma", { label: "Standard deviation", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 5, step: 0.1, default: 1, description: "\u03C3: the normal standard deviation; for the lognormal, that of ln X." }),
+  param("theta", { label: "Scale", symbol: "\u03B8", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 10, step: 0.1, default: 1, description: "\u03B8: the scale (an exponential's mean; a gamma's mean is \u03B1\u03B8)." }),
+  param("alpha", { label: "Shape", symbol: "\u03B1", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 20, step: 0.1, default: 2, description: "\u03B1: the gamma or beta shape." }),
+  param("beta", { label: "Second shape", symbol: "\u03B2", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 5, description: "\u03B2: the beta's second shape." }),
+  param("lambda", { label: "Mean count", symbol: "\u03BB", unit: "plain", min: 1e-9, max: 1e5, sliderMax: 30, step: 0.1, default: 4, description: "\u03BB: the Poisson mean." }),
+  param("n", { label: "Trials, or sample size", symbol: "n", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 100, step: 1, default: 10, description: "n: the binomial's trials, or the hypergeometric's sample size." }),
+  param("p", { label: "Success probability", symbol: "p", unit: "plain", min: 1e-9, max: 1, sliderMax: 1, step: 0.01, default: 0.5, description: "p: the chance of a success on each trial." }),
+  param("r", { label: "Successes required", symbol: "r", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 20, step: 1, default: 3, description: "r: the negative binomial's successes (it counts total trials to the r-th)." }),
+  param("N", { label: "Population size", symbol: "N", unit: "count", integer: true, min: 1, max: 1e5, sliderMax: 200, step: 1, default: 50, description: "N: the hypergeometric population." }),
+  param("K", { label: "Successes in population", symbol: "K", unit: "count", integer: true, min: 0, max: 1e5, sliderMax: 50, step: 1, default: 15, description: "K: the hypergeometric population's successes." })
+];
+function params(input, key) {
+  const spec = DISTRIBUTIONS[key];
+  const p2 = Object.fromEntries(spec.params.map((q) => [q.key, Number(input[q.key])]));
+  if (key === "hypergeometric" && (p2.K > p2.N || p2.n > p2.N)) throw new ToolInputError("N", "The population N must hold at least K successes and the sample of n.");
+  if (key === "binomial" && p2.p > 1) throw new ToolInputError("p", "p is a probability: at most 1.");
+  return p2;
+}
+function quantile(key, p2, q) {
+  const spec = DISTRIBUTIONS[key];
+  const [lo0, hi0] = spec.range(p2);
+  if (spec.kind === "discrete") {
+    let k = Math.max(0, Math.floor(lo0) - 1);
+    while (spec.cdf(k, p2) < q - 1e-12 && k < 1e7) k++;
+    return k;
+  }
+  let lo = lo0;
+  let hi = hi0;
+  for (let n = 0; spec.cdf(lo, p2) > q && n < 200; n++) lo -= Math.max(1, Math.abs(lo));
+  for (let n = 0; spec.cdf(hi, p2) < q && n < 200; n++) hi += Math.max(1, Math.abs(hi));
+  return bisect((x) => spec.cdf(x, p2) - q, lo, hi);
+}
+var distribution = {
+  id: "distributions.distribution",
+  version: "1.0.0",
+  name: "Distribution",
+  area: "distributions",
+  answers: "What's the probability, quantile or moment?",
+  fields: [
+    {
+      kind: "choice",
+      key: "family",
+      label: "Distribution",
+      description: "The distribution, in the parameterisation of its concept page: exponential and gamma by scale \u03B8, the geometric counting trials to the first success (k \u2265 1), the negative binomial total trials to the r-th.",
+      options: KEYS.map((k) => ({ value: k, label: DISTRIBUTIONS[k].name })),
+      default: "normal"
+    },
+    ...PARAMS,
+    { kind: "number", key: "x", label: "Value", symbol: "x", unit: "plain", min: -1e12, max: 1e12, sliderMin: -10, sliderMax: 10, step: 0.1, default: 1, description: "The value x for P(X \u2264 x) and P(X > x). For a count, P(X \u2265 k) is P(X > k \u2212 1)." },
+    { kind: "number", key: "q", label: "Quantile level", symbol: "q", unit: "percent", min: 1e-9, max: 0.999999999, sliderMax: 0.99, step: 0.01, default: 0.95, description: "The level q for the quantile, the smallest x with F(x) \u2265 q." }
+  ],
+  notation: (input) => DISTRIBUTIONS[String(input.family)].notation(params(input, String(input.family))),
+  view: "table",
+  compute: (input) => {
+    const key = String(input.family);
+    const spec = DISTRIBUTIONS[key];
+    const p2 = params(input, key);
+    const x = Number(input.x);
+    const q = Number(input.q);
+    const F2 = spec.cdf(x, p2);
+    const xq = quantile(key, p2, q);
+    const m = spec.moments(p2);
+    const rows = [
+      { measure: "Mean", value: m.mean },
+      { measure: "Variance", value: m.variance },
+      { measure: "Standard deviation", value: m.sd },
+      ...m.skewness === null ? [] : [{ measure: "Skewness", value: m.skewness }],
+      ...m.median === null ? [] : [{ measure: "Median", value: m.median }],
+      ...m.mode === null ? [] : [{ measure: "Mode", value: m.mode }]
+    ];
+    return {
+      tiles: [
+        { symbol: "F(x)", label: "P(X \u2264 x)", value: F2, unit: "plain" },
+        { symbol: "S(x)", label: "P(X > x)", value: 1 - F2, unit: "plain" },
+        { symbol: "x_q", label: `q = ${formatValue(q, "percent")}`, value: xq, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          { key: "measure", label: "Moment", kind: "text" },
+          { key: "value", label: "", kind: "number", unit: "plain", computed: true }
+        ],
+        rows
+      },
+      trace: [
+        { label: `${spec.kind === "discrete" ? "Mass" : "Density"} at x`, formula: `${spec.kind === "discrete" ? "p" : "f"}(${x})`, result: spec.density(x, p2), unit: "plain" },
+        { label: "Distribution function", formula: `F(${x}) = P(X \u2264 ${x})`, result: F2, unit: "plain" },
+        { label: "Quantile", formula: `the smallest x with F(x) \u2265 ${q}`, result: xq, unit: "plain" }
+      ],
+      warnings: [],
+      values: { cdf: F2, survival: 1 - F2, quantile: xq, density: spec.density(x, p2), mean: m.mean, variance: m.variance, sd: m.sd, skewness: m.skewness, median: m.median, mode: m.mode },
+      summary: `For ${spec.notation(p2)}: P(X \u2264 ${x}) = ${formatValue(F2, "plain")}, the ${formatValue(q, "percent")} quantile is ${formatValue(xq, "plain")}, and the mean is ${formatValue(m.mean, "plain")}.`
+    };
+  },
+  method: { concepts: ["Continuous Univariate Distributions", "Discrete Univariate Distributions"], readings: [] }
+};
+
+// src/lib/tools/distributions/lossModels.ts
+var FAMILY = {
+  kind: "choice",
+  key: "family",
+  label: "Loss distribution",
+  description: "The ground-up loss distribution, in the exam tables' parameterisation: Pareto is the two-parameter (Lomax) form on x > 0; the single-parameter Pareto lives on x > \u03B8.",
+  options: [
+    { value: "exponential", label: "Exponential" },
+    { value: "uniform", label: "Uniform" },
+    { value: "pareto", label: "Pareto" },
+    { value: "single_pareto", label: "Single-parameter Pareto" },
+    { value: "gamma", label: "Gamma" },
+    { value: "lognormal", label: "Lognormal" },
+    { value: "weibull", label: "Weibull" }
+  ],
+  default: "exponential"
+};
+var scaled = ["exponential", "pareto", "single_pareto", "gamma", "weibull"];
+var PARAMETERS = [
+  { kind: "number", key: "theta", label: "Scale", symbol: "\u03B8", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 1e4, step: 10, default: 1e3, description: "The scale \u03B8: the mean of an exponential; the lower bound of a single-parameter Pareto.", showWhen: { field: "family", in: scaled } },
+  { kind: "number", key: "alpha", label: "Shape", symbol: "\u03B1", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 10, step: 0.1, default: 3, description: "The shape \u03B1 of a Pareto, single-parameter Pareto or gamma.", showWhen: { field: "family", in: ["pareto", "single_pareto", "gamma"] } },
+  { kind: "number", key: "tau", label: "Shape", symbol: "\u03C4", unit: "plain", min: 1e-6, max: 1e6, sliderMax: 5, step: 0.05, default: 1.5, description: "The Weibull shape \u03C4.", showWhen: { field: "family", in: ["weibull"] } },
+  { kind: "number", key: "mu", label: "Log-mean", symbol: "\u03BC", unit: "plain", min: -1e3, max: 1e3, sliderMax: 15, step: 0.05, default: 7, description: "The lognormal \u03BC: the mean of ln X.", showWhen: { field: "family", in: ["lognormal"] } },
+  { kind: "number", key: "sigma", label: "Log-sd", symbol: "\u03C3", unit: "plain", min: 1e-9, max: 1e3, sliderMax: 3, step: 0.05, default: 1, description: "The lognormal \u03C3: the standard deviation of ln X.", showWhen: { field: "family", in: ["lognormal"] } },
+  { kind: "number", key: "a", label: "From", symbol: "a", unit: "plain", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 0, description: "The uniform's lower end (losses are never negative).", showWhen: { field: "family", in: ["uniform"] } },
+  { kind: "number", key: "b", label: "To", symbol: "b", unit: "plain", min: 1e-9, max: 1e12, sliderMax: 1e4, step: 10, default: 1e3, description: "The uniform's upper end.", showWhen: { field: "family", in: ["uniform"] } }
+];
+var fmt2 = (x) => Number.isInteger(x) ? String(x) : String(Number(x.toPrecision(6)));
+var P = regularizedGammaP;
+function lossModel(input) {
+  const family = String(input.family);
+  const theta = Number(input.theta);
+  const alpha = Number(input.alpha);
+  switch (family) {
+    case "exponential":
+      return {
+        family,
+        label: "Exponential",
+        notation: `Exp(\u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : Math.exp(-x / theta),
+        mean: theta,
+        lev: (u) => u <= 0 ? 0 : theta * (1 - Math.exp(-u / theta))
+      };
+    case "uniform": {
+      const a = Number(input.a);
+      const b = Number(input.b);
+      if (!(b > a)) throw new ToolInputError("b", "The uniform's upper end must be above its lower end.");
+      return {
+        family,
+        label: "Uniform",
+        notation: `U(${fmt2(a)}, ${fmt2(b)})`,
+        survival: (x) => x <= a ? 1 : x >= b ? 0 : (b - x) / (b - a),
+        mean: (a + b) / 2,
+        lev: (u) => u <= 0 ? 0 : u <= a ? u : u >= b ? (a + b) / 2 : a + ((b - a) ** 2 - (b - u) ** 2) / (2 * (b - a))
+      };
+    }
+    case "pareto":
+      return {
+        family,
+        label: "Pareto",
+        notation: `Pareto(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : (theta / (x + theta)) ** alpha,
+        mean: alpha > 1 ? theta / (alpha - 1) : Infinity,
+        lev: (u) => {
+          if (u <= 0) return 0;
+          if (alpha === 1) return theta * Math.log((u + theta) / theta);
+          return theta / (alpha - 1) * (1 - (theta / (u + theta)) ** (alpha - 1));
+        }
+      };
+    case "single_pareto":
+      return {
+        family,
+        label: "Single-parameter Pareto",
+        notation: `Single Pareto(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= theta ? 1 : (theta / x) ** alpha,
+        mean: alpha > 1 ? alpha * theta / (alpha - 1) : Infinity,
+        lev: (u) => {
+          if (u <= theta) return Math.max(u, 0);
+          if (alpha === 1) return theta * (1 + Math.log(u / theta));
+          return alpha * theta / (alpha - 1) - theta ** alpha / ((alpha - 1) * u ** (alpha - 1));
+        }
+      };
+    case "gamma":
+      return {
+        family,
+        label: "Gamma",
+        notation: `Gamma(\u03B1 = ${fmt2(alpha)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : 1 - P(alpha, x / theta),
+        mean: alpha * theta,
+        lev: (u) => u <= 0 ? 0 : alpha * theta * P(alpha + 1, u / theta) + u * (1 - P(alpha, u / theta))
+      };
+    case "lognormal": {
+      const mu = Number(input.mu);
+      const sigma = Number(input.sigma);
+      return {
+        family,
+        label: "Lognormal",
+        notation: `Lognormal(\u03BC = ${fmt2(mu)}, \u03C3 = ${fmt2(sigma)})`,
+        survival: (x) => x <= 0 ? 1 : 1 - standardNormalCdf((Math.log(x) - mu) / sigma),
+        mean: Math.exp(mu + sigma ** 2 / 2),
+        lev: (u) => {
+          if (u <= 0) return 0;
+          const z = (Math.log(u) - mu) / sigma;
+          return Math.exp(mu + sigma ** 2 / 2) * standardNormalCdf(z - sigma) + u * (1 - standardNormalCdf(z));
+        }
+      };
+    }
+    case "weibull": {
+      const tau = Number(input.tau);
+      const g = gammaFn(1 + 1 / tau);
+      return {
+        family,
+        label: "Weibull",
+        notation: `Weibull(\u03C4 = ${fmt2(tau)}, \u03B8 = ${fmt2(theta)})`,
+        survival: (x) => x <= 0 ? 1 : Math.exp(-((x / theta) ** tau)),
+        mean: theta * g,
+        lev: (u) => u <= 0 ? 0 : theta * g * P(1 + 1 / tau, (u / theta) ** tau) + u * Math.exp(-((u / theta) ** tau))
+      };
+    }
+    default:
+      throw new ToolInputError("family", `Unknown loss distribution "${family}".`);
+  }
+}
+
+// src/lib/tools/distributions/limitedExpectedValue.ts
+var limitedExpectedValue = {
+  id: "distributions.limited_expected_value",
+  version: "1.0.0",
+  name: "Limited Expected Value",
+  area: "distributions",
+  answers: "What's the expected loss, capped at u?",
+  fields: [
+    FAMILY,
+    ...PARAMETERS,
+    { kind: "number", key: "u", label: "Limit", symbol: "u", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 10, default: 2e3, description: "The cap: the policy limit, or a deductible whose eliminated losses are E[X \u2227 u]." }
+  ],
+  notation: (input) => `E[X \u2227 u] = \u222B\u2080\u1D58 S(x) dx,  X ~ ${lossModel(input).notation}`,
+  view: "none",
+  compute: (input) => {
+    const model = lossModel(input);
+    const u = Number(input.u);
+    const lev = model.lev(u);
+    const ler = Number.isFinite(model.mean) ? lev / model.mean : 0;
+    const warnings = Number.isFinite(model.mean) ? [] : ["The mean is infinite (\u03B1 \u2264 1), so the loss elimination ratio is 0: no cap removes a finite share of an infinite mean."];
+    return {
+      tiles: [
+        { symbol: "E[X\u2227u]", label: "Limited", value: lev, unit: "money" },
+        { symbol: "E[X]", label: "Unlimited", value: model.mean, unit: "money" },
+        { symbol: "LER", label: "Share kept under u", value: ler, unit: "percent" }
+      ],
+      trace: [
+        { label: "Probability the loss exceeds u", formula: `S(${u})`, result: model.survival(u), unit: "percent" },
+        { label: "Limited expected value", formula: `E[X \u2227 ${u}], in closed form for the ${model.label.toLowerCase()}`, result: lev, unit: "money" },
+        { label: "Mean", formula: "E[X]", result: model.mean, unit: "money" },
+        { label: "Loss elimination ratio", formula: "E[X \u2227 u] / E[X]", result: ler, unit: "percent" }
+      ],
+      warnings,
+      values: { lev, mean: model.mean, ler, survival: model.survival(u) },
+      summary: `E[X \u2227 ${formatValue(u, "money")}] = ${formatValue(lev, "money")} for X ~ ${model.notation}; E[X] = ${formatValue(model.mean, "money")}.`
+    };
+  },
+  method: { concepts: ["Limited Expected Value", "Loss Elimination Ratio"], readings: [] },
+  next: [
+    { tool: "distributions.expected_payment", label: "Expected Payment", build: (input) => ({ family: input.family, theta: input.theta, alpha: input.alpha, tau: input.tau, mu: input.mu, sigma: input.sigma, a: input.a, b: input.b, limit: input.u }) }
+  ]
+};
+
+// src/lib/tools/distributions/expectedPayment.ts
+var expectedPayment = {
+  id: "distributions.expected_payment",
+  version: "1.0.0",
+  name: "Expected Payment",
+  area: "distributions",
+  answers: "What does the insurer expect to pay, per loss and per payment?",
+  fields: [
+    FAMILY,
+    ...PARAMETERS,
+    { kind: "number", key: "deductible", label: "Deductible", symbol: "d", unit: "money", min: 0, max: 1e12, sliderMax: 5e3, step: 10, default: 500, description: "The deductible per loss." },
+    { kind: "number", key: "limit", label: "Maximum covered loss", symbol: "u", unit: "money", min: 0, max: 1e12, sliderMax: 2e4, step: 100, default: 0, zeroLabel: "None", description: "The loss above which nothing more is paid (0 for none): with an ordinary deductible the most paid is u \u2212 d. For coinsurance c, multiply both expected payments by c." },
+    {
+      kind: "choice",
+      key: "type",
+      label: "Deductible",
+      description: "Ordinary: pays the loss less d. Franchise: pays the whole loss once it exceeds d.",
+      options: [{ value: "ordinary", label: "Ordinary" }, { value: "franchise", label: "Franchise" }],
+      default: "ordinary"
+    }
+  ],
+  notation: (input) => (input.type === "franchise" ? "E[Y_L] = E[X\u2227u] \u2212 E[X\u2227d] + d\xB7S(d)" : "E[Y_L] = E[X\u2227u] \u2212 E[X\u2227d]") + ",  E[Y_P] = E[Y_L] / S(d)",
+  view: "none",
+  compute: (input) => {
+    const model = lossModel(input);
+    const d = Number(input.deductible);
+    const u = Number(input.limit) === 0 ? Infinity : Number(input.limit);
+    if (u <= d) throw new ToolInputError("limit", "The maximum covered loss must be above the deductible (or 0 for none).");
+    const franchise = input.type === "franchise";
+    const top = Number.isFinite(u) ? model.lev(u) : model.mean;
+    const sd = model.survival(d);
+    const perLoss = top - model.lev(d) + (franchise ? d * sd : 0);
+    const perPayment = sd > 0 ? perLoss / sd : NaN;
+    const warnings = [
+      ...Number.isFinite(top) ? [] : ["With no limit the expected payment is infinite: this model has no finite mean (\u03B1 \u2264 1)."],
+      ...sd > 0 ? [] : ["No loss exceeds the deductible, so nothing is ever paid."]
+    ];
+    return {
+      tiles: [
+        { symbol: "E[Y_L]", label: "Per loss", value: perLoss, unit: "money" },
+        { symbol: "E[Y_P]", label: "Per payment", value: perPayment, unit: "money" },
+        { symbol: "S(d)", label: "Paid", value: sd, unit: "percent" }
+      ],
+      trace: [
+        { label: Number.isFinite(u) ? "Limited expected value at u" : "Mean loss", formula: Number.isFinite(u) ? `E[X \u2227 ${u}]` : "E[X]", result: top, unit: "money" },
+        { label: "Limited expected value at d", formula: `E[X \u2227 ${d}]`, result: model.lev(d), unit: "money" },
+        ...franchise ? [{ label: "Deductible given back on paid losses", formula: `${d} \xD7 S(${d})`, result: d * sd, unit: "money" }] : [],
+        { label: "Expected payment per loss", formula: franchise ? "E[X\u2227u] \u2212 E[X\u2227d] + d\xB7S(d)" : "E[X\u2227u] \u2212 E[X\u2227d]", result: perLoss, unit: "money" },
+        { label: "Probability a loss is paid", formula: `S(${d})`, result: sd, unit: "percent" },
+        { label: "Expected payment per payment", formula: "E[Y_L] / S(d)", result: perPayment, unit: "money" }
+      ],
+      warnings,
+      values: { per_loss: perLoss, per_payment: perPayment, survival: sd, lev_d: model.lev(d), lev_u: top },
+      summary: `Expected payment ${formatValue(perLoss, "money")} per loss and ${formatValue(perPayment, "money")} per payment, with a${franchise ? " franchise" : "n ordinary"} deductible of ${formatValue(d, "money")}${Number.isFinite(u) ? ` and losses covered to ${formatValue(u, "money")}` : ""}, for X ~ ${model.notation}.`
+    };
+  },
+  method: { concepts: ["Deductible", "Limited Expected Value"], readings: [] }
+};
+
 // src/lib/tools/registry.ts
 var ENGINE_VERSION = "0.1.0";
 var AREAS = [
   { id: "reserving", label: "Reserving" },
   { id: "ratemaking", label: "Ratemaking" },
+  { id: "distributions", label: "Loss distributions" },
   { id: "credibility", label: "Credibility" },
   { id: "finance", label: "Financial mathematics" }
 ];
 var TOOLS = [
+  ratioTriangle,
   ageToAgeFactors,
   developmentToUltimate,
   chainLadder,
   expectedClaims,
   bornhuetterFerguson,
+  benktander,
+  capeCod,
+  earnedPremium,
+  onLevelFactors,
+  trendFit,
+  trendFactor,
+  expenseRatios,
+  permissibleLossRatio,
   lossRatioMethod,
+  purePremiumMethod,
+  distribution,
+  limitedExpectedValue,
+  expectedPayment,
   fullCredibilityStandard,
   partialCredibility,
+  buhlmannCredibility,
   interestConverter,
   annuity,
-  presentValue
+  presentValue,
+  internalRateOfReturn,
+  loanSchedule,
+  bondPrice,
+  bondYield,
+  bondAmortization,
+  durationConvexity,
+  redingtonImmunization
 ];
 var BY_ID = new Map(TOOLS.map((t) => [t.id, t]));
 function toolById(id) {
@@ -1199,6 +3576,11 @@ function choiceField(f, raw) {
   if (!hit) throw new ToolInputError(f.key, `"${f.key}" must be one of: ${f.options.map((o) => o.value).join(", ")}.`);
   return hit.value;
 }
+function dateField(f, raw) {
+  const parts = parseDate(raw);
+  if (!parts) throw new ToolInputError(f.key, `"${f.key}" must be a date: "2017-01-01" or "01/01/2017".`);
+  return isoDate(parts);
+}
 function tableField(f, raw) {
   if (!Array.isArray(raw)) throw new ToolInputError(f.key, `"${f.key}" must be an array of rows, each with ${f.columns.map((c) => c.key).join(", ")}.`);
   if (raw.length < f.minRows || raw.length > f.maxRows) {
@@ -1270,6 +3652,8 @@ function readField(field, raw) {
       return numberField(field, raw);
     case "choice":
       return choiceField(field, raw);
+    case "date":
+      return dateField(field, raw);
     case "table":
       return tableField(field, raw);
     case "triangle":
@@ -2076,6 +4460,2322 @@ var friedland_2010_default = {
         }
       ],
       pdf_page: 168
+    },
+    ch9_exhibit3_sheet1: {
+      locator: "Chapter 9, Exhibit III, Sheet 1",
+      printed_page: 168,
+      units: "$000",
+      scenarios: {
+        "Steady-State": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 919306,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 938067,
+            ultimate_paid: 938067,
+            ibnr_reported: 18761,
+            ibnr_paid: 18761,
+            actual_ibnr: 18761,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 935722,
+            paid: 827375,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 984970,
+            ultimate_paid: 984970,
+            ibnr_reported: 49249,
+            ibnr_paid: 49249,
+            actual_ibnr: 49249,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 930797,
+            paid: 734295,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1034219,
+            ultimate_paid: 1034219,
+            ibnr_reported: 103422,
+            ibnr_paid: 103422,
+            actual_ibnr: 103422,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 836166,
+            paid: 456090,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1085930,
+            ultimate_paid: 1085930,
+            ibnr_reported: 249764,
+            ibnr_paid: 249764,
+            actual_ibnr: 249764,
+            difference_reported: 0,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1019749,
+            ultimate_paid: 1015920,
+            ibnr_reported: 8934,
+            ibnr_paid: 5105,
+            actual_ibnr: 10210,
+            difference_reported: 1276,
+            difference_paid: 5105
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 1116300,
+            paid: 1047955,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 1135061,
+            ultimate_paid: 1123e3,
+            ibnr_reported: 18761,
+            ibnr_paid: 6700,
+            actual_ibnr: 22782,
+            difference_reported: 4020,
+            difference_paid: 16081
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 1203071,
+            paid: 1063768,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 1252319,
+            ultimate_paid: 1221363,
+            ibnr_reported: 49249,
+            ibnr_paid: 18292,
+            actual_ibnr: 63320,
+            difference_reported: 14071,
+            difference_paid: 45027
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 1263224,
+            paid: 996544,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1366646,
+            ultimate_paid: 1296467,
+            ibnr_reported: 103422,
+            ibnr_paid: 33243,
+            actual_ibnr: 140358,
+            difference_reported: 36936,
+            difference_paid: 107116
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 1194523,
+            paid: 651558,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1444287,
+            ultimate_paid: 1281397,
+            ibnr_reported: 249764,
+            ibnr_paid: 86874,
+            actual_ibnr: 356805,
+            difference_reported: 107042,
+            difference_paid: 269931
+          }
+        ]
+      },
+      pdf_page: 174
+    },
+    ch9_exhibit3_sheet2: {
+      locator: "Chapter 9, Exhibit III, Sheet 2",
+      printed_page: 169,
+      units: "$000",
+      scenarios: {
+        "Increasing Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 933377,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 951395,
+            ultimate_paid: 938067,
+            ibnr_reported: 18018,
+            ibnr_paid: 4690,
+            actual_ibnr: 4690,
+            difference_reported: -13328,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 962808,
+            paid: 827375,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1013733,
+            ultimate_paid: 984970,
+            ibnr_reported: 50925,
+            ibnr_paid: 22162,
+            actual_ibnr: 22162,
+            difference_reported: -28763,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 979922,
+            paid: 734295,
+            cdf_reported: 1.119,
+            cdf_paid: 1.408,
+            unreported: 0.106,
+            unpaid: 0.29,
+            ultimate_reported: 1089655,
+            ultimate_paid: 1034219,
+            ibnr_reported: 109733,
+            ibnr_paid: 54296,
+            actual_ibnr: 54296,
+            difference_reported: -55437,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 931185,
+            paid: 456090,
+            cdf_reported: 1.318,
+            cdf_paid: 2.381,
+            unreported: 0.241,
+            unpaid: 0.58,
+            ultimate_reported: 1193385,
+            ultimate_paid: 1085930,
+            ibnr_reported: 262200,
+            ibnr_paid: 154745,
+            actual_ibnr: 154745,
+            difference_reported: -107455,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios and Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            expected: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            expected: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            expected: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            expected: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            expected: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            expected: 893397,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1019749,
+            ultimate_paid: 1015920,
+            ibnr_reported: 8934,
+            ibnr_paid: 5105,
+            actual_ibnr: 10210,
+            difference_reported: 1276,
+            difference_paid: 5105
+          },
+          {
+            origin: "2005",
+            age: 48,
+            expected: 938067,
+            reported: 1133386,
+            paid: 1047955,
+            cdf_reported: 1.019,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 1151324,
+            ultimate_paid: 1123e3,
+            ibnr_reported: 17938,
+            ibnr_paid: -10386,
+            actual_ibnr: 5695,
+            difference_reported: -12243,
+            difference_paid: 16081
+          },
+          {
+            origin: "2006",
+            age: 36,
+            expected: 984970,
+            reported: 1237897,
+            paid: 1063768,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1289001,
+            ultimate_paid: 1221363,
+            ibnr_reported: 51105,
+            ibnr_paid: -16533,
+            actual_ibnr: 28494,
+            difference_reported: -22611,
+            difference_paid: 45027
+          },
+          {
+            origin: "2007",
+            age: 24,
+            expected: 1034219,
+            reported: 1329895,
+            paid: 996544,
+            cdf_reported: 1.12,
+            cdf_paid: 1.408,
+            unreported: 0.107,
+            unpaid: 0.29,
+            ultimate_reported: 1440327,
+            ultimate_paid: 1296467,
+            ibnr_reported: 110432,
+            ibnr_paid: -33427,
+            actual_ibnr: 73688,
+            difference_reported: -36744,
+            difference_paid: 107116
+          },
+          {
+            origin: "2008",
+            age: 12,
+            expected: 1085930,
+            reported: 1330264,
+            paid: 651558,
+            cdf_reported: 1.32,
+            cdf_paid: 2.381,
+            unreported: 0.243,
+            unpaid: 0.58,
+            ultimate_reported: 1593780,
+            ultimate_paid: 1281397,
+            ibnr_reported: 263516,
+            ibnr_paid: -48867,
+            actual_ibnr: 221064,
+            difference_reported: -42452,
+            difference_paid: 269931
+          }
+        ]
+      },
+      pdf_page: 175
+    },
+    ch9_exhibit5_sheet1: {
+      locator: "Chapter 9, Exhibit V, Sheet 1",
+      printed_page: 171,
+      units: "$000",
+      scenarios: {
+        "Steady-State": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 893397,
+            bf_ultimate_paid: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 938067,
+            bf_ultimate_paid: 938067,
+            reported: 919306,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 938067,
+            ultimate_paid: 938067,
+            ibnr_reported: 18761,
+            ibnr_paid: 18761,
+            actual_ibnr: 18761,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 984970,
+            bf_ultimate_paid: 984970,
+            reported: 935722,
+            paid: 827375,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 984970,
+            ultimate_paid: 984970,
+            ibnr_reported: 49249,
+            ibnr_paid: 49249,
+            actual_ibnr: 49249,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1034219,
+            bf_ultimate_paid: 1034219,
+            reported: 930797,
+            paid: 734295,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1034219,
+            ultimate_paid: 1034219,
+            ibnr_reported: 103422,
+            ibnr_paid: 103422,
+            actual_ibnr: 103422,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1085930,
+            bf_ultimate_paid: 1085930,
+            reported: 836166,
+            paid: 456090,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1085930,
+            ultimate_paid: 1085930,
+            ibnr_reported: 249764,
+            ibnr_paid: 249764,
+            actual_ibnr: 249764,
+            difference_reported: 0,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 1019749,
+            bf_ultimate_paid: 1015920,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1021012,
+            ultimate_paid: 1020821,
+            ibnr_reported: 10197,
+            ibnr_paid: 10006,
+            actual_ibnr: 10210,
+            difference_reported: 13,
+            difference_paid: 204
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 1135061,
+            bf_ultimate_paid: 1123e3,
+            reported: 1116300,
+            paid: 1047955,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.02,
+            unpaid: 0.08,
+            ultimate_reported: 1139001,
+            ultimate_paid: 1137795,
+            ibnr_reported: 22701,
+            ibnr_paid: 21495,
+            actual_ibnr: 22782,
+            difference_reported: 80,
+            difference_paid: 1286
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1252319,
+            bf_ultimate_paid: 1221363,
+            reported: 1203071,
+            paid: 1063768,
+            cdf_reported: 1.053,
+            cdf_paid: 1.19,
+            unreported: 0.05,
+            unpaid: 0.16,
+            ultimate_reported: 1265687,
+            ultimate_paid: 1259186,
+            ibnr_reported: 62616,
+            ibnr_paid: 56115,
+            actual_ibnr: 63320,
+            difference_reported: 704,
+            difference_paid: 7204
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1366646,
+            bf_ultimate_paid: 1296467,
+            reported: 1263224,
+            paid: 996544,
+            cdf_reported: 1.111,
+            cdf_paid: 1.408,
+            unreported: 0.1,
+            unpaid: 0.29,
+            ultimate_reported: 1399889,
+            ultimate_paid: 1372519,
+            ibnr_reported: 136665,
+            ibnr_paid: 109295,
+            actual_ibnr: 140358,
+            difference_reported: 3694,
+            difference_paid: 31064
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1444287,
+            bf_ultimate_paid: 1281397,
+            reported: 1194523,
+            paid: 651558,
+            cdf_reported: 1.299,
+            cdf_paid: 2.381,
+            unreported: 0.23,
+            unpaid: 0.58,
+            ultimate_reported: 1526709,
+            ultimate_paid: 1394768,
+            ibnr_reported: 332186,
+            ibnr_paid: 200245,
+            actual_ibnr: 356805,
+            difference_reported: 24620,
+            difference_paid: 156560
+          }
+        ]
+      },
+      pdf_page: 177
+    },
+    ch9_exhibit5_sheet2: {
+      locator: "Chapter 9, Exhibit V, Sheet 2",
+      printed_page: 172,
+      units: "$000",
+      scenarios: {
+        "Increasing Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 893397,
+            bf_ultimate_paid: 893397,
+            reported: 884463,
+            paid: 857661,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 893397,
+            ultimate_paid: 893397,
+            ibnr_reported: 8934,
+            ibnr_paid: 8934,
+            actual_ibnr: 8934,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 951395,
+            bf_ultimate_paid: 938067,
+            reported: 933377,
+            paid: 863022,
+            cdf_reported: 1.02,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 951651,
+            ultimate_paid: 938067,
+            ibnr_reported: 18274,
+            ibnr_paid: 4690,
+            actual_ibnr: 4690,
+            difference_reported: -13584,
+            difference_paid: 0
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1013733,
+            bf_ultimate_paid: 984970,
+            reported: 962808,
+            paid: 827375,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1015221,
+            ultimate_paid: 984970,
+            ibnr_reported: 52412,
+            ibnr_paid: 22162,
+            actual_ibnr: 22162,
+            difference_reported: -30250,
+            difference_paid: 0
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1089655,
+            bf_ultimate_paid: 1034219,
+            reported: 979922,
+            paid: 734295,
+            cdf_reported: 1.119,
+            cdf_paid: 1.408,
+            unreported: 0.106,
+            unpaid: 0.29,
+            ultimate_reported: 1095537,
+            ultimate_paid: 1034219,
+            ibnr_reported: 115615,
+            ibnr_paid: 54296,
+            actual_ibnr: 54296,
+            difference_reported: -61319,
+            difference_paid: 0
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1193385,
+            bf_ultimate_paid: 1085930,
+            reported: 931185,
+            paid: 456090,
+            cdf_reported: 1.318,
+            cdf_paid: 2.381,
+            unreported: 0.241,
+            unpaid: 0.58,
+            ultimate_reported: 1219330,
+            ultimate_paid: 1085930,
+            ibnr_reported: 288146,
+            ibnr_paid: 154745,
+            actual_ibnr: 154745,
+            difference_reported: -133401,
+            difference_paid: 0
+          }
+        ],
+        "Increasing Claim Ratios and Case Outstanding Strength": [
+          {
+            origin: "1999",
+            age: 120,
+            bf_ultimate_reported: 7e5,
+            bf_ultimate_paid: 7e5,
+            reported: 7e5,
+            paid: 7e5,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 7e5,
+            ultimate_paid: 7e5,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2000",
+            age: 108,
+            bf_ultimate_reported: 735e3,
+            bf_ultimate_paid: 735e3,
+            reported: 735e3,
+            paid: 735e3,
+            cdf_reported: 1,
+            cdf_paid: 1,
+            unreported: 0,
+            unpaid: 0,
+            ultimate_reported: 735e3,
+            ultimate_paid: 735e3,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2001",
+            age: 96,
+            bf_ultimate_reported: 771750,
+            bf_ultimate_paid: 771750,
+            reported: 771750,
+            paid: 764033,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 771750,
+            ultimate_paid: 771750,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2002",
+            age: 84,
+            bf_ultimate_reported: 810338,
+            bf_ultimate_paid: 810338,
+            reported: 810338,
+            paid: 802234,
+            cdf_reported: 1,
+            cdf_paid: 1.01,
+            unreported: 0,
+            unpaid: 0.01,
+            ultimate_reported: 810338,
+            ultimate_paid: 810338,
+            ibnr_reported: 0,
+            ibnr_paid: 0,
+            actual_ibnr: 0,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2003",
+            age: 72,
+            bf_ultimate_reported: 850854,
+            bf_ultimate_paid: 850854,
+            reported: 842346,
+            paid: 833837,
+            cdf_reported: 1.01,
+            cdf_paid: 1.02,
+            unreported: 0.01,
+            unpaid: 0.02,
+            ultimate_reported: 850854,
+            ultimate_paid: 850854,
+            ibnr_reported: 8509,
+            ibnr_paid: 8509,
+            actual_ibnr: 8509,
+            difference_reported: 0,
+            difference_paid: 0
+          },
+          {
+            origin: "2004",
+            age: 60,
+            bf_ultimate_reported: 1019749,
+            bf_ultimate_paid: 1015920,
+            reported: 1010815,
+            paid: 980184,
+            cdf_reported: 1.01,
+            cdf_paid: 1.042,
+            unreported: 0.01,
+            unpaid: 0.04,
+            ultimate_reported: 1021012,
+            ultimate_paid: 1020821,
+            ibnr_reported: 10197,
+            ibnr_paid: 10006,
+            actual_ibnr: 10210,
+            difference_reported: 13,
+            difference_paid: 204
+          },
+          {
+            origin: "2005",
+            age: 48,
+            bf_ultimate_reported: 1151324,
+            bf_ultimate_paid: 1123e3,
+            reported: 1133386,
+            paid: 1047955,
+            cdf_reported: 1.019,
+            cdf_paid: 1.087,
+            unreported: 0.019,
+            unpaid: 0.08,
+            ultimate_reported: 1155402,
+            ultimate_paid: 1137795,
+            ibnr_reported: 22016,
+            ibnr_paid: 4409,
+            actual_ibnr: 5695,
+            difference_reported: -16321,
+            difference_paid: 1286
+          },
+          {
+            origin: "2006",
+            age: 36,
+            bf_ultimate_reported: 1289001,
+            bf_ultimate_paid: 1221363,
+            reported: 1237897,
+            paid: 1063768,
+            cdf_reported: 1.055,
+            cdf_paid: 1.19,
+            unreported: 0.052,
+            unpaid: 0.16,
+            ultimate_reported: 1304776,
+            ultimate_paid: 1259186,
+            ibnr_reported: 66879,
+            ibnr_paid: 21289,
+            actual_ibnr: 28494,
+            difference_reported: -38385,
+            difference_paid: 7204
+          },
+          {
+            origin: "2007",
+            age: 24,
+            bf_ultimate_reported: 1440327,
+            bf_ultimate_paid: 1296467,
+            reported: 1329895,
+            paid: 996544,
+            cdf_reported: 1.12,
+            cdf_paid: 1.408,
+            unreported: 0.107,
+            unpaid: 0.29,
+            ultimate_reported: 1483691,
+            ultimate_paid: 1372519,
+            ibnr_reported: 153796,
+            ibnr_paid: 42625,
+            actual_ibnr: 73688,
+            difference_reported: -80108,
+            difference_paid: 31064
+          },
+          {
+            origin: "2008",
+            age: 12,
+            bf_ultimate_reported: 1593780,
+            bf_ultimate_paid: 1281397,
+            reported: 1330264,
+            paid: 651558,
+            cdf_reported: 1.32,
+            cdf_paid: 2.381,
+            unreported: 0.243,
+            unpaid: 0.58,
+            ultimate_reported: 1717017,
+            ultimate_paid: 1394768,
+            ibnr_reported: 386753,
+            ibnr_paid: 64504,
+            actual_ibnr: 221064,
+            difference_reported: -165689,
+            difference_paid: 156560
+          }
+        ]
+      },
+      pdf_page: 178
+    },
+    ch10_exhibit1_sheet1: {
+      locator: "Chapter 10, Exhibit I, Sheet 1",
+      printed_page: 180,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          premium: 68574209,
+          age: 120,
+          reported: 47742304,
+          cdf: 1,
+          percent_reported: 1,
+          used_up: 68574209,
+          claim_ratio: 0.696
+        },
+        {
+          origin: "1999",
+          premium: 68544981,
+          age: 108,
+          reported: 51185767,
+          cdf: 1,
+          percent_reported: 1,
+          used_up: 68544981,
+          claim_ratio: 0.747
+        },
+        {
+          origin: "2000",
+          premium: 68907977,
+          age: 96,
+          reported: 54837929,
+          cdf: 1.001,
+          percent_reported: 0.999,
+          used_up: 68839138,
+          claim_ratio: 0.797
+        },
+        {
+          origin: "2001",
+          premium: 72544955,
+          age: 84,
+          reported: 56299562,
+          cdf: 1.003,
+          percent_reported: 0.997,
+          used_up: 72327971,
+          claim_ratio: 0.778
+        },
+        {
+          origin: "2002",
+          premium: 79228887,
+          age: 72,
+          reported: 58592712,
+          cdf: 1.006,
+          percent_reported: 0.994,
+          used_up: 78756349,
+          claim_ratio: 0.744
+        },
+        {
+          origin: "2003",
+          premium: 86643542,
+          age: 60,
+          reported: 57565344,
+          cdf: 1.011,
+          percent_reported: 0.989,
+          used_up: 85700833,
+          claim_ratio: 0.672
+        },
+        {
+          origin: "2004",
+          premium: 91763523,
+          age: 48,
+          reported: 56976657,
+          cdf: 1.023,
+          percent_reported: 0.978,
+          used_up: 89700413,
+          claim_ratio: 0.635
+        },
+        {
+          origin: "2005",
+          premium: 94115312,
+          age: 36,
+          reported: 56786410,
+          cdf: 1.051,
+          percent_reported: 0.951,
+          used_up: 89548346,
+          claim_ratio: 0.634
+        },
+        {
+          origin: "2006",
+          premium: 95272279,
+          age: 24,
+          reported: 54641339,
+          cdf: 1.11,
+          percent_reported: 0.901,
+          used_up: 85830882,
+          claim_ratio: 0.637
+        },
+        {
+          origin: "2007",
+          premium: 95176240,
+          age: 12,
+          reported: 48853563,
+          cdf: 1.292,
+          percent_reported: 0.774,
+          used_up: 73665820,
+          claim_ratio: 0.663
+        }
+      ],
+      total: {
+        premium: 820771905,
+        reported: 543481587,
+        used_up: 781488943,
+        claim_ratio: 0.695
+      },
+      pdf_page: 186
+    },
+    ch10_exhibit1_sheet2: {
+      locator: "Chapter 10, Exhibit I, Sheet 2",
+      printed_page: 181,
+      units: "$000",
+      rows: [
+        {
+          origin: "1998",
+          premium: 68574209,
+          claim_ratio: 0.695,
+          expected: 47689504,
+          cdf: 1,
+          unreported: 0,
+          ibnr: 0,
+          reported: 47742304,
+          ultimate: 47742304
+        },
+        {
+          origin: "1999",
+          premium: 68544981,
+          claim_ratio: 0.695,
+          expected: 47669177,
+          cdf: 1,
+          unreported: 0,
+          ibnr: 0,
+          reported: 51185767,
+          ultimate: 51185767
+        },
+        {
+          origin: "2000",
+          premium: 68907977,
+          claim_ratio: 0.695,
+          expected: 47921621,
+          cdf: 1.001,
+          unreported: 1e-3,
+          ibnr: 47874,
+          reported: 54837929,
+          ultimate: 54885803
+        },
+        {
+          origin: "2001",
+          premium: 72544955,
+          claim_ratio: 0.695,
+          expected: 50450934,
+          cdf: 1.003,
+          unreported: 3e-3,
+          ibnr: 150900,
+          reported: 56299562,
+          ultimate: 56450462
+        },
+        {
+          origin: "2002",
+          premium: 79228887,
+          claim_ratio: 0.695,
+          expected: 55099233,
+          cdf: 1.006,
+          unreported: 6e-3,
+          ibnr: 328624,
+          reported: 58592712,
+          ultimate: 58921336
+        },
+        {
+          origin: "2003",
+          premium: 86643542,
+          claim_ratio: 0.695,
+          expected: 60255708,
+          cdf: 1.011,
+          unreported: 0.011,
+          ibnr: 655601,
+          reported: 57565344,
+          ultimate: 58220945
+        },
+        {
+          origin: "2004",
+          premium: 91763523,
+          claim_ratio: 0.695,
+          expected: 63816367,
+          cdf: 1.023,
+          unreported: 0.022,
+          ibnr: 1434777,
+          reported: 56976657,
+          ultimate: 58411434
+        },
+        {
+          origin: "2005",
+          premium: 94115312,
+          claim_ratio: 0.695,
+          expected: 65451904,
+          cdf: 1.051,
+          unreported: 0.049,
+          ibnr: 3176068,
+          reported: 56786410,
+          ultimate: 59962478
+        },
+        {
+          origin: "2006",
+          premium: 95272279,
+          claim_ratio: 0.695,
+          expected: 66256509,
+          cdf: 1.11,
+          unreported: 0.099,
+          ibnr: 6565960,
+          reported: 54641339,
+          ultimate: 61207299
+        },
+        {
+          origin: "2007",
+          premium: 95176240,
+          claim_ratio: 0.695,
+          expected: 66189720,
+          cdf: 1.292,
+          unreported: 0.226,
+          ibnr: 14959286,
+          reported: 48853563,
+          ultimate: 63812849
+        }
+      ],
+      pdf_page: 187
+    },
+    ch6_tables_2_3: {
+      locator: "Chapter 6, Table 2 and Table 3",
+      printed_page: 65,
+      units: "$000 or counts",
+      tables: {
+        table_2: {
+          title: "Table 2 \u2013 Reported Claim Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              12811,
+              20370,
+              26656,
+              37667,
+              44414,
+              48701,
+              48169
+            ],
+            [
+              9651,
+              16995,
+              30354,
+              40594,
+              44231,
+              44373,
+              null
+            ],
+            [
+              16995,
+              40180,
+              58866,
+              71707,
+              70288,
+              null,
+              null
+            ],
+            [
+              28674,
+              47432,
+              70340,
+              70655,
+              null,
+              null,
+              null
+            ],
+            [
+              27066,
+              46783,
+              48804,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              19477,
+              31732,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              18632,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        },
+        table_3: {
+          title: "Table 3 \u2013 Paid Claim Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              2318,
+              7932,
+              13822,
+              22095,
+              31945,
+              40629,
+              44437
+            ],
+            [
+              1743,
+              6240,
+              12683,
+              22892,
+              34505,
+              39320,
+              null
+            ],
+            [
+              2221,
+              9898,
+              25950,
+              43439,
+              52811,
+              null,
+              null
+            ],
+            [
+              3043,
+              12219,
+              27073,
+              40026,
+              null,
+              null,
+              null
+            ],
+            [
+              3531,
+              11778,
+              22819,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              3529,
+              11865,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              3409,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 71
+    },
+    ch6_table_6: {
+      locator: "Chapter 6, Table 6",
+      printed_page: 68,
+      units: "$000 or counts",
+      tables: {
+        table_6: {
+          title: "Table 6 \u2013 Ratio of Paid Claims-to-Reported Claims",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              0.181,
+              0.389,
+              0.519,
+              0.587,
+              0.719,
+              0.834,
+              0.923
+            ],
+            [
+              0.181,
+              0.367,
+              0.418,
+              0.564,
+              0.78,
+              0.886,
+              null
+            ],
+            [
+              0.131,
+              0.246,
+              0.441,
+              0.606,
+              0.751,
+              null,
+              null
+            ],
+            [
+              0.106,
+              0.258,
+              0.385,
+              0.567,
+              null,
+              null,
+              null
+            ],
+            [
+              0.13,
+              0.252,
+              0.468,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.181,
+              0.374,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.183,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 74
+    },
+    ch6_table_8: {
+      locator: "Chapter 6, Table 8",
+      printed_page: 69,
+      units: "$000 or counts",
+      tables: {
+        table_8: {
+          title: "Table 8 \u2013 Reported Claim Count Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              1342,
+              1514,
+              1548,
+              1557,
+              1549,
+              1552,
+              1554
+            ],
+            [
+              1373,
+              1616,
+              1630,
+              1626,
+              1629,
+              1629,
+              null
+            ],
+            [
+              1932,
+              2168,
+              2234,
+              2249,
+              2258,
+              null,
+              null
+            ],
+            [
+              2067,
+              2293,
+              2367,
+              2390,
+              null,
+              null,
+              null
+            ],
+            [
+              1473,
+              1645,
+              1657,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              1192,
+              1264,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              1036,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 75
+    },
+    ch6_table_9: {
+      locator: "Chapter 6, Table 9",
+      printed_page: 70,
+      units: "$000 or counts",
+      tables: {
+        table_9: {
+          title: "Table 9 \u2013 Closed Claim Count Development Triangle",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              203,
+              607,
+              841,
+              1089,
+              1327,
+              1464,
+              1523
+            ],
+            [
+              181,
+              614,
+              941,
+              1263,
+              1507,
+              1568,
+              null
+            ],
+            [
+              235,
+              848,
+              1442,
+              1852,
+              2029,
+              null,
+              null
+            ],
+            [
+              295,
+              1119,
+              1664,
+              1946,
+              null,
+              null,
+              null
+            ],
+            [
+              307,
+              906,
+              1201,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              329,
+              791,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              276,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 76
+    },
+    ch6_table_10: {
+      locator: "Chapter 6, Table 10",
+      printed_page: 72,
+      units: "$000 or counts",
+      tables: {
+        table_10: {
+          title: "Table 10 \u2013 Ratio of Closed-to-Reported Claim Counts",
+          ages: [
+            12,
+            24,
+            36,
+            48,
+            60,
+            72,
+            84
+          ],
+          origins: [
+            "2002",
+            "2003",
+            "2004",
+            "2005",
+            "2006",
+            "2007",
+            "2008"
+          ],
+          values: [
+            [
+              0.151,
+              0.401,
+              0.543,
+              0.699,
+              0.857,
+              0.943,
+              0.98
+            ],
+            [
+              0.132,
+              0.38,
+              0.577,
+              0.777,
+              0.925,
+              0.963,
+              null
+            ],
+            [
+              0.122,
+              0.391,
+              0.645,
+              0.823,
+              0.899,
+              null,
+              null
+            ],
+            [
+              0.143,
+              0.488,
+              0.703,
+              0.814,
+              null,
+              null,
+              null
+            ],
+            [
+              0.208,
+              0.551,
+              0.725,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.276,
+              0.626,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            [
+              0.266,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          ]
+        }
+      },
+      pdf_page: 78
     }
   }
 };
@@ -2326,9 +7026,1754 @@ var basic_ratemaking_2016_default = {
         }
       },
       pdf_page: 380
+    },
+    a1_assumptions: {
+      locator: "Appendix A, Auto Indication",
+      printed_page: "A-1",
+      term_months: 6,
+      effective: "2017-01-01",
+      in_effect_months: 12,
+      quote: "All policies are semi-annual, and the proposed effective date for the revised rates is January 1, 2017. Rates are expected to be in effect for one year.",
+      pdf_page: 338
+    },
+    b1_assumptions: {
+      locator: "Appendix B, Homeowners Indication",
+      printed_page: "B-1",
+      term_months: 12,
+      effective: "2017-01-01",
+      in_effect_months: 12,
+      quote: "All policies are annual, and the proposed effective date for new rates in State XX is January 1, 2017. Rates are expected to be in effect for one year.",
+      pdf_page: 359
+    },
+    a9_rate_changes: {
+      locator: "Appendix A, Current Rate Level - 1",
+      printed_page: "A-9",
+      groups: [
+        {
+          group: "A",
+          date: null,
+          change: null,
+          index: 1,
+          cumulative: 1
+        },
+        {
+          group: "B",
+          date: "04/01/2011",
+          change: -0.05,
+          index: 0.95,
+          cumulative: 0.95
+        },
+        {
+          group: "C",
+          date: "07/01/2012",
+          change: 0.1,
+          index: 1.1,
+          cumulative: 1.045
+        },
+        {
+          group: "D",
+          date: "10/01/2013",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.0973
+        },
+        {
+          group: "E",
+          date: "07/01/2014",
+          change: -0.02,
+          index: 0.98,
+          cumulative: 1.0754
+        },
+        {
+          group: "F",
+          date: "10/01/2015",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.1292
+        },
+        {
+          group: "G",
+          date: "01/01/2016",
+          change: 0.05,
+          index: 1.05,
+          cumulative: 1.1857
+        }
+      ],
+      pdf_page: 346
+    },
+    a10_rate_level_factors: {
+      locator: "Appendix A, Current Rate Level - 2",
+      printed_page: "A-10",
+      rows: [
+        {
+          year: "2011",
+          portions: [
+            0.5,
+            0.5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          average: 0.975,
+          current: 1.1857,
+          factor: 1.2161
+        },
+        {
+          year: "2012",
+          portions: [
+            0,
+            0.75,
+            0.25,
+            0,
+            0,
+            0,
+            0
+          ],
+          average: 0.9738,
+          current: 1.1857,
+          factor: 1.2176
+        },
+        {
+          year: "2013",
+          portions: [
+            0,
+            0,
+            0.9375,
+            0.0625,
+            0,
+            0,
+            0
+          ],
+          average: 1.0483,
+          current: 1.1857,
+          factor: 1.1311
+        },
+        {
+          year: "2014",
+          portions: [
+            0,
+            0,
+            0.0625,
+            0.6875,
+            0.25,
+            0,
+            0
+          ],
+          average: 1.0886,
+          current: 1.1857,
+          factor: 1.0892
+        },
+        {
+          year: "2015",
+          portions: [
+            0,
+            0,
+            0,
+            0,
+            0.9375,
+            0.0625,
+            0
+          ],
+          average: 1.0788,
+          current: 1.1857,
+          factor: 1.0991
+        }
+      ],
+      pdf_page: 347
+    },
+    a11_premium_trend: {
+      locator: "Appendix A, Premium Trend - 1",
+      printed_page: "A-11",
+      points: [
+        {
+          quarter: "2010 - 2",
+          written: 1314117,
+          exposure: 12752,
+          average: 103.05
+        },
+        {
+          quarter: "2010 - 3",
+          written: 1323381,
+          exposure: 12776,
+          average: 103.58
+        },
+        {
+          quarter: "2010 - 4",
+          written: 1333726,
+          exposure: 12806,
+          average: 104.15
+        },
+        {
+          quarter: "2011 - 1",
+          written: 1343014,
+          exposure: 12825,
+          average: 104.72
+        },
+        {
+          quarter: "2011 - 2",
+          written: 1354391,
+          exposure: 12863,
+          average: 105.29
+        },
+        {
+          quarter: "2011 - 3",
+          written: 1364644,
+          exposure: 12893,
+          average: 105.84
+        },
+        {
+          quarter: "2011 - 4",
+          written: 1374283,
+          exposure: 12917,
+          average: 106.39
+        },
+        {
+          quarter: "2012 - 1",
+          written: 1384951,
+          exposure: 12953,
+          average: 106.92
+        },
+        {
+          quarter: "2012 - 2",
+          written: 1393570,
+          exposure: 12973,
+          average: 107.42
+        },
+        {
+          quarter: "2012 - 3",
+          written: 1403987,
+          exposure: 13005,
+          average: 107.96
+        },
+        {
+          quarter: "2012 - 4",
+          written: 1415881,
+          exposure: 13044,
+          average: 108.55
+        },
+        {
+          quarter: "2013 - 1",
+          written: 1428087,
+          exposure: 13082,
+          average: 109.16
+        },
+        {
+          quarter: "2013 - 2",
+          written: 1438647,
+          exposure: 13108,
+          average: 109.75
+        },
+        {
+          quarter: "2013 - 3",
+          written: 1448311,
+          exposure: 13128,
+          average: 110.32
+        },
+        {
+          quarter: "2013 - 4",
+          written: 1458540,
+          exposure: 13155,
+          average: 110.87
+        },
+        {
+          quarter: "2014 - 1",
+          written: 1468617,
+          exposure: 13183,
+          average: 111.4
+        },
+        {
+          quarter: "2014 - 2",
+          written: 1479666,
+          exposure: 13217,
+          average: 111.95
+        },
+        {
+          quarter: "2014 - 3",
+          written: 1492537,
+          exposure: 13262,
+          average: 112.54
+        },
+        {
+          quarter: "2014 - 4",
+          written: 1503294,
+          exposure: 13292,
+          average: 113.1
+        },
+        {
+          quarter: "2015 - 1",
+          written: 1514903,
+          exposure: 13325,
+          average: 113.69
+        },
+        {
+          quarter: "2015 - 2",
+          written: 1524242,
+          exposure: 13341,
+          average: 114.25
+        },
+        {
+          quarter: "2015 - 3",
+          written: 1536215,
+          exposure: 13383,
+          average: 114.79
+        },
+        {
+          quarter: "2015 - 4",
+          written: 1547368,
+          exposure: 13414,
+          average: 115.35
+        }
+      ],
+      fits: {
+        "20": 0.021,
+        "16": 0.021,
+        "12": 0.02,
+        "8": 0.02,
+        "6": 0.02,
+        "4": 0.019
+      },
+      pdf_page: 348
+    },
+    a15_loss_trend: {
+      locator: "Appendix A, Loss Trend - 1",
+      printed_page: "A-15",
+      points: [
+        {
+          quarter: "2011 - 1",
+          exposure: 131911,
+          counts: 7745,
+          losses: 8220899,
+          frequency: 0.0587,
+          severity: 1061.45,
+          pure_premium: 62.32
+        },
+        {
+          quarter: "2011 - 2",
+          exposure: 132700,
+          counts: 7785,
+          losses: 8381016,
+          frequency: 0.0587,
+          severity: 1076.56,
+          pure_premium: 63.16
+        },
+        {
+          quarter: "2011 - 3",
+          exposure: 133602,
+          counts: 7917,
+          losses: 8594389,
+          frequency: 0.0593,
+          severity: 1085.56,
+          pure_premium: 64.33
+        },
+        {
+          quarter: "2011 - 4",
+          exposure: 135079,
+          counts: 7928,
+          losses: 8705108,
+          frequency: 0.0587,
+          severity: 1098.02,
+          pure_premium: 64.44
+        },
+        {
+          quarter: "2012 - 1",
+          exposure: 137384,
+          counts: 7997,
+          losses: 8816379,
+          frequency: 0.0582,
+          severity: 1102.46,
+          pure_premium: 64.17
+        },
+        {
+          quarter: "2012 - 2",
+          exposure: 138983,
+          counts: 8037,
+          losses: 8901163,
+          frequency: 0.0578,
+          severity: 1107.52,
+          pure_premium: 64.04
+        },
+        {
+          quarter: "2012 - 3",
+          exposure: 140396,
+          counts: 7939,
+          losses: 8873491,
+          frequency: 0.0565,
+          severity: 1117.71,
+          pure_premium: 63.2
+        },
+        {
+          quarter: "2012 - 4",
+          exposure: 140997,
+          counts: 7831,
+          losses: 8799730,
+          frequency: 0.0555,
+          severity: 1123.7,
+          pure_premium: 62.41
+        },
+        {
+          quarter: "2013 - 1",
+          exposure: 140378,
+          counts: 7748,
+          losses: 8736859,
+          frequency: 0.0552,
+          severity: 1127.63,
+          pure_premium: 62.24
+        },
+        {
+          quarter: "2013 - 2",
+          exposure: 139682,
+          counts: 7719,
+          losses: 8676220,
+          frequency: 0.0553,
+          severity: 1124.01,
+          pure_premium: 62.11
+        },
+        {
+          quarter: "2013 - 3",
+          exposure: 138982,
+          counts: 7730,
+          losses: 8629925,
+          frequency: 0.0556,
+          severity: 1116.42,
+          pure_premium: 62.09
+        },
+        {
+          quarter: "2013 - 4",
+          exposure: 138984,
+          counts: 7790,
+          losses: 8642835,
+          frequency: 0.056,
+          severity: 1109.48,
+          pure_premium: 62.19
+        },
+        {
+          quarter: "2014 - 1",
+          exposure: 139155,
+          counts: 7782,
+          losses: 8602105,
+          frequency: 0.0559,
+          severity: 1105.38,
+          pure_premium: 61.82
+        },
+        {
+          quarter: "2014 - 2",
+          exposure: 139618,
+          counts: 7741,
+          losses: 8535327,
+          frequency: 0.0554,
+          severity: 1102.61,
+          pure_premium: 61.13
+        },
+        {
+          quarter: "2014 - 3",
+          exposure: 139996,
+          counts: 7720,
+          losses: 8466272,
+          frequency: 0.0551,
+          severity: 1096.67,
+          pure_premium: 60.48
+        },
+        {
+          quarter: "2014 - 4",
+          exposure: 140141,
+          counts: 7691,
+          losses: 8412159,
+          frequency: 0.0549,
+          severity: 1093.77,
+          pure_premium: 60.03
+        },
+        {
+          quarter: "2015 - 1",
+          exposure: 140754,
+          counts: 7735,
+          losses: 8513679,
+          frequency: 0.055,
+          severity: 1100.67,
+          pure_premium: 60.49
+        },
+        {
+          quarter: "2015 - 2",
+          exposure: 141534,
+          counts: 7769,
+          losses: 8614224,
+          frequency: 0.0549,
+          severity: 1108.79,
+          pure_premium: 60.86
+        },
+        {
+          quarter: "2015 - 3",
+          exposure: 141800,
+          counts: 7755,
+          losses: 8702135,
+          frequency: 0.0547,
+          severity: 1122.13,
+          pure_premium: 61.37
+        },
+        {
+          quarter: "2015 - 4",
+          exposure: 142986,
+          counts: 7778,
+          losses: 8761588,
+          frequency: 0.0544,
+          severity: 1126.46,
+          pure_premium: 61.28
+        }
+      ],
+      fits: {
+        "20": {
+          frequency: -0.017,
+          severity: 5e-3,
+          pure_premium: -0.012
+        },
+        "16": {
+          frequency: -0.013,
+          severity: -1e-3,
+          pure_premium: -0.014
+        },
+        "12": {
+          frequency: -7e-3,
+          severity: -2e-3,
+          pure_premium: -9e-3
+        },
+        "8": {
+          frequency: -0.012,
+          severity: 0.012,
+          pure_premium: -1e-3
+        },
+        "6": {
+          frequency: -9e-3,
+          severity: 0.025,
+          pure_premium: 0.016
+        },
+        "4": {
+          frequency: -0.015,
+          severity: 0.033,
+          pure_premium: 0.019
+        }
+      },
+      pdf_page: 352
+    },
+    a19_loss_trend_periods: {
+      locator: "Appendix A, Loss Trend - 5",
+      printed_page: "A-19",
+      projected_from: "07/01/2015",
+      projected_to: "09/30/2017",
+      rows: [
+        {
+          year: "2011",
+          current_trend: -5e-3,
+          current_period: 4,
+          current_factor: 0.9801,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 0.9912
+        },
+        {
+          year: "2012",
+          current_trend: -5e-3,
+          current_period: 3,
+          current_factor: 0.9851,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 0.9962
+        },
+        {
+          year: "2013",
+          current_trend: -5e-3,
+          current_period: 2,
+          current_factor: 0.99,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0012
+        },
+        {
+          year: "2014",
+          current_trend: -5e-3,
+          current_period: 1,
+          current_factor: 0.995,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0062
+        },
+        {
+          year: "2015",
+          current_trend: -5e-3,
+          current_period: 0,
+          current_factor: 1,
+          projected_trend: 5e-3,
+          projected_period: 2.25,
+          projected_factor: 1.0113,
+          total: 1.0113
+        }
+      ],
+      pdf_page: 356
+    },
+    b12_loss_trend_periods: {
+      locator: "Appendix B, Loss Trend - 3",
+      printed_page: "B-12",
+      projected_from: "07/01/2015",
+      projected_to: "01/01/2018",
+      rows: [
+        {
+          year: "2011",
+          current_trend: 0.02,
+          current_period: 4,
+          current_factor: 1.0824,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1939
+        },
+        {
+          year: "2012",
+          current_trend: 0.02,
+          current_period: 3,
+          current_factor: 1.0612,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1705
+        },
+        {
+          year: "2013",
+          current_trend: 0.02,
+          current_period: 2,
+          current_factor: 1.0404,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1476
+        },
+        {
+          year: "2014",
+          current_trend: 0.02,
+          current_period: 1,
+          current_factor: 1.02,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.1251
+        },
+        {
+          year: "2015",
+          current_trend: 0.02,
+          current_period: 0,
+          current_factor: 1,
+          projected_trend: 0.04,
+          projected_period: 2.5,
+          projected_factor: 1.103,
+          total: 1.103
+        }
+      ],
+      pdf_page: 370
+    },
+    a21_expenses: {
+      locator: "Appendix A, Expense",
+      printed_page: "A-21",
+      types: [
+        {
+          type: "General Expenses",
+          expenses: [
+            29143368,
+            29940978,
+            30763160
+          ],
+          premium: [
+            466001205,
+            478971842,
+            491904082
+          ],
+          premium_basis: "Countrywide Earned Premium",
+          ratios: [
+            0.063,
+            0.063,
+            0.063
+          ],
+          weighted: 0.063,
+          selected: 0.063,
+          fixed_share: 0.75,
+          fixed: 0.047,
+          variable: 0.016
+        },
+        {
+          type: "Other Acquisition",
+          expenses: [
+            40158296,
+            40912479,
+            41652543
+          ],
+          premium: [
+            468850020,
+            482345783,
+            495356701
+          ],
+          premium_basis: "Countrywide Written Premium",
+          ratios: [
+            0.086,
+            0.085,
+            0.084
+          ],
+          weighted: 0.085,
+          selected: 0.085,
+          fixed_share: 0.75,
+          fixed: 0.064,
+          variable: 0.021
+        },
+        {
+          type: "Licenses and Fees",
+          expenses: [
+            3124,
+            3190,
+            3229
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            2e-3,
+            2e-3,
+            2e-3
+          ],
+          weighted: 2e-3,
+          selected: 2e-3,
+          fixed_share: 1,
+          fixed: 2e-3,
+          variable: 0
+        },
+        {
+          type: "Commission and Brokerage",
+          expenses: [
+            145073,
+            154235,
+            158712
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            0.113,
+            0.112,
+            0.113
+          ],
+          weighted: 0.112,
+          selected: 0.112,
+          fixed_share: 0,
+          fixed: 0,
+          variable: 0.112
+        },
+        {
+          type: "Taxes",
+          expenses: [
+            27338,
+            27549,
+            29853
+          ],
+          premium: [
+            1289484,
+            1380129,
+            1407811
+          ],
+          premium_basis: "State Written Premium",
+          ratios: [
+            0.021,
+            0.02,
+            0.021
+          ],
+          weighted: 0.021,
+          selected: 0.021,
+          fixed_share: 0,
+          fixed: 0,
+          variable: 0.021
+        }
+      ],
+      fixed_provision: 0.113,
+      variable_provision: 0.17,
+      pdf_page: 358
+    },
+    ch4_annual_written: {
+      locator: "Chapter 4, Tables 4.7",
+      printed_page: "54",
+      tables: {
+        "4.7": {
+          title: "4.7 Calendar Year Written Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            1,
+            4,
+            1
+          ]
+        }
+      },
+      pdf_page: 66
+    },
+    ch4_annual_earned: {
+      locator: "Chapter 4, Tables 4.11, 4.13",
+      printed_page: "56",
+      tables: {
+        "4.11": {
+          title: "4.11 Calendar Year Earned Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                0.25,
+                0.75,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.75,
+                0.25
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.5,
+                0.5
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0.25,
+                0.75
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            0.25,
+            3.25,
+            2.5
+          ]
+        },
+        "4.13": {
+          title: "4.13 Policy Year Earned  Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "09/30/11",
+              exposure: 1,
+              by_year: [
+                1,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "12/31/11",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "03/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "06/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "09/30/12",
+              exposure: 1,
+              by_year: [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "12/31/12",
+              exposure: 1,
+              by_year: [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          total: 6,
+          by_year: [
+            1,
+            4,
+            1
+          ]
+        }
+      },
+      pdf_page: 68
+    },
+    ch4_semiannual: {
+      locator: "Chapter 4, Tables 4.18, 4.19, 4.20, 4.21",
+      printed_page: "59",
+      tables: {
+        "4.18": {
+          title: "4.18 Calendar Year Written Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        },
+        "4.19": {
+          title: "4.19 Calendar Year Earned Exposures a/o 12/31/12",
+          years: [
+            "CY 2010",
+            "CY 2011",
+            "CY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.25,
+                0.25,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.25,
+                0.25
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.25,
+            2,
+            0.75
+          ]
+        },
+        "4.20": {
+          title: "4.20 Policy Year Written Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        },
+        "4.21": {
+          title: "4.21 Policy Year Earned Exposures a/o 12/31/12",
+          years: [
+            "PY 2010",
+            "PY 2011",
+            "PY 2012"
+          ],
+          policies: [
+            {
+              policy: "A",
+              effective: "10/01/10",
+              expiration: "03/31/11",
+              exposure: 0.5,
+              by_year: [
+                0.5,
+                0,
+                0
+              ]
+            },
+            {
+              policy: "B",
+              effective: "01/01/11",
+              expiration: "06/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "C",
+              effective: "04/01/11",
+              expiration: "09/30/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "D",
+              effective: "07/01/11",
+              expiration: "12/31/11",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "E",
+              effective: "10/01/11",
+              expiration: "03/31/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0.5,
+                0
+              ]
+            },
+            {
+              policy: "F",
+              effective: "01/01/12",
+              expiration: "06/30/12",
+              exposure: 0.5,
+              by_year: [
+                0,
+                0,
+                0.5
+              ]
+            }
+          ],
+          total: 3,
+          by_year: [
+            0.5,
+            2,
+            0.5
+          ]
+        }
+      },
+      pdf_page: 71
     }
   }
 };
+
+// src/lib/tools/questionChecks.ts
+var last = (rs) => rs[rs.length - 1];
+var val = (key) => (rs) => Number(last(rs).values[key]);
+var at = (key, k) => (rs) => last(rs).values[key][k];
+var one = (tool, input) => [{ tool, input: () => input }];
+var flows = (n, from, amount, step = 1) => Array.from({ length: n }, (_, k) => ({ time: (from + k) * step, amount: amount(k) }));
+var fm = (n, check) => ({
+  question: `fm-${String(n).padStart(3, "0")}`,
+  bank: "exam-fm",
+  label: `SOA Exam FM sample question ${n}`,
+  ...check
+});
+var p = (n, check) => ({
+  question: `p-${String(n).padStart(3, "0")}`,
+  bank: "exam-p",
+  label: `SOA Exam P sample question ${n}`,
+  ...check
+});
+var cas = (id, check) => {
+  const [, exam, year, season, n] = /^(masi|masii)-(\d{4})([sf])-(\d+)$/.exec(id);
+  return {
+    question: id,
+    bank: exam === "masi" ? "exam-mas-i" : "exam-mas-ii",
+    label: `CAS Exam ${exam === "masi" ? "MAS-I" : "MAS-II"}, ${season === "s" ? "Spring" : "Fall"} ${year}, question ${Number(n)}`,
+    ...check
+  };
+};
+var QUESTION_CHECKS = [
+  // ─── Present Value ─────────────────────────────────────────────────────────
+  fm(26, {
+    quotes: ["5000", "7% per year", "20 payments", "one year from today", "5%"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(20, 1, (k) => 5e3 * 1.07 ** (k + 1)) }),
+    tolerance: 50,
+    value: val("present_value")
+  }),
+  fm(71, {
+    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
+    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
+    steps: one("finance.present_value", { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(82, {
+    quotes: ["30-year annuity", "5% annual effective", "first payment of the annuity is due in ten years in the amount of 1,000", "increase by 500 each year"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(30, 10, (k) => 1e3 + 500 * k) }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(225, {
+    quotes: ["| 1 | 10 | 4.0% |", "| 2 | 12 | 4.5% |", "| 3 | 15 | 5.5% |", "| 4 | 20 | 7.0% |"],
+    steps: one("finance.present_value", {
+      flows: [
+        { time: 1, amount: 10, spot: 0.04 },
+        { time: 2, amount: 12, spot: 0.045 },
+        { time: 3, amount: 15, spot: 0.055 },
+        { time: 4, amount: 20, spot: 0.07 }
+      ]
+    }),
+    tolerance: 5e-3,
+    value: val("present_value")
+  }),
+  fm(245, {
+    quotes: ["annual effective interest rate of 5%", "10-year annuity-immediate", "annual payment of 100", "increases each year by 15%"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(10, 1, (k) => 100 * 1.15 ** k) }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(281, {
+    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
+    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
+    steps: one("finance.present_value", { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1e3 }] }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  // ─── Bonds ─────────────────────────────────────────────────────────────────
+  fm(71, {
+    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
+    steps: one("finance.bond_price", { face: 1e3, coupon: 0.09, redemption: 1200, years: 20, m: 2, yield: 0.1 }),
+    tolerance: 0.5,
+    value: val("price")
+  }),
+  fm(213, {
+    // A face amount and no redemption value: redeemable at par.
+    quotes: ["six-year 1000 face amount bond", "annual coupon rate of 8% semiannually", "sells for 911.37", "annual effective yield rate"],
+    steps: one("finance.bond_yield", { face: 1e3, coupon: 0.08, redemption: 1e3, years: 6, m: 2, price: 911.37 }),
+    tolerance: 5e-5,
+    value: val("effective_yield")
+  }),
+  fm(325, {
+    // Bought at a discount of 1.50 to its face amount of 100: a price of 98.50.
+    quotes: ["one-year bond with a face amount of 100", "annual coupon rate of 6% paid semiannually", "discount of 1.50", "convertible semiannually"],
+    steps: one("finance.bond_yield", { face: 100, coupon: 0.06, redemption: 100, years: 1, m: 2, price: 98.5 }),
+    tolerance: 5e-4,
+    value: val("nominal_yield")
+  }),
+  fm(7, {
+    quotes: ["10,000 par value 10-year bond", "8% annual coupons", "annual effective rate of 6%", "the 7th coupon"],
+    steps: one("finance.bond_amortization", { face: 1e4, coupon: 0.08, redemption: 1e4, years: 10, m: 1, yield: 0.06 }),
+    tolerance: 0.5,
+    value: at("interest", 6)
+  }),
+  fm(281, {
+    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
+    steps: one("finance.bond_amortization", { face: 1e3, coupon: 0.076, redemption: 1e3, years: 10, m: 2, yield: 0.06 }),
+    tolerance: 0.5,
+    value: at("book_value", 11)
+  }),
+  // ─── Loans ─────────────────────────────────────────────────────────────────
+  fm(190, {
+    // 16% convertible quarterly is 4% a quarter.
+    quotes: ["loan of 10,000", "payments of 1,000 at the end of each quarter for as long as necessary", "16% convertible quarterly", "the tenth payment"],
+    steps: one("finance.loan_schedule", { amount: 1e4, i: 0.04, payment: 1e3, n: 0 }),
+    tolerance: 0.5,
+    value: at("interest", 9)
+  }),
+  fm(380, {
+    quotes: ["Annual payments of 240", "loan of 3400", "annual effective interest rate of 4.5%", "drop payment"],
+    steps: one("finance.loan_schedule", { amount: 3400, i: 0.045, payment: 240, n: 0 }),
+    tolerance: 5e-3,
+    value: val("final_payment")
+  }),
+  fm(212, {
+    quotes: ["Payments of 1000 at the end of each year", "loan of 12,000", "annual effective interest rate of 10%", "immediately after the 12th payment"],
+    steps: one("finance.loan_schedule", { amount: 12e3, i: 0.1, payment: 1e3, n: 12 }),
+    tolerance: 0.5,
+    value: at("balance", 11)
+  }),
+  fm(232, {
+    // The beginning of the seventh year is the moment after the sixth payment.
+    quotes: ["loan of 4000", "annual effective interest rate of 5%", "payments of 250 at the end of each year for ten years", "beginning of the seventh year"],
+    steps: one("finance.loan_schedule", { amount: 4e3, i: 0.05, payment: 250, n: 10 }),
+    tolerance: 0.5,
+    value: at("balance", 5)
+  }),
+  fm(90, {
+    // The discount rate converted, the level payment found, then the loan run again on that payment rounded up.
+    quotes: ["5-year loan of 500,000", "annual effective discount rate of 8%", "level end-of-year payments", "next multiple of 1,000"],
+    steps: [
+      { tool: "finance.interest_converter", input: () => ({ form: "effective_discount", rate: 0.08, m: 1 }) },
+      { tool: "finance.loan_schedule", input: ([rate]) => ({ amount: 5e5, i: rate.values.i, n: 5, payment: 0 }) },
+      { tool: "finance.loan_schedule", input: ([rate, level]) => ({ amount: 5e5, i: rate.values.i, n: 0, payment: Math.ceil(Number(level.values.payment) / 1e3) * 1e3 }) }
+    ],
+    tolerance: 50,
+    value: val("final_payment")
+  }),
+  // ─── Duration, convexity and immunization ──────────────────────────────────
+  fm(101, {
+    quotes: ["40,000 at time 2", "25,000 at time 3", "100,000 at time 4", "7.0%"],
+    steps: one("finance.duration_convexity", { i: 0.07, flows: [{ time: 2, amount: 4e4 }, { time: 3, amount: 25e3 }, { time: 4, amount: 1e5 }] }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(228, {
+    quotes: ["| 1 | 10 |", "| 2 | 12 |", "| 3 | 15 |", "| 4 | 20 |", "| 5 | 30 |", "8% annual effective"],
+    steps: one("finance.duration_convexity", { i: 0.08, flows: [10, 12, 15, 20, 30].map((amount, k) => ({ time: k + 1, amount })) }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(50, {
+    // Bought at par, the bond yields its coupon rate: 3.8% a half-year, an annual effective 1.038² − 1.
+    quotes: ["7-year, 5000 par value bond", "annual coupon rate of 7.6% paid semiannually", "no premium or discount"],
+    steps: one("finance.duration_convexity", { i: 1.038 ** 2 - 1, flows: [...flows(14, 1, () => 190, 0.5), { time: 7, amount: 5e3 }] }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(183, {
+    quotes: ["7-year loan", "equal payments made at the end of each year", "annual effective interest rate is 10%"],
+    steps: one("finance.duration_convexity", { i: 0.1, flows: flows(7, 1, () => 1) }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(409, {
+    quotes: ["ten-year mortgage", "annual level payments at the end of the year", "annual effective interest rate of 6%"],
+    steps: one("finance.duration_convexity", { i: 0.06, flows: flows(10, 1, () => 1) }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(429, {
+    // Per 100 of face: coupons of 9, then the 100 redeemed with the last.
+    quotes: ["annual coupon rate of 9% paid annually", "matures in ten years", "annual effective yield rate is 10%", "modified duration"],
+    steps: one("finance.duration_convexity", { i: 0.1, flows: [...flows(9, 1, () => 9), { time: 10, amount: 109 }] }),
+    tolerance: 5e-3,
+    value: val("modified")
+  }),
+  fm(372, {
+    quotes: ["five-year 1000 face amount bond", "10% annual coupons", "annual effective interest rate of 5%"],
+    steps: one("finance.duration_convexity", { i: 0.05, flows: [...flows(4, 1, () => 100), { time: 5, amount: 1100 }] }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(165, {
+    // Payments of 1 at times 0–19 and 4 at times 20–49: the duration doesn't depend on X.
+    quotes: ["$X$ at the beginning of each year for 20 years, starting today", "$4X$ at the beginning of each year for 30 years, starting 20 years from today", "annual effective interest rate of 2%"],
+    steps: one("finance.duration_convexity", { i: 0.02, flows: [...flows(20, 0, () => 1), ...flows(30, 20, () => 4)] }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(219, {
+    // The assets' duration doesn't depend on X, so X = 1.
+    quotes: ["liability cash flow of 100 at the end of year two", "liability cash flow of 200 at the end of year three", "asset cash flows of $X$ at the end of years one and five", "annual effective interest rate of 10%"],
+    steps: one("finance.redington_immunization", {
+      i: 0.1,
+      flows: [
+        { time: 1, asset: 1, liability: 0 },
+        { time: 2, asset: 0, liability: 100 },
+        { time: 3, asset: 0, liability: 200 },
+        { time: 5, asset: 1, liability: 0 }
+      ]
+    }),
+    tolerance: 5e-4,
+    value: (rs) => Math.abs(Number(last(rs).values.macaulay_assets) - Number(last(rs).values.macaulay_liabilities))
+  }),
+  // ─── Rates and annuities, chained ──────────────────────────────────────────
+  fm(291, {
+    quotes: ["deposits 150 today", "receives 100 one year from now and 80 two years from now", "annual nominal rate of interest convertible quarterly"],
+    steps: [
+      { tool: "finance.internal_rate_of_return", input: () => ({ flows: [{ time: 0, amount: -150 }, { time: 1, amount: 100 }, { time: 2, amount: 80 }] }) },
+      { tool: "finance.interest_converter", input: ([irr]) => ({ form: "effective_interest", rate: irr.values.irr, m: 4 }) }
+    ],
+    tolerance: 5e-4,
+    value: val("nominal_interest")
+  }),
+  fm(370, {
+    // Times in years: the quarterly payments at 0.25, 0.5, … 5, so the yield comes out annual effective.
+    quotes: ["5000 is borrowed", "convertible monthly", "payments of 291.23 at the end of each quarter for 5 years"],
+    steps: [
+      { tool: "finance.internal_rate_of_return", input: () => ({ flows: [{ time: 0, amount: -5e3 }, ...flows(20, 1, () => 291.23, 0.25)] }) },
+      { tool: "finance.interest_converter", input: ([irr]) => ({ form: "effective_interest", rate: irr.values.irr, m: 12 }) }
+    ],
+    tolerance: 5e-5,
+    value: val("nominal_interest")
+  }),
+  fm(334, {
+    // The annuity-due's price is the balance at year five; the yield is the rate that grows 9550 to it.
+    quotes: ["deposit of 9550", "for five years", "20-year annuity-due", "level annual payments of 756.97", "annual effective interest rate of 4%"],
+    steps: [
+      { tool: "finance.annuity", input: () => ({ timing: "due", payment: 756.97, n: 20, i: 0.04 }) },
+      { tool: "finance.internal_rate_of_return", input: ([annuity2]) => ({ flows: [{ time: 0, amount: -9550 }, { time: 5, amount: annuity2.values.present_value }] }) }
+    ],
+    tolerance: 5e-4,
+    value: val("irr")
+  }),
+  fm(367, {
+    // 8% effective is i⁽¹²⁾/12 a month; the 240 monthly deposits' accumulated value buys the 30-year annuity-due.
+    quotes: ["deposits 225 into a bank at the beginning of each month for 20 years", "annual effective rate of 8%", "30-year annuity-due with annual payments of $X$", "annual effective interest rate of 7%"],
+    steps: [
+      { tool: "finance.interest_converter", input: () => ({ form: "effective_interest", rate: 0.08, m: 12 }) },
+      { tool: "finance.annuity", input: ([rate]) => ({ timing: "due", payment: 225, n: 240, i: Number(rate.values.nominal_interest) / 12 }) },
+      { tool: "finance.annuity", input: () => ({ timing: "due", payment: 1, n: 30, i: 0.07 }) }
+    ],
+    tolerance: 0.5,
+    value: ([, saved, bought]) => Number(saved.values.accumulated_value) / Number(bought.values.annuity_factor)
+  }),
+  // ─── Distributions ─────────────────────────────────────────────────────────
+  p(124, {
+    // Three independent weeks at a mean of 2 a week: Poisson with mean 6. Fewer than four is X ≤ 3.
+    quotes: ["Poisson distribution with mean 2", "mutually independent", "fewer than four tornadoes occur in a three-week period"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 6, x: 3 }),
+    tolerance: 5e-3,
+    value: val("cdf")
+  }),
+  p(158, {
+    quotes: ["Poisson distribution with mean 1", "mutually independent", "more than two days in a three-month period"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 3, x: 2 }),
+    tolerance: 5e-4,
+    value: val("survival")
+  }),
+  p(355, {
+    // A Poisson standard deviation of 2 is a mean of 4; at least two is more than one.
+    quotes: ["Poisson distribution with a standard deviation of 2", "at least two calls"],
+    steps: one("distributions.distribution", { family: "poisson", lambda: 4, x: 1 }),
+    tolerance: 5e-4,
+    value: val("survival")
+  }),
+  p(164, {
+    quotes: ["normally distributed with mean 10 and variance 4", "12th percentile"],
+    steps: one("distributions.distribution", { family: "normal", mu: 10, sigma: 2, q: 0.12 }),
+    tolerance: 5e-3,
+    value: val("quantile")
+  }),
+  p(390, {
+    // A gamma with mean αθ = 6 and variance αθ² = 18: θ = 3, α = 2.
+    quotes: ["gamma distribution with mean 6 and variance 18", "exceeds 4"],
+    steps: one("distributions.distribution", { family: "gamma", alpha: 2, theta: 3, x: 4 }),
+    tolerance: 5e-3,
+    value: val("survival")
+  }),
+  p(66, {
+    // The mean of 25 claims is normal with standard deviation 5,000 / √25 = 1,000.
+    quotes: ["normal distribution with mean 19,400 and standard deviation 5,000", "average of 25 randomly selected claims exceeds 20,000"],
+    steps: one("distributions.distribution", { family: "normal", mu: 19400, sigma: 1e3, x: 2e4 }),
+    tolerance: 5e-3,
+    value: val("survival")
+  }),
+  p(327, {
+    // The mean of 100 claims has standard deviation 500 / √100 = 50; K is its 99th percentile.
+    quotes: ["normally distributed with mean 2500 and standard deviation 500", "random sample of 100 claims will exceed $K$ is 0.01"],
+    steps: one("distributions.distribution", { family: "normal", mu: 2500, sigma: 50, q: 0.99 }),
+    tolerance: 0.5,
+    value: val("quantile")
+  }),
+  p(670, {
+    quotes: ["normally distributed with mean 2500 and standard deviation 500", "exceeds $P$ is 5%", "exceeds the median loss"],
+    steps: one("distributions.distribution", { family: "normal", mu: 2500, sigma: 500, q: 0.95 }),
+    tolerance: 0.5,
+    value: (rs) => Number(last(rs).values.quantile) - Number(last(rs).values.median)
+  }),
+  p(563, {
+    quotes: [String.raw`exponentially distributed with mean $\dfrac{400}{\ln 2}$`, "up to a maximum of 1000"],
+    steps: one("distributions.limited_expected_value", { family: "exponential", theta: 400 / Math.LN2, u: 1e3 }),
+    tolerance: 0.5,
+    value: val("lev")
+  }),
+  p(50, {
+    // f(y) = 2/y³ on y > 1 is the single-parameter Pareto with α = 2, θ = 1.
+    quotes: ["benefit limit of 10", String.raw`\frac{2}{y^3}, & y > 1`],
+    steps: one("distributions.limited_expected_value", { family: "single_pareto", alpha: 2, theta: 1, u: 10 }),
+    tolerance: 0.05,
+    value: val("lev")
+  }),
+  p(48, {
+    // The density is the single-parameter Pareto's with α = 2.5, θ = 0.6; what a deductible of 2 leaves unpaid is E[X ∧ 2].
+    quotes: [String.raw`\frac{2.5(0.6)^{2.5}}{x^{3.5}}, & x > 0.6`, "annual deductible of 2", "losses not paid by the insurance policy"],
+    steps: one("distributions.limited_expected_value", { family: "single_pareto", alpha: 2.5, theta: 0.6, u: 2 }),
+    tolerance: 5e-3,
+    value: val("lev")
+  }),
+  p(337, {
+    quotes: ["deductible of 3", "exponentially distributed with mean 10"],
+    steps: one("distributions.expected_payment", { family: "exponential", theta: 10, deductible: 3 }),
+    tolerance: 5e-3,
+    value: val("per_loss")
+  }),
+  p(601, {
+    // (3/1000)(1000/x)⁴ on x > 1000 is the single-parameter Pareto with α = 3, θ = 1000.
+    quotes: [String.raw`\dfrac{3}{1000}\left(\dfrac{1000}{x}\right)^4, & \text{for } x > 1000`, "deductible of 1100", "for a random loss"],
+    steps: one("distributions.expected_payment", { family: "single_pareto", alpha: 3, theta: 1e3, deductible: 1100 }),
+    tolerance: 0.5,
+    value: val("per_loss")
+  }),
+  cas("masi-2019f-001", {
+    // The memoryless distribution is the exponential.
+    quotes: ["memoryless distribution with mean 1,000", "deductible of 500", "losses that exceed the deductible"],
+    steps: one("distributions.expected_payment", { family: "exponential", theta: 1e3, deductible: 500 }),
+    tolerance: 0,
+    value: val("per_payment")
+  }),
+  cas("masi-2019f-023", {
+    quotes: [String.raw`lognormal distribution with $(\mu = 8,\ \sigma = 1)$`, "ordinary deductible of 1,000 per loss", "Losses below the deductible are not reported"],
+    steps: one("distributions.expected_payment", { family: "lognormal", mu: 8, sigma: 1, deductible: 1e3 }),
+    tolerance: 0,
+    value: val("per_payment")
+  }),
+  // ─── Credibility ───────────────────────────────────────────────────────────
+  cas("masii-2018f-004", {
+    quotes: ["pure premium of 960", "72,000 policies with a pure premium of 530", "expected variance of the pure premium within each region is 1,800,000,000", "variance of the region pure premium means is 45,000"],
+    steps: one("credibility.buhlmann_credibility", { epv: 18e8, vhm: 45e3, exposure: 72e3, observed: 530, prior: 960 }),
+    tolerance: 0,
+    value: val("estimate")
+  }),
+  cas("masii-2018f-005", {
+    // θ ~ U(0.05, 0.25): EPV = E[2θ] = 0.3, VHM = Var θ = 0.2²/12, μ = 0.15. 60 claims on 675 insureds; Year 4 has 250.
+    quotes: [String.raw`mean $\theta$ and variance $2\theta$`, "uniformly distributed from 0.05 to 0.25", "| 1 | 200 | 15 |", "| 2 | 250 | 20 |", "| 3 | 225 | 25 |", "| 4 | 250 | --- |"],
+    steps: one("credibility.buhlmann_credibility", { epv: 0.3, vhm: 0.2 ** 2 / 12, exposure: 675, observed: 60 / 675, prior: 0.15 }),
+    tolerance: 0,
+    value: (rs) => 250 * Number(last(rs).values.estimate)
+  })
+];
+var questionRef = (q) => ({
+  question: q.question,
+  title: q.label,
+  url: `/quiz?ids=${q.question}`,
+  locator: q.label
+});
 
 // src/lib/tools/checks.ts
 var F = friedland_2010_default.exhibits;
@@ -2491,6 +8936,93 @@ var CHECKS = [
     })
   }
 ];
+var ch10 = F.ch10_exhibit1_sheet1;
+var ch10Projection = F.ch10_exhibit1_sheet2;
+var capeCodInput = { rows: ch10.rows.map((r) => ({ origin: r.origin, premium: r.premium, latest: r.reported, cdf: r.cdf })) };
+CHECKS.push(
+  {
+    tool: "reserving.cape_cod",
+    source: friedlandRef(ch10),
+    cases: [{
+      name: "Columns (7) and (8), used-up premium and the total expected claim ratio",
+      input: capeCodInput,
+      expect: [
+        ...ch10.rows.map((r, k) => ({ what: `${r.origin} used-up premium`, printed: r.used_up, tolerance: DOLLAR, actual: (res) => values(res, "used_up")[k] })),
+        { what: "expected claim ratio", printed: ch10.total.claim_ratio, tolerance: PERCENT, actual: (res) => Number(res.values.elr) }
+      ]
+    }]
+  },
+  {
+    tool: "reserving.cape_cod",
+    source: friedlandRef(ch10Projection),
+    cases: [{
+      name: "Columns (4), (7) and (9), expected claims, IBNR and ultimate claims",
+      input: capeCodInput,
+      expect: ch10Projection.rows.flatMap((r, k) => [
+        { what: `${r.origin} expected claims`, printed: r.expected, tolerance: DOLLAR, actual: (res) => values(res, "expected")[k] },
+        { what: `${r.origin} IBNR`, printed: r.ibnr, tolerance: DOLLAR, actual: (res) => values(res, "reserve")[k] },
+        { what: `${r.origin} ultimate`, printed: r.ultimate, tolerance: DOLLAR, actual: (res) => values(res, "ultimate")[k] }
+      ])
+    }]
+  }
+);
+CHECKS.push(
+  ...[["ch9_exhibit3_sheet1", "ch9_exhibit5_sheet1"], ["ch9_exhibit3_sheet2", "ch9_exhibit5_sheet2"]].flatMap(([bfKey, gbKey]) => {
+    const bf = F[bfKey];
+    const gb = F[gbKey];
+    return [{
+      tool: "reserving.benktander",
+      source: friedlandRef(gb),
+      cases: Object.entries(gb.scenarios).flatMap(([scenario, rows]) => ["reported", "paid"].filter((basis) => basis === "paid" || gbKey === "ch9_exhibit5_sheet1").map((basis) => {
+        const reported = basis === "reported";
+        const prior = bf.scenarios[scenario];
+        return {
+          name: `${scenario}, column (${reported ? 11 : 12}), the Benktander ultimate with ${basis} claims`,
+          input: {
+            basis,
+            iterations: 2,
+            rows: prior.map((r) => ({ origin: r.origin, latest: r[basis], cdf: 1 / (1 - (reported ? r.unreported : r.unpaid)), expected: r.expected }))
+          },
+          expect: rows.map((r, k) => {
+            const q = reported ? r.unreported : r.unpaid;
+            return {
+              what: `${r.origin} ultimate`,
+              printed: reported ? r.ultimate_reported : r.ultimate_paid,
+              tolerance: DOLLAR + 0.5 * (1 + q + q * q),
+              actual: (res) => values(res, "ultimate")[k]
+            };
+          })
+        };
+      }))
+    }];
+  })
+);
+var ch6 = (key, table) => {
+  const t = F[key].tables[table];
+  return { origins: t.origins, ages: t.ages, values: t.values };
+};
+CHECKS.push(
+  ...[
+    { key: "ch6_table_6", table: "table_6", numerator: ch6("ch6_tables_2_3", "table_3"), denominator: ch6("ch6_tables_2_3", "table_2"), what: "paid-to-reported" },
+    { key: "ch6_table_10", table: "table_10", numerator: ch6("ch6_table_9", "table_9"), denominator: ch6("ch6_table_8", "table_8"), what: "closed-to-reported counts" }
+  ].map(({ key, table, numerator, denominator, what }) => {
+    const printed = ch6(key, table);
+    return {
+      tool: "reserving.ratio_triangle",
+      source: friedlandRef(F[key]),
+      cases: [{
+        name: `${table.replace("table_", "Table ")}, the ratio of ${what}`,
+        input: { numerator, denominator },
+        expect: printed.values.flatMap((row2, i) => row2.flatMap((value, j) => value === null ? [] : [{
+          what: `${printed.origins[i]} at ${printed.ages[j]}`,
+          printed: value,
+          tolerance: FACTOR + 0.5 * (1 + numerator.values[i][j] / denominator.values[i][j]) / denominator.values[i][j],
+          actual: (res) => res.values.ratios[i][j] ?? NaN
+        }]))
+      }]
+    };
+  })
+);
 CHECKS.push(
   ...[
     { exhibit: W.a7_lr_indication, loss: 11, fixed: 12, variable: 13, profit: 14, plr: 15, change: 16 },
@@ -2544,87 +9076,154 @@ CHECKS.push(
     }]
   }))
 );
-var pv = (r) => Number(r.values.present_value);
-var flows = (n, from, amount) => Array.from({ length: n }, (_, k) => ({ time: from + k, amount: amount(k) }));
-var QUESTION_CHECKS = [
+var FOUR = 5e-5 + 1e-9;
+var A1 = W.a1_assumptions;
+var B1 = W.b1_assumptions;
+CHECKS.push(
   {
-    tool: "finance.present_value",
-    question: "fm-026",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 26",
-    quotes: ["5000", "7% per year", "20 payments", "one year from today", "5%"],
-    input: { i: 0.05, flows: flows(20, 1, (k) => 5e3 * 1.07 ** (k + 1)) },
-    tolerance: 50,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-071",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 71",
-    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
-    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
-    input: { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] },
-    tolerance: 0.5,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-082",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 82",
-    quotes: ["30-year annuity", "5% annual effective", "first payment of the annuity is due in ten years in the amount of 1,000", "increase by 500 each year"],
-    input: { i: 0.05, flows: flows(30, 10, (k) => 1e3 + 500 * k) },
-    tolerance: 0.5,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-225",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 225",
-    quotes: ["| 1 | 10 | 4.0% |", "| 2 | 12 | 4.5% |", "| 3 | 15 | 5.5% |", "| 4 | 20 | 7.0% |"],
-    input: {
-      flows: [
-        { time: 1, amount: 10, spot: 0.04 },
-        { time: 2, amount: 12, spot: 0.045 },
-        { time: 3, amount: 15, spot: 0.055 },
-        { time: 4, amount: 20, spot: 0.07 }
+    tool: "ratemaking.pure_premium_method",
+    source: wernerRef(W.b5_pp_indication),
+    cases: [{
+      // Row (16)'s total pure premium carries row (17)'s reinsurance cost per exposure, as row (22) adds it.
+      name: "Rows (21) and (22), the variable permissible loss ratio and indicated rate",
+      input: {
+        pure_premium: row(W.b5_pp_indication, 16) + row(W.b5_pp_indication, 17),
+        fixed: row(W.b5_pp_indication, 18),
+        variable: row(W.b5_pp_indication, 19),
+        profit: row(W.b5_pp_indication, 20)
+      },
+      expect: [
+        { what: "variable permissible loss ratio", printed: row(W.b5_pp_indication, 21), tolerance: PERCENT, actual: (r) => Number(r.values.variable_permissible_loss_ratio) },
+        // Three inputs printed to the cent, divided by the permissible loss ratio, beside the rate's own half cent.
+        { what: "indicated rate", printed: row(W.b5_pp_indication, 22), tolerance: 5e-3 + 0.015 / row(W.b5_pp_indication, 21), actual: (r) => Number(r.values.indicated_rate) }
       ]
-    },
-    tolerance: 5e-3,
-    value: pv
-  }
-];
-QUESTION_CHECKS.push(
+    }]
+  },
+  ...[
+    { exhibit: W.a7_lr_indication, fixed: 12, variable: 13, profit: 14, plr: 15, key: "variable_permissible_loss_ratio" },
+    { exhibit: W.b5_pp_indication, fixed: null, variable: 19, profit: 20, plr: 21, key: "variable_permissible_loss_ratio" },
+    // Appendix C treats every expense, ULAE included, as variable.
+    { exhibit: W.c7_lr_indication, fixed: null, variable: 9, profit: 10, plr: 11, key: "permissible_loss_ratio" }
+  ].map(({ exhibit, fixed, variable, profit, plr, key }) => ({
+    tool: "ratemaking.permissible_loss_ratio",
+    source: wernerRef(exhibit),
+    cases: [{
+      name: `Row (${plr}), the ${key === "permissible_loss_ratio" ? "" : "variable "}permissible loss ratio`,
+      input: { fixed: fixed === null ? 0 : row(exhibit, fixed), variable: row(exhibit, variable), profit: row(exhibit, profit) },
+      expect: [{ what: "permissible loss ratio", printed: row(exhibit, plr), tolerance: PERCENT, actual: (r) => Number(r.values[key]) }]
+    }]
+  })),
   {
-    tool: "finance.present_value",
-    question: "fm-245",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 245",
-    quotes: ["annual effective interest rate of 5%", "10-year annuity-immediate", "annual payment of 100", "increases each year by 15%"],
-    input: { i: 0.05, flows: flows(10, 1, (k) => 100 * 1.15 ** k) },
-    tolerance: 0.5,
-    value: pv
+    tool: "ratemaking.expense_ratios",
+    source: wernerRef(W.a21_expenses),
+    cases: [{
+      // Each type's three years, summed: the exhibit's three-year weighted average.
+      name: "Rows (1)\u2013(5) c, e and f, and the provisions (6) and (7)",
+      input: {
+        rows: W.a21_expenses.types.map((t) => ({
+          type: t.type,
+          expenses: t.expenses.reduce((a, b) => a + b, 0),
+          premium: t.premium.reduce((a, b) => a + b, 0),
+          fixed_share: t.fixed_share
+        }))
+      },
+      expect: [
+        ...W.a21_expenses.types.flatMap((t, k) => [
+          { what: `${t.type}, three-year ratio`, printed: t.weighted, tolerance: PERCENT, actual: (r) => values(r, "ratio")[k] },
+          { what: `${t.type}, fixed`, printed: t.fixed, tolerance: PERCENT, actual: (r) => values(r, "fixed")[k] },
+          { what: `${t.type}, variable`, printed: t.variable, tolerance: PERCENT, actual: (r) => values(r, "variable")[k] }
+        ]),
+        { what: "fixed expense provision", printed: W.a21_expenses.fixed_provision, tolerance: PERCENT, actual: (r) => Number(r.values.fixed_provision) },
+        { what: "variable expense provision", printed: W.a21_expenses.variable_provision, tolerance: PERCENT, actual: (r) => Number(r.values.variable_provision) }
+      ]
+    }]
   },
   {
-    tool: "finance.present_value",
-    question: "fm-281",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 281",
-    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
-    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
-    input: { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1e3 }] },
-    tolerance: 0.5,
-    value: pv
-  }
+    tool: "ratemaking.trend_fit",
+    source: wernerRef(W.a11_premium_trend),
+    // The fits are of the printed averages, column (3), as the exhibit's own are.
+    cases: Object.entries(W.a11_premium_trend.fits).map(([n, printed]) => ({
+      name: `the ${n}-point exponential fit to average written premium at current rate level`,
+      input: { per_year: 4, latest: Number(n), points: W.a11_premium_trend.points.map((p2) => ({ period: p2.quarter, value: p2.average })) },
+      expect: [{ what: `${n}-point annual trend`, printed, tolerance: PERCENT, actual: (r) => Number(r.values.trend) }]
+    }))
+  },
+  {
+    tool: "ratemaking.trend_fit",
+    source: wernerRef(W.a15_loss_trend),
+    cases: ["frequency", "severity", "pure_premium"].flatMap((measure) => Object.entries(W.a15_loss_trend.fits).map(([n, fits]) => ({
+      name: `the ${n}-point exponential fit to ${measure.replace("_", " ")}`,
+      input: { per_year: 4, latest: Number(n), points: W.a15_loss_trend.points.map((p2) => ({ period: p2.quarter, value: p2[measure] })) },
+      expect: [{ what: `${n}-point ${measure.replace("_", " ")} trend`, printed: fits[measure], tolerance: PERCENT, actual: (r) => Number(r.values.trend) }]
+    })))
+  },
+  ...[
+    { exhibit: W.a19_loss_trend_periods, assumptions: A1, periodTolerance: 5e-3 + 1e-9 },
+    // Appendix B prints the period to one decimal.
+    { exhibit: W.b12_loss_trend_periods, assumptions: B1, periodTolerance: 0.05 + 1e-9 }
+  ].map(({ exhibit, assumptions, periodTolerance }) => {
+    const latest = exhibit.rows[exhibit.rows.length - 1];
+    return {
+      tool: "ratemaking.trend_factor",
+      source: wernerRef(exhibit),
+      cases: [{
+        name: `Columns (5) and (6), the projected trend period and factor for accident year ${latest.year}`,
+        input: { trend: latest.projected_trend, basis: "accident", year: Number(latest.year), effective: assumptions.effective, in_effect: assumptions.in_effect_months, term: assumptions.term_months },
+        expect: [
+          { what: "projected trend period", printed: latest.projected_period, tolerance: periodTolerance, actual: (r) => Number(r.values.period) },
+          { what: "projected trend factor", printed: latest.projected_factor, tolerance: FOUR, actual: (r) => Number(r.values.factor) }
+        ]
+      }]
+    };
+  }),
+  {
+    tool: "ratemaking.on_level_factors",
+    source: wernerRef(W.a10_rate_level_factors),
+    cases: [{
+      // The exhibit weights the cumulative rate levels as Current Rate Level - 1 prints them, to four decimals.
+      name: "Columns (1a), (2) and (4), by the parallelogram method on Current Rate Level - 1's history",
+      input: {
+        changes: W.a9_rate_changes.groups.filter((g) => g.date !== null).map((g) => ({ date: g.date, change: g.change })),
+        term: A1.term_months,
+        basis: "calendar",
+        first: Number(W.a10_rate_level_factors.rows[0].year),
+        last: Number(W.a10_rate_level_factors.rows[W.a10_rate_level_factors.rows.length - 1].year),
+        rounding: "four"
+      },
+      expect: W.a10_rate_level_factors.rows.flatMap((y, k) => [
+        ...y.portions.map((p2, g) => ({ what: `${y.year}, group ${W.a9_rate_changes.groups[g].group}`, printed: p2, tolerance: FOUR, actual: (r) => r.values.portions[k][g] })),
+        { what: `${y.year} average rate level`, printed: y.average, tolerance: FOUR, actual: (r) => values(r, "averages")[k] },
+        { what: `${y.year} on-level factor`, printed: y.factor, tolerance: FOUR, actual: (r) => values(r, "factors")[k] }
+      ])
+    }]
+  },
+  ...[
+    { exhibit: W.ch4_annual_written, written: "4.7", earned: null, earnedExhibit: null, term: 12, basis: "calendar" },
+    { exhibit: W.ch4_annual_earned, written: null, earned: "4.11", earnedExhibit: null, term: 12, basis: "calendar" },
+    { exhibit: W.ch4_annual_earned, written: "4.13", earned: "4.13", earnedExhibit: null, term: 12, basis: "policy" },
+    { exhibit: W.ch4_semiannual, written: "4.18", earned: "4.19", earnedExhibit: null, term: 6, basis: "calendar" },
+    { exhibit: W.ch4_semiannual, written: "4.20", earned: "4.21", earnedExhibit: null, term: 6, basis: "policy" }
+  ].map(({ exhibit, written, earned, term, basis }) => {
+    const tables = exhibit.tables;
+    const table = tables[written ?? earned];
+    const asOf = Number(table.years[table.years.length - 1].slice(3));
+    return {
+      tool: "ratemaking.earned_premium",
+      source: (() => {
+        const named = [written, earned].filter((t, i, all) => t && all.indexOf(t) === i);
+        return wernerRef({ ...exhibit, locator: `Chapter 4, Table${named.length > 1 ? "s" : ""} ${named.join(" and ")}` });
+      })(),
+      cases: [{
+        name: `${basis === "policy" ? "policy" : "calendar"} year exposures of ${term}-month policies, as of 12/31/${asOf}`,
+        input: { term, basis, as_of: asOf, policies: table.policies.map((p2) => ({ policy: p2.policy, effective: p2.effective, amount: p2.exposure })) },
+        expect: [
+          ...written ? tables[written].by_year.map((v, k) => ({ what: `${tables[written].years[k]} written`, printed: v, tolerance: 5e-3 + 1e-9, actual: (r) => values(r, "written")[k] })) : [],
+          ...earned ? tables[earned].by_year.map((v, k) => ({ what: `${tables[earned].years[k]} earned`, printed: v, tolerance: 5e-3 + 1e-9, actual: (r) => values(r, "earned")[k] })) : []
+        ]
+      }]
+    };
+  })
 );
-var questionRef = (q) => ({
-  question: q.question,
-  title: q.label,
-  url: `/quiz?ids=${q.question}`,
-  locator: q.label
-});
 function verifyCheck(check) {
   const spec = toolById(check.tool);
   if (!spec) throw new Error(`No tool ${check.tool}`);
@@ -2643,11 +9242,20 @@ function verifyCheck(check) {
 function checksFor(toolId) {
   return [
     ...CHECKS.filter((c) => c.tool === toolId).map((c) => c.source),
-    ...QUESTION_CHECKS.filter((q) => q.tool === toolId).map(questionRef)
+    ...QUESTION_CHECKS.filter((q) => q.steps.some((s) => s.tool === toolId)).map(questionRef)
   ];
 }
 function checkedValueCount(toolId) {
   return CHECKS.filter((c) => c.tool === toolId).reduce((n, c) => n + c.cases.reduce((m, k) => m + k.expect.length, 0), 0);
+}
+function runQuestionCheck(q) {
+  const results = [];
+  for (const step of q.steps) {
+    const spec = toolById(step.tool);
+    if (!spec) throw new Error(`No tool ${step.tool}`);
+    results.push(runTool(spec, step.input(results)));
+  }
+  return q.value(results);
 }
 
 // src/lib/tools/schema.ts
@@ -2676,6 +9284,8 @@ function fieldSchema(f) {
       };
     case "choice":
       return { type: "string", enum: f.options.map((o) => o.value), default: f.default, description: `${f.description}${judgment}` };
+    case "date":
+      return { type: "string", format: "date", default: f.default, description: `${f.description} As YYYY-MM-DD.${judgment}` };
     case "table":
       return {
         type: "array",
@@ -2795,6 +9405,7 @@ export {
   normalizeInput,
   readNumber,
   runPath,
+  runQuestionCheck,
   runTool,
   sourceLine,
   toolById,

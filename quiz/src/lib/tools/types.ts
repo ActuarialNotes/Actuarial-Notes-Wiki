@@ -10,7 +10,7 @@
  * serverless functions (`npm run tools:bundle`), outside the app's `@/` alias.
  */
 
-export type PracticeArea = 'reserving' | 'ratemaking' | 'credibility' | 'finance'
+export type PracticeArea = 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
 export type NumberUnit = 'percent' | 'money' | 'factor' | 'count' | 'years' | 'plain'
@@ -35,12 +35,19 @@ export interface NumberField extends FieldBase {
   max: number
   /** The slider's step, in stored units. */
   step: number
-  /** The slider's end, where `max` is only the validation bound (an amount can be any size). */
+  /** The slider's ends, where `min` and `max` are only the validation bounds (an amount can be any size). */
+  sliderMin?: number
   sliderMax?: number
   /** What the card prints for 0, where 0 means something other than nothing ("All" years). */
   zeroLabel?: string
   default: number
   integer?: boolean
+}
+
+/** A date, held as 'YYYY-MM-DD' (an effective date, a valuation date). */
+export interface DateField extends FieldBase {
+  kind: 'date'
+  default: string
 }
 
 export interface ChoiceField extends FieldBase {
@@ -73,7 +80,7 @@ export interface TriangleField extends FieldBase {
   default: Triangle
 }
 
-export type ToolField = NumberField | ChoiceField | TableField | TriangleField
+export type ToolField = NumberField | ChoiceField | DateField | TableField | TriangleField
 
 export type TableRow = Record<string, string | number | null>
 

@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c775ffb9aa52ab7ed740318eadf76845ae013d885b0b951e66f23a8fb5e69aec
-  sources: []
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section II paras 1 a-e, 2 a-d, 3 a-c and closing sentence (pp.9-10); Section V defs 5, 6, 10, 19, 20 (pp.13-16); Coverage A exclusion e (p.2), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/CGL Who Is an Insured.md

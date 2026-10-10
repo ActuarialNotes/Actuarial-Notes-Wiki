@@ -4,13 +4,13 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1bbe0750591ae6654d26bc9013fd738a69c4ebc15f9ab34031655ec92dda63c4
+  content_hash: sha256:713d691f06000c4b71eac1b21c7432792a3a6faf3217a648e37626641a98572e
   sources:
     - "NAIC, Statistical Handbook of Data Available to Insurance Regulators (2012), as hosted by the Alaska Division of Insurance, §1.3 financial vs statistical data, §1.4 pooled data and statistical agents, §1.6 role of statistical agents and statistical plans (data elements, formats, coding), §2.3.1-2.3.3 control totals, reconciliation to Annual Statement State Pages, validity checks; §5 private passenger auto data elements; §23A unit statistical reports; App. A statistical agents (AAIS, ISO, NCCI), PDF pp.13-30, 71-76, 229-232, 289-298, sha256:b2929917f42e54e41b4904be523f776f28c21c482933613eca3432982b7561ca — https://www.commerce.Alaska.gov/web/Portals/11/Pub/INS_StatisticalHandbookDataInsurance%20Regulators.pdf"
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 External Data / Statistical Plans, printed pp.44-45 (PDF pp.56-57); App. D advisory loss costs and company deviation, PDF pp.394-398, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "NCCI, ABCs of Experience Rating (copy hosted by CEIWC), 'Data Used on the Experience Rating Worksheet': payroll and loss information used to calculate the mod comes from unit statistical reports filed under NCCI's Statistical Plan, sha256:268bbb28e4894f10ca942274a62ac2bcd6237e9278ddd1df8f414da99e0f31ed — https://www.ceiwc.com/PDFs/ABCs-of-Experience-Rating-NCCI.pdf"
     - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Statistical Plan.md
 ---
@@ -23,7 +23,7 @@ A **Statistical Plan** is a standardized set of rules and codes by which insurer
 
 - **Symbols:** $L_{j,c,t}$ and $E_{j,c,t}$ are the losses and [[Earned Exposure|earned exposure]] that insurer $j$ reports for class $c$ in territory $t$, and $\text{LC}_{c,t}$ is the industry [[Loss Cost|loss cost]] for that cell. The second block shows how an insurer with thin data can blend its own experience with the industry figure using a [[Credibility|credibility]] weight $Z$.
 - **What a record holds:** A statistical plan defines a record layout and the code lists that fill it. A premium record typically carries the state, the line and subline, the class, the territory, the coverage, the limit and deductible, the policy effective date, and the exposure and premium amounts. A loss record carries the same classification codes with the accident date, the number of claims, and the paid and outstanding losses.
-- **Coded fields:** Every characteristic is reported as a code from the plan's tables rather than as free text, so that one insurer's "downtown core" and another's "central business district" both map to the same territory code. The agent's edits reject records with codes that are not on the lists.
+- **Coded fields:** Every characteristic is reported as a code from the plan's tables rather than as free text, so that one insurer's "downtown core" and another's "central business district" both map to the same territory code. The agent's edits flag records with codes that are not on the lists, and the insurer must correct them.
 - **Uses in ratemaking:** An advisory organization such as ISO uses the pooled data to develop loss costs and rating factors that member insurers can adopt or adjust. A small insurer's own data are too thin for credible class and territory relativities, so the industry statistics give it a starting point.
 - **Uses in regulation:** Regulators require insurers to report statistical data to a licensed or designated statistical agent, and use the compiled data to review rate filings, monitor market conditions and study topics such as availability of coverage. In workers compensation, NCCI's unit statistical data also feed [[Experience Rating|experience rating]] of individual employers.
 - **Statistical data versus financial data:** Statistical plans report data at a much finer level than the [[NAIC Annual Statement|annual statement]], and agents compare an insurer's statistical totals with its financial reporting to check that nothing was lost. The two are designed for different purposes, so timing and definitions can differ and have to be reconciled.

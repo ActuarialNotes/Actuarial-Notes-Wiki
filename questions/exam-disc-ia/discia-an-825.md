@@ -14,12 +14,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4d000a3e41de9d7c10806f7d87c21caefb59ebf4ef24595c69d6387cd96d6c41
-  sources: []
+  sources:
+    - "ISO CG 20 10 04 13 Additional Insured – Owners, Lessees or Contractors – Scheduled Person or Organization (City of Hayward sample), paras A and C, sha256:1b76886d2dc2530490dd2f276acf6cacd08529e5fc75b33ed76b0cf3a15aba04 — https://hayward-ca.gov/sites/default/files/documents/Sample-Additional-Insured_0.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-825.md

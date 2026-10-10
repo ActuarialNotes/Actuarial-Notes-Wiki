@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:354026f9115bf361ed6960bc65393f27f4f6d3d9d1587107736d412c2631e4d1
-  sources: []
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Supplementary Payments — Coverages A and B, para 1 a-g and para 2 a-f with closing paragraphs (pp.8-9); Coverage A exclusion b(2) (p.2), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "IRMI glossary, 'supplementary payments', definition (supplementary payments reduce the limit under most professional liability policies), sha256:c92a78b38fd66ecb1c07cba19b0645c8dea320c74f369a3f7fb543dd8cad8320 — https://www.irmi.com/term/insurance-definitions/supplementary-payments"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/CGL Supplementary Payments.md

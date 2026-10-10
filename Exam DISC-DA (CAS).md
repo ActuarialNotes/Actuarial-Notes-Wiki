@@ -1,14 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:aeb88f13834f1bce62c146eaea5063046975d810bfefcb0777ff346b03f7c141
   sources:
     - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), PDF pp.1-3, sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
-    - "CAS, CAS Data and Insurance Series Courses page, read 2026-10-09: 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)'; 'The course fee includes one attempt at the exam'; Textbook / Review Notes / Course Guide / Flashcards 'supplemental ... not required'; links the three syllabus PDFs, sha256:3e0a0a62640d7ceb371c520997757d169f8735e81a473a45a12ba7468198e298 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
-    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced', sha256:a84507a4d89728d73d486a1baae822d65d097911608d6cb7f89be5470e5f3e3d — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
+    - "CAS, CAS Data and Insurance Series Courses page, copy fetched 2026-10-10 (browser user agent; the cache fetcher got HTTP 504): 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)', each linking its 2022-12 syllabus PDF; 'Each course itself contains learning objectives and all the educational material to meet these objectives and successfully complete the exam. The course fee includes one attempt at the exam.'; Textbook 'identical to the online course', Review Notes 'a condensed version of the textbook', Course Guide 'sample questions and answers', Flashcards — 'supplemental ... but are not required'; 'Register for CAS DISCs' links https://web.theinstitutes.org/casualty-actuarial-society, sha256:da8a31d8a4e331bb240d5924a56b3eb1f037469fc043f20151abbe63020ae947 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
+    - "CAS, 'CAS Announces Details on New CAS Course on Data Analytics' (05/12/2022): 'CAS Online Course assignments are self-paced'; 'Candidates must pass a final course exam to receive course credit', copy fetched 2026-10-10, sha256:95547588717fc74e8126c8154fbe114d253140cd8aca54fee99ffefcbf0f6768 — https://www.casact.org/article/cas-announces-details-new-cas-course-data-analytics"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam DISC-DA (CAS).md

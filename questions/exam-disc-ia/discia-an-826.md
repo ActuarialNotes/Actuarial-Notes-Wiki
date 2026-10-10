@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ba04861eee11de0359bfad3e2293908a74ecb1603eba0e96df37ffc36d717314
-  sources: []
+  sources:
+    - "FC&S Editors, 'Claims-Made CGL Form' (PropertyCasualty360, Feb 18 2014), reproducing CG 00 02 04 13 Coverage A/B triggers, conditions and Section V Extended Reporting Periods, CG 00 02 04 13 Coverage A para b and Section V paras 1-5, sha256:50deda297f1951ab725a435ed84e2aef1287e833a2365374cede46df9213a9b7 — https://www.propertycasualty360.com/fcs/2014/02/18/claims-made-cgl-form"
+    - "Craig F. Stanovich, 'The Claims-Made CGL Policy' (Austin & Stanovich / IRMI Expert Commentary, Nov 2012), pp.2-5, sha256:ecdd3b4915a46649d53fd844be39f49d3994758f9e0ed6028230f208b76d497f — https://austinstanovich.com/pdf/claims-made-cgl-policy.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-826.md

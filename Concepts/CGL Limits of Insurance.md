@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7bdf692b022c2b5b0cdb47c4bf2ccae306d419a54f930c78718006d3df804ca3
-  sources: []
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Section III paras 1-7 and the annual-period paragraph (pp.10-11), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "ISO CG 25 03 05 09 Designated Construction Project(s) General Aggregate Limit (NY OGS SPC Exhibit 21), paras A-E, sha256:509a3393d259f4582657f70278d7e328c56fcf7c1af5b0fc3fc6a091ec1bec17 — https://ogs.ny.gov/spc-exhibit-21"
+    - "ISO CG 20 10 04 13 Additional Insured – Owners, Lessees or Contractors – Scheduled Person or Organization (City of Hayward sample), para C (lesser of contract or available limits), sha256:1b76886d2dc2530490dd2f276acf6cacd08529e5fc75b33ed76b0cf3a15aba04 — https://hayward-ca.gov/sites/default/files/documents/Sample-Additional-Insured_0.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/CGL Limits of Insurance.md

@@ -1,12 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aa6a224e774cecb4fc79eb5253829b61cb18da5134a9576df07137d1b3f65b5c
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CG 20 10 04 13 Additional Insured – Owners, Lessees or Contractors – Scheduled Person or Organization (City of Hayward sample), paras A-C, sha256:1b76886d2dc2530490dd2f276acf6cacd08529e5fc75b33ed76b0cf3a15aba04 — https://hayward-ca.gov/sites/default/files/documents/Sample-Additional-Insured_0.pdf"
+    - "DASNY sample endorsements: ISO CG 20 10 04 13, CG 20 37 04 13, CG 20 01 04 13, CG 20 37 04 13 paras A-B; CG 20 01 04 13, sha256:dcb2734e92fede914e0caaf08f46ba527e34cfde7c218b021bd970a0315ee2a1 — https://www.dasny.org/sites/default/files/rfp-documents/2024-01/5b.%20Sample%20Endorsement.pdf"
+    - "ISO CG 24 04 05 09 Waiver of Transfer of Rights of Recovery Against Others to Us, full text, sha256:9b2b5c2d0afcd1dfd98d7bdc7595929ba25980b93e947439f3cab050947200de — https://www.mofbinsurance.com/Content/PDFs/PolicyForms/CPP/CG24040509.pdf"
+    - "ISO CG 25 03 05 09 Designated Construction Project(s) General Aggregate Limit (NY OGS SPC Exhibit 21), paras A-E, sha256:509a3393d259f4582657f70278d7e328c56fcf7c1af5b0fc3fc6a091ec1bec17 — https://ogs.ny.gov/spc-exhibit-21"
+    - "Ted Kinney, 'Liquor Liability Coverage Changes under New ISO Forms', IA Magazine, May 23 2013, liquor endorsements CG 21 50/21 51/29 52/29 53, sha256:a58026708cc1e9f3a44e92763eb3f3fd58afd33720eaca1357199cf9de997431 — https://www.iamagazine.com/2013/05/23/liquor-liability-coverage-changes-under-new-iso-forms/"
+    - "FC&S Editors, 'Claims-Made CGL Form' (PropertyCasualty360, Feb 18 2014), reproducing CG 00 02 04 13 Coverage A/B triggers, conditions and Section V Extended Reporting Periods, CG 00 02 04 13 Coverage A trigger and Section V Extended Reporting Periods paras 1-6, sha256:50deda297f1951ab725a435ed84e2aef1287e833a2365374cede46df9213a9b7 — https://www.propertycasualty360.com/fcs/2014/02/18/claims-made-cgl-form"
+    - "Craig F. Stanovich, 'The Claims-Made CGL Policy' (Austin & Stanovich / IRMI Expert Commentary, Nov 2012), pp.1-5, retroactive date, BERP, SERP, sha256:ecdd3b4915a46649d53fd844be39f49d3994758f9e0ed6028230f208b76d497f — https://austinstanovich.com/pdf/claims-made-cgl-policy.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/CGL Endorsements.md
 ---

@@ -13,13 +13,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6dae455b33a62bfb456af44580ad37e18ae31435578a88f138e9d53e56a56c91
-  sources: []
-  open_findings: 0
+  sources:
+    - "IRMI glossary, 'owners and contractors protective (OCP) liability coverage', definition, sha256:23f03e4cfed80ccf026d0dab18a94e9c6474f377e57126ba4f63e2b61292709b — https://www.irmi.com/term/insurance-definitions/owners-and-contractors-protective-(ocp)-liability-coverage"
+    - "IRMI glossary, 'designated contractor', definition, sha256:7dc1f90691ae185072f75769dbc19acbbbf3fd6d34248621856ccbd6638e3174 — https://irmi.com/term/insurance-definitions/designated-contractor"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-830.md
 ---

@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0f2571bbb0dec31265441cd5be8a7118d2ed2e357847f72074ead5615dc4ef04
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage B para 1 and exclusions a-p (pp.6-7); Coverage A exclusion o (p.5); Section III paras 2 and 4 (pp.10-11); Section V defs 1 and 14 (pp.13, 15), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/CGL Coverage B.md
 ---

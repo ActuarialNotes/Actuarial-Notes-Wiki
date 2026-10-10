@@ -4,7 +4,7 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cba09a70f5b2945150b30f09fbf51fe83c87b2f7d2ea0e096103463a5df1efbb
+  content_hash: sha256:d696b1d375b22baf22bdf3c2a3e4f435e254ef1d26c85d79dee7e7357fc125a3
   sources:
     - "PostgreSQL 17 Documentation, Description (general processing of SELECT, steps 1-8); WHERE Clause; SELECT List (output names in ORDER BY/GROUP BY, not WHERE/HAVING), sha256:16d6c1ac8132a80f1a157883d3fae1c07fca9196b44e76c4574027f13d830a7f — https://www.postgresql.org/docs/17/sql-select.html"
     - "PostgreSQL 17 Documentation, §2.7 WHERE selects input rows before aggregates, HAVING groups after; WHERE must not contain aggregates; condition without aggregate more efficient in WHERE, sha256:df158bcbc7924e1fbe49821aab78e37df53a7e14ac4cc8befdc480fee72b7e35 — https://www.postgresql.org/docs/17/tutorial-agg.html"
@@ -16,7 +16,7 @@ verification:
     - "PostgreSQL 17 Documentation, §9.18 COALESCE, sha256:30ef51aafd582617bbc6b538f21fb77149001f937cc795e23f54b4501db45146 — https://www.postgresql.org/docs/17/functions-conditional.html"
     - "MySQL 8.4 Reference Manual §15.2.13 SELECT Statement, alias 'can be used in GROUP BY, ORDER BY, or HAVING clauses'; not permissible in WHERE, sha256:94ac7713ee060fc295f2258a235fc52352ae1f395f396fdd2f8853e7711ca129 — https://dev.mysql.com/doc/refman/8.4/en/select.html"
     - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/SQL.md
 ---
@@ -42,7 +42,7 @@ ORDER BY total_paid DESC;
 - **`GROUP BY` and aggregate functions:** `GROUP BY` combines rows that share the same values of the grouping columns into one output row, and aggregate functions compute one value per group: `COUNT(*)` counts rows, `COUNT(col)` counts rows where `col` is not null, and `SUM`, `AVG`, `MIN` and `MAX` work on the non-null values. Without `GROUP BY`, an aggregate treats the whole table as one group.
 - **`HAVING` filters groups:** `HAVING` selects groups after the aggregates are computed, so its condition normally uses one, such as territories with at least 50 claims. A condition that needs no aggregate belongs in `WHERE`, which is also cheaper, because the rows it removes are never grouped.
 - **`ORDER BY` sorts the result:** Without it, rows come back in an unspecified order that must not be relied on. Sorting is ascending unless `DESC` is written, and each later sort column breaks ties in the earlier ones. The direction applies to each column separately: `ORDER BY x, y DESC` sorts `x` ascending.
-- **Aliases:** `AS` gives an output column a name (a column alias), which can be used in `ORDER BY` but not in `WHERE` or `HAVING`, where the expression has to be written out again, because those steps run before the select list is computed. A table alias (`FROM claim AS c`) gives a table a short name, which keeps join conditions readable and is required to join a table to itself.
+- **Aliases:** `AS` gives an output column a name (a column alias), which can be used in `ORDER BY` but not in `WHERE`, where the expression has to be written out again, because that step runs before the select list is computed. In standard SQL and PostgreSQL the alias cannot be used in `HAVING` either; MySQL is an exception and permits an alias in `HAVING`. A table alias (`FROM claim AS c`) gives a table a short name, which keeps join conditions readable and is required to join a table to itself.
 - **Nulls:** A null is an unknown value, so comparing it with `=` or `<>` gives null rather than true or false, and the row fails a `WHERE` condition. Test for it with `IS NULL` or `IS NOT NULL`, and use `COALESCE` to substitute a value. Aggregates other than `COUNT` return null, not zero, when no rows are selected ([[Missing Data]]).
 - **Related tools:** [[Table Join|Joins]] combine tables, a [[Database Index|database index]] speeds up filtering and joining on a column, and a [[User-Defined Function|user-defined function]] packages a rule for reuse inside queries. The same operations exist for an in-memory [[Dataframe|dataframe]] in R or pandas, and a query's result is itself a [[Structured Data|structured]] table.
 
@@ -105,4 +105,4 @@ ORDER BY total_paid DESC;
 > - **`COUNT(*)` versus `COUNT(col)`:** `COUNT(*)` counts rows and `COUNT(col)` counts non-null values of `col`, and `AVG` divides by the non-null count. A question with nulls in the column usually turns on this.
 > - **`= NULL` matches nothing:** Use `IS NULL`. A `<>` condition also drops the null rows, which is easy to miss.
 > - **No `ORDER BY`, no order:** A query without `ORDER BY` returns rows in no guaranteed order, so "the first row" of its result is not defined.
-> - **An alias does not exist yet in `WHERE`:** A column alias from the select list can be used in `ORDER BY` but not in `WHERE` or `HAVING`. Repeat the expression there.
+> - **An alias does not exist yet in `WHERE`:** A column alias from the select list can be used in `ORDER BY` but not in `WHERE`, and in standard SQL and PostgreSQL not in `HAVING` either (MySQL permits it there). Repeat the expression.

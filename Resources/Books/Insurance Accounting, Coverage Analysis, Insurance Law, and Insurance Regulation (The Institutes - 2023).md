@@ -7,12 +7,15 @@ date: "2023"
 Type: "Course"
 Available from: "[web.theinstitutes.org](https://web.theinstitutes.org/casualty-actuarial-society)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c75005fb6bd09a050c98cb2606e141a6e76fc809002cda6f5b278f76be38811b
-  sources: []
+  sources:
+    - "The Institutes, CAS DISC IA – Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation Course Syllabus (© 2023), PDF pp.1-4, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
+    - "CAS, CAS Data and Insurance Series Courses page, copy fetched 2026-10-10 (browser user agent; the cache fetcher got HTTP 504): 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)', each linking its 2022-12 syllabus PDF; 'Each course itself contains learning objectives and all the educational material to meet these objectives and successfully complete the exam. The course fee includes one attempt at the exam.'; Textbook 'identical to the online course', Review Notes 'a condensed version of the textbook', Course Guide 'sample questions and answers', Flashcards — 'supplemental ... but are not required'; 'Register for CAS DISCs' links https://web.theinstitutes.org/casualty-actuarial-society, sha256:da8a31d8a4e331bb240d5924a56b3eb1f037469fc043f20151abbe63020ae947 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
+    - "The Institutes, Casualty Actuarial Society Online Courses page, copy fetched 2026-10-10: course records 'Introduction to Data and Analytics' abbreviation 'CAS DISC DA', 'Risk Management and Insurance Operations' 'CAS DISC RM', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation' 'CAS DISC IA'; packages 'Online course, printed course book, printable study outline, assignment quizzes, practice exams, simulated credentialing exam, mobile app, plus one exam attempt', sha256:1f4bb936518c361d041d9cbf411963df17bc8a2bd7a029c9e70ef541242de0c9 — https://web.theinstitutes.org/casualty-actuarial-society"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (The Institutes - 2023).md"

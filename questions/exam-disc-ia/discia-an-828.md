@@ -13,12 +13,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ba4463af25b067d4effb1d41481427c2f3b9d4f9ee4ff6ae21287ce5b1d29602
-  sources: []
+  sources:
+    - "DASNY sample endorsements: ISO CG 20 10 04 13, CG 20 37 04 13, CG 20 01 04 13, CG 20 01 04 13 (p.4), sha256:dcb2734e92fede914e0caaf08f46ba527e34cfde7c218b021bd970a0315ee2a1 — https://www.dasny.org/sites/default/files/rfp-documents/2024-01/5b.%20Sample%20Endorsement.pdf"
+    - "ISO CG 24 04 05 09 Waiver of Transfer of Rights of Recovery Against Others to Us, full text, sha256:9b2b5c2d0afcd1dfd98d7bdc7595929ba25980b93e947439f3cab050947200de — https://www.mofbinsurance.com/Content/PDFs/PolicyForms/CPP/CG24040509.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-828.md

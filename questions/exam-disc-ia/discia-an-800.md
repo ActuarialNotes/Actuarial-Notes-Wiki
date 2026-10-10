@@ -13,13 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ef68feeab051b15f2904daa28d49df8ee3e3b75e97ea9c6d107beecd64d7ff03
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (ISO 2012, 16 pp.), Coverage A para 1.b(3)-1.d (p.1); Section II para 1 (p.9), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-800.md
 ---

@@ -13,13 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fbbef231953f52280c35893efd02b0cc00751530dfebb2cdedab28c8e6aa7b9e
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO CG 25 03 05 09 Designated Construction Project(s) General Aggregate Limit (NY OGS SPC Exhibit 21), paras A, B, C, sha256:509a3393d259f4582657f70278d7e328c56fcf7c1af5b0fc3fc6a091ec1bec17 — https://ogs.ny.gov/spc-exhibit-21"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-827.md
 ---

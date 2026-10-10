@@ -47,7 +47,7 @@ An **Accounting Rule Hierarchy** ranks the sources of accounting guidance within
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The objective pairs accounting frameworks with rule hierarchies. Expect a question that names several sources of guidance and asks which governs, or asks what makes a source authoritative under GAAP or SAP.
 > - **Prescribed versus permitted:** A short scenario, such as a state law that applies to every domestic insurer or one insurer's approved exception, asks which kind of practice it is and how it is disclosed.
-> - **SAP and GAAP together:** A question can ask how a new GAAP standard enters statutory accounting, which happens only when the NAIC adopts it, adopts it with modification, or rejects it.
+> - **SAP and GAAP together:** A question can ask how a new GAAP standard enters statutory accounting, which happens only when the NAIC adopts it or adopts it with modification.
 
 > [!warning]- Exam traps
 > - **The Manual does not outrank state law:** Statutory statements follow the domiciliary state's prescribed and permitted practices. The Manual provides the common standard against which departures are measured and disclosed.

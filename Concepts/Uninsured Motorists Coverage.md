@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:894f6aac8b090508d63c7ef25cd8aa42fe7a2e5bcc7533cbb34c33a68c593d43
-  sources: []
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part C, pp.6–8; Part E C, p.12, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "ISO PP 03 11 01 05 Underinsured Motorists Coverage (© ISO 2003; copy posted by Hagerty), Insuring Agreement, def. C, Limit of Liability B, pp.1–2, sha256:0238ec0f9164ddbe715c8defafd275ee1fe5f2b30ba4a561aea53904fbc1e7cf — https://www.hagerty.com/EDocs/Download?id=2835"
+    - "ISO PP 14 03 07 23 Uninsured Motorists Coverage – Virginia, Insuring Agreement A–F, pp.1–2, sha256:6db2461c87cfbed2327bf312f4d18144c7d628f976a4525362293aea01b22207 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-14-03-07-23.pdf"
+    - "Rough Notes PF&M, PP 03 11 Underinsured Motorists Coverage (Sept 2024), Definition of underinsured motor vehicle; Lyman example, sha256:1a6f7981b53258f842a14cf19b7962139c903a0a65c0c443e26cd8034be6dd6e — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0607.HTM"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Uninsured Motorists Coverage.md

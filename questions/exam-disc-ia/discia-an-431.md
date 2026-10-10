@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3b40afe5217e8f9d0967b32c52ca7fe05eb7ed77450f51a58e1544d4cedb28a3
-  sources: []
+  sources:
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Sections I and II Conditions C–D, p.23, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-431.md

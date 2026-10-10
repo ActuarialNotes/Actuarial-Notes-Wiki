@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:76bdc68944f68e3036238e01eedd73360a9341cd75795819eb18b87ff449d971
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Section II – Conditions A–J and Sections I and II – Conditions A–G, pp.21–24, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part F Termination, p.13, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/HO-3 Coverage Conditions.md
 ---

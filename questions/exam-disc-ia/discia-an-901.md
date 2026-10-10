@@ -11,12 +11,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f639754bf8420687c3fbf585a22e6e574ae4c57e4895261b6237c3225569c392
-  sources: []
+  sources:
+    - "Texas Department of Public Safety, Financial Responsibility Insurance Certificate (SR-22), SR-22 requirements, sha256:6e459c9ff0aab5821ec98ef355f31ea4eb9390fa0a3ae34d578ef86eb9105edc — https://www.dps.texas.gov/node/676"
+    - "IRMI glossary, financial responsibility law, definition, sha256:60714ce8dd24be24f0d5c028e063e9abeeffc56ec0dd055628671d61b3741072 — https://www.irmi.com/term/insurance-definitions/financial-responsibility-law"
+    - "Insurance Information Institute, Background on: Compulsory Auto/Uninsured Motorists, sections on compulsory laws, enforcement, penalties, UM, no pay no play, history; limits table, sha256:aa7498e2fd868e312225a20ca08a888db7dab55acc680d4499b704d6b0ef7476 — https://www.iii.org/article/background-on-compulsory-auto-uninsured-motorists"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-901.md

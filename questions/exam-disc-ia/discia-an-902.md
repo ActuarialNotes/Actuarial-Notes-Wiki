@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2e75adb6d141f0c94355e91075ef6045f624e5c6613f75b25f7241866f4b1c48
-  sources: []
+  sources:
+    - "Insurance Information Institute, Background on: No-fault auto insurance, The Different Auto Insurance Systems, sha256:e06a65313d6092233b852f044c19f24cc5214b323e033cb69169585a2fc65c0a — https://www.iii.org/article/background-on-no-fault-auto-insurance"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-902.md

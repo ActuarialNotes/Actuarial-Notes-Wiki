@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:96c7c6444d16ec7c53cb1ccfd8195ad5b1815fb13f526a18d4dd6099650b3a08
-  sources: []
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part C Insured B.2 and Other Insurance 1–2, pp.6–7, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-404.md

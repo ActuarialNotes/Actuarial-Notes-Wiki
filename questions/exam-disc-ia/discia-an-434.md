@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4b7d484a99a37aa47b83456b1693808616df1bb77210deff602fb6ba36a9eceb
-  sources: []
+  sources:
+    - "ISO HO 04 54 10 00 Earthquake (© ISO 1999), A–D, p.1, sha256:482ba852fa920fddc10d71f40081a7f0b4f696c9a8a0680a08a7e7787c4998f1 — https://soi.policyport.com/wp-content/uploads/2018/04/HO-04-54-10-00.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-434.md

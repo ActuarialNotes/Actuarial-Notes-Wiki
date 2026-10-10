@@ -1,11 +1,27 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:01c837af9de5263bb6547411114e0c7806b321751d30eae95b5c26882dc05d23
-  sources: []
+  sources:
+    - "ISO PP 13 63 01 20 Miscellaneous Type Vehicle Endorsement – Virginia, Definitions I.A–C, Part A B, Part D A–D, pp.2–4, sha256:dea8ecb84b104d91d368358a2f08fa2da07fe8b44b04f5ddfedb8405f6ee6297 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-63-01-20.pdf"
+    - "ISO PP 13 57 01 20 Trailer/Camper Body Coverage (Maximum Limit Of Liability) – Virginia, A–F, pp.1–2, sha256:d20c8d361e8de8436669bd508b69b3c9fddda1ce5bb6474bd8cb3643acff0c9d — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-57-01-20.pdf"
+    - "ISO PP 13 58 12 20 Coverage For Damage To Your Auto (Maximum Limit Of Liability) – Virginia, Notice and Limit Of Liability A–C, p.1, sha256:12b9cb6c099d3ecac948d5b08139c57e31dfb9915e9c29d8ce9beca8bb391c67 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-58-12-20.pdf"
+    - "ISO PP 13 59 01 20 Single Liability Limit – Virginia, Limit Of Liability A–B, p.1, sha256:2769afaf7eb8187dd6440f529cc194ba459b61cb4a6363ee38c8555e7f3fe3fb — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-59-01-20.pdf"
+    - "ISO PP 13 68 01 20 Miscellaneous Type Vehicle Amendment (Motor Homes) – Virginia, Warning and schedule, pp.1–2, sha256:3cc923c12e0599629cb80841468d7def0e45c755948777bcfface8c6a9cdce3e — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-68-01-20.pdf"
+    - "ISO PP 03 11 01 05 Underinsured Motorists Coverage (© ISO 2003; copy posted by Hagerty), Insuring Agreement, def. C, Limit of Liability B, pp.1–2, sha256:0238ec0f9164ddbe715c8defafd275ee1fe5f2b30ba4a561aea53904fbc1e7cf — https://www.hagerty.com/EDocs/Download?id=2835"
+    - "NC 03 23 07 25 Miscellaneous Type Vehicle Endorsement (NCRB, includes ISO material; copy posted by Hagerty), III. Medical Payments Coverage, p.3, sha256:4f183b8f7e208470c9d464b3dbaaf7aa34f5c4f70ec84669bbca55241c4955e6 — https://www.hagerty.com/EDocs/Download?id=5142344"
+    - "Risk Education, Miscellaneous Type Vehicle Endorsement PP 03 23 revisions summary, p.1, sha256:808a502810811e3e3262687615a61db29953f586331355b0226e512f849190aa — https://www.riskeducation.org/wp-content/uploads/2022/10/Misc-Veh-Endt-Summary-1.pdf"
+    - "Rough Notes PF&M, ISO Personal Auto Policy Endorsements (Sept 2024), entries PP 03 02–PP 03 35, PP 23 41, sha256:a11fbdaa373b8a43ba98c56ca9cb7aee06c804c8d7c4d9564f0580a25c10ab0a — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0403.HTM"
+    - "Rough Notes PF&M, PP 03 22 Named Non-Owner Coverage (Sept 2024), Definitions, Parts A–D, sha256:3799fde2be70b303c04f119d4a461f995bbdd3cb27144fd2817d0b729d0e72c4 — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0600.HTM"
+    - "Rough Notes PF&M, PP 03 34 Joint Ownership Coverage (Sept 2024), opening and Definitions, sha256:75b3c3560cca916814ab8b3a2658810df031496c201714e8e3221aac645f5eff — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0601.HTM"
+    - "Rough Notes PF&M, PP 03 06 Extended Non-Owned Coverage (Sept 2024), Coverage Analysis, sha256:24e023b72007f45d19dea14245a9e9a22dd5b155bd2015aade58ddf4ae8a6884 — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0604.HTM"
+    - "Rough Notes PF&M, PP 03 08 Coverage For Damage To Your Auto (Maximum Limit of Liability) (Sept 2024), Coverage Analysis and example, sha256:f4bfe4ce851f125fa7185f3b31430ede503b912d77b92c9d168f9ff8b36dfb8e — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0606.HTM"
+    - "Rough Notes PF&M, PP 03 23 Miscellaneous Type Vehicle (Sept 2024), Schedule, Definitions, Part A, sha256:530c6b57305fef0ae17ed7cdf2a958f4078677c544add68e5b50ceddcad949dc — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0610.HTM"
+    - "Rough Notes PF&M, PP 03 28 Miscellaneous Type Vehicle Amendment (Motor Homes) (Sept 2024), Warning and Exclusion Analysis, sha256:abe5aacd4e47c45c420d6c3e23a2400a356826fb28640f83fd898b16dfa0177f — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0611.HTM"
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part A B.1, Part B 1, Part D 7, pp.4–10, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/PAP Endorsements.md

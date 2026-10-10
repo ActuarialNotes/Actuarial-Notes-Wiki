@@ -1,0 +1,15 @@
+---
+target: Concepts/Personal Auto Insurance Laws.md
+created: 2026-10-10
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv09
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: every rule, number and list checked against the cited form text; worked examples recomputed; links resolve; U.S. framing; exam-section references checked against Exam DISC-IA (CAS).md
+- sources_checked: Insurance Information Institute, Background on: Compulsory Auto/Uninsured Motorists, sections on compulsory laws, enforcement, penalties, UM, no pay no play, history; limits table, sha256:aa7498e2fd868e312225a20ca08a888db7dab55acc680d4499b704d6b0ef7476 — https://www.iii.org/article/background-on-compulsory-auto-uninsured-motorists; Insurance Information Institute, Background on: No-fault auto insurance, The Different Auto Insurance Systems, sha256:e06a65313d6092233b852f044c19f24cc5214b323e033cb69169585a2fc65c0a — https://www.iii.org/article/background-on-no-fault-auto-insurance; Texas Department of Public Safety, Financial Responsibility Insurance Certificate (SR-22), SR-22 requirements, sha256:6e459c9ff0aab5821ec98ef355f31ea4eb9390fa0a3ae34d578ef86eb9105edc — https://www.dps.texas.gov/node/676; Maryland DBM FY2024 operating budget, Maryland Automobile Insurance Fund, D70J00.42 Insured Division and D70J00.47 Uninsured Division, pp.2–3, sha256:437ad83c90f881c250ec232531ed2df932434a466b22177563d20ed75fc104f2 — https://dbm.maryland.gov/budget/Documents/operbudget/2024/agency/MarylandAutomobileInsuranceFund.pdf; IRMI glossary, financial responsibility law, definition, sha256:60714ce8dd24be24f0d5c028e063e9abeeffc56ec0dd055628671d61b3741072 — https://www.irmi.com/term/insurance-definitions/financial-responsibility-law; IRMI glossary, assigned risk plan, definition, sha256:b73e8f7c5737d90162c6e7c7cd52ddd8261413a8690d122faabd5d13f0992fad — https://www.irmi.com/term/insurance-definitions/assigned-risk-plan; ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part A Out Of State Coverage and Financial Responsibility, p.4, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf
+- note: Texas SR-22 triggers, two years and lapse notice match Texas DPS; 30/60/25 matches the III table; MAIF Insured/Uninsured Divisions match the FY2024 Maryland budget; compulsory-law history (MA 1927), NH and VA exceptions, enforcement, penalties, 14.0% uninsured (IRC 2022), UJFs, UM mandatory in ~20 jurisdictions and offered elsewhere, no pay no play in about a dozen states, CA 10/20/3 and NJ basic policy match III; no-fault counts and threshold lists match III no-fault; FR definition matches IRMI. Several claims rest on III (rank 3) alone but are uncontroversial; medium. Example recomputes (80,000 paid, 18,000 owed).

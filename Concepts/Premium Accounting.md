@@ -91,7 +91,7 @@ verification:
 > - **Other issues:** Questions on nonadmitted overdue premium, EBUB and the premium deficiency reserve test the statutory reasoning: only assets that could pay claims are admitted, and a liability is added when the unearned premium cannot cover what is still owed.
 
 > [!warning]- Exam traps
-> - **Written on the effective date:** Statutory written premium is booked in full when the policy takes effect, not when it is billed or paid. Premium paid early is an advance premium liability, not written premium.
+> - **Written on the effective date:** Statutory written premium is booked in full when the policy takes effect, not when it is paid. Premium paid early is an advance premium liability, not written premium.
 > - **Ceded premium reduces premium:** Ceded premium is a reduction of written and earned premium for the ceding insurer, not an expense line.
 > - **Monthly pro rata uses mid-month:** A one-year policy written in March is $5/24$ unearned at year end, not $3/12$.
 > - **Nonadmitted is not written off:** Overdue premium that is nonadmitted is excluded from surplus but may still be collected. A balance that is probably uncollectible is written off and charged to income.

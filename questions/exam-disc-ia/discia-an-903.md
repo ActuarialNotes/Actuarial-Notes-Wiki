@@ -12,12 +12,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c33b2744c38b32fba0eced82ad1d273747f0bfa1da4ba9fcb4df931e2103eb79
-  sources: []
+  sources:
+    - "Maryland DBM FY2024 operating budget, Maryland Automobile Insurance Fund, D70J00.42 Insured Division and D70J00.47 Uninsured Division, pp.2–3, sha256:437ad83c90f881c250ec232531ed2df932434a466b22177563d20ed75fc104f2 — https://dbm.maryland.gov/budget/Documents/operbudget/2024/agency/MarylandAutomobileInsuranceFund.pdf"
+    - "Insurance Information Institute, Background on: Compulsory Auto/Uninsured Motorists, sections on compulsory laws, enforcement, penalties, UM, no pay no play, history; limits table, sha256:aa7498e2fd868e312225a20ca08a888db7dab55acc680d4499b704d6b0ef7476 — https://www.iii.org/article/background-on-compulsory-auto-uninsured-motorists"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-903.md

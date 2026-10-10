@@ -77,7 +77,7 @@ verification:
 > > **$K=100$**: very rigid — high bias, low variance (predictions are averaged over many neighbors, smoothing out local patterns but potentially missing fine structure).
 
 > [!tip]- How it appears on the exam
-> - **DISC-DA:** Section 7.1 covers basic data modeling techniques. Questions describe an insurance problem and ask whether it is supervised or unsupervised, a regression or a classification problem, or a prediction or an inference task, and which kind of technique fits, such as a [[Classification Tree|classification tree]] for a yes/no outcome or [[Clustering|clustering]] for segments with no target. Section 10.2 links here for how regulation and professional codes bear on data modeling.
+> - **DISC-DA:** Section 7.1 covers basic data modeling techniques. Questions describe an insurance problem and ask whether it is supervised or unsupervised, a regression or a classification problem, or a prediction or an inference task, and which kind of technique fits, such as a [[Classification Tree|classification tree]] for a yes/no outcome or [[Clustering|clustering]] for segments with no target.
 > - **MAS-II and SRM:** Questions compare methods on flexibility and interpretability and apply the bias-variance trade-off, as in the examples above.
 
 > [!warning]- Exam traps

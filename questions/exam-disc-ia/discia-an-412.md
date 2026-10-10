@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c3a109883d40f6dee3228eca8c3d1afa32a9cf88ecf0b6cb25b78e4a811ec998
-  sources: []
+  sources:
+    - "ISO PP 13 58 12 20 Coverage For Damage To Your Auto (Maximum Limit Of Liability) – Virginia, Notice and Limit Of Liability A–C, p.1, sha256:12b9cb6c099d3ecac948d5b08139c57e31dfb9915e9c29d8ce9beca8bb391c67 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-58-12-20.pdf"
+    - "Rough Notes PF&M, PP 03 08 Coverage For Damage To Your Auto (Maximum Limit of Liability) (Sept 2024), Coverage Analysis and example, sha256:f4bfe4ce851f125fa7185f3b31430ede503b912d77b92c9d168f9ff8b36dfb8e — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0606.HTM"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-412.md

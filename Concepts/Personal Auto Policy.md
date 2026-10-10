@@ -4,12 +4,14 @@ aliases:
   - ISO Personal Auto Policy
   - PAP
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d8bd4aa2fc39915908e800c6b7e72140768da3bd507dc947bca51756cdbb991c
-  sources: []
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Definitions and Parts A–F, pp.1–14, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "NAIC, Automobile Insurance: A Shopping Tool for Consumers (© 2014), pp.10–11 (printed 8–9), sha256:b03458a5fdf0192a263ce489c66c4c4d50cebc54a90916f3e18b266f30073977 — https://doi.colorado.gov/sites/doi/files/documents/Buyers%20Guide%20to%20Auto%20Insurance.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Personal Auto Policy.md

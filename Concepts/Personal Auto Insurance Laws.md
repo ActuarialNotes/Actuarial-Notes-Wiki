@@ -1,11 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ca8f0fad7749dff6931ae1c3c51d21f4f6916b26292767ac87b689ffd0cfb4dc
-  sources: []
+  sources:
+    - "Insurance Information Institute, Background on: Compulsory Auto/Uninsured Motorists, sections on compulsory laws, enforcement, penalties, UM, no pay no play, history; limits table, sha256:aa7498e2fd868e312225a20ca08a888db7dab55acc680d4499b704d6b0ef7476 — https://www.iii.org/article/background-on-compulsory-auto-uninsured-motorists"
+    - "Insurance Information Institute, Background on: No-fault auto insurance, The Different Auto Insurance Systems, sha256:e06a65313d6092233b852f044c19f24cc5214b323e033cb69169585a2fc65c0a — https://www.iii.org/article/background-on-no-fault-auto-insurance"
+    - "Texas Department of Public Safety, Financial Responsibility Insurance Certificate (SR-22), SR-22 requirements, sha256:6e459c9ff0aab5821ec98ef355f31ea4eb9390fa0a3ae34d578ef86eb9105edc — https://www.dps.texas.gov/node/676"
+    - "Maryland DBM FY2024 operating budget, Maryland Automobile Insurance Fund, D70J00.42 Insured Division and D70J00.47 Uninsured Division, pp.2–3, sha256:437ad83c90f881c250ec232531ed2df932434a466b22177563d20ed75fc104f2 — https://dbm.maryland.gov/budget/Documents/operbudget/2024/agency/MarylandAutomobileInsuranceFund.pdf"
+    - "IRMI glossary, financial responsibility law, definition, sha256:60714ce8dd24be24f0d5c028e063e9abeeffc56ec0dd055628671d61b3741072 — https://www.irmi.com/term/insurance-definitions/financial-responsibility-law"
+    - "IRMI glossary, assigned risk plan, definition, sha256:b73e8f7c5737d90162c6e7c7cd52ddd8261413a8690d122faabd5d13f0992fad — https://www.irmi.com/term/insurance-definitions/assigned-risk-plan"
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part A Out Of State Coverage and Financial Responsibility, p.4, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Personal Auto Insurance Laws.md

@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b2c02a3042049c8310d44334982980be76080ca4d78a17dd1a3d1bbf1b4c243a
-  sources: []
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part F Policy Period And Territory, p.13, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "Rough Notes PF&M, ISO Personal Auto Policy Endorsements (Sept 2024), entries PP 03 02–PP 03 35, PP 23 41, sha256:a11fbdaa373b8a43ba98c56ca9cb7aee06c804c8d7c4d9564f0580a25c10ab0a — https://www.rnc-pro.com/rnc-pro/pfm/400/410_0403.HTM"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-408.md

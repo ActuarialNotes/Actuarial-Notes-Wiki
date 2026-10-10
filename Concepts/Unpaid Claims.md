@@ -1,13 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-13
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:b3fcf7c7e9b2b5e4fe6d3310786ea4d77f8172fc825d800be97ac00373512f1b
   sources:
-    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007), sections 2.1, 2.11, 3.3, 3.6.4-3.6.5, standard pp.2-4 and 7, sha256:b921a3c59038fcb748214ed127e97dfe9df2111c97ac1223f8cf9952c16304e9"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 'Key Terminology', printed pp.13-14 (PDF pp.19-20), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 55 ¶4, 6.a-c, 11, 13-14 (PDF pp.362-363, 367); SSAP No. 62R ¶31 (PDF pp.441-442), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), Ch.2 p.12 (printed 11); Ch.22 p.306 (printed 305), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "ASOP No. 43, Property/Casualty Unpaid Claim Estimates (ASB, June 2007, updated for deviation language May 2011, Doc. No. 159), sections 2.1, 2.11 (PDF p.8) — re-fetched this run; this ASB copy's hash differs from the copy cited in run f8d9 (the 2011 deviation-language reissue), definitions identical, sha256:776302c442cb8d3210fc41269d38caeec4c547da8159084b80fa2ac4ce949cce — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop043_159.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), Ch.1 printed pp.13-14 — prior-pass source, re-fetched, hash unchanged, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Unpaid Claims.md

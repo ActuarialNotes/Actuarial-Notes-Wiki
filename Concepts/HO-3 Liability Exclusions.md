@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d6fa1da533992815efc61033717082cf8218da8cb527a07f02fed6a64abfb315
-  sources: []
+  sources:
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Definitions B.1, B.3, B.7; Section II – Exclusions A–G, pp.1–2, 17–20, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/HO-3 Liability Exclusions.md

@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1b49b486f1aab6e679baf0c4b82d5d529a39bd81f5118a84c47f1ebdc4457e09
-  sources: []
-  open_findings: 0
+  sources:
+    - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Definitions A–L, pp.1–2; Part A, pp.2–4, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "ISO PP 13 59 01 20 Single Liability Limit – Virginia, Limit Of Liability A–B, p.1, sha256:2769afaf7eb8187dd6440f529cc194ba459b61cb4a6363ee38c8555e7f3fe3fb — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-13-59-01-20.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/PAP Liability Coverage.md
 ---

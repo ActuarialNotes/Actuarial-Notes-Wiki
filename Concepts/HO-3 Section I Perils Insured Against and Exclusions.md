@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e1205084098aced348714d576f3e74abf4eeae103fbdd44abbbed3baca82b0f7
-  sources: []
+  sources:
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Section I – Perils Insured Against and Exclusions, pp.9–13, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/HO-3 Section I Perils Insured Against and Exclusions.md

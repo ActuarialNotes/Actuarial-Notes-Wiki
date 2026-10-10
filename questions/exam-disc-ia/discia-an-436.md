@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1096457900650f0aa1dd23484b416d87dbb06bde99b51375df6459437704e198
-  sources: []
+  sources:
+    - "ISO HO 04 90 04 91 Personal Property Replacement Cost (© ISO 1990; Auto Club forms index copy), paragraphs 1–2, sha256:869c43c273d3f479e07e17436267f6a0826ed0b772e49f3f41eaae2427203790 — https://services.autoclubmo.aaa.com/InsuranceAux/Forms/AR/HomeOwners/HO049004-91.html"
+    - "Auto Club Family Ins. Co. CO 04 90 07 05 Personal Property Replacement Cost (includes ISO material), paragraphs 1–2, sha256:c26f3d8c14eae615b11df8fdedb8247b4a65e38d317a1e07054a53a00a26c476 — https://services.autoclubmo.aaa.com/InsuranceAux/Forms/AR/HomeOwners/CO049007-05.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-436.md

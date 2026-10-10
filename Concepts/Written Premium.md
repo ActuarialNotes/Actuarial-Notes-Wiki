@@ -1,12 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0ddacad25c91633a5966335622aabd8dbec658497cb138d82fb2c8adc64d449a
+  content_hash: sha256:757b8958314ef12521fbc780b41b580f3f1c020b57fe4a8050c8c772e71a6b84
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.2 (PDF p.14), Ch. 5 pp.66-70 (PDF pp.78-82) and Ch. 5 premium trend pp.78-79 (PDF pp.90-91), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 53 ¶3-4, 6, 12, 14-15 (PDF pp.347-350); SSAP No. 62R ¶30 (62-8, PDF p.441), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), U&IE Part 1B columns, pp.82-83, 218 (printed 81-82, 217), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 p.2, Ch.5 pp.66-70, 78-79 (PDF pp.14, 78-82, 90-91) — prior-pass source, re-fetched this run, hash unchanged, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Written Premium.md
@@ -75,4 +77,4 @@ verification:
 > [!warning]- Exam traps
 > - **Net is after ceding:** Net written premium subtracts ceded premium from direct plus assumed; leaving out assumed business understates it.
 > - **Advance premium is not written:** Premium paid before the policy's effective date is a liability, not written premium, until coverage begins.
-> - **Written on the effective date:** Written premium is recorded when the policy takes effect, not when it is billed or collected.
+> - **Written on the effective date:** Written premium is recorded when the policy takes effect, not when it is collected.

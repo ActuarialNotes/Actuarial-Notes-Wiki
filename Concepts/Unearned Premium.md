@@ -1,12 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-12
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:405199b290de67ee94a94d01aca92caf5dea4d04d09a9d48a685386b38824c8d
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp.68-70 (PDF pp.80-82), incl. footnote 12 on short-rate tables, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 53 ¶6-8, 17-18 (PDF pp.348-350); SSAP No. 55 ¶4, 6 (PDF p.362), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), pp.34, 36-37 (printed 33, 35-36), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.5 pp.68-70 incl. footnote 12 (PDF pp.80-82) — prior-pass source, re-fetched this run, hash unchanged, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Unearned Premium.md

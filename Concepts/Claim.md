@@ -1,17 +1,23 @@
 ---
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-28
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:e17cc04edadc658bfd9839ad54a1dab9b238798bc5d3d48f89c1bb9266fab8f1
   sources:
-    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf — §II claim payment PDF p.2; §III frequency and severity PDF p.3; §VI losses vs claim payments PDF p.7"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 2016), Ch.1 claim, claimant, accident date PDF p.14; loss, losses and claims used interchangeably PDF p.15, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 (random sum Y = X1+...+XN: EY = E[X]E[N], Var(Y) = EN Var(X) + (EX)^2 Var(N)), fetched 2026-09-28, sha256:b02361ccef1565d4250b62e694cf7e84e96005add6eb5bb45dff9f51d72d12be — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
-    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §11.1.3 Splitting a Poisson process (N1(t) Poisson with rate lambda p), fetched 2026-09-28, sha256:2b83b99ec8feade5f4778629c16b496516b0d40ae3e284456afcf1cc6a3a4506 — https://www.probabilitycourse.com/chapter11/11_1_3_merging_and_splitting_poisson_processes.php"
-    - "SOA, Tables for Exam C (Fall 2009), exponential entry E[X^x] = theta(1 - e^(-x/theta)), PDF p.11, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS study note), claim life cycle PDF p.14, reopened claims and IBNR PDF p.20, reported claim count triangle PDF p.66, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "IRMI Insurance Glossary, 'claim' (fetched 2026-10-10), sha256:38c7e60380b2dc016b204eaa95c17228c89cf89e57152e7dcc4a37e300651b0b — https://www.irmi.com/term/insurance-definitions/claim"
+    - "IRMI Insurance Glossary, 'proof of loss' (fetched 2026-10-10), sha256:4a15c05bdb1431633d387a74200419f35393f5ab6c054c4bcdd72de6782d79f2 — https://www.irmi.com/term/insurance-definitions/proof-of-loss"
+    - "IRMI Insurance Glossary, 'first party insurance' (fetched 2026-10-10), sha256:345598aa5e91f2702abb219143b6331af4d3dfe650e779f0fcb151d439a3a9a0 — https://www.irmi.com/term/insurance-definitions/first-party-insurance"
+    - "IRMI Insurance Glossary, 'liability insurance' (fetched 2026-10-10), sha256:3d142cd30f5eb36026cf77cd347df7109ee125eedb4c584e9242a19eb7bf7dd2 — https://www.irmi.com/term/insurance-definitions/liability-insurance"
+    - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Conditions C.8, I, J (pp.14, 16), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, D Deductible, F.1 Coinsurance (pp.10, 13), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.1 PDF pp.14-15 — prior-pass source, re-fetched, hash unchanged, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §II, §III, §VI (PDF pp.2-3, 7) — re-fetched, hash unchanged, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §5.1.5 (fetched 2026-10-10), random sums — re-fetched; HTML hash differs from run 919b's copy, sha256:b7c8d711d8ba6910e0226b0beb5046d25a834faeeecc0ef5ce87ead3c15aede8 — https://www.probabilitycourse.com/chapter5/5_1_5_conditional_expectation.php"
+    - "Pishro-Nik, Introduction to Probability, Statistics, and Random Processes, §11.1.3 (fetched 2026-10-10), Poisson splitting — re-fetched; HTML hash differs from run 919b's copy, sha256:ee6db1bea6bec9eb05fbf1b8ec21a67b5b37ba380a8b425f8c99576739c86c0f — https://www.probabilitycourse.com/chapter11/11_1_3_merging_and_splitting_poisson_processes.php"
+    - "SOA, Tables for Exam C (Fall 2009), exponential E[X^x], PDF p.11 — re-fetched, hash unchanged, sha256:cefc3286baa0150b6520455e76104589f1187622212efe05a600926d0bf14e0f — https://www.soa.org/globalassets/assets/files/edu/edu-2009-fall-exam-c-table.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010), PDF pp.14, 20, 66 — re-fetched, hash unchanged, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claim.md

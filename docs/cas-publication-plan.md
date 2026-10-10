@@ -205,7 +205,7 @@ are mostly four-option multiple choice on a short insurance scenario, written wi
 it, and at least two for every new specific page. No published DISC questions exist to convert:
 The Institutes sells its course guide and publishes no samples.
 
-### 3.4 Fact check, then promote (DISCs promoted to beta 10 Oct 2026; fact check running)
+### 3.4 Fact check, then promote (beta 10 Oct 2026; DISC-DA and DISC-IA ready the same day)
 
 G2, G3 and G6 pass on all three DISCs, so they moved from development to beta and joined the
 DEFAULT track. The fact check runs as twelve packets, one per writer's area plus one for the
@@ -228,21 +228,24 @@ commercial text's *contents*.
 
 ### 3.5 What the fact check settled (10 Oct 2026)
 
-**Results.** Eleven fact-check packets and their clean-up rounds checked about 650 files. Every
-vault-written question was recomputed blind before its key was read. Below is how each DISC stood
-at the end of the day; the most recent results are pending (V4, V5, V8, W2).
+**Results.** Thirteen fact-check packets and their clean-up rounds checked about 700 files.
+Every vault-written question was recomputed blind before its key was read. The DISCs stood like
+this at the end of 10 Oct 2026:
 
-| Exam | Status | Remaining |
-|---|---|---|
-| **DISC-DA** | **ready** (7/7) | none |
-| **DISC-IA** | beta (6/7) | *Strict Liability* (dram-shop framing, being fixed) |
-| **DISC-RM** | beta | see below |
+| Exam | Status | Gates | What is left |
+|---|---|---:|---|
+| **DISC-DA** | **ready** | 7/7 | nothing |
+| **DISC-IA** | **ready** | 7/7 | nothing |
+| **DISC-RM** | beta | 5/7 | only decision D6 (below) |
 
-**DISC-RM** still has these open:
-- four new DISC-specific pages being written and checked;
-- *Period of Restoration* and question 217;
-- *Types of Reinsurance*'s IFRS 17 bullet;
-- the Institutes-only frameworks, below.
+On DISC-RM, everything else passes: the study guide, the course page, 62 of 65 concept pages, and
+141 of 146 questions. The three pages left are *Insurer Goals and Constraints*, *Insurance
+Marketing* and *Insurtech*, and the five questions left are 035, 041, 047, 233 and 471. All of
+them wait on D6.
+
+**MAS-I** was promoted to **ready** the same day. All 117 of its vault-written questions were
+fact checked in runs `masa` and `masb`. So were the shared pages that DISC additions had made
+stale.
 
 **Rules adopted while running it.** These apply to every later campaign.
 
@@ -255,6 +258,9 @@ at the end of the day; the most recent results are pending (V4, V5, V8, W2).
    it. Examples are *Levels of Strategy* and the four DISC-RM pages.
 3. **Don't make a DISC depend on another exam's commercial reading.** Five DISC-RM sections linked
    pages shared with Exam 9, whose Exam 9 half rests on Brehm et al.: 1.3, 1.4, 4.4, 5.1 and 15.3.
+   The same went for the underwriting lines, whose *Underwriting* page carries life and health
+   material no free source covers. Section 8.1 now links *Underwriting Authority*, and the six
+   lines on underwriting a coverage now link *Underwriting Process*.
    Those pages can't be verified until someone reads that book. Each of those sections now links its
    own DISC page, and the shared pages are left for the Exam 9 campaign.
 4. **Never cite an unauthorized copy.** A checker found a full commercial textbook on a university
@@ -278,9 +284,12 @@ teaches:
 - essential, desirable and available coverage.
 
 They are the content of *Insurer Goals and Constraints* and *Insurance Marketing*, and of questions
-035, 041, 047 and 233. They stay `in_review` until someone checks them against the course text, or
-they are rewritten to what open sources say. That choice is decision D6. *Insurtech* is in the same
-position, because no open text is current enough.
+035, 041, 047, 233 and 471. The essential/desirable/available split rested only on lecture notes,
+so it was removed from *Insurance as a Risk Management Technique*. That leaves questions 035 and
+471 testing material no page now teaches. All of these stay `in_review` until someone checks them
+against the course text, or they are rewritten to what open sources say, or the questions are
+retired. That choice is decision D6. *Insurtech* is in the same position, because no open text is
+current enough.
 
 ## 4. Order of work
 

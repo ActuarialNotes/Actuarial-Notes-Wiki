@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-10 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **991 of 2067 syllabus concept entries (48%)** have at least one question in their exam's own bank.
+> **991 of 2066 syllabus concept entries (48%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -42,8 +42,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam RET-301 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
 | [[Exam MAS-II (CAS)]] | `exam-mas-ii` (146) | 79 / 109 | 72% | 0 / 4 |
-| [[Exam DISC-DA (CAS)]] | `exam-disc-da` (68) | 41 / 42 | 98% | 0 / 10 |
-| [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (131) | 66 / 66 | 100% | 0 / 15 |
+| [[Exam DISC-DA (CAS)]] | `exam-disc-da` (70) | 42 / 42 | 100% | 0 / 10 |
+| [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (146) | 65 / 65 | 100% | 0 / 15 |
 | [[Exam DISC-IA (CAS)]] | `exam-disc-ia` (221) | 97 / 97 | 100% | 0 / 16 |
 | [[Exam 5 (CAS)]] | `exam-5` (349) | 129 / 138 | 93% | 0 / 2 |
 | [[Exam PCPA (CAS)]] | none | 0 / 30 | 0% | 3 / 3 |
@@ -52,7 +52,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (118) | 20 / 30 | 67% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (132) | 32 / 38 | 84% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **991 / 2067** | **48%** | |
+| **Total** | | **991 / 2066** | **48%** | |
 
 108 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -1957,8 +1957,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *4 of 20 uncovered*
 
-- [[Frequency]] — tagged in another bank (20)
-- [[Severity]] — tagged in another bank (26)
+- [[Frequency]] — tagged in another bank (21)
+- [[Severity]] — tagged in another bank (27)
 - [[Risk Experience]] — tagged in another bank (3)
 - [[Exposure Base]] — tagged in another bank (25)
 
@@ -1967,7 +1967,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *5 of 27 uncovered*
 
 - [[Variance]] — tagged in another bank (61)
-- [[Expected Value]] — tagged in another bank (101)
+- [[Expected Value]] — tagged in another bank (102)
 - [[Residual]] — tagged in another bank (3)
 - [[BIC]] — tagged in another bank (3)
 - [[Summary Statistics]] — tagged in another bank (1)
@@ -1994,7 +1994,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Double Lift Chart]] — tagged in another bank (1)
 - [[Quantile Plot]] — tagged in another bank (2)
 - [[Mean Square Error]] — tagged in another bank (10)
-- [[Standard Deviation]] — tagged in another bank (21)
+- [[Standard Deviation]] — tagged in another bank (23)
 
 ### D. Time Series with Constant Variance {15–25%}
 
@@ -2006,13 +2006,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam DISC-DA (CAS)
 
-*1 of 42 syllabus concepts have no question in `questions/exam-disc-da/`.*
-
-### 10. Ethical and Societal Considerations of Data Analytics
-
-*1 of 6 uncovered*
-
-- [[Predictive Analytics]] — tagged in another bank (7)
+*Every syllabus concept has at least one question.*
 
 ## Exam DISC-RM (CAS)
 
@@ -2262,7 +2256,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Premium Reserve]]
 - [[Parameter Estimation]] — tagged in another bank (1)
 - [[Moment]] — tagged in another bank (3)
-- [[Expected Value]] — tagged in another bank (101)
+- [[Expected Value]] — tagged in another bank (102)
 - [[Range of Indications]]
 - [[Ceded Loss Reserve]]
 - [[Types of Reinsurance]] — tagged in another bank (7)

@@ -1,6 +1,7 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-09 · Status: **plan**. Nothing here is built yet._
+_Last updated: 2026-10-09 · Status: **first set built** — eleven tools on the Tools page and in the
+MCP connector. §16 says what is built and what of this plan is still to do._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -368,7 +369,11 @@ and gives a corrected example. The MCP connector already does this
 
 ### 6.1 Where it lives
 
-**Recommendation: Tools is a third app mode**, beside Study and Cowork, in `lib/appMode.ts`:
+**Decided: Tools is a page in the sidebar** (`/tools`, between Projects and the Shop), inside
+Study mode and open to every reader, gated by `TOOLS_ENABLED`. The rest of this section is the
+option weighed against it, kept for the record.
+
+The option was a third app mode, beside Study and Cowork, in `lib/appMode.ts`:
 
 ```ts
 { id: 'tools', label: 'Tools', tagline: 'Actuarial calculators, for you and your AI',
@@ -869,8 +874,7 @@ previous phase's tools pass R6.
 
 ## 14. Open decisions (the product owner's call)
 
-1. **Mode or section?** Tools as a third mode (recommended, §6.1) or a sidebar entry in
-   Study mode. A third mode out of Preview puts the mode pill in front of every reader.
+1. ~~**Mode or section?**~~ Decided: a page in the sidebar, in Study mode (§6.1).
 2. **Access and pricing.** Recommended: every calculator free and signed-out (it's public
    method maths, it's the SEO and connector story, and an agent needs no account), with
    **Pro** for synced runs, Analyses, Cowork population and, later, higher API limits.
@@ -889,9 +893,101 @@ previous phase's tools pass R6.
 
 ## 15. Immediate next steps
 
-1. Ratify §3 (the ground rules) and decisions 1–3 in §14. Everything in Phase 0 depends on
-   them.
-2. Run the §8.2 bundling spike. It's the one technical unknown.
-3. Transcribe the first two fixtures: an FM sample solution for the Interest Converter and
-   Friedland's Ch. 7 example for Age-to-Age Factors. Then build Phase 0 against them, card
-   first: the card's look is the thing to settle before tools multiply.
+1. **Check the last two tools (R6).** Nine of the eleven reproduce a published example (§17).
+   Interest Converter and Annuity don't yet: the SOA FM sample set has no question either
+   answers on its own. Candidates are a textbook worked example (a Resources/Books FM text with
+   a free copy) or a chained check once Interest Converter can hand its rate to Annuity.
+2. Map more bank questions to tools (§9.2), so explanations gain **Work it in a tool** and the
+   agent eval has its set. Exam 5's reserving and ratemaking questions are the richest seam.
+3. Build the rest of Phase 1 (§11) on the card that now exists.
+
+## 16. What's built (2026-10-09)
+
+**Eleven tools**, each in its own file under `quiz/src/lib/tools/<area>/`:
+
+| Area | Tools |
+|---|---|
+| Reserving | Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson |
+| Ratemaking | Loss Ratio Method (with the variable permissible loss ratio as a tile) |
+| Credibility | Full Credibility Standard, Partial Credibility |
+| Financial mathematics | Interest Converter, Annuity, Present Value |
+
+**The engine** (`quiz/src/lib/tools/`): `types.ts` (the spec and the result envelope),
+`input.ts` (lenient in, strict out: `"5%"`, `"$1,200"`, a bare matrix for a triangle, rows as
+objects or arrays; errors that name the field and the fix), `hash.ts` (a synchronous SHA-256 of
+the canonical input), `run.ts` (the envelope: judgments marked `default` when the caller left
+them out), `schema.ts` (the JSON Schema an agent reads), `share.ts` (`#input=` run links),
+`registry.ts`. Relative imports only. Tested in `tools.test.ts`, including the registry's R9
+rules (one question, at most six scalar inputs, at most three tiles, every handoff accepted by
+its target).
+
+**One engine for the connector (§8.2).** The spike's answer was the fallback: the bundle is
+committed. `npm run tools:bundle` writes `quiz/api/_tools/engine.js` with esbuild (pinned as a
+dev dependency), and `lib/tools/bundle.test.ts` rebuilds it and fails when the committed copy
+differs, then runs every tool through both engines and requires byte-identical results (R1).
+
+**The connector** (`quiz/api/_mcp/server.js`): `list_tools`, `describe_tool`, `run_tool`, the
+server instructions' line on using them, and the skill's "Calculations" section. The three are
+`standalone`: they answer even when the knowledge base can't be loaded, with the method's
+pages unlinked. `run_tool` returns the envelope with `input_hash`, the method's concept pages
+(URL and fact check) and an `app_url` that opens the same run.
+
+**The app**: the sidebar row, `/tools` (catalogue: practice areas as `ListPanel`s, each row the
+tool's question) and `/tools/:slug` (the card alone), `pages/Tools.tsx`, lazy. The card is
+`components/tools/ToolCard.tsx` with `ToolGrid.tsx` (the editable table whose computed columns
+sit beside the inputs; the triangle with its cumulative ↔ incremental switch; Excel paste
+into both) and `ToolMenu.tsx` (copy link, copy for AI, copy JSON, `.xlsx` via
+`lib/toolExport.ts`, Send to…). Pure helpers are `lib/toolDraft.ts`. The title opens the
+method's concept pages in the concept popup, loading the wiki bundle on that first tap.
+`e2e/tools.spec.ts` covers the sidebar, a live recompute, an error kept to one line, Send to…,
+a run link and the phone fit.
+
+**Not built yet**, from §3–§11: published checks for Interest Converter and Annuity (§15);
+the agent eval (§9.4); `POST /api/tools/{id}` and the OpenAPI
+export (§7.2); the MCP prompts `reserve_analysis` / `rate_indication` / `check_my_work`; the
+`%%tool%%` marker on concept pages and the concept-menu row (§6.4); saved runs and Analyses
+(§6.5, §8.5); analytics events (§8.6); the notation and working as KaTeX rather than plain
+text.
+
+## 17. Tested against (R6)
+
+Nine tools reproduce published worked examples, value for value, in CI. One list,
+`quiz/src/lib/tools/checks.ts`, is both what `checks.test.ts` runs and what the card's ⋯ menu,
+the catalogue's tick and the connector's `tested_against` say, so a tool can only claim a check
+that passes.
+
+**Published documents (§9.1).** `scripts/tool_fixtures.py` reads the exhibits off the CAS's free
+copies of the two Exam 5 texts, mechanically, with no model retyping a number: the same rule as
+the question pipeline. It refuses a PDF whose sha256 isn't the printing it was written for, and
+records each exhibit's PDF page and printed page. The output is
+`quiz/src/lib/tools/fixtures/*.json`, committed. `scripts/test_tool_fixtures.py` tests its parsers.
+
+| Tool | Source | Held to |
+|---|---|---|
+| Age-to-Age Factors | Friedland (2010), Ch. 7, Exhibit I, Sheet 1 | the 45 age-to-age factors, and all six rows of averages: simple, medial and volume-weighted over the latest 3 or 5, geometric over the latest 4 |
+| Development to Ultimate | the same sheet, Part 4 | 10 CDFs and 10 percents reported, from the selected factors |
+| Chain Ladder | Ch. 7, Exhibit I, Sheet 3 | 20 ultimates, reported and paid |
+| Expected Claims | Ch. 8, Exhibit II, Sheet 1 | 10 expected claims, at each year's own ELR |
+| Bornhuetter-Ferguson | Ch. 9, Exhibit I, Sheet 1 | 60 values: percent unreported, expected unreported and ultimate, reported and paid |
+| Loss Ratio Method | Werner & Modlin (2016), Appendix A, LR Indication; Appendix C, LR Indication | the variable permissible loss ratio and indicated change, with and without a fixed provision |
+| Full Credibility Standard | Werner & Modlin, Ch. 12, p. 218 | z and the 1,082-claim standard at p = 90%, k = 5% |
+| Partial Credibility | Werner & Modlin, Ch. 12, p. 219; Appendices A-8, B-5, C-7 | Z for 100, 3,612, 683 and 283 claims |
+
+Each value is compared at the precision the source prints: three decimals for factors, a tenth of
+a percent for percentages, a dollar for amounts.
+
+**Published questions (§9.2).** Present Value reproduces six SOA Exam FM sample questions (26, 71,
+82, 225, 245, 281). The official answer is never copied into the check: the test reads the keyed
+option from the bank, and requires the tool to land within its printed precision *and* nearer it
+than any other option. Every input's printed form is quoted from the question's stem, and the
+test finds each quote there.
+
+**Two conventions the checks surfaced**, now explicit options rather than silent choices (§13):
+- *Latest n.* Friedland averages the latest 3 or 5 years, and the geometric mean over 4. Age-to-Age
+  Factors' average is now two judgments, the method and the latest years (0 for all), and
+  Expected Claims takes an optional ELR per origin, as Friedland's Chapter 8 sets 75% and 65%.
+- *Rounded CDFs.* Friedland rounds each CDF to three decimals, and takes percent reported and the
+  ultimates from the rounded CDF: unrounded, 1/1.0508 is 95.2% where the book prints 95.1%.
+  Development to Ultimate has a **CDFs: Unrounded / 3 decimals** choice. The Chain Ladder and B-F
+  checks take the printed CDFs as inputs, as a reader working the exhibit would.
+

@@ -1,0 +1,248 @@
+{
+  "generated_by": "scripts/tool_fixtures.py",
+  "source": {
+    "resource": "Basic Ratemaking (Werner - 2016)",
+    "title": "Werner & Modlin, Basic Ratemaking (CAS, 5th ed., 2016)",
+    "url": "https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf",
+    "sha256": "6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c"
+  },
+  "exhibits": {
+    "ch12_full_standard": {
+      "locator": "Chapter 12, classical credibility: the full credibility standard",
+      "printed_page": "218",
+      "p": 0.9,
+      "k": 0.05,
+      "z": 1.645,
+      "standard": 1082,
+      "pdf_page": 230
+    },
+    "ch12_square_root_rule": {
+      "locator": "Chapter 12, classical credibility: the square root rule",
+      "printed_page": "219",
+      "claims": 100,
+      "standard": 1082,
+      "z": 0.3,
+      "pdf_page": 231
+    },
+    "a7_lr_indication": {
+      "locator": "Appendix A, LR Indication",
+      "printed_page": "A-7",
+      "rows": {
+        "11": {
+          "label": "Selected Projected Loss and LAE Ratio",
+          "value": 0.619
+        },
+        "12": {
+          "label": "Fixed Expense Provision",
+          "value": 0.113
+        },
+        "13": {
+          "label": "Variable Expense Provision",
+          "value": 0.17
+        },
+        "14": {
+          "label": "UW Profit Provision",
+          "value": 0.05
+        },
+        "15": {
+          "label": "Variable Permissible Loss Ratio",
+          "value": 0.78
+        },
+        "16": {
+          "label": "Indicated Rate Change",
+          "value": -0.062
+        },
+        "17": {
+          "label": "Credibility",
+          "value": 1.0
+        },
+        "18": {
+          "label": "Trended Present Rates Indication",
+          "value": 0.062
+        },
+        "19": {
+          "label": "Credibility-Weighted Indicated Rate Change",
+          "value": -0.062
+        },
+        "20": {
+          "label": "Selected Rate Change",
+          "value": -0.062
+        }
+      },
+      "pdf_page": 344
+    },
+    "a8_credibility": {
+      "locator": "Appendix A, Credibility",
+      "printed_page": "A-8",
+      "rows": {
+        "1": {
+          "label": "Total Number of Claims in Historical Period",
+          "value": 3612
+        },
+        "2": {
+          "label": "Number of Claims for Full Credibility",
+          "value": 1082
+        },
+        "3": {
+          "label": "Credibility",
+          "value": 1.0
+        },
+        "4": {
+          "label": "Latest Indicated Rate Change",
+          "value": 0.132
+        },
+        "5": {
+          "label": "Last Rate Change Taken",
+          "value": 0.05
+        },
+        "6": {
+          "label": "Residual Indication",
+          "value": 0.078
+        },
+        "7": {
+          "label": "Projected Loss Trend",
+          "value": 0.005
+        },
+        "8": {
+          "label": "Projected Premium Trend",
+          "value": 0.02
+        },
+        "9": {
+          "label": "Net Trend",
+          "value": -0.015
+        },
+        "10": {
+          "label": "Trend Period",
+          "value": 1.0
+        },
+        "11": {
+          "label": "Trended Present Rates Indication",
+          "value": 0.062
+        }
+      },
+      "pdf_page": 345
+    },
+    "b5_pp_indication": {
+      "locator": "Appendix B, PP Indication",
+      "printed_page": "B-5",
+      "rows": {
+        "8": {
+          "label": "Selected Projected Non-Cat Pure Premium",
+          "value": 469.88
+        },
+        "9": {
+          "label": "Number of Claims",
+          "value": 683
+        },
+        "10": {
+          "label": "Claims Required for Full Crediblity",
+          "value": 1082
+        },
+        "11": {
+          "label": "Credibilty",
+          "value": 0.795
+        },
+        "12": {
+          "label": "Regional Non-Cat Pure Premium",
+          "value": 585.75
+        },
+        "13": {
+          "label": "Credibility-Weighted Non-Cat Pure Premium",
+          "value": 493.63
+        },
+        "14": {
+          "label": "Non-Modeled Cat Pure Premium",
+          "value": 29.11
+        },
+        "15": {
+          "label": "Modeled Cat Pure Premium",
+          "value": 74.57
+        },
+        "16": {
+          "label": "Total Pure Premium",
+          "value": 597.31
+        },
+        "17": {
+          "label": "Projected Net Reinsurance Cost Per Exposure",
+          "value": 15.68
+        },
+        "18": {
+          "label": "Projected Fixed Expense Per Exposure",
+          "value": 77.83
+        },
+        "19": {
+          "label": "Variable Expense Provision",
+          "value": 0.138
+        },
+        "20": {
+          "label": "Profit and Contingency Provision",
+          "value": 0.05
+        },
+        "21": {
+          "label": "Variable Permissible Loss Ratio",
+          "value": 0.812
+        },
+        "22": {
+          "label": "Indicated Rate",
+          "value": 850.76
+        },
+        "23": {
+          "label": "Selected Rate",
+          "value": 850.76
+        }
+      },
+      "pdf_page": 363
+    },
+    "c7_lr_indication": {
+      "locator": "Appendix C, LR Indication",
+      "printed_page": "C-7",
+      "rows": {
+        "8": {
+          "label": "Selected Loss and ALAE Ratio",
+          "value": 1.085
+        },
+        "9": {
+          "label": "Expense and ULAE Ratio",
+          "value": 0.347
+        },
+        "10": {
+          "label": "Profit and Contingency Provision",
+          "value": -0.05
+        },
+        "11": {
+          "label": "Permissible Loss Ratio",
+          "value": 0.703
+        },
+        "12": {
+          "label": "Statewide Indicated Rate Change",
+          "value": 0.543
+        },
+        "13": {
+          "label": "Number of Reported Claims",
+          "value": 283
+        },
+        "14": {
+          "label": "Claims Required for Full Credility Standard",
+          "value": 683
+        },
+        "15": {
+          "label": "Credibility",
+          "value": 0.644
+        },
+        "16": {
+          "label": "Countrywide Indicated Rate Change",
+          "value": 0.185
+        },
+        "17": {
+          "label": "Credibility-Weighted Indicated Rate Change",
+          "value": 0.416
+        },
+        "18": {
+          "label": "Selected Rate Change",
+          "value": 0.416
+        }
+      },
+      "pdf_page": 380
+    }
+  }
+}

@@ -15,6 +15,7 @@ import werner from './fixtures/basic-ratemaking-2016.json'
 import { runTool } from './run'
 import { toolById } from './registry'
 import type { ToolResult } from './types'
+import { QUESTION_CHECKS, questionRef, type QuestionCheck } from './questionChecks'
 
 export interface SourceRef {
   /** The vault's Resources/Books page, for a published document. */
@@ -287,114 +288,6 @@ CHECKS.push(
   })),
 )
 
-/**
- * Published exam questions a tool answers outright (docs/actuarial-tools.md
- * §9.2). The official answer is *not* here: `checks.test.ts` reads it from the
- * question bank — the keyed option's printed value — and requires the tool to
- * land within that value's printed precision and closer to it than to any
- * other option. Each input's printed form is quoted from the stem, and the test
- * finds every quote there, so an input can't be mistyped unnoticed.
- */
-export interface QuestionCheck {
-  tool: string
-  /** The bank id; the file is questions/<bank>/<id>.md. */
-  question: string
-  bank: string
-  /** Who published it and as what: "SOA Exam FM sample question 26". */
-  label: string
-  quotes: string[]
-  input: Record<string, unknown>
-  /** Half a unit of the keyed option's last printed digit. */
-  tolerance: number
-  value: (result: ToolResult) => number
-}
-
-const pv = (r: ToolResult) => Number(r.values.present_value)
-const flows = (n: number, from: number, amount: (k: number) => number) =>
-  Array.from({ length: n }, (_, k) => ({ time: from + k, amount: amount(k) }))
-
-export const QUESTION_CHECKS: QuestionCheck[] = [
-  {
-    tool: 'finance.present_value',
-    question: 'fm-026',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 26',
-    quotes: ['5000', '7% per year', '20 payments', 'one year from today', '5%'],
-    input: { i: 0.05, flows: flows(20, 1, k => 5000 * 1.07 ** (k + 1)) },
-    tolerance: 50,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-071',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 71',
-    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
-    quotes: ['1000 par value 20-year bond', '10% convertible semiannually', '9% coupons payable semiannually', 'redemption value of 1200'],
-    input: { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] },
-    tolerance: 0.5,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-082',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 82',
-    quotes: ['30-year annuity', '5% annual effective', 'first payment of the annuity is due in ten years in the amount of 1,000', 'increase by 500 each year'],
-    input: { i: 0.05, flows: flows(30, 10, k => 1000 + 500 * k) },
-    tolerance: 0.5,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-225',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 225',
-    quotes: ['| 1 | 10 | 4.0% |', '| 2 | 12 | 4.5% |', '| 3 | 15 | 5.5% |', '| 4 | 20 | 7.0% |'],
-    input: {
-      flows: [
-        { time: 1, amount: 10, spot: 0.04 },
-        { time: 2, amount: 12, spot: 0.045 },
-        { time: 3, amount: 15, spot: 0.055 },
-        { time: 4, amount: 20, spot: 0.07 },
-      ],
-    },
-    tolerance: 0.005,
-    value: pv,
-  },
-]
-
-QUESTION_CHECKS.push(
-  {
-    tool: 'finance.present_value',
-    question: 'fm-245',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 245',
-    quotes: ['annual effective interest rate of 5%', '10-year annuity-immediate', 'annual payment of 100', 'increases each year by 15%'],
-    input: { i: 0.05, flows: flows(10, 1, k => 100 * 1.15 ** k) },
-    tolerance: 0.5,
-    value: pv,
-  },
-  {
-    tool: 'finance.present_value',
-    question: 'fm-281',
-    bank: 'exam-fm',
-    label: 'SOA Exam FM sample question 281',
-    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
-    quotes: ['1000 par value ten-year bond', '7.6% semiannual coupons', '6.0% convertible semiannually', 'end of year six'],
-    input: { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1000 }] },
-    tolerance: 0.5,
-    value: pv,
-  },
-)
-
-const questionRef = (q: QuestionCheck): SourceRef => ({
-  question: q.question,
-  title: q.label,
-  url: `/quiz?ids=${q.question}`,
-  locator: q.label,
-})
-
 /** Run one check: every printed value the tool doesn't reproduce at the source's precision. */
 export function verifyCheck(check: ToolCheck): CheckMismatch[] {
   const spec = toolById(check.tool)
@@ -416,11 +309,22 @@ export function verifyCheck(check: ToolCheck): CheckMismatch[] {
 export function checksFor(toolId: string): SourceRef[] {
   return [
     ...CHECKS.filter(c => c.tool === toolId).map(c => c.source),
-    ...QUESTION_CHECKS.filter(q => q.tool === toolId).map(questionRef),
+    ...QUESTION_CHECKS.filter(q => q.steps.some(s => s.tool === toolId)).map(questionRef),
   ]
 }
 
 /** How many printed values a tool's checks hold it to. */
 export function checkedValueCount(toolId: string): number {
   return CHECKS.filter(c => c.tool === toolId).reduce((n, c) => n + c.cases.reduce((m, k) => m + k.expect.length, 0), 0)
+}
+
+/** Work one published question through its chain of tools; the number it comes to. */
+export function runQuestionCheck(q: QuestionCheck): number {
+  const results: ToolResult[] = []
+  for (const step of q.steps) {
+    const spec = toolById(step.tool)
+    if (!spec) throw new Error(`No tool ${step.tool}`)
+    results.push(runTool(spec, step.input(results)))
+  }
+  return q.value(results)
 }

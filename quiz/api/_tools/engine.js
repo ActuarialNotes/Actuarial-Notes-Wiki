@@ -240,12 +240,12 @@ var presentValue = {
       const discount = r.spot == null ? v ** t : (1 + Number(r.spot)) ** -t;
       return Object.assign({}, r, { discount, pv: amount * discount });
     });
-    const pv2 = rows.reduce((s, r) => s + r.pv, 0);
+    const pv = rows.reduce((s, r) => s + r.pv, 0);
     const total = rows.reduce((s, r) => s + Number(r.amount), 0);
     const warnings = flows2.some((r) => Number(r.time) < 0) ? ["A cash flow has a negative time: it is accumulated to today, not discounted."] : [];
     return {
       tiles: [
-        { symbol: "PV", label: "Today", value: pv2, unit: "money" },
+        { symbol: "PV", label: "Today", value: pv, unit: "money" },
         { symbol: "\u03A3CF", label: "Undiscounted", value: total, unit: "money" }
       ],
       table: {
@@ -257,7 +257,7 @@ var presentValue = {
           { key: "pv", label: "PV", kind: "number", unit: "money", computed: true }
         ],
         rows,
-        footer: { time: "Total", amount: total, spot: null, discount: null, pv: pv2 }
+        footer: { time: "Total", amount: total, spot: null, discount: null, pv }
       },
       trace: [
         { label: "Discount factor", formula: `v = 1/(1 + ${i})`, result: v, unit: "factor" },
@@ -267,14 +267,717 @@ var presentValue = {
           result: r.pv,
           unit: "money"
         })),
-        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv2, unit: "money" }
+        { label: "Present value", formula: "\u03A3 CF\u209C v\u1D57", result: pv, unit: "money" }
       ],
       warnings,
-      values: { present_value: pv2, undiscounted: total, v },
-      summary: `Present value ${formatValue(pv2, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
+      values: { present_value: pv, undiscounted: total, v },
+      summary: `Present value ${formatValue(pv, "money")} of ${formatValue(total, "money")} in undiscounted cash flows at ${formatValue(i, "percent")}.`
     };
   },
   method: { concepts: ["Present Value", "Discount Function"], readings: [] }
+};
+
+// src/lib/distributionMath.ts
+var LANCZOS_COEFFS = [
+  676.5203681218851,
+  -1259.1392167224028,
+  771.3234287776531,
+  -176.6150291621406,
+  12.507343278686905,
+  -0.13857109526572012,
+  9984369578019572e-21,
+  15056327351493116e-23
+];
+function logGamma(x) {
+  if (x < 0.5) {
+    return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - logGamma(1 - x);
+  }
+  const z = x - 1;
+  let a = 0.9999999999998099;
+  for (let i = 0; i < LANCZOS_COEFFS.length; i++) a += LANCZOS_COEFFS[i] / (z + i + 1);
+  const t = z + LANCZOS_COEFFS.length - 0.5;
+  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(a);
+}
+var EPS = 1e-14;
+var TINY = 1e-300;
+var MAX_ITER = 500;
+function gammaPSeries(a, x) {
+  let ap = a;
+  let sum = 1 / a;
+  let del = sum;
+  for (let n = 0; n < MAX_ITER; n++) {
+    ap += 1;
+    del *= x / ap;
+    sum += del;
+    if (Math.abs(del) < Math.abs(sum) * EPS) break;
+  }
+  return sum * Math.exp(-x + a * Math.log(x) - logGamma(a));
+}
+function gammaQContinuedFraction(a, x) {
+  let b = x + 1 - a;
+  let c = 1 / TINY;
+  let d = 1 / b;
+  let h = d;
+  for (let i = 1; i <= MAX_ITER; i++) {
+    const an = -i * (i - a);
+    b += 2;
+    d = an * d + b;
+    if (Math.abs(d) < TINY) d = TINY;
+    c = b + an / c;
+    if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < EPS) break;
+  }
+  return Math.exp(-x + a * Math.log(x) - logGamma(a)) * h;
+}
+function regularizedGammaP(a, x) {
+  if (a <= 0 || !(x >= 0)) return NaN;
+  if (x === 0) return 0;
+  return x < a + 1 ? gammaPSeries(a, x) : 1 - gammaQContinuedFraction(a, x);
+}
+function erf(x) {
+  if (x === 0) return 0;
+  const p = regularizedGammaP(0.5, x * x);
+  return x > 0 ? p : -p;
+}
+function standardNormalPdf(z) {
+  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+}
+function standardNormalCdf(z) {
+  return 0.5 * (1 + erf(z / Math.SQRT2));
+}
+
+// src/lib/tools/numeric.ts
+function inverseNormalCdf(p) {
+  if (!(p > 0 && p < 1)) return p === 0 ? -Infinity : p === 1 ? Infinity : NaN;
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const low = 0.02425;
+  let x;
+  if (p < low) {
+    const q = Math.sqrt(-2 * Math.log(p));
+    x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  } else if (p <= 1 - low) {
+    const q = p - 0.5;
+    const r = q * q;
+    x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  } else {
+    const q = Math.sqrt(-2 * Math.log(1 - p));
+    x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  }
+  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p) / standardNormalPdf(x);
+  return x;
+}
+function bisect(f, lo, hi) {
+  let flo = f(lo);
+  if (flo === 0) return lo;
+  for (let k = 0; k < 200; k++) {
+    const mid = (lo + hi) / 2;
+    if (mid === lo || mid === hi) return mid;
+    const fm2 = f(mid);
+    if (fm2 === 0) return mid;
+    if (Math.sign(fm2) === Math.sign(flo)) {
+      lo = mid;
+      flo = fm2;
+    } else {
+      hi = mid;
+    }
+  }
+  return (lo + hi) / 2;
+}
+function rootsOn(f, grid) {
+  const out = [];
+  let prev = f(grid[0]);
+  if (prev === 0) out.push(grid[0]);
+  for (let k = 1; k < grid.length; k++) {
+    const cur = f(grid[k]);
+    if (cur === 0) out.push(grid[k]);
+    else if (prev !== 0 && Number.isFinite(prev) && Number.isFinite(cur) && Math.sign(cur) !== Math.sign(prev)) out.push(bisect(f, grid[k - 1], grid[k]));
+    prev = cur;
+  }
+  return out;
+}
+var RATE_GRID = (() => {
+  const grid = [];
+  for (let i = -0.99; i < -0.2; i += 0.01) grid.push(i);
+  for (let i = -0.2; i < 0.5; i += 25e-4) grid.push(i);
+  for (let i = 0.5; i <= 10; i += 0.05) grid.push(i);
+  return grid;
+})();
+
+// src/lib/tools/finance/internalRateOfReturn.ts
+var TIME = { key: "time", label: "Time t", kind: "number", unit: "years" };
+var AMOUNT = { key: "amount", label: "Amount", kind: "number", unit: "money" };
+var npvAt = (flows2, i) => flows2.reduce((s, r) => s + Number(r.amount) * (1 + i) ** -Number(r.time), 0);
+var internalRateOfReturn = {
+  id: "finance.internal_rate_of_return",
+  version: "1.0.0",
+  name: "Internal Rate of Return",
+  area: "finance",
+  answers: "What rate makes these cash flows worth zero?",
+  fields: [
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 2,
+      maxRows: 500,
+      description: "Each cash flow: its time (in years, or in whatever period the rate is to be per) and its amount, negative for money paid out and positive for money received.",
+      columns: [TIME, AMOUNT],
+      default: [
+        { time: 0, amount: -1e3 },
+        { time: 1, amount: 300 },
+        { time: 2, amount: 400 },
+        { time: 3, amount: 500 }
+      ]
+    }
+  ],
+  notation: () => "\u03A3 CF\u209C (1 + i)\u207B\u1D57 = 0",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const flows2 = input.flows;
+    const amounts = flows2.map((r) => Number(r.amount));
+    if (!amounts.some((a) => a > 0) || !amounts.some((a) => a < 0)) {
+      throw new ToolInputError("flows", "The flows need at least one payment out (negative) and one receipt (positive): otherwise no rate makes them worth zero.");
+    }
+    if (flows2.some((r) => Number(r.time) < 0)) throw new ToolInputError("flows", "A cash flow has a negative time; measure every time from the first flow.");
+    const roots = rootsOn((i) => npvAt(flows2, i), RATE_GRID);
+    if (roots.length === 0) throw new ToolInputError("flows", "No rate between \u221299% and 1,000% makes these flows worth zero.");
+    const irr = [...roots].sort((a, b) => Math.abs(a) - Math.abs(b))[0];
+    const v = 1 / (1 + irr);
+    const rows = flows2.map((r) => {
+      const discount = v ** Number(r.time);
+      return Object.assign({}, r, { discount, pv: Number(r.amount) * discount });
+    });
+    const warnings = roots.length > 1 ? [`${roots.length} rates make these flows worth zero: ${roots.map((r) => formatValue(r, "percent")).join(", ")}. No one of them is the yield; the one nearest zero is shown.`] : [];
+    return {
+      tiles: [
+        { symbol: "i", label: "Yield rate", value: irr, unit: "percent" },
+        { symbol: "\u03B4", label: "Force", value: Math.log(1 + irr), unit: "percent" }
+      ],
+      table: {
+        columns: [
+          TIME,
+          AMOUNT,
+          { key: "discount", label: "v\u1D57", kind: "number", unit: "factor", computed: true },
+          { key: "pv", label: "PV at i", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", amount: amounts.reduce((s, a) => s + a, 0), discount: null, pv: rows.reduce((s, r) => s + r.pv, 0) }
+      },
+      trace: [
+        { label: "Sign changes in the flows", formula: "Descartes: at most this many positive roots in v", result: signChanges(flows2), unit: "count" },
+        { label: "Yield rate", formula: "the i where \u03A3 CF\u209C v\u1D57 = 0, by bisection", result: irr, unit: "percent" },
+        { label: "Net present value at i", formula: "\u03A3 CF\u209C (1 + i)\u207B\u1D57", result: npvAt(flows2, irr), unit: "money" }
+      ],
+      warnings,
+      values: { irr, rates: roots, force: Math.log(1 + irr) },
+      summary: `Internal rate of return ${formatValue(irr, "percent")} per unit of time${roots.length > 1 ? ` (one of ${roots.length} roots)` : ""}.`
+    };
+  },
+  method: { concepts: ["Internal Rate of Return", "Yield Rate"], readings: [] },
+  next: [
+    { tool: "finance.interest_converter", label: "Interest Converter", build: (_input, output) => ({ form: "effective_interest", rate: Math.max(0, Number(output.values.irr)) }) }
+  ]
+};
+function signChanges(flows2) {
+  const signs = [...flows2].sort((a, b) => Number(a.time) - Number(b.time)).map((r) => Math.sign(Number(r.amount))).filter((s) => s !== 0);
+  return signs.reduce((n, s, k) => k > 0 && s !== signs[k - 1] ? n + 1 : n, 0);
+}
+
+// src/lib/tools/finance/loanSchedule.ts
+var MAX_PAYMENTS = 1200;
+var loanSchedule = {
+  id: "finance.loan_schedule",
+  version: "1.0.0",
+  name: "Loan Schedule",
+  area: "finance",
+  answers: "How is this loan repaid, payment by payment?",
+  fields: [
+    { kind: "number", key: "amount", label: "Amount borrowed", symbol: "L", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e5, step: 100, default: 1e4, description: "The loan amount at time 0." },
+    { kind: "number", key: "i", label: "Rate per period", symbol: "i", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The effective rate per payment period, as a decimal (a quarterly loan at 16% convertible quarterly is 0.04)." },
+    {
+      kind: "number",
+      key: "payment",
+      label: "Payment",
+      symbol: "P",
+      unit: "money",
+      min: 0,
+      max: 1e12,
+      sliderMax: 1e4,
+      step: 10,
+      default: 0,
+      zeroLabel: "Level",
+      description: "The payment each period. 0 means the level payment that repays the loan in n payments; any other amount is paid as given."
+    },
+    {
+      kind: "number",
+      key: "n",
+      label: "Payments",
+      symbol: "n",
+      unit: "count",
+      integer: true,
+      min: 0,
+      max: MAX_PAYMENTS,
+      sliderMax: 60,
+      step: 1,
+      default: 10,
+      zeroLabel: "As needed",
+      description: `How many payments. With a payment given, 0 means as many as it takes, the last a smaller drop payment; at most ${MAX_PAYMENTS}.`
+    }
+  ],
+  notation: (input) => Number(input.payment) === 0 ? "P = L / a\u2309n,  B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P" : "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P",
+  view: "table",
+  compute: (input) => {
+    const L = Number(input.amount);
+    const i = Number(input.i);
+    const given = Number(input.payment);
+    const n = Number(input.n);
+    const level = given === 0;
+    if (level && n === 0) throw new ToolInputError("n", "Give the number of payments, or a payment: with neither there is no schedule.");
+    if (!level && n === 0 && given <= L * i) {
+      throw new ToolInputError("payment", `A payment of ${formatValue(given, "money")} doesn't cover the first period's interest of ${formatValue(L * i, "money")}, so the loan is never repaid.`);
+    }
+    const an = i === 0 ? n : (1 - (1 + i) ** -n) / i;
+    const P = level ? L / an : given;
+    const rows = [];
+    let balance = L;
+    for (let k = 1; k <= (n || MAX_PAYMENTS); k++) {
+      const interest = balance * i;
+      const payment = !level && n === 0 && balance + interest <= P ? balance + interest : P;
+      balance = balance + interest - payment;
+      if (level && k === n) balance = 0;
+      rows.push({ k, payment, interest, principal: payment - interest, balance });
+      if (!level && n === 0 && balance <= 1e-9) {
+        balance = 0;
+        break;
+      }
+    }
+    if (!level && n === 0 && balance > 0) throw new ToolInputError("payment", `The loan isn't repaid within ${MAX_PAYMENTS} payments.`);
+    const totalPaid = rows.reduce((s, r) => s + r.payment, 0);
+    const totalInterest = rows.reduce((s, r) => s + r.interest, 0);
+    const last2 = rows[rows.length - 1];
+    const warnings = !level && n > 0 && balance < -1e-9 ? [`The payments overpay the loan: the balance after payment ${n} is negative.`] : [];
+    return {
+      tiles: [
+        level ? { symbol: "P", label: "Level payment", value: P, unit: "money" } : n === 0 ? { symbol: "P\u2099", label: `Final (no. ${last2.k})`, value: last2.payment, unit: "money" } : { symbol: `B${n}`, label: `Balance after ${n}`, value: balance, unit: "money" },
+        { symbol: "\u03A3I", label: "Total interest", value: totalInterest, unit: "money" },
+        { symbol: "\u03A3P", label: "Total paid", value: totalPaid, unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "k", label: "k", kind: "number", unit: "count" },
+          { key: "payment", label: "Payment", kind: "number", unit: "money", computed: true },
+          { key: "interest", label: "Interest", kind: "number", unit: "money", computed: true },
+          { key: "principal", label: "Principal", kind: "number", unit: "money", computed: true },
+          { key: "balance", label: "Balance", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { k: "Total", payment: totalPaid, interest: totalInterest, principal: totalPaid - totalInterest, balance: null }
+      },
+      trace: [
+        ...level ? [{ label: "Annuity factor", formula: `a\u2309${n} at ${i}`, result: an, unit: "factor" }, { label: "Level payment", formula: `${L} / a\u2309${n}`, result: P, unit: "money" }] : [],
+        { label: "Interest in payment 1", formula: `${L} \xD7 ${i}`, result: rows[0].interest, unit: "money" },
+        { label: "Principal in payment 1", formula: "P \u2212 I\u2081", result: rows[0].principal, unit: "money" },
+        { label: `Balance after payment ${last2.k}`, formula: "B\u2096 = B\u2096\u208B\u2081(1 + i) \u2212 P\u2096", result: balance, unit: "money" }
+      ],
+      warnings,
+      values: {
+        payment: P,
+        payments: rows.map((r) => r.payment),
+        interest: rows.map((r) => r.interest),
+        principal: rows.map((r) => r.principal),
+        balance: rows.map((r) => r.balance),
+        final_payment: last2.payment,
+        count: rows.length,
+        total_interest: totalInterest
+      },
+      summary: level ? `Level payment ${formatValue(P, "money")} for ${n} periods; total interest ${formatValue(totalInterest, "money")}.` : `${rows.length} payments, the last ${formatValue(last2.payment, "money")}; balance after them ${formatValue(balance, "money")}; total interest ${formatValue(totalInterest, "money")}.`
+    };
+  },
+  method: { concepts: ["Loan Amortization", "Amortization Schedule", "Outstanding Balance"], readings: [] }
+};
+
+// src/lib/tools/finance/bondTerms.ts
+var FACE = { kind: "number", key: "face", label: "Face amount", symbol: "F", unit: "money", min: 0.01, max: 1e12, sliderMax: 1e4, step: 100, default: 1e3, description: "The face (par) amount coupons are paid on." };
+var COUPON = { kind: "number", key: "coupon", label: "Coupon rate", symbol: "r", unit: "percent", min: 0, max: 1, sliderMax: 0.2, step: 25e-4, default: 0.06, description: "The annual coupon rate, nominal: 0.08 with two coupons a year pays 4% of face each half-year." };
+var REDEMPTION = { kind: "number", key: "redemption", label: "Redemption value", symbol: "C", unit: "money", min: 0, max: 1e12, sliderMax: 1e4, step: 100, default: 1e3, description: "What the bond pays at maturity (the face amount, for a bond redeemable at par)." };
+var YEARS = { kind: "number", key: "years", label: "Years to maturity", symbol: "T", unit: "years", min: 0.01, max: 200, sliderMax: 40, step: 0.5, default: 10, description: "The term in years; with m coupons a year, T \xD7 m must be a whole number of coupons." };
+var FREQUENCY = { kind: "number", key: "m", label: "Coupons a year", symbol: "m", unit: "count", integer: true, min: 1, max: 12, sliderMax: 12, step: 1, default: 2, description: "How many coupons a year (2 for semiannual)." };
+var YIELD = {
+  kind: "number",
+  key: "yield",
+  label: "Yield, convertible m-thly",
+  symbol: "i\u207D\u1D50\u207E",
+  unit: "percent",
+  min: -0.5,
+  max: 2,
+  sliderMax: 0.2,
+  step: 25e-4,
+  default: 0.05,
+  description: "The annual nominal yield, convertible as often as the coupons are paid: 0.10 with two coupons a year is 5% a half-year. For an annual effective yield i, give m[(1 + i)^(1/m) \u2212 1]."
+};
+function bondTerms(input) {
+  const F2 = Number(input.face);
+  const r = Number(input.coupon);
+  const m = Number(input.m);
+  const years = Number(input.years);
+  const N = Math.round(years * m);
+  if (Math.abs(years * m - N) > 1e-9 || N < 1) {
+    throw new ToolInputError("years", `${years} years at ${m} coupon${m === 1 ? "" : "s"} a year isn't a whole number of coupons.`);
+  }
+  return { F: F2, r, C: Number(input.redemption), m, N, coupon: F2 * r / m };
+}
+function bondPriceAt(t, j) {
+  const v = 1 / (1 + j);
+  const a = j === 0 ? t.N : (1 - v ** t.N) / j;
+  return t.coupon * a + t.C * v ** t.N;
+}
+
+// src/lib/tools/finance/bondPrice.ts
+var bondPrice = {
+  id: "finance.bond_price",
+  version: "1.0.0",
+  name: "Bond Price",
+  area: "finance",
+  answers: "What's this bond worth at this yield?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
+  notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A,  at j = i\u207D\u1D50\u207E/m",
+  view: "none",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const j = Number(input.yield) / t.m;
+    const P = bondPriceAt(t, j);
+    const premium = P - t.C;
+    const pvCoupons = P - t.C * (1 + j) ** -t.N;
+    return {
+      tiles: [
+        { symbol: "P", label: "Price", value: P, unit: "money" },
+        { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium" : "Discount", value: Math.abs(premium), unit: "money" },
+        { symbol: "j", label: "Yield per coupon", value: j, unit: "percent" }
+      ],
+      trace: [
+        { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
+        { label: "Yield per coupon period", formula: `j = ${Number(input.yield)} / ${t.m}`, result: j, unit: "percent" },
+        { label: "Present value of the coupons", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} at j`, result: pvCoupons, unit: "money" },
+        { label: "Present value of the redemption", formula: `${t.C} \xD7 v^${t.N}`, result: t.C * (1 + j) ** -t.N, unit: "money" },
+        { label: "Price", formula: "sum of the two", result: P, unit: "money" }
+      ],
+      warnings: [],
+      values: { price: P, premium, coupon: t.coupon, periods: t.N, yield_per_period: j, effective_yield: (1 + j) ** t.m - 1 },
+      summary: `Price ${formatValue(P, "money")}, a ${premium >= 0 ? "premium" : "discount"} of ${formatValue(Math.abs(premium), "money")} to the redemption value, at ${formatValue(j, "percent")} per coupon period.`
+    };
+  },
+  method: { concepts: ["Bond Price", "Bonds"], readings: [] },
+  next: [
+    { tool: "finance.bond_amortization", label: "Bond Amortization", build: (input) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: input.yield }) },
+    {
+      tool: "finance.duration_convexity",
+      label: "Duration & Convexity",
+      build: (input) => {
+        const t = bondTerms(input);
+        const j = Number(input.yield) / t.m;
+        return {
+          i: (1 + j) ** t.m - 1,
+          flows: Array.from({ length: t.N }, (_, k) => ({ time: (k + 1) / t.m, amount: t.coupon + (k === t.N - 1 ? t.C : 0) }))
+        };
+      }
+    }
+  ]
+};
+
+// src/lib/tools/finance/bondYield.ts
+var PRICE = { kind: "number", key: "price", label: "Price", symbol: "P", unit: "money", min: 0.01, max: 1e12, sliderMax: 2e3, step: 1, default: 950, description: "The price paid for the bond, on a coupon date." };
+var bondYield = {
+  id: "finance.bond_yield",
+  version: "1.0.0",
+  name: "Bond Yield",
+  area: "finance",
+  answers: "What yield does this price give?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, PRICE],
+  notation: () => "P = Fr/m \xB7 a\u2309N + C \xB7 v\u1D3A, solved for j",
+  view: "none",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const P = Number(input.price);
+    const f = (j2) => bondPriceAt(t, j2) - P;
+    if (f(-0.99) < 0) throw new ToolInputError("price", `No yield gives a price of ${formatValue(P, "money")}: it's more than every coupon and the redemption together, undiscounted, would be worth even at \u221299%.`);
+    let hi = 1;
+    while (f(hi) > 0 && hi < 1e6) hi *= 2;
+    if (f(hi) > 0) throw new ToolInputError("price", "The price is too low for any yield to give it.");
+    const j = bisect(f, -0.99, hi);
+    const nominal = j * t.m;
+    const effective = (1 + j) ** t.m - 1;
+    return {
+      tiles: [
+        { symbol: "i\u207D\u1D50\u207E", label: "Nominal yield", value: nominal, unit: "percent" },
+        { symbol: "i", label: "Effective yield", value: effective, unit: "percent" },
+        { symbol: "j", label: "Per coupon", value: j, unit: "percent" }
+      ],
+      trace: [
+        { label: "Coupon", formula: `${t.F} \xD7 ${t.r} / ${t.m}`, result: t.coupon, unit: "money" },
+        { label: "Yield per coupon period", formula: `the j where ${formatValue(t.coupon, "money")} a\u2309${t.N} + ${t.C} v^${t.N} = ${P}, by bisection`, result: j, unit: "percent" },
+        { label: "Nominal yield", formula: `i\u207D\u1D50\u207E = ${t.m} \xD7 j`, result: nominal, unit: "percent" },
+        { label: "Effective annual yield", formula: `(1 + j)^${t.m} \u2212 1`, result: effective, unit: "percent" }
+      ],
+      warnings: [],
+      values: { yield_per_period: j, nominal_yield: nominal, effective_yield: effective, periods: t.N },
+      summary: `Yield ${formatValue(nominal, "percent")} convertible ${t.m === 1 ? "annually" : `${t.m} times a year`} (${formatValue(effective, "percent")} effective).`
+    };
+  },
+  method: { concepts: ["Bond Price", "Yield Rate"], readings: [] },
+  next: [
+    { tool: "finance.bond_price", label: "Bond Price", build: (input, output) => ({ face: input.face, coupon: input.coupon, redemption: input.redemption, years: input.years, m: input.m, yield: output.values.nominal_yield }) }
+  ]
+};
+
+// src/lib/tools/finance/bondAmortization.ts
+var MAX_ROWS = 2400;
+var bondAmortization = {
+  id: "finance.bond_amortization",
+  version: "1.0.0",
+  name: "Bond Amortization",
+  area: "finance",
+  answers: "How does the book value move to redemption?",
+  fields: [FACE, COUPON, REDEMPTION, YEARS, FREQUENCY, YIELD],
+  notation: () => "I\u2096 = j \xB7 BV\u2096\u208B\u2081,  BV\u2096 = BV\u2096\u208B\u2081 \u2212 (Fr/m \u2212 I\u2096)",
+  view: "table",
+  compute: (input) => {
+    const t = bondTerms(input);
+    const j = Number(input.yield) / t.m;
+    const price = bondPriceAt(t, j);
+    let bv = price;
+    const rows = Array.from({ length: Math.min(t.N, MAX_ROWS) }, (_, n) => {
+      const interest = bv * j;
+      const amortized = t.coupon - interest;
+      bv -= amortized;
+      if (n === t.N - 1) bv = t.C;
+      return { k: n + 1, coupon: t.coupon, interest, amortized, book: bv };
+    });
+    const premium = price - t.C;
+    return {
+      tiles: [
+        { symbol: "BV\u2080", label: "Price", value: price, unit: "money" },
+        { symbol: "\u03A3I", label: "Interest earned", value: rows.reduce((s, r) => s + r.interest, 0), unit: "money" },
+        { symbol: premium >= 0 ? "P \u2212 C" : "C \u2212 P", label: premium >= 0 ? "Premium written down" : "Discount accumulated", value: Math.abs(premium), unit: "money" }
+      ],
+      table: {
+        columns: [
+          { key: "k", label: "Coupon", kind: "number", unit: "count" },
+          { key: "coupon", label: "Paid", kind: "number", unit: "money" },
+          { key: "interest", label: "Interest", kind: "number", unit: "money", computed: true },
+          { key: "amortized", label: premium >= 0 ? "Premium amortized" : "Discount accumulated", kind: "number", unit: "money", computed: true },
+          { key: "book", label: "Book value", kind: "number", unit: "money", computed: true }
+        ],
+        rows
+      },
+      trace: [
+        { label: "Price (BV\u2080)", formula: `${formatValue(t.coupon, "money")} \xD7 a\u2309${t.N} + ${t.C} \xD7 v^${t.N} at j = ${j}`, result: price, unit: "money" },
+        { label: "Interest in coupon 1", formula: `${formatValue(price, "money")} \xD7 ${j}`, result: rows[0].interest, unit: "money" },
+        { label: "Amortization in coupon 1", formula: `${formatValue(t.coupon, "money")} \u2212 I\u2081`, result: rows[0].amortized, unit: "money" }
+      ],
+      warnings: t.N > MAX_ROWS ? [`Only the first ${MAX_ROWS} coupons are scheduled.`] : [],
+      values: {
+        price,
+        interest: rows.map((r) => r.interest),
+        amortized: rows.map((r) => r.amortized),
+        book_value: rows.map((r) => r.book),
+        yield_per_period: j
+      },
+      summary: `Bought at ${formatValue(price, "money")}, the book value moves to ${formatValue(t.C, "money")} over ${t.N} coupons; the first coupon carries ${formatValue(rows[0].interest, "money")} of interest.`
+    };
+  },
+  method: { concepts: ["Bond Amortization", "Book Value", "Amortization of Premium"], readings: [] }
+};
+
+// src/lib/tools/finance/durationConvexity.ts
+var TIME2 = { key: "time", label: "Time t", kind: "number", unit: "years" };
+var AMOUNT2 = { key: "amount", label: "Amount", kind: "number", unit: "money" };
+function flowMeasures(flows2, i, amountKey = "amount") {
+  const v = 1 / (1 + i);
+  let pv = 0;
+  let weighted = 0;
+  let second = 0;
+  for (const r of flows2) {
+    const t = Number(r.time);
+    const cf = Number(r[amountKey] ?? 0);
+    pv += cf * v ** t;
+    weighted += t * cf * v ** t;
+    second += t * (t + 1) * cf * v ** (t + 2);
+  }
+  const macaulay = weighted / pv;
+  return { pv, macaulay, modified: macaulay * v, convexity: second / pv };
+}
+var durationConvexity = {
+  id: "finance.duration_convexity",
+  version: "1.0.0",
+  name: "Duration & Convexity",
+  area: "finance",
+  answers: "How sensitive is the value of these cash flows to the rate?",
+  fields: [
+    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The annual effective rate (the yield), as a decimal. Times are in years." },
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 1,
+      maxRows: 1200,
+      description: "Each cash flow: its time in years and its amount. A semiannual coupon at the end of year 1\xBD has time 1.5.",
+      columns: [TIME2, AMOUNT2],
+      default: [
+        { time: 1, amount: 60 },
+        { time: 2, amount: 60 },
+        { time: 3, amount: 60 },
+        { time: 4, amount: 1060 }
+      ]
+    }
+  ],
+  notation: () => "D = \u03A3 t\xB7CF\u209Cv\u1D57 / P,  D_mod = D\xB7v,  C = P\u2033/P",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const i = Number(input.i);
+    const flows2 = input.flows;
+    const m = flowMeasures(flows2, i);
+    if (!(Math.abs(m.pv) > 1e-12)) throw new ToolInputError("flows", "The flows are worth nothing at this rate, so their duration is undefined.");
+    const v = 1 / (1 + i);
+    const rows = flows2.map((r) => {
+      const pv = Number(r.amount) * v ** Number(r.time);
+      return Object.assign({}, r, { pv, weight: pv / m.pv });
+    });
+    const warnings = flows2.some((r) => Number(r.amount) < 0) ? ["Some flows are negative: the duration is a net figure and may lie outside the span of the flows."] : [];
+    return {
+      tiles: [
+        { symbol: "D", label: "Macaulay", value: m.macaulay, unit: "years" },
+        { symbol: "D_mod", label: "Modified", value: m.modified, unit: "years" },
+        { symbol: "C", label: "Convexity", value: m.convexity, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          TIME2,
+          AMOUNT2,
+          { key: "pv", label: "PV", kind: "number", unit: "money", computed: true },
+          { key: "weight", label: "Weight", kind: "number", unit: "percent", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", amount: flows2.reduce((s, r) => s + Number(r.amount), 0), pv: m.pv, weight: 1 }
+      },
+      trace: [
+        { label: "Present value", formula: "P = \u03A3 CF\u209C v\u1D57", result: m.pv, unit: "money" },
+        { label: "Macaulay duration", formula: "\u03A3 t \xB7 CF\u209C v\u1D57 / P", result: m.macaulay, unit: "years" },
+        { label: "Modified duration", formula: `D / (1 + ${i})`, result: m.modified, unit: "years" },
+        { label: "Convexity", formula: "\u03A3 t(t + 1) CF\u209C v^(t+2) / P", result: m.convexity, unit: "plain" },
+        { label: "First-order change for +1%", formula: "\u2212D_mod \xD7 0.01 \xD7 P", result: -m.modified * 0.01 * m.pv, unit: "money" }
+      ],
+      warnings,
+      values: { present_value: m.pv, macaulay: m.macaulay, modified: m.modified, convexity: m.convexity },
+      summary: `Macaulay duration ${formatValue(m.macaulay, "years")} years, modified ${formatValue(m.modified, "years")}, convexity ${formatValue(m.convexity, "plain")}, on a present value of ${formatValue(m.pv, "money")} at ${formatValue(i, "percent")}.`
+    };
+  },
+  method: { concepts: ["Macaulay Duration", "Modified Duration", "Convexity"], readings: [] }
+};
+
+// src/lib/tools/finance/redingtonImmunization.ts
+var MATCH = 1e-4;
+var redingtonImmunization = {
+  id: "finance.redington_immunization",
+  version: "1.0.0",
+  name: "Redington Immunization",
+  area: "finance",
+  answers: "Are these assets Redington-immunized against these liabilities?",
+  fields: [
+    { kind: "number", key: "i", label: "Annual effective rate", symbol: "i", unit: "percent", min: -0.5, max: 2, sliderMax: 0.2, step: 25e-4, default: 0.05, description: "The flat annual effective rate both sides are valued at. Times are in years." },
+    {
+      kind: "table",
+      key: "flows",
+      label: "Cash flows",
+      minRows: 1,
+      maxRows: 1200,
+      description: "Each time in years with the asset cash flow and the liability cash flow due then (0 where there is none).",
+      columns: [
+        { key: "time", label: "Time t", kind: "number", unit: "years" },
+        { key: "asset", label: "Asset", kind: "number", unit: "money" },
+        { key: "liability", label: "Liability", kind: "number", unit: "money" }
+      ],
+      default: [
+        // At 5%, assets matching the liability's value and duration: 10,000v − 5,250v² at 1, and 5,250 at 3.
+        { time: 1, asset: 4761.9, liability: 0 },
+        { time: 2, asset: 0, liability: 1e4 },
+        { time: 3, asset: 5250, liability: 0 }
+      ]
+    }
+  ],
+  notation: () => "P_A = P_L,  D_A = D_L,  C_A > C_L",
+  view: "table",
+  grid: "flows",
+  compute: (input) => {
+    const i = Number(input.i);
+    const flows2 = input.flows;
+    const A = flowMeasures(flows2, i, "asset");
+    const L = flowMeasures(flows2, i, "liability");
+    if (!(A.pv > 0) || !(L.pv > 0)) throw new ToolInputError("flows", "Both the assets and the liabilities need a positive present value.");
+    const v = 1 / (1 + i);
+    const rows = flows2.map((r) => Object.assign({}, r, {
+      pv_asset: Number(r.asset) * v ** Number(r.time),
+      pv_liability: Number(r.liability) * v ** Number(r.time)
+    }));
+    const pvMatch = Math.abs(A.pv - L.pv) <= MATCH * L.pv;
+    const durationMatch = Math.abs(A.modified - L.modified) <= MATCH * Math.max(L.modified, 1);
+    const convexityHolds = A.convexity > L.convexity;
+    const immunized = pvMatch && durationMatch && convexityHolds;
+    const failed = [
+      !pvMatch && `present values differ (${formatValue(A.pv, "money")} against ${formatValue(L.pv, "money")})`,
+      !durationMatch && `modified durations differ (${formatValue(A.modified, "years")} against ${formatValue(L.modified, "years")})`,
+      !convexityHolds && `the assets' convexity (${formatValue(A.convexity, "plain")}) doesn't exceed the liabilities' (${formatValue(L.convexity, "plain")})`
+    ].filter(Boolean);
+    return {
+      tiles: [
+        { symbol: "P_A \u2212 P_L", label: "Surplus", value: A.pv - L.pv, unit: "money" },
+        { symbol: "D_A \u2212 D_L", label: "Duration gap", value: A.modified - L.modified, unit: "years" },
+        { symbol: "C_A \u2212 C_L", label: "Convexity gap", value: A.convexity - L.convexity, unit: "plain" }
+      ],
+      table: {
+        columns: [
+          { key: "time", label: "Time t", kind: "number", unit: "years" },
+          { key: "asset", label: "Asset", kind: "number", unit: "money" },
+          { key: "liability", label: "Liability", kind: "number", unit: "money" },
+          { key: "pv_asset", label: "PV asset", kind: "number", unit: "money", computed: true },
+          { key: "pv_liability", label: "PV liability", kind: "number", unit: "money", computed: true }
+        ],
+        rows,
+        footer: { time: "Total", asset: null, liability: null, pv_asset: A.pv, pv_liability: L.pv }
+      },
+      trace: [
+        { label: "PV of assets", formula: "\u03A3 A\u209C v\u1D57", result: A.pv, unit: "money" },
+        { label: "PV of liabilities", formula: "\u03A3 L\u209C v\u1D57", result: L.pv, unit: "money" },
+        { label: "Macaulay duration, assets", formula: "\u03A3 t A\u209C v\u1D57 / P_A", result: A.macaulay, unit: "years" },
+        { label: "Macaulay duration, liabilities", formula: "\u03A3 t L\u209C v\u1D57 / P_L", result: L.macaulay, unit: "years" },
+        { label: "Modified duration, assets", formula: "D_A \xB7 v", result: A.modified, unit: "years" },
+        { label: "Modified duration, liabilities", formula: "D_L \xB7 v", result: L.modified, unit: "years" },
+        { label: "Convexity, assets", formula: "\u03A3 t(t + 1) A\u209C v^(t+2) / P_A", result: A.convexity, unit: "plain" },
+        { label: "Convexity, liabilities", formula: "\u03A3 t(t + 1) L\u209C v^(t+2) / P_L", result: L.convexity, unit: "plain" }
+      ],
+      warnings: immunized ? [] : [`Not Redington-immunized: ${failed.join("; ")}.`],
+      values: {
+        immunized,
+        pv_assets: A.pv,
+        pv_liabilities: L.pv,
+        macaulay_assets: A.macaulay,
+        macaulay_liabilities: L.macaulay,
+        modified_assets: A.modified,
+        modified_liabilities: L.modified,
+        convexity_assets: A.convexity,
+        convexity_liabilities: L.convexity
+      },
+      summary: immunized ? `Redington-immunized at ${formatValue(i, "percent")}: present values and durations match, and the assets are more convex.` : `Not Redington-immunized at ${formatValue(i, "percent")}: ${failed.join("; ")}.`
+    };
+  },
+  method: { concepts: ["Redington Immunization", "Immunization"], readings: [] }
 };
 
 // src/lib/tools/reserving/ageToAge.ts
@@ -817,102 +1520,6 @@ var lossRatioMethod = {
   }
 };
 
-// src/lib/distributionMath.ts
-var LANCZOS_COEFFS = [
-  676.5203681218851,
-  -1259.1392167224028,
-  771.3234287776531,
-  -176.6150291621406,
-  12.507343278686905,
-  -0.13857109526572012,
-  9984369578019572e-21,
-  15056327351493116e-23
-];
-function logGamma(x) {
-  if (x < 0.5) {
-    return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - logGamma(1 - x);
-  }
-  const z = x - 1;
-  let a = 0.9999999999998099;
-  for (let i = 0; i < LANCZOS_COEFFS.length; i++) a += LANCZOS_COEFFS[i] / (z + i + 1);
-  const t = z + LANCZOS_COEFFS.length - 0.5;
-  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(a);
-}
-var EPS = 1e-14;
-var TINY = 1e-300;
-var MAX_ITER = 500;
-function gammaPSeries(a, x) {
-  let ap = a;
-  let sum = 1 / a;
-  let del = sum;
-  for (let n = 0; n < MAX_ITER; n++) {
-    ap += 1;
-    del *= x / ap;
-    sum += del;
-    if (Math.abs(del) < Math.abs(sum) * EPS) break;
-  }
-  return sum * Math.exp(-x + a * Math.log(x) - logGamma(a));
-}
-function gammaQContinuedFraction(a, x) {
-  let b = x + 1 - a;
-  let c = 1 / TINY;
-  let d = 1 / b;
-  let h = d;
-  for (let i = 1; i <= MAX_ITER; i++) {
-    const an = -i * (i - a);
-    b += 2;
-    d = an * d + b;
-    if (Math.abs(d) < TINY) d = TINY;
-    c = b + an / c;
-    if (Math.abs(c) < TINY) c = TINY;
-    d = 1 / d;
-    const del = d * c;
-    h *= del;
-    if (Math.abs(del - 1) < EPS) break;
-  }
-  return Math.exp(-x + a * Math.log(x) - logGamma(a)) * h;
-}
-function regularizedGammaP(a, x) {
-  if (a <= 0 || !(x >= 0)) return NaN;
-  if (x === 0) return 0;
-  return x < a + 1 ? gammaPSeries(a, x) : 1 - gammaQContinuedFraction(a, x);
-}
-function erf(x) {
-  if (x === 0) return 0;
-  const p = regularizedGammaP(0.5, x * x);
-  return x > 0 ? p : -p;
-}
-function standardNormalPdf(z) {
-  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
-}
-function standardNormalCdf(z) {
-  return 0.5 * (1 + erf(z / Math.SQRT2));
-}
-
-// src/lib/tools/numeric.ts
-function inverseNormalCdf(p) {
-  if (!(p > 0 && p < 1)) return p === 0 ? -Infinity : p === 1 ? Infinity : NaN;
-  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
-  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
-  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
-  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
-  const low = 0.02425;
-  let x;
-  if (p < low) {
-    const q = Math.sqrt(-2 * Math.log(p));
-    x = (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-  } else if (p <= 1 - low) {
-    const q = p - 0.5;
-    const r = q * q;
-    x = (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
-  } else {
-    const q = Math.sqrt(-2 * Math.log(1 - p));
-    x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
-  }
-  for (let k = 0; k < 2; k++) x -= (standardNormalCdf(x) - p) / standardNormalPdf(x);
-  return x;
-}
-
 // src/lib/tools/credibility/fullCredibility.ts
 var BASES = [
   { value: "frequency", label: "Frequency" },
@@ -1021,6 +1628,7 @@ var ENGINE_VERSION = "0.1.0";
 var AREAS = [
   { id: "reserving", label: "Reserving" },
   { id: "ratemaking", label: "Ratemaking" },
+  { id: "distributions", label: "Loss distributions" },
   { id: "credibility", label: "Credibility" },
   { id: "finance", label: "Financial mathematics" }
 ];
@@ -1035,7 +1643,14 @@ var TOOLS = [
   partialCredibility,
   interestConverter,
   annuity,
-  presentValue
+  presentValue,
+  internalRateOfReturn,
+  loanSchedule,
+  bondPrice,
+  bondYield,
+  bondAmortization,
+  durationConvexity,
+  redingtonImmunization
 ];
 var BY_ID = new Map(TOOLS.map((t) => [t.id, t]));
 function toolById(id) {
@@ -2330,6 +2945,252 @@ var basic_ratemaking_2016_default = {
   }
 };
 
+// src/lib/tools/questionChecks.ts
+var last = (rs) => rs[rs.length - 1];
+var val = (key) => (rs) => Number(last(rs).values[key]);
+var at = (key, k) => (rs) => last(rs).values[key][k];
+var one = (tool, input) => [{ tool, input: () => input }];
+var flows = (n, from, amount, step = 1) => Array.from({ length: n }, (_, k) => ({ time: (from + k) * step, amount: amount(k) }));
+var fm = (n, check) => ({
+  question: `fm-${String(n).padStart(3, "0")}`,
+  bank: "exam-fm",
+  label: `SOA Exam FM sample question ${n}`,
+  ...check
+});
+var QUESTION_CHECKS = [
+  // ─── Present Value ─────────────────────────────────────────────────────────
+  fm(26, {
+    quotes: ["5000", "7% per year", "20 payments", "one year from today", "5%"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(20, 1, (k) => 5e3 * 1.07 ** (k + 1)) }),
+    tolerance: 50,
+    value: val("present_value")
+  }),
+  fm(71, {
+    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
+    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
+    steps: one("finance.present_value", { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(82, {
+    quotes: ["30-year annuity", "5% annual effective", "first payment of the annuity is due in ten years in the amount of 1,000", "increase by 500 each year"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(30, 10, (k) => 1e3 + 500 * k) }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(225, {
+    quotes: ["| 1 | 10 | 4.0% |", "| 2 | 12 | 4.5% |", "| 3 | 15 | 5.5% |", "| 4 | 20 | 7.0% |"],
+    steps: one("finance.present_value", {
+      flows: [
+        { time: 1, amount: 10, spot: 0.04 },
+        { time: 2, amount: 12, spot: 0.045 },
+        { time: 3, amount: 15, spot: 0.055 },
+        { time: 4, amount: 20, spot: 0.07 }
+      ]
+    }),
+    tolerance: 5e-3,
+    value: val("present_value")
+  }),
+  fm(245, {
+    quotes: ["annual effective interest rate of 5%", "10-year annuity-immediate", "annual payment of 100", "increases each year by 15%"],
+    steps: one("finance.present_value", { i: 0.05, flows: flows(10, 1, (k) => 100 * 1.15 ** k) }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  fm(281, {
+    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
+    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
+    steps: one("finance.present_value", { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1e3 }] }),
+    tolerance: 0.5,
+    value: val("present_value")
+  }),
+  // ─── Bonds ─────────────────────────────────────────────────────────────────
+  fm(71, {
+    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
+    steps: one("finance.bond_price", { face: 1e3, coupon: 0.09, redemption: 1200, years: 20, m: 2, yield: 0.1 }),
+    tolerance: 0.5,
+    value: val("price")
+  }),
+  fm(213, {
+    // A face amount and no redemption value: redeemable at par.
+    quotes: ["six-year 1000 face amount bond", "annual coupon rate of 8% semiannually", "sells for 911.37", "annual effective yield rate"],
+    steps: one("finance.bond_yield", { face: 1e3, coupon: 0.08, redemption: 1e3, years: 6, m: 2, price: 911.37 }),
+    tolerance: 5e-5,
+    value: val("effective_yield")
+  }),
+  fm(325, {
+    // Bought at a discount of 1.50 to its face amount of 100: a price of 98.50.
+    quotes: ["one-year bond with a face amount of 100", "annual coupon rate of 6% paid semiannually", "discount of 1.50", "convertible semiannually"],
+    steps: one("finance.bond_yield", { face: 100, coupon: 0.06, redemption: 100, years: 1, m: 2, price: 98.5 }),
+    tolerance: 5e-4,
+    value: val("nominal_yield")
+  }),
+  fm(7, {
+    quotes: ["10,000 par value 10-year bond", "8% annual coupons", "annual effective rate of 6%", "the 7th coupon"],
+    steps: one("finance.bond_amortization", { face: 1e4, coupon: 0.08, redemption: 1e4, years: 10, m: 1, yield: 0.06 }),
+    tolerance: 0.5,
+    value: at("interest", 6)
+  }),
+  fm(281, {
+    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
+    steps: one("finance.bond_amortization", { face: 1e3, coupon: 0.076, redemption: 1e3, years: 10, m: 2, yield: 0.06 }),
+    tolerance: 0.5,
+    value: at("book_value", 11)
+  }),
+  // ─── Loans ─────────────────────────────────────────────────────────────────
+  fm(190, {
+    // 16% convertible quarterly is 4% a quarter.
+    quotes: ["loan of 10,000", "payments of 1,000 at the end of each quarter for as long as necessary", "16% convertible quarterly", "the tenth payment"],
+    steps: one("finance.loan_schedule", { amount: 1e4, i: 0.04, payment: 1e3, n: 0 }),
+    tolerance: 0.5,
+    value: at("interest", 9)
+  }),
+  fm(380, {
+    quotes: ["Annual payments of 240", "loan of 3400", "annual effective interest rate of 4.5%", "drop payment"],
+    steps: one("finance.loan_schedule", { amount: 3400, i: 0.045, payment: 240, n: 0 }),
+    tolerance: 5e-3,
+    value: val("final_payment")
+  }),
+  fm(212, {
+    quotes: ["Payments of 1000 at the end of each year", "loan of 12,000", "annual effective interest rate of 10%", "immediately after the 12th payment"],
+    steps: one("finance.loan_schedule", { amount: 12e3, i: 0.1, payment: 1e3, n: 12 }),
+    tolerance: 0.5,
+    value: at("balance", 11)
+  }),
+  fm(232, {
+    // The beginning of the seventh year is the moment after the sixth payment.
+    quotes: ["loan of 4000", "annual effective interest rate of 5%", "payments of 250 at the end of each year for ten years", "beginning of the seventh year"],
+    steps: one("finance.loan_schedule", { amount: 4e3, i: 0.05, payment: 250, n: 10 }),
+    tolerance: 0.5,
+    value: at("balance", 5)
+  }),
+  fm(90, {
+    // The discount rate converted, the level payment found, then the loan run again on that payment rounded up.
+    quotes: ["5-year loan of 500,000", "annual effective discount rate of 8%", "level end-of-year payments", "next multiple of 1,000"],
+    steps: [
+      { tool: "finance.interest_converter", input: () => ({ form: "effective_discount", rate: 0.08, m: 1 }) },
+      { tool: "finance.loan_schedule", input: ([rate]) => ({ amount: 5e5, i: rate.values.i, n: 5, payment: 0 }) },
+      { tool: "finance.loan_schedule", input: ([rate, level]) => ({ amount: 5e5, i: rate.values.i, n: 0, payment: Math.ceil(Number(level.values.payment) / 1e3) * 1e3 }) }
+    ],
+    tolerance: 50,
+    value: val("final_payment")
+  }),
+  // ─── Duration, convexity and immunization ──────────────────────────────────
+  fm(101, {
+    quotes: ["40,000 at time 2", "25,000 at time 3", "100,000 at time 4", "7.0%"],
+    steps: one("finance.duration_convexity", { i: 0.07, flows: [{ time: 2, amount: 4e4 }, { time: 3, amount: 25e3 }, { time: 4, amount: 1e5 }] }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(228, {
+    quotes: ["| 1 | 10 |", "| 2 | 12 |", "| 3 | 15 |", "| 4 | 20 |", "| 5 | 30 |", "8% annual effective"],
+    steps: one("finance.duration_convexity", { i: 0.08, flows: [10, 12, 15, 20, 30].map((amount, k) => ({ time: k + 1, amount })) }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(50, {
+    // Bought at par, the bond yields its coupon rate: 3.8% a half-year, an annual effective 1.038² − 1.
+    quotes: ["7-year, 5000 par value bond", "annual coupon rate of 7.6% paid semiannually", "no premium or discount"],
+    steps: one("finance.duration_convexity", { i: 1.038 ** 2 - 1, flows: [...flows(14, 1, () => 190, 0.5), { time: 7, amount: 5e3 }] }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(183, {
+    quotes: ["7-year loan", "equal payments made at the end of each year", "annual effective interest rate is 10%"],
+    steps: one("finance.duration_convexity", { i: 0.1, flows: flows(7, 1, () => 1) }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(409, {
+    quotes: ["ten-year mortgage", "annual level payments at the end of the year", "annual effective interest rate of 6%"],
+    steps: one("finance.duration_convexity", { i: 0.06, flows: flows(10, 1, () => 1) }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(429, {
+    // Per 100 of face: coupons of 9, then the 100 redeemed with the last.
+    quotes: ["annual coupon rate of 9% paid annually", "matures in ten years", "annual effective yield rate is 10%", "modified duration"],
+    steps: one("finance.duration_convexity", { i: 0.1, flows: [...flows(9, 1, () => 9), { time: 10, amount: 109 }] }),
+    tolerance: 5e-3,
+    value: val("modified")
+  }),
+  fm(372, {
+    quotes: ["five-year 1000 face amount bond", "10% annual coupons", "annual effective interest rate of 5%"],
+    steps: one("finance.duration_convexity", { i: 0.05, flows: [...flows(4, 1, () => 100), { time: 5, amount: 1100 }] }),
+    tolerance: 0.05,
+    value: val("macaulay")
+  }),
+  fm(165, {
+    // Payments of 1 at times 0–19 and 4 at times 20–49: the duration doesn't depend on X.
+    quotes: ["$X$ at the beginning of each year for 20 years, starting today", "$4X$ at the beginning of each year for 30 years, starting 20 years from today", "annual effective interest rate of 2%"],
+    steps: one("finance.duration_convexity", { i: 0.02, flows: [...flows(20, 0, () => 1), ...flows(30, 20, () => 4)] }),
+    tolerance: 5e-3,
+    value: val("macaulay")
+  }),
+  fm(219, {
+    // The assets' duration doesn't depend on X, so X = 1.
+    quotes: ["liability cash flow of 100 at the end of year two", "liability cash flow of 200 at the end of year three", "asset cash flows of $X$ at the end of years one and five", "annual effective interest rate of 10%"],
+    steps: one("finance.redington_immunization", {
+      i: 0.1,
+      flows: [
+        { time: 1, asset: 1, liability: 0 },
+        { time: 2, asset: 0, liability: 100 },
+        { time: 3, asset: 0, liability: 200 },
+        { time: 5, asset: 1, liability: 0 }
+      ]
+    }),
+    tolerance: 5e-4,
+    value: (rs) => Math.abs(Number(last(rs).values.macaulay_assets) - Number(last(rs).values.macaulay_liabilities))
+  }),
+  // ─── Rates and annuities, chained ──────────────────────────────────────────
+  fm(291, {
+    quotes: ["deposits 150 today", "receives 100 one year from now and 80 two years from now", "annual nominal rate of interest convertible quarterly"],
+    steps: [
+      { tool: "finance.internal_rate_of_return", input: () => ({ flows: [{ time: 0, amount: -150 }, { time: 1, amount: 100 }, { time: 2, amount: 80 }] }) },
+      { tool: "finance.interest_converter", input: ([irr]) => ({ form: "effective_interest", rate: irr.values.irr, m: 4 }) }
+    ],
+    tolerance: 5e-4,
+    value: val("nominal_interest")
+  }),
+  fm(370, {
+    // Times in years: the quarterly payments at 0.25, 0.5, … 5, so the yield comes out annual effective.
+    quotes: ["5000 is borrowed", "convertible monthly", "payments of 291.23 at the end of each quarter for 5 years"],
+    steps: [
+      { tool: "finance.internal_rate_of_return", input: () => ({ flows: [{ time: 0, amount: -5e3 }, ...flows(20, 1, () => 291.23, 0.25)] }) },
+      { tool: "finance.interest_converter", input: ([irr]) => ({ form: "effective_interest", rate: irr.values.irr, m: 12 }) }
+    ],
+    tolerance: 5e-5,
+    value: val("nominal_interest")
+  }),
+  fm(334, {
+    // The annuity-due's price is the balance at year five; the yield is the rate that grows 9550 to it.
+    quotes: ["deposit of 9550", "for five years", "20-year annuity-due", "level annual payments of 756.97", "annual effective interest rate of 4%"],
+    steps: [
+      { tool: "finance.annuity", input: () => ({ timing: "due", payment: 756.97, n: 20, i: 0.04 }) },
+      { tool: "finance.internal_rate_of_return", input: ([annuity2]) => ({ flows: [{ time: 0, amount: -9550 }, { time: 5, amount: annuity2.values.present_value }] }) }
+    ],
+    tolerance: 5e-4,
+    value: val("irr")
+  }),
+  fm(367, {
+    // 8% effective is i⁽¹²⁾/12 a month; the 240 monthly deposits' accumulated value buys the 30-year annuity-due.
+    quotes: ["deposits 225 into a bank at the beginning of each month for 20 years", "annual effective rate of 8%", "30-year annuity-due with annual payments of $X$", "annual effective interest rate of 7%"],
+    steps: [
+      { tool: "finance.interest_converter", input: () => ({ form: "effective_interest", rate: 0.08, m: 12 }) },
+      { tool: "finance.annuity", input: ([rate]) => ({ timing: "due", payment: 225, n: 240, i: Number(rate.values.nominal_interest) / 12 }) },
+      { tool: "finance.annuity", input: () => ({ timing: "due", payment: 1, n: 30, i: 0.07 }) }
+    ],
+    tolerance: 0.5,
+    value: ([, saved, bought]) => Number(saved.values.accumulated_value) / Number(bought.values.annuity_factor)
+  })
+];
+var questionRef = (q) => ({
+  question: q.question,
+  title: q.label,
+  url: `/quiz?ids=${q.question}`,
+  locator: q.label
+});
+
 // src/lib/tools/checks.ts
 var F = friedland_2010_default.exhibits;
 var friedlandRef = (exhibit) => ({
@@ -2544,87 +3405,6 @@ CHECKS.push(
     }]
   }))
 );
-var pv = (r) => Number(r.values.present_value);
-var flows = (n, from, amount) => Array.from({ length: n }, (_, k) => ({ time: from + k, amount: amount(k) }));
-var QUESTION_CHECKS = [
-  {
-    tool: "finance.present_value",
-    question: "fm-026",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 26",
-    quotes: ["5000", "7% per year", "20 payments", "one year from today", "5%"],
-    input: { i: 0.05, flows: flows(20, 1, (k) => 5e3 * 1.07 ** (k + 1)) },
-    tolerance: 50,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-071",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 71",
-    // Times in half-years, at the half-year rate: 40 coupons of 45 and the 1200 redemption.
-    quotes: ["1000 par value 20-year bond", "10% convertible semiannually", "9% coupons payable semiannually", "redemption value of 1200"],
-    input: { i: 0.05, flows: [...flows(40, 1, () => 45), { time: 40, amount: 1200 }] },
-    tolerance: 0.5,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-082",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 82",
-    quotes: ["30-year annuity", "5% annual effective", "first payment of the annuity is due in ten years in the amount of 1,000", "increase by 500 each year"],
-    input: { i: 0.05, flows: flows(30, 10, (k) => 1e3 + 500 * k) },
-    tolerance: 0.5,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-225",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 225",
-    quotes: ["| 1 | 10 | 4.0% |", "| 2 | 12 | 4.5% |", "| 3 | 15 | 5.5% |", "| 4 | 20 | 7.0% |"],
-    input: {
-      flows: [
-        { time: 1, amount: 10, spot: 0.04 },
-        { time: 2, amount: 12, spot: 0.045 },
-        { time: 3, amount: 15, spot: 0.055 },
-        { time: 4, amount: 20, spot: 0.07 }
-      ]
-    },
-    tolerance: 5e-3,
-    value: pv
-  }
-];
-QUESTION_CHECKS.push(
-  {
-    tool: "finance.present_value",
-    question: "fm-245",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 245",
-    quotes: ["annual effective interest rate of 5%", "10-year annuity-immediate", "annual payment of 100", "increases each year by 15%"],
-    input: { i: 0.05, flows: flows(10, 1, (k) => 100 * 1.15 ** k) },
-    tolerance: 0.5,
-    value: pv
-  },
-  {
-    tool: "finance.present_value",
-    question: "fm-281",
-    bank: "exam-fm",
-    label: "SOA Exam FM sample question 281",
-    // The book value after year six is what the last eight half-yearly coupons and the redemption are worth then.
-    quotes: ["1000 par value ten-year bond", "7.6% semiannual coupons", "6.0% convertible semiannually", "end of year six"],
-    input: { i: 0.03, flows: [...flows(8, 1, () => 38), { time: 8, amount: 1e3 }] },
-    tolerance: 0.5,
-    value: pv
-  }
-);
-var questionRef = (q) => ({
-  question: q.question,
-  title: q.label,
-  url: `/quiz?ids=${q.question}`,
-  locator: q.label
-});
 function verifyCheck(check) {
   const spec = toolById(check.tool);
   if (!spec) throw new Error(`No tool ${check.tool}`);
@@ -2643,11 +3423,20 @@ function verifyCheck(check) {
 function checksFor(toolId) {
   return [
     ...CHECKS.filter((c) => c.tool === toolId).map((c) => c.source),
-    ...QUESTION_CHECKS.filter((q) => q.tool === toolId).map(questionRef)
+    ...QUESTION_CHECKS.filter((q) => q.steps.some((s) => s.tool === toolId)).map(questionRef)
   ];
 }
 function checkedValueCount(toolId) {
   return CHECKS.filter((c) => c.tool === toolId).reduce((n, c) => n + c.cases.reduce((m, k) => m + k.expect.length, 0), 0);
+}
+function runQuestionCheck(q) {
+  const results = [];
+  for (const step of q.steps) {
+    const spec = toolById(step.tool);
+    if (!spec) throw new Error(`No tool ${step.tool}`);
+    results.push(runTool(spec, step.input(results)));
+  }
+  return q.value(results);
 }
 
 // src/lib/tools/schema.ts
@@ -2795,6 +3584,7 @@ export {
   normalizeInput,
   readNumber,
   runPath,
+  runQuestionCheck,
   runTool,
   sourceLine,
   toolById,

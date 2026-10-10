@@ -24,14 +24,29 @@ const tool = (id: string): ToolSpec => {
 }
 const run = (id: string, input: unknown = {}) => runTool(tool(id), input)
 
+/** Every combination of a tool's choice fields' values (each choice's options, crossed). */
+function choiceSettings(spec: ToolSpec): Record<string, string>[] {
+  let settings: Record<string, string>[] = [{}]
+  for (const f of spec.fields) {
+    if (f.kind !== 'choice') continue
+    settings = settings.flatMap(s => f.options.map(o => ({ ...s, [f.key]: o.value })))
+  }
+  return settings
+}
+
 describe('the registry holds every tool to one job (R9)', () => {
   it.each(TOOLS.map(t => [t.id, t] as const))('%s', (_id, spec) => {
     expect(spec.id).toMatch(/^[a-z]+\.[a-z_]+$/)
     expect(AREAS.map(a => a.id)).toContain(spec.area)
     // One question, asked as a question.
     expect(spec.answers.trim().endsWith('?')).toBe(true)
-    // At most six scalar inputs, at most three headline results.
-    expect(spec.fields.filter(f => f.kind === 'number' || f.kind === 'choice').length).toBeLessThanOrEqual(6)
+    // At most six scalar inputs on the card at once — whichever choices are
+    // made, counting a field only while its `showWhen` draws it — and at most
+    // three headline results.
+    for (const setting of choiceSettings(spec)) {
+      const shown = spec.fields.filter(f => (f.kind === 'number' || f.kind === 'choice') && (!f.showWhen || f.showWhen.in.includes(setting[f.showWhen.field])))
+      expect(shown.length, JSON.stringify(setting)).toBeLessThanOrEqual(6)
+    }
     const result = runTool(spec, {})
     expect(result.tiles.length).toBeLessThanOrEqual(3)
     // A grid tool's grid is one of its table fields.
@@ -149,6 +164,81 @@ describe('Present Value', () => {
     const flows = Array.from({ length: 10 }, (_, k) => ({ time: k + 1, amount: 100 }))
     const pv = run('finance.present_value', { i: 0.05, flows }).values.present_value as number
     expect(pv).toBeCloseTo(run('finance.annuity', { payment: 100, n: 10, i: 0.05 }).values.present_value as number, 9)
+  })
+})
+
+describe('Internal Rate of Return', () => {
+  it('finds the rate that zeroes the flows, and inverts Present Value', () => {
+    const flows = [{ time: 0, amount: -1000 }, { time: 1, amount: 300 }, { time: 2, amount: 400 }, { time: 3, amount: 500 }]
+    const irr = run('finance.internal_rate_of_return', { flows }).values.irr as number
+    const pv = run('finance.present_value', { i: irr, flows: flows.slice(1) }).values.present_value as number
+    expect(pv).toBeCloseTo(1000, 8)
+  })
+
+  it('names every root when there is more than one', () => {
+    // −100, +230, −132: NPV = 0 at 10% and at 20%.
+    const out = run('finance.internal_rate_of_return', { flows: [{ time: 0, amount: -100 }, { time: 1, amount: 230 }, { time: 2, amount: -132 }] })
+    expect((out.values.rates as number[]).map(r => Number(r.toFixed(10)))).toEqual([0.1, 0.2])
+    expect(out.warnings[0]).toMatch(/2 rates/)
+  })
+
+  it('refuses flows all one way', () => {
+    expect(() => run('finance.internal_rate_of_return', { flows: [{ time: 0, amount: 100 }, { time: 1, amount: 100 }] })).toThrow(/at least one payment out/)
+  })
+})
+
+describe('Loan Schedule', () => {
+  it('repays a level loan to exactly zero, the principal summing to the loan', () => {
+    const out = run('finance.loan_schedule', { amount: 10000, i: 0.05, n: 10 })
+    expect(out.values.payment as number).toBeCloseTo(10000 / ((1 - 1.05 ** -10) / 0.05), 9)
+    expect((out.values.balance as number[])[9]).toBe(0)
+    expect((out.values.principal as number[]).reduce((s, p) => s + p, 0)).toBeCloseTo(10000, 8)
+  })
+
+  it('ends a given payment with a drop payment, and refuses one below the interest', () => {
+    const out = run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 300, n: 0 })
+    expect(out.values.final_payment as number).toBeLessThan(300)
+    expect(() => run('finance.loan_schedule', { amount: 1000, i: 0.1, payment: 100, n: 0 })).toThrow(/never repaid/)
+  })
+})
+
+describe('Bonds', () => {
+  const terms = { face: 1000, coupon: 0.06, redemption: 1000, years: 10, m: 2 }
+
+  it('prices a bond at par when it yields its coupon rate', () => {
+    expect(run('finance.bond_price', { ...terms, yield: 0.06 }).values.price as number).toBeCloseTo(1000, 9)
+  })
+
+  it('finds the yield a price gives, inverting Bond Price', () => {
+    const price = run('finance.bond_price', { ...terms, yield: 0.0725 }).values.price as number
+    expect(run('finance.bond_yield', { ...terms, price }).values.nominal_yield as number).toBeCloseTo(0.0725, 10)
+  })
+
+  it('amortizes the book value from the price to the redemption value', () => {
+    const out = run('finance.bond_amortization', { ...terms, yield: 0.05 })
+    const book = out.values.book_value as number[]
+    expect(book[book.length - 1]).toBe(1000)
+    expect(out.values.price as number).toBeCloseTo(run('finance.bond_price', { ...terms, yield: 0.05 }).values.price as number, 9)
+  })
+
+  it('refuses a term that is not a whole number of coupons', () => {
+    expect(() => run('finance.bond_price', { ...terms, years: 10.25 })).toThrow(/whole number of coupons/)
+  })
+})
+
+describe('Duration & Convexity, and Redington Immunization', () => {
+  it('gives a zero-coupon bond its maturity as duration', () => {
+    const out = run('finance.duration_convexity', { i: 0.05, flows: [{ time: 7, amount: 100 }] })
+    expect(out.values.macaulay as number).toBeCloseTo(7, 12)
+    expect(out.values.modified as number).toBeCloseTo(7 / 1.05, 12)
+    expect(out.values.convexity as number).toBeCloseTo((7 * 8) / 1.05 ** 2, 12)
+  })
+
+  it('finds the default portfolio immunized, and says which condition fails when it is not', () => {
+    expect(run('finance.redington_immunization').values.immunized).toBe(true)
+    const off = run('finance.redington_immunization', { flows: [{ time: 2, asset: 10000, liability: 10000 }] })
+    expect(off.values.immunized).toBe(false)
+    expect(off.warnings[0]).toMatch(/convexity/)
   })
 })
 

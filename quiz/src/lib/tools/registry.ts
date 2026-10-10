@@ -2,6 +2,13 @@ import type { PracticeArea, ToolSpec } from './types'
 import { interestConverter } from './finance/interestConverter'
 import { annuity } from './finance/annuity'
 import { presentValue } from './finance/presentValue'
+import { internalRateOfReturn } from './finance/internalRateOfReturn'
+import { loanSchedule } from './finance/loanSchedule'
+import { bondPrice } from './finance/bondPrice'
+import { bondYield } from './finance/bondYield'
+import { bondAmortization } from './finance/bondAmortization'
+import { durationConvexity } from './finance/durationConvexity'
+import { redingtonImmunization } from './finance/redingtonImmunization'
 import { ageToAgeFactors } from './reserving/ageToAge'
 import { developmentToUltimate } from './reserving/developmentToUltimate'
 import { chainLadder } from './reserving/chainLadder'
@@ -18,6 +25,7 @@ export const ENGINE_VERSION = '0.1.0'
 export const AREAS: { id: PracticeArea; label: string }[] = [
   { id: 'reserving', label: 'Reserving' },
   { id: 'ratemaking', label: 'Ratemaking' },
+  { id: 'distributions', label: 'Loss distributions' },
   { id: 'credibility', label: 'Credibility' },
   { id: 'finance', label: 'Financial mathematics' },
 ]
@@ -35,6 +43,13 @@ export const TOOLS: ToolSpec[] = [
   interestConverter,
   annuity,
   presentValue,
+  internalRateOfReturn,
+  loanSchedule,
+  bondPrice,
+  bondYield,
+  bondAmortization,
+  durationConvexity,
+  redingtonImmunization,
 ]
 
 const BY_ID = new Map(TOOLS.map(t => [t.id, t]))

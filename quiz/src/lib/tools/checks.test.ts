@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { CHECKS, QUESTION_CHECKS, checkedValueCount, checksFor, verifyCheck, type QuestionCheck } from './checks'
-import { runTool } from './run'
+import { CHECKS, checkedValueCount, checksFor, runQuestionCheck, verifyCheck } from './checks'
+import { QUESTION_CHECKS, type QuestionCheck } from './questionChecks'
 import { parseQuestion } from '../parser'
 import { toolById } from './registry'
 import friedland from './fixtures/friedland-2010.json'
@@ -56,29 +56,88 @@ describe('published exam questions', () => {
     if (!parsed) throw new Error(`${q.question} does not parse`)
     return parsed
   }
-  const numberOf = (text: string) => Number(text.replace(/[$,\s]/g, ''))
 
-  it.each(QUESTION_CHECKS.map(q => [`${q.tool} — ${q.question}`, q] as const))('%s', (_name, q) => {
+  it.each(QUESTION_CHECKS.map(q => [`${q.steps.map(s => s.tool).join(' → ')} — ${q.question}`, q] as const))('%s', (_name, q) => {
     const question = read(q)
     // Every input is quoted from the stem.
     for (const quote of q.quotes) expect(question.stem, `"${quote}" in ${q.question}`).toContain(quote)
-    // The numeric options ("Cannot be determined" is no number to be near).
-    const options = question.options.map(o => ({ key: o.key, value: numberOf(o.text) })).filter(o => Number.isFinite(o.value))
-    const keyed = options.find(o => o.key === question.answer)
+    const options = question.options.map(o => ({ key: o.key, value: readOption(o.text) })).filter(o => o.value !== null)
+    const keyed = options.find(o => o.key === question.answer)?.value
     expect(keyed, 'a numeric keyed answer').toBeTruthy()
     if (!keyed) return
-    const actual = q.value(runTool(toolById(q.tool)!, q.input))
+    const actual = runQuestionCheck(q)
+    if (keyed.kind === 'range') {
+      // A range answer ("At least 21, but less than 23"): the tool lands inside it.
+      expect(actual).toBeGreaterThanOrEqual(keyed.lo)
+      expect(actual).toBeLessThan(keyed.hi)
+      return
+    }
     expect(Math.abs(actual - keyed.value)).toBeLessThanOrEqual(q.tolerance)
     // And the tool picks the keyed answer: nearer it than any other option.
-    const nearest = [...options].sort((a, b) => Math.abs(a.value - actual) - Math.abs(b.value - actual))[0]
+    const nearest = options
+      .flatMap(o => (o.value!.kind === 'number' ? [{ key: o.key, value: o.value!.value }] : []))
+      .sort((a, b) => Math.abs(a.value - actual) - Math.abs(b.value - actual))[0]
     expect(nearest.key).toBe(question.answer)
   })
 
-  it('names the SOA sample question each check reads, and no question with an open critical finding', () => {
+  it('names each question as its publisher numbers it, and none with an open critical finding', () => {
     for (const q of QUESTION_CHECKS) {
-      expect(q.label).toBe(`SOA Exam FM sample question ${Number(q.question.replace('fm-', ''))}`)
+      expect(q.label).toBe(expectedLabel(q.question))
       expect(read(q).verification?.openCritical ?? 0).toBe(0)
-      expect(checksFor(q.tool).some(s => s.question === q.question)).toBe(true)
+      for (const step of q.steps) expect(checksFor(step.tool).some(s => s.question === q.question), `${step.tool} cites ${q.question}`).toBe(true)
     }
   })
+
+  it('reads the options a question prints', () => {
+    expect(readOption('10.25%')).toEqual({ kind: 'number', value: 0.1025 })
+    expect(readOption('$-2.22\\%$')).toEqual({ kind: 'number', value: -0.0222 })
+    expect(readOption('−2.47%')).toEqual({ kind: 'number', value: -0.0247 })
+    expect(readOption('3.4 years')).toEqual({ kind: 'number', value: 3.4 })
+    expect(readOption('$1{,}554$')).toEqual({ kind: 'number', value: 1554 })
+    expect(readOption('At least 21, but less than 23')).toEqual({ kind: 'range', lo: 21, hi: 23 })
+    expect(readOption('Less than -5%')).toEqual({ kind: 'range', lo: -Infinity, hi: -0.05 })
+    expect(readOption('At least 0.35')).toEqual({ kind: 'range', lo: 0.35, hi: Infinity })
+    expect(readOption('7th')).toBeNull()
+    expect(readOption('There is insufficient information to calculate the Macaulay duration.')).toBeNull()
+  })
 })
+
+type OptionValue = { kind: 'number'; value: number } | { kind: 'range'; lo: number; hi: number }
+
+/** An option as printed: a number (5.56, 10.25%, "3.4 years") or a range ("At least 21, but less than 23"). */
+function readOption(text: string): OptionValue | null {
+  const clean = text.replace(/\$/g, '').replace(/\{,\}/g, ',').replace(/\\%/g, '%').replace(/[−–]/g, '-').trim()
+  const num = (t: string) => {
+    const m = /^(-?\s*[\d,]*\.?\d+)\s*(%?)$/.exec(t.trim())
+    if (!m) return null
+    const n = Number(m[1].replace(/[,\s]/g, ''))
+    return m[2] ? Number((n / 100).toPrecision(12)) : n
+  }
+  const between = /^At least (.+), but less than (.+)$/i.exec(clean)
+  if (between) {
+    const lo = num(between[1])
+    const hi = num(between[2])
+    return lo === null || hi === null ? null : { kind: 'range', lo, hi }
+  }
+  const below = /^Less than (.+)$/i.exec(clean)
+  if (below) {
+    const hi = num(below[1])
+    return hi === null ? null : { kind: 'range', lo: -Infinity, hi }
+  }
+  const above = /^At least (.+)$/i.exec(clean)
+  if (above) {
+    const lo = num(above[1])
+    return lo === null ? null : { kind: 'range', lo, hi: Infinity }
+  }
+  const value = num(clean.replace(/\s+(years?|months?)$/i, ''))
+  return value === null ? null : { kind: 'number', value }
+}
+
+/** How a bank's id reads as its publisher's name for the question. */
+function expectedLabel(id: string): string {
+  const soa = /^(fm|p)-(\d+)$/.exec(id)
+  if (soa) return `SOA Exam ${soa[1].toUpperCase()} sample question ${Number(soa[2])}`
+  const cas = /^(masi|masii)-(\d{4})([sf])-(\d+)$/.exec(id)
+  if (cas) return `CAS Exam ${cas[1] === 'masi' ? 'MAS-I' : 'MAS-II'}, ${cas[3] === 's' ? 'Spring' : 'Fall'} ${cas[2]}, question ${Number(cas[4])}`
+  throw new Error(`No label rule for ${id}`)
+}

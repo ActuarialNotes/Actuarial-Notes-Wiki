@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
-import { ArrowLeft, Calculator, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
+import { ArrowLeft, Calculator, Sigma, Landmark, Scale, TrendingUp, type LucideIcon } from 'lucide-react'
 import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type PracticeArea } from '@/lib/tools'
 import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
@@ -26,6 +26,7 @@ import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 const AREA_ICON: Record<PracticeArea, LucideIcon> = {
   reserving: Landmark,
   ratemaking: TrendingUp,
+  distributions: Sigma,
   credibility: Scale,
   finance: Calculator,
 }

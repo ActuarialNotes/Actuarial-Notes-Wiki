@@ -32,7 +32,7 @@ import {
   standardNormalPdf,
   openUnit,
   type Rng,
-} from '@/lib/distributionMath'
+} from './distributionMath'
 
 export type DistributionKey =
   | 'normal'

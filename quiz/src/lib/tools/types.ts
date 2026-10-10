@@ -10,7 +10,7 @@
  * serverless functions (`npm run tools:bundle`), outside the app's `@/` alias.
  */
 
-export type PracticeArea = 'reserving' | 'ratemaking' | 'credibility' | 'finance'
+export type PracticeArea = 'reserving' | 'ratemaking' | 'distributions' | 'credibility' | 'finance'
 
 /** How a number is read and shown. A `percent` is stored as a decimal (0.05) and shown as 5%. */
 export type NumberUnit = 'percent' | 'money' | 'factor' | 'count' | 'years' | 'plain'

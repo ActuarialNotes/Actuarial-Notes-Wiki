@@ -10,9 +10,9 @@
 // result's judgments say honestly which were left at their default (R3), in
 // the card, the export and the "Copy for AI" call alike.
 
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
+import { ArrowDownToLine, BadgeCheck, ListChecks, RotateCcw } from 'lucide-react'
 import {
   ToolInputError,
   checksFor,
@@ -26,9 +26,14 @@ import {
   type NumberField,
   type TableField,
   type TriangleField,
+  type ToolInput,
   type ToolResult,
   type ToolSpec,
 } from '@/lib/tools'
+import { fillColumn, scalarSources, selectionsToFactors, type ColumnSource, type Selection } from '@/lib/toolColumns'
+import { FactorSelection } from './FactorSelection'
+import { lastRun, rememberRun } from '@/lib/toolRuns'
+import { SourceSheet, type Sourcing } from './SourceSheet'
 import { fromDisplay, toDisplay } from '@/lib/tools/format'
 import { runToolCall, toolResultSheets } from '@/lib/toolExport'
 import { fieldVisible, groupSources, initialDraft, type Draft } from '@/lib/toolDraft'
@@ -43,14 +48,26 @@ export function ToolCard({
   spec,
   initialInput,
   onOpenMethod,
+  onResult,
+  embedded = false,
 }: {
   spec: ToolSpec
   initialInput?: unknown
   onOpenMethod?: () => void
+  /** Told each result as it changes (null while an input is unreadable) — the source sheet reads it. */
+  onResult?: (result: ToolResult | null) => void
+  /** Drawn inside another card's source sheet: no sources of its own, no Send to… */
+  embedded?: boolean
 }) {
   const navigate = useNavigate()
   const [draft, setDraft] = useState<Draft>(() => initialDraft(spec, initialInput))
   const lastGood = useRef<ToolResult | null>(null)
+  const [sourcing, setSourcing] = useState<Sourcing | null>(null)
+  // Age-to-Age Factors' selection exhibit (§6.6): the picks, one per interval.
+  // A new triangle starts them over.
+  const selecting = spec.id === SELECTING_TOOL
+  const [selections, setSelections] = useState<(Selection | null)[]>([])
+  useEffect(() => setSelections([]), [draft.triangle])
 
   const outcome = useMemo(() => {
     try {
@@ -65,8 +82,30 @@ export function ToolCard({
   const result = outcome.result
   const stale = outcome.error !== null
 
+  // The session remembers each tool's last good run, for the candidates a
+  // cell's stepper offers elsewhere (§6.6); a source sheet is told each result.
+  useEffect(() => {
+    if (result && !stale) rememberRun(spec.id, result.input)
+    onResult?.(stale ? null : result)
+  }, [result, stale, spec.id, onResult])
+
   const set = (key: string, value: unknown) => setDraft(d => ({ ...d, [key]: value }))
   const valueOf = (f: ToolSpec['fields'][number]) => draft[f.key] ?? (f as { default: unknown }).default
+
+  /** Open the tool a column's values come from, filled from this grid where it can be (§6.6). */
+  const fillFrom = (field: TableField, key: string, source: ColumnSource) => {
+    const tool = toolById(source.tool)
+    if (!tool) return
+    const column = field.columns.find(c => c.key === key)
+    const rows = valueOf(field) as DraftRow[]
+    setSourcing({
+      title: `${column?.label ?? key} from ${tool.name}`,
+      how: source.how,
+      tool,
+      initial: source.prefill?.(rows) ?? (lastRun(tool.id) as ToolInput | undefined),
+      apply: r => set(field.key, fillColumn(valueOf(field) as DraftRow[], key, source.take(r, rows))),
+    })
+  }
 
   const slug = toolSlug(spec)
   const menu: ToolMenuItem[] = [
@@ -77,12 +116,18 @@ export function ToolCard({
       key: 'xlsx', label: 'Download .xlsx', icon: 'download', disabled: !result || stale,
       run: () => { if (result) downloadWorkbook(`${slug}.xlsx`, toolResultSheets(spec, result)) },
     },
-    ...(spec.next ?? []).flatMap(next => {
+    ...(embedded ? [] : spec.next ?? []).flatMap(next => {
       const target = toolById(next.tool)
       if (!target || !result || stale) return []
+      const picked = selecting && selections.some(Boolean)
       return [{
-        key: `next-${next.tool}`, label: `Send to ${next.label}`, icon: 'next' as const,
-        run: () => { navigate(runPath(toolSlug(target), next.build(result.input, result))) },
+        key: `next-${next.tool}`, label: `Send ${picked ? 'selections ' : ''}to ${next.label}`, icon: 'next' as const,
+        run: () => {
+          const built = picked
+            ? selectionsToFactors(result.values.ages as number[], result.values.averages as (number | null)[], selections)
+            : next.build(result.input, result)
+          navigate(runPath(toolSlug(target), built))
+        },
       }]
     }),
   ]
@@ -153,7 +198,14 @@ export function ToolCard({
       ))}
       {grid ? (
         <InputBlock label={labelled ? grid.label : null}>
-          <EditableTable field={grid} rows={valueOf(grid) as DraftRow[]} result={stale ? undefined : result?.table} onChange={rows => set(grid.key, rows)} />
+          <EditableTable
+            field={grid}
+            rows={valueOf(grid) as DraftRow[]}
+            result={stale ? undefined : result?.table}
+            onChange={rows => set(grid.key, rows)}
+            toolId={embedded ? undefined : spec.id}
+            onFillFrom={(key, source) => fillFrom(grid, key, source)}
+          />
         </InputBlock>
       ) : (
         spec.view === 'table' && result?.table && (
@@ -162,12 +214,44 @@ export function ToolCard({
           </div>
         )
       )}
+      {selecting && result && !stale && !embedded && (
+        <FactorSelection
+          input={result.input}
+          intervals={result.values.intervals as string[]}
+          averages={result.values.averages as (number | null)[]}
+          selections={selections}
+          onSelect={setSelections}
+        />
+      )}
 
       {scalars.length > 0 && (
         <div className="space-y-1">
           {scalars.map(f =>
             f.kind === 'number' ? (
-              <NumberControl key={f.key} field={f} value={Number(valueOf(f))} chosen={draft[f.key] !== undefined} onChange={v => set(f.key, v)} />
+              <NumberControl
+                key={f.key}
+                field={f}
+                value={Number(valueOf(f))}
+                chosen={draft[f.key] !== undefined}
+                onChange={v => set(f.key, v)}
+                sources={embedded ? [] : scalarSources(spec.id, f.key).map(source => ({
+                  label: toolById(source.tool)?.name ?? source.tool,
+                  open: () => {
+                    const tool = toolById(source.tool)
+                    if (!tool) return
+                    setSourcing({
+                      title: `${f.label} from ${tool.name}`,
+                      how: source.how,
+                      tool,
+                      initial: lastRun(tool.id),
+                      apply: r => {
+                        const v = source.take(r)
+                        if (v != null && Number.isFinite(v)) set(f.key, v)
+                      },
+                    })
+                  },
+                }))}
+              />
             ) : f.kind === 'date' ? (
               <DateControl key={f.key} field={f} value={String(valueOf(f))} onChange={v => set(f.key, v)} />
             ) : (
@@ -193,9 +277,13 @@ export function ToolCard({
           </ol>
         </details>
       )}
+      {sourcing && <SourceSheet sourcing={sourcing} onClose={() => setSourcing(null)} />}
     </div>
   )
 }
+
+/** The tool whose card carries the LDF selection exhibit (§6.6). */
+const SELECTING_TOOL = 'reserving.age_to_age_factors'
 
 /**
  * The menu's head: the question the tool answers, then what it was tested
@@ -277,7 +365,20 @@ function DefaultDot({ show }: { show: boolean }) {
   )
 }
 
-function NumberControl({ field, value, chosen, onChange }: { field: NumberField; value: number; chosen: boolean; onChange: (v: number) => void }) {
+function NumberControl({
+  field,
+  value,
+  chosen,
+  onChange,
+  sources = [],
+}: {
+  field: NumberField
+  value: number
+  chosen: boolean
+  onChange: (v: number) => void
+  /** The tools this value can be taken from (§6.6), each opening in the source sheet. */
+  sources?: { label: string; open: () => void }[]
+}) {
   const shown = toDisplay(value, field.unit)
   const [text, setText] = useState<string | null>(null)
   const sliderMax = Math.max(field.sliderMax ?? field.max, Math.min(value, field.max))
@@ -292,6 +393,18 @@ function NumberControl({ field, value, chosen, onChange }: { field: NumberField;
           {field.judgment && <DefaultDot show={!chosen} />}
         </label>
         <span className="flex items-center gap-1">
+          {sources.map(s => (
+            <button
+              key={s.label}
+              type="button"
+              onClick={s.open}
+              aria-label={`${field.label} from ${s.label}`}
+              title={`From ${s.label}`}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              <ArrowDownToLine className="h-4 w-4" aria-hidden />
+            </button>
+          ))}
           <input
             aria-label={`${field.label} value`}
             inputMode="decimal"

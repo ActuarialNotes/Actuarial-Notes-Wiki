@@ -3593,8 +3593,65 @@ function readNumber(raw, percent) {
   if (!text) return null;
   const isPct = text.endsWith("%");
   const n = Number(isPct ? text.slice(0, -1) : text);
-  if (!Number.isFinite(n)) return null;
-  return isPct && percent ? n / 100 : n;
+  if (Number.isFinite(n)) return isPct && percent ? n / 100 : n;
+  return evaluateArithmetic(text);
+}
+function evaluateArithmetic(raw) {
+  const src = raw.replace(/\s+/g, "").replace(/^=/, "").replace(/[×x]/g, "*").replace(/÷/g, "/").replace(/−/g, "-");
+  if (!src || !/^[-+*/^().%\d eE]+$/.test(src)) return null;
+  let i = 0;
+  const peek = () => src[i];
+  const expr = () => {
+    let v = term();
+    while (peek() === "+" || peek() === "-") v = src[i++] === "+" ? v + term() : v - term();
+    return v;
+  };
+  const term = () => {
+    let v = unary();
+    while (peek() === "*" || peek() === "/") v = src[i++] === "*" ? v * unary() : v / unary();
+    return v;
+  };
+  const unary = () => {
+    if (peek() === "-") {
+      i++;
+      return -unary();
+    }
+    if (peek() === "+") {
+      i++;
+      return unary();
+    }
+    return power();
+  };
+  const power = () => {
+    const base = atom();
+    if (peek() !== "^") return base;
+    i++;
+    return base ** unary();
+  };
+  const atom = () => {
+    let v;
+    if (peek() === "(") {
+      i++;
+      v = expr();
+      if (src[i++] !== ")") throw new Error("bracket");
+    } else {
+      const m = /^(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?/.exec(src.slice(i));
+      if (!m) throw new Error("number");
+      i += m[0].length;
+      v = Number(m[0]);
+    }
+    if (peek() === "%") {
+      i++;
+      v /= 100;
+    }
+    return v;
+  };
+  try {
+    const v = expr();
+    return i === src.length && Number.isFinite(v) ? v : null;
+  } catch {
+    return null;
+  }
 }
 function numberField(f, raw) {
   const n = readNumber(raw, f.unit === "percent");
@@ -9436,6 +9493,7 @@ export {
   defaultInput,
   describeTool,
   encodeRunInput,
+  evaluateArithmetic,
   formatValue,
   inputSchema,
   normalizeInput,

@@ -2,8 +2,13 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNo
 import { flushSync } from 'react-dom'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory, type BrowserHistory, type Location, type Action } from '@remix-run/router'
-import { canTransition, isPageMove, paperMove, sheetInset, startViewTransition } from '@/lib/viewTransition'
+import { canTransition, effectiveAction, isPageMove, paperMove, sheetInset, startViewTransition } from '@/lib/viewTransition'
 import { arrivalScroll, loadScrollMemory, rememberScroll, saveScrollMemory, type ScrollMemory } from '@/lib/routeScrollMemory'
+import { currentHistoryIndex, recordNavigation, startNavTrail } from '@/hooks/useBack'
+
+function trailEntry(location: Location) {
+  return { key: location.key, path: `${location.pathname}${location.search}${location.hash}` }
+}
 
 function sessionStore(): Storage | undefined {
   try { return window.sessionStorage } catch { return undefined }
@@ -66,6 +71,8 @@ function scrollToSettled(top: number) {
  * It also keeps the reader's place: the window's position is recorded as each
  * page is left and put back when Back or Forward returns to it
  * (`lib/routeScrollMemory.ts` decides; the browser's own restoration is off).
+ * And it keeps the record of where the reader has been (`lib/navTrail.ts`),
+ * which is how every back control in the app knows the page they came from.
  *
  * Four details are load-bearing:
  *
@@ -94,7 +101,13 @@ export default function PaperRouter({
   preload?: (path: string) => Promise<unknown> | null
 }) {
   const historyRef = useRef<BrowserHistory>()
-  if (!historyRef.current) historyRef.current = createBrowserHistory({ v5Compat: true })
+  if (!historyRef.current) {
+    // Read before the router stamps the entry: an unstamped one is a document
+    // opened from outside, with nothing of the app's behind it.
+    const fresh = currentHistoryIndex() === null
+    historyRef.current = createBrowserHistory({ v5Compat: true })
+    startNavTrail(trailEntry(historyRef.current.location), currentHistoryIndex() ?? 0, fresh)
+  }
   const history = historyRef.current
 
   const [state, setState] = useState<{ action: Action; location: Location }>({
@@ -132,7 +145,7 @@ export default function PaperRouter({
   useLayoutEffect(() => {
     const from = shownRef.current
     shownRef.current = state.location
-    const top = arrivalScroll(memoryRef.current!, from, state.location, state.action)
+    const top = arrivalScroll(memoryRef.current!, from, state.location, effectiveAction(state.action, state.location.state) as Action)
     if (top !== null) scrollToSettled(top)
   }, [state])
 
@@ -155,8 +168,10 @@ export default function PaperRouter({
     window.addEventListener('popstate', onPopState)
 
     const unlisten = history.listen(({ action, location, delta }) => {
-      // First, before anything moves: where the page being left was read to.
+      // First, before anything moves: where the page being left was read to,
+      // and the entry arrived on, so the page arriving can name its way back.
       if (shownRef.current) remember(shownRef.current)
+      recordNavigation(trailEntry(location), action)
       const mine = ++ticket
       const from = heading
       heading = location
@@ -164,7 +179,7 @@ export default function PaperRouter({
 
       const byGesture = action === 'POP' && gestureDrewBack
       gestureDrewBack = false
-      const move = byGesture ? null : paperMove(from.pathname, location.pathname, action, delta)
+      const move = byGesture ? null : paperMove(from.pathname, location.pathname, effectiveAction(action, location.state), delta)
 
       if (!move || !canTransition()) {
         setState(next)

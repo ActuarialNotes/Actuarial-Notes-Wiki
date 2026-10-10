@@ -1,13 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:876df01c1d8cd206583bf7bf11f14cd676b734c5789d432d28a67131459d3282
+  content_hash: sha256:a55125a2c7d50ce81ceacd4994e4e19a142ff71be9f4e2ebd40406e4a2366030
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 72-80 (PDF pp. 84-92), Current Rate Level: extension of exposures, parallelogram method Steps 1-6, six-month and policy-year variants, Rate Changes Mandated by Law, and the method shortcomings, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp.71-80 (PDF pp.83-92); Ch. 5 p.82 (PDF p.94); Ch. 6 p.100 (PDF p.112), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/On-Leveling.md
 ---
@@ -19,10 +19,10 @@ verification:
 **The parallelogram method.** Picture a unit square whose horizontal axis is calendar time and whose vertical axis is the fraction of the policy term elapsed. A rate change effective on date $d$ enters as a diagonal line; each region's **area** is the share of the year's earned premium written at that rate level.
 
 - For **annual** policies written uniformly, a rate change effective at time $p$ through year $Y$ earns over a triangle of area $\tfrac{1}{2}(1-p)^2$ in year $Y$ — so a $7/1$ change affects only $0.125$ of that year's earned premium, and a $1/1$ change affects $0.500$.
-- The method's assumptions are its weaknesses: premium written **uniformly** through the year, a **single** policy term, and rate changes applied uniformly to all risks. Seasonal writing (crop, some property) or a mid-year term change breaks it.
+- The method's assumptions are its weaknesses: premium written **uniformly** through the year, a **single** policy term, and rate changes applied uniformly to all risks. Seasonal writing (Werner's example: boat owners policies, bought before the boating season) or a mid-year term change breaks it, and where the rate changes varied by class the on-level premium is unusable for classification ratemaking.
 - **Extension of exposures** has none of those assumptions — it simply re-rates each historical policy at today's rates — and it automatically captures distributional shifts. Its cost is data: policy-level detail for every historical year, and a rating engine that still knows the old policies' characteristics.
-- A special case: if the rate change applies to **in-force** policies rather than only new and renewal business, the parallelogram geometry no longer holds and the change is treated as effective immediately across the whole book.
-- On-levelling handles rate changes only; changes in the average risk being written are [[Premium Trend|premium trend]], and law amendments or benefit-level changes are handled by a separate law-level adjustment on the loss side.
+- A special case: if the rate change applies to **in-force** policies rather than only new and renewal business — Werner's case is a change mandated by law — it takes effect immediately across the whole book and is drawn as a **vertical** line rather than a diagonal one. The areas are still found by geometry, and the on-level factor is still the current cumulative index over the year's average index.
+- On-levelling handles rate changes only (law-mandated ones included); changes in the average premium from distributional shifts in the business written are [[Premium Trend|premium trend]], and the effect of a coverage or benefit-level change on losses is a separate adjustment on the loss side.
 
 ![[Media/Figures/On-Leveling.svg|340]]
 

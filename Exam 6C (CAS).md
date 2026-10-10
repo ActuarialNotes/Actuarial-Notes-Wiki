@@ -2,13 +2,12 @@
 verification:
   status: in_review
   confidence: null
-  last_checked: 2026-10-03
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:9bf165a6265ccc43a428661986fae4f8d39dfd0fcc28b02e21ec17c2f4b038ee
   sources:
     - "CAS, Exam Content Outline — Canada Regulation and Financial Reporting – Exam 6C, Fall 2026 (the 'October 2026 Content Outline'; v04 2026-05-26, 14 pp.), PDF pp.1-14, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf"
-    - "CAS, Exam Content Outline — Exam 6C, Fall 2025 (v04 2025-05-09, 14 pp.), PDF pp.1-14, for the wording the page carries and the readings Fall 2026 dropped, sha256:b47003231c4bff742f5ca8829ff3c6f26f2e639c1c733f17d3c418f85b422bcb — https://www.casact.org/sites/default/files/2025-05/Exam_6C_ContentOutlines_2025_F.pdf"
-    - "CAS, Exam 6C-Regulation and Financial Reporting (Canada) exam page, read 2026-10-03: window October 19-27, 2026; the October 2026 Content Outline is the only outline linked; no notice or errata — https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada"
+    - "CAS, Exam 6C-Regulation and Financial Reporting (Canada) exam page, read 2026-10-09: window October 19-27, 2026; the October 2026 Content Outline is the only outline linked; no errata or syllabus update — https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada"
   open_findings: 8
   open_critical: 0
   log: .verify/Exam 6C (CAS).md

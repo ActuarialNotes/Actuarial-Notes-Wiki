@@ -846,6 +846,21 @@ Other important `lib/` modules:
   and a same-page change (query, hash) or a redirect leaves the window alone. The browser's
   own restoration is off. Pages don't save or restore their own scroll — don't add a
   per-page copy. Pure and tested; the flow is in `e2e/wiki.spec.ts`.
+- `navTrail.ts` — **where the reader came from**: the app's own record of the history stack,
+  fed by `PaperRouter` on every move (keyed by the `idx` the router stamps on `history.state`,
+  mirrored to sessionStorage, checked by entry key so another visit's record is never trusted).
+  `backTarget` is the nearest earlier entry on another *page* (a filter, a `?concept=` popup or
+  a hash is the same page; the sign-in screens are never a target), and `placeLabel` names it.
+  **Every back control goes through `hooks/useBack.ts`**: `useBack({ to, label })` returns the
+  way back — the browser's own Back to the page left (scroll, filters and search intact, drawn
+  as a `pop`), or up to the `to` fallback for a reader who came in from outside the app — and
+  its name ("Back to Exam P-1"); `usePageLabel` lets a page name its own entry better than its
+  path can (an exam's builder, a Cowork source, a project brief). Don't hardcode a parent in a
+  back arrow; pass it as the fallback. Two moves keep the history honest: the Quiz tab's open
+  exam is an entry of its own (`/?topic=…`), so quitting a quiz returns to that exam's builder,
+  and a finished quiz hands its entry to the review (`replace` with `REPLACE_AS_PUSH` from
+  `viewTransition.ts`, still drawn as a push), so Back from a review never lands on a quiz that
+  is over. Pure and tested; the flows are in `e2e/wiki.spec.ts` and `e2e/quiz-resume.spec.ts`.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
   Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite
@@ -1143,8 +1158,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **197 test files /
-~3205 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **198 test files /
+~3490 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).
@@ -1219,10 +1234,9 @@ compile — don't "clean up" the flagged code as dead.
   its text. A reading line that opens with learning-objective codes (`A1, C1-C5`) gives
   the shelf a **Learning objective** filter (`readingObjectives` / `objectiveFilterOptions`
   in `lib/sourceMaterial.ts`), each code named from the page's own numbered objectives —
-  but only where every cited code is one the page numbers. Exam 6C, 7, 8, 9, MAS-I, MAS-II
-  and PCPA have it; Exam 5 and 6U cite codes in another numbering than their
-  objectives' (Exam 5's readings cite B1–B42, its page numbers B18–B42), so they get none
-  until the two agree. `sourceMaterial.test.ts` holds Exam 6C's and MAS-I's readings to
+  but only where every cited code is one the page numbers. Exam 5, 6C, 7, 8, 9, MAS-I,
+  MAS-II and PCPA have it; Exam 6U cites codes from an earlier outline than its objectives'
+  numbering, so it gets none until the two agree. `sourceMaterial.test.ts` holds Exam 6C's and MAS-I's readings to
   their objectives.
 - **Every** content file (`questions/`, `Concepts/`, `Resources/`, root `Exam *.md`) carries a
   `verification:` block as the last key of its YAML frontmatter — including concept and exam
@@ -1285,7 +1299,13 @@ compile — don't "clean up" the flagged code as dead.
   OCR characters). Tests: `scripts/test_pdf_pipeline.py`.
 - `verify_lib.py` / `verify_check.py` / `verify_targets.py` / `verify_context.py` /
   `verify_record.py` / `sync_reports.py` / `generate_validation_status.py` — the **VERIFY**
-  toolchain. `verify_check.py` is the CI gate (and `--sync` the repair pass);
+  toolchain. The **packet tooling** beside it (`docs/verification-plan.md` §4):
+  `verify_sources.py` (the shared source cache, outside the repo, OCR'ing scans),
+  `verify_paper.py` (one past paper and every question sat on it: blind stems, stems
+  located and diffed in the booklet, the report side), `verify_route.py` (concept →
+  syllabus task → reading → focus pages, one packet per reading), `verify_record.py batch`
+  and `verify_targets.py --by-source`. Cloud sessions get PyMuPDF and Tesseract from
+  `.claude/hooks/session-start.sh`. Tests: `scripts/test_verify_wave0.py`. `verify_check.py` is the CI gate (and `--sync` the repair pass);
   `verify_record.py` is the only supported way to write a finding, resolution or status —
   it dedupes findings by fingerprint and refuses to mark anything `verified` without a
   cited source. Stdlib only, no PyYAML. Tests: `python3 -m unittest discover -s scripts`.

@@ -17,3 +17,23 @@ created: 2026-09-13
 - proposed_action: Change +25.0% to +25.1%.
 - applied: true
 - fingerprint: b466851fc1a6
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Applied fix confirmed on the page: the closing display now reads +25.1%. Recomputed this run: 2,400 e^(-500/2400) / (2,000 e^(-0.25)) - 1 = 25.11%.
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Definition and LEV formula against Werner p.202 continuous LER; relativity 1 - LER p.200; data bullet rewritten to Werner p.201 (empirical when ground-up known; net-loss data cannot use higher-deductible policies) — 'gamma' and 'empirical preferred' removed as unsourced; inflation bullet against Werner p.202 and Palmer's leveraged effect; expense bullet rewritten to Werner's all-variable assumption, Ch.9 fixed-expense flattening and the large-deductible claim-handling point (p.303) — the unsourced 'still investigates claims below the deductible in many lines' replaced. Examples recomputed: (100,000 + 600 x 500)/1,500,000 = 26.7%; 1 - e^-0.25 = 22.1%, 1 - e^-0.2083 = 18.8%, relativities 0.779/0.812, excess growth +25.1%.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 pp.199-202 (PDF pp.211-214); Ch.9 p.161 (PDF p.173); Ch.15 p.303 (PDF p.315), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; Palmer, Increased Limits Ratemaking for Liability Insurance (CAS study note, 2006), PDF pp.13-14, sha256:44fcc71dbf33647fd07be04e515239989907eb894fc8df5fb18b541ebe301cf7 — https://www.casact.org/sites/default/files/database/studynotes_palmer.pdf
+- note: F-001 closed. Medium: examples are vault-authored.

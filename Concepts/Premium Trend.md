@@ -2,25 +2,24 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-09-12
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:866d091d7543b661541188796d2094f3a531cc066f7a6b9bd3ea278f80d36a79
+  content_hash: sha256:3bf4e88c71212bed15553b6a0073277a3b55a6b6e7e2dd8c6b04104698e25496
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 pp. 82-88 (PDF pp. 94-100), Premium Trend: Table 5.24, One-Step Trending and the trend period (Figs. 5.26-5.27), Two-Step Trending, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Appendix A p. A-3 (PDF p. 341), Premium Trend Exhibit Sheet 3, Columns 4-9, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 5 p.64 and pp.81-88 (PDF p.76, pp.93-100), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Premium Trend.md
 ---
 
-**Premium Trend** is the change over time in the average premium per exposure at a *constant rate level* — the drift caused by shifts in amounts of insurance, limits, deductibles, [[Mix of Business|mix of business]] and inflation-sensitive exposure bases, as distinct from deliberate [[Rate Change|rate changes]], which [[On-Leveling|on-levelling]] handles.
+**Premium Trend** is the change over time in the average premium per exposure at a *constant rate level* — the drift caused by distributional shifts in the policies written (amounts of insurance, limits, deductibles, [[Mix of Business|mix of business]]), as distinct from deliberate [[Rate Change|rate changes]], which [[On-Leveling|on-levelling]] handles, and from inflation in an inflation-sensitive exposure base, which Werner & Modlin treat as [[Exposure Trend|exposure trend]].
 
 > $$\text{Average Premium at Current Rate Level} = \frac{\text{On-Level Premium}}{\text{Earned Exposures}}$$
 
 > $$\text{Premium Trend Factor} = (1 + t_P)^{n}$$
 
-- The trend is measured on the **average premium at current rate level**, usually from written data (which reflects what is being sold now) fitted with an exponential regression over the last several quarters or years.
-- The trend period $n$ runs from the average written date of the experience period to the **average written date of the forecast policy period** — further out than the loss trend period, because premium is trended from when policies were written rather than when losses occurred.
+- The trend is measured on the **average premium per exposure at current rate level**, usually from written data — a leading indicator, reflecting distributional shifts sooner than earned premium — often quarterly. An exponential or linear fit may guide the selection, though Werner & Modlin note curve-fitting is usually unnecessary because the changes are normally consistent from period to period.
+- The trend period $n$ runs from the average written date of the policies earning premium in the experience period to the **average written date of the policies in effect while the new rates are** — for calendar-year 2011 earned premium and annual policies written in 2013, $1/1/2011$ to $6/30/2013$, or $2.5$ years. Measuring between average *earned* dates gives the same $2.5$ years, because both dates shift by the same amount; with six-month policies the trend-from date moves to $4/1/2011$ and the period is $2.25$ years.
 - **One-step trending** applies a single selected annual trend across the whole period. It is adequate when the drift has been steady.
 - **Two-step trending** is used when the recent history contains a shift the historical fit would understate or overstate. Step one brings historical average earned premium up to the **current** average written premium level (a known, observed figure); step two projects forward from there at a selected prospective trend:
 
@@ -28,8 +27,8 @@ verification:
 
 > $$\text{Step 2} = (1 + t_P)^{n_2}$$
 
-- Premium trend matters most where the exposure base inflates ([[Exposure Trend]]) or where the book is drifting — rising homeowners amounts of insurance, higher liability limits, shifting deductible mix. Where the exposure base is a stable count and mix is stable, the trend is near zero and may be omitted.
-- Applying premium trend in a [[Pure Premium Method]] indication is a double count: that method never divides by premium, and the same phenomenon is captured there by exposure trend in the denominator.
+- Premium trend matters where the book is drifting — homeowners amounts of insurance indexed to inflation, a move of insureds to higher deductibles, the acquisition of a book of higher-valued homes (Werner & Modlin's three examples). The actuary decides whether an observed shift was a one-time event or will continue, and where the mix is stable the trend is near zero.
+- Premium trend is not needed for a [[Pure Premium Method]] indication: only the loss ratio approach requires the actuary to estimate the premium to be collected in the future period.
 
 ![[Media/Figures/Premium_Trend.svg|340]]
 

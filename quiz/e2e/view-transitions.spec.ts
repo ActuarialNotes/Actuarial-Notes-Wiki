@@ -124,7 +124,7 @@ test.describe('tab-switch view transitions', () => {
     // the page's chunk has come (components/PaperRouter.tsx) — and a Back that
     // lands first rightly wins, leaving no push to record. A reader goes back
     // from a page they can see, so the test waits for it too.
-    await expect(page.getByRole('link', { name: 'All exams' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Back to Study Guides' })).toBeVisible()
     // Back: that sheet swiped off again.
     await page.goBack()
     await expect(page.locator('a[data-tour="exam-p"]')).toBeVisible()

@@ -8,14 +8,14 @@ Edition: "12th"
 Type: "Textbook"
 ISBN: "978-0-12-814346-9"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-05
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:beef5096e06a2e214820036be67ef5e17a05d1c5167741f2fa9e6cfd96dbfb1f
   sources:
     - "Ross, Introduction to Probability Models, Twelfth Edition (Academic Press, 2019), title page and printed Contents pp. v-x, library scan (TU Ilmenau via K10plus), re-fetched 2026-10-05, sha256:0c754803d244fd8e3d9343742c99e98ded9a331894a833711e17b018622023dc — https://www.gbv.de/dms/ilmenau/toc/1665053453.PDF"
-    - "Google Books record for ISBN 9780128143469: publisher description, Twelfth Edition, Academic Press 2019, fetched 2026-10-05, sha256:9ee0a9dcaa73134607d9b364b22944e733e2fda14cb2f01dd6896383d695ff21 — https://books.google.com/books?vid=ISBN9780128143469"
+    - "Google Books record for ISBN 9780128143469: publisher description, Twelfth Edition, Academic Press 2019, fetched 2026-10-05, sha256:bb8ba54506a6c6f194d0484c16ca610bd6e826cc51b4d2b1743888c2fad27a92 — https://books.google.com/books?vid=ISBN9780128143469"
     - "CAS Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026_6_29), Complete Text References p.6 (and Domain readings pp.3-5), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
   open_findings: 0
   open_critical: 0

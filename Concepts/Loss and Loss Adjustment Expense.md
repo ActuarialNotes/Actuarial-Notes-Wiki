@@ -1,14 +1,13 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-13
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eb62adbc7b5bfd6144a474e50e48fe7346bd7c8fd92e418c6e7d6d8b98f11748
+  content_hash: sha256:81fd18ad83f3c32e3aad14d6a8955493ff76cfce80daeb4228191ec1be3b731b
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.4 (PDF p.16), Ch. 3 p.42 (PDF p.54), Ch. 6 pp.93-95 and p.122 (PDF pp.105-107, 134), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 1 p.9 (PDF p.15), Ch. 16 p.369 (PDF p.375), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 3
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 1 p.9 (PDF p.21); Ch. 3 p.42 (PDF p.54); Ch. 6 pp.94-97 and 121-123 (PDF pp.106-109, 133-135), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Loss and Loss Adjustment Expense.md
 ---
@@ -20,9 +19,9 @@ verification:
 > $$\text{Loss \& LAE Ratio} = \frac{\text{Loss} + \text{LAE}}{\text{Earned Premium}}$$
 
 - **[[Allocated Loss Adjustment Expense|ALAE]]** is claim-specific: defence counsel, expert witnesses, independent adjusters, court costs. Because it attaches to a claim, it can be carried inside the loss triangle and developed with the losses.
-- **[[Unallocated Loss Adjustment Expenses ULAE|ULAE]]** is claims-department overhead: staff salaries, systems, occupancy. It cannot be traced to a claim, so it is estimated in aggregate — classically as a ratio of paid ULAE to paid loss.
+- **[[Unallocated Loss Adjustment Expenses ULAE|ULAE]]** is claims-department overhead: staff salaries, systems, occupancy. It cannot be traced to a claim, so it is estimated in aggregate — classically as the ratio of calendar-year paid ULAE to calendar-year paid loss plus ALAE, applied to loss plus ALAE that has been adjusted for extraordinary events, development and trend.
 - The four "loss" numbers in an analysis are different: **paid**, **reported** (paid $+$ case), **ultimate** (reported $+$ IBNR), and **projected** (ultimate, trended to the future policy period). Each adjustment answers a different question and skipping one biases the indication in a predictable direction.
-- The full ratemaking chain on the loss side is: start with reported losses → **develop** to ultimate ([[Loss Development]]) → **trend** to the forecast period ([[Loss Trend]]) → adjust for [[Large Loss|large losses]] and [[Catastrophe Loss|catastrophes]] → adjust for benefit or coverage changes → add LAE.
+- The ratemaking adjustments on the loss side: start with reported losses → remove extraordinary [[Large Loss|shock]] and [[Catastrophe Loss|catastrophe]] losses → **develop** to ultimate ([[Loss Development]]) → **trend** to the forecast period ([[Loss Trend]]) → restate for benefit or coverage changes → add back a long-term large-loss and catastrophe provision → load ULAE. Werner & Modlin prescribe no single order, but a catastrophe provision is added to losses that have already been trended and developed — trending and developing it again would over-adjust it — and the ULAE ratio is applied to losses already adjusted.
 - The statutory Annual Statement calls ALAE **Defense and Cost Containment (DCC)** and ULAE **Adjusting and Other (A&O)**; the definitions do not match exactly, which matters when using industry data.
 
 ![[Media/Figures/Loss_and_Loss_Adjustment_Expense.svg|340]]

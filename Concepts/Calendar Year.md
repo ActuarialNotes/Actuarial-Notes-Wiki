@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-13
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c303222308afa56dcdf04dd6f59fe5ee0bdc313829cd187881e1fc6187b21122
+  content_hash: sha256:0e0b2f3659c55b333485503b8c7475dc25638103c98c36d775e1a10b7a05bba2
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-43 (PDF pp.54-55), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.39-40 (PDF pp.45-46), and p.36 fn.17 (PDF p.42), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 2
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-44 (PDF pp.54-56); Ch. 5 p.69 (PDF p.81), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.36, 39-40 (PDF pp.42, 45-46), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Calendar Year.md
 ---
@@ -17,14 +17,17 @@ verification:
 
 > $$\text{CY Earned Premium} = \text{Written Premium} - \Delta\text{UEP}$$
 
-> $$\text{CY Incurred Losses} = \text{Paid} + \Delta\text{Case Reserves} + \Delta\text{IBNR}$$
+> $$\text{CY Reported Losses} = \text{Paid} + \Delta\text{Case Reserves}$$
+
+> $$\text{CY Incurred Losses (finance)} = \text{Paid} + \Delta\text{Case Reserves} + \Delta\text{IBNR}$$
 
 - $\Delta\text{UEP}$ is the change in the [[Unearned Premium|unearned premium reserve]] over the year; $\Delta$ terms are ending balance minus beginning balance.
-- CY is the **financial reporting** basis: it is what the income statement, the [[Combined Ratio|combined ratio]] and Schedule P Part 1 report, and it is available immediately after the year closes with no estimation of "which cohort does this belong to".
-- A calendar year **never develops** — it is closed and fixed the moment the books close. That is its one advantage and the source of its central defect.
+- Werner & Modlin and Friedland both define calendar-year **reported** losses as paid losses plus the change in case reserves. The IBNR-inclusive form is the finance department's "incurred" figure (Friedland).
+- CY is the **financial reporting** basis: most insurers report financially by calendar year, so the data is available quickly once the year ends and costs nothing extra to aggregate for ratemaking.
+- A calendar year **never develops** — it is closed and fixed the moment the books close. Friedland counts that as an advantage and also as a disadvantage: calendar-year data cannot address development.
 - CY incurred losses **mix accident years**: a CY 2024 figure contains payments and reserve changes on claims from $2024$ and from every prior year. A single large reserve strengthening on a $2018$ claim lands entirely in CY 2024 and contaminates the CY 2024 loss ratio.
-- Because of that mixing, a CY loss ratio is a **profitability** measure, not a pricing measure. Ratemaking uses [[Accident Year]] or [[Policy Year]] losses against on-level earned premium — see [[Ratemaking Data Organization]].
-- CY premium is unambiguous and is used everywhere: CY earned premium is the same number under CY, AY and (with more work) PY loss aggregation, so "calendar/accident year" data — CY premium against AY losses — is the standard ratemaking pairing.
+- Because of that mismatch, Werner & Modlin say calendar-year aggregation for ratemaking may be most appropriate for lines or coverages whose losses are reported and settled relatively quickly, such as homeowners. [[Accident Year]] aggregation matches premium and losses better, and [[Policy Year]] best — see [[Ratemaking Data Organization]].
+- Accident-year aggregation takes its premium and exposures on the calendar-year basis — Werner & Modlin note the method is often called *calendar-accident year* — and Friedland observes that actuaries often use calendar-year exposures with accident-year claims. [[Policy Year]] premium is aggregated differently, by policy effective date.
 
 ![[Media/Figures/Calendar_Year.svg|340]]
 

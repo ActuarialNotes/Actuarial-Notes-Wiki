@@ -138,6 +138,22 @@ export function deskPlace(path: string): DeskPlace {
 export type HistoryAction = 'PUSH' | 'POP' | 'REPLACE'
 
 /**
+ * Navigation state for a `replace` that is still a move to a new page: a
+ * finished quiz hands its place in the history to its review, so Back from the
+ * review returns to where the quiz was started rather than onto a quiz that is
+ * over — but the reader still sees the review laid down like any new page,
+ * opened at its top.
+ */
+export const REPLACE_AS_PUSH = { replaceAsPush: true } as const
+
+/** The action a history update should be drawn (and scrolled) as. */
+export function effectiveAction(action: HistoryAction, state: unknown): HistoryAction {
+  if (action !== 'REPLACE') return action
+  const asPush = typeof state === 'object' && state !== null && (state as { replaceAsPush?: unknown }).replaceAsPush === true
+  return asPush ? 'PUSH' : action
+}
+
+/**
  * Which move takes the reader from `from` to `to`, or null when the change
  * isn't one to animate.
  *

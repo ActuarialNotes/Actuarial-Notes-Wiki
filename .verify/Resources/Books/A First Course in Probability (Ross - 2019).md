@@ -47,3 +47,14 @@ created: 2026-09-27
 - confidence: medium
 - checks_run: Re-verified after F-001: Sources syllabus line now names the November 2026 syllabus; its p.5 Ross citation and chapter list re-read against the callout (Ch 1-3; Ch 4 excl 4.8.4; Ch 5 excl 5.6.2, 5.6.3, 5.6.5, 5.7; Ch 6: 6.1, 6.2, 6.3.3, 6.3.4, 6.4, 6.6; Ch 7 discrete only excl 7.2.1, 7.2.2, 7.3, 7.6-7.9; Ch 8: 8.1, 8.3); rest unchanged since the 2026-09-27 pass; resource_lint
 - sources_checked: Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii; sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6, https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf; SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.5, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397, https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Pearson product page, A First Course in Probability 10th ed., Table of contents (fetched 2026-09-27, sha256:e889adc70c0c2f935f8893ec2477851a28c173bf6eae11979b02ee686ce1bbd2), https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334
+
+## [C-003] Delta re-check — cover jacket
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: delta diff against the verified version; jacket compared with the frontmatter; cited sources re-fetched
+- sources_checked: Ross, A First Course in Probability, Tenth Edition (Pearson, 2019), publisher front matter PDF pp. i-xii: title page p. iii, copyright page p. iv, Contents pp. vii-ix, Preface pp. x-xii;, sha256:ad10c2e634a970e2a39042327927e09d4296924cb0189c1267450a0606a60fa6 — https://www.pearsonhighered.com/assets/preface/0/1/3/4/0134753119.pdf; SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.5, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Pearson product page, A First Course in Probability 10th ed., Table of contents (fetched 2026-09-27, sha256:dabe1e922254e53f04636b1a8a931892898259f8401373911492cabde74580fd — https://www.pearson.com/en-us/subject-catalog/p/first-course-in-probability-a/P200000006334
+- note: Stale only because of an edit after the pass of 2026-09-28 (commit a58cfab5). The cover embed now names the real jacket, '- Cover.jpg', instead of the generated '- Cover.svg' (commit 756fa1d1, 2026-10-07). The jacket shows this page's title, authors and edition. Every PDF the earlier pass cited was re-fetched and is byte-identical; catalogue pages were re-read (an HTML page's hash moves on every fetch).

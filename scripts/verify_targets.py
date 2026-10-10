@@ -24,6 +24,18 @@ Usage:
   python3 scripts/verify_targets.py questions/exam-5      # restrict to a subtree
   python3 scripts/verify_targets.py --json                # machine-readable
   python3 scripts/verify_targets.py --traffic traffic.json
+  python3 scripts/verify_targets.py --by-source           # packets, not files
+  python3 scripts/verify_targets.py --by-source --routes routes.json
+
+`--by-source` groups the targets into the work packets of
+`docs/verification-plan.md`: each packet is one source document and the files
+it can verify — a past paper and every question sat on it (across banks), a
+reading and the concepts `verify_route.py` routed to it plus its own resource
+page, one resource's document, the SOA syllabus pages generated from their
+hashed JSON, or one hand-made syllabus page. A packet ranks by its most urgent
+file's band, then by how many files one load of its source clears. Concepts are
+grouped by reading only when a `--routes` file from `verify_route.py --json` is
+given; otherwise by the first exam that links them.
 """
 
 from __future__ import annotations
@@ -263,6 +275,80 @@ def _files_for(paths: list[str]) -> list[Path]:
     return selected
 
 
+# ─── Packets ──────────────────────────────────────────────────────────────────
+
+@dataclass
+class Packet:
+    key: str
+    source: str
+    band: int
+    files: list[str]
+
+    def sort_key(self) -> tuple:
+        return (self.band, -len(self.files), self.key)
+
+
+def _fm(text: str, key: str) -> str:
+    fm_text, _body = V.split_frontmatter(text)
+    match = re.search(r"^" + re.escape(key) + r":\s*(.*)$", fm_text or "", re.MULTILINE)
+    return match.group(1).strip().strip('"').strip("'") if match else ""
+
+
+def packet_of(rel: str, text: str, links: dict, routes: dict | None,
+              exams_of: dict[str, list[str]] | None) -> tuple[str, str]:
+    """`(packet key, source URL)` for one target file."""
+    if rel.startswith("questions/"):
+        exam = _fm(text, "originally_exam") or _fm(text, "exam")
+        year, session = _fm(text, "year"), _fm(text, "session")
+        if year:
+            return (f"paper: {exam} {session} {year}".replace("  ", " "),
+                    links.get((exam, year, session.lower()), ""))
+        return f"sample set: {rel.split('/')[1]}", ""
+    if rel.startswith("Concepts/"):
+        info = (routes or {}).get("concepts", {}).get(rel)
+        if info and info.get("packet"):
+            reading = info["packet"]
+            url = next((c["url"] for c in info["candidates"] if c["reading"] == reading), "")
+            return f"reading: {reading}", url
+        if info:
+            return f"concepts ({info['state']}): {(info['exams'] or ['no exam'])[0]}", ""
+        exams = (exams_of or {}).get(Path(rel).stem) or ["no exam"]
+        return f"concepts: {exams[0]}", ""
+    if rel.startswith("Resources/Books/"):
+        for packet in (routes or {}).get("packets", []):
+            if packet.get("resource") == rel:
+                return f"reading: {packet['reading']}", packet.get("url", "")
+        import resource_extract  # noqa: PLC0415
+
+        return f"resource: {Path(rel).stem}", resource_extract.page_link(rel) or ""
+    if rel.startswith("Resources/"):
+        return "timeline pages", ""
+    if _fm(text, "syllabus") or re.search(r"^syllabus:", V.split_frontmatter(text)[0] or "", re.M):
+        return "syllabus pages: generated from .syllabus/ JSON", ""
+    return f"syllabus page: {Path(rel).stem}", ""
+
+
+def packets(targets: list[Target], routes: dict | None) -> list[Packet]:
+    import verify_paper  # noqa: PLC0415
+
+    links = verify_paper.paper_links()
+    exams_of = None
+    if routes is None and any(t.path.startswith("Concepts/") for t in targets):
+        import verify_route  # noqa: PLC0415
+        import vault_links  # noqa: PLC0415
+
+        exams_of = verify_route.concept_exams(vault_links.load_catalog())
+    grouped: dict[str, Packet] = {}
+    for target in targets:
+        text = (REPO_ROOT / target.path).read_text(encoding="utf-8")
+        key, source = packet_of(target.path, text, links, routes, exams_of)
+        packet = grouped.setdefault(key, Packet(key, source, target.band, []))
+        packet.band = min(packet.band, target.band)
+        packet.source = packet.source or source
+        packet.files.append(target.path)
+    return sorted(grouped.values(), key=Packet.sort_key)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="*", help="restrict the pool to these files/directories")
@@ -270,12 +356,29 @@ def main() -> int:
     ap.add_argument("--recheck-days", type=int, default=DEFAULT_RECHECK_DAYS)
     ap.add_argument("--traffic", help="JSON file of {question id or path: attempt count}")
     ap.add_argument("--json", action="store_true", help="emit JSON instead of a table")
+    ap.add_argument("--by-source", action="store_true",
+                    help="group into source packets; --limit then counts packets")
+    ap.add_argument("--routes", help="verify_route.py --json output, to group concepts by reading")
     args = ap.parse_args()
 
     traffic: dict[str, int] = {}
     if args.traffic:
         raw = json.loads(Path(args.traffic).read_text(encoding="utf-8"))
         traffic = {str(k): int(v) for k, v in raw.items()}
+
+    if args.by_source:
+        routes = json.loads(Path(args.routes).read_text(encoding="utf-8")) if args.routes else None
+        grouped = packets(select(args.paths, 0, args.recheck_days, traffic), routes)
+        grouped = grouped[:args.limit] if args.limit > 0 else grouped
+        if args.json:
+            print(json.dumps([asdict(p) for p in grouped], indent=2))
+            return 0
+        print(f"{len(grouped)} packet(s), highest priority first:\n")
+        print("| Band | Files | Packet | Source |")
+        print("|---|---:|---|---|")
+        for p in grouped:
+            print(f"| {BAND_LABELS[p.band].split(' —')[0]} | {len(p.files)} | {p.key} | {p.source or '—'} |")
+        return 0
 
     targets = select(args.paths, args.limit, args.recheck_days, traffic)
 

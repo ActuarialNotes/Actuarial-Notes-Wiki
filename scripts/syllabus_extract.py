@@ -101,8 +101,11 @@ ITEM_RE = re.compile(r"^([a-z])\)\s+(.*)$")
 GROUP_RE = re.compile(r"^(\d+)\.\s+(\S.*)$")            # CFE 101's numbered sub-topics
 BULLET_RE = re.compile(r"^[•o▪◦●\-]\s+(.*)$")
 ROMAN_RE = re.compile(r"^(?:i|ii|iii|iv|v|vi|vii|viii|ix|x)\.\s+(.*)$")   # CP 311's sub-items
+_CODE = r"\d+(?:\.\d+)?[a-z]{0,2}(?:\s*[-–]\s*(?:\d+(?:\.\d+)?)?[a-z]{1,2})?"
+# A code is `2a`, `1.2d`, `3a-3d`; after one, a bare letter or letter range
+# (`6a, c-d, f`) and a full stop typed for a comma (`2a. 2b`) are still codes.
 CODES_RE = re.compile(
-    r"^(?:Background|(?:\d+(?:\.\d+)?[a-z]{0,2}(?:\s*[-–]\s*(?:\d+(?:\.\d+)?)?[a-z]{1,2})?\s*,?\s*)+)$")
+    rf"^(?:Background|{_CODE}(?:\s*[,.]?\s*(?:{_CODE}|[a-z](?:\s*[-–]\s*[a-z])?))*\s*,?\s*)$")
 LEAD_IN_RE = re.compile(r"^The Candidate will be able to(.*?):?\s*$", re.I)
 END_OF_OUTCOMES_RE = re.compile(
     r"^(Resources|Learning|Outcomes|Readings:?|REQUIRED RESOURCES:?|Textbooks|Other Resources:?|OTHER RESOURCES:?)\s*$")
@@ -223,6 +226,7 @@ def _parse_topic(m: re.Match, body: list[str]) -> dict:
         topic["title"] = f"{topic['title']} ({weight_raw})"
     stage = "head"
     objective: list[str] = []
+    lead_in: list[str] = []
     group: str | None = None
     rest_at = len(body)
     for j, raw in enumerate(body):
@@ -239,7 +243,16 @@ def _parse_topic(m: re.Match, body: list[str]) -> dict:
             elif s:
                 objective.append(s)
             continue
-        # outcomes
+        # outcomes. Under its own heading, a lead-in longer than "The Candidate
+        # will be able to:" ("Given a context, …, the Candidate will be able
+        # to:") heads the outcomes; it is not part of the objective above.
+        if objective and not topic["outcomes"] and group is None and s and not LEAD_IN_RE.match(s):
+            if ITEM_RE.match(s):
+                if lead_in:
+                    group = norm(" ".join(lead_in))
+            elif not END_OF_OUTCOMES_RE.match(s):
+                lead_in.append(s)
+                continue
         if not s:
             continue
         if END_OF_OUTCOMES_RE.match(s):   # the resource table (or reading list) begins

@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-13
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f739359d8126dad58aadc1cbdcde970a60c7ce021d7b8ef8e2d3bd4f5114bad5
+  content_hash: sha256:4266ead44b73923d89276c993549b37605677ead760802baf2ba7347a0e0acd5
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-43 (PDF pp.54-55), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.40-41 (PDF pp.46-47), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 3 pp.42-44 (PDF pp.54-56); Ch. 6 p.106 (PDF p.118) triangle rows and diagonals, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 3 pp.39-42 (PDF pp.45-48), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Accident Year.md
 ---
@@ -18,10 +18,10 @@ verification:
 > $$\text{AY } n \text{ Loss Ratio} = \frac{\text{Losses occurring in year } n}{\text{Premium earned in year } n}$$
 
 - The **occurrence date** alone decides the year. A policy written $10/1/2023$ with a loss on $2/4/2024$ paid in $2026$ is Accident Year $2024$.
-- AY is the standard basis for both ratemaking and reserving because it is the best compromise on Werner & Modlin's two axes: losses are matched to the exposure that generated them (unlike [[Calendar Year]]), and the cohort closes at the end of the year rather than a full policy term later (unlike [[Policy Year]]).
+- Werner & Modlin set three objectives for aggregating ratemaking data: accurately match losses and premium, use the most recent data available, and minimize the cost of data collection and retrieval. AY matches premium and losses better than [[Calendar Year]], and its claims occur over a shorter time frame than a [[Policy Year]]'s, so its ultimate can be reliably estimated sooner. Friedland calls it the accepted norm for P&C insurers in the U.S. and Canada, and by far the most common grouping for the analysis of unpaid claims.
 - An AY cohort is **not final** at year end: losses still develop as claims are reported and case reserves are re-estimated, so an AY must be brought to ultimate with a [[Cumulative Development Factor|CDF]] before it can be compared with a mature year. See [[Loss Development]].
 - Premium and losses are only *approximately* matched. AY $n$ earned premium comes partly from policies written in year $n-1$, whose rates and terms differ — which is why the premium must still be brought to current level ([[On-Leveling]]).
-- The rows of a [[Development Triangle]] are usually accident years; diagonals are valuation dates. Accident *quarters* or *months* are used when volume permits and responsiveness matters.
+- The rows of a [[Development Triangle]] are usually accident years; diagonals are valuation dates. Insurers also compile claims by accident *month*, *quarter* and *half-year*.
 
 ![[Media/Figures/Accident_Year.svg|340]]
 
@@ -39,7 +39,7 @@ verification:
 > > | [[Close Year]] | 2025 | settlement $3/1/2025$ |
 > > | [[Calendar Year]] | 2024 and 2025 | $\$40{,}000$ incurred in CY 2024; the $\$12{,}000$ of adverse development lands in CY 2025 |
 > >
-> > Only the accident-year assignment is unaffected by how the claim was handled — which is exactly why it is the ratemaking standard.
+> > The accident-year and policy-year assignments are fixed by the occurrence and policy dates alone; the report, close and calendar years depend on when the claim was reported, settled and paid.
 
 > [!example]- Why an Accident Year Loss Ratio Moves {Example}
 > AY 2024 earned premium is $\$8{,}000{,}000$. Reported losses were $\$4{,}400{,}000$ at $12$ months and $\$5{,}300{,}000$ at $24$ months. The selected $\text{CDF}_{24 \to \text{ult}}$ is $1.150$.

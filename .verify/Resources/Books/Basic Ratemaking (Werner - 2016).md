@@ -270,3 +270,158 @@ created: 2026-09-05
 - checks_run: all eight findings from run 2026-09-05T16:45Z/fb4a resolved and re-checked against the source; chapter 16 section authored from ch.16 body and cross-checked against its KEY CONCEPTS list; heading sequence now 1-16 plus lettered Appendices, matching the printed TOC; 64 wiki-links and the cover embed re-resolved after editing
 - sources_checked: Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): printed Table of Contents PDF pp.8-12, PDF bookmark outline, and chapter bodies pp.204-210 (ILF), 310 (large commercial scope), 324-333 (ch.16), 411/415 (Appendices E/F); CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5' and p.4 Domain A task list
 - note: Every heading and bullet on the page now traces to a cited page of the Werner PDF or to the CAS content outline. Chapter 2 is retained but marked off-syllabus rather than deleted (see F-003 resolution). Two terms the page previously asserted - 'Lee diagram' and 'self-insured' - occur zero times in the book and are gone.
+
+## [F-011] Chapter 6 bullet tells the reader to avoid an overlap the book calls a fallacy
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: major
+- status: open
+- locus: '## 6 Losses and LAE', bullet 3
+- claim: Bullet read: 'Loss development to ultimate and loss trend to the future period; avoiding overlap between the two'.
+- evidence: Werner & Modlin, Basic Ratemaking (CAS, May 2016; sha256 6b214d4d...), PDF p.132 (printed p.120), section 'Overlap Fallacy: Loss Development and Loss Trend': 'It may seem that trending and developing losses results in overlapping adjustments; however, this is not the case.' The chapter's KEY CONCEPTS list (PDF p.136) names it item 10, 'Overlap fallacy'. 'Avoiding overlap' implies a double count the actuary must remove, which is the opposite of what the chapter teaches; a candidate who trusts it would answer an overlap-fallacy question wrong.
+- source_rank: 2
+- proposed_action: Restate as the overlap fallacy: trending and developing losses are not overlapping adjustments.
+- applied: true
+- fingerprint: 16574c76c258
+
+## [F-012] Chapter 12 bullet names Bühlmann-Straub, which the book never mentions, and omits Bayesian analysis
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: major
+- status: open
+- locus: '## 12 Credibility', bullet 2
+- claim: Bullet read: '[[Bühlmann Credibility|Bühlmann]] and [[Bühlmann-Straub Credibility|Bühlmann-Straub]] approaches'.
+- evidence: Full-text search of all 423 pages of the Werner PDF (sha256 6b214d4d...) returns zero occurrences of 'Straub'. Chapter 12's METHODS FOR MEASURING CREDIBILITY section (PDF pp.228-235) names three methods: the classical (limited fluctuation) approach, Bühlmann credibility ('commonly referred to as least squares credibility'), and Bayesian analysis ('A third method, Bayesian analysis'); KEY CONCEPTS IN CHAPTER 12 (PDF p.250) lists 2a Classical credibility, 2b Bühlmann credibility, 2c Bayesian analysis. Bühlmann-Straub is MAS-II material, not this book's.
+- source_rank: 2
+- proposed_action: Replace with 'Bühlmann (least squares) credibility and Bayesian analysis'.
+- applied: true
+- fingerprint: 9bb0d09c3ad5
+
+## [F-013] Chapter 9 names an 'actuarial' criterion for rating variables; the book's first category is 'statistical'
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: '## 9 Traditional Risk Classification', bullet 2
+- claim: Bullet read: 'Criteria for evaluating rating variables: actuarial, operational, social, and legal'.
+- evidence: Werner PDF p.167 (printed p.155), CRITERIA FOR EVALUATING RATING VARIABLES, after Finger (2001): 'The criteria can be grouped into the following categories: Statistical, Operational, Social, Legal', followed by the subsection 'Statistical Criteria' (statistical significance, homogeneity, credibility). The phrase 'actuarial criteria' occurs nowhere in the PDF (full-text search).
+- source_rank: 2
+- proposed_action: Change 'actuarial' to 'statistical'.
+- applied: true
+- fingerprint: bae7bab2860d
+
+## [F-014] Chapter 3 bullet invents aggregation trade-offs (availability, timeliness) instead of the book's three objectives
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: '## 3 Ratemaking Data', bullet 4
+- claim: Bullet read: 'Trade-offs between accuracy, availability, and timeliness of each aggregation'.
+- evidence: Werner PDF p.54 (printed p.42), DATA AGGREGATION: 'When aggregating data for ratemaking purposes, three general objectives apply: Accurately match losses and premium for the policy; Use the most recent data available; Minimize the cost of data collection and retrieval. ... Each method differs in how well it achieves the objectives outlined above.' 'timeliness' occurs zero times in the PDF, and the bullet drops the cost objective.
+- source_rank: 2
+- proposed_action: Restate the three objectives as the book lists them.
+- applied: true
+- fingerprint: b7c828a81e84
+
+## [F-015] Chapter 14 bullet speaks of 'rebalancing', a word the book does not use, for the off-balance factor
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: '## 14 Implementation', bullet 2
+- claim: Bullet read: 'Off-balancing and rebalancing the [[Rating Algorithm|rating algorithm]]'.
+- evidence: 'rebalancing'/'rebalance' occur zero times in the Werner PDF. The concept the chapter teaches is the off-balance factor, PDF p.288 (printed p.276): 'is commonly referred to as the off-balance factor. It is called that as it represents the amount the base rate needs to be adjusted to balance the changes in the rate differentials.'
+- source_rank: 2
+- proposed_action: Restate as the off-balance factor in the book's words.
+- applied: true
+- fingerprint: a407b9e95a54
+
+## [F-016] Sources line lists two of the errata's three items
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- severity: minor
+- status: open
+- locus: '## Sources', errata entry
+- claim: Errata entry said the errata cover 'the coinsurance clause (pp. 209–210) and Appendix D-14'.
+- evidence: Errata to Basic Ratemaking, 5th Edition (CAS Exam 5 Syllabus Committee, Version 1.0, June 27, 2024; https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf, sha256 d4d11b59...), pp.1-2 list three errata: the Coinsurance Clause (pp. 209-210), Workers Compensation (app. D-14), and 'Composite Rating Example Calculation ... (p. 300): Disregard the $500,000 general aggregate limit'. The Fall 2026 content outline includes the errata in the reading, so the omitted composite-rating erratum is examinable.
+- source_rank: 1
+- proposed_action: Add the composite rating example (p. 300) to the errata entry.
+- applied: true
+- fingerprint: 5b8c94968476
+
+## [F-011/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-011
+- status: resolved
+- note: Bullet now reads '...loss trend to the future period; the overlap fallacy — trending and developing losses are not overlapping adjustments', transcribing Werner PDF p.132 (printed p.120): 'It may seem that trending and developing losses results in overlapping adjustments; however, this is not the case.'
+
+## [F-012/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-012
+- status: resolved
+- note: Bullet now reads '[[Bühlmann Credibility|Bühlmann]] (least squares) credibility and Bayesian analysis', per Werner PDF pp.232-235 and KEY CONCEPTS IN CHAPTER 12 (PDF p.250). The Bühlmann-Straub link is gone; 'Straub' still occurs zero times in the book.
+
+## [F-013/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-013
+- status: resolved
+- note: 'actuarial' changed to 'statistical', matching Werner PDF p.167 (printed p.155): Statistical, Operational, Social, Legal.
+
+## [F-014/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-014
+- status: resolved
+- note: Bullet now lists the three objectives verbatim in substance from Werner PDF p.54 (printed p.42) — accurately match losses and premium, use the most recent data available, minimize the cost of data collection and retrieval — and how well each method achieves them.
+
+## [F-015/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-015
+- status: resolved
+- note: Bullet now reads 'The off-balance factor: the amount the base rate needs to be adjusted to balance the changes in the rate differentials of the rating algorithm', the book's own definition at PDF p.288 (printed p.276).
+
+## [F-016/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-016
+- status: resolved
+- note: Errata entry now lists all three items: the coinsurance clause (pp. 209–210), Appendix D-14, and the composite rating example (p. 300), per the 2024 errata pp.1-2.
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: high
+- checks_run: re-verification of the c3d5c977 rewrite: chapter outline rebuilt from the printed TOC (PDF pp.8-12) and bookmark outline before re-reading the page (16 chapters, Bibliography, Appendices A-F, Changes; bookmark 'Credibitiliy' typo is the source's own); every heading diffed; full-text search for every named term and method (34 terms; zero hits for Straub, rebalancing, timeliness, actuarial criteria — all fixed); bullet claims re-read against chapter bodies; lead checked against the abstract (PDF p.2) and Organization of this Text (p.4); On the syllabus callout diffed against the Fall 2026 outline v02 p.6; frontmatter against title page PDF pp.1-2; errata fetched and read; Related readings checked (SoP principles 1-3 quoted PDF pp.17-19, ASOP 13 social influences PDF p.122, both in Bibliography PDF pp.334-336); all wiki-links and the cover embed resolve; resource_lint 0 errors
+- sources_checked: Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS), title page/abstract PDF pp.1-2, Organization of this Text pp.4-6, printed TOC PDF pp.8-12, bookmark outline, chapter text PDF pp.13-19, 48-60, 61, 75, 93-101, 122, 132-136, 139-142, 152, 166-167, 176, 183, 204-211, 228-250, 251, 269, 275-300, 310, 324-332, 334-336, 415-420, Changes p.422, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15), p.4 Domain A tasks 1-18 and readings; p.6 Complete Text References, Werner & Modlin row, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf; Errata to Basic Ratemaking, 5th Edition (CAS Exam 5 Syllabus Committee, Version 1.0, June 27, 2024), pp.1-2, all three errata, sha256:d4d11b5935d8c3fa7863759a70d2f8d0ed68d0b69fb16ab337a44100b075be10 — https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf
+- note: Re-verified as it now stands. Six new findings (F-011..F-016), all fixed from the source in this run, two of them major (overlap fallacy inverted; Bühlmann-Straub attributed to a book that never names it). The CAS Fall 2026 outline has been revised since the 2026-09-05 pass: v02 dated 2026-09-15 (sha256 fd8373ae..., was v01 a7ba895...) now gives Werner & Modlin tasks 'A1-15, A17-A18'; the page's callout already says A1–A15 and A17–A18, Chapters 1 and 3–16, Chapter 2 excluded, Appendices integral, errata included. Exam 5 (CAS).md's Source Material still says 'A1–A15, A17' for this reading (and B1–B42 for Friedland, which v02 gives as B1-B20) — outside this file. The [!warning] Chapter 2 callout F-003 added was dropped in the rewrite; the exclusion is now carried by the On the syllabus callout, which is where docs/resource-pages.md §2.3 puts scope.

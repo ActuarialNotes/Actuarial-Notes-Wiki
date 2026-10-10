@@ -24,7 +24,7 @@ import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
-import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
+import { useBack } from '@/hooks/useBack'
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
@@ -109,6 +109,8 @@ export default function WikiExam() {
   const { slug = '' } = useParams()
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
+  // A resource to open on arrival — the action menu's Open in Study Guide.
+  const resourceParam = searchParams.get('resource')
   const examFileName = fromSlug(slug)
   const { setPageRefs, setExamId, setPageTitle, setPageIcon, setPageTitleBadge, setBackLink, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
@@ -155,9 +157,10 @@ export default function WikiExam() {
     <ExamLogo examKey={progressKey} size="md" />
   ), [progressKey])
 
-  const backLink = useMemo(() => (
-    <FloatingSearchBack to="/wiki" state={RESTORE_SCROLL} label="All exams" />
-  ), [])
+  // Back to wherever the reader opened this exam from — the Dashboard, the
+  // quiz builder, a search — and up to the exam list for one who landed here.
+  const back = useBack({ to: '/wiki', label: 'All exams' })
+  const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or
   // 'development' (the DISCs and Exam 6U: syllabus outline only). Drives the
@@ -290,13 +293,19 @@ export default function WikiExam() {
     setBackLink(backLink)
   }, [backLink, setBackLink])
 
+  // A reading opens in the popup on the Source Material walk, the way a card on
+  // the page's shelf does.
+  const openResource = useCallback((name: string) => {
+    const resList = resourceRefs ?? [{ kind: 'resource' as const, name }]
+    const resIdx = resList.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
+    openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
+  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
+
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false
     if (ref.kind === 'resource' || / \([^)]*\d{4}\)$/.test(ref.name)) {
       e.preventDefault()
-      const resList = resourceRefs ?? [{ kind: 'resource' as const, name: ref.name }]
-      const resIdx = resList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
-      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
+      openResource(ref.name)
       return true
     }
     if (ref.kind !== 'concept') return false
@@ -329,7 +338,7 @@ export default function WikiExam() {
       { occurrences: conceptOccurrences, occurrenceIndex, objectives },
     )
     return true
-  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
+  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, openResource, studyPlanRefs, objectives])
 
   // The title is the page's action-menu trigger, as a concept's title is in the
   // popup — underlined to say so. It opens the exam form of the same menu:
@@ -362,7 +371,7 @@ export default function WikiExam() {
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
     popupOpenedRef.current = false
-  }, [examFileName, conceptParam])
+  }, [examFileName, conceptParam, resourceParam])
 
   // When arriving from search with ?concept=, open the popup once pageRefs load.
   useEffect(() => {
@@ -382,6 +391,13 @@ export default function WikiExam() {
       objectives,
     })
   }, [conceptParam, pageRefs, conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs, objectives])
+
+  // Likewise with ?resource=: the reading opens in the popup over its study guide.
+  useEffect(() => {
+    if (!resourceParam || pageRefs.length === 0 || popupOpenedRef.current) return
+    popupOpenedRef.current = true
+    openResource(resourceParam)
+  }, [resourceParam, pageRefs, openResource])
 
   return (
     <div className="space-y-4">

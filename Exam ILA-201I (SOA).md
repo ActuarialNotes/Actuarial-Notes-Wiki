@@ -5,12 +5,13 @@ syllabus:
   source_sha256: 3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3233f8f3f774cd5577d09dc4354ed7ab47bb8cfdae202722729e7d5a864fe5d6
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6f941ba7d97afa95e0dc9e6024a30f612e6d0e9e9d18c98f0503a5548fd9d026
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201I, all pages, sha256:3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ILA-201I (SOA).md
@@ -22,8 +23,6 @@ verification:
 
 # Exam ILA-201I
 **ILA 201-I – Valuation and Advanced Product and Risk Management, International** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
-
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
 
 ## Learning Objectives
 
@@ -49,10 +48,10 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023 (1a, 1b)
 
 > [!example]- Capital Management {20–30%}
-> The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and [[Tool|tools]] of [[Regulatory Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
+> The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and tools of [[Regulatory Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
 >
 > 1. Explain and calculate [[Regulatory Capital|regulatory capital]] using various [[International Framework|international frameworks]]
-> 2. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
+> 2. Explain and evaluate the respective perspectives of regulators, investors, [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and determination of [[Capital|capital]]
 > 3. Describe the purpose and application of [[Economic Capital|economic capital]]
 >
 > **Readings:**
@@ -66,9 +65,9 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > [!example]- Management and Evaluation of Life Insurance Risks {10–15%}
 > The candidate will understand various approaches to manage and evaluate [[Insurance Risk|life insurance risks]].
 >
-> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for [[Modeling|modeling]] and [[Offset|offsets]] between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
-> 2. Understand the role and framework used by [[Regulator|regulators]] and [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
-> 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) [[Report|report]]
+> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and offsets between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
+> 2. Understand the role and framework used by regulators and [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
+> 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) report
 >
 > **Readings:**
 > - ILA201-100-25: Diversification: Consideration on Modelling Aspects & Related Fungibility and Transferability, CRO Forum, Oct 2013 (pp. 1-18) (3a)
@@ -77,13 +76,13 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19) (3c)
 
 > [!example]- Advanced Product Management {20–30%}
-> The candidate will understand value [[Creation|creation]] and [[In-Force Management|inforce]] management techniques for [[Life|life]] and [[Annuity Contract|annuity products]].
+> The candidate will understand value creation and [[In-Force Management|inforce]] management techniques for life and [[Annuity Contract|annuity products]].
 >
-> 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and [[Profitability|profitability]] through [[In-Force Management|active in-force]] and [[Operational|operational]] management
+> 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and profitability through [[In-Force Management|active in-force]] and operational management
 > 2. Describe, evaluate, and apply the [[Economic Value|economic value creation]] framework
 > 3. Recommend and justify changes to [[Policyholder Dividend|policyholder dividends]]
 > 4. Understand [[Corporate Taxation|corporate taxation]], [[Policyholder Taxation|policyholder taxation]] and calculate [[Investment Income Tax|investment income tax]]
-> 5. Describe and apply the methods and [[Principle|principles]] of [[Embedded|embedded]] value for an [[Embedded Value|insurance enterprise]]
+> 5. Describe and apply the methods and principles of embedded value for an [[Embedded Value|insurance enterprise]]
 >
 > **Readings:**
 > - ILA201-101-25: Life in-force Management: Improving Consumer Value and Long-Term Profitability (4a)

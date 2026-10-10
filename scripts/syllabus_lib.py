@@ -242,7 +242,8 @@ def source_entries(page: ExamPage) -> list[tuple[int, "vault_links.Link", list[s
 #
 # The rule for an exam page is that every noun phrase in an objective links to
 # a concept note — written or not yet written (an unwritten one is a gap on the
-# Pipeline B worklist, which is the point). There is no parser in the stdlib, so
+# Pipeline B worklist, which is the point) — except a single word with no page
+# of its own, which stays plain text (`needs_note`). There is no parser in the stdlib, so
 # this is a chunker: an objective is cut at verbs, function words and
 # punctuation, and what's left between the cuts are its noun phrases. It errs
 # towards finding too many, which is the safe side — `syllabus_lint.py` reports
@@ -265,6 +266,7 @@ exactly appropriately alternative similar out-of
 unique selected
 typical possible potential commonly effectively specifically especially optimally respective hypothetical
 significant additional relevant
+particular applicable once
 """.split())
 
 VERBS = frozenset("""
@@ -289,6 +291,7 @@ supporting conducted raising resulting attributing targeting recognizing utilizi
 taking assessing needed cited accepted projecting managing valuing selecting assuming proposed
 recommend propose examine detect explore interpret formulate quantify differentiate synthesize prepare
 outline contrast critique appraise review reconcile mitigating evaluating describing demonstrating
+provide provides providing applies reduce reducing face faces transforming distinguishing varying compete competes
 """.split())
 
 # Abstract nouns that name no concept of their own — "the *role* of…", "the
@@ -328,6 +331,26 @@ def _generic(word: str) -> bool:
     return word[0].isdigit() or word.lower().strip("'’") in GENERIC_NOUNS
 
 
+# A noun phrase ends on its noun. A past participle or one of these adjectives
+# left at the end of a chunk ("qualitative information required", "the
+# organization's strategic …") is the clause running on, not part of a name.
+TRAILING_ADJECTIVES = frozenset("strategic regulatory financial operational statistical economic".split())
+NOT_PARTICIPLES = frozenset("need needs speed seed feed greed breed creed embed hundred".split())
+# An adverb ("actuarially adjusted", "partially hedged") is never part of a name.
+NOT_ADVERBS = frozenset("""family supply anomaly monopoly oligopoly early assembly italy july rally
+butterfly fly ally apply reply comply multiply quarterly monthly weekly daily yearly""".split())
+
+
+def _trailing_only(word: str) -> bool:
+    w = word.lower().strip("'’")
+    return w in TRAILING_ADJECTIVES or (len(w) > 4 and w.endswith("ed") and w not in NOT_PARTICIPLES)
+
+
+def _adverb(word: str) -> bool:
+    w = word.lower()
+    return len(w) > 4 and w.endswith("ly") and w not in NOT_ADVERBS and "-" not in w
+
+
 def noun_phrases(text: str) -> list[tuple[int, int, str]]:
     """(start, end, phrase) for each noun-phrase chunk of plain `text`.
 
@@ -342,19 +365,23 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
         words = list(run)
         while words and _generic(words[0].group(0)):
             words.pop(0)
-        while words and _generic(words[-1].group(0)):
+        while words and (_generic(words[-1].group(0)) or _trailing_only(words[-1].group(0))):
             words.pop()
         if words:
             out.append((words[0].start(), words[-1].end(), text[words[0].start():words[-1].end()]))
         run.clear()
 
     pos = 0
-    for m in WORD_RE.finditer(text):
+    matches = list(WORD_RE.finditer(text))
+    for i, m in enumerate(matches):
         between = text[pos:m.start()]
         if re.search(r"[^\s]", between):   # punctuation between words ends a phrase
             flush()
         w = m.group(0).lower().strip("'’")
-        if w in BREAK_WORDS or w.strip("-") in BREAK_WORDS or w in VERBS or len(w) == 1:
+        nxt = matches[i + 1].group(0).lower() if i + 1 < len(matches) else ""
+        if w == "defined" and nxt.startswith(("benefit", "contribution")):
+            run.append(m)                    # "defined benefit plan" is a name, not a verb
+        elif w in BREAK_WORDS or w.strip("-") in BREAK_WORDS or w in VERBS or len(w) == 1 or _adverb(w):
             flush()
         else:
             run.append(m)
@@ -363,8 +390,18 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
     return out
 
 
-def unlinked_noun_phrases(line: str) -> list[str]:
-    """Noun phrases of a page line that no `[[link]]` covers."""
+def needs_note(phrase: str, has_page) -> bool:
+    """Whether a noun phrase must be a link. A phrase of two or more words names
+    a concept, written or not (an unwritten one is a gap on the worklist). A
+    single word — "structure", "business", "traditional" — names one only when
+    the vault has a page for it; linking every such word to a page that would
+    never be written buried the objectives' real concepts in links."""
+    return len(phrase.split()) > 1 or has_page(phrase)
+
+
+def unlinked_noun_phrases(line: str, has_page=None) -> list[str]:
+    """Noun phrases of a page line that no `[[link]]` covers. With `has_page`
+    (phrase → bool), a single word with no page is not required to be linked."""
     plain_parts: list[tuple[int, int]] = []   # spans of the plain text that were links
     plain = ""
     last = 0
@@ -379,6 +416,6 @@ def unlinked_noun_phrases(line: str) -> list[str]:
     missing = []
     for start, end, phrase in noun_phrases(plain):
         covered = sum(max(0, min(end, b) - max(start, a)) for a, b in plain_parts)
-        if covered < (end - start) * 0.5:
+        if covered < (end - start) * 0.5 and (has_page is None or needs_note(phrase, has_page)):
             missing.append(phrase)
     return missing

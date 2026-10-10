@@ -42,3 +42,32 @@ created: 2026-09-13
 - confidence: high
 - checks_run: Located Werner's retro section and diffed it clause by clause. Formula confirmed: printed p.306 'Retro Premium = [Basic Premium + Converted Losses] x Tax Multiplier ... subject to a maximum and a minimum'; Converted Losses = Reported Losses (limited by the accident limit) x LCF, p.307; Basic Premium = [Expense Allowance - Expense Provided Through LCF + Net Insurance Charge] x Standard Premium with Net Insurance Charge = Insurance Charge - Insurance Savings, p.307 (so the page's 'basic premium factor times standard premium' and its account of what the basic premium provides for -- target UW profit and non-LAE expenses, plus the cost of the max/min -- are right); Minimum/Maximum Retro Premium = ratio x Standard Premium, p.308. Independently recomputed both examples before reading the answers: (100,000+350,000x1.10)x1.03 = 485,000x1.03 = 499,550, inside [300,000, 800,000]; (100+110)x1.03 = 216,300 -> floored at 300,000; (100+990)x1.03 = 1,122,700 -> capped at 800,000, excess 322,700; marginal cost 1.10x1.03 = 1.133; inversion of the band, L = (300/1.03-100)/1.10 = 173.9K and (800/1.03-100)/1.10 = 615.2K, matching the page's ~174K and ~615K. Werner's own Table 15.17 example reproduces on the same formula. Terminology check: 'Table M' and 'excess loss premium' occur zero times in Werner -> F-001; symbol CL glossed as converted losses -> F-002. LaTeX delimiters balanced; wiki-links and the Media/Figures embed resolve.
 - sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 'Commercial Lines Rating Mechanisms', printed pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-001
+- status: resolved
+- note: Werner Ch.15 p.308 (PDF p.320): insurance charge and savings come from a table of values expressed as a percentage of expected unlimited losses, derivation beyond the text's scope; the per-occurrence loss limitation is either in the table or computed as a separate additional charge. Both bullets rewritten to that wording; 'Table M', 'entry ratio and risk size' and 'excess loss premium' removed.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- resolves: F-002
+- status: resolved
+- note: Formula symbol changed from CL to L (limited reported losses); the bullet now reads 'Converted losses (L x LCF) are the insured's reported losses L, limited by any per-accident limit, multiplied by the LCF', per Werner p.307 (PDF p.319). Example arithmetic unchanged.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: Formula and min/max against Werner p.306-308; basic premium contents p.307; LCF loads ALAE not in losses plus ULAE p.307 (page made specific); tax multiplier now 'premium taxes and related assessments' as Werner says — unsourced 'licences, fees' and 'payable on the premium collected' removed; insurance charge/savings and loss limitation p.308; unsourced 'credit risk' sentence replaced with Werner's 'similar to self-insurance' remark p.305. Examples recomputed: 499,550; 216,300 -> 300,000; 1,122,700 -> 800,000; 1.133 per dollar; band 173.9K-615.2K.
+- sources_checked: Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.15 pp.305-309 (PDF pp.317-321), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf
+- note: Both findings fixed. Medium: the second example's framing is vault-authored.

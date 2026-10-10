@@ -8,16 +8,15 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-981-12-4327-1"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-29
+  status: verified
+  confidence: low
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:3a679f14a48928034e13d61504778dd5c71f31cd35e7c42a3f89b2a58e3a44bb
   sources:
     - "SOA Financial Mathematics Exam syllabus, December 2026, Suggested Textbooks (Chan & Tse entry), PDF p.5, 7, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
-    - "World Scientific's Crossref deposit for Financial Mathematics for Actuaries, 3rd ed.: chapter records 10.1142/9789811243288_0001–_0011 with titles and page ranges, re-fetched 2026-09-29, sha256:8a015cb140eaa779b82f41856ee5800df2af336f25d2ed78a0fc2b5a44b964ee — https://api.crossref.org/works?filter=isbn:9789811243271&rows=40&select=DOI,title,page,type"
-    - "swisscovery (SLSP) catalogue, MARC records for ISBN 9789811243271 (010 LCCN 2021036685, 020, 250 'Third edition', 264 '[2022]' / '© 2022', 505 chapter contents note), fetched 2026-09-29, sha256:031e9406d92ead58740eaedee65d58f46a7cc35757add56993cd25d0f06475f0 — https://swisscovery.slsp.ch/view/sru/41SLSP_NETWORK?version=1.2&operation=searchRetrieve&recordSchema=marcxml&query=alma.isbn=9789811243271"
-    - "Library of Congress catalog record 2021036685 (title, date 2022, note 'Includes index.'; no contents note), JSON fetched 2026-09-29, sha256:0f5a19e8fbbd6091d2e0845c8c5a8628ad14abb6752d1f890a29832b6e5a89ea — https://www.loc.gov/item/2021036685/?fo=json"
+    - "swisscovery (SLSP) catalogue, MARC records for ISBN 9789811243271 (010 LCCN 2021036685, 020, 250 'Third edition', 264 '[2022]' / '© 2022', 505 chapter contents note), fetched 2026-09-29, sha256:17546755c3e13acbc7527eceacac72a507794c58b26801265b86d9b0003e994c — https://swisscovery.slsp.ch/view/sru/41SLSP_NETWORK?version=1.2&operation=searchRetrieve&recordSchema=marcxml&query=alma.isbn=9789811243271"
+    - "Library of Congress catalog record 2021036685 (title, date 2022, note 'Includes index.'; no contents note), JSON fetched 2026-09-29, sha256:0081bb7a48e89b1ffea5922fd1d2c8b220ad9c183d052b157c7c2476160cf55c — https://www.loc.gov/item/2021036685/?fo=json"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022).md"

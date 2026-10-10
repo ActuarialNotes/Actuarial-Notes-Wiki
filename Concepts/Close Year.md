@@ -1,13 +1,15 @@
 ---
 verification:
-  status: verified
-  confidence: medium
-  last_checked: 2026-09-12
+  status: in_review
+  confidence: null
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:043a3b4fa6921fcd1f68763f387954e6581182a139503d1c848da2674b94ea59
+  content_hash: sha256:134c0a9ad45182e24df265ddfcaf7e7eb7ce1c3e25195be19a5aba3cb1a3b6c4
   sources:
-    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch. 1 pp.14-15 (PDF pp.20-21), Ch. 3 p.31 (PDF p.37), Ch. 11 pp.206-208 (PDF pp.212-214), Ch. 13 pp.283-308 (PDF pp.289-314), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/database/studynotes_friedland_estimating.pdf"
-  open_findings: 2
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 3rd ed. 2010), Ch.1 p.14 (PDF p.20), Ch.4 p.44 (PDF p.50), Ch.6 p.71 (PDF p.77), Ch.11 pp.206-208 (PDF pp.212-214), Ch.13 p.288 (PDF p.294), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2025, p.3 task A3, sha256:bbb07433732f1d2f097db74e69ed263771dd512ce3e14229384b6df5654ebfc7 — https://www.casact.org/sites/default/files/2025-05/Exam_5_ContentOutline_2025_F.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026, p.3 task A3, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Close Year.md
 ---
@@ -16,9 +18,9 @@ verification:
 
 > $$\text{Settlement lag} = \text{Close date} - \text{Accident date}$$
 
-- A close-year cohort is **complete and fully developed the moment it closes** — a settled claim has no further development — which makes closed-claim data the only loss data that needs no [[Loss Development|development]] at all.
+- A close-year cohort is **complete the moment it closes** — a settled claim has no further development unless it reopens, and reopened claims are a separate component of the unpaid claim estimate (Friedland Ch. 1) — so closed-claim data needs almost no [[Loss Development|development]].
 - The trade-off is severe selection bias: within any recent accident year the claims that close first are the small, simple ones. Closed-claim severity therefore **understates** ultimate severity, and the bias is worst in the [[Long Tail Lines|long-tail lines]] where the expensive claims litigate for years.
-- Close year is rarely a ratemaking basis. Its real work is **operational**: measuring the [[Settlement Rate|disposal rate]] (claims closed as a share of claims reported), claim-department throughput, and the average cost of a closed claim.
+- Close year is rarely a ratemaking basis. Its real work is **operational**: measuring the [[Settlement Rate|disposal rate]] (in Friedland, cumulative closed claim counts divided by the selected ultimate claim count for the accident year; other authors define it differently), claim-department throughput, and the average cost of a closed claim.
 - Those same closed-claim counts drive the [[Berquist-Sherman Method|Berquist-Sherman]] paid adjustment and the disposal-rate variant of the [[Frequency-Severity Method]], where a triangle of *closed* counts is used to restate paid losses onto a common settlement pattern.
 - A shift in closing speed is one of the operational changes an actuary must probe (Friedland Ch. 4): faster closing inflates historical paid development factors, slower closing deflates them — see [[Claims Processing Changes]].
 

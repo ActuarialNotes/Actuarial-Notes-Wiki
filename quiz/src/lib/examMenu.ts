@@ -1,7 +1,9 @@
 import { formatSittingDate, type ExamSitting } from '@/data/examSittings'
 import { daysBetween, type StudyPlan } from '@/lib/studyPlan'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
 import { bankLabelFor } from '@/lib/examIds'
+import { compareExamLabels } from '@/lib/resourceExams'
+import { examDisplayName } from '@/lib/wikiRoutes'
 
 // The exam's action menu, as data — what the study guide's title opens
 // (`components/ConceptActionMenu.tsx`, its exam branch). An exam isn't a concept:
@@ -40,6 +42,24 @@ export function examProgressKeyFromFile(fileName: string): string {
  */
 export function examQuizTopic(fileName: string): string | undefined {
   return bankLabelFor({ examId: examPageIdFromFile(fileName) })
+}
+
+/**
+ * The study guides a resource is a reading for — the exam pages whose `Source
+ * Material` callout links it — in ladder order (Exam P before Exam 7). Empty
+ * when no exam lists it, which is what greys out a resource's **Open in Study
+ * Guide** row. Matched on the page name, case-insensitively, the way the
+ * syllabus links it.
+ */
+export function studyGuidesForResource(
+  syllabi: WikiExamSyllabus[],
+  resourceName: string,
+): WikiExamSyllabus[] {
+  const needle = resourceName.trim().toLowerCase()
+  if (!needle) return []
+  return syllabi
+    .filter(s => s.fileName && s.resources.some(r => r.name.trim().toLowerCase() === needle))
+    .sort((a, b) => compareExamLabels(examDisplayName(a.fileName!), examDisplayName(b.fileName!)))
 }
 
 /**

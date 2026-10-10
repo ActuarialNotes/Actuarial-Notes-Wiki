@@ -5,7 +5,7 @@
   "sitting": "Nov 2026/Mar 2027",
   "source_url": "https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf",
   "source_sha256": "4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9",
-  "extracted_at": "2026-10-05",
+  "extracted_at": "2026-10-09",
   "intro": [],
   "topics": [
     {
@@ -549,8 +549,8 @@
           ]
         },
         {
-          "citation": "IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial 6a, c-d, f Association, May 2023, section 9",
-          "codes": "",
+          "citation": "IAA Risk Book: Reinsurance, Insurance Regulation Committee, International Actuarial Association, May 2023, section 9",
+          "codes": "6a, c-d, f",
           "parts": []
         },
         {

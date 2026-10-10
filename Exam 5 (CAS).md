@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f27f8f6884ef0e485481983ae53c453b0157487bbd06a347d6f9826353a12bc1
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:31a644903f11a8bd4761f75ea273cfa300a7c43a3fd04ba79248f939d9a29d9d
+  sources:
+    - "CAS, Exam Content Outline — Basic Techniques for Ratemaking and Estimating Claim Liabilities (Exam 5), Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795), pp.1-6"
+    - "CAS, Exam 5 — Basic Ratemaking and Est Claim Liabilities exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026; refund deadline October 6, 2026; fee $850 ($680 students); 'October 2026 Content Outline' (Updated September 2026) the only outline linked, sha256:4768a5849e7021628953aadeebb0a33de3b128301b9e9479e523b004d1168b2b — https://www.casact.org/exam/exam-5-basic-ratemaking-and-est-claim-liabilities"
+  open_findings: 5
   open_critical: 0
   log: .verify/Exam 5 (CAS).md
 ---
@@ -24,9 +26,9 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > Candidates should have a thorough understanding of basic [[Ratemaking]] so that they can analyze [[Ratemaking Data Organization|data]], select appropriate techniques, and develop solutions to problems.
 > 
 > 1. Define and describe [[Exposure Base]]s as used in the [[Ratemaking|ratemaking process]]
-> 2. Evaluate and select an [[Exposure Base|exposure base]] in a given scenario (e.g., [[Line of Business|line of business]], use cases)
+> 2. Evaluate and select an [[Exposure Base|exposure base]] in a given scenario for use in the [[Ratemaking|ratemaking process]] (e.g., [[Line of Business|line of business]], use cases)
 > 3. Aggregate and/or organize [[Ratemaking Data Organization|ratemaking data]] by: [[Calendar Year]], [[Policy Year]], [[Accident Year]], [[Report Year]], [[Close Year|close year]], [[In-Force|in-force]], [[Net of Reinsurance|net of reinsurance]]; collect [[Written Premium|written]], [[Earned Premium|earned]] and [[Unearned Premium|unearned]] premium and [[Earned Exposure]]
-> 4. Evaluate [[Ratemaking Data Organization|ratemaking data]] and analyses for [[Data Issues|errors]] and [[Reasonableness Testing|reasonableness]]
+> 4. Evaluate [[Ratemaking Data Organization|ratemaking data]] and analyses for [[Data Issues|errors]], [[Data Quality|completeness]], and [[Reasonableness Testing|reasonableness]]
 > 5. Separate [[Ratemaking Data Organization|data]] into [[Data Segmentation|groups]] that balance [[Homogeneity]] and [[Credibility]] and summarize the considerations for determining such [[Data Segmentation|groups]]
 > 6. Calculate [[Loss and Loss Adjustment Expense]]s for [[Ratemaking|ratemaking]] (e.g., [[Basic Insurance Ratios|common ratios]] such as [[Frequency]], [[Severity]], [[Pure Premium]] and [[Loss Ratio]]; adjustments to [[Loss and Loss Adjustment Expense|losses]] such as [[Loss Development|development]] and [[Loss Trend|trend]]; [[Claims Made Coverage|claims-made]] vs [[Occurrence Coverage|occurrence coverage]])
 > 7. Calculate various adjustments to the [[Insurance Premium|premium]] used for [[Ratemaking|ratemaking]] (e.g., [[On Level Premium]], [[On-Leveling]] via the [[Parallelogram Method|parallelogram method]] or [[Extension of Exposures|extension of exposures]], [[Premium Audit|premium audit]])
@@ -35,7 +37,7 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 10. Demonstrate proper handling of [[Extraordinary Losses|extraordinary losses]] for [[Ratemaking|ratemaking]] purposes (e.g., [[Large Loss]]es, [[Catastrophe Loss|Catastrophe]]s)
 > 11. Construct an [[Overall Rate Level Indication|overall rate level indication]] using the [[Pure Premium Method]] and [[Loss Ratio Method]]; calculate a [[Permissible Loss Ratio]]
 > 12. Apply [[Credibility]] to [[Ratemaking|ratemaking]] analyses using different methods and justify choice of [[Complement of Credibility|complement]]
-> 13. Select and justify a [[Rate Change|final rate change]] beyond the calculated [[Overall Rate Level Indication|overall rate level indication]] (e.g., [[Ratemaking Constraints|operational]], [[Ratemaking Constraints|marketing]], regulatory [[Ratemaking Constraints|Constraints]], [[Lifetime Value]])
+> 13. Select and justify a [[Rate Change|final rate change]] to implement beyond the calculated [[Overall Rate Level Indication|overall rate level indication]] (e.g., [[Ratemaking Constraints|operational]], [[Ratemaking Constraints|marketing]], regulatory [[Ratemaking Constraints|Constraints]], [[Lifetime Value]])
 > 14. Perform calculations related to alternative [[Ratemaking|ratemaking]] procedures (e.g., [[Classification Ratemaking|classification]], [[Territory Ratemaking|territory]], [[Deductible Rating|deductibles]] and the [[Loss Elimination Ratio]], [[Increased Limits]] and the [[Limited Expected Value]], [[Coinsurance Rating|coinsurance]] and the [[Coinsurance Percentage]], [[Commercial Lines Rating]] mechanisms such as [[Experience Rating|experience]], [[Schedule Rating|schedule]] and [[Retrospective Rating|retrospective rating]], [[Self-Insured Retention|self-insured retentions]] and [[Large Deductible Policy|large deductibles]])
 > 15. Analyze results of [[Predictive Analytics|predictive models]] (e.g., [[Generalized Linear Model]])
 > 16. Apply the [[Principles of Ratemaking|four principles of ratemaking]] to a scenario
@@ -51,26 +53,26 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > [!example]- B. Estimating Claim Liabilities (Reserving) {45–55%}
 > Candidates should understand how to estimate [[Unpaid Claims]] for both [[Insurer|insurance entities]] and [[Self-Insured Retention|non-insurance entities]] that retain [[Risk|risk]] (e.g., [[Self-Insured Retention|self-insureds]]). See [[Loss Reserving]] for the overall framework.
 > 
-> 18. Organize [[Reserving Data Organization|reserving data]] by: [[Calendar Year]], [[Accident Year]], [[Policy Year]], [[Underwriting Year]], [[Report Year]]
-> 19. Evaluate [[Reserving Data Organization|reserving data]] and analyses for [[Data Issues|errors]] and [[Reasonableness Testing|reasonableness]]
-> 20. Describe the role of [[Homogeneity]] and [[Credibility]] of [[Reserving Data Organization|data]] in estimating [[Unpaid Claims|unpaid claims]]
-> 21. Describe the fundamentals of different [[Types of Insurance]] (e.g., [[Long Tail Lines|long tail]] vs. [[Short Tail Insurance|short tail]] lines, low [[Frequency|frequency]] vs. [[Frequency|high frequency]] lines, [[Occurrence Coverage|occurrence]] vs. [[Claims Made Coverage|claims made]])
-> 22. Articulate the importance of [[Unpaid Claims|accurate estimates]] of [[Unpaid Claims|unpaid claims]]
-> 23. Build and analyze [[Development Triangle]]s (e.g., [[Paid Losses|paid]] and [[Incurred Losses|reported]] loss, [[Case Reserves]], [[Claim Count Triangle|count]], [[Allocated Loss Adjustment Expense]] ([[Allocated Loss Adjustment Expense|ALAE]])); select [[Age to Age Factor|age-to-age factors]] and [[Cumulative Development Factor]]s
-> 24. Apply a [[Tail Factor]]
-> 25. Use [[Development Triangle|development triangles]] as [[Data Diagnostic Analysis|diagnostic tools]] to identify changes and [[Loss Development|development]] trends (e.g., [[Frequency|claim count]], [[Severity]], [[Severity Analysis]], [[Loss Ratio|ratio of losses to premium]], ratios of [[Loss and Loss Adjustment Expense|loss]] and [[Claim Count Triangle|claim counts]])
-> 26. Calculate and evaluate [[Loss Reserving|unpaid loss estimation techniques]] (i.e., [[Chain Ladder Method]], [[Case Outstanding Development Method|case outstanding development]], [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], [[Frequency-Severity Method|frequency-severity]], [[Berquist-Sherman Method|Berquist-Sherman]], [[Benktander Method]]); estimate [[IBNR]] and [[Ultimate Loss]]
-> 27. Assess the influence of [[Changing Conditions|operating changes]] on the [[Unpaid Claims|estimation of unpaid losses]] (e.g., [[Claims Coding Changes|claims coding]], [[Claims Processing Changes|claims processing]], [[Underwriting Changes|underwriting]] and [[Policy Provision Changes|policy provisions]], [[Changing Conditions|marketing]], [[Reinsurance|reinsurance]], treatment of [[Recoveries|recoveries]] such as [[Deductible Recovery|deductibles]], [[Salvage and Subrogation|salvage and subrogation]])
-> 28. Adjust [[Reserving Data Organization|data]] and/or [[Loss Reserving|estimation techniques]] for changes in the [[Changing Conditions|internal and external environment]] (e.g., shift in [[Case Adequacy|adequacy of case outstanding]] or [[Settlement Rate|settlement rates]], change in [[Mix of Business|mix of business]], change in [[Rate Level Change|rate level]], [[Inflation|inflationary]] or [[Tort Litigation|legal environment]])
-> 29. Consider the impact of and adjust for the presence of [[Large Loss|large losses]] in a [[Loss Reserving|reserving analysis]]
-> 30. Calculate and evaluate [[Loss Reserving|estimation techniques]] for [[Recoveries|recoveries]] (e.g., [[Salvage and Subrogation]], [[Reinsurance Recovery|reinsurance]])
-> 31. Calculate and evaluate [[Loss Reserving|estimation techniques]] for [[Allocated Loss Adjustment Expense]]s
-> 32. Calculate and evaluate [[Loss Reserving|estimation techniques]] for [[Unallocated Loss Adjustment Expenses ULAE|Unallocated Loss Adjustment Expense]]s
-> 33. Evaluate the results of a [[Loss Reserving|reserve analysis]] for [[Reserve Adequacy|adequacy and reasonableness]] using [[Loss Ratio|loss ratios]], [[Severity|severities]], [[Pure Premium Analysis|pure premiums]], [[Frequency|frequencies]], [[Unpaid Claims|indicated unpaid losses]], etc.
-> 34. Monitor results for [[Reserve Adequacy|adequacy]] and [[Reasonableness Testing|reasonableness]] including [[Roll Forward Analysis|interim valuations]] (e.g., [[Actual vs Expected Analysis|actual versus expected]], [[Roll Forward Analysis|roll forward analysis]])
-> 35. [[Reserve Communication|Communicate results and drivers of change]] to various [[Stakeholder Reporting|stakeholders]] ([[Stakeholder Reporting|internal management]], [[Stakeholder Reporting|investors]], [[Regulatory Reporting|regulators]])
-> 36. Define and apply [[Reinsurance]] concepts to calculate [[Net Losses|net]], [[Ceded Losses|ceded]], and [[Gross Losses|gross losses]]
-> 37. Utilize [[External Information in Reserving|external information]] in a [[Loss Reserving|reserve analysis]]
+> 1. Organize [[Reserving Data Organization|reserving data]] by: [[Calendar Year]], [[Accident Year]], [[Policy Year]], [[Underwriting Year]], [[Report Year]], etc.
+> 2. Evaluate [[Reserving Data Organization|reserving data]] and analyses for [[Data Issues|errors]] and [[Reasonableness Testing|reasonableness]]
+> 3. Describe the role of [[Homogeneity]] and [[Credibility]] of [[Reserving Data Organization|data]] in the [[Loss Reserving|process]] of estimating [[Unpaid Claims|unpaid claims]]
+> 4. Describe the fundamentals of different [[Types of Insurance]] (e.g., [[Long Tail Lines|long tail]] vs. [[Short Tail Insurance|short tail]] lines, low [[Frequency|frequency]] vs. [[Frequency|high frequency]] lines, [[Occurrence Coverage|occurrence]] vs. [[Claims Made Coverage|claims made]])
+> 5. Articulate the importance of [[Unpaid Claims|accurate estimates]] of [[Unpaid Claims|unpaid claims]]
+> 6. Build and analyze [[Development Triangle]]s (e.g., [[Paid Losses|paid]] and [[Incurred Losses|reported]] loss, [[Case Reserves]], [[Claim Count Triangle|count]], [[Allocated Loss Adjustment Expense]] ([[Allocated Loss Adjustment Expense|ALAE]])); select [[Age to Age Factor|age-to-age factors]] and [[Cumulative Development Factor]]s
+> 7. Apply a [[Tail Factor]]
+> 8. Use [[Development Triangle|development triangles]] as [[Data Diagnostic Analysis|diagnostic tools]] to identify changes and [[Loss Development|development]] trends (e.g., [[Frequency|claim count]], [[Severity]], [[Severity Analysis]], [[Loss Ratio|ratio of losses to premium]], ratios of [[Loss and Loss Adjustment Expense|loss]] and [[Claim Count Triangle|claim counts]])
+> 9. Calculate and evaluate [[Loss Reserving|unpaid loss estimation techniques]] (i.e., [[Chain Ladder Method]], [[Case Outstanding Development Method|case outstanding development]], [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], [[Frequency-Severity Method|frequency-severity]], [[Berquist-Sherman Method|Berquist-Sherman]], [[Benktander Method]]); estimate [[IBNR]] and [[Ultimate Loss]]
+> 10. Assess the influence of [[Changing Conditions|operating changes]] on the [[Unpaid Claims|estimation of unpaid losses]] (e.g., [[Claims Coding Changes|claims coding]] and/or [[Loss and Loss Adjustment Expense|claim-related expenses]], [[Claims Processing Changes|claims processing]], [[Underwriting Changes|underwriting]] and [[Policy Provision Changes|policy provisions]], [[Changing Conditions|marketing]], [[Reinsurance|reinsurance]], treatment of [[Recoveries|recoveries]] such as [[Deductible Recovery|deductibles]] and [[Salvage and Subrogation|salvage and subrogation]])
+> 11. Adjust [[Reserving Data Organization|data]] and/or [[Loss Reserving|estimation techniques]] for changes in the [[Changing Conditions|internal and external environment]] (e.g., [[Claims Processing Changes|claims processes]] that result in shift in the [[Case Adequacy|adequacy of case outstanding]] or shift in [[Settlement Rate|settlement rates]], change in [[Mix of Business|mix of business]], change in [[Rate Level Change|rate level]], [[Inflation|inflationary]] or [[Tort Litigation|legal environment]])
+> 12. Consider the impact of and adjust for the presence of [[Large Loss|large losses]] in a [[Loss Reserving|reserving analysis]]
+> 13. Calculate and evaluate the [[Loss Reserving|estimation techniques]] for [[Recoveries|recoveries]] (e.g., [[Salvage and Subrogation]], [[Reinsurance Recovery|reinsurance]])
+> 14. Calculate and evaluate the [[Loss Reserving|estimation techniques]] for [[Allocated Loss Adjustment Expense]]s
+> 15. Calculate and evaluate the [[Loss Reserving|estimation techniques]] for [[Unallocated Loss Adjustment Expenses ULAE|Unallocated Loss Adjustment Expense]]s
+> 16. Evaluate the results of a [[Loss Reserving|reserve analysis]] for [[Reserve Adequacy|adequacy and reasonableness]] using [[Loss Ratio|loss ratios]], [[Severity|severities]], [[Pure Premium Analysis|pure premiums]], [[Frequency|frequencies]], [[Unpaid Claims|indicated unpaid losses]], etc.
+> 17. Monitor results for [[Reserve Adequacy|adequacy]] and [[Reasonableness Testing|reasonability]] including [[Roll Forward Analysis|interim valuations]] (e.g., [[Actual vs Expected Analysis|actual versus expected]], [[Roll Forward Analysis|roll forward analysis]])
+> 18. [[Reserve Communication|Communicate results and drivers of change]] to various [[Stakeholder Reporting|stakeholders]] ([[Stakeholder Reporting|internal management]], [[Stakeholder Reporting|investors]], [[Regulatory Reporting|regulators]])
+> 19. Define and apply [[Reinsurance]] concepts to calculate [[Net Losses|net]], [[Ceded Losses|ceded]], and [[Gross Losses|gross losses]]
+> 20. Utilize [[External Information in Reserving|external information]] in a [[Loss Reserving|reserve analysis]] (e.g., [[Inflation|inflation]], [[Tort Reform|tort reform]], [[Tort Litigation|attorney involvement]])
 > 
 > **Readings:**
 > - Friedland
@@ -80,9 +82,9 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > [!answer]- Source Material {6 Sources}
 > 
 > - [[Basic Ratemaking (Werner - 2016)]]
->      - A1–A15, A17
+>      - A1–A15, A17–A18
 > - [[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)]]
->      - B1–B42
+>      - B1–B20
 > - [[ASOP 12 - Risk Classification (ASB - 2005)]]
 >      - A4–A5
 > - [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]]

@@ -5,12 +5,13 @@ syllabus:
   source_sha256: a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6235f56601f5856bceb29e7210e19b92da7883c6a643e38a2c396596bcabc701
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b81318b6d2af492487158fc5b09fddf9d041efcea522377e977b8008a550003a
+  sources:
+    - "SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam CP-341 (SOA).md
@@ -23,18 +24,16 @@ verification:
 # Exam CP-341
 **CP 341 – Advanced Life Reinsurance** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Mar 2027/Jul 2027 sittings.
 
-The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- Types of Reinsurance Arrangements and Methods {30–40%}
-> The candidate will understand different types of [[Traditional|traditional]] and [[Advanced Reinsurance Transaction|advanced reinsurance transactions]] for [[Life Insurance|life insurance]].
+> The candidate will understand different types of traditional and [[Advanced Reinsurance Transaction|advanced reinsurance transactions]] for [[Life Insurance|life insurance]].
 >
 > 1. Describe basic terms and concepts related to [[Reinsurance|reinsurance]]
-> 2. Understand the key [[Aspect|aspects]] of [[Automatic|automatic]] and [[Facultative Reinsurance|facultative reinsurance]]
+> 2. Understand the key aspects of automatic and [[Facultative Reinsurance|facultative reinsurance]]
 > 3. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Reinsurance Transaction|yearly renewable term]], [[Coinsurance|coinsurance]], [[Reinsurance Transaction|modified coinsurance]], and [[Reinsurance Transaction|funds withheld arrangements]]
-> 4. Explain reasons for using [[Inforce Reinsurance|inforce reinsurance]], approaches used for [[Inforce Reinsurance|inforce reinsurance]], and [[Advantage|advantages]] and [[Disadvantage|disadvantages]] of each approach
-> 5. Demonstrate knowledge of different [[Form|forms]] of [[Reinsurance|reinsurance]] for different [[Product|products]]; specifically, [[PRTs-longevity Swap|PRTs/longevity swaps]], [[Annuity Coinsurance|annuity coinsurance]], and [[Life Insurance Yearly Renewable Term|life insurance yearly renewable term]]
+> 4. Explain reasons for using [[Inforce Reinsurance|inforce reinsurance]], approaches used for [[Inforce Reinsurance|inforce reinsurance]], and advantages and disadvantages of each approach
+> 5. Demonstrate knowledge of different forms of [[Reinsurance|reinsurance]] for different products; specifically, [[PRTs-longevity Swap|PRTs/longevity swaps]], [[Annuity Coinsurance|annuity coinsurance]], and [[Life Insurance Yearly Renewable Term|life insurance yearly renewable term]]
 > 6. Describe and evaluate types of [[Non-Proportional Reinsurance Transaction|non-proportional reinsurance transactions]]
 > 7. Describe and evaluate types of [[Reinsurance Transaction|reinsurance transactions]] for [[Annuity Contract|annuity contracts]]
 > 8. Understand the role of [[Private Equity Involvement|private equity involvement]] in the [[Global Reinsurance Market|global reinsurance market]] and the use of [[Offshore Reinsurance|offshore reinsurance]]
@@ -62,7 +61,7 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 >
 > 1. Describe the elements within [[Treaty Reinsurance|reinsurance treaties]]
 > 2. Describe the elements and considerations of [[Risk Transfer|risk transfer]] between [[Credit Risk|counterparties]], and evaluate their impact on [[Reinsurance Agreement Provision|reinsurance agreement provisions]]
-> 3. Explain the considerations and [[Process|process]] of managing [[Solvency|insolvency]] of the [[Ceding|ceding]] and assuming [[Party|parties]] within a [[Reinsurance Transaction|reinsurance transaction]]
+> 3. Explain the considerations and process of managing [[Solvency|insolvency]] of the ceding and assuming parties within a [[Reinsurance Transaction|reinsurance transaction]]
 > 4. Explain the types, uses, and functions of [[Captive Reinsurance Transaction|captive reinsurance transactions]]
 >
 > **Readings:**
@@ -80,10 +79,10 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - The Impact of BEAT on US Foreign Affiliated Reinsurance, Taxing Times, Dec 2020 (2c, 2d)
 
 > [!example]- Key Accounting and Regulatory Considerations {25–40%}
-> The candidate will understand [[Credit for Reinsurance|regulatory frameworks]] for [[Reinsurance Transaction|reinsurance transactions]] across [[US]], [[Canadian]], and [[Global Jurisdiction|global jurisdictions]].
+> The candidate will understand [[Credit for Reinsurance|regulatory frameworks]] for [[Reinsurance Transaction|reinsurance transactions]] across US, Canadian, and [[Global Jurisdiction|global jurisdictions]].
 >
-> 1. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the [[State and Federal Insurance Regulation|US regulatory]] framework
-> 2. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the [[Canadian Regulatory|Canadian regulatory]] framework
+> 1. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the US regulatory framework
+> 2. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the Canadian regulatory framework
 > 3. Understand [[GAAP|US GAAP]] and [[US Stat Requirement|US Stat requirements]] related to [[Reinsurance|reinsurance]]
 > 4. Understand [[IFRS]] and [[OSFI Requirement|OSFI requirements]] related to [[Reinsurance|reinsurance]]
 > 5. Understand key [[International Reinsurance Regulatory Framework|international reinsurance regulatory frameworks]], especially as they relate to the use of [[Offshore Reinsurance|offshore reinsurance]] and [[Private Equity Backed Reinsurer|private equity backed reinsurers]].
@@ -111,11 +110,11 @@ The learning objectives below are transcribed from the Mar 2027/Jul 2027 [syllab
 > - CP341-108-25: The Heat is on for US Asset-Intensive Reinsurance Regulations (3e)
 
 > [!example]- Reinsurance Administration and Management {0–10%}
-> The candidate will understand and be able to explain [[Practice|practices]] for [[Administering|administering]] and managing [[Reinsurance Transaction|reinsurance arrangements]].
+> The candidate will understand and be able to explain practices for administering and managing [[Reinsurance Transaction|reinsurance arrangements]].
 >
-> 1. Describe [[Feature|features]] and considerations related to [[Reinsurance Administration|reinsurance administration]]
+> 1. Describe features and considerations related to [[Reinsurance Administration|reinsurance administration]]
 > 2. Describe and evaluate concepts related to the management of [[Reinsurance|reinsurance]]
-> 3. Describe the concept of [[Reinsurance Counterparty Credit Risk|reinsurance counterparty credit risk]] and evaluate methods to [[Reduce|reduce]] such [[Risk|risks]].
+> 3. Describe the concept of [[Reinsurance Counterparty Credit Risk|reinsurance counterparty credit risk]] and evaluate methods to reduce such [[Risk|risks]].
 >
 > **Readings:**
 > - Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015 (4a)

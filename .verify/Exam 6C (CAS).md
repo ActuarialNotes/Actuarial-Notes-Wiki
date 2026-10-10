@@ -188,3 +188,69 @@ created: 2026-10-03
 - checks_run: Format: PDF p.1 gives a 4-hour exam (4.5-hour appointment) with seven item types, which matches 'a 4 hour exam with mixed question types'. Domain weights A 20-25%, B 10-15%, C 60-70% (p.2) match. The cognitive-level split (p.2: Remember 30-40%, Understand and Apply 25-35%, Analyze and Evaluate 25-35%, Create 0-10%) is not on the page; no vault exam page carries one, so it is not filed. All 11 tasks and the 3 preambles were diffed phrase by phrase against pp.3-5 and against the Fall 2025 outline pp.3-5. A3 and B3 match. A1's stem matches, but its list is the vault's (F-005, F-006). A2 and B2 lack the Fall 2026 scope (F-002). B1's 'historical significance' was removed (F-003, fixed). C1-C5 are Fall 2025's (F-001). Preambles are condensed (F-007), and the C title drops 'of an Actuary' (F-010). Readings lines: A (19) and B (6) match pp.3-4 item for item. C matches the reference table, and CIA Reinsurance Treatment was removed (F-004, fixed). Source Material: 67 bullets = the 64 Fall 2026 readings (counted from the pp.7-14 table), every task code equal to the table's, plus 3 Fall 2025 readings marked retired, confirmed dropped (F-008). Lines carry codes only (F-009). Conflicts inside the outline are logged in a comment. Rollover: the CAS 6C page, read today, links only the Fall 2026 outline; re-fetched bytes are identical. No notice, errata or 2027 outline. Links: 225 distinct targets all resolve exactly (scripts/vault_links.py). syllabus_lint 0 errors 0 warnings; test_syllabus_lib OK; vitest sourceMaterial, questionBank, examCatalog and resourceExams pass.
 - sources_checked: CAS, Exam Content Outline — Canada Regulation and Financial Reporting – Exam 6C, Fall 2026 (the 'October 2026 Content Outline'; v04 2026-05-26, 14 pp.), PDF pp.1-14, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf; CAS, Exam Content Outline — Exam 6C, Fall 2025 (v04 2025-05-09, 14 pp.), PDF pp.1-14, for the wording the page carries and the readings Fall 2026 dropped, sha256:b47003231c4bff742f5ca8829ff3c6f26f2e639c1c733f17d3c418f85b422bcb — https://www.casact.org/sites/default/files/2025-05/Exam_6C_ContentOutlines_2025_F.pdf; CAS, Exam 6C-Regulation and Financial Reporting (Canada) exam page, read 2026-10-03: window October 19-27, 2026; the October 2026 Content Outline is the only outline linked; no notice or errata — https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada
 - note: In review, not verified. The Fall 2026 outline was read in full, but two major findings stay open. The domain C task list is the Fall 2025 outline's (F-001), and tasks A2 and B2 lack scope Fall 2026 added (F-002). Neither is a mechanical fix; F-001 waits on a conflict inside the outline itself (see the comment). Two deletions were applied (F-003, F-004). No critical finding: the weights, every reading and every task code agree with the outline.
+
+## [C-003] Still present: Tasks A2 and B2 lack the scope Fall 2026 added
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-002
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; pp.3-4 A2 and B2 read as quoted; the page's stems are unchanged. Still not auto-fixed: a trial verbatim transcription made test_syllabus_lib's noun-phrase check flag `litigation environment`, `funding mechanisms` and `funding` as unlinked, so each needs a link a maintainer chooses (reverted).
+
+## [C-004] Still present: Vault-chosen terms presented as CAS's task wording
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-005
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; pp.3-5 e.g. lists unchanged and the page's added terms still stand. Moving them to Key concepts lines is restructuring, not transcription; left open.
+
+## [C-005] Still present: A1 names IBC's Code of Consumer Rights; the syllabus's IBC code is the credit-information code
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-006
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; A1 (p.3) still names 'industry codes of conduct'; the only IBC code in the table is the credit-information code (p.10). Relinking is a judgment; left open.
+
+## [C-006] Still present: Domain preambles condensed; A loses its scope limiter, C its sections sentence
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-007
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; pp.3-5 preambles as quoted. A trial verbatim insertion of the A scope limiter and B's 'e.g., auto, property' flagged `law`, `thereby modify regulatory`, `auto`, `property` as unlinked in test_syllabus_lib, so linking is a maintainer's call (reverted).
+
+## [C-007] Still present: Source Material keeps three retired readings with live task codes; title says 67, CAS assigns 64
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-008
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; pp.7-14 still list 64 readings; the page still has 67 bullets incl. the three retired ones. Dropping them changes the shelf and three resource pages; left open.
+
+## [C-008] Still present: Reading lines give task codes only; the outline's page, section and exclusion limits are absent
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-009
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; pp.7-14 scope limits unchanged; page lines still carry codes only. 64 lines of transcription best done with the F-001 domain C work; left open.
+
+## [C-009] Still present: Domain C title drops 'of an Actuary'
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- reaffirms: F-010
+- note: Fall 2026 outline re-fetched 2026-10-09 (https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf), sha256:1bd4b2b8…275c1, byte-identical to the copy cited; p.2 and p.5 still read '... Professional Responsibility of an Actuary'. Retitling must move 233 questions' learning_objective with it; left open.
+
+## [C-010] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T20:35Z/cdb5
+- date: 2026-10-09
+- status_set: in_review
+- checks_run: Re-fetched the Fall 2026 outline with --refresh (sha256 identical to run 9495's copy); re-read pp.1-6 against the page's domains, preambles, tasks and Readings lines; trial verbatim fixes for F-002 and F-007 run through test_syllabus_lib (flagged unlinked noun phrases, reverted); exam page read for rollover: sitting October 19-27, 2026 still current, no 2027 outline posted.
+- sources_checked: CAS, Exam Content Outline — Canada Regulation and Financial Reporting – Exam 6C, Fall 2026 (the 'October 2026 Content Outline'; v04 2026-05-26, 14 pp.), PDF pp.1-14, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf; CAS, Exam 6C-Regulation and Financial Reporting (Canada) exam page, read 2026-10-09: window October 19-27, 2026; the October 2026 Content Outline is the only outline linked; no errata or syllabus update — https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada
+- note: In review, not verified. No page edits. F-001 (domain C renumbering) left open as a maintainer's call. The other seven open findings (F-002, F-005-F-010) were reaffirmed against the unchanged outline; none is a plain transcription fix: each needs a link choice, a restructure, or edits to other files. Sitting still current.

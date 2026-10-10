@@ -134,3 +134,14 @@ created: 2026-09-27
 - run_id: 2026-09-28T02:59Z/919b
 - date: 2026-09-28
 - note: The pass above says 33 sections; ptext.con lists 37 (3+6+5+7+5+5+3+3). A mechanical diff of the page against the re-fetched ptext.con finds all 37 on the page with the same numbers and titles, and the page adds only 3.6 Exercises and 4.8 Exercises (confirmed by sample pp.170 and 242).
+
+## [C-005] Delta re-check — cover jacket
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-09T19:04Z/2db6
+- date: 2026-10-09
+- status_set: verified
+- confidence: medium
+- checks_run: delta diff against the verified version; jacket compared with the frontmatter; cited sources re-fetched
+- sources_checked: SOA Probability Exam syllabus, November 2026 (7 pp.), REFERENCES p.7, sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf; Introduction to Probability, W&M ScholarWorks record (first edition), https://scholarworks.wm.edu/asbookchapters/125/, html, sha256:01334cc7f901193ff49bb9750216f3746fbd85e7065cb1f028202f13629b61ca — https://scholarworks.wm.edu/asbookchapters/125/
+- note: Stale only because of an edit after the pass of 2026-09-28 (commit 305dce51). The cover embed now names the real jacket, '- Cover.jpg', instead of the generated '- Cover.svg' (commit 756fa1d1, 2026-10-07). The jacket shows this page's title, authors and edition. Every PDF the earlier pass cited was re-fetched and is byte-identical; catalogue pages were re-read (an HTML page's hash moves on every fetch). Not reachable this session, so not cited: https://www.math.wm.edu/~leemis/ptext.con (<urlopen error [SSL); https://www.math.wm.edu/~leemis/probability/samplepages/ (<urlopen error [SSL); https://www.math.wm.edu/~leemis/ (<urlopen error [SSL); https://www.math.wm.edu/~leemis/probability2e-review.pdf (<urlopen error [SSL).

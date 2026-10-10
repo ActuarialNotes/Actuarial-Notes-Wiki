@@ -1,12 +1,18 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b19e3cfb742288bdaa81b4c1db168ff8c1ffaddbade11485c5aa17a7b7b99bc4
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7027ad059a865ae21ba8342aaf33c98d6fc607623432f794a11f4770f369401c
+  sources:
+    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "CAS, Exam MAS-II — Modern Actuarial Statistics-II exam page, read 2026-10-09: windows July 29 - August 4, 2026 and October 28 - November 5, 2026 (register by Sep. 29, 2026); '2026 Content Outline' the only outline linked, sha256:0b8e99645a8185c88b514201e1b60ed881d27b51442f616af4baab416d4f2f48 — https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii"
+    - "Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II, updated November 6, 2025, PDF p.1, sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
+    - "James et al., An Introduction to Statistical Learning 2nd ed., CAS-hosted PDF, bookmark outline, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goldburd, Khare, Tevet & Guller, GLMs for Insurance Rating, CAS Monograph 5, 2nd ed., bookmark outline Ch 7, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.1-3, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
+  open_findings: 3
   open_critical: 0
   log: .verify/Exam MAS-II (CAS).md
 ---
@@ -28,7 +34,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 
 > [!example]- A. Introduction to Credibility {15–25%}
 > 
-> Candidates should understand and be able to calculate [[Credibility|credibility-weighted estimates]].
+> Candidates should understand and be able to calculate [[Credibility|credibility weighted estimates]].
 > 
 > 1. Calculate [[Limited Fluctuation Credibility|classical]] ([[Limited Fluctuation Credibility]]), [[Bühlmann Credibility]], [[Bühlmann-Straub Credibility]], and [[Bayesian Credibility]]-weighted estimates for [[Frequency|frequency]], [[Severity|severity]], and [[Aggregate Loss Model|aggregate loss]]
 > 2. Understand the framework used for the [[Limited Fluctuation Credibility|classical]] ([[Limited Fluctuation Credibility|limited fluctuation]]), [[Bühlmann Credibility|Bühlmann]], [[Bühlmann-Straub Credibility|Bühlmann-Straub]], and [[Bayesian Credibility|Bayesian]] [[Credibility|credibility procedures]]
@@ -70,7 +76,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 
 > [!example]- C. Statistical Learning {40–50%}
 > 
-> Candidates should understand the mechanics of the [[Statistical Learning|algorithms]] identified in the tasks below and recognize their inherent strengths and weaknesses to select the most appropriate procedure for the [[Statistical Learning|learning task]] at hand.
+> Candidates should understand the mechanics of the [[Statistical Learning|algorithms]] identified in the tasks below and recognize their inherent strengths and weaknesses to be able to select the most appropriate procedure for the [[Statistical Learning|learning task]] at hand.
 > 
 > 1. Distinguish [[Supervised Learning|supervised]] from [[Unsupervised Learning|unsupervised]] learning, and explain the [[Bias-Variance Tradeoff|bias-variance tradeoff]] behind [[Test Error|test-error]] behaviour
 > 2. Estimate [[Test Error|test error]] by [[Cross-Validation|cross-validation]] and estimate [[Sampling Distribution|sampling variability]] by the [[Bootstrap|bootstrap]]
@@ -108,11 +114,11 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > - [[Confusion Matrix]] · [[AUROC]] · [[Gini Index]]
 > - [[Lift]] · [[Double Lift Chart]] · [[Quantile Plot]]
 > 
-> **Readings:** James et al. · GLM
+> **Readings:** James et al. · GLM · Salis
 
 > [!example]- D. Time Series with Constant Variance {15–25%}
 > 
-> Candidates should understand the basic applications of the [[ARIMA]] ([[ARIMA|Auto Regressive Integrated Moving Average]]) [[Time Series|time series]] model.
+> Candidates should understand the basic applications of the [[ARIMA|Auto Regressive Integrated Moving Average]] ([[ARIMA]]) [[Time Series|time series]] model.
 > 
 > 1. Model relationships of current and [[Backward Shift Operator|past values]] of a [[Time Series|statistic/metric]] using [[Autoregressive Model|autoregressive]] and [[Moving Average Model|moving average]] terms
 > 2. Test a [[Time Series|series]] for [[Stationarity|stationarity]] and achieve it by [[Differencing|differencing]]; recognize [[White Noise|white noise]] and the [[Random Walk|random walk]] as limiting cases
@@ -138,12 +144,12 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > [!answer]- Source Material {5 Sources}
 > 
 > - [[Introductory Time Series with R (Cowpertwait - 2009)]]
->      - D1–D4
+>      - D1–D4 — Chapters 1–5 (excluding Sections 3.3 and 3.4), 6, 7 (Sections 7.1, 7.2 and 7.3)
 > - [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]
->      - C10–C11
+>      - C10–C11 — CAS Monograph #5, 2nd edition, Chapter 7
 > - [[An Introduction to Statistical Learning (James et al. - 2021)]]
->      - C1–C9
+>      - C1–C9 — 2nd edition, Chapters 1 (Background reading only), 2.2, 4.4.2 (Confusion Matrix Only), 8, 10, 12. Exam questions will not be sourced directly from Chapter 1.
 > - [[Nonlife Actuarial Models (Tse - 2009)]]
->      - A1–A2
+>      - A1–A2 — Chapters 6.1–6.3, 7.1–7.4, 8.1–8.2, and 9.1–9.2
 > - [[Linear Mixed Models (West et al. - 2022)]]
->      - B1–B4
+>      - B1–B4 — 3rd Edition, all chapters, excluding coding examples; Additional Notes on Shrinkage Means (http://www-personal.umich.edu/~bwest/shrinkage.doc)

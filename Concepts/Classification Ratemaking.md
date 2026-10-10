@@ -1,14 +1,14 @@
 ---
 verification:
   status: verified
-  confidence: high
-  last_checked: 2026-09-12
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ef17a0c755a3521e32371bcfd7c6afde31b0ec1445338af4516b686985b34b7a
+  content_hash: sha256:4e568eac4c585b3eeb58da944ad4b4006760ac26c873fa0b5f6d6cf3d4727765
   sources:
-    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch. 9 pp.154-158 (PDF pp.166-170) and Ch. 11 p.189 with footnote 37 (PDF p.201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/old/studynotes_werner_modlin_ratemaking.pdf"
-    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988), sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — p.3, Principle 3"
-  open_findings: 1
+    - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.9 pp.151-159 and 161-170 (PDF pp.163-171, 173-182), Ch.10 p.172 (PDF p.184), Ch.11 p.189 with fn.37 (PDF p.201), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Statement of Principles Regarding Property and Casualty Insurance Ratemaking (adopted May 1988; reinstated May 2021), Section II p.2, Principle 3, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Classification Ratemaking.md
 ---
@@ -21,9 +21,9 @@ verification:
 
 **Why classify at all.** In a competitive market an insurer that charges one average rate to a heterogeneous group loses the better risks to competitors that price them properly, and retains the worse ones — the **adverse selection spiral**. Classification is what keeps the pool viable, and [[Principles of Ratemaking|Principle 3]] requires the rate to reflect the individual risk transfer.
 
-**Werner's criteria for a rating variable:**
+**Criteria for a rating variable** (Werner, after Finger's *Risk Classification*):
 
-- **Actuarial** — statistically significant, accurate, [[Homogeneity|homogeneous]] within class, and [[Credibility|credible]].
+- **Statistical** — statistical significance, [[Homogeneity|homogeneity]] within levels, and [[Credibility|credibility]].
 - **Operational** — objective, inexpensive to obtain and verify, not manipulable by the insured.
 - **Social** — privacy, causality, controllability and affordability; these are where public and regulatory objections arise.
 - **Legal** — some variables are prohibited outright in some jurisdictions.

@@ -8,14 +8,15 @@ Edition: "5th"
 Type: "Textbook"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf)"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-05
-  last_checked_by: agent:validate-v1-followup
-  content_hash: sha256:8b04b31a2b25c4ac14cc24b0a4ee75778f6f80b5cb411542743ef08b7bc4f5ae
+  status: verified
+  confidence: high
+  last_checked: 2026-10-09
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8fc6e29617634090e48908fe2e97de10c4a9c4fed411f5970ae94cc89941077c
   sources:
-    - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS) — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf (sha256 6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c, 423 pp.): printed Table of Contents PDF pp.8-12, PDF bookmark outline, and chapter bodies pp.204-210 (ILF), 310 (large commercial scope), 324-333 (ch.16), 411/415 (Appendices E/F)"
-    - "CAS Exam 5 Content Outline, Fall 2026 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf (version Exam_5_CO_2026_F v01 2026_4_22.docx; sha256 a7ba895343f7d888bc2c2d5f3b10b2811c8911620c628ae4cebd3ae6393ff1ea), p.6 'Complete Text References for Exam 5' and p.4 Domain A task list"
+    - "Werner, G. & Modlin, C., Basic Ratemaking, 5th ed., May 2016 (CAS), title page/abstract PDF pp.1-2, Organization of this Text pp.4-6, printed TOC PDF pp.8-12, bookmark outline, chapter text PDF pp.13-19, 48-60, 61, 75, 93-101, 122, 132-136, 139-142, 152, 166-167, 176, 183, 204-211, 228-250, 251, 269, 275-300, 310, 324-332, 334-336, 415-420, Changes p.422, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15), p.4 Domain A tasks 1-18 and readings; p.6 Complete Text References, Werner & Modlin row, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "Errata to Basic Ratemaking, 5th Edition (CAS Exam 5 Syllabus Committee, Version 1.0, June 27, 2024), pp.1-2, all three errata, sha256:d4d11b5935d8c3fa7863759a70d2f8d0ed68d0b69fb16ab337a44100b075be10 — https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Basic Ratemaking (Werner - 2016).md
@@ -45,7 +46,7 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 - Internal data: policy and claim databases, accounting records
 - [[Ratemaking Data Organization|Aggregation methods]]: [[Calendar Year]], [[Accident Year]], [[Policy Year]], [[Report Year]]
 - External data: statistical plans, other aggregated insurance data, competitor rate filings, third-party data
-- Trade-offs between accuracy, availability, and timeliness of each aggregation
+- The three objectives of data aggregation — accurately match losses and premium, use the most recent data available, and minimize the cost of data collection and retrieval — and how well each method achieves them
 
 ## 4 Exposures
 
@@ -64,7 +65,7 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 
 - [[Paid Losses|Paid]], case incurred, and ultimate losses; [[Case Reserves|case reserves]] and [[IBNR]]
 - [[Allocated Loss Adjustment Expense|ALAE]] and [[Unallocated Loss Adjustment Expenses ULAE|ULAE]]
-- [[Loss Development|Loss development]] to ultimate and [[Loss Trend|loss trend]] to the future period; avoiding overlap between the two
+- [[Loss Development|Loss development]] to ultimate and [[Loss Trend|loss trend]] to the future period; the overlap fallacy — trending and developing losses are not overlapping adjustments
 - [[Occurrence Coverage|Occurrence]] vs. [[Claims Made Coverage|claims-made]] coverage triggers
 - Adjusting for [[Large Loss|extraordinary losses]], [[Catastrophe Loss|catastrophes]], and reinsurance
 
@@ -84,7 +85,7 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 ## 9 Traditional Risk Classification
 
 - Rationale for [[Classification Ratemaking|risk classification]]: adverse selection and equity
-- Criteria for evaluating rating variables: actuarial, operational, social, and legal
+- Criteria for evaluating rating variables: statistical, operational, social, and legal
 - Univariate methods — pure premium and loss ratio approaches — and their bias from exposure correlation
 
 ## 10 Multivariate Classification
@@ -103,7 +104,7 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 ## 12 Credibility
 
 - [[Credibility|Credibility]] measures and the [[Limited Fluctuation Credibility|limited fluctuation]] standard
-- [[Bühlmann Credibility|Bühlmann]] and [[Bühlmann-Straub Credibility|Bühlmann-Straub]] approaches
+- [[Bühlmann Credibility|Bühlmann]] (least squares) credibility and Bayesian analysis
 - Choosing the [[Complement of Credibility|complement of credibility]]: first dollar and excess methods, and desirable criteria for a complement
 
 ## 13 Other Considerations
@@ -115,7 +116,7 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 ## 14 Implementation
 
 - [[Considerations for Implementing Rates|Implementation considerations]]: non-pricing solutions, [[Minimum Premium|minimum premiums]], base rate offsets
-- Off-balancing and rebalancing the [[Rating Algorithm|rating algorithm]]
+- The off-balance factor: the amount the base rate needs to be adjusted to balance the changes in the rate differentials of the [[Rating Algorithm|rating algorithm]]
 - Calculating a final base rate consistent with the overall indication
 
 ## 15 Commercial Lines Rating Mechanisms
@@ -159,4 +160,4 @@ A CAS text outlining basic property/casualty insurance ratemaking concepts and t
 ## Sources
 - [Basic Ratemaking, Fifth Edition (Casualty Actuarial Society, 2016)](https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf) — the document: title page and abstract, the printed table of contents and bookmark outline (chapter and appendix titles), and the chapter text behind the points under each chapter
 - [CAS Exam 5 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf) — the citation and the assigned scope
-- [Errata to Basic Ratemaking, 5th Edition (Casualty Actuarial Society, 2024)](https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf) — the errata the content outline includes in the reading: the coinsurance clause (pp. 209–210) and Appendix D-14
+- [Errata to Basic Ratemaking, 5th Edition (Casualty Actuarial Society, 2024)](https://www.casact.org/sites/default/files/2024-07/2024_Exam_5_Werner_Errata_2024_06_27.pdf) — the errata the content outline includes in the reading: the coinsurance clause (pp. 209–210), Appendix D-14, and the composite rating example (p. 300)

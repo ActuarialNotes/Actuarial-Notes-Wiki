@@ -8,9 +8,9 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-0-9981604-4-3"
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-09-29
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
   content_hash: sha256:29cff43ffd62c180760ad03dad33804b1aaae4d5775fa7431a0973ff50d26175
   sources:

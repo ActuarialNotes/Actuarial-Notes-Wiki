@@ -5,12 +5,13 @@ syllabus:
   source_sha256: daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87
   extracted_at: 2026-10-05
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c94b2195784d862c2e17d6133b55fd2d7dc48df107689274d68bdd1641c443c4
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e1496f3c218d6a2e3e9966fe842e91eb9d5e94a937ec3be23876d83de1a8ea1a
+  sources:
+    - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam ILA-201U (SOA).md
@@ -23,15 +24,13 @@ verification:
 # Exam ILA-201U
 **ILA 201-U – Valuation and Advanced Product and Risk Management, U.S.** is an exam of the Society of Actuaries' Fellowship (FSA) pathway. Its syllabus covers the Nov 2026/Mar 2027/Jul 2027 sittings.
 
-The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 2027 [syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf) the SOA publishes, word for word; the SOA lists its outcomes a), b), c), numbered 1, 2, 3 here.
-
 ## Learning Objectives
 
 > [!example]- U.S. Financial Reporting Requirements {50–60%}
-> The candidate will understand and apply U.S. [[Valuation Principle|valuation principles]] and methods [[Applicable|applicable]] to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by U.S. [[Life Insurance Company|life insurance companies]].
+> The candidate will understand and apply U.S. [[Valuation Principle|valuation principles]] and methods applicable to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by U.S. [[Life Insurance Company|life insurance companies]].
 >
-> 1. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, [[Requirement|requirements]], and techniques and related under the [[Statutory Accounting Principles|US statutory]] framework, including the calculation of [[Principles-Based Reserving|principles-based reserves]] and [[Formulaic Reserve|formulaic reserves]]
-> 2. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, [[Requirement|requirements]], and techniques and related under the [[GAAP|US GAAP]] framework, including the calculation of [[Reserve|reserves]] and related items (e.g., [[DAC]])
+> 1. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, requirements, and techniques and related under the [[Statutory Accounting Principles|US statutory]] framework, including the calculation of [[Principles-Based Reserving|principles-based reserves]] and [[Formulaic Reserve|formulaic reserves]]
+> 2. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, requirements, and techniques and related under the [[GAAP|US GAAP]] framework, including the calculation of [[Reserve|reserves]] and related items (e.g., DAC)
 >
 > **Readings:**
 > - Statutory Valuation of Individual Life and Annuity Contracts, Volumes I and II, Claire, D., Lombardi, L. and Summers, S., 5th Edition, 2018 (1a)
@@ -64,11 +63,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - Targeted Improvements Interactive Model (1b)
 
 > [!example]- Capital Management {5–20%}
-> The candidate will understand how to explain and apply the methods, approaches and [[Tool|tools]] of [[Regulatory Capital|financial capital]] management for [[Life Insurance Company|life insurance company]] under a [[State and Federal Insurance Regulation|US regulatory]] framework.
+> The candidate will understand how to explain and apply the methods, approaches and tools of [[Regulatory Capital|financial capital]] management for [[Life Insurance Company|life insurance company]] under a US regulatory framework.
 >
-> 1. Explain and calculate [[Regulatory Capital|required capital]] under a [[State and Federal Insurance Regulation|US regulatory]] framework
+> 1. Explain and calculate [[Regulatory Capital|required capital]] under a US regulatory framework
 > 2. Describe the purpose and application of [[Economic Capital|economic capital]]
-> 3. Explain and evaluate the respective [[Perspective|perspectives]] of [[Regulator|regulators]], [[Investor|investors]], [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and [[Determination|determination]] of [[Capital|capital]]
+> 3. Explain and evaluate the respective perspectives of regulators, investors, [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and determination of [[Capital|capital]]
 > 4. Explain and apply methods in [[Capital|capital]] management
 >
 > **Readings:**
@@ -79,11 +78,11 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-800-25: Theory of Risk Capital in Financial Firms (2d)
 
 > [!example]- Management and Evaluation of Life Insurance Risks {5–20%}
-> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of [[Diversification|diversification]], [[Crediting Rating Agency Framework|crediting rating agency frameworks]], and the [[Assessment|assessment]] of [[Risk|risk]] management.
+> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of diversification, [[Crediting Rating Agency Framework|crediting rating agency frameworks]], and the assessment of [[Risk|risk]] management.
 >
-> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for [[Modeling|modeling]] and [[Offset|offsets]] between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
+> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and offsets between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
 > 2. Understand the role and framework used by [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
-> 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) [[Report|report]]
+> 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) report
 >
 > **Readings:**
 > - ILA201-801-25: Diversification of Longevity and Mortality Risk (3a)
@@ -92,12 +91,12 @@ The learning objectives below are transcribed from the Nov 2026/Mar 2027/Jul 202
 > - ILA201-802-25: NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual, National Association of Insurance Commissioners, Dec 2017 (3c)
 
 > [!example]- Advanced Product Management {15–25%}
-> The candidate will understand the fundamentals of value [[Creation|creation]] and [[In-Force Management|inforce]] management techniques for [[Life|life]] and [[Annuity Contract|annuity products]].
+> The candidate will understand the fundamentals of value creation and [[In-Force Management|inforce]] management techniques for life and [[Annuity Contract|annuity products]].
 >
-> 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and [[Profitability|profitability]] through [[In-Force Management|active in-force]] and [[Operational|operational]] management
-> 2. Recommend and justify changes to [[Non-Guaranteed|non-guaranteed]] elements and [[Policyholder Dividend|policyholder dividends]]
+> 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and profitability through [[In-Force Management|active in-force]] and operational management
+> 2. Recommend and justify changes to non-guaranteed elements and [[Policyholder Dividend|policyholder dividends]]
 > 3. Describe, evaluate, and apply the [[Economic Value|economic value creation]] framework
-> 4. Describe and apply the methods and [[Principle|principles]] of [[Embedded|embedded]] value for an [[Embedded Value|insurance enterprise]]
+> 4. Describe and apply the methods and principles of embedded value for an [[Embedded Value|insurance enterprise]]
 > 5. Describe and calculate [[Reserve|reserves]] under [[US Company Tax Rule|US Company Tax rules]]
 >
 > **Readings:**

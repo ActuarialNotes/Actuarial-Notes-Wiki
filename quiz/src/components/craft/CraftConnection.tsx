@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { ArrowRight, Play, X } from 'lucide-react'
 import { MarkdownText } from '@/components/MarkdownText'
 import { MIN_STRENGTH, STRENGTH_TIERS, strengthTier, type Connection } from '@/lib/conceptGraph'
-import { connectionPoints, practicePoints } from '@/lib/conceptCraft'
+import { connectionPoints } from '@/lib/conceptCraft'
 import type { Recipe } from '@/lib/conceptRecipes'
 import { relationSentence, type Relation } from '@/lib/conceptRelations'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,8 @@ import { cn } from '@/lib/utils'
  * the other, transcribed from the graph (`lib/conceptGraph.ts`), each naming
  * its page. Its title is the connection as a sentence — the two names and
  * what one is to the other (`lib/conceptRelations.ts`) — and under the meter,
- * what it scored and what its practice can still score. The concepts
+ * what finding it scored (practice is an ordinary quiz, and scores nothing on
+ * the board). The concepts
  * themselves are read in the app's popup, which their names open. A drawer on
  * the right of a wide board, a sheet over a phone's.
  */
@@ -29,8 +30,6 @@ export interface CraftConnectionProps {
   makes: readonly Recipe[]
   /** What the connection says, 1–5 words between the two names. */
   relation: Relation
-  /** Questions right on this connection's best practice run so far. */
-  practiced: number
   layout: 'drawer' | 'sheet'
   onClose: () => void
   /** Open a concept in the app's popup. */
@@ -41,13 +40,11 @@ export interface CraftConnectionProps {
 
 const TIER_WORD = { weak: 'Weak connection', moderate: 'Moderate connection', strong: 'Strong connection' } as const
 
-export function CraftConnection({ connection, practice, makes, relation, practiced, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
+export function CraftConnection({ connection, practice, makes, relation, layout, onClose, onRead, onPractice }: CraftConnectionProps) {
   const { strength, mentions } = connection
   const tier = strengthTier(strength)
   const faint = strength < MIN_STRENGTH
   const found = connectionPoints(strength)
-  const earned = practicePoints(strength, practiced)
-  const perRight = practicePoints(strength, 1)
   const practiceRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   // A card opened by a tap takes the focus — on its one action, when it has one.
@@ -123,8 +120,6 @@ export function CraftConnection({ connection, practice, makes, relation, practic
           </div>
           <p className="text-xs tabular-nums text-muted-foreground" data-testid="craft-connection-points">
             +{found} for finding it
-            {earned > 0 ? ` · +${earned.toLocaleString()} from practice (${practiced} right)` : ''}
-            {practice.length > 0 ? ` · +${perRight} for each question right` : ''}
           </p>
           {faint && (
             <p className="text-xs text-muted-foreground">

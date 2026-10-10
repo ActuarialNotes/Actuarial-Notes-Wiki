@@ -16,7 +16,6 @@ import {
   objectiveBlocks,
   objectiveTitle,
   packSeeds,
-  practicePoints,
   practiceQuestions,
   PRACTICE_FALLBACK,
   recipesOf,
@@ -213,16 +212,9 @@ describe('the score', () => {
     expect(connectionPoints(2)).toBe(1)
   })
 
-  it('rewards practice far more again, per question right', () => {
-    expect(practicePoints(90, 0)).toBe(0)
-    expect(practicePoints(90, 5)).toBe(550)
-    expect(practicePoints(90, 1)).toBeGreaterThan(connectionPoints(90))
-  })
-
-  it('adds up every connection found and its best practice', () => {
+  it('adds up every connection found', () => {
     const state = boardState(GRAPH, SEEDS, found(['Fire', 'Water'], ['Fire', 'Earth']))
-    expect(craftScore(state)).toEqual({ total: 5, found: 5, practice: 0 })
-    expect(craftScore(state, { 'fire|water': 2, 'gone|nowhere': 9 })).toEqual({ total: 5 + 80, found: 5, practice: 80 })
+    expect(craftScore(state)).toBe(5)
   })
 })
 

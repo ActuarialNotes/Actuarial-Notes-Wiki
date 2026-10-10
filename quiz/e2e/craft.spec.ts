@@ -122,7 +122,7 @@ test.describe('concept craft', () => {
     const cards = await inHand(page)
     const tiles = page.getByTestId('craft-deck-tile')
     const score = page.getByTestId('craft-score')
-    await expect(score).toContainText(/^0Score$/)
+    await expect(score).toHaveAttribute('data-score', '0')
     const points: number[] = []
     for (const [i, j] of [[0, cards.length - 1], [1, cards.length - 2]]) {
       await tiles.nth(i).click()
@@ -131,15 +131,45 @@ test.describe('concept craft', () => {
       // What it scored and what the two are to each other, in one line.
       const notice = page.getByTestId('craft-notice')
       await expect(notice).toHaveText(/^\+\d+ · .+$/)
-      points.push(Number((await notice.textContent())?.match(/^\+(\d+)/)?.[1]))
+      const scored = Number((await notice.textContent())?.match(/^\+(\d+)/)?.[1])
+      points.push(scored)
+      // …and the points pop off the line that scored them.
+      await expect(page.getByTestId('craft-score-pop')).toHaveText(`+${scored}`)
+      await expect(page.getByTestId('craft-score-pop')).toHaveCount(1)
       await expect(notice).toHaveCount(0, { timeout: 5000 })
     }
-    await expect(score).toContainText(new RegExp(`^${points[0] + points[1]}Score$`))
+    await expect(score).toHaveAttribute('data-score', String(points[0] + points[1]))
+    // The score counts up to it.
+    await expect(page.getByTestId('craft-score-value')).toHaveText(String(points[0] + points[1]))
     // The line carries its weight: a stronger connection is drawn thicker.
     const widths = await page.getByTestId('craft-line').evaluateAll(lines =>
       lines.map(l => ({ s: Number(l.getAttribute('data-strength')), w: Number(l.getAttribute('stroke-width')) })))
     const [weak, strong] = [...widths].sort((x, y) => x.s - y.s)
     if (strong.s > weak.s) expect(strong.w).toBeGreaterThan(weak.w)
+  })
+
+  test('plays for medals: 80% of the score in the first 20% of the pairs for gold', async ({ page }) => {
+    // Nine cards, 36 pairs: gold is in the first 7 connections, silver 10, bronze 14.
+    await page.goto('/craft/exam-pcpa-dealing-with-data')
+    await inHand(page)
+    const medals = page.getByTestId('craft-medals')
+    await expect(medals).toContainText(/to go\s*in 7 for Gold/)
+    await medals.click()
+    const panel = page.getByTestId('craft-medals-panel')
+    await expect(panel).toContainText('The 9 concepts here make 36 pairs')
+    const tiers = panel.getByTestId('craft-medal-tier')
+    await expect(tiers).toHaveCount(3)
+    await expect(tiers.nth(0)).toContainText(/Gold80% in 20%.*in your first 7 connections/)
+    await expect(tiers.nth(1)).toContainText('in your first 10 connections')
+    await expect(tiers.nth(2)).toContainText('in your first 14 connections')
+    await page.keyboard.press('Escape')
+    await expect(panel).toHaveCount(0)
+
+    // A connection spends one of them.
+    const tiles = page.getByTestId('craft-deck-tile')
+    await tiles.nth(0).click()
+    await tiles.nth(1).click()
+    await expect(medals).toContainText(/in 6 for Gold/)
   })
 
   test('connects by tapping a deck card, then a card on the board', async ({ page }) => {

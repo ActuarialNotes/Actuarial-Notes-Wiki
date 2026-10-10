@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { EMPTY_PROGRESS, boardState, connectionFor, craftTopics, madeBy, seedConcepts, topicGraph, withConnection, type CraftGraph, type CraftProgress } from './conceptCraft'
+import { EMPTY_PROGRESS, boardState, connectionFor, connectionPoints, craftTopics, madeBy, seedConcepts, topicGraph, withConnection, type CraftGraph, type CraftProgress } from './conceptCraft'
+import { bestPlay, leastPoints, medalPlan } from './craftMedals'
 import { relationOf, writtenRelation, type WrittenRelations } from './conceptRelations'
 import written from '../data/craftRelations.json'
 import { pageMentions } from './conceptGraph'
@@ -91,6 +92,34 @@ describe('Concept Craft over the vault', () => {
     const concepts = graphs.reduce((n, [t]) => n + t.concepts.length, 0)
     const dealt = graphs.reduce((n, [, g]) => n + seedConcepts(g).length, 0)
     expect(dealt / concepts).toBeLessThan(0.45)
+  })
+
+  // A medal's target is capped at what a play reaches (lib/craftMedals.ts), so
+  // the plays it was capped by are replayed for real: each pair found with both
+  // its cards in hand, making what it makes, scoring what the board scores it
+  // — at least what the plan counted it at.
+  it.each(graphs.map(([t, g]) => [t.id, g] as const))('%s: every medal can be won', (_, graph) => {
+    const seeds = seedConcepts(graph)
+    const plan = medalPlan(graph, seeds)
+    const points = leastPoints(graph)
+    const longest = Math.max(...plan.tiers.map(t => t.budget))
+    const best = new Map<number, number>()
+    for (const ahead of ['none', 'sum', 'rate'] as const) {
+      const held = new Set(seeds.map(n => n.toLowerCase()))
+      let score = 0
+      bestPlay(graph, seeds, points, longest, ahead).picks.forEach((key, i) => {
+        if (key) {
+          const [a, b] = key.split('|')
+          expect(held.has(a) && held.has(b), key).toBe(true)
+          const scored = connectionPoints(connectionFor(graph, a, b)!.strength)
+          expect(scored, key).toBeGreaterThanOrEqual(points.get(key) ?? 1)
+          score += scored
+          for (const m of madeBy(graph, a, b)) held.add(m.toLowerCase())
+        } else score += 1
+        best.set(i + 1, Math.max(best.get(i + 1) ?? 0, score))
+      })
+    }
+    for (const t of plan.tiers) expect(best.get(t.budget) ?? 0, t.id).toBeGreaterThanOrEqual(t.target)
   })
 
   // What a pair makes is what the made concept's own page builds from the two.

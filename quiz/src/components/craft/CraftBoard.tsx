@@ -102,6 +102,8 @@ export interface CraftBoardProps {
   flashConnection: string | null
   /** The connection whose card is open. */
   openConnection: string | null
+  /** A find's points, popping off its line — a new id on every find. */
+  scorePop?: { key: string; points: number; id: number } | null
   /** What a connection says, in 1–5 words — written under a lit line's strength. */
   relationOf?: (connection: Connection) => Relation
   onOpen: (name: string) => void
@@ -180,6 +182,7 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
     freshConnection,
     flashConnection,
     openConnection,
+    scorePop = null,
     relationOf,
     onOpen,
     onCombine,
@@ -833,6 +836,40 @@ export const CraftBoard = forwardRef<BoardCommands, CraftBoardProps>(function Cr
             </div>
           )
         })}
+
+        {/* A find's points: off the middle of its line, bigger for more, held
+            at one size on screen whatever the zoom. A strong find flares a ring. */}
+        {scorePop && (() => {
+          const c = connections.find(x => x.key === scorePop.key)
+          const a = c && all[conceptKey(c.a)]
+          const b = c && all[conceptKey(c.b)]
+          if (!c || !a || !b) return null
+          const { x, y } = lineLabelPoint(a, b)
+          const scale = Math.min(3, Math.max(0.6, 1 / v.k))
+          const size = Math.round(16 + 22 * Math.sqrt(Math.min(100, scorePop.points) / 100))
+          return (
+            <div
+              key={scorePop.id}
+              className="pointer-events-none absolute left-0 top-0 z-[25]"
+              style={{ transform: `translate(${x}px, ${y}px) scale(${scale})` }}
+              aria-hidden
+              data-testid="craft-score-pop"
+            >
+              {strengthTier(c.strength) === 'strong' && (
+                <span
+                  className="craft-score-ring absolute left-0 top-0 rounded-full"
+                  style={{ width: size * 5, height: size * 5, border: `3px solid ${ACCENT}` }}
+                />
+              )}
+              <span
+                className="craft-score-pop absolute left-0 top-0 whitespace-nowrap font-black leading-none tabular-nums text-white"
+                style={{ fontSize: size, textShadow: `0 0 14px ${ACCENT_FILL}, 0 0 4px ${ACCENT_FILL}, 0 2px 0 rgb(0 0 0 / 0.55)` }}
+              >
+                +{scorePop.points}
+              </span>
+            </div>
+          )
+        })()}
 
         {placed.map(name => {
           const key = conceptKey(name)

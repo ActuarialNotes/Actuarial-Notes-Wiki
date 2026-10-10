@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ListFilter,
   Maximize,
+  Medal,
   Plus,
   RotateCcw,
   Wand2,
@@ -17,6 +18,7 @@ import { CraftConnection } from '@/components/craft/CraftConnection'
 import { CraftDeck } from '@/components/craft/CraftDeck'
 import { CraftLogo } from '@/components/craft/CraftLogo'
 import { CraftPackMenu, type PackGroup } from '@/components/craft/CraftPackMenu'
+import { CraftScoreboard, MedalDisc } from '@/components/craft/CraftScoreboard'
 import { ConceptTileStatic } from '@/components/ConceptTile'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { CheckMark } from '@/components/CheckMark'
@@ -43,20 +45,19 @@ import {
   topicTally,
   type CraftGraph,
   type CraftProgress,
-  type CraftScore,
   type CraftTopic,
   type TopicTally,
 } from '@/lib/conceptCraft'
 import { MIN_STRENGTH, STRENGTH_TIERS, type Connection, type GraphQuestion } from '@/lib/conceptGraph'
 import { relationOf, relationSentence, type Placement, type Relation, type WrittenRelations } from '@/lib/conceptRelations'
-import { clearPracticeScores, readPracticeScores, startCraftPractice, type CraftPracticeScores } from '@/lib/craftPractice'
+import { medalPlan, medalStanding, medalsWon, type MedalProgress } from '@/lib/craftMedals'
 import writtenRelations from '@/data/craftRelations.json'
 import { examAccentStyle } from '@/lib/examColors'
 import { setWikiContentLookup } from '@/lib/github'
 import { filterQuestions } from '@/lib/parser'
 import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
-import { trackCraftCombined, trackCraftTopicCompleted } from '@/lib/analytics'
+import { trackCraftCombined, trackCraftMedalWon, trackCraftTopicCompleted } from '@/lib/analytics'
 import { cn } from '@/lib/utils'
 
 // The board reads concept pages — the graph is built from them, and the reader
@@ -288,10 +289,15 @@ function CraftPlay({
   const [flash, setFlash] = useState<string | null>(null)
   const [openKey, setOpenKey] = useState<string | null>(null)
   const [packsOpen, setPacksOpen] = useState(false)
-  // What each connection's practice earned — re-read whenever the board opens,
-  // which is how a practice quiz's result comes back (lib/craftPractice.ts).
-  const [practiced, setPracticed] = useState<CraftPracticeScores>(readPracticeScores)
-  const score = useMemo(() => craftScore(state, practiced), [state, practiced])
+  const score = useMemo(() => craftScore(state), [state])
+  // The medals: what each asks of this board, worked out once a board, and
+  // where the connections found stand against them (lib/craftMedals.ts).
+  const plan = useMemo(() => medalPlan(graph, seeds), [graph, seeds])
+  const standing = useMemo(() => medalStanding(plan, state), [plan, state])
+  // A find's points, popping off its line and flying off the score; a medal
+  // won, or one missed.
+  const [scorePop, setScorePop] = useState<{ key: string; points: number; id: number } | null>(null)
+  const [banner, setBanner] = useState<{ kind: 'won' | 'lost'; medal: MedalProgress; next: MedalProgress | null; id: number } | null>(null)
 
   // What every connection says (lib/conceptRelations.ts), read once a board.
   const relate = useMemo(() => {
@@ -325,6 +331,16 @@ function CraftPlay({
     const t = window.setTimeout(() => setFlash(null), 1400)
     return () => window.clearTimeout(t)
   }, [flash])
+  useEffect(() => {
+    if (!scorePop) return
+    const t = window.setTimeout(() => setScorePop(null), 1500)
+    return () => window.clearTimeout(t)
+  }, [scorePop])
+  useEffect(() => {
+    if (!banner) return
+    const t = window.setTimeout(() => setBanner(null), banner.kind === 'won' ? 4000 : 3000)
+    return () => window.clearTimeout(t)
+  }, [banner])
   // The pops and the line drawing in are one-off; after them the board draws
   // the cards and the connection as it draws every other.
   useEffect(() => {
@@ -375,28 +391,42 @@ function CraftPlay({
     const after = new Set([...before, connection.key])
     addConnection(connection)
     setFresh({ made, connection: connection.key })
+    // What it scored, popping off its line; and what it did to the medals.
+    const points = connectionPoints(connection.strength)
+    const id = Date.now()
+    setScorePop({ key: connection.key, points, id })
+    const next = medalStanding(plan, boardState(graph, seeds, { found: [...progress.found, connection.key] }))
+    const won = medalsWon(standing, next)
+    const missed = next.tiers.filter(t => t.status === 'lost' && standing.tiers.find(b => b.id === t.id)?.status === 'open')
+    if (won.length > 0) {
+      setBanner({ kind: 'won', medal: won[0], next: next.chasing, id })
+      for (const m of won) trackCraftMedalWon({ medal: m.id, connections: m.used, concepts: plan.concepts })
+    } else if (missed.length > 0 && !next.medal) {
+      setBanner({ kind: 'lost', medal: missed[0], next: next.chasing, id })
+    }
     // A pack is done once every connection in its topic is found.
     const done = (g: CraftGraph, keys: Set<string>) => g.connections.length > 0 && g.connections.every(c => keys.has(c.key))
     const completed = packs.filter((_, i) => done(packGraphs[i], after) && !done(packGraphs[i], before))
     const topic = packOf(connection.key)
-    if (completed.length > 0) {
+    for (const t of completed) trackCraftTopicCompleted({ exam: t.exam, topic: t.id })
+    if (completed.length > 0 || won.length > 0) {
       play('complete')
-      for (const t of completed) trackCraftTopicCompleted({ exam: t.exam, topic: t.id })
     } else {
       // A card landing is `collect`; a line the notes draw, a right answer; a
       // faint inferred one, barely a click.
       play(made.length > 0 ? 'collect' : connection.strength >= MIN_STRENGTH ? 'correct' : 'select')
     }
     // What it scored and what it says, in one line; the map is the rest.
-    const points = connectionPoints(connection.strength)
     const sentence = relationSentence(relate(connection))
     setNotice(`+${points} · ${sentence}`)
     setAnnounce(
       `Connected ${connection.a} and ${connection.b}, strength ${connection.strength}: ${sentence}. Plus ${points} points.`
-      + (made.length > 0 ? ` New: ${made.join(', ')}.` : ''),
+      + (made.length > 0 ? ` New: ${made.join(', ')}.` : '')
+      + won.map(m => ` ${m.label} medal won!`).join('')
+      + missed.map(m => ` ${m.label} medal missed.`).join(''),
     )
     trackCraftCombined({ exam: topic.exam, topic: topic.id, outcome: 'new', strength: connection.strength, made: made.length })
-  }, [progress, addConnection, packs, packGraphs, packOf, play, relate])
+  }, [progress, addConnection, packs, packGraphs, packOf, play, relate, plan, standing, graph, seeds])
 
   const onCombine = useCallback((a: string, b: string): DropVerdict => {
     setHeld(null)
@@ -464,9 +494,7 @@ function CraftPlay({
     if (isPhone) useConceptPopup.getState().close()
   }, [isPhone])
 
-  const practice = useCallback((key: string, ids: string[]) => {
-    // Leave a note for the quiz, so what it scores comes back to this connection.
-    startCraftPractice(key, ids)
+  const practice = useCallback((ids: string[]) => {
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
     } catch { /* private mode: the quiz falls back to its own draw */ }
@@ -491,9 +519,8 @@ function CraftPlay({
 
   const startOver = () => {
     resetBoard()
-    clearPracticeScores()
-    setPracticed({})
     setHeld(null)
+    setBanner(null)
     setOpenKey(null)
   }
 
@@ -535,7 +562,17 @@ function CraftPlay({
 
   return (
     <>
-      <BoardHeader tally={empty ? null : tally} score={empty ? null : score} />
+      <BoardHeader
+        tally={empty ? null : tally}
+        scoreboard={empty ? null : (
+          <CraftScoreboard
+            score={score}
+            plan={plan}
+            standing={standing}
+            gained={scorePop && { points: scorePop.points, id: scorePop.id }}
+          />
+        )}
+      />
 
       <div className="relative min-h-0 flex-1">
         <CraftBoard
@@ -552,6 +589,7 @@ function CraftPlay({
           freshConnection={fresh.connection}
           flashConnection={flash}
           openConnection={openKey}
+          scorePop={scorePop}
           relationOf={relate}
           onOpen={read}
           onCombine={onCombine}
@@ -559,14 +597,16 @@ function CraftPlay({
           onSettle={onSettle}
         />
 
-        {tally.complete && (
-          <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-3">
+        <div className="pointer-events-none absolute inset-x-0 top-3 z-30 flex flex-col items-center gap-2 px-3">
+          {/* A medal won, or one gone: what the find did to the medals. */}
+          {banner && <MedalBanner key={banner.id} {...banner} />}
+          {tally.complete && (
             <p className="pointer-events-auto flex items-center gap-2 rounded-full bg-card px-4 py-2 text-sm shadow-[var(--shadow-card)]">
               <CheckMark className="h-4 w-4" />
               Every connection found
             </p>
-          </div>
-        )}
+          )}
+        </div>
 
         {empty && (
           <div className="absolute inset-0 z-20 flex items-center justify-center p-6">
@@ -576,7 +616,8 @@ function CraftPlay({
                 <h2 className="text-lg font-semibold">Start with a starter pack</h2>
                 <p className="text-sm text-muted-foreground">
                   Add any exam section and its first concepts land here. Drop one on another: every pair connects,
-                  and the stronger the connection, the more it scores. Practise a connection to score far more.
+                  and the stronger the connection, the more it scores. Most of a board&rsquo;s score is in a few of its
+                  connections: find 80% of it in your first 20% for gold.
                 </p>
               </div>
               <button
@@ -672,11 +713,10 @@ function CraftPlay({
               practice={practiceIds}
               makes={openMakes}
               relation={relate(open)}
-              practiced={practiced[open.key] ?? 0}
               layout="drawer"
               onClose={() => setOpenKey(null)}
               onRead={read}
-              onPractice={ids => practice(open.key, ids)}
+              onPractice={practice}
             />
           </div>
         )}
@@ -690,11 +730,10 @@ function CraftPlay({
             practice={practiceIds}
             makes={openMakes}
             relation={relate(open)}
-            practiced={practiced[open.key] ?? 0}
             layout="sheet"
             onClose={() => setOpenKey(null)}
             onRead={read}
-            onPractice={ids => practice(open.key, ids)}
+            onPractice={practice}
           />
         </div>
       )}
@@ -712,7 +751,7 @@ function CraftPlay({
   )
 }
 
-function BoardHeader({ tally, score = null }: { tally: TopicTally | null; score?: CraftScore | null }) {
+function BoardHeader({ tally, scoreboard = null }: { tally: TopicTally | null; scoreboard?: ReactNode }) {
   // Back where the board was opened from — the Quiz tab, or a study guide.
   const back = useBack({ to: '/', label: 'Quiz' })
   return (
@@ -737,17 +776,43 @@ function BoardHeader({ tally, score = null }: { tally: TopicTally | null; score?
           </p>
         )}
       </div>
-      {score && (
-        <div
-          className="shrink-0 text-right"
-          title={`${score.found.toLocaleString()} from connections found, ${score.practice.toLocaleString()} from practice`}
-          data-testid="craft-score"
-        >
-          <p className="text-lg font-bold tabular-nums leading-none sm:text-xl">{score.total.toLocaleString()}</p>
-          <p className="text-[11px] text-muted-foreground">Score</p>
-        </div>
-      )}
+      {scoreboard}
     </header>
+  )
+}
+
+/** A medal won — it spins in — or a medal gone, and what is still in play. */
+function MedalBanner({ kind, medal, next }: { kind: 'won' | 'lost'; medal: MedalProgress; next: MedalProgress | null }) {
+  return (
+    <div
+      role="status"
+      data-testid="craft-medal-banner"
+      data-kind={kind}
+      className="toast-fade-in pointer-events-auto flex items-center gap-3 rounded-2xl bg-card px-4 py-2.5 shadow-lg ring-1 ring-border"
+      style={kind === 'won' ? { boxShadow: `0 0 0 2px ${medal.color}, 0 0 28px ${medal.color}66` } : undefined}
+    >
+      {kind === 'won' ? (
+        <span
+          className="craft-medal-in flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white"
+          style={{ background: medal.color, boxShadow: 'inset 0 0 0 3px rgb(255 255 255 / 0.35)' }}
+          aria-hidden
+        >
+          <Medal className="h-5 w-5" />
+        </span>
+      ) : (
+        <MedalDisc medal={medal} size={20} />
+      )}
+      <div className="min-w-0 leading-tight">
+        <p className="text-sm font-semibold">{kind === 'won' ? `${medal.label} medal!` : `${medal.label} is out of reach`}</p>
+        <p className="text-xs tabular-nums text-muted-foreground">
+          {kind === 'won'
+            ? `${Math.round(medal.score * 100)}% of the score in ${medal.used} ${medal.used === 1 ? 'connection' : 'connections'}${next ? ` · ${next.label} still in play` : ''}`
+            : next
+              ? `${next.label}: ${(next.target - next.scored).toLocaleString()} to go in ${next.budget - next.used}`
+              : 'Clear the board to try again'}
+        </p>
+      </div>
+    </div>
   )
 }
 

@@ -274,8 +274,11 @@ before touching that area**:
   connection's **strength**, 0–100, drawn as its thickness, and what one is to the other in
   1–5 words (`lib/conceptRelations.ts`: a label written for each of the graph's connections in
   `data/craftRelations.json`, else one read off the vault for any pair); the board **scores**
-  each find by its strength (squared) and a connection's practice far more
-  (`craftScore`, `lib/craftPractice.ts`). Where the vault ties them together, the connection
+  each find by its strength (squared), the points popping off its line, and plays for
+  **medals** — the Pareto rule: gold for 80% of the board's score within the first 20%
+  of its pairs found, silver 70/30, bronze 60/40, each target capped at what a play
+  from the seeds can reach (`lib/craftMedals.ts`). A connection's practice is an
+  ordinary quiz and scores nothing on the board. Where the vault ties them together, the connection
   also **makes** what is built from the pair, cause and effect — the concepts whose own pages define them by the two
   (`Pure Premium = Frequency × Severity`; the recipes are read off the made concept's page by
   `lib/conceptRecipes.ts`) — landing beside the pair filled with the exam's accent, a dashed
@@ -1054,7 +1057,7 @@ Other important `lib/` modules:
   rate-limited Contents API — the first screen of the app has to find things offline. What
   the bundle can't answer, the foot of the results hands to the Search page, which now takes
   `?type=` and `?q=`. Pure and tested.
-- `conceptGraph.ts` / `conceptRecipes.ts` / `conceptCraft.ts` / `craftLayout.ts` — **Concept Craft**
+- `conceptGraph.ts` / `conceptRecipes.ts` / `conceptCraft.ts` / `craftMedals.ts` / `craftLayout.ts` — **Concept Craft**
   (`docs/concept-craft.md`). `conceptGraph.ts` is the derived graph: `pageMentions` (what a page
   says about other concepts — every link, and every topic concept named in its text, longest
   name first, never inside a link, math or code — with the sentence it sits in),
@@ -1076,14 +1079,19 @@ Other important `lib/` modules:
   pair dealt first), a board as one list of found pair keys (all that
   `hooks/useConceptCraft.ts` stores) read back into the hand, what made each card and which
   are new (`boardState`), `combine`, `withConnection`, `topicTally`, and a connection's
-  practice (`practiceQuestions`). `craftLayout.ts` is the board's physics and
+  practice (`practiceQuestions`). `craftMedals.ts` is the medals: every pair of the
+  board at the least it can score (`leastPoints`), the best a rule-keeping play from the
+  seeds reaches in so many connections (`bestPlay` — what caps a target), each medal's
+  target and connections (`medalPlan`) and where the connections found, in order, stand
+  against them (`medalStanding`). `craftLayout.ts` is the board's physics and
   camera: bodies, springs sized by strength (`connectionSpring`), collision, seeding
   (`spawnBeside` for what a find made, `spawnNear`, `seedPositions`), a dragged card as a
   **ghost** (no force reaches it — or collision would shove the target out from under the
   drop), `fitView` with insets for the panels. All pure and tested;
   `conceptCraftVault.test.ts` runs the first three over the real vault, playing every topic
   out from its seeds to every concept and connection, and pins a handful of recipes
-  (*Frequency* + *Severity* → *Pure Premium*).
+  (*Frequency* + *Severity* → *Pure Premium*), and replays every topic's medal plays to
+  check each medal can be won.
 - `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
   approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-05
   last_checked_by: agent:validate-v1
-  content_hash: sha256:692912cdab9e2ee898a21c60f2d151f96c2266325c691234a6ccc196c9603c48
+  content_hash: sha256:4be3bf759df1dffb069e1b5dc8c5e64f0e787f46ac257cf4577d67e699712a3d
   sources:
     - "CAS, Exam MAS-I Content Outline 2026 (MASI_CO_2026_F v06 2026-06-29, 8 pp.), PDF pp.1-8 (p.1 duration 4 hours; p.3 domains, weights, A1-A6 and readings Daniel/Ross/Struppeck; p.4 B1-B9; p.5 C1-C9; p.6 Complete Text References: Ross 4.1-4.8 for A1-A6, Dobson & Barnett Ch 1-9, Hogg Domain C 9.1-9.6, Larsen for C1-C9), sha256:245892366dea073ff44e89b3ac2ae1401517b127d36d51c8a1198b3185faa2ed — https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf"
     - "CAS, 2026 Syllabus of Basic Education, pp.7-8 (prior-knowledge table: Exam MAS-I assumes Exams 1 and 2), sha256:f0ce0da128368cedb6ca35ac139ca0357e159a983dcf94e4275e32fa44530038 — https://www.casact.org/sites/default/files/2025-01/2025_SOBE.pdf"
@@ -76,8 +76,8 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 
 > ### Reliability Theory
 > - [[System Reliability]] — [[System Reliability|structure functions]], [[System Reliability|minimal path and minimal cut sets]], [[System Reliability|systems of independent components]], [[System Reliability|system life as a function of component lives]], and the [[System Reliability|expected system lifetime]]
-> - [[Inclusion-Exclusion Principle]] — [[System Reliability|bounds on the reliability function]]
-> - [[Combinatorics]] — counting the [[System Reliability|path and cut sets]] of a $k$-out-of-$n$ [[System Reliability|system]]
+> - [[Inclusion-Exclusion Principle]] — bounds on the reliability function
+> - [[Combinatorics]] — counting the path and cut sets of a $k$-out-of-$n$ system
 > 
 > ### Simulation
 > - [[Inversion Method]] — using the [[Cumulative Distribution Function (CDF)|CDF]] to simulate a [[Inversion Method|draw by inversion]] ([[Inversion Method|the inverse transformation method]])

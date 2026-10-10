@@ -81,7 +81,7 @@ describe('questionExamLabel', () => {
     expect(examPages.length).toBeGreaterThan(0)
   })
 
-  // The DISCs, PCPA and Exam 6U have a syllabus page and no questions yet, so
+  // PCPA and Exam 6U have a syllabus page and no questions yet, so
   // only the mapped ones can be checked against the bank.
   const bankedPages = examPages.filter(e => bankLabelFor(e.meta))
 

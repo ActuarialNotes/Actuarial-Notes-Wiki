@@ -27,9 +27,10 @@ const READY_EXAMS = new Set(['P', 'FM'])
  * are listed — they are visible so candidates can see what is coming, not
  * because they are usable.
  */
-// The three DISC courses have no bank because The Institutes sells their
-// sample questions in a course guide and publishes none, so their pages
-// transcribe the course syllabi. (PCPA has none either — CAS releases no PCPA
+// The three DISC courses have no published papers — The Institutes sells their
+// sample questions in a course guide and publishes none — so their pages
+// transcribe the course syllabi and their banks are the vault's own questions
+// (`questions/exam-disc-*`, `discda-an-001`, …). (PCPA has no bank — CAS releases no PCPA
 // paper or sample questions to convert — but it is beta: its page and the
 // Projects tab's simulator are material to study from.)
 // The SOA exams past FM — FAM, SRM, PA, ALTAM, ASTAM, the ATPA assessment and

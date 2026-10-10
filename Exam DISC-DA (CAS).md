@@ -33,12 +33,12 @@ The Institutes gives the topics no exam weights.
 > 4. [[Data Types|Data Classifications]]
 
 > [!example]- 2. Collecting Data for Insurer Models
-> 1. [[Ratemaking Data Organization|Insurer Operational Data]]
+> 1. [[Insurer Operational Data]]
 > 2. [[Statistical Plan|Statistical Plans]]
 > 3. [[External Data|External Data Sources]]
 
 > [!example]- 3. Preparing Data for Analysis
-> 1. Managing [[Tidy Data|Dataframes]]
+> 1. Managing [[Dataframe|Dataframes]]
 > 2. [[SQL|Querying Data]]
 > 3. [[Table Join|Joining Data Tables]]
 > 4. [[Database Index|Indexes]], [[Missing Data|Null Values]], and [[User-Defined Function|User-Defined Functions]]
@@ -53,34 +53,34 @@ The Institutes gives the topics no exam weights.
 > [!example]- 5. Analyzing Data With Visualizations
 > 1. Planning an Effective [[Exploratory Data Analysis|Data Exploration]]
 > 2. [[Exploratory Data Analysis|Data Exploration]] Fundamentals
-> 3. Fundamentals of [[Data Visualization|Exploratory Data Visualizations]]
-> 4. Creating [[Data Visualization|Plots]]
+> 3. Fundamentals of [[Exploratory Data Visualization|Exploratory Data Visualizations]]
+> 4. Creating [[Types of Plots|Plots]]
 
 > [!example]- 6. Presenting Data Effectively
-> 1. Keys to Effective [[Data Visualization|Presentation Visualizations]]
-> 2. Selecting the Right [[Data Visualization|Presentation Visualization]]
-> 3. Maximizing a [[Data Visualization|Presentation Visualization's]] Effectiveness
+> 1. Keys to Effective [[Presentation Visualization|Presentation Visualizations]]
+> 2. Selecting the Right [[Chart Selection|Presentation Visualization]]
+> 3. Maximizing a [[Visualization Design Principles|Presentation Visualization's]] Effectiveness
 
 > [!example]- 7. Understanding Fundamental Modeling Concepts
 > 1. Basic [[Statistical Learning|Data Modeling Techniques]]
-> 2. [[K-Nearest Neighbors|Similarity and Distance]] in [[Statistical Learning|Data Modeling]]
-> 3. [[Predictive Analytics|Predictive Model]] [[Holdout Sample|Training and Evaluation]]
+> 2. [[Similarity and Distance Measures|Similarity and Distance]] in Data Modeling
+> 3. [[Model Training and Evaluation|Predictive Model Training and Evaluation]]
 
 > [!example]- 8. Basic Data Analysis
 > 1. [[Summary Statistics|Traditional Data Analysis]]
-> 2. [[Data Analytics|Analyzing Data]] with [[Decision Tree|Classification Trees]]
-> 3. [[Data Analytics|Analyzing Data]] with [[Linear Regression|Linear Functions]]
+> 2. Analyzing Data with [[Classification Tree|Classification Trees]]
+> 3. Analyzing Data with [[Linear Regression|Linear Functions]]
 > 4. [[Data Segmentation|Segmenting Data]] with [[Clustering|Cluster Analysis]]
 
 > [!example]- 9. Preparing Data for Insurance Applications
 > 1. [[Data Preparation|Preparing Data for Insurance Applications]] Using [[SQL]]
-> 2. Creating [[Tidy Data|Datasets]] for [[Predictive Analytics|Claims Models]]
-> 3. Creating [[Tidy Data|Datasets]] for [[Predictive Analytics|Underwriting Models]]
+> 2. Creating [[Claims Modeling Dataset|Datasets for Claims Models]]
+> 3. Creating [[Underwriting Modeling Dataset|Datasets for Underwriting Models]]
 
 > [!example]- 10. Ethical and Societal Considerations of Data Analytics
 > 1. Using [[Data Ethics|Data Ethically]]
-> 2. How [[Insurance Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect [[Statistical Learning|Data Modeling]]
-> 3. Applying [[Data Ethics|Ethics Checklists]] to [[Predictive Analytics|Insurance Data Modeling]]
+> 2. How [[Insurance Data Regulation|Regulations]] and [[Professional Responsibilities of the Actuary|Professional Codes]] Affect [[Statistical Learning|Data Modeling]]
+> 3. Applying [[Data Ethics Checklist|Ethics Checklists]] to Insurance Data Modeling
 > 4. [[Unfair Discrimination|Societal Impact]] of [[Credit-Based Insurance Scoring|Credit-Based Insurance Scores]]
 
 ## Source Material

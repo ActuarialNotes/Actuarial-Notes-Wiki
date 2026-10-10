@@ -198,6 +198,16 @@ before touching that area**:
   resource page in the same load), the near-mechanical syllabus pages, the Wave 0 tooling
   (source cache, OCR'd booklets, blind-stem diffs, batch recording) and the maintainer
   decisions that block parts of it. Read before planning or launching a VERIFY sweep.
+- `docs/cas-publication-plan.md` — **how a CAS exam leaves Beta / In Development**: the seven
+  gates `scripts/publication_readiness.py` measures (page verified, every objective link lands on
+  a written page, **no catch-all links** — one concept page standing in, under other names, for
+  more than two objective lines — concepts verified, readings written and verified, a served
+  question for every concept in the exam's own bank, the bank verified), each exam's baseline, the
+  order of the campaigns, and the DISC redesign: every lettered DISC section links a page about
+  *that* section (`CGL Coverage B`, `HO-3 Liability Exclusions`, `Chart Selection`, …), written
+  from the primary documents the course teaches (ISO forms, NAIC model acts, SSAPs, LII), with
+  the DISCs' own vault-written banks. Run `publication_readiness.py --check <exam>` before
+  promoting an exam in `examStatus.ts`.
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
@@ -545,8 +555,9 @@ Other important `lib/` modules:
   `ready` (P, FM), `beta` (MAS-I, MAS-II, Exams 5, 6C, 7, 8 and 9, and PCPA) or
   `development` (the three DISCs, Exam 6U and the SOA exams past FM — FAM, SRM, PA, ALTAM,
   ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — a syllabus outline with no
-  question bank yet; the DISCs have none because The Institutes sells their sample questions and
-  publishes none). PCPA is beta with no bank — CAS releases no PCPA paper or sample
+  question bank yet). The DISCs publish no papers — The Institutes sells their sample questions —
+  so their banks (`exam-disc-da` / `-rm` / `-ia`) are the vault's own, written for
+  `docs/cas-publication-plan.md`. PCPA is beta with no bank — CAS releases no PCPA paper or sample
   questions to convert — because its page and the Projects tab's simulator are material
   to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
@@ -1330,7 +1341,8 @@ compile — don't "clean up" the flagged code as dead.
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
-  `exam-mas-i`, `exam-mas-ii`, `exam-5` (hundreds of questions each), `exam-6c` — the
+  `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
+  (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the
   thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /
   `exam-8` / `exam-9` — the 2012–2019 Exam 7 and Exam 8 papers: reserving in `exam-7`,
   classification and individual risk rating in `exam-8`, and in `exam-9` with

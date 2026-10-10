@@ -29,10 +29,10 @@ The Institutes gives the topics no exam weights.
 
 > [!example]- 1. Introduction to Risk Management
 > 1. The [[Risk Management|Risk Management Environment]]
-> 2. [[Risk Management|Objectives and Benefits]]
+> 2. [[Risk Management Objectives|Objectives and Benefits]]
 > 3. Basic [[Risk Measure|Risk Measures]]
 > 4. [[Risk Taxonomies|Classifications and Categories]]
-> 5. [[Risk Management|Process for Managing Risk]]
+> 5. [[Risk Management Process|Process for Managing Risk]]
 
 > [!example]- 2. Identifying Risk
 > 1. [[Risk Identification|Holistic Risk Identification]]
@@ -42,12 +42,12 @@ The Institutes gives the topics no exam weights.
 > [!example]- 3. Managing Business Continuity Risk
 > 1. [[Organizational Resilience|Organizational Resiliency]]
 > 2. [[Business Continuity Management]]
-> 3. [[Business Continuity Management|Business Continuity Planning]]
+> 3. [[Business Continuity Plan|Business Continuity Planning]]
 
 > [!example]- 4. Treating Risk
-> 1. [[Risk Mitigation|Risk Treat Fundamentals]]
-> 2. The Evolution of [[Risk Mitigation|Risk Treatment]]
-> 3. [[Risk Mitigation|Risk Treatment]] Applications
+> 1. [[Risk Treatment|Risk Treat Fundamentals]]
+> 2. The Evolution of [[Risk Treatment]]
+> 3. [[Risk Treatment]] Applications
 > 4. [[Enterprise Risk Management|Treating Risk Holistically]]
 
 > [!example]- 5. Insurance as a Risk Management Technique
@@ -65,8 +65,8 @@ The Institutes gives the topics no exam weights.
 > 5. The [[Insurtech|Digitization of Insurance]]
 
 > [!example]- 7. Insurance Marketing and Distribution
-> 1. [[Insurance Industry|Property-Casualty Insurer Marketplace]]
-> 2. Unique Factors in the [[Insurance Industry|Property-Casualty Insurer Marketplace]]
+> 1. [[Property-Casualty Insurance Marketplace|Property-Casualty Insurer Marketplace]]
+> 2. Unique Factors in the [[Property-Casualty Insurance Marketplace|Property-Casualty Insurer Marketplace]]
 > 3. [[Insurance Marketing|Insurer Marketing Activities]]
 > 4. [[Insurance Distribution Systems|Insurance Distribution Systems and Channels]]
 > 5. [[Insurance Producer|Functions of Insurance Producers]]
@@ -75,14 +75,14 @@ The Institutes gives the topics no exam weights.
 > [!example]- 8. The Underwriting Function
 > 1. [[Underwriting|Underwriting Activities]]
 > 2. [[Underwriting Authority]]
-> 3. [[Underwriting Policy|Constraints in Establishing Underwriting Policy]]
-> 4. Implementing [[Underwriting Policy]]
-> 5. Steps in the [[Underwriting|Underwriting Process]]
+> 3. Constraints in Establishing [[Underwriting Policy]]
+> 4. Implementing [[Underwriting Guidelines|Underwriting Policy]]
+> 5. Steps in the [[Underwriting Process]]
 > 6. Measuring [[Underwriting Profit|Underwriting Results]]
 
 > [!example]- 9. Underwriting Commercial Property Coverage
 > 1. Identifying the [[Causes of Loss|Causes of Commercial Property Loss]]
-> 2. Analyzing [[COPE|Fire Exposure: The Greatest Threat]]
+> 2. Analyzing [[COPE|Fire Exposure]]: The Greatest Threat
 > 3. Evaluating [[Commercial Property Insurance|Commercial Property Provisions Affecting the Amount of Loss]]
 > 4. Verifying [[Insurance to Value|Property Values]]
 > 5. Determining [[Probable Maximum Loss|Potential Loss Severity]]
@@ -117,24 +117,24 @@ The Institutes gives the topics no exam weights.
 > [!example]- 13. The Claims Function
 > 1. Overview of the [[Claims Handling|Claims Function]]
 > 2. [[Claims Handling|Claims Department Structure, Personnel, and Performance]]
-> 3. [[Claims Handling|Claims Measures]] Used to Ensure [[Market Conduct Regulation|Regulatory Compliance]]
-> 4. The [[Claims Handling|Claims Handling Process]]
+> 3. Claims Measures Used to Ensure [[Unfair Claims Settlement Practices|Regulatory Compliance]]
+> 4. The [[Claims Handling Process]]
 > 5. Framework for [[Coverage Analysis]]
-> 6. Applying the [[Claims Handling|Claims Handling Process]] and the Framework for [[Coverage Analysis]]
+> 6. Applying the [[Claims Handling Process]] and the Framework for [[Coverage Analysis]]
 
 > [!example]- 14. Understanding Reinsurance
 > 1. [[Reinsurance]] and its Functions
 > 2. [[Reinsurance]] Sources
 > 3. [[Types of Reinsurance|Reinsurance Transactions]]
-> 4. Types of [[Types of Reinsurance|Pro Rata Reinsurance]]
+> 4. Types of [[Pro Rata Reinsurance]]
 > 5. Types of [[Excess of Loss|Excess of Loss Reinsurance]]
 > 6. [[Insurance-Linked Securities|Alternatives to Traditional Reinsurance]]
 
 > [!example]- 15. Insurer Strategic Management
-> 1. [[Business Strategy|Strategic Management Process]]
-> 2. The [[Porter's Five Forces|Five Forces]] and [[SWOT Analysis|SWOT]] Methods of Analyzing the [[Business Strategy|Environment]]
+> 1. [[Strategic Management Process]]
+> 2. The [[Porter's Five Forces|Five Forces]] and [[SWOT Analysis|SWOT]] Methods of Analyzing the Environment
 > 3. Determining [[Business Strategy|Strategy at Different Organizational Levels]]
-> 4. [[Business Strategy|Strategic Management]] Case
+> 4. [[Strategic Management Process|Strategic Management]] Case
 > 5. The [[Underwriting Cycle|Insurance Underwriting Cycle]]
 
 ## Source Material

@@ -18,6 +18,11 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Financial Mathematics': 'FM',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
+  // The three DISC courses. The Institutes sells their sample questions and
+  // publishes none, so each bank is the vault's own (`discda-an-001`, …).
+  'Exam DISC-DA': 'CAS-DA',
+  'Exam DISC-RM': 'CAS-RM',
+  'Exam DISC-IA': 'CAS-IA',
   'Exam 5': 'CAS-5',
   // Exam 6 is sat in regional variants that share the `CAS-6` progress key.
   // Only the Canadian one has a bank (the 2013–2019 Exam 6-Canada papers), so

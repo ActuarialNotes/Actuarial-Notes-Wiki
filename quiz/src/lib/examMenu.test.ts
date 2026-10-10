@@ -44,12 +44,12 @@ describe('examQuizTopic', () => {
     expect(examQuizTopic('Exam 5 (CAS)')).toBe('Exam 5')
     expect(examQuizTopic('Exam 6C (CAS)')).toBe('Exam 6C')
     expect(examQuizTopic('Exam 9 (CAS)')).toBe('Exam 9')
+    expect(examQuizTopic('Exam DISC-DA (CAS)')).toBe('Exam DISC-DA')
   })
 
   it('has none for an exam with no bank', () => {
     expect(examQuizTopic('Exam 6U (CAS)')).toBeUndefined()
     expect(examQuizTopic('Exam PCPA (CAS)')).toBeUndefined()
-    expect(examQuizTopic('Exam DISC-DA (CAS)')).toBeUndefined()
   })
 })
 

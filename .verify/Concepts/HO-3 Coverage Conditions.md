@@ -28,3 +28,23 @@ created: 2026-10-10
 - checks_run: every rule, number and list checked against the cited form text; worked examples recomputed; links resolve; U.S. framing; exam-section references checked against Exam DISC-IA (CAS).md
 - sources_checked: ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Section II – Conditions A–J and Sections I and II – Conditions A–G, pp.21–24, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf; ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part F Termination, p.13, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf
 - note: Section II conditions and Sections I and II conditions (liberalization 60 days, cancellation 10/10/30/30 days, pro rata refund, nonrenewal 30 days, subrogation not for F or property of others, death) match HO 00 03 05 11; the PAP 20-day contrast matches PP 00 01 09 18. Refund example recomputes (584). One minor open finding on the severability sentence.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv09
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Applied: the severability bullet now adds the exception for exclusions worded "an insured", per HO 00 03 05 11 Definition B.5 (p.2) and Section II Exclusion E.1 (p.19); Section II Condition B (p.22) unchanged.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv09
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: every rule, number and list checked against the cited form text; worked examples recomputed; links resolve; U.S. framing; exam-section references checked against Exam DISC-IA (CAS).md
+- sources_checked: ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Section II – Conditions A–J and Sections I and II – Conditions A–G, pp.21–24, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf; ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part F Termination, p.13, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf; ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Definition B.5 last paragraph, p.2; Section II Exclusion E.1, p.19 (re-check of the F-001 fix), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf
+- note: Section II conditions and Sections I and II conditions (liberalization 60 days, cancellation 10/10/30/30 days, pro rata refund, nonrenewal 30 days, subrogation not for F or property of others, death) match HO 00 03 05 11; the PAP 20-day contrast matches PP 00 01 09 18. Refund example recomputes (584). F-001 fixed this run; previously one minor finding on the severability sentence. Re-verified after the fix: the edited sentence checked against the same source.

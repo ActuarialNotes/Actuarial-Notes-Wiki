@@ -4,11 +4,12 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:76bdc68944f68e3036238e01eedd73360a9341cd75795819eb18b87ff449d971
+  content_hash: sha256:e5f9b813fe201ee04b11d2053a914a6130e74b9c82d438f2496f0e4c91e3d377
   sources:
     - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Section II – Conditions A–J and Sections I and II – Conditions A–G, pp.21–24, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
     - "ISO Personal Auto Policy PP 00 01 09 18 (Virginia SCC specimen), Part F Termination, p.13, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
-  open_findings: 1
+    - "ISO Homeowners 3 – Special Form HO 00 03 05 11 (Maine Bureau of Insurance copy), Definition B.5 last paragraph, p.2; Section II Exclusion E.1, p.19 (re-check of the F-001 fix), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/HO-3 Coverage Conditions.md
 ---
@@ -21,7 +22,7 @@ verification:
 
 - **Symbols:** $P$ is the policy premium, $n_{\text{remaining}}$ the days from the cancellation date to the expiration date and $n_{\text{term}}$ the days in the policy term; the HO-3 refunds premium pro rata whoever cancels. $t_{\text{notice}}$ is the least advance notice the insurer must give before a cancellation takes effect, or before the expiration date for a nonrenewal.
 - **Section II, limit of liability:** The Coverage E limit is the most paid for all damages from one occurrence, however many insureds, claims or injured persons. All bodily injury and property damage from one accident, or from continuous or repeated exposure to substantially the same harmful conditions, is one occurrence. The Coverage F limit is the most paid for one person's medical expenses from one accident.
-- **Severability of insurance:** The insurance applies separately to each insured, so an exclusion that applies to one insured does not by itself remove coverage for another, but it does not increase the limit for one occurrence.
+- **Severability of insurance:** The insurance applies separately to each insured, so an exclusion that applies to one insured does not by itself remove coverage for another, but it does not increase the limit for one occurrence. The exception is an exclusion worded "an insured", such as expected or intended injury: the form defines "an insured" as one or more insureds, so that exclusion removes coverage for every insured when any one of them expected or intended the injury.
 - **Duties after an occurrence:** The insurer has no duty to provide coverage if failing to perform these is prejudicial to it. The named insured or another insured must give written notice as soon as practical with the policy's identity, the time, place and circumstances, and the names and addresses of claimants and witnesses; cooperate in the investigation, settlement or defense; promptly forward every notice, demand and summons; at the insurer's request help it settle, enforce rights of contribution or indemnity, conduct suits and attend hearings and trials, and secure evidence and witnesses; for damage to property of others, submit a sworn statement of loss within 60 days and show the damaged property; and not voluntarily make payments, assume obligations or incur expenses, except at the insured's own cost or for first aid at the time of injury.
 - **Duties of an injured person under Coverage F:** The injured person or a representative must give written proof of claim, under oath if required, as soon as practical, authorize the insurer to obtain medical reports and records, and submit to physical exams by a doctor of the insurer's choice as often as reasonably required. Payment under Coverage F is not an admission of liability by an insured or the insurer.
 - **Suit against us:** No action can be brought against the insurer unless Section II has been fully complied with. No one may join the insurer as a party to an action against an insured, and no action under Coverage E can be brought until the insured's obligation has been decided by final judgment or by an agreement the insurer signs.

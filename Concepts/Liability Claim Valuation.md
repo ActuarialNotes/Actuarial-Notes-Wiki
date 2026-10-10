@@ -68,7 +68,7 @@ verification:
 > > &= 180{,}000
 > > \end{align*}
 > > $$
-> > Under joint and several liability the insured can be made to pay the whole judgment and is left to seek contribution from a co-defendant who cannot pay. The insured's share of fault is the same in both states; the jurisdiction's rule triples what the claim is worth against it.
+> > Under joint and several liability the insured can be made to pay the whole judgment and is left to seek contribution from a co-defendant who cannot pay. The insured's share of fault is the same in both states; the jurisdiction's rule more than triples what the claim is worth against it.
 
 > [!tip]- How it appears on the exam
 > - **DISC-IA:** The objective is the factors affecting liability claim valuation. Expect a scenario describing a claim, its injuries, the parties' fault, the state and the policy, and a question asking which factor would raise or lower its value, or what the claimant would recover.

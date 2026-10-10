@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils'
 
 /**
  * The board controls, bottom right under the thumb — shared by Concept Craft
- * and the Workflow Builder, so the two canvases have one set of buttons
- * (docs/concept-craft.md, docs/workflow-builder.md).
+ * and Workflows, so the two canvases have one set of buttons
+ * (docs/concept-craft.md, docs/workflows.md).
  */
 
 /** A stack of controls on one card. */

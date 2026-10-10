@@ -34,7 +34,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
 import { actuariaDestination } from '@/lib/actuaria/access'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
-import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { ACTUARIA_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -45,7 +45,7 @@ import { lazyRoute } from '@/lib/lazyRoute'
 // would capture that frame's spinner (see lib/lazyRoute.ts).
 const { Component: Research, preload: loadResearch } = lazyRoute(() => import('@/pages/Research'))
 // Cowork is the app's second product (see `lib/appMode.ts`). Lazy, because a
-// reader in Study mode should never pay for its catalogue or its xlsx writer.
+// reader in Study mode should never pay for its catalogue.
 const { Component: Cowork, preload: loadCowork } = lazyRoute(() => import('@/pages/Cowork'))
 // The Projects tab — the PCPA project simulator (docs/pcpa-project.md). Lazy:
 // its editor, its spreadsheet and its data generator are for the candidates
@@ -61,8 +61,8 @@ const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages
 // Actuarial Tools (docs/actuarial-tools.md) — calculators, each one card. Lazy:
 // the engine and its grids are for the readers who open a tool.
 const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages/Tools'))
-// The Workflow Builder (docs/workflow-builder.md) — tools, data and concepts
-// chained on a board, opened from the Tools catalogue. Its own chunk.
+// Workflows (docs/workflows.md) — Cowork's second place: sources, data,
+// tools and concepts chained on a board. Its own chunk.
 const { Component: WorkflowBuilder, preload: loadWorkflowBuilder } = lazyRoute(() => import('@/pages/WorkflowBuilder'))
 // Concept Craft (docs/concept-craft.md) — a topic's concepts on a board, and
 // how they connect. Lazy: its graph, its physics and the wiki bundle it reads
@@ -89,12 +89,12 @@ const { Component: WikiResources, preload: loadWikiResources } = lazyRoute(() =>
 function preloadRoute(path: string): Promise<unknown> | null {
   const route = path.split('?')[0].split('#')[0]
   if (route === '/research' || route.startsWith('/research/')) return loadResearch()
+  if (TOOLS_ENABLED && (route === '/cowork/workflows' || route.startsWith('/cowork/workflows/'))) return loadWorkflowBuilder()
   if (route === '/cowork' || route.startsWith('/cowork/')) return loadCowork()
   if (route === '/project' || route.startsWith('/project/')) return loadProject()
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
-  if (TOOLS_ENABLED && route === '/tools/workflow') return loadWorkflowBuilder()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
@@ -259,7 +259,7 @@ function RequireAuth({ children }: { children: ReactNode }) {
 function RequireMode({ mode, children }: { mode: AppMode; children: ReactNode }) {
   const { user } = useAuth()
   const { isPro, loading } = useSubscription()
-  const viewer = { signedIn: !!user, isPro, email: user?.email }
+  const viewer = { signedIn: !!user, isPro, email: user?.email, previewOpen: COWORK_OPEN_TO_ALL }
   if (canEnterMode(mode, viewer)) return <>{children}</>
   if (user && loading) return <WikiFallback />
   return <Navigate to={modeDestination(mode, viewer)} replace />
@@ -337,14 +337,21 @@ function ToolsRoute() {
   )
 }
 
+/**
+ * Workflows — Cowork's second place, so behind Cowork's own gate
+ * (`RequireMode`), and run on the Actuarial Tools engine, so behind its flag
+ * too.
+ */
 function WorkflowRoute() {
-  if (!TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
+  if (!COWORK_ENABLED || !TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
   return (
-    <ErrorBoundary>
-      <Suspense fallback={<WikiFallback />}>
-        <WorkflowBuilder />
-      </Suspense>
-    </ErrorBoundary>
+    <RequireMode mode="cowork">
+      <ErrorBoundary>
+        <Suspense fallback={<WikiFallback />}>
+          <WorkflowBuilder />
+        </Suspense>
+      </ErrorBoundary>
+    </RequireMode>
   )
 }
 
@@ -398,7 +405,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                     page. The gem shop is a corner of it. */}
                 <Route path="/store" element={<StoreRoute />} />
                 <Route path="/tools" element={<ToolsRoute />} />
-                <Route path="/tools/workflow" element={<WorkflowRoute />} />
+                {/* Workflows moved to Cowork; an old link lands there. */}
+                <Route path="/tools/workflow" element={<Navigate to="/cowork/workflows" replace />} />
                 <Route path="/tools/:slug" element={<ToolsRoute />} />
                 <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
                 <Route path="/research" element={
@@ -415,11 +423,15 @@ export default function App({ initialSession }: { initialSession: Session | null
                   )
                 } />
                 {/* Cowork — in Preview, open to approved accounts only. The
-                    three paths are one page: the tab and the open deliverable
-                    live in the URL so a deliverable can be linked to and Back
-                    walks the loop. `RequireMode` is what keeps the mode's own
-                    rule (`canEnterMode`) true of the route and not only of the
-                    pill. */}
+                    Sources paths are one page: the open source lives in the
+                    URL so it can be linked to and Back walks the loop.
+                    Workflows is its own full-screen board. `RequireMode` is
+                    what keeps the mode's own rule (`canEnterMode`) true of the
+                    route and not only of the pill. Deliverables were retired
+                    for Workflows; an old link lands there. */}
+                <Route path="/cowork/workflows" element={<WorkflowRoute />} />
+                <Route path="/cowork/deliverables" element={<Navigate to="/cowork/workflows" replace />} />
+                <Route path="/cowork/deliverables/:id" element={<Navigate to="/cowork/workflows" replace />} />
                 <Route path="/cowork" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab" element={<CoworkRoute />} />
                 <Route path="/cowork/:tab/:id" element={<CoworkRoute />} />

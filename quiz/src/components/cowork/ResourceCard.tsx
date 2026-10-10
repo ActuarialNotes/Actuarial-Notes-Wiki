@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
  * One document, as a **card**.
  *
  * Every surface that lists documents — the Sources shelf, a source's page, a
- * deliverable's attached and attachable sources — uses this one component, and
+ * workflow's source step — uses this one component, and
  * it is deliberately the same object the study guide's resource shelf is built
  * from (`components/wiki/SourceMaterialGallery.tsx`): a jacket or a kind icon
  * on the left, the title, and a row of metadata pills. Cowork is a second
@@ -58,7 +58,7 @@ export interface ResourceCardProps {
   onOpen: (resource: SourceResource) => void
   /** The work's jacket, when the vault carries one — see `lib/coworkCovers.ts`. */
   cover?: string
-  /** Swaps the add control for an "attach to this deliverable" one. */
+  /** Renames the add control ("Add to workflow"), for a surface that takes the document somewhere else. */
   attachLabel?: string
 }
 

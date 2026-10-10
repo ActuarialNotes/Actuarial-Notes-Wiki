@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
-import { BookOpen, Calculator, Database, FileSpreadsheet, Workflow as WorkflowIcon, type LucideIcon } from 'lucide-react'
+import { BookOpen, Calculator, Database, FileSpreadsheet, Library, Workflow as WorkflowIcon, type LucideIcon } from 'lucide-react'
 import { fitView, toScreen, toWorld, zoomAt, type Insets, type Point, type View } from '@/lib/craftLayout'
 import { GRID, NODE, boxes, cellAt, cellCentre, edgeGeometry, type Cell } from '@/lib/workflowGrid'
 import {
@@ -24,7 +24,7 @@ import type { ConceptLevels } from '@/hooks/useConceptLevels'
 import { cn } from '@/lib/utils'
 
 /**
- * **The Workflow Builder's board** (docs/workflow-builder.md) — Concept
+ * **The workflow board** (docs/workflows.md) — Concept
  * Craft's canvas, with the physics taken out: every step is a card that stays
  * where it is put, snapped to a fine grid (`lib/workflowGrid.ts`), and every
  * connection an arrow from one card's right edge into the next one's left.
@@ -85,15 +85,21 @@ const LABEL_ZOOM = 0.6
 /** How wide a line is to the touch, in world px. */
 const LINE_HIT = 14
 
-const KIND_ICON: Record<StepKind, LucideIcon> = { data: Database, tool: Calculator, concept: BookOpen, workflow: WorkflowIcon }
+const KIND_ICON: Record<StepKind, LucideIcon> = { source: Library, data: Database, tool: Calculator, concept: BookOpen, workflow: WorkflowIcon }
 /** Each kind's stripe down the card's left edge. */
 const KIND_TINT: Record<StepKind, string> = {
+  source: 'hsl(160 70% 48%)',
   data: 'hsl(199 89% 56%)',
   tool: 'hsl(var(--primary))',
   concept: 'hsl(38 92% 56%)',
   workflow: 'hsl(262 83% 70%)',
 }
 const ACCENT = 'hsl(var(--primary))'
+
+/** A source table's figures still to be read off the document: its blank cells, past the label column. */
+function blankCells(table: { rows: string[][] }): number {
+  return table.rows.reduce((n, r) => n + r.slice(1).filter(c => c.trim() === '').length, 0)
+}
 
 type Gesture =
   | { kind: 'node'; id: string; start: Point; moved: boolean; at: Point }
@@ -571,6 +577,10 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
                 <span className="line-clamp-2 text-[13px] font-semibold leading-tight">{name}</span>
                 {run?.error ? (
                   <span className="truncate text-[11px] text-amber-500">{nested ? run.error : 'Needs input'}</span>
+                ) : node.kind === 'source' && node.csv && blankCells(node.csv) > 0 ? (
+                  <span className="truncate text-[11px] text-amber-500" data-testid="workflow-source-blanks">
+                    {blankCells(node.csv)} {blankCells(node.csv) === 1 ? 'figure' : 'figures'} to fill in
+                  </span>
                 ) : node.csv ? (
                   <span className="truncate text-[11px] tabular-nums text-muted-foreground">
                     {node.csv.rows.length} {node.csv.rows.length === 1 ? 'row' : 'rows'} · {node.csv.columns.length} columns

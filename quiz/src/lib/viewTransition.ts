@@ -104,10 +104,10 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/search', tab: 5, depth: 0 },
   { prefix: '/upgrade', tab: 7, depth: 0 },
   { prefix: '/settings', tab: 8, depth: 0 },
-  // Cowork's two places are two tabs of their own, and a source or a
-  // deliverable opens as a sheet over its shelf.
+  // Cowork's two places are two tabs of their own, and a source opens as a
+  // sheet over its shelf.
   { prefix: '/cowork', tab: 9, depth: 0, below: 1 },
-  { prefix: '/cowork/deliverables', tab: 10, depth: 0, below: 1 },
+  { prefix: '/cowork/workflows', tab: 10, depth: 0 },
   { prefix: '/auth', tab: 11, depth: 0 },
 ]
 

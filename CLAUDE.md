@@ -71,14 +71,14 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
-  `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — the Workflow Builder,
-  `/tools/workflow`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
+  `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — Cowork's Workflows,
+  `/cowork/workflows`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
-  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
+  `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's Sources shelf and source pages —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
-  `components/workflow/` (the Workflow Builder's board, + menu and panels),
+  `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
   Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/research/` (flag-gated).
@@ -309,8 +309,10 @@ before touching that area**:
   concept is made of. localStorage only, and only the connections found — the hand is
   re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
   named `craft*`, `conceptCraft` or `conceptGraph`.
-- `docs/workflow-builder.md` — the **Workflow Builder** (`/tools/workflow`, the row at the top of
-  the Tools catalogue): data, calculations and concepts as steps that **stay where they are put**,
+- `docs/workflows.md` — **Workflows** (`/cowork/workflows`, Cowork's second place in the sidebar,
+  behind Cowork's gate; it was the Tools tab's *Workflow Builder*, and `/tools/workflow` and
+  `/cowork/deliverables` redirect to it): **sources** (documents from Cowork's Sources — a
+  `source` step, `sourceStep`), data, calculations and concepts as steps that **stay where they are put**,
   snapped to a fine 24 px grid on an unbounded board (`lib/workflowGrid.ts` — a card dropped on
   another lands in the nearest place it fits, `nearestFit`; workflows saved on the first, coarse grid
   are spread onto it by `parseWorkflow`) — Concept Craft's board with the physics taken out, sharing
@@ -330,7 +332,9 @@ before touching that area**:
   `evaluateWorkflow(wf, resolve)`, never nested in itself — `canNest`), and **Open** goes into it
   with a way back up. A **CSV** upload is a data step whose columns a connection maps onto a tool's
   table, triangle, date or number inputs (`lib/workflowCsv.ts`: `parseCsv`, `guessMapping`,
-  `csvInput` — cells moved, never computed on). **The app calls no model and holds no key**:
+  `csvInput` — cells moved, never computed on); a source whose document publishes a table
+  (`SourceResource.table` — FSRA's loss trend benchmarks) brings it as the step's data, figures
+  blank until the reader reads them off the document, and maps the same way (`stepTable`). **The app calls no model and holds no key**:
   *Run in Claude* copies the workflow as a brief for the MCP connector (`lib/workflowBrief.ts`) — an
   earlier in-browser deploy on the reader's own API key was removed as a security risk. All of
   `lib/workflow*.ts` is pure and tested; the flows are `e2e/workflow.spec.ts`. Read before touching
@@ -371,14 +375,14 @@ before touching that area**:
   `lib/actuaria/lexicon.ts`; the look is style guide §2.6 (`.actuaria dark` scope, the signal
   teal as chrome only, Oxanium for display labels). Read before touching anything under
   `actuaria/` or `Actuaria`.
-- `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), the
-  Sources → Library → Deliverable → Export loop, the three deliverable types and their five
-  facets, and the two rules that hold the whole thing up — *nothing is invented* (exports
-  carry structure and blank value cells, because the app holds no experience data; a `Sample`
-  entry carries no date and no link because it names no particular document) and *there is no
-  second reader* (a Cowork resource opens in `ConceptPopup`; its own documents are registered
-  as virtual vault files to keep that true). Read before touching anything named `cowork*`,
-  `ModeSwitcher`, `appMode` or `xlsx`.
+- `docs/cowork.md` — **Cowork**, the second product: the mode switch (`lib/appMode.ts`), its
+  two places — Sources and Workflows (Workflows replaced Deliverables) — and how they meet (a
+  document as a workflow's source step), and the two rules that hold the whole thing up —
+  *nothing is invented* (a source's table comes with blank figures until they are read off the
+  publisher; a `Sample` entry carries no date and no link because it names no particular
+  document) and *there is no second reader* (a Cowork resource opens in `ConceptPopup`; its own
+  documents are registered as virtual vault files to keep that true). Read before touching
+  anything named `cowork*`, `ModeSwitcher` or `appMode`.
 - `docs/ai-connector.md` — the **AI connector**: Actuarial Notes as an MCP server that Claude and
   ChatGPT add as a custom connector (facts = the build-time vault export, tools = search / fetch /
   syllabus / concept / practice / marking, skills = MCP prompts + the uploadable Agent Skill). Covers
@@ -1143,23 +1147,21 @@ Other important `lib/` modules:
   out from its seeds to every concept and connection, and pins a handful of recipes
   (*Frequency* + *Severity* → *Pure Premium*), and replays every topic's medal plays to
   check each medal can be won.
-- `appMode.ts` / `cowork*.ts` / `xlsx.ts` — **Cowork**, the app's second product (Preview,
-  approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`). `appMode.ts` is the one definition of what a mode *is* — label,
+- `appMode.ts` / `cowork*.ts` — **Cowork**, the app's second product (Preview,
+  approved accounts only via `PREVIEW_APPROVED_EMAILS`, `COWORK_ENABLED`; the e2e build opens it
+  to everyone with `VITE_COWORK_PREVIEW=on` → `COWORK_OPEN_TO_ALL` → `ModeViewer.previewOpen`). `appMode.ts` is the one definition of what a mode *is* — label,
   home, routes, what it takes to enter it — read by the pill (`components/ModeSwitcher.tsx`),
   the sidebar's nav and `App.tsx`'s route guard, so none of the three re-decides it.
-  `coworkFacets.ts` is the five facet axes as data; `coworkSources.ts` is the
-  entity/resource model, the shelf's filters (`groupSources` for publishers,
+  `coworkSources.ts` is the entity/resource model (a resource's `table`, for Workflows), the shelf's filters (`groupSources` for publishers,
   `filterResources` for the flat document list, both honouring the `entityIds`/`resourceIds`
   the **My Library** pill passes — `[]` is an empty library, `undefined` is the filter off),
   the search bar's two-list lookup (`searchSources`, where each side matches on its *own*
   account), the per-publisher lookups a source page reads (`entityById` / `entityResources`)
   and the library reducers (adding a document follows its publisher; dropping a publisher
   drops its documents); `coworkCovers.ts` finds a resource
-  card's cover in the wiki index, or says there is none; `coworkDeliverables.ts` is the
-  step-by-step scoping engine (which question comes next, and `answerStep`, which drops the
-  answers a change orphans); `coworkExport.ts` turns a deliverable into workbook sheets; and
-  `xlsx.ts` is a minimal dependency-free `.xlsx` writer (stored ZIP + CRC-32 + inline
-  strings), pure and byte-reproducible. `coworkContent.ts` is the one impure one: it installs
+  card's cover in the wiki index, or says there is none. (`xlsx.ts`, the minimal dependency-free
+  `.xlsx` writer that Cowork's retired Deliverables exported through, stays for the tool card's
+  and the Projects tab's exports.) `coworkContent.ts` is the one impure one: it installs
   the wiki bundle's lookup *and* registers Cowork's sample documents as virtual vault files,
   which is what lets both kinds of resource open in `ConceptPopup` rather than a second
   reader. The two rules to keep are in `docs/cowork.md` — nothing is invented, and there is
@@ -1516,43 +1518,43 @@ are `_`-prefixed so Vercel doesn't route them.
 
 In **Preview**, gated by `COWORK_ENABLED`, and open only to the approved accounts in
 `PREVIEW_APPROVED_EMAILS` (`lib/appMode.ts`) — no one else sees the mode pill, and `/cowork`
-redirects them to the dashboard. Two places — **Sources** and
-**Deliverables** — chosen from the sidebar, like every route in Study mode (the page carries
-no tab row). They are the two halves of one loop:
+redirects them to the dashboard. Two places — **Sources** and **Workflows** — chosen from the
+sidebar, like every route in Study mode (the page carries no tab row). They are the two halves
+of one loop:
 
 ```
-Sources ──► Library ──► Deliverable ──► Scoping ──► Attach ──► Populate ──► Export
+Sources ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
 ```
 
 A reader follows the **entities** that publish (OSFI, FSRA, the CIA, Intact, Canadian
-Underwriter…), takes documents into a library, creates a deliverable (**Analysis**,
-**Report** or **Documentation** — the difference is what it is *for*), answers a short
-step-by-step sequence of multiple-choice questions to scope it, attaches the documents it is
-built on, and exports the exhibit the scoping earned as `.xlsx` or `.csv`. The assumptions
-register fills in from *both* the answers and the attached documents, every row naming what
-supports it.
+Underwriter…), takes documents into a library, and lays them on a **workflow**'s board
+(`/cowork/workflows`, `docs/workflows.md` — what was the Tools tab's Workflow Builder; it
+replaced Cowork's Deliverables) as **source** steps beside the data, calculations and concepts
+they feed. A document that publishes a table (`SourceResource.table` — FSRA's private passenger
+auto **loss trend benchmarks** first) brings it as the step's data, mapped onto a calculation's
+inputs the way an uploaded CSV's columns are, so a coverage's trend links straight into Trend
+Factor.
 
-Four surfaces, and the shape of each is deliberate: the Sources shelf (`/cowork`) answers
+The Sources surfaces, and the shape of each is deliberate: the shelf (`/cowork`) answers
 one primary filter — **Sources or Documents** — with a grid of publisher cards or document
 cards, over a secondary pill row led by **My Library** (a filter narrowing the shelf to what
 the reader follows/has taken, not a section stacked above it); **a source is its own page**
 (`/cowork/sources/:id`), the way an exam's study guide is, with the publisher's *own* logo in
 the sticky header (`SourceEntity.logo`, transcribed from their site, monogram tile as the
-fallback) and their catalogue below it; **a document is always a card**, never a row — one
+fallback) and their catalogue below it; and **a document is always a card**, never a row — one
 component (`components/cowork/ResourceCard.tsx`) draws it everywhere, and it is the study
-guide's resource card; and a deliverable is started from **one floating button** bottom
-right, which opens the three types in line and drops straight into the scoping flow. On both
-kinds of card the **whole card** is the target and the one control that doesn't navigate
-(Follow, Add) sits at its right edge; a card carries pills, not a paragraph — a publisher's
-region and `established` year, a document's kind and date.
+guide's resource card. On both kinds of card the **whole card** is the target and the one
+control that doesn't navigate (Follow, Add) sits at its right edge; a card carries pills, not a
+paragraph — a publisher's region and `established` year, a document's kind and date.
 
 Three things to know before changing any of it — all three are load-bearing, and
 `docs/cowork.md` is the full account:
 
-1. **Nothing is invented.** The app holds no experience data, so an export carries the right
-   columns, the right periods and every assumption and source with its basis named, and
-   leaves its **value cells empty**. An assumption a document supplies the *row* but not the
-   number for stays visibly blank with its locator. Same rule as the vault's pass rates and
+1. **Nothing is invented.** A source's table carries the publisher's columns and row labels,
+   and its **figures stay blank** until they have been read off the publisher — the reader
+   fills them in on the workflow step, and a blank carries nothing down a link
+   (`coworkContent.test.ts` holds every table to a real, linked document). An assumption a
+   document supplies the *row* but not the number for stays visibly blank with its locator. Same rule as the vault's pass rates and
    examiner's reports: transcribed, never constructed.
 2. **There is no second reader.** A Cowork resource opens in `ConceptPopup`, the same split
    pane the study guide reads a concept in. Resources that are vault pages carry a `wikiRef`;
@@ -1561,14 +1563,14 @@ Three things to know before changing any of it — all three are load-bearing, a
    seems to need a bespoke viewer should become a page at a vault-shaped path instead.
 3. **A `Sample` entry names no particular document.** The catalogue is seed data; entries
    marked `sample: true` stand for a *class* of document a publisher issues and carry no date
-   and no link, because inventing a plausible one would put a citation in a deliverable that
+   and no link, because inventing a plausible one would put a citation in a workflow that
    nothing supports. Tests enforce this both ways (`lib/coworkContent.test.ts`), including
    that every `wikiRef` still resolves to a file that is actually in the vault.
 
-The stores (`hooks/useCoworkLibrary.ts`, `hooks/useCoworkDeliverables.ts`) are localStorage
-only and hold **ids only** — the catalogue and the scoping flow are passed in. That is what
-keeps Cowork an ~88 KB lazy chunk instead of pulling its catalogue into the main bundle
-through the sidebar's nav badges. Populating the corpus more deeply is the next phase.
+The library store (`hooks/useCoworkLibrary.ts`) is localStorage only and holds **ids only** —
+the catalogue is passed in. That is what keeps Cowork a lazy chunk instead of pulling its
+catalogue into the main bundle through the sidebar's nav badge (and why the Workflows row has
+no count: the workflow store reads the tools engine). Populating the corpus more deeply is the next phase.
 
 ## Working conventions observed in this repo
 

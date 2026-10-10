@@ -373,7 +373,7 @@ agent can be asked to analyse when the reader has no triangle of their own.
   the Agent plan's Phase C and to Cowork, with a human reviewer. A tool's output is an
   exhibit, not a conclusion.
 - **Checklists and documentation templates** (ASOP 41 disclosures and similar). That's
-  document work, so it belongs to Cowork's deliverables.
+  document work, so it belongs to Cowork.
 
 ---
 
@@ -1006,7 +1006,7 @@ measured on calculation. The invalid-input rate is the main feedback for improvi
 | Surface | Integration |
 |---|---|
 | **Study mode** | Open in Tools from concept pages; Work it in a tool from revealed explanations; exam logos on each tool lead back to the exam. Tools never affect mastery. |
-| **Cowork** | A deliverable's **Populate** step attaches tool runs. An exhibit's value cells are filled from a run on the reader's data, and each cell names the run (tool, version, input hash) as its source. That keeps "nothing invented" true when the cells are no longer blank. Phase 4. |
+| **Cowork** | **Workflows** (`/cowork/workflows`, docs/workflows.md) run the tools as steps, chained by their hand-offs, beside the documents from Cowork's Sources they rest on — a source's published table (FSRA's loss trend benchmarks) mapped into a tool's inputs as a CSV's columns are. (Cowork's Deliverables, which this row once planned to fill from tool runs, were retired for Workflows.) |
 | **AI connector** | `list_tools` / `describe_tool` / `run_tool`, the prompts, and the skill section (§7). Bump the connector's version documentation in the same change. The knowledge-base export is untouched, so `KNOWLEDGE_BASE_VERSION` stays as it is. |
 | **Agent product plan** | Delivers B3. Its eval harness gains the calculation arm (§9.4). Phase C copilots (reserve review, method rationale) are built on these tools. |
 | **Distribution simulators** | One engine. The simulator becomes a view of the Distribution Calculator. |

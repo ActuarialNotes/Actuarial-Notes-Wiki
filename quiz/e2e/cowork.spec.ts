@@ -3,44 +3,39 @@ import { test, expect } from '@playwright/test'
 /**
  * Cowork's shell, from a signed-out browser.
  *
- * The suite never touches Supabase (see `playwright.config.ts`), so what it can
- * assert about a Pro-only mode is the part that matters most anyway: the lock
- * holds. A mode whose pill says "Pro" but whose URL lets anyone in is the one
- * bug here that a reader would find by typing an address.
+ * Cowork is open only to approved accounts while it is in Preview; the suite's
+ * build opens it to every viewer (`VITE_COWORK_PREVIEW=on` in
+ * playwright.config.ts, `COWORK_OPEN_TO_ALL`), the way Actuaria's is, so its
+ * two places can be exercised without one. The lock itself is pinned by
+ * `src/lib/appMode.test.ts`.
  */
 test.describe('cowork mode', () => {
-  test('sends a signed-out visitor to sign in rather than into the mode', async ({ page }) => {
-    await page.goto('/cowork')
-    await expect(page).toHaveURL(/\/auth/)
-    await expect(page.getByText('Something went wrong')).toHaveCount(0)
-  })
-
-  test('locks the deliverable routes too, not just the mode home', async ({ page }) => {
-    await page.goto('/cowork/deliverables')
-    await expect(page).toHaveURL(/\/auth/)
-  })
-
-  test('offers the mode from the pill beside the wordmark, marked Pro and Preview', async ({ page }) => {
+  test('offers the mode from the pill beside the wordmark, marked Preview', async ({ page }) => {
     await page.goto('/dashboard')
     const pill = page.getByRole('button', { name: /Mode: Study/ }).first()
     await expect(pill).toBeVisible()
 
     await pill.click()
     await expect(page.getByRole('menu', { name: 'Switch mode' })).toBeVisible()
-
     const cowork = page.getByRole('menuitem', { name: /Cowork/ })
-    await expect(cowork).toBeVisible()
-    // Both facts the mode carries are on its row: it is in Preview, and it is
-    // Pro. Signed out, the tagline is replaced by what it would take to open it.
     await expect(cowork).toContainText('Preview')
-    await expect(cowork).toContainText('Pro')
-    await expect(cowork).toContainText(/Sign in with Pro/i)
+    await cowork.click()
+    await expect(page).toHaveURL(/\/cowork$/)
   })
 
-  test('picking the locked mode sends a signed-out visitor to sign in', async ({ page }) => {
-    await page.goto('/dashboard')
-    await page.getByRole('button', { name: /Mode: Study/ }).first().click()
-    await page.getByRole('menuitem', { name: /Cowork/ }).click()
-    await expect(page).toHaveURL(/\/auth/)
+  test('lists Sources and Workflows in the sidebar, and no Deliverables', async ({ page }) => {
+    await page.goto('/cowork')
+    await expect(page.getByRole('link', { name: 'Sources' }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Workflows' }).first()).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Deliverables' })).toHaveCount(0)
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+
+  test('sends an old Deliverables or Workflow Builder link to Workflows', async ({ page }) => {
+    await page.goto('/cowork/deliverables')
+    await expect(page).toHaveURL(/\/cowork\/workflows$/)
+    await page.goto('/tools/workflow')
+    await expect(page).toHaveURL(/\/cowork\/workflows$/)
+    await expect(page.getByTestId('workflow-add')).toBeVisible()
   })
 })

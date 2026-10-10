@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { toolById } from './tools'
+import { COWORK_RESOURCES } from '@/data/coworkSources'
 import { STEP, overlaps } from './workflowGrid'
 import {
   CSV_DATA,
@@ -27,9 +28,12 @@ import {
   parseWorkflow,
   removeStep,
   runOrder,
+  sourceStep,
   stepName,
+  stepTable,
   stepOwnInput,
   updateEdge,
+  updateStep,
   type Workflow,
 } from './workflow'
 
@@ -357,6 +361,56 @@ describe('a CSV in a workflow', () => {
     let wf = addStep({ ...newWorkflow('w', 0), saved: true }, { kind: 'data', ref: CSV_DATA, csv }, 1).workflow
     wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_fit' }, 1, 'n1').workflow
     wf = addStep(wf, { kind: 'workflow', ref: TEMPLATE_PREFIX + 'bond-risk', label: 'Bonds' }, 1).workflow
+    expect(parseWorkflow(JSON.parse(JSON.stringify(wf)))).toEqual(wf)
+  })
+})
+
+describe('a source in a workflow', () => {
+  const fsra = COWORK_RESOURCES.find(r => r.id === 'fsra-ppa-loss-trend-benchmarks')!
+
+  it('brings the document\'s table onto the board, blanks and all, as a copy', () => {
+    const step = sourceStep(fsra)
+    expect(step).toMatchObject({ kind: 'source', ref: fsra.id, label: fsra.title })
+    expect(step.csv!.columns).toEqual(fsra.table!.columns)
+    expect(step.csv!.rows).toEqual(fsra.table!.rows)
+    step.csv!.rows[0][1] = '9%'
+    expect(fsra.table!.rows[0][1]).toBe('')
+  })
+
+  it('is a source, not a calculation, named by its title', () => {
+    const wf = addStep(newWorkflow('w', 0), sourceStep(fsra), 1).workflow
+    expect(stepName(wf.nodes[0])).toBe(fsra.title)
+    expect(stepTable(wf.nodes[0])).toEqual(wf.nodes[0].csv)
+    expect(evaluateWorkflow(wf).size).toBe(0)
+  })
+
+  it('links a figure read off the document into a calculation, by its row', () => {
+    let wf = addStep(newWorkflow('w', 0), sourceStep(fsra), 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_factor' }, 1, 'n1').workflow
+    // A single cell is never guessed: until it is mapped, the source only feeds.
+    expect(wf.edges[0].map).toBeUndefined()
+    expect(edgeKind(wf, wf.edges[0])).toBe('feeds')
+
+    const collision = fsra.table!.rows.findIndex(r => r[0] === 'Collision')
+    const rows = wf.nodes[0].csv!.rows.map((r, i) => (i === collision ? [r[0], '5%', '', ''] : r))
+    wf = updateStep(wf, 'n1', { csv: { ...wf.nodes[0].csv!, rows } }, 2)
+    wf = updateEdge(wf, 'n1', 'n2', { map: { trend: { kind: 'cell', column: 1, row: collision } } }, 3)
+    expect(edgeKind(wf, wf.edges[0])).toBe('handoff')
+    const run = evaluateWorkflow(wf).get('n2')!
+    expect(run.piped).toEqual([{ from: 'n1', fields: ['trend'] }])
+    expect(run.input!.trend).toBeCloseTo(0.05, 12)
+  })
+
+  it('carries nothing from a blank figure — the calculation keeps its own', () => {
+    let wf = addStep(newWorkflow('w', 0), sourceStep(fsra), 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_factor' }, 1, 'n1').workflow
+    wf = updateEdge(wf, 'n1', 'n2', { map: { trend: { kind: 'cell', column: 1, row: 0 } } }, 2)
+    expect(evaluateWorkflow(wf).get('n2')!.piped).toEqual([])
+  })
+
+  it('round-trips through storage with the reader\'s figures', () => {
+    let wf = addStep(newWorkflow('w', 0), sourceStep(fsra), 1).workflow
+    wf = updateStep(wf, 'n1', { csv: { ...wf.nodes[0].csv!, rows: [['Collision', '8%', '6%', '10%']] } }, 2)
     expect(parseWorkflow(JSON.parse(JSON.stringify(wf)))).toEqual(wf)
   })
 })

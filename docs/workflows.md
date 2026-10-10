@@ -1,11 +1,18 @@
-# Workflow Builder
+# Workflows
 
-`/tools/workflow`, opened from the row at the top of the Tools catalogue. A reader lays out
-an actuarial workflow — **data** (published tables, or a **CSV** of their own),
-**calculations**, **concepts** and whole **sub-workflows** as steps on a grid, joined by
-**directed connections** — watches it run live on the Actuarial Tools engine, keeps the ones
-worth keeping in a **library**, and **runs it in Claude** by copying it as a brief for the
-Actuarial Notes connector.
+`/cowork/workflows`, **Cowork**'s second place — the sidebar lists it under Sources
+(docs/cowork.md). It was the *Workflow Builder* under the Tools tab; it moved to Cowork,
+renamed, when it replaced Cowork's Deliverables, and `/tools/workflow` and
+`/cowork/deliverables` now redirect here. A reader lays out an actuarial workflow —
+**sources** (documents from Cowork's Sources, and the tables they publish), **data**
+(published tables, or a **CSV** of their own), **calculations**, **concepts** and whole
+**sub-workflows** as steps on a grid, joined by **directed connections** — watches it run
+live on the Actuarial Tools engine, keeps the ones worth keeping in a **library**, and
+**runs it in Claude** by copying it as a brief for the Actuarial Notes connector.
+
+Because it is Cowork's, it is behind Cowork's gate: `RequireMode mode="cowork"` in `App.tsx`
+(approved accounts while Cowork is in Preview), and `TOOLS_ENABLED` too, since it runs the
+tools engine. The e2e build opens it to every viewer with `VITE_COWORK_PREVIEW=on`.
 
 It is Concept Craft's board (docs/concept-craft.md) with the physics taken out. Concept
 Craft is a map to be discovered, so its cards float on a force simulation; a workflow is a
@@ -20,6 +27,7 @@ anywhere on an unbounded board.
 | The brief *Copy for Claude* writes | `quiz/src/lib/workflowBrief.ts` |
 | The reader's workflows and library (localStorage), and the sub-workflow resolver | `quiz/src/hooks/useWorkflows.ts` |
 | The page | `quiz/src/pages/WorkflowBuilder.tsx` |
+| A source step's document and table | `SourceResource.table` in `quiz/src/lib/coworkSources.ts`, authored in `quiz/src/data/coworkSources.ts` |
 | The board | `quiz/src/components/workflow/WorkflowBoard.tsx` |
 | The **+** menu | `quiz/src/components/workflow/WorkflowAddMenu.tsx` |
 | A step's and a connection's panel | `quiz/src/components/workflow/WorkflowPanels.tsx` |
@@ -34,6 +42,7 @@ All four `lib/` modules are pure and tested (`workflow*.test.ts`); the flows are
 
 | Kind | What it is | `ref` |
 | --- | --- | --- |
+| **Source** | A document from Cowork's Sources — and, when it publishes one, its table as data | the resource's id (`fsra-ppa-loss-trend-benchmarks`) |
 | **Data** | A Data Sources tool (life table, price index, yield curve), a **CSV** the reader uploaded, or their **own data** named and described or pasted in | the tool id, `csv`, or `custom` |
 | **Calculation** | Any other Actuarial Tool | the tool id (`reserving.chain_ladder`) |
 | **Concept** | A vault concept page: the method, definition or judgment a step rests on | the page name |
@@ -160,6 +169,38 @@ rate indication as one card in a pricing review, or opened up into its six steps
 - **Never inside itself**: `canNest` refuses a workflow on its own board, or on the board of
   any workflow it holds at any depth; the + menu greys such a workflow out. A sub-workflow
   deleted from the library says so on its card. Evaluation stops nesting at six levels.
+
+## Sources
+
+The + menu's first page is **Source**: the reader's library from Sources first, then every
+publisher's catalogue, or a search over document titles (`searchSources`). A source step is a
+document the work rests on, named — its panel shows the publisher (a tap goes to their page in
+Sources), the document's kind and date, **Read the document** (the concept popup, the same
+reader Sources opens it in, walking the workflow's documents in run order), and what it
+supplies (`SourceResource.assumptions`, each with its locator). A document goes on a board
+once, and putting it there adds it to the reader's library in Sources, as **Add** does.
+
+A document that **publishes a table** carries its shape in the catalogue
+(`SourceResource.table`: the publisher's columns, its row labels, and a locator). On the board
+that table becomes the step's data (`sourceStep` copies it onto `WorkflowNode.csv`), and from
+there it is a CSV in everything but name: `stepTable` hands it to `link`, `edgeKind` and the
+evaluator, so a connection maps its columns or one of its cells onto a calculation's inputs
+exactly as an uploaded file's are, and the mapping editor offers a cell's row by its label
+("Collision", not "Row 7").
+
+**Nothing is invented.** A figure appears in a catalogue table only once it has been read off
+the publisher; otherwise the cell is blank. The step's panel lets the reader fill the blanks in
+from the document (and add a row, remove one, or start over from the publisher's shape); the
+card counts the figures still to fill in, and a blank cell carries nothing down a link. The
+brief for Claude carries the table as read and tells the assistant that a blank is a figure
+not yet read — to ask for it, never to fill it in.
+
+**FSRA's loss trend benchmarks** are the first such table:
+`Resources/Benchmarks/FSRA Private Passenger Automobile Loss Trend Benchmarks (2025).md`, the
+benchmark past trend and range of future trends by coverage that FSRA reviews an Ontario auto
+rate filing against. FSRA's site refuses automated reads, so its figures are not transcribed;
+the rows are its coverages and the cells are for the reader. Link a coverage's trend into
+**Trend Factor** and the factor runs on it.
 
 ## Your data, as a CSV
 

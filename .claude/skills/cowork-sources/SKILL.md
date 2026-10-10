@@ -6,9 +6,9 @@ description: Add a publisher or a document to the Cowork source catalogue (quiz/
 # Cowork Source Catalogue
 
 Cowork's **Sources** half is a catalogue of *publishers* and what they publish. A
-reader follows an entity, takes documents into a library, and attaches those
-documents to a deliverable — where each one contributes assumption rows that name
-it as their basis.
+reader follows an entity, takes documents into a library, and lays those
+documents on a workflow's board as source steps (`docs/workflows.md`) — where each
+one says what it supplies, and a document that publishes a table brings it as data.
 
 Read `docs/cowork.md` once for the design. This file is the operating procedure.
 
@@ -25,9 +25,9 @@ quiz/src/lib/coworkContent.test.ts   the integrity checks every entry has to pas
 
 ## The rule that decides everything: nothing is invented
 
-Cowork's whole value is that a deliverable can name what supports every row in it.
+Cowork's whole value is that a workflow can name what supports every step in it.
 A catalogue entry carrying a plausible-but-unread date, link, logo or founding year
-puts a citation into an export that nothing supports — the same failure as an
+puts a citation into a workflow that nothing supports — the same failure as an
 invented pass rate or an invented examiner's report link
 (`docs/verification.md`, `docs/mock-exam-browser.md`).
 
@@ -173,22 +173,21 @@ off it. It sorts newest-first with undated last, and a bare year sorts *behind* 
 dated document in the same year — an undated-within-the-year document is the older
 one. Never date a document from the year its neighbours carry.
 
-**`practiceAreas`** and **`functions`** are the facet axes from `lib/coworkFacets.ts`:
+**`practiceAreas`** and **`functions`** are the two closed lists in `lib/coworkSources.ts`:
 
 - practice areas — `life`, `pc`, `pensions`, `erm`
 - functions — `pricing`, `underwriting`, `reserving`, `capital`,
   `financial-reporting`, `advisory`
 
-They are how a document surfaces against a deliverable being scoped, so list what
-the document is genuinely used *for*, not everything it touches. An entity carries
+List what the document is genuinely used *for*, not everything it touches. An entity carries
 `practiceAreas` only; functions belong to documents.
 
 ---
 
-## Step 4 — assumptions: the mechanical half of "it populates itself"
+## Step 4 — assumptions: what the document supplies
 
-Attaching a document to a deliverable adds its `assumptions` rows to the
-assumptions register, each naming the document as its basis. This is where the
+A document's `assumptions` rows are listed on its source step in a workflow, as
+*What it supplies*, each with where in the document it is read from. This is where the
 "nothing is invented" rule bites hardest:
 
 ```ts
@@ -206,9 +205,27 @@ assumptions: [
   the MCT guideline prints it. A figure the reader must take from their own data
   never gets one.
 - **`locator` says where in the document it is read from** — a section, a table, a
-  page. It is what makes the export auditable.
+  page. It is what makes the work auditable.
 - A **sample's** assumptions carry locators and essentially never values, because a
   sample names no particular document to have read a number from.
+
+### A table the document publishes
+
+A real document (never a sample) that publishes a table a calculation can take — a
+regulator's benchmark trends, a yield curve — can carry its shape as `table`:
+
+```ts
+table: {
+  locator: 'Loss trend benchmarks, by coverage',
+  columns: ['Coverage', 'Past trend', 'Future trend, low', 'Future trend, high'],
+  rows: [['Collision', '', '', ''], /* … */],
+},
+```
+
+On a workflow it becomes the source step's data, mapped onto a tool's inputs like a
+CSV. Transcribe the columns and row labels from the document, and a figure only
+once you have read it there — otherwise leave the cell `''` for the reader to fill
+in. Every row has one cell per column (`coworkContent.test.ts`).
 
 ---
 
@@ -234,7 +251,7 @@ Available from: "[fsrao.ca](https://www.fsrao.ca)"
 
 > [!info] Sample entry
 > Cowork does not carry FSRA's bulletin archive yet. This page describes the
-> series so a deliverable can be scoped against it; cite the specific bulletin
+> series so a workflow can name it; cite the specific bulletin
 > in force at your filing date.
 
 <what this class of document contains>
@@ -243,7 +260,7 @@ Available from: "[fsrao.ca](https://www.fsrao.ca)"
 
 - **The filing path.** …
 
-## How it is used in a deliverable
+## How it is used in a workflow
 
 …
 

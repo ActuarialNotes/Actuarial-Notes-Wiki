@@ -201,13 +201,24 @@ export const FACT_CHECK_UI_ENABLED: boolean = true
  * here, because they are properties of the mode and every surface has to state
  * them the same way.
  *
- * Gating the flag off removes the pill and redirects `/cowork` back into Study
- * mode; nothing behind it is deleted, and the pure engines
- * (`lib/cowork*.ts`, `lib/xlsx.ts`) and their tests stay compiled either way.
+ * Gating the flag off removes the pill and redirects `/cowork` (Sources and
+ * Workflows) back into Study mode; nothing behind it is deleted, and the pure
+ * engines (`lib/cowork*.ts`, `lib/workflow*.ts`) and their tests stay compiled
+ * either way.
  * The `: boolean` annotation keeps both branches of every gate type-checked
  * (see the flags above). See `docs/cowork.md`.
  */
 export const COWORK_ENABLED: boolean = true
+
+/**
+ * The preview override: Cowork open to every viewer, signed out included,
+ * rather than to `PREVIEW_APPROVED_EMAILS` alone (`ModeViewer.previewOpen` in
+ * `lib/appMode.ts`). Only the e2e suite's build sets `VITE_COWORK_PREVIEW=on`
+ * (playwright.config.ts), so Sources and Workflows are exercised without an
+ * approved account; no deployed build does, and there the comparison is a
+ * constant `false`.
+ */
+export const COWORK_OPEN_TO_ALL: boolean = import.meta.env.VITE_COWORK_PREVIEW === 'on'
 
 /**
  * **Actuarial Tools** (docs/actuarial-tools.md) — the Tools tab (`/tools`):

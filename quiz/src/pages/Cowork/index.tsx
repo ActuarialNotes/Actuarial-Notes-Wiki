@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -11,8 +11,6 @@ import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkS
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import SourcesView from './SourcesView'
 import SourcePage from './SourcePage'
-import DeliverablesView from './DeliverablesView'
-import DeliverableDetail from './DeliverableDetail'
 // Registers Cowork's sample source documents as virtual vault files, which is
 // what lets them open in the same popup viewer as a real wiki page. Imported
 // for the side effect, once, before anything tries to read one.
@@ -22,12 +20,13 @@ import '@/lib/coworkContent'
  * **Cowork** — the second product under the Actuarial Notes roof.
  *
  * Two places, which are the two halves of one loop: **Sources** is what an
- * actuary reads, **Deliverables** is what they produce from it. A reader
- * follows publishers and takes documents into a library, scopes a deliverable
- * by answering a short sequence of questions, attaches the documents it is
- * built on, watches the assumptions register fill in from both, and exports the
- * exhibit in a format they can work in. Which place you are in is chosen in the
- * sidebar, like every other route in the app — this page carries no tab row.
+ * actuary reads, **Workflows** is what they do with it. A reader follows
+ * publishers and takes documents into a library, then lays those documents on
+ * a workflow's board as steps beside the calculations they feed
+ * (`pages/WorkflowBuilder.tsx`, at `/cowork/workflows` — its own full-screen
+ * board, so it is not drawn by this page). Which place you are in is chosen in
+ * the sidebar, like every other route in the app — this page carries no tab
+ * row.
  *
  * The one thing worth understanding before changing this file: **there is no
  * second reader.** A resource opens in `ConceptPopup` — the same split pane the
@@ -37,24 +36,20 @@ import '@/lib/coworkContent'
  * Anything that would need a bespoke viewer should become a page at a
  * vault-shaped path instead.
  *
- * Four addresses, and a source is one of them, the way an exam's study guide is
- * (`/cowork`, `/cowork/sources/:id`, `/cowork/deliverables`,
- * `/cowork/deliverables/:id`), so a source or a deliverable can be linked to
- * and the back button works through the loop. The search is not among them: it
+ * Two addresses here, and a source is one of them, the way an exam's study
+ * guide is (`/cowork`, `/cowork/sources/:id`), so a source can be linked to and
+ * the back button works through the loop. The search is not among them: it
  * is a question the bar answers with a list of places to go
  * (`components/cowork/CoworkTopBar.tsx`), exactly as the wiki's is, so there is
  * no filtered state of a page for a URL to carry.
  */
 
 export default function Cowork() {
-  const navigate = useNavigate()
   const params = useParams()
   const openPopup = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
 
-  const onDeliverables = params.tab === 'deliverables'
   const entityId = params.tab === 'sources' ? params.id ?? null : null
-  const deliverableId = onDeliverables ? params.id ?? null : null
 
   /**
    * Open a document in the popup viewer.
@@ -84,11 +79,10 @@ export default function Cowork() {
   // with, rather than restating the heading a few pixels below it.
   const entity = useMemo(() => (entityId ? entityById(COWORK_ENTITIES, entityId) : null), [entityId])
 
-  // Each place's way back leads to the page the reader came from (a
-  // deliverable's attached source, a search), and up the loop for one who
-  // landed here — `hooks/useBack.ts`.
+  // A source's way back leads to the page the reader came from (a workflow's
+  // source step, a search), and up to the shelf for one who landed here —
+  // `hooks/useBack.ts`.
   const sourceBack = useBack({ to: '/cowork', label: 'Sources' })
-  const deliverableBack = useBack({ to: '/cowork/deliverables', label: 'Deliverables' })
   // A source names its entry, so the page after it can say "Back to OSFI".
   usePageLabel(entity?.name)
 
@@ -124,17 +118,7 @@ export default function Cowork() {
         className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        {deliverableId ? (
-          <DeliverableDetail
-            deliverableId={deliverableId}
-            onBack={deliverableBack.go}
-            backLabel={deliverableBack.label}
-            onOpenResource={openResource}
-            onBrowseSources={() => navigate('/cowork')}
-          />
-        ) : onDeliverables ? (
-          <DeliverablesView onOpen={id => navigate(`/cowork/deliverables/${id}`)} />
-        ) : entityId ? (
+        {entityId ? (
           <SourcePage entityId={entityId} onOpenResource={openResource} onBack={sourceBack.go} backLabel={sourceBack.label} />
         ) : (
           <SourcesView onOpenResource={openResource} />

@@ -2,7 +2,7 @@ import { LogoTile, type LogoTileSize } from '@/components/LogoTile'
 import { cn } from '@/lib/utils'
 
 /**
- * The Workflow Builder's tile — a piece of the board: three steps locked in
+ * The Workflows tile — a piece of the board: three steps locked in
  * their cells, one leading into the next two. It carries `.dark`, as Concept
  * Craft's does, so it is the board's own black whatever the reader's theme.
  * Decorative: whatever carries it also names it.

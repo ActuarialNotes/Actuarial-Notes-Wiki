@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { BookOpen, Calculator, ChevronLeft, ChevronRight, Database, FileSpreadsheet, PenLine, Plus, Search, Workflow as WorkflowIcon } from 'lucide-react'
+import { BookOpen, Calculator, ChevronLeft, ChevronRight, Database, FileSpreadsheet, FileText, Library, PenLine, Plus, Search, Table2, Workflow as WorkflowIcon } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
+import { EntityLogo } from '@/components/cowork/EntityLogo'
+import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
+import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
+import { searchSources, type SourceEntity, type SourceResource } from '@/lib/coworkSources'
 import { AREAS, TOOLS, type PracticeArea, type ToolSpec } from '@/lib/tools'
-import { CUSTOM_DATA, TEMPLATES, TEMPLATE_PREFIX, kindOfTool, type NewStep } from '@/lib/workflow'
+import { CUSTOM_DATA, TEMPLATES, TEMPLATE_PREFIX, kindOfTool, sourceStep, type NewStep } from '@/lib/workflow'
 import { examAccentStyle } from '@/lib/examColors'
 import { rankMatch } from '@/lib/appSearch'
 import { cn } from '@/lib/utils'
@@ -17,6 +21,8 @@ export interface ConceptShelf {
 
 type Page =
   | { id: 'root' }
+  | { id: 'sources' }
+  | { id: 'publisher'; entity: SourceEntity }
   | { id: 'data' }
   | { id: 'calc' }
   | { id: 'area'; area: PracticeArea }
@@ -32,10 +38,12 @@ export interface LibraryEntry {
 }
 
 /**
- * **The Workflow Builder's +** — Concept Craft's starter-pack menu, turned
- * into a few pages (docs/workflow-builder.md): the first asks what kind of
- * step to add — data, a calculation or a concept — and each answer opens the
- * next page down, the way a phone's settings do, with a back arrow at the top.
+ * **The workflow board's +** — Concept Craft's starter-pack menu, turned
+ * into a few pages (docs/workflows.md): the first asks what kind of
+ * step to add — a source, data, a calculation or a concept — and each answer
+ * opens the next page down, the way a phone's settings do, with a back arrow
+ * at the top. A source is a document from Cowork's Sources: the reader's
+ * library first, then every publisher's catalogue, or searched for by title.
  * Data is the Data Sources tools, the reader's own data, or a CSV they
  * upload; a calculation is one of the Actuarial Tools, by practice area; a
  * concept is a vault page, by exam and section, or searched for by name; a
@@ -48,6 +56,7 @@ export function WorkflowAddMenu({
   onClose,
   usedTools,
   usedConcepts,
+  usedSources,
   after,
   library,
   canNest,
@@ -63,6 +72,8 @@ export function WorkflowAddMenu({
   usedTools: ReadonlyMap<string, number>
   /** Concepts already on the board (lower-cased) — each goes on once. */
   usedConcepts: ReadonlySet<string>
+  /** Source documents already on the board, by resource id — each goes on once. */
+  usedSources: ReadonlySet<string>
   /** The step a new one is added after, and connected from — named in the header. */
   after: string | null
   /** The reader's library, offered as sub-workflows (the open workflow left out). */
@@ -105,6 +116,11 @@ export function WorkflowAddMenu({
     }
   }, [onClose, stack.length])
 
+  const libraryIds = useCoworkLibrary(s => s.resourceIds)
+  const libraryDocs = useMemo(() => COWORK_RESOURCES.filter(r => libraryIds.includes(r.id)), [libraryIds])
+  const publishers = useMemo(() => new Map(COWORK_ENTITIES.map(e => [e.id, e] as const)), [])
+  const sourceMatches = useMemo(() => (query.trim() ? searchSources(COWORK_ENTITIES, COWORK_RESOURCES, query).resources : []), [query])
+
   const dataTools = TOOLS.filter(t => kindOfTool(t) === 'data')
   const calcAreas = AREAS.filter(a => a.id !== 'data')
 
@@ -144,18 +160,64 @@ export function WorkflowAddMenu({
     )
   }
 
+  const sourceRow = (r: SourceResource, withPublisher = true) => (
+    <Row
+      key={r.id}
+      title={r.title}
+      subtitle={[withPublisher ? publishers.get(r.entityId)?.short : null, r.table ? 'Table' : null, r.sample ? 'Sample' : null].filter(Boolean).join(' · ') || undefined}
+      icon={r.table ? Table2 : FileText}
+      added={usedSources.has(r.id)}
+      onClick={() => onAdd(sourceStep(r))}
+      testId="workflow-add-source"
+      data={r.id}
+    />
+  )
+
   let title = 'Add a step'
   let body: ReactNode = null
   switch (page.id) {
     case 'root':
       body = (
         <>
+          <NavRow icon={Library} title="Source" subtitle="A document from Sources, and the tables it publishes" onClick={() => go({ id: 'sources' })} testId="workflow-add-sources" />
           <NavRow icon={Database} title="Data" subtitle="Published tables, or your own" onClick={() => go({ id: 'data' })} testId="workflow-add-data" />
           <NavRow icon={Calculator} title="Calculation" subtitle={`${TOOLS.length - dataTools.length} tools in ${calcAreas.length} areas`} onClick={() => go({ id: 'calc' })} testId="workflow-add-calc" />
           <NavRow icon={BookOpen} title="Concept" subtitle="The method or idea a step rests on" onClick={() => go({ id: 'concepts' })} testId="workflow-add-concepts" />
           <NavRow icon={WorkflowIcon} title="Workflow" subtitle="One from your library, or a template, as one step" onClick={() => go({ id: 'workflows' })} testId="workflow-add-workflows" />
         </>
       )
+      break
+    case 'sources':
+      title = 'Source'
+      body = query.trim()
+        ? sourceMatches.length
+          ? sourceMatches.map(r => sourceRow(r))
+          : <p className="px-4 py-3 text-sm text-muted-foreground">No documents match “{query.trim()}”.</p>
+        : (
+            <>
+              {libraryDocs.length > 0 && (
+                <>
+                  <h3 className="px-4 pb-1.5 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your library</h3>
+                  {libraryDocs.map(r => sourceRow(r))}
+                </>
+              )}
+              <h3 className="px-4 pb-1.5 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Publishers</h3>
+              {COWORK_ENTITIES.map(e => (
+                <NavRow
+                  key={e.id}
+                  lead={<EntityLogo entity={e} size="sm" />}
+                  title={e.name}
+                  subtitle={`${COWORK_RESOURCES.filter(r => r.entityId === e.id).length} documents`}
+                  onClick={() => go({ id: 'publisher', entity: e })}
+                  testId="workflow-add-publisher"
+                />
+              ))}
+            </>
+          )
+      break
+    case 'publisher':
+      title = page.entity.short
+      body = COWORK_RESOURCES.filter(r => r.entityId === page.entity.id).map(r => sourceRow(r, false))
       break
     case 'data':
       title = 'Data'
@@ -275,7 +337,8 @@ export function WorkflowAddMenu({
       break
   }
 
-  const searching = page.id === 'concepts' || page.id === 'exam'
+  const searching = page.id === 'concepts' || page.id === 'exam' || page.id === 'sources'
+  const searchLabel = page.id === 'sources' ? 'Search documents' : 'Search concept pages'
 
   return (
     <div
@@ -310,8 +373,8 @@ export function WorkflowAddMenu({
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search concept pages"
-            aria-label="Search concept pages"
+            placeholder={searchLabel}
+            aria-label={searchLabel}
             className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
             data-testid="workflow-add-search"
           />

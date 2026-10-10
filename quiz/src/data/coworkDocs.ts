@@ -4,7 +4,7 @@
  * Each one stands for a *class* of document a publisher issues, not a
  * particular issue of it — Cowork does not carry FSRA's bulletin archive or
  * Intact's filings yet, and naming an imaginary one would put a citation in a
- * deliverable that nothing supports. So a sample says what that kind of
+ * workflow that nothing supports. So a sample says what that kind of
  * document contains, what an actuary takes out of it, and where to go for the
  * real thing; it carries no date, no figures and no link it cannot support.
  * `docs/cowork.md` calls this the seed contract, and replacing a sample with a

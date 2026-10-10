@@ -2,10 +2,10 @@
  * A minimal **.xlsx writer** — enough of the format to hand someone a real
  * workbook, and no more.
  *
- * Why write one rather than take a dependency: an export is the last step of
- * the Cowork loop and the only thing that leaves the app, so it is worth the
- * few hundred bytes of arithmetic here instead of ~700 KB of SheetJS in the
- * bundle for a feature that writes cells and nothing else. What it does *not*
+ * Why write one rather than take a dependency: an export is the only thing
+ * that leaves the app (a tool's results, a project's workbook), so it is worth
+ * the few hundred bytes of arithmetic here instead of ~700 KB of SheetJS in
+ * the bundle for a feature that writes cells and nothing else. What it does *not*
  * do is the reason it stays small: no formulas, no styling beyond a bold header
  * row, no shared-string table (values are written as inline strings), no
  * compression. A spreadsheet application reads all of that fine.

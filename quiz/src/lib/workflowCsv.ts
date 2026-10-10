@@ -1,6 +1,6 @@
 /**
- * **The reader's own data, as a CSV** (docs/workflow-builder.md) — a file
- * uploaded onto a Workflow Builder board, and the mapping that connects its
+ * **The reader's own data, as a CSV** (docs/workflows.md) — a file
+ * uploaded onto a workflow's board, and the mapping that connects its
  * columns to a calculation's inputs.
  *
  * A CSV step holds the table as it was read (`parseCsv`: the header row, then

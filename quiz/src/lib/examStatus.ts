@@ -5,11 +5,13 @@ import type { ItemStatus } from '@/data/tracks'
 // (`P`, `FM`, `MAS-I`, `CAS-5`, `CAS-7`, … — see `wikiExamIdToProgressKey`).
 //
 // Three states:
-//   'ready'       — a mature syllabus page plus a full question bank (P, FM)
+//   'ready'       — a mature syllabus page plus a full question bank, all of it
+//                   fact checked (P, FM, and DISC-DA — the first CAS exam to
+//                   pass every gate of `scripts/publication_readiness.py`)
 //   'beta'        — usable, still being filled out (MAS-I, MAS-II, Exams 5,
 //                   6C, 7, 8 and 9 — their banks converted from the released
-//                   papers — PCPA, which has no paper to convert, and the three
-//                   DISCs, whose pages and banks are the vault's own)
+//                   papers — PCPA, which has no paper to convert, and DISC-RM
+//                   and DISC-IA, whose pages and banks are the vault's own)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
 //                   study from yet (Exam 6U, the SOA exams past FM).
@@ -26,7 +28,7 @@ import type { ItemStatus } from '@/data/tracks'
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all. */
-const READY_EXAMS = new Set(['P', 'FM'])
+const READY_EXAMS = new Set(['P', 'FM', 'CAS-DA'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they

@@ -13,7 +13,7 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: stale
+  status: in_review
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1

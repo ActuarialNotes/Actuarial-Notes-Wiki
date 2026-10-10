@@ -12,8 +12,8 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:b6d40b776f60f5b0fbdad25c1ebac0b3a20bcfbd1a3a8aaa9935d82ac157dfdb

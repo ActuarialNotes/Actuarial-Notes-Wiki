@@ -26,3 +26,19 @@ created: 2026-10-10
 - run_id: 2026-10-10T21:00Z/dv03
 - date: 2026-10-10
 - note: Checked the open Baranoff text as directed; it does not cover the essential/desirable/available classification (Bonga notes only; Baranoff and Rejda 12th ed. do not have it). Restating the question would mean rewriting it; stays in_review pending a maintainer decision.
+
+## [C-004] Retag checked; still in_review for D6
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv13
+- date: 2026-10-10
+- note: Retag to Insurance as a Risk Management Technique checked (topic and first tag only). The question tests the essential/desirable/available split, now deleted from that page under D6; stays in_review pending D6.
+
+## [C-005] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv13
+- date: 2026-10-10
+- status_set: in_review
+- checks_run: delta check after retag: only topic and a new first wiki_link changed since the dv03 pass (stem, options, key and explanation byte-identical); new tag target exists and covers the tested concept
+- note: Left in_review pending D6.

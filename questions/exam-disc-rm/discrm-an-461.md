@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ee83d4697e62b773e7b0e0eacc029397335459e09d3c4acf2376eddde7a806b7
-  sources: []
+  sources:
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06 expected value; median = 50% mark, sha256:b1b3f4d398fc20b80cf6d2c1861bf4bdf0a442a933224686daa102c72ecb18be — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-01-quantification-of-uncertainty-.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-461.md

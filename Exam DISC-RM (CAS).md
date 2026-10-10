@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f4ca8796d5344d0563db650973171af63ed22e11c49f6407c325002f64c82acf
+  content_hash: sha256:2bc20f38fd13a232a26c0cbc21bdf0ad11b32ef73bbcdd464fb2bf6c9e48dbda
   sources:
     - "The Institutes, CAS DISC RM – Risk Management and Insurance Operations Course Syllabus (© 2023), PDF pp.1-4, sha256:34fbee38024d3433de5d84c09138114c56edfb0336468dfefefdc78e23f67eac — https://www.casact.org/sites/default/files/2022-12/DISC_RM.pdf"
     - "CAS, CAS Data and Insurance Series Courses page, copy fetched 2026-10-10 (browser user agent; the cache fetcher got HTTP 504): 'Candidates taking the virtual online courses will have 100 minutes to complete 75 application-based multiple-choice questions'; Study Materials: 'Introduction to Data and Analytics (New!)', 'Risk Management and Insurance Operations (Previously Online Course 1)', 'Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation (Previously Online Course 2)', each linking its 2022-12 syllabus PDF; 'Each course itself contains learning objectives and all the educational material to meet these objectives and successfully complete the exam. The course fee includes one attempt at the exam.'; Textbook 'identical to the online course', Review Notes 'a condensed version of the textbook', Course Guide 'sample questions and answers', Flashcards — 'supplemental ... but are not required'; 'Register for CAS DISCs' links https://web.theinstitutes.org/casualty-actuarial-society, sha256:da8a31d8a4e331bb240d5924a56b3eb1f037469fc043f20151abbe63020ae947 — https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses"
@@ -73,7 +73,7 @@ The Institutes gives the topics no exam weights.
 > 6. Selecting [[Insurance Distribution Systems|Distribution Systems and Channels]]
 
 > [!example]- 8. The Underwriting Function
-> 1. [[Underwriting Process|Underwriting Activities]]
+> 1. [[Underwriting Authority|Underwriting Activities]]
 > 2. [[Underwriting Authority]]
 > 3. [[Underwriting Policy|Constraints in Establishing Underwriting Policy]]
 > 4. Implementing [[Underwriting Guidelines|Underwriting Policy]]

@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:49df6c2e97ccb4b10ca579577e9d33201f7c7b6557a009955241cd8863c26374
-  sources: []
+  sources:
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06 frequency, severity, probability sources, mode/median, measures that matter most, sha256:b1b3f4d398fc20b80cf6d2c1861bf4bdf0a442a933224686daa102c72ecb18be — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-01-quantification-of-uncertainty-.html"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06 range, variance, SD, CV, deviation as surprise, sha256:2cd18f66c1d1d9bc8162fb93bce73ddf75b766f3363ac06e3ec20e165d473773 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-02-measures-of-risk-putting-it-to.html"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s05 exposure unit (Galveston), sha256:4d894cf157c8f6b7a4c620f551f76e788a2b6fb98bf979d3cbe23c3f32071592 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s05-04-types-of-risks-risk-exposures.html"
+    - "NIST SP 800-30 Rev. 1, Guide for Conducting Risk Assessments (2012), §2.3 pp.6-11 (risk = f(likelihood, impact); likelihood over a time frame; impact = magnitude of harm), sha256:f214087f0bdb35932a28c16eb93932a33c67a6edfb5e6f1638866bd201c98e04 — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-30r1.pdf"
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.117-118 (PDF p.19) solvency vs performance measures, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Basic Risk Measures.md

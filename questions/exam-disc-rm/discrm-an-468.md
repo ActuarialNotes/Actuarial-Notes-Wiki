@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:325a27dfc82761e32ffedd08b949390b09e7c93caa00c88b7ceb18099e27bbd8
-  sources: []
+  sources:
+    - "Rittenberg & Martens, Enterprise Risk Management - Understanding and Communicating Risk Appetite (COSO, Jan 2012), pp.1, 6, 11 (appetite definition; tolerance = acceptable level of variation relative to a specific objective), sha256:9d2780c3dae839afe27d56adb9461066548b9ace9c64b46369baf778570d0768 — https://www.coso.org/_files/ugd/3059fc_b0013c9344764b0b8c30a7eb7e5c27c9.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-468.md

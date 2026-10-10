@@ -8,15 +8,15 @@ type: multiple-choice
 bloom: apply
 wiki_link:
   - Concepts/Insurance+as+a+Risk+Management+Technique
-  - Concepts/Workers+Compensation+Insurance
+  - Concepts/Workers+Compensation+Underwriting
 answer: "C"
 points: 1
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7417a94e56206de1912a5e827a407f1e128805b346e5a3078bca1372ceff5594
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:05f74f143306bff4aa0f35636fe4747b49e836975a88308b42fde0e32b7a70ef
   sources: []
   open_findings: 0
   open_critical: 0

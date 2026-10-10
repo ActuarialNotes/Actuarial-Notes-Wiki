@@ -12,12 +12,15 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fac0c202b02362cebbf6d506a04991761b496963819d461463a14462b4d8dfd2
-  sources: []
+  sources:
+    - "Ketchen & Short, Mastering Strategic Management v1.0 (Saylor Academy), §8.2 forward vertical integration, sha256:f6a1407e786ac1e77e2d41090c2c5a06b3f94f3563010f38e3d7908b64bfffa2 — https://saylordotorg.github.io/text_mastering-strategic-management/s12-02-vertical-integration-strategie.html"
+    - "Ketchen & Short, Mastering Strategic Management v1.0 (Saylor Academy), §8.1 market development, sha256:6516e306f6ae140850dc08c73756193be3c3ea3e0dbb99b6dfa393d4015a7aa2 — https://saylordotorg.github.io/text_mastering-strategic-management/s12-01-concentration-strategies.html"
+    - "Ketchen & Short, Mastering Strategic Management v1.0 (Saylor Academy), §8.4 retrenchment, sha256:82390b40686874d3ccff350533b7b6be3e947c02e52155ef38d0150f05566e09 — https://saylordotorg.github.io/text_mastering-strategic-management/s12-04-strategies-for-getting-smaller.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-450.md

@@ -11,12 +11,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:37095d1f4b73d373b99a292a5c998efa2d61a168f0673fb468e0de5ffbce3275
-  sources: []
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.1 pp.3-4 (PDF pp.22-23) objective vs subjective risk, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Spaulding, \"Subjective and Objective Risks\", thismatter.com (rank 3, corroborating Rejda), page, sha256:659df83373126ab2bcbc77f5c62f32ad63dc672422c9d5e5ddf8fc6cdf26343d — https://thismatter.com/money/insurance/risk.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-463.md

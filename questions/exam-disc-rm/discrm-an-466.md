@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a96a057aa3952367ab4009c1ae5fd4a52df1f78a50f4f0ecb94ba6afc0f7ec15
-  sources: []
+  sources:
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.105, 122-123 portfolio not sum; correlation, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Rittenberg & Martens, Enterprise Risk Management - Understanding and Communicating Risk Appetite (COSO, Jan 2012), pp.1, 6, 11 (appetite definition; tolerance = acceptable level of variation relative to a specific objective), sha256:9d2780c3dae839afe27d56adb9461066548b9ace9c64b46369baf778570d0768 — https://www.coso.org/_files/ugd/3059fc_b0013c9344764b0b8c30a7eb7e5c27c9.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-466.md

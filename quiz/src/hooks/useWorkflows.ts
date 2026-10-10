@@ -1,15 +1,19 @@
+import { useMemo } from 'react'
 import { create } from 'zustand'
 import {
   fromTemplate,
   newWorkflow,
   parseWorkflow,
+  resolverFor,
   type Workflow,
+  type WorkflowResolver,
   type WorkflowTemplate,
 } from '@/lib/workflow'
 
 /**
  * The reader's workflows (docs/workflow-builder.md): every one they have
- * built, and which is open. localStorage only, like Concept Craft's board —
+ * built, which is open, and which are in their **library** (`saved`) — the
+ * ones the starting screen lists, and the + menu offers as sub-workflows. localStorage only, like Concept Craft's board —
  * a workflow is a plan for a calculation, not a record anyone else needs —
  * and read back field by field (`parseWorkflow`), so a page always opens.
  *
@@ -77,6 +81,10 @@ interface WorkflowsState extends Saved {
   remove: (id: string) => void
   /** Change the open workflow. `change` is one of `lib/workflow.ts`'s reducers. */
   update: (change: (wf: Workflow, now: number) => Workflow) => void
+  /** Put a workflow in the library, or take it out. */
+  setSaved: (id: string, saved: boolean) => void
+  /** A template, copied into the library as a workflow of the reader's own, without opening it. */
+  saveTemplate: (template: WorkflowTemplate) => string
 }
 
 export const useWorkflows = create<WorkflowsState>((set, get) => {
@@ -101,6 +109,25 @@ export const useWorkflows = create<WorkflowsState>((set, get) => {
       const currentId = get().currentId === id ? workflows[0]?.id ?? null : get().currentId
       commit({ workflows, currentId })
     },
+    setSaved: (id, saved) => {
+      const { workflows, currentId } = get()
+      commit({
+        workflows: workflows.map(w => {
+          if (w.id !== id) return w
+          const next = { ...w, updatedAt: Date.now() }
+          if (saved) next.saved = true
+          else delete next.saved
+          return next
+        }),
+        currentId,
+      })
+    },
+    saveTemplate: template => {
+      const id = makeId()
+      const wf = { ...fromTemplate(template, id, Date.now()), saved: true }
+      commit({ workflows: [wf, ...get().workflows], currentId: get().currentId })
+      return id
+    },
     update: change => {
       const { workflows, currentId } = get()
       const at = workflows.findIndex(w => w.id === currentId)
@@ -111,6 +138,12 @@ export const useWorkflows = create<WorkflowsState>((set, get) => {
     },
   }
 })
+
+/** Finds a sub-workflow: one of the reader's workflows, or a template. */
+export function useWorkflowResolver(): WorkflowResolver {
+  const workflows = useWorkflows(s => s.workflows)
+  return useMemo(() => resolverFor(workflows), [workflows])
+}
 
 /** The open workflow, if any. */
 export function useCurrentWorkflow(): Workflow | null {

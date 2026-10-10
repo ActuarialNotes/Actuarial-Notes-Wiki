@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, ClipboardCopy, Copy, X } from 'lucide-react'
 import { connectorUrl } from '@/lib/aiConnector'
-import type { StepRun, Workflow } from '@/lib/workflow'
+import type { StepRun, Workflow, WorkflowResolver } from '@/lib/workflow'
 import { describeWorkflow } from '@/lib/workflowBrief'
 import { cn } from '@/lib/utils'
 import type { PanelLayout } from './WorkflowPanels'
@@ -20,16 +20,18 @@ export function WorkflowClaudePanel({
   layout,
   onGoal,
   onClose,
+  resolve,
 }: {
   workflow: Workflow
   runs: Map<string, StepRun>
+  resolve?: WorkflowResolver
   layout: PanelLayout
   onGoal: (goal: string) => void
   onClose: () => void
 }) {
   const [copied, setCopied] = useState<'brief' | 'url' | null>(null)
   const steps = workflow.nodes.length
-  const brief = describeWorkflow(workflow, runs)
+  const brief = describeWorkflow(workflow, runs, resolve)
   const url = connectorUrl()
 
   const copy = async (what: 'brief' | 'url', text: string) => {

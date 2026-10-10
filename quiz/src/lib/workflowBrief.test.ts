@@ -35,3 +35,26 @@ describe('the brief for Claude', () => {
     expect(describeWorkflow(wf, new Map())).toContain('AY 2020: 100, 150')
   })
 })
+
+describe('the brief, at more than one level', () => {
+  it('lists a sub-workflow’s own steps under it, each with what it runs on', async () => {
+    const { resolverFor, TEMPLATE_PREFIX } = await import('./workflow')
+    const wf = addStep(newWorkflow('h', 0, 'Host'), { kind: 'workflow', ref: TEMPLATE_PREFIX + 'bond-risk', label: 'Bond pricing and risk' }, 1).workflow
+    const resolve = resolverFor([])
+    const brief = describeWorkflow(wf, evaluateWorkflow(wf, resolve), resolve)
+    expect(brief).toContain('### 1. Bond pricing and risk — Workflow')
+    expect(brief).toContain('A sub-workflow of 5 steps, in run order:')
+    expect(brief).toMatch(/\n {2}\d\. Bond Price — Calculation \(`finance\.bond_price`\)\n {5}Current input:/)
+  })
+
+  it('carries an uploaded CSV whole, and says which columns fill which inputs', async () => {
+    const { CSV_DATA } = await import('./workflow')
+    const csv = { name: 'cpi.csv', columns: ['Quarter', 'Index'], rows: [['2022Q1', '100'], ['2022Q2', '101']] }
+    let wf = addStep(newWorkflow('w', 0), { kind: 'data', ref: CSV_DATA, csv }, 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_fit' }, 1, 'n1').workflow
+    const brief = describeWorkflow(wf, evaluateWorkflow(wf))
+    expect(brief).toContain('My data, uploaded as cpi.csv (2 rows):')
+    expect(brief).toContain('```csv\nQuarter,Index\n2022Q1,100\n2022Q2,101\n```')
+    expect(brief).toContain('Mapped into step 2 (Trend Fit): Points ← period: Quarter, value: Index')
+  })
+})

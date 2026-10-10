@@ -4,8 +4,13 @@ import { describe, expect, it } from 'vitest'
 import { toolById } from './tools'
 import { STEP, overlaps } from './workflowGrid'
 import {
+  CSV_DATA,
   CUSTOM_DATA,
   GRID_VERSION,
+  TEMPLATE_PREFIX,
+  canNest,
+  resolverFor,
+  withResolvedLabels,
   TEMPLATES,
   addStep,
   carriedTile,
@@ -257,5 +262,101 @@ describe('templates', () => {
     expect(wf.edges).toHaveLength(t.edges.length)
     for (const a of wf.nodes) for (const b of wf.nodes) if (a !== b) expect(overlaps(a, b), `${a.id} ${b.id}`).toBe(false)
     for (const [id, run] of evaluateWorkflow(wf)) expect(run.error, id).toBeNull()
+  })
+})
+
+describe('sub-workflows', () => {
+  /** A library workflow of one Trend Fit step, and a host that links it into a Trend Factor. */
+  function nested() {
+    let inner = addStep({ ...newWorkflow('inner', 0, 'Fit the trend'), saved: true }, { kind: 'tool', ref: 'ratemaking.trend_fit' }, 1).workflow
+    inner = { ...inner, goal: 'Fit it' }
+    let host = addStep(newWorkflow('host', 0), { kind: 'workflow', ref: 'inner', label: 'old name' }, 1).workflow
+    host = addStep(host, { kind: 'tool', ref: 'ratemaking.trend_factor' }, 1, 'n1').workflow
+    const resolve = resolverFor([inner, host])
+    return { inner, host, resolve }
+  }
+
+  it('hands a sub-workflow’s last calculations on along the engine’s hand-offs', () => {
+    const { host, resolve } = nested()
+    expect(edgeKind(host, host.edges[0], resolve)).toBe('handoff')
+    const runs = evaluateWorkflow(host, resolve)
+    const sub = runs.get('n1')!
+    expect(sub.inner?.workflow.id).toBe('inner')
+    expect(sub.exits).toHaveLength(1)
+    const factor = runs.get('n2')!
+    expect(factor.piped).toEqual([{ from: 'n1', fields: ['trend'] }])
+    expect(factor.input!.trend).toBe(sub.exits[0].values.trend)
+  })
+
+  it('takes what links into it in its first calculations', () => {
+    // A Price Index hands its change on to a Trend Fit — the sub-workflow's first step.
+    const { inner } = nested()
+    let host = addStep(newWorkflow('host2', 0), { kind: 'data', ref: 'data.price_index' }, 1).workflow
+    host = addStep(host, { kind: 'workflow', ref: 'inner' }, 1, 'n1').workflow
+    const resolve = resolverFor([inner, host])
+    expect(edgeKind(host, host.edges[0], resolve)).toBe('handoff')
+    const runs = evaluateWorkflow(host, resolve)
+    const sub = runs.get('n2')!
+    expect(sub.piped[0].from).toBe('n1')
+    expect(sub.piped[0].fields).toEqual(['Trend Fit: model', 'Trend Fit: per_year', 'Trend Fit: points'])
+    // The inner Trend Fit runs on the index's own periods.
+    const index = runs.get('n1')!.result!
+    const innerFit = sub.inner!.runs.get('n1')!
+    expect((innerFit.input!.points as { period: string }[]).map(p => p.period)).toEqual(index.values.periods)
+  })
+
+  it('runs a template as a sub-workflow', () => {
+    const host = addStep(newWorkflow('h', 0), { kind: 'workflow', ref: TEMPLATE_PREFIX + 'reserve-review' }, 1).workflow
+    const runs = evaluateWorkflow(host, resolverFor([]))
+    expect(runs.get('n1')!.exits.map(r => r.tool).sort()).toEqual(['reserving.bornhuetter_ferguson', 'reserving.chain_ladder'])
+  })
+
+  it('says when a sub-workflow is no longer in the library', () => {
+    const host = addStep(newWorkflow('h', 0), { kind: 'workflow', ref: 'gone' }, 1).workflow
+    expect(evaluateWorkflow(host, resolverFor([])).get('n1')!.error).toMatch(/no longer/)
+  })
+
+  it('never nests a workflow in itself, at any depth', () => {
+    const { inner, host, resolve } = nested()
+    expect(canNest(resolve, 'inner', 'inner')).toBe(false)
+    expect(canNest(resolve, 'inner', 'host')).toBe(false)
+    expect(canNest(resolve, 'host', 'inner')).toBe(true)
+    expect(canNest(resolverFor([inner, host]), 'inner', TEMPLATE_PREFIX + 'bond-risk')).toBe(true)
+  })
+
+  it('names a sub-workflow by its title now', () => {
+    const { host, resolve } = nested()
+    expect(withResolvedLabels(host, resolve).nodes[0].label).toBe('Fit the trend')
+    const same = withResolvedLabels(withResolvedLabels(host, resolve), resolve)
+    expect(withResolvedLabels(same, resolve)).toBe(same)
+  })
+})
+
+describe('a CSV in a workflow', () => {
+  const csv = { name: 'cpi.csv', columns: ['Quarter', 'Index'], rows: [['2022Q1', '100'], ['2022Q2', '101.5'], ['2022Q3', '103'], ['2022Q4', '104.2']] }
+
+  it('links its guessed columns into the next tool, and runs it on them', () => {
+    let wf = addStep(newWorkflow('w', 0), { kind: 'data', ref: CSV_DATA, csv }, 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_fit' }, 1, 'n1').workflow
+    expect(wf.edges[0].map).toEqual({ points: { kind: 'columns', columns: { period: 0, value: 1 } } })
+    expect(edgeKind(wf, wf.edges[0])).toBe('handoff')
+    const fit = evaluateWorkflow(wf).get('n2')!
+    expect(fit.error).toBeNull()
+    expect(fit.piped).toEqual([{ from: 'n1', fields: ['points'] }])
+    expect((fit.input!.points as { value: number }[]).map(p => p.value)).toEqual([100, 101.5, 103, 104.2])
+  })
+
+  it('is only a connection until a column is mapped', () => {
+    let wf = addStep(newWorkflow('w', 0), { kind: 'data', ref: CSV_DATA, csv }, 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'finance.annuity' }, 1, 'n1').workflow
+    expect(edgeKind(wf, wf.edges[0])).toBe('feeds')
+    expect(stepName(wf.nodes[0])).toBe('cpi.csv')
+  })
+
+  it('round-trips through storage, file, mapping and library flag', () => {
+    let wf = addStep({ ...newWorkflow('w', 0), saved: true }, { kind: 'data', ref: CSV_DATA, csv }, 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_fit' }, 1, 'n1').workflow
+    wf = addStep(wf, { kind: 'workflow', ref: TEMPLATE_PREFIX + 'bond-risk', label: 'Bonds' }, 1).workflow
+    expect(parseWorkflow(JSON.parse(JSON.stringify(wf)))).toEqual(wf)
   })
 })

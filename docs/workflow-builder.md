@@ -1,9 +1,11 @@
 # Workflow Builder
 
 `/tools/workflow`, opened from the row at the top of the Tools catalogue. A reader lays out
-an actuarial workflow — **data**, **calculations** and **concepts** as steps on a grid,
-joined by **directed connections** — watches it run live on the Actuarial Tools engine,
-and **runs it in Claude** by copying it as a brief for the Actuarial Notes connector.
+an actuarial workflow — **data** (published tables, or a **CSV** of their own),
+**calculations**, **concepts** and whole **sub-workflows** as steps on a grid, joined by
+**directed connections** — watches it run live on the Actuarial Tools engine, keeps the ones
+worth keeping in a **library**, and **runs it in Claude** by copying it as a brief for the
+Actuarial Notes connector.
 
 It is Concept Craft's board (docs/concept-craft.md) with the physics taken out. Concept
 Craft is a map to be discovered, so its cards float on a force simulation; a workflow is a
@@ -14,8 +16,9 @@ anywhere on an unbounded board.
 | --- | --- |
 | The model: steps, connections, edits, run order, live evaluation, templates | `quiz/src/lib/workflow.ts` |
 | The grid: snapping, the gutter between cards, placement, the line between two cards | `quiz/src/lib/workflowGrid.ts` |
+| An uploaded CSV: reading it, and mapping its columns onto a tool's inputs | `quiz/src/lib/workflowCsv.ts` |
 | The brief *Copy for Claude* writes | `quiz/src/lib/workflowBrief.ts` |
-| The reader's workflows (localStorage) | `quiz/src/hooks/useWorkflows.ts` |
+| The reader's workflows and library (localStorage), and the sub-workflow resolver | `quiz/src/hooks/useWorkflows.ts` |
 | The page | `quiz/src/pages/WorkflowBuilder.tsx` |
 | The board | `quiz/src/components/workflow/WorkflowBoard.tsx` |
 | The **+** menu | `quiz/src/components/workflow/WorkflowAddMenu.tsx` |
@@ -24,16 +27,17 @@ anywhere on an unbounded board.
 | A linked field, on the primary colour | `ToolCard`'s and `EditableTable`'s / `TriangleGrid`'s `linked` |
 | Shared with Concept Craft | `components/craft/CraftControls.tsx` (the map buttons), `lib/craftLayout.ts` (the camera), the `.craft-floor`, `.craft-drawer-in` / `.craft-sheet-in` classes, the concept popup |
 
-All three `lib/` modules are pure and tested (`workflow*.test.ts`); the flows are
+All four `lib/` modules are pure and tested (`workflow*.test.ts`); the flows are
 `e2e/workflow.spec.ts`.
 
 ## Steps
 
 | Kind | What it is | `ref` |
 | --- | --- | --- |
-| **Data** | A Data Sources tool (life table, price index, yield curve) — or the reader's **own data**, named and described or pasted in | the tool id, or `custom` |
+| **Data** | A Data Sources tool (life table, price index, yield curve), a **CSV** the reader uploaded, or their **own data** named and described or pasted in | the tool id, `csv`, or `custom` |
 | **Calculation** | Any other Actuarial Tool | the tool id (`reserving.chain_ladder`) |
 | **Concept** | A vault concept page: the method, definition or judgment a step rests on | the page name |
+| **Workflow** | A whole workflow as one step — one from the reader's library, or a template | the workflow's id, or `template:<id>` |
 
 A tool may be on the board more than once (Bornhuetter-Ferguson on two priors); a concept
 only once. A tool step stores only its **own** input — the fields the reader moved off their
@@ -120,6 +124,68 @@ the question it answers, the reader's note, what leads into it and out of it —
 fields it carries, a *feeds* connection with its note — and for a tool the input it currently
 runs on, its result, the judgments left at their defaults and its warnings. The reader's own
 data is included verbatim.
+
+## The library
+
+**Save** (the bookmark in the header) puts the open workflow in the reader's **library**
+(`Workflow.saved`); tapping it again takes it out. The library is what the **starting
+screen** — the board of an empty workflow — lists above the templates, each opening the
+workflow it names (an empty, unsaved draft is let go as it does), and what the + menu's
+*Workflow* page offers as sub-workflows. The title's menu lists the library and the drafts
+(workflows not saved, with steps on them) apart.
+
+## Sub-workflows
+
+A workflow from the library, or a template, goes on another workflow's board as **one step**
+(kind `workflow`), so a workflow can be built and read at whichever level of detail suits: a
+rate indication as one card in a pricing review, or opened up into its six steps.
+
+- **What links into it** goes into its **first calculations** — the ones nothing inside it
+  leads into (`sourceSteps`, `entrySteps`) — along the engine's hand-offs, as overrides on
+  those inner steps' inputs; **what it hands on** is its **last calculations'** results
+  (`sinkSteps`, `exitSpecs`; a sub-workflow inside a sub-workflow hands on through its own).
+  So `edgeKind` reads a line into or out of one as a link when any of those hand-offs exists.
+  A link only ever enters at a first step: a hand-off into a step inside, already fed from
+  within, would have two sources for one value.
+- `evaluateWorkflow(wf, resolve)` runs the sub-workflow whole on its own steps' inputs
+  (`StepRun.inner`), and its card shows its last calculation's headline figure (`StepRun.exits`),
+  or how many of its steps need input (`innerErrors`). Its panel lists its steps in run order
+  with their figures, and what links into it ("Trend Fit: points linked to cpi.csv").
+- **Open this workflow** goes into it, on the same board; the header shows the workflow it was
+  opened from, and tapping that goes back up. A **template** opens as a copy of the reader's
+  own, saved to their library, and the step is pointed at the copy — so what is changed inside
+  is what the step runs. A sub-workflow is resolved by id each time (`resolverFor`, over the
+  library and the templates), so editing a library workflow changes every board it is on, and
+  its card reads under its current title (`withResolvedLabels`).
+- **Never inside itself**: `canNest` refuses a workflow on its own board, or on the board of
+  any workflow it holds at any depth; the + menu greys such a workflow out. A sub-workflow
+  deleted from the library says so on its card. Evaluation stops nesting at six levels.
+
+## Your data, as a CSV
+
+The + menu's *Data* page takes a **CSV upload** (`parseCsv`: the header row, quoted cells,
+comma, semicolon or tab, up to 2,000 rows, 60 columns and 300 KB — a larger file says so
+rather than being cut). The step keeps the file as text, cell for cell, and its panel shows
+its columns, what each holds (`columnKind`: dates and periods, values, or text) and its first
+rows, with **Replace the file**.
+
+Connected to a calculation, the CSV is **linked** once its columns are mapped onto the tool's
+inputs, on the connection's panel (`CsvMapping`, one entry per field):
+
+- a **table** input (Trend Fit's points, On-Level Factors' rate changes, a cash-flow list…)
+  takes one CSV column per table column — the dates or periods into its text column, the
+  values into its number columns — and every row of the file becomes a row of the table;
+- a **triangle** input takes the whole file, origins down the first column and ages across the
+  header, when the file has that shape (`triangleShaped`);
+- a **date** or **number** input takes one cell: a column, and its last, first or n-th row.
+
+Connecting a CSV starts from a guess (`guessMapping`, in `link`): a table's columns by name
+first, then by kind; a triangle by shape; never a single cell, since which row is a judgment.
+The mapped values travel as the file's own text and the engine reads them as it reads anything
+typed, so a cell it can't read is named by the tool's own error. Nothing is computed from the
+file — a mapping only moves cells. On the step's card the filled fields wear the primary
+colour, and the note says "**Points** linked to **cpi.csv**". The brief for Claude carries the
+file whole (up to 200 rows) and what each connection maps.
 
 ## Templates
 

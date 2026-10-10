@@ -323,7 +323,14 @@ before touching that area**:
   link fills wear the primary colour on its embedded `ToolCard` (`linked`), the figure they came from
   wears it on the upstream card (`carriedTile`), and one tinted line says "**Annual trend** linked to
   **Trend Fit**". The **+** is a menu of pages (kind → area or exam → item). A tool step stores only
-  the fields moved off their defaults (`stepOwnInput`). **The app calls no model and holds no key**:
+  the fields moved off their defaults (`stepOwnInput`). **Save** puts a workflow in the reader's
+  **library** (`Workflow.saved`), which the starting screen lists above the templates; a library
+  workflow or a template goes on another board as one **sub-workflow** step, entered through its
+  first calculations and handing on its last ones' results (`entrySteps` / `exitSpecs`,
+  `evaluateWorkflow(wf, resolve)`, never nested in itself — `canNest`), and **Open** goes into it
+  with a way back up. A **CSV** upload is a data step whose columns a connection maps onto a tool's
+  table, triangle, date or number inputs (`lib/workflowCsv.ts`: `parseCsv`, `guessMapping`,
+  `csvInput` — cells moved, never computed on). **The app calls no model and holds no key**:
   *Run in Claude* copies the workflow as a brief for the MCP connector (`lib/workflowBrief.ts`) — an
   earlier in-browser deploy on the reader's own API key was removed as a security risk. All of
   `lib/workflow*.ts` is pure and tested; the flows are `e2e/workflow.spec.ts`. Read before touching
@@ -1233,8 +1240,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **215 test files /
-~4170 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **216 test files /
+~4200 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

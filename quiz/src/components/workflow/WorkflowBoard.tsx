@@ -1,12 +1,14 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
-import { BookOpen, Calculator, Database, type LucideIcon } from 'lucide-react'
+import { BookOpen, Calculator, Database, FileSpreadsheet, Workflow as WorkflowIcon, type LucideIcon } from 'lucide-react'
 import { fitView, toScreen, toWorld, zoomAt, type Insets, type Point, type View } from '@/lib/craftLayout'
 import { GRID, NODE, boxes, cellAt, cellCentre, edgeGeometry, type Cell } from '@/lib/workflowGrid'
 import {
+  CSV_DATA,
   KIND_LABEL,
   edgeKey,
   edgeKind,
   edgeLabel,
+  innerErrors,
   landingCell,
   stepName,
   type EdgeKind,
@@ -14,6 +16,7 @@ import {
   type StepRun,
   type Workflow,
   type WorkflowEdge,
+  type WorkflowResolver,
 } from '@/lib/workflow'
 import { formatValue } from '@/lib/tools'
 import { flashcardFoilClass } from '@/lib/flashcardFoil'
@@ -64,6 +67,8 @@ export interface WorkflowBoardProps {
    * the primary colour, as the linked field is on the open step's card.
    */
   marked: ReadonlyMap<string, number>
+  /** Finds a sub-workflow, so a line into or out of one knows whether it is a link. */
+  resolve?: WorkflowResolver
   insets: Insets
   onSelect: (id: string) => void
   onSelectEdge: (edge: WorkflowEdge) => void
@@ -80,12 +85,13 @@ const LABEL_ZOOM = 0.6
 /** How wide a line is to the touch, in world px. */
 const LINE_HIT = 14
 
-const KIND_ICON: Record<StepKind, LucideIcon> = { data: Database, tool: Calculator, concept: BookOpen }
+const KIND_ICON: Record<StepKind, LucideIcon> = { data: Database, tool: Calculator, concept: BookOpen, workflow: WorkflowIcon }
 /** Each kind's stripe down the card's left edge. */
 const KIND_TINT: Record<StepKind, string> = {
   data: 'hsl(199 89% 56%)',
   tool: 'hsl(var(--primary))',
   concept: 'hsl(38 92% 56%)',
+  workflow: 'hsl(262 83% 70%)',
 }
 const ACCENT = 'hsl(var(--primary))'
 
@@ -122,6 +128,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
     selectedEdge,
     linking,
     marked,
+    resolve,
     insets,
     onSelect,
     onSelectEdge,
@@ -425,7 +432,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
             const from = byId.get(e.from)
             const to = byId.get(e.to)
             if (!from || !to) return null
-            const kind = edgeKind(workflow, e)
+            const kind = edgeKind(workflow, e, resolve)
             const lit = isLitEdge(e)
             const { width, color, dash } = edgeStroke(kind, lit)
             const { d, end } = edgeGeometry(from, to)
@@ -474,7 +481,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
           const from = byId.get(e.from)
           const to = byId.get(e.to)
           if (!from || !to) return null
-          const kind = edgeKind(workflow, e)
+          const kind = edgeKind(workflow, e, resolve)
           const word = edgeLabel(kind)
           if (!word) return null
           const lit = isLitEdge(e)
@@ -511,12 +518,14 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
           const isSelected = selected === node.id
           const isLinking = linking === node.id
           const isTarget = linkTarget === node.id && linkTarget !== drawingLink?.id
-          const Icon = KIND_ICON[node.kind]
+          const Icon = node.ref === CSV_DATA ? FileSpreadsheet : KIND_ICON[node.kind]
           const run = runs.get(node.id)
           // A step the open one is linked to shows the figure it carries, on the link's colour.
           const markedTile = marked.get(node.id)
           const isMarked = markedTile !== undefined
-          const tile = run?.result?.tiles[markedTile !== undefined && markedTile >= 0 ? markedTile : 0]
+          const tile = run?.exits[0]?.tiles[markedTile !== undefined && markedTile >= 0 ? markedTile : 0]
+          const nested = node.kind === 'workflow'
+          const stuck = nested ? innerErrors(run) : 0
           const name = stepName(node)
           const concept = node.kind === 'concept'
           return (
@@ -552,6 +561,7 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
                   isTarget && 'scale-105',
                   isDragging && 'cursor-grabbing opacity-90 shadow-xl',
                 )}
+                style={nested ? { boxShadow: '4px 4px 0 -1px hsl(var(--card)), 4px 4px 0 0 hsl(var(--border)), var(--shadow-card)' } : undefined}
               >
                 <span className="absolute inset-y-0 left-0 w-1" style={{ background: KIND_TINT[node.kind] }} aria-hidden />
                 <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -560,7 +570,13 @@ export const WorkflowBoard = forwardRef<WorkflowBoardCommands, WorkflowBoardProp
                 </span>
                 <span className="line-clamp-2 text-[13px] font-semibold leading-tight">{name}</span>
                 {run?.error ? (
-                  <span className="truncate text-[11px] text-amber-500">Needs input</span>
+                  <span className="truncate text-[11px] text-amber-500">{nested ? run.error : 'Needs input'}</span>
+                ) : node.csv ? (
+                  <span className="truncate text-[11px] tabular-nums text-muted-foreground">
+                    {node.csv.rows.length} {node.csv.rows.length === 1 ? 'row' : 'rows'} · {node.csv.columns.length} columns
+                  </span>
+                ) : !tile && stuck > 0 ? (
+                  <span className="truncate text-[11px] text-amber-500">{stuck} {stuck === 1 ? 'step needs' : 'steps need'} input</span>
                 ) : tile ? (
                   <span className="truncate text-[11px] tabular-nums text-muted-foreground" data-testid="workflow-step-value">
                     {tile.symbol} ={' '}

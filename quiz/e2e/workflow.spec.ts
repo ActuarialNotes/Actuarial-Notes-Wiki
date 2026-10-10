@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Locator, type Page } from '@playwright/test'
 
 // The Workflow Builder (docs/workflow-builder.md): the way in from the Tools
 // catalogue onto an empty board, steps added through the + menu's pages, a
@@ -21,6 +21,19 @@ async function dragBetween(page: Page, from: Point, to: Point) {
 }
 
 const step = (page: Page, name: string) => page.locator('[data-workflow-step]').filter({ hasText: name })
+
+/** A box once the board's camera has stopped moving — it frames what is open. */
+async function restingBox(locator: Locator) {
+  let last = await locator.boundingBox()
+  for (let i = 0; i < 40; i++) {
+    await locator.page().waitForTimeout(60)
+    const next = await locator.boundingBox()
+    if (last && next && Math.abs(last.x - next.x) < 0.5 && Math.abs(last.y - next.y) < 0.5) return next
+    last = next
+  }
+  if (!last) throw new Error('not on the board')
+  return last
+}
 
 async function openTemplate(page: Page, id: string) {
   await page.goto('/tools/workflow')
@@ -166,4 +179,86 @@ test.describe('workflow builder', () => {
     expect(copied).toContain('`run_tool`')
     expect(copied).toContain('`get_concept`')
   })
+
+  test('saves a workflow to the library, and lists it on the starting screen', async ({ page }) => {
+    await openTemplate(page, 'reserve-review')
+    await page.getByTestId('workflow-save').click()
+    await expect(page.getByTestId('workflow-save')).toHaveAttribute('aria-pressed', 'true')
+
+    // A new, empty workflow opens on the starting screen: the library, then the templates.
+    await page.getByTestId('workflow-title').click()
+    await page.getByTestId('workflow-new').click()
+    await expect(page.getByTestId('workflow-empty')).toBeVisible()
+    const item = page.getByTestId('workflow-library-item')
+    await expect(item).toHaveCount(1)
+    await expect(item).toContainText('Reserve review')
+    await item.click()
+    await expect(page.getByTestId('workflow-tally')).toHaveText('5 steps · 4 connections')
+  })
+
+  test('adds a template as one step, opens it to edit, and comes back up', async ({ page }) => {
+    await page.goto('/tools/workflow')
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-workflows').click()
+    await page.locator('[data-testid="workflow-add-template"][data-ref="rate-indication"]').click()
+    const sub = page.locator('[data-workflow-step][data-kind="workflow"]')
+    await expect(sub).toHaveCount(1)
+    await expect(sub).toContainText('Rate indication')
+    // At one remove: the sub-workflow's figure is its last calculation's.
+    await expect(sub.getByTestId('workflow-step-value')).toContainText('ΔR')
+
+    await sub.click()
+    const panel = page.getByTestId('workflow-step-panel')
+    await expect(panel.getByTestId('workflow-inner-steps').locator('li')).toHaveCount(6)
+    await panel.getByTestId('workflow-open-sub').click()
+    // Inside it, at full detail — a copy of the reader's own, saved to the library.
+    await expect(page.getByTestId('workflow-tally')).toHaveText('6 steps · 5 connections')
+    await expect(page.getByTestId('workflow-save')).toHaveAttribute('aria-pressed', 'true')
+
+    await page.getByTestId('workflow-parent').click()
+    await expect(page.getByTestId('workflow-tally')).toHaveText('1 step · 0 connections')
+    await expect(page.locator('[data-workflow-step][data-kind="workflow"]')).toContainText('Rate indication')
+    // The workflow can't go inside itself: the copy is offered, the host isn't.
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-workflows').click()
+    await expect(page.getByTestId('workflow-add-library')).toHaveCount(1)
+  })
+
+  test('uploads a CSV and links its columns into a calculation', async ({ page }) => {
+    await page.goto('/tools/workflow')
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-data').click()
+    await page.getByTestId('workflow-csv-input').setInputFiles({
+      name: 'cpi.csv',
+      mimeType: 'text/csv',
+      buffer: Buffer.from('Quarter,Index\n2022Q1,100\n2022Q2,101.5\n2022Q3,103\n2022Q4,104.2\n'),
+    })
+    const csv = page.locator('[data-workflow-step]').filter({ hasText: 'cpi.csv' })
+    await expect(csv).toContainText('4 rows · 2 columns')
+
+    // A Trend Fit added after it is linked, its points filled from the file.
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-calc').click()
+    await page.getByTestId('workflow-add-area').filter({ hasText: 'Ratemaking' }).click()
+    await page.locator('[data-testid="workflow-add-tool"][data-ref="ratemaking.trend_fit"]').click()
+    await expect(page.locator('[data-testid="workflow-edge"][data-kind="handoff"]')).toHaveCount(1)
+    await step(page, 'Trend Fit').click()
+    const panel = page.getByTestId('workflow-step-panel')
+    await expect(panel.getByTestId('workflow-link-note')).toHaveText('Points linked to cpi.csv')
+    await expect(panel.getByLabel('Value, row 4')).toHaveValue(/104\.2/)
+
+    // The connection says which column fills what; unmapping the values unlinks it.
+    await page.keyboard.press('Escape')
+    await expect(panel).toHaveCount(0)
+    const port = await restingBox(csv.locator('..').getByTestId('workflow-port'))
+    const fit = await restingBox(step(page, 'Trend Fit'))
+    await page.mouse.click((port.x + port.width + fit.x) / 2, port.y + port.height / 2)
+    const edge = page.getByTestId('workflow-edge-panel')
+    await expect(edge.getByTestId('workflow-csv-map')).toBeVisible()
+    await expect(edge.getByTestId('workflow-map-points-value')).toHaveValue('1')
+    await edge.getByTestId('workflow-map-points-value').selectOption('-1')
+    await edge.getByTestId('workflow-map-points-period').selectOption('-1')
+    await expect(page.locator('[data-testid="workflow-edge"][data-kind="handoff"]')).toHaveCount(0)
+  })
 })
+

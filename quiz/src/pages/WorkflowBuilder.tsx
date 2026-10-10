@@ -5,7 +5,7 @@
 // the physics taken out.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ChevronDown, ChevronLeft, ClipboardCopy, Maximize, Plus, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
+import { Bookmark, BookmarkCheck, ChevronDown, ChevronLeft, ClipboardCopy, Maximize, Plus, Trash2, Workflow as WorkflowIcon, ZoomIn, ZoomOut } from 'lucide-react'
 import { backLabel, useBack } from '@/hooks/useBack'
 import { ClearButton, ControlGroup, MapButton } from '@/components/craft/CraftControls'
 import { WorkflowAddMenu, type ConceptShelf } from '@/components/workflow/WorkflowAddMenu'
@@ -13,6 +13,7 @@ import { WorkflowBoard, type WorkflowBoardCommands } from '@/components/workflow
 import { WorkflowClaudePanel } from '@/components/workflow/WorkflowClaudePanel'
 import { WorkflowLogo } from '@/components/workflow/WorkflowLogo'
 import { EdgePanel, StepPanel, type PanelLayout } from '@/components/workflow/WorkflowPanels'
+import { readCsvFile } from '@/lib/workflowCsv'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { useConceptLevels } from '@/hooks/useConceptLevels'
@@ -20,28 +21,33 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { usePageHead } from '@/hooks/usePageHead'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
-import { useCurrentWorkflow, useWorkflows } from '@/hooks/useWorkflows'
+import { useCurrentWorkflow, useWorkflowResolver, useWorkflows } from '@/hooks/useWorkflows'
 import { craftTopics } from '@/lib/conceptCraft'
 import { setWikiContentLookup } from '@/lib/github'
 import { setWikiIndexBundle } from '@/lib/wikiIndex'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import {
+  CSV_DATA,
   REFUSAL_TEXT,
   TEMPLATES,
+  TEMPLATE_PREFIX,
   addStep,
+  canNest,
   carriedTile,
-  connect,
   connectReason,
   disconnect,
   edgeKey,
   evaluateWorkflow,
+  link,
   moveStep,
   removeStep,
   runOrder,
   stepName,
   updateEdge,
   updateStep,
+  withResolvedLabels,
   type NewStep,
+  type WorkflowNode,
   type Workflow,
   type WorkflowEdge,
   type WorkflowTemplate,
@@ -122,7 +128,7 @@ export default function WorkflowBuilder() {
   )
 }
 
-function Builder({ workflow }: { workflow: Workflow }) {
+function Builder({ workflow: stored }: { workflow: Workflow }) {
   const isPhone = useIsMobile(1023)
   const { play } = useSoundEffects()
   const levels = useConceptLevels()
@@ -130,6 +136,17 @@ function Builder({ workflow }: { workflow: Workflow }) {
   const update = useWorkflows(s => s.update)
   const create = useWorkflows(s => s.create)
   const remove = useWorkflows(s => s.remove)
+  const openWorkflowById = useWorkflows(s => s.open)
+  const setSaved = useWorkflows(s => s.setSaved)
+  const saveTemplate = useWorkflows(s => s.saveTemplate)
+  const allWorkflows = useWorkflows(s => s.workflows)
+  const resolve = useWorkflowResolver()
+  // Sub-workflows read under what they are called now.
+  const workflow = useMemo(() => withResolvedLabels(stored, resolve), [stored, resolve])
+  // The sub-workflows gone into on the way down to this one — the way back up.
+  // Each step names where it came from and where it went, so a workflow opened
+  // any other way (the menu, a template) shows no way up it doesn't have.
+  const [trail, setTrail] = useState<{ from: string; to: string }[]>([])
 
   const boardRef = useRef<WorkflowBoardCommands>(null)
   const [panel, setPanel] = useState<Panel>(null)
@@ -140,7 +157,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
   const [announce, setAnnounce] = useState('')
 
   // Every calculation, run live: what each card shows and each panel opens on.
-  const runs = useMemo(() => evaluateWorkflow(workflow), [workflow])
+  const runs = useMemo(() => evaluateWorkflow(workflow, resolve), [workflow, resolve])
 
   // A workflow switched: nothing from the last one stays selected.
   useEffect(() => {
@@ -167,6 +184,10 @@ function Builder({ workflow }: { workflow: Workflow }) {
   // ── Adding, moving, connecting ───────────────────────────────────────────
   const after = cursor && workflow.nodes.some(n => n.id === cursor) ? cursor : null
   const add = (step: NewStep) => {
+    if (step.kind === 'workflow' && !canNest(resolve, workflow.id, step.ref)) {
+      say('That workflow holds this one already')
+      return
+    }
     let added = ''
     update((wf, now) => {
       const { workflow: next, id } = addStep(wf, step, now, after)
@@ -182,6 +203,58 @@ function Builder({ workflow }: { workflow: Workflow }) {
     window.setTimeout(() => boardRef.current?.reveal(added), 60)
   }
 
+  const uploadCsv = async (file: File) => {
+    setAddOpen(false)
+    const read = await readCsvFile(file)
+    if (!read.ok) {
+      say(read.error)
+      return
+    }
+    add({ kind: 'data', ref: CSV_DATA, csv: read.table })
+  }
+
+  // ── Library and sub-workflows ────────────────────────────────────────────
+  const library = useMemo(
+    () => allWorkflows.filter(w => w.saved && w.id !== workflow.id).map(w => ({ id: w.id, title: w.title, steps: w.nodes.length })),
+    [allWorkflows, workflow.id],
+  )
+  /** Open another workflow from the top: the library, the menu, a template. An empty draft is let go. */
+  const openTop = (id: string) => {
+    if (workflow.nodes.length === 0 && !workflow.saved && id !== workflow.id) remove(workflow.id)
+    setTrail([])
+    openWorkflowById(id)
+    window.setTimeout(() => boardRef.current?.fit(), 60)
+  }
+  /**
+   * Go into a sub-workflow, to work on it at full detail. A template is copied
+   * into the library first, and the step pointed at the copy, so what is
+   * changed inside is what the step runs.
+   */
+  const goInto = (node: WorkflowNode) => {
+    let ref = node.ref
+    if (ref.startsWith(TEMPLATE_PREFIX)) {
+      const template = TEMPLATES.find(t => TEMPLATE_PREFIX + t.id === ref)
+      if (!template) return
+      ref = saveTemplate(template)
+      update((wf, now) => ({ ...wf, updatedAt: now, nodes: wf.nodes.map(n => (n.id === node.id ? { ...n, ref } : n)) }))
+      say(`Saved a copy of ${template.title} to your library`)
+    } else if (!resolve(ref)) {
+      say('That workflow is no longer in your library')
+      return
+    }
+    setTrail(t => [...t, { from: workflow.id, to: ref }])
+    openWorkflowById(ref)
+    window.setTimeout(() => boardRef.current?.fit(), 60)
+  }
+  const step = trail[trail.length - 1]
+  const parent = step && step.to === workflow.id ? resolve(step.from) : undefined
+  const goUp = () => {
+    if (!parent) return
+    setTrail(t => t.slice(0, -1))
+    openWorkflowById(parent.id)
+    window.setTimeout(() => boardRef.current?.fit(), 60)
+  }
+
   // A card goes wherever it is dropped — beside another, if dropped on one.
   const onMove = (id: string, to: Cell) => update((wf, now) => moveStep(wf, id, to, now))
 
@@ -192,7 +265,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
       say(REFUSAL_TEXT[refusal])
       return
     }
-    update((wf, now) => connect(wf, from, to, now))
+    update((wf, now) => link(wf, from, to, now))
     play('correct')
     say(`${nameOf(from)} → ${nameOf(to)}`)
   }
@@ -250,7 +323,8 @@ function Builder({ workflow }: { workflow: Workflow }) {
 
   const startFrom = (t: WorkflowTemplate) => {
     // An empty workflow is replaced, not kept beside the template.
-    if (workflow.nodes.length === 0) remove(workflow.id)
+    if (workflow.nodes.length === 0 && !workflow.saved) remove(workflow.id)
+    setTrail([])
     create(t)
     play('collect')
     window.setTimeout(() => boardRef.current?.fit(), 60)
@@ -261,14 +335,14 @@ function Builder({ workflow }: { workflow: Workflow }) {
   const openEdge = panel?.kind === 'edge' ? workflow.edges.find(e => edgeKey(e) === panel.key) ?? null : null
   const forClaude = panel?.kind === 'claude'
   const panelOpen = !!openStep || !!openEdge || forClaude
-  const panelRem = openStep ? (openStep.kind !== 'concept' && openStep.ref !== 'custom' ? 30 : 22) : forClaude ? 26 : 22
+  const panelRem = openStep ? (openStep.kind === 'tool' || (openStep.kind === 'data' && openStep.ref !== 'custom') ? 30 : 22) : openEdge ? 26 : forClaude ? 26 : 22
   // The open step's links: each step it is linked to, and the figure it carries — marked on that card.
   const marked = useMemo(() => {
     const out = new Map<string, number>()
     const run = openStep ? runs.get(openStep.id) : undefined
     if (!run?.input) return out
     for (const p of run.piped) {
-      const upstream = runs.get(p.from)?.result
+      const upstream = runs.get(p.from)?.exits[0]
       out.set(p.from, upstream ? carriedTile(upstream, run.input, p.fields) : -1)
     }
     return out
@@ -281,7 +355,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
   const empty = workflow.nodes.length === 0
   const usedTools = useMemo(() => {
     const m = new Map<string, number>()
-    for (const n of workflow.nodes) if (n.kind !== 'concept') m.set(n.ref, (m.get(n.ref) ?? 0) + 1)
+    for (const n of workflow.nodes) if (n.kind === 'tool' || n.kind === 'data') m.set(n.ref, (m.get(n.ref) ?? 0) + 1)
     return m
   }, [workflow.nodes])
   const usedConcepts = useMemo(() => new Set(workflow.nodes.filter(n => n.kind === 'concept').map(n => n.ref.toLowerCase())), [workflow.nodes])
@@ -308,6 +382,9 @@ function Builder({ workflow }: { workflow: Workflow }) {
         select(id)
         boardRef.current?.reveal(id)
       }}
+      resolve={resolve}
+      onOpenWorkflow={goInto}
+      onNotice={say}
     />
   ) : openEdge ? (
     <EdgePanel
@@ -318,6 +395,8 @@ function Builder({ workflow }: { workflow: Workflow }) {
       layout={layout}
       onClose={() => setPanel(null)}
       onUpdate={note => update((wf, now) => updateEdge(wf, openEdge.from, openEdge.to, { note }, now))}
+      onUpdateMap={map => update((wf, now) => updateEdge(wf, openEdge.from, openEdge.to, { map }, now))}
+      resolve={resolve}
       onRemove={() => {
         update((wf, now) => disconnect(wf, openEdge.from, openEdge.to, now))
         setPanel(null)
@@ -331,6 +410,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
       layout={layout}
       onGoal={goal => update((wf, now) => ({ ...wf, goal, updatedAt: now }))}
       onClose={() => setPanel(null)}
+      resolve={resolve}
     />
   ) : null
 
@@ -343,6 +423,13 @@ function Builder({ workflow }: { workflow: Workflow }) {
           if (isPhone) useConceptPopup.getState().close()
         }}
         forClaude={forClaude}
+        parent={parent?.title ?? null}
+        onParent={goUp}
+        onToggleSaved={() => {
+          setSaved(workflow.id, !workflow.saved)
+          say(workflow.saved ? 'Taken out of your library' : 'Saved to your library')
+        }}
+        onOpen={openTop}
         onTemplate={startFrom}
       />
 
@@ -356,6 +443,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
           selectedEdge={openEdge ? edgeKey(openEdge) : null}
           linking={linking}
           marked={marked}
+          resolve={resolve}
           insets={insets}
           onSelect={select}
           onSelectEdge={selectEdge}
@@ -370,7 +458,7 @@ function Builder({ workflow }: { workflow: Workflow }) {
             <div className="pointer-events-auto flex w-full max-w-md flex-col items-center gap-4 text-center" data-testid="workflow-empty">
               <WorkflowLogo size="lg" />
               <div className="space-y-1.5">
-                <h2 className="text-lg font-semibold">Build a workflow</h2>
+                <h2 className="text-lg font-semibold">{parent ? 'An empty workflow' : 'Build a workflow'}</h2>
                 <p className="text-sm text-muted-foreground">
                   Add data, calculations and the concepts behind them, then drag from a step&rsquo;s dot to the next to say
                   what flows where. Calculations the engine can chain fill each other in as you go.
@@ -385,8 +473,28 @@ function Builder({ workflow }: { workflow: Workflow }) {
                 <Plus className="h-4 w-4" aria-hidden />
                 Add a step
               </button>
+              {library.length > 0 && (
+                <div className="w-full space-y-2 pt-2 text-left" data-testid="workflow-library">
+                  <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your library</p>
+                  <div className="max-h-56 overflow-y-auto rounded-xl bg-card shadow-[var(--shadow-card)]">
+                    {library.map((w, i) => (
+                      <button
+                        key={w.id}
+                        type="button"
+                        onClick={() => openTop(w.id)}
+                        data-testid="workflow-library-item"
+                        className={cn('flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent', i > 0 && 'border-t border-border/60')}
+                      >
+                        <WorkflowIcon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                        <span className="min-w-0 flex-1 truncate text-sm font-medium">{w.title}</span>
+                        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{w.steps} {w.steps === 1 ? 'step' : 'steps'}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="w-full space-y-2 pt-2 text-left">
-                <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Or start from</p>
+                <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Templates</p>
                 <div className="overflow-hidden rounded-xl bg-card shadow-[var(--shadow-card)]">
                   {TEMPLATES.map((t, i) => (
                     <button
@@ -455,6 +563,9 @@ function Builder({ workflow }: { workflow: Workflow }) {
                 usedTools={usedTools}
                 usedConcepts={usedConcepts}
                 after={after ? nameOf(after) : null}
+                library={library}
+                canNest={ref => canNest(resolve, workflow.id, ref)}
+                onUploadCsv={uploadCsv}
               />
             )}
           </div>
@@ -484,11 +595,21 @@ function Header({
   onClaude,
   forClaude = false,
   onTemplate,
+  parent = null,
+  onParent,
+  onToggleSaved,
+  onOpen,
 }: {
   workflow: Workflow | null
   onClaude: () => void
   forClaude?: boolean
   onTemplate?: (t: WorkflowTemplate) => void
+  /** The workflow this one was opened from, as a sub-workflow — the way back up. */
+  parent?: string | null
+  onParent?: () => void
+  onToggleSaved?: () => void
+  /** Open another workflow from the menu. */
+  onOpen?: (id: string) => void
 }) {
   const back = useBack({ to: '/tools', label: 'Tools' })
   const [menuOpen, setMenuOpen] = useState(false)
@@ -505,6 +626,18 @@ function Header({
         <ChevronLeft className="h-4 w-4" />
       </button>
       <WorkflowLogo size="sm" className="hidden sm:flex" />
+      {parent && onParent && (
+        <button
+          type="button"
+          onClick={onParent}
+          title={`Back up to ${parent}`}
+          className="hidden max-w-[10rem] shrink-0 items-center gap-1 truncate rounded-md px-1.5 py-1 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground sm:flex"
+          data-testid="workflow-parent"
+        >
+          <span className="truncate">{parent}</span>
+          <span aria-hidden>›</span>
+        </button>
+      )}
       <div className="relative min-w-0 flex-1">
         <button
           type="button"
@@ -525,10 +658,37 @@ function Header({
           </span>
           <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
         </button>
-        {menuOpen && workflow && onTemplate && (
-          <WorkflowMenu workflow={workflow} onTemplate={onTemplate} onClose={() => setMenuOpen(false)} />
+        {menuOpen && workflow && onTemplate && onOpen && (
+          <WorkflowMenu workflow={workflow} onTemplate={onTemplate} onOpen={onOpen} onClose={() => setMenuOpen(false)} />
         )}
       </div>
+      {parent && onParent && (
+        <button
+          type="button"
+          onClick={onParent}
+          aria-label={`Back up to ${parent}`}
+          className="shrink-0 rounded-full px-3 py-2 text-xs font-semibold ring-1 ring-border transition-colors hover:bg-accent sm:hidden"
+        >
+          Up
+        </button>
+      )}
+      {workflow && onToggleSaved && (
+        <button
+          type="button"
+          onClick={onToggleSaved}
+          aria-pressed={!!workflow.saved}
+          aria-label={workflow.saved ? 'In your library — tap to take it out' : 'Save to your library'}
+          title={workflow.saved ? 'In your library' : 'Save to your library'}
+          className={cn(
+            'flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            workflow.saved ? 'bg-primary/15 text-foreground ring-1 ring-primary/30' : 'bg-card text-foreground ring-1 ring-border hover:bg-accent',
+          )}
+          data-testid="workflow-save"
+        >
+          {workflow.saved ? <BookmarkCheck className="h-4 w-4" aria-hidden /> : <Bookmark className="h-4 w-4" aria-hidden />}
+          <span className="hidden md:inline">{workflow.saved ? 'In library' : 'Save'}</span>
+        </button>
+      )}
       <button
         type="button"
         onClick={onClaude}
@@ -549,9 +709,8 @@ function Header({
 }
 
 /** The workflow's own menu, off its title: rename it, open another, start one, delete it. */
-function WorkflowMenu({ workflow, onTemplate, onClose }: { workflow: Workflow; onTemplate: (t: WorkflowTemplate) => void; onClose: () => void }) {
+function WorkflowMenu({ workflow, onTemplate, onOpen, onClose }: { workflow: Workflow; onTemplate: (t: WorkflowTemplate) => void; onOpen: (id: string) => void; onClose: () => void }) {
   const workflows = useWorkflows(s => s.workflows)
-  const open = useWorkflows(s => s.open)
   const create = useWorkflows(s => s.create)
   const remove = useWorkflows(s => s.remove)
   const update = useWorkflows(s => s.update)
@@ -593,22 +752,28 @@ function WorkflowMenu({ workflow, onTemplate, onClose }: { workflow: Workflow; o
         />
       </label>
       <div className="min-h-0 flex-1 overflow-y-auto py-1 [scrollbar-width:thin]">
-        {workflows.length > 1 && (
-          <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your workflows</p>
-        )}
-        {workflows.length > 1 && workflows.map(w => (
-          <button
-            key={w.id}
-            type="button"
-            onClick={() => {
-              open(w.id)
-              onClose()
-            }}
-            className={cn(row, w.id === workflow.id && 'font-semibold')}
-          >
-            <span className="min-w-0 flex-1 truncate">{w.title}</span>
-            <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{w.nodes.length}</span>
-          </button>
+        {[
+          { title: 'Library', list: workflows.filter(w => w.saved) },
+          { title: 'Drafts', list: workflows.filter(w => !w.saved && (w.nodes.length > 0 || w.id === workflow.id)) },
+        ].map(group => group.list.length > 0 && (
+          <div key={group.title}>
+            <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.title}</p>
+            {group.list.map(w => (
+              <button
+                key={w.id}
+                type="button"
+                onClick={() => {
+                  onOpen(w.id)
+                  onClose()
+                }}
+                className={cn(row, w.id === workflow.id && 'font-semibold')}
+                data-testid="workflow-menu-item"
+              >
+                <span className="min-w-0 flex-1 truncate">{w.title}</span>
+                <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{w.nodes.length}</span>
+              </button>
+            ))}
+          </div>
         ))}
         <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">New</p>
         <button

@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { existsSync } from 'fs'
+import { existsSync, readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import {
   copySources,
+  extractSyllabusAssignments,
   isNumberedOutline,
   librarySearchUrl,
   parseResourceMeta,
@@ -64,6 +65,41 @@ ${OUTLINE}`
     expect(out).not.toContain('Cover.png')
     expect(out).toContain('- 1.1 Interest Accumulation')
     expect(out).not.toMatch(/^\s*1\. 1\.1 /m)
+  })
+})
+
+describe('extractSyllabusAssignments', () => {
+  const PAGE = `Lead paragraph.
+
+> [!info] On the syllabus
+> - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives B1–B4; Sections 1.1 and 2.2.
+> - [[Exam MAS-II (CAS)]]
+
+## Preface`
+
+  it('lifts the callout out as one assignment per exam', () => {
+    const { markdown, assignments } = extractSyllabusAssignments(PAGE)
+    expect(assignments).toEqual([
+      { exam: 'Exam MAS-I (CAS)', label: 'Exam MAS-I', detail: 'Objectives B1–B4; Sections 1.1 and 2.2.' },
+      { exam: 'Exam MAS-II (CAS)', label: 'Exam MAS-II (CAS)' },
+    ])
+    expect(markdown).toBe('Lead paragraph.\n\n## Preface')
+  })
+
+  it('leaves a callout it cannot read on the page', () => {
+    const odd = PAGE.replace('> - [[Exam MAS-II (CAS)]]', '> Some prose.')
+    expect(extractSyllabusAssignments(odd)).toEqual({ markdown: odd, assignments: [] })
+  })
+
+  it('reads every resource page in the vault', () => {
+    const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../Resources/Books')
+    for (const file of readdirSync(dir).filter(f => f.endsWith('.md'))) {
+      const raw = readFileSync(path.join(dir, file), 'utf8')
+      if (!raw.includes('[!info] On the syllabus')) continue
+      const { markdown, assignments } = extractSyllabusAssignments(raw)
+      expect(assignments.length, file).toBeGreaterThan(0)
+      expect(markdown, file).not.toContain('On the syllabus')
+    }
   })
 })
 

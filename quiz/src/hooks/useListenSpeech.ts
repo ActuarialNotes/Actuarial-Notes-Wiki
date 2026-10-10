@@ -2,9 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
 import { segmentsToSsml, type SpeechSegment } from '@/lib/listenTokens'
+import { segmentStartTime, tokenAt } from '@/lib/listenNarration'
+import type { RecordedVoice } from '@/hooks/useListenRecording'
 
 export type ListenStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'ended' | 'unsupported'
-export type ListenEngine = 'browser' | 'pro'
+export type ListenEngine = 'browser' | 'pro' | 'studio'
 
 export interface ListenSpeech {
   status: ListenStatus
@@ -61,11 +63,13 @@ function pickEnglishVoice(synth: SpeechSynthesis): SpeechSynthesisVoice | null {
 
 /**
  * Controller for the Listen view. Plays the given speech segments and reports
- * the token index currently being spoken. Pro users get Google Cloud TTS
- * (with SSML mark timepoints); everyone else (and any cloud failure) uses the
- * browser's Web Speech API with word-boundary highlighting.
+ * the token index currently being spoken. A concept with a recorded voice-over
+ * (`recorded`) plays that, the highlight following the audio's clock; otherwise
+ * Pro users get Google Cloud TTS (with SSML mark timepoints) and everyone else
+ * (and any failure of either) uses the browser's Web Speech API with
+ * word-boundary highlighting.
  */
-export function useListenSpeech(segments: SpeechSegment[], rate: number): ListenSpeech {
+export function useListenSpeech(segments: SpeechSegment[], rate: number, recorded: RecordedVoice | null = null): ListenSpeech {
   const { isPro } = useSubscription()
   const [status, setStatus] = useState<ListenStatus>('idle')
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
@@ -78,7 +82,11 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const isProRef = useRef(isPro)
   const activeIndexRef = useRef<number | null>(null)
+  const recordedRef = useRef(recorded)
+  const engineRef = useRef<ListenEngine>('browser')
+  const frameRef = useRef(0)
 
+  recordedRef.current = recorded
   segmentsRef.current = segments
   rateRef.current = rate
   isProRef.current = isPro
@@ -104,11 +112,14 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   }, [])
 
   const teardownAudio = useCallback(() => {
+    cancelAnimationFrame(frameRef.current)
     const audio = audioRef.current
     if (audio) {
       audio.onended = null
       audio.ontimeupdate = null
       audio.onerror = null
+      audio.onplay = null
+      audio.onpause = null
       audio.pause()
       audio.src = ''
       audioRef.current = null
@@ -153,6 +164,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
 
   const startBrowser = useCallback((runId: number, fromSeg: number) => {
     if (!synth) { setStatus('unsupported'); return }
+    engineRef.current = 'browser'
     setEngine('browser')
     setStatus('playing')
     speakSegment(fromSeg, runId)
@@ -199,6 +211,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   }, [teardownAudio, setActive])
 
   const startCloud = useCallback(async (runId: number, fromSeg: number) => {
+    engineRef.current = 'pro'
     setEngine('pro')
     setStatus('loading')
     try {
@@ -212,6 +225,64 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
     }
   }, [playCloudChunk, startBrowser, teardownAudio])
 
+  // --- Recorded voice-over path ---
+  // One audio file for the whole page; the highlight is read off its clock. The
+  // clock is polled every frame rather than taken from `timeupdate`, which
+  // fires about four times a second — slower than a short word.
+  const startRecorded = useCallback((runId: number, fromSeg: number, fallback: () => void) => {
+    const voice = recordedRef.current
+    if (!voice) { fallback(); return }
+    engineRef.current = 'studio'
+    setEngine('studio')
+    setStatus('loading')
+
+    const { marks } = voice.recording
+    const audio = new Audio(voice.audioUrl)
+    audioRef.current = audio
+    audio.preload = 'auto'
+    audio.defaultPlaybackRate = rateRef.current
+    audio.playbackRate = rateRef.current
+    audio.preservesPitch = true
+
+    const follow = () => {
+      if (runId !== runIdRef.current) return
+      const idx = tokenAt(marks, audio.currentTime)
+      if (idx != null) setActive(idx)
+      frameRef.current = requestAnimationFrame(follow)
+    }
+    audio.onplay = () => {
+      if (runId !== runIdRef.current) return
+      setStatus('playing')
+      cancelAnimationFrame(frameRef.current)
+      frameRef.current = requestAnimationFrame(follow)
+    }
+    audio.onpause = () => cancelAnimationFrame(frameRef.current)
+    audio.onended = () => {
+      if (runId !== runIdRef.current) return
+      cancelAnimationFrame(frameRef.current)
+      setActive(null)
+      setStatus('ended')
+    }
+    audio.onerror = () => {
+      if (runId !== runIdRef.current) return
+      console.warn('Listen: recorded voice failed to load, falling back to a live voice')
+      teardownAudio()
+      fallback()
+    }
+
+    const start = segmentStartTime(marks, voice.narration, fromSeg)
+    const go = () => {
+      if (runId !== runIdRef.current) return
+      if (start > 0) audio.currentTime = start
+      audio.play().catch(() => {
+        // Autoplay refused (no gesture yet): leave it paused on Play, as the live voices do.
+        if (runId === runIdRef.current) setStatus('paused')
+      })
+    }
+    if (audio.readyState >= 1) go()
+    else audio.addEventListener('loadedmetadata', go, { once: true })
+  }, [setActive, teardownAudio])
+
   // --- Public controls ---
   // Stop everything and (re)start playback from a given paragraph index.
   const begin = useCallback((fromSeg: number) => {
@@ -221,23 +292,29 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
     if (segs.length === 0) { setActive(null); setStatus('ended'); return }
     const clamped = Math.max(0, Math.min(fromSeg, segs.length - 1))
     setActive(segs[clamped].ranges[0]?.index ?? null)
-    if (isProRef.current) startCloud(runId, clamped)
-    else startBrowser(runId, clamped)
-  }, [hardStop, startCloud, startBrowser, setActive])
+    const live = () => (isProRef.current ? startCloud(runId, clamped) : startBrowser(runId, clamped))
+    if (recordedRef.current) startRecorded(runId, clamped, live)
+    else live()
+  }, [hardStop, startCloud, startBrowser, startRecorded, setActive])
 
   const play = useCallback(() => begin(0), [begin])
-  const restartCurrent = useCallback(() => begin(currentSegmentIndex()), [begin, currentSegmentIndex])
+  const restartCurrent = useCallback(() => {
+    // A recording changes speed in place; the live voices must replay the paragraph.
+    const audio = audioRef.current
+    if (engineRef.current === 'studio' && audio) { audio.playbackRate = rateRef.current; return }
+    begin(currentSegmentIndex())
+  }, [begin, currentSegmentIndex])
   const rewind = useCallback(() => begin(currentSegmentIndex() - 1), [begin, currentSegmentIndex])
   const skipForward = useCallback(() => begin(currentSegmentIndex() + 1), [begin, currentSegmentIndex])
 
   const pause = useCallback(() => {
-    if (engine === 'pro') audioRef.current?.pause()
+    if (engine !== 'browser') audioRef.current?.pause()
     else synth?.pause()
     setStatus('paused')
   }, [engine, synth])
 
   const resume = useCallback(() => {
-    if (engine === 'pro') void audioRef.current?.play()
+    if (engine !== 'browser') void audioRef.current?.play()
     else synth?.resume()
     setStatus('playing')
   }, [engine, synth])

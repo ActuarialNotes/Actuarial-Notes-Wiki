@@ -294,7 +294,7 @@ export function ConceptPagePanel({
         )}
         {content !== null && (
           listenView ? (
-            <ListenView markdown={content} />
+            <ListenView markdown={content} recordingFor={entry.kind === 'concept' ? entry.name : undefined} />
           ) : (
             <>
               {/* The concept's figure leads the page — see ConceptImageBanner. */}

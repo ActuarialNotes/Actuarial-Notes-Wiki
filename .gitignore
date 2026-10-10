@@ -11,3 +11,6 @@ __pycache__/
 *.pyc
 questions/exam-p-backup/
 .syllabus/*/source.pdf
+
+# Listen recordings: made by quiz/scripts/listen-recording.mjs, kept in object storage, never in git
+quiz/public/listen/

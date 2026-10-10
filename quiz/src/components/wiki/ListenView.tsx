@@ -3,18 +3,27 @@ import katex from 'katex'
 import { Loader2, Pause, Play, SkipBack, SkipForward, Sparkles, Volume2 } from 'lucide-react'
 import { buildListenContent, toSegments, type InlineToken, type ListenBlock } from '@/lib/listenTokens'
 import { useListenSpeech } from '@/hooks/useListenSpeech'
+import { useListenRecording } from '@/hooks/useListenRecording'
+import { listenSlug } from '@/lib/listenNarration'
 
 interface Props {
   markdown: string
+  /** The concept's name, which names its recorded voice-over (`public/listen/`). */
+  recordingFor?: string
 }
 
 const RATES = [0.75, 1, 1.25] as const
 
-export function ListenView({ markdown }: Props) {
+export function ListenView({ markdown, recordingFor }: Props) {
   const { blocks, tokens } = useMemo(() => buildListenContent(markdown), [markdown])
   const segments = useMemo(() => toSegments(blocks), [blocks])
   const [rate, setRate] = useState(1)
-  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent, skipForward } = useListenSpeech(segments, rate)
+  const recording = useListenRecording(recordingFor ? listenSlug(recordingFor) : undefined, segments)
+  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent, skipForward } = useListenSpeech(
+    segments,
+    rate,
+    recording.status === 'ready' ? recording : null,
+  )
   const containerRef = useRef<HTMLDivElement>(null)
   const didMountRef = useRef(false)
 
@@ -29,10 +38,14 @@ export function ListenView({ markdown }: Props) {
     return map
   }, [tokens])
 
-  // Auto-play from the top whenever the concept (its segments) changes.
+  // Auto-play from the top whenever the concept (its segments) changes — once
+  // we know whether it has a recorded voice-over, so the live voice never
+  // starts only to be swapped out.
+  const checking = recording.status === 'checking'
   useEffect(() => {
+    if (checking) return
     play()
-  }, [segments, play])
+  }, [segments, play, checking])
 
   // Changing speed continues from the current paragraph (Web Speech can't
   // re-rate a live utterance, so we replay the current one at the new speed).
@@ -115,7 +128,9 @@ export function ListenView({ markdown }: Props) {
           ))}
         </div>
         <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0">
-          {engine === 'pro'
+          {engine === 'studio'
+            ? <><Sparkles className="h-3 w-3" /> Studio voice</>
+            : engine === 'pro'
             ? <><Sparkles className="h-3 w-3" /> Pro voice</>
             : <><Volume2 className="h-3 w-3" /> Browser voice</>}
         </span>

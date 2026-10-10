@@ -23,6 +23,7 @@ verification:
 - **Policy year** earned premium comes from one cohort only, and is fully earned $24$ months after the policy year begins (for annual policies).
 - Earning is pro rata *by default*, but the pattern must match the exposure. Werner & Modlin note that an even earning pattern does not hold for lines such as warranty, or for lines with seasonal writings such as boat owners insurance, and actuaries specify other earning patterns for them from historical experience.
 - The premium the ratemaking analysis actually uses is historical earned premium after three successive adjustments, each addressing a different distortion: brought to the **current rate level** ([[On-Leveling]]) for rate changes during and after the experience period, **developed to ultimate** where it is still changing (incomplete policy years, premium awaiting audit), and **trended** for the change in average premium from shifts in the mix of business ([[Premium Trend]]).
+- **Statutory revenue recognition:** In a U.S. insurer's statutory statements, SSAP No. 53 recognizes premium as earned by the daily pro rata or monthly pro rata method, because the exposure under most property-casualty policies does not vary much over the term; where the period of risk differs significantly from the contract period, premium is earned in proportion to the protection provided. Revenue is recognized only as the underwriting earnings process is completed, which is the NAIC's recognition concept ([[Premium Accounting]]).
 
 ![[Media/Figures/Earned_Premium.svg|340]]
 
@@ -70,3 +71,12 @@ verification:
 > > \end{align*}$$
 > >
 > > Earned premium lags written premium by $\$3{,}000{,}000$ — exactly the growth in the unearned reserve, and exactly the amount by which written premium would overstate the denominator of the loss ratio.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The revenue recognition objective asks how much of a policy's premium is earned in a period. Expect a policy written partway through a year, possibly with a mid-term endorsement or cancellation, and a question asking for the earned premium in each calendar year.
+> - **Exam 5:** Ratemaking questions build calendar year and policy year earned premium for a book and bring it to current rate level.
+
+> [!warning]- Exam traps
+> - **Earned is not collected:** Premium earns with the passage of time, whether or not the insured has paid it.
+> - **Monthly pro rata assumes mid-month:** A one-year policy written in January is $23/24$ earned by December 31 under the monthly method, not $12/12$.
+> - **Calendar year mixes cohorts:** Calendar year earned premium includes the unearned premium carried in from the prior year's writings.

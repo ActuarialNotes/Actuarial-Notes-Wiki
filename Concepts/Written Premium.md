@@ -23,6 +23,7 @@ verification:
 - Written premium is the right measure for production, market share, commission (paid on writings) and for the **average written premium** series used in [[Premium Trend|premium trend]] analysis — trend is a written-level phenomenon, since it is driven by what is being sold today.
 - It is the *wrong* denominator for a [[Loss Ratio|loss ratio]]: losses in the period arise from coverage provided in the period, which is earned premium.
 - Written premium may still change after issuance — endorsements, cancellations and [[Premium Audit|audits]] all book additional or return premium into a later period, so "written premium" for a policy year keeps moving until the audits close.
+- **Statutory definition and types:** SSAP No. 53 defines written premium as the contractually determined amount charged to the policyholder for the policy's effective period, recorded on the effective date. An insurer's written premium is **direct** (its own policies), **assumed** (reinsurance it accepts) or **ceded** (reinsurance it buys, which reduces its written and earned premium), and **net** written premium is direct plus assumed less ceded ([[Premium Accounting]]).
 
 ![[Media/Figures/Written_Premium.svg|340]]
 
@@ -66,3 +67,12 @@ verification:
 > > The loss ratio did not improve at all — it is flat at $72\%$. The apparent improvement is entirely an artefact of $30\%$ written-premium growth outrunning $19\%$ earned-premium growth: losses emerge on *earned* exposure, so a fast-growing book always looks better on a written basis than it is.
 > >
 > > This is one of the standard data-reasonableness checks: any loss ratio quoted against written premium in a growing book should be recomputed before it is believed.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The objective on types of written premium asks how direct, assumed, ceded and net written premium relate, and when a transaction, such as an endorsement, an audit adjustment or premium paid before the effective date, counts as written premium.
+> - **Exam 5:** Written premium feeds premium trend and the bridge to earned premium through the change in the unearned premium reserve.
+
+> [!warning]- Exam traps
+> - **Net is after ceding:** Net written premium subtracts ceded premium from direct plus assumed; leaving out assumed business understates it.
+> - **Advance premium is not written:** Premium paid before the policy's effective date is a liability, not written premium, until coverage begins.
+> - **Written on the effective date:** Written premium is recorded when the policy takes effect, not when it is billed or collected.

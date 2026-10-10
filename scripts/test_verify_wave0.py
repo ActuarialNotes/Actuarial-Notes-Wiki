@@ -337,6 +337,23 @@ class BatchTests(TempVault):
         self.assertEqual((log_path.read_text(encoding="utf-8"), page_path.read_text(encoding="utf-8")), first)
         self.assertEqual(len(V.read_log(self.rels[0]).findings()), 1)
 
+    def test_a_pass_after_an_edit_and_a_sync_is_recorded_in_the_same_run(self) -> None:
+        """Edit a verified page, let the sync mark it stale (refreshing the
+        hash), then record the same pass again in the same run: that is a
+        re-check of new bytes, not a replay, and must verify the page."""
+        op = {"op": "pass", "path": self.rels[0], "status": "verified", "confidence": "high",
+              "source": ["CAS Exam 5 Fall 2019, Q1, sha256:ab — https://x/a.pdf"]}
+        self.batch([op], "--run-id", "2026-10-09T00:00Z/abcd")
+        page = self.root / self.rels[0]
+        edited = page.read_text(encoding="utf-8").replace("- B) 0.62", "- B) 0.620", 1)
+        self.assertNotEqual(edited, page.read_text(encoding="utf-8"))
+        block = V.parse_verification(edited)
+        block.update(status="stale", confidence=None, content_hash=V.content_hash(edited))
+        page.write_text(V.upsert_verification(edited, block), encoding="utf-8")
+        self.assertEqual(self.status(self.rels[0]), "stale")
+        self.batch([op], "--run-id", "2026-10-09T00:00Z/abcd")
+        self.assertEqual(self.status(self.rels[0]), "verified")
+
     def test_a_later_run_still_records_a_recurrence(self) -> None:
         ops = [{"op": "finding", "path": self.rels[0], "severity": "minor", "locus": "stem",
                 "claim": "Says 1,205.", "evidence": "The booklet prints 1,250."},

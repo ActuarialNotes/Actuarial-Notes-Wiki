@@ -312,11 +312,15 @@ def cmd_pass(args: argparse.Namespace) -> int:
         raise SystemExit("confidence is only meaningful on a verified page")
 
     # The same pass recorded twice in one run (a replayed batch) on unchanged
-    # bytes says nothing the first did: append nothing.
+    # bytes says nothing the first did: append nothing. A page whose status is
+    # no longer the one this pass sets has moved since — edited, then marked
+    # stale by `verify_check.py --sync`, which also refreshes the hash — so a
+    # pass on it is a re-check, not a replay.
     log = V.read_log(rel)
     current = V.content_hash(path.read_text(encoding="utf-8"))
     block_now = V.parse_verification(path.read_text(encoding="utf-8")) or {}
-    if args.run_id and log and block_now.get("content_hash") == current:
+    if (args.run_id and log and block_now.get("content_hash") == current
+            and block_now.get("status") == args.status):
         for e in reversed(log.entries):
             if e.entry_type == "comment" and e.fields.get("status_set"):
                 if (e.fields.get("run_id") == args.run_id

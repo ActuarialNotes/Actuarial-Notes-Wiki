@@ -61,7 +61,8 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
           q.wiki_link.some(link => linkMatchesConcept(link, conceptName))
         )
         setQuestions(filtered)
-        setSelectedIds(new Set(filtered.map(q => q.id)))
+        // Nothing starts picked — the reader chooses what to quiz on.
+        setSelectedIds(new Set())
       })
       .catch(err => {
         if (cancelled) return

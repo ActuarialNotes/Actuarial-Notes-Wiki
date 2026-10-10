@@ -48,8 +48,41 @@ export function toggleFacet(selection: FacetSelection, facet: QuestionFacet, val
   return { ...selection, [facet]: next }
 }
 
+/** Every level ticked narrows nothing, so it is the same as none chosen. */
+function narrowsDifficulty(chosen: ReadonlySet<string>): boolean {
+  return chosen.size > 0 && !DIFFICULTY_ORDER.every(level => chosen.has(level))
+}
+
 export function hasFacetFilters(selection: FacetSelection): boolean {
-  return QUESTION_FACETS.some(facet => selection[facet].size > 0)
+  return QUESTION_FACETS.some(facet =>
+    facet === 'difficulty' ? narrowsDifficulty(selection.difficulty) : selection[facet].size > 0,
+  )
+}
+
+/**
+ * The difficulty dropdown opens with every level ticked, and that resting state
+ * is the empty selection (nothing chosen matches everything) — so the ticks the
+ * reader sees and the set stored differ. This is the set the control shows.
+ */
+export function ticksFor(chosen: ReadonlySet<string>, levels: readonly string[]): ReadonlySet<string> {
+  return chosen.size === 0 ? new Set(levels) : chosen
+}
+
+/**
+ * The stored difficulty selection after the reader flips `value` in a control
+ * showing `ticksFor`: one level always stays ticked (the last can't be
+ * unticked), and every level ticked is stored as none chosen.
+ */
+export function toggleLevel(
+  chosen: ReadonlySet<string>,
+  value: string,
+  levels: readonly string[],
+): ReadonlySet<string> {
+  const next = new Set(ticksFor(chosen, levels))
+  if (next.has(value)) next.delete(value)
+  else next.add(value)
+  if (next.size === 0) return chosen
+  return levels.every(level => next.has(level)) ? new Set() : next
 }
 
 /**

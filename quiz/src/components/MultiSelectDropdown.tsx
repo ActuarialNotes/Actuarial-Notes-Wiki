@@ -34,6 +34,9 @@ interface MultiSelectDropdownProps {
   /** One choice at a time — a radio mark, and picking closes the menu. The
    *  Resources shelf's Vintage: an edition of the syllabus, never two. */
   single?: boolean
+  /** Everything ticked is this control's resting state (Difficulty opens with
+   *  all three levels on), so the pill stays unhighlighted until it narrows. */
+  allByDefault?: boolean
 }
 
 /** A pill-style button that opens a checkbox list for multi-selecting options
@@ -53,6 +56,7 @@ export function MultiSelectDropdown({
   surface = 'background',
   shape = 'tile',
   single: singleChoice = false,
+  allByDefault = false,
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -98,6 +102,7 @@ export function MultiSelectDropdown({
           ? `${label}: All`
           : `${label} (${selected.size})`
   const empty = options.length === 0
+  const highlighted = selected.size > 0 && !(allByDefault && selected.size === options.length)
 
   return (
     <div ref={ref} className="relative">
@@ -111,7 +116,7 @@ export function MultiSelectDropdown({
         className={`flex items-center text-sm font-medium transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${
           shape === 'pill' ? 'gap-1 rounded-full border px-3 py-1.5' : 'gap-2 rounded-lg px-4 py-2.5'
         } ${
-          selected.size > 0
+          highlighted
             ? `bg-primary/10 text-primary${shape === 'pill' ? ' border-primary/40' : ''}`
             : `${surface === 'card' ? 'bg-card' : 'bg-background'} enabled:hover:bg-accent`
         }`}

@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1589c76609559f0eaf354ede552c9d5bd6d76ab0a856ba585a8865dba83dfa30
+  content_hash: sha256:95fda82e0d1559e2d20c8d8888afaa0aecd41bc4457d39d600a755963e7f9465
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
   open_findings: 1
@@ -27,12 +27,12 @@ verification:
 ## Learning Objectives
 
 > [!example]- Methods {10–20%}
-> The candidate will understand how to apply/synthesize the methods and models used to value [[Pension Benefit|pension benefits]] for various purposes.
+> The candidate will understand how to apply/synthesize the methods and models used to value [[Pension Plan|pension benefits]] for various purposes.
 >
 > 1. Differentiate between the various purposes for valuing [[Pension Plan|pension plans]]
-> 2. Perform [[Periodic Valuation|periodic valuations]] of [[Going-Concern Valuation|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a variety of cost methods
-> 3. Analyze and communicate the pattern of [[Cost Recognition|cost recognition]] that arises under a variety of cost methods
-> 4. Analyze and communicate the impact on [[Cost Stability|cost stability]] of a variety of [[Asset Valuation Method|asset valuation]] methods
+> 2. Perform [[Going-Concern Valuation|periodic valuations]] of [[Going-Concern Valuation|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a variety of cost methods
+> 3. Analyze and communicate the pattern of [[Actuarial Cost Method|cost recognition]] that arises under a variety of cost methods
+> 4. Analyze and communicate the impact on [[Asset Valuation Method|cost stability]] of a variety of [[Asset Valuation Method|asset valuation]] methods
 >
 > **Readings:**
 > - RET201-100-25: Chapter 15 (Sections 1500 through 1515) of Canadian Pensions and Retirement Income Planning (remaining material is background only; legislative requirements will not be tested) (1a)
@@ -55,7 +55,7 @@ verification:
 > - e-Learning Module: Pension Projection (background only) (1a, 1b)
 
 > [!example]- Actuarial Assumptions {15–25%}
-> The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in [[Pension Valuation|pension valuations]]
+> The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions used in [[Pension Plan|pension valuations]]
 >
 > **Given a context, including valuations for specific purposes (funding, accounting, termination/windup) and for different types of plans (single employer, multi-employer, open, closed, public), the Candidate will be able to:**
 >
@@ -105,10 +105,10 @@ verification:
 > - Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (excluding Appendices) (3a)
 
 > [!example]- Retirement Plan Investment and Risk Management {10–20%}
-> The candidate will recognize and appropriately reflect the role of [[Investment Policy Statement|retirement plan investments]] in managing [[Plan Sponsor Risk|plan sponsor risk]] and make recommendations.
+> The candidate will recognize and appropriately reflect the role of [[Investment Policy Statement|retirement plan investments]] in managing [[Plan Sponsor|plan sponsor risk]] and make recommendations.
 >
 > 1. Evaluate the interaction of [[Investment Policy Statement|plan investments]] with various [[Valuation|valuation]] methods and assumptions
-> 2. Evaluate how factors including [[Cash Flow Requirement|cash flow requirements]], various [[Plan Design|plan designs]] and various [[Economic Environments Affect Setting Investment Strategy|economic environments affect setting investment strategy]]
+> 2. Evaluate how factors including [[Investment Policy Statement|cash flow requirements]], various [[Plan Design|plan designs]] and various [[Economic Environments Affect Setting Investment Strategy|economic environments affect setting investment strategy]]
 > 3. Describe strategies and techniques for [[Asset-liability|asset/liability]] management
 > 4. Provide advice and analysis to [[Plan Sponsor|plan sponsors]] regarding the mitigation of [[Market Risk|investment risks]]
 >
@@ -127,10 +127,10 @@ verification:
 > The candidate will understand the general principles applicable to the [[Funding|funding]] of [[Retirement Plan|retirement income plans]] and recommend a [[Funding Policy|funding policy]].
 >
 > 1. Describe the options available to [[Plan Sponsor|plan sponsors]] for [[Funding|funding]] their [[Retirement Plan|retirement plans]]
-> 2. Given a context, such as [[Insurance Regulation|regulatory environment]], [[Plan Asset Composition|plan asset composition]], [[Stakeholders' Interest|stakeholders’ interests]], sponsor goals, the candidate will be able to analyze and defend an appropriate [[Funding Policy|funding policy]] for various types of [[Retirement Plan|retirement income plans]], including:
->    - [[Single-employer Plan|Single-employer plans]]
+> 2. Given a context, such as [[Insurance Regulation|regulatory environment]], [[Asset Allocation|plan asset composition]], [[Funding Policy|stakeholders’ interests]], sponsor goals, the candidate will be able to analyze and defend an appropriate [[Funding Policy|funding policy]] for various types of [[Retirement Plan|retirement income plans]], including:
+>    - [[Multi-Employer Plan|Single-employer plans]]
 >    - [[Multi-Employer Plan|Multi-employer plans]]
->    - [[Government-sponsored Plan|Government-sponsored plans]]
+>    - [[Public Sector Pension Plan|Government-sponsored plans]]
 >
 > **Readings:**
 > - RET201-121-27: Introduction to Retirement Plan Funding (5a, 5b)

@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:90ed36042cce9ed9afbbb97aecb5fce398faf8427e5e48279d5a4aa7cf66daf9
+  content_hash: sha256:0ed9d17be3ae31159426e7342d3aa11f56c376e6aaf74de50b81ebdc59d8e644
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
@@ -27,14 +27,14 @@ verification:
 ## Learning Objectives
 
 > [!example]- Stochastic Reserving {15–25%}
-> The candidate will understand how to use [[Stochastic Loss Development|stochastic loss development]] models to estimate [[Reserve Variability|reserve variability]].
+> The candidate will understand how to use [[Stochastic Reserving|stochastic loss development]] models to estimate [[Unpaid Claim Distribution|reserve variability]].
 >
-> 1. Identify the assumptions underlying the [[Chain Ladder Estimation|chain ladder estimation]] method.
+> 1. Identify the assumptions underlying the [[Chain Ladder Assumptions|chain ladder estimation]] method.
 > 2. Test for the validity of these [[Assumption|assumptions]].
 > 3. Identify alternative models that should be considered depending on the results of the [[Test|tests]].
-> 4. Estimate the [[Standard Deviation|standard deviation]] of a [[Chain Ladder Estimator|chain ladder estimator]] of [[Unpaid Claims|unpaid claims]].
+> 4. Estimate the [[Standard Deviation|standard deviation]] of a [[Mack Chain Ladder Model|chain ladder estimator]] of [[Unpaid Claims|unpaid claims]].
 > 5. Apply a parametric model of [[Loss Development|loss development]].
-> 6. Estimate the [[Standard Deviation|standard deviation]] of a [[Parametric Estimator|parametric estimator]] of [[Unpaid Claims|unpaid claims]].
+> 6. Estimate the [[Standard Deviation|standard deviation]] of a [[Growth Curve|parametric estimator]] of [[Unpaid Claims|unpaid claims]].
 > 7. Assess whether a fitted model is acceptable given the [[Data|data]] being modeled.
 >
 > **Readings:**
@@ -96,14 +96,14 @@ verification:
 >     - Appendix E: Public Entity Self-Insurance Pool, sections E.3.1 & E.3.2
 
 > [!example]- Specialized Ratemaking Topics {25–35%}
-> The candidate will understand and be able to apply [[Ratemaking|ratemaking]] techniques for the following situations: [[Classification Ratemaking|classification ratemaking]], [[Deductible Rating|deductible options]], [[Increased Limit Option|increased limit options]], [[Claims Made Coverage|claims-made policies]] and [[Individual Risk Rating|individual risk rating]].
+> The candidate will understand and be able to apply [[Ratemaking|ratemaking]] techniques for the following situations: [[Classification Ratemaking|classification ratemaking]], [[Deductible Rating|deductible options]], [[Increased Limits|increased limit options]], [[Claims Made Coverage|claims-made policies]] and [[Individual Risk Rating|individual risk rating]].
 >
 > 1. Understand and apply [[Classification Ratemaking|classification ratemaking]] methods.
 > 2. Explain the issues and considerations regarding [[Classification Ratemaking|classification ratemaking]].
 > 3. Price for [[Deductible Rating|deductible options]] and [[Increased Limits|increased limits]].
-> 4. Develop rates for [[Claims-Made Contract|claims-made contracts]].
+> 4. Develop rates for [[Claims Made Coverage|claims-made contracts]].
 > 5. Understand and apply techniques for [[Individual Risk Rating|individual risk rating]].
-> 6. Estimate the [[Retrospective Premium Reserve|premium asset]] for retrospectively [[Rated Policy|rated policies]].
+> 6. Estimate the [[Retrospective Premium Reserve|premium asset]] for retrospectively [[Retrospective Rating|rated policies]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (6a, 6b)
@@ -131,7 +131,7 @@ verification:
 > 4. Understand the issues encountered when applying [[Loss Development|loss development]] methods to [[Reinsurance|reinsurance]].
 > 5. Calculate the price of a [[Reinsurance|reinsurance contract]].
 > 6. Apply an aggregate distribution model to a [[Reinsurance Pricing|reinsurance pricing]] scenario.
-> 7. Describe considerations involved in [[Pricing Property Catastrophe Cover|pricing property catastrophe covers]].
+> 7. Describe considerations involved in [[Reinsurance Pricing|pricing property catastrophe covers]].
 > 8. Understand the application of a [[Reinstatements|reinstatement premium]].
 > 9. Test for [[Risk Transfer|risk transfer]] in [[Reinsurance|reinsurance contracts]].
 >
@@ -148,7 +148,7 @@ verification:
 > - Risk Transfer Practice Note, AAA, Nov 2022, section 4 (7i)
 
 > [!example]- Catastrophe Models and Risk Loads {5–10%}
-> The candidate will understand [[Catastrophe Modeling Output|catastrophe modeling output]] and the allocation of [[Catastrophe Risk Load|catastrophe risk loads]] among accounts.
+> The candidate will understand [[Catastrophe Model Output|catastrophe modeling output]] and the allocation of [[Catastrophe Risk Load|catastrophe risk loads]] among accounts.
 >
 > 1. Understand the purpose and development of [[Catastrophe|catastrophe]] models.
 > 2. Understand the type of output produced by [[Catastrophe|catastrophe]] models.

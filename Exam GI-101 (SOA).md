@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:60585b57fe254680785da1f6104d3612ba71a77118c0c99658992d69eceb78f9
+  content_hash: sha256:8bbb4f4d201b9672253d5937305405cb256cc8fad4cb25e9dbb87c900d6aac7b
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GI-101, all pages, sha256:deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf"
   open_findings: 0
@@ -29,7 +29,7 @@ verification:
 > [!example]- Introduction and Key Considerations {0–6%}
 > The candidate will understand the key considerations for and key concepts underlying general [[Insurance|insurance]] actuarial work.
 >
-> 1. Identify sources of [[Professionalism Requirement|professionalism requirements]] and good practice
+> 1. Identify sources of [[Professional Responsibilities of the Actuary|professionalism requirements]] and good practice
 > 2. Demonstrate knowledge of [[Good|good]] practice related to actuarial work
 > 3. Use the actuarial control cycle to [[Frame|frame]] actuarial work
 > 4. Understand the components of [[Ultimate Loss|ultimate values]]
@@ -43,7 +43,7 @@ verification:
 > 12. Understand [[Credibility|credibility]] as used for actuarial work
 > 13. Explain the application of [[Trend|trend]] adjustments in actuarial work
 > 14. Illustrate the types of [[Trend|trend]] that influence the [[Future Cost|future cost]] of [[Claim|claims]], [[Expenses|expenses]], and [[Insurance Premium|premiums]]
-> 15. Identify the [[Actuary's Responsibility|actuary’s responsibilities]] with regards to documentation for actuarial work
+> 15. Identify the [[Actuarial Communication|actuary’s responsibilities]] with regards to documentation for actuarial work
 > 16. Describe the role of [[Professional Judgment|professional judgment]] in actuarial work
 >
 > **Readings:**
@@ -55,12 +55,12 @@ verification:
 > [!example]- Preparing Claims and Exposure Data for Actuarial Work {8–18%}
 > The candidate will demonstrate the ability to prepare [[Claim|claims]] and [[Exposure Base|exposure data]] for general insurance actuarial work.
 >
-> 1. Create [[Development Triangle|development triangles]] of [[Claim|claims]] and counts from detailed [[Claim Transaction Data|claim transaction data]]
+> 1. Create [[Development Triangle|development triangles]] of [[Claim|claims]] and counts from detailed [[Development Triangle|claim transaction data]]
 > 2. Describe the different types of [[Exposure Base|exposures]] used for conducting actuarial work
-> 3. Calculate written, earned, [[In-Force|in-force]] and [[Unearned Premium|unearned premiums]] for [[Portfolio|portfolios]] of policies with various policy terms and [[Earnings Pattern|earnings patterns]]
+> 3. Calculate written, earned, [[In-Force|in-force]] and [[Unearned Premium|unearned premiums]] for [[Portfolio|portfolios]] of policies with various policy terms and [[Earned Premium|earnings patterns]]
 > 4. Adjust historical [[Earned Premium|earned premiums]] to current [[On-Leveling|rate levels]]
-> 5. Understand types of changes [[Influencing Average Premium Level|influencing average premium levels]]
-> 6. Describe adjustments needed to estimate [[Ultimate Premium|ultimate premiums]]
+> 5. Understand types of changes [[Premium Trend|influencing average premium levels]]
+> 6. Describe adjustments needed to estimate [[Premium Audit|ultimate premiums]]
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, J. Friedland, 2nd Edition, 2022 (2a-f)
@@ -68,17 +68,17 @@ verification:
 >     - Appendices A through C and F (excluding Sections A.3.6, A.5)
 
 > [!example]- Projecting Ultimate Claims {42–56%}
-> The candidate will know how to calculate and evaluate [[Projected Ultimate Value|projected ultimate values]].
+> The candidate will know how to calculate and evaluate [[Ultimate Loss|projected ultimate values]].
 >
 > 1. Identify considerations for selecting methods for estimating [[Ultimate Loss|ultimate claims]]
-> 2. Identify and describe good practice related to projecting [[Ultimate Loss|ultimate claims]] with regard to [[Required Data|required data]], [[Large Loss|large claims]], and comparison of current to prior actuarial work
+> 2. Identify and describe good practice related to projecting [[Ultimate Loss|ultimate claims]] with regard to [[Reserving Data Organization|required data]], [[Large Loss|large claims]], and comparison of current to prior actuarial work
 > 3. Identify the types of [[Development Triangle|development triangles]] that can be used for [[Data Diagnostic Analysis|investigative testing]]
 > 4. Analyze [[Development Triangle|development triangles]] for [[Data Diagnostic Analysis|investigative testing]]
-> 5. Describe the key assumptions underlying the following projection methods: development method, [[Development-Based Frequency-Severity|development-based frequency-severity]] method, expected method, [[Bornhuetter Ferguson]] method, Benktander method, [[Cape Cod]] method, and [[Generalized Cape Cod]] method
+> 5. Describe the key assumptions underlying the following projection methods: development method, [[Frequency-Severity Method|development-based frequency-severity]] method, expected method, [[Bornhuetter Ferguson]] method, Benktander method, [[Cape Cod]] method, and [[Generalized Cape Cod Method|Generalized Cape Cod]] method
 > 6. Demonstrate knowledge of good practice related to projecting [[Ultimate Loss|ultimate values]]
 > 7. Estimate [[Ultimate Loss|ultimate values]] using the methods cited in (e)
 > 8. Describe the [[Berquist-Sherman Method|Berquist-Sherman data]] adjustments and their key assumptions
-> 9. Adjust [[Data Triangle|data triangles]] for changes in the adequacy of [[Case Estimate|case estimates]] or changes in the rate of [[Settlement Rate|claim settlement]] using a [[Berquist-Sherman Method|Berquist-Sherman data]] adjustment
+> 9. Adjust [[Development Triangle|data triangles]] for changes in the adequacy of [[Case Reserves|case estimates]] or changes in the rate of [[Settlement Rate|claim settlement]] using a [[Berquist-Sherman Method|Berquist-Sherman data]] adjustment
 > 10. Estimate [[Ultimate Loss|ultimate claims]] using the appropriate [[Berquist-Sherman Method|Berquist-Sherman data]] adjustments
 > 11. Explain the effect of [[Changing Conditions|changing conditions]] on the projection methods cited in (e)
 > 12. Assess the appropriateness of the projection methods cited in (e) in varying [[Circumstance|circumstances]]
@@ -105,7 +105,7 @@ verification:
 >
 > 1. Identify and describe the influences of [[Portfolio|portfolio]] changes on [[Frequency|claim frequency]] and [[Severity|severity]]
 > 2. Identify the time periods associated with [[Trend|trending]] procedures
-> 3. Analyze and evaluate [[Trend|trend]] for [[Claim|claims]] (including [[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]] (including [[Inflation-Sensitive Exposure|inflation-sensitive exposures]] and [[Insurance Premium|premiums]])
+> 3. Analyze and evaluate [[Trend|trend]] for [[Claim|claims]] (including [[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]] (including [[Exposure Trend|inflation-sensitive exposures]] and [[Insurance Premium|premiums]])
 > 4. Choose [[Trend|trend rates]] for [[Claim|claims]] ([[Frequency|frequency]], [[Severity|severity]], and [[Pure Premium|pure premium]]) and [[Exposure Base|exposures]]
 > 5. Calculate [[Trend|trend]] factors for [[Claim|claims]] and [[Exposure Base|exposures]]
 >
@@ -115,10 +115,10 @@ verification:
 >     - Appendices A through C, and F (excluding A.3.6, A.5)
 
 > [!example]- Ratemaking {10–22%}
-> The candidate will understand how to apply the [[Fundamental Ratemaking|fundamental ratemaking]] techniques of general insurance.
+> The candidate will understand how to apply the [[Ratemaking|fundamental ratemaking]] techniques of general insurance.
 >
-> 1. Quantify different types of [[Expenses|expenses]] required for [[Ratemaking|ratemaking]] including [[Expense Trending|expense trending]] procedures
-> 2. Incorporate [[Underwriting Profit|underwriting profit]] and [[Contingency Margin|contingency margins]] in [[Ratemaking|ratemaking]]
+> 1. Quantify different types of [[Expenses|expenses]] required for [[Ratemaking|ratemaking]] including [[Expense Provisions|expense trending]] procedures
+> 2. Incorporate [[Underwriting Profit|underwriting profit]] and [[Profit and Contingency Provision|contingency margins]] in [[Ratemaking|ratemaking]]
 > 3. Explain the requirements for loadings for catastrophes and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
 > 4. Calculate loadings for catastrophes and [[Large Loss|large claims]]
 > 5. Apply loadings for catastrophes and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
@@ -132,10 +132,10 @@ verification:
 >     - Appendices A through C, and F (excluding A.3.6, A.5)
 
 > [!example]- Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) {0%}
-> The candidate will be able to define an approach for actuarial analyses supporting [[Financial Reporting|financial reporting]] and [[Ratemaking|ratemaking]] analyses under various [[Real-Life Scenario|real-life scenarios]]. The candidates will be able to define [[Funding Requirement|funding requirements]] for self-insurers.
+> The candidate will be able to define an approach for actuarial analyses supporting [[Financial Reporting|financial reporting]] and [[Ratemaking|ratemaking]] analyses under various [[Real-Life Scenario|real-life scenarios]]. The candidates will be able to define [[Self-Insurance Funding|funding requirements]] for self-insurers.
 >
 > 1. Identify data and information [[Requirement|requirements]]
-> 2. [[Conduct Investigative Testing|Conduct investigative testing]]
+> 2. [[Data Diagnostic Analysis|Conduct investigative testing]]
 > 3. Choose projection methods to estimate [[Ultimate Loss|ultimate values]]
 > 4. Estimate [[Ultimate Loss|ultimate values]]
 > 5. Justify selections of [[Ultimate Loss|ultimate values]]

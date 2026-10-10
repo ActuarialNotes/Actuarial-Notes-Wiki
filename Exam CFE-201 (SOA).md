@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6fd120b7e8198fd6bd6220f56067b9af58c9c87fc253d4498121ffa6a3750069
+  content_hash: sha256:3da42448c0c347a80b6cc80f64878ba282435f8ee7f960b9297b5fed5bdc3bb5
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
   open_findings: 0
@@ -29,7 +29,7 @@ verification:
 > [!example]- Corporate Finance {15–29%}
 > The candidate will understand how an [[Organization Optimiz|organization optimizes]] its [[Corporate Finance|corporate finance]] decisions based on its business objectives.
 >
-> 1. Recommend an [[Optimal Capital Structure|optimal capital structure]] for given business objectives and the [[Competitive Environment|competitive environment]]
+> 1. Recommend an [[Capital Structure|optimal capital structure]] for given business objectives and the [[Porter's Five Forces|competitive environment]]
 > 2. Evaluate and apply the methods to determine the value of a business or project, including the impact of financial and non-financial factors on [[Capital Budgeting|capital budgeting]] and allocation decisions
 > 3. Assess the impact on value creation from [[Business Strategy|business strategies]] such as acquisitions, divestitures, or [[Reinsurance|reinsurance]]
 >
@@ -48,11 +48,11 @@ verification:
 > - CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla (1c)
 
 > [!example]- Financial Statement Analysis {21–35%}
-> The candidate will understand how to gauge an [[Organization's Performance|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
+> The candidate will understand how to gauge an [[Key Financial Measures|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
 >
-> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the interrelationships among them, in order to measure [[Key Financial Measures|financial performance]]
-> 2. Identify unusual or questionable accounting practices and analyze their impact on the quality of key [[Financial Metrics|financial metrics]]
-> 3. Analyze the impact of accounting policies related to taxes and [[Foreign Exchange Rate|foreign exchange rates]] on [[Financial Statements|financial statements]]
+> 1. Analyze the [[Financial Statements|reported financial statements]] and the interrelationships among them, in order to measure [[Key Financial Measures|financial performance]]
+> 2. Identify unusual or questionable accounting practices and analyze their impact on the quality of key [[Key Financial Measures|financial metrics]]
+> 3. Analyze the impact of accounting policies related to taxes and [[Foreign Currency Translation|foreign exchange rates]] on [[Financial Statements|financial statements]]
 >
 > **Readings:**
 > - International Financial Statement Analysis, Robinson et al, 4th Edition, 2020
@@ -64,11 +64,11 @@ verification:
 > - CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla (2a)
 
 > [!example]- Managerial Accounting and Operational Excellence {9–20%}
-> The candidate will understand how managerial accounting and [[Operational Process|operational processes]] impact an [[Organization's Performance|organization’s performance]] evaluation and [[Decision Making|decision making]].
+> The candidate will understand how managerial accounting and [[Operational Excellence|operational processes]] impact an [[Key Financial Measures|organization’s performance]] evaluation and [[Decision Making|decision making]].
 >
-> 1. Assess how managerial accounting can [[Drive Decision Making|drive decision making]] and impact behavior and performance evaluation
-> 2. Assess and recommend methods used to allocate costs and how these methods can [[Distort Perceived Performance|distort perceived performance]]
-> 3. Recommend [[Best Practice|best practices]] in [[Business Process|business processes]] to achieve [[Operational Excellence|operational excellence]]
+> 1. Assess how managerial accounting can [[Managerial Accounting|drive decision making]] and impact behavior and performance evaluation
+> 2. Assess and recommend methods used to allocate costs and how these methods can [[Managerial Accounting|distort perceived performance]]
+> 3. Recommend [[Best Practice|best practices]] in [[Operational Excellence|business processes]] to achieve [[Operational Excellence|operational excellence]]
 >
 > **Readings:**
 > - Accounting for Decision Making and Control, Zimmerman, Jerold, 10th Edition, 2020 (3a, 3b)

@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:117279f5b045326a12d2b3cceb36e55741de459474b7b98b1b1b1fd154a18852
+  content_hash: sha256:e5cd5d5f7762fb966b395365b5a008afe7b032ee2171fbe4746fa00a37ffa893
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-101, all pages, sha256:cd1c4219dd85ad017d63963b38a538c9b7271071f465ad2fd26449a11c940d74 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-101/2026-2027-inv-101-syllabus.pdf"
   open_findings: 0
@@ -29,12 +29,12 @@ verification:
 > [!example]- Asset Classes {25–40%}
 > The candidate will understand the nature and the variety of [[Asset Class|asset classes]] that can be used in constructing a [[Portfolio|portfolio]].
 >
-> 1. Demonstrate an understanding of [[Cash Flow|cash flow]] characteristics, underlying [[Risk|risks]] and roles in [[Portfolio|investment portfolios]] of various [[Fixed Income Investment|fixed income investments]], including:
+> 1. Demonstrate an understanding of [[Cash Flow|cash flow]] characteristics, underlying [[Risk|risks]] and roles in [[Portfolio|investment portfolios]] of various [[Fixed Income Portfolio|fixed income investments]], including:
 >    - Government and [[Corporate Bond|corporate bonds]]
 >    - [[Leveraged Loan|Leveraged loans]]
->    - Commercial and [[Residential Mortgage|residential mortgages]]
->    - [[Mortgage-backed Security|Mortgage-backed securities]]
->    - [[Structured Credit Product|Structured credit products]]
+>    - Commercial and [[Mortgage Loan|residential mortgages]]
+>    - [[Mortgage-Backed Security|Mortgage-backed securities]]
+>    - [[Structured Finance|Structured credit products]]
 >    - [[Private Debt|Private debt]]
 > 2. Demonstrate an understanding of the distinguishing investment characteristics and potential contributions to [[Portfolio|investment portfolios]] of various types of equity and alternative investments, including:
 >    - [[Public Equity]]
@@ -75,17 +75,17 @@ verification:
 > [!example]- Portfolio Construction, Management, and Assessment {35–50%}
 > The candidate will understand [[Portfolio|portfolio]] construction, management, and assessment.
 >
-> 1. Describe the [[Portfolio Management Process|portfolio management process]] and recommend [[Investment Governance Structure|investment governance structure]]
+> 1. Describe the [[Portfolio Management Process|portfolio management process]] and recommend [[Portfolio Management Process|investment governance structure]]
 > 2. Develop an [[Investment Policy Statement|investment policy statement]] ([[Investment Policy Statement|IPS]]) for an [[Institutional Investor|institutional investor]]
 > 3. Demonstrate an understanding of [[Portfolio|portfolio]] construction approaches and techniques for [[Asset Allocation|asset allocation]], passive/active management and [[Portfolio Rebalancing|rebalancing]]
-> 4. Recommend and justify an [[Optimal Portfolio Allocation|optimal portfolio allocation]] in a risk-return framework
-> 5. Demonstrate an understanding of common techniques to [[Enhance Yield|enhance yield]] and manage liquidity in [[Fixed Income Portfolio|fixed income portfolios]]
-> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Investment|fixed income investments]] under various strategies, including [[Passive Management|indexing]] and [[Immunization|target return]]
-> 7. Construct and manage [[Portfolio|portfolios]] of equity under various [[Passive Strategy|passive strategies]]
+> 4. Recommend and justify an [[Asset Allocation|optimal portfolio allocation]] in a risk-return framework
+> 5. Demonstrate an understanding of common techniques to [[Fixed Income Portfolio|enhance yield]] and manage liquidity in [[Fixed Income Portfolio|fixed income portfolios]]
+> 6. Construct and manage [[Portfolio|portfolios]] of [[Fixed Income Portfolio|fixed income investments]] under various strategies, including [[Passive Management|indexing]] and [[Immunization|target return]]
+> 7. Construct and manage [[Portfolio|portfolios]] of equity under various [[Passive Management|passive strategies]]
 > 8. Construct and manage [[Portfolio|portfolios]] of equity under various [[Active Management|active strategies]]
 > 9. Apply [[Performance Measurement|performance measurement]] methodologies to various [[Portfolio|asset portfolios]]
-> 10. Describe and assess techniques to select or build an [[Asset Benchmark|asset benchmark]] for a given investment objective
-> 11. Assess and interpret [[Performance Attribution Metrics|performance attribution metrics]] for a given asset or [[Portfolio|portfolio]]
+> 10. Describe and assess techniques to select or build an [[Performance Measurement|asset benchmark]] for a given investment objective
+> 11. Assess and interpret [[Performance Measurement|performance attribution metrics]] for a given asset or [[Portfolio|portfolio]]
 > 12. Understand how behavior [[Bias|bias]] can impact [[Portfolio|portfolio]] management
 >
 > **Readings:**

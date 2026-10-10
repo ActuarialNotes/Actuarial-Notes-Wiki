@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b81318b6d2af492487158fc5b09fddf9d041efcea522377e977b8008a550003a
+  content_hash: sha256:69e70dc64e83fbdf2685ade0238203f1e381fa04aaa7347fe77dd8ba60e03baa
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf"
   open_findings: 0
@@ -27,16 +27,16 @@ verification:
 ## Learning Objectives
 
 > [!example]- Types of Reinsurance Arrangements and Methods {30–40%}
-> The candidate will understand different types of traditional and [[Advanced Reinsurance Transaction|advanced reinsurance transactions]] for [[Life Insurance|life insurance]].
+> The candidate will understand different types of traditional and [[Reinsurance Transaction|advanced reinsurance transactions]] for [[Life Insurance|life insurance]].
 >
 > 1. Describe basic terms and concepts related to [[Reinsurance|reinsurance]]
 > 2. Understand the key aspects of automatic and [[Facultative Reinsurance|facultative reinsurance]]
 > 3. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Reinsurance Transaction|yearly renewable term]], [[Coinsurance|coinsurance]], [[Reinsurance Transaction|modified coinsurance]], and [[Reinsurance Transaction|funds withheld arrangements]]
 > 4. Explain reasons for using [[Inforce Reinsurance|inforce reinsurance]], approaches used for [[Inforce Reinsurance|inforce reinsurance]], and advantages and disadvantages of each approach
-> 5. Demonstrate knowledge of different forms of [[Reinsurance|reinsurance]] for different products; specifically, [[PRTs-longevity Swap|PRTs/longevity swaps]], [[Annuity Coinsurance|annuity coinsurance]], and [[Life Insurance Yearly Renewable Term|life insurance yearly renewable term]]
-> 6. Describe and evaluate types of [[Non-Proportional Reinsurance Transaction|non-proportional reinsurance transactions]]
+> 5. Demonstrate knowledge of different forms of [[Reinsurance|reinsurance]] for different products; specifically, [[PRTs-longevity Swap|PRTs/longevity swaps]], [[Reinsurance Transaction|annuity coinsurance]], and [[Reinsurance Transaction|life insurance yearly renewable term]]
+> 6. Describe and evaluate types of [[Types of Reinsurance|non-proportional reinsurance transactions]]
 > 7. Describe and evaluate types of [[Reinsurance Transaction|reinsurance transactions]] for [[Annuity Contract|annuity contracts]]
-> 8. Understand the role of [[Private Equity Involvement|private equity involvement]] in the [[Global Reinsurance Market|global reinsurance market]] and the use of [[Offshore Reinsurance|offshore reinsurance]]
+> 8. Understand the role of [[Private Equity-Backed Insurer|private equity involvement]] in the [[Global Reinsurance Market|global reinsurance market]] and the use of [[Offshore Reinsurance|offshore reinsurance]]
 >
 > **Readings:**
 > - CP341-100-25: The Essential Guide to Reinsurance (background only) (1a)
@@ -60,9 +60,9 @@ verification:
 > The candidate will understand the fundamentals of [[Risk Transfer|risk transfer]] between two [[Credit Risk|counterparties]].
 >
 > 1. Describe the elements within [[Treaty Reinsurance|reinsurance treaties]]
-> 2. Describe the elements and considerations of [[Risk Transfer|risk transfer]] between [[Credit Risk|counterparties]], and evaluate their impact on [[Reinsurance Agreement Provision|reinsurance agreement provisions]]
+> 2. Describe the elements and considerations of [[Risk Transfer|risk transfer]] between [[Credit Risk|counterparties]], and evaluate their impact on [[Life Reinsurance Treaty|reinsurance agreement provisions]]
 > 3. Explain the considerations and process of managing [[Solvency|insolvency]] of the ceding and assuming parties within a [[Reinsurance Transaction|reinsurance transaction]]
-> 4. Explain the types, uses, and functions of [[Captive Reinsurance Transaction|captive reinsurance transactions]]
+> 4. Explain the types, uses, and functions of [[Captive Reinsurance|captive reinsurance transactions]]
 >
 > **Readings:**
 > - Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015 (2a)
@@ -81,11 +81,11 @@ verification:
 > [!example]- Key Accounting and Regulatory Considerations {25–40%}
 > The candidate will understand [[Credit for Reinsurance|regulatory frameworks]] for [[Reinsurance Transaction|reinsurance transactions]] across US, Canadian, and [[Global Jurisdiction|global jurisdictions]].
 >
-> 1. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the US regulatory framework
-> 2. Describe and evaluate elements of [[Reinsurance Requirement|reinsurance requirements]] within the Canadian regulatory framework
-> 3. Understand [[GAAP|US GAAP]] and [[US Stat Requirement|US Stat requirements]] related to [[Reinsurance|reinsurance]]
-> 4. Understand [[IFRS]] and [[OSFI Requirement|OSFI requirements]] related to [[Reinsurance|reinsurance]]
-> 5. Understand key [[International Reinsurance Regulatory Framework|international reinsurance regulatory frameworks]], especially as they relate to the use of [[Offshore Reinsurance|offshore reinsurance]] and [[Private Equity Backed Reinsurer|private equity backed reinsurers]].
+> 1. Describe and evaluate elements of [[Credit for Reinsurance|reinsurance requirements]] within the US regulatory framework
+> 2. Describe and evaluate elements of [[Credit for Reinsurance|reinsurance requirements]] within the Canadian regulatory framework
+> 3. Understand [[GAAP|US GAAP]] and [[Statutory Accounting Principles|US Stat requirements]] related to [[Reinsurance|reinsurance]]
+> 4. Understand [[IFRS]] and [[Credit for Reinsurance|OSFI requirements]] related to [[Reinsurance|reinsurance]]
+> 5. Understand key [[Offshore Reinsurance|international reinsurance regulatory frameworks]], especially as they relate to the use of [[Offshore Reinsurance|offshore reinsurance]] and [[Private Equity-Backed Insurer|private equity backed reinsurers]].
 >
 > **Readings:**
 > - Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015
@@ -114,7 +114,7 @@ verification:
 >
 > 1. Describe features and considerations related to [[Reinsurance Administration|reinsurance administration]]
 > 2. Describe and evaluate concepts related to the management of [[Reinsurance|reinsurance]]
-> 3. Describe the concept of [[Reinsurance Counterparty Credit Risk|reinsurance counterparty credit risk]] and evaluate methods to reduce such [[Risk|risks]].
+> 3. Describe the concept of [[Reinsurance Credit Risk|reinsurance counterparty credit risk]] and evaluate methods to reduce such [[Risk|risks]].
 >
 > **Readings:**
 > - Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015 (4a)

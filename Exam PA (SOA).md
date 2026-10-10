@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:39bb3a927be509396d12ec69905174d7ec06da9d4858514d57661c89156e794c
+  content_hash: sha256:3b10a1031d5985c57866fac52421fb21309fa080aa667917dd61c665e102aca8
   sources:
     - "SOA, October 2026 syllabus PDF for PA, all pages, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
   open_findings: 0
@@ -39,7 +39,7 @@ The Predictive Analytics exam is administered as a three hour and thirty-minute 
 > [!example]- Predictive Analytics Problem Definition {10–20%}
 > The Candidate will be able to identify the business problem, how the available data relates to possible analyses, and use the information to propose an appropriate [[Modeling|modeling]] approach.
 >
-> 1. Assess whether descriptive, predictive, and [[Prescriptive Analytics|prescriptive analytics]] applies to a business problem.
+> 1. Assess whether descriptive, predictive, and [[Data Analytics|prescriptive analytics]] applies to a business problem.
 > 2. Describe the characteristics of [[Predictive Analytics|predictive modeling]] problems.
 > 3. Explain the concepts of [[Bias|bias]], [[Variance|variance]], model complexity, and the [[Bias-Variance Tradeoff|bias-variance trade-off]].
 > 4. Translate a [[Vague Question|vague question]] into one that can be analyzed with [[Statistics|statistics]] and [[Predictive Analytics|predictive analytics]] to solve a business problem.

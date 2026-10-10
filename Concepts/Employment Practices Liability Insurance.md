@@ -1,0 +1,71 @@
+---
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:54885f421d1598867a73f3db8cbb9486fb8613c4a4ad72bb41d3591f9aa76eea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Concepts/Employment Practices Liability Insurance.md
+---
+
+**Employment Practices Liability Insurance** (EPLI) covers an employer, and usually its directors, officers, managers and employees, against claims by employees, former employees and job applicants alleging a wrongful employment practice, such as discrimination, harassment, wrongful termination or retaliation. It fills a gap left by the [[Commercial General Liability|CGL]], which excludes employment-related practices, and by [[Workers Compensation Insurance|workers compensation]] and employers liability, which cover work-related injury rather than the employment relationship itself. Most EPLI is written on a [[Claims Made Coverage|claims-made]] basis with defense costs inside the limit.
+
+> $$X = I + E$$
+
+> $$\text{Paid} = \min\left((1 - c)\,(X - R)^+,\ L\right)$$
+
+> $$\text{Borne} = X - \text{Paid}$$
+
+- **Symbols:** $I$ is the indemnity, meaning the settlement or judgment, $E$ is the defense cost and $X$ is the covered loss. $R$ is the retention, $c$ is the insured's coinsurance share of loss above the retention, and $L$ is the limit, which defense costs erode.
+- **Covered practices:** The insuring agreement lists the wrongful acts it covers. They include wrongful termination, discrimination on a protected characteristic such as age, sex, race, religion or disability, sexual and workplace harassment, retaliation against an employee who complained or blew the whistle, wrongful discipline, failure to promote, and negligent evaluation.
+- **What counts as a claim:** A claim usually includes an administrative charge before a government agency, such as a charge of discrimination, as well as a lawsuit or a written demand. Defending the agency charge is often where the defense costs start, long before any suit is filed.
+- **Duty to defend:** Unlike many D&O forms, EPLI usually gives the insurer the [[Duty to Defend|duty to defend]] and the right to choose counsel, often from a panel of employment lawyers. A hammer clause, as in [[Professional Liability Insurance|professional liability]], may cap the insurer's payment if the employer refuses a settlement the insurer recommends.
+- **Exclusions:** Obligations under workers compensation, unemployment and disability benefit laws are excluded, as are benefit plan claims, which belong to [[Fiduciary Liability Insurance|fiduciary liability]]. Wage and hour claims, such as unpaid overtime, are usually excluded or covered only for defense under a sublimit. Costs of reinstating an employee or of complying with an accommodation order, and bodily injury other than emotional distress, are also excluded.
+- **Third-party EPL:** An endorsement extends the policy to discrimination or harassment by the insured's employees against customers, clients, patients or vendors. It matters to restaurants, retailers, hotels and health care providers, whose staff deal with the public every day.
+- **Why the line is volatile:** Losses depend on the employment laws in force, jury awards and economic conditions, since layoffs bring a wave of termination claims. Claims are frequent for large employers, so EPLI for them is often written over a large retention.
+
+> [!example]- A Wrongful Termination Settlement With a Retention and Coinsurance {Example}
+> A restaurant chain's EPLI policy has a \$1,000,000 aggregate limit with defense inside the limit, a \$50,000 retention and 10% coinsurance on all loss above the retention, defense costs included. A dismissed manager files an age discrimination charge and then a wrongful termination suit. Defense costs reach \$180,000 and the case settles for \$320,000. What does the insurer pay, and what does the chain bear?
+>
+> > [!answer]-
+> > The defense costs and the settlement are one loss, so the retention and the coinsurance apply to their total.
+> > $$
+> > \begin{align*}
+> > X &= 320{,}000 + 180{,}000 \\
+> > &= 500{,}000 \\
+> > \text{Paid} &= 0.90\,(500{,}000 - 50{,}000) \\
+> > &= 405{,}000 \\
+> > \text{Borne} &= 500{,}000 - 405{,}000 \\
+> > &= 95{,}000
+> > \end{align*}
+> > $$
+> > The chain bears the \$50,000 retention and \$45,000 of coinsurance. The insurer's payment is well within the limit, but \$180,000 of it went to defense, so the limit left for the rest of the policy year is \$595,000. Coinsurance keeps the employer sharing in every dollar of defense, which gives it a reason to settle early and to manage its employment practices.
+
+> [!example]- Separating an Excluded Wage Claim {Example}
+> A former employee's suit combines a sexual harassment claim with a claim for \$60,000 of unpaid overtime. The case settles for \$260,000, of which \$200,000 is allocated to the harassment claim and \$60,000 to the overtime. Defense costs are \$90,000, all of which the policy treats as covered. The policy excludes wage and hour claims, has a \$25,000 retention and no coinsurance. Find the insurer's payment and the employer's share.
+>
+> > [!answer]-
+> > Only the harassment settlement and the defense costs are covered loss.
+> > $$
+> > \begin{align*}
+> > X &= 200{,}000 + 90{,}000 \\
+> > &= 290{,}000 \\
+> > \text{Paid} &= 290{,}000 - 25{,}000 \\
+> > &= 265{,}000
+> > \end{align*}
+> > $$
+> > The employer pays the \$25,000 retention and the \$60,000 overtime itself, \$85,000 in all. Back pay is part of the harassment damages and covered, while the overtime is wages the employer owed under the law in any case, which is why the policy treats it as uninsurable.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** Questions ask what wrongful employment practices EPLI covers, why the CGL and workers compensation do not, who is an insured, and which exclusions apply. The applied version describes a claim and asks whether EPLI responds and how the retention, coinsurance and defense-inside-limits terms divide the loss.
+> - **Neighbouring lines:** Candidates should be able to tell an EPLI claim from a [[Directors and Officers Liability Insurance|D&O]] claim, a fiduciary claim over a benefit plan and a workers compensation claim for a workplace injury.
+
+> [!warning]- Exam traps
+> - **Defense inside the limit:** EPLI defense costs erode the limit, so the limit left after a long defense is smaller than the limit less the settlement. Treating defense as paid in addition, as under the CGL, overstates the remaining limit.
+> - **Coinsurance on defense too:** Where the coinsurance applies to loss above the retention, it applies to defense costs as well as the settlement. Applying it to the settlement alone understates the employer's share.
+> - **Applicants are claimants:** A job applicant who was not hired can bring a covered discrimination claim, even though they were never an employee.
+> - **Third-party claims need the endorsement:** Harassment of a customer by an employee is not covered by the basic employee-claims form. It is covered only if third-party EPL has been added.
+> - **Workplace injury is elsewhere:** A claim for physical injury at work goes to workers compensation and employers liability, not EPLI. EPLI pays emotional distress that flows from the employment practice, not bodily injury.

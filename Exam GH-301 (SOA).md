@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b076831d4f45601f4d334bb9ab89b309e3a403155df60b30927c0103d02820d8
+  content_hash: sha256:b80c918194c369b6e885b5b1a23e4a6a4c33e8202f694b13319d53e200630995
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-301, all pages, sha256:2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd — https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf"
   open_findings: 0
@@ -30,8 +30,8 @@ verification:
 > The candidate will understand how to evaluate the effectiveness of [[Provider Reimbursement|provider reimbursement]] methods from both a cost and [[Quality Viewpoint|quality viewpoint]].
 >
 > 1. Describe contracts between payers and [[Provider|providers]]
-> 2. Calculate [[Provider Payment|provider payments]] under various [[Provider Reimbursement|reimbursement]] methods
-> 3. Evaluate [[Standard Contracting|standard contracting]] methods from a cost-effective and [[Quality Perspective|quality perspective]]
+> 2. Calculate [[Provider Reimbursement|provider payments]] under various [[Provider Reimbursement|reimbursement]] methods
+> 3. Evaluate [[Provider Reimbursement|standard contracting]] methods from a cost-effective and [[Quality Perspective|quality perspective]]
 > 4. Evaluate [[Accountable Care Organization|accountable care organizations]] (ACO) and their impact on quality, [[Utilization|utilization]], and cost
 >
 > **Readings:**
@@ -51,12 +51,12 @@ verification:
 > - Surprises in the No Surprises Act: An Interview with Greg Fann (Part 2), Health Watch, Nov 2024 (1a, 1b)
 
 > [!example]- Disease Management {20–30%}
-> The candidate will understand how to evaluate [[Healthcare Intervention|healthcare intervention]] programs.
+> The candidate will understand how to evaluate [[Care Management Program|healthcare intervention]] programs.
 >
 > 1. Describe, compare, and evaluate [[Program|programs]]
-> 2. Estimate savings, [[Utilization Rate|utilization rate]] changes, and return on investment
+> 2. Estimate savings, [[Utilization|utilization rate]] changes, and return on investment
 > 3. Apply the actuarially adjusted historical control [[Methodology|methodology]]
-> 4. Calculate chronic and [[Non-Chronic Trend|non-chronic trends]] in a manner that [[Reflects Patient Risk|reflects patient risk]]
+> 4. Calculate chronic and [[Care Management Program|non-chronic trends]] in a manner that [[Health Risk Adjustment|reflects patient risk]]
 >
 > **Readings:**
 > - Managing and Evaluating Healthcare Intervention Programs, Duncan, Ian G., 2nd Edition, 2014
@@ -73,8 +73,8 @@ verification:
 > [!example]- Healthcare Risk Adjustment1 {15–25%}
 > The candidate will understand how to apply [[Risk|risk]] adjustment in actuarial work.
 >
-> 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], pricing, [[Claim|claims]], and [[Care Management Situation|care management situations]] (applications include [[Medicare]], [[Medicaid]], and [[ACA Product|ACA products]])
-> 2. Apply [[Risk|risk]] adjustment concepts to [[Normalize Population Claims Experience|normalize population claims experience]]
+> 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], pricing, [[Claim|claims]], and [[Care Management Program|care management situations]] (applications include [[Medicare]], [[Medicaid]], and [[Affordable Care Act|ACA products]])
+> 2. Apply [[Risk|risk]] adjustment concepts to [[Health Risk Adjustment|normalize population claims experience]]
 > 3. Apply applicable [[Best Practice|best practices]] in [[Risk|risk]] adjustment
 >
 > **Readings:**
@@ -97,24 +97,24 @@ verification:
 > The candidate will understand how to describe [[Medical Coding|medical coding]], sources of data, and [[Data Quality|data quality]].
 >
 > 1. Identify various medical terms, diseases, and treatment options relevant to [[Health|health]] actuarial work
-> 2. Identify and explain the use of [[Coding Set|coding sets]] used in health practice (CPT, ICD-10, DRG, [[Revenue Code|Revenue Codes]])
-> 3. Describe how [[Coding Set|coding sets]] change over time and evaluate the potential impact on actuarial analysis
-> 4. Evaluate impacts of changes in [[Coding Structure|coding structures]] on [[Provider Reimbursement|provider reimbursement]]
+> 2. Identify and explain the use of [[Medical Coding|coding sets]] used in health practice (CPT, ICD-10, DRG, [[Medical Coding|Revenue Codes]])
+> 3. Describe how [[Medical Coding|coding sets]] change over time and evaluate the potential impact on actuarial analysis
+> 4. Evaluate impacts of changes in [[Medical Coding|coding structures]] on [[Provider Reimbursement|provider reimbursement]]
 > 5. Describe and interpret [[Clinical Policy Bulletin|clinical policy bulletins]]
-> 6. Distinguish between public and [[Private Data|private data]]
+> 6. Distinguish between public and [[Healthcare Data|private data]]
 > 7. Evaluate types of study methods and identify the method used for a given [[Study|study]]
-> 8. Research a question using [[Multiple Data|multiple data]] sources
+> 8. Research a question using [[Healthcare Data|multiple data]] sources
 >
 > **Readings:**
 > - eLearning Module: FSA: Terminology and Analytical Use of Data for Healthcare Actuaries (4a-4h)
 
 > [!example]- Social Determinants of Health {5–15%}
-> The candidate will understand how to explain the [[Social Determinant|social determinants]] of health (SDOH) and their impact on [[Health Care Cost|health care costs]] and policy.
+> The candidate will understand how to explain the [[Social Determinants of Health|social determinants]] of health (SDOH) and their impact on [[Health Care System|health care costs]] and policy.
 >
-> 1. Explain the [[Social Determinant|social determinants]] of health and how they impact the cost of healthcare
+> 1. Explain the [[Social Determinants of Health|social determinants]] of health and how they impact the cost of healthcare
 > 2. Describe program design and economic techniques used to measure program [[Performance|performance]]
 > 3. Describe the current use of SDOH in [[Traditional Actuarial Practice|traditional actuarial practices]]
-> 4. Evaluate applications of [[SDOH Derived Statistics|SDOH derived statistics]] in actuarial models
+> 4. Evaluate applications of [[Social Determinants of Health|SDOH derived statistics]] in actuarial models
 >
 > **Readings:**
 > - GH301-108-25: Social Determinants of Health in the Work of Health Actuaries (5a-5d)
@@ -128,9 +128,9 @@ verification:
 > The candidate will understand how to apply the framework of [[Predictive Analytics|predictive analytics]] to [[Healthcare Data|healthcare data]] and business applications.
 >
 > 1. Describe common applications of [[Predictive Analytics|predictive analytics]] in [[Health Care|health care]]
-> 2. Differentiate between types of [[Risk Score|risk score]] models
-> 3. Describe [[Common Healthcare Data|common healthcare data]] sources for [[Predictive Analytics|predictive modelling]]
-> 4. Identify challenges specific to the use of [[Healthcare Claim|healthcare claims]] in model development
+> 2. Differentiate between types of [[Health Risk Adjustment|risk score]] models
+> 3. Describe [[Healthcare Data|common healthcare data]] sources for [[Predictive Analytics|predictive modelling]]
+> 4. Identify challenges specific to the use of [[Healthcare Data|healthcare claims]] in model development
 > 5. Describe ethical considerations for [[Actuary|actuaries]] in developing predictive models
 >
 > **Readings:**

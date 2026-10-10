@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e1496f3c218d6a2e3e9966fe842e91eb9d5e94a937ec3be23876d83de1a8ea1a
+  content_hash: sha256:46e6009b52903acdb35a56f3b0969822224e44a966aa431796f77dd4767eb9d9
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf"
   open_findings: 0
@@ -29,7 +29,7 @@ verification:
 > [!example]- U.S. Financial Reporting Requirements {50–60%}
 > The candidate will understand and apply U.S. [[Valuation Principle|valuation principles]] and methods applicable to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by U.S. [[Life Insurance Company|life insurance companies]].
 >
-> 1. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, requirements, and techniques and related under the [[Statutory Accounting Principles|US statutory]] framework, including the calculation of [[Principles-Based Reserving|principles-based reserves]] and [[Formulaic Reserve|formulaic reserves]]
+> 1. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, requirements, and techniques and related under the [[Statutory Accounting Principles|US statutory]] framework, including the calculation of [[Principles-Based Reserving|principles-based reserves]] and [[Commissioners Reserve Valuation Method|formulaic reserves]]
 > 2. Describe, apply and evaluate the appropriate [[Valuation|valuation]] methods, requirements, and techniques and related under the [[GAAP|US GAAP]] framework, including the calculation of [[Reserve|reserves]] and related items (e.g., DAC)
 >
 > **Readings:**
@@ -78,7 +78,7 @@ verification:
 > - ILA201-800-25: Theory of Risk Capital in Financial Firms (2d)
 
 > [!example]- Management and Evaluation of Life Insurance Risks {5–20%}
-> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of diversification, [[Crediting Rating Agency Framework|crediting rating agency frameworks]], and the assessment of [[Risk|risk]] management.
+> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of diversification, [[Rating Agency|crediting rating agency frameworks]], and the assessment of [[Risk|risk]] management.
 >
 > 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and offsets between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
 > 2. Understand the role and framework used by [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
@@ -97,7 +97,7 @@ verification:
 > 2. Recommend and justify changes to non-guaranteed elements and [[Policyholder Dividend|policyholder dividends]]
 > 3. Describe, evaluate, and apply the [[Economic Value|economic value creation]] framework
 > 4. Describe and apply the methods and principles of embedded value for an [[Embedded Value|insurance enterprise]]
-> 5. Describe and calculate [[Reserve|reserves]] under [[US Company Tax Rule|US Company Tax rules]]
+> 5. Describe and calculate [[Reserve|reserves]] under [[Life Insurance Company Taxation|US Company Tax rules]]
 >
 > **Readings:**
 > - Evolving Strategies to Improve Inforce Post-Level Term Profitability, Product Matters, Feb 2015, pp. 23-28 (4a)

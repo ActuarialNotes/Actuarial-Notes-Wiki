@@ -4,7 +4,7 @@ The concept pages the study guides link to that don't exist yet: found, ranked, 
 batches to write. **Status: Phase A (batches 1–7) done — 44 pages written, 7 targets aliased to
 existing pages, study guides re-rendered. Phase B reviewed and planned (§8) with one example
 page written; plan and example approved 2026-10-09. Phase B done (§9): 80 pages, 147 aliases,
-13 noise targets. Phase C plan and example approved 2026-10-09; Phase C done (§11): 69 pages, 160 aliases, 5 namesakes, 12 noise targets, `Total Risk` left. Next: Phase D (Tier 3), awaiting go-ahead.**
+13 noise targets. Phase C plan and example approved 2026-10-09; Phase C done (§11): 69 pages, 160 aliases, 5 namesakes, 12 noise targets, `Total Risk` left. Phase D done 2026-10-10 (§12–13): 170 pages, 310 aliases, 5 namesakes, 22 noise targets; every concept target resolves except `Total Risk`.**
 
 - Rerun the analysis: `python3 scripts/find_concept_gaps.py` (summary) ·
   `--update-plan` (refresh the generated half of this file) · `--json out.json` (everything) ·
@@ -198,6 +198,12 @@ From `.claude/skills/actuarial-concept-definitions/SKILL.md` and the best existi
 | 2026-10-09 | G3 | 7 | `6a35489` | General insurance finance, capital and ERM |
 | 2026-10-09 | aliases | — | `fc0ce1e` | 159 entries and 5 namesakes in `scripts/concept_aliases.json` |
 | 2026-10-09 | re-render | — | `0104db6` | 23 development guides; text identical, 279 link targets moved; one more alias |
+| 2026-10-10 | D triage | — | — | Phase D triaged (§12): 449 targets, 170 pages, 254 aliases, 22 skips, 1 left |
+| 2026-10-10 | noise | — | `4765856` | 22 reviewed non-concept targets classified as link noise |
+| 2026-10-10 | W01–W25 | 170 | `7fea6bf`…`4e479e2` | 25 groups, one commit each (DISC, ERM, GI, health, investments, life, retirement) |
+| 2026-10-10 | aliases | — | `54c20c6` | 305 entries and 5 namesakes in `scripts/concept_aliases.json` |
+| 2026-10-10 | re-render | — | `2c83a17` | 26 development guides; words identical, 322 link targets moved, 3 newly linked; re-recorded verified |
+| 2026-10-10 | aliases | — | `9284549` | 5 slash-phrase keys; four guides re-rendered and re-recorded |
 
 ## 7. Phase A record (2026-10-07)
 
@@ -917,6 +923,582 @@ approved example's 1,549.
 - `Canadian Institute of Actuaries (CIA)` is close to empty (25 words); several RET pages link it.
 - The existing `Shapley Value` page is written for SHAP; `Catastrophe Risk Load` links it for the game-theory definition.
 
+## 12. Phase D plan (2026-10-10)
+
+Phase D is Tier 3: the 441 single-link targets in pinned batches 50–109, plus the 8 Tier 1 and Tier 2 targets that
+main's phrase cutting created after Phase C (`Defined Benefit`, `Defined Contribution`, `Rated Policy`, `Total Risk`,
+`Actual Profit`, `Provider System`, `Prescriptive Analytics`, `Defined Contribution Pension Plan`). That is 449
+targets. Eight triage agents, one per domain, read each target in its objective sentence and checked it against the
+1,140 existing concept pages; I merged their results across domains. Approved by the request to implement Phase D
+with D2's alias rule (the linked spelling goes in the page's `aliases:` and in `scripts/concept_aliases.json`, then the
+development guides are re-rendered in their own commit).
+
+| Outcome | Targets | Pages |
+|---|---|---|
+| A new page under the target's own name | 121 | 121 new |
+| A new page under a better title; the target becomes its alias (D2) | 51 | 49 new |
+| Folded into another Phase D page; alias only | 60 | — |
+| An existing page already covers it; alias only | 194 | — |
+| Not a concept; skip (D3) | 22 | — |
+| Can't identify the concept; leave unresolved (`Total Risk`, as agreed in Phase C) | 1 | — |
+| **Total** | **449** | **170 new** |
+
+### 12.1 Judgment calls
+
+1. **The hand-written DISC guides get pages under their exact names** (47 targets: 21 DISC-IA, 15 DISC-RM, 11
+   DISC-DA), as in Phase C §10.1. Five of them overlap an existing page: `Actual Cash Value` (`Replacement Cost`),
+   `Terrorism Risk Insurance Program` (`Terrorism Insurance`), `Table Join` (`Relational Database`), `Period of
+   Restoration` (`Business Income Coverage`) and `SWOT Analysis` (`Porter's Five Forces`). Each was written to keep to
+   its own concept and to link the existing page rather than repeat it, since editing a verified hand-written guide
+   was out of scope.
+2. **Cross-domain merges.** `Indexed Annuity` serves INV-201 and ILA-101 (alias *Index-Linked Credit*). One
+   `Life Insurance Company Taxation` page serves ILA-201U, ILA-201I and GH-201C (*Taxable Income*, *Corporate
+   Taxation*, *US Company Tax Rule*). Four GI-302 and GI-201 targets point at DISC pages, whose briefs were widened to
+   serve them: *Cyber Risk* → `Cyber Insurance`, *Commercial Auto Insurance* and *ISO Commercial Automobile Policy* →
+   `Business Auto Coverage`, *International Business* → `International Insurance`.
+3. **Five namesakes** keep generic words exam-specific: `funding requirement` (GI-101 → `Self-Insurance Funding`,
+   elsewhere `Funding`), `life insurance reserve` (ILA-101 → `Commissioners Reserve Valuation Method`, elsewhere
+   `Policy Value`), `government regulation` and `reporting requirement` (RET-301 → `Canadian Pension Legislation`)
+   and `cap` (INV-201 → `Payoff`, elsewhere `Cap on Non-Pecuniary Damages`).
+4. **A few bare words from the ambiguous table are aliased** where the context is clear: `IAA`, `OTC` → `Derivative
+   Instrument`, `Lemma` → `Itō Calculus`, `Put` and `Floor` → `Payoff`, `Collar` → `Option Trading Strategy`. After the
+   re-render they land only on INV-201, plus FAM's "puts and calls", which means put options.
+5. **Aliases onto a page from another jurisdiction or line**, the trade-off Phases B and C accepted: *Signing
+   Actuary* → `Appointed Actuary Responsibilities`, *Premium Deficiency Reserve* → `Premium Deficiency`,
+   *Guaranty Association* → `Guaranty Funds`, *Reinsurance Counterparty Credit Risk* → `Reinsurance Credit Risk`,
+   *Market Conduct Compliance Activity* → `Market Conduct Regulation`, *Organizational Decision-Making* →
+   `Decision-Making` (a stub).
+6. **Skip 22 targets that name no concept** (list below); they join the hand-reviewed noise set.
+7. **Re-render 26 generated guides** after the alias table grows. Phase B/C precedent: words unchanged, each guide's
+   pass re-recorded as verified against its syllabus PDF.
+
+### 12.2 How it ran
+
+- 25 writing groups (W01–W25) of 6–9 pages, each sharing one reading's vocabulary, written by parallel agents to the
+  §4 template and the writer brief: worked numbers recomputed in Python, `verify_check.py --sync` (status
+  `unverified`), a template check (§4 shape, bold labels with colons, links that resolve) and a KaTeX render of
+  every formula through the app's own `normalizeVaultMath` + remark-math pipeline. One commit per group, listing the
+  facts its writer stated from memory.
+- Then one commit for the noise set, one for the alias table, one for the re-render, and a follow-up for slash
+  phrases.
+
+### 12.3 New pages by writing group (170)
+
+A name in *italics* after a page is a target (or a second spelling) that becomes its alias.
+
+**W01 — Specialty liability and commercial coverages** (DISC-IA, GI-201, GI-302) · 8 pages
+
+- `Directors and Officers Liability Insurance`
+- `Employment Practices Liability Insurance`
+- `Fiduciary Liability Insurance`
+- `Environmental Insurance`
+- `Aircraft Insurance`
+- `Cyber Insurance` ← *Cyber Risk*
+- `International Insurance` ← *International Business*
+- `Terrorism Risk Insurance Program`
+
+**W02 — Tort law for insurance professionals** (DISC-IA) · 6 pages
+
+- `Negligence`
+- `Premises Liability`
+- `Intentional Tort`
+- `Strict Liability`
+- `Products Liability`
+- `Compensatory Damages`
+
+**W03 — Policy concepts and personal-lines coverages** (DISC-IA) · 7 pages
+
+- `Insurable Risk`
+- `Actual Cash Value`
+- `Loss Settlement Provisions`
+- `Medical Payments Coverage`
+- `Health Insurance Plans`
+- `Common Policy Conditions`
+- `Blanket Insurance`
+
+**W04 — Commercial underwriting** (DISC-RM, GI-302) · 7 pages
+
+- `Underwriting Authority`
+- `Underwriting Policy`
+- `Period of Restoration`
+- `Premises and Operations Liability`
+- `Products and Completed Operations Liability`
+- `Commercial Crime Insurance`
+- `Business Auto Coverage` ← *Commercial Auto Insurance*, *ISO Commercial Automobile Policy*
+
+**W05 — Insurer operations, distribution and strategy** (DISC-RM) · 7 pages
+
+- `Organizational Resilience`
+- `Business Continuity Management`
+- `Insurer Goals and Constraints`
+- `Types of Insurers`
+- `Insurance Marketing`
+- `Insurance Distribution Systems`
+- `SWOT Analysis`
+
+**W06 — Data management and SQL** (DISC-DA) · 6 pages
+
+- `Table Join`
+- `Database Index`
+- `User-Defined Function`
+- `Data Mart`
+- `Structured Data`
+- `Data Preparation`
+
+**W07 — Data governance, ethics and digitization** (DISC-DA, DISC-RM) · 6 pages
+
+- `Data Documentation`
+- `Statistical Plan`
+- `Data Validation`
+- `Web Scraping`
+- `Data Ethics`
+- `Insurtech`
+
+**W08 — ERM risk identification and non-financial risk (CFE-101)** (CFE01) · 6 pages
+
+- `Emerging Risk`
+- `Key Risk Indicator` ← *Monitoring Mechanism*
+- `Compounding Risk`
+- `Contagion Risk` ← *Contagion-Related Risk*
+- `Non-Financial Risk`
+- `Internal Control` ← *Organizational Process*
+
+**W09 — Strategic management and decision-making (CP-311, CFE-101)** (CFE01, CP-311) · 6 pages
+
+- `External Environment` ← *Business Environment*, *Market Opportunity*
+- `Business-Level Strategy`
+- `Competitive Dynamics`
+- `Corporate-Level Strategy`
+- `Cognitive Bias` ← *Cognitive Biase*
+- `Decision Analysis` ← *Uncertain Condition*
+
+**W10 — Corporate finance, accounting and operations (CFE-201, CP-311)** (CFE-201, CP-311) · 6 pages
+
+- `Corporate Finance`
+- `Capital Budgeting`
+- `Mergers and Acquisitions` ← *External-inorganic Growth Strategy*
+- `Foreign Currency Translation` ← *Foreign Exchange Rate*
+- `Managerial Accounting` ← *Distort Perceived Performance*, *Drive Decision Making*
+- `Operational Excellence` ← *Business Process*, *Operational Process*
+
+**W11 — GI actuarial practice, reserving and reinsurance** (GI-201, GI-301, GI01) · 7 pages
+
+- `Generalized Cape Cod Method` ← *Generalized Cape Cod*
+- `Self-Insurance Funding` ← *Funding Requirement*
+- `Risk Transfer Testing`
+- `Catastrophe Model Output` ← *Catastrophe Modeling Output*
+- `Professional Judgment`
+- `International Actuarial Association` ← *Professionalism Principle*
+- `Behavioral Finance`
+
+**W12 — GI legal environment and U.S. coverages** (GI-201, GI-302) · 6 pages
+
+- `Insurance Law`
+- `Social Inflation` ← *Tort Trend*
+- `International Legal Environment`
+- `Transnational Tort Litigation` ← *Tort Law Environment*
+- `Employers Liability Insurance` ← *ISO WC*
+- `Specialty Insurance Coverage`
+
+**W13 — Health benefits products and pricing (GH-101, CP-321, GH-201C)** (CP-321, GH01) · 8 pages
+
+- `Medical Cost Trend` ← *Medical Cost Trend Experience*
+- `Pharmacy Benefit` ← *Prescription Drug*
+- `Product Development Process`
+- `Employee Benefit Plan` ← *Employee Benefit Strategy*
+- `Critical Illness Insurance` ← *Critical Illness*
+- `Medicare Supplement Insurance` ← *Medicare Supplement*
+- `Social Security Disability Insurance` ← *Social Security Disability Income Benefit*
+- `Long-Term Care Rate Increase` ← *Long Term Care Rate Increase*
+
+**W14 — Health analytics (GH-301, GH-201U)** (GH-201U, GH-301, GH01) · 8 pages
+
+- `Health Risk Adjustment` ← *Risk Score*, *Normalize Population Claims Experience*, *Reflects Patient Risk*, *Risk Assessment Mechanism*
+- `Care Management Program` ← *Healthcare Intervention*, *Care Management Situation*, *Non-Chronic Trend*
+- `Medical Coding` ← *Coding Set*, *Coding Structure*, *Revenue Code*
+- `Clinical Policy Bulletin`
+- `Healthcare Data` ← *Healthcare Claim*, *Private Data*, *Multiple Data*, *Common Healthcare Data*
+- `Accountable Care Organization`
+- `Social Determinants of Health` ← *Social Determinant*, *SDOH Derived Statistics*
+- `Affordable Care Act` ← *ACA Product*
+
+**W15 — Derivative instruments and strategies** (INV-201) · 7 pages
+
+- `Derivative Instrument`
+- `Central Clearing` ← *Derivatives Trading*
+- `Daily Settlement` ← *Daily Settle*, *Daily Margin Variation*
+- `Option Trading Strategy` ← *Derivatives Strategy*, *Call Spread*, *Put Spread*, *Butterfly Spread*, *Collar*, *Strangle*
+- `Exotic Option` ← *Asian Option*
+- `Swaption`
+- `Option Greeks` ← *Cross Greek*
+
+**W16 — Stochastic calculus and valuation theory** (INV-201) · 6 pages
+
+- `Itō Calculus` ← *Stochastic Calculus Theory*, *Isometry*
+- `Stochastic Differential Equation`
+- `Martingale`
+- `Girsanov's Theorem`
+- `Numeraire`
+- `Arrow-Debreu Security` ← *Arrow-Debreau Security*, *Incomplete Market*
+
+**W17 — Volatility, numerical methods and index-linked products** (CP-312, INV-201) · 7 pages
+
+- `Euler-Maruyama Discretization` ← *Numerical Discretization*, *Transition Density*
+- `Model Calibration` ← *Observed Price*, *Traded Security*
+- `Volatility Smile` ← *Modeling Smile*, *Local Volatility*
+- `Stochastic Volatility`
+- `Indexed Annuity` ← *Index-Linked Credit*
+- `Structured Product`
+- `Target Volatility Fund` ← *Fund Performance*
+
+**W18 — Fixed income and credit (INV-101)** (INV01) · 7 pages
+
+- `Corporate Bond`
+- `Leveraged Loan`
+- `Mortgage Loan` ← *Residential Mortgage*
+- `Mortgage-Backed Security` ← *Mortgage-backed Security*
+- `Private Debt`
+- `Fixed Income Portfolio` ← *Fixed Income Investment*, *Enhance Yield*
+- `Credit Risk Modeling`
+
+**W19 — Portfolio management and ALM (INV-101, CP-351)** (CP-351, INV01) · 9 pages
+
+- `Asset Class`
+- `Public Equity`
+- `Hedge Fund`
+- `Portfolio Management Process` ← *Investment Governance Structure*
+- `Institutional Investor`
+- `Interest Rate Derivative`
+- `ALM Risk`
+- `ALM Failure`
+- `Long-Tail Liability` ← *Long-Tail Insurance Liability*
+
+**W20 — Life reinsurance** (CP-341, ILA01) · 7 pages
+
+- `Inforce Reinsurance`
+- `Offshore Reinsurance` ← *International Reinsurance Regulatory Framework*
+- `Private Equity-Backed Insurer` ← *Private Equity Backed Reinsurer*, *Private Equity Involvement*
+- `Captive Reinsurance` ← *Captive Reinsurance Transaction*
+- `Pension Risk Transfer` ← *PRTs-longevity Swap*
+- `Reinsurance Administration`
+- `Life Reinsurance Treaty` ← *Reinsurance Agreement Provision*
+
+**W21 — Life valuation, accounting and taxation** (GH-201C, ILA-201I, ILA-201U, ILA01) · 7 pages
+
+- `Commissioners Reserve Valuation Method` ← *Formulaic Reserve*, *Life Insurance Reserve*
+- `Liability for Future Policy Benefits` ← *Term Insurance Reserve*
+- `Deferred Acquisition Cost`
+- `Nonforfeiture Benefit` ← *Nonforfeiture*
+- `Policyholder Taxation` ← *Canadian Tax Regulation*
+- `Life Insurance Company Taxation` ← *Corporate Taxation*, *Taxable Income*, *US Company Tax Rule*
+- `Investment Income Tax`
+
+**W22 — Life assumptions, products and profit analysis** (ALTAM, CP-312, ILA01) · 7 pages
+
+- `Mortality Table Construction` ← *Modern Mortality Table*
+- `Premium Persistency`
+- `Term Conversion`
+- `Dynamic Policyholder Behavior` ← *Dynamic Policyholder*
+- `Economic Scenario Generator`
+- `Life Insurance Distribution` ← *Annuity Distribution*
+- `Analysis of Surplus` ← *Actual Profit*
+
+**W23 — Retirement plan types and participant risk** (RET-201, RET-301, RET01) · 7 pages
+
+- `Hybrid Plan`
+- `Target Benefit Plan` ← *Shared Risk Plan*
+- `Executive Retirement Plan` ← *Retirement Funding Alternative*
+- `Public Sector Pension Plan` ← *Public Sector Employer*, *Government-sponsored Plan*
+- `Retirement Risk`
+- `Decumulation` ← *Decumulation Feature*
+- `Investment Vehicle`
+
+**W24 — Plan features and member options** (RET01) · 6 pages
+
+- `Vesting` ← *Benefit Eligibility Requirement*
+- `Ancillary Benefit`
+- `Optional Form of Payment` ← *Payment Option*, *Optional Form*
+- `Early Retirement` ← *Benefit Subsidy*
+- `Postponed Retirement` ← *Late Retirement Option*
+- `Employee Contribution` ← *Optional Employee Contribution*
+
+**W25 — Pension valuation, accounting, funding and Canadian tax** (RET-201, RET-301, RET01) · 6 pages
+
+- `Actuarial Cost Method` ← *Cost Recognition*
+- `Plan Curtailment`
+- `Funding Policy` ← *Stakeholders' Interest*
+- `Commuted Value` ← *Portability Option*
+- `Tax Treatment of Retirement Plans` ← *Tax Incentive*, *Taxpayers' Perspective*
+- `Registered Retirement Savings Plan` ← *Individual Savings Plan*
+### 12.4 Targets an existing page already covers (194)
+
+<details><summary>Alias table entries — target → existing page</summary>
+
+| Target | Existing page |
+|---|---|
+| `Prescriptive Analytics` | Data Analytics |
+| `Capital Assessment` | Economic Capital |
+| `Marginal Capital` | Risk Capital |
+| `Return Trade-Off` | Business Strategy |
+| `Gauge Performance` | Risk-Adjusted Performance |
+| `Organization's Risk Profile` | Risk Appetite |
+| `Risk Strategy` | Risk Mitigation |
+| `Risk-capital Strategy` | Risk Capital |
+| `Market Conduct Compliance Activity` | Market Conduct Regulation |
+| `Risk Accumulation` | Concentration Risk |
+| `Risk Aggregation` | Risk Diversification |
+| `Optimal Capital Structure` | Capital Structure |
+| `Competitive Environment` | Porter's Five Forces |
+| `Financial Metrics` | Key Financial Measures |
+| `Organization's Performance` | Key Financial Measures |
+| `Reported Financial Statement` | Financial Statements |
+| `Organization's Business Strategy` | Business Strategy |
+| `Organizational Decision-Making` | Decision-Making |
+| `Sustainable Growth` | Strategic Budgeting |
+| `Effective Strategic Budgeting` | Strategic Budgeting |
+| `Financial Budgeting` | Strategic Budgeting |
+| `Forecasting Decision Making Process` | Strategic Budgeting |
+| `Organization's Initiative` | Strategic Budgeting |
+| `Tracking Progress` | Strategic Budgeting |
+| `Conduct Investigative Testing` | Data Diagnostic Analysis |
+| `Actuary's Responsibility` | Actuarial Communication |
+| `Professionalism Requirement` | Professional Responsibilities of the Actuary |
+| `Earnings Pattern` | Earned Premium |
+| `Ultimate Premium` | Premium Audit |
+| `Claim Transaction Data` | Development Triangle |
+| `Influencing Average Premium Level` | Premium Trend |
+| `Data Triangle` | Development Triangle |
+| `Required Data` | Reserving Data Organization |
+| `Case Estimate` | Case Reserves |
+| `Development-Based Frequency-Severity` | Frequency-Severity Method |
+| `Projected Ultimate Value` | Ultimate Loss |
+| `Contingency Margin` | Profit and Contingency Provision |
+| `Expense Trending` | Expense Provisions |
+| `Fundamental Ratemaking` | Ratemaking |
+| `Inflation-Sensitive Exposure` | Exposure Trend |
+| `EU Solvency II Capital Requirement` | Solvency II |
+| `Claim Handling Process` | Claims Handling |
+| `Insurer Risk` | Risk Control |
+| `Pricing General Insurance Policy` | Ratemaking |
+| `Risk Mitigation Instrument` | Insurance-Linked Securities |
+| `Mass Torts-class Action Suit` | Mass Tort |
+| `Collective Insurance Industry Organization` | Government and Industry Insurance Programs |
+| `Insolvency Regulation` | Solvency Regulation |
+| `Insurance Actuarial Opinion` | Statement of Actuarial Opinion |
+| `Pricing Property Catastrophe Cover` | Reinsurance Pricing |
+| `Claims-Made Contract` | Claims Made Coverage |
+| `Increased Limit Option` | Increased Limits |
+| `Chain Ladder Estimator` | Mack Chain Ladder Model |
+| `Parametric Estimator` | Growth Curve |
+| `Reserve Variability` | Unpaid Claim Distribution |
+| `Stochastic Loss Development` | Stochastic Reserving |
+| `Signing Actuary` | Appointed Actuary Responsibilities |
+| `Signing General Insurance Actuary` | Appointed Actuary Responsibilities |
+| `NAIC Annual Statement Pages-schedule` | Annual Statement Schedules |
+| `NAIC RBC` | Risk-Based Capital |
+| `Statutory Financial Statement` | NAIC Annual Statement |
+| `Premium Basis` | Workers Compensation Classification |
+| `Insurance Department` | Insurance Regulator |
+| `Insurance Commissioners' Duty` | Insurance Regulator |
+| `Insurance Personnel` | Insurance Producer |
+| `Licensing Requirement` | Insurance Regulator |
+| `Regulatory Body` | State and Federal Insurance Regulation |
+| `Rated Policy` | Retrospective Rating |
+| `Legal Cases-issue` | Court Case |
+| `Asset Adequacy Standard` | Asset Adequacy Analysis |
+| `Asset Matching` | Asset-Liability Management |
+| `Cash Flow Projection` | Asset Adequacy Analysis |
+| `Mismatched Asset` | Asset-Liability Management |
+| `IFRS 17, US GAAP` | Accounting Standards |
+| `Data Credibility` | Credibility |
+| `Base Rate Development` | Manual Rate |
+| `Guaranty Association` | Guaranty Funds |
+| `Policy Reserve` | Policy Value |
+| `Non-Claim Reserves Held` | Reserve |
+| `Premium Deficiency Reserve` | Premium Deficiency |
+| `Employers Offer Retiree Group Benefit` | Retiree Group Benefits |
+| `Life Plan Design` | Retiree Group Benefits |
+| `Post-Employment Benefit Plan` | Retiree Group Benefits |
+| `Retiree Health Valuation` | Retiree Group Benefits |
+| `Service Cost` | Retiree Group Benefits |
+| `Plan Provision` | Group Health Insurance |
+| `Short Duration Contract` | Short-Term Insurance Coverage |
+| `Case-Specific Pricing` | Experience Rating |
+| `Claim Credibility` | Credibility |
+| `Underwriting Situation` | Underwriting |
+| `Health Insurance Company` | Life Insurance Company |
+| `Insurer Financial Statement` | Financial Statements |
+| `International Financial Reporting Standard` | IFRS |
+| `Canadian Health Care System` | Health Care Insurance |
+| `Private Group Insurance Plan` | Group Health Insurance |
+| `Capital Strain` | Regulatory Capital |
+| `Canadian Healthcare System` | Health Care Insurance |
+| `Filing Requirement` | Rate Regulation |
+| `Medicaid Program Structure` | Medicaid |
+| `Medicare Benefit` | Medicare |
+| `Short Duration Group` | Short-Term Insurance Coverage |
+| `Utilization Rate` | Utilization |
+| `Provider Payment` | Provider Reimbursement |
+| `Standard Contracting` | Provider Reimbursement |
+| `Health Care Cost` | Health Care System |
+| `Provider System` | Health Care System |
+| `Health Benefit` | Health Care System |
+| `Operational Failure` | Operational Risk |
+| `Dynamic Hedging` | Hedging |
+| `Guarantee Cost` | Equity-Linked Insurance |
+| `Hedge Strategy` | Hedging |
+| `Implied Volatility` | Volatility |
+| `Variable Annuity Guarantee Rider` | Equity-Linked Insurance |
+| `Floor` | Payoff |
+| `Pricing Derivative` | Risk-Neutral Valuation |
+| `Regulatory Capital Adequacy` | Regulatory Capital |
+| `Risk Identification Tool` | Risk Identification |
+| `Insurance Contracts Generate Embedded Option` | Embedded Option |
+| `ALM Context` | Asset-Liability Management |
+| `Asset Allocation Strategy` | Asset Allocation |
+| `Extreme ALM Event` | Stress Testing |
+| `Liability Profile` | Asset-Liability Management |
+| `Transferring Risk` | Risk Transfer |
+| `Structured Credit Product` | Structured Finance |
+| `Passive Strategy` | Passive Management |
+| `Asset Benchmark` | Performance Measurement |
+| `Optimal Portfolio Allocation` | Asset Allocation |
+| `Performance Attribution Metrics` | Performance Measurement |
+| `Equity-Linked Guarantee` | Equity-Linked Insurance |
+| `Long-Term Insurance Business` | Long-Term Insurance Coverage |
+| `Governance Best Practice` | Model Governance |
+| `Governance Documentation` | Model Governance |
+| `Organizational Structure` | Model Governance |
+| `OSFI Requirement` | Credit for Reinsurance |
+| `Reinsurance Requirement` | Credit for Reinsurance |
+| `US Stat Requirement` | Statutory Accounting Principles |
+| `Reinsurance Counterparty Credit Risk` | Reinsurance Credit Risk |
+| `Advanced Reinsurance Transaction` | Reinsurance Transaction |
+| `Annuity Coinsurance` | Reinsurance Transaction |
+| `Life Insurance Yearly Renewable Term` | Reinsurance Transaction |
+| `Non-Proportional Reinsurance Transaction` | Types of Reinsurance |
+| `Annuity Product Design` | Annuity Contract |
+| `Common Profit Metrics` | Profit Testing |
+| `Pricing Insurance Product` | Profit Testing |
+| `Pricing Practice` | Profit Testing |
+| `Annuity Context` | Annuity Contract |
+| `Annuity Liability` | Annuity Contract |
+| `Common Insurance Guarantees Generate Embedded Option` | Embedded Option |
+| `Duration-convexity Matching` | Redington Immunization |
+| `Integrating ALM` | Asset-Liability Management |
+| `Life Insurance Reinsurance Arrangement` | Reinsurance Transaction |
+| `International Regulatory Framework` | Regulatory Capital |
+| `Rising Interest Rate Environment` | Interest Rate Risk |
+| `Annuity Insurance Product` | Annuity Contract |
+| `Common Life` | Life Insurance |
+| `Common Valuation` | Valuation Principle |
+| `International Capital Requirement` | Regulatory Capital |
+| `International Framework` | Regulatory Capital |
+| `International Life Insurance Company` | Life Insurance Company |
+| `Crediting Rating Agency Framework` | Rating Agency |
+| `Defined Benefit` | Defined Benefit Plan |
+| `Defined Contribution Pension Plan` | Defined Contribution Plan |
+| `Plan Design Feature` | Plan Design |
+| `Sponsor's Plan` | Plan Design |
+| `Retirement Plan Design` | Plan Design |
+| `Retirement Fund Asset` | Investment Policy Statement |
+| `Contribution Formula` | Plan Design |
+| `Participant Investment Option` | Defined Contribution Plan |
+| `Plan Eligibility Requirement` | Plan Design |
+| `Retirement Plan Asset` | Investment Policy Statement |
+| `Benefit Adequacy` | Replacement Ratio |
+| `Replacement Income` | Replacement Ratio |
+| `Single Employer Sponsored Retirement Plan` | Multi-Employer Plan |
+| `Social Insurance Plan` | Social Insurance |
+| `Pension Valuation` | Pension Plan |
+| `Cost Stability` | Asset Valuation Method |
+| `Pension Benefit` | Pension Plan |
+| `Periodic Valuation` | Going-Concern Valuation |
+| `Cash Flow Requirement` | Investment Policy Statement |
+| `Plan Sponsor Risk` | Plan Sponsor |
+| `Plan Asset Composition` | Asset Allocation |
+| `Single-employer Plan` | Multi-Employer Plan |
+| `Asset Transfer` | Plan Merger and Spin-Off |
+| `Government Regulation` | Canadian Pension Legislation |
+| `Members' Right` | Canadian Pension Legislation |
+| `Plan Amendment` | Canadian Pension Legislation |
+| `Plan Establishment` | Canadian Pension Legislation |
+| `Registered Retirement Plan` | Canadian Pension Legislation |
+| `Reporting Requirement` | Canadian Pension Legislation |
+| `Tax Regulation Pertaining` | Canadian Pension Legislation |
+| `Pension Plan Funding` | Funding |
+| `Defined Contribution` | Defined Contribution Plan |
+| `Traditional Defined Benefit Plan` | Defined Benefit Plan |
+| `Funding Restriction` | Canadian Pension Legislation |
+
+</details>
+
+### 12.5 Skipped — not concepts (22)
+
+`Organization Optimiz`, `Evolving Quantitative`, `Making Suboptimal Individual`, `Organizational Behavior Plays`, `Real-Life Scenario`, `Syllabus Resource`, `Quality Perspective`, `Quality Viewpoint`, `Traditional Actuarial Practice`, `Portfolio's Exposure`, `Individual Security`, `Portfolio Level`, `Complex Component`, `Financial Business`, `Global Jurisdiction`, `Global Reinsurance Market`, `Common Asset`, `Challenges Insurer`, `Employee Perspective`, `Introducing Option`, `Labor Force Demographics`, `Promote Employee Behavior Consistent`.
+
+## 13. Phase D record (2026-10-10)
+
+**Outcome.** All 448 Phase D targets other than `Total Risk` resolve (`find_concept_gaps.py --check` over them exits
+0): 170 new pages, 310 alias-table entries and 5 namesakes, and 22 targets reclassified as link noise. Links resolving
+on the study guides rose from 3,390 to 3,858, and missing concepts fell from 449 to 1 (`Total Risk`). The 26
+re-rendered guides keep their words exactly (327 link targets moved, 3 phrases newly linked: `IAA`, `vesting`,
+`puts`), and each guide's pass is re-recorded as verified against its cited syllabus PDF (runs
+2026-10-10T08:57Z/4697 and a second for the four guides the slash-phrase fix touched). Every page passed the template
+check and a KaTeX render (3,910 formulas on the 170 pages, 0 problems); `verify_check.py` (0 errors, 0 warnings), the
+full app suite (202 files, 3,811 tests), `npm run build`, the scripts' unit tests, `syllabus_lint.py` (0 errors;
+warnings 1,402 → 946), `syllabus_write.py --all --check` and `validate_links.py --studiable` all pass. Each writer
+recomputed its worked numbers in Python, and I recomputed a sample (the control-test upper bound of 12.4% for 3
+exceptions in 60, and 4.9% for none). All 170 pages are `unverified` and need human review. Pages run 1,036–1,757
+words counting the LaTeX (median 1,306).
+
+**How it ran.** Eight triage agents, then 25 writers in waves of about ten. A usage limit stopped the last five groups
+(W21–W25) partway; after the reset a second writer for each reviewed every draft the first had left, recomputed its
+numbers and finished the group. That review found and fixed real errors on four W24 drafts (two worked values, an
+inverted inequality in a trap, an interest-only factor), so the drafts were not trusted as they stood.
+
+**Checked against a source** (the rest is AI-drafted from general knowledge; each group's commit lists what its
+writer stated from memory):
+- Ruhm & Brehm (2007, *Variance*) for `Risk Transfer Testing`; the IAA's "Professional Standards" Risk Book (2023)
+  for `International Actuarial Association`; Ritter's behavioral finance paper (sections 1–3) for `Behavioral Finance`.
+- The NAIC Medicare supplement refund calculation form for `Medicare Supplement Insurance`.
+- IRC sections 807(d) and 848, Canada's Budget 2022 measures and Income Tax Act sections 211–211.1 for `Life Insurance
+  Company Taxation` and `Investment Income Tax` (which falls in effect on exempt policies; the writing brief had it the
+  other way round).
+- General American's 1999 put-option run (`ALM Failure`), from a web search.
+
+**Points for the reviewer** — the facts most worth checking, by area:
+- *DISC courses:* nothing could be checked against The Institutes' texts. The ISO form details (IL 00 17 conditions,
+  the 2018 PAP Part B, business auto symbols, crime insuring agreements, the period of restoration), D&O/EPLI/
+  fiduciary provisions, TRIP's recoupment and extension dates, the tort-law cases and Restatement sections, and the
+  claim-valuation factors (a reconstruction of DISC-IA 3.7).
+- *Investments:* Hull 11e chapter attributions, the change-of-numeraire drift, NAIC designations, leveraged-loan and
+  mortgage conventions, Heston's and CIR's Feller conditions.
+- *Health:* the CMS-HCC and HHS-HCC details, ACO and ACA program parameters, SSDI's 2026 bend points (from a web
+  search), the NAIC LTC rate framework and its 2025 revision.
+- *Life:* Bermuda's BSCR regime, AG48, LDTI's details, the standard nonforfeiture law's allowance, Canada's 8-pay
+  exemption test.
+- *Retirement:* ASC 715 and IAS 19 curtailment and settlement rules, CIA section 3500's commuted-value basis, the
+  RRSP and RCA rules, New Brunswick's shared risk tests.
+
+**Overlaps worth a look:** the five DISC pages next to existing pages (§12.1); `Social Inflation` and `Nuclear Verdicts`;
+`Long-Tail Liability` (life and pension sense) and `Long Tail Lines` (P&C); `Non-Financial Risk` and IFRS 17's `Risk
+Adjustment for Non-Financial Risk`; `Cognitive Bias` and `Behavioral Finance` (same prospect-theory parameters);
+`Employers Liability Insurance` notes that the standard form is NCCI's, though GI-302 links it as *ISO WC*.
+
+**Follow-ups noticed** (not done — outside Phase D's targets):
+- Variant links that still go through a link fix rather than the page they mean, most of them older than Phase D:
+  `Decision Making`, `Financial Statement`, `Financial Report`, `Maximum Likelihood Estimate(-or)`, `Hypothesis Test`,
+  `Long Term Insurance Coverage`, `Individual-joint Life Mortality`, `Insurance-reinsurance`, `Plan Sponsor'`, `Plan
+  Termination-wind-Up`. Each wants an alias keyed the way the generator looks phrases up (slash and possessive forms
+  kept, as the slash-phrase commit does).
+- The ambiguous table still lists `SQL` and `COPE` (hand-written DISC guides, so each needs a page), `PDE`, `Forward`,
+  and single words (`Accuracy`, `Test`, `Organization`, `Stakeholder`, `Provider`, `Performance`, `Coefficient`).
+- `Workers Compensation Insurance` is Canadian only, but the `wc` alias sends GI-302 (U.S.) there; it may want a
+  namesake or a U.S. section.
+- `Risk Transfer` has nothing on pension risk transfer; the new `Pension Risk Transfer` page could be linked from it.
+- `Decision-Making` is still a stub, and now more guides lean on it.
+
 <!-- gaps:begin -->
 
 _Generated by `python3 scripts/find_concept_gaps.py --update-plan`. Do not edit between the markers._
@@ -925,19 +1507,19 @@ _Generated by `python3 scripts/find_concept_gaps.py --update-plan`. Do not edit 
 
 | Bucket | Distinct targets | Links |
 |---|---|---|
-| Resolve exactly (Obsidian and the app) | | 3,390 |
+| Resolve exactly (Obsidian and the app) | | 3,858 |
 | Resolve only case-insensitively (Obsidian yes, app no) | | 0 |
-| Resolve through a frontmatter `aliases:` | | 4 |
-| **Concepts to write** (tiered and batched below) | **449** | 486 |
+| Resolve through a frontmatter `aliases:` | | 7 |
+| **Concepts to write** (tiered and batched below) | **1** | 1 |
 | Variant spelling of an existing page — link fix | 11 | 16 |
 | Cut short — the link plus its next words names an existing page | 26 | 46 |
-| Link noise — names no concept (`Cannot`, `Differ Compared`) | 69 | 105 |
-| One-word target, not a term of art — triage | 32 | 47 |
-| Ambiguous — needs your decision | 14 | 18 |
+| Link noise — names no concept (`Cannot`, `Differ Compared`) | 91 | 127 |
+| One-word target, not a term of art — triage | 30 | 45 |
+| Ambiguous — needs your decision | 11 | 15 |
 | Missing reading — `Resources/Books/`, Source Material only | 633 | 672 |
-| **Total** | | **4,784** |
+| **Total** | | **4,787** |
 
-Within the concepts to write: 2 duplicate spellings merged (+1 acronyms, +6 fragments). Tier 1 / 2 / 3: **2 / 6 / 441**, in **109 batches** (48 done). Existing concept pages that are stubs: **22**.
+Within the concepts to write: 0 duplicate spellings merged (+1 acronyms, +5 fragments). Tier 1 / 2 / 3: **0 / 1 / 0**, in **99 batches** (98 done). Existing concept pages that are stubs: **22**.
 
 ### Missing concepts by exam
 
@@ -945,35 +1527,7 @@ A concept linked from several exams counts once under each.
 
 | Exam | Stage | Tier 1 | Tier 2 | Tier 3 | Total |
 |---|---|---|---|---|---|
-| INV-201 (SOA) | development | 0 | 0 | 44 | 44 |
-| RET-101 (SOA) | development | 1 | 0 | 37 | 38 |
-| GH-301 (SOA) | development | 0 | 0 | 26 | 26 |
-| ILA-101 (SOA) | development | 0 | 0 | 26 | 26 |
-| INV-101 (SOA) | development | 0 | 0 | 22 | 22 |
-| GI-201 (SOA) | development | 0 | 0 | 21 | 21 |
-| DISC-IA (CAS) | development | 0 | 0 | 21 | 21 |
-| GI-101 (SOA) | development | 0 | 0 | 20 | 20 |
-| CP-321 (SOA) | development | 0 | 0 | 20 | 20 |
-| CP-341 (SOA) | development | 0 | 0 | 19 | 19 |
-| CP-311 (SOA) | development | 0 | 0 | 18 | 18 |
-| CFE-101 (SOA) | development | 0 | 0 | 17 | 17 |
-| GI-302 (SOA) | development | 0 | 0 | 17 | 17 |
-| CFE-201 (SOA) | development | 0 | 0 | 15 | 15 |
-| DISC-RM (CAS) | development | 0 | 0 | 15 | 15 |
-| CP-351 (SOA) | development | 0 | 0 | 14 | 14 |
-| RET-201 (SOA) | development | 0 | 0 | 13 | 13 |
-| GH-101 (SOA) | development | 0 | 1 | 11 | 12 |
-| RET-301 (SOA) | development | 0 | 0 | 12 | 12 |
-| DISC-DA (CAS) | development | 0 | 0 | 11 | 11 |
-| GI-301 (SOA) | development | 0 | 1 | 9 | 10 |
-| CP-312 (SOA) | development | 0 | 0 | 10 | 10 |
-| GH-201U (SOA) | development | 0 | 1 | 8 | 9 |
-| GH-201C (SOA) | development | 0 | 1 | 6 | 7 |
-| ILA-201I (SOA) | development | 0 | 0 | 6 | 6 |
-| ALTAM (SOA) | development | 2 | 1 | 0 | 3 |
-| ILA-201U (SOA) | development | 0 | 0 | 3 | 3 |
-| FAM (SOA) | development | 1 | 1 | 0 | 2 |
-| PA (SOA) | development | 0 | 1 | 0 | 1 |
+| GH-101 (SOA) | development | 0 | 1 | 0 | 1 |
 
 ### Batches
 
@@ -1028,534 +1582,62 @@ In order. Each batch is one topic (the exam and syllabus section it is most heav
 - **Batch 47** (Tier 2, done) · Statistics and predictive analytics (ATPA (SOA) › Working with Data; PA (SOA) › Data Exploration and Visualization) · 10 concepts: `Handle Missing Data`, `Imputation`, `Internal Consistency`, `Otherwise Modify Data`, `Preparing Data`, `Relational Database`, `Data Analytics`, `External Data`, `Bivariate Data Exploration`, `Common Visualization`
 - **Batch 48** (Tier 2, done) · Statistics and predictive analytics (PA (SOA) › Data Exploration and Visualization; SRM (SOA) › Basics of Statistical Learning) · 10 concepts: `Effective Data`, `Exploring Data`, `Granularity`, `Univariate Data Exploration`, `Existing Data`, `Bias-Variance Trade-Off`, `Vague Question`, `K-Fold Cross-Validation`, `Leave-one-out Cross-Validation`, `Resampling`
 - **Batch 49** (Tier 2, done) · Statistics and predictive analytics (SRM (SOA) › Linear Models; SRM (SOA) › Decision Trees) · 11 concepts: `Training Data`, `Overfitting`, `Regression Tree`, `Predicted Value`, `Diagnostic Test`, `Ridge Regression`, `Corresponding Link`, `Lasso`, `Autoregressive Conditionally Heteroskedastic`, `Regression-Based Time Series`, `Stochastic Time Series Process`
-- **Batch 50** (Tier 3, to do) · Short-term insurance (P&C, general) (DISC-IA (CAS) › 12. Specialty Coverages Part 1; DISC-IA (CAS) › 13. Specialty Coverages Part 2) · 10 concepts: `Professional Liability Insurance` ✓, `Directors and Officers Liability Insurance`, `Employment Practices Liability Insurance`, `Environmental Insurance`, `Fiduciary Liability Insurance`, `International Insurance`, `Aircraft Insurance`, `Cyber Insurance`, `Terrorism Risk Insurance Program`, `Intentional Tort`
-- **Batch 51** (Tier 3, to do) · Short-term insurance (P&C, general) (DISC-IA (CAS) › 3. Common Policy Concepts; DISC-IA (CAS) › 14. Insurance Law Part 1) · 10 concepts: `Negligence`, `Premises Liability`, `Products Liability`, `Strict Liability`, `Insurable Risk`, `Compensatory Damages`, `Loss Settlement Provisions`, `Actual Cash Value`, `Medical Payments Coverage`, `Health Insurance Plans`
-- **Batch 52** (Tier 3, to do) · Short-term insurance (P&C, general) (DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage; DISC-IA (CAS) › 9. Commercial Property Insurance Part 2) · 10 concepts: `Term Life Insurance` ✓, `Blanket Insurance`, `Common Policy Conditions`, `Period of Restoration`, `Commercial Crime Insurance`, `Premises and Operations Liability`, `Products and Completed Operations Liability`, `Business Auto Coverage`, `SWOT Analysis`, `Business Continuity Management`
-- **Batch 53** (Tier 3, to do) · Short-term insurance (P&C, general) (DISC-RM (CAS) › 6. Overview of Insurance Operations; DISC-RM (CAS) › 7. Insurance Marketing and Distribution) · 10 concepts: `Organizational Resilience`, `Insurer Goals and Constraints`, `Insurtech`, `Types of Insurers`, `Insurance Distribution Systems`, `Insurance Marketing`, `Underwriting Policy`, `Underwriting Authority`, `Conduct Investigative Testing`, `Funding Requirement`
-- **Batch 54** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-101 (SOA) › Introduction and Key Considerations; GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work) · 10 concepts: `Real-Life Scenario`, `Self-Insurer` ✓, `Professional Judgment`, `Actuary's Responsibility`, `Professionalism Requirement`, `Qualitative Information Required` ✓, `Earnings Pattern`, `Ultimate Premium`, `Claim Transaction Data`, `Influencing Average Premium Level`
-- **Batch 55** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-101 (SOA) › Projecting Ultimate Claims; GI-101 (SOA) › Ratemaking) · 10 concepts: `Data Triangle`, `Required Data`, `Case Estimate`, `Development-Based Frequency-Severity`, `Generalized Cape Cod`, `Projected Ultimate Value`, `Varying Circumstance` ✓, `Contingency Margin`, `Expenses Required` ✓, `Expense Trending`
-- **Batch 56** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-201 (SOA) › General Insurance Company Operations; GI-201 (SOA) › Financial Economics) · 10 concepts: `Fundamental Ratemaking`, `Inflation-Sensitive Exposure`, `Behavioral Finance`, `Asset Liability Management Strategy` ✓, `Underwriting Profit Margin` ✓, `EU Solvency II Capital Requirement`, `Claim Handling Process`, `Insurer Risk`, `International Business`, `Peril` ✓
-- **Batch 57** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-201 (SOA) › Legal Environment; GI-201 (SOA) › General Insurance Company Operations) · 10 concepts: `Pricing General Insurance Policy`, `Risk Mitigation Instrument`, `Insurance Law`, `Social Inflation`, `International Legal Environment`, `Legal Cases-issues Included` ✓, `Mass Torts-class Action Suit`, `Syllabus Resource`, `Tort Law Environment`, `Tort Trend`
-- **Batch 58** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-201 (SOA) › Regulatory Environment; GI-201 (SOA) › Responsibilities of the Actuary) · 10 concepts: `Transnational Tort Litigation`, `Collective Insurance Industry Organization`, `Insolvency Regulation`, `Insurance Programs Controlled` ✓, `Telematics` ✓, `Insurance Actuarial Opinion`, `International Actuarial Association`, `Professionalism Principle`, `Professionalism Required` ✓, `Catastrophe Modeling Output`
-- **Batch 59** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-301 (SOA) › Stochastic Reserving; GI-301 (SOA) › Reinsurance) · 10 concepts: `Property Catastrophe Risk Load` ✓, `Insurance Premium Liability` ✓, `Pricing Property Catastrophe Cover`, `Risk Transfer Testing`, `Claims-Made Contract`, `Increased Limit Option`, `Chain Ladder Estimator`, `Parametric Estimator`, `Reserve Variability`, `Stochastic Loss Development`
-- **Batch 60** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-302 (SOA) › U.S. General Insurance Products and Coverages; GI-302 (SOA) › Responsibilities of a U.S. Signing General Insurance Actuary) · 10 concepts: `Applicable Standard` ✓, `Signing Actuary`, `Signing General Insurance Actuary`, `NAIC Annual Statement Pages-schedule`, `NAIC RBC`, `Statutory Financial Statement`, `Cyber Risk`, `Premium Basis`, `Commercial Auto Insurance`, `Employers Liability Insurance`
-- **Batch 61** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-302 (SOA) › U.S. General Insurance Products and Coverages; GI-302 (SOA) › U.S. General Insurance Regulation) · 13 concepts: `Excess Liability` ✓, `ISO Commercial Automobile Policy`, `ISO Commercial Property` ✓, `ISO Homeowner` ✓, `ISO Personal Auto Policy` ✓, `ISO WC`, `Specialty Insurance Coverage`, `Surety` ✓, `Insurance Department`, `Insurance Commissioners' Duty`, `Insurance Personnel`, `Licensing Requirement`, `Regulatory Body`
-- **Batch 62** (Tier 3, to do) · Financial economics and investments (CP-351 (SOA) › Measuring Risks from Assets and Liabilities; CP-351 (SOA) › Objectives of Asset Liability Management) · 10 concepts: `Long-Tail Liability`, `Portfolio's Exposure`, `Regulatory Capital Adequacy`, `Risk Identification Tool`, `ALM Failure`, `Insurance Contracts Generate Embedded Option`, `Lessons Learned` ✓, `ALM Risk`, `ALM Context`, `Asset Allocation Strategy`
-- **Batch 63** (Tier 3, to do) · Financial economics and investments (CP-351 (SOA) › Tools and Strategies to Manage ALM Risks; INV-101 (SOA) › Asset Classes) · 10 concepts: `Extreme ALM Event`, `Interest Rate Derivative`, `Liability Profile`, `Long-Tail Insurance Liability`, `Transferring Risk`, `Asset Class`, `Corporate Bond`, `Hedge Fund`, `Mortgage-backed Security`, `Distinguishing Investment` ✓
-- **Batch 64** (Tier 3, to do) · Financial economics and investments (INV-101 (SOA) › Asset Classes; INV-101 (SOA) › Credit Risk Management) · 10 concepts: `Leveraged Loan`, `Private Debt`, `Public Equity`, `Residential Mortgage`, `Structured Credit Product`, `Individual Security`, `Credit Risk Modeling`, `Portfolio Level`, `Passive Strategy`, `Institutional Investor`
-- **Batch 65** (Tier 3, to do) · Financial economics and investments (INV-101 (SOA) › Portfolio Construction, Management, and Assessment) · 10 concepts: `Fixed Income Investment`, `Asset Benchmark`, `Enhance Yield`, `Fixed Income Portfolio`, `Investment Governance Structure`, `Investment Policy Statement` ✓, `Liquidity` ✓, `Optimal Portfolio Allocation`, `Performance Attribution Metrics`, `Portfolio Management Process`
-- **Batch 66** (Tier 3, to do) · Financial economics and investments (INV-201 (SOA) › Applications and Risks of Derivatives) · 10 concepts: `Operational Failure`, `Cross Greek`, `Dynamic Hedging`, `Fund Performance`, `Guarantee Cost`, `Hedge Strategy`, `Implied Volatility`, `Indexed Annuity`, `Partially Hedged` ✓, `Structured Product`
-- **Batch 67** (Tier 3, to do) · Financial economics and investments (INV-201 (SOA) › Key Types of Derivatives; INV-201 (SOA) › Applications and Risks of Derivatives) · 10 concepts: `Target Volatility Fund`, `Variable Annuity Guarantee Rider`, `Asian Option`, `Butterfly Spread`, `Call Spread`, `Central Clearing`, `Collar`, `Daily Margin Variation`, `Daily Settle`, `Derivative Instrument`
-- **Batch 68** (Tier 3, to do) · Financial economics and investments (INV-201 (SOA) › Key Types of Derivatives; INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Derivatives Strategy`, `Derivatives Trading`, `Exchange Traded` ✓, `Exotic Option`, `Floor`, `Put Spread`, `Straddle` ✓, `Strangle`, `Swaption`, `Arrow-Debreau Security`
-- **Batch 69** (Tier 3, to do) · Financial economics and investments (INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Black-Scholes-Merton` ✓, `Euler-Maruyama Discretization`, `Girsanov's Theorem`, `Incomplete Market`, `Isometry`, `Jump-Diffusion` ✓, `Local- Volatility`, `Martingale`, `Modeling Smile`, `No-Arbitrage` ✓
-- **Batch 70** (Tier 3, to do) · Financial economics and investments (INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Numeraire`, `Numerical Discretization`, `Observed Price`, `Pricing Derivative`, `Stochastic Calculus Theory`, `Stochastic Differential Equation`, `Stochastic Volatility`, `Traded Security`, `Transition Density`, `Volatility Smile`
-- **Batch 71** (Tier 3, to do) · ERM and corporate finance (CFE-101 (SOA) › Embedding ERM into Decision-Making) · 10 concepts: `Capital Assessment`, `Marginal Capital`, `Non-Financial Risk`, `Return Trade-Off`, `Gauge Performance`, `Organization's Risk Profile`, `Organizational Process`, `Risk Capital Once Aggregated` ✓, `Risk Once Aggregated` ✓, `Risk Strategy`
-- **Batch 72** (Tier 3, to do) · ERM and corporate finance (CFE-101 (SOA) › Risk Analysis and Evaluation; CFE-101 (SOA) › Enterprise Risk Management Foundations) · 10 concepts: `Risk-capital Strategy`, `External Environment`, `Market Conduct Compliance Activity`, `Emerging Risk`, `Risk Accumulation`, `Compounding Risk`, `Contagion-Related Risk`, `Easily Quantifiable` ✓, `Monitoring Mechanism`, `Risk Aggregation`
-- **Batch 73** (Tier 3, to do) · ERM and corporate finance (CFE-201 (SOA) › Corporate Finance; CFE-201 (SOA) › Financial Statement Analysis) · 10 concepts: `Optimal Capital Structure`, `Capital Budgeting`, `Competitive Environment`, `Corporate Finance`, `Divestiture` ✓, `Organization Optimiz`, `Evolving Quantitative`, `Foreign Exchange Rate`, `Financial Metrics`, `Organization's Performance`
-- **Batch 74** (Tier 3, to do) · ERM and corporate finance (CFE-201 (SOA) › Managerial Accounting and Operational Excellence; CP-311 (SOA) › Introduction to Strategic Management) · 10 concepts: `Reported Financial Statement`, `Business Process`, `Distort Perceived Performance`, `Drive Decision Making`, `Operational Excellence`, `Operational Process`, `Uncertain Condition`, `Business Environment`, `Business-Level Strategy`, `Competitive Dynamics`
-- **Batch 75** (Tier 3, to do) · ERM and corporate finance (CP-311 (SOA) › Introduction to Strategic Management; CP-311 (SOA) › Organizational Behavior) · 10 concepts: `Corporate-Level Strategy`, `External-inorganic Growth Strategy`, `Market Opportunity`, `Organization's Business Strategy`, `Cognitive Biase`, `Making Suboptimal Individual`, `Organizational Behavior Plays`, `Organizational Decision-Making`, `Sustainable Growth`, `Effective Strategic Budgeting`
-- **Batch 76** (Tier 3, to do) · ERM and corporate finance (CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures) · 5 concepts: `Financial Budgeting`, `Forecasting Decision Making Process`, `Organization's Initiative`, `Organization's Strategic` ✓, `Tracking Progress`
-- **Batch 77** (Tier 3, to do) · Health (CP-321 (SOA) › Manual Rates; CP-321 (SOA) › Asset Adequacy) · 10 concepts: `Asset Adequacy Standard`, `Asset Matching`, `Cash Flow Projection`, `Mismatched Asset`, `IFRS 17, US GAAP`, `Data Credibility`, `Base Rate Development`, `Commission` ✓, `Guaranty Association`, `Long Term Care Rate Increase`
-- **Batch 78** (Tier 3, to do) · Health (CP-321 (SOA) › Reserving; CP-321 (SOA) › Plan and Product Provisions) · 10 concepts: `Properly Modelling` ✓, `Critical Illness`, `Medicare Supplement`, `Social Security Disability Income Benefit`, `Policy Reserve`, `Appliable Best Practice` ✓, `Non-Claim Reserves Held`, `Premium Deficiency Reserve`, `Employers Offer Retiree Group Benefit`, `Life Plan Design`
-- **Batch 79** (Tier 3, to do) · Health (GH-101 (SOA) › Plan and Product Provisions; CP-321 (SOA) › Retiree Group Benefits) · 10 concepts: `Post-Employment Benefit Plan`, `Retiree Health Valuation`, `Service Cost`, `Employee Benefit Plan`, `Employee Benefit Strategy`, `Medical Cost Trend Experience`, `Plan Provision`, `Prescription Drug`, `Product Development Process`, `Short Duration Contract`
-- **Batch 80** (Tier 3, to do) · Health (GH-101 (SOA) › Underwriting and Funding; GH-201C (SOA) › Financial Statements) · 10 concepts: `Case-Specific Pricing`, `Claim Credibility`, `Pooling` ✓, `Risk Assessment Mechanism`, `Underwriting Situation`, `Health Insurance Company`, `Taxable Income`, `Insurer Financial Statement`, `International Financial Reporting Standard`, `Canadian Health Care System`
-- **Batch 81** (Tier 3, to do) · Health (GH-201U (SOA) › Government Programs; GH-201C (SOA) › Government Programs) · 10 concepts: `Private Group Insurance Plan`, `Capital Strain`, `Canadian Healthcare System`, `Affordable Care Act`, `Filing Requirement`, `Government Programs Providing Health Benefit` ✓, `Medicaid Program Structure`, `Medicare Benefit`, `Short Duration Group`, `Actuarially Adjusted` ✓
-- **Batch 82** (Tier 3, to do) · Health (GH-301 (SOA) › Disease Management; GH-301 (SOA) › Healthcare Risk Adjustment1) · 10 concepts: `Healthcare Intervention`, `Non-Chronic Trend`, `Reflects Patient Risk`, `Utilization Rate`, `ACA Product`, `Care Management Situation`, `Normalize Population Claims Experience`, `Multiple Data`, `Coding Set`, `Clinical Policy Bulletin`
-- **Batch 83** (Tier 3, to do) · Health (GH-301 (SOA) › Medical Data; GH-301 (SOA) › Predictive Analytics) · 10 concepts: `Coding Structure`, `Medical Coding`, `Private Data`, `Revenue Code`, `Healthcare Data`, `Healthcare Claim`, `Risk Score`, `Provider Reimbursement` ✓, `Accountable Care Organization`, `Provider Payment`
-- **Batch 84** (Tier 3, to do) · Health (GH-301 (SOA) › Social Determinants of Health; GH-301 (SOA) › Provider Contracting and Reimbursement) · 7 concepts: `Quality Perspective`, `Quality Viewpoint`, `Standard Contracting`, `Health Care Cost`, `Social Determinant`, `SDOH Derived Statistics`, `Traditional Actuarial Practice`
-- **Batch 85** (Tier 3, to do) · Retirement (RET-101 (SOA) › Benefit Plan Design Recommendation) · 10 concepts: `Plan Design Feature`, `Retirement Risk`, `Sponsor's Plan`, `Employee Perspective`, `Introducing Option`, `Investment Risk Applicable` ✓, `Labor Force Demographics`, `Plan Sponsor's Particular` ✓, `Promote Employee Behavior Consistent`, `Retirement Plan Design`
-- **Batch 86** (Tier 3, to do) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments; RET-101 (SOA) › Benefit Plan Design Recommendation) · 10 concepts: `Tax Incentive`, `Taxpayers' Perspective`, `Investment Vehicle`, `Payment Option`, `Providing Retirement Benefit` ✓, `Retirement Fund Asset`, `Ancillary Benefit`, `Benefit Eligibility Requirement`, `Benefit Subsidy`, `Contribution Formula`
-- **Batch 87** (Tier 3, to do) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments) · 10 concepts: `Executive Retirement Plan`, `Hybrid Plan`, `Late Retirement Option`, `Optional Employee Contribution`, `Participant Investment Option`, `Plan Eligibility Requirement`, `Retirement Plan Asset`, `Shared Risk Plan`, `Target Benefit Plan`, `Vesting` ✓
-- **Batch 88** (Tier 3, to do) · Retirement (RET-101 (SOA) › Participant Risks; RET-101 (SOA) › Sponsor Risks) · 10 concepts: `Benefit Adequacy`, `Public Sector Employer`, `Replacement Income`, `Retirement Plans Sponsored` ✓, `Single Employer Sponsored Retirement Plan`, `Social Insurance Plan`, `Early Retirement`, `Decumulation Feature`, `Optional Form`, `Portability Option`
-- **Batch 89** (Tier 3, to do) · Retirement (RET-201 (SOA) › Methods; RET-201 (SOA) › Accounting Standards) · 10 concepts: `Postponed Retirement`, `Termination-windup` ✓, `Plan Curtailment`, `Pension Valuation`, `Cost Recognition`, `Cost Stability`, `Pension Benefit`, `Periodic Valuation`, `Cash Flow Requirement`, `Plan Sponsor Risk`
-- **Batch 90** (Tier 3, to do) · Retirement (RET-201 (SOA) › Valuations for the Purpose of Funding; RET-301 (SOA) › Methods) · 10 concepts: `Funding Policy`, `Government-sponsored Plan`, `Multi-employer Plan` ✓, `Plan Asset Composition`, `Principles Applicable` ✓, `Single-employer Plan`, `Stakeholders' Interest`, `Asset Transfer`, `Going Concern Funding` ✓, `Government Regulation`
-- **Batch 91** (Tier 3, to do) · Retirement (RET-301 (SOA) › Regulations: Evaluation and Application; RET-301 (SOA) › Regulations: Plan Funding) · 11 concepts: `Individual Savings Plan`, `Members' Right`, `Plan Amendment`, `Plan Establishment`, `Plan Termination-wind-Up` ✓, `Registered Retirement Plan`, `Reporting Requirement`, `Tax Regulation Pertaining`, `Funding Restrictions Imposed` ✓, `Pension Plan Funding`, `Retirement Funding Alternative`
-- **Batch 92** (Tier 3, to do) · Long-term insurance (life, annuities) (CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business; CP-312 (SOA) › Model Governance) · 10 concepts: `Complex Component`, `Dynamic Policyholder`, `Equity-Linked Guarantee`, `Index-Linked Credit`, `Long-Term Insurance Business`, `Governance Best Practice`, `Governance Documentation`, `Organizational Structure`, `Economic Scenario Generator`, `Financial Business`
-- **Batch 93** (Tier 3, to do) · Long-term insurance (life, annuities) (CP-341 (SOA) › Key Accounting and Regulatory Considerations; CP-341 (SOA) › Reinsurance Administration and Management) · 10 concepts: `OSFI Requirement`, `Reinsurance Requirement`, `Canadian Regulatory` ✓, `Global Jurisdiction`, `International Reinsurance Regulatory Framework`, `Private Equity Backed Reinsurer`, `US Stat Requirement`, `Reinsurance Administration`, `Reinsurance Counterparty Credit Risk`, `Captive Reinsurance Transaction`
-- **Batch 94** (Tier 3, to do) · Long-term insurance (life, annuities) (CP-341 (SOA) › Types of Reinsurance Arrangements and Methods; CP-341 (SOA) › Transferring Risk) · 10 concepts: `Reinsurance Agreement Provision`, `Inforce Reinsurance`, `Offshore Reinsurance`, `Advanced Reinsurance Transaction`, `Annuity Coinsurance`, `Global Reinsurance Market`, `Life Insurance Yearly Renewable Term`, `Non-Proportional Reinsurance Transaction`, `PRTs-longevity Swap`, `Private Equity Involvement`
-- **Batch 95** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing; ILA-101 (SOA) › Assumption Development and Experience Studies) · 10 concepts: `Experience Study` ✓, `Modern Mortality Table`, `Premium Persistency`, `Term Conversion`, `Annuity Product Design`, `Common Profit Metrics`, `Nonforfeiture`, `Pricing Insurance Product`, `Pricing Practice`, `Annuity Context`
-- **Batch 96** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Introduction to Assets and Risk Management; ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts) · 10 concepts: `Annuity Liability`, `Common Insurance Guarantees Generate Embedded Option`, `Duration-convexity Matching`, `Integrating ALM`, `Life Insurance Reinsurance Arrangement`, `Segmentation` ✓, `Deferred Acquisition Cost`, `International Regulatory Framework`, `Life Insurance Reserve`, `Term Insurance Reserve`
-- **Batch 97** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Product Management; ILA-201I (SOA) › Advanced Product Management) · 10 concepts: `Rising Interest Rate Environment`, `Annuity Distribution`, `Annuity Insurance Product`, `Canadian Tax Regulation`, `Challenges Insurers Face` ✓, `Corporate Taxation`, `Investment Income Tax`, `Policyholder Taxation`, `International Capital Requirement`, `International Framework`
-- **Batch 98** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-201I (SOA) › International Financial Reporting Requirements; ILA-201U (SOA) › Advanced Product Management) · 4 concepts: `International Life Insurance Company`, `US Company Tax Rule`, `Crediting Rating Agency Framework`, `Formulaic Reserve`
-- **Batch 99** (Tier 3, to do) · Statistics and predictive analytics (DISC-DA (CAS) › 3. Preparing Data for Analysis; DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project) · 11 concepts: `Data Documentation`, `Data Ethics`, `Statistical Plan`, `Data Mart`, `Data Validation`, `Database Index`, `Table Join`, `User-Defined Function`, `Web Scraping`, `Structured Data`, `Data Preparation`
-- **Batch 100** (Tier 1, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Pension Plans and Retirement Benefits) · 1 concepts: `Defined Benefit`
-- **Batch 101** (Tier 1, to do) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments) · 1 concepts: `Defined Contribution`
-- **Batch 102** (Tier 2, to do) · Short-term insurance (P&C, general) (GI-301 (SOA) › Specialized Ratemaking Topics) · 1 concepts: `Rated Policy`
-- **Batch 103** (Tier 2, to do) · Long-term insurance (life, annuities) (ALTAM (SOA) › Profit Analysis; FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs) · 2 concepts: `Actual Profit`, `Defined Contribution Pension Plan`
-- **Batch 104** (Tier 2, to do) · Health (GH-201U (SOA) › Flow of Funds) · 1 concepts: `Provider System`
-- **Batch 105** (Tier 2, to do) · Statistics and predictive analytics (PA (SOA) › Predictive Analytics Problem Definition) · 1 concepts: `Prescriptive Analytics`
-- **Batch 106** (Tier 3, to do) · Health (GH-201U (SOA) › Government Programs) · 1 concepts: `Health Benefit`
-- **Batch 107** (Tier 3, to do) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments; RET-301 (SOA) › Regulations: Plan Funding) · 2 concepts: `Traditional Defined Benefit Plan`, `Funding Restriction`
-- **Batch 108** (Tier 3, to do) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing; ILA-101 (SOA) › Introduction to Assets and Risk Management) · 4 concepts: `Common Life`, `Common Asset`, `Common Valuation`, `Challenges Insurer`
-- **Batch 109** (Tier 3, to do) · Short-term insurance (P&C, general) (GI-201 (SOA) › Legal Environment) · 1 concepts: `Legal Cases-issue`
+- **Batch 50** (Tier 3, done) · Short-term insurance (P&C, general) (DISC-IA (CAS) › 12. Specialty Coverages Part 1; DISC-IA (CAS) › 13. Specialty Coverages Part 2) · 10 concepts: `Professional Liability Insurance`, `Directors and Officers Liability Insurance`, `Employment Practices Liability Insurance`, `Environmental Insurance`, `Fiduciary Liability Insurance`, `International Insurance`, `Aircraft Insurance`, `Cyber Insurance`, `Terrorism Risk Insurance Program`, `Intentional Tort`
+- **Batch 51** (Tier 3, done) · Short-term insurance (P&C, general) (DISC-IA (CAS) › 3. Common Policy Concepts; DISC-IA (CAS) › 14. Insurance Law Part 1) · 10 concepts: `Negligence`, `Premises Liability`, `Products Liability`, `Strict Liability`, `Insurable Risk`, `Compensatory Damages`, `Loss Settlement Provisions`, `Actual Cash Value`, `Medical Payments Coverage`, `Health Insurance Plans`
+- **Batch 52** (Tier 3, done) · Short-term insurance (P&C, general) (DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage; DISC-IA (CAS) › 9. Commercial Property Insurance Part 2) · 10 concepts: `Term Life Insurance`, `Blanket Insurance`, `Common Policy Conditions`, `Period of Restoration`, `Commercial Crime Insurance`, `Premises and Operations Liability`, `Products and Completed Operations Liability`, `Business Auto Coverage`, `SWOT Analysis`, `Business Continuity Management`
+- **Batch 53** (Tier 3, done) · Short-term insurance (P&C, general) (DISC-RM (CAS) › 6. Overview of Insurance Operations; DISC-RM (CAS) › 7. Insurance Marketing and Distribution) · 10 concepts: `Organizational Resilience`, `Insurer Goals and Constraints`, `Insurtech`, `Types of Insurers`, `Insurance Distribution Systems`, `Insurance Marketing`, `Underwriting Policy`, `Underwriting Authority`, `Conduct Investigative Testing`, `Funding Requirement`
+- **Batch 54** (Tier 3, done) · Short-term insurance (P&C, general) (GI-101 (SOA) › Introduction and Key Considerations; GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work) · 10 concepts: `Real-Life Scenario`, `Self-Insurer`, `Professional Judgment`, `Actuary's Responsibility`, `Professionalism Requirement`, `Qualitative Information Required`, `Earnings Pattern`, `Ultimate Premium`, `Claim Transaction Data`, `Influencing Average Premium Level`
+- **Batch 55** (Tier 3, done) · Short-term insurance (P&C, general) (GI-101 (SOA) › Projecting Ultimate Claims; GI-101 (SOA) › Ratemaking) · 10 concepts: `Data Triangle`, `Required Data`, `Case Estimate`, `Development-Based Frequency-Severity`, `Generalized Cape Cod`, `Projected Ultimate Value`, `Varying Circumstance`, `Contingency Margin`, `Expenses Required`, `Expense Trending`
+- **Batch 56** (Tier 3, done) · Short-term insurance (P&C, general) (GI-201 (SOA) › General Insurance Company Operations; GI-201 (SOA) › Financial Economics) · 10 concepts: `Fundamental Ratemaking`, `Inflation-Sensitive Exposure`, `Behavioral Finance`, `Asset Liability Management Strategy`, `Underwriting Profit Margin`, `EU Solvency II Capital Requirement`, `Claim Handling Process`, `Insurer Risk`, `International Business`, `Peril`
+- **Batch 57** (Tier 3, done) · Short-term insurance (P&C, general) (GI-201 (SOA) › Legal Environment; GI-201 (SOA) › General Insurance Company Operations) · 10 concepts: `Pricing General Insurance Policy`, `Risk Mitigation Instrument`, `Insurance Law`, `Social Inflation`, `International Legal Environment`, `Legal Cases-issues Included`, `Mass Torts-class Action Suit`, `Syllabus Resource`, `Tort Law Environment`, `Tort Trend`
+- **Batch 58** (Tier 3, done) · Short-term insurance (P&C, general) (GI-201 (SOA) › Regulatory Environment; GI-201 (SOA) › Responsibilities of the Actuary) · 10 concepts: `Transnational Tort Litigation`, `Collective Insurance Industry Organization`, `Insolvency Regulation`, `Insurance Programs Controlled`, `Telematics`, `Insurance Actuarial Opinion`, `International Actuarial Association`, `Professionalism Principle`, `Professionalism Required`, `Catastrophe Modeling Output`
+- **Batch 59** (Tier 3, done) · Short-term insurance (P&C, general) (GI-301 (SOA) › Stochastic Reserving; GI-301 (SOA) › Reinsurance) · 10 concepts: `Property Catastrophe Risk Load`, `Insurance Premium Liability`, `Pricing Property Catastrophe Cover`, `Risk Transfer Testing`, `Claims-Made Contract`, `Increased Limit Option`, `Chain Ladder Estimator`, `Parametric Estimator`, `Reserve Variability`, `Stochastic Loss Development`
+- **Batch 60** (Tier 3, done) · Short-term insurance (P&C, general) (GI-302 (SOA) › U.S. General Insurance Products and Coverages; GI-302 (SOA) › Responsibilities of a U.S. Signing General Insurance Actuary) · 10 concepts: `Applicable Standard`, `Signing Actuary`, `Signing General Insurance Actuary`, `NAIC Annual Statement Pages-schedule`, `NAIC RBC`, `Statutory Financial Statement`, `Cyber Risk`, `Premium Basis`, `Commercial Auto Insurance`, `Employers Liability Insurance`
+- **Batch 61** (Tier 3, done) · Short-term insurance (P&C, general) (GI-302 (SOA) › U.S. General Insurance Products and Coverages; GI-302 (SOA) › U.S. General Insurance Regulation) · 13 concepts: `Excess Liability`, `ISO Commercial Automobile Policy`, `ISO Commercial Property`, `ISO Homeowner`, `ISO Personal Auto Policy`, `ISO WC`, `Specialty Insurance Coverage`, `Surety`, `Insurance Department`, `Insurance Commissioners' Duty`, `Insurance Personnel`, `Licensing Requirement`, `Regulatory Body`
+- **Batch 62** (Tier 3, done) · Financial economics and investments (CP-351 (SOA) › Measuring Risks from Assets and Liabilities; CP-351 (SOA) › Objectives of Asset Liability Management) · 10 concepts: `Long-Tail Liability`, `Portfolio's Exposure`, `Regulatory Capital Adequacy`, `Risk Identification Tool`, `ALM Failure`, `Insurance Contracts Generate Embedded Option`, `Lessons Learned`, `ALM Risk`, `ALM Context`, `Asset Allocation Strategy`
+- **Batch 63** (Tier 3, done) · Financial economics and investments (CP-351 (SOA) › Tools and Strategies to Manage ALM Risks; INV-101 (SOA) › Asset Classes) · 10 concepts: `Extreme ALM Event`, `Interest Rate Derivative`, `Liability Profile`, `Long-Tail Insurance Liability`, `Transferring Risk`, `Asset Class`, `Corporate Bond`, `Hedge Fund`, `Mortgage-backed Security`, `Distinguishing Investment`
+- **Batch 64** (Tier 3, done) · Financial economics and investments (INV-101 (SOA) › Asset Classes; INV-101 (SOA) › Credit Risk Management) · 10 concepts: `Leveraged Loan`, `Private Debt`, `Public Equity`, `Residential Mortgage`, `Structured Credit Product`, `Individual Security`, `Credit Risk Modeling`, `Portfolio Level`, `Passive Strategy`, `Institutional Investor`
+- **Batch 65** (Tier 3, done) · Financial economics and investments (INV-101 (SOA) › Portfolio Construction, Management, and Assessment) · 10 concepts: `Fixed Income Investment`, `Asset Benchmark`, `Enhance Yield`, `Fixed Income Portfolio`, `Investment Governance Structure`, `Investment Policy Statement`, `Liquidity`, `Optimal Portfolio Allocation`, `Performance Attribution Metrics`, `Portfolio Management Process`
+- **Batch 66** (Tier 3, done) · Financial economics and investments (INV-201 (SOA) › Applications and Risks of Derivatives) · 10 concepts: `Operational Failure`, `Cross Greek`, `Dynamic Hedging`, `Fund Performance`, `Guarantee Cost`, `Hedge Strategy`, `Implied Volatility`, `Indexed Annuity`, `Partially Hedged`, `Structured Product`
+- **Batch 67** (Tier 3, done) · Financial economics and investments (INV-201 (SOA) › Key Types of Derivatives; INV-201 (SOA) › Applications and Risks of Derivatives) · 10 concepts: `Target Volatility Fund`, `Variable Annuity Guarantee Rider`, `Asian Option`, `Butterfly Spread`, `Call Spread`, `Central Clearing`, `Collar`, `Daily Margin Variation`, `Daily Settle`, `Derivative Instrument`
+- **Batch 68** (Tier 3, done) · Financial economics and investments (INV-201 (SOA) › Key Types of Derivatives; INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Derivatives Strategy`, `Derivatives Trading`, `Exchange Traded`, `Exotic Option`, `Floor`, `Put Spread`, `Straddle`, `Strangle`, `Swaption`, `Arrow-Debreau Security`
+- **Batch 69** (Tier 3, done) · Financial economics and investments (INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Black-Scholes-Merton`, `Euler-Maruyama Discretization`, `Girsanov's Theorem`, `Incomplete Market`, `Isometry`, `Jump-Diffusion`, `Local- Volatility`, `Martingale`, `Modeling Smile`, `No-Arbitrage`
+- **Batch 70** (Tier 3, done) · Financial economics and investments (INV-201 (SOA) › Valuation of Derivatives) · 10 concepts: `Numeraire`, `Numerical Discretization`, `Observed Price`, `Pricing Derivative`, `Stochastic Calculus Theory`, `Stochastic Differential Equation`, `Stochastic Volatility`, `Traded Security`, `Transition Density`, `Volatility Smile`
+- **Batch 71** (Tier 3, done) · ERM and corporate finance (CFE-101 (SOA) › Embedding ERM into Decision-Making) · 10 concepts: `Capital Assessment`, `Marginal Capital`, `Non-Financial Risk`, `Return Trade-Off`, `Gauge Performance`, `Organization's Risk Profile`, `Organizational Process`, `Risk Capital Once Aggregated`, `Risk Once Aggregated`, `Risk Strategy`
+- **Batch 72** (Tier 3, done) · ERM and corporate finance (CFE-101 (SOA) › Risk Analysis and Evaluation; CFE-101 (SOA) › Enterprise Risk Management Foundations) · 10 concepts: `Risk-capital Strategy`, `External Environment`, `Market Conduct Compliance Activity`, `Emerging Risk`, `Risk Accumulation`, `Compounding Risk`, `Contagion-Related Risk`, `Easily Quantifiable`, `Monitoring Mechanism`, `Risk Aggregation`
+- **Batch 73** (Tier 3, done) · ERM and corporate finance (CFE-201 (SOA) › Corporate Finance; CFE-201 (SOA) › Financial Statement Analysis) · 10 concepts: `Optimal Capital Structure`, `Capital Budgeting`, `Competitive Environment`, `Corporate Finance`, `Divestiture`, `Organization Optimiz`, `Evolving Quantitative`, `Foreign Exchange Rate`, `Financial Metrics`, `Organization's Performance`
+- **Batch 74** (Tier 3, done) · ERM and corporate finance (CFE-201 (SOA) › Managerial Accounting and Operational Excellence; CP-311 (SOA) › Introduction to Strategic Management) · 10 concepts: `Reported Financial Statement`, `Business Process`, `Distort Perceived Performance`, `Drive Decision Making`, `Operational Excellence`, `Operational Process`, `Uncertain Condition`, `Business Environment`, `Business-Level Strategy`, `Competitive Dynamics`
+- **Batch 75** (Tier 3, done) · ERM and corporate finance (CP-311 (SOA) › Introduction to Strategic Management; CP-311 (SOA) › Organizational Behavior) · 10 concepts: `Corporate-Level Strategy`, `External-inorganic Growth Strategy`, `Market Opportunity`, `Organization's Business Strategy`, `Cognitive Biase`, `Making Suboptimal Individual`, `Organizational Behavior Plays`, `Organizational Decision-Making`, `Sustainable Growth`, `Effective Strategic Budgeting`
+- **Batch 76** (Tier 3, done) · ERM and corporate finance (CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures) · 5 concepts: `Financial Budgeting`, `Forecasting Decision Making Process`, `Organization's Initiative`, `Organization's Strategic`, `Tracking Progress`
+- **Batch 77** (Tier 3, done) · Health (CP-321 (SOA) › Manual Rates; CP-321 (SOA) › Asset Adequacy) · 10 concepts: `Asset Adequacy Standard`, `Asset Matching`, `Cash Flow Projection`, `Mismatched Asset`, `IFRS 17, US GAAP`, `Data Credibility`, `Base Rate Development`, `Commission`, `Guaranty Association`, `Long Term Care Rate Increase`
+- **Batch 78** (Tier 3, done) · Health (CP-321 (SOA) › Reserving; CP-321 (SOA) › Plan and Product Provisions) · 10 concepts: `Properly Modelling`, `Critical Illness`, `Medicare Supplement`, `Social Security Disability Income Benefit`, `Policy Reserve`, `Appliable Best Practice`, `Non-Claim Reserves Held`, `Premium Deficiency Reserve`, `Employers Offer Retiree Group Benefit`, `Life Plan Design`
+- **Batch 79** (Tier 3, done) · Health (GH-101 (SOA) › Plan and Product Provisions; CP-321 (SOA) › Retiree Group Benefits) · 10 concepts: `Post-Employment Benefit Plan`, `Retiree Health Valuation`, `Service Cost`, `Employee Benefit Plan`, `Employee Benefit Strategy`, `Medical Cost Trend Experience`, `Plan Provision`, `Prescription Drug`, `Product Development Process`, `Short Duration Contract`
+- **Batch 80** (Tier 3, done) · Health (GH-101 (SOA) › Underwriting and Funding; GH-201C (SOA) › Financial Statements) · 10 concepts: `Case-Specific Pricing`, `Claim Credibility`, `Pooling`, `Risk Assessment Mechanism`, `Underwriting Situation`, `Health Insurance Company`, `Taxable Income`, `Insurer Financial Statement`, `International Financial Reporting Standard`, `Canadian Health Care System`
+- **Batch 81** (Tier 3, done) · Health (GH-201U (SOA) › Government Programs; GH-201C (SOA) › Government Programs) · 10 concepts: `Private Group Insurance Plan`, `Capital Strain`, `Canadian Healthcare System`, `Affordable Care Act`, `Filing Requirement`, `Government Programs Providing Health Benefit`, `Medicaid Program Structure`, `Medicare Benefit`, `Short Duration Group`, `Actuarially Adjusted`
+- **Batch 82** (Tier 3, done) · Health (GH-301 (SOA) › Disease Management; GH-301 (SOA) › Healthcare Risk Adjustment1) · 10 concepts: `Healthcare Intervention`, `Non-Chronic Trend`, `Reflects Patient Risk`, `Utilization Rate`, `ACA Product`, `Care Management Situation`, `Normalize Population Claims Experience`, `Multiple Data`, `Coding Set`, `Clinical Policy Bulletin`
+- **Batch 83** (Tier 3, done) · Health (GH-301 (SOA) › Medical Data; GH-301 (SOA) › Predictive Analytics) · 10 concepts: `Coding Structure`, `Medical Coding`, `Private Data`, `Revenue Code`, `Healthcare Data`, `Healthcare Claim`, `Risk Score`, `Provider Reimbursement`, `Accountable Care Organization`, `Provider Payment`
+- **Batch 84** (Tier 3, done) · Health (GH-301 (SOA) › Social Determinants of Health; GH-301 (SOA) › Provider Contracting and Reimbursement) · 7 concepts: `Quality Perspective`, `Quality Viewpoint`, `Standard Contracting`, `Health Care Cost`, `Social Determinant`, `SDOH Derived Statistics`, `Traditional Actuarial Practice`
+- **Batch 85** (Tier 3, done) · Retirement (RET-101 (SOA) › Benefit Plan Design Recommendation) · 10 concepts: `Plan Design Feature`, `Retirement Risk`, `Sponsor's Plan`, `Employee Perspective`, `Introducing Option`, `Investment Risk Applicable`, `Labor Force Demographics`, `Plan Sponsor's Particular`, `Promote Employee Behavior Consistent`, `Retirement Plan Design`
+- **Batch 86** (Tier 3, done) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments; RET-101 (SOA) › Benefit Plan Design Recommendation) · 10 concepts: `Tax Incentive`, `Taxpayers' Perspective`, `Investment Vehicle`, `Payment Option`, `Providing Retirement Benefit`, `Retirement Fund Asset`, `Ancillary Benefit`, `Benefit Eligibility Requirement`, `Benefit Subsidy`, `Contribution Formula`
+- **Batch 87** (Tier 3, done) · Retirement (RET-101 (SOA) › Benefit Plan Structure, Features and Investments) · 10 concepts: `Executive Retirement Plan`, `Hybrid Plan`, `Late Retirement Option`, `Optional Employee Contribution`, `Participant Investment Option`, `Plan Eligibility Requirement`, `Retirement Plan Asset`, `Shared Risk Plan`, `Target Benefit Plan`, `Vesting`
+- **Batch 88** (Tier 3, done) · Retirement (RET-101 (SOA) › Participant Risks; RET-101 (SOA) › Sponsor Risks) · 10 concepts: `Benefit Adequacy`, `Public Sector Employer`, `Replacement Income`, `Retirement Plans Sponsored`, `Single Employer Sponsored Retirement Plan`, `Social Insurance Plan`, `Early Retirement`, `Decumulation Feature`, `Optional Form`, `Portability Option`
+- **Batch 89** (Tier 3, done) · Retirement (RET-201 (SOA) › Methods; RET-201 (SOA) › Accounting Standards) · 10 concepts: `Postponed Retirement`, `Termination-windup`, `Plan Curtailment`, `Pension Valuation`, `Cost Recognition`, `Cost Stability`, `Pension Benefit`, `Periodic Valuation`, `Cash Flow Requirement`, `Plan Sponsor Risk`
+- **Batch 90** (Tier 3, done) · Retirement (RET-201 (SOA) › Valuations for the Purpose of Funding; RET-301 (SOA) › Methods) · 10 concepts: `Funding Policy`, `Government-sponsored Plan`, `Multi-employer Plan`, `Plan Asset Composition`, `Principles Applicable`, `Single-employer Plan`, `Stakeholders' Interest`, `Asset Transfer`, `Going Concern Funding`, `Government Regulation`
+- **Batch 91** (Tier 3, done) · Retirement (RET-301 (SOA) › Regulations: Evaluation and Application; RET-301 (SOA) › Regulations: Plan Funding) · 11 concepts: `Individual Savings Plan`, `Members' Right`, `Plan Amendment`, `Plan Establishment`, `Plan Termination-wind-Up`, `Registered Retirement Plan`, `Reporting Requirement`, `Tax Regulation Pertaining`, `Funding Restrictions Imposed`, `Pension Plan Funding`, `Retirement Funding Alternative`
+- **Batch 92** (Tier 3, done) · Long-term insurance (life, annuities) (CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business; CP-312 (SOA) › Model Governance) · 10 concepts: `Complex Component`, `Dynamic Policyholder`, `Equity-Linked Guarantee`, `Index-Linked Credit`, `Long-Term Insurance Business`, `Governance Best Practice`, `Governance Documentation`, `Organizational Structure`, `Economic Scenario Generator`, `Financial Business`
+- **Batch 93** (Tier 3, done) · Long-term insurance (life, annuities) (CP-341 (SOA) › Key Accounting and Regulatory Considerations; CP-341 (SOA) › Reinsurance Administration and Management) · 10 concepts: `OSFI Requirement`, `Reinsurance Requirement`, `Canadian Regulatory`, `Global Jurisdiction`, `International Reinsurance Regulatory Framework`, `Private Equity Backed Reinsurer`, `US Stat Requirement`, `Reinsurance Administration`, `Reinsurance Counterparty Credit Risk`, `Captive Reinsurance Transaction`
+- **Batch 94** (Tier 3, done) · Long-term insurance (life, annuities) (CP-341 (SOA) › Types of Reinsurance Arrangements and Methods; CP-341 (SOA) › Transferring Risk) · 10 concepts: `Reinsurance Agreement Provision`, `Inforce Reinsurance`, `Offshore Reinsurance`, `Advanced Reinsurance Transaction`, `Annuity Coinsurance`, `Global Reinsurance Market`, `Life Insurance Yearly Renewable Term`, `Non-Proportional Reinsurance Transaction`, `PRTs-longevity Swap`, `Private Equity Involvement`
+- **Batch 95** (Tier 3, done) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing; ILA-101 (SOA) › Assumption Development and Experience Studies) · 10 concepts: `Experience Study`, `Modern Mortality Table`, `Premium Persistency`, `Term Conversion`, `Annuity Product Design`, `Common Profit Metrics`, `Nonforfeiture`, `Pricing Insurance Product`, `Pricing Practice`, `Annuity Context`
+- **Batch 96** (Tier 3, done) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Introduction to Assets and Risk Management; ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts) · 10 concepts: `Annuity Liability`, `Common Insurance Guarantees Generate Embedded Option`, `Duration-convexity Matching`, `Integrating ALM`, `Life Insurance Reinsurance Arrangement`, `Segmentation`, `Deferred Acquisition Cost`, `International Regulatory Framework`, `Life Insurance Reserve`, `Term Insurance Reserve`
+- **Batch 97** (Tier 3, done) · Long-term insurance (life, annuities) (ILA-101 (SOA) › Product Management; ILA-201I (SOA) › Advanced Product Management) · 10 concepts: `Rising Interest Rate Environment`, `Annuity Distribution`, `Annuity Insurance Product`, `Canadian Tax Regulation`, `Challenges Insurers Face`, `Corporate Taxation`, `Investment Income Tax`, `Policyholder Taxation`, `International Capital Requirement`, `International Framework`
+- **Batch 98** (Tier 3, done) · Long-term insurance (life, annuities) (ILA-201I (SOA) › International Financial Reporting Requirements; ILA-201U (SOA) › Advanced Product Management) · 4 concepts: `International Life Insurance Company`, `US Company Tax Rule`, `Crediting Rating Agency Framework`, `Formulaic Reserve`
+- **Batch 99** (Tier 3, done) · Statistics and predictive analytics (DISC-DA (CAS) › 3. Preparing Data for Analysis; DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project) · 11 concepts: `Data Documentation`, `Data Ethics`, `Statistical Plan`, `Data Mart`, `Data Validation`, `Database Index`, `Table Join`, `User-Defined Function`, `Web Scraping`, `Structured Data`, `Data Preparation`
 
-### Tier 1 — high-traffic foundations (2)
+### Tier 2 — frequently linked, exam-relevant (1)
 
 | # | Concept (canonical filename) | Aliases | Links (guides) | Qs tagged / mentioned | Weight | Exam(s) | Linked from | Depends on | Score |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | `Concepts/Defined Benefit.md` | — | 2 (2) | 0 / 1 | 11% | ALTAM (SOA), FAM (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits; FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | — | 7.3 |
-| 2 | `Concepts/Defined Contribution.md` | — | 2 (2) | 0 / 0 | 18% | ALTAM (SOA), RET-101 (SOA) | ALTAM (SOA) › Pension Plans and Retirement Benefits; RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 7.02 |
-
-### Tier 2 — frequently linked, exam-relevant (6)
-
-| # | Concept (canonical filename) | Aliases | Links (guides) | Qs tagged / mentioned | Weight | Exam(s) | Linked from | Depends on | Score |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | `Concepts/Rated Policy.md` | — | 1 (1) | 0 / 12 | 14% | GI-301 (SOA) | GI-301 (SOA) › Specialized Ratemaking Topics | — | 6.35 |
-| 2 | `Concepts/Total Risk.md` | — | 1 (1) | 0 / 8 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 6.05 |
-| 3 | `Concepts/Actual Profit.md` | — | 1 (1) | 0 / 2 | 12% | ALTAM (SOA) | ALTAM (SOA) › Profit Analysis | — | 5.5 |
-| 4 | `Concepts/Provider System.md` | — | 2 (2) | 0 / 0 | 5% | GH-201C (SOA), GH-201U (SOA) | GH-201C (SOA) › Flow of Funds; GH-201U (SOA) › Flow of Funds | — | 4.47 |
-| 5 | `Concepts/Prescriptive Analytics.md` | — | 1 (1) | 0 / 0 | 12% | PA (SOA) | PA (SOA) › Predictive Analytics Problem Definition | — | 4.4 |
-| 6 | `Concepts/Defined Contribution Pension Plan.md` | — | 1 (1) | 0 / 0 | 3% | FAM (SOA) | FAM (SOA) › Long-Term Insurance Coverages and Retirement Financial Security Programs | Defined Contribution | 3.86 |
-
-### Tier 3 — niche or single-link (441)
-
-<details><summary>Show the table</summary>
-
-| # | Concept (canonical filename) | Aliases | Links (guides) | Qs tagged / mentioned | Weight | Exam(s) | Linked from | Depends on | Score |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | `Concepts/Data Triangle.md` | — | 1 (1) | 0 / 2 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 5.4 |
-| 2 | `Concepts/Passive Strategy.md` | — | 1 (1) | 0 / 2 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 5.23 |
-| 3 | `Concepts/Sustainable Growth.md` | — | 2 (1) | 0 / 1 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 5.09 |
-| 4 | `Concepts/Capital Assessment.md` | — | 2 (1) | 0 / 1 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 5.08 |
-| 5 | `Concepts/Marginal Capital.md` | — | 1 (1) | 0 / 2 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 5.08 |
-| 6 | `Concepts/Required Data.md` | — | 1 (1) | 0 / 1 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 5.0 |
-| 7 | `Concepts/Asset Class.md` | — | 1 (1) | 0 / 2 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 4.96 |
-| 8 | `Concepts/Corporate Bond.md` | — | 1 (1) | 0 / 2 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 4.96 |
-| 9 | `Concepts/Emerging Risk.md` | — | 2 (1) | 0 / 1 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 4.92 |
-| 10 | `Concepts/Capital Strain.md` | — | 1 (1) | 0 / 2 | 14% | GH-201U (SOA) | GH-201U (SOA) › Financial Statements | — | 4.89 |
-| 11 | `Concepts/Foreign Exchange Rate.md` | — | 1 (1) | 0 / 2 | 13% | CFE-201 (SOA) | CFE-201 (SOA) › Financial Statement Analysis | — | 4.83 |
-| 12 | `Concepts/Health Insurance Company.md` | — | 2 (1) | 0 / 1 | 12% | GH-201C (SOA) | GH-201C (SOA) › Financial Statements | — | 4.82 |
-| 13 | `Concepts/Institutional Investor.md` | — | 1 (1) | 0 / 1 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.82 |
-| 14 | `Concepts/Investment Vehicle.md` | — | 1 (1) | 0 / 1 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.75 |
-| 15 | `Concepts/Operational Failure.md` | — | 1 (1) | 0 / 1 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.75 |
-| 16 | `Concepts/Payment Option.md` | — | 1 (1) | 0 / 1 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.75 |
-| 17 | `Concepts/ALM Risk.md` | — | 2 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Objectives of Asset Liability Management; CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.73 |
-| 18 | `Concepts/Economic Scenario Generator.md` | — | 1 (1) | 0 / 1 | 17% | CP-312 (SOA) | CP-312 (SOA) › Other types of Models for Financial Business | — | 4.69 |
-| 19 | `Concepts/Non-Financial Risk.md` | — | 1 (1) | 0 / 1 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 4.67 |
-| 20 | `Concepts/Insurance Law.md` | — | 2 (1) | 0 / 1 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 4.62 |
-| 21 | `Concepts/Social Inflation.md` | — | 1 (1) | 0 / 2 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 4.62 |
-| 22 | `Concepts/International Life Insurance Company.md` | — | 2 (1) | 0 / 0 | 20% | ILA-201I (SOA) | ILA-201I (SOA) › Capital Management; ILA-201I (SOA) › International Financial Reporting Requirements | — | 4.6 |
-| 23 | `Concepts/Hedge Fund.md` | — | 1 (1) | 0 / 1 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 4.55 |
-| 24 | `Concepts/Mortgage-backed Security.md` | — | 1 (1) | 0 / 1 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 4.55 |
-| 25 | `Concepts/OSFI Requirement.md` | — | 1 (1) | 0 / 1 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 4.55 |
-| 26 | `Concepts/Fixed Income Investment.md` | — | 2 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes; INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.53 |
-| 27 | `Concepts/Risk Accumulation.md` | — | 1 (1) | 0 / 1 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 4.51 |
-| 28 | `Concepts/Compensatory Damages.md` | — | 2 (1) | 0 / 2 | — | DISC-IA (CAS) | DISC-IA (CAS) › 15. Insurance Law Part 2; DISC-IA (CAS) › 3. Common Policy Concepts | — | 4.48 |
-| 29 | `Concepts/Data Credibility.md` | — | 1 (1) | 0 / 1 | 14% | CP-321 (SOA) | CP-321 (SOA) › Manual Rates | — | 4.48 |
-| 30 | `Concepts/Plan Provision.md` | — | 1 (1) | 0 / 2 | 7% | GH-101 (SOA) | GH-101 (SOA) › Plan and Product Provisions | — | 4.48 |
-| 31 | `Concepts/Formulaic Reserve.md` | — | 1 (1) | 0 / 0 | 25% | ILA-201U (SOA) | ILA-201U (SOA) › U.S. Financial Reporting Requirements | — | 4.46 |
-| 32 | `Concepts/Retirement Fund Asset.md` | — | 2 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation; RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.46 |
-| 33 | `Concepts/Earnings Pattern.md` | — | 1 (1) | 0 / 2 | 6% | GI-101 (SOA) | GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work | — | 4.43 |
-| 34 | `Concepts/Financial Metrics.md` | — | 1 (1) | 0 / 1 | 13% | CFE-201 (SOA) | CFE-201 (SOA) › Financial Statement Analysis | — | 4.43 |
-| 35 | `Concepts/Ultimate Premium.md` | — | 1 (1) | 0 / 2 | 6% | GI-101 (SOA) | GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work | — | 4.43 |
-| 36 | `Concepts/Individual Security.md` | — | 1 (1) | 0 / 1 | 12% | INV-101 (SOA) | INV-101 (SOA) › Credit Risk Management | — | 4.42 |
-| 37 | `Concepts/Insurance Department.md` | — | 1 (1) | 0 / 2 | 6% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Regulation | — | 4.42 |
-| 38 | `Concepts/Taxable Income.md` | — | 1 (1) | 0 / 1 | 12% | GH-201C (SOA) | GH-201C (SOA) › Financial Statements | — | 4.42 |
-| 39 | `Concepts/Inflation-Sensitive Exposure.md` | — | 1 (1) | 0 / 2 | 5% | GI-101 (SOA) | GI-101 (SOA) › Trending | — | 4.38 |
-| 40 | `Concepts/Return Trade-Off.md` | — | 2 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 4.38 |
-| 41 | `Concepts/Health Care Cost.md` | — | 1 (1) | 0 / 2 | 5% | GH-301 (SOA) | GH-301 (SOA) › Social Determinants of Health | — | 4.35 |
-| 42 | `Concepts/ALM Context.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 43 | `Concepts/Arrow-Debreau Security.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 44 | `Concepts/Asset Allocation Strategy.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 45 | `Concepts/Euler-Maruyama Discretization.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 46 | `Concepts/Extreme ALM Event.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 47 | `Concepts/Girsanov's Theorem.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 48 | `Concepts/Incomplete Market.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 49 | `Concepts/Inforce Reinsurance.md` | — | 2 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 4.33 |
-| 50 | `Concepts/Interest Rate Derivative.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 51 | `Concepts/Isometry.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 52 | `Concepts/Liability Profile.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 53 | `Concepts/Local- Volatility.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 54 | `Concepts/Long-Tail Insurance Liability.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 55 | `Concepts/Martingale.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 56 | `Concepts/Modeling Smile.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 57 | `Concepts/Numeraire.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 58 | `Concepts/Numerical Discretization.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 59 | `Concepts/Observed Price.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 60 | `Concepts/Offshore Reinsurance.md` | — | 2 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations; CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 4.33 |
-| 61 | `Concepts/Pricing Derivative.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 62 | `Concepts/Stochastic Calculus Theory.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 63 | `Concepts/Stochastic Differential Equation.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 64 | `Concepts/Stochastic Volatility.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 65 | `Concepts/Traded Security.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 66 | `Concepts/Transferring Risk.md` | — | 1 (1) | 0 / 0 | 22% | CP-351 (SOA) | CP-351 (SOA) › Tools and Strategies to Manage ALM Risks | — | 4.33 |
-| 67 | `Concepts/Transition Density.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 68 | `Concepts/Volatility Smile.md` | — | 1 (1) | 0 / 0 | 22% | INV-201 (SOA) | INV-201 (SOA) › Valuation of Derivatives | — | 4.33 |
-| 69 | `Concepts/Case Estimate.md` | — | 1 (1) | 0 / 0 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 4.3 |
-| 70 | `Concepts/Development-Based Frequency-Severity.md` | — | 1 (1) | 0 / 0 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 4.3 |
-| 71 | `Concepts/Generalized Cape Cod.md` | — | 1 (1) | 0 / 0 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 4.3 |
-| 72 | `Concepts/Projected Ultimate Value.md` | — | 1 (1) | 0 / 0 | 22% | GI-101 (SOA) | GI-101 (SOA) › Projecting Ultimate Claims | — | 4.3 |
-| 73 | `Concepts/Cyber Risk.md` | — | 1 (1) | 0 / 2 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.28 |
-| 74 | `Concepts/Premium Basis.md` | — | 1 (1) | 0 / 2 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 4.28 |
-| 75 | `Concepts/Optimal Capital Structure.md` | — | 1 (1) | 0 / 1 | 10% | CFE-201 (SOA) | CFE-201 (SOA) › Corporate Finance | — | 4.27 |
-| 76 | `Concepts/Reinsurance Requirement.md` | — | 2 (1) | 0 / 0 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 4.26 |
-| 77 | `Concepts/Behavioral Finance.md` | — | 1 (1) | 0 / 2 | 3% | GI-201 (SOA) | GI-201 (SOA) › Financial Economics | — | 4.25 |
-| 78 | `Concepts/Deferred Acquisition Cost.md` | — | 1 (1) | 0 / 1 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts | — | 4.21 |
-| 79 | `Concepts/Early Retirement.md` | — | 1 (1) | 0 / 1 | 9% | RET-101 (SOA) | RET-101 (SOA) › Sponsor Risks | — | 4.21 |
-| 80 | `Concepts/Employee Benefit Plan.md` | — | 1 (1) | 0 / 1 | 9% | GH-101 (SOA) | GH-101 (SOA) › Employee Benefits | — | 4.21 |
-| 81 | `Concepts/Healthcare Data.md` | Common Healthcare Data | 2 (1) | 0 / 1 | 2% | GH-301 (SOA) | GH-301 (SOA) › Predictive Analytics | — | 4.21 |
-| 82 | `Concepts/Policy Reserve.md` | — | 1 (1) | 0 / 1 | 9% | CP-321 (SOA) | CP-321 (SOA) › Reserving | — | 4.21 |
-| 83 | `Concepts/Rising Interest Rate Environment.md` | — | 1 (1) | 0 / 1 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Product Management | — | 4.21 |
-| 84 | `Concepts/Professional Judgment.md` | — | 1 (1) | 0 / 2 | 1% | GI-101 (SOA) | GI-101 (SOA) › Introduction and Key Considerations | — | 4.16 |
-| 85 | `Concepts/Organization's Performance.md` | — | 2 (1) | 0 / 0 | 13% | CFE-201 (SOA) | CFE-201 (SOA) › Financial Statement Analysis; CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 4.14 |
-| 86 | `Concepts/Asset Benchmark.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 87 | `Concepts/Complex Component.md` | — | 1 (1) | 0 / 0 | 19% | CP-312 (SOA) | CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business | — | 4.13 |
-| 88 | `Concepts/Dynamic Policyholder.md` | — | 1 (1) | 0 / 0 | 19% | CP-312 (SOA) | CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business | — | 4.13 |
-| 89 | `Concepts/Enhance Yield.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 90 | `Concepts/Equity-Linked Guarantee.md` | — | 1 (1) | 0 / 0 | 19% | CP-312 (SOA) | CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business | — | 4.13 |
-| 91 | `Concepts/Fixed Income Portfolio.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 92 | `Concepts/Index-Linked Credit.md` | — | 1 (1) | 0 / 0 | 19% | CP-312 (SOA) | CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business | — | 4.13 |
-| 93 | `Concepts/Investment Governance Structure.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 94 | `Concepts/Long-Term Insurance Business.md` | — | 1 (1) | 0 / 0 | 19% | CP-312 (SOA) | CP-312 (SOA) › Cash Flow Models for Long-Term Insurance Business | — | 4.13 |
-| 95 | `Concepts/NAIC Annual Statement Pages-schedule.md` | — | 1 (1) | 0 / 0 | 19% | GI-302 (SOA) | GI-302 (SOA) › U.S. GI Financial Reporting and Financial Health Measurement | — | 4.13 |
-| 96 | `Concepts/NAIC RBC.md` | — | 1 (1) | 0 / 0 | 19% | GI-302 (SOA) | GI-302 (SOA) › U.S. GI Financial Reporting and Financial Health Measurement | — | 4.13 |
-| 97 | `Concepts/Optimal Portfolio Allocation.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 98 | `Concepts/Performance Attribution Metrics.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 99 | `Concepts/Portfolio Management Process.md` | — | 1 (1) | 0 / 0 | 19% | INV-101 (SOA) | INV-101 (SOA) › Portfolio Construction, Management, and Assessment | — | 4.13 |
-| 100 | `Concepts/Statutory Financial Statement.md` | — | 1 (1) | 0 / 0 | 19% | GI-302 (SOA) | GI-302 (SOA) › U.S. GI Financial Reporting and Financial Health Measurement | — | 4.13 |
-| 101 | `Concepts/Contingency Margin.md` | — | 1 (1) | 0 / 1 | 7% | GI-101 (SOA) | GI-101 (SOA) › Ratemaking | — | 4.1 |
-| 102 | `Concepts/Affordable Care Act.md` | — | 1 (1) | 0 / 1 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 4.08 |
-| 103 | `Concepts/Health Benefit.md` | — | 1 (1) | 0 / 1 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 4.08 |
-| 104 | `Concepts/Intentional Tort.md` | — | 2 (1) | 0 / 1 | — | DISC-IA (CAS) | DISC-IA (CAS) › 14. Insurance Law Part 1 | — | 4.08 |
-| 105 | `Concepts/Multiple Data.md` | — | 1 (1) | 0 / 1 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 4.08 |
-| 106 | `Concepts/Products Liability.md` | — | 1 (1) | 0 / 2 | — | DISC-IA (CAS) | DISC-IA (CAS) › 15. Insurance Law Part 2 | — | 4.08 |
-| 107 | `Concepts/Underwriting Policy.md` | — | 2 (1) | 0 / 1 | — | DISC-RM (CAS) | DISC-RM (CAS) › 8. The Underwriting Function | — | 4.08 |
-| 108 | `Concepts/Ancillary Benefit.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 109 | `Concepts/Benefit Eligibility Requirement.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 110 | `Concepts/Benefit Subsidy.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 111 | `Concepts/Contribution Formula.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 112 | `Concepts/Cross Greek.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 113 | `Concepts/Dynamic Hedging.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 114 | `Concepts/Executive Retirement Plan.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 115 | `Concepts/Fund Performance.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 116 | `Concepts/Guarantee Cost.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 117 | `Concepts/Hedge Strategy.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 118 | `Concepts/Hybrid Plan.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 119 | `Concepts/Implied Volatility.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 120 | `Concepts/Indexed Annuity.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 121 | `Concepts/Late Retirement Option.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 122 | `Concepts/Optional Employee Contribution.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 123 | `Concepts/Participant Investment Option.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 124 | `Concepts/Plan Curtailment.md` | — | 1 (1) | 0 / 0 | 18% | RET-201 (SOA) | RET-201 (SOA) › Accounting Standards | — | 4.06 |
-| 125 | `Concepts/Plan Eligibility Requirement.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 126 | `Concepts/Retirement Plan Asset.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 127 | `Concepts/Shared Risk Plan.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 128 | `Concepts/Structured Product.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 129 | `Concepts/Target Benefit Plan.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | — | 4.06 |
-| 130 | `Concepts/Target Volatility Fund.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 131 | `Concepts/Traditional Defined Benefit Plan.md` | — | 1 (1) | 0 / 0 | 18% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Structure, Features and Investments | Defined Benefit | 4.06 |
-| 132 | `Concepts/Variable Annuity Guarantee Rider.md` | — | 1 (1) | 0 / 0 | 18% | INV-201 (SOA) | INV-201 (SOA) › Applications and Risks of Derivatives | — | 4.06 |
-| 133 | `Concepts/Effective Strategic Budgeting.md` | — | 1 (1) | 0 / 0 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 3.99 |
-| 134 | `Concepts/Financial Budgeting.md` | — | 1 (1) | 0 / 0 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 3.99 |
-| 135 | `Concepts/Financial Business.md` | — | 1 (1) | 0 / 0 | 17% | CP-312 (SOA) | CP-312 (SOA) › Other types of Models for Financial Business | — | 3.99 |
-| 136 | `Concepts/Forecasting Decision Making Process.md` | — | 1 (1) | 0 / 0 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 3.99 |
-| 137 | `Concepts/Organization's Initiative.md` | — | 1 (1) | 0 / 0 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 3.99 |
-| 138 | `Concepts/Signing Actuary.md` | — | 1 (1) | 0 / 0 | 17% | GI-302 (SOA) | GI-302 (SOA) › Responsibilities of a U.S. Signing General Insurance Actuary | — | 3.99 |
-| 139 | `Concepts/Signing General Insurance Actuary.md` | — | 1 (1) | 0 / 0 | 17% | GI-302 (SOA) | GI-302 (SOA) › Responsibilities of a U.S. Signing General Insurance Actuary | — | 3.99 |
-| 140 | `Concepts/Tracking Progress.md` | — | 1 (1) | 0 / 0 | 17% | CP-311 (SOA) | CP-311 (SOA) › Strategic Budgeting, Forecasting, and Value Measures | — | 3.99 |
-| 141 | `Concepts/Gauge Performance.md` | — | 1 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 3.98 |
-| 142 | `Concepts/Organization's Risk Profile.md` | — | 1 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 3.98 |
-| 143 | `Concepts/Organizational Process.md` | — | 1 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 3.98 |
-| 144 | `Concepts/Risk Strategy.md` | — | 1 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 3.98 |
-| 145 | `Concepts/Risk-capital Strategy.md` | — | 1 (1) | 0 / 0 | 17% | CFE-101 (SOA) | CFE-101 (SOA) › Embedding ERM into Decision-Making | — | 3.98 |
-| 146 | `Concepts/Advanced Reinsurance Transaction.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 147 | `Concepts/Annuity Coinsurance.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 148 | `Concepts/Chain Ladder Estimator.md` | Chain Ladder Estimation | 2 (1) | 0 / 0 | 9% | GI-301 (SOA) | GI-301 (SOA) › Stochastic Reserving | — | 3.92 |
-| 149 | `Concepts/Employee Benefit Strategy.md` | — | 2 (1) | 0 / 0 | 9% | GH-101 (SOA) | GH-101 (SOA) › Employee Benefits | — | 3.92 |
-| 150 | `Concepts/Evolving Quantitative.md` | — | 1 (1) | 0 / 0 | 16% | CFE-201 (SOA) | CFE-201 (SOA) › Evolving Quantitative Methods and Technologies | — | 3.92 |
-| 151 | `Concepts/Global Reinsurance Market.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 152 | `Concepts/Life Insurance Yearly Renewable Term.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 153 | `Concepts/Long-Tail Liability.md` | — | 1 (1) | 0 / 0 | 16% | CP-351 (SOA) | CP-351 (SOA) › Measuring Risks from Assets and Liabilities | — | 3.92 |
-| 154 | `Concepts/Non-Proportional Reinsurance Transaction.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 155 | `Concepts/PRTs-longevity Swap.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 156 | `Concepts/Plan Design Feature.md` | — | 2 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.92 |
-| 157 | `Concepts/Portfolio's Exposure.md` | — | 1 (1) | 0 / 0 | 16% | CP-351 (SOA) | CP-351 (SOA) › Measuring Risks from Assets and Liabilities | — | 3.92 |
-| 158 | `Concepts/Private Equity Involvement.md` | — | 1 (1) | 0 / 0 | 16% | CP-341 (SOA) | CP-341 (SOA) › Types of Reinsurance Arrangements and Methods | — | 3.92 |
-| 159 | `Concepts/Regulatory Capital Adequacy.md` | — | 1 (1) | 0 / 0 | 16% | CP-351 (SOA) | CP-351 (SOA) › Measuring Risks from Assets and Liabilities | — | 3.92 |
-| 160 | `Concepts/Retirement Risk.md` | — | 2 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.92 |
-| 161 | `Concepts/Risk Identification Tool.md` | — | 1 (1) | 0 / 0 | 16% | CP-351 (SOA) | CP-351 (SOA) › Measuring Risks from Assets and Liabilities | — | 3.92 |
-| 162 | `Concepts/Short Duration Group.md` | — | 1 (1) | 0 / 0 | 16% | GH-201U (SOA) | GH-201U (SOA) › Reserving | — | 3.92 |
-| 163 | `Concepts/Sponsor's Plan.md` | — | 2 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.92 |
-| 164 | `Concepts/Business Environment.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 165 | `Concepts/Business-Level Strategy.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 166 | `Concepts/Competitive Dynamics.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 167 | `Concepts/Corporate-Level Strategy.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 168 | `Concepts/External-inorganic Growth Strategy.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 169 | `Concepts/Market Opportunity.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 170 | `Concepts/Organization's Business Strategy.md` | — | 1 (1) | 0 / 0 | 16% | CP-311 (SOA) | CP-311 (SOA) › Introduction to Strategic Management | — | 3.91 |
-| 171 | `Concepts/Claim Handling Process.md` | — | 1 (1) | 0 / 1 | 3% | GI-201 (SOA) | GI-201 (SOA) › General Insurance Company Operations | — | 3.88 |
-| 172 | `Concepts/Insurer Risk.md` | — | 1 (1) | 0 / 1 | 3% | GI-201 (SOA) | GI-201 (SOA) › General Insurance Company Operations | — | 3.88 |
-| 173 | `Concepts/Case-Specific Pricing.md` | — | 1 (1) | 0 / 0 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 3.86 |
-| 174 | `Concepts/Claim Credibility.md` | — | 1 (1) | 0 / 0 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 3.86 |
-| 175 | `Concepts/Global Jurisdiction.md` | — | 1 (1) | 0 / 0 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 3.86 |
-| 176 | `Concepts/International Reinsurance Regulatory Framework.md` | — | 1 (1) | 0 / 0 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 3.86 |
-| 177 | `Concepts/Leveraged Loan.md` | — | 1 (1) | 0 / 0 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 3.86 |
-| 178 | `Concepts/Medical Cost Trend Experience.md` | — | 1 (1) | 0 / 0 | 15% | GH-101 (SOA) | GH-101 (SOA) › Manual Rates | — | 3.86 |
-| 179 | `Concepts/Private Debt.md` | — | 1 (1) | 0 / 0 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 3.86 |
-| 180 | `Concepts/Private Equity Backed Reinsurer.md` | — | 1 (1) | 0 / 0 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 3.86 |
-| 181 | `Concepts/Public Equity.md` | — | 1 (1) | 0 / 0 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 3.86 |
-| 182 | `Concepts/Residential Mortgage.md` | — | 1 (1) | 0 / 0 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 3.86 |
-| 183 | `Concepts/Risk Assessment Mechanism.md` | — | 1 (1) | 0 / 0 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 3.86 |
-| 184 | `Concepts/Structured Credit Product.md` | — | 1 (1) | 0 / 0 | 15% | INV-101 (SOA) | INV-101 (SOA) › Asset Classes | — | 3.86 |
-| 185 | `Concepts/US Stat Requirement.md` | — | 1 (1) | 0 / 0 | 15% | CP-341 (SOA) | CP-341 (SOA) › Key Accounting and Regulatory Considerations | — | 3.86 |
-| 186 | `Concepts/Underwriting Situation.md` | — | 1 (1) | 0 / 0 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 3.86 |
-| 187 | `Concepts/External Environment.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Enterprise Risk Management Foundations | — | 3.84 |
-| 188 | `Concepts/Market Conduct Compliance Activity.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Enterprise Risk Management Foundations | — | 3.84 |
-| 189 | `Concepts/Compounding Risk.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 3.82 |
-| 190 | `Concepts/Contagion-Related Risk.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 3.82 |
-| 191 | `Concepts/Monitoring Mechanism.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 3.82 |
-| 192 | `Concepts/Risk Aggregation.md` | — | 1 (1) | 0 / 0 | 14% | CFE-101 (SOA) | CFE-101 (SOA) › Risk Analysis and Evaluation | — | 3.82 |
-| 193 | `Concepts/Base Rate Development.md` | — | 1 (1) | 0 / 0 | 14% | CP-321 (SOA) | CP-321 (SOA) › Manual Rates | — | 3.79 |
-| 194 | `Concepts/Claims-Made Contract.md` | — | 1 (1) | 0 / 0 | 14% | GI-301 (SOA) | GI-301 (SOA) › Specialized Ratemaking Topics | — | 3.79 |
-| 195 | `Concepts/Coding Set.md` | — | 2 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.79 |
-| 196 | `Concepts/Filing Requirement.md` | — | 2 (1) | 0 / 0 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 3.79 |
-| 197 | `Concepts/Guaranty Association.md` | — | 1 (1) | 0 / 0 | 14% | CP-321 (SOA) | CP-321 (SOA) › Manual Rates | — | 3.79 |
-| 198 | `Concepts/Increased Limit Option.md` | — | 1 (1) | 0 / 0 | 14% | GI-301 (SOA) | GI-301 (SOA) › Specialized Ratemaking Topics | — | 3.79 |
-| 199 | `Concepts/Long Term Care Rate Increase.md` | — | 1 (1) | 0 / 0 | 14% | CP-321 (SOA) | CP-321 (SOA) › Manual Rates | — | 3.79 |
-| 200 | `Concepts/Reported Financial Statement.md` | — | 1 (1) | 0 / 0 | 13% | CFE-201 (SOA) | CFE-201 (SOA) › Financial Statement Analysis | — | 3.74 |
-| 201 | `Concepts/Captive Reinsurance Transaction.md` | — | 1 (1) | 0 / 0 | 12% | CP-341 (SOA) | CP-341 (SOA) › Transferring Risk | — | 3.72 |
-| 202 | `Concepts/Credit Risk Modeling.md` | — | 1 (1) | 0 / 0 | 12% | INV-101 (SOA) | INV-101 (SOA) › Credit Risk Management | — | 3.72 |
-| 203 | `Concepts/Insurer Financial Statement.md` | — | 1 (1) | 0 / 0 | 12% | GH-201C (SOA) | GH-201C (SOA) › Financial Statements | — | 3.72 |
-| 204 | `Concepts/International Financial Reporting Standard.md` | — | 1 (1) | 0 / 0 | 12% | GH-201C (SOA) | GH-201C (SOA) › Financial Statements | — | 3.72 |
-| 205 | `Concepts/Portfolio Level.md` | — | 1 (1) | 0 / 0 | 12% | INV-101 (SOA) | INV-101 (SOA) › Credit Risk Management | — | 3.72 |
-| 206 | `Concepts/Reinsurance Agreement Provision.md` | — | 1 (1) | 0 / 0 | 12% | CP-341 (SOA) | CP-341 (SOA) › Transferring Risk | — | 3.72 |
-| 207 | `Concepts/Collective Insurance Industry Organization.md` | — | 1 (1) | 0 / 0 | 12% | GI-201 (SOA) | GI-201 (SOA) › Regulatory Environment | — | 3.68 |
-| 208 | `Concepts/Insolvency Regulation.md` | — | 1 (1) | 0 / 0 | 12% | GI-201 (SOA) | GI-201 (SOA) › Regulatory Environment | — | 3.68 |
-| 209 | `Concepts/International Insurance.md` | — | 1 (1) | 0 / 1 | — | DISC-IA (CAS) | DISC-IA (CAS) › 13. Specialty Coverages Part 2 | — | 3.67 |
-| 210 | `Concepts/Accountable Care Organization.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Provider Contracting and Reimbursement | — | 3.65 |
-| 211 | `Concepts/Asset Transfer.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Methods | — | 3.65 |
-| 212 | `Concepts/Corporate Taxation.md` | — | 1 (1) | 0 / 0 | 11% | ILA-201I (SOA) | ILA-201I (SOA) › Advanced Product Management | — | 3.65 |
-| 213 | `Concepts/Employers Offer Retiree Group Benefit.md` | — | 1 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 3.65 |
-| 214 | `Concepts/Funding Policy.md` | — | 2 (1) | 0 / 0 | 5% | RET-201 (SOA) | RET-201 (SOA) › Valuations for the Purpose of Funding | — | 3.65 |
-| 215 | `Concepts/Funding Restriction.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Plan Funding | — | 3.65 |
-| 216 | `Concepts/Government Regulation.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 217 | `Concepts/Healthcare Intervention.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Disease Management | — | 3.65 |
-| 218 | `Concepts/Individual Savings Plan.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 219 | `Concepts/International Capital Requirement.md` | — | 1 (1) | 0 / 0 | 11% | ILA-201I (SOA) | ILA-201I (SOA) › Capital Management | — | 3.65 |
-| 220 | `Concepts/International Framework.md` | — | 1 (1) | 0 / 0 | 11% | ILA-201I (SOA) | ILA-201I (SOA) › Capital Management | — | 3.65 |
-| 221 | `Concepts/Investment Income Tax.md` | — | 1 (1) | 0 / 0 | 11% | ILA-201I (SOA) | ILA-201I (SOA) › Advanced Product Management | — | 3.65 |
-| 222 | `Concepts/Life Plan Design.md` | — | 1 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 3.65 |
-| 223 | `Concepts/Members' Right.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 224 | `Concepts/Non-Chronic Trend.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Disease Management | — | 3.65 |
-| 225 | `Concepts/Pension Plan Funding.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Plan Funding | — | 3.65 |
-| 226 | `Concepts/Plan Amendment.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 227 | `Concepts/Plan Establishment.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 228 | `Concepts/Policyholder Taxation.md` | — | 1 (1) | 0 / 0 | 11% | ILA-201I (SOA) | ILA-201I (SOA) › Advanced Product Management | — | 3.65 |
-| 229 | `Concepts/Post-Employment Benefit Plan.md` | — | 1 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 3.65 |
-| 230 | `Concepts/Private Group Insurance Plan.md` | — | 1 (1) | 0 / 0 | 11% | GH-201C (SOA) | GH-201C (SOA) › Government Programs | — | 3.65 |
-| 231 | `Concepts/Provider Payment.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Provider Contracting and Reimbursement | — | 3.65 |
-| 232 | `Concepts/Quality Perspective.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Provider Contracting and Reimbursement | — | 3.65 |
-| 233 | `Concepts/Quality Viewpoint.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Provider Contracting and Reimbursement | — | 3.65 |
-| 234 | `Concepts/Reflects Patient Risk.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Disease Management | — | 3.65 |
-| 235 | `Concepts/Registered Retirement Plan.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 236 | `Concepts/Reporting Requirement.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 237 | `Concepts/Retiree Health Valuation.md` | — | 1 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 3.65 |
-| 238 | `Concepts/Retirement Funding Alternative.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Plan Funding | — | 3.65 |
-| 239 | `Concepts/Service Cost.md` | — | 1 (1) | 0 / 0 | 11% | CP-321 (SOA) | CP-321 (SOA) › Retiree Group Benefits | — | 3.65 |
-| 240 | `Concepts/Social Determinant.md` | — | 2 (1) | 0 / 0 | 5% | GH-301 (SOA) | GH-301 (SOA) › Social Determinants of Health | — | 3.65 |
-| 241 | `Concepts/Standard Contracting.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Provider Contracting and Reimbursement | — | 3.65 |
-| 242 | `Concepts/Tax Regulation Pertaining.md` | — | 1 (1) | 0 / 0 | 11% | RET-301 (SOA) | RET-301 (SOA) › Regulations: Evaluation and Application | — | 3.65 |
-| 243 | `Concepts/Utilization Rate.md` | — | 1 (1) | 0 / 0 | 11% | GH-301 (SOA) | GH-301 (SOA) › Disease Management | — | 3.65 |
-| 244 | `Concepts/Capital Budgeting.md` | — | 1 (1) | 0 / 0 | 10% | CFE-201 (SOA) | CFE-201 (SOA) › Corporate Finance | — | 3.57 |
-| 245 | `Concepts/Competitive Environment.md` | — | 1 (1) | 0 / 0 | 10% | CFE-201 (SOA) | CFE-201 (SOA) › Corporate Finance | — | 3.57 |
-| 246 | `Concepts/Corporate Finance.md` | — | 1 (1) | 0 / 0 | 10% | CFE-201 (SOA) | CFE-201 (SOA) › Corporate Finance | — | 3.57 |
-| 247 | `Concepts/Organization Optimiz.md` | — | 1 (1) | 0 / 0 | 10% | CFE-201 (SOA) | CFE-201 (SOA) › Corporate Finance | — | 3.57 |
-| 248 | `Concepts/ACA Product.md` | — | 1 (1) | 0 / 0 | 9% | GH-301 (SOA) | GH-301 (SOA) › Healthcare Risk Adjustment1 | — | 3.52 |
-| 249 | `Concepts/Annuity Context.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 250 | `Concepts/Annuity Distribution.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Product Management | — | 3.52 |
-| 251 | `Concepts/Annuity Insurance Product.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Product Management | — | 3.52 |
-| 252 | `Concepts/Annuity Liability.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 253 | `Concepts/Annuity Product Design.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 254 | `Concepts/Benefit Adequacy.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Participant Risks | — | 3.52 |
-| 255 | `Concepts/Canadian Tax Regulation.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Product Management | — | 3.52 |
-| 256 | `Concepts/Care Management Situation.md` | — | 1 (1) | 0 / 0 | 9% | GH-301 (SOA) | GH-301 (SOA) › Healthcare Risk Adjustment1 | — | 3.52 |
-| 257 | `Concepts/Challenges Insurer.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Product Management | — | 3.52 |
-| 258 | `Concepts/Common Asset.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 259 | `Concepts/Common Insurance Guarantees Generate Embedded Option.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 260 | `Concepts/Common Life.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 261 | `Concepts/Common Profit Metrics.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 262 | `Concepts/Common Valuation.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts | — | 3.52 |
-| 263 | `Concepts/Decumulation Feature.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Sponsor Risks | — | 3.52 |
-| 264 | `Concepts/Duration-convexity Matching.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 265 | `Concepts/Employee Perspective.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 266 | `Concepts/Governance Best Practice.md` | — | 1 (1) | 0 / 0 | 9% | CP-312 (SOA) | CP-312 (SOA) › Model Governance | — | 3.52 |
-| 267 | `Concepts/Governance Documentation.md` | — | 1 (1) | 0 / 0 | 9% | CP-312 (SOA) | CP-312 (SOA) › Model Governance | — | 3.52 |
-| 268 | `Concepts/Integrating ALM.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 269 | `Concepts/International Legal Environment.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 270 | `Concepts/International Regulatory Framework.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts | — | 3.52 |
-| 271 | `Concepts/Introducing Option.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 272 | `Concepts/Labor Force Demographics.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 273 | `Concepts/Legal Cases-issue.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 274 | `Concepts/Life Insurance Reinsurance Arrangement.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Assets and Risk Management | — | 3.52 |
-| 275 | `Concepts/Life Insurance Reserve.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts | — | 3.52 |
-| 276 | `Concepts/Mass Torts-class Action Suit.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 277 | `Concepts/Modern Mortality Table.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Assumption Development and Experience Studies | — | 3.52 |
-| 278 | `Concepts/Non-Claim Reserves Held.md` | — | 1 (1) | 0 / 0 | 9% | CP-321 (SOA) | CP-321 (SOA) › Reserving | — | 3.52 |
-| 279 | `Concepts/Nonforfeiture.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 280 | `Concepts/Normalize Population Claims Experience.md` | — | 1 (1) | 0 / 0 | 9% | GH-301 (SOA) | GH-301 (SOA) › Healthcare Risk Adjustment1 | — | 3.52 |
-| 281 | `Concepts/Optional Form.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Sponsor Risks | — | 3.52 |
-| 282 | `Concepts/Organizational Structure.md` | — | 1 (1) | 0 / 0 | 9% | CP-312 (SOA) | CP-312 (SOA) › Model Governance | — | 3.52 |
-| 283 | `Concepts/Parametric Estimator.md` | — | 1 (1) | 0 / 0 | 9% | GI-301 (SOA) | GI-301 (SOA) › Stochastic Reserving | — | 3.52 |
-| 284 | `Concepts/Pension Valuation.md` | — | 1 (1) | 0 / 0 | 9% | RET-201 (SOA) | RET-201 (SOA) › Actuarial Assumptions | — | 3.52 |
-| 285 | `Concepts/Portability Option.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Sponsor Risks | — | 3.52 |
-| 286 | `Concepts/Postponed Retirement.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Sponsor Risks | — | 3.52 |
-| 287 | `Concepts/Premium Deficiency Reserve.md` | — | 1 (1) | 0 / 0 | 9% | CP-321 (SOA) | CP-321 (SOA) › Reserving | — | 3.52 |
-| 288 | `Concepts/Premium Persistency.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Assumption Development and Experience Studies | — | 3.52 |
-| 289 | `Concepts/Pricing Insurance Product.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 290 | `Concepts/Pricing Practice.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Individual Life and Annuity Product Design and Pricing | — | 3.52 |
-| 291 | `Concepts/Promote Employee Behavior Consistent.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 292 | `Concepts/Public Sector Employer.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Participant Risks | — | 3.52 |
-| 293 | `Concepts/Replacement Income.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Participant Risks | — | 3.52 |
-| 294 | `Concepts/Reserve Variability.md` | — | 1 (1) | 0 / 0 | 9% | GI-301 (SOA) | GI-301 (SOA) › Stochastic Reserving | — | 3.52 |
-| 295 | `Concepts/Retirement Plan Design.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 296 | `Concepts/Single Employer Sponsored Retirement Plan.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Participant Risks | — | 3.52 |
-| 297 | `Concepts/Social Insurance Plan.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Participant Risks | — | 3.52 |
-| 298 | `Concepts/Stochastic Loss Development.md` | — | 1 (1) | 0 / 0 | 9% | GI-301 (SOA) | GI-301 (SOA) › Stochastic Reserving | — | 3.52 |
-| 299 | `Concepts/Syllabus Resource.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 300 | `Concepts/Tax Incentive.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 301 | `Concepts/Taxpayers' Perspective.md` | — | 1 (1) | 0 / 0 | 9% | RET-101 (SOA) | RET-101 (SOA) › Benefit Plan Design Recommendation | — | 3.52 |
-| 302 | `Concepts/Term Conversion.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Assumption Development and Experience Studies | — | 3.52 |
-| 303 | `Concepts/Term Insurance Reserve.md` | — | 1 (1) | 0 / 0 | 9% | ILA-101 (SOA) | ILA-101 (SOA) › Introduction to Life and Annuity Valuation Concepts | — | 3.52 |
-| 304 | `Concepts/Tort Law Environment.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 305 | `Concepts/Tort Trend.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 306 | `Concepts/Transnational Tort Litigation.md` | — | 1 (1) | 0 / 0 | 9% | GI-201 (SOA) | GI-201 (SOA) › Legal Environment | — | 3.52 |
-| 307 | `Concepts/US Company Tax Rule.md` | — | 1 (1) | 0 / 0 | 9% | ILA-201U (SOA) | ILA-201U (SOA) › Advanced Product Management | — | 3.52 |
-| 308 | `Concepts/EU Solvency II Capital Requirement.md` | — | 1 (1) | 0 / 0 | 8% | GI-201 (SOA) | GI-201 (SOA) › Financial Health Measurement | — | 3.45 |
-| 309 | `Concepts/Pricing Property Catastrophe Cover.md` | — | 1 (1) | 0 / 0 | 8% | GI-301 (SOA) | GI-301 (SOA) › Reinsurance | — | 3.45 |
-| 310 | `Concepts/Risk Transfer Testing.md` | — | 1 (1) | 0 / 0 | 8% | GI-301 (SOA) | GI-301 (SOA) › Reinsurance | — | 3.45 |
-| 311 | `Concepts/Uncertain Condition.md` | — | 1 (1) | 0 / 0 | 8% | CP-311 (SOA) | CP-311 (SOA) › Decision Modeling and Optimization | — | 3.45 |
-| 312 | `Concepts/Expense Trending.md` | — | 1 (1) | 0 / 0 | 7% | GI-101 (SOA) | GI-101 (SOA) › Ratemaking | — | 3.41 |
-| 313 | `Concepts/Fundamental Ratemaking.md` | — | 1 (1) | 0 / 0 | 7% | GI-101 (SOA) | GI-101 (SOA) › Ratemaking | — | 3.41 |
-| 314 | `Concepts/Business Auto Coverage.md` | — | 2 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 11. Underwriting Other Types of Coverage | — | 3.38 |
-| 315 | `Concepts/Business Continuity Management.md` | — | 2 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 3. Managing Business Continuity Risk | — | 3.38 |
-| 316 | `Concepts/Cash Flow Requirement.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Retirement Plan Investment and Risk Management | — | 3.38 |
-| 317 | `Concepts/Clinical Policy Bulletin.md` | — | 1 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.38 |
-| 318 | `Concepts/Coding Structure.md` | — | 1 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.38 |
-| 319 | `Concepts/Cost Recognition.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Methods | — | 3.38 |
-| 320 | `Concepts/Cost Stability.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Methods | — | 3.38 |
-| 321 | `Concepts/Data Ethics.md` | — | 2 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 10. Ethical and Societal Considerations of Data Analytics | — | 3.38 |
-| 322 | `Concepts/Insurance Distribution Systems.md` | — | 2 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 7. Insurance Marketing and Distribution | — | 3.38 |
-| 323 | `Concepts/Loss Settlement Provisions.md` | — | 2 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 3. Common Policy Concepts | — | 3.38 |
-| 324 | `Concepts/Medicaid Program Structure.md` | — | 1 (1) | 0 / 0 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 3.38 |
-| 325 | `Concepts/Medical Coding.md` | — | 1 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.38 |
-| 326 | `Concepts/Medicare Benefit.md` | — | 1 (1) | 0 / 0 | 7% | GH-201U (SOA) | GH-201U (SOA) › Government Programs | — | 3.38 |
-| 327 | `Concepts/Negligence.md` | — | 2 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 14. Insurance Law Part 1 | — | 3.38 |
-| 328 | `Concepts/Pension Benefit.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Methods | — | 3.38 |
-| 329 | `Concepts/Period of Restoration.md` | — | 2 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 3.38 |
-| 330 | `Concepts/Periodic Valuation.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Methods | — | 3.38 |
-| 331 | `Concepts/Plan Sponsor Risk.md` | — | 1 (1) | 0 / 0 | 7% | RET-201 (SOA) | RET-201 (SOA) › Retirement Plan Investment and Risk Management | — | 3.38 |
-| 332 | `Concepts/Prescription Drug.md` | — | 1 (1) | 0 / 0 | 7% | GH-101 (SOA) | GH-101 (SOA) › Plan and Product Provisions | — | 3.38 |
-| 333 | `Concepts/Private Data.md` | — | 1 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.38 |
-| 334 | `Concepts/Product Development Process.md` | — | 1 (1) | 0 / 0 | 7% | GH-101 (SOA) | GH-101 (SOA) › Plan and Product Provisions | — | 3.38 |
-| 335 | `Concepts/Revenue Code.md` | — | 1 (1) | 0 / 0 | 7% | GH-301 (SOA) | GH-301 (SOA) › Medical Data | — | 3.38 |
-| 336 | `Concepts/Short Duration Contract.md` | — | 1 (1) | 0 / 0 | 7% | GH-101 (SOA) | GH-101 (SOA) › Plan and Product Provisions | — | 3.38 |
-| 337 | `Concepts/Business Process.md` | — | 1 (1) | 0 / 0 | 7% | CFE-201 (SOA) | CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 3.37 |
-| 338 | `Concepts/Distort Perceived Performance.md` | — | 1 (1) | 0 / 0 | 7% | CFE-201 (SOA) | CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 3.37 |
-| 339 | `Concepts/Drive Decision Making.md` | — | 1 (1) | 0 / 0 | 7% | CFE-201 (SOA) | CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 3.37 |
-| 340 | `Concepts/Operational Excellence.md` | — | 1 (1) | 0 / 0 | 7% | CFE-201 (SOA) | CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 3.37 |
-| 341 | `Concepts/Operational Process.md` | — | 1 (1) | 0 / 0 | 7% | CFE-201 (SOA) | CFE-201 (SOA) › Managerial Accounting and Operational Excellence | — | 3.37 |
-| 342 | `Concepts/Claim Transaction Data.md` | — | 1 (1) | 0 / 0 | 6% | GI-101 (SOA) | GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work | — | 3.33 |
-| 343 | `Concepts/Influencing Average Premium Level.md` | — | 1 (1) | 0 / 0 | 6% | GI-101 (SOA) | GI-101 (SOA) › Preparing Claims and Exposure Data for Actuarial Work | — | 3.33 |
-| 344 | `Concepts/ALM Failure.md` | — | 1 (1) | 0 / 0 | 6% | CP-351 (SOA) | CP-351 (SOA) › Objectives of Asset Liability Management | — | 3.32 |
-| 345 | `Concepts/Crediting Rating Agency Framework.md` | — | 1 (1) | 0 / 0 | 6% | ILA-201U (SOA) | ILA-201U (SOA) › Management and Evaluation of Life Insurance Risks | — | 3.32 |
-| 346 | `Concepts/Insurance Commissioners' Duty.md` | — | 1 (1) | 0 / 0 | 6% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Regulation | — | 3.32 |
-| 347 | `Concepts/Insurance Contracts Generate Embedded Option.md` | — | 1 (1) | 0 / 0 | 6% | CP-351 (SOA) | CP-351 (SOA) › Objectives of Asset Liability Management | — | 3.32 |
-| 348 | `Concepts/Insurance Personnel.md` | — | 1 (1) | 0 / 0 | 6% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Regulation | — | 3.32 |
-| 349 | `Concepts/Licensing Requirement.md` | — | 1 (1) | 0 / 0 | 6% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Regulation | — | 3.32 |
-| 350 | `Concepts/Regulatory Body.md` | — | 1 (1) | 0 / 0 | 6% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Regulation | — | 3.32 |
-| 351 | `Concepts/Cognitive Biase.md` | — | 1 (1) | 0 / 0 | 5% | CP-311 (SOA) | CP-311 (SOA) › Organizational Behavior | — | 3.26 |
-| 352 | `Concepts/Making Suboptimal Individual.md` | — | 1 (1) | 0 / 0 | 5% | CP-311 (SOA) | CP-311 (SOA) › Organizational Behavior | — | 3.26 |
-| 353 | `Concepts/Organizational Behavior Plays.md` | — | 1 (1) | 0 / 0 | 5% | CP-311 (SOA) | CP-311 (SOA) › Organizational Behavior | — | 3.26 |
-| 354 | `Concepts/Organizational Decision-Making.md` | — | 1 (1) | 0 / 0 | 5% | CP-311 (SOA) | CP-311 (SOA) › Organizational Behavior | — | 3.26 |
-| 355 | `Concepts/Asian Option.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 356 | `Concepts/Butterfly Spread.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 357 | `Concepts/Call Spread.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 358 | `Concepts/Canadian Health Care System.md` | — | 1 (1) | 0 / 0 | 5% | GH-201C (SOA) | GH-201C (SOA) › Flow of Funds | — | 3.25 |
-| 359 | `Concepts/Canadian Healthcare System.md` | — | 1 (1) | 0 / 0 | 5% | GH-201U (SOA) | GH-201U (SOA) › Flow of Funds | — | 3.25 |
-| 360 | `Concepts/Central Clearing.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 361 | `Concepts/Collar.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 362 | `Concepts/Critical Illness.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Plan and Product Provisions | — | 3.25 |
-| 363 | `Concepts/Daily Margin Variation.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 364 | `Concepts/Daily Settle.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 365 | `Concepts/Derivative Instrument.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 366 | `Concepts/Derivatives Strategy.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 367 | `Concepts/Derivatives Trading.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 368 | `Concepts/Exotic Option.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 369 | `Concepts/Floor.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 370 | `Concepts/Government-sponsored Plan.md` | — | 1 (1) | 0 / 0 | 5% | RET-201 (SOA) | RET-201 (SOA) › Valuations for the Purpose of Funding | — | 3.25 |
-| 371 | `Concepts/IFRS 17, US GAAP.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Insurer Financial Statements | — | 3.25 |
-| 372 | `Concepts/Medicare Supplement.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Plan and Product Provisions | — | 3.25 |
-| 373 | `Concepts/Plan Asset Composition.md` | — | 1 (1) | 0 / 0 | 5% | RET-201 (SOA) | RET-201 (SOA) › Valuations for the Purpose of Funding | — | 3.25 |
-| 374 | `Concepts/Put Spread.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 375 | `Concepts/SDOH Derived Statistics.md` | — | 1 (1) | 0 / 0 | 5% | GH-301 (SOA) | GH-301 (SOA) › Social Determinants of Health | — | 3.25 |
-| 376 | `Concepts/Single-employer Plan.md` | — | 1 (1) | 0 / 0 | 5% | RET-201 (SOA) | RET-201 (SOA) › Valuations for the Purpose of Funding | — | 3.25 |
-| 377 | `Concepts/Social Security Disability Income Benefit.md` | — | 1 (1) | 0 / 0 | 5% | CP-321 (SOA) | CP-321 (SOA) › Plan and Product Provisions | — | 3.25 |
-| 378 | `Concepts/Stakeholders' Interest.md` | — | 1 (1) | 0 / 0 | 5% | RET-201 (SOA) | RET-201 (SOA) › Valuations for the Purpose of Funding | — | 3.25 |
-| 379 | `Concepts/Strangle.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 380 | `Concepts/Swaption.md` | — | 1 (1) | 0 / 0 | 5% | INV-201 (SOA) | INV-201 (SOA) › Key Types of Derivatives | — | 3.25 |
-| 381 | `Concepts/Traditional Actuarial Practice.md` | — | 1 (1) | 0 / 0 | 5% | GH-301 (SOA) | GH-301 (SOA) › Social Determinants of Health | — | 3.25 |
-| 382 | `Concepts/Catastrophe Modeling Output.md` | — | 1 (1) | 0 / 0 | 3% | GI-301 (SOA) | GI-301 (SOA) › Catastrophe Models and Risk Loads | — | 3.18 |
-| 383 | `Concepts/Commercial Auto Insurance.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 3.18 |
-| 384 | `Concepts/Employers Liability Insurance.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 3.18 |
-| 385 | `Concepts/ISO Commercial Automobile Policy.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 3.18 |
-| 386 | `Concepts/ISO WC.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 3.18 |
-| 387 | `Concepts/Insurance Actuarial Opinion.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › Responsibilities of the Actuary | — | 3.18 |
-| 388 | `Concepts/International Actuarial Association.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › Responsibilities of the Actuary | — | 3.18 |
-| 389 | `Concepts/International Business.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › General Insurance Company Operations | — | 3.18 |
-| 390 | `Concepts/Pricing General Insurance Policy.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › General Insurance Company Operations | — | 3.18 |
-| 391 | `Concepts/Professionalism Principle.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › Responsibilities of the Actuary | — | 3.18 |
-| 392 | `Concepts/Risk Mitigation Instrument.md` | — | 1 (1) | 0 / 0 | 3% | GI-201 (SOA) | GI-201 (SOA) › General Insurance Company Operations | — | 3.18 |
-| 393 | `Concepts/Specialty Insurance Coverage.md` | — | 1 (1) | 0 / 0 | 3% | GI-302 (SOA) | GI-302 (SOA) › U.S. General Insurance Products and Coverages | — | 3.18 |
-| 394 | `Concepts/Asset Adequacy Standard.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 3.11 |
-| 395 | `Concepts/Asset Matching.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 3.11 |
-| 396 | `Concepts/Cash Flow Projection.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 3.11 |
-| 397 | `Concepts/Healthcare Claim.md` | — | 1 (1) | 0 / 0 | 2% | GH-301 (SOA) | GH-301 (SOA) › Predictive Analytics | — | 3.11 |
-| 398 | `Concepts/Mismatched Asset.md` | — | 1 (1) | 0 / 0 | 2% | CP-321 (SOA) | CP-321 (SOA) › Asset Adequacy | — | 3.11 |
-| 399 | `Concepts/Reinsurance Administration.md` | — | 1 (1) | 0 / 0 | 2% | CP-341 (SOA) | CP-341 (SOA) › Reinsurance Administration and Management | — | 3.11 |
-| 400 | `Concepts/Reinsurance Counterparty Credit Risk.md` | — | 1 (1) | 0 / 0 | 2% | CP-341 (SOA) | CP-341 (SOA) › Reinsurance Administration and Management | — | 3.11 |
-| 401 | `Concepts/Risk Score.md` | — | 1 (1) | 0 / 0 | 2% | GH-301 (SOA) | GH-301 (SOA) › Predictive Analytics | — | 3.11 |
-| 402 | `Concepts/Actuary's Responsibility.md` | — | 1 (1) | 0 / 0 | 1% | GI-101 (SOA) | GI-101 (SOA) › Introduction and Key Considerations | — | 3.06 |
-| 403 | `Concepts/Professionalism Requirement.md` | — | 1 (1) | 0 / 0 | 1% | GI-101 (SOA) | GI-101 (SOA) › Introduction and Key Considerations | — | 3.06 |
-| 404 | `Concepts/Actual Cash Value.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 3. Common Policy Concepts | — | 2.98 |
-| 405 | `Concepts/Aircraft Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 13. Specialty Coverages Part 2 | — | 2.98 |
-| 406 | `Concepts/Blanket Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 9. Commercial Property Insurance Part 2 | — | 2.98 |
-| 407 | `Concepts/Commercial Crime Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 2.98 |
-| 408 | `Concepts/Common Policy Conditions.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 9. Commercial Property Insurance Part 2 | — | 2.98 |
-| 409 | `Concepts/Conduct Investigative Testing.md` | — | 1 (1) | 0 / 0 | — | GI-101 (SOA) | GI-101 (SOA) › Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) | — | 2.98 |
-| 410 | `Concepts/Cyber Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 13. Specialty Coverages Part 2 | — | 2.98 |
-| 411 | `Concepts/Data Documentation.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 1. Planning an Insurer Data Modeling Project | — | 2.98 |
-| 412 | `Concepts/Data Mart.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-| 413 | `Concepts/Data Preparation.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 9. Preparing Data for Insurance Applications | — | 2.98 |
-| 414 | `Concepts/Data Validation.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-| 415 | `Concepts/Database Index.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-| 416 | `Concepts/Directors and Officers Liability Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1 | — | 2.98 |
-| 417 | `Concepts/Employment Practices Liability Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1 | — | 2.98 |
-| 418 | `Concepts/Environmental Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1 | — | 2.98 |
-| 419 | `Concepts/Fiduciary Liability Insurance.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 12. Specialty Coverages Part 1 | — | 2.98 |
-| 420 | `Concepts/Funding Requirement.md` | — | 1 (1) | 0 / 0 | — | GI-101 (SOA) | GI-101 (SOA) › Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) | — | 2.98 |
-| 421 | `Concepts/Health Insurance Plans.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 7. Life and Health Insurance | — | 2.98 |
-| 422 | `Concepts/Insurable Risk.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 2. Insurance Policy Analysis | — | 2.98 |
-| 423 | `Concepts/Insurance Marketing.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 7. Insurance Marketing and Distribution | — | 2.98 |
-| 424 | `Concepts/Insurer Goals and Constraints.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 6. Overview of Insurance Operations | — | 2.98 |
-| 425 | `Concepts/Insurtech.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 6. Overview of Insurance Operations | — | 2.98 |
-| 426 | `Concepts/Medical Payments Coverage.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 4. Personal Auto Policy | — | 2.98 |
-| 427 | `Concepts/Organizational Resilience.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 3. Managing Business Continuity Risk | — | 2.98 |
-| 428 | `Concepts/Premises Liability.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 14. Insurance Law Part 1 | — | 2.98 |
-| 429 | `Concepts/Premises and Operations Liability.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 2.98 |
-| 430 | `Concepts/Products and Completed Operations Liability.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 10. Underwriting Business Income and Commercial Liability Coverage | — | 2.98 |
-| 431 | `Concepts/Real-Life Scenario.md` | — | 1 (1) | 0 / 0 | — | GI-101 (SOA) | GI-101 (SOA) › Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) | — | 2.98 |
-| 432 | `Concepts/SWOT Analysis.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 15. Insurer Strategic Management | — | 2.98 |
-| 433 | `Concepts/Statistical Plan.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 2. Collecting Data for Insurer Models | — | 2.98 |
-| 434 | `Concepts/Strict Liability.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 15. Insurance Law Part 2 | — | 2.98 |
-| 435 | `Concepts/Structured Data.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 4. Working With Different Types of Data | — | 2.98 |
-| 436 | `Concepts/Table Join.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-| 437 | `Concepts/Terrorism Risk Insurance Program.md` | — | 1 (1) | 0 / 0 | — | DISC-IA (CAS) | DISC-IA (CAS) › 13. Specialty Coverages Part 2 | — | 2.98 |
-| 438 | `Concepts/Types of Insurers.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 6. Overview of Insurance Operations | — | 2.98 |
-| 439 | `Concepts/Underwriting Authority.md` | — | 1 (1) | 0 / 0 | — | DISC-RM (CAS) | DISC-RM (CAS) › 8. The Underwriting Function | — | 2.98 |
-| 440 | `Concepts/User-Defined Function.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-| 441 | `Concepts/Web Scraping.md` | — | 1 (1) | 0 / 0 | — | DISC-DA (CAS) | DISC-DA (CAS) › 3. Preparing Data for Analysis | — | 2.98 |
-
-</details>
+| 1 | `Concepts/Total Risk.md` | — | 1 (1) | 0 / 8 | 15% | GH-101 (SOA) | GH-101 (SOA) › Underwriting and Funding | — | 6.05 |
 
 ### Link fixes — the target is a variant of a page that exists
 
@@ -1589,7 +1671,7 @@ Writing a page would duplicate one. Each of these wants its guide link changed t
 | `Loss` | `Expected Loss` | 2 | `> - Expected [[Loss]] Ratio` |
 | `Linear` | `Linear Mixed Model` | 2 | `> - [[Linear]] mixed models` |
 | `Enterprise Risk` | `Enterprise Risk Management` | 2 | `Recommend an appropriate [[Enterprise Risk]] management framework for` |
-| `Output` | `Model Output` | 2 | `models and their [[Output]]` |
+| `Output` | `Catastrophe Model Output` | 2 | `models and their [[Output]]` |
 | `Chain-Ladder` | `Chain Ladder Method` | 2 | `> - [[Chain-Ladder]]` |
 | `Selection` | `Model Selection` | 1 | `Perform model [[Selection]] using` |
 | `Cape Cod` | `Cape Cod Method` | 1 | `[[Cape Cod]] method` |
@@ -1614,34 +1696,31 @@ Writing a page would duplicate one. Each of these wants its guide link changed t
 | `SQL` | bare acronym — which expansion does this exam mean? | 2 | DISC-DA (CAS) | — | — |
 | `COPE` | bare acronym — which expansion does this exam mean? | 2 | DISC-RM (CAS) | — | — |
 | `Test` | one word — the one existing page it begins is probably what is meant | 2 | GI-301 (SOA), SRM (SOA) | Test Error | link `Test Error` |
+| `Organization` | one word — the one existing page it begins is probably what is meant | 1 | CP-311 (SOA) | Organizational Resilience | link `Organizational Resilience` |
 | `Stakeholder` | one word — the one existing page it begins is probably what is meant | 1 | CP-311 (SOA) | Stakeholder Reporting | link `Stakeholder Reporting` |
 | `Provider` | one word — the one existing page it begins is probably what is meant | 1 | GH-301 (SOA) | Provider Reimbursement | link `Provider Reimbursement` |
 | `Performance` | one word — the one existing page it begins is probably what is meant | 1 | GH-301 (SOA) | Performance Measurement | link `Performance Measurement` |
-| `IAA` | bare acronym — which expansion does this exam mean? | 1 | GI-201 (SOA) | International Actuarial Association (new) | link `International Actuarial Association` (planned page) |
 | `Forward` | one word — the one existing page it begins is probably what is meant | 1 | INV-201 (SOA) | Forward Rate | link `Forward Rate` |
-| `Put` | one word — the one existing page it begins is probably what is meant | 1 | INV-201 (SOA) | Put-Call Parity | link `Put-Call Parity` |
-| `Cap` | one word — the one existing page it begins is probably what is meant | 1 | INV-201 (SOA) | Cap on Non-Pecuniary Damages | link `Cap on Non-Pecuniary Damages` |
-| `OTC` | bare acronym — which expansion does this exam mean? | 1 | INV-201 (SOA) | — | — |
 | `PDE` | bare acronym — which expansion does this exam mean? | 1 | INV-201 (SOA) | — | — |
 | `Coefficient` | one word — the one existing page it begins is probably what is meant | 1 | PA (SOA) | Coefficient of Variation | link `Coefficient of Variation` |
 
-### One-word targets that aren't terms of art (32)
+### One-word targets that aren't terms of art (30)
 
 Not batched. Most are a phrase cut short (`Call` for *call option*); a page named after the bare word would have nothing exam-specific to say. Promote one by adding it to `TERMS_OF_ART` in the script.
 
 <details><summary>Show the list</summary>
 
-`Distribution` (5), `Contract` (3), `Assumption` (3), `Experience` (3), `Circumstance` (2), `Regulation` (2), `Insurance` (2), `Catastrophe` (2), `Call` (2), `Poisson` (1), `Prediction` (1), `Organization` (1), `Maintenance` (1), `Motivation` (1), `Learning` (1), `Senior` (1), `Program` (1), `Methodology` (1), `Health` (1), `Interrelationship` (1), `Uncertainty` (1), `Monitoring` (1), `Swap` (1), `Currency` (1), `Lemma` (1), `Expectation` (1), `Modeling` (1), `Graph` (1), `Tradeoff` (1), `Training` (1), `Algorithm` (1), `Cluster` (1)
+`Distribution` (5), `Contract` (3), `Assumption` (3), `Experience` (3), `Circumstance` (2), `Regulation` (2), `Insurance` (2), `Catastrophe` (2), `Call` (2), `Poisson` (1), `Prediction` (1), `Maintenance` (1), `Motivation` (1), `Learning` (1), `Senior` (1), `Program` (1), `Methodology` (1), `Health` (1), `Interrelationship` (1), `Uncertainty` (1), `Monitoring` (1), `Swap` (1), `Currency` (1), `Expectation` (1), `Modeling` (1), `Graph` (1), `Tradeoff` (1), `Training` (1), `Algorithm` (1), `Cluster` (1)
 
 </details>
 
-### Link noise (69)
+### Link noise (91)
 
 Targets that name no concept. The fix is to unlink them (in `scripts/syllabus_write.py`'s linker), not to write pages.
 
 <details><summary>Show the list</summary>
 
-`Data` (13), `United State` (9), `Business` (3), `Benefits Payable` (2), `Model` (2), `Parametric` (2), `Graphical` (2), `Business Context` (2), `Organization's Ability` (2), `Quantitative` (2), `Appropriateness` (2), `Development` (2), `Strategy` (2), `Single Non-Dividend Paying Asset` (2), `Physicians Play` (2), `Derivative` (2), `Future` (2), `Source` (1), `Parameters Affect` (1), `Mack'` (1), `Responsible Manner` (1), `Skill` (1), `Otherwise Modify Data` (1), `Final Product` (1), `Affect Data Quality` (1), `Additive` (1), `Analytical Effort` (1), `Computational Efficiency` (1), `Effect` (1), `Recommended Analytics` (1), `Record` (1), `Ethical Context` (1), `Straightforward Manner` (1), `Common Language` (1), `Effective Manner While` (1), `Successful Risk` (1), `Common Risk` (1), `Meets Organizational Need` (1), `Third Party` (1), `Business Situation` (1), `Address Issues Common` (1), `Purpose` (1), `Situational Context` (1), `Claim Amounts Paid` (1), `Characterize Distribution` (1), `Continuous Payment Frequency` (1), `Claim Data` (1), `Study` (1), `Good` (1), `Frame` (1), `Qualitative` (1), `Future Cost` (1), `Requirement` (1), `Captive` (1), `Affect Commercial Insurance Premium` (1), `Employers Liability Insurance Policy Address` (1), `Premium Adjustments Affect WC Insurance` (1), `Regulatory Activity` (1), `Product` (1), `Element` (1), `Integral` (1), `Vague Question` (1), `Challenge` (1), `Weight` (1), `Defend` (1), `Economic Environments Affect Setting Investment Strategy` (1), `Benefit` (1), `Appropriate` (1), `Predict` (1)
+`Data` (13), `United State` (9), `Business` (3), `Benefits Payable` (2), `Model` (2), `Parametric` (2), `Graphical` (2), `Business Context` (2), `Organization's Ability` (2), `Quantitative` (2), `Appropriateness` (2), `Development` (2), `Strategy` (2), `Single Non-Dividend Paying Asset` (2), `Physicians Play` (2), `Derivative` (2), `Future` (2), `Source` (1), `Parameters Affect` (1), `Mack'` (1), `Responsible Manner` (1), `Skill` (1), `Otherwise Modify Data` (1), `Final Product` (1), `Affect Data Quality` (1), `Additive` (1), `Analytical Effort` (1), `Computational Efficiency` (1), `Effect` (1), `Recommended Analytics` (1), `Record` (1), `Ethical Context` (1), `Straightforward Manner` (1), `Common Language` (1), `Effective Manner While` (1), `Successful Risk` (1), `Common Risk` (1), `Meets Organizational Need` (1), `Third Party` (1), `Organization Optimiz` (1), `Evolving Quantitative` (1), `Business Situation` (1), `Organizational Behavior Plays` (1), `Making Suboptimal Individual` (1), `Complex Component` (1), `Financial Business` (1), `Address Issues Common` (1), `Purpose` (1), `Situational Context` (1), `Global Reinsurance Market` (1), `Global Jurisdiction` (1), `Portfolio's Exposure` (1), `Claim Amounts Paid` (1), `Characterize Distribution` (1), `Continuous Payment Frequency` (1), `Claim Data` (1), `Quality Viewpoint` (1), `Quality Perspective` (1), `Study` (1), `Traditional Actuarial Practice` (1), `Good` (1), `Frame` (1), `Qualitative` (1), `Future Cost` (1), `Real-Life Scenario` (1), `Requirement` (1), `Captive` (1), `Syllabus Resource` (1), `Affect Commercial Insurance Premium` (1), `Employers Liability Insurance Policy Address` (1), `Premium Adjustments Affect WC Insurance` (1), `Regulatory Activity` (1), `Product` (1), `Element` (1), `Challenges Insurer` (1), `Common Asset` (1), `Portfolio Level` (1), `Individual Security` (1), `Integral` (1), `Vague Question` (1), `Challenge` (1), `Weight` (1), `Promote Employee Behavior Consistent` (1), `Employee Perspective` (1), `Introducing Option` (1), `Labor Force Demographics` (1), `Defend` (1), `Economic Environments Affect Setting Investment Strategy` (1), `Benefit` (1), `Appropriate` (1), `Predict` (1)
 
 </details>
 
@@ -2298,10 +2377,10 @@ Nearly empty (under 40 words of prose); or under 100 words and missing a part of
 | Page | Words | Missing | Inbound guide links |
 |---|---|---|---|
 | `Capital` | 27 | definition, formula, example | 6 |
+| `Decision-Making` | 120 | formula, example | 3 |
 | `Risk Management` | 130 | formula, example | 3 |
 | `Catastrophe Modelling` | 160 | definition, formula, example | 3 |
 | `Fellow of the Society of Actuaries (FSA)` | 236 | formula, example | 3 |
-| `Decision-Making` | 120 | formula, example | 2 |
 | `Canadian Institute of Actuaries (CIA)` | 0 | definition, formula, example | 1 |
 | `Credit` | 0 | definition, formula, example | 1 |
 | `Pension` | 0 | definition, formula, example | 1 |

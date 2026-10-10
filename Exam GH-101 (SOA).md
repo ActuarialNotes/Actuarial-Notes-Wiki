@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:795d08b0920e50955e7f44722c3d7a5b50ea062c941acc1411d902e3a7e6662e
+  content_hash: sha256:1ede8673ee689cfdd7511cfc5b62cd58b867a2f89204d024973360bfce509aaa
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-101, all pages, sha256:fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806 — https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf"
   open_findings: 0
@@ -27,7 +27,7 @@ verification:
 ## Learning Objectives
 
 > [!example]- Plan and Product Provisions {10–20%}
-> The candidate will understand how to describe [[Plan Provision|plan provisions]] typically offered under [[Short Duration Contract|short duration contracts]] (medical, dental, vision, [[Prescription Drug|prescription drug]], [[Group Life Insurance|group life]]).
+> The candidate will understand how to describe [[Group Health Insurance|plan provisions]] typically offered under [[Short-Term Insurance Coverage|short duration contracts]] (medical, dental, vision, [[Pharmacy Benefit|prescription drug]], [[Group Life Insurance|group life]]).
 >
 > 1. Describe typical organizations offering these [[Contract|contracts]]
 > 2. Describe each of the [[Contract|contracts]] listed above
@@ -49,7 +49,7 @@ verification:
 > The candidate will understand how to calculate and recommend a [[Manual Rate|manual rate]] for each of the contracts described in Learning Objective 1.
 >
 > 1. Identify and evaluate sources of data needed for pricing, including the quality, appropriateness, and limitations of each [[Data Quality|data source]]
-> 2. Develop a [[Medical Cost Trend Experience|medical cost trend experience]] analysis
+> 2. Develop a [[Medical Cost Trend|medical cost trend experience]] analysis
 > 3. Calculate and recommend [[Assumption|assumptions]]
 > 4. Calculate and recommend a [[Manual Rate|manual rate]] (includes developing a [[Manual Rate|base rate]] and applying a [[Manual Rate|rating manual]])
 > 5. Identify [[Actual vs Expected Analysis|critical metrics]] to evaluate actual vs. expected results
@@ -72,13 +72,13 @@ verification:
 > - ASOP 41: Actuarial Communications (excluding Appendices) (2f)
 
 > [!example]- Underwriting and Funding {25–40%}
-> The candidate will understand how to apply principles of pricing, [[Risk Assessment|risk assessment]], and [[Funding|funding]] to an [[Underwriting Situation|underwriting situation]].
+> The candidate will understand how to apply principles of pricing, [[Risk Assessment|risk assessment]], and [[Funding|funding]] to an [[Underwriting|underwriting situation]].
 >
 > 1. Understand the [[Risk|risks]] and opportunities associated with a given contract, [[Underwriting|eligibility requirement]], or [[Funding|funding mechanism]]
-> 2. Understand, evaluate, and apply [[Risk Assessment Mechanism|risk assessment mechanisms]]
+> 2. Understand, evaluate, and apply [[Health Risk Adjustment|risk assessment mechanisms]]
 > 3. Recommend strategies for appropriately pricing, [[Underwriting|underwriting]], and [[Funding|funding case-specific risks]]
-> 4. Describe and apply approaches to [[Claim Credibility|claim credibility]] and pooling
-> 5. Apply [[Total Risk]] Analysis (TRA) strategies to [[Case-Specific Pricing|case-specific pricing]]
+> 4. Describe and apply approaches to [[Credibility|claim credibility]] and pooling
+> 5. Apply [[Total Risk]] Analysis (TRA) strategies to [[Experience Rating|case-specific pricing]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (3d)
@@ -97,10 +97,10 @@ verification:
 >     - Excel Model: Calculated Risk
 
 > [!example]- Employee Benefits {15–25%}
-> The candidate will understand how to evaluate and recommend an [[Employee Benefit Strategy|employee benefit strategy]].
+> The candidate will understand how to evaluate and recommend an [[Employee Benefit Plan|employee benefit strategy]].
 >
 > 1. Describe the structure of [[Employee Benefit Plan|employee benefit plans]] and products offered, and the rationale for offering these structures
-> 2. Recommend an [[Employee Benefit Strategy|employee benefit strategy]] in light of an employer’s objectives
+> 2. Recommend an [[Employee Benefit Plan|employee benefit strategy]] in light of an employer’s objectives
 >
 > **Readings:**
 > - GH101-103-25: Health Plan Payroll Contribution Strategies and Development for Employers (4b)

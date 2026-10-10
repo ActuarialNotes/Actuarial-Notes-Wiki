@@ -61,6 +61,9 @@ const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages
 // Actuarial Tools (docs/actuarial-tools.md) — calculators, each one card. Lazy:
 // the engine and its grids are for the readers who open a tool.
 const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages/Tools'))
+// The Workflow Builder (docs/workflow-builder.md) — tools, data and concepts
+// chained on a board, opened from the Tools catalogue. Its own chunk.
+const { Component: WorkflowBuilder, preload: loadWorkflowBuilder } = lazyRoute(() => import('@/pages/WorkflowBuilder'))
 // Concept Craft (docs/concept-craft.md) — a topic's concepts on a board, and
 // how they connect. Lazy: its graph, its physics and the wiki bundle it reads
 // the graph from are for the readers who open it.
@@ -91,6 +94,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
+  if (TOOLS_ENABLED && route === '/tools/workflow') return loadWorkflowBuilder()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
@@ -333,6 +337,17 @@ function ToolsRoute() {
   )
 }
 
+function WorkflowRoute() {
+  if (!TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <WorkflowBuilder />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ProjectRoute() {
   return (
     <ErrorBoundary>
@@ -383,6 +398,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                     page. The gem shop is a corner of it. */}
                 <Route path="/store" element={<StoreRoute />} />
                 <Route path="/tools" element={<ToolsRoute />} />
+                <Route path="/tools/workflow" element={<WorkflowRoute />} />
                 <Route path="/tools/:slug" element={<ToolsRoute />} />
                 <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
                 <Route path="/research" element={

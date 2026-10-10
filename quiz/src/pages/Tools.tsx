@@ -22,6 +22,7 @@ import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolCard } from '@/components/tools/ToolCard'
+import { WorkflowLogo } from '@/components/workflow/WorkflowLogo'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
@@ -99,18 +100,32 @@ function Catalogue() {
             <p className="px-1 text-sm text-muted-foreground" data-testid="tool-no-results">No tools match “{query.trim()}”.</p>
           )
         ) : (
-          AREAS.map(a => {
-            const tools = TOOLS.filter(t => t.area === a.id)
-            if (!tools.length) return null
-            return (
-              <section key={a.id} className="space-y-2" aria-labelledby={`area-${a.id}`}>
-                <h2 id={`area-${a.id}`} className="px-1 text-sm font-semibold text-muted-foreground">{a.label}</h2>
-                <ListPanel>
-                  {tools.map(t => <ToolRow key={t.id} spec={t} />)}
-                </ListPanel>
-              </section>
-            )
-          })
+          <>
+            {/* The Workflow Builder: the tools chained together, with their data
+                and the concepts behind them — one row above the areas, the way
+                Concept Craft sits above the Quiz tab's exams. */}
+            <ListPanel>
+              <ListRow
+                to="/tools/workflow"
+                data-testid="workflow-builder-entry"
+                leading={<WorkflowLogo size="lg" />}
+                title="Workflow Builder"
+                subtitle="Chain data, calculations and concepts, then deploy it with AI"
+              />
+            </ListPanel>
+            {AREAS.map(a => {
+              const tools = TOOLS.filter(t => t.area === a.id)
+              if (!tools.length) return null
+              return (
+                <section key={a.id} className="space-y-2" aria-labelledby={`area-${a.id}`}>
+                  <h2 id={`area-${a.id}`} className="px-1 text-sm font-semibold text-muted-foreground">{a.label}</h2>
+                  <ListPanel>
+                    {tools.map(t => <ToolRow key={t.id} spec={t} />)}
+                  </ListPanel>
+                </section>
+              )
+            })}
+          </>
         )}
       </div>
     </>

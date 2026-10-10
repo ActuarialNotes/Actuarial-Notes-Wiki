@@ -71,12 +71,14 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 ### Inside `quiz/src/`
 - `pages/` — route-level views (Quiz, Review, Dashboard, Flashcards, Search, Settings,
-  `Store.tsx` — the Store, `/store`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
+  `Store.tsx` — the Store, `/store`, lazy — `WorkflowBuilder.tsx` — the Workflow Builder,
+  `/tools/workflow`, lazy — `GemShop.tsx` — the gem cosmetics, `/store/gems` —
   Upgrade, wiki/*, `Battle.tsx` — Quiz Battle, `/battle`, lazy — `Craft.tsx` — Concept Craft,
   `/craft` (one board; `/craft/:topicId` adds that pack and redirects), lazy — `Project/` — the Projects tab and the PCPA project simulator, `Cowork/` — the second product's shelf, source pages and deliverables —
   and `Research/`, which is
   flag-gated)
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
+  `components/workflow/` (the Workflow Builder's board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
   Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
   deck and a connection's card), `components/research/` (flag-gated).
@@ -307,6 +309,23 @@ before touching that area**:
   concept is made of. localStorage only, and only the connections found — the hand is
   re-derived from them (`boardState`); feeds no mastery or XP. Read before touching anything
   named `craft*`, `conceptCraft` or `conceptGraph`.
+- `docs/workflow-builder.md` — the **Workflow Builder** (`/tools/workflow`, the row at the top of
+  the Tools catalogue): data, calculations and concepts as steps **locked on a grid**
+  (`lib/workflowGrid.ts`) — Concept Craft's board with the physics taken out, sharing its
+  camera (`lib/craftLayout.ts`), its map buttons (`components/craft/CraftControls.tsx`) and its
+  panels' shape — joined by **directed** connections dragged from a card's port. A workflow
+  never loops (`connectReason`), so it has a run order (`runOrder`); a connection along a hand-off
+  the engine already defines (`ToolSpec.next`) **sends values**, and `evaluateWorkflow` runs the
+  chain live, while any other connection is descriptive (`edgeKind`). The **+** is a menu of pages
+  (kind → area or exam → item). A tool step's panel embeds its `ToolCard` and stores only the
+  fields moved off their defaults (`stepOwnInput`), so judgments still read as defaulted.
+  **Deploy** runs the workflow with Claude on the reader's **own** API key — kept in localStorage,
+  sent only to Anthropic through the SDK in the browser (a lazy chunk) — as a manual tool-use loop
+  (`lib/workflowAgent.ts`) whose `run_tool` / `describe_tool` / `read_concept` run here, on the
+  engine, over only what is on the workflow; *Copy for Claude* gives a keyless reader the same brief
+  for the MCP connector. All of `lib/workflow*.ts` is pure and tested; the flows (deployment
+  against a stubbed API included) are `e2e/workflow.spec.ts`. Read before touching anything named
+  `workflow*` or `Workflow`.
 - `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
@@ -1212,8 +1231,8 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **202 test files /
-~3790 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **215 test files /
+~4170 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

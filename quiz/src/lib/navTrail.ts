@@ -173,6 +173,7 @@ const STATIC_LABELS: Record<string, string> = {
   '/review': 'Review',
   '/battle': 'Quiz Battle',
   '/craft': 'Concept Craft',
+  '/tools/workflow': 'Workflow Builder',
   '/project': 'Projects',
   '/store': 'Store',
   '/store/gems': 'Gem Shop',

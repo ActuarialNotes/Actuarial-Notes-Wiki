@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c0be458285c654e016013273d65a0e1d202bcd8bff16bf189e84ab8bd9195cae
-  sources: []
+  sources:
+    - "FASB, Concepts Statement No. 8, Conceptual Framework for Financial Reporting (as amended), Ch.3 QC1-QC39 (PDF pp.26-32); BC1.2, BC3.2 joint development (PDF pp.16, 34); BC3.19, BC3.27-BC3.28 (PDF pp.38, 40), sha256:30fc0735a3362490d5708953fbbb78ee9e6baf2e05fa02efd1e753d5aa2effae — https://storage.fasb.org/Concepts_Statement_No._8_(As_Amended).pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶20, ¶30-38 (P-4 to P-7, PDF pp.35-38), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Qualitative Characteristics of Accounting Information.md

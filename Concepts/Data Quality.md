@@ -46,7 +46,7 @@ verification:
 
 > [!tip]- How it appears on the exam
 > - **DISC-DA** covers applying data quality principles in its first topic, planning an insurer data modeling project, beside [[Data Documentation|documenting data]] and [[Data Types|data classifications]]. Application questions describe a data set gathered for a model and ask which quality consideration it fails (appropriate, reasonable, sufficient, current) or what the analyst should do next: learn a field's definition, investigate a questionable value, reconcile to another source, or disclose a limitation.
-> - **Exam 5** and **PCPA** use the same ASOP No. 23 framework: reconciling the data to financial records before an analysis, and judging whether the data can support it.
+> - **PCPA** uses the same ASOP No. 23 framework: reconciling the data to financial records before an analysis, and judging whether the data can support it.
 
 > [!warning]- Exam traps
 > - **A review is not an audit:** ASOP No. 23 defines a review as an examination of the data's obvious characteristics for reasonableness and consistency, which is less detailed than an audit testing accuracy and completeness. An answer requiring the actuary to audit the source data overstates the standard.

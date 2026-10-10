@@ -1,12 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:33367e43d76b90d1d421f7621bc8102c5034e2029695e86056e5ccbfd4ee2c56
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b0c2bfccfdf975913fa7edbc6b166aff25573eb20aeb5aa82dd58863375b1c16
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶20, ¶27, ¶30-38, ¶54 (PDF pp.35-41); SSAP No. 1 ¶7 (PDF p.48); SSAP No. 41 ¶3-6 (PDF pp.266-267); SSAP No. 62R ¶31, ¶77, ¶85 (PDF pp.441-442, 450-451); SSAP No. 65 ¶10-15 (PDF pp.493-494); SSAP No. 6 ¶9 (PDF p.83), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), Ch.1 pp.8-10; p.22; pp.66-67; Ch.22 pp.302-306, sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "IFRS 17 Insurance Contracts as adopted by Commission Regulation (EU) 2021/2036 (OJ L 416, 23.11.2021), ¶37, ¶59(a), ¶78, ¶82, B65(a), sha256:c3fd00c0bff726d1886fffc0404815217cba23a84d155d681cfbf9fa631ec315 — https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32021R2036"
+    - "PwC Viewpoint, Loans and investments guide §7.8 'Application of CECL to insurance receivables' (fetched 2026-10-10), sha256:8b9973dbc73b4470cf6b0094f5db54cea781bf3d7ba1c0473b79c139f5a92a23 — https://viewpoint.pwc.com/dt/us/en/pwc/accounting_guides/loans_and_investment/loans_and_investment_US/chapter_7_current_ex_US/7_8-Application-of-CECL-to-insurance-receivables.html"
+    - "SEC EDGAR, CIK 876437 10-Q (2020) note on ASC 326 and premium receivable (fetched 2026-10-10), sha256:6399a4ac9c4c86512fd70472ca5e708e8eea84009c3506a5460faec2f3dc0353 — https://www.sec.gov/Archives/edgar/data/876437/000087643720000031/R9.htm"
+    - "SEC EDGAR, CIK 1401521 filing (2014) note on statutory vs GAAP differences, surplus notes (fetched 2026-10-10), sha256:2b6c27d739b4b61513d3f3c1300fb55a5661fb23009771aac560c0de293d30f9 — https://www.sec.gov/Archives/edgar/data/1401521/000140152114000125/R13.htm"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Accounting Standards.md
 ---

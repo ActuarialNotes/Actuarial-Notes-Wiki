@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8fee1ee0a42118e66f366fb22ec1676ce9e49057c4307b1d3d0b07ee7f1dcaad
-  sources: []
+  sources:
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), Ch.1 pp.8-11, Ch.2 p.12, p.25 (printed 7-11, 24), Ch.22 pp.302-306, sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶17-20, ¶30-31, ¶36 (PDF pp.34-37), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "FASB, Concepts Statement No. 8, Conceptual Framework for Financial Reporting (as amended), OB2, OB5, OB9, OB10 (PDF pp.11-13), sha256:30fc0735a3362490d5708953fbbb78ee9e6baf2e05fa02efd1e753d5aa2effae — https://storage.fasb.org/Concepts_Statement_No._8_(As_Amended).pdf"
+    - "IFRS Foundation, IFRS 17 Insurance Contracts standard page (fetched 2026-10-10), sha256:ed3f063f8346f9f29d379aa4eaa2a0c56d1df5bf5d82e05e2a175305c14ebac9 — https://www.ifrs.org/issued-standards/list-of-standards/ifrs-17-insurance-contracts/"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Accounting Frameworks.md

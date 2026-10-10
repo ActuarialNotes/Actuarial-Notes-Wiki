@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:2fb169f6a5c8e07b668fecb239e476faf71a32dae6e491e748c1bb2b3f054741
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:503718326963c0a43bc70cf44f3699cea0b1a50b4011c957e7050346a199fa6c
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶31, ¶35 (PDF pp.37-38); SSAP No. 62R ¶30, ¶40, ¶49, ¶76 (PDF pp.441, 444, 446, 450), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), pp.56-58 (Capital and Surplus Account), p.62 (ceding commission treated as revenue), pp.121-122, pp.302-306, sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "IFRS 17 Insurance Contracts as adopted by Commission Regulation (EU) 2021/2036 (OJ L 416, 23.11.2021), ¶78, ¶80, ¶82-83, ¶86 (PDF pp.18-19), sha256:c3fd00c0bff726d1886fffc0404815217cba23a84d155d681cfbf9fa631ec315 — https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32021R2036"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Financial Statements.md
 ---

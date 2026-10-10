@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:58b1c84748622fd6c1926b79b8db02cc8d47afcf01e71dc299e769ce26c0b7d2
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e3f1e6eb244228d077ecea83c83b25493af9588e3b7b822e5cc3a0e0487b1d0f
+  sources:
+    - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), SSAP No. 62R ¶10-13, ¶30-32, ¶40, ¶49, ¶76-78, ¶85 (PDF pp.438, 441-442, 444, 446, 450-451), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
+    - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), p.62 (ceding commissions treated as revenue, benefit surplus); Ch.22 p.306, sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "IFRS 17 Insurance Contracts as adopted by Commission Regulation (EU) 2021/2036 (OJ L 416, 23.11.2021), ¶63, ¶67, ¶78, ¶82, ¶86 (PDF pp.15-16, 18-19), sha256:c3fd00c0bff726d1886fffc0404815217cba23a84d155d681cfbf9fa631ec315 — https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:32021R2036"
+    - "IRMI Insurance Glossary, 'commutation' (fetched 2026-10-10), sha256:4a4f0a8117e3514e20cc7e93053507feceb324dfb9a5643fff6d872fa4ed2d96 — https://www.irmi.com/term/insurance-definitions/commutation"
+    - "OSFI, Questions and Answers – Guidance for Reinsurance Security Agreements (fetched 2026-10-10), sha256:83c50de632d4683ac140675078179f9e51c8cfefa99d248f8c78730a67bc4d0d — https://www.osfi-bsif.gc.ca/index%2ephp/en/data-forms/applications-approvals/questions-answers-guidance-reinsurance-security-agreements"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reinsurance Accounting.md
 ---

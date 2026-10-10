@@ -673,18 +673,33 @@
 
 /* Designation-credential rainbow foil — ACAS/ASA/FCAS/FSA share one "earned
    achievement" material (Sidebar profile chip + Store banner preview) instead
-   of a flat colour per designation: a soft rainbow-tinted wash under the same
-   sky→fuchsia→gold foil ring as collected flashcards. The base class is a
-   calm, static ring for persistent chrome (the Sidebar chip); the --hero
-   modifier sets the ring travelling for the Store's purchase-moment preview. */
+   of a flat colour per designation: the same sky→fuchsia→gold foil ring as
+   collected flashcards, plus a soft glow of the same colours. The rainbow is
+   only ever the edge and its glow — the fill is the page's own background, so
+   the label stays as legible as any other text. The base class is a calm,
+   static ring for persistent chrome (the Sidebar chip); the --hero modifier
+   sets the ring travelling for the Store's purchase-moment preview. */
 .designation-foil {
   position: relative;
-  background: linear-gradient(115deg,
-    hsl(199 89% 60% / 0.14), hsl(292 84% 61% / 0.14), hsl(45 93% 51% / 0.16));
+  isolation: isolate;
+  background: hsl(var(--background));
+  --designation-glow-blur: 5px;
+  --designation-glow-opacity: 0.4;
 }
 .dark .designation-foil {
-  background: linear-gradient(115deg,
-    hsl(199 89% 60% / 0.22), hsl(292 84% 61% / 0.22), hsl(45 93% 51% / 0.24));
+  --designation-glow-opacity: 0.55;
+}
+.designation-foil::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  background-size: 300% 100%;
+  filter: blur(var(--designation-glow-blur));
+  opacity: var(--designation-glow-opacity);
+  pointer-events: none;
 }
 .designation-foil::before {
   content: '';
@@ -699,12 +714,19 @@
   mask-composite: exclude;
   pointer-events: none;
 }
+.designation-foil--hero {
+  --designation-glow-blur: 12px;
+}
 .designation-foil--hero::before {
   padding: 1.5px;
   animation: flashcard-foil-shift 4.5s linear infinite;
 }
+.designation-foil--hero::after {
+  animation: flashcard-foil-shift 4.5s linear infinite;
+}
 @media (prefers-reduced-motion: reduce) {
-  .designation-foil--hero::before { animation: none; }
+  .designation-foil--hero::before,
+  .designation-foil--hero::after { animation: none; }
 }
 
 /* The concept popup's title is a control — it opens the page's action menu —

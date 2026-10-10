@@ -38,7 +38,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useTheme } from '@/hooks/useTheme'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
-import { ProBadge } from '@/components/ProBadge'
+import { ProBadge, NAME_PILL } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
@@ -903,7 +903,7 @@ export default function Sidebar() {
                     <span
                       title={designationBanner?.fullName}
                       className={cn(
-                        'shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tracking-wide leading-none',
+                        NAME_PILL,
                         designationBanner
                           ? 'designation-foil text-foreground'
                           : equippedBanner?.id === 'beta_tester'
@@ -915,7 +915,7 @@ export default function Sidebar() {
                     </span>
                   )}
                   {isPro && (
-                    <ProBadge star={isBetaTester} title={isBetaTester ? 'Beta Tester' : undefined} />
+                    <ProBadge title={isBetaTester ? 'Beta Tester' : undefined} />
                   )}
                 </span>
               </button>

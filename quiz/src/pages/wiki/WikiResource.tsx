@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { fromSlug, RESOURCES_ROUTE } from '@/lib/wikiRoutes'
+import { fromSlug, RESOURCES_ROUTE, wikiRoute } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -13,13 +13,15 @@ import { parseVerification } from '@/lib/verification'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { RESTORE_SCROLL } from '@/lib/routeScrollMemory'
 import { backLabel, useBack } from '@/hooks/useBack'
-import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { extractSyllabusAssignments, isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 
 export default function WikiResource() {
   const { slug = '' } = useParams()
   const resourceName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
   const { openAt } = useConceptPopup()
+  const navigate = useNavigate()
   const back = useBack({ to: RESOURCES_ROUTE, label: 'All resources' })
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -45,6 +47,11 @@ export default function WikiResource() {
   }, [resourceName])
 
   const meta = useMemo(() => (content ? parseResourceMeta(content) : null), [content])
+
+  const syllabusAssignments = useMemo(
+    () => (content ? extractSyllabusAssignments(content).assignments : []),
+    [content],
+  )
 
   const processedContent = useMemo(() => {
     if (!content) return null
@@ -78,7 +85,18 @@ export default function WikiResource() {
         <p className="text-sm text-muted-foreground">Couldn't load {resourceName}.</p>
       )}
 
-      {meta && <ResourceMetaCard meta={meta} />}
+      {/* The citation block: the metadata card, and under it the exams it is
+          a reading for — one column, one width. */}
+      {meta && (
+        <div className="flex w-fit max-w-full flex-col gap-3">
+          <ResourceMetaCard meta={meta} className="mb-0 w-full" />
+          <ResourceSyllabusCard
+            assignments={syllabusAssignments}
+            onOpen={ref => navigate(wikiRoute(ref))}
+            className="mb-0"
+          />
+        </div>
+      )}
 
       {processedContent !== null && (
         <WikiArticle

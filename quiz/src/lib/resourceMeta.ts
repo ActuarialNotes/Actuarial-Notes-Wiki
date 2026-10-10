@@ -196,8 +196,62 @@ export function stripFirstCoverImage(md: string): string {
   return md.replace(/!\[\[[^\]|]+\.(png|jpe?g|gif|svg|webp|avif)\]\][ \t]*\n?/i, '')
 }
 
+/**
+ * One exam a resource is a reading for, as its page's `> [!info] On the
+ * syllabus` callout states it (docs/resource-pages.md): the exam page linked,
+ * the name it was linked under, and what of the resource that exam assigns.
+ */
+export interface SyllabusAssignment {
+  /** The exam page's vault name — "Exam MAS-I (CAS)". */
+  exam: string
+  /** How the callout names it — "Exam MAS-I". */
+  label: string
+  /** The rest of the bullet, after its dash — objectives and chapters. */
+  detail?: string
+}
+
+const SYLLABUS_CALLOUT_RE = /^>\s*\[!info\][-+]?\s+On the syllabus\s*$/i
+const SYLLABUS_ENTRY_RE = /^>\s*[-*+]\s+\[\[([^\]|]+)(?:\|([^\]]+))?\]\]\s*(?:[—–-]\s*(.+))?$/
+
+/**
+ * Lift the "On the syllabus" callout out of a resource page, so the app can
+ * draw it as its own card under the metadata card rather than as a callout
+ * part-way down the article. The callout is removed only when every line of
+ * it reads as an entry — anything the parser doesn't understand is left on
+ * the page for the article to render as written.
+ */
+export function extractSyllabusAssignments(md: string): {
+  markdown: string
+  assignments: SyllabusAssignment[]
+} {
+  const lines = md.split('\n')
+  const start = lines.findIndex(line => SYLLABUS_CALLOUT_RE.test(line))
+  if (start < 0) return { markdown: md, assignments: [] }
+  let end = start + 1
+  const assignments: SyllabusAssignment[] = []
+  for (; end < lines.length && lines[end].startsWith('>'); end++) {
+    if (lines[end].replace(/^>\s*/, '') === '') continue
+    const m = SYLLABUS_ENTRY_RE.exec(lines[end])
+    if (!m) return { markdown: md, assignments: [] }
+    const exam = m[1].trim()
+    const detail = m[3]?.trim()
+    assignments.push({
+      exam,
+      label: (m[2] ?? exam).trim(),
+      ...(detail ? { detail: detail.charAt(0).toUpperCase() + detail.slice(1) } : {}),
+    })
+  }
+  if (assignments.length === 0) return { markdown: md, assignments: [] }
+  // Take one blank line after the callout with it, so no double gap is left.
+  if (end < lines.length && lines[end].trim() === '') end++
+  return {
+    markdown: [...lines.slice(0, start), ...lines.slice(end)].join('\n'),
+    assignments,
+  }
+}
+
 export function preprocessResourceMarkdown(raw: string): string {
-  return stripFirstCoverImage(raw)
+  return extractSyllabusAssignments(stripFirstCoverImage(raw)).markdown
 }
 
 const LIST_ITEM_RE = /^\s*[-*+]\s+\S/

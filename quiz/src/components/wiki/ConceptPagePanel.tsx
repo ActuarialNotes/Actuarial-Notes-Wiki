@@ -5,7 +5,8 @@ import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { recallPageScroll, rememberPageScroll } from '@/lib/pageScrollMemory'
 import { WikiArticle, extractImages } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
-import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { extractSyllabusAssignments, isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { ResourceSyllabusCard } from '@/components/wiki/ResourceSyllabusCard'
 import { ListenView } from '@/components/wiki/ListenView'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
@@ -145,6 +146,13 @@ export function ConceptPagePanel({
     return parseResourceMeta(content)
   }, [content, entry.kind])
 
+  // The resource's "On the syllabus" callout, drawn as a card under its
+  // metadata card — `preprocessResourceMarkdown` takes it out of the article.
+  const syllabusAssignments = useMemo(
+    () => (content && entry.kind === 'resource' ? extractSyllabusAssignments(content).assignments : []),
+    [content, entry.kind],
+  )
+
   const processedContent = useMemo(() => {
     if (!content) return content
     if (entry.kind !== 'resource') return content
@@ -263,14 +271,25 @@ export function ConceptPagePanel({
                 images={images}
                 onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
               />
+              {/* The citation block: the metadata card, and under it the
+                  exams it is a reading for — one column, one width. */}
               {resourceMeta && (
-                <ResourceMetaCard
-                  meta={resourceMeta}
-                  compact
-                  // Its document opens as the next page of the stack, with
-                  // this one folded into a bar above it — a link, not a lid.
-                  onReadPdf={onOpenPdf}
-                />
+                <div className="mb-4 flex w-fit max-w-full flex-col gap-3">
+                  <ResourceMetaCard
+                    meta={resourceMeta}
+                    compact
+                    className="mb-0 w-full"
+                    // Its document opens as the next page of the stack, with
+                    // this one folded into a bar above it — a link, not a lid.
+                    onReadPdf={onOpenPdf}
+                  />
+                  <ResourceSyllabusCard
+                    assignments={syllabusAssignments}
+                    onOpen={onOpenLink}
+                    compact
+                    className="mb-0"
+                  />
+                </div>
               )}
               <WikiArticle
                 markdown={processedContent ?? content}

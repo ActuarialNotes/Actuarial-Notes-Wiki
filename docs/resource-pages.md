@@ -211,6 +211,12 @@ In order:
    and saying, after ` — `, what that exam assigns: the objectives (from the exam page)
    and the chapters, sections, pages or exclusions (from the content outline or syllabus,
    in its words). The lint compares the bullets with the exam pages both ways.
+   The app doesn't render it as a callout: `extractSyllabusAssignments`
+   (`lib/resourceMeta.ts`) lifts it out of the article and
+   `components/wiki/ResourceSyllabusCard.tsx` draws it directly under the metadata card,
+   one row per exam (its logo, name and assignment, opening the exam's study guide). Keep
+   every line of it a `> - [[Exam …]] — …` bullet — a callout the parser can't read is
+   left in the article as written.
 4. **The document's divisions** — its chapters, sections, parts, schedules or form pages,
    as `##` headings, **titled and numbered as the document titles and numbers them**:
    `## 4 Insurance Risk`, `## Appendix A …`, `## 10.60 Summary of Selected Financial Data

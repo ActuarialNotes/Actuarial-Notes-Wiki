@@ -14,6 +14,7 @@ export const internalRateOfReturn: ToolSpec = {
   name: 'Internal Rate of Return',
   area: 'finance',
   answers: 'What rate makes these cash flows worth zero?',
+  aka: ['IRR', 'yield rate', 'dollar-weighted'],
   fields: [
     {
       kind: 'table', key: 'flows', label: 'Cash flows', minRows: 2, maxRows: 500,

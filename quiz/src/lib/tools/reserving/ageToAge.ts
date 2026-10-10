@@ -70,6 +70,7 @@ export const ageToAgeFactors: ToolSpec = {
   name: 'Age-to-Age Factors',
   area: 'reserving',
   answers: 'How has each origin developed between ages, and what is the average at each age?',
+  aka: ['LDF', 'link ratio', 'development factor', 'ATA'],
   fields: [
     {
       kind: 'triangle', key: 'triangle', label: 'Cumulative triangle',

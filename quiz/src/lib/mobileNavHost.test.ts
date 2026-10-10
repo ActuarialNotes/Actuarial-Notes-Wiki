@@ -16,6 +16,8 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/flashcards')).toBe(true)
     expect(pageHostsNavButton('/actuaria')).toBe(true)
     expect(pageHostsNavButton('/actuaria/sector/CAS-5')).toBe(true)
+    expect(pageHostsNavButton('/tools')).toBe(true)
+    expect(pageHostsNavButton('/tools/bornhuetter-ferguson')).toBe(true)
   })
 
   it('leaves every other route to the app header', () => {
@@ -33,5 +35,6 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/flashcards/deck')).toBe(false)
     expect(pageHostsNavButton('/projects')).toBe(false)
     expect(pageHostsNavButton('/actuarial')).toBe(false)
+    expect(pageHostsNavButton('/toolshed')).toBe(false)
   })
 })

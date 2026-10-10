@@ -5,7 +5,7 @@
  * agent run the same code (R1).
  */
 
-export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSlug } from './registry'
+export { TOOLS, AREAS, ENGINE_VERSION, toolById, toolBySlug, toolSearchText, toolSlug } from './registry'
 export { runTool } from './run'
 export { describeTool, inputSchema, sourceLine, toolSummary } from './schema'
 export { CHECKS, checksFor, checkedValueCount, runQuestionCheck, verifyCheck, type SourceRef } from './checks'

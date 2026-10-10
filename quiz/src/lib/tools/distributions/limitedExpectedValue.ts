@@ -8,6 +8,7 @@ export const limitedExpectedValue: ToolSpec = {
   name: 'Limited Expected Value',
   area: 'distributions',
   answers: "What's the expected loss, capped at u?",
+  aka: ['LEV', 'limited expected value', 'LER', 'loss elimination ratio'],
   fields: [
     FAMILY,
     ...PARAMETERS,

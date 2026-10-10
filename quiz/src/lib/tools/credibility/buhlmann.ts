@@ -7,6 +7,7 @@ export const buhlmannCredibility: ToolSpec = {
   name: 'Bühlmann Credibility',
   area: 'credibility',
   answers: "What's the credibility estimate from the structural parameters?",
+  aka: ['Buhlmann', 'EPV', 'VHM', 'Z', 'k'],
   fields: [
     { kind: 'number', key: 'epv', label: 'Expected process variance', symbol: 'EPV', unit: 'plain', min: 0, max: 1e18, sliderMax: 1000, step: 1, default: 100, description: 'The expected value of the process variance, per unit of exposure: E[Var(X | Θ)].' },
     { kind: 'number', key: 'vhm', label: 'Variance of hypothetical means', symbol: 'VHM', unit: 'plain', min: 1e-18, max: 1e18, sliderMax: 100, step: 0.1, default: 10, description: 'The variance of the hypothetical means: Var(E[X | Θ]).' },

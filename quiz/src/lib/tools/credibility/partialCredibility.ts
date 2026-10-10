@@ -6,6 +6,7 @@ export const partialCredibility: ToolSpec = {
   name: 'Partial Credibility',
   area: 'credibility',
   answers: 'How much credibility does this experience get?',
+  aka: ['square root rule', 'Z'],
   fields: [
     { kind: 'number', key: 'claims', label: 'Observed claims', symbol: 'n', unit: 'count', min: 0, max: 1e9, sliderMax: 2000, step: 1, default: 300, description: 'The number of claims in the experience.' },
     { kind: 'number', key: 'standard', label: 'Full standard', symbol: 'N', unit: 'count', judgment: true, min: 1, max: 1e9, sliderMax: 5000, step: 1, default: 1082, description: 'The number of claims for full credibility.' },

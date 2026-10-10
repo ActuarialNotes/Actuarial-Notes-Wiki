@@ -30,6 +30,7 @@ export const onLevelFactors: ToolSpec = {
   name: 'On-Level Factors',
   area: 'ratemaking',
   answers: "What brings each year's premium to current rates?",
+  aka: ['OLF', 'parallelogram method', 'current rate level'],
   fields: [
     {
       kind: 'table', key: 'changes', label: 'Rate changes', minRows: 1, maxRows: 100,

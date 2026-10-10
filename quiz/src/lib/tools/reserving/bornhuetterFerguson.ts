@@ -9,6 +9,7 @@ export const bornhuetterFerguson: ToolSpec = {
   name: 'Bornhuetter-Ferguson',
   area: 'reserving',
   answers: "What's the Bornhuetter-Ferguson ultimate?",
+  aka: ['BF', 'B-F', 'IBNR'],
   fields: [
     BASIS_FIELD,
     {

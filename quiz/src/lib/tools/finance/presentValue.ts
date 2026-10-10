@@ -7,6 +7,7 @@ export const presentValue: ToolSpec = {
   name: 'Present Value',
   area: 'finance',
   answers: 'What are these cash flows worth today?',
+  aka: ['NPV', 'PV', 'discount', 'accumulated value', 'FV'],
   fields: [
     { kind: 'number', key: 'i', label: 'Rate', symbol: 'i', unit: 'percent', min: -0.5, max: 1, sliderMax: 0.2, step: 0.0025, default: 0.05, description: 'The effective annual rate, as a decimal.' },
     {

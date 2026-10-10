@@ -12,6 +12,7 @@ export const expenseRatios: ToolSpec = {
   name: 'Expense Ratios',
   area: 'ratemaking',
   answers: 'What are the fixed and variable expense provisions?',
+  aka: ['fixed expense', 'variable expense', 'expense provision'],
   fields: [
     {
       kind: 'table', key: 'rows', label: 'Expense types', minRows: 1, maxRows: 50,

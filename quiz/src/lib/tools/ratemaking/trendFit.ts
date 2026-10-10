@@ -27,6 +27,7 @@ export const trendFit: ToolSpec = {
   name: 'Trend Fit',
   area: 'ratemaking',
   answers: 'What annual trend do these data show?',
+  aka: ['exponential trend', 'linear trend', 'loss trend', 'premium trend'],
   fields: [
     {
       kind: 'choice', key: 'model', label: 'Fit', description: 'Exponential fits ln(value) on time, a constant rate of change; linear fits the value itself, a constant amount.',

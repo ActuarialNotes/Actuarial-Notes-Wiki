@@ -25,6 +25,7 @@ export const chainLadder: ToolSpec = {
   name: 'Chain Ladder',
   area: 'reserving',
   answers: "What's the ultimate by development?",
+  aka: ['CL', 'development method', 'IBNR'],
   fields: [
     BASIS_FIELD,
     {

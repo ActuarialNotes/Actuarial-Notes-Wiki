@@ -31,6 +31,7 @@ import {
   runPath,
   runTool,
   toolById,
+  toolSearchText,
   toolSlug,
   toolSummary,
 } from '../_tools/engine.js'
@@ -642,7 +643,7 @@ TOOLS.push(
       type: 'object',
       properties: {
         area: { type: 'string', enum: AREA_IDS, description: 'Only tools in this practice area.' },
-        query: { type: 'string', description: 'Words to match against a tool\'s name and the question it answers, e.g. "ultimate", "credibility", "annuity".' },
+        query: { type: 'string', description: 'Words to match against a tool\'s name, the short names it goes by ("BF", "LDF"), the question it answers and its method\'s concepts, e.g. "ultimate", "credibility", "annuity".' },
       },
     },
     annotations: { title: 'List actuarial calculators', ...READ_ONLY },
@@ -654,7 +655,7 @@ TOOLS.push(
       const words = query ? normalizeTerm(query).split(' ').filter(Boolean) : []
       const tools = CALCULATORS
         .filter(t => !area || t.area === area)
-        .filter(t => words.every(w => normalizeTerm(`${t.name} ${t.answers} ${t.id}`).includes(w)))
+        .filter(t => words.every(w => normalizeTerm([t.id, ...toolSearchText(t)].join(' ')).includes(w)))
         .map(toolSummary)
       return result(JSON.stringify({ tools }))
     },

@@ -102,4 +102,27 @@ test.describe('tools', () => {
     expect(box).not.toBeNull()
     expect(box!.y + box!.height).toBeLessThanOrEqual(844)
   })
+
+  test('searches the catalogue by name, short name and question, keeping the query in the URL', async ({ page }) => {
+    await page.goto('/tools')
+    const search = page.getByRole('textbox', { name: 'Search tools' })
+    await search.fill('BF')
+    await expect(page).toHaveURL(/[?&]q=BF/)
+    await expect(page.getByTestId('tool-row').first()).toContainText('Bornhuetter-Ferguson')
+    await search.fill('what loss ratio do the rates allow')
+    await expect(page.getByTestId('tool-row').first()).toContainText('Permissible Loss Ratio')
+    await page.getByTestId('tool-row').first().click()
+    await expect(page).toHaveURL(/\/tools\/permissible-loss-ratio/)
+    await page.goBack()
+    await expect(search).toHaveValue('what loss ratio do the rates allow')
+    await search.fill('zzzz')
+    await expect(page.getByTestId('tool-no-results')).toBeVisible()
+  })
+
+  test('finds the next tool from a tool\'s own page', async ({ page }) => {
+    await page.goto('/tools/development-to-ultimate')
+    await page.getByRole('textbox', { name: 'Search tools' }).fill('cape')
+    await page.getByTestId('tool-search-results').getByRole('button', { name: /Cape Cod/ }).click()
+    await expect(page).toHaveURL(/\/tools\/cape-cod$/)
+  })
 })

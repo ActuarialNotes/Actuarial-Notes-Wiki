@@ -35,6 +35,7 @@ export const interestConverter: ToolSpec = {
   name: 'Interest Converter',
   area: 'finance',
   answers: "What's this rate in another form?",
+  aka: ['nominal rate', 'force of interest', 'discount rate', 'effective rate'],
   fields: [
     { kind: 'choice', key: 'form', label: 'Given as', description: 'Which form the rate is given in.', options: FORMS, default: 'effective_interest' },
     { kind: 'number', key: 'rate', label: 'Rate', symbol: 'r', unit: 'percent', min: 0, max: 1, step: 0.0005, default: 0.05, description: 'The rate, as a decimal (0.05 for 5%).' },

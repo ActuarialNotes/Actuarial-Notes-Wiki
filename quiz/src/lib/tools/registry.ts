@@ -94,3 +94,16 @@ export function toolSlug(spec: ToolSpec): string {
 export function toolBySlug(slug: string): ToolSpec | undefined {
   return TOOLS.find(t => toolSlug(t) === slug) ?? BY_ID.get(slug)
 }
+
+/**
+ * What a tool is found by, most identifying first: its name, the short names it
+ * goes by, the question it answers, its method's concept pages and its practice
+ * area. The Tools page's search (`lib/toolSearch.ts`) ranks on these in this
+ * order, and the connector's `list_tools` matches its query against the same
+ * words, so a person and an agent find a tool by the same words
+ * (docs/actuarial-tools.md §6.2).
+ */
+export function toolSearchText(spec: ToolSpec): string[] {
+  const area = AREAS.find(a => a.id === spec.area)?.label ?? spec.area
+  return [spec.name, ...(spec.aka ?? []), spec.answers, ...spec.method.concepts, area]
+}

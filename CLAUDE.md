@@ -353,7 +353,7 @@ before touching that area**:
 - `docs/actuarial-tools.md` — **Actuarial Tools**, the plan and what's built (§16): the Tools
   page (`/tools`, a sidebar row between Projects and the Shop, `TOOLS_ENABLED`) of actuarial
   calculators — thirty-two so far across reserving, ratemaking, loss distributions, credibility
-  and financial maths —
+  and financial maths, plus three Data Sources —
   that people use as a card (`components/tools/ToolCard.tsx`) and AI agents use through the
   MCP connector (`list_tools` / `describe_tool` / `run_tool`), all running one pure engine in
   `lib/tools/`. The connector runs it as a committed bundle, `quiz/api/_tools/engine.js`:
@@ -369,12 +369,18 @@ before touching that area**:
   (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
   transcribed with their source), and no tool leaves Preview until it reproduces a published
-  worked example in CI. §18 is the **V2 review** and §11 its plan, built before Phase 2: a search
-  bar on `/tools`, assumptions picked from a column's header menu or a stepper rather than typed
-  (§6.6), a live figure on every card (§6.7, R11: it draws only what the tool computed), and
-  **Data Sources** (§4.11) — life tables, price indices, yield curves and published triangles,
-  each a dated snapshot extracted from the publisher's file, its licence named. Read before
-  building any of it.
+  worked example in CI. **V2** (§16.1, reviewed in §18) is built: a search bar on `/tools`
+  (`ToolsSearchBar`, `lib/toolSearch.ts`, a spec's `aka` short names — `list_tools` matches the
+  same words); assumptions picked rather than typed (`lib/toolColumns.ts`: a column header's
+  **From** another tool in a `SourceSheet`, Every row / Scale by, arithmetic in any number cell,
+  a touch stepper with candidates from the session's last runs, Age-to-Age Factors' selection
+  exhibit); a live figure on every card (`lib/toolFigures.ts` → `ToolFigure`, R11: it draws only
+  what the tool computed, a curve's points from `sweep`, the same engine run again); and **Data
+  Sources**, the first practice area (`lib/tools/data/`: Life Table, Price Index, Yield Curve),
+  whose tables `scripts/dataset_extract.py` reads off NCHS's, Statistics Canada's, BLS's and the
+  Treasury's own files with each file's sha256 and licence, into
+  `lib/tools/data/datasets/*.json` — never hand-edited; re-run the script for a new edition.
+  Read before building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
   pages behind it fold up into title bars — vertically, along the pane's short axis, so a
@@ -1344,6 +1350,11 @@ compile — don't "clean up" the flagged code as dead.
   `figures_exam_{p,fm,mas_i,mas_ii,5,6c}.py`) draws the per-concept SVGs in `Media/Figures/`
   and inserts their embeds. The figures are **generated** — edit the builder, not the SVG.
   See `docs/concept-figures.md`.
+- `dataset_extract.py` — published tables → the **Actuarial Tools** Data Sources
+  (`quiz/src/lib/tools/data/datasets/*.json`): NCHS's and Statistics Canada's life tables, BLS's
+  and Statistics Canada's price indexes, the Treasury's par yield curves, each file's URL, sha256
+  and date read recorded with the licence. Downloads cached outside the repo (`--cache`,
+  `--offline`); openpyxl for NCHS's `.xlsx`. Tests: `scripts/test_datasets.py`.
 - `tool_fixtures.py` — published worked examples → **Actuarial Tools** fixtures
   (`quiz/src/lib/tools/fixtures/*.json`): Friedland's and Werner & Modlin's exhibits read off
   the CAS's PDFs, each checked by sha256, with no model retyping a number. PyMuPDF, imported

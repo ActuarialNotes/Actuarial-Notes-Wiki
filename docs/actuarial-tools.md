@@ -1,11 +1,12 @@
 # Actuarial Tools — plan
 
-_Last updated: 2026-10-10 · Status: **Phase 1 nearly built; V2 planned** — thirty-two tools on
-the Tools page and in the MCP connector, each checked against a published source. §16 says what
-is built and §15 what is next. **§18 is the V2 review**: what the first build looks like on a
-phone, and the four changes it leads to — assumptions picked rather than typed (§6.6), a live
-figure on every card (§6.7), **Data Sources** as a practice area (§4.11) and a search bar on the
-Tools page (§6.2). V2 is built before Phase 2 widens the catalogue (§11)._
+_Last updated: 2026-10-10 · Status: **Phase 1 nearly built; V2 built** — thirty-five tools on
+the Tools page and in the MCP connector: thirty-two calculators, each checked against a published
+source, and three Data Sources. §16 says what is built and §15 what is next. **§18 is the V2
+review**: what the first build looked like on a phone, and the four changes it led to —
+assumptions picked rather than typed (§6.6), a live figure on every card (§6.7), **Data Sources**
+as a practice area (§4.11) and a search bar on the Tools page (§6.2). §16.1 says what of V2 was
+built and where the build departs from the plan._
 
 **Actuarial Tools** is a new section of the app: a catalogue of actuarial calculators that
 people and AI agents both use. A person uses a tool card. An agent uses the same tool through
@@ -315,9 +316,9 @@ chain starts. In the engine they're the area `data` (`PracticeArea`), and every 
 held to R1–R11 like any other tool, plus these rules, which are R2 applied to a whole table:
 
 - **Extracted mechanically, never retyped.** `scripts/dataset_extract.py` reads the publisher's
-  own file (CSV, XLS, XTbML, or a PDF table through PyMuPDF) into
-  `.datasets/<id>/<edition>.json`, with the source URL, the sha256 of the file it read, the date
-  read and the licence. It's the same pattern as `.syllabus/` (`docs/syllabus-pipeline.md`) and
+  own file (a CSV inside StatCan's table zip, BLS's tab-separated time-series files, NCHS's
+  `.xlsx`, the Treasury's CSV) into `quiz/src/lib/tools/data/datasets/<id>.json`, with each
+  file's URL, the sha256 of the bytes it read, the date read and the licence. It's the same pattern as `.syllabus/` (`docs/syllabus-pipeline.md`) and
   `tool_fixtures.py` (§17). A table no script can read isn't offered.
 - **Free to reuse, licence named.** A dataset ships only under terms that allow redistribution:
   a US federal work (public domain), the Statistics Canada Open Licence, or a publisher's terms
@@ -335,17 +336,20 @@ held to R1–R11 like any other tool, plus these rules, which are R2 applied to 
 - **Chosen, never a default.** A value a data source supplies arrives in the next tool as a
   judgment carrying its provenance (`source: { dataset, edition, slice }`). It's never
   `default: true`, and nothing is filled in from a dataset unless the reader picked it there.
-- **Served as static files.** The build emits `ai/datasets/<id>.json` beside
-  `knowledge-base.json`. The card fetches the one dataset it shows, and the MCP function fetches
-  its own static export, as it already does for the knowledge base. No table enters the engine
-  bundle or the main chunk.
+- **Small, and carried by the engine.** A tool computes synchronously and the connector runs
+  the same engine, so the tables ride with it (`lib/tools/data/datasets.ts` imports them). That
+  keeps them out of the main chunk — the engine loads only in the Tools page's lazy chunk — and
+  they are kept small: monthly index values since 2000, the Treasury's curve at each month-end,
+  single-age life tables (about 100 KB in all). A table too big for that (daily curves, the CAS
+  triangles) is the point to move to fetched static files (`ai/datasets/<id>.json`), as first
+  planned.
 
 | Tool | Answers | In → out | Datasets, first wave | Sends to | Phase |
 |---|---|---|---|---|---|
-| **Life Table** | What does this published table give at each age? | Table (sex or variant where the table has one), ages → *q_x*, *p_x*, *l_x*, *e_x* by age | US Life Tables (NCHS, *National Vital Statistics Reports*, latest year); Statistics Canada's complete life table (latest three-year); the SOA's exam tables, the Standard Ultimate Life Table and the Illustrative Life Table, once their terms are confirmed (§14) | Survival Probability, Life Insurance Value, Life Annuity Value, Net Premium, Policy Value (§4.9) | V2 |
-| **Price Index** | How has this price index moved? | Series, start and end → the values by period, each year's change, and the annualised change between the two dates | BLS CPI-U: all items, medical care, motor vehicle maintenance and repair, motor vehicle insurance, used cars and trucks, shelter; BLS Employment Cost Index (wages and salaries, a workers compensation severity index); Statistics Canada CPI: all items, passenger vehicle insurance premiums, vehicle parts, maintenance and repairs, health care; Statistics Canada's building construction price indexes (a property severity index) | Trend Fit (the values as points), Trend Factor (the annualised change as the selected trend, a judgment) | V2 |
-| **Yield Curve** | What were interest rates on this date? | Curve, date → the yield at each term (par, or zero-coupon where that's what the publisher gives) | US Treasury daily par yield curve; Bank of Canada zero-coupon yield curves | Present Value (as a spot curve), Spot & Forward Rates, Duration & Convexity and Redington Immunization (the rate at a term) | V2 |
-| **Loss Development Data** | What are this insurer's published triangles? | Line of business, company → paid and incurred triangles and earned premium by accident year | The CAS Loss Reserving Database (Meyers & Shi, built from NAIC Schedule P: six lines, accident years 1988–1997, ten years of development, the later diagonals kept for back-testing) | Age-to-Age Factors, Ratio Triangle, Expected Claims (premium), Cape Cod | V2 |
+| **Life Table** | What does this published life table give at each age? | Table, population (all, male, female), age *x*, years ahead *t* → *q_x*, *l_x*, *e_x* from *x* to *x + t*, and *ₜp_x* | **Built:** *United States Life Tables, 2024* (NCHS, NVSR 75-05, Tables 1–3, ages 0–100+); Statistics Canada's complete life table, 2022–2024 (Table 13-10-0114-01, ages 0–110+). **Waiting:** the SOA's exam tables, the Standard Ultimate Life Table and the Illustrative Life Table, until their terms are confirmed (§14) | Survival Probability, Life Insurance Value, Life Annuity Value, Net Premium, Policy Value (§4.9), once built | V2 ✓ |
+| **Price Index** | How has this price index moved? | Series, from and to → the values by period, each one's 12-month (or 4-quarter) change, and the annualised and total change between the first and last | **Built:** BLS CPI-U (all items, medical care, motor vehicle maintenance and repair, motor vehicle insurance, used cars and trucks, shelter) and ECI (wages and salaries, private industry), monthly or quarterly since 2000; Statistics Canada CPI (all items, passenger vehicle insurance premiums, passenger vehicle parts, maintenance and repairs, health care, shelter), monthly since 2000. **Not yet:** Statistics Canada's building construction price indexes | Trend Fit (the window as points), Trend Factor (the annualised change as the selected trend, a judgment) | V2 ✓ |
+| **Yield Curve** | What were interest rates on this date? | Curve, date, term → the curve on or before the date, the yield at the term and the 10Y − 2Y slope | **Built:** the Treasury's daily par yield curve, its last trading day of each month since January 2000 (and the latest day of the month in progress). **Waiting:** the Bank of Canada's zero-coupon curves (§14) | Interest Converter (a par yield is nominal, convertible semiannually; the converter gives the effective rate), and through it Present Value, Annuity, Duration & Convexity and Redington Immunization, whose rate offers it as a source | V2 ✓ |
+| **Loss Development Data** | What are this insurer's published triangles? | Line of business, company → paid and incurred triangles and earned premium by accident year | The CAS Loss Reserving Database (Meyers & Shi, built from NAIC Schedule P: six lines, accident years 1988–1997, ten years of development, the later diagonals kept for back-testing) | Age-to-Age Factors, Ratio Triangle, Expected Claims (premium), Cape Cod | Waits on §14's terms |
 | **Exposure Curve** | What share of a risk's loss sits below this point? | Curve, a point as a share of the sum insured → the share of expected loss | Bernegger's (1997) MBBEFD parameters for the Swiss Re Y1–Y4 curves | Exposure Rating (§4.6) | 2 |
 | **Capital Factors** | What factor does the regulator set for this risk? | Guideline in force, risk category → the factor, with the guideline's section | OSFI's MCT guideline, by year | MCT Ratio (§4.8) | 3 |
 
@@ -858,11 +862,13 @@ quiz/src/lib/tools/
   fixtures/<tool>/*.json   cited published examples (§9)
   *.test.ts
 quiz/src/pages/Tools/      Catalogue, ToolRoute, Runs, Analysis (lazy chunk)
-quiz/src/components/tools/ ToolCard (renders any spec), ToolGrid, ToolTiles, ToolMenu,
-                           WorkingFold, ToolFigure (§6.7), ColumnSources and CellStepper
-                           (§6.6), ToolsSearchBar (§6.2)
+quiz/src/components/tools/ ToolCard (renders any spec), ToolGrid (with the column panel and
+                           the cell stepper, §6.6), ToolMenu, SourceSheet, FactorSelection,
+                           ToolFigure (§6.7), ToolsSearchBar (§6.2)
 quiz/src/lib/toolFigures.ts   result → FigureSpec, pure (app-side; not in the engine bundle)
-.datasets/<id>/<edition>.json published tables, extracted by scripts/dataset_extract.py (§4.11)
+quiz/src/lib/toolColumns.ts   cell printing, steps, column moves, sources and candidates (§6.6)
+quiz/src/lib/toolSearch.ts    the catalogue's search; toolRuns.ts, the session's last runs
+quiz/src/lib/tools/data/      the Data Sources and their datasets/<id>.json (§4.11)
 Resources/Data/<Name>.md      one page per dataset: what it is, edition, licence (R5)
 quiz/src/hooks/useToolRuns.ts, useToolWorker.ts
 quiz/api/tools.js          GET catalogue / POST run (HTTP)
@@ -1045,7 +1051,7 @@ previous phase's tools pass R6.
   bank questions are mapped and reproduced. The tools-eval harness has a baseline for both
   arms. Then the mode can leave Preview (a §14 decision).
 
-### V2 — Easier to use, and data to use it on (before Phase 2)
+### V2 — Easier to use, and data to use it on (before Phase 2) — built, §16.1
 
 The first build is correct but hard to drive on a phone (§18). V2 fixes that before the
 catalogue grows, because every Phase 2 tool would inherit the same grid and the same blank card.
@@ -1189,10 +1195,10 @@ In order, each step shippable alone:
 
 ## 15. Immediate next steps
 
-0. **V2 (§11), in its order**: the search bar, the grid's pinned columns, picking assumptions,
-   figures, then Data Sources. The first two are a day's work each and fix what §18's
-   screenshots show; Data Sources waits on §14's dataset terms only for the SOA and CAS
-   tables, so the US and Canadian government sources can start at once.
+0. **The rest of V2 (§16.1, *Not built*)**: the Search page's Tools pill, block selection and
+   undo in the grid, From a saved run, and the datasets waiting on §14's terms (the SOA's exam
+   tables, the CAS triangles, the Bank of Canada's curves). A scheduled refresh of the datasets
+   (§14, decision 7) is the other open piece.
 1. **Finish Phase 1's tools (§11).** One tool is left, **Tail Factor**, waiting on a source
    that prints a fitted tail to check it against (R6): Friedland's Chapter 7 discusses the
    curves but its exhibits select the tail by judgment. Two parts of built tools are left too:
@@ -1213,6 +1219,7 @@ reproducing a published worked example or exam question in CI (§17):
 
 | Area | Tools |
 |---|---|
+| Data Sources (V2, §16.1) | Life Table, Price Index, Yield Curve — these read published tables rather than compute, so they carry no "Tested against" mark |
 | Reserving | Ratio Triangle, Age-to-Age Factors, Development to Ultimate, Chain Ladder, Expected Claims, Bornhuetter-Ferguson, Benktander, Cape Cod |
 | Ratemaking | Earned Premium, On-Level Factors, Trend Fit, Trend Factor, Expense Ratios, Permissible Loss Ratio, Loss Ratio Method, Pure Premium Method |
 | Loss distributions | Distribution, Limited Expected Value, Expected Payment |
@@ -1273,6 +1280,76 @@ named, or On-Level Factors' rate changes beside the factors they produce. A `dat
 effective date) is the browser's date picker over an ISO date; `lib/tools/dates.ts` reads the
 texts' `01/01/17` too, and measures time in months as Werner & Modlin do. A number field may
 set `sliderMin` where its valid range starts far below where values live (a year, a mean).
+
+### 16.1 V2, built (2026-10-10)
+
+The four changes of §18, as built. Where the build departs from §4.11, §6.2, §6.6 or §6.7, it says so.
+
+**Search (§6.2).** `components/tools/ToolsSearchBar.tsx`, built from the `FloatingSearchBar`
+parts: on the catalogue the page itself is the result list, its query and practice-area pill in
+the URL (`?q=…&area=…`); on a tool's page a query opens a dropdown of tools over the card, and the
+strip under it carries the back control (`useBack`, so it returns to the page left). `/tools` is in
+`lib/mobileNavHost.ts`, so the app header row is gone there. A tool is found by
+`toolSearchText` (`lib/tools/registry.ts`): its name, a new `aka` field of short names ("BF",
+"LDF", "YTM"), its question, its concept pages and its area — ranked by `searchBy`
+(`lib/toolSearch.ts`), and the connector's `list_tools` matches the same words. Catalogue rows
+let the question wrap to two lines (`ListRow`'s new `subtitleLines`).
+
+**The grid (§6.3).** The origin column is pinned at the left and the **first** computed column at
+the right: pinning every computed column, as first tried, left a phone one input column. Cells
+print as their column does once they lose focus (`formatCell`), and input-column totals print the
+same way.
+
+**Picking assumptions (§6.6)**, in `lib/toolColumns.ts` (pure, tested) and
+`components/tools/ToolGrid.tsx`:
+- A number column's header opens a panel under the grid: **From** the tool that produces it
+  (`COLUMN_SOURCES`: CDFs from Development to Ultimate by position, expected claims from Expected
+  Claims by origin, latest values from Age-to-Age Factors' diagonal, selected factors from its
+  averages), **Every row** and **Scale by** (`×1.05`, `+5%`, `+100`). A scalar has the same
+  **From** as a button beside its value (`SCALAR_SOURCES`: a trend from Trend Fit or Price Index,
+  expense provisions from Expense Ratios, an ELR from Cape Cod, a rate from Yield Curve). Either
+  opens `components/tools/SourceSheet.tsx`: the source tool's own card, filled from this one where
+  it can be, and **Use these**.
+- Every number field reads arithmetic (`readNumber` → `evaluateArithmetic` in
+  `lib/tools/input.ts`, a recursive-descent reader, never `eval`), so an agent can send it too.
+  The cell keeps the result once it loses focus.
+- Enter and ↓ move down a column, ↑ up, ⌘/Ctrl+D fills from the cell above.
+- On a touch screen a number cell opens the **stepper** (no keyboard): the value, − and + at the
+  column's step (`stepFor`), a slider centred on it (`sliderRange`), and ‹ › to the next row.
+  Its **candidates** come from the session's last runs (`lib/toolRuns.ts`, sessionStorage):
+  every distinct average of an interval's factors for a selected factor, the last CDFs for a CDF
+  cell. With a mouse, a cell that has candidates shows them as chips under the grid.
+- Age-to-Age Factors gains the **selection exhibit** (`components/tools/FactorSelection.tsx`):
+  seven averages × every interval, each value the engine's own run; tap a value, or an average's
+  name for every interval; the **Selected** row names each pick's source, or "default". Send to…
+  carries the selections when there are any ("Send selections to Development to Ultimate").
+
+**Figures (§6.7).** `lib/toolFigures.ts` (pure, tested) and `components/tools/ToolFigure.tsx`,
+for all thirty-five tools. Curves come from `sweep` — the same engine over a range of one input —
+and `toolFigures.test.ts` checks every tool's default figure, that a reserve stacked on the latest
+diagonal reaches the ultimate the tool computed, and that a run's point sits on its swept curve.
+Draggable points: Distribution's *x*, Limited Expected Value's *u*, Expected Payment's
+deductible, Partial and Bühlmann Credibility's claims and exposure, Bond Price's yield, Duration
+& Convexity's and Redington's rate, and Life Table's age. The figure is 96 px tall, 72 px on a
+card with five inputs on screen and 56 px with six, and the notation is one line on a phone (a tap
+shows the rest), which keeps every scalar card on one 390 × 844 screen; the e2e test now checks
+thirteen of them. Departures from §6.7's table: Earned Premium and On-Level Factors are stacked
+bars (earned and unearned by year; each year's share of each rate level) rather than the
+calendar of policy diagonals; Cape Cod outlines each year's used-up premium × the Cape Cod ELR;
+Price Index joins its first and last values rather than drawing a growth curve, which would be a
+formula of the figure's own (R11). The catalogue's rows lead with the figure in miniature.
+
+**Data Sources (§4.11).** Built: Life Table, Price Index and Yield Curve, in `lib/tools/data/`,
+the practice area `data`, first in the catalogue; their datasets from
+`scripts/dataset_extract.py` (tests: `scripts/test_datasets.py`) with a `Resources/Data/` page
+each; the ⋯ menu names what a data tool reads, its edition, date read and licence; the
+connector's instructions point an agent at them for published figures. `datasets.test.ts` holds
+each dataset to its sha256s, licence and page.
+
+**Not built yet**, from V2: the Search page's **Tools** pill and the hand-off to it from a search
+with no result; block selection and undo in the grid; **From a run** (the saved runs it needs are
+§8.5's); Loss Development Data, the SOA tables and the Bank of Canada curves (§14); Statistics
+Canada's construction price indexes; a scheduled dataset refresh.
 
 ## 17. Tested against (R6)
 

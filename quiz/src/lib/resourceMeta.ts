@@ -1,5 +1,6 @@
 import fm from 'front-matter'
 import { rawGithubUrl } from '@/lib/github'
+import { vaultMediaUrl } from '@/lib/vaultAssets'
 
 const IMAGE_EXT_RE = /\.(png|jpe?g|gif|svg|webp|avif)$/i
 
@@ -172,7 +173,7 @@ export function parseResourceMeta(raw: string): ResourceMeta {
     const imgPath = imgMatch[1].trim()
     if (IMAGE_EXT_RE.test(imgPath)) {
       const resolved = imgPath.includes('/') ? imgPath : `Media/Attachments/${imgPath}`
-      coverImageUrl = rawGithubUrl(resolved)
+      coverImageUrl = vaultMediaUrl(resolved) ?? rawGithubUrl(resolved)
     }
   }
 

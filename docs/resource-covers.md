@@ -36,6 +36,18 @@ button filled, so the passive facts never read as things to press; and the card 
 sized to its content (`w-fit`) rather than stretched across the pane, because a
 citation block with a third of its width empty reads as a layout bug.
 
+## Where a cover is served from
+
+By the app itself, never a third party. The build copies the vault's `Media/` folder
+into `dist/` at the same path and the dev server serves it (`vaultMediaPlugin` in
+`quiz/vite.config.ts`), so a cover is `/Media/Attachments/<file>` on the app's own
+origin (`lib/vaultAssets.ts`: `vaultMediaUrl`). Covers used to be hotlinked from
+`raw.githubusercontent.com`; when that host stopped answering for the repo every
+cover in the app disappeared at once (the card hides a failed image rather than
+showing a broken one, so it looked like the images were simply gone). Concept
+figures and any other `![[Media/…]]` embed in an article take the same route. A cover
+path outside `Media/` falls back to the raw URL.
+
 ## Real jackets win, always
 
 A scanned or publisher-supplied jacket is the better picture. Twenty-nine of the

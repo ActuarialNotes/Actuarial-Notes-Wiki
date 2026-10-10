@@ -18,6 +18,7 @@ import {
 } from './src/lib/knowledgeBase'
 import { PUBLIC_SITE_URL, SKILL_ASSET, connectorUrl, skillUrl } from './src/lib/aiConnector'
 import { buildZip } from './src/lib/xlsx'
+import { VAULT_MEDIA_DIR, vaultMediaUrl } from './src/lib/vaultAssets'
 import { buildSeoPages, countQuestionsByExam, pageHead, sitemapXml, SITEMAP_APP_PATHS, type SeoPage } from './src/lib/seo'
 import { renderStaticPage, staticBody } from './src/lib/seoPrerender'
 
@@ -35,6 +36,8 @@ function extractCoverImageUrl(content: string): string | undefined {
   const imagePath = m[1].trim()
   if (!IMAGE_EXT_RE.test(imagePath)) return undefined
   const resolved = imagePath.includes('/') ? imagePath : `Media/Attachments/${imagePath}`
+  const own = vaultMediaUrl(resolved)
+  if (own) return own
   const encoded = resolved.replace(/^\/+/, '').split('/').map(encodeURIComponent).join('/')
   return `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${encoded}`
 }
@@ -598,6 +601,66 @@ function aiConnectorAssetsPlugin(): Plugin {
   }
 }
 
+// ── Vault media: the vault's images, served by the app itself ───────────────
+// Book jackets, generated concept figures and exam diagrams live under the
+// vault's `Media/` folder. They are copied into the build at the same path
+// (`/Media/Attachments/…`) and served by the dev server from the repo, so no
+// image in the app hangs on raw.githubusercontent.com answering for the repo
+// (it stopped, and every cover vanished at once). `lib/vaultAssets.ts` is the
+// URL side of this.
+function vaultMediaPlugin(): Plugin {
+  const ROOT = path.join(REPO_ROOT, VAULT_MEDIA_DIR)
+  const TYPES: Record<string, string> = {
+    '.svg': 'image/svg+xml',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.webp': 'image/webp',
+    '.avif': 'image/avif',
+  }
+  return {
+    name: 'vault-media',
+    configureServer(server) {
+      server.middlewares.use(`/${VAULT_MEDIA_DIR}/`, async (req, res, next) => {
+        let rel: string
+        try {
+          rel = decodeURIComponent((req.url ?? '').split(/[?#]/)[0].replace(/^\/+/, ''))
+        } catch {
+          return next()
+        }
+        const file = path.resolve(ROOT, rel)
+        const type = TYPES[path.extname(file).toLowerCase()]
+        if (!type || !file.startsWith(ROOT + path.sep)) return next()
+        try {
+          const body = await readFile(file)
+          res.setHeader('Content-Type', type)
+          res.end(body)
+        } catch {
+          next()
+        }
+      })
+    },
+    async generateBundle() {
+      let names: string[]
+      try {
+        names = await readdir(ROOT, { recursive: true })
+      } catch {
+        return
+      }
+      for (const name of names) {
+        const rel = name.split(path.sep).join('/')
+        if (!TYPES[path.extname(rel).toLowerCase()]) continue
+        this.emitFile({
+          type: 'asset',
+          fileName: `${VAULT_MEDIA_DIR}/${rel}`,
+          source: await readFile(path.join(ROOT, name)),
+        })
+      }
+    },
+  }
+}
+
 /**
  * Serves the asset directories pdf.js loads at runtime, from `/pdf-<dir>/`.
  *
@@ -751,7 +814,7 @@ function seoPagesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
+  plugins: [react(), examPagesPlugin(), wikiContentPlugin(), storeBooksPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin(), examGuidesPlugin(), pdfjsAssetsPlugin(), vaultMediaPlugin(), seoPagesPlugin(), aiConnectorAssetsPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

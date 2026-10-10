@@ -5,6 +5,7 @@
 
 import fm from 'front-matter'
 import { listRepoContents, fetchWikiFile, rawGithubUrl } from '@/lib/github'
+import { vaultMediaUrl } from '@/lib/vaultAssets'
 import { buildResourceExamMap, examsForResource } from '@/lib/resourceExams'
 import { examDisplayName } from '@/lib/wikiRoutes'
 import { resourcePdfUrl } from '@/lib/examPdf'
@@ -25,7 +26,7 @@ export interface WikiIndexItem {
   title?: string        // display title (overrides name): a resource's own title, or
                         // an exam without its examining-body suffix ("Exam MAS-I")
   questionCount?: number // number of questions whose wiki_link points here
-  coverImage?: string   // full GitHub raw URL to cover image
+  coverImage?: string   // the cover's URL — the app's own /Media/… copy
   edition?: string
   publisher?: string
   // The page's `Available from` is a PDF the app's reader opens — the card's
@@ -78,7 +79,7 @@ function extractCoverImageUrl(content: string): string | undefined {
   if (!IMAGE_EXT_RE.test(imagePath)) return undefined
   // Short filenames (no directory) live under Media/Attachments/ by convention
   const resolved = imagePath.includes('/') ? imagePath : `Media/Attachments/${imagePath}`
-  return rawGithubUrl(resolved)
+  return vaultMediaUrl(resolved) ?? rawGithubUrl(resolved)
 }
 
 function parseFrontmatter(raw: string): Record<string, string> {

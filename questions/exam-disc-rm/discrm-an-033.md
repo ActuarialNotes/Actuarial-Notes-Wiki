@@ -11,12 +11,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4e909d7cd8bbcd847ed180227e4b5392ab6c1742d262ede290e290c2a8b7f308
-  sources: []
+  sources:
+    - "Mid Sussex District Council, Business Continuity Policy Appendix A: Terms & Definitions (2019, citing ISO 22301), p.2, sha256:3550ebea9d87cf22770286c01a673a36a75c26d93818bfb7dfbac85a7ccb9315 — https://www.midsussex.gov.uk/media/4134/business-continuity-policy-appendix-a.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-033.md

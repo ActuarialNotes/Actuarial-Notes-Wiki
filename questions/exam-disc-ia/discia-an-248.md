@@ -11,12 +11,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:43e4d06921bb43c8d39d43524aa09ffdb6f57ff387019fedc8fe1174c55c6383
-  sources: []
+  sources:
+    - "NAIC P&C Commercial Rate and Policy Form Model Law (Condensed) (#777, 2002), s.3A, 3B(4)-(5) and drafting note, 3C(1), 3I, 3J, s.4, sha256:811c7c1579aaf33f16ab03f1ac27d474e93744e1aed89e452ee847938a385f84 — https://content.naic.org/sites/default/files/model-law-777.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-248.md

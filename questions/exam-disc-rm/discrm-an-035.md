@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:21af7fa53b6660e6f9809b6963857ca8ad1ea511d5df79a6905371d4f765893e
-  sources: []
+  sources:
+    - "Biniam G., Bonga University, Risk Management and Insurance Chapter Two (lecture notes, 2020), pp.2-3, 10, sha256:37410f48587eebe39188d15f5aa51af832d85f8179229edc0b3d9dd322165f01 — http://ndl.ethernet.edu.et/bitstream/123456789/79433/7/RISK-%20Ch@2.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-035.md

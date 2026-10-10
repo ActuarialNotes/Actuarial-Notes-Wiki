@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:03cb5c63f14dbd115ca2e00fa22c363bb2d52802541f1d7078bbaa1228350949
-  sources: []
+  sources:
+    - "NAIC Unfair Trade Practices Act (#880, Spring 2024), ss.1, 4A, 4B, 4D-4F, 4H, 4I, 4K-4M, 6, 8A, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
+    - "NAIC Unfair Claims Settlement Practices Act (#900, 1997), ss.1, 3, 4F, sha256:ba1d03c3819ae83500abaa0d6f50bba07a896d4be0ba26b84405095c131f6ba2 — https://content.naic.org/sites/default/files/model-law-900.pdf"
+    - "GAO-03-433, Insurance Regulation: Common Standards and Improved Coordination Needed to Strengthen Market Regulation (2003), market analysis, comprehensive vs targeted exams, 1975 handbook, sha256:a19281e28511a6a0f19dd4e47fdd0ec2979f10afd26f3abb7ce30f6db54aca40 — https://www.gao.gov/assets/a239983.html"
+    - "15 U.S.C. s.1013 (McCarran-Ferguson Act), via LII, section text and notes, sha256:12aef39131def2a132d65c7de84d47975d9938b1a5765a660f036c6b1efa0e6c — https://www.law.cornell.edu/uscode/text/15/1013"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/State Market Conduct Regulation.md

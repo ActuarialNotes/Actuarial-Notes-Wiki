@@ -2,12 +2,14 @@
 aliases:
   - CGL
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0e5db715d46b2c0a431daac8eb4157fa4f0294b97ab72b18b5b96371d21e9160
-  sources: []
+  sources:
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, I Cov A 1.a-b, 2.j-n; Cov B 1, Cov C 1-2; Supplementary Payments; II; III; V.13 occurrence, V.14 P&AI, V.16 PCOH, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+    - "FC&S Editors, 'Bases of Liability Premium', PropertyCasualty360, 9 Oct 2012, entry, sha256:3098468d31acf87f67490601c66a720666953277f266b0692ff23c3d387ab3ed — https://www.propertycasualty360.com/fcs/2012/10/09/bases-of-liability-premium/"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Commercial General Liability.md

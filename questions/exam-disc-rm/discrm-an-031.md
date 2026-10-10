@@ -11,12 +11,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3a8e91496962bdb47098dbf777107392ff4d9125a0e9e9d2a481aaf933fc3f25
-  sources: []
+  sources:
+    - "Bruneau et al., A Framework to Quantitatively Assess and Enhance the Seismic Resilience of Communities, Earthquake Spectra 19(4) 2003 (author copy), pp.736-737 (Q(t), loss of resilience integral; robustness, redundancy), sha256:38afd71aebf6f552712b9100e09b5938a5f04e18bc2d0bc1f795011d3e9bd8b7 — https://www.eng.buffalo.edu/~bruneau/EERI%202003%20Bruneau%20et%20al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-031.md

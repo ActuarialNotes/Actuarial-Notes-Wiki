@@ -4,11 +4,11 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:676a3d5f1babf020ea36b25debb842e339784521524dde7e50fe1bfc6442c0b5
+  content_hash: sha256:b67670200caab529b7de0b1a0f847185127d5d6cc76ae18b0470f231ad33f7e9
   sources:
     - "FASB Statement No. 168, The FASB Accounting Standards Codification and the Hierarchy of GAAP (June 2009), Summary, ¶1-11 (PDF pp.3, 9-11); Topic 105 (PDF p.21), sha256:b0e4014d4ff284e082ac858fc585d9e39a364b30fa53354c472542105f5e6360 — https://storage.fasb.org/fas168.pdf"
     - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶12, ¶24, ¶27, ¶42-44 and footnotes 3-4 (PDF pp.34, 36-40); Preamble Q&A Q2-Q3 (PDF p.44); SSAP No. 1 ¶7 (PDF p.48), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Accounting Rule Hierarchy.md
 ---
@@ -30,7 +30,7 @@ An **Accounting Rule Hierarchy** ranks the sources of accounting guidance within
   - **Level 4:** the Statutory Accounting Principles Preamble and Statement of Concepts;
   - **Level 5:** nonauthoritative GAAP sources, the same kinds of literature listed above, including FASB Concepts Statements and IFRS.
 - **Resolving a gap or conflict in SAP:** If the SSAPs do not specify a treatment, the preparer applies a relevant principle from Level 2 or 3, and if those conflict, follows the higher level. If no established statutory principle applies, a principle for an analogous transaction may be used, and after that other literature, of which the Statement of Concepts is the most authoritative. GAAP guidance does not become part of SAP until the NAIC adopts it.
-- **Disclosure of departures:** An insurer using a prescribed or permitted practice that affects surplus or risk-based capital must describe it, state that it differs from NAIC SAP, give its monetary effect on net income and surplus, and say whether risk-based capital would have triggered a regulatory event without it (SSAP No. 1). These disclosures are in Note 1 of the [[Notes to Financial Statements|notes]], and [[Accounting Standards]] works an example.
+- **Disclosure of departures:** An insurer using a prescribed or permitted practice that affects surplus or risk-based capital must describe it, state that it differs from NAIC SAP, give its monetary effect on net income and surplus, and say whether risk-based capital would have triggered a regulatory event without it (SSAP No. 1). These disclosures are in Note 1 of the notes, and [[Accounting Standards]] works an example.
 
 > [!example]- Ranking Statutory Guidance {Example}
 > A statutory accountant finds that an SSAP is silent on a transaction. The *Annual Statement Instructions* describe one treatment, an INT adopted by the NAIC working group addresses a closely similar question with a different treatment, and a widely used accounting textbook suggests a third. The insurer's domiciliary state has no prescribed practice on the point. Which treatment should be used, and what would change the answer?

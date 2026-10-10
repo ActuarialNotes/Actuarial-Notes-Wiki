@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bf7b27e1e33685a2f4eab2f6111056a39c7887c6a364c5185a9324cf1d219362
-  sources: []
-  open_findings: 0
+  sources:
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.8 (PDF p.157) loss ratio method, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.7 p.129 (PDF p.148), sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurer Goals and Constraints.md
 ---
@@ -22,7 +24,7 @@ verification:
 - **Symbols:** The first identity measures the profit goal: [[Underwriting Profit|underwriting profit]] plus [[Investment Income|investment income]]. In the [[Loss Ratio Method|loss ratio method]], LR is the projected loss and LAE ratio at current rates, $F$ is the fixed expense ratio, $V$ is the variable expense ratio and $Q$ is the [[Profit and Contingency Provision|profit and contingency provision]]. In the capacity constraint, WP is annual [[Written Premium|written premium]], Surplus is policyholders' surplus and $k$ is the premium-to-surplus ratio the insurer, its regulator or rating agencies regard as prudent.
 - **Earn a profit:** A stock insurer must give its owners a return that competes with other investments, and a mutual needs profit to build the surplus that backs its policies and funds growth. Profit comes from underwriting and from investing the funds held between collecting premium and paying claims, and over time it is what keeps the insurer [[Solvency|solvent]].
 - **Meet customer needs:** Customers want coverage that fits their exposures, a fair price, good service, and claims paid promptly. An insurer that ignores them loses business to competitors, so this goal supports the profit goal in the long run even when it costs money in the short run.
-- **Comply with legal requirements:** Insurers are licensed, and regulators oversee their [[Solvency Regulation|solvency]], [[Rate Regulation|rates]] and policy forms, and their [[Market Conduct Regulation|market conduct]]. Compliance is not optional, so it acts as a goal and a constraint at once, and failing at it risks fines, lost licences and lost trust.
+- **Comply with legal requirements:** Insurers are licensed, and regulators oversee their solvency, [[State Rating Laws|rates]] and policy forms, and their [[State Market Conduct Regulation|market conduct]]. Compliance is not optional, so it acts as a goal and a constraint at once, and failing at it risks fines, lost licences and lost trust.
 - **Fulfil the duty to society:** Because society relies on insurance to restore people and businesses after a loss, an insurer has a duty to stay solvent, treat customers and employees ethically, and support the economy through employment, taxes and investment. Many insurers also add loss prevention and community programs.
 - **Internal constraints:** An insurer's capital and surplus limit how much business it can write safely, its people and their expertise limit the lines and markets it can serve well, and its systems, distribution and reputation shape what it can do quickly. A company that lacks the underwriting or claims expertise for a line takes on more risk than its numbers show.
 - **External constraints:** Regulation limits rates, forms, investments and how the insurer treats customers. Competition limits the price it can charge and the selection it can apply, and economic conditions such as inflation, interest rates and recessions change claim costs, investment returns and demand. Catastrophes and the [[Underwriting Cycle|underwriting cycle]] change the market it works in.

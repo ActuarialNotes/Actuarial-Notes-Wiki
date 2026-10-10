@@ -11,12 +11,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6e129f1c76ce78990e5c8a7e3edc66d2c9fefedc92bd96c838b8fc10b1003155
-  sources: []
+  sources:
+    - "OSHA, Incident [Accident] Investigations: A Guide for Employers (Dec 2015), pp.1-4 (root causes, close calls), sha256:828756cf17298e2da0eac2235d32c10a5c98973b55cd54a84e6ffcf4acbbe659 — https://www.osha.gov/sites/default/files/IncInvGuide4Empl_Dec2015.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-029.md

@@ -51,3 +51,23 @@ created: 2026-10-10
 - checks_run: Both examples recomputed before reading (figures in F-001). CV formula re-derived: Var(mean) = sigma^2[1 + (n-1)rho]/n for equicorrelated units; rho = 0 gives 1/sqrt(n); n -> infinity gives (sigma/mu)sqrt(rho). Flood and war exclusions in the homeowners form: HO 00 03 05 11 Section I Exclusions A.3, A.6. The six-item list and its attribution: only a flashcard deck (F-002).
 - sources_checked: ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Exclusions A.3 water/flood, A.6 war (pp.12-13), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf; Brainscape flashcards 'Assignment 5: Insurance as a Risk Management Technique' (CAS Online Course 1 pack), card 5, read via WebFetch 2026-10-10, no digest — https://brainscape.com/flashcards/assignment-5-insurance-as-a-risk-managem-12871202/packs/21196986
 - note: Left in_review: the list's attribution to The Institutes needs The Institutes' own text, which is not public. F-001 (arithmetic) fixed.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv06
+- date: 2026-10-10
+- resolves: F-002
+- status: resolved
+- note: Lead-authorized clean-up, applied: 'The Institutes list six:' restated as 'Six characteristics are commonly listed:'. The list now rests on what was read: Wikipedia 'Insurability' (large number of similar exposure units; definite loss; accidental loss that is 'pure', speculative business risks generally not insurable; affordable premium; losses ideally independent and non-catastrophic), IRMI 'pure risk' and 'speculative risk' (pure risks generally insurable, speculative generally not), and the CAS Online Course 1 flashcard deck carrying the same six items.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv06
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verify after F-002's restatement. Each of the six characteristics is matched by two independent rank-3 sources (Wikipedia 'Insurability' and the flashcard deck; IRMI for pure vs speculative risk). Mathematics and both examples re-checked as in the earlier pass (F-001's 2,000 per valley home in place).
+- sources_checked: Wikipedia, 'Insurability' (fetched 2026-10-10), sha256:68a5a12ac2c667fd605a4bb9c343733bee449dc6a0d6e8c1adc8928182da0233 — https://en.wikipedia.org/wiki/Insurability; IRMI Insurance Glossary, 'pure risk' (fetched 2026-10-10), sha256:53c02db03b0c4161afef15f3c858c900ee18e236a7a33bad7d389f085eabe39d — https://www.irmi.com/term/insurance-definitions/pure-risk; IRMI Insurance Glossary, 'speculative risk' (fetched 2026-10-10), sha256:33cd8e29012019052d89c1dafc07296e1b395ae4bb0addc4f1e6b9d23ade348e — https://www.irmi.com/term/insurance-definitions/speculative-risk; ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), Section I Exclusions A.3 water/flood, A.6 war (pp.12-13), sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf; Brainscape flashcards 'Assignment 5: Insurance as a Risk Management Technique' (CAS Online Course 1 pack), card 5, read via WebFetch 2026-10-10, no digest — https://brainscape.com/flashcards/assignment-5-insurance-as-a-risk-managem-12871202/packs/21196986
+- note: Medium: rank-3 sources only, two independent ones agreeing on each item, as the brief allows.

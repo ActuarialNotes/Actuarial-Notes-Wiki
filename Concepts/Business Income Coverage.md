@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ef8aa1bf01660e0cd17bd90e4b2b245b60717c5c98334d6f0143138ea1c98899
-  sources: []
+  sources:
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, A.1-2; A.5.c Extended Business Income (60 days); F.1 coinsurance and deducted expenses; G.1-4 optional coverages; H.3 'period of restoration', sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Business Income Coverage.md

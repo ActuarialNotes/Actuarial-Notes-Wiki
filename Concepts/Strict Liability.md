@@ -1,12 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cb1f1f3390fa926cfb1a7a5771460259ea8220f1159bfa1f2b3793c306cc1cd2
   sources: []
-  open_findings: 0
+  open_findings: 3
   open_critical: 0
   log: .verify/Concepts/Strict Liability.md
 ---

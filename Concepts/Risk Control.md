@@ -1,17 +1,17 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0071a115b64bf27623e23b1007e381376e28cf3d407f6226c2cdc1ba58a76b45
+  content_hash: sha256:2441270f28ac3873f4031675ad20cecc6c647876846f5fbd2638f4913bc887f9
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Control.md
 ---
 
-**Risk control** is the set of techniques that reduce the frequency or severity of losses, or make them more predictable, as distinct from risk financing, which pays for the losses that still occur. The techniques are avoidance, loss prevention, loss reduction, separation, duplication and diversification. Insurers also use the term for their risk control function, whose representatives survey accounts for [[Underwriting|underwriting]] and advise policyholders on preventing losses, in cooperation with the insurer's other [[Insurance Operations|functions]].
+**Risk control** is the set of techniques that reduce the frequency or severity of losses, as distinct from risk financing, which pays for the losses that still occur. The techniques are avoidance, loss prevention, loss reduction, separation, duplication and diversification. Insurers also use the term for their risk control function, whose representatives survey accounts for [[Underwriting|underwriting]] and advise policyholders on preventing losses, in cooperation with the insurer's other [[Insurance Operations|functions]].
 
 > $$\Delta E[L] = f_0\,s_0 - f_1\,s_1$$
 
@@ -19,12 +19,11 @@ verification:
 
 - **Symbols:** $f_0$ and $s_0$ are the [[Frequency|frequency]] and [[Severity|severity]] of losses before a measure, and $f_1$ and $s_1$ are their values after it, so $\Delta E[L]$ is the reduction in [[Expected Loss|expected loss]] a year. In the cost-benefit test, $C_0$ is the cost of putting the measure in place, $B_t$ is its net benefit in year $t$, which is the reduction in expected loss plus any premium savings less running costs, $i$ is the discount rate and $n$ is the measure's useful life. A measure passes the test when its [[Net Present Value|net present value]] is positive.
 - **Avoidance:** Avoidance eliminates an exposure by never undertaking the activity or by abandoning it, so the probability of loss from it becomes zero. It is often impractical, because the activity usually earns the income the organization exists for, and abandoning one activity can create another exposure.
-- **Loss prevention and loss reduction:** Loss prevention lowers frequency, as machine guarding, driver training and fire-resistive storage do. Loss reduction lowers severity once a loss has begun, as sprinklers, fire walls, seat belts and early return-to-work programs do. Some measures do both, and the label follows the measure's main effect.
-- **Separation, duplication and diversification:** Separation divides an exposure among several locations or units, such as two warehouses instead of one, so a single event damages less. Duplication keeps a spare or backup that is used only when the original is lost, such as off-site copies of records. Diversification spreads activity across products, customers or regions whose losses are not perfectly correlated. All three make losses more predictable, and separation and duplication can raise frequency or cost while they cut the worst case.
-- **The cost-benefit test:** A measure is worth adopting when the present value of what it saves exceeds what it costs. The savings include indirect ones, such as less downtime, better employee morale and protection of reputation, and some measures are required by law or by a lender whatever their return. An insured organization captures much of the saving through lower premiums and fewer uninsured costs rather than through lower insured losses.
-- **Insurer risk control goals:** An insurer's risk control function supports its overall goals. It helps the insurer earn a profit by improving the accounts it writes and keeping good ones, it meets customer needs with advice they value, it fulfills a duty to society by reducing injuries and damage, and it meets legal requirements, such as inspections that some jurisdictions require for boilers and pressure vessels.
-- **Insurer risk control services:** Risk control representatives conduct physical surveys of an account's premises and operations, report what they find to underwriters, and make recommendations to the policyholder. Larger accounts may receive consulting, such as help designing a safety program, training, or analysis of loss data. The service level depends on the size of the account and the line of business, and some insurers sell risk control services for a fee to organizations they do not insure.
-- **Cooperation with other functions:** Risk control helps marketing and producers attract and keep accounts, and it gives underwriters the information they need to accept, modify or decline one. It shares what it learns about operations with [[Premium Audit|premium auditing]], and claims data shows it where losses occur, while its findings can help [[Claims Handling|claims]] investigate them.
+- **Loss prevention and loss reduction:** Loss prevention lowers frequency, as machine guarding, driver training and fire-resistive storage do. Loss reduction lowers severity once a loss has begun, as sprinklers, fire walls, seat belts and early return-to-work programs do.
+- **Separation, duplication and diversification:** Separation divides an exposure among several locations or units, such as two warehouses instead of one, so a single event damages less. Duplication keeps a spare or backup that is used only when the original is lost, such as off-site copies of records. Diversification spreads activity across products, customers or regions whose losses are not perfectly correlated. Separation and duplication reduce the severity of the largest loss a single event can cause.
+- **The cost-benefit test:** A measure is worth adopting when the present value of what it saves, in reduced losses or in premium savings, exceeds what it costs. An insured organization captures part of the saving through lower premiums.
+- **Insurer risk control:** Some insurers, primarily for commercial clients, offer engineering and loss control: methods of preventing and reducing loss wherever the effort is economically feasible. These services are particularly applicable to workers compensation and boiler and machinery exposures, and the facilities an insurer devotes to them, and how well they work, are an element a policyholder weighs in choosing an insurer.
+- **Risk control and underwriting:** Underwriters order loss control inspections to help assess an account and decide whether to accept it, and a policy may be written subject to the insured's compliance with the loss control recommendations. Some insurers also sell loss control separately from insurance, to businesses that retain their own losses.
 - **Place in risk management:** Risk control is one half of risk treatment, with risk financing through retention and [[Risk Transfer|transfer]] the other ([[Risk Mitigation]]). It works on the exposures found by [[Risk Identification|risk identification]] and ranked by [[Risk Assessment|risk assessment]], and it rarely removes the need for financing, because what it leaves behind still has to be paid for.
 
 > [!example]- Should the Warehouse Install Sprinklers? {Example}
@@ -63,7 +62,7 @@ verification:
 > > Each measure is then tested on cost and benefit. Avoidance gives up the hazardous materials revenue, and the second depot adds rent and travel, so neither is right merely because it lowers risk.
 
 > [!tip]- How it appears on the exam
-> - **DISC-RM:** The risk control and premium auditing section asks candidates to describe the insurer's risk control goals, the services risk control provides, and how risk control cooperates with marketing, underwriting, premium auditing and claims. Scenario questions describe an account and ask which services or recommendations fit it, and how the information should flow to the other functions. The risk treatment sections ask candidates to classify measures by technique and to apply the cost-benefit test.
+> - **DISC-RM:** The risk control and premium auditing section asks candidates to describe the insurer's risk control goals, the services risk control provides, and how risk control cooperates with the insurer's other functions. Scenario questions describe an account and ask which services or recommendations fit it, and how the information should flow to the other functions. The risk treatment sections ask candidates to classify measures by technique and to apply the cost-benefit test.
 
 > [!warning]- Exam traps
 > - **Prevention versus reduction:** Loss prevention acts before a loss and lowers frequency, and loss reduction acts during or after one and lowers severity. Sprinklers do not stop fires starting, so they are loss reduction.

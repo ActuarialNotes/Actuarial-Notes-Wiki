@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:639e73d66331a97d9c0882b3448370a71ad92cddad7cdfe1dbb1eb18c871e611
-  sources: []
+  sources:
+    - "NAIC Insurance Topics: Surplus Lines (last updated 10/27/2025), read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://content.naic.org/insurance-topics/surplus-lines"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 p.95 (PDF p.114): surplus lines broker, nonadmitted insurer, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-014.md

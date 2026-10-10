@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:396e0f0ab0788c2c73ebbebab024599d981573f7cab381e92146c56447ed2b70
-  sources: []
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.9 pp.167-169 (PDF pp.186-188): ACV = RC less depreciation, valuation methods, insurable interest of owners, bailees, secured creditors, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 p.46: business income exposures (loss of income, continuing expenses, extra expenses), sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form (specimen), A.1.b.(6) use interest as tenant in improvements and betterments, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO HO 00 03 05 11, Homeowners 3 - Special Form (specimen, Maine BOI), Section I Coverage D; Section II Coverage E, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
+    - "Risk & Insurance Education Alliance, Risk Identification (ELR course reading), pp.1-5, sha256:1592f41132ab2c9854a94b3de7c237a84442678d065a545621991fda4d6148cc — https://riskeducation.org/pub/media/elr/Risk-Identification.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Property Loss Exposure.md

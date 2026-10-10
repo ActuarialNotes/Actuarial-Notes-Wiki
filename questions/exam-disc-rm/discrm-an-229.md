@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ca3b9fcaf4b883f12dd08b4cf5aef3d11cc71cb5a0e5455e08914dd0f475b847
-  sources: []
+  sources:
+    - "NCCI WC 00 00 00 C (Ed. 1-15) Workers Compensation and Employers Liability Insurance Policy (Guard copy), Part Five C (remuneration), E (final premium on proper classifications, actual remuneration), sha256:f0723f4875806fb2237386a91b554c3edbdb10b94315204ab8bb19696a1e64dd — https://policyholder.guard.com/wwwroot/static/Policy_Docs/POLICY_WC-2015-01.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-229.md

@@ -1,12 +1,18 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8749742e666f07d3d272be1f9f4c8690a8f77a3ed75d1be7f3f5a4e99f74250c
-  sources: []
-  open_findings: 0
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.47-54 (PDF pp.66-73): risk control and financing, retention, captives, RRGs, noninsurance transfers, insurance, matrix, market conditions, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s08-04 matrix Table 4.4; incorporation incl. courts caveat; warranties; hold-harmless; surety, sha256:5da3c20b87e2a72ff64a492c44f23e70c966629c990a5dfd9739b0ec09c59eb8 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s08-04-risk-management-alternatives-t.html"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s08-05 overlaying maps; residual $140M vs $100M, sha256:dce7d26c3b00af3545e85a525938f4313aa3e7063eae4e71c8d2bc616fa2edf2 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s08-05-comparisons-to-current-risk-ha.html"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s08-01 treasurer, CRO, sha256:d4360b972503a96e37389598cccade396a0e3625ed78dad905726181812db468 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s08-01-the-risk-management-function.html"
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.105, 114 (PDF pp.7, 16), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Nebraska DAS State Accounting, Risk Assessment (rev. 11/01/2014), \"Segregate Losses\" (separation, duplication), sha256:b464a63ed39a0d3fe31011f621eb1b191595c6f52c207d25ffe7c2733b2cb093 — https://das.nebraska.gov/accounting/risk-assesment.html"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Risk Treatment.md
 ---

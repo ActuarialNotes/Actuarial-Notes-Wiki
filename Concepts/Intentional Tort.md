@@ -1,12 +1,34 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ca7e655086e55c7820dadb73b4712976bffb49f73dc1a903bc0590bcfea59b72
-  sources: []
-  open_findings: 0
+  sources:
+    - "Cornell LII Wex, \"intentional tort\", whole entry, sha256:6eeae7f913e8476b44f72be41bbf1f72e18f3f911bf7d0c51432a6346e3d878d — https://www.law.cornell.edu/wex/intentional_tort"
+    - "Cornell LII Wex, \"battery\", whole entry, sha256:b1a72e1c4bb6db71b50fb25c9fb7cb4b88fcc9a2e504adf2a103787d3ced80c6 — https://www.law.cornell.edu/wex/battery"
+    - "Cornell LII Wex, \"assault\", whole entry, sha256:de9f18acbb7bb06cc40f64d37a7ef17a67ffa933a8c5072544609cc4cff939f1 — https://www.law.cornell.edu/wex/assault"
+    - "Cornell LII Wex, \"false imprisonment\", whole entry, sha256:6710067ed89928e2f9287cad7bf3fa63bd289f7e838ff842913b7b9fb782377f — https://www.law.cornell.edu/wex/false_imprisonment"
+    - "Cornell LII Wex, \"intentional infliction of emotional distress\", whole entry, sha256:ed4ca69dcc67fa34b47852a097e40945590449b8a3913c24f397ea71a0e3d365 — https://www.law.cornell.edu/wex/intentional_infliction_of_emotional_distress"
+    - "Cornell LII Wex, \"trespass\", whole entry, sha256:15930f12119cc6a499137f69e35855f7a780e6f0e3de7f95942c31a35c3c86cc — https://www.law.cornell.edu/wex/trespass"
+    - "Cornell LII Wex, \"trespass to chattels\", whole entry, sha256:ba28979c47a830842d4bec3b9ac073ebbb67d2594806a23385a35aa16a7ffa77 — https://www.law.cornell.edu/wex/trespass_to_chattels"
+    - "Cornell LII Wex, \"conversion\", whole entry, sha256:9f9520e1b3ec83375f541a6542feb638ea481f15c2e74e19cdca0301d688e5a0 — https://www.law.cornell.edu/wex/conversion"
+    - "Cornell LII Wex, \"defamation\", whole entry, sha256:8d9d6867e37af8afba92ae248bffe08c1ced25658084d15046998d8b96cef127 — https://www.law.cornell.edu/wex/defamation"
+    - "Cornell LII Wex, \"invasion of privacy\", whole entry, sha256:031395054271c4eb95db4f42f92d70b2a130692aa275bc69274e66ccdc4d0968 — https://www.law.cornell.edu/wex/invasion_of_privacy"
+    - "Cornell LII Wex, \"fraud\", whole entry, sha256:e9f5bfc09ef154bb5545b65844b4f86dfc3b117e56a373d3799c723c786e4fa6 — https://www.law.cornell.edu/wex/fraud"
+    - "Cornell LII Wex, \"consent\", whole entry, sha256:c90058df34fe06c14a304af2fd5e1e550f29f50d527cede0edc3a57d24f1cd5b — https://www.law.cornell.edu/wex/consent"
+    - "Cornell LII Wex, \"self-defense\", whole entry, sha256:5dc7eec2eba8878db36923d92e5f401a131d4a710fb5f23aa112e2717885e7ba — https://www.law.cornell.edu/wex/self-defense"
+    - "Cornell LII Wex, \"defense of property\", whole entry, sha256:a345f23cf3f0d2874e3ca3f501207b1c231cba4244ece6b22a820a019ad6e730 — https://www.law.cornell.edu/wex/defense_of_property"
+    - "Cornell LII Wex, \"necessity defense\", whole entry, sha256:633596f29b15f83fcdaefe2cec097d94b78593b18dab8eaaa260b23c36d47b4c — https://www.law.cornell.edu/wex/necessity_defense"
+    - "Cornell LII Wex, \"nominal damages\", whole entry, sha256:8bc84843c6a20f4bd0f05cc0c34b41f323b8fbd5de5c03882bc69ff9fe448b60 — https://www.law.cornell.edu/wex/nominal_damages"
+    - "Cornell LII Wex, \"punitive damages\", whole entry, sha256:d7d3c177c6bb8aff7989985bdb69ed4452bf7457888735cde1ebf97b7586b7ec — https://www.law.cornell.edu/wex/punitive_damages"
+    - "PPG Industries v. Transamerica, 20 Cal. 4th 310 (1999) (Caselaw Access Project), public-policy discussion of insuring punitive damages, sha256:ef2c38bf2ecf125988034d0e1094372fb85140e3e5deb61d5912f8b7b556536d — https://static.case.law/cal-4th/20/cases/0310-01.json"
+    - "Buss v. Superior Court, 16 Cal. 4th 35 (1997) (Caselaw Access Project), duty to defend mixed action, sha256:62d5f71539e73ef7f160c2658783d9e3978ee8ac4c89607a22065cdd8d966915 — https://static.case.law/cal-4th/16/cases/0035-01.json"
+    - "IRMI Glossary, \"duty to defend\", whole entry, sha256:a300b15f90422dda94e7921eb0cc3100fc480b28c99906387d2fa318781680fa — https://www.irmi.com/term/insurance-definitions/duty-to-defend"
+    - "Katko v. Briney, 183 N.W.2d 657 (Iowa 1971) (Caselaw Access Project), instructions 2, 5 and 6, sha256:db0baf0b78caa8615295b5b37ca669f9da0f03c07d1cc814470080147ca83c31 — https://static.case.law/nw2d/183/cases/0657-01.json"
+    - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), Coverage A excl. 2.a (expected or intended, reasonable-force exception); Coverage B exclusions 2.a-2.b; s.V def. 14 personal and advertising injury, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Intentional Tort.md
 ---

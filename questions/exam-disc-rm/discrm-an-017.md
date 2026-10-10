@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:dd059e2ea714d24146818da961f070117014f25d42e861e1064153c507a517b9
-  sources: []
+  sources:
+    - "Triple-I, Facts + Statistics: Auto insurance, \"The shared/residual market\", sha256:86950959d65e25ac88028b883dfa1f928927d41f43314281b50e4477b16c5840 — https://www.iii.org/fact-statistic/facts-statistics-auto-insurance"
+    - "Hartwig & Wilkinson, Residual Market Property Plans (Insurance Information Institute, May 2016), pp.4, 25, sha256:8f3a5bb1df3d8cd47fd05936bd4558ae06c04c321414e8cd650ae1822b7ba90d — https://www.iii.org/sites/default/files/docs/pdf/residual_markets_wp_051616.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-017.md

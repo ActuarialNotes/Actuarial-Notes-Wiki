@@ -13,12 +13,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e7a7a51b3e6a77f56b18f4f53966538d5606ab1826c8e9bceea8d1defdcb67a9
-  sources: []
+  sources:
+    - "FC&S Editors, 'Bases of Liability Premium', PropertyCasualty360, 9 Oct 2012, payroll, gross sales, area, total cost, sha256:3098468d31acf87f67490601c66a720666953277f266b0692ff23c3d387ab3ed — https://www.propertycasualty360.com/fcs/2012/10/09/bases-of-liability-premium/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-222.md

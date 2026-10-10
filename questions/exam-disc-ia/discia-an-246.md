@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0eb19005a5100187ff25ac610d6d019cb2808d142907dde0e72c194ee500bae2
-  sources: []
+  sources:
+    - "NAIC Life and Health Insurance Policy Language Simplification Model Act (#575, 1995), s.5A-B, s.7, sha256:f35b42a1540ecf9afa159d13ff31e35c08ffd4be9b6ab75ba5c34edd5da70d10 — https://content.naic.org/sites/default/files/model-law-575.pdf"
+    - "N.Y. Insurance Law s.3102, (a), (c)(1), read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://www.nysenate.gov/legislation/laws/ISC/3102"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-246.md

@@ -1,11 +1,20 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e15fd191b87d7325bbfbaacfee85e6ff7f154ca0dbfeffdd45b15f20151814f0
-  sources: []
+  sources:
+    - "NAIC, Automobile Insurance: A Shopping Tool for Consumers (© 2014; Colorado DOI copy), pp.12-13, 17 (printed 10-11, 15), sha256:b03458a5fdf0192a263ce489c66c4c4d50cebc54a90916f3e18b266f30073977 — https://doi.colorado.gov/sites/doi/files/documents/Buyers%20Guide%20to%20Auto%20Insurance.pdf"
+    - "ISO PP 00 01 09 18 Personal Auto Policy (Virginia SCC specimen), Part F Termination A-B, sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "New York Insurance Law §3425(c)(1), (d)(1), (f)(1)-(2) (NY Senate site; read via WebFetch 2026-10-10 — the scripted fetch was refused 403, so no sha256) — https://www.nysenate.gov/legislation/laws/ISC/3425"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating (CAS Monograph 5, 2nd ed.), pp.4-5 (PDF pp.14-15), sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "FTC, Credit-Based Insurance Scores: Impacts on Consumers of Automobile Insurance (Report to Congress, July 2007), p.29 (Hawaii by statute; California, Massachusetts), sha256:4ab0292ce105ff017feb03304dd6f89120b87fa76f8afea1594d7f2c7cbeb05d — https://www.ftc.gov/sites/default/files/documents/reports/credit-based-insurance-scores-impacts-consumers-automobile-insurance-report-congress-federal-trade/p044804facta_report_credit-based_insurance_scores.pdf"
+    - "IRMI Glossary, 'assigned risk plan', entry, sha256:b73e8f7c5737d90162c6e7c7cd52ddd8261413a8690d122faabd5d13f0992fad — https://www.irmi.com/term/insurance-definitions/assigned-risk-plan"
+    - "IRMI Glossary, 'residual market', entry, sha256:52e4a41b843097cd006cc271375fceca16e41a5dbb4cecfd58f1a58dd19fcee5 — https://www.irmi.com/term/insurance-definitions/residual-market"
+    - "Maryland DBM FY2024 operating budget, Maryland Automobile Insurance Fund, Insured Division, sha256:437ad83c90f881c250ec232531ed2df932434a466b22177563d20ed75fc104f2 — https://dbm.maryland.gov/budget/Documents/operbudget/2024/agency/MarylandAutomobileInsuranceFund.pdf"
+    - "IRMI Glossary, 'motor vehicle record (MVR)', entry, sha256:b8eac348a0f86568d7e92079c070b64dd60e132e3b3b580e6fc61e1a4892e035 — https://www.irmi.com/term/insurance-definitions/motor-vehicle-record"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Personal Auto Underwriting.md

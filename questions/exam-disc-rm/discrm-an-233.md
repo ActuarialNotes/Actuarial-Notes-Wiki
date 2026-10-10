@@ -12,11 +12,11 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9c9c85966774a68ef165cdd2d6759cadfefc37e59a803b0722bc581b50d55d0d
+  content_hash: sha256:ab5e22ee68c6a2a24c1d66dab3d70c5511b68add6db8d38e55c62d43da31959b
   sources: []
   open_findings: 1
   open_critical: 0
@@ -26,9 +26,9 @@ verification:
 An insurer's risk control representatives inspect boilers and pressure vessels for policyholders in a jurisdiction that requires such inspections, and also run free driver-safety seminars that reduce injuries on the road. Which pair of insurer risk control goals do these two services serve?
 
 - A) Earning a profit, and meeting customer needs
-- B) Meeting customer needs, and earning a profit
+- B) Meeting customer needs, and meeting legal requirements
 - C) Meeting legal requirements, and fulfilling a duty to society
-- D) Fulfilling a duty to society, and meeting legal requirements
+- D) Earning a profit, and fulfilling a duty to society
 
 ## Explanation
 
@@ -36,5 +36,6 @@ An insurer's risk control function supports four goals: earning a profit, meetin
 
 **Why not the others**
 
-- **A**, **B** — Both services may help profit and customers indirectly, but the stem's details point to the legal requirement and the benefit to society.
-- **D** — Names the right two goals in the wrong order for the two services.
+- **A** — Both services may help profit and customers indirectly, but neither names the legal requirement or the benefit to society that the stem describes.
+- **B** — Gets the boiler inspections right but misses that the seminars benefit the public, which is a duty to society rather than a customer need.
+- **D** — Gets the seminars right but misses that the boiler inspections are required by the jurisdiction.

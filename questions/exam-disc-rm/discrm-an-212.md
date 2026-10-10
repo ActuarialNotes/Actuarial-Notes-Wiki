@@ -11,12 +11,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2e045462c16b3e2496e730b0df797c8b12b8689a9d9017e4656995c775011933
-  sources: []
+  sources:
+    - "Verisk, Building Fundamentals sample report (ISO CLM construction classes 1-6, CSP occupancy codes, PPC), p.2 ISO Construction Class definitions, codes 1-6, sha256:ec0d18b4de14f24ce24f64c12aa59d49cf84cd6579bc72a80539aec9c44abff7 — https://www.verisk.com/49ba9b/siteassets/media/downloads/commercial-property/building-fundamentals-report.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-212.md

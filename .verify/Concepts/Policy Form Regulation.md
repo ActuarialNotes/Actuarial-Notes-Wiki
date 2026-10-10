@@ -1,0 +1,15 @@
+---
+target: Concepts/Policy Form Regulation.md
+created: 2026-10-10
+---
+
+## [C-001] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv08
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: every statement against the NAIC models, New York statutes, LII and FC&S; Flesch examples recomputed; links resolve
+- sources_checked: NAIC Life and Health Insurance Policy Language Simplification Model Act (#575, 1995), s.5A-B, s.7, sha256:f35b42a1540ecf9afa159d13ff31e35c08ffd4be9b6ab75ba5c34edd5da70d10 — https://content.naic.org/sites/default/files/model-law-575.pdf; N.Y. Insurance Law s.3102, (a), (c)(1), read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://www.nysenate.gov/legislation/laws/ISC/3102; N.Y. Insurance Law s.3404, (b)(1), (d)(1), (f)(1), read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://www.nysenate.gov/legislation/laws/ISC/3404; NAIC P&C Commercial Rate and Policy Form Model Law (Condensed) (#777, 2002), s.3A, 3B(4)-(5) and drafting note, 3C(1), 3I, 3J, s.4, sha256:811c7c1579aaf33f16ab03f1ac27d474e93744e1aed89e452ee847938a385f84 — https://content.naic.org/sites/default/files/model-law-777.pdf; PropertyCasualty360 / FC&S, "Standard Fire Insurance Policy" (2012, rank 3), history paragraphs, sha256:22880effff57d5d338301afc0f02b4f9a07cd4350913a53308a6095d77e4e760 — https://www.propertycasualty360.com/fcs/2012/10/04/standard-fire-insurance-policy; Cornell LII Wex, "contra proferentem", whole entry, sha256:e17e688d536be7c5603d1061dd780ba795f218487fddb7b78bff817bb6f654f1 — https://www.law.cornell.edu/wex/contra_proferentem; Cornell LII Wex, "adhesion contract", whole entry, sha256:6cb7999ec8c8f828d339722af1b7e4a3944886565464c14ef86ac9571e590b6f — https://www.law.cornell.edu/wex/adhesion_contract_(contract_of_adhesion); NAIC Standard Nonforfeiture Law for Life Insurance (#808), s.2, sha256:627c7440efe9047fbd0e941b19c90efe0e39a3920cc95ec960db2e9e9cd416b9 — https://content.naic.org/sites/default/files/model-law-808.pdf
+- note: Flesch formula and 40 minimum, ten-point type, no undue prominence, table of contents rule, officer certification, lower-score authority (Model 575); New York 45 minimum and scope (3201/4308 forms, dwellings of up to four units, non-business motor vehicle), standard fire policy conformity, endorsements and no-less-favorable exception (NY 3102, 3404); Model 777 filing periods (no more than 30 days), 30+30 waiting period with deemer, unique-risk exemption, broadening forms, primarily-located rule, exempt lines incl. D&O and EPL; 1873 Massachusetts and 1943 New York fire policy (FC&S); contra proferentem with LII's mudslide example; adhesion. Flesch recomputed: 59.6 and 36.8. No findings. Medium because the New York statutes were read through WebFetch (host refuses scripted fetch, no hash) and the fire-policy history rests on FC&S. The syllabus reading (The Institutes, Insurance Accounting, Coverage Analysis, Insurance Law, and Insurance Regulation, 2023) is sold, not published, and was not read; confidence is held at medium for that reason.

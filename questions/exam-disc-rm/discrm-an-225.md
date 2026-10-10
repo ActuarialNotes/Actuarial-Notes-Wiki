@@ -12,12 +12,15 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:867fc54fb438823f288354bc8ca28b15e8ac3bda8223a7023f7a33734da300b5
-  sources: []
+  sources:
+    - "ISO CR 00 21 11 15 Commercial Crime Coverage Form (Loss Sustained Form), A.1 Employee Theft; A.6 Computer And Funds Transfer Fraud, sha256:6d33044bc7a0ef1cb11e32f01b65c5f712091d24aad8fb459d085141fdb5f803 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CR+00+21&ed=11-15"
+    - "Case IQ, 'Combatting Workplace Fraud Through Internal Controls', entry, sha256:7bf97d2dd417d551eed40fd9a1818dde76af26ec2e6d8d297e6b9d48daae2200 — https://www.caseiq.com/resources/combatting-workplace-fraud-through-internal-controls"
+    - "GRF CPAs & Advisors, 'Steps for Preventing Employee Fraud in Your Organization', entry, sha256:0729972031647ead412cb975486b5ffd76df5d093fe8e727c2a66d3e64b49be7 — https://www.grfcpa.com/resource/steps-for-preventing-employee-fraud-in-your-organization/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-225.md

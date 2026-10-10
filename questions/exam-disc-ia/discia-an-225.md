@@ -12,12 +12,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aa59d1254bbfa81de7cdd675b2da559f01b4c97b0cdcb3cb7627861447d49542
-  sources: []
+  sources:
+    - "Rowland v. Christian, 69 Cal. 2d 108 (1968) (Caselaw Access Project), opinion text, sha256:6637138ee1290c3ab8819bc096f5e472c37adcfcee21300471aa2cc33b72398d — https://static.case.law/cal-2d/69/cases/0108-01.json"
+    - "Demag v. Better Power Equipment, 2014 VT 78 (Vt. Supreme Court), pp.3-6, 10-11, sha256:e74830ed35c819710cc75a2f6dddfa11e62a058e9cdbe78b138129b13b4be43f — https://www.vtcourts.gov/media/4343"
+    - "Cornell LII Wex, \"licensee\", whole entry, sha256:d86ad3f8db08b9ab3e11a6ae00eafc9fdae2ba189937012163de40632c97b36d — https://www.law.cornell.edu/wex/licensee"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-225.md

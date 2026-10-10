@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a7f1516b084192fc56f1900fe45c79e86382e807aaea4ef10de9b46c54830314
-  sources: []
+  sources:
+    - "15 U.S.C. s.1012 (McCarran-Ferguson Act), via LII, section text and notes, sha256:535ac29a8bf43a413de01cd9bf4496970aff48d88a47c87cfbf296696012ef32 — https://www.law.cornell.edu/uscode/text/15/1012"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-251.md

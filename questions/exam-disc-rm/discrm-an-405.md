@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cf23a9541f2739ca74a167c025da601564b2aa5b7de3046bcd5b88584f2d4ebe
-  sources: []
+  sources:
+    - "FC&S Editors, 'Bases of Liability Premium', PropertyCasualty360, 9 Oct 2012, area definition and 50% rule, sha256:3098468d31acf87f67490601c66a720666953277f266b0692ff23c3d387ab3ed — https://www.propertycasualty360.com/fcs/2012/10/09/bases-of-liability-premium/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-405.md

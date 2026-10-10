@@ -13,12 +13,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8ed29afd80c646761442d271234f615af5d9cd5a99cc9213cd7894b12f6bcb75
-  sources: []
+  sources:
+    - "Big 'I' Virtual University, \"'Dagger' or Plus Symbol Classes: What They Mean\", entry, sha256:1fd8d55831527c9c2665b618bb06bc257bfc5aefe3ec495d252dda3980c10f24 — https://www.independentagent.com/vu_resource/dagger-or-plus-symbol-classes-what-they-mean/"
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, V.16.b(3), sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-407.md

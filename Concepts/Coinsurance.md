@@ -4,12 +4,12 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:35ddefb137dfe33257ac577e87193f51c63c3d30b5ef3bdc8453d098daaac367
+  content_hash: sha256:bed53335fc03749739da0a055f21e706ae4765cccedaf546e692c8ca66bd07b5
   sources:
     - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, F.1.a-b with Examples 1-3 (pp.13-14), D (p.10), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
     - "Werner & Modlin, Basic Ratemaking (CAS, 5th ed. May 2016), Ch.11 PDF pp.211-213, 221-222 — LER and coinsurance clause, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "Anderson & Brown, Risk and Insurance (SOA study note P-21-05, 2005), §IV limits on policy benefits, PDF p.7, sha256:1cb44e7f9ee240a9a0597a89dbf3a055ab70d07a8739132c75440051ee655922 — https://www.soa.org/globalassets/assets/files/edu/P-21-05.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coinsurance.md
 ---
@@ -19,7 +19,7 @@ verification:
 > $$\text{Payment} = c \cdot (X - d)^+$$
 
 - Coinsurance incentivizes loss prevention by keeping the policyholder exposed to a share of every claim; it is common in health insurance and some property lines
-- In ratemaking, the coinsurance percentage reduces the loss elimination ratio, since more of each loss is borne by the insured — rates are scaled by $c$ relative to a full-coverage rate
+- In ratemaking, Werner and Modlin define the loss elimination ratio for deductibles; they treat the property coinsurance clause separately, through an apportionment ratio applied to the loss payment
 - In the property insurance context, a **coinsurance clause** can instead refer to a penalty applied when the insured carries less coverage than a required percentage of replacement value
 - **The property coinsurance clause:** Under the ISO Building and Personal Property Coverage Form (CP 00 10 10 12), if the value of the covered property at the time of loss times the coinsurance percentage in the declarations exceeds the limit, the insurer pays: (1) value times the coinsurance percentage, the minimum insurance required; (2) the limit divided by that figure; (3) the whole loss, before any deductible, times that ratio; (4) less the deductible, but never more than the limit. The insured absorbs the rest or relies on other insurance. When one limit covers several items, the test uses the total value of all of them. Why the clause exists, and the other insurance-to-value provisions, are on [[Insurance to Value]].
 

@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:117d2754faf62ee79ece7e90d17e7f85440ab3eca28ca44dbdc90f95d85fc4fa
-  sources: []
+  sources:
+    - "North Carolina Basic Manual (NCRB), Rule 1 – Assignment of Classifications, 1-B-2 standard exceptions; 1-B-5 Governing Classification Determination Table, sha256:cf8907fcf5fbe01060a1f9cebaf941c349f947b039c59e56356fe3f474042190 — https://www.ncrb.org/digitallibrary/basicmanual/Rule_1_-_Assignment_of_Classifications.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-400.md

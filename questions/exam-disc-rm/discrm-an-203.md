@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:383404d6f9e66140d6e2a872d10dab89c59277cdc309f4abb0936e589df8fabc
-  sources: []
+  sources:
+    - "Texas Insurance Code ch. 38 (Texas Legislature), §38.002(b), (e); §38.003(c)-(d), sha256:362ed8ab524661320175c0c52224afe8f9a2ad104649b8b11a691ce81cfe5156 — https://tcss.legis.texas.gov/resources/IN/htm/IN.38.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-203.md

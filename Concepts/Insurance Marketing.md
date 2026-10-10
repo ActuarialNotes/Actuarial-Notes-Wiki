@@ -1,12 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8e6415fd998cd6e3ba7acdcdc6fe6b46d76e5630e7db52b94fac0ac7f3f6fd34
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Insurance Marketing.md
 ---
@@ -25,7 +25,7 @@ verification:
 - **Advertising and promotion:** Advertising builds awareness of the insurer's brand and products, and promotion supports sales through producers, sponsorships, and digital and social media campaigns. Direct response insurers rely on it most, because advertising is how their customers find them.
 - **Customer relationship management:** CRM uses data on each customer's policies, contacts and claims to serve them well, keep them at renewal and offer them other products they need. Retention is valuable because, as the CLV formula shows, a customer kept for longer spreads the acquisition cost over more years of margin.
 - **Product development:** Marketing identifies the needs a new or revised product should meet, and it works with underwriting, actuarial, claims, legal and compliance to design, price, file and launch it. The [[Product Development Process|product development process]] describes the steps.
-- **Constraints:** Insurance marketing works within [[Market Conduct Regulation|market conduct regulation]], which prohibits misrepresenting policies, unfair discrimination and unfair inducements, and within [[Risk Classification Restrictions|limits on rating variables]] that some jurisdictions apply to targeting and pricing.
+- **Constraints:** Insurance marketing works within [[State Market Conduct Regulation|market conduct regulation]], which prohibits misrepresenting policies, unfair discrimination and unfair inducements, and within [[Risk Classification Restrictions|limits on rating variables]] that some jurisdictions apply to targeting and pricing.
 
 > [!example]- Choosing a Target Segment by Lifetime Value {Example}
 > A personal lines insurer is choosing between two segments for a new marketing campaign. With illustrative figures, young renters buying online bring an annual margin of \$60, renew at 70% and cost \$120 to acquire. Homeowners who bundle auto and home bring a margin of \$150, renew at 88% and cost \$350 to acquire, much of it in producer commission and advertising. Using a 5% discount rate, find the CLV of a customer in each segment.

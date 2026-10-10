@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8e9c67b39b1b8cddb030230912452093ca3a286513aedb619d15d2a9ec5114df
-  sources: []
+  sources:
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.1 Coinsurance (12 months following inception or last anniversary; deducted expenses), sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-220.md

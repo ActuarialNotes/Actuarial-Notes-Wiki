@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5653ec2a39d7a4be6c68326e5b3e1c746a86620fc1d5c07472f20f5c46819802
-  sources: []
+  sources:
+    - "Bruneau et al., A Framework to Quantitatively Assess and Enhance the Seismic Resilience of Communities, Earthquake Spectra 19(4) 2003 (author copy), pp.736-737 (Q(t), loss of resilience integral; robustness, redundancy), sha256:38afd71aebf6f552712b9100e09b5938a5f04e18bc2d0bc1f795011d3e9bd8b7 — https://www.eng.buffalo.edu/~bruneau/EERI%202003%20Bruneau%20et%20al.pdf"
+    - "NIST SP 800-160 Vol. 2 Rev. 1, Developing Cyber-Resilient Systems (2021), Appendix B p.76 (NIAC 2010 definition: anticipate, absorb, adapt to, rapidly recover), sha256:d3e9830faadfd1e7a43392194320c5203935c3d7f30f78896b55a8a53e0f0b15 — https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-160v2r1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-055.md

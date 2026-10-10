@@ -14,12 +14,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7e528ec849bf4beee21d8c8ca102fed60b960ea4f99402922c45024b76f2fb02
-  sources: []
+  sources:
+    - "NCCI WC 00 00 00 C (Ed. 1-15) Workers Compensation and Employers Liability Insurance Policy (Guard copy), Part Five C (uninsured subcontractor; contract price), E, sha256:f0723f4875806fb2237386a91b554c3edbdb10b94315204ab8bb19696a1e64dd — https://policyholder.guard.com/wwwroot/static/Policy_Docs/POLICY_WC-2015-01.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-402.md

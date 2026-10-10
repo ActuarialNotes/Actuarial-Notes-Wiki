@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2015b36a8c55433633d43dc4241c4bf70da4d69b380e21ba3b56fa8e950f354e
+  content_hash: sha256:a980d91a0026a31e512c4e1debdf396b820d01a4a34340b94855d9cfd2532492
   sources: []
   open_findings: 0
   open_critical: 0
@@ -18,10 +18,9 @@ verification:
 - $s$ is the premium or spread received and $\ell$ the loss suffered, both as fractions of the capital posted; for a fully collateralised instrument $0 \leq \ell \leq 1$. The expected excess return $s - E[\ell]$ is the price of the risk. Because [[Catastrophe Risk|catastrophe losses]] are nearly independent of financial markets, investors value that return as a diversifier.
 - **The main forms:**
   - **Cat bonds** — notes issued by a special purpose reinsurer, tradable among institutional investors, typically multi-year, with indemnity, industry-index, modelled-loss or parametric triggers.
-  - **Sidecars** — special purpose reinsurers formed by a (re)insurer to take a [[Quota Share|quota share]] of a defined book for a year or two, funded by outside investors. Quick and cheap to set up, they multiplied after the 2005 hurricanes, when reinsurance capacity was scarce.
-  - **Industry loss warranties** (ILWs) — pay a fixed limit if an industry loss index exceeds a trigger. Written as reinsurance they add a second, low trigger on the buyer's own loss, which supplies the indemnity; written as a swap they carry the index trigger alone.
-  - **Collateralised reinsurance** — an ordinary reinsurance contract, often [[Excess of Loss|excess of loss]], written by an investor-backed vehicle that posts the full limit as collateral in a trust: cat-bond economics without a security, a rating or an offering.
-  - **Other risk-linked instruments** — catastrophe risk swaps between insurers exposed to different perils, contingent capital such as a catastrophe equity put (the right to issue preferred shares at a pre-set price after a catastrophe), and life-side deals covering extreme mortality. Exchange-traded catastrophe options and futures were tried in the 1990s and failed for lack of liquidity.
+  - **Sidecars** — special purpose vehicles through which a (re)insurer cedes premium and risk on a defined book, for example by a [[Quota Share|quota share]], to outside investors whose funds are held as collateral. They are tactical instruments of limited duration, used in a hard market, and became very popular after Hurricane Katrina.
+  - **Industry loss warranties** (ILWs) — pay a fixed limit if an industry loss index exceeds a trigger. Written as reinsurance they add a second trigger on the buyer's own loss, which supplies the indemnity.
+  - **Other risk-linked instruments** — contingent capital such as a catastrophe equity put, an option to raise additional equity capital if losses exceed a predetermined level; the instruments have also spread to life insurance and annuities. Exchange-traded catastrophe options, offered on the Chicago Board of Trade from 1995, were among the first attempts, and trading ceased in 1999 for lack of demand.
 - **Against traditional [[Reinsurance|reinsurance]]:** collateral replaces a reinsurer's promise, so there is no [[Reinsurance Credit Risk|credit risk]] on the limit; capacity comes from capital markets; and index or parametric triggers trade moral hazard for **basis risk**. Cummins concludes that ILS complement reinsurance rather than replace it. See [[Securitization]] for the economic case.
 
 > [!example]- A Sidecar's Return in Three Years {Example}
@@ -49,6 +48,6 @@ verification:
 > > [!answer]-
 > > - (a) Both triggers met: **$\$50$ million**.
 > > - (b) Industry trigger missed: **nothing**, despite a heavy own loss — basis risk.
-> > - (c) Own-loss trigger missed: **nothing**. The same contract written as a swap would pay $\$50$ million.
+> > - (c) Own-loss trigger missed: **nothing**.
 > >
-> > The ILW is cheap, standardised protection against a *market-wide* event. The low own-loss trigger is what makes it indemnity — and so reinsurance — while the swap form can be bought by anyone, with or without an insured loss.
+> > The ILW is standardised protection against a *market-wide* event, with relatively low transaction costs. The own-loss trigger is what makes it indemnity, and regulators treat buying one with that trigger as a reinsurance purchase.

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:50c0800785643e2ff091735f829e31b141f64e0c93d9e9f9bc4d548ef0c71368
-  sources: []
+  sources:
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), p.114 (PDF p.16) risk map, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s06-02 probability measures, sha256:2cd18f66c1d1d9bc8162fb93bce73ddf75b766f3363ac06e3ec20e165d473773 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s06-02-measures-of-risk-putting-it-to.html"
+    - "OSHA, Incident [Accident] Investigations: A Guide for Employers (Dec 2015), pp.1-4 (root causes, close calls), sha256:828756cf17298e2da0eac2235d32c10a5c98973b55cd54a84e6ffcf4acbbe659 — https://www.osha.gov/sites/default/files/IncInvGuide4Empl_Dec2015.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Assessment.md

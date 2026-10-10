@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:af34c5d0d584e12ec71137b83c3cacbde672e99a485add68fb439cd020fb4165
-  sources: []
+  sources:
+    - "Cornell LII Wex, \"negligence\", whole entry, sha256:83fcfd0343f79398b5caeca4fa538f5e938906edbbbbd01840c24b5988fa3ef5 — https://www.law.cornell.edu/wex/negligence"
+    - "Cornell LII Wex, \"invitee\", whole entry, sha256:1e19ea6629325da9163cdd4b29730e43bc2419b0ab635ec5f9c3e899503a4c83 — https://www.law.cornell.edu/wex/invitee"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-220.md

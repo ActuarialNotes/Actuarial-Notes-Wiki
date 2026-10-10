@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8eb25843f31f1c5a51e959f7410fa4141282f6a6089a0df691102cbf3c11527f
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:40e3f95eb621eb21474b13c0fda5eca244ff870f1337a9d2ce7c66c5bab16c96
+  sources:
+    - "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems (2010), ES-1 (policy), §3.2 BIA, §3.2.1 RTO/MTD, §3.4.2 sites, §3.5.3 exercises, §3.6 maintenance, sha256:476f04d4c60b0770c1ac8b2720551972074ce78e936a3e7a535048416111d0df — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf"
+    - "Mid Sussex District Council, Business Continuity Policy Appendix A: Terms & Definitions (2019, citing ISO 22301), p.2, sha256:3550ebea9d87cf22770286c01a673a36a75c26d93818bfb7dfbac85a7ccb9315 — https://www.midsussex.gov.uk/media/4134/business-continuity-policy-appendix-a.pdf"
+    - "Ready.gov (FEMA), Business Impact Analysis page, read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://www.ready.gov/business-impact-analysis"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Business Continuity Management.md

@@ -13,14 +13,19 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
+  status: disputed
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:62510b3ed723412c7213f4d2a5b1275ec527408500af42716b351829bd61941f
-  sources: []
-  open_findings: 0
-  open_critical: 0
+  sources:
+    - "IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss"
+    - "IRMI Glossary, 'maximum foreseeable loss (MFL)', entry, sha256:ac6a852f104fe279e0909ec10a83934963490673519be7caa5ceef6192b7151c — https://www.irmi.com/term/insurance-definitions/maximum-foreseeable-loss"
+    - "IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss"
+    - "Risk & Insurance Education Alliance, Insurance Glossary, 'Probable Maximum Loss (PML)', entry, sha256:5afb6a900dd760a9c0b0b5488990f7f36ec8779ac2ff1b18bf67d4918d6e9b14 — https://www.riskeducation.org/insurance-glossary/probable-maximum-loss-pml/"
+    - "M. Korn, '6 Fire Loss Scenarios to Review Before It's Too Late', Risk & Insurance (NLE/PML/MFL/EML/MPL definitions), entry, sha256:63e30fa759800ffc8283e3d82f56542677192cac9820af605fb5fbcc8a88319c — https://riskandinsurance.com/6-fire-loss-scenarios-to-review-before-its-too-late/"
+  open_findings: 1
+  open_critical: 1
   log: .verify/questions/exam-disc-rm/discrm-an-217.md
 ---
 

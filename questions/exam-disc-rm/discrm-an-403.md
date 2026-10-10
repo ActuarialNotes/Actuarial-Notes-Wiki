@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e7ef48af3caa4abf57e7e5056f1edeafb176018528593f396ff0d800728dee2e
-  sources: []
+  sources:
+    - "NCCI WC 00 00 00 C (Ed. 1-15) Workers Compensation and Employers Liability Insurance Policy (Guard copy), Part Two A, B.1 (third-party-over), C.1 (contractual exclusion); Part Three, sha256:f0723f4875806fb2237386a91b554c3edbdb10b94315204ab8bb19696a1e64dd — https://policyholder.guard.com/wwwroot/static/Policy_Docs/POLICY_WC-2015-01.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-403.md

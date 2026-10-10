@@ -11,12 +11,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:92322a8674955729482116bd1974fa72e656328e9cfadc200da7571bdc765f22
-  sources: []
+  sources:
+    - "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems (2010), §3.5.3 (PDF p.43): tabletop discussion-only; functional to full-scale, sha256:476f04d4c60b0770c1ac8b2720551972074ce78e936a3e7a535048416111d0df — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf"
+    - "Ready.gov (FEMA), Ready Business Business Continuity Plan template, p.3 orientation, tabletop, full-scale; p.3 maintenance, sha256:9945e3bb8bb0d45507e97de3d6f31a1b5a9bc90d454e95b8b8731b975bef259b — https://www.ready.gov/sites/default/files/2020-03/business-continuity-plan.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-009.md

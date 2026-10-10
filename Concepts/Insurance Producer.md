@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6900c0197c48910be47780d3ccd6c1f23b98b3ba087bfab6427a636045d6992c
-  sources: []
-  open_findings: 0
+  sources:
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 agents vs brokers; binding; x-date; half the states, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.5 pp.93-99; Ch.8 p.145 (licensing of agents and brokers), sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "IRMI Glossary, \"producer\", definition, sha256:ab86f978b17bbaa40dcb8086817cd5a3fa812fc527a86b508f7d5412ecdeb1ea — https://www.irmi.com/term/insurance-definitions/producer"
+    - "IRMI Glossary, \"contingent commission\", definition, sha256:5f3bd9ede066a8144c57ce4b896a8611d06972318b0a2c2cf56f740e64cb4ad1 — https://www.irmi.com/term/insurance-definitions/contingent-commission"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurance Producer.md
 ---

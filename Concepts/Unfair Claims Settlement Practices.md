@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:04f7e4924fd93988f7aaea44673cde26acdace8b3c10cc583276b6fc4ea76543
+  content_hash: sha256:cb3f065f48528829dabc4d3196ccf42a3a87a928513a6f8becaa8f731d6cb441
   sources:
     - "NAIC Unfair Claims Settlement Practices Act, Model #900 (Jan 1997 printing), §§1, 3, 4A–N, 5, 6A–B, 7, prefatory note, pp.1–4, sha256:ba1d03c3819ae83500abaa0d6f50bba07a896d4be0ba26b84405095c131f6ba2 — https://content.naic.org/sites/default/files/model-law-900.pdf"
     - "NAIC Unfair Property/Casualty Claims Settlement Practices Model Regulation, Model #902 (Jul 1997 printing), §§2–9, pp.1–9, sha256:f33578860a5603a165819316747c996514340f371ca42f77f00621e3b3d41f55 — https://content.naic.org/sites/default/files/model-law-902.pdf"
@@ -37,7 +37,7 @@ verification:
   - fail to promptly explain the basis for a denial or a compromise offer;
   - fail to provide claim forms within 15 calendar days of a request;
   - fail to ensure that repairs by a repairer it owns or requires are done in a workmanlike manner.
-- **Scope:** The model act covers claims under policies issued to the state's residents, but not workers compensation, fidelity, suretyship or boiler and machinery claims. It creates no private cause of action: it is enforced by the commissioner. A claimant who sues an insurer for [[Bad Faith Damages|bad faith]] does so under other law, which the act does not create.
+- **Scope:** The model act covers claims under policies issued to the state's residents, but not workers compensation, fidelity, suretyship or boiler and machinery claims. It creates no private cause of action: it is enforced by the commissioner. A claimant who sues an insurer for bad faith does so under other law, which the act does not create.
 - **Files and records:** Under the regulation, claim files are subject to examination by the commissioner. The insurer must be able to produce each claim's number, line of coverage, date of loss and date of payment, denial or closing for the current year and the two before it. Each file must contain enough documentation to reconstruct the insurer's handling of the claim, with every document dated when received, processed or mailed.
 - **Communications:** Besides acknowledging a claim within 15 days, the insurer must answer an inquiry from the insurance department within 21 days, reply within 15 days to other claimant communications that expect a response, and promptly give first-party claimants the forms, instructions and reasonable help they need.
 - **Disclosure and releases:** The insurer must fully disclose to a first-party claimant all pertinent benefits and coverages. It may not deny a claim for failure to exhibit property unless the file documents a breach of the policy. It may not mark a payment "final" or a "release" unless the policy limit has been paid or a compromise has been agreed.

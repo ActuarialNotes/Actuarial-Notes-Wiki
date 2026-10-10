@@ -1,12 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:54251320398ff9498392c0e77ffdcdbb46899a44d3f3226fc743e567ac3ff088
-  sources: []
-  open_findings: 0
+  sources:
+    - "IRMI Glossary, 'excess liability policy', entry, sha256:8400c1a7acec64412e464cfeb44e9a19b1bd14cbc14a81d33caaee9f680e2d38 — https://www.irmi.com/term/insurance-definitions/excess-liability-policy"
+    - "IRMI Glossary, 'umbrella liability policy', entry, sha256:5cce6a9bbdf4f78a8916a7a9cd477c31d14051abe9f552582a8af7b7e6e14268 — https://www.irmi.com/term/insurance-definitions/umbrella-liability-policy"
+    - "IRMI Glossary, 'self-insured retention (SIR)', entry, sha256:cc734858023b47db3112cb5e4f0ff025ca8f50ad098792ee7110f802a7c5cca6 — https://www.irmi.com/term/insurance-definitions/self-insured-retention"
+    - "IRMI Glossary, 'deductible', entry, sha256:95bff5ff32cde7c6a56aafa63343209ec839067f1a3ed9a75dd4dda780c17286 — https://www.irmi.com/term/insurance-definitions/deductible"
+    - "ISO CG 03 00 01 96 Deductible Liability Insurance (draft specimen), A-D, sha256:2274fc25a3b7672eab8a27b35ccf9961a3edb152021253638f59534e4d9055ec — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CG+03+00&ed=01-96"
+    - "D. R. Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), pp.15, 23-25 (ALAE pro rata / part-of-loss), 17-19 exposure curves, 27-30 ILFs, 43 reinstatements, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
+    - "R. Sahasrabuddhe, 'Claims Development by Layer' (CAS E-Forum Fall 2010, rev. 2 Jan 2013), abstract and §1, sha256:42ecb7ecc7270a462e397a1d4d5c8d42e50b4bc9719122b4c53873dfc84fd5a3 — https://www.casact.org/pubs/forum/10fforum/Sahasrabuddhe.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Excess Insurance.md
 ---

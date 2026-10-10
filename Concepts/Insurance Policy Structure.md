@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f62ae6dc6bd3c5bfbff86d9a2d0b6e852f19a67f329361a74f33d77b11294b4
+  content_hash: sha256:714f215e3b27e6f5a3c4e480b89259c3f999ee4060f82dcf440a9785faee7d73
   sources:
     - "IRMI Insurance Glossary, 'manuscript form or policy' (fetched 2026-10-10), sha256:d5cb32be678fc42bc2d7a367be03e7046cb8a470cd2b332eb72ee9d7eb9a9775 — https://www.irmi.com/term/insurance-definitions/manuscript-form-or-policy"
     - "IRMI Insurance Glossary, 'self contained policy' (fetched 2026-10-10), sha256:bf6aa36ad95643301e5205ea7339da26516fab9d72645a0998e4d30bab7e0fa1 — https://www.irmi.com/term/insurance-definitions/self-contained-policy"
@@ -20,8 +20,7 @@ verification:
     - "ISO IL 00 17 11 98, Common Policy Conditions (RSUI copy), lead line, A, B, sha256:f1854d69221a8b317236ebd98e8ade32b3181dd0b4e28786526bdfef36c8029c — https://baservices.rsui.com/fs/api/docid/12603"
     - "ISO CP 00 10 10 12, Building and Personal Property Coverage Form, A.3, B, E/F introductions, D (pp.2, 9-10, 13), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
     - "ISO HO 00 03 05 11, Homeowners 3 – Special Form (Maine Bureau of Insurance copy), form structure, sha256:ac539e500a5767946452d1e6ad4c4b7dcc395c6c65c48fc3a8ac92a7c330a1d4 — https://www.maine.gov/pfr/insurance/sites/maine.gov.pfr.insurance/files/inline-files/ho00-03-05-11-homeowners3-special-form.pdf"
-    - "open-exam-prep.com, '1.4 Policy Structure: Declarations, Insuring Agreement, Conditions, Exclusions' (fetched 2026-10-10), sha256:2b7bcfec7d59f90616547bf8b1178af9a72663c9b646180b6d4e3bff4ac229f1 — https://open-exam-prep.com/study-guides/il-property-casualty/national-pc-fundamentals/pcnat-1-4-policy-structure-components"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Policy Structure.md
 ---
@@ -37,7 +36,7 @@ verification:
 - **Self-contained policies:** A self-contained policy is a single document containing all the insuring agreements between insurer and insured. It is often preprinted and standardized for a large number of insureds, and it is tailored through endorsements. The ISO homeowners form HO 00 03 is built this way: one form carries the definitions, the Section I property coverages and the Section II liability coverages, with their exclusions and conditions, and the declarations page and endorsements are attached to it.
 - **Modular policies:** A modular policy is assembled from separate standardized forms. A **coverage form** is one of the primary forms used to construct the contract, and generally holds the insuring agreement, coverage conditions, exclusions and definitions. The ISO commercial package is the example: one set of Common Policy Declarations and the [[Common Policy Conditions]] (IL 00 17), which apply to every coverage part, plus coverage parts that are each built from forms. A commercial property coverage part combines its declarations, the [[Building and Personal Property Coverage Form]] (CP 00 10), a causes of loss form that the BPP refers to for both the covered causes of loss and the exclusions, and the [[Commercial Property Conditions]]. A commercial general liability coverage part is added the same way around the [[Commercial General Liability|CGL coverage form]] (CG 00 01). A package policy combines several coverages in this way, usually general liability and property.
 - **Endorsements:** An endorsement is a form that changes or adds to the provisions of one or more other forms in the policy. It may broaden or restrict coverage, clarify how coverage applies to an unusual exposure, add insureds or add locations. Under the Common Policy Conditions the policy's terms can be amended or waived only by an endorsement the insurer issues.
-- **Where each provision sits:** The **declarations** are the front page or pages: the named insured, address, policy period, locations, limits and other information that varies from insured to insured. **Definitions**, **insuring agreements**, **exclusions** and **conditions** are usually in the coverage form. Exclusions can also be in a causes of loss form, and conditions in a separate conditions form that applies to a whole coverage part or the whole policy. This is the order of a coverage analysis, often remembered as DICE: declarations, insuring agreement, conditions, exclusions, with definitions and endorsements read alongside. The categories themselves, and what each does, are on [[Policy Provisions]].
+- **Where each provision sits:** The **declarations** are the front page or pages: the named insured, address, policy period, locations, limits and other information that varies from insured to insured. **Definitions**, **insuring agreements**, **exclusions** and **conditions** are usually in the coverage form. Exclusions can also be in a causes of loss form, and conditions in a separate conditions form that applies to a whole coverage part or the whole policy. The categories themselves, and what each does, are on [[Policy Provisions]].
 
 > [!example]- Sorting a Commercial Package {Example}
 > A retailer's commercial package policy contains these documents: Common Policy Declarations; IL 00 17 Common Policy Conditions; Commercial Property declarations; CP 00 10 Building and Personal Property Coverage Form; a Causes of Loss – Special Form; Commercial Property Conditions; Commercial General Liability declarations; CG 00 01 Commercial General Liability Coverage Form; and an endorsement adding the retailer's landlord as an additional insured on the CGL. Group them by coverage part, and say which apply to the whole policy.

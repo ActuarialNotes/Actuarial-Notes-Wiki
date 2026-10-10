@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0fa4e1572ac5c40cc423c5070c52f6216a44dfaf2e64877ef45cdf291a66c6d5
-  sources: []
+  sources:
+    - "NAIC Unfair Trade Practices Act (#880, Spring 2024), ss.1, 4A, 4B, 4D-4F, 4H, 4I, 4K-4M, 6, 8A, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-250.md

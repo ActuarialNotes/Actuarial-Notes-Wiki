@@ -1,12 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:15ac594b767791e02024d221c4ea7a65447229617409cb11a69eb7810c2f948d
-  sources: []
-  open_findings: 0
+  sources:
+    - "15 U.S.C. s.1011 (McCarran-Ferguson Act), via LII, section text and notes, sha256:4a241b15f73f03c4968717b2c27837c5a518e5a1b9a8101e583645654d615b23 — https://www.law.cornell.edu/uscode/text/15/1011"
+    - "15 U.S.C. s.1012 (McCarran-Ferguson Act), via LII, section text and notes, sha256:535ac29a8bf43a413de01cd9bf4496970aff48d88a47c87cfbf296696012ef32 — https://www.law.cornell.edu/uscode/text/15/1012"
+    - "15 U.S.C. s.1013 (McCarran-Ferguson Act), via LII, section text and notes, sha256:12aef39131def2a132d65c7de84d47975d9938b1a5765a660f036c6b1efa0e6c — https://www.law.cornell.edu/uscode/text/15/1013"
+    - "NAIC testimony (Csiszar), Senate Commerce Committee, Oct 22 2003, PDF p.3 (\"one overriding reason\"); p.5 (UCAA), sha256:b465c2a47d11ff54d304ff2c91a26987265d74208a77e37fdb2c6c65157c1d1a — https://content.naic.org/sites/default/files/naic_archive/testimony_0310_csiszar.pdf"
+    - "S. Harrington, testimony to Senate Banking Committee, July 18 2006, PDF pp.3-4, 9, sha256:b9f8f73ee163f8da541f0b1eac83254cafbcf66cdd8e508c0fb8e770a7fcf20c — https://www.banking.senate.gov/download/harrington-july-18-2006&download=1"
+    - "NAIC Life Insurance Buyer's Guide (2026), p.2 (NAIC governance), sha256:c7439cde01522328eca7eab1a7323e5ca193ed8af7d21deb80bda6ae9f36837a — https://content.naic.org/sites/default/files/publication-lig-lp-consumer-life.pdf"
+    - "NAIC P&C Commercial Rate and Policy Form Model Law (Condensed) (#777, 2002), s.3A, 3B(4)-(5) and drafting note, 3C(1), 3I, 3J, s.4, sha256:811c7c1579aaf33f16ab03f1ac27d474e93744e1aed89e452ee847938a385f84 — https://content.naic.org/sites/default/files/model-law-777.pdf"
+    - "Cornell LII Wex, \"contra proferentem\", whole entry, sha256:e17e688d536be7c5603d1061dd780ba795f218487fddb7b78bff817bb6f654f1 — https://www.law.cornell.edu/wex/contra_proferentem"
+    - "Cornell LII Wex, \"adhesion contract\", whole entry, sha256:6cb7999ec8c8f828d339722af1b7e4a3944886565464c14ef86ac9571e590b6f — https://www.law.cornell.edu/wex/adhesion_contract_(contract_of_adhesion)"
+    - "NAIC Unfair Trade Practices Act (#880, Spring 2024), ss.1, 4A, 4B, 4D-4F, 4H, 4I, 4K-4M, 6, 8A, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reasons for Insurance Regulation.md
 ---

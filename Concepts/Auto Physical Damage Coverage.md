@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cd58d25010a8fc55b852649bb232280ecff8092aa39c86276b0823ab35988d4e
-  sources: []
+  sources:
+    - "ISO PP 00 01 09 18 Personal Auto Policy (Virginia SCC specimen), Part D insuring agreement, collision definition, other than collision 1-10, non-owned auto, custom equipment, transportation expenses, exclusions 1-16, limit of liability A-C, payment of loss, appraisal, other sources of recovery (pp.8-12), sha256:20a8001d97dcc09d70ab2a76579414c3b869ecb4afe23d2446b844ad4c7780c8 — https://www.scc.virginia.gov/media/sccvirginiagov-home/regulated-industries/insurance/insurance-companies/property-casualty-companies/personal-commercial-auto-forms/pp-00-01-09-18.pdf"
+    - "ISO CA 00 01 10 13 Business Auto Coverage Form, III physical damage, sha256:b8e36d4e31f05a7eaad97cba8b091f8a45cf1ea302e616bad96b4c132c1457e8 — https://assets.touchpointmarkets.com/80/d7/be854d714678be5fefc9d17cc365/ca-00-01-10-13-business-auto-coverage-form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Auto Physical Damage Coverage.md

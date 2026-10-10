@@ -8,17 +8,17 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Risk+Measure
-  - Concepts/Solvency
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cc517c260dc7d199c94e7042243d513482f8d7b71f84cd231ca0f1517bb517c5
-  sources: []
-  open_findings: 0
+  sources:
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), pp.117-118 (PDF p.19): solvency-related measures, probability of ruin, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-022.md
 ---

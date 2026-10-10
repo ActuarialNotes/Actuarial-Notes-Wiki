@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b2c0741485ece8665973d9c1645b435c6334571896ef521b1b073fe6d38da7d3
-  sources: []
+  sources:
+    - "NFPA One-Stop Data Shop fact sheet 'U.S. Experience with Sprinklers' (2004-2008 data), pp.1-2, sha256:2e411c9a24fcc9f5d04dc3aeca23c8c78ce347a6dad1bbbd356d0eeddcc7a3a0 — https://www.windsorfire.com/wp-content/uploads/sprinkler-fact-sheet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-214.md

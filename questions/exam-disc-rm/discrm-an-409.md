@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8076a95bae4ddb8b801d614576bb8bb3d06147ec3a915ae193cdb66106b2c855
-  sources: []
+  sources:
+    - "NAIC, Automobile Insurance: A Shopping Tool for Consumers (© 2014; Colorado DOI copy), p.12 (printed 10) 'Principal Operator', sha256:b03458a5fdf0192a263ce489c66c4c4d50cebc54a90916f3e18b266f30073977 — https://doi.colorado.gov/sites/doi/files/documents/Buyers%20Guide%20to%20Auto%20Insurance.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-409.md

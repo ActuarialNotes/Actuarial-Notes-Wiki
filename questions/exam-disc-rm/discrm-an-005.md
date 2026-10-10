@@ -13,12 +13,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:96a34697f68e6c902e5bfc27704a2d80c44d7731eb3c7bbbc2636c2fcc0b2e1b
-  sources: []
+  sources:
+    - "NC State ERM Initiative, \"ISO's Risk Management Framework\" (summary of ISO 31000:2018), process elements, sha256:d225c2986035263284b625785ad916009690b86e1285788533c2467438c02a48 — https://erm.ncsu.edu/resource-center/isos-risk-management-framework"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-005.md

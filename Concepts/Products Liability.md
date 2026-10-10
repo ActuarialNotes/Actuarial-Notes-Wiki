@@ -1,12 +1,26 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:7f0a35cd6069387ac87fbeea26ff1ab90c9865a0be7d686cfe43461886bd6136
-  sources: []
-  open_findings: 0
+  sources:
+    - "Cornell LII Wex, \"products liability\", whole entry, sha256:3932a61c3a07202fd010d53a48a95868ba5ce8965c19b11890b41f59b224daf5 — https://www.law.cornell.edu/wex/products_liability"
+    - "Cornell LII Wex, \"design defect\", whole entry, sha256:dee38ea306d1221efb1fac89e21c6345201c8417decb960b10b1cf17942f5579 — https://www.law.cornell.edu/wex/design_defect"
+    - "Cornell LII Wex, \"manufacturing defect\", whole entry, sha256:878c81fb8dfae85a22dc3f7c93878eaaa703b14ab471183f5fb05d87b0697fb1 — https://www.law.cornell.edu/wex/manufacturing_defect"
+    - "Cornell LII Wex, \"warranty of merchantability\", whole entry, sha256:f8f2ecfbb71064114586928fbe1f5f182b33233e8fbd0271246fd467f9e97d23 — https://www.law.cornell.edu/wex/warranty_of_merchantability"
+    - "UCC s.2-313 (express warranties), via LII, section text, sha256:d46f2186b152678f968e7b8aa9c91538768cd1998c14e2fb0c97a819ad071a87 — https://www.law.cornell.edu/ucc/2/2-313"
+    - "UCC s.2-314 (merchantability), via LII, section text, sha256:e01e96d60caf78222cc3459bb8f17147247b090ee11eafc74b0f6126551e9046 — https://www.law.cornell.edu/ucc/2/2-314"
+    - "UCC s.2-315 (fitness for particular purpose), via LII, section text, sha256:fbc7416bd26d5141b672d967f4169b59eff4da02b3047f54ec6a08993bedb378 — https://www.law.cornell.edu/ucc/2/2-315"
+    - "UCC s.2-316 (exclusion of warranties), via LII, section text, sha256:d804acc380ff4af0e8efd06bda35b657c57e6c3e93e88b883942959da30a884b — https://www.law.cornell.edu/ucc/2/2-316"
+    - "Webb v. Zern, 422 Pa. 424 (1966) (Caselaw Access Project), quotation of Restatement (Second) s.402A, sha256:eac448a0817d7253681fb5fd8506c8b786db8c6c360e2609148f256d0947c5f0 — https://static.case.law/pa/422/cases/0424-01.json"
+    - "MacPherson v. Buick Motor Co., 217 N.Y. 382 (1916) (Caselaw Access Project), opinion text, sha256:11d9b06149d105cc11a92409ff8c46dc5bcec02a1d26e3754b81144ee561a471 — https://static.case.law/ny/217/cases/0382-01.json"
+    - "N.C. Gen. Stat. ch. 99B (Products Liability), ss.99B-1.1, 99B-2, 99B-3, 99B-4, 99B-6, sha256:77f19d9ffee208e103cf242770e09eb5c654562e107a8849b46e389dc5341d65 — https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/Chapter_99B.html"
+    - "The Indiana Lawyer (DTCI), \"Are sellers safe from strict liability under the IPLA?\" (rank 3), quotation of Ind. Code 34-20-2-3, read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://theindianalawyer.com/?p=138294"
+    - "IRMI Glossary, \"vendors endorsement\", whole entry, sha256:74b815c93094a19b5557fdbb7832aef01914bde7af83cb952b0467fdba111fdc — https://www.irmi.com/term/insurance-definitions/vendors-endorsement"
+    - "ISO CGL Coverage Form CG 00 01 04 13 (specimen copy), s.V def. 16 products-completed operations hazard; exclusions k and n, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Products Liability.md
 ---

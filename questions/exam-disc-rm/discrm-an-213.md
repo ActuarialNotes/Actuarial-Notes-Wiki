@@ -11,12 +11,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8bac9da51351d7f1001b3105a48d86fd6cdac717e5f5f0a09aa4594736e6412e
-  sources: []
+  sources:
+    - "Verisk ISO Mitigation, 'Scores and PPC Ratings', entry, sha256:4dc8a5df7de6acd02ca0a768ef688ded26c994b46ac7d7baf0922fdab747a9d4 — https://www.isomitigation.com/ppc/program-works/scores-and-ppc-ratings/"
+    - "Verisk ISO Mitigation, 'Split Classifications', entry, sha256:97d23bc95c64d3e50a71e9e0162445f52ccb7f4642ca677bb14f7bab50b155d9 — https://www.isomitigation.com/ppc/program-works/split-classifications/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-213.md

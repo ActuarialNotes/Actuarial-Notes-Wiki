@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:73424643371dba7253fced612901ce47139383afe523597e27bbb83e37a56eb0
-  sources: []
+  sources:
+    - "ISO CU 00 01 04 13 Commercial Liability Umbrella Coverage Form, IV.13 Maintenance Of/Changes To Underlying Insurance; V 'retained limit', sha256:cc5fa6ae2dd91ff4ab9b7820b132a73da1d6681521a8ce25a33471459edcd405 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CU+00+01&ed=04-13"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-230.md

@@ -11,12 +11,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f63bde6fcca91fcd8f6d21d5f6b809c7947c010d7c9c62a8672cdc5451e772f8
-  sources: []
+  sources:
+    - "Cornell LII Wex, \"invasion of privacy\", whole entry, sha256:031395054271c4eb95db4f42f92d70b2a130692aa275bc69274e66ccdc4d0968 — https://www.law.cornell.edu/wex/invasion_of_privacy"
+    - "Cornell LII Wex, \"defamation\", whole entry, sha256:8d9d6867e37af8afba92ae248bffe08c1ced25658084d15046998d8b96cef127 — https://www.law.cornell.edu/wex/defamation"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-228.md

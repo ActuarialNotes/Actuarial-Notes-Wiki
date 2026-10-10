@@ -13,12 +13,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:eb8d0f3337bf2cb09c3b2cdcb3569a20ab6f2604d5d4e7fc1fa8f5ac31367292
-  sources: []
+  sources:
+    - "IRMI Expert Commentary, 'The ISO Classification System and the CGL Policy', classification vs coverage; outlet example; audit; classification limitation endorsement, sha256:5ff8d6216bca0ffb174a3463b5e9298621240d2aba4ba9481d9487467446334c — https://irmi.com/articles/expert-commentary/the-iso-classification-system-and-the-cgl-policy"
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, IV.5 Premium Audit, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-406.md

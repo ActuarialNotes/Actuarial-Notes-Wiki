@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4b0ffc28249c5b02c76355eeccea934e2094395d50858653327ae026712a638e
-  sources: []
+  sources:
+    - "NAIC Glossary of Insurance Terms, Domestic Insurer, Foreign Insurer, Alien Company, Admitted Company, Nonadmitted Insurer, Public Adjuster, Independent Adjuster, Prior Approval Law, read via WebFetch 2026-10-10 (host refuses scripted fetch, no hash) — https://content.naic.org/glossary-insurance-terms"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-239.md

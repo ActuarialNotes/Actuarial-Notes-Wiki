@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:a00534d3d9615a9915e018ff4897a952233272599d821a8151bf77db06df17de
-  sources: []
+  sources:
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s09-01 Tables 5.1-5.2, sha256:fb6132c902587c0b9c1303ce5a29fa0cb6addb19de40716dfcbec5dee0779559 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s09-01-enterprise-risk-management-wit.html"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-002.md

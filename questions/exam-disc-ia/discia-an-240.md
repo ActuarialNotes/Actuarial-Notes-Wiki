@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6b61446d503b260654bc35d3261fdef060bffc2782224be48e0f730c4c982b71
-  sources: []
+  sources:
+    - "NAIC Nonadmitted Insurance Model Act (#870, Summer 2023), s.3 definitions (exempt commercial purchaser, CPI adjustment), s.5A diligent search, s.5C(2) eligibility, s.5D home state, sha256:00383df09c6d2d91bce6836f20c24d591be44649acae74fc0ed50c01083da04f — https://content.naic.org/sites/default/files/model-law-870.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-240.md

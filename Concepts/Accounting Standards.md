@@ -4,7 +4,7 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b0c2bfccfdf975913fa7edbc6b166aff25573eb20aeb5aa82dd58863375b1c16
+  content_hash: sha256:913640f70242888086d63682a2839127a642c85d8d5713082a727ce1038629b4
   sources:
     - "NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶20, ¶27, ¶30-38, ¶54 (PDF pp.35-41); SSAP No. 1 ¶7 (PDF p.48); SSAP No. 41 ¶3-6 (PDF pp.266-267); SSAP No. 62R ¶31, ¶77, ¶85 (PDF pp.441-442, 450-451); SSAP No. 65 ¶10-15 (PDF pp.493-494); SSAP No. 6 ¶9 (PDF p.83), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf"
     - "Odomirok, McFarlane, Kennedy & Brenden, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2014), Ch.1 pp.8-10; p.22; pp.66-67; Ch.22 pp.302-306, sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
@@ -12,7 +12,7 @@ verification:
     - "PwC Viewpoint, Loans and investments guide §7.8 'Application of CECL to insurance receivables' (fetched 2026-10-10), sha256:8b9973dbc73b4470cf6b0094f5db54cea781bf3d7ba1c0473b79c139f5a92a23 — https://viewpoint.pwc.com/dt/us/en/pwc/accounting_guides/loans_and_investment/loans_and_investment_US/chapter_7_current_ex_US/7_8-Application-of-CECL-to-insurance-receivables.html"
     - "SEC EDGAR, CIK 876437 10-Q (2020) note on ASC 326 and premium receivable (fetched 2026-10-10), sha256:6399a4ac9c4c86512fd70472ca5e708e8eea84009c3506a5460faec2f3dc0353 — https://www.sec.gov/Archives/edgar/data/876437/000087643720000031/R9.htm"
     - "SEC EDGAR, CIK 1401521 filing (2014) note on statutory vs GAAP differences, surplus notes (fetched 2026-10-10), sha256:2b6c27d739b4b61513d3f3c1300fb55a5661fb23009771aac560c0de293d30f9 — https://www.sec.gov/Archives/edgar/data/1401521/000140152114000125/R13.htm"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Accounting Standards.md
 ---
@@ -24,7 +24,7 @@ verification:
 - **Who sets them.** SAP: the NAIC, through the Statements of Statutory Accounting Principles (SSAPs) in its *Accounting Practices and Procedures Manual*, with each state's law the final authority. GAAP: FASB's Accounting Standards Codification, enforced for public companies by the SEC. IFRS: the IASB. Tax: the Internal Revenue Code, which for a P&C insurer starts from the annual statement ([[Insurance Income Tax]]).
 - **Objectives explain every difference.** SAP's primary users are regulators judging solvency, and the Preamble to the Manual rests it on three concepts: **conservatism** (surplus should not be overstated, and valuation should damp swings over economic cycles), **recognition** (only assets available to pay policyholder obligations are admitted; the rest are charged against surplus) and **consistency** (comparable across companies and over time). GAAP serves investors in a going concern, so it matches costs to the revenue they earn.
 - **How GAAP enters SAP.** New GAAP guidance becomes statutory only when the NAIC adopts it or adopts it with modification. A state may **prescribe** a departure for all its domestic insurers or **permit** one for a single insurer; the notes must describe it and quantify its effect on surplus and income.
-- **Principles versus rules.** IFRS 17 is principles-based (an entity-specific risk adjustment, judgement on discount rates); SAP leans rules-based (admissibility tests, the [[Schedule F]] provision formula), which buys comparability for regulators at the cost of economic realism.
+- **Principles versus rules.** IFRS 17 measures with entity-specific judgements, such as a risk adjustment equal to the compensation the entity requires for bearing non-financial risk; SAP relies on prescribed tests, such as admissibility and the [[Schedule F]] provision for reinsurance. Odomirok frames the trade-off: rules-based guidance may be easier to understand and to audit, while a principles-based approach is generally more adaptable to changes in the business environment.
 - **Where this sits on the DISC-IA syllabus.** The concepts behind these standards are on [[Qualitative Characteristics of Accounting Information]], the frameworks and their users on [[Accounting Frameworks]], and which source of guidance governs within each framework on [[Accounting Rule Hierarchy]].
 - The actuary's own [[Actuarial Standards of Practice]] sit alongside these: they govern how the actuary estimates, not how the entity books. See [[Financial Statements]] for how the statements themselves differ.
 

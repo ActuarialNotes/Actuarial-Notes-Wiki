@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:519b90b6a957b6fcdf1fdf8814a4f62c32216ab436c40a51468cdfc8176dd575
-  sources: []
+  sources:
+    - "NAIC State Insurance Chart PA-10, Rate Filing Methods (2026), Definitions of Rating Laws; rows AL, CO, FL, NC, OR, TX, sha256:d479b50c6d65a7a81d2df71eb1e98e72cf2e12af706ec8355e5403b2aa1dad1f — https://content.naic.org/sites/default/files/model-law-chart-pa-10-rate-filing-methods-for-property-casualty-insurance-workers-comp-title.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-252.md

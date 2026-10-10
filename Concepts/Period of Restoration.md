@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:fcb0fc1882cdf1b7d43f05c570f2dbe0ec3fcedda18c4729d15116c12546a552
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:fae03c88ed17b5f142dc2139de4ca1ab6dcdf5e24b598030c7fd7c34afb5197b
+  sources:
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, F.3 'period of restoration' (p.9); A.5.c Extended Business Income 60 days; G.4 Extended Period of Indemnity, sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Period of Restoration.md
 ---
@@ -22,7 +23,7 @@ The **Period of Restoration** is the time over which a business income form pays
 - **Symbols:** $t_0$ is the day of the direct physical loss, the $+3$ is the 72-hour waiting period, $t_R$ is the day restoration with reasonable speed would be complete, $t_N$ is the day the business reopens at a new permanent location, and $T$ is the number of days business income is paid. $t_R$ is the longest path through the restoration tasks, where each path $p$ is a chain of tasks that must follow one another and $d_j$ is a task's duration. In the PML, $w$ is the daily net income plus continuing expenses at risk, $T_{\max}$ is the longest probable period, EE is the extra expense, and EBI is the extended business income after the property is restored.
 - **When it begins:** The 72-hour waiting period acts as a time deductible on business income, so short interruptions are retained by the insured. It does not apply to extra expense, which pays from the moment of loss, and an endorsement can shorten or remove it for an additional premium.
 - **When it ends:** The period ends at the theoretical completion date. An insured who rebuilds slowly is paid only for the time restoration should have taken, and one who rebuilds faster than expected is paid only until it actually reopens. The expiration of the policy does not cut it short.
-- **Building codes:** The ISO definition includes the extra time needed to comply with an ordinance or law regulating construction or repair, so a code that requires sprinklers or seismic bracing in the rebuilt structure lengthens the period. The extra time spent cleaning up or testing for pollutants is excluded.
+- **Building codes:** The ISO definition does not include any increased period required by the enforcement of an ordinance or law that regulates the construction, use or repair of property, or requires its tearing down, or that requires testing for, monitoring, cleaning up or otherwise responding to pollutants.
 - **Size and construction:** A large building, a complex structure, or one whose plans and permits take months to obtain takes longer to restore. A wide-area catastrophe lengthens every claim at once, because contractors and materials are scarce.
 - **Specialized equipment:** A custom press, kiln or production line may have a lead time far longer than the building, and it often sets the critical path. An underwriter asks whether a spare or a used replacement could be found.
 - **Seasonality:** Weather can stop construction for part of the year, and a business that misses its peak season may lose most of a year's income even though restoration takes only months.

@@ -1,11 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cb9a7cf102249ed0b720cf3ae20072bd566d74599414b8d6c96a9bb74b0af97e
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.1 (PDF pp.20-23): frequency, severity, pure premium, loss, LAE, UW expense, OER, combined, retention, close ratios, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.7 p.129 (PDF p.148): investment income ratio, overall operating ratio, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), p.115 ROE, sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s12-01 break-even combined ratio by line, sha256:7e7830b39c5a0cd17f75dbfeb2f0d2abe4e422df2b92c3f0218097ca48411d3d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-01-insurance-market-conditions.html"
+    - "Indiana Department of Insurance, Complaint Index, page text (0.50 / 1.00 / 2.00 readings), sha256:7c5ebc7e1885751fbdd07590084e1bf3098e41f2bae90ffcb5d33073a0f56914 — https://www.in.gov/idoi/consumer-services/complaint-index/"
+    - "American Academy of Actuaries, statement of J. Hurley to House Energy & Commerce (10 Feb 2003), p.3 (operating ratio), sha256:44bcfc849dec23481c2e6a203d0b0da0fd5a29a8f14dabf1797c3dff33078c3c — https://actuary.org/wp-content/uploads/2017/11/medmal_10feb03.4.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Basic Insurance Ratios.md

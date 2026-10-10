@@ -52,3 +52,23 @@ created: 2026-10-10
 - proposed_action: Add the U.S. statutory notes (Note 1, SSAP No. 1) to the Notes page or link a U.S. page; the lead decides.
 - applied: false
 - fingerprint: ea84d8028ed0
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv06
+- date: 2026-10-10
+- resolves: F-002
+- status: resolved
+- note: Lead-authorized, applied: link to the IFRS-only Notes page dropped; the sentence keeps 'Note 1 of the notes' (SSAP No. 1 ¶7).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv06
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Re-verify after dropping one link; content otherwise as verified earlier in dv06 (FAS 168, AP&P Preamble, SSAP 1 ¶7).
+- sources_checked: FASB Statement No. 168, The FASB Accounting Standards Codification and the Hierarchy of GAAP (June 2009), Summary, ¶1-11 (PDF pp.3, 9-11); Topic 105 (PDF p.21), sha256:b0e4014d4ff284e082ac858fc585d9e39a364b30fa53354c472542105f5e6360 — https://storage.fasb.org/fas168.pdf; NAIC, Accounting Practices and Procedures Manual, as of March 2025, Part 1 (Indiana DOI copy), Preamble ¶12, ¶24, ¶27, ¶42-44 and footnotes 3-4 (PDF pp.34, 36-40); Preamble Q&A Q2-Q3 (PDF p.44); SSAP No. 1 ¶7 (PDF p.48), sha256:a29e7223b53854eff1beb79c3fd6a969c54529d2dacc74510ea122a5c7b4ad13 — https://www.in.gov/idoi/files/INDAP25-Pt-1.pdf
+- note: No open findings.

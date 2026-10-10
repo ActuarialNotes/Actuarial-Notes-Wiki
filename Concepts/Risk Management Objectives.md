@@ -1,12 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:24e149d419daa92b94ed5363ac2f8238e97009bb6dec1c6da554b054da919b99
-  sources: []
-  open_findings: 0
+  sources:
+    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.3 pp.44-45, 54-55 (PDF pp.63-64, 73-74): pre-/post-loss objectives, policy statement, benefits, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s09-01 Tables 5.1-5.2 value model (Doherty), sha256:fb6132c902587c0b9c1303ce5a29fa0cb6addb19de40716dfcbec5dee0779559 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s09-01-enterprise-risk-management-wit.html"
+    - "COSO, Enterprise Risk Management: Integrating with Strategy and Performance, Executive Summary (June 2017), pp.4-5 benefits of ERM, sha256:2d4809dd09687d701944987f65ca6ddc39074a00236abebfd436d79f4563abd1 — https://www.coso.org/_files/ugd/3059fc_61ea5985b03c4293960642fdce408eaa.pdf"
+    - "Biniam G., Bonga University, Risk Management and Insurance Chapter Two (lecture notes, 2020), pp.2-3, 10, sha256:37410f48587eebe39188d15f5aa51af832d85f8179229edc0b3d9dd322165f01 — http://ndl.ethernet.edu.et/bitstream/123456789/79433/7/RISK-%20Ch@2.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Risk Management Objectives.md
 ---

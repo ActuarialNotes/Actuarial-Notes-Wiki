@@ -12,12 +12,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:739567cb52d134857de8760e1bae66bf4a9403b50e831e16eb6fc3a1b2715839
-  sources: []
+  sources:
+    - "Indiana Department of Insurance, Complaint Index, page text (0.50 / 1.00 / 2.00 readings), sha256:7c5ebc7e1885751fbdd07590084e1bf3098e41f2bae90ffcb5d33073a0f56914 — https://www.in.gov/idoi/consumer-services/complaint-index/"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-044.md

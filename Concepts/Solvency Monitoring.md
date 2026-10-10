@@ -1,12 +1,22 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d0fc214754acceb9c11ec081e34247e8a4c8c7a7f4c4c1f56da961c1812a7b8b
-  sources: []
-  open_findings: 0
+  sources:
+    - "NAIC testimony (Dilweg), House Financial Services, Mar 18 2010, PDF pp.2-6 (FAST tools, Analyst Team, Scoring System, Insurer Profiles, Financial Analysis Handbook stair-step, FAWG), sha256:6b54489519acef3b13de704b7ee457613331d9eb7881c25cb79a9928f9fa9239 — https://financialservices.house.gov/media/file/hearings/111/final_dilweg_testimony_3_18_2010.pdf"
+    - "NAIC Model Law on Examinations (#390), examination frequency (not less than once every five years), sha256:0ac0345b424cbe0e28f85c01b9c87b276bdaa967c64dbb2accb192f04e9b46c4 — https://content.naic.org/sites/default/files/model-law-390.pdf"
+    - "NAIC Model Regulation to Define Standards and Commissioner's Authority for Companies Deemed to be in Hazardous Financial Condition (#385), s.3 standards, s.4 orders, sha256:a85597cbe53da10521b464543813d02aa1ab01a9d6fe332e307f49ea6f2086a4 — https://content.naic.org/sites/default/files/model-law-385.pdf"
+    - "NAIC Risk-Based Capital (RBC) for Insurers Model Act (#312), s.1 definitions (Regulatory Action Level RBC = 1.5 x ACL; P&C trend test band), s.4, sha256:973063eff4e1d044765b1d06e88d025da452d900d587faadd85528ba4c45bf63 — https://content.naic.org/sites/default/files/model-law-312.pdf"
+    - "NAIC Risk Management and Own Risk and Solvency Assessment Model Act (#505), ORSA Summary Report, sha256:d5df715f08b8061178f58fbf5d6aefd4b5993d845584455f0fa7eef492108798 — https://content.naic.org/sites/default/files/model-law-505.pdf"
+    - "NAIC Corporate Governance Annual Disclosure Model Act (#305), CGAD filing, sha256:8ae9cdde0ecc51884b9299b925008c5f9733e236cece540382ce551a4e98c64a — https://content.naic.org/sites/default/files/model-law-305.pdf"
+    - "NAIC Insurer Receivership Model Act (#520), scope, sha256:0bcda9fc876090b38d9fce9b0edc98b0884b467840acc33801cb1eab4837b908 — https://content.naic.org/sites/default/files/model-law-520.pdf"
+    - "NAIC 2025 Property and Casualty IRIS Ratios (means/medians and results), PDF p.2 (ratio list), p.5 (unusual-value row), sha256:0cb14c7a1f73bee94056296833cce0b70659e23b43842df033819fb962fde0ba — https://content.naic.org/sites/default/files/publication-iris-means-median-2025.pdf"
+    - "NAMIC Issue Analysis, \"The Financial Examination\" (Dec 2019, rank 3), pp.4-6 (3-5 year cycle, risk-focused, controls, prospective), sha256:677c4dbbb2e5d4dba57816c5ccadf95831810b80b1360ba5d714ec22417b72c6 — https://www.NAMIC.org/pdf/publicpolicy/191218_financial_exam_v2.pdf"
+    - "S. Harrington, testimony to Senate Banking Committee, July 18 2006, PDF pp.3-4, 9, sha256:b9f8f73ee163f8da541f0b1eac83254cafbcf66cdd8e508c0fb8e770a7fcf20c — https://www.banking.senate.gov/download/harrington-july-18-2006&download=1"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Solvency Monitoring.md
 ---

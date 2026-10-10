@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aafdb9d4cb6ee3b316b2259960ed33f7f063072328d10d6ac1e0d25c95024f3f
-  sources: []
+  sources:
+    - "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems (2010), §3.2.1 p.17 (PDF p.31) MTD/RTO/RPO; §3.4.2 pp.21-22 site types; §3.5.3 exercises; §3.6 maintenance, sha256:476f04d4c60b0770c1ac8b2720551972074ce78e936a3e7a535048416111d0df — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-34r1.pdf"
+    - "Ready.gov (FEMA), Ready Business Business Continuity Plan template, pp.1-3 plan sections, sha256:9945e3bb8bb0d45507e97de3d6f31a1b5a9bc90d454e95b8b8731b975bef259b — https://www.ready.gov/sites/default/files/2020-03/business-continuity-plan.pdf"
+    - "Ready.gov (FEMA), Business Impact Analysis page, read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://www.ready.gov/business-impact-analysis"
+    - "Ready.gov (FEMA), Business Continuity Planning page (six planning steps), read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://www.ready.gov/business/emergency-plans/continuity-planning"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Business Continuity Plan.md

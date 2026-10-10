@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ed11498189c7e8fd37c5e1f92b30a8469351ea5544ef5ca8fd851236cae5c545
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b8499e2947221fcf5266348a65946f81fdd67f37814a79385e81fcfc521da1ca
+  sources:
+    - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (PML500, gross/net PML, models), definitions of PML, PML500, gross/net PML; models, sha256:e826e5e04f4c4170671288527ae7bebd0ace06ac940254e7d5ecd3adbe92f37e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
+    - "OSFI, Minimum Capital Test Guideline (2026), ch.1 (100% minimum, 150% supervisory target), ch.1 100% minimum, 150% supervisory target, sha256:80450516aa1bb0a7534ceedcf50e39966406ecdcd52d0109af4a94d3439959ce — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2026"
+    - "IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss"
+    - "IRMI Glossary, 'maximum foreseeable loss (MFL)', entry, sha256:ac6a852f104fe279e0909ec10a83934963490673519be7caa5ceef6192b7151c — https://www.irmi.com/term/insurance-definitions/maximum-foreseeable-loss"
+    - "IRMI Glossary, 'maximum possible loss (MPL)', entry, sha256:5216b2a4bb6e2fd2293be9003732c8549708b87e7e3be408b39de7a8a93e50e9 — https://www.irmi.com/term/insurance-definitions/maximum-possible-loss"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Probable Maximum Loss.md
 ---
@@ -50,7 +55,7 @@ verification:
 > >
 > > **What to consider:**
 > >
-> > - **Buy the top layer.** Extending cover from $\$350$M to $\$430$M removes the $\$80$M excess exposure. The question is whether that layer's premium is worth the $17$ points of post-event MCT ratio it protects.
+> > - **Buy the top layer.** Extending cover from $\$350$M to $\$430$M removes the $\$80$M excess exposure. The question is whether that layer's premium is worth the roughly $26$ points of post-event MCT ratio it protects.
 > > - **Check reinstatements.** If the programme has limited reinstatements and a foreshock or a second event occurs, the analysis above is optimistic.
 > > - **Check the model.** A single model's $1$-in-$500$ figure carries real uncertainty; a second model might put it at $\$550$ million, at which point the retained loss is $\$240$ million and the conclusion changes entirely.
 > > - **Reinsurer credit.** A $\$310$ million recovery is only worth what the reinsurers pay. Their [[Credit Risk Margin|credit standing]] and any [[Concentration Risk|concentration]] among them is part of the assessment, and it matters most in exactly the scenario where every cedant is claiming at once.

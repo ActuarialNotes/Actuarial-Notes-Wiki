@@ -30,8 +30,8 @@ The Institutes gives the topics no exam weights.
 > [!example]- 1. Introduction to Risk Management
 > 1. The [[Risk Management|Risk Management Environment]]
 > 2. [[Risk Management Objectives|Objectives and Benefits]]
-> 3. Basic [[Risk Measure|Risk Measures]]
-> 4. [[Risk Taxonomies|Classifications and Categories]]
+> 3. [[Basic Risk Measures]]
+> 4. [[Risk Classifications|Classifications and Categories]]
 > 5. [[Risk Management Process|Process for Managing Risk]]
 
 > [!example]- 2. Identifying Risk
@@ -48,10 +48,10 @@ The Institutes gives the topics no exam weights.
 > 1. [[Risk Treatment|Risk Treat Fundamentals]]
 > 2. The Evolution of [[Risk Treatment]]
 > 3. [[Risk Treatment]] Applications
-> 4. [[Enterprise Risk Management|Treating Risk Holistically]]
+> 4. [[Holistic Risk Treatment|Treating Risk Holistically]]
 
 > [!example]- 5. Insurance as a Risk Management Technique
-> 1. Using [[Risk Transfer|Insurance to Treat Risk]]
+> 1. Using [[Insurance as a Risk Management Technique|Insurance to Treat Risk]]
 > 2. Managing [[Property Loss Exposure|Personal Property Exposures]]
 > 3. Managing [[Liability Loss Exposure|Personal Liability Exposures]]
 > 4. Analyzing [[Property Loss Exposure|Commercial Property Loss Exposures]]
@@ -133,7 +133,7 @@ The Institutes gives the topics no exam weights.
 > [!example]- 15. Insurer Strategic Management
 > 1. [[Strategic Management Process]]
 > 2. The [[Porter's Five Forces|Five Forces]] and [[SWOT Analysis|SWOT]] Methods of Analyzing the Environment
-> 3. Determining [[Business Strategy|Strategy at Different Organizational Levels]]
+> 3. Determining [[Levels of Strategy|Strategy at Different Organizational Levels]]
 > 4. [[Strategic Management Process|Strategic Management]] Case
 > 5. The [[Underwriting Cycle|Insurance Underwriting Cycle]]
 

@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1608349470fff441adcfd3eac862331e5334eb8adc91131d698ac3b55f1822fa
-  sources: []
+  sources:
+    - "ISO CP 00 30 10 12 Business Income (And Extra Expense) Coverage Form, H.3 'period of restoration' (should be repaired ... with reasonable speed), sha256:4b77049e08827380f912161468b9aef9b182853f5a217f50993546366d101b98 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+00+30&ed=10-12"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-219.md

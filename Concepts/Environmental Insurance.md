@@ -4,7 +4,7 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7c3308efb7fbf2be9c21ad30324dad34c3dc5d8798bd9208defc54570df721a7
+  content_hash: sha256:1522a9137d7cd2c80bb66f77a43473fa0344ecebb10e4dce3de540b3f8f1b4c6
   sources:
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, exclusion f. Pollution (pp.3-4: heating-equipment and hostile-fire exceptions; clean-up costs), g. Aircraft, p. Electronic Data (p.5); no employment-related practices, professional services or data-disclosure exclusion in the base form, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
     - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form, Additional Coverage d. Pollutant Clean-up and Removal ($10,000; only if release caused by a Covered Cause of Loss), sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
@@ -13,7 +13,7 @@ verification:
     - "U.S. EPA, Superfund Liability page (strict, joint and several, retroactive), read 2026-10-10, sha256:134a0cd82aaeec64157164312a766363c67b6be1c2a20e45cada6a39a770cd4f — https://www.epa.gov/enforcement/superfund-liability"
     - "40 C.F.R. part 280 subpart H, §280.93 (petroleum UST owners must demonstrate financial responsibility for corrective action and third-party BI/PD) and §280.97 (insurance), eCFR read 2026-10-10, sha256:37e032194b8ed36fbcc4c38f53f962a257ba51448ebbffbb6db37cef1dcdd0a4 — https://www.ecfr.gov/current/title-40/part-280"
     - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Environmental Insurance.md
 ---
@@ -25,10 +25,10 @@ verification:
 > $$\text{Paid} = \min\left((1 - c)\,(C - A)^+,\ L\right)$$
 
 - **Symbols:** These describe a remediation cost cap. $E_0$ is the expected cleanup cost in the agreed remediation plan, $S$ is the insured's self-insured buffer above it, and $A$ is the attachment point. $C$ is the actual cleanup cost, $c$ is the insured's coinsurance share above the attachment and $L$ is the policy limit.
-- **The CGL pollution exclusion:** Since the mid-1980s the standard CGL has excluded bodily injury and property damage from the actual, alleged or threatened discharge of pollutants, and the cost of testing for or cleaning them up. Narrow exceptions give back cover for a few situations, such as fumes from a hostile fire or a building's heating equipment. Most gradual or sudden pollution from a business's premises or operations is therefore uninsured under the CGL.
+- **The CGL pollution exclusion:** The standard CGL excludes bodily injury and property damage from the actual, alleged or threatened discharge of pollutants, and the cost of testing for or cleaning them up. Narrow exceptions give back cover for a few situations, such as fumes from a hostile fire or a building's heating equipment. Most gradual or sudden pollution from a business's premises or operations is therefore uninsured under the CGL.
 - **Property policies:** The [[Building and Personal Property Coverage Form|building and personal property form]] excludes pollution damage and pays only a small additional amount for removing pollutants from the insured's own land, and only when a covered cause of loss released them. Gradual leakage from corroded equipment is not a covered cause of loss.
 - **Pollution legal liability:** A site pollution legal liability (PLL) policy covers third-party bodily injury and property damage, and cleanup costs on and off the site, from pollution conditions at a scheduled location. It covers pre-existing conditions the insured did not know of, as well as new releases, is written claims-made, and can run for several years, which suits a property sale or a lender's needs. Liability for cleanup can be strict and joint and several under federal and state environmental law ([[Strict Liability]], [[Joint and Several Liability]]), so an owner can be liable for contamination someone else caused.
-- **Contractor's pollution liability:** A contractor's pollution liability (CPL) policy covers pollution a contractor causes at a job site, such as disturbing asbestos or releasing fuel. It follows the contractor's work rather than a fixed location and is often written on an occurrence basis.
+- **Contractor's pollution liability:** A contractor's pollution liability (CPL) policy covers pollution a contractor causes at a job site, such as disturbing asbestos or releasing fuel. It follows the contractor's work rather than a fixed location, so its aggregate limit can be used up by claims from the contractor's other projects; a developer can instead buy one owner-controlled policy covering every party on its project.
 - **Remediation cost cap:** A cost cap, or cleanup stop-loss, is bought once contamination is known and a cleanup plan is agreed. It pays cost overruns above the expected cost and the buffer, usually with coinsurance, because the risk is the uncertainty in how much contamination there is and how long it takes to remove, not whether a loss occurs.
 - **Storage tank policies:** Owners of underground storage tanks holding petroleum must show financial responsibility for cleanup and third-party claims under federal and state rules. A storage tank policy is a common way to meet the requirement, and it covers releases from the scheduled tanks.
 
@@ -65,7 +65,7 @@ verification:
 > - **Liability law:** Environmental liability is a standard example of [[Strict Liability|strict liability]] in the insurance law assignments, where liability doesn't depend on fault.
 
 > [!warning]- Exam traps
-> - **Absolute, not sudden and accidental:** The current CGL pollution exclusion removes nearly all pollution, sudden or gradual. The older "sudden and accidental" exception that once gave back abrupt releases is no longer in the standard form.
+> - **Sudden or gradual alike:** The current CGL pollution exclusion has no exception for sudden or accidental releases, so apart from its narrow exceptions it removes sudden and gradual pollution alike.
 > - **Cost cap needs a known loss:** A remediation cost cap covers overruns on a cleanup that is already planned. It does not cover the expected cost, and it is not liability insurance for unknown contamination, which is what PLL does.
 > - **Site versus operations:** PLL follows a location, and CPL follows a contractor's work. A contractor that causes a release at a client's site needs CPL, since the client's PLL covers the client.
 > - **Strict liability:** An owner can owe cleanup costs for contamination a previous owner caused. That is why buyers and lenders want PLL with cover for pre-existing conditions.

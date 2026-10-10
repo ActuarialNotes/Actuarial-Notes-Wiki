@@ -12,12 +12,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d828ecc773b9c991602a840f9736f6e8c4f70109e7f2816765ed1169ef873065
-  sources: []
+  sources:
+    - "IRMI Glossary, 'construction, occupancy, protection, and exposure (COPE)', entry, sha256:ea50c61618dbbaca26029ea3116e38d8f76f12e2a959a9fee2a939aa54c6c035 — https://www.irmi.com/term/insurance-definitions/cope"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-211.md

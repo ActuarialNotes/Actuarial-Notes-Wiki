@@ -9,17 +9,17 @@ bloom: understand
 wiki_link:
   - Concepts/Property-Casualty+Insurance+Marketplace
   - Concepts/Excess+and+Surplus+Lines
-  - Concepts/Guaranty+Funds
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1eb957055c013252819b6c5156754a63f7b8ebca35855c0865518dc82e6ceacc
-  sources: []
-  open_findings: 0
+  sources:
+    - "NAIC Insurance Topics: Surplus Lines (last updated 10/27/2025), read via WebFetch 2026-10-10 (direct fetch 403; no hash) — https://content.naic.org/insurance-topics/surplus-lines"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-015.md
 ---

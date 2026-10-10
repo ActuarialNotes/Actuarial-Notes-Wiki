@@ -12,12 +12,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:fc81aedeae381adb65ba56c929275d05e2a4c6fb1a8aa4a3fe004d10e1ac5338
-  sources: []
+  sources:
+    - "Cornell LII Wex, \"assumption of risk\", whole entry, sha256:7d1a8b51f5c9e813c2400cea1e0f97d008b86d4774b3df78c8d3547bb1213a05 — https://www.law.cornell.edu/wex/assumption_of_risk"
+    - "Cornell LII Wex, \"last clear chance\", whole entry, sha256:d75968f2adf4d2ba5f99c9f140845273ed20c5655d7e459ea49845078d08c7ae — https://www.law.cornell.edu/wex/last_clear_chance"
+    - "Cornell LII Wex, \"statute of repose\", whole entry, sha256:6ae5fa0e18758b179bab831e21ebce635107ea0b903c83fd73203f03e21a4305 — https://www.law.cornell.edu/wex/statute_of_repose"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-ia/discia-an-222.md

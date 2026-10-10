@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: medium
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ce861b2f2d37005df4e92a765d4831758f7b73ab01351dbdd1a4628c39ec87f4
+  content_hash: sha256:6d5f379be4062c413e6c4294aa05c87223b2bf6168698c5d8d51e9fc3c2e1809
   sources:
     - "Clark, Basics of Reinsurance Pricing (CAS study note, rev. 2014), §1A pp.3–4, §1B pp.9–12, §2A pp.14–15, casualty layers pp.22–23, 27, sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/2021-03/8_Clark.pdf"
     - "Myers, Reinsurance Overview (NAMIC Directors' Education, 9 May 2017), slides pp.6–17 (functions, types, facultative uses, pro rata, per-risk/cat XOL, types of reinsurers, marketing), sha256:c8c7fe0c3bbd0f5d327147142f007ff9d13af260c71da725eb9973a0700121a4 — https://www.namic.org/pdf/reinsuranceRe/17dbc_ReinsuranceOverview.pdf"
@@ -28,7 +28,7 @@ verification:
 
 - **Symbols:** $X$ is a loss and $a$ is the quota share percentage ceded. For a surplus share, $V$ is the risk's insured value, $R$ is the retained line, $N$ is the number of lines the treaty provides, and $s$ is the risk's cession percentage. The treaty's capacity is $NR$, and a risk worth more than $R + NR$ leaves the excess with the cedant unless it buys more reinsurance. $c$ is the ceding commission rate, applied to the premium ceded, which is ceded in the same percentage as the losses.
 - **Quota share:** The reinsurer receives a flat percentage of the premium for the book reinsured and pays that percentage of its losses, usually including allocated loss adjustment expense. Because every policy is shared alike, a quota share reduces the cedant's net premium and net losses in proportion without changing the shape of its results. It is also how an insurer can leave a territory or line, by ceding 100% of the business until the policies run off.
-- **Surplus share:** The cedant keeps up to a fixed amount of each risk, its retained line, and cedes the part of the insured value above it, up to the treaty's number of lines. Small risks are retained entirely and large ones are mostly ceded, which evens out the cedant's net amount at risk per policy. A line guide can set different retentions by class, so a more hazardous class is retained at a lower amount.
+- **Surplus share:** The cedant keeps up to a fixed amount of each risk, its retained line, and cedes the part of the insured value above it, up to the treaty's number of lines. Small risks are retained entirely and large ones are mostly ceded, which evens out the cedant's net amount at risk per policy. A line guide can set different retentions by class.
 - **Not excess of loss:** In a surplus share the retention is used only to fix the risk's cession percentage. Once that is fixed, the reinsurer pays its share of every loss on the risk, however small. [[Excess of Loss|Excess of loss]] reinsurance, by contrast, pays only the part of a loss above the retention.
 - **Ceding commission:** The reinsurer pays the cedant a ceding commission to compensate it for the underwriting and acquisition expenses it incurred to write the business. The commission offsets the cedant's expenses on the ceded share, and in practice it is the price of a proportional treaty.
 - **Adjustable commissions:** A sliding scale commission moves with the treaty's loss experience between a minimum and a maximum. In Clark's illustration the provisional commission is 30%, the minimum 25% at a 65% loss ratio, rising one point per point of loss ratio to 35% at a 55% loss ratio, then half a point per point to a maximum of 45% at a 35% loss ratio. A profit commission instead pays the cedant a share of the treaty's profit after losses, the ceding commission and the reinsurer's margin.

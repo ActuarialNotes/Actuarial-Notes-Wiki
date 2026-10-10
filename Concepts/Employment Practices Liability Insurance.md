@@ -1,20 +1,20 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:54885f421d1598867a73f3db8cbb9486fb8613c4a4ad72bb41d3591f9aa76eea
+  content_hash: sha256:4c7f026a08ff26c30a5ab3640c8afae249c6ae19dfff1c8653cffce40c9f76c4
   sources:
     - "Chubb, The ForeFront Portfolio Policy Guidebook (specimen forms PF-55501 GTC (07/21) Retention, Severability, Payment Priority, Recourse pp.20-29; PF-55502 D&O and Entity Liability for Private Companies (07/21) Insuring Clauses A-C, Insured v. Insured carve-backs, Conduct (final non-appealable adjudication), ERISA exclusion, advancement pp.30-43; PF-55505 EPL (07/21) Insuring Clauses A-B (Third Party Liability), Employment Claim incl. administrative charge and applicants, Loss exclusions, Exclusions C-D incl. wage and hour, duty to defend or reimbursement pp.73-83; PF-55506 Fiduciary (07/21) Loss exclusions for benefits due and contributions, settlor capacity, Exclusions A-E pp.84-96), sha256:a97417e82bbcbe6773ba442938c4b575ea10b43d40f7b918a5a085f6f3dde294 — https://www.Chubb.com/content/dam/chubb-sites/chubb-com/us-en/the_forefront_portfolio_policy_guide.pdf"
     - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form, exclusion f. Pollution (pp.3-4: heating-equipment and hostile-fire exceptions; clean-up costs), g. Aircraft, p. Electronic Data (p.5); no employment-related practices, professional services or data-disclosure exclusion in the base form, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
     - "The Institutes, CAS DISC IA Course Syllabus (c)2023, PDF p.3-4, sections 7 a-d, 12 a-f, 13 a-d, sha256:e9ce8e88d95d49d9154b6aac841f04fec43c68392171d59ca1fca10b058dd50b — https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf"
-  open_findings: 3
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Employment Practices Liability Insurance.md
 ---
 
-**Employment Practices Liability Insurance** (EPLI) covers an employer, and usually its directors, officers, managers and employees, against claims by employees, former employees and job applicants alleging a wrongful employment practice, such as discrimination, harassment, wrongful termination or retaliation. It fills a gap left by the [[Commercial General Liability|CGL]], which excludes employment-related practices, and by [[Workers Compensation Insurance|workers compensation]] and employers liability, which cover work-related injury rather than the employment relationship itself. Most EPLI is written on a [[Claims Made Coverage|claims-made]] basis with defense costs inside the limit.
+**Employment Practices Liability Insurance** (EPLI) covers an employer, and usually its directors, officers, managers and employees, against claims by employees, former employees and job applicants alleging a wrongful employment practice, such as discrimination, harassment, wrongful termination or retaliation. It fills a gap left by the [[Commercial General Liability|CGL]], whose Coverage A covers bodily injury and property damage and excludes bodily injury to an employee arising out of employment, and by [[Workers Compensation Insurance|workers compensation]] and employers liability, which cover work-related injury rather than the employment relationship itself. Most EPLI is written on a [[Claims Made Coverage|claims-made]] basis with defense costs inside the limit.
 
 > $$X = I + E$$
 
@@ -25,10 +25,9 @@ verification:
 - **Symbols:** $I$ is the indemnity, meaning the settlement or judgment, $E$ is the defense cost and $X$ is the covered loss. $R$ is the retention, $c$ is the insured's coinsurance share of loss above the retention, and $L$ is the limit, which defense costs erode.
 - **Covered practices:** The insuring agreement lists the wrongful acts it covers. They include wrongful termination, discrimination on a protected characteristic such as age, sex, race, religion or disability, sexual and workplace harassment, retaliation against an employee who complained or blew the whistle, wrongful discipline, failure to promote, and negligent evaluation.
 - **What counts as a claim:** A claim usually includes an administrative charge before a government agency, such as a charge of discrimination, as well as a lawsuit or a written demand. Defending the agency charge is often where the defense costs start, long before any suit is filed.
-- **Duty to defend:** Unlike many D&O forms, EPLI usually gives the insurer the [[Duty to Defend|duty to defend]] and the right to choose counsel, often from a panel of employment lawyers. A hammer clause, as in [[Professional Liability Insurance|professional liability]], may cap the insurer's payment if the employer refuses a settlement the insurer recommends.
+- **Duty to defend:** An EPLI form may give the insurer the [[Duty to Defend|duty to defend]] and the right to choose counsel from its list of approved employment defense firms, or leave the defense to the insured, with the insurer advancing covered defense costs; Chubb's form lets the insured select either in the declarations.
 - **Exclusions:** Obligations under workers compensation, unemployment and disability benefit laws are excluded, as are benefit plan claims, which belong to [[Fiduciary Liability Insurance|fiduciary liability]]. Wage and hour claims, such as unpaid overtime, are usually excluded or covered only for defense under a sublimit. Costs of reinstating an employee or of complying with an accommodation order, and bodily injury other than emotional distress, are also excluded.
-- **Third-party EPL:** An endorsement extends the policy to discrimination or harassment by the insured's employees against customers, clients, patients or vendors. It matters to restaurants, retailers, hotels and health care providers, whose staff deal with the public every day.
-- **Why the line is volatile:** Losses depend on the employment laws in force, jury awards and economic conditions, since layoffs bring a wave of termination claims. Claims are frequent for large employers, so EPLI for them is often written over a large retention.
+- **Third-party EPL:** Cover for discrimination against or harassment of third parties, such as customers, clients, patients or vendors, is part of some base EPL forms (Chubb's includes a Third Party Liability insuring clause) and is added by endorsement to others. It matters to restaurants, retailers, hotels and health care providers, whose staff deal with the public every day.
 
 > [!example]- A Wrongful Termination Settlement With a Retention and Coinsurance {Example}
 > A restaurant chain's EPLI policy has a \$1,000,000 aggregate limit with defense inside the limit, a \$50,000 retention and 10% coinsurance on all loss above the retention, defense costs included. A dismissed manager files an age discrimination charge and then a wrongful termination suit. Defense costs reach \$180,000 and the case settles for \$320,000. What does the insurer pay, and what does the chain bear?
@@ -70,5 +69,5 @@ verification:
 > - **Defense inside the limit:** EPLI defense costs erode the limit, so the limit left after a long defense is smaller than the limit less the settlement. Treating defense as paid in addition, as under the CGL, overstates the remaining limit.
 > - **Coinsurance on defense too:** Where the coinsurance applies to loss above the retention, it applies to defense costs as well as the settlement. Applying it to the settlement alone understates the employer's share.
 > - **Applicants are claimants:** A job applicant who was not hired can bring a covered discrimination claim, even though they were never an employee.
-> - **Third-party claims need the endorsement:** Harassment of a customer by an employee is not covered by the basic employee-claims form. It is covered only if third-party EPL has been added.
+> - **Read the form for third-party cover:** Harassment of a customer by an employee is a third-party claim, not an employment claim. It is covered only if the policy has third-party cover, in its base form or by endorsement.
 > - **Workplace injury is elsewhere:** A claim for physical injury at work goes to workers compensation and employers liability, not EPLI. EPLI pays emotional distress that flows from the employment practice, not bodily injury.

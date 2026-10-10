@@ -11,12 +11,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:25b80791139965fd6d2c3f0e2b03bdd5c1dac30426e6af3c41ce062adc090c5e
-  sources: []
+  sources:
+    - "Marsh, 'What TRIPRA's Approaching Expiration Means for Workers' Compensation Programs' (Nov 2019), pp.1-2, sha256:7e1e9b8050931b6ae102f02670106b56d0f7cd78f9570ca2dac845b3da21ae37 — https://www.marsh.com/content/dam/marsh/Documents/PDF/US-en/tripra-expiration-and-workers-compensation-programs.pdf"
+    - "Insurance Thought Leadership (Marsh), 'Employee Concentration Impacting Workers' Compensation Renewals', entry, sha256:069c1273909e9f4499661a3390a3541a5c4663bd8aff764398a089099ee9e0e8 — https://www.insurancethoughtleadership.com/commercial-lines/employee-concentration-impacting-workers-compensation-renewals"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-401.md

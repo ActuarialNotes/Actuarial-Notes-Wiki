@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d2758857a326014f05f7d20a2b183b8e98ad0152c67cdf2f0540c503b6405ffc
-  sources: []
-  open_findings: 0
+  sources:
+    - "IRMI Glossary, 'line underwriter', entry, sha256:5798e2b8d8b3f666cb25ffe076c1283556d86f27c6dcb33b49929a4152f707b5 — https://www.irmi.com/term/insurance-definitions/line-underwriter"
+    - "IRMI Glossary, 'staff underwriter', entry, sha256:b2d2b0aacfead61f6ee5debe5c8f13fdd6475253d2bba76b5ee7a148cf45b632 — https://www.irmi.com/term/insurance-definitions/staff-underwriter"
+    - "IRMI Glossary, 'managing general agent (MGA)', entry, sha256:6a995d166456ad5d3628e11e57d8985a68e371bb26fa474f7cdf606b39cd1ce6 — https://www.irmi.com/term/insurance-definitions/managing-general-agent"
+    - "NAIC Managing General Agents Act, Model #225, §§ on underwriting guidelines, claim settlement authority, semi-annual on-site review, sha256:207df638926293f00eeb10ff247ce66a6172e1d00317a048b51ad6051cfd386a — https://content.naic.org/sites/default/files/model-law-225.pdf"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals (Saylor, CC BY-NC-SA), ch. 7 'Insurance Operations' §7.1, §7.1 independent agency system, sha256:ca16a568fa570ed4aade53cffc55f5c3eba724e809d13c0a24a8f1edddeb56f5 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-insurance-operations.html"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Underwriting Authority.md
 ---

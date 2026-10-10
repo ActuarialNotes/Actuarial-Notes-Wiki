@@ -1,11 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:cbf0bee8c52082ddcc710eb203c6cb7be39a9833282b3f0f7a6c070162fab910
-  sources: []
+  sources:
+    - "NCCI WC 00 00 00 C (Ed. 1-15) Workers Compensation and Employers Liability Insurance Policy (Guard copy), General Section C; Part One A-F; Part Two A-C; Part Three; Part Five B, C, E, G; Part Six A, sha256:f0723f4875806fb2237386a91b554c3edbdb10b94315204ab8bb19696a1e64dd — https://policyholder.guard.com/wwwroot/static/Policy_Docs/POLICY_WC-2015-01.pdf"
+    - "NCCI, ABCs of Experience Rating (CEIWC copy), pp.2-4, 10-11, sha256:268bbb28e4894f10ca942274a62ac2bcd6237e9278ddd1df8f414da99e0f31ed — https://www.ceiwc.com/PDFs/ABCs-of-Experience-Rating-NCCI.pdf"
+    - "North Carolina Basic Manual (NCRB), Rule 1 – Assignment of Classifications, 1-A, 1-B-2, 1-B-5 table, 1-D-3, sha256:cf8907fcf5fbe01060a1f9cebaf941c349f947b039c59e56356fe3f474042190 — https://www.ncrb.org/digitallibrary/basicmanual/Rule_1_-_Assignment_of_Classifications.htm"
+    - "Marsh, 'What TRIPRA's Approaching Expiration Means for Workers' Compensation Programs' (Nov 2019), pp.1-2, sha256:7e1e9b8050931b6ae102f02670106b56d0f7cd78f9570ca2dac845b3da21ae37 — https://www.marsh.com/content/dam/marsh/Documents/PDF/US-en/tripra-expiration-and-workers-compensation-programs.pdf"
+    - "Insurance Thought Leadership (Marsh), 'Employee Concentration Impacting Workers' Compensation Renewals', entry, sha256:069c1273909e9f4499661a3390a3541a5c4663bd8aff764398a089099ee9e0e8 — https://www.insurancethoughtleadership.com/commercial-lines/employee-concentration-impacting-workers-compensation-renewals"
+    - "Texas Department of Insurance, maximum and minimum weekly benefits, FY2026 row, sha256:3f8f1a20ad7813d115e3e8dbb1161e5d693b47522706dcf6066483e28c5d64dc — https://tdi.texas.gov/wc/employee/maxminbens.html"
+    - "Texas Department of Insurance, employer workers' compensation page, entry, sha256:6de23951e8eba909520e9384d0c03a3ed3b8caa2aa7c9f6f434ca3a29dd537e8 — https://www.tdi.texas.gov/wc/employer/index.html"
+    - "IRMI Glossary, 'assigned risk plan', entry, sha256:b73e8f7c5737d90162c6e7c7cd52ddd8261413a8690d122faabd5d13f0992fad — https://www.irmi.com/term/insurance-definitions/assigned-risk-plan"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Workers Compensation Underwriting.md

@@ -11,10 +11,10 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b4f6d989e7c671f4bb9467b82cda2d86da2617df94e3a41c10c62c2ab8e41897
   sources: []
   open_findings: 0

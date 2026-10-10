@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c4285c1676a8751b98b2a6ae3093d4d20f72bf65109a30985748a6302c3aaad3
-  sources: []
+  sources:
+    - "CAS Enterprise Risk Management Committee, Overview of Enterprise Risk Management (CAS Forum, Summer 2003), p.111 (PDF p.13), sha256:f433c8300785640b2f4fd168d3b38878d1bfbc9b9f8f74c08e43de8e98982efd — https://www.casact.org/sites/default/files/database/forum_03sforum_03sf099.pdf"
+    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s05-04 Tables 1.2-1.3, sha256:4d894cf157c8f6b7a4c620f551f76e788a2b6fb98bf979d3cbe23c3f32071592 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s05-04-types-of-risks-risk-exposures.html"
+    - "Odomirok et al., Financial Reporting Through the Lens of a Property/Casualty Actuary v4 (CAS), RBC chapter, PDF pp.230-231 (R0-R5), sha256:eee4cf26c25cc24d4802029ecc44bbc9b419f2bfa9d1859e6e808884a0ec04e6 — https://www.casact.org/sites/default/files/database/studynotes_odomirok-etal_financial-reportingv4.pdf"
+    - "NAIC Insurance Topics: Risk-Based Capital (last updated 06/30/2026; 'catastrophe risk is included only in the P/C formula'), read via WebFetch 2026-10-10 (no hash) — https://content.naic.org/insurance-topics/risk-based-capital"
+    - "Directive 2009/138/EC (Solvency II), Art. 101(3), Art.101(3), sha256:17c8dd8d2f06a8d8881bfd4b031fcf662ff59f68ce5ff43f716451a4a906af94 — https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32009L0138"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Taxonomies.md

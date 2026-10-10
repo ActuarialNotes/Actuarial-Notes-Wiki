@@ -12,12 +12,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ac249d817c76368df08c1836c3c6902293b6b99177fe503323bcfc51346e2322
-  sources: []
+  sources:
+    - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (PML500, gross/net PML, models), concentration of exposures in catastrophe (earthquake) PML, sha256:e826e5e04f4c4170671288527ae7bebd0ace06ac940254e7d5ecd3adbe92f37e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
+    - "ISO CP 10 10 10 12 Causes of Loss – Basic Form, A.4 Windstorm or Hail, sha256:14aea49e74f393f8370fa78a89f12e99a9f4927dc704bd386fc7e41a9223f5b4 — https://forms.nationwideexcessandsurplus.com/FormsExternal/ContractForm?num=CP+10+10&ed=10-12"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-210.md

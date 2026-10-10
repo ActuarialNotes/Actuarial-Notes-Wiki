@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6f941ba7d97afa95e0dc9e6024a30f612e6d0e9e9d18c98f0503a5548fd9d026
+  content_hash: sha256:e00201cd0da1da4d35263e61d070ff5266dc0ef59f4d45def269bb662eb2d72e
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201I, all pages, sha256:3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf"
   open_findings: 0
@@ -27,7 +27,7 @@ verification:
 ## Learning Objectives
 
 > [!example]- International Financial Reporting Requirements {40–50%}
-> The candidate will understand and apply [[Valuation Principle|valuation principles]] to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by [[International Life Insurance Company|international life insurance companies]].
+> The candidate will understand and apply [[Valuation Principle|valuation principles]] to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by [[Life Insurance Company|international life insurance companies]].
 >
 > 1. Describe the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
 > 2. Evaluate the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
@@ -48,9 +48,9 @@ verification:
 > - ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023 (1a, 1b)
 
 > [!example]- Capital Management {20–30%}
-> The candidate will understand [[International Capital Requirement|international capital requirements]], the approaches and tools of [[Regulatory Capital|financial capital]] management for [[International Life Insurance Company|international life insurance companies]].
+> The candidate will understand [[Regulatory Capital|international capital requirements]], the approaches and tools of [[Regulatory Capital|financial capital]] management for [[Life Insurance Company|international life insurance companies]].
 >
-> 1. Explain and calculate [[Regulatory Capital|regulatory capital]] using various [[International Framework|international frameworks]]
+> 1. Explain and calculate [[Regulatory Capital|regulatory capital]] using various [[Regulatory Capital|international frameworks]]
 > 2. Explain and evaluate the respective perspectives of regulators, investors, [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and determination of [[Capital|capital]]
 > 3. Describe the purpose and application of [[Economic Capital|economic capital]]
 >
@@ -81,7 +81,7 @@ verification:
 > 1. Describe and evaluate [[In-Force Management|fundamental strategies]] for enhancing value and profitability through [[In-Force Management|active in-force]] and operational management
 > 2. Describe, evaluate, and apply the [[Economic Value|economic value creation]] framework
 > 3. Recommend and justify changes to [[Policyholder Dividend|policyholder dividends]]
-> 4. Understand [[Corporate Taxation|corporate taxation]], [[Policyholder Taxation|policyholder taxation]] and calculate [[Investment Income Tax|investment income tax]]
+> 4. Understand [[Life Insurance Company Taxation|corporate taxation]], [[Policyholder Taxation|policyholder taxation]] and calculate [[Investment Income Tax|investment income tax]]
 > 5. Describe and apply the methods and principles of embedded value for an [[Embedded Value|insurance enterprise]]
 >
 > **Readings:**

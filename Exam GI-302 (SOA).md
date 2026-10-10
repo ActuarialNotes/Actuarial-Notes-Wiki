@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:87daac213c3e9c4865123db6a84a79af2a90362ddadafa9615e107f0a6a81eb9
+  content_hash: sha256:fc18bac2aad40ba7baaab8da17e79f412c50202c9894af17754f61600de178a1
   sources:
     - "SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf"
   open_findings: 0
@@ -34,12 +34,12 @@ verification:
 > 3. Describe [[Commercial Property Insurance|commercial property insurance]] in terms of categories of [[Loss Exposure|loss exposures]].
 > 4. Describe the contents of the [[Commercial Property Insurance|ISO commercial property]] (CP) and general liability ([[Commercial General Liability|CGL]]) policies, and types of coverage they provide.
 > 5. Identify the factors that [[Affect Commercial Insurance Premium|affect commercial insurance premiums]] and how [[Insurance Premium|premium]] is determined.
-> 6. Describe [[Commercial Auto Insurance|commercial auto insurance]] in terms of the [[Loss Exposure|loss exposures]].
-> 7. Describe the contents of the [[ISO Commercial Automobile Policy|ISO Commercial Automobile policies]] and the coverages they provide.
+> 6. Describe [[Business Auto Coverage|commercial auto insurance]] in terms of the [[Loss Exposure|loss exposures]].
+> 7. Describe the contents of the [[Business Auto Coverage|ISO Commercial Automobile policies]] and the coverages they provide.
 > 8. Describe the [[Workers Compensation|workers compensation]] ([[Workers Compensation Insurance|WC]]) system.
-> 9. Explain why [[Employers Liability Insurance|employers liability insurance]] is needed and how the [[ISO WC]] and [[Employers Liability Insurance Policy Address|Employers Liability Insurance Policy address]] this need.
-> 10. Explain how [[Premium Basis|premium bases]], classifications, and [[Premium Adjustments Affect WC Insurance|premium adjustments affect WC insurance]].
-> 11. Describe various [[Specialty Insurance Coverage|specialty insurance coverages]] (including [[Umbrella Liability Insurance|excess liability]], [[Umbrella Liability Insurance|umbrella liability]], [[Professional Liability Insurance|professional liability]], [[Cyber Risk|cyber risk]], surety and [[Terrorism Insurance|terrorism]]).
+> 9. Explain why [[Employers Liability Insurance|employers liability insurance]] is needed and how the [[Employers Liability Insurance|ISO WC]] and [[Employers Liability Insurance Policy Address|Employers Liability Insurance Policy address]] this need.
+> 10. Explain how [[Workers Compensation Classification|premium bases]], classifications, and [[Premium Adjustments Affect WC Insurance|premium adjustments affect WC insurance]].
+> 11. Describe various [[Specialty Insurance Coverage|specialty insurance coverages]] (including [[Umbrella Liability Insurance|excess liability]], [[Umbrella Liability Insurance|umbrella liability]], [[Professional Liability Insurance|professional liability]], [[Cyber Insurance|cyber risk]], surety and [[Terrorism Insurance|terrorism]]).
 >
 > **Readings:**
 > - General Insurance: U.S. Policies and Coverages, SOA, May 2025 (1a, 1d, 1g, 1i, 1k)
@@ -53,11 +53,11 @@ verification:
 > [!example]- U.S. General Insurance Regulation {5–20%}
 > The candidate will understand the development and structure of [[Insurance Regulation|insurance regulations]] in the [[United State|United States]].
 >
-> 1. Describe the functions of key [[Regulatory Body|regulatory bodies]] in the U.S. including the NAIC and SEC.
+> 1. Describe the functions of key [[State and Federal Insurance Regulation|regulatory bodies]] in the U.S. including the NAIC and SEC.
 > 2. Describe the historical development of general [[Insurance Regulation|insurance regulations]] in the [[United State|United States]].
 > 3. Describe and interpret the current state of general [[Insurance Regulation|insurance regulations]] in the [[United State|United States]].
-> 4. Summarize the [[Regulatory Activity|regulatory activities]] of state [[Insurance Department|insurance departments]], including [[Insurance Commissioners' Duty|insurance commissioners’ duties]].
-> 5. Describe the [[Licensing Requirement|licensing requirements]] for [[Insurer|insurers]] and [[Insurance Personnel|insurance personnel]] in the [[United State|United States]].
+> 4. Summarize the [[Regulatory Activity|regulatory activities]] of state [[Insurance Regulator|insurance departments]], including [[Insurance Regulator|insurance commissioners’ duties]].
+> 5. Describe the [[Insurance Regulator|licensing requirements]] for [[Insurer|insurers]] and [[Insurance Producer|insurance personnel]] in the [[United State|United States]].
 > 6. Describe the methods that U.S. regulators use to maintain the [[Solvency|solvency]] of [[Insurer|insurers]].
 >
 > **Readings:**
@@ -74,12 +74,12 @@ verification:
 > - The Dodd-Frank Wall Street Reform and Consumer Protection Act: Insurance Provisions, Congressional Research Service, CRS Report R41372, Aug 2010 (2a-d, 2f)
 
 > [!example]- U.S. GI Financial Reporting and Financial Health Measurement {35–50%}
-> The candidate will understand the different [[Financial Reporting|reporting standards]] for U.S. general [[Insurer|insurance companies]] and use [[Statutory Financial Statement|statutory financial statement]] information to measure [[Financial Health|insurer financial health]].
+> The candidate will understand the different [[Financial Reporting|reporting standards]] for U.S. general [[Insurer|insurance companies]] and use [[NAIC Annual Statement|statutory financial statement]] information to measure [[Financial Health|insurer financial health]].
 >
 > 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. statutory accounting and U.S. tax accounting for general [[Insurer|insurance companies]].
 > 2. Describe the elements of the [[NAIC Annual Statement]].
 > 3. Complete and interpret [[NAIC Annual Statement Pages-schedule|NAIC Annual Statement pages/schedules]] (as referenced in the resources).
-> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[NAIC RBC]] and IRIS Ratios).
+> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[Risk-Based Capital|NAIC RBC]] and IRIS Ratios).
 >
 > **Readings:**
 > - FRE-802-19: National Association of Insurance Commissioners (NAIC), Accounting Practices and Procedures Manual, 2018 Preamble (3a)
@@ -103,11 +103,11 @@ verification:
 >     - Part 3: General Insurance Financial Health Topics (sections 10.4.3, 10.8.3, 11.8, 11.10-11.11, 12.9, 12.10.2 & 12.11)
 
 > [!example]- Responsibilities of a U.S. Signing General Insurance Actuary {30–45%}
-> The candidate will be able to use applicable standards of practice to carry out the responsibilities of a U.S. [[Signing General Insurance Actuary|signing general insurance actuary]] as defined by regulators and the [[American Academy]] of [[Actuary|Actuaries]].
+> The candidate will be able to use applicable standards of practice to carry out the responsibilities of a U.S. [[Appointed Actuary Responsibilities|signing general insurance actuary]] as defined by regulators and the [[American Academy]] of [[Actuary|Actuaries]].
 >
 > 1. Describe and apply the concept of [[Materiality|materiality]].
 > 2. Describe, interpret and apply the applicable U.S. [[Standard|Standards]] of Practice.
-> 3. Describe, interpret and apply the responsibilities of a [[Signing Actuary|signing actuary]] with respect to the U.S. Statement of Actuarial Opinion and the Actuarial Report.
+> 3. Describe, interpret and apply the responsibilities of a [[Appointed Actuary Responsibilities|signing actuary]] with respect to the U.S. Statement of Actuarial Opinion and the Actuarial Report.
 >
 > **Readings:**
 > - Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8 (pp. 1-8, 13-17 & 19-20) (4a)

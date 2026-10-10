@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f61d0e5c09dafad7f241dccde2a368dc70c1f3f09605e94ad76d8729d7e900b
+  content_hash: sha256:de66bad933388cf8de15d3189c03344fd52a2ae9fa733a219a0c7a60c2fee825
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   open_findings: 1
@@ -32,13 +32,13 @@ verification:
 > 1. Describe the various core and supporting functions of a general [[Insurer|insurance company]].
 > 2. Differentiate among the various classifications of [[Insurer|insurers]].
 > 3. Describe the marketing and distribution of general [[Insurance Policy|insurance products]].
-> 4. Understand the processes for [[Underwriting|underwriting]] and [[Pricing General Insurance Policy|pricing general insurance policies]].
-> 5. Describe the activities and challenges in the [[Claim Handling Process|claim handling process]].
-> 6. Describe the goals of [[Insurer Risk|insurer risk]] control activities.
+> 4. Understand the processes for [[Underwriting|underwriting]] and [[Ratemaking|pricing general insurance policies]].
+> 5. Describe the activities and challenges in the [[Claims Handling|claim handling process]].
+> 6. Describe the goals of [[Risk Control|insurer risk]] control activities.
 > 7. Explain why [[Premium Audit|premium audits]] are conducted.
 > 8. Demonstrate knowledge of general [[Insurance Risk|insurance risks]], perils, product characteristics / issues, and contracts.
-> 9. Describe and compare the different types of [[Reinsurance|reinsurance]] and [[Risk Mitigation Instrument|risk mitigation instruments]].
-> 10. Demonstrate knowledge of the issues regarding [[International Business|international business]] for [[Insurer|insurance companies]].
+> 9. Describe and compare the different types of [[Reinsurance|reinsurance]] and [[Insurance-Linked Securities|risk mitigation instruments]].
+> 10. Demonstrate knowledge of the issues regarding [[International Insurance|international business]] for [[Insurer|insurance companies]].
 >
 > **Readings:**
 > - General Insurance Company Operations, SOA, May 2025 (1a-g)
@@ -52,10 +52,10 @@ verification:
 > The candidate will understand the [[Insurance Regulation|regulatory environment]] for general insurance.
 >
 > 1. Describe the functions and goals of the different forms of [[Insurance Regulation|insurance regulation]].
-> 2. Describe the protections provided by [[Solvency|solvency]] and [[Insolvency Regulation|insolvency regulation]].
+> 2. Describe the protections provided by [[Solvency|solvency]] and [[Solvency Regulation|insolvency regulation]].
 > 3. Understand the issue of discrimination and [[Insurance|insurance]].
 > 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and telematics in [[Personal Auto Policy|automobile insurance]].
-> 5. Describe the development of general insurance programs controlled by government or [[Collective Insurance Industry Organization|collective insurance industry organizations]] and their mechanisms of operation.
+> 5. Describe the development of general insurance programs controlled by government or [[Government and Industry Insurance Programs|collective insurance industry organizations]] and their mechanisms of operation.
 > 6. Discuss the issues with the use of [[Credit-Based Insurance Scoring|credit scores]] by [[Insurer|insurers]].
 > 7. Understand the function and regulation of price [[Optimization|optimization]].
 > 8. Outline the function and regulation of [[Captive|captives]].
@@ -80,12 +80,12 @@ verification:
 > The candidate will understand [[Tort Law|tort law]] and [[Insurance Law|insurance law]] with respect to general insurance.
 >
 > 1. Describe and interpret the key elements of [[Tort Law|tort law]] and the underlying principles of [[Insurance Law|insurance law]].
-> 2. Discuss the issues of [[Tort Trend|tort trends]] and [[Tort Reform|tort reform]] as it applies to the general [[Insurance Industry|insurance industry]].
+> 2. Discuss the issues of [[Social Inflation|tort trends]] and [[Tort Reform|tort reform]] as it applies to the general [[Insurance Industry|insurance industry]].
 > 3. Understand the effects of [[Transnational Tort Litigation|transnational tort litigation]].
 > 4. Understand [[Mass Torts-class Action Suit|mass torts/class action suits]] and discuss their effect on the general [[Insurance Industry|insurance industry]].
 > 5. Understand the use of [[No-Fault Insurance|no-fault insurance]].
 > 6. Understand the [[International Legal Environment|international legal environment]] as it relates to general insurance.
-> 7. Discuss the influence of the U.S. [[Tort Law Environment|tort law environment]] in other countries.
+> 7. Discuss the influence of the U.S. [[Transnational Tort Litigation|tort law environment]] in other countries.
 > 8. Discuss the issue of [[Social Inflation|social inflation]] and its effect on general insurance.
 > 9. Describe and interpret [[Legal Cases-issue|legal cases/issues]] included in the [[Syllabus Resource|syllabus resources]].
 >
@@ -136,7 +136,7 @@ verification:
 > 1. Understand the various considerations for [[Key Financial Measures|performance measurement]] of a general [[Insurer|insurer]].
 > 2. Understand and apply [[Financial Health|financial health]] ratios.
 > 3. Demonstrate knowledge of [[Solvency Monitoring|solvency monitoring]] for general [[Insurer|insurance companies]].
-> 4. Understand and apply the [[EU Solvency II Capital Requirement|EU Solvency II capital requirement]].
+> 4. Understand and apply the [[Solvency II|EU Solvency II capital requirement]].
 > 5. Demonstrate knowledge of [[ORSA]].
 > 6. Discuss the function of [[Rating Agency|credit rating agencies]] and their influence on general [[Insurer|insurers]].
 >
@@ -155,9 +155,9 @@ verification:
 > [!example]- Responsibilities of the Actuary {5–10%}
 > The candidate will understand the standards of practice and professionalism required of the [[Actuary|actuary]].
 >
-> 1. Describe, interpret and apply [[Professionalism Principle|professionalism principles]] as defined by the [[International Actuarial Association]] (IAA).
-> 2. Describe, interpret and apply Standards of Practice as defined by the [[IAA]].
-> 3. Demonstrate knowledge of the general [[Insurance Actuarial Opinion|insurance actuarial opinion]] and the role of the [[Appointed Actuary|appointed actuary]].
+> 1. Describe, interpret and apply [[International Actuarial Association|professionalism principles]] as defined by the [[International Actuarial Association]] ([[International Actuarial Association|IAA]]).
+> 2. Describe, interpret and apply Standards of Practice as defined by the [[International Actuarial Association|IAA]].
+> 3. Demonstrate knowledge of the general [[Statement of Actuarial Opinion|insurance actuarial opinion]] and the role of the [[Appointed Actuary|appointed actuary]].
 > 4. Describe and apply the concept of [[Materiality|materiality]].
 >
 > **Readings:**

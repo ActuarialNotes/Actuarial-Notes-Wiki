@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9dae65f9469128d4ed7a9f0c6f1eb4ffa36cc2d6d94b0a36b6b8cf5fd9fc24a0
+  content_hash: sha256:05f52a3c4baa65287ae980a284c1c120a15dbcd1485e0ff9c8410cbdf17f92c9
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf"
   open_findings: 0
@@ -37,7 +37,7 @@ verification:
 >
 > 1. Recommend an appropriate [[Enterprise Risk|enterprise risk]] management framework for an organization
 > 2. Analyze the [[Enterprise Risk Management|ERM]] roles and responsibilities of the people within an organization and how the different groups can collaborate effectively
-> 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as agency, compliance and [[Operational Risk|legal risks]] and the need for audit and [[Market Conduct Compliance Activity|market conduct compliance activities]]
+> 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as agency, compliance and [[Operational Risk|legal risks]] and the need for audit and [[Market Conduct Regulation|market conduct compliance activities]]
 > 4. Evaluate the elements and structure of a [[Successful Risk|successful risk]] management function
 >
 > **3. The External Environment**
@@ -80,18 +80,18 @@ verification:
 >
 > 1. Identify specific [[Risk|risks]] faced by an organization
 > 2. Detect [[Emerging Risk|emerging risks]]
-> 3. Determine an appropriate [[Monitoring Mechanism|monitoring mechanism]] for [[Emerging Risk|emerging risks]]
+> 3. Determine an appropriate [[Key Risk Indicator|monitoring mechanism]] for [[Emerging Risk|emerging risks]]
 >
 > **2. Risk Assessment**
 >
 > 1. Determine the implication of [[Risk|risks]] on the [[Balance Sheet|balance sheet]] and [[Income Statement|income statement]]
 > 2. Describe the properties and limitations of [[Common Risk|common risk]] measures (e.g., VaR and TVaR)
-> 3. Demonstrate [[Risk Aggregation|risk aggregation]] techniques that illustrate the concept of [[Risk Diversification|risk diversification]]
+> 3. Demonstrate [[Risk Diversification|risk aggregation]] techniques that illustrate the concept of [[Risk Diversification|risk diversification]]
 > 4. Demonstrate the use of scenario analysis and [[Stress Testing|stress testing]] in the measurement of [[Risk|risks]]
-> 5. Demonstrate the use of techniques to assess [[Risk Accumulation|risk accumulations]] and [[Compounding Risk|compounding risks]]
+> 5. Demonstrate the use of techniques to assess [[Concentration Risk|risk accumulations]] and [[Compounding Risk|compounding risks]]
 > 6. Demonstrate an understanding of model [[Risk|risk]]
 > 7. Propose an appropriate modelling technique that [[Meets Organizational Need|meets organizational needs]] to analyze [[Risk|risks]]
-> 8. Analyze [[Risk|risks]] that are not easily quantifiable, such as operational, environmental and [[Contagion-Related Risk|contagion-related risks]]
+> 8. Analyze [[Risk|risks]] that are not easily quantifiable, such as operational, environmental and [[Contagion Risk|contagion-related risks]]
 >
 > **Readings:**
 > - CFE101-103-25: ORSA and the Regulator (2.1a, 2.2h)
@@ -127,29 +127,29 @@ verification:
 > - Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research, 2025 (excluding Appendices) (2.2d)
 
 > [!example]- Embedding ERM into Decision-Making {28–46%}
-> The candidate will understand how an organization can articulate its approach to [[Risk|risk]] and how to assess [[Risk|risk]] and [[Return Trade-Off|return trade-offs]]. The candidate will understand the approaches for managing [[Risk|risk]]. The candidate will understand different concepts of [[Risk Capital|risk capital]], [[Risk|risk]] measures in [[Capital Assessment|capital assessment]] and techniques to allocate [[Risk Capital|risk capital]] once aggregated.
+> The candidate will understand how an organization can articulate its approach to [[Risk|risk]] and how to assess [[Risk|risk]] and [[Business Strategy|return trade-offs]]. The candidate will understand the approaches for managing [[Risk|risk]]. The candidate will understand different concepts of [[Risk Capital|risk capital]], [[Risk|risk]] measures in [[Economic Capital|capital assessment]] and techniques to allocate [[Risk Capital|risk capital]] once aggregated.
 >
 > **1. Making Decisions**
 >
 > 1. Describe how an organization can articulate its approach to [[Risk|risk]] using [[Risk Appetite|risk appetite]] and [[Risk Appetite|risk limits]]
-> 2. Assess the [[Risk|risk]] and [[Return Trade-Off|return trade-offs]] for decisions (e.g. those targeting changes in the [[Organization's Risk Profile|organization’s risk profiles]])
+> 2. Assess the [[Risk|risk]] and [[Business Strategy|return trade-offs]] for decisions (e.g. those targeting changes in the [[Risk Appetite|organization’s risk profiles]])
 >
 > **2. Responding to Risks**
 >
 > 1. Demonstrate application of the following responses to [[Risk|risk]], including consideration of their costs and benefits: avoidance, acceptance, reduction without transfer, and transfer to a [[Third Party|third party]]
-> 2. Demonstrate the use of controls in an [[Organizational Process|organizational process]]
+> 2. Demonstrate the use of controls in an [[Internal Control|organizational process]]
 > 3. Demonstrate how derivatives or similar methods may be used to manage or reduce [[Risk|risk]]
 > 4. Demonstrate how [[Reinsurance|reinsurance]] or similar methods may be used to manage or reduce [[Risk|risk]]
-> 5. Analyze how [[Asset-Liability Management|ALM]] and similar [[Risk Strategy|risk strategies]] can be used to manage or reduce [[Risk|risk]] in an organization
+> 5. Analyze how [[Asset-Liability Management|ALM]] and similar [[Risk Mitigation|risk strategies]] can be used to manage or reduce [[Risk|risk]] in an organization
 > 6. Demonstrate possible techniques for managing [[Non-Financial Risk|non-financial risks]]
 >
 > **3. Risk Capital**
 >
 > 1. Explain how to develop a [[Capital|capital]] model for a hypothetical organization
 > 2. Demonstrate a conceptual understanding of economic measures of value and [[Regulatory Capital|capital requirements]] (e.g., EVA, embedded value, [[Economic Capital|economic capital]], regulatory measures, and accounting measures) and their uses in [[Decision-Making|decision-making processes]]
-> 3. Apply [[Risk|risk]] measures (such as VaR and TVaR) and demonstrate how to use them in value and [[Capital Assessment|capital assessment]]
+> 3. Apply [[Risk|risk]] measures (such as VaR and TVaR) and demonstrate how to use them in value and [[Economic Capital|capital assessment]]
 > 4. Demonstrate the use of techniques to allocate [[Risk|risk]] once aggregated
-> 5. Propose techniques of attributing the “cost” of [[Risk-capital Strategy|risk/capital strategies]] to [[Business Unit|business units]] in order to [[Gauge Performance|gauge performance]] (e.g. returns on [[Marginal Capital|marginal capital]])
+> 5. Propose techniques of attributing the “cost” of [[Risk-capital Strategy|risk/capital strategies]] to [[Business Unit|business units]] in order to [[Risk-Adjusted Performance|gauge performance]] (e.g. returns on [[Risk Capital|marginal capital]])
 >
 > **Readings:**
 > - CFE101-103-25: ORSA and the Regulator (3.1a, 3.3b, 3.3c)

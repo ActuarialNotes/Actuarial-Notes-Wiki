@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:dfa4674b521773e1d19522ce632dcb69236706856fe79739a3173c5854dfb6c7
+  content_hash: sha256:ed024cf46e4729ed97bc36132ba5ddc0116907f6acf50ecdccb2b5fd5d2fec9f
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf"
   open_findings: 0
@@ -49,12 +49,12 @@ verification:
 > [!example]- Financial Statements {20–35%}
 > The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with [[IFRS]].
 >
-> 1. Interpret [[Insurer Financial Statement|insurer financial statements]] from the viewpoint of various stakeholders
+> 1. Interpret [[Financial Statements|insurer financial statements]] from the viewpoint of various stakeholders
 > 2. Evaluate key [[Key Financial Measures|financial performance]] measures used by life and [[Insurer|health insurers]] for both short and [[Long-Term Insurance Coverage|long-duration contracts]]
 > 3. Project financial outcomes and recommend a strategy to [[Senior|senior]] management to achieve financial goals
-> 4. Describe how to compute the [[Taxable Income|taxable income]] of a life and [[Health Insurance Company|health insurance company]]
-> 5. Explain fair value accounting principles and describe [[International Financial Reporting Standard|International Financial Reporting Standards]] ([[IFRS]])
-> 6. Construct basic [[Financial Statements|financial statements]] and associated actuarial entries for a life and [[Health Insurance Company|health insurance company]]
+> 4. Describe how to compute the [[Life Insurance Company Taxation|taxable income]] of a life and [[Life Insurance Company|health insurance company]]
+> 5. Explain fair value accounting principles and describe [[IFRS|International Financial Reporting Standards]] ([[IFRS]])
+> 6. Construct basic [[Financial Statements|financial statements]] and associated actuarial entries for a life and [[Life Insurance Company|health insurance company]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, 8th Edition, 2021 (2a, 2d, 2e, 2f)
@@ -111,7 +111,7 @@ verification:
 > The candidate will understand how to describe and evaluate government programs providing health and [[Social Insurance|disability benefits]] in Canada.
 >
 > 1. Describe [[Underwriting|eligibility requirements]] for social programs in Canada and the benefits provided
-> 2. Describe how [[Private Group Insurance Plan|private group insurance plans]] work within the framework of social programs in Canada
+> 2. Describe how [[Group Health Insurance|private group insurance plans]] work within the framework of social programs in Canada
 >
 > **Readings:**
 > - Morneau Shepell Handbook of Canadian Pension Benefit Plans, 17th Edition, 2020 (4a, 4b)
@@ -153,8 +153,8 @@ verification:
 >
 > 1. Establish a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
 > 2. Describe the role [[Physicians Play|physicians play]] and their influence on the flow of funds
-> 3. Describe the [[Health Care System|market power]] of hospitals and how [[Provider System|provider systems]] compete for patients, physicians, and contracts
-> 4. Compare the flow of funds in the US and [[Canadian Health Care System|Canadian health care systems]] and evaluate the value of different systems
+> 3. Describe the [[Health Care System|market power]] of hospitals and how [[Health Care System|provider systems]] compete for patients, physicians, and contracts
+> 4. Compare the flow of funds in the US and [[Health Care Insurance|Canadian health care systems]] and evaluate the value of different systems
 >
 > **Readings:**
 > - GH201-102-25: Flow of Funds in Healthcare System and the Role of Providers (5a-5d)

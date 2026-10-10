@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c82d3497fccf2dcaaff9a5f211c6b26548975efa4c02dfa09fe23f6f9fe4e874
+  content_hash: sha256:006b630594aa86d0de03dabbce1a328939153b70b06d14e2dba6f57eccb2e6ee
   sources:
     - "SOA, Nov 2026/Jul 2027 syllabus PDF for RET-301, all pages, sha256:fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf"
   open_findings: 0
@@ -55,7 +55,7 @@ verification:
 >    - [[Termination-wind-up|Termination/wind-up]]
 > 2. Analyze a variety of [[Asset Valuation Method|asset valuation]] methods appropriate for regulatory purposes
 > 3. Prepare [[Valuation|valuation]] results for [[Going-Concern Valuation|ongoing plans]] appropriate for regulatory purposes
-> 4. Prepare [[Valuation|valuation]] results for special purposes, including [[Plan Termination|plan terminations]], [[Plan Merger and Spin-Off|plan mergers]] or [[Plan Merger and Spin-Off|spin-off]], actuarial equivalence calculations and [[Asset Transfer|asset transfers]]
+> 4. Prepare [[Valuation|valuation]] results for special purposes, including [[Plan Termination|plan terminations]], [[Plan Merger and Spin-Off|plan mergers]] or [[Plan Merger and Spin-Off|spin-off]], actuarial equivalence calculations and [[Plan Merger and Spin-Off|asset transfers]]
 >
 > **Readings:**
 > - Part 1000 of the CIA Standards of Practice - General, CIA, Jan 2026, sections 1000-1700 (2a-2d)
@@ -67,19 +67,19 @@ verification:
 > - Calculation of Incremental Cost on a Hypothetical Wind-Up or Solvency Basis, CIA Educational Note, Apr 2023 (2a, 2c)
 
 > [!example]- Regulations: Evaluation and Application {20–30%}
-> The candidate will understand how to evaluate and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] for [[Registered Retirement Plan|registered retirement plans]].
+> The candidate will understand how to evaluate and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] for [[Canadian Pension Legislation|registered retirement plans]].
 >
-> 1. Describe sources and framework of [[Government Regulation|government regulation]]
-> 2. Describe and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]] and [[Tax Regulation Pertaining|tax regulation pertaining]] to:
+> 1. Describe sources and framework of [[Canadian Pension Legislation|government regulation]]
+> 2. Describe and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]] and [[Canadian Pension Legislation|tax regulation pertaining]] to:
 >    - [[Plan]] design
->    - [[Plan Establishment|Plan establishment]]
->    - [[Members' Right|Members’ rights]]
+>    - [[Canadian Pension Legislation|Plan establishment]]
+>    - [[Canadian Pension Legislation|Members’ rights]]
 >    - Contributions and [[Benefit|benefits]]
->    - [[Plan Amendment|Plan amendment]]
+>    - [[Canadian Pension Legislation|Plan amendment]]
 >    - [[Plan Termination-wind-Up|Plan termination/wind-up]]
 >    - [[Plan Merger and Spin-Off|Plan merger]] or [[Plan Merger and Spin-Off|spin-off]]
->    - [[Reporting Requirement|Reporting requirements]]
->    - [[Individual Savings Plan|Individual savings plans]]
+>    - [[Canadian Pension Legislation|Reporting requirements]]
+>    - [[Registered Retirement Savings Plan|Individual savings plans]]
 >
 > **Readings:**
 > - Morneau Shepell Handbook of Canadian Pension and Benefit Plans, 17th Edition, 2020
@@ -121,10 +121,10 @@ verification:
 > - RET301-115-26: Q&A: Answering Your Tax Questions on RRSPs, TFSAs, and the New First-Home Savings Account (FHSA) (3b)
 
 > [!example]- Regulations: Plan Funding {20–30%}
-> The candidate will understand how to apply the [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] in the context of [[Pension Plan Funding|pension plan funding]].
+> The candidate will understand how to apply the [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], and [[Canadian Pension Legislation|tax legislation]] in the context of [[Funding|pension plan funding]].
 >
-> 1. Evaluate [[Retirement Funding Alternative|retirement funding alternatives]] for the [[Plan Sponsor|plan sponsor]], shareholders and participants
-> 2. Evaluate [[Funding Restriction|funding restrictions]] imposed by regulations
+> 1. Evaluate [[Executive Retirement Plan|retirement funding alternatives]] for the [[Plan Sponsor|plan sponsor]], shareholders and participants
+> 2. Evaluate [[Canadian Pension Legislation|funding restrictions]] imposed by regulations
 >
 > **Readings:**
 > - Canadian Pensions and Retirement Income Planning, Willis Towers Watson, 6th Edition, 2017 (4a, 4b)

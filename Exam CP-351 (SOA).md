@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:c085d6170d9a24f8f1ee9f499cf58a14eeae7d7a8c135ce682f2e0e9dd91c427
+  content_hash: sha256:4499e383d664cc13f615319a8af432aeb03c4cb0218d2255c0a96db127bdd132
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
   open_findings: 0
@@ -32,7 +32,7 @@ verification:
 > 1. Explain the principles of [[Asset-Liability Management|Asset Liability]] Management
 > 2. Understand the lessons learned from [[ALM Failure|ALM failures]]
 > 3. Demonstrate an understanding of various [[ALM Risk|ALM risks]]
-> 4. Describe how different [[Pension|pension]] and [[Insurance Contracts Generate Embedded Option|insurance contracts generate embedded options]]
+> 4. Describe how different [[Pension|pension]] and [[Embedded Option|insurance contracts generate embedded options]]
 >
 > **Readings:**
 > - CP351-100-26: IAA Risk Book - Asset Liability Management (1a)
@@ -55,9 +55,9 @@ verification:
 > [!example]- Measuring Risks from Assets and Liabilities {25–45%}
 > The candidate will understand how to measure [[Risk|risks]] from assets and liabilities.
 >
-> 1. Demonstrate an understanding of various [[Risk Identification Tool|risk identification tools]]
+> 1. Demonstrate an understanding of various [[Risk Identification|risk identification tools]]
 > 2. Evaluate a company’s or a [[Portfolio's Exposure|portfolio’s exposures]] to various [[Risk|risks]]
-> 3. Understand measures of [[Regulatory Capital Adequacy|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various jurisdictions
+> 3. Understand measures of [[Regulatory Capital|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various jurisdictions
 > 4. Evaluate the difficulties of investing for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 years) such as [[Inflation|inflation]] and [[Longevity Risk|longevity]]
 >
 > **Readings:**
@@ -81,13 +81,13 @@ verification:
 > [!example]- Tools and Strategies to Manage ALM Risks {40–60%}
 > The candidate will understand tools and strategies to manage [[ALM Risk|ALM risks]].
 >
-> 1. Develop and critique [[Asset Allocation Strategy|asset allocation strategies]] appropriate to underlying [[Liability Profile|liability profiles]] such as [[Pension Plan|pension plans]] and [[Long-Tail Insurance Liability|long-tail insurance liabilities]]
-> 2. Demonstrate an understanding of and apply tools and techniques for measuring and managing [[Interest Rate Risk|interest rate risk]] in an [[ALM Context|ALM context]]
-> 3. Apply [[Stress Testing|stress testing]] and scenario analysis to assess [[Extreme ALM Event|extreme ALM events]]
+> 1. Develop and critique [[Asset Allocation|asset allocation strategies]] appropriate to underlying [[Asset-Liability Management|liability profiles]] such as [[Pension Plan|pension plans]] and [[Long-Tail Liability|long-tail insurance liabilities]]
+> 2. Demonstrate an understanding of and apply tools and techniques for measuring and managing [[Interest Rate Risk|interest rate risk]] in an [[Asset-Liability Management|ALM context]]
+> 3. Apply [[Stress Testing|stress testing]] and scenario analysis to assess [[Stress Testing|extreme ALM events]]
 > 4. Understand and evaluate model and [[Parameter Risk|parameter risks]]
 > 5. Explain and implement techniques used to mitigate [[Market Risk|market risks]]
 > 6. Understand [[Interest Rate Derivative|interest rate derivatives]] and use them to mitigate [[Interest Rate Risk|interest rate risk]]
-> 7. Explain different methods available for [[Transferring Risk|transferring risk]]
+> 7. Explain different methods available for [[Risk Transfer|transferring risk]]
 >
 > **Readings:**
 > - CP351-101-25: ALM for Life, Annuities, and Pensions (section 5) (3a, 3e, 3f)

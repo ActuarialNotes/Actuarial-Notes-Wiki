@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8fb1ad4bdbacc27dbf8e471f41221dda239afabeddaf1bded8c8f6fe3a4347cb
+  content_hash: sha256:f4c17a081f3bd7c4d2245fe858fe240485ce0f8c2f7ac378dcf14894cd6c054e
   sources:
     - "SOA, OCTOBER 2026 syllabus PDF for ALTAM, all pages, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
   open_findings: 0
@@ -79,7 +79,7 @@ The ALTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > [!example]- Profit Analysis {10–20%}
 > The Candidate will be able to analyze [[Profit Vector|emerging surplus]], and to set [[Insurance Premium|premiums]] and [[Reserve|reserves]], using [[Profit Testing|profit testing]].
 >
-> 1. Calculate and interpret expected profit and [[Actual Profit|actual profit]],
+> 1. Calculate and interpret expected profit and [[Analysis of Surplus|actual profit]],
 > 2. Analyze and interpret gains by [[Source|source]].
 > 3. Calculate and interpret [[Profit Signature|profit signature]], [[Profit Vector|profit vector]], net present value, [[Internal Rate of Return|internal rate]] of return, [[Profit Margin|profit margin]], and [[Discounted Payback Period|discounted payback period]] for [[Life Insurance|long-term life]] and [[Health Insurance|health insurance]], and [[Annuity Contract|annuity contracts]].
 > 4. Calculate [[Insurance Premium|premiums]] for [[Life Insurance|long-term life]] and [[Health Insurance|health insurance]] and [[Annuity Contract|annuity contracts]] based on a specified profit objective.
@@ -88,7 +88,7 @@ The ALTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > [!example]- Pension Plans and Retirement Benefits {10–18%}
 > The Candidate will understand how [[Pension Plan|retirement benefits]] are accrued, valued, and funded.
 >
-> 1. Calculate replacement ratios for [[Defined Contribution]] ([[Defined Contribution Plan|DC]]), and [[Defined Benefit]] ([[Defined Benefit Plan|DB]]) plans, including [[Defined Benefit Plan|final average salary]] (FAS), [[Defined Benefit Plan|career average earnings]] (CAE), and [[Defined Benefit Plan|career average revalued earnings]] (CARE) plans.
+> 1. Calculate replacement ratios for [[Defined Contribution Plan|Defined Contribution]] ([[Defined Contribution Plan|DC]]), and [[Defined Benefit Plan|Defined Benefit]] ([[Defined Benefit Plan|DB]]) plans, including [[Defined Benefit Plan|final average salary]] (FAS), [[Defined Benefit Plan|career average earnings]] (CAE), and [[Defined Benefit Plan|career average revalued earnings]] (CARE) plans.
 > 2. Calculate the [[Defined Contribution Plan|required contribution rate]] to meet a [[Replacement Ratio|target replacement]] ratio for a [[Defined Contribution Plan|DC plan participant]], using a deterministic approach.
 > 3. Identify, interpret, and apply [[Service Table|service table]] and [[Salary Scale|salary scale]] functions for [[Pension Plan|pension plan valuation]].
 > 4. For a [[Defined Benefit Plan|DB plan]], calculate and interpret [[Accrued Benefit|accrued benefits]], including benefits on [[Accrued Benefit|early exit]] from the plan.

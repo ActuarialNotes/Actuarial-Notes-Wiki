@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d5cffb217dba4f300466418cdd421c6a3e3f7651966da94e1d0f34d3bd81bfee
+  content_hash: sha256:6e9dae5bcff93b801a618e7afcee0eac2bf48ca26db8da21a10bea5c367fc5ae
   sources:
     - "SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
@@ -106,7 +106,7 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > [!example]- Option Pricing Fundamentals {2.5–7.5%}
 > The Candidate will be able to value [[European Option|simple options]] and derivatives using [[Risk-Neutral Valuation|risk neutral]] expected present values, under the binomial and [[Black-Scholes Model|Black-Scholes]] models.
 >
-> 1. Identify the [[Cash Flow|cash flows]] and characteristics of puts and calls.
+> 1. Identify the [[Cash Flow|cash flows]] and characteristics of [[Payoff|puts]] and calls.
 > 2. Apply the [[Binomial Option Pricing Model|binomial option pricing]] model to calculate the price of a [[European Option|simple European-style derivative]] on a [[Single Non-Dividend Paying Asset|single non-dividend paying asset]].
 > 3. Apply the [[Black-Scholes Model|Black-Scholes formula]] to calculate the price and [[Delta Hedging|delta hedge]] of a [[European Option|simple European-style derivative]] on a [[Single Non-Dividend Paying Asset|single non-dividend paying asset]].
 > 4. Apply [[Put-Call Parity|put-call parity]].
@@ -115,7 +115,7 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > The Candidate will understand the key features of [[Insurance Coverage|insurance coverages]] and [[Retirement Plan|retirement financial security]] programs.
 >
 > 1. Define and apply the concept of [[Insurable Interest|insurable interest]].
-> 2. Identify the [[Long-Term Insurance Coverage|long-term insurance coverages]] (life, health), [[Annuities|annuities]], and [[Defined Benefit|defined benefit]] and [[Defined Contribution Pension Plan|defined contribution pension plans]].
+> 2. Identify the [[Long-Term Insurance Coverage|long-term insurance coverages]] (life, health), [[Annuities|annuities]], and [[Defined Benefit Plan|defined benefit]] and [[Defined Contribution Plan|defined contribution pension plans]].
 
 > [!example]- Mortality Models {10–15%}
 > The Candidate will understand key concepts concerning parametric and [[Life Table|non-parametric mortality]] models for [[Future Lifetime Random Variable|individual lives]].

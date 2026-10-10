@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { ExternalLink, Shuffle } from 'lucide-react'
+import { Shuffle } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { cn } from '@/lib/utils'
 import { formatPassRate, hasPublishedStats, type PastExamRow } from '@/lib/pastExams'
@@ -27,8 +27,6 @@ interface Props {
   mixCount: number
   /** Exam display name, e.g. "Exam 5". */
   examLabel: string
-  /** Where to look the exam's published pass ratios up, when there is somewhere. */
-  lookup?: { url: string; label: string } | null
   /**
    * Examiner's report (or equivalent) for the current selection — opened in the
    * in-app PDF viewer, on the selected row.
@@ -78,13 +76,13 @@ export function PastExamBrowser({
   onSelect,
   mixCount,
   examLabel,
-  lookup,
   reportLink,
   solutionsLink,
 }: Props) {
   // The pass-ratio column only earns its width once the sitting catalogue
   // carries published figures — a column of em-dashes reads as a broken
-  // readout, so until then the header's lookup link is the honest answer.
+  // readout, so until then the exam info panel's pass-rate link is the honest
+  // answer (components/QuizExamInfoButton.tsx).
   const showStats = hasPublishedStats(rows)
   // Whether this exam's figures are CAS effective ratios at all — decides what
   // an unfilled row's dash is labelled.
@@ -136,25 +134,11 @@ export function PastExamBrowser({
 
   return (
     <div className="space-y-2">
-      {/* The exam's pass-rate table to look up, above the shelf. Thumb-sized
-          rather than fine print — it sits between two much larger targets on
-          a phone. */}
-      {lookup && (
-        <div className="flex flex-wrap items-center justify-end gap-2 px-1">
-          <a
-            href={lookup.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Pass rates
-            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-          </a>
-        </div>
-      )}
-
-      {/* A bounded scroller rather than a long page: the shelf is something you
-          flick through, and the action bar below stays reachable.
+      {/* Part of the page, not a scroller of its own. It used to be a bounded
+          box (`max-h-72 overscroll-contain`), which on a phone filled most of
+          the room between the header and the action bar: nearly every swipe
+          landed inside it, never scrolled the page, and left the box's last
+          rows under the bar. The page's bottom padding clears the bar.
 
           Each row is a radio whose ::after stretches over the whole row, so the
           row is one target — and the selected row's PDF buttons, which a radio
@@ -162,7 +146,7 @@ export function PastExamBrowser({
       <div
         role="radiogroup"
         aria-label={`${examLabel} exams`}
-        className="max-h-72 divide-y divide-border overflow-y-auto overscroll-contain rounded-lg bg-muted/30"
+        className="divide-y divide-border overflow-hidden rounded-lg bg-muted/30"
       >
         <div
           className={cn(

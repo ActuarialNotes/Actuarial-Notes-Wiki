@@ -12,8 +12,8 @@ import {
 // Deliberately quiet: the shelf renders from the authored catalogue first and
 // these figures land on top when they arrive. Nothing here surfaces a loading
 // state or an error — a source that's down, unconfigured or blocked simply
-// leaves the authored numbers in place, and the browser's "Pass rates ↗" link
-// remains the way out.
+// leaves the authored numbers in place, and the "Pass rates" link in the exam
+// info panel (components/QuizExamInfoButton.tsx) remains the way out.
 
 export function useExamPassRates(exam: string): PassRateRecord[] {
   const [records, setRecords] = useState<PassRateRecord[]>([])

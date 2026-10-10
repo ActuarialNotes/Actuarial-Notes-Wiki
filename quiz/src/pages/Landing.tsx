@@ -41,7 +41,6 @@ import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink, getExamSolutionsPdfLink } from '@/data/examPdfLinks'
-import { getPassRateLookup } from '@/data/pastExams'
 import { buildPastExamRows, examSourceLabel, practiceExamQuestions, PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
@@ -1386,7 +1385,7 @@ export default function Landing() {
     <div
       className={cn(
         'max-w-4xl mx-auto w-full px-4 sm:px-6',
-        hasTopic ? 'pt-6 space-y-6' : 'py-8 space-y-8',
+        hasTopic ? 'pt-4 space-y-6' : 'py-8 space-y-8',
       )}
       // Inside an exam the builder is scoped to its colour, which the learning
       // objectives' weight bars fill in — as on the exam's study guide.
@@ -1401,6 +1400,11 @@ export default function Landing() {
           own: the way back and the exam's logo ride the search bar's strip
           (`examStrip`, above), which is what stays in sight as the concept list
           scrolls. */}
+      {/* Inside an exam the row is empty unless a concept filter rides it — and
+          an empty row still took a `space-y-6` slot, which opened a gap between
+          the exam's strip and the source tabs. So it is only drawn with
+          something in it. */}
+      {(!hasTopic || selectedConcept) && (
       <div className={cn(hasTopic && 'space-y-2')}>
         {!hasTopic && (
           <div className="flex items-center gap-2">
@@ -1453,6 +1457,7 @@ export default function Landing() {
         )}
 
       </div>
+      )}
 
       {/* Quiz Battle and Concept Craft — ways of quizzing rather than exams,
           so they sit above the ladder, where the Study Guides tab keeps its
@@ -1601,7 +1606,7 @@ export default function Landing() {
                     onSelect={setSelectedSitting}
                     mixCount={mode === 'mock-exam' ? mixQuestionCount : Math.min(count, examQuestionCount)}
                     examLabel={examLabel}
-                    lookup={getPassRateLookup(topic)}
+                    
                     reportLink={mockReportLink}
                     solutionsLink={mockSolutionsLink}
                   />

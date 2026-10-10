@@ -12,12 +12,15 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f3356b7547947b091107ad111690812be7f49520ac78bbc7550dc0886c15e942
-  sources: []
+  sources:
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §1 structured data's canonical example is a relational database; unstructured data has no easy-for-a-computer structure, sha256:2536b9352416ca671cd66b93bd5878c85d7461d479dc730c2f79687e69dd0e65 — https://nlp.stanford.edu/IR-book/html/htmledition/boolean-retrieval-1.html"
+    - "Manning, Raghavan & Schütze, Introduction to Information Retrieval (Cambridge UP, 2008), §10 semistructured (XML) data, sha256:6ad525b29d7965f8216806084a9bceb4bf533ad0533acc017fb58ac9724fb5df — https://nlp.stanford.edu/IR-book/html/htmledition/xml-retrieval-1.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-023.md

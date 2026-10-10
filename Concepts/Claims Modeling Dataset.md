@@ -4,12 +4,12 @@ verification:
   confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:10e2999a238522a72887075ebe9125aef0f67478413bb8b4d61a416d36270287
+  content_hash: sha256:f5858dd1252234fb16b50bcf0444c20acf33d2ef982af7d7dbd49f376de16422
   sources:
     - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed., §2.8 PDF p.35; §4.1 PDF pp.45-46; §4.3.1 PDF p.50; §5.1.3 PDF p.55, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
     - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS 2010), ch.3 PDF pp.43, 45 (reopened claims, valuation date), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
     - "scikit-learn User Guide, Common pitfalls, §'Data leakage', definition, sha256:21fac11c181ab35624dcf8673f0475d403d4f6ecf0f9bead01a573d7642b515c — https://scikit-learn.org/stable/common_pitfalls.html"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claims Modeling Dataset.md
 ---

@@ -12,12 +12,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:af7a428febcc2c376c1b7990cdb1e7d9c5686eb3fd851808abd0e92f68ee39dd
-  sources: []
+  sources:
+    - "Oracle Business Intelligence Standard Edition One Tutorial 10.1.3, Data Mart Concepts, Appendix A, A.1-A.3 (data mart = single subject, often one department; data warehouse = multiple subjects; dependent marts draw from a central warehouse, independent marts directly from operational or external sources; ETL), sha256:2cdad56cd480d46df69d46bddc08c7cc0c7790ddc43a03622ff2fb2d0e667575 — https://docs.oracle.com/cd/E10352_01/doc/bi.1013/e10312/dm_concepts.htm"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-021.md

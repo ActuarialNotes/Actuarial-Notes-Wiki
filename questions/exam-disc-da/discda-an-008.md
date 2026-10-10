@@ -13,12 +13,16 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:030fa972eb984f5036344c2307567d3087bde8739e81aa772e21e1d848f4520d
-  sources: []
+  sources:
+    - "NAIC, Statistical Handbook of Data Available to Insurance Regulators (2012), as hosted by the Alaska Division of Insurance, §1.4 pooled data and statistical agents; §1.6 statistical plans, PDF pp.14-15, sha256:b2929917f42e54e41b4904be523f776f28c21c482933613eca3432982b7561ca — https://www.commerce.Alaska.gov/web/Portals/11/Pub/INS_StatisticalHandbookDataInsurance%20Regulators.pdf"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), App. D Workers Compensation Indication, PDF pp.394-398: advisory loss costs from industry data; companies apply their own expense, profit and deviation factors, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS, May 2016), Ch.3 Statistical Plans, printed p.45 (PDF p.57), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-008.md

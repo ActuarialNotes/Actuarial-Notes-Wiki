@@ -12,12 +12,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bac4c0e14cf7e5bdf7614890310e07a4a098feb4b9e9c692cb7e378b6b5b2766
-  sources: []
+  sources:
+    - "ASB, ASOP No. 23 Data Quality (Doc. No. 185, Dec. 2016), §2.5 review vs audit, §3.3(a)-(b) definitions, questionable values, disclose steps taken to improve data, §3.4(c) judgmental adjustments, §3.8(c) no audit required, PDF pp.6-11, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
+    - "van Buuren, Flexible Imputation of Missing Data, 2nd ed. (online), §1.3.1 listwise deletion biased unless MCAR; §1.3.7 indicator method, sha256:cb82f987435cf0811a89c3a3f4b5b7a359edcc49cfb2d0c47a0f532d2218bdfe — https://stefvanbuuren.name/fimd/sec-simplesolutions.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-002.md

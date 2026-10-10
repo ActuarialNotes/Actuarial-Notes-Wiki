@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-10
+  last_checked_by: agent:validate-v1
   content_hash: sha256:466e35848bb3d27e097b8c092abfb789360ff2098220757b8e7502935ae4662d
-  sources: []
+  sources:
+    - "Wickham, Çetinkaya-Rundel & Grolemund, R for Data Science (2e), Ch.24 'Web scraping', §24.1 (use an API where possible: more reliable data), §24.2 ethics and legalities (terms of service, PII, copyright; public, non-personal, factual data; wait between requests), §24.3-24.4 (HTML elements, id/class attributes, CSS selectors), §24.6 (if the structure of the site changes, the scraping code must change), sha256:460c5ef7b2c93b577eb9edf35c23ac336e97c997fbaf552e08e9df004ec5c817 — https://r4ds.hadley.nz/webscraping.html"
+    - "The Institutes, CAS DISC DA – Introduction to Data and Analytics Course Syllabus (© 2023), Course Syllabus, PDF pp.2-3 (topics 1-10 and their lettered sections), sha256:d4d823238bd55da3339a9a1ad682029c9a7aa9d4bcb0c18b319d499a00f6ba16 — https://www.casact.org/sites/default/files/2022-12/DISC_DA.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-da/discda-an-020.md

@@ -1,11 +1,21 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:923167f6eb09e006779df43e65fa8b88ee7abaafca28d562e8ffb1fa71c82e60
-  sources: []
+  sources:
+    - "NAIC, 2025 P&C Statement of Actuarial Opinion Instructions, exposure draft of the Annual Statement Instructions (P/C 2024 base text, © 2024), §1 appointment, five-business-day notices, report to the board, ASOPs 23/36/41/43; §1A Qualified Actuary; Determination of Deficient or Inadequate Provision; RMAD materiality in dollars; §9 opinion in error (five/ten business days, amended opinion, no liability for good-faith statements), PDF pp.1-2, 5-9, 11, sha256:a9e51366f82d79c99aa58d7725c76147e66126313f830d162fb39dd2c691a16d — https://content.naic.org/sites/default/files/call_materials/027_Property_2025_Actuarial_Opinion_01272025_0.pdf"
+    - "NAIC Actuarial Opinion (C) Working Group, Regulatory Guidance 2026 exposure draft, p.1 (SAO, Actuarial Opinion Summary, Actuarial Report), sha256:f916d0703dd5ad589d1baa052bc5a2a717304439d68957132c4c4812f3b195cc — https://content.naic.org/sites/default/files/inline-files/aowg-regulatory-guidance-2026-exposure-draft.pdf"
+    - "Insurance Companies Act (Canada), S.C. 1991 c.47, consolidated text (Justice Laws), s.49(1), s.365, s.368, s.369, sha256:9c041a9b453cb6cd89fbe883b60546990c43aa794a458cf5fde014225b17b1a2 — https://laws-lois.justice.gc.ca/eng/acts/I-11.8/FullText.html"
+    - "OSFI Guideline E-15, Appointed Actuary: Legal Requirements, Qualifications and Peer Review (2023), §1-3 (appointment, FCIA, valuation per accepted actuarial practice, FCT, report to CEO/CFO, peer review), sha256:0841e72e184128b5a182afbfebf4cd4422eb67581d03d5ce8581e76077969c58 — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/appointed-actuary-legal-requirements-qualifications-peer-review-guideline-2023"
+    - "CIA Standards of Practice (consolidated, effective April 1, 2026), 1110.02 (standards the only articulation of AAP; educational notes as other guidance), 1210 conflict with law, materiality and subsequent events (Part 1000), 2230 reporting and reservations incl. .25-.26 liabilities different from the actuary's, sha256:cc9fedc79c4d758a081d75d157071edef0b26dbcdc7968fe12b7700179344a6c — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=713004&fid=713005"
+    - "Code of Professional Conduct (U.S.-based organizations, eff. Jan 1 2001; Academy copy), Precepts 1-4, 8, 9, sha256:611f8101cf7bebd9cf8cfc1d5dfdc5f4e5b86e8d1fedca50069d291db9ec950c — https://www.actuary.org/sites/default/files/files/code_of_conduct.8_1.pdf"
+    - "ASB, ASOP No. 23 Data Quality (Doc. 185, Dec 2016), §3.3 Review of Data, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — http://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
+    - "ASB, ASOP No. 12 Risk Classification (Doc. 132), §3.2.1, §3.2.2 Causality, §3.2.5 Applicable Law, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
+    - "ASB web page for ASOP No. 12, Document Number 132, status Adopted (current), sha256:301b504c0764673d2c52935f869c8c65bcfc6cebe432fa8e3289e86bef6f84b2 — https://www.actuarialstandardsboard.org/asops/risk-classification-practice-areas/"
+    - "ASB, ASOP No. 56 Modeling (Doc. 195, Dec 2019), §2.4 Hold-out Data, §2.12 Overfitting, §3.1, §3.6, sha256:f3e159300fde3ff3f9db4198eb6b0a660f182875b2cc47a2da92c2567b7bd799 — http://www.actuarialstandardsboard.org/wp-content/uploads/2020/01/asop056_195.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Professional Responsibilities of the Actuary.md

@@ -44,7 +44,8 @@ class Noise(unittest.TestCase):
             self.assertTrue(g.is_noise(name), name)
 
     def test_reviewed_noise(self):
-        for name in ("Effective Manner While", "Jurisdiction", "Biases Introduced", "Benefits Payable"):
+        for name in ("Effective Manner While", "Jurisdiction", "Biases Introduced", "Benefits Payable",
+                     "Physicians Play", "United State", "Organization's Ability", "Claim Amounts Paid"):
             self.assertTrue(g.is_noise(name), name)
 
     def test_real_terms_with_ordinary_words(self):

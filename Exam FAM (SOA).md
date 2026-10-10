@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9d5661e7c003e741dd6d92331527010411cbc57a4deb7076542e928bfbac3d0e
+  content_hash: sha256:d5cffb217dba4f300466418cdd421c6a3e3f7651966da94e1d0f34d3bd81bfee
   sources:
     - "SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
@@ -43,13 +43,13 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 ## Learning Objectives
 
 > [!example]- Short-Term Insurance and Reinsurance Coverages {5–10%}
-> The Candidate will understand and be able to apply the key features of insurance and [[Reinsurance Coverage|reinsurance coverages]].
+> The Candidate will understand and be able to apply the key features of insurance and [[Reinsurance|reinsurance coverages]].
 >
 > 1. Identify the types of [[Coverage Modifications|coverage modifications]] for [[Short-Term Insurance Coverage|short-term insurance]].
 > 2. Perform calculations assessing the impact of [[Coverage Modifications|coverage modifications]].
 > 3. Perform calculations of the [[Loss Elimination|loss elimination]] ratio and the effect of [[Inflation|inflation]] on losses.
 > 4. Identify the operation of basic forms of proportional and excess of [[Excess of Loss|loss reinsurance]] and understand their impact on reserving and pricing.
-> 5. Determine the allocation of [[Claim Amounts Paid|claim amounts paid]] by the [[Insurer|insurer]] and reinsurer under various forms of [[Reinsurance|reinsurance]].
+> 5. Determine the allocation of [[Claim Amounts Paid|claim amounts paid]] by the [[Insurer|insurer]] and [[Reinsurance|reinsurer]] under various forms of [[Reinsurance|reinsurance]].
 
 > [!example]- Severity, Frequency, and Aggregate Models {12.5–17.5%}
 > The Candidate will understand the characteristics of and uses for commonly used [[Severity|severity]], [[Frequency|frequency]], and aggregate models.
@@ -71,9 +71,9 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > **The Candidate will be able to, for aggregate risk models:**
 >
 > 9. Define collective and [[Individual Risk Model|individual risk]] models and calculate their mean and [[Variance|variance]].
-> 10. Use the log-normal or [[Normal Approximation|normal approximation]] to approximate the aggregate distribution.
+> 10. Use the [[Lognormal Distribution|log-normal]] or [[Normal Approximation|normal approximation]] to approximate the aggregate distribution.
 > 11. Calculate [[Probability|probabilities]] using the [[Convolution|convolution]] method.
-> 12. Calculate the expected [[Payment|payment]] for [[Stop-Loss Insurance|stop-loss insurance]].
+> 12. Calculate the expected [[Payment|payment]] for [[Stop-Loss Reinsurance|stop-loss insurance]].
 > 13. Calculate Value at [[Risk]] and Tail Value at [[Risk]].
 > 14. Determine whether a given [[Risk|risk]] measure has certain [[Risk Measure|desirable properties]].
 
@@ -112,7 +112,7 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > 4. Apply [[Put-Call Parity|put-call parity]].
 
 > [!example]- Long-Term Insurance Coverages and Retirement Financial Security Programs {2.5–5%}
-> The Candidate will understand the key features of [[Insurance Coverage|insurance coverages]] and [[Retirement Financial Security|retirement financial security]] programs.
+> The Candidate will understand the key features of [[Insurance Coverage|insurance coverages]] and [[Retirement Plan|retirement financial security]] programs.
 >
 > 1. Define and apply the concept of [[Insurable Interest|insurable interest]].
 > 2. Identify the [[Long-Term Insurance Coverage|long-term insurance coverages]] (life, health), [[Annuities|annuities]], and [[Defined Benefit|defined benefit]] and [[Defined Contribution Pension Plan|defined contribution pension plans]].
@@ -129,8 +129,8 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > [!example]- Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
 > The Candidate will be able to perform calculations on the present value [[Random Variable|random variables]] associated with benefits and [[Expenses|expenses]] for [[Long Term Insurance Coverage|long term insurance coverages]].
 >
-> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Annuity Payment|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on annual, 1/m-thly and [[Continuous Payment Frequency|continuous payment frequency]].
-> 2. Calculate [[Probability|probabilities]], means, [[Variance|variances]] and [[Covariance|covariances]] for the [[Random Variable|random variables]] in Topic 9(a), using [[Fractional Age Assumption|fractional age]] or [[Claims Acceleration Approximation|claims acceleration approximations]] where appropriate.
+> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Life Annuity|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on annual, 1/m-thly and [[Continuous Payment Frequency|continuous payment frequency]].
+> 2. Calculate [[Probability|probabilities]], means, [[Variance|variances]] and [[Covariance|covariances]] for the [[Random Variable|random variables]] in Topic 9(a), using [[Fractional Age Assumption|fractional age]] or [[Fractional Age Assumption|claims acceleration approximations]] where appropriate.
 > 3. Understand the relationships between the insurance, [[Pure Endowment|endowment]], and annuity present value [[Random Variable|random variables]] in Topic 9(a), and between their expected values.
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).
 > 5. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for the expected values of the [[Random Variable|random variables]] in Topic 9(a).
@@ -138,7 +138,7 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > [!example]- Premium and Policy Value Calculation for Long-Term Insurance Coverages {15–22.5%}
 > The Candidate will be able to use and explain the [[Insurance Premium|premium]] and [[Policy Value|policy value calculation processes]] for [[Long-Term Insurance Coverage|long-term insurance coverages]].
 >
-> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with term and [[Whole Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
+> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with term and [[Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
 > 2. Calculate [[Insurance Premium|premiums]] based on the [[Equivalence Principle|equivalence principle]], the [[Portfolio Percentile Principle|portfolio percentile principle]], and for a given expected present value of profit, for the policies in Topic 10(a).
 > 3. Calculate and interpret [[Policy Value|gross premium]], [[Policy Value|net premium]] and [[Modified Net Premium Policy Value|modified net premium policy values]] for the policies in Topic 10(a).
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).

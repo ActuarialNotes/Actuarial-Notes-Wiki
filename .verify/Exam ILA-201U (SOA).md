@@ -24,3 +24,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (single words with no concept page are no longer linked; chunker trims trailing participles). syllabus_lint fidelity 0 errors; syllabus_write --check clean; every prose, objective and reading line, links stripped, again located in the PDF text fetched earlier today (same sha256).
 - sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T00:02Z/6b32
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Re-check after a link-only regeneration (Phase C alias table: variant spellings now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified on 2026-10-09 (same source PDF, same sha256).
+- sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

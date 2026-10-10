@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:502704ae356e50944e8af5967164138c0368e427ddb4055f75e098897120bd2a
+  content_hash: sha256:c085d6170d9a24f8f1ee9f499cf58a14eeae7d7a8c135ce682f2e0e9dd91c427
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
   open_findings: 0
@@ -27,9 +27,9 @@ verification:
 ## Learning Objectives
 
 > [!example]- Objectives of Asset Liability Management {5–20%}
-> The candidate will understand the objectives of [[Asset Liability]] Management (ALM).
+> The candidate will understand the objectives of [[Asset-Liability Management|Asset Liability]] Management ([[Asset-Liability Management|ALM]]).
 >
-> 1. Explain the principles of [[Asset Liability]] Management
+> 1. Explain the principles of [[Asset-Liability Management|Asset Liability]] Management
 > 2. Understand the lessons learned from [[ALM Failure|ALM failures]]
 > 3. Demonstrate an understanding of various [[ALM Risk|ALM risks]]
 > 4. Describe how different [[Pension|pension]] and [[Insurance Contracts Generate Embedded Option|insurance contracts generate embedded options]]
@@ -58,7 +58,7 @@ verification:
 > 1. Demonstrate an understanding of various [[Risk Identification Tool|risk identification tools]]
 > 2. Evaluate a company’s or a [[Portfolio's Exposure|portfolio’s exposures]] to various [[Risk|risks]]
 > 3. Understand measures of [[Regulatory Capital Adequacy|regulatory capital adequacy]] for [[Life Insurance Company|life insurance companies]] in various jurisdictions
-> 4. Evaluate the difficulties of investing for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 years) such as [[Inflation|inflation]] and longevity
+> 4. Evaluate the difficulties of investing for [[Long-Tail Liability|long-tail liabilities]] (i.e. beyond 30 years) such as [[Inflation|inflation]] and [[Longevity Risk|longevity]]
 >
 > **Readings:**
 > - CP351-101-25: ALM for Life, Annuities, and Pensions (section 4) (2a)

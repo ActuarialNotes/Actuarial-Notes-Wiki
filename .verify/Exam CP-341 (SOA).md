@@ -24,3 +24,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (single words with no concept page are no longer linked; chunker trims trailing participles). syllabus_lint fidelity 0 errors; syllabus_write --check clean; every prose, objective and reading line, links stripped, again located in the PDF text fetched earlier today (same sha256).
 - sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T00:02Z/6b32
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Re-check after a link-only regeneration (Phase C alias table: variant spellings now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified on 2026-10-09 (same source PDF, same sha256).
+- sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

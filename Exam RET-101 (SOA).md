@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:191a5f4316029df5e6e1bbcd954f222260e94f2f42c2688ef8be1a108a51bc87
+  content_hash: sha256:73e15e3ad6b469ad498cf5d7ed57ea01d2f08bfe83e1feaf84525f3cb9efe8f4
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for RET-101, all pages, sha256:d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf"
   open_findings: 0
@@ -27,14 +27,14 @@ verification:
 ## Learning Objectives
 
 > [!example]- Benefit Plan Structure, Features and Investments {30–50%}
-> The candidate will understand how to analyze different types of designs for [[Retirement Plan|retirement plans]] and [[Retirement Plan Investment|retirement plan investments]].
+> The candidate will understand how to analyze different types of designs for [[Retirement Plan|retirement plans]] and [[Investment Policy Statement|retirement plan investments]].
 >
 > 1. Describe the structure of the following [[Plan|plans]]:
 >    - [[Traditional Defined Benefit Plan|Traditional defined benefit plans]]
->    - [[Defined Contribution|Defined contribution]] and [[Savings Plan|savings plans]]
+>    - [[Defined Contribution|Defined contribution]] and [[Defined Contribution Plan|savings plans]]
 >    - [[Hybrid Plan|Hybrid plans]]
 >    - Other alternative [[Retirement Plan|retirement plans]] such as [[Executive Retirement Plan|executive retirement plans]], [[Shared Risk Plan|shared risk plans]], [[Target Benefit Plan|target benefit plans]], etc.
-> 2. Given a plan type, explain the relevance and range of [[Plan Feature|plan features]] including the following:
+> 2. Given a plan type, explain the relevance and range of [[Plan Design|plan features]] including the following:
 >    - [[Plan Eligibility Requirement|Plan eligibility requirements]]
 >    - [[Benefit Eligibility Requirement|Benefit eligibility requirements]], accrual, vesting
 >    - Benefit / [[Contribution Formula|contribution formula]], including methods of integration with benefits provided by [[Social Insurance|social insurance]]
@@ -44,7 +44,7 @@ verification:
 >    - [[Participant Investment Option|Participant investment options]]
 >    - Required and [[Optional Employee Contribution|optional employee contributions]]
 >    - Early and [[Late Retirement Option|late retirement options]]
->    - [[Indexing]]
+>    - [[Plan Design|Indexing]]
 > 3. Discuss investment of [[Retirement Plan Asset|retirement plan assets]]
 >    - Assess the different types and combinations of [[Investment Vehicle|investment vehicles]] typically used for providing [[Pension Plan|retirement benefits]].
 >    - Distinguish the various strategies, approaches and techniques used to manage [[Retirement Fund Asset|retirement fund assets]]
@@ -90,12 +90,12 @@ verification:
 > The candidate will understand how to analyze the [[Risk|risks]] faced by [[Retiree|retirees]] and the participants of [[Retirement Plan|retirement plans]].
 >
 > 1. Identify [[Risk|risks]] faced by [[Retiree|retirees]] and the elderly
-> 2. Describe and contrast the [[Risk|risks]] faced by participants of various [[Sponsored Plan|sponsored plans]], such as:
+> 2. Describe and contrast the [[Risk|risks]] faced by participants of various [[Retirement Plan|sponsored plans]], such as:
 >    - [[Retirement Plan|Retirement plans]] sponsored by [[Public Sector Employer|public sector employers]]
 >    - [[Single Employer Sponsored Retirement Plan|Single employer sponsored retirement plans]]
 >    - [[Retirement Plan|Retirement plans]] involving more than one employer, and
 >    - [[Social Insurance Plan|Social insurance plans]]
-> 3. Evaluate [[Benefit Adequacy|benefit adequacy]] and measure [[Replacement Income|replacement income]] for members of a particular plan given other sources of [[Retirement Income|retirement income]]
+> 3. Evaluate [[Benefit Adequacy|benefit adequacy]] and measure [[Replacement Income|replacement income]] for members of a particular plan given other sources of [[Replacement Ratio|retirement income]]
 > 4. Describe ways in which [[Retirement Plan|retirement plan]] design can manage the range of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]]
 >
 > **Readings:**
@@ -123,16 +123,16 @@ verification:
 > [!example]- Sponsor Risks {15–25%}
 > The candidate will understand how to analyze the [[Risk|risks]] faced by sponsors of [[Retirement Plan|retirement plans]].
 >
-> 1. Identify how [[Plan Feature|plan features]], temporary or permanent, can adversely affect the [[Plan Sponsor|plan sponsor]]
-> 2. Assess the [[Sponsor Risk|sponsor risk]] from options offered, including:
+> 1. Identify how [[Plan Design|plan features]], temporary or permanent, can adversely affect the [[Plan Sponsor|plan sponsor]]
+> 2. Assess the [[Plan Sponsor|sponsor risk]] from options offered, including:
 >    - [[Postponed Retirement|Postponed retirement]]
 >    - [[Early Retirement|Early retirement]]
 >    - [[Optional Form|Optional forms]] of [[Payment|payment]] factors
 >    - [[Embedded Option|Embedded options]]
 >    - [[Portability Option|Portability options]]
->    - [[Investment Option|Investment options]]
+>    - [[Defined Contribution Plan|Investment options]]
 >    - [[Decumulation Feature|Decumulation features]]
-> 3. Describe ways to mitigate the [[Risk|risks]] identified with a particular [[Plan Feature|plan feature]]
+> 3. Describe ways to mitigate the [[Risk|risks]] identified with a particular [[Plan Design|plan feature]]
 >
 > **Readings:**
 > - RET101-104-25: The Hybrid Handbook: Not All Hybrids are Created Equal (3a, 3b, 3c)
@@ -158,10 +158,10 @@ verification:
 > 8. Evaluate the pros and cons from both a sponsor and [[Employee Perspective|employee perspective]] of [[Introducing Option|introducing options]] that impact the [[Labor Force Demographics|labor force demographics]]
 > 9. Recommend a method to integrate benefits provided by [[Social Insurance|social insurance]] with [[Retirement Plan Design|retirement plan designs]] in order to meet the [[Plan Sponsor'|plan sponsor’s]] particular goals and defend the recommendation
 > 10. Recommend an appropriate plan type and [[Plan Design Feature|plan design features]] for providing [[Pension Plan|retirement benefits]] and defend the recommendations
-> 11. Assess the potential effects, including tax implications, of various investments and [[Investment Policy|investment policies]] on all of the stakeholders
-> 12. Identify and assess the sources of [[Investment Risk|investment risk]] applicable to [[Retirement Fund Asset|retirement fund assets]]
+> 11. Assess the potential effects, including tax implications, of various investments and [[Investment Policy Statement|investment policies]] on all of the stakeholders
+> 12. Identify and assess the sources of [[Market Risk|investment risk]] applicable to [[Retirement Fund Asset|retirement fund assets]]
 > 13. Explain and apply restrictions on [[Plan Design Feature|plan design features]] to a proposed plan design, taking into accounting the use of [[Tax Incentive|tax incentives]] and understanding conflicts between regulations and design objectives
-> 14. Identify changes that could reduce [[Sponsor Risk|sponsor risk]].
+> 14. Identify changes that could reduce [[Plan Sponsor|sponsor risk]].
 >
 > **Readings:**
 > - Retirement Plans - 401(k)s, IRAs and Other Deferred Compensation Approaches, Allen et al., 12th Edition, 2018 (4a-4n)

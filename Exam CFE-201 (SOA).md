@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7444be9c90849eb006e44a685a137dabc881a528fc132d6d354e21292d1eaca7
+  content_hash: sha256:6fd120b7e8198fd6bd6220f56067b9af58c9c87fc253d4498121ffa6a3750069
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
   open_findings: 0
@@ -50,7 +50,7 @@ verification:
 > [!example]- Financial Statement Analysis {21–35%}
 > The candidate will understand how to gauge an [[Organization's Performance|organization’s performance]] through an evaluation of its [[Financial Report|financial reports]].
 >
-> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the interrelationships among them, in order to measure [[Financial Performance|financial performance]]
+> 1. Analyze the [[Reported Financial Statement|reported financial statements]] and the interrelationships among them, in order to measure [[Key Financial Measures|financial performance]]
 > 2. Identify unusual or questionable accounting practices and analyze their impact on the quality of key [[Financial Metrics|financial metrics]]
 > 3. Analyze the impact of accounting policies related to taxes and [[Foreign Exchange Rate|foreign exchange rates]] on [[Financial Statements|financial statements]]
 >

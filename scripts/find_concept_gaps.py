@@ -117,13 +117,17 @@ VAGUE = {
 # Targets a person read in context and found to name no concept, though the word
 # lists above can't tell: each is part of a sentence the noun-phrase linker cut out
 # ("report in an [[Effective Manner While]] following standards", "companies in various
-# [[Jurisdiction|jurisdictions]]"). Reviewed for Phase B of CONCEPT_GAPS_PLAN.md; keys as
-# concept_key.
+# [[Jurisdiction|jurisdictions]]"). Reviewed for Phases B and C of CONCEPT_GAPS_PLAN.md;
+# keys as concept_key.
 REVIEWED_NOISE = {
     "benefit payable", "jurisdiction", "single non dividend paying asset", "analytical effort",
     "computational efficiency", "common language", "effective manner while", "recommended analytics",
     "straightforward manner", "final product", "biase introduced", "otherwise modify data",
     "vague question",
+    # Phase C
+    "claim amount paid", "future cost", "continuous payment frequency", "claim data",
+    "contract described", "project financial", "physician play", "provider system compete",
+    "united state", "applicable law", "third party", "organization ability",
 }
 # Leading modifiers that don't change which concept is meant: `Applicable Best
 # Practice` is `Best Practice`.

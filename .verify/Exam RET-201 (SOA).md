@@ -38,3 +38,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (single words with no concept page are no longer linked; chunker trims trailing participles). syllabus_lint fidelity 0 errors; syllabus_write --check clean; every prose, objective and reading line, links stripped, again located in the PDF text fetched earlier today (same sha256).
 - sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T00:02Z/6b32
+- date: 2026-10-10
+- status_set: verified
+- confidence: high
+- checks_run: Re-check after a link-only regeneration (Phase C alias table: variant spellings now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified on 2026-10-09 (same source PDF, same sha256).
+- sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

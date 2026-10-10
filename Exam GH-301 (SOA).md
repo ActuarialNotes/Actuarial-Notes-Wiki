@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:96b5bb5f9f75ce78ab2307cfb6dfaa7d7829296e29bd08f66207d9c1b7c09a8a
+  content_hash: sha256:b076831d4f45601f4d334bb9ab89b309e3a403155df60b30927c0103d02820d8
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-301, all pages, sha256:2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd — https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf"
   open_findings: 0
@@ -30,9 +30,9 @@ verification:
 > The candidate will understand how to evaluate the effectiveness of [[Provider Reimbursement|provider reimbursement]] methods from both a cost and [[Quality Viewpoint|quality viewpoint]].
 >
 > 1. Describe contracts between payers and [[Provider|providers]]
-> 2. Calculate [[Provider Payment|provider payments]] under various reimbursement methods
+> 2. Calculate [[Provider Payment|provider payments]] under various [[Provider Reimbursement|reimbursement]] methods
 > 3. Evaluate [[Standard Contracting|standard contracting]] methods from a cost-effective and [[Quality Perspective|quality perspective]]
-> 4. Evaluate [[Accountable Care Organization|accountable care organizations]] (ACO) and their impact on quality, utilization, and cost
+> 4. Evaluate [[Accountable Care Organization|accountable care organizations]] (ACO) and their impact on quality, [[Utilization|utilization]], and cost
 >
 > **Readings:**
 > - Video: Challenges of Provider Reimbursement (Background)
@@ -73,7 +73,7 @@ verification:
 > [!example]- Healthcare Risk Adjustment1 {15–25%}
 > The candidate will understand how to apply [[Risk|risk]] adjustment in actuarial work.
 >
-> 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], pricing, [[Claim|claims]], and [[Care Management Situation|care management situations]] (applications include Medicare, Medicaid, and [[ACA Product|ACA products]])
+> 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], pricing, [[Claim|claims]], and [[Care Management Situation|care management situations]] (applications include [[Medicare]], [[Medicaid]], and [[ACA Product|ACA products]])
 > 2. Apply [[Risk|risk]] adjustment concepts to [[Normalize Population Claims Experience|normalize population claims experience]]
 > 3. Apply applicable [[Best Practice|best practices]] in [[Risk|risk]] adjustment
 >

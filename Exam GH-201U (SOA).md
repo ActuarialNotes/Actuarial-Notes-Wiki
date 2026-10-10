@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eb9f127e5333d851a626b3502cf8352ba858b32008ea0d7f483d1206ef704f14
+  content_hash: sha256:74739702e01771234d3bf816ceaad19e6db1ecf5f1db8cfc4e6060f38ab82908
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201U, all pages, sha256:dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf"
   open_findings: 0
@@ -27,13 +27,13 @@ verification:
 ## Learning Objectives
 
 > [!example]- Reserving {30–40%}
-> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Short Duration Group|short duration group]] and [[Health Insurance Contract|health insurance contracts]].
+> The candidate will understand how to apply [[Valuation Principle|valuation principles]] for [[Short Duration Group|short duration group]] and [[Group Health Insurance|health insurance contracts]].
 >
 > 1. Describe the types of [[Claim Reserve|claim reserves]]
-> 2. Explain the limitations and biases of the [[Traditional Valuation|traditional valuation]] methods
+> 2. Explain the limitations and biases of the [[Claim Reserve|traditional valuation]] methods
 > 3. Calculate appropriate [[Claim Reserve|claim reserves]] given data
 > 4. Describe, calculate, and evaluate the impact of environmental factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
-> 5. Evaluate [[Data Resource|data resources]] and appropriateness for calculating [[Reserve|reserves]]
+> 5. Evaluate [[Data Quality|data resources]] and appropriateness for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate non-IBNR types of [[Reserve|reserves]] and explain when each is required
 > 7. Apply applicable [[Best Practice|best practices]] related to reserving
 >
@@ -52,12 +52,12 @@ verification:
 > - ASOP 42: Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims (excluding Appendices) (1g)
 
 > [!example]- Financial Statements {25–35%}
-> The candidate will understand how to prepare and interpret [[Insurance Company Financial Statement|insurance company financial statements]] in accordance with Statutory Accounting Standards and [[GAAP]].
+> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with Statutory Accounting Standards and [[GAAP]].
 >
 > 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting Principles ([[GAAP]])
-> 2. Interpret the results of both statutory and [[GAAP Statement|GAAP statements]] from the viewpoint of stakeholders, including regulators, senior management, and investors
+> 2. Interpret the results of both statutory and [[GAAP|GAAP statements]] from the viewpoint of stakeholders, including regulators, senior management, and investors
 > 3. Project financial outcomes and recommend [[Strategy|strategy]]
-> 4. Evaluate [[Capital Need|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
+> 4. Evaluate [[Regulatory Capital|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Capital Strain|capital strain]]
 > 5. Apply applicable [[Best Practice|best practices]] related to [[Financial Statements|financial statements]]
 >
 > **Readings:**
@@ -74,7 +74,7 @@ verification:
 > [!example]- Regulation {15–25%}
 > The candidate will understand how to evaluate the impact of regulation on [[Insurer|insurance companies]] and [[Plan Sponsor|plan sponsors]] in the [[United State|United States]].
 >
-> 1. Describe the regulatory and [[Policy Making Process|policy making process]] in the [[United State|United States]]
+> 1. Describe the regulatory and [[State and Federal Insurance Regulation|policy making process]] in the [[United State|United States]]
 > 2. Describe the major applicable laws and [[Regulation|regulations]] and evaluate their impact
 >
 > **Readings:**
@@ -94,7 +94,7 @@ verification:
 >
 > 1. Describe [[Medicare Benefit|Medicare benefits]] and evaluate pricing and [[Filing Requirement|filing requirements]]
 > 2. Describe [[Medicaid Program Structure|Medicaid program structure]] and benefits, and evaluate pricing and [[Filing Requirement|filing requirements]]
-> 3. Describe the [[Affordable Care Act]] and evaluate impacts on pricing and filing
+> 3. Describe the [[Affordable Care Act]] and evaluate impacts on pricing and [[Rate Regulation|filing]]
 >
 > **Readings:**
 > - Group Insurance, Skwire, Daniel D., 8th Edition, 2021 (4a, 4b)
@@ -113,9 +113,9 @@ verification:
 > [!example]- Flow of Funds {5–15%}
 > The candidate will understand how to describe the flow of funds in the [[Health Care System|health care system]] and the role of providers in the system.
 >
-> 1. Establish a framework of how [[Funds Flow|funds flow]] through the [[Health Care System|health care system]]
+> 1. Establish a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
 > 2. Describe the role [[Physicians Play|physicians play]] and their influence on the flow of funds
-> 3. Describe the [[Market Power|market power]] of hospitals and how [[Provider System|provider systems]] compete for patients, physicians, and contracts
+> 3. Describe the [[Health Care System|market power]] of hospitals and how [[Provider System|provider systems]] compete for patients, physicians, and contracts
 > 4. Describe the flow of funds in the [[Canadian Healthcare System|Canadian healthcare system]] and the roles of the provider and government
 >
 > **Readings:**

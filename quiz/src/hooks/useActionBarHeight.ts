@@ -37,15 +37,25 @@ export function useActionBarHeight(ref: RefObject<HTMLElement | null>, active = 
 
     const me = {}
     owner = me
-    const observer = new ResizeObserver(entries => {
+    // What the page has to keep clear is everything from the bar's top edge to
+    // the bottom of the window — the bar, and anything the browser keeps under
+    // it (a phone browser's toolbar can sit between a `bottom-0` bar and the
+    // window's edge). Measured rather than taken as the bar's own height, so a
+    // page scrolled to its end shows its last row above the bar, not under it.
+    const publish = () => {
       if (owner !== me) return
-      const height = entries[0]?.borderBoxSize?.[0]?.blockSize ?? el.offsetHeight
-      root.style.setProperty('--action-bar-height', `${Math.round(height)}px`)
-    })
+      const rect = el.getBoundingClientRect()
+      const below = document.documentElement.clientHeight - rect.top
+      const reserve = Math.max(rect.height, below > 0 ? below : 0)
+      root.style.setProperty('--action-bar-height', `${Math.round(reserve)}px`)
+    }
+    const observer = new ResizeObserver(publish)
     observer.observe(el)
+    window.addEventListener('resize', publish)
 
     return () => {
       observer.disconnect()
+      window.removeEventListener('resize', publish)
       if (owner !== me) return
       owner = null
       root.style.removeProperty('--action-bar-height')

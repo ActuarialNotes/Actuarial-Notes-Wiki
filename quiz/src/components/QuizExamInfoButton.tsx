@@ -4,6 +4,7 @@ import { ExamLogo } from '@/components/ExamLogo'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { examAbout } from '@/data/examSittingDetails'
+import { getPassRateLookup } from '@/data/pastExams'
 import type { Question } from '@/lib/parser'
 import {
   formatExamLength,
@@ -116,6 +117,9 @@ function QuizExamInfoDialog({
 
   const info = useMemo(() => quizBankInfo(questions, exam), [questions, exam])
   const about = examAbout(progressKey, wikiExamId)
+  // Where the exam's published pass rates are looked up — a fact about the
+  // exam, so it lives here rather than over the past-paper shelf.
+  const passRates = getPassRateLookup(exam)
   const { sources, pace } = info
 
   // Where the questions came from, largest share of the bank's story first:
@@ -195,17 +199,31 @@ function QuizExamInfoDialog({
             </p>
           )}
 
-          {about && (
+          {(about || passRates) && (
             <footer className="flex flex-wrap gap-x-4 gap-y-1.5 border-t pt-3">
-              <a
-                href={about.source.url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <ExternalLink className="h-3 w-3" aria-hidden />
-                {about.source.label}
-              </a>
+              {about && (
+                <a
+                  href={about.source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <ExternalLink className="h-3 w-3" aria-hidden />
+                  {about.source.label}
+                </a>
+              )}
+              {passRates && (
+                <a
+                  href={passRates.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={passRates.label}
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <ExternalLink className="h-3 w-3" aria-hidden />
+                  Pass rates
+                </a>
+              )}
             </footer>
           )}
         </div>

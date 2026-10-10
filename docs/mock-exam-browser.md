@@ -117,8 +117,9 @@ arrive one of two ways — live from the publisher, or authored into the catalog
 floor.
 
 Until a sitting has a figure from either source, the browser shows no statistics column at
-all (`hasPublishedStats`) — a shelf of em-dashes reads as a broken readout — and the header
-links out to the exam's lookup page (`PASS_RATE_LOOKUP`) instead. One figure lights the
+all (`hasPublishedStats`) — a shelf of em-dashes reads as a broken readout — and the exam's
+lookup page (`PASS_RATE_LOOKUP`) is linked from the builder's exam info panel instead
+(**Pass rates**, in `QuizExamInfoButton`'s footer: a fact about the exam, not a control on the shelf). One figure lights the
 column for the whole shelf.
 
 ### Live figures (`api/pass-rates.js`)
@@ -232,7 +233,6 @@ siblings; a tap anywhere else on the row still selects it.
 | Control | What it is | Shown when |
 |---|---|---|
 | Examiner's report | The selected sitting's paper, opened in the in-app PDF viewer (icon + `PDF` tag), on the selected row | `getSittingPdfLink` has that sitting — or, for an exam with no dated papers at all, `getExamPdfLink` has the exam-level sample-question PDF (on the Mix row) |
-| Pass rates | The exam's lookup page (`PASS_RATE_LOOKUP`), above the shelf, sized as a real control rather than fine print | The exam has a lookup entry |
 
 The report tracks the *selection*, so it moves with the checkmark as you go down the shelf
 — a sitting whose report isn't in `SITTING_PDF_LINKS` shows no button rather than a dead one.

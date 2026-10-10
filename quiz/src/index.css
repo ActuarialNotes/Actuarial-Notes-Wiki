@@ -78,6 +78,36 @@
   }
 }
 
+/* Concept mentions: a concept a quiz question names in its own words, made
+   tappable (lib/conceptMentions.ts). A button laid out as the word it wraps —
+   the sentence's own type and colour, with the study guide's underline saying
+   it can be read. While the popup shows it, `.wiki-link--active` (below)
+   draws it as the study guide's active link. */
+.concept-mention {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-color: hsl(var(--primary) / 0.55);
+  border-radius: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+.concept-mention:hover {
+  text-decoration-color: hsl(var(--primary));
+}
+.concept-mention:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
 /* Wiki: the currently-active concept link on a source page (exam/resource)
    while the concept popup is open.
    Light mode: solid primary chip (near-black bg, near-white text).

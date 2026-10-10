@@ -44,7 +44,10 @@ test.describe('answer reveal', () => {
 
   test('the builder checkbox is remembered across visits', async ({ page }) => {
     const label = 'Show answers after each question'
+    // The choice lives in the settings menu beside the deck card.
+    const settings = page.getByRole('button', { name: 'Quiz settings' })
     await page.goto('/?topic=Probability')
+    await settings.click()
     const box = page.getByRole('checkbox', { name: label })
     // A quiz defaults to answering as you go.
     await expect(box).toBeVisible()
@@ -54,6 +57,7 @@ test.describe('answer reveal', () => {
     await expect(box).toHaveAttribute('aria-checked', 'false')
 
     await page.goto('/?topic=Probability')
+    await settings.click()
     await expect(page.getByRole('checkbox', { name: label }))
       .toHaveAttribute('aria-checked', 'false')
   })

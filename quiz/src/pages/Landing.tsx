@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavTrail, usePageLabel } from '@/hooks/useBack'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, ChevronDown, Circle, Loader2, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, ChevronDown, Circle, ClipboardCheck, ListChecks, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuizExamInfoButton } from '@/components/QuizExamInfoButton'
 import { ExamStatusBanner, FloatingSearchBack } from '@/components/FloatingSearchBar'
@@ -26,7 +26,7 @@ import { planDoneConceptSlugs } from '@/lib/planCompletion'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
-import { filterQuestions, isFromAnotherExamsPaper } from '@/lib/parser'
+import { filterQuestions } from '@/lib/parser'
 import type { Difficulty, Question } from '@/lib/parser'
 import { bankLabelFor } from '@/lib/examIds'
 import { matchesSelectedVariant } from '@/data/examSittings'
@@ -56,6 +56,7 @@ import {
   shuffle,
 } from '@/lib/quizDifficulty'
 import { formatPace, loadTimed, paceForExam, saveTimed } from '@/lib/quizTiming'
+import { loadConceptLinks, saveConceptLinks } from '@/lib/quizConceptLinks'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { BattleLogo } from '@/components/battle/BattleLogo'
@@ -99,13 +100,15 @@ function formatTargetDate(dateStr: string): string {
 const QUICK_COUNTS = [1, 3, 5, 10]
 
 /**
- * What the builder is drawing from. This used to be two separate pieces of
- * state — a `conceptMode` of today/custom, and a `mode` of quiz/mock-exam that
- * the *question-count* row set — which meant picking "Mock Exam" from a row of
- * 1/3/5/10 silently changed the view. All three are one choice, so they're one
- * control now (see `SOURCE_OPTIONS` below).
+ * Where the builder's questions come from: today's plan, a hand-picked set of
+ * topics, or the exam's past papers. *How* they are sat is a second, separate
+ * choice — the format, Quiz or Practice Exam (`QuizMode`) — and any source can
+ * be sat either way: a past paper as a quiz with the answers as you go, a set
+ * of topics as a full-length practice exam. The two used to be one control,
+ * whose "Past Papers" tab silently meant "practice exam" too, so the questions'
+ * source and the way of sitting them couldn't be told apart.
  */
-type QuizSource = 'today' | 'custom' | 'mock-exam'
+type QuizSource = 'today' | 'custom' | 'papers'
 
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
@@ -386,12 +389,17 @@ export default function Landing() {
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
 
-  // What the quiz draws from: today's plan, a hand-picked set of topics, or a
-  // mock exam. One choice, one control — `mode` and `conceptMode` below are
-  // read-only views of it, kept so the launch/filter code reads unchanged.
-  const [source, setSource] = useState<QuizSource>(initialMode === 'mock-exam' ? 'mock-exam' : 'custom')
-  const mode: QuizMode = source === 'mock-exam' ? 'mock-exam' : 'quiz'
+  // What the quiz draws from: today's plan, a hand-picked set of topics, or the
+  // exam's past papers. `conceptMode` below is a read-only view of it, kept so
+  // the plan code reads unchanged.
+  const [source, setSource] = useState<QuizSource>(initialMode === 'mock-exam' ? 'papers' : 'custom')
   const conceptMode: 'today' | 'custom' = source === 'today' ? 'today' : 'custom'
+  // How it is sat — the format, chosen beside Start and independent of the
+  // source. A quiz is a short set you size and filter; a practice exam is sat
+  // the way a paper is, full length and every difficulty. (A link with
+  // `mode=mock-exam` — the old Past Papers tab's — opens on both.)
+  const [format, setFormat] = useState<QuizMode>(initialMode === 'mock-exam' ? 'mock-exam' : 'quiz')
+  const mode: QuizMode = format
 
   // Quiz-specific options
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
@@ -415,6 +423,16 @@ export default function Landing() {
     setTimed(next)
     saveTimed(mode, next)
   }
+
+  // Whether the concepts a question names are tappable — per mode as well: on
+  // for a quiz, off for a practice exam until the reader says otherwise.
+  const [conceptLinks, setConceptLinks] = useState<boolean>(() => loadConceptLinks(mode))
+  useEffect(() => { setConceptLinks(loadConceptLinks(mode)) }, [mode])
+  function handleConceptLinksChange(next: boolean) {
+    setConceptLinks(next)
+    saveConceptLinks(mode, next)
+  }
+  const linksParam = conceptLinks ? '1' : '0'
 
   // Which difficulty levels a quiz draws from (lib/quizDifficulty.ts) — a
   // filter, so every count on the page below reads through `inLevels`. One
@@ -456,13 +474,15 @@ export default function Landing() {
     } catch { /* ignore */ }
   }
 
-  // Reset state and restore saved topic selections when exam topic or mode changes
+  // Reset state and restore saved topic selections when the exam changes. The
+  // format is not a reason to: switching Quiz ↔ Practice Exam keeps the topics
+  // and the paper picked.
   useEffect(() => {
     setIsAdaptive(false)
-    setSource(prev => (prev === 'mock-exam' ? prev : 'custom'))
+    setSource(prev => (prev === 'papers' ? prev : 'custom'))
     setSelectedSitting(null)
     userPickedCountRef.current = false
-    if (topic && mode === 'quiz') {
+    if (topic) {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
         const parsed = saved ? JSON.parse(saved) : null
@@ -473,7 +493,7 @@ export default function Landing() {
     } else {
       setSelectedConcepts([])
     }
-  }, [topic, mode])
+  }, [topic])
 
   // --- Syllabus-derived data ---
 
@@ -708,20 +728,21 @@ export default function Landing() {
     } catch { /* ignore */ }
     const params = new URLSearchParams({
       selection: 'stored',
-      mode: 'quiz',
+      mode,
       reveal,
       count: String(selected.length),
       from: 'home',
+      links: linksParam,
     })
     if (timed) params.set('timed', '1')
     navigate(`/quiz?${params.toString()}`, { replace })
     return true
-  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, reveal, timed])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds, mode, reveal, timed, linksParam])
 
   // Auto-activate today's study plan for Pro users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
   useEffect(() => {
-    if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
+    if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || source === 'papers' || !topic) return
 
     if (!didApplyOverrideRef.current && conceptOverrideRef.current) {
       didApplyOverrideRef.current = true
@@ -738,7 +759,7 @@ export default function Landing() {
       setIsAdaptive(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, planConceptCount, examInProgress])
+  }, [topic, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPro, planConceptCount, examInProgress])
 
   // Auto-size Today's Quiz to cover the entire (remaining) plan, until the user
   // picks a specific count. This is what makes "Start Today's Quiz" pull exactly
@@ -792,11 +813,11 @@ export default function Landing() {
 
   // Persist manual concept selections to localStorage
   useEffect(() => {
-    if (!topic || mode !== 'quiz' || isAdaptive || conceptMode === 'today') return
+    if (!topic || isAdaptive || conceptMode === 'today') return
     try {
       localStorage.setItem(`actuarial_quiz_concepts_v1_${topic}`, JSON.stringify(selectedConcepts))
     } catch { /* ignore */ }
-  }, [selectedConcepts, topic, mode, isAdaptive, conceptMode])
+  }, [selectedConcepts, topic, isAdaptive, conceptMode])
 
   // Question counts per exam (for the exam selection cards)
   const questionCounts = useMemo(() => {
@@ -821,8 +842,19 @@ export default function Landing() {
     return filterQuestions(allQuestions, { concept: selectedConcept }).filter(inLevels).length
   }, [allQuestions, selectedConcept, inLevels])
 
+  // The past-paper shelf's pool: the picked sitting, or the whole exam for the Mix.
+  const papersAvailableCount = useMemo(() => {
+    if (!topic) return 0
+    return filterQuestions(allQuestions, {
+      exam: topic,
+      ...(selectedSitting && { year: selectedSitting.year, session: selectedSitting.session }),
+    }).filter(inLevels).length
+  }, [allQuestions, topic, selectedSitting, inLevels])
+
   // When study plan is active, use its question pool size; otherwise use subtopic-filtered count
-  const effectiveAvailableCount = selectedConcept
+  const effectiveAvailableCount = source === 'papers'
+    ? papersAvailableCount
+    : selectedConcept
     ? conceptAvailableCount
     : useTodaysPlan ? todayAvailableCount : availableCount
 
@@ -908,7 +940,7 @@ export default function Landing() {
       ),
     })
     options.push({
-      value: 'mock-exam',
+      value: 'papers',
       flex: showTodayOption ? 2 : 1,
       label: <span className="truncate">{examSourceName}</span>,
     })
@@ -921,10 +953,44 @@ export default function Landing() {
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
-    // Leaving quiz mode invalidates a question count the user picked for it, and
-    // arriving at one should re-run the auto-size for today's plan.
-    if (next !== 'mock-exam') setSelectedSitting(null)
+    // A paper picked on the shelf is only meant while the shelf is the source.
+    if (next !== 'papers') setSelectedSitting(null)
   }
+
+  // ── How it is sat ─────────────────────────────────────────────────────────
+  // The format sits beside Start, which it renames: one row says what the
+  // questions are, this one says how they're sat. Each option says, under its
+  // name, the one thing that separates the two — how long the set is. Whether
+  // the answers come as you go, and the clock, are the settings menu's, and
+  // remembered for each format apart.
+  const formatOptions = useMemo<SegmentedOption<QuizMode>[]>(() => [
+    {
+      value: 'quiz',
+      ariaLabel: 'Quiz: a short set',
+      label: (
+        <span className="flex min-w-0 flex-col items-center gap-0.5 leading-tight">
+          <span className="flex items-center gap-1.5 text-base">
+            <ListChecks className="h-4 w-4 shrink-0" aria-hidden />
+            Quiz
+          </span>
+          <span className="truncate text-xs font-normal text-muted-foreground">Short set</span>
+        </span>
+      ),
+    },
+    {
+      value: 'mock-exam',
+      ariaLabel: `${PRACTICE_EXAM_LABEL}: full length`,
+      label: (
+        <span className="flex min-w-0 flex-col items-center gap-0.5 leading-tight">
+          <span className="flex items-center gap-1.5 text-base">
+            <ClipboardCheck className="h-4 w-4 shrink-0" aria-hidden />
+            <span className="truncate">{PRACTICE_EXAM_LABEL}</span>
+          </span>
+          <span className="truncate text-xs font-normal text-muted-foreground">Full length</span>
+        </span>
+      ),
+    },
+  ], [])
 
   function handleStart() {
     // A shuffled draw pins the exact question set, whichever mode produced it.
@@ -938,63 +1004,52 @@ export default function Landing() {
         count: String(drawnIds.length),
         reveal,
         from: 'home',
+        links: linksParam,
       })
       if (timed) params.set('timed', '1')
       navigate(`/quiz?${params.toString()}`)
       return
     }
 
-    if (selectedConcept) {
-      // Always a quiz, whichever source tab happens to be showing, so it takes
-      // the quiz's saved reveal rather than the tab's.
+    if (selectedConcept && source !== 'papers') {
       const params = new URLSearchParams({
         concept: selectedConcept,
-        mode: 'quiz',
-        reveal: loadRevealMode('quiz'),
+        mode,
+        reveal,
         from: 'home',
+        links: linksParam,
       })
       if (levelsParam) params.set('levels', levelsParam)
-      if (loadTimed('quiz')) params.set('timed', '1')
-      if (count < conceptAvailableCount) params.set('count', String(count))
+      if (timed) params.set('timed', '1')
+      if (quizQuestionCount < conceptAvailableCount) params.set('count', String(quizQuestionCount))
       navigate(`/quiz?${params.toString()}`)
       return
     }
 
     // Today's study plan mode: greedily cover as many of today's (still-incomplete)
-    // concepts as possible with the fewest questions, capped at the chosen count.
+    // concepts as possible with the fewest questions, capped at the chosen count
+    // — or, sat as a practice exam, at the exam's length.
     if (useTodaysPlan && plan) {
-      if (launchTodaysPlan(count)) return
+      if (launchTodaysPlan(mode === 'mock-exam' ? quizQuestionCount : count)) return
     }
 
-    const params = new URLSearchParams({ exam: topic, mode, reveal })
+    // Everything else is the source's filter plus the format's size: a quiz
+    // takes the count and difficulties picked, a practice exam the paper's
+    // length (a sitting whole) and every difficulty (`levelsParam` is null).
+    const params = new URLSearchParams({ exam: topic, mode, reveal, links: linksParam })
     if (timed) params.set('timed', '1')
-    if (mode === 'quiz') {
-      if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
-      params.set('count', String(count))
-      if (levelsParam) params.set('levels', levelsParam)
-    } else if (selectedSitting !== null) {
-      params.set('year', String(selectedSitting.year))
-      if (selectedSitting.session) params.set('session', selectedSitting.session)
-      params.set('count', String(sittingQuestionCount || practiceExamQuestions(topic)))
-    } else {
-      params.set('count', String(practiceExamQuestions(topic)))
+    if (source === 'papers') {
+      if (selectedSitting !== null) {
+        params.set('year', String(selectedSitting.year))
+        if (selectedSitting.session) params.set('session', selectedSitting.session)
+      }
+    } else if (selectedConcepts.length > 0) {
+      params.set('concepts', selectedConcepts.join(','))
     }
+    if (levelsParam) params.set('levels', levelsParam)
+    params.set('count', String(quizQuestionCount))
     navigate(`/quiz?${params.toString()}`)
   }
-
-  // Questions belonging to the selected sitting — shared by the launch params,
-  // the browser's footer line, and the availability count in the action bar.
-  const sittingQuestionCount = useMemo(() => {
-    if (!topic || !selectedSitting) return 0
-    return allQuestions.filter(q =>
-      q.exam === topic &&
-      // Same rule the shelf counts by: a question carried over from another
-      // exam's paper keeps that paper's date and isn't part of this sitting.
-      !isFromAnotherExamsPaper(q, topic) &&
-      q.year === selectedSitting.year &&
-      (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
-    ).length
-  }, [allQuestions, topic, selectedSitting])
 
   const mockExamCount = practiceExamQuestions(topic)
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
@@ -1037,7 +1092,7 @@ export default function Landing() {
   // The questions the current configuration covers before the difficulty
   // choice — what the menu's per-level counts are read from.
   const unleveledPool = useMemo<Question[]>(() => {
-    if (mode === 'mock-exam') {
+    if (source === 'papers') {
       if (!topic) return []
       return filterQuestions(allQuestions, {
         exam: topic,
@@ -1051,7 +1106,7 @@ export default function Landing() {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     })
-  }, [mode, topic, allQuestions, selectedSitting, selectedConcept, useTodaysPlan, todaysPlanUnleveledPool, selectedConcepts])
+  }, [source, topic, allQuestions, selectedSitting, selectedConcept, useTodaysPlan, todaysPlanUnleveledPool, selectedConcepts])
 
   // How many questions each level holds there, said under each level's name.
   const difficultyCounts = useMemo(() => {
@@ -1076,8 +1131,10 @@ export default function Landing() {
     () => currentPool.reduce((n, q) => n + (attemptsByQuestionId.has(q.id) ? 0 : 1), 0),
     [currentPool, attemptsByQuestionId],
   )
+  // A practice exam is the paper's length — a sitting whole — and a quiz the
+  // count picked, either capped at what the source holds.
   const quizQuestionCount = mode === 'mock-exam'
-    ? (selectedSitting ? poolCount : Math.min(mockExamCount, poolCount))
+    ? (source === 'papers' && selectedSitting ? poolCount : Math.min(mockExamCount, poolCount))
     : Math.min(count, poolCount)
 
   // ── Shuffling the draw ────────────────────────────────────────────────────
@@ -1091,6 +1148,7 @@ export default function Landing() {
 
   const drawSignature = [
     mode,
+    source,
     topic,
     selectedConcept,
     conceptMode,
@@ -1257,9 +1315,9 @@ export default function Landing() {
   const searchFilter = useMemo(() => {
     if (selectedConcept) return { concept: selectedConcept }
     if (!topic) return {}
-    // Mock exam: the shelf's selection is the pool. Opening the search while
+    // Past papers: the shelf's selection is the pool. Opening the search while
     // Spring 2019 is picked should show that paper, not the whole exam.
-    if (mode === 'mock-exam') {
+    if (source === 'papers') {
       return {
         exam: topic,
         ...(selectedSitting && { year: selectedSitting.year, session: selectedSitting.session }),
@@ -1278,7 +1336,7 @@ export default function Landing() {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     }
-  }, [topic, mode, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan])
+  }, [topic, source, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan])
 
   // Active filter chips shown in the search dropdown so the user can see and
   // remove concept filters without leaving the search panel. The exam and the
@@ -1535,13 +1593,13 @@ export default function Landing() {
                   </div>
                 )}
 
-                {/* Mock Exam content — the past-paper shelf */}
-                {quizModeResolved && source === 'mock-exam' && (
+                {/* The past-paper shelf */}
+                {quizModeResolved && source === 'papers' && (
                   <PastExamBrowser
                     rows={pastExamRows}
                     selected={selectedSitting}
                     onSelect={setSelectedSitting}
-                    mixCount={mixQuestionCount}
+                    mixCount={mode === 'mock-exam' ? mixQuestionCount : Math.min(count, examQuestionCount)}
                     examLabel={examLabel}
                     lookup={getPassRateLookup(topic)}
                     reportLink={mockReportLink}
@@ -1562,6 +1620,15 @@ export default function Landing() {
         className="fixed bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm"
       >
         <div className="container max-w-4xl mx-auto px-4 sm:px-6 pt-3 pb-4 space-y-3">
+          {/* ── How it is sat — Quiz or Practice Exam, whatever the source ── */}
+          <SegmentedControl
+            label="How to sit it"
+            value={format}
+            onChange={setFormat}
+            options={formatOptions}
+            size="xl"
+          />
+
           {/* ── Question deck: availability + shuffle the draw, and the
                  settings that shape it ────────────────────────────────────
               The deck says what the quiz draws from; the button beside it
@@ -1584,7 +1651,7 @@ export default function Landing() {
             )}
             {/* A practice exam is sat whole, as the paper sets it, so it
                 carries no count and no difficulty — the menu opens on the
-                reveal and timing choices alone. */}
+                reveal, timing and concept choices alone. */}
             <QuizSettingsMenu
               countOptions={mode === 'quiz' ? countOptions : undefined}
               countValue={mode === 'quiz' ? countValue : undefined}
@@ -1597,6 +1664,8 @@ export default function Landing() {
               timed={timed}
               onTimedChange={handleTimedChange}
               timedPace={timedPace}
+              conceptLinks={conceptLinks}
+              onConceptLinksChange={handleConceptLinksChange}
               className={poolCount > 0 ? undefined : 'h-14'}
             />
           </div>

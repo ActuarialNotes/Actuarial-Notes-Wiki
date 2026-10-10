@@ -229,12 +229,17 @@ export const PRACTICE_EXAM_LABEL = 'Practice Exam'
  * The label follows the content, the same rule the report button follows
  * (`Examiner's Report` vs `Exam & Answer Key`): an exam whose body released its
  * papers offers **Past Papers**, and one with none — Exam P and FM draw on the
- * SOA's rolling sample set, so their shelf is the generated Mix row alone —
- * offers a **Practice Exam**. Naming real papers "mock" understated them; naming
- * the Mix "past papers" would overstate it.
+ * SOA's rolling sample set, so their shelf is the generated Mix row and the
+ * sample set's PDFs — offers **Samples**. Naming the Mix "past papers" would
+ * overstate it.
+ *
+ * It names a *source* of questions and nothing else. It used to fall back to
+ * "Practice Exam", when the tab also decided how the questions were sat; that
+ * is the builder's format choice now (Quiz or Practice Exam, beside Start), and
+ * any source can be sat as either.
  */
 export function examSourceLabel(rows: PastExamRow[]): string {
-  return rows.length > 0 ? 'Past Papers' : PRACTICE_EXAM_LABEL
+  return rows.length > 0 ? 'Past Papers' : 'Samples'
 }
 
 /** A percentage for display: `40` → `"40%"`, `40.6` → `"40.6%"`, nothing → `null`. */

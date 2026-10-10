@@ -33,7 +33,8 @@ interface SegmentedControlProps<T extends string> {
   options: SegmentedOption<T>[]
   /** Accessible name for the group as a whole, e.g. "Question count". */
   label: string
-  size?: 'sm' | 'md' | 'lg'
+  /** `xl` fits a two-line label — a name with a short line under it. */
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   /**
    * Fully rounded ends, for a control that sits beside a page title rather than
    * inside a form: at that size the default radius reads as a stray box, while
@@ -47,6 +48,7 @@ const SIZES = {
   sm: 'h-9',
   md: 'h-10',
   lg: 'h-11',
+  xl: 'h-14',
 } as const
 
 export function SegmentedControl<T extends string>({

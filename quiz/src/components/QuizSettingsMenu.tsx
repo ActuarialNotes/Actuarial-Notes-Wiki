@@ -48,6 +48,9 @@ export interface QuizSettingsMenuProps {
   onTimedChange: (next: boolean) => void
   /** The exam's pace, e.g. "6:00 per question" — said beside the Timed choice. */
   timedPace?: string
+  /** Whether the concepts a question names are underlined to tap and read. */
+  conceptLinks?: boolean
+  onConceptLinksChange?: (next: boolean) => void
   className?: string
 }
 
@@ -63,6 +66,8 @@ export function QuizSettingsMenu({
   timed,
   onTimedChange,
   timedPace,
+  conceptLinks,
+  onConceptLinksChange,
   className,
 }: QuizSettingsMenuProps) {
   const [open, setOpen] = useState(false)
@@ -239,6 +244,15 @@ export function QuizSettingsMenu({
       <CheckRow checked={timed} onToggle={() => onTimedChange(!timed)} divided detail={timedPace}>
         Timed
       </CheckRow>
+
+      {/* ── Concepts in the question ─────────────────────────────────────
+          Ticked, a concept the question writes out is underlined, and a tap
+          opens it in the concept popup (lib/quizConceptLinks.ts). */}
+      {conceptLinks !== undefined && onConceptLinksChange && (
+        <CheckRow checked={conceptLinks} onToggle={() => onConceptLinksChange(!conceptLinks)} divided>
+          Tap concepts to read them
+        </CheckRow>
+      )}
     </div>
   )
 

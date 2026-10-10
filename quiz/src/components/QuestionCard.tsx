@@ -7,10 +7,15 @@ import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/component
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
 import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
 
 export type { SelfGrade }
+
+// A part's question reads at the size of the question's own stem — the
+// reading class a size up, so a part is the thing the eye lands on.
+const PART_STEM_CLASS = cn(READING_MD_CLASS, 'text-[17px] sm:text-lg')
 
 interface QuestionCardProps {
   question: Question
@@ -27,6 +32,11 @@ interface QuestionCardProps {
   onSelfGrade?: (grade: SelfGrade) => void
   partManualGrades?: Record<string, SelfGrade>  // keyed by part.label for multi-part
   onPartManualGrade?: (partLabel: string, grade: SelfGrade) => void
+  /**
+   * Concept names to underline wherever the question's text writes them, so
+   * a tap opens the concept (lib/conceptMentions.ts). The quiz handles the tap.
+   */
+  conceptNames?: readonly string[]
 }
 
 // ── Free-entry input ────────────────────────────────────────────────────────
@@ -131,9 +141,10 @@ interface PartCardProps {
   onSelfGrade?: (grade: SelfGrade) => void
   /** The question's one part — asked about as the question, not "this part". */
   isOnlyPart?: boolean
+  conceptNames?: readonly string[]
 }
 
-function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false }: PartCardProps) {
+function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade, isOnlyPart = false, conceptNames }: PartCardProps) {
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
   const autoIsRight = !isEssay && isAnswered && (
@@ -168,16 +179,16 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
     return (
       <div className="rounded-lg bg-card sm:p-4 space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Part {part.label.toUpperCase()}
             {part.points > 0 && (
               <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
             )}
           </span>
-          <span className="text-xs text-muted-foreground italic">Written response</span>
+          <span className="text-sm text-muted-foreground italic">Written response</span>
         </div>
 
-        {part.stem && <MarkdownText className={READING_MD_CLASS}>{part.stem}</MarkdownText>}
+        {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
         {!isLocked ? (
           <textarea
@@ -235,20 +246,20 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
   return (
     <div className="rounded-lg bg-card sm:p-4 space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <span className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Part {part.label.toUpperCase()}
           {part.points > 0 && (
             <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
           )}
         </span>
         {isAnswered && (
-          <span className={isRight ? 'text-green-600 dark:text-green-400 text-xs font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-xs font-medium' : 'text-red-600 dark:text-red-400 text-xs font-medium'}>
+          <span className={isRight ? 'text-green-600 dark:text-green-400 text-sm font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-sm font-medium' : 'text-red-600 dark:text-red-400 text-sm font-medium'}>
             {isRight ? '✓ Correct' : effectiveSelfGrade === 'partial' ? '~ Partial' : '✗ Incorrect'}
           </span>
         )}
       </div>
 
-      {part.stem && <MarkdownText className={READING_MD_CLASS}>{part.stem}</MarkdownText>}
+      {part.stem && <MarkdownText className={PART_STEM_CLASS} conceptNames={conceptNames}>{part.stem}</MarkdownText>}
 
       {part.type === 'multiple-choice' ? (
         <div className="space-y-2">
@@ -320,6 +331,7 @@ export function QuestionCard({
   onSelfGrade,
   partManualGrades,
   onPartManualGrade,
+  conceptNames,
 }: QuestionCardProps) {
   // Per-part answer state for multi-part questions
   const [partAnswers, setPartAnswers] = useState<Record<string, string>>({})
@@ -363,7 +375,7 @@ export function QuestionCard({
               )}
             </div>
           )}
-          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
+          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         </CardHeader>
@@ -427,7 +439,7 @@ export function QuestionCard({
               )}
             </div>
           )}
-          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
+          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         </CardHeader>
@@ -482,7 +494,7 @@ export function QuestionCard({
           </div>
         )}
         {question.stem && (
-          <MarkdownText className={`text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
+          <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
         )}
@@ -514,6 +526,7 @@ export function QuestionCard({
                 : (onPartManualGrade ? (grade) => onPartManualGrade(part.label, grade) : undefined)
             }
             isOnlyPart={parts.length === 1}
+            conceptNames={conceptNames}
           />
         ))}
       </CardContent>

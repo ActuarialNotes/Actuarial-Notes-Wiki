@@ -47,6 +47,12 @@ interface QuestionInfoButtonProps {
   onOpenChange: (open: boolean) => void
   /** Show topic / objective / difficulty — only once the answer is locked in. */
   showStudyMeta?: boolean
+  /**
+   * Open one of the question's concepts in the concept popup — `links` is
+   * the question's `wiki_link` tags, `index` the one tapped. Without it, a
+   * concept row goes to the concept's page.
+   */
+  onOpenConcept?: (links: string[], index: number) => void
   className?: string
 }
 
@@ -55,6 +61,7 @@ export function QuestionInfoButton({
   open,
   onOpenChange,
   showStudyMeta = false,
+  onOpenConcept,
   className,
 }: QuestionInfoButtonProps) {
   return (
@@ -66,12 +73,12 @@ export function QuestionInfoButton({
         aria-expanded={open}
         title="Where this question came from (i)"
         className={cn(
-          'flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-accent',
+          'flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors hover:bg-accent sm:px-3',
           open ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
           className,
         )}
       >
-        <Info className="h-3.5 w-3.5" aria-hidden />
+        <Info className="h-4 w-4" aria-hidden />
         Info
       </button>
 
@@ -79,6 +86,7 @@ export function QuestionInfoButton({
         <QuestionInfoDialog
           question={question}
           showStudyMeta={showStudyMeta}
+          onOpenConcept={onOpenConcept}
           onClose={() => onOpenChange(false)}
         />
       )}
@@ -89,12 +97,14 @@ export function QuestionInfoButton({
 interface QuestionInfoDialogProps {
   question: Question
   showStudyMeta?: boolean
+  onOpenConcept?: (links: string[], index: number) => void
   onClose: () => void
 }
 
 export function QuestionInfoDialog({
   question,
   showStudyMeta = false,
+  onOpenConcept,
   onClose,
 }: QuestionInfoDialogProps) {
   const [showFactCheck, setShowFactCheck] = useState(false)
@@ -194,7 +204,11 @@ export function QuestionInfoDialog({
             </button>
           )}
 
-          <QuestionConcepts links={question.wiki_link} onOpen={onClose} />
+          <QuestionConcepts
+            links={question.wiki_link}
+            onOpen={onClose}
+            onRead={onOpenConcept && ((i: number) => { onClose(); onOpenConcept(question.wiki_link, i) })}
+          />
 
           <dl className="space-y-2 text-sm">
             <InfoRow label="Question ID" value={question.id} mono />
@@ -258,9 +272,19 @@ export function QuestionInfoDialog({
  * row goes to the concept's page — the quiz outlives the page
  * (`lib/quizResume.ts`), so the Return pill brings the reader back to it.
  */
-function QuestionConcepts({ links, onOpen }: { links: string[]; onOpen: () => void }) {
+function QuestionConcepts({
+  links,
+  onOpen,
+  onRead,
+}: {
+  links: string[]
+  onOpen: () => void
+  /** Read the concept at this index in the popup, rather than going to its page. */
+  onRead?: (index: number) => void
+}) {
   const [open, setOpen] = useState(false)
   if (links.length === 0) return null
+  const names = links.map(conceptLabel)
   return (
     <section className="rounded-lg border border-border">
       <button
@@ -279,8 +303,20 @@ function QuestionConcepts({ links, onOpen }: { links: string[]; onOpen: () => vo
       </button>
       {open && (
         <ul className="space-y-0.5 border-t px-1.5 py-1.5">
-          {links.map(link => {
-            const name = conceptLabel(link)
+          {links.map((link, i) => {
+            const name = names[i]
+            const row = 'flex w-full items-center gap-2.5 rounded-md px-2 py-2.5 text-left text-sm transition-colors hover:bg-accent'
+            if (onRead) {
+              return (
+                <li key={link}>
+                  <button type="button" data-sound="tap" onClick={() => onRead(i)} className={row}>
+                    <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden />
+                    <span className="min-w-0 flex-1 truncate">{name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">Read</span>
+                  </button>
+                </li>
+              )
+            }
             return (
               <li key={link}>
                 <Link

@@ -33,8 +33,11 @@ type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
  * sources). The picker is dropped for the same reason a guide walk drops it:
  * every filter it offers would be either a no-op or a lie about what is being
  * read.
+ *
+ * `question` — the concepts one quiz question names (lib/conceptMentions.ts).
+ * No picker either: re-slicing two mentions into "today's plan" says nothing.
  */
-export type WalkKind = 'syllabus' | 'corpus'
+export type WalkKind = 'syllabus' | 'corpus' | 'question'
 
 // A single mention of a concept on the source page, in document order. The
 // same concept mentioned N times (a primary link + N-1 dimmed repeats) yields

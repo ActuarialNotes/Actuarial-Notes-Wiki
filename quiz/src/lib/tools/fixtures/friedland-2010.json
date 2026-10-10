@@ -1,0 +1,750 @@
+{
+  "generated_by": "scripts/tool_fixtures.py",
+  "source": {
+    "resource": "Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)",
+    "title": "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, 2010)",
+    "url": "https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf",
+    "sha256": "5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464"
+  },
+  "exhibits": {
+    "ch7_exhibit1_sheet1": {
+      "locator": "Chapter 7, Exhibit I, Sheet 1",
+      "printed_page": 106,
+      "units": "$000",
+      "ages": [
+        12,
+        24,
+        36,
+        48,
+        60,
+        72,
+        84,
+        96,
+        108,
+        120
+      ],
+      "triangle": {
+        "origins": [
+          "1998",
+          "1999",
+          "2000",
+          "2001",
+          "2002",
+          "2003",
+          "2004",
+          "2005",
+          "2006",
+          "2007"
+        ],
+        "ages": [
+          12,
+          24,
+          36,
+          48,
+          60,
+          72,
+          84,
+          96,
+          108,
+          120
+        ],
+        "values": [
+          [
+            37017487,
+            43169009,
+            45568919,
+            46784558,
+            47337318,
+            47533264,
+            47634419,
+            47689655,
+            47724678,
+            47742304
+          ],
+          [
+            38954484,
+            46045718,
+            48882924,
+            50219672,
+            50729292,
+            50926779,
+            51069285,
+            51163540,
+            51185767,
+            null
+          ],
+          [
+            41155776,
+            49371478,
+            52358476,
+            53780322,
+            54303086,
+            54582950,
+            54742188,
+            54837929,
+            null,
+            null
+          ],
+          [
+            42394069,
+            50584112,
+            53704296,
+            55150118,
+            55895583,
+            56156727,
+            56299562,
+            null,
+            null,
+            null
+          ],
+          [
+            44755243,
+            52971643,
+            56102312,
+            57703851,
+            58363564,
+            58592712,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45163102,
+            52497731,
+            55468551,
+            57015411,
+            57565344,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45417309,
+            52640322,
+            55553673,
+            56976657,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            46360869,
+            53790061,
+            56786410,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            46582684,
+            54641339,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            48853563,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "factors": {
+        "1998": [
+          1.166,
+          1.056,
+          1.027,
+          1.012,
+          1.004,
+          1.002,
+          1.001,
+          1.001,
+          1.0
+        ],
+        "1999": [
+          1.182,
+          1.062,
+          1.027,
+          1.01,
+          1.004,
+          1.003,
+          1.002,
+          1.0
+        ],
+        "2000": [
+          1.2,
+          1.061,
+          1.027,
+          1.01,
+          1.005,
+          1.003,
+          1.002
+        ],
+        "2001": [
+          1.193,
+          1.062,
+          1.027,
+          1.014,
+          1.005,
+          1.003
+        ],
+        "2002": [
+          1.184,
+          1.059,
+          1.029,
+          1.011,
+          1.004
+        ],
+        "2003": [
+          1.162,
+          1.057,
+          1.028,
+          1.01
+        ],
+        "2004": [
+          1.159,
+          1.055,
+          1.026
+        ],
+        "2005": [
+          1.16,
+          1.056
+        ],
+        "2006": [
+          1.173
+        ]
+      },
+      "averages": {
+        "simple_latest_5": [
+          1.168,
+          1.058,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ],
+        "simple_latest_3": [
+          1.164,
+          1.056,
+          1.027,
+          1.012,
+          1.005,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ],
+        "medial_latest_5": [
+          1.165,
+          1.057,
+          1.027,
+          1.01,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ],
+        "volume_latest_5": [
+          1.168,
+          1.058,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ],
+        "volume_latest_3": [
+          1.164,
+          1.056,
+          1.027,
+          1.012,
+          1.005,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ],
+        "geometric_latest_4": [
+          1.164,
+          1.057,
+          1.027,
+          1.011,
+          1.004,
+          1.003,
+          1.002,
+          1.001,
+          1.0
+        ]
+      },
+      "selected": [
+        1.164,
+        1.056,
+        1.027,
+        1.012,
+        1.005,
+        1.003,
+        1.002,
+        1.001,
+        1.0,
+        1.0
+      ],
+      "cdf": [
+        1.292,
+        1.11,
+        1.051,
+        1.023,
+        1.011,
+        1.006,
+        1.003,
+        1.001,
+        1.0,
+        1.0
+      ],
+      "percent_reported": [
+        0.774,
+        0.901,
+        0.951,
+        0.978,
+        0.989,
+        0.994,
+        0.997,
+        0.999,
+        1.0,
+        1.0
+      ],
+      "pdf_page": 112
+    },
+    "ch7_exhibit1_sheet3": {
+      "locator": "Chapter 7, Exhibit I, Sheet 3",
+      "printed_page": 108,
+      "units": "$000",
+      "rows": [
+        {
+          "origin": "1998",
+          "age": 120,
+          "reported": 47742304,
+          "paid": 47644187,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.002,
+          "ultimate_reported": 47742304,
+          "ultimate_paid": 47739475
+        },
+        {
+          "origin": "1999",
+          "age": 108,
+          "reported": 51185767,
+          "paid": 51000534,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.004,
+          "ultimate_reported": 51185767,
+          "ultimate_paid": 51204536
+        },
+        {
+          "origin": "2000",
+          "age": 96,
+          "reported": 54837929,
+          "paid": 54533225,
+          "cdf_reported": 1.001,
+          "cdf_paid": 1.006,
+          "ultimate_reported": 54892767,
+          "ultimate_paid": 54860424
+        },
+        {
+          "origin": "2001",
+          "age": 84,
+          "reported": 56299562,
+          "paid": 55878421,
+          "cdf_reported": 1.003,
+          "cdf_paid": 1.011,
+          "ultimate_reported": 56468461,
+          "ultimate_paid": 56493084
+        },
+        {
+          "origin": "2002",
+          "age": 72,
+          "reported": 58592712,
+          "paid": 57807215,
+          "cdf_reported": 1.006,
+          "cdf_paid": 1.02,
+          "ultimate_reported": 58944268,
+          "ultimate_paid": 58963359
+        },
+        {
+          "origin": "2003",
+          "age": 60,
+          "reported": 57565344,
+          "paid": 55930654,
+          "cdf_reported": 1.011,
+          "cdf_paid": 1.04,
+          "ultimate_reported": 58198563,
+          "ultimate_paid": 58167880
+        },
+        {
+          "origin": "2004",
+          "age": 48,
+          "reported": 56976657,
+          "paid": 53774672,
+          "cdf_reported": 1.023,
+          "cdf_paid": 1.085,
+          "ultimate_reported": 58287120,
+          "ultimate_paid": 58345519
+        },
+        {
+          "origin": "2005",
+          "age": 36,
+          "reported": 56786410,
+          "paid": 50644994,
+          "cdf_reported": 1.051,
+          "cdf_paid": 1.184,
+          "ultimate_reported": 59682517,
+          "ultimate_paid": 59963673
+        },
+        {
+          "origin": "2006",
+          "age": 24,
+          "reported": 54641339,
+          "paid": 43606497,
+          "cdf_reported": 1.11,
+          "cdf_paid": 1.404,
+          "ultimate_reported": 60651886,
+          "ultimate_paid": 61223522
+        },
+        {
+          "origin": "2007",
+          "age": 12,
+          "reported": 48853563,
+          "paid": 27229969,
+          "cdf_reported": 1.292,
+          "cdf_paid": 2.39,
+          "ultimate_reported": 63118803,
+          "ultimate_paid": 65079626
+        }
+      ],
+      "pdf_page": 114
+    },
+    "ch8_exhibit2_sheet1": {
+      "locator": "Chapter 8, Exhibit II, Sheet 1",
+      "printed_page": 142,
+      "units": "$000",
+      "rows": [
+        {
+          "origin": "1998",
+          "reported": 47742304,
+          "paid": 47644187,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.002,
+          "ultimate_reported": 47742304,
+          "ultimate_paid": 47739475,
+          "initial_ultimate": 47740890,
+          "premium": 68574209,
+          "estimated_ratio": 0.696,
+          "selected_ratio": 0.75,
+          "expected": 51430657
+        },
+        {
+          "origin": "1999",
+          "reported": 51185767,
+          "paid": 51000534,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.004,
+          "ultimate_reported": 51185767,
+          "ultimate_paid": 51204536,
+          "initial_ultimate": 51195152,
+          "premium": 68544981,
+          "estimated_ratio": 0.747,
+          "selected_ratio": 0.75,
+          "expected": 51408736
+        },
+        {
+          "origin": "2000",
+          "reported": 54837929,
+          "paid": 54533225,
+          "cdf_reported": 1.001,
+          "cdf_paid": 1.006,
+          "ultimate_reported": 54892767,
+          "ultimate_paid": 54860424,
+          "initial_ultimate": 54876596,
+          "premium": 68907977,
+          "estimated_ratio": 0.796,
+          "selected_ratio": 0.75,
+          "expected": 51680983
+        },
+        {
+          "origin": "2001",
+          "reported": 56299562,
+          "paid": 55878421,
+          "cdf_reported": 1.003,
+          "cdf_paid": 1.011,
+          "ultimate_reported": 56468461,
+          "ultimate_paid": 56493084,
+          "initial_ultimate": 56480772,
+          "premium": 72544955,
+          "estimated_ratio": 0.779,
+          "selected_ratio": 0.75,
+          "expected": 54408716
+        },
+        {
+          "origin": "2002",
+          "reported": 58592712,
+          "paid": 57807215,
+          "cdf_reported": 1.006,
+          "cdf_paid": 1.02,
+          "ultimate_reported": 58944268,
+          "ultimate_paid": 58963359,
+          "initial_ultimate": 58953814,
+          "premium": 79228887,
+          "estimated_ratio": 0.744,
+          "selected_ratio": 0.75,
+          "expected": 59421665
+        },
+        {
+          "origin": "2003",
+          "reported": 57565344,
+          "paid": 55930654,
+          "cdf_reported": 1.011,
+          "cdf_paid": 1.04,
+          "ultimate_reported": 58198563,
+          "ultimate_paid": 58167880,
+          "initial_ultimate": 58183221,
+          "premium": 86643542,
+          "estimated_ratio": 0.672,
+          "selected_ratio": 0.65,
+          "expected": 56318302
+        },
+        {
+          "origin": "2004",
+          "reported": 56976657,
+          "paid": 53774672,
+          "cdf_reported": 1.023,
+          "cdf_paid": 1.085,
+          "ultimate_reported": 58287120,
+          "ultimate_paid": 58345519,
+          "initial_ultimate": 58316320,
+          "premium": 91763523,
+          "estimated_ratio": 0.636,
+          "selected_ratio": 0.65,
+          "expected": 59646290
+        },
+        {
+          "origin": "2005",
+          "reported": 56786410,
+          "paid": 50644994,
+          "cdf_reported": 1.051,
+          "cdf_paid": 1.184,
+          "ultimate_reported": 59682517,
+          "ultimate_paid": 59963673,
+          "initial_ultimate": 59823095,
+          "premium": 94115312,
+          "estimated_ratio": 0.636,
+          "selected_ratio": 0.65,
+          "expected": 61174953
+        },
+        {
+          "origin": "2006",
+          "reported": 54641339,
+          "paid": 43606497,
+          "cdf_reported": 1.11,
+          "cdf_paid": 1.404,
+          "ultimate_reported": 60651886,
+          "ultimate_paid": 61223522,
+          "initial_ultimate": 60937704,
+          "premium": 95272279,
+          "estimated_ratio": 0.64,
+          "selected_ratio": 0.65,
+          "expected": 61926981
+        },
+        {
+          "origin": "2007",
+          "reported": 48853563,
+          "paid": 27229969,
+          "cdf_reported": 1.292,
+          "cdf_paid": 2.39,
+          "ultimate_reported": 63118803,
+          "ultimate_paid": 65079626,
+          "initial_ultimate": 64099215,
+          "premium": 95176240,
+          "estimated_ratio": 0.673,
+          "selected_ratio": 0.65,
+          "expected": 61864556
+        }
+      ],
+      "pdf_page": 148
+    },
+    "ch9_exhibit1_sheet1": {
+      "locator": "Chapter 9, Exhibit I, Sheet 1",
+      "printed_page": 162,
+      "units": "$000",
+      "rows": [
+        {
+          "origin": "1998",
+          "expected": 51430657,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.002,
+          "unreported": 0.0,
+          "unpaid": 0.002,
+          "ibnr_reported": 0,
+          "ibnr_paid": 102656,
+          "reported": 47742304,
+          "paid": 47644187,
+          "ultimate_reported": 47742304,
+          "ultimate_paid": 47746843
+        },
+        {
+          "origin": "1999",
+          "expected": 51408736,
+          "cdf_reported": 1.0,
+          "cdf_paid": 1.004,
+          "unreported": 0.0,
+          "unpaid": 0.004,
+          "ibnr_reported": 0,
+          "ibnr_paid": 204816,
+          "reported": 51185767,
+          "paid": 51000534,
+          "ultimate_reported": 51185767,
+          "ultimate_paid": 51205350
+        },
+        {
+          "origin": "2000",
+          "expected": 51680983,
+          "cdf_reported": 1.001,
+          "cdf_paid": 1.006,
+          "unreported": 0.001,
+          "unpaid": 0.006,
+          "ibnr_reported": 51629,
+          "ibnr_paid": 308236,
+          "reported": 54837929,
+          "paid": 54533225,
+          "ultimate_reported": 54889558,
+          "ultimate_paid": 54841461
+        },
+        {
+          "origin": "2001",
+          "expected": 54408716,
+          "cdf_reported": 1.003,
+          "cdf_paid": 1.011,
+          "unreported": 0.003,
+          "unpaid": 0.011,
+          "ibnr_reported": 162738,
+          "ibnr_paid": 591984,
+          "reported": 56299562,
+          "paid": 55878421,
+          "ultimate_reported": 56462300,
+          "ultimate_paid": 56470405
+        },
+        {
+          "origin": "2002",
+          "expected": 59421665,
+          "cdf_reported": 1.006,
+          "cdf_paid": 1.02,
+          "unreported": 0.006,
+          "unpaid": 0.02,
+          "ibnr_reported": 354404,
+          "ibnr_paid": 1165131,
+          "reported": 58592712,
+          "paid": 57807215,
+          "ultimate_reported": 58947116,
+          "ultimate_paid": 58972346
+        },
+        {
+          "origin": "2003",
+          "expected": 56318302,
+          "cdf_reported": 1.011,
+          "cdf_paid": 1.04,
+          "unreported": 0.011,
+          "unpaid": 0.038,
+          "ibnr_reported": 612761,
+          "ibnr_paid": 2166089,
+          "reported": 57565344,
+          "paid": 55930654,
+          "ultimate_reported": 58178105,
+          "ultimate_paid": 58096743
+        },
+        {
+          "origin": "2004",
+          "expected": 59646290,
+          "cdf_reported": 1.023,
+          "cdf_paid": 1.085,
+          "unreported": 0.022,
+          "unpaid": 0.078,
+          "ibnr_reported": 1341021,
+          "ibnr_paid": 4672751,
+          "reported": 56976657,
+          "paid": 53774672,
+          "ultimate_reported": 58317678,
+          "ultimate_paid": 58447423
+        },
+        {
+          "origin": "2005",
+          "expected": 61174953,
+          "cdf_reported": 1.051,
+          "cdf_paid": 1.184,
+          "unreported": 0.049,
+          "unpaid": 0.155,
+          "ibnr_reported": 2968528,
+          "ibnr_paid": 9506918,
+          "reported": 56786410,
+          "paid": 50644994,
+          "ultimate_reported": 59754938,
+          "ultimate_paid": 60151912
+        },
+        {
+          "origin": "2006",
+          "expected": 61926981,
+          "cdf_reported": 1.11,
+          "cdf_paid": 1.404,
+          "unreported": 0.099,
+          "unpaid": 0.288,
+          "ibnr_reported": 6136908,
+          "ibnr_paid": 17819445,
+          "reported": 54641339,
+          "paid": 43606497,
+          "ultimate_reported": 60778247,
+          "ultimate_paid": 61425942
+        },
+        {
+          "origin": "2007",
+          "expected": 61864556,
+          "cdf_reported": 1.292,
+          "cdf_paid": 2.39,
+          "unreported": 0.226,
+          "unpaid": 0.582,
+          "ibnr_reported": 13981773,
+          "ibnr_paid": 35979805,
+          "reported": 48853563,
+          "paid": 27229969,
+          "ultimate_reported": 62835336,
+          "ultimate_paid": 63209774
+        }
+      ],
+      "pdf_page": 168
+    }
+  }
+}

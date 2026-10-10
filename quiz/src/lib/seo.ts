@@ -842,6 +842,7 @@ const STATIC_TITLES: Record<string, string> = {
   '/upgrade': `Upgrade | ${SITE_NAME}`,
   '/store': `Actuarial Exam Shop | ${SITE_NAME}`,
   '/store/gems': `Gem Shop | ${SITE_NAME}`,
+  '/tools': `Actuarial Tools | ${SITE_NAME}`,
   '/wiki': `SOA & CAS Actuarial Exam Study Guides | ${SITE_NAME}`,
   '/wiki/resources': `Actuarial Exam Syllabus Readings & Resources | ${SITE_NAME}`,
 }
@@ -890,6 +891,23 @@ export const STORE_HEAD: PageHead = {
   description:
     'Exam registration, study manuals and courses, the calculators SOA and CAS allow, and the syllabus textbooks — every product linked to the seller who sells it.',
   canonical: absoluteUrl('/store'),
+}
+
+/** The Tools catalogue's head (docs/actuarial-tools.md). */
+export const TOOLS_HEAD: PageHead = {
+  title: STATIC_TITLES['/tools']!,
+  description:
+    'Actuarial calculators that each do one thing — development factors, chain ladder, Bornhuetter-Ferguson, the indicated rate change, credibility standards, interest and annuities — with the working shown, for you and your AI assistant.',
+  canonical: absoluteUrl('/tools'),
+}
+
+/** One tool's head: its name, and the question it answers. */
+export function toolHead(name: string, answers: string, slug: string): PageHead {
+  return {
+    title: `${name} Calculator | ${SITE_NAME}`,
+    description: `${answers} A live ${name.toLowerCase()} calculator with the working shown, the method linked and an export to Excel.`,
+    canonical: absoluteUrl(`/tools/${slug}`),
+  }
 }
 
 /**

@@ -210,6 +210,14 @@ export const FACT_CHECK_UI_ENABLED: boolean = true
 export const COWORK_ENABLED: boolean = true
 
 /**
+ * **Actuarial Tools** (docs/actuarial-tools.md) — the Tools tab (`/tools`):
+ * calculators that each do one thing, the same engine the MCP connector's
+ * `run_tool` runs. Off drops the sidebar row and sends `/tools` to the
+ * dashboard; the connector's calculators are unaffected.
+ */
+export const TOOLS_ENABLED: boolean = true
+
+/**
  * **Actuaria Online** — the game layer over Study Mode (docs/actuaria-online.md).
  *
  * ON, and open to **approved accounts** alone: a signed-in account on

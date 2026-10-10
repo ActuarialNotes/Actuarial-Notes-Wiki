@@ -34,7 +34,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
 import { actuariaDestination } from '@/lib/actuaria/access'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
-import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { ACTUARIA_ENABLED, COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -58,6 +58,9 @@ const { Component: Battle, preload: loadBattle } = lazyRoute(() => import('@/pag
 // its catalogue, its textbook shelf and its drawings are for the readers who
 // open it.
 const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages/Store'))
+// Actuarial Tools (docs/actuarial-tools.md) — calculators, each one card. Lazy:
+// the engine and its grids are for the readers who open a tool.
+const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages/Tools'))
 // Concept Craft (docs/concept-craft.md) — a topic's concepts on a board, and
 // how they connect. Lazy: its graph, its physics and the wiki bundle it reads
 // the graph from are for the readers who open it.
@@ -88,6 +91,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
+  if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
   if (route === '/wiki/resources') return Promise.all([loadWikiLayout(), loadWikiResources()])
@@ -318,6 +322,17 @@ function StoreRoute() {
   )
 }
 
+function ToolsRoute() {
+  if (!TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Tools />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ProjectRoute() {
   return (
     <ErrorBoundary>
@@ -367,6 +382,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                 {/* The Store: real products, each bought on its seller's own
                     page. The gem shop is a corner of it. */}
                 <Route path="/store" element={<StoreRoute />} />
+                <Route path="/tools" element={<ToolsRoute />} />
+                <Route path="/tools/:slug" element={<ToolsRoute />} />
                 <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
                 <Route path="/research" element={
                   RESEARCH_TAB_ENABLED ? (

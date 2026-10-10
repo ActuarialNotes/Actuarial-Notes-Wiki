@@ -153,6 +153,9 @@ All tools are read-only (`readOnlyHint: true`) and deterministic apart from the 
 | `get_concept` | `name` (aliases, abbreviations, plurals, no accents) | The page, where it is examined, linked pages, question counts, fact check; suggestions when not found |
 | `get_practice_questions` | `exam` or `concept`; optional `objective`, `topic`, `difficulty`, `sitting`, `count` (≤10), `exclude`, `seed` | Stems and options only, plus an app link to take the same set (`/quiz?ids=…`, where progress is tracked) |
 | `check_answer` | `question_id`, `answer` or `parts` | The verdict (MC letters however written; numbers compared as the app does, with a "close" for rounding slips), then the official solution and examiner's report. Written parts come back to be graded against the model answer |
+| `list_tools` | optional `area`, `query` | The Actuarial Tools calculators (`docs/actuarial-tools.md`): id, name, area, the one question each answers |
+| `describe_tool` | `tool` | Its input JSON Schema, judgments, notation, method pages and the tools its result feeds |
+| `run_tool` | `tool`, `input` | The run's envelope — results, judgments marked `default`, warnings, trace, method pages with fact checks, `input_hash` and an `app_url` to the same run. Runs the bundled engine (`api/_tools/engine.js`), the app's own code; answers even when the knowledge base can't be loaded |
 
 A bad argument returns a tool result with `isError: true` and a message the model can act on.
 An unknown tool is a protocol error (-32602).
@@ -252,5 +255,6 @@ TypeScript clients in all four modes: `@modelcontextprotocol/sdk` 1.x (legacy, n
   put the connector in front of readers who never visit Settings. Both need a review submission.
 - **Calculators.** The distribution simulators' tested maths (`lib/distributionMath.ts`) would
   make a good `distribution` tool, grounded in the exam parameterizations. Today it is
-  TypeScript the function can't import. `docs/actuarial-tools.md` plans the calculators and
-  how one engine reaches both the app and this function.
+  TypeScript the function can't import. *Done for the Actuarial Tools*: `list_tools`,
+  `describe_tool` and `run_tool` run the app's engine, bundled (`docs/actuarial-tools.md`);
+  a `distribution` tool would join them there.

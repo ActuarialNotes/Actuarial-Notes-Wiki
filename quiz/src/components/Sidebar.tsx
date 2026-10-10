@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
+  Calculator,
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
@@ -40,7 +41,7 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { ProBadge } from '@/components/ProBadge'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { COWORK_ENABLED, RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
@@ -762,6 +763,17 @@ export default function Sidebar() {
               deadline, not a bank of questions — so it is a tab of its own
               (docs/pcpa-project.md). */}
           <ProjectsNav collapsed={collapsed} onNavigate={closeMobile} />
+          {/* Calculators that each do one thing — the same engine an AI agent
+              runs through the connector (docs/actuarial-tools.md). */}
+          {TOOLS_ENABLED && (
+            <SidebarItem
+              to="/tools"
+              label="Tools"
+              icon={<Calculator className="h-5 w-5 lg:h-4 lg:w-4" />}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
+          )}
           {/* Real products — registration, study materials, calculators and
               textbooks — each bought on its seller's own page (docs/store.md).
               The gem shop is a corner of it, so this row stays lit there. */}

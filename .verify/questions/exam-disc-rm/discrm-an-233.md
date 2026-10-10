@@ -26,3 +26,21 @@ created: 2026-10-10
 - status_set: in_review
 - checks_run: Recomputed blind from the stem (answer and explanation stripped) before reading the key; blind answer C (with D equally defensible - finding opened); learning objective and tags checked.
 - note: Left in_review: the four insurer risk control goals are The Institutes' framework, not found in any readable source this run (only flashcard sites); plus the open major finding on duplicate option pairs.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv05
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Options rewritten on the lead's authorization so the four are distinct pairs: A profit + customer needs; B customer needs + legal requirements; C legal requirements + duty to society (key, unchanged); D profit + duty to society. Why-not lines rewritten to match.
+
+## [C-002] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv05
+- date: 2026-10-10
+- status_set: in_review
+- checks_run: Re-read after the option rewrite: four distinct pairs, key C unchanged in meaning, blind answer C.
+- note: Still in_review: the four insurer risk control goals the question tests (profit, customer needs, duty to society, legal requirements) are The Institutes' framework and appear in no source readable this run; Risk Control no longer states them.

@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:6d5f379be4062c413e6c4294aa05c87223b2bf6168698c5d8d51e9fc3c2e1809
@@ -11,7 +11,7 @@ verification:
     - "IRMI glossary, 'surplus share', sha256:ed71737b7b895e79a3c5a11fdd70d35675c6d78baf97a62dd3ae544c84f66d13 — https://www.irmi.com/term/insurance-definitions/surplus-share"
     - "IRMI glossary, 'ceding commission', sha256:88a3389009b6868cb1b320484faec2ea1d2e744f5e74e14631b2cebe31600323 — https://www.irmi.com/term/insurance-definitions/ceding-commission"
     - "IRMI glossary, 'pro rata reinsurance', sha256:87029130ba567ffc15e84988e1569b5582477b2cb4c4f27db17e5717c4a85c6f — https://www.irmi.com/term/insurance-definitions/pro-rata-reinsurance"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Pro Rata Reinsurance.md
 ---

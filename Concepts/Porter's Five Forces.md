@@ -2,13 +2,17 @@
 aliases:
   - Porter's Five Force
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:95236384ab8e3c484ae54aa095217466dd92753dc8624c8d2b227f40a606975d
-  sources: []
-  open_findings: 1
+  sources:
+    - "Mastering Strategic Management (Saylor), §3.3 'Evaluating the Industry' (five forces), sha256:0236a5741a5c24f68527dbb1e5ece70c2dd5afb9c91ab6a1de346c781f0c2ef0 — https://saylordotorg.github.io/text_mastering-strategic-management/s07-03-evaluating-the-industry.html"
+    - "Mastering Strategic Management (Saylor), §4.3 'Value Chain' (path by which products are created and sold; primary and support activities), sha256:7b083e706d5f6b30874a39c1da896339c8d67137d3817ade97c60ce4708e375f — https://saylordotorg.github.io/text_mastering-strategic-management/s08-03-value-chain.html"
+    - "Carpenter, Bauer & Erdogan, Principles of Management v1.1 (Saylor, CC BY-NC-SA), §5.2 'Strategic Management in the P-O-L-C Framework': formulation and implementation, corporate vs business strategy, SWOT and SO/ST/WO/WT, value chain, VRIO, PESTEL, sha256:f8b7b28801d9bdb61effb2c7e7ed4269d9bf3831502508d2ddfb0688bcda5890 — https://saylordotorg.github.io/text_principles-of-management-v1.1/s09-02-strategic-management-in-the-p-.html"
+    - "Mastering Strategic Management (Saylor), §4.5 'SWOT Analysis', sha256:d6752e321fdf92132768a4b85f17be669789b83daac40c4f375c4c2bb549d974 — https://saylordotorg.github.io/text_mastering-strategic-management/s08-05-swot-analysis.html"
+  open_findings: 0
   open_critical: 0
   log: ".verify/Concepts/Porter's Five Forces.md"
 ---

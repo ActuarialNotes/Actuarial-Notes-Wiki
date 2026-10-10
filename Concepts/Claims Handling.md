@@ -1,7 +1,7 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:58da196c852a4fc5ad5d931c2a2002abf5787594cec52bc855a201b568c89fae
@@ -16,7 +16,7 @@ verification:
     - "IRMI glossary, 'claims adjuster', sha256:0b5580c20339c7bd76af212b03d797d9c496612b5c0512835156ccd294e9f1cb — https://www.irmi.com/term/insurance-definitions/claims-adjuster"
     - "IRMI glossary, 'claims audit', sha256:1196943c53782d496a35da951b9cd866034dad145f6360543813ce6f5466957d — https://www.irmi.com/term/insurance-definitions/claims-audit"
     - "IRMI glossary, 'reservation of rights', sha256:ada48198a157a8c1c8d24b80c061118d4ac01e8fdc21df0f28d2cba0746333b4 — https://www.irmi.com/term/insurance-definitions/reservation-of-rights"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Claims Handling.md
 ---

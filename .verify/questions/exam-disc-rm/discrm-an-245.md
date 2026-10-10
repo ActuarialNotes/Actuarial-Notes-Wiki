@@ -28,3 +28,23 @@ created: 2026-10-10
 - checks_run: Recomputed blind from the stem (answer and explanation stripped) before reading the key; blind B = key. ROR generally unilateral, non-waiver agreement sometimes bilateral (ALFA §1); ROR is not a denial and lets the insurer defend without waiving (IRMI); untimely ROR risks waiver/estoppel (ALFA §3) refutes D.
 - sources_checked: Dunn & Fencl, Reservation of Rights 101 (ALFA International), §§1, 3: ROR generally unilateral, non-waiver agreement sometimes bilateral, untimely ROR risks waiver/estoppel, jurisdictional variation, sha256:bcfbba032e5df89d121c693bc0226a8b0c8e9f90c9f3d8a84ef46879cc162d08 — https://www.alfainternational.com/publications_news/reservation-of-rights-101/; IRMI glossary, 'reservation of rights', sha256:ada48198a157a8c1c8d24b80c061118d4ac01e8fdc21df0f28d2cba0746333b4 — https://www.irmi.com/term/insurance-definitions/reservation-of-rights
 - note: Vault-written; medium; one minor finding open on distractor C.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv05
+- date: 2026-10-10
+- resolves: F-001
+- status: resolved
+- note: Option C reworded to 'A non-waiver agreement is a denial of coverage, sent once the investigation is complete', false under both usages ALFA documents; its why-not line rewritten.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-10T21:00Z/dv05
+- date: 2026-10-10
+- status_set: verified
+- confidence: medium
+- checks_run: Re-verify after the option C rewrite: B still the only correct statement (ALFA §1); C now false (a non-waiver agreement preserves the right to deny, it is not a denial); A and D as before.
+- sources_checked: Dunn & Fencl, Reservation of Rights 101 (ALFA International), §§1, 3: ROR generally unilateral, non-waiver agreement sometimes bilateral, untimely ROR risks waiver/estoppel, jurisdictional variation, sha256:bcfbba032e5df89d121c693bc0226a8b0c8e9f90c9f3d8a84ef46879cc162d08 — https://www.alfainternational.com/publications_news/reservation-of-rights-101/; IRMI glossary, 'reservation of rights', sha256:ada48198a157a8c1c8d24b80c061118d4ac01e8fdc21df0f28d2cba0746333b4 — https://www.irmi.com/term/insurance-definitions/reservation-of-rights
+- note: Medium.

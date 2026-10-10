@@ -1,11 +1,14 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:a980d91a0026a31e512c4e1debdf396b820d01a4a34340b94855d9cfd2532492
-  sources: []
+  sources:
+    - "U.S. GAO, Catastrophe Insurance Risks: The Role of Risk-Linked Securities (GAO-02-941, 2002), pp.16–23, App. II p.36: SPRV and trust, basis risk, minimal credit risk, CBOT catastrophe options ceased 1999, sha256:14de86f282f00ef14b4382979e503f0a202138d57bc482017228da5d9a200d24 — https://www.gao.gov/assets/gao-02-941.pdf"
+    - "Blanchet, Lam, Tang & Yuan, Mitigating Extreme Risks Through Securitization (SOA research report, Mar 2017), §§1.2–1.4 pp.2–7: ILS, CAT bond triggers, basis risk vs moral hazard, dual-trigger ILWs, sha256:674f956d74f5f5bae9ad9f92126ebf0a8c47693af78dfbf2bd12454f5d9b3d66 — https://www.soa.org/globalassets/assets/files/research/projects/2017-03-mitigating-risks-through-securitization.pdf"
+    - "IRMI glossary, 'catastrophe equity put', sha256:56057e1690baa552363dd829ca041e48efa39f4718e93e5b6a493d488a3605fc — https://www.irmi.com/term/insurance-definitions/catastrophe-equity-put"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance-Linked Securities.md

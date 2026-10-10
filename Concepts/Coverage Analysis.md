@@ -1,12 +1,15 @@
 ---
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
   content_hash: sha256:e1e6dc848eca6d8c9e85cbc4dd96b0d17912059c35f5fad1763fe5ebda48cd2f
-  sources: []
-  open_findings: 1
+  sources:
+    - "ISO CP 00 10 10 12 Building and Personal Property Coverage Form (specimen), A.2.a property not covered (money), D. Deductible, sha256:b46b0929e7effc6cfcfde0493f5a363dc32053b3afd56632776432f596a1e106 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2017/05/CP00101012-1.pdf"
+    - "ISO CP 10 30 10 12 Causes of Loss – Special Form (specimen), B exclusions with ensuing fire exceptions, C.1.c interior rain limitation, sha256:119fcd978212db836e1084ca8ca90c0fdacb60d157caf4867bbc7b4e02f498e3 — https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2018/09/CP.10.30.10.12-1-1.pdf"
+    - "ISO CG 00 01 04 13 Commercial General Liability Coverage Form (specimen), Coverages A–C insuring agreements and exclusions, Section II, III, IV, sha256:78739f04c6b7b183d1c2e5cd1dd34411cc7f6585760096a2eddb63d0ea904869 — https://cooperscully.com/uploads/file/Commercial%20General%20Liability%20Coverage%20Form.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Coverage Analysis.md
 ---

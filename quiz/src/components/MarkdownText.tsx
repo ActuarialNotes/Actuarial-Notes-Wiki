@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -7,6 +8,7 @@ import { codeComponents, inlineCodeComponents } from '@/components/CodeBlock'
 import { normalizeVaultMath } from '@/lib/vaultMath'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
+import { rehypeConceptMentions } from '@/lib/conceptMentions'
 
 interface Props {
   children: string
@@ -14,6 +16,11 @@ interface Props {
   // When true, block elements (p, br) are rendered as inline spans — safe inside
   // flex containers like answer option buttons.
   inline?: boolean
+  /**
+   * Concept names to make tappable wherever the text writes them — the
+   * question's own tags (lib/conceptMentions.ts). The host handles the click.
+   */
+  conceptNames?: readonly string[]
 }
 
 // Lists, for markdown that doesn't render through `prose`. Tailwind's preflight
@@ -89,7 +96,12 @@ const blockComponents: Components = {
   img: ZoomableImage,
 }
 
-export function MarkdownText({ children, className, inline }: Props) {
+export function MarkdownText({ children, className, inline, conceptNames }: Props) {
+  const namesKey = conceptNames?.join('\u0000') ?? ''
+  const rehypePlugins = useMemo(
+    () => (namesKey ? [rehypeKatex, rehypeConceptMentions(namesKey.split('\u0000'))] : [rehypeKatex]),
+    [namesKey],
+  )
   // Inline mode wraps in a span, not a div: its callers are phrasing-level
   // contexts (answer option buttons, spans in reveal/search rows) where a div
   // is invalid HTML. Flex sizing classes still apply — flex items are
@@ -103,7 +115,7 @@ export function MarkdownText({ children, className, inline }: Props) {
     <Wrapper className={className} data-math-scope="" data-image-scope="">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={rehypePlugins}
         components={inline ? inlineComponents : blockComponents}
       >
         {normalizeVaultMath(children)}

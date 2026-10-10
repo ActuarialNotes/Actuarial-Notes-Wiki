@@ -33,14 +33,15 @@ export function useQuestions(filters: QuestionFilter) {
         const parsed = parseAllQuestions(rawFiles)
         const filtered = filterQuestions(parsed, { ...filters, includeFlagged: showFlagged })
         const limit = filters.count || filtered.length
-        // A past sitting is sat the way the paper set it, question 1 first.
-        // Anything else is a draw: leaning toward a difficulty when the link
+        // A past sitting is sat the way the paper set it, question 1 first —
+        // and a quiz of a few of its questions is a random few, still in the
+        // paper's order. Anything else is a draw: leaning toward a difficulty when the link
         // carries one (the old builder slider's `level`), a uniform shuffle when it doesn't. A pinned id list
         // is always shuffled — it is taken whole, and `filterQuestions` ignores
         // a sitting beside it, so neither the paper nor the lean has a say.
         const sitting = Boolean(filters.year || filters.session) && !filters.ids?.length
         const result = sitting
-          ? inPaperOrder(filtered).slice(0, limit)
+          ? inPaperOrder(limit < filtered.length ? shuffle(filtered).slice(0, limit) : filtered)
           : filters.difficultyTarget !== undefined && !filters.ids?.length
           ? drawByDifficulty(filtered, limit, filters.difficultyTarget)
           : shuffle(filtered).slice(0, limit)

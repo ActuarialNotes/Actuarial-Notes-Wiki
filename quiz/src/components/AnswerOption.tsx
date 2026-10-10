@@ -32,7 +32,7 @@ export function AnswerOption({
   const scrolling = useRef(false)
 
   const baseClasses =
-    'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-start gap-3'
+    'w-full text-left px-4 py-3.5 min-h-[52px] rounded-xl text-base font-medium transition-colors flex items-start gap-3'
 
   const isNavigable = isDisabled && !!onNext
 
@@ -116,19 +116,19 @@ export function AnswerOption({
       }}
       className={cn(baseClasses, stateClasses)}
     >
-      <span aria-hidden="true" className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold mt-0.5">
+      <span aria-hidden="true" className="flex-shrink-0 w-7 h-7 rounded-full border-2 border-current flex items-center justify-center text-sm font-bold">
         {optionKey}
       </span>
       <MarkdownText
         inline
-        className="flex-1 [&_p]:my-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-3"
+        className="flex-1 pt-0.5 [&_p]:my-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-3"
       >
         {text}
       </MarkdownText>
       {keyHint && !isDisabled && (
         <kbd
           aria-hidden="true"
-          className="hidden sm:flex self-start mt-0.5 shrink-0 h-5 min-w-[1.25rem] items-center justify-center rounded border border-border bg-muted/70 text-[10px] font-mono font-semibold text-muted-foreground/70 px-1"
+          className="hidden sm:flex self-start mt-1 shrink-0 h-5 min-w-[1.25rem] items-center justify-center rounded border border-border bg-muted/70 text-[10px] font-mono font-semibold text-muted-foreground/70 px-1"
         >
           {keyHint}
         </kbd>

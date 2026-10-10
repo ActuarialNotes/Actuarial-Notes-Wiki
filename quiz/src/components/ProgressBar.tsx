@@ -88,9 +88,9 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
   }
 
   return (
-    <div className="space-y-2.5">
-      <div className="flex justify-between items-center text-sm text-muted-foreground">
-        <div className="flex items-center gap-1.5">
+    <div className="space-y-3">
+      <div className="flex justify-between items-center gap-2 text-base text-muted-foreground">
+        <div className="flex min-w-0 items-center gap-1">
         {onNavigate ? (
           <div ref={containerRef} className="relative">
             <button
@@ -100,10 +100,10 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
               aria-haspopup="listbox"
               onClick={() => setOpen(o => !o)}
               onKeyDown={handleToggleKeyDown}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/40 hover:bg-accent hover:text-foreground transition-colors text-sm font-medium"
+              className="flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg bg-muted/40 px-3 py-2 text-[15px] sm:text-base font-medium transition-colors hover:bg-accent hover:text-foreground"
             >
               Question {current} of {total}
-              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform text-muted-foreground', open && 'rotate-180')} />
+              <ChevronDown className={cn('h-4 w-4 transition-transform text-muted-foreground', open && 'rotate-180')} />
             </button>
 
             {open && (
@@ -112,7 +112,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                 role="listbox"
                 aria-label="Jump to question"
                 onKeyDown={handleListKeyDown}
-                className="absolute top-full left-0 mt-1 z-50 bg-popover rounded-md shadow-lg max-h-64 overflow-y-auto min-w-[190px]"
+                className="absolute top-full left-0 mt-1 z-50 bg-popover rounded-lg shadow-lg max-h-72 overflow-y-auto min-w-[200px]"
               >
                 {Array.from({ length: total }, (_, i) => {
                   const isItemFlagged = !!(flaggedIds && questionIds && flaggedIds.includes(questionIds[i] ?? ''))
@@ -127,7 +127,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                       data-active={isCurrent}
                       onClick={() => { onNavigate(i); setOpen(false) }}
                       className={cn(
-                        'w-full text-left px-3 py-2 text-sm flex items-center justify-between gap-4 transition-colors hover:bg-accent',
+                        'w-full text-left px-3 py-3 text-base flex items-center justify-between gap-4 transition-colors hover:bg-accent',
                         isCurrent && 'bg-accent font-semibold text-foreground'
                       )}
                     >
@@ -140,7 +140,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
             )}
           </div>
         ) : (
-          <span>Question {current} of {total}</span>
+          <span className="px-1 font-medium">Question {current} of {total}</span>
         )}
         {onFlag && (
           <button
@@ -148,19 +148,21 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
             onClick={onFlag}
             aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
             className={cn(
-              'flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-colors hover:bg-accent',
+              'flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium transition-colors hover:bg-accent sm:px-3',
               isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
             )}
           >
             {isFlagged
-              ? <BookmarkCheck className="h-3.5 w-3.5" />
-              : <Bookmark className="h-3.5 w-3.5" />}
+              ? <BookmarkCheck className="h-4 w-4" />
+              : <Bookmark className="h-4 w-4" />}
             {isFlagged ? 'Flagged' : 'Flag'}
           </button>
         )}
         {info}
         </div>
-        <span>{Math.round(percentage)}%</span>
+        {/* The bar under the row already says how far in; on a phone the
+            figure gives its width to the three controls beside it. */}
+        <span className="hidden shrink-0 text-sm tabular-nums sm:inline">{Math.round(percentage)}%</span>
       </div>
       {/* The bar is the second way to jump between questions, alongside the
           dropdown above it: press or drag along it to go straight to a question,
@@ -170,7 +172,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
         current={current}
         total={total}
         label={`Question ${current} of ${total}`}
-        trackClassName="h-2 rounded-full bg-secondary group-hover:h-2.5 group-focus-visible:h-2.5"
+        trackClassName="h-2.5 rounded-full bg-secondary group-hover:h-3 group-focus-visible:h-3"
         fillClassName="bg-foreground dark:bg-foreground"
         onScrub={onNavigate ? position => onNavigate(position - 1) : undefined}
         formatValue={position => `Question ${position} of ${total}`}

@@ -15,6 +15,11 @@ import { GradePartsDialog } from '@/components/GradePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizConcepts } from '@/components/PreQuizConcepts'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useConceptHighlight } from '@/hooks/useConceptHighlight'
+import { mentionWalk } from '@/lib/conceptMentions'
+import { loadConceptLinks, parseConceptLinksParam } from '@/lib/quizConceptLinks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
@@ -65,6 +70,10 @@ export default function Quiz() {
   // Timed: a countdown sized to what these questions would get on the real
   // paper (lib/quizTiming.ts). Set by the quiz builder's settings menu.
   const timed = searchParams.get('timed') === '1'
+  // Whether the concepts a question names are underlined to tap and read
+  // (lib/quizConceptLinks.ts) — the builder says so in the URL, anything else
+  // falls back to the reader's saved choice for this mode.
+  const linkConcepts = parseConceptLinksParam(searchParams.get('links')) ?? loadConceptLinks(mode)
   // A raid run (Actuaria, docs/actuaria-online.md §7.7): an ordinary quiz whose
   // first answer to each question is also handed to the cohort's boss, which
   // the server marks — `raid` is the draw quiz/api/raid.js served it as.
@@ -303,6 +312,62 @@ export default function Quiz() {
   }, [currentIndex])
 
   const currentQuestion = storeQuestions[currentIndex]
+
+  // ── Concepts named in the question ───────────────────────────────────────
+  // A concept the question writes out is underlined (lib/conceptMentions.ts);
+  // a tap opens it in the popup, the split pane the study guide reads one in,
+  // and the popup walks every mention on the card the way the study guide walks
+  // its links — the one it shows highlighted and scrolled to, the rest faded
+  // (hooks/useConceptHighlight.ts). Only the question's own tags are looked
+  // for, and only words already on screen are marked.
+  const cardRef = useRef<HTMLDivElement>(null)
+  const openConceptAt = useConceptPopup(s => s.openAt)
+  const conceptPopupOpen = useConceptPopup(s => s.open)
+  const conceptSource = currentQuestion ? `quiz:${currentQuestion.id}` : undefined
+  useConceptHighlight(cardRef, conceptSource)
+  const conceptNames = useMemo(() => {
+    if (!linkConcepts || !currentQuestion) return undefined
+    const names = currentQuestion.wiki_link.map(slugForLink).filter((n): n is string => !!n)
+    return names.length > 0 ? [...new Set(names)] : undefined
+  }, [linkConcepts, currentQuestion])
+
+  // A popup opened on one question is about that question: turning the page,
+  // or leaving the quiz, closes it.
+  useEffect(() => {
+    const { open, sourcePath, close } = useConceptPopup.getState()
+    if (open && sourcePath?.startsWith('quiz:')) close()
+  }, [currentIndex])
+  useEffect(() => () => {
+    const { open, sourcePath, close } = useConceptPopup.getState()
+    if (open && sourcePath?.startsWith('quiz:')) close()
+  }, [])
+
+  function handleMentionClick(e: React.MouseEvent) {
+    const target = (e.target as HTMLElement).closest<HTMLElement>('[data-concept-mention]')
+    const root = cardRef.current
+    if (!target || !root || !root.contains(target) || !conceptSource) return
+    e.preventDefault()
+    const mentions = Array.from(root.querySelectorAll<HTMLElement>('[data-concept-mention]'))
+    const { list, occurrences } = mentionWalk(mentions.map(el => el.dataset.conceptMention ?? ''))
+    const name = (target.dataset.conceptMention ?? '').toLowerCase()
+    openConceptAt(
+      list,
+      Math.max(0, list.findIndex(r => r.name.toLowerCase() === name)),
+      conceptSource,
+      null,
+      null,
+      { occurrences, occurrenceIndex: Math.max(0, mentions.indexOf(target)), walk: 'question' },
+    )
+  }
+
+  // The Info panel's concept rows open the same popup, over every concept the
+  // question is tagged with — whether the text names it or not.
+  function openTaggedConcept(links: string[], index: number) {
+    if (!conceptSource) return
+    const refs = links.map(link => ({ kind: 'concept' as const, name: slugForLink(link) ?? link }))
+    openConceptAt(refs, index, conceptSource, null, null, { walk: 'question' })
+  }
+
   const pendingAnswer = pendingAnswerFor(pending, currentQuestion)
   const committedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
   const isLocked = status === 'reviewing'
@@ -355,7 +420,7 @@ export default function Quiz() {
     'm': () => { toggleSound(); playSound('toggleOn') },
     '?': () => setShowShortcutsHelp(v => !v),
     'i': () => { if (currentQuestion) setShowQuestionInfo(v => !v) },
-  }, !anyDialogOpen && !showConceptList && status !== 'idle' && status !== 'complete')
+  }, !anyDialogOpen && !conceptPopupOpen && !showConceptList && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
     leavingRef.current = true
@@ -629,24 +694,29 @@ export default function Quiz() {
     setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <>
+    <div
+      className="container max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5"
+      // Below lg the concept popup docks as a bottom sheet; keep the question
+      // and its buttons scrollable out from under it, as the study guide does.
+      style={conceptPopupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+    >
       {ACTUARIA_ENABLED && raidDraw && <RaidHitChip />}
       <div className="flex items-center justify-between gap-3">
         <Button
           variant="ghost"
-          size="sm"
           data-tour="quit-quiz"
           onClick={() => setShowQuitDialog(true)}
-          className="text-muted-foreground hover:text-foreground"
+          className="-ml-3 h-11 px-3 text-base text-muted-foreground hover:text-foreground"
         >
-          <X className="h-4 w-4 mr-1" />
+          <X className="h-5 w-5 mr-1.5" />
           Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
         </Button>
 
         <div className="flex items-center gap-2">
           <span
             className={
-              'inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full border ' +
+              'inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full border ' +
               (mode === 'mock-exam'
                 ? 'bg-primary/10 text-primary border-primary/30'
                 : 'bg-muted text-muted-foreground border-border')
@@ -659,23 +729,23 @@ export default function Quiz() {
           )}
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             data-sound="none"
             onClick={() => { toggleSound(); playSound('toggleOn') }}
             aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
-            className="text-muted-foreground hover:text-foreground"
+            className="h-11 w-11 -mr-2 text-muted-foreground hover:text-foreground sm:mr-0"
           >
-            {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            {soundEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </Button>
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             onClick={() => setShowShortcutsHelp(true)}
             aria-label="Keyboard shortcuts"
             title="Keyboard shortcuts (?)"
-            className="text-muted-foreground hover:text-foreground hidden sm:flex"
+            className="h-11 w-11 text-muted-foreground hover:text-foreground hidden sm:flex"
           >
-            <Keyboard className="h-4 w-4" />
+            <Keyboard className="h-5 w-5" />
           </Button>
         </div>
       </div>
@@ -697,6 +767,7 @@ export default function Quiz() {
               // Topic and difficulty are a hint while the question is live, so
               // they only join the panel once the answer is committed.
               showStudyMeta={isLocked}
+              onOpenConcept={openTaggedConcept}
             />
           }
         />
@@ -743,8 +814,9 @@ export default function Quiz() {
         />
       )}
 
-      {/* The sheet Next and Back turn. */}
-      <div className="paper-sheet mt-4">
+      {/* The sheet Next and Back turn. A tap on a concept it names opens that
+          concept (handleMentionClick); everything else passes through. */}
+      <div ref={cardRef} className="paper-sheet mt-4" onClick={handleMentionClick}>
         <QuestionCard
           // Keyed by question so nothing the card holds locally — a typed
           // free-entry answer, a self-grade — can outlive the question it
@@ -766,6 +838,7 @@ export default function Quiz() {
           onPartManualGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
           essaySelfGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
           onEssaySelfGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
+          conceptNames={conceptNames}
         />
       </div>
 
@@ -833,5 +906,7 @@ export default function Quiz() {
         </div>
       )}
     </div>
+    <ConceptPopup />
+    </>
   )
 }

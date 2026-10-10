@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode, type RefObject } from 'react'
+import { createContext, useCallback, useContext, useMemo, useRef, type ReactNode, type RefObject } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -18,7 +18,7 @@ import { distributionForImage } from '@/lib/distributions'
 import { normalizeVaultMath } from '@/lib/vaultMath'
 import { themedFigureSrc } from '@/lib/figureTheme'
 import { useTheme } from '@/hooks/useTheme'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { refKey, useConceptHighlight } from '@/hooks/useConceptHighlight'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
 const GITHUB_BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
@@ -204,10 +204,6 @@ function ArticleTitle({ children }: { children: ReactNode }) {
   )
 }
 
-function refKey(ref: WikiEntryRef): string {
-  return `${ref.kind}:${ref.name.toLowerCase()}`
-}
-
 // Breadcrumb navigation lines written by Obsidian Publish (first line of every
 // file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
 // or [[Wiki]] / [[Concepts]] / **Concept Name**
@@ -254,13 +250,6 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       objectives: entries.length > 0 ? parseSyllabusObjectives(body) : [],
     }
   }, [markdown])
-
-  const popupOpen = useConceptPopup(s => s.open)
-  const popupIndex = useConceptPopup(s => s.index)
-  const popupSource = useConceptPopup(s => s.sourcePath)
-  const popupCurrent = useConceptPopup(s => s.list[s.index])
-  const popupOccurrences = useConceptPopup(s => s.occurrences)
-  const popupOccurrenceIndex = useConceptPopup(s => s.occurrenceIndex)
 
   // One place decides what a wiki reference does when clicked: the article's own
   // links and the source-material cards both go through it.
@@ -357,87 +346,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, theme])
 
   // Active-concept highlight: when the popup is open and its sourcePath
-  // matches this article's sourcePath, find the matching wikilink in this
-  // article's DOM, flag it with .wiki-link--active, and scroll it into view.
-  useEffect(() => {
-    const root = articleRef.current
-    if (!root) return
-    root.querySelectorAll('.wiki-link--active').forEach(el => el.classList.remove('wiki-link--active'))
-    root.classList.remove('concept-focus-mode')
-    if (!popupOpen || !popupCurrent) return
-    // Focus mode only applies when the popup was opened from a specific wiki
-    // page (popupSource is set). If null (e.g. opened from Dashboard or
-    // Flashcards), no article should receive concept-focus-mode.
-    if (!popupSource) return
-    if (sourcePath && sourcePath !== popupSource) return
-    // Use getAttribute comparison instead of CSS.escape to avoid any selector
-    // escaping edge-cases (colons, spaces, quotes in concept names).
-    const key = refKey(popupCurrent)
-    // Source-material links in exam markdown are parsed as 'concept' kind by
-    // hrefToEntryRef (bare names default to concept), but the popup stores them
-    // as 'resource'. Check both keys so the highlight still finds the DOM node.
-    const altKey =
-      popupCurrent.kind === 'resource'
-        ? `concept:${popupCurrent.name.toLowerCase()}`
-        : popupCurrent.kind === 'concept'
-        ? `resource:${popupCurrent.name.toLowerCase()}`
-        : null
-    const matches = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
-      .filter(el => {
-        const attr = el.getAttribute('data-wikiref')
-        return attr === key || (altKey !== null && attr === altKey)
-      })
-    // Which mention to highlight: the occurrence the user clicked / navigated
-    // to (dimmed repeats included). Falls back to the first when occurrence nav
-    // isn't active or the concept doesn't match the current occurrence entry.
-    const wantOcc =
-      popupOccurrences && popupOccurrences[popupOccurrenceIndex]?.name.toLowerCase() === popupCurrent.name.toLowerCase()
-        ? popupOccurrences[popupOccurrenceIndex]!.occurrence
-        : 0
-    const target = matches[Math.min(wantOcc, matches.length - 1)] ?? matches[0] ?? null
-    if (!target) return
-    target.classList.add('wiki-link--active')
-    root.classList.add('concept-focus-mode')
-
-    // Expand any collapsed callout ancestors so the target becomes visible.
-    let node: HTMLElement | null = target.parentElement
-    while (node && node !== root) {
-      if (node.dataset.calloutBody !== undefined && node.hidden) {
-        const toggle = node.parentElement?.querySelector<HTMLButtonElement>('[data-callout-toggle]')
-        toggle?.click()
-      }
-      node = node.parentElement
-    }
-
-    function doScroll() {
-      // --concept-split-height is set by ConceptPopup.useEffect which runs in
-      // the same commit. Read it here (inside rAF) so it's already applied.
-      const splitHeightStr = getComputedStyle(document.documentElement)
-        .getPropertyValue('--concept-split-height').trim()
-      const splitHeight = parseFloat(splitHeightStr) || 0
-      const effectiveBottom = window.innerHeight - splitHeight
-      // Account for whatever chrome is pinned to the top of the viewport — the
-      // sticky floating search bar, and below lg the fixed nav header it rests
-      // under — so concepts near the top of the page aren't treated as "in
-      // view" when they are hidden behind it. Measured rather than hardcoded:
-      // the bar sits at a different offset on either side of the lg breakpoint.
-      const searchBar = document.querySelector<HTMLElement>('[data-floating-search]')
-      const stickyOffset = searchBar ? searchBar.getBoundingClientRect().bottom : 56
-      const rect = target!.getBoundingClientRect()
-      const inView = rect.top >= stickyOffset && rect.bottom <= effectiveBottom
-      if (!inView) {
-        // Center within the visible area between the sticky bar and popup panel.
-        const visibleHeight = effectiveBottom - stickyOffset
-        const scrollBy = rect.top - stickyOffset - (visibleHeight / 2 - rect.height / 2)
-        window.scrollBy({ top: scrollBy, behavior: 'smooth' })
-      }
-    }
-
-    // Always defer via double rAF so that:
-    // 1. ConceptPopup.useEffect has run and set --concept-split-height.
-    // 2. Any callout re-renders have been committed and laid out.
-    requestAnimationFrame(() => requestAnimationFrame(doScroll))
-  }, [popupOpen, popupIndex, popupOccurrences, popupOccurrenceIndex, popupSource, popupCurrent, sourcePath])
+  // matches this article's sourcePath, the matching wikilink is flagged and
+  // scrolled into view (hooks/useConceptHighlight.ts).
+  useConceptHighlight(articleRef, sourcePath)
 
   return (
     <div

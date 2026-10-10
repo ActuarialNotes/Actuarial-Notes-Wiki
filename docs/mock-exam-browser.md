@@ -15,8 +15,19 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 | Label | Where | When |
 |---|---|---|
 | `examSourceLabel(rows)` → **Past Papers** | The source tab on the quiz builder | The exam has released sittings (Exam 5, Exam 7, MAS-I, MAS-II) |
-| `examSourceLabel(rows)` → **Practice Exam** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row alone |
-| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The Start button, the in-quiz mode pill, the quit dialog, the completion heading | Always — a session is practice whether it was drawn from Fall 2019 or from the Mix |
+| `examSourceLabel(rows)` → **Samples** | The same tab | It has none — Exam P and FM draw on the SOA's rolling sample set, so their shelf is the Mix row and the sample set's PDFs |
+| `PRACTICE_EXAM_LABEL` → **Practice Exam** | The builder's format choice, the Start button, the in-quiz mode pill, the quit dialog, the completion heading | The session is sat as a practice exam — whatever source it was drawn from |
+
+**The source and the format are two choices.** The tab says where the questions come from
+(Today's Plan, By Topic, Past Papers); the format control beside Start says how they're sat —
+**Quiz** (a short set: the count and difficulties picked, answers as you go by default) or
+**Practice Exam** (full length — a sitting whole, or the exam's paper length from any other
+source — every difficulty, answers at the end by default). Any source can be sat either way:
+a past paper as a quiz, a set of topics as a practice exam. They used to be one control, whose
+Past Papers tab also meant "practice exam" (and was even *named* Practice Exam for P and FM),
+so where the questions came from and how they were sat couldn't be told apart. The mode id
+`mock-exam` is the format; `source === 'papers'` is the shelf. A quiz of a few questions from
+one sitting is a random few, kept in the paper's order (`hooks/useQuestions.ts`).
 
 The rule is the one the report button follows (`Examiner's Report` vs `Exam & Answer Key`):
 **the label follows the content.** "Mock" said the paper was a fabrication, which for most of

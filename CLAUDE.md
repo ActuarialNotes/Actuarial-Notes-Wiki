@@ -425,8 +425,10 @@ before touching that area**:
   jacket always wins — drop it in under a name that isn't `… - Cover.svg` and the generator
   leaves it alone forever.
 - `docs/mock-exam-browser.md` — the **past-paper browser** on the quiz builder (the mode id is
-  still `mock-exam`; on screen the tab reads **Past Papers**, or **Practice Exam** for an exam
-  with no released sittings — `examSourceLabel` / `PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`): the
+  still `mock-exam`, and it is now the *format*, not the source: the builder asks where the
+  questions come from — the tab reads **Past Papers**, or **Samples** for an exam with no released
+  sittings (`examSourceLabel`) — and, separately beside Start, whether to sit them as a **Quiz** or a
+  **Practice Exam** (`PRACTICE_EXAM_LABEL` in `lib/pastExams.ts`); any source either way): the
   authored sitting catalogue (`data/pastExams.ts`), how `lib/pastExams.ts` merges it with the
   question bank so unimported papers still list (greyed out), the **live pass-rate
   pipeline** (`api/pass-rates.js` → `lib/passRates.ts` → `hooks/useExamPassRates`) that lays
@@ -579,6 +581,15 @@ Other important `lib/` modules:
   With `'end'` the right-answer chime is silent too — it would give the verdict away
   (`docs/sound-design.md` rule 7). Pure and tested (the storage read/write wrap pure `revealFromStored` /
   `storedWithReveal`).
+- `conceptMentions.ts` / `quizConceptLinks.ts` — **concepts in a question, tappable**: a concept
+  the question is tagged with (`wiki_link`) and writes out in its stem or a part's ("the concept
+  of materiality") is wrapped by a rehype plugin in a `button.concept-mention` carrying the study
+  guide's `data-wikiref`; a tap opens it in `ConceptPopup` and the popup walks every mention on the
+  card (`mentionWalk`, walk kind `question`), highlighting and scrolling each one through
+  `hooks/useConceptHighlight.ts` — the hook `WikiArticle` uses for the same thing. Only words already
+  on screen are marked. On by default for a quiz, off for a practice exam — the settings menu's
+  *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
+  panel's concept rows open the same popup. Pure and tested.
 - `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
   mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
   an unticked level is out of the pool, so the deck card's count, the count clamp and

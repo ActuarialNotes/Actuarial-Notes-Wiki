@@ -22,7 +22,9 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
-import { CheckMark } from '@/components/CheckMark'
+import { CompletionCornerBadge } from '@/components/CheckMark'
+import { ExamLogo } from '@/components/ExamLogo'
+import { StreakNavBadge } from '@/components/StreakBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -43,7 +45,7 @@ import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DashboardSearchBar } from '@/components/DashboardSearchBar'
-import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
@@ -792,7 +794,7 @@ export default function Dashboard() {
             <div
               ref={examTabsScrollRef}
               onScroll={measureTabsOverflow}
-              className={`exam-tab-strip flex flex-1 min-w-0 gap-1.5 overflow-x-auto${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
+              className={`exam-tab-strip flex flex-1 min-w-0 gap-3 overflow-x-auto px-1 py-1.5${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
             >
               {inProgressSyllabi.map((s, i) => {
                 // The tab strip is the one place every active exam is visible
@@ -800,26 +802,37 @@ export default function Dashboard() {
                 // gets answered. Inline rather than a corner badge: the strip
                 // scrolls under `overflow-x-auto`, which would clip an overhang.
                 const planDone = todayQuizByExam[wikiExamIdToProgressKey(s.examId)]?.complete ?? false
+                // The tab is the exam's logo — its monogram and ladder colour
+                // say which exam without printing the name; the active one is
+                // ringed, the rest held back.
+                const active = i === clampedIdx
                 return (
                   <button
                     key={s.examId}
                     type="button"
-                    data-exam-tab-active={i === clampedIdx}
+                    data-exam-tab-active={active}
                     onClick={() => setActiveExamIdx(i)}
-                    className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors inline-flex items-center gap-2 ${
-                      i === clampedIdx
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-transparent text-muted-foreground hover:text-foreground'
+                    aria-label={s.examLabel}
+                    aria-pressed={active}
+                    title={s.examLabel}
+                    className={`relative shrink-0 rounded-[14px] p-0.5 transition-opacity ${
+                      active ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-100'
                     }`}
                   >
-                    {s.examLabel}
+                    <ExamLogo examKey={wikiExamIdToProgressKey(s.examId)} size="lg" />
                     {planDone && (
-                      <CheckMark className="h-4 w-4" label={`${s.examLabel}: today's study plan complete`} />
+                      <CompletionCornerBadge label={`${s.examLabel}: today's study plan complete`} />
                     )}
                   </button>
                 )
               })}
             </div>
+
+            {/* The study streak — renders nothing without a live streak. Gives
+                its place to the compact actions once they pin. */}
+            {STREAK_ENABLED && user && !actionsPinned && (
+              <div className="shrink-0"><StreakNavBadge /></div>
+            )}
 
             {/* Compact copies of the primary actions — only once the full-size
                 pair below has scrolled behind this row. Icon-only on phones,

@@ -19,8 +19,8 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **Exam readiness** card (the schedule above it, the logo and `NN% Ready`, the primary actions under it) | `components/ReadinessCard.tsx` |
-| Dashboard **Study Guide** card (the ring and the criterion bars — the breakdown of that one score, which it no longer reprints) | `components/ReadinessCard.tsx` |
+| Dashboard **readiness square** (`NN% Ready` inside a mini ring, beside the exam-date and days-left squares) | `components/ReadinessCard.tsx` |
+| Dashboard **Study Guide** popup, opened by that square (the ring and the criterion bars — the breakdown of that one score) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |
 | Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |

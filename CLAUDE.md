@@ -1151,7 +1151,7 @@ Other important `lib/` modules:
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
 `*.test.ts` files sit alongside the modules they test (vitest). There are **201 test files /
-~3470 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+~3560 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS
 endpoint under `quiz/api/` the way `passRate*.test.ts` do theirs).

@@ -37,4 +37,4 @@ The second bar looks four times as long, though the relativity is only $\tfrac{1
 
 - **A** — 1.33 is the true ratio of the values, which is what the chart *should* convey, not what it shows.
 - **B** — 1.50 divides the second value by the axis start, $\tfrac{1.20}{0.80}$, which is not the length of either bar.
-- **C** — 3.00 divides the gap between the bars, $0.30$, by the first bar's length, mixing a difference with a length.
+- **C** — 3.00 divides the gap between the bars, 0.30, by the first bar's length, mixing a difference with a length.

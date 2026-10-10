@@ -32,6 +32,8 @@ import {
 } from '@/lib/tools'
 import { fillColumn, scalarSources, selectionsToFactors, type ColumnSource, type Selection } from '@/lib/toolColumns'
 import { FactorSelection } from './FactorSelection'
+import { ToolFigure } from './ToolFigure'
+import { figureFor } from '@/lib/toolFigures'
 import { lastRun, rememberRun } from '@/lib/toolRuns'
 import { SourceSheet, type Sourcing } from './SourceSheet'
 import { fromDisplay, toDisplay } from '@/lib/tools/format'
@@ -81,6 +83,15 @@ export function ToolCard({
   }, [spec, draft])
   const result = outcome.result
   const stale = outcome.error !== null
+  // The figure (§6.7), from the same run as the tiles.
+  const figure = useMemo(() => (result ? figureFor(result) : null), [result])
+  /** A figure's dragged point sets its input, held to the field's step and bounds as a slider is. */
+  const dragTo = (key: string, value: number) => {
+    const f = spec.fields.find(x => x.key === key)
+    if (!f || f.kind !== 'number') return
+    const stepped = f.integer ? Math.round(value) : Math.round(value / f.step) * f.step
+    set(key, Math.min(f.max, Math.max(f.min, Number(stepped.toFixed(10)))))
+  }
 
   // The session remembers each tool's last good run, for the candidates a
   // cell's stepper offers elsewhere (§6.6); a source sheet is told each result.
@@ -152,7 +163,7 @@ export function ToolCard({
           >
             {spec.name}
           </button>
-          <p className="mt-0.5 min-h-[1.5em] text-sm leading-snug text-muted-foreground tabular-nums">{spec.notation(result?.input ?? (draft as never))}</p>
+          <Notation text={spec.notation(result?.input ?? (draft as never))} />
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <button
@@ -178,6 +189,13 @@ export function ToolCard({
               <p className="mt-1 text-lg font-semibold leading-none tabular-nums" data-testid="tool-tile">{formatValue(t.value, t.unit)}</p>
             </div>
           ))}
+        </div>
+      )}
+
+      {figure && (
+        <div className={cn(stale && 'opacity-50')}>
+          {/* A card with five or more inputs on screen draws a shorter figure, so it still fits one phone screen (R10). */}
+          <ToolFigure figure={figure} onDrag={dragTo} height={scalars.length >= 6 ? 56 : scalars.length >= 5 ? 72 : 96} />
         </div>
       )}
 
@@ -323,6 +341,24 @@ function MenuHeader({ spec, onRead }: { spec: ToolSpec; onRead: () => void }) {
         </div>
       )}
     </div>
+  )
+}
+
+/**
+ * The notation under the title: one line on a phone, the rest a tap away —
+ * the figure needs the room more than a long formula's second and third
+ * lines do (R10).
+ */
+function Notation({ text }: { text: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <p
+      onClick={() => setOpen(o => !o)}
+      title={text}
+      className={cn('mt-0.5 min-h-[1.5em] cursor-default text-sm leading-snug text-muted-foreground tabular-nums', !open && 'line-clamp-1 sm:line-clamp-none')}
+    >
+      {text}
+    </p>
   )
 }
 

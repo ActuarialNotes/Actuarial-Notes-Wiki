@@ -14,6 +14,9 @@ import { AREAS, TOOLS, checksFor, decodeRunInput, toolBySlug, toolSlug, type Pra
 import { searchTools } from '@/lib/toolSearch'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { ToolsSearchBar } from '@/components/tools/ToolsSearchBar'
+import { ToolFigure } from '@/components/tools/ToolFigure'
+import { figureFor, type FigureSpec } from '@/lib/toolFigures'
+import { runTool } from '@/lib/tools'
 import { useBack, usePageLabel } from '@/hooks/useBack'
 import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
@@ -113,15 +116,31 @@ function Catalogue() {
   )
 }
 
-/** One tool in the catalogue: its tile, name and the question it answers, with the tested mark. */
+/**
+ * A tool's figure in miniature, drawn from its own first example (§6.7): the
+ * catalogue's tiles tell eight reserving tools apart by what they draw rather
+ * than by eight copies of one icon. Computed once per tool per visit.
+ */
+const MINIATURES = new Map<string, FigureSpec | null>()
+function miniature(spec: ToolSpec): FigureSpec | null {
+  if (!MINIATURES.has(spec.id)) {
+    let fig: FigureSpec | null = null
+    try { fig = figureFor(runTool(spec, {})) } catch { fig = null }
+    MINIATURES.set(spec.id, fig)
+  }
+  return MINIATURES.get(spec.id) ?? null
+}
+
+/** One tool in the catalogue: its figure, name and the question it answers, with the tested mark. */
 function ToolRow({ spec, query = '' }: { spec: ToolSpec; query?: string }) {
   const Icon = AREA_ICON[spec.area]
+  const fig = miniature(spec)
   return (
     <ListRow
       to={`/tools/${toolSlug(spec)}`}
       leading={
         <LogoTile size="lg" className="bg-muted text-foreground">
-          <Icon className="h-6 w-6" aria-hidden />
+          {fig ? <ToolFigure figure={fig} compact className="h-12 w-12" /> : <Icon className="h-6 w-6" aria-hidden />}
         </LogoTile>
       }
       title={highlightMatch(spec.name, query)}

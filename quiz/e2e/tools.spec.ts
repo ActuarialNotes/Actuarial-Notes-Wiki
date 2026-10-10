@@ -96,12 +96,32 @@ test.describe('tools', () => {
     await expect(card.getByTestId('tool-tile').nth(1)).toHaveText('3.5')
   })
 
-  test('fits a scalar card on a phone without scrolling', async ({ page }) => {
+  test('fits every scalar card, figure and all, on a phone without scrolling', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/tools/annuity')
-    const box = await page.getByTestId('tool-card').boundingBox()
-    expect(box).not.toBeNull()
-    expect(box!.y + box!.height).toBeLessThanOrEqual(844)
+    for (const slug of [
+      'annuity', 'trend-factor', 'bond-price', 'bond-yield', 'buhlmann-credibility', 'partial-credibility',
+      'full-credibility-standard', 'limited-expected-value', 'expected-payment', 'permissible-loss-ratio',
+      'loss-ratio-method', 'pure-premium-method', 'interest-converter',
+    ]) {
+      await page.goto(`/tools/${slug}`)
+      await expect(page.getByTestId('tool-figure')).toBeVisible()
+      const box = await page.getByTestId('tool-card').boundingBox()
+      expect(box, slug).not.toBeNull()
+      expect(box!.y + box!.height, slug).toBeLessThanOrEqual(844)
+    }
+  })
+
+  test('draws a figure that follows the inputs, and sets an input when its point is dragged', async ({ page }) => {
+    await page.goto('/tools/partial-credibility')
+    const card = page.getByTestId('tool-card')
+    const z = card.getByTestId('tool-tile').first()
+    const before = await z.textContent()
+    const svg = card.getByTestId('tool-figure').locator('svg')
+    const box = (await svg.boundingBox())!
+    await page.mouse.move(box.x + box.width * 0.8, box.y + box.height / 2)
+    await page.mouse.down()
+    await page.mouse.up()
+    await expect(z).not.toHaveText(before ?? '')
   })
 
   test('searches the catalogue by name, short name and question, keeping the query in the URL', async ({ page }) => {

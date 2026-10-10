@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { parseQuestion, type Question } from './parser'
-import { VAULT_QUESTION_IDS, questionPublisher } from './questionPublisher'
+import { VAULT_QUESTION_IDS, VAULT_QUESTION_ID_RE, questionPublisher } from './questionPublisher'
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 const QUESTIONS_DIR = path.join(REPO_ROOT, 'questions')
@@ -25,6 +25,8 @@ describe('questionPublisher', () => {
   it('names the vault for its own questions', () => {
     expect(questionPublisher(q({ id: 'p-901', exam: 'Probability' }))).toBe('Actuarial Notes')
     expect(questionPublisher(q({ id: 'p-964', exam: 'Probability' }))).toBe('Actuarial Notes')
+    expect(questionPublisher(q({ id: 'masi-an-001', exam: 'Exam MAS-I' }))).toBe('Actuarial Notes')
+    expect(questionPublisher(q({ id: 'masi-2019s-q10', exam: 'Exam MAS-I' }))).toBe('CAS')
   })
 
   it('names no one for an exam it does not know', () => {
@@ -66,6 +68,11 @@ describe('the question bank, by publisher', () => {
       expect(question!.year, `${id} names a sitting`).toBeUndefined()
       expect(citedSampleNumbers(question!), `${id} is checked as the SOA's own question`).not.toContain(idNumber(question!))
     }
+  })
+
+  it('files every `-an-` question under no sitting', () => {
+    const dated = questions.filter(x => VAULT_QUESTION_ID_RE.test(x.id) && (x.year || x.session))
+    expect(dated.map(x => x.id)).toEqual([])
   })
 
   it('leaves no question of the vault’s own filed as the SOA’s', () => {

@@ -19,6 +19,7 @@ verification:
 
 - **Direct equity items** are changes that bypass net income: other comprehensive income under GAAP and IFRS; under SAP, direct charges and credits to surplus such as unrealised gains, the change in non-admitted assets, the change in the provision for reinsurance and the change in net deferred tax.
 - **United States — SAP versus GAAP.** SAP measures solvency on a liquidation-minded basis: only **admitted assets** count; acquisition costs are expensed immediately while the full unearned premium is held, so there is no DAC and new business *drains* surplus; the [[Schedule F]] provision for reinsurance is charged to surplus; loss and premium reserves are shown **net** of reinsurance. GAAP (ASC 944) measures performance for a going concern: acquisition costs are capitalised as DAC and matched to earned premium, all assets are recognised subject to impairment, and reinsurance is presented **gross**, with recoverables as an asset.
+- **The U.S. statutory set.** Under the NAIC Preamble, the statutory financial statements are the balance sheet, the related summary of operations (the statutory income statement), the statement of changes in capital and surplus, and the cash flow statement. Because these cannot show everything needed to judge an insurer's short- and long-term stability, management supplements them with notes, management's discussion and analysis, and supplementary schedules and exhibits. The balance sheet is the principal focus of solvency measurement, and the income statement a secondary one that shows whether the insurer can sustain itself as a going concern.
 - **Canada — IFRS 17.** The statement of financial position, statement of profit or loss, comprehensive income, changes in equity, cash flows and notes. Revenue is [[Insurance Revenue]], not written or earned premium; acquisition costs sit inside the [[Liability for Remaining Coverage]]; [[Reinsurance Contracts Held]] are a separate asset, never netted, and reinsurance appears in profit or loss as one net line. The OSFI core return (see [[Canadian Annual Return]]) reproduces these statements in regulatory form with the liability roll-forwards IFRS 17 introduced.
 - **Reinsurance is where the bases diverge most.** A proportional treaty with a ceding commission gives immediate **surplus relief** under SAP but none under GAAP, and a contract that fails [[Risk Transfer|risk transfer]] is a deposit on every basis — see [[Reinsurance Accounting]], [[Deposit Accounting]] and [[Reinsurance Strategy]].
 - Canadian ratios computed from IFRS 17 statements are not comparable with the pre-2023 series, nor with U.S. statutory ratios; see [[Key Financial Measures]].
@@ -71,3 +72,12 @@ verification:
 > > **Netted (pre-IFRS 17):** net earned $400$, net claims $288$, net expenses $80 - 25 = 55$, so the underwriting result is $400 - 288 - 55 = 57$.
 > >
 > > Same profit of $\$57$ million, different picture: IFRS 17 keeps revenue at the gross $\$500$ million and shows reinsurance as a single $\$3$ million net cost, so ratios built on the two presentations cannot be compared.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The objective on the fundamentals of insurer financial statements asks what each statement shows, and how the statutory statements differ from GAAP ones, for example in acquisition costs, nonadmitted assets and reinsurance.
+> - **Exams 6C and 6U:** The SAP, GAAP and IFRS 17 statements are compared in detail, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Surplus moves outside income:** Under SAP, changes in nonadmitted assets and in the provision for reinsurance go directly to surplus, not through net income.
+> - **Ceding commission and surplus:** A quota share's ceding commission raises statutory surplus at once, but leaves GAAP equity unchanged.
+

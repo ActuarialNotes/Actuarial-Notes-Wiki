@@ -69,3 +69,12 @@ verification:
 > > **As a deposit:** loss ratio $210/300 = 70.0\%$ and premium to surplus $300/150 = 2.00$, with a $\$30$M deposit asset that the $\$27$M of recoveries will draw down.
 > >
 > > Booking a failed contract as reinsurance would flatter the loss ratio by $2.2$ points and leverage by $0.2$ — improvements with no risk behind them. That is precisely the misstatement the risk transfer test and the CEO/CFO attestation exist to prevent.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The deposit accounting objective asks when a reinsurance contract must be accounted for as a deposit and what that changes: no ceded premium, no ceded losses, no reduction of the loss reserves, and interest income or expense on the deposit.
+> - **Exams 6C and 6U:** Risk transfer testing and the effective-yield method, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Both components of risk:** A contract must transfer both underwriting risk and timing risk to escape deposit accounting under SSAP No. 62R.
+> - **Recoveries are not ceded losses:** Under deposit accounting a recovery draws down the deposit; it never reduces incurred losses or the loss ratio.
+

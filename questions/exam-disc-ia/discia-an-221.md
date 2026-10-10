@@ -1,0 +1,30 @@
+---
+id: "discia-an-221"
+exam: "Exam DISC-IA"
+topic: "Defenses Against Negligence"
+learning_objective: "Insurance Law Part 1"
+difficulty: medium
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/Defenses+Against+Negligence
+  - Concepts/Negligence
+  - Concepts/Tort+Law
+answer: "B"
+points: 1
+---
+
+A pedestrian is struck by a speeding driver and proves damages of \$250,000. The jury finds the pedestrian 50% at fault for crossing against the signal and the driver 50% at fault. What does she recover in State X, which uses the 50% bar rule of modified comparative negligence, and in State Y, which uses the 51% bar rule?
+
+- A) \$0 in State X and \$0 in State Y
+- B) \$0 in State X and \$125,000 in State Y
+- C) \$125,000 in State X and \$0 in State Y
+- D) \$125,000 in State X and \$125,000 in State Y
+
+## Explanation
+
+Under modified comparative negligence the award is reduced by the plaintiff's share of fault, $(1 - 0.50)(250{,}000) = 125{,}000$, but only if she is below the state's bar. Under the 50% bar rule a plaintiff 50% or more at fault recovers nothing. Under the 51% bar rule only a plaintiff 51% or more at fault is barred, so she recovers **\$125,000** in State Y and **\$0** in State X.
+
+- **A** applies contributory negligence, which bars any plaintiff who was at fault at all.
+- **C** reverses the two bar rules.
+- **D** applies pure comparative negligence, which has no bar.

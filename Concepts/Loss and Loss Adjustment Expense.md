@@ -23,6 +23,7 @@ verification:
 - The four "loss" numbers in an analysis are different: **paid**, **reported** (paid $+$ case), **ultimate** (reported $+$ IBNR), and **projected** (ultimate, trended to the future policy period). Each adjustment answers a different question and skipping one biases the indication in a predictable direction.
 - The ratemaking adjustments on the loss side: start with reported losses → remove extraordinary [[Large Loss|shock]] and [[Catastrophe Loss|catastrophe]] losses → **develop** to ultimate ([[Loss Development]]) → **trend** to the forecast period ([[Loss Trend]]) → restate for benefit or coverage changes → add back a long-term large-loss and catastrophe provision → load ULAE. Werner & Modlin prescribe no single order, but a catastrophe provision is added to losses that have already been trended and developed — trending and developing it again would over-adjust it — and the ULAE ratio is applied to losses already adjusted.
 - The statutory Annual Statement calls ALAE **Defense and Cost Containment (DCC)** and ULAE **Adjusting and Other (A&O)**; the definitions do not match exactly, which matters when using industry data.
+- **Statutory accounting (SSAP No. 55):** Losses and LAE are recognized as expenses when a covered event occurs, with a liability for the unpaid amount ([[Unpaid Claims]]). Defense and cost containment (DCC) covers defense, litigation and medical cost containment expenses, internal or external, including attorney fees incurred under a duty to defend, surveillance, litigation management and the cost of experts. Adjusting and other (AO) covers the rest, such as fees and expenses of adjusters and settling agents and attorney fees incurred to determine coverage, including litigation between the insurer and the policyholder. Extra-contractual and bad-faith losses are included in losses.
 
 ![[Media/Figures/Loss_and_Loss_Adjustment_Expense.svg|340]]
 
@@ -70,3 +71,12 @@ verification:
 > > **5. Load LAE**, and only then divide by exposures or premium.
 > >
 > > The order is not decorative. Trending before developing gives the same answer only if both are simple multiplications applied to the same base; developing the shock loss, or adding this year's actual large loss instead of the expected load, does not — and each error goes in a direction the analysis will not reveal.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The objective on loss and loss adjustment expense accounting asks when losses and LAE are recognized and how LAE is classified. Expect a list of claim costs, such as a defense attorney, an independent adjuster or coverage counsel, and a question asking which are DCC and which AO.
+> - **Exam 5:** Ratemaking loads ALAE and ULAE onto losses, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Two attorneys, two categories:** An attorney defending the insured under the duty to defend is DCC; an attorney hired to decide whether the policy covers the claim is AO.
+> - **DCC is not exactly ALAE:** The statutory categories do not line up exactly with the allocated and unallocated split, so industry data need care.
+> - **Recognition follows the event:** Losses are expensed when the covered event occurs, not when they are paid.

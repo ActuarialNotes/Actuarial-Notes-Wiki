@@ -19,6 +19,7 @@ verification:
 - **Objectives explain every difference.** SAP's primary users are regulators judging solvency, and the Preamble to the Manual rests it on three concepts: **conservatism** (surplus should not be overstated, and valuation should damp swings over economic cycles), **recognition** (only assets available to pay policyholder obligations are admitted; the rest are charged against surplus) and **consistency** (comparable across companies and over time). GAAP serves investors in a going concern, so it matches costs to the revenue they earn.
 - **How GAAP enters SAP.** New GAAP guidance becomes statutory only when the NAIC adopts it, adopts it with modification, or rejects it. A state may **prescribe** a departure for all its domestic insurers or **permit** one for a single insurer; the notes must describe it and quantify its effect on surplus and income.
 - **Principles versus rules.** IFRS 17 is principles-based (an entity-specific risk adjustment, judgement on discount rates); SAP leans rules-based (admissibility tests, the [[Schedule F]] provision formula), which buys comparability for regulators at the cost of economic realism.
+- **Where this sits on the DISC-IA syllabus.** The concepts behind these standards are on [[Qualitative Characteristics of Accounting Information]], the frameworks and their users on [[Accounting Frameworks]], and which source of guidance governs within each framework on [[Accounting Rule Hierarchy]].
 - The actuary's own [[Actuarial Standards of Practice]] sit alongside these: they govern how the actuary estimates, not how the entity books. See [[Financial Statements]] for how the statements themselves differ.
 
 > [!example]- Recognition, Measurement or Presentation? {Example}
@@ -48,3 +49,12 @@ verification:
 > > The statements are filed on the state basis, but the notes must describe the practice, reconcile net income and surplus to the NAIC basis — here $280 - 30 = \$250$M of surplus — and state whether risk-based capital would have triggered regulatory action without it. The discounting disclosures give the rate used and the non-tabular discount by line.
 > >
 > > An analyst comparing insurers should restate to the NAIC basis. Surplus that exists only by one regulator's permission is not the same quality as surplus under the common standard, and it is exactly the kind of difference [[Financial Health|financial health]] reviews are meant to surface.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The objective on selected accounting concepts asks how the statutory concepts of conservatism, consistency and recognition, and the distinction between recognition, measurement and presentation, explain the way an insurer accounts for an item. Expect an item such as overdue premium, acquisition costs or reinsurance recoverables and a question asking how SAP treats it and why.
+> - **Exams 6C and 6U:** The comparisons above, between SAP, GAAP, tax and IFRS 17, return in the financial reporting objectives.
+
+> [!warning]- Exam traps
+> - **Recognition is not measurement:** Whether an item appears at all (recognition) is a different question from the amount it appears at (measurement) and from where it is shown (presentation).
+> - **Permitted practices change surplus, not the standard:** A state's permitted practice applies to one insurer, and the notes must quantify its effect against the NAIC basis.
+

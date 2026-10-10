@@ -25,6 +25,7 @@ verification:
 - ASOP 43's **actuarial central estimate** is an estimate "that represents an expected value over the range of reasonably possible outcomes" — not a conservative figure, not a best case, and not necessarily any particular percentile of the distribution.
 - The estimate applies equally to **non-insurance entities that retain risk** — self-insureds, captives, public entities, pools — for their [[Self-Insured Retention|retained layer]], which is why the reserving syllabus covers them alongside insurers.
 - Accuracy matters beyond the balance sheet: unpaid claim estimates drive solvency assessment, [[Ratemaking|ratemaking]] (through ultimate loss ratios), reinsurance commutations, collateral requirements, and the price of the company itself in a transaction.
+- **Statutory accounting (SSAP No. 55):** In a U.S. insurer's statutory statements, losses and LAE are recognized as expenses when the covered event occurs, which for a claims-made policy is the reporting of the incident to the insurer, and a liability is set up for what is unpaid: reported losses, IBNR (including bulk provisions for deficiencies in case reserves) and LAE. The liability is based on the estimated ultimate cost of settling the claims, including inflation, and is not discounted unless a specific SSAP allows it. Management records its best estimate for each line and in total; where it estimates a range and no point is better than another, it records the midpoint. Reserves recoverable from reinsurers are netted against the gross liability (SSAP No. 62R), so the statutory balance sheet shows unpaid claims net of reinsurance.
 
 ![[Media/Figures/Unpaid_Claims.svg|340]]
 
@@ -68,3 +69,12 @@ verification:
 > > \end{align*}$$
 > >
 > > Three things this shows. **ULAE has to be added explicitly** — it is in no case reserve and no loss triangle. **The recoveries are assets, not reductions of the liability**, in statutory presentation: ceded amounts are shown as reinsurance recoverable, and the insurer keeps the credit risk on them. And the difference between $\$28.1$M gross and $\$22.0$M net is entirely a question of collectability — which is why an actuary reporting a net figure states the gross alongside it.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** Loss reserves appear in the objectives on loss and LAE accounting and on the relationship between loss reserves and the [[Unearned Premium|unearned premium reserve]]. Expect a question asking when a loss is recognized, what the reserve includes, or whether an amount belongs in the loss reserves or the UPR.
+> - **Exam 5:** Reserving questions split the unpaid estimate into case and IBNR and build the full liability, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Occurrence versus report:** Under an occurrence policy the loss is recognized when the event occurs, even if no one has reported it yet (IBNR). Only for claims-made coverage is the report the covered event.
+> - **Statutory reserves are net:** SAP nets ceded reserves against the liability; GAAP shows the gross liability and a reinsurance recoverable asset.
+> - **No discount by default:** Statutory loss reserves are undiscounted unless a specific SSAP permits discounting.

@@ -27,6 +27,7 @@ verification:
 - **Claim, loss, accident date.** The claim is the demand, and the *loss* is the amount of compensation paid or payable to the claimant under the policy. The date of the event that caused the loss is the accident date, also called the date of loss or occurrence date. Actuaries occasionally use *losses* and *claims* interchangeably, so check which one a source means.
 - **Per loss or per payment.** Under a [[Deductible|deductible]], a loss doesn't always produce a payment. The payment per loss $Y^L$ includes zeros. The payment per payment $Y^P$ is conditional on $X > d$, and $E[Y^L] = P(X > d)\,E[Y^P]$. The number of payments is a thinned count: if losses are Poisson with rate $\lambda$, payments are Poisson with rate $\lambda\,P(X > d)$ ([[Poisson Thinning]]).
 - **The claim's life.** A claim is reported, given a [[Case Reserves|case reserve]], paid in one or more instalments and closed. Some close without payment and some reopen. Claims that have occurred but not yet been reported are [[IBNR]]. Counts at each stage feed the [[Claim Count Triangle|claim count triangles]] used in reserving.
+- **Property damage claims.** A claim is a demand to recover, under a policy, for a loss that may come within it. On a property policy the insured claims for damage to its own property, a first-party claim; on a liability policy a third party claims for injury or damage it says the insured caused. The ISO homeowners form (HO 00 03 05 11) sets out the property claim's steps: the insured submits a signed, sworn proof of loss; the insurer may, by written notice within 30 days of receiving it, choose to repair or replace the damaged property with property of like kind and quality; and loss is payable 60 days after the proof of loss once the parties agree, a final judgment is entered or an appraisal award is filed. The amount turns on the policy's valuation basis, [[Actual Cash Value|actual cash value]], [[Replacement Cost|replacement cost]] or another of the [[Loss Settlement Provisions|loss settlement provisions]], and then on the limit and deductible ([[Property Insurance Limits and Deductibles]]).
 
 > [!example]- Per Loss or Per Payment {Example}
 > Losses are exponential with mean $\$2{,}000$, and a $\$500$ deductible applies.
@@ -70,3 +71,12 @@ verification:
 > > $$P(\text{no large claim}) = e^{-4} = 0.0183$$
 > >
 > > A year with no large claim happens less than $2\%$ of the time, so an analyst should expect several large claims every year. The compound variance uses $E[X^2]$ rather than $\text{Var}(X)$.
+
+> [!tip]- How it appears on the exam
+> - **DISC-IA:** The common policy concepts section values property damage claims, for example by applying book value, actual cash value or replacement cost to a damaged item and then the deductible and limit. The claim page is the starting point; the valuation is on [[Loss Settlement Provisions]].
+> - **Exam P:** Claims are the counts and sizes of the collective risk model, as in the examples above.
+
+> [!warning]- Exam traps
+> - **Per loss or per payment:** On Exam P, a loss below the deductible produces no payment. Mixing a count of losses with the mean per payment is the classic error.
+> - **Valuation before limits:** On a property damage claim, the loss is first valued on the policy's basis, then reduced for any coinsurance penalty and the deductible, and capped by the limit.
+

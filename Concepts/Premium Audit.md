@@ -20,6 +20,8 @@ verification:
 > $$\text{Audit Adjustment} = \text{Audited Premium} - \text{Deposit Premium}$$
 
 - The insured pays a **deposit premium** at inception based on estimated exposures. After expiry, the auditor examines payroll records, tax filings and sales ledgers, and the difference is billed as **additional premium** or refunded as **return premium**.
+- **Why insurers audit:** The premium charged at inception is an estimate, and the exposures and classifications behind it change during the policy. The audit compares the actual exposures and classifications with the estimate to fix the final premium, which can go down as well as up, and it checks that each employee's duties are assigned to the right classification. Without it, an insured that under-estimates its exposure pays too little, and one that over-estimates pays too much.
+- **How audits are done:** An audit may be physical, at the insured's premises with an auditor, or virtual, by telephone, by mail or online. The records reviewed include payroll records, federal reports of employee income, state reemployment tax forms, cash disbursement journals and other accounting records, certificates of insurance for subcontractors, and independent contractor documents. Which method a policy gets is often set by rule. Florida's workers compensation rule, for example, requires a physical audit every year for a voluntary market policy with an estimated annual premium of \$10,000 or more, allows a mail or physical audit below that, and requires a physical audit for new business with construction classifications. An insured that does not cooperate with an audit can face an audit noncompliance charge, which varies by state.
 - Audits break the tidy relationship between transaction date and cohort. An audit on a policy written in $2023$ books premium in $2025$, so **[[Policy Year]] premium keeps changing** for two or three years and [[Calendar Year|calendar year]] premium contains audit adjustments belonging to prior years.
 - For ratemaking this means the experience period's premium is not final. Werner's remedy is an **audit-to-date development** on premium — the same logic as loss development, applied to the premium triangle — or restricting the experience period to years whose audits are essentially complete.
 - Audits are the reason auditable lines carry [[Exposure Trend|exposure trend]]: a growing insured generates more payroll and pays more premium at the same rate, with no filing required. That automatic response is a feature, and it is why workers compensation rates respond to wage inflation without action.
@@ -69,3 +71,11 @@ verification:
 > > $$\text{Ultimate PY 2023} = \$11{,}000{,}000 \times 1.071 = \$11{,}781{,}000$$
 > >
 > > Using the unaudited $\$11{,}000{,}000$ as the denominator of a PY 2023 loss ratio would overstate it by about $7\%$ relative — while the losses in the numerator are developed to ultimate and the premium is not. Consistency of maturity between numerator and denominator is the point: develop both, or neither.
+
+> [!tip]- How it appears on the exam
+> - **DISC-RM:** The risk control and premium auditing section asks why insurers audit premiums, how an audit is carried out (the method, the records examined, the classification check), and what audits contribute to underwriting, ratemaking and the insured's fair treatment.
+> - **Ratemaking (Exam 5):** Audits explain why policy-year premium develops, and why an unaudited year's premium needs development before it is used.
+
+> [!warning]- Exam traps
+> - **Audits can return premium:** An audit finds the actual exposure, so an insured whose payroll or sales fell gets a return premium. Treating the audit as a device only for collecting more is wrong.
+> - **Classification matters as much as exposure:** Payroll assigned to a cheaper class code understates the premium even when the total payroll is right. The audit checks both.

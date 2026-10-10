@@ -91,6 +91,7 @@ A **classification tree** is a [[Decision Tree]] for a qualitative [[Response Va
 > > against $8{,}000 \times 59 = \$472{,}000$ when nothing is referred. The referral rule's error rate is $(255 + 14)/1{,}000 = 26.9\%$ — far worse — yet it saves \$210,000. The tree's leaf proportions, not its majority vote, are what a business decision should use.
 
 > [!tip]- How it appears on the exam
+> - **DISC-DA:** Section 8.2 covers analyzing data with classification trees. Questions give a small fitted tree for an insurance yes/no outcome, such as lapse, fraud or a large loss, and ask for the class or probability predicted for a new record, which split separates the classes better, or how to evaluate the tree on holdout data with a [[Confusion Matrix|confusion matrix]] ([[Model Training and Evaluation]]).
 > - **SRM** (multiple choice): compute the Gini index, entropy or error rate of a node or a split from class counts and pick the best split; or judge statements on which measure suits growing and which pruning.
 > - **SRM**: read a fitted tree — follow a new observation to its leaf and give the predicted class or probability — and compare trees with linear models (interpretability, interactions, variance).
 > - **PA** (written): construct, prune and validate a classification tree for a business problem — interpret its splits, justify the pruned size from CV error, and evaluate it on held-out data with a [[Confusion Matrix]] or [[AUROC]] at a cutoff suited to the problem.

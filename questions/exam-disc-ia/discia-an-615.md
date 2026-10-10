@@ -1,0 +1,41 @@
+---
+id: "discia-an-615"
+exam: "Exam DISC-IA"
+topic: "BPP Limits of Insurance and Deductible"
+learning_objective: "Commercial Property Insurance Part 1"
+difficulty: hard
+type: multiple-choice
+bloom: apply
+wiki_link:
+  - Concepts/BPP+Limits+of+Insurance+and+Deductible
+  - Concepts/BPP+Loss+Conditions+and+Additional+Conditions
+answer: "A"
+points: 1
+---
+A building worth \$400,000 at the time of loss is insured for \$200,000 under the BPP with an 80% coinsurance percentage and a \$1,500 deductible. A vandal causes \$2,400 of damage. How much does the insurer pay?
+
+- A) \$0
+- B) \$562.50
+- C) \$900
+- D) \$2,400
+
+## Explanation
+
+The deductible clause first reduces the loss as the coinsurance condition requires, then compares the adjusted loss with the deductible:
+
+$$
+\begin{align*}
+R &= \frac{200{,}000}{0.80 \times 400{,}000} \\
+&= 0.625 \\
+L^{*} &= 0.625 \times 2{,}400 \\
+&= 1{,}500
+\end{align*}
+$$
+
+If the adjusted loss is less than or equal to the deductible, the insurer pays nothing. Here it equals the deductible, so the answer is **A**.
+
+**Why not the others**
+
+- **B** — Subtracts the deductible first and then applies the coinsurance ratio: $R \times 900 = 562.50$. The form applies the ratio to the loss before the deductible.
+- **C** — Ignores the coinsurance penalty and pays the loss less the deductible.
+- **D** — Ignores both the coinsurance penalty and the deductible.

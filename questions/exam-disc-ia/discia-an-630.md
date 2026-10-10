@@ -1,0 +1,38 @@
+---
+id: "discia-an-630"
+exam: "Exam DISC-IA"
+topic: "Coverage Analysis"
+learning_objective: "Commercial Property Insurance Part 2"
+difficulty: hard
+type: multiple-choice
+bloom: analyze
+wiki_link:
+  - Concepts/Coverage+Analysis
+  - Concepts/BPP+Covered+Property
+  - Concepts/Causes+of+Loss+Special+Form
+  - Concepts/BPP+Additional+Coverages+and+Coverage+Extensions
+answer: "B"
+points: 1
+---
+A shop is insured under the BPP with the causes of loss special form, ample building and business personal property limits, 80% coinsurance (met) and a \$1,000 deductible. A windstorm tears off part of the roof (\$40,000). Rain pours through the opening and ruins \$25,000 of stock. The wind also blows over \$1,500 of ornamental trees, and rain soaks \$2,000 of cash in the register. How much does the insurer pay?
+
+- A) \$39,000
+- B) \$64,000
+- C) \$65,500
+- D) \$66,000
+
+## Explanation
+
+Work through the policy in order. The roof is Building and the stock is business personal property, both damaged by windstorm, which the special form does not exclude. The rain damage inside is covered because it entered through an opening the windstorm made in the roof. Cash is property not covered. Outdoor trees are covered only under the outdoor property extension, and only for fire, lightning, explosion, riot or civil commotion and aircraft, not wind. The deductible applies once to the occurrence:
+
+$$
+\text{Paid} = (40{,}000 + 25{,}000) - 1{,}000 = 64{,}000
+$$
+
+The answer is **B**.
+
+**Why not the others**
+
+- **A** — Applies the interior rain limitation as if the roof had not been damaged first; here a covered cause opened it.
+- **C** — Pays the trees, which the outdoor property extension does not cover against wind.
+- **D** — Pays the cash, which is property not covered.

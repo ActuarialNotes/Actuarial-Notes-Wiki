@@ -2,14 +2,19 @@
 
 **Cowork** is the second product under the Actuarial Notes roof. Where Study Mode is for
 someone preparing to *become* an actuary, Cowork is for someone doing the work: following
-the entities that publish what they work from, and turning what those entities publish into
-the analyses, reports and documentation they produce.
+the entities that publish what they work from, and building the workflows that turn what
+those entities publish into the work.
 
 It is in **Preview**, gated by `COWORK_ENABLED` in `quiz/src/lib/featureFlags.ts`, and
 while it is in Preview it is open **only to approved accounts** — `PREVIEW_APPROVED_EMAILS`
 in `quiz/src/lib/appMode.ts` (today, `jordan@actuarialnotes.com`). To everyone else it does
 not exist: no mode pill, and `/cowork` redirects to the dashboard. Once it leaves Preview it
 is Pro-only.
+
+The one exception is the e2e suite's build: `VITE_COWORK_PREVIEW=on` (playwright.config.ts)
+sets `COWORK_OPEN_TO_ALL`, which passes `previewOpen` to every mode check, so Sources and
+Workflows are tested from a signed-out browser — Actuaria's preview override, for Cowork. No
+deployed build sets it.
 
 ---
 
@@ -51,12 +56,17 @@ Adding a third mode is one entry in `APP_MODES` plus its routes.
 ## 2. The loop
 
 ```
-  Sources ──► Library ──► Deliverable ──► Scoping ──► Attach ──► Populate ──► Export
- (who publishes)        (analysis /     (multiple    (from      (assumptions   (.xlsx
-                         report /        choice,      library)   + key          /.csv)
-                         documentation)  step by                 details)
-                                         step)
+  Sources ──► Library ──► Workflow ──► Connect ──► Run ──► Run in Claude
+ (who publishes)         (sources, data,  (what flows   (live, on the   (the brief, for
+                          calculations,    into what)     tools engine)   the connector)
+                          concepts)
 ```
+
+Two places, chosen in the sidebar: **Sources** (`/cowork`, a source's page at
+`/cowork/sources/:id`) and **Workflows** (`/cowork/workflows`). Workflows replaced the
+Deliverables place that used to stand second — a scoping wizard whose exports carried
+structure and blank value cells — with the board that was the Tools tab's *Workflow Builder*,
+because a workflow does what a deliverable only described: it runs.
 
 ### Sources
 
@@ -77,8 +87,8 @@ approximated logo is an invented brand. A publisher with no usable mark, and a m
 fails to load, fall back to the monogram tile (`components/cowork/EntityLogo.tsx`).
 
 **Documents are always cards, never rows.** One component draws them everywhere they are
-listed — the shelf's Documents view, a source's page, a deliverable's attached and
-attachable sources — and it is the study guide's resource card
+listed — the shelf's Documents view and a source's page — and it is the study guide's
+resource card
 (`components/cowork/ResourceCard.tsx` beside `components/wiki/SourceMaterialGallery.tsx`):
 the work's jacket when the vault has one (`lib/coworkCovers.ts`), otherwise its kind icon,
 then the title and a row of metadata pills. Cowork is a second product, not a second design
@@ -122,8 +132,7 @@ should not feel like a different app one mode over.
 
 It behaves like the wiki's too: a query is **a question with answers**, not a filter that
 quietly thins the page behind the bar. Typing opens a list and picking a row goes to the
-thing — a publisher to their page, a document into `ConceptPopup`, a deliverable to its
-detail. Publishers and documents are listed apart and each matches **on its own account**
+thing — a publisher to their page, a document into `ConceptPopup`. Publishers and documents are listed apart and each matches **on its own account**
 (`searchSources`): on the shelf a publisher that matched answers with its whole catalogue,
 but in a list of results a document that only matched because its publisher did is a row
 nobody asked for, under the row that opens the page it is already on. Scope is **This
@@ -136,49 +145,21 @@ library holding a document whose publisher it no longer lists could name the doc
 not who issued it. Dropping a document leaves the publisher followed: the two are separate
 claims. All of this is pure and tested in `lib/coworkSources.ts`.
 
-### Deliverables
+### Workflows
 
-One button starts one, bottom right, and it is the only way in
-(`components/cowork/NewDeliverableFab.tsx`): pressing it opens the three types **in line**
-above it, nearest first, and picking one creates the deliverable and opens it straight into
-its scoping flow. The type is all that control asks — everything else is the scoping's to
-ask, one question at a time, on the page it opens.
+`docs/workflows.md` is the full account; what matters here is how the two places meet. The
+board's **+** opens with **Source**: the reader's library first, then every publisher's
+catalogue, then a search. A document goes on the board as a **source step** — the publisher,
+the document's kind and date, **Read the document** (the same `ConceptPopup` Sources opens it
+in), and what it supplies (`SourceResource.assumptions`, each with its locator) — and putting
+it on a board adds it to the library, as **Add** does on its card.
 
-Three fundamental types, and the difference is what the deliverable is **for**:
-
-| Type | What it is for | Output |
-|---|---|---|
-| **Analysis** | Work that reaches a number | An estimate and the exhibits behind it |
-| **Report** | Work that tells someone the result | A narrative with the finding and what follows |
-| **Documentation** | Work that records how it was done | A record another actuary could repeat |
-
-Each is described by five **facets** (`lib/coworkFacets.ts`): practice area, function,
-audience, driver and time orientation. They are the axes the browser filters on, and each is
-optional — an unanswered facet reads as *unanswered*, never as a default nobody chose.
-
-### Scoping
-
-A short sequence of multiple-choice questions, authored as data in
-`data/coworkDeliverables.ts` and sequenced by `lib/coworkDeliverables.ts`. One question at a
-time is the point, not a layout preference: each answer changes what the next question can
-sensibly ask, so a form showing every field at once would be showing fields that do not
-apply and cannot yet know it.
-
-Each option does three things at once, and that is the whole mechanism behind "it populates
-itself":
-
-- `facets` — pins down an axis.
-- `assumptions` / `details` — adds rows, each carrying the question it came from as its
-  basis.
-- `exports` — opens up the exhibits that make sense for the resulting deliverable.
-
-`when` makes a step conditional on earlier answers. Changing an earlier answer drops the
-answers it unlocked (`answerStep`, which re-runs until it settles, so a chain of dependent
-steps is pruned and not just the first), so the flow can be walked backwards without leaving
-a deliverable carrying an assumption its scoping no longer asks for.
-
-Status is **derived, never stored** — `draft` → `scoped` → `populated` — so a deliverable can
-never claim a state its own contents contradict.
+A document that **publishes a table** carries its shape (`SourceResource.table`), and on the
+board that table is data: a connection maps its columns, or one of its cells, onto a
+calculation's inputs exactly as an uploaded CSV's are. FSRA's private passenger automobile
+**loss trend benchmarks** are the first — the past trend and range of future trends by
+coverage that an Ontario rate filing is reviewed against — so a Collision trend read off
+FSRA's page links straight into **Trend Factor**.
 
 ---
 
@@ -187,16 +168,18 @@ never claim a state its own contents contradict.
 Cowork holds no experience data. Two consequences run through the whole feature and neither
 is negotiable:
 
-**Exports go out with their value cells empty.** An exhibit that arrived pre-filled would be
-filled with numbers nobody measured, and a deliverable built on it would carry a figure with
-no basis. What an export *can* carry honestly is structure: the right columns, the right
-periods (calendar arithmetic off the as-of date — a fact, not an estimate), and every
-assumption and source with the thing that supports it named. That is a working paper, ready
-for data. `lib/coworkExport.ts` and its tests pin this.
+**A source's table goes onto a board with its figures blank** unless they have been read off
+the publisher. A table that arrived pre-filled from anywhere else would be filled with numbers
+nobody read, and a workflow built on it would carry a figure with no basis. What the catalogue
+*can* carry honestly is structure — the publisher's columns, its row labels, where in the
+document the table is — and the reader fills the figures in from the document on the step.
+A blank cell carries nothing down a link, so the calculation it feeds keeps its own input
+rather than running on a value nobody read. `lib/coworkContent.test.ts` holds every table to
+a real, linked document (never a sample).
 
 **An assumption with no value stays visibly blank, with its locator.** `value` is optional on
-`ResourceAssumption` and `AssumptionSeed` precisely so a document can supply the *row* — and
-where in itself the number is read from — without supplying a number it does not state.
+`ResourceAssumption` precisely so a document can supply the *row* — and where in itself the
+number is read from — without supplying a number it does not state.
 
 This is the vault's own rule (`docs/verification.md`, `docs/mock-exam-browser.md`) applied to
 a second product: provenance is **transcribed, never constructed**.
@@ -214,10 +197,10 @@ load-bearing:
 - A resource with **`sample: true`** illustrates the shape of the catalogue for a publisher
   whose corpus Cowork does not carry yet. It carries **no date and no link**, because it
   names no particular document; inventing a plausible one would put a citation in a
-  deliverable that nothing supports. Its body says what that class of document contains and
+  workflow that nothing supports. Its body says what that class of document contains and
   what an actuary takes out of it, which is the part that is true, and opens with a
-  "Sample entry" callout. The row wears a `Sample` chip, and a sample carried into an export
-  is flagged as one on the Sources sheet.
+  "Sample entry" callout. The row wears a `Sample` chip, on a workflow's source step too,
+  and the brief for Claude tells the assistant not to cite it as a document.
 
 Tests enforce the contract both ways: every `docPath` has a body, every body is referenced,
 every sample is dateless and linkless, and no wiki-backed page is marked a sample.
@@ -253,7 +236,7 @@ same failure `virtual:exam-pages` exists to prevent. Both callers hand over the 
 so the two registrations are idempotent.
 
 One known gap: `virtual:wiki-content` carries `Concepts/`, `Resources/Books/`, the exam pages
-and `Guides/` — **not** `Resources/Regulation/`. A Cowork resource pointing there still falls
+and `Guides/` — **not** `Resources/Regulation/` or `Resources/Benchmarks/`. A Cowork resource pointing there still falls
 back to a GitHub fetch, exactly as the Research tab's timeline cards already do.
 
 ### The walk kind
@@ -265,60 +248,45 @@ is being read.
 
 ---
 
-## 5. The xlsx writer
+## 5. Persistence
 
-`lib/xlsx.ts` is a minimal, dependency-free `.xlsx` writer: a ZIP of XML parts with a CRC-32
-per entry, **stored** (uncompressed) so no deflate implementation is needed, and inline
-strings so there is no shared-string table. It does no formulas and no styling beyond a bold
-header row.
+The library is **localStorage only**, deliberately, while Cowork is in Preview: the
+catalogue is seed data that will be replaced, and a server table keyed to today's resource
+ids would be a migration to write before the feature has been used. Workflows are
+localStorage too (`docs/workflows.md`, *Storage*); a source step stores its resource id, its
+title as last seen and the table as the reader filled it in.
 
-It exists rather than a dependency because the export is the last step of the loop and the
-only thing that leaves the app — worth a few hundred bytes of arithmetic instead of ~700 KB
-of SheetJS for a feature that writes cells and nothing else. `buildXlsx` is pure (`Sheet[]`
-in, bytes out) and takes its timestamp as an argument, so the same workbook built twice is
-byte-identical and the container is testable without a DOM.
-
----
-
-## 6. Persistence
-
-Both stores are **localStorage only**, deliberately, while Cowork is in Preview: the
-catalogue and the scoping flows are seed data that will be replaced, and a server table keyed
-to today's resource ids (or a stored answer keyed to today's questions) would be a migration
-to write before the feature has been used.
-
-Both hold **ids and nothing else**, and the calls that need the catalogue or the flow take it
-as an argument. That is not ceremony: the sidebar imports both stores to badge the Cowork nav
-rows, so a `data/cowork*` import inside them would drag the whole catalogue out of Cowork's
-lazy chunk and into the main bundle, for every reader in Study mode. With the stores kept
-clean, Cowork is an ~88 KB lazy chunk that a Study-mode reader never downloads.
+The library holds **ids and nothing else**, and the calls that need the catalogue take it as
+an argument. That is not ceremony: the sidebar imports the store to badge the Sources row,
+so a `data/cowork*` import inside it would drag the whole catalogue out of Cowork's lazy
+chunk and into the main bundle, for every reader in Study mode. For the same reason the
+Workflows row carries no count: the workflow store reads the tools engine.
 
 ---
 
-## 7. Where things are
+## 6. Where things are
 
 ```
 quiz/src/lib/appMode.ts               modes: labels, routes, Pro gating, preview
-quiz/src/lib/coworkFacets.ts          the five facet axes, as data
-quiz/src/lib/coworkSources.ts         entity/resource types, search, filters, library reducers
-quiz/src/lib/coworkDeliverables.ts    the wizard engine + derivation (pure)
-quiz/src/lib/coworkExport.ts          deliverable → workbook sheets
+quiz/src/lib/coworkSources.ts         entity/resource types (a resource's table), search,
+                                      filters, library reducers
 quiz/src/lib/coworkContent.ts         wiki-bundle + virtual-file registration (side effects)
-quiz/src/lib/xlsx.ts                  the .xlsx / .csv writer
+quiz/src/lib/workflow*.ts             Workflows: the model, grid, CSV/table mapping, brief
 quiz/src/data/coworkSources.ts        the seed catalogue (entities + resources)
 quiz/src/data/coworkDocs.ts           the sample documents' markdown bodies
-quiz/src/data/coworkDeliverables.ts   the scoping flows, export specs, outlines
 quiz/src/hooks/useCoworkLibrary.ts    library persistence (ids only)
-quiz/src/hooks/useCoworkDeliverables.ts  deliverable persistence (ids + answers only)
+quiz/src/hooks/useWorkflows.ts        workflow persistence
 quiz/src/components/ModeSwitcher.tsx  the mode pill
 quiz/src/lib/coworkCovers.ts          a resource card's vault cover, looked up (pure)
 quiz/src/components/FloatingSearchBar.tsx  the shared search-bar chrome (with the wiki's)
 quiz/src/components/SearchHighlight.tsx    the shared marked-match run
-quiz/src/components/cowork/           the mode's own UI (EntityCard, EntityLogo,
-                                      ResourceCard, NewDeliverableFab, CoworkTopBar, …)
-quiz/src/pages/Cowork/                index (routing) + Sources shelf / a Source's page /
-                                      Deliverables / a deliverable's detail
-quiz/e2e/cowork.spec.ts               the Pro lock, from a signed-out browser
+quiz/src/components/cowork/           Sources' UI (EntityCard, EntityLogo, ResourceCard,
+                                      CoworkTopBar, …)
+quiz/src/components/workflow/         the board, the + menu, a step's and a line's panels
+quiz/src/pages/Cowork/                index (routing) + Sources shelf / a Source's page
+quiz/src/pages/WorkflowBuilder.tsx    Workflows, at /cowork/workflows
+quiz/e2e/cowork.spec.ts               the mode, its two places and the old links' redirects
+quiz/e2e/workflow.spec.ts             Workflows, including a source's table linked into a tool
 ```
 
 Every `lib/cowork*.ts` module is pure and has a `*.test.ts` beside it, in the repo's usual

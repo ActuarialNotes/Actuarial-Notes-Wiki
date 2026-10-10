@@ -74,6 +74,22 @@ describe('the source catalogue', () => {
     }
   })
 
+  it('gives every published table one cell per column in every row', () => {
+    for (const r of COWORK_RESOURCES.filter(r => r.table)) {
+      const { columns, rows } = r.table!
+      expect(columns.length, r.id).toBeGreaterThan(1)
+      expect(rows.length, r.id).toBeGreaterThan(0)
+      for (const row of rows) expect(row.length, `${r.id}: ${row[0]}`).toBe(columns.length)
+    }
+  })
+
+  it('puts a table only on a real document — a sample has no figures to read off', () => {
+    for (const r of COWORK_RESOURCES.filter(r => r.table)) {
+      expect(r.sample, r.id).toBeUndefined()
+      expect(r.url, `${r.id} must say where its figures are read from`).toMatch(/^https:\/\//)
+    }
+  })
+
   it('gives every resource a summary and at least one practice area', () => {
     for (const r of COWORK_RESOURCES) {
       expect(r.summary.trim(), `${r.id}`).not.toBe('')

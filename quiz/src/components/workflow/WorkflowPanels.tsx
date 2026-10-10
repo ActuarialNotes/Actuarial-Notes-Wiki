@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, type ReactNode } from 'react'
-import { ArrowRight, BookOpen, FileUp, LogIn, Trash2, X } from 'lucide-react'
+import { ArrowRight, BookOpen, FileText, FileUp, Library, LogIn, Plus, RotateCcw, Trash2, X } from 'lucide-react'
 import { ToolCard } from '@/components/tools/ToolCard'
+import { EntityLogo } from '@/components/cowork/EntityLogo'
+import { MetaPill } from '@/components/wiki/ResourcePills'
+import { formatPublished, resourceKindLabel, type SourceEntity, type SourceResource } from '@/lib/coworkSources'
 import { formatValue, type ToolResult, type ToolSpec } from '@/lib/tools'
 import {
   CSV_DATA,
@@ -12,6 +15,7 @@ import {
   runOrder,
   stepName,
   stepOwnInput,
+  stepTable,
   stepTool,
   type StepRun,
   type Workflow,
@@ -33,7 +37,7 @@ import { cn } from '@/lib/utils'
 export type PanelLayout = 'drawer' | 'sheet'
 
 /**
- * The Workflow Builder's panels (docs/workflow-builder.md) — Concept Craft's
+ * The panels of a workflow's board (docs/workflows.md) — Concept Craft's
  * connection card in shape: a drawer on the right of a wide board, a sheet
  * over the bottom of a phone's, opened by tapping a step or a connection.
  */
@@ -154,6 +158,9 @@ export function StepPanel({
   resolve,
   onOpenWorkflow,
   onNotice,
+  source,
+  onReadSource,
+  onSourcePage,
 }: {
   workflow: Workflow
   node: WorkflowNode
@@ -172,6 +179,12 @@ export function StepPanel({
   onOpenWorkflow: (node: WorkflowNode) => void
   /** Say something in the board's notice line — a file that couldn't be read. */
   onNotice: (text: string) => void
+  /** A source step's document and its publisher, from Cowork's Sources; null when it is no longer there. */
+  source?: { resource: SourceResource; entity?: SourceEntity } | null
+  /** Open a source step's document in the reader. */
+  onReadSource?: (resource: SourceResource) => void
+  /** Go to the source's own page in Sources. */
+  onSourcePage?: (entityId: string) => void
 }) {
   const spec = stepTool(node)
   const name = stepName(node)
@@ -207,7 +220,7 @@ export function StepPanel({
       title={name}
       onClose={onClose}
       testId="workflow-step-panel"
-      wide={!!spec || node.ref === CSV_DATA}
+      wide={!!spec || !!stepTable(node)}
     >
       {spec && <p className="text-sm text-muted-foreground">{spec.answers}</p>}
 
@@ -221,6 +234,16 @@ export function StepPanel({
           <BookOpen className="h-5 w-5" aria-hidden />
           Read the page
         </button>
+      )}
+
+      {node.kind === 'source' && (
+        <SourceView
+          node={node}
+          source={source ?? null}
+          onRead={onReadSource}
+          onSourcePage={onSourcePage}
+          onTable={csv => onUpdate({ csv })}
+        />
       )}
 
       {node.ref === CUSTOM_DATA && (
@@ -425,6 +448,197 @@ function SubWorkflowView({
   )
 }
 
+/**
+ * A source step: the document from Cowork's Sources the work rests on — its
+ * publisher, what it is, the way into it (**Read the document**, in the same
+ * reader Sources opens it in) and what it supplies. A document that publishes
+ * a table brings it as the step's data: the publisher's columns and row
+ * labels, each figure a cell the reader fills in from the document, so a
+ * value on the board is one somebody read rather than one supplied for them.
+ * Mapped onto a calculation on the connection, exactly as a CSV's columns are.
+ */
+function SourceView({
+  node,
+  source,
+  onRead,
+  onSourcePage,
+  onTable,
+}: {
+  node: WorkflowNode
+  source: { resource: SourceResource; entity?: SourceEntity } | null
+  onRead?: (resource: SourceResource) => void
+  onSourcePage?: (entityId: string) => void
+  onTable: (table: CsvTable) => void
+}) {
+  if (!source) {
+    return (
+      <p className="rounded-lg bg-amber-500/10 px-3 py-2 text-sm text-amber-600 dark:text-amber-400">
+        This document is no longer in Sources.
+      </p>
+    )
+  }
+  const { resource, entity } = source
+  const shape = resource.table
+  return (
+    <div className="space-y-3" data-testid="workflow-source">
+      {entity && (
+        <button
+          type="button"
+          onClick={() => onSourcePage?.(entity.id)}
+          className="flex w-full items-center gap-2.5 rounded-lg text-left transition-colors hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          data-testid="workflow-source-publisher"
+        >
+          <EntityLogo entity={entity} size="sm" />
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-medium">{entity.name}</span>
+            <span className="block truncate text-xs text-muted-foreground">{entity.jurisdiction}</span>
+          </span>
+          <Library className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+        </button>
+      )}
+      <div className="flex flex-wrap items-center gap-1">
+        <MetaPill>{resourceKindLabel(resource.kind)}</MetaPill>
+        <MetaPill>{formatPublished(resource.published)}</MetaPill>
+        {resource.sample && (
+          <span
+            title="A sample entry: it stands for this kind of document rather than naming one Cowork carries. Cite the real document."
+            className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400"
+          >
+            Sample
+          </span>
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground">{resource.summary}</p>
+      <button
+        type="button"
+        onClick={() => onRead?.(resource)}
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-base font-semibold text-primary-foreground shadow-[var(--shadow-card)] transition-[filter] hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-testid="workflow-read-source"
+      >
+        <FileText className="h-5 w-5" aria-hidden />
+        Read the document
+      </button>
+      {resource.assumptions && resource.assumptions.length > 0 && (
+        <div className="space-y-1.5">
+          <p className={fieldLabel}>What it supplies</p>
+          <ul className="space-y-1">
+            {resource.assumptions.map(a => (
+              <li key={a.label} className="rounded-lg bg-muted/60 px-3 py-1.5 text-sm">
+                <span className="font-medium">{a.label}</span>
+                {a.value && <span className="block text-xs">{a.value}</span>}
+                {a.locator && <span className="block text-xs text-muted-foreground">{a.locator}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {node.csv && shape && (
+        <SourceTableEditor
+          table={node.csv}
+          locator={shape.locator}
+          onChange={onTable}
+          onReset={() => onTable({ name: node.csv!.name, columns: [...shape.columns], rows: shape.rows.map(r => [...r]) })}
+        />
+      )}
+    </div>
+  )
+}
+
+/**
+ * A source's table, to fill in from the document: every cell editable, the
+ * row labels included (an edition can add a line), rows added and taken out,
+ * and the publisher's own shape restored on request. A blank figure stays
+ * blank — the calculation it feeds says it needs input rather than running
+ * on a value nobody read.
+ */
+function SourceTableEditor({
+  table,
+  locator,
+  onChange,
+  onReset,
+}: {
+  table: CsvTable
+  locator: string
+  onChange: (table: CsvTable) => void
+  onReset: () => void
+}) {
+  const blanks = table.rows.reduce((n, r) => n + r.slice(1).filter(c => c.trim() === '').length, 0)
+  const setCell = (i: number, j: number, value: string) =>
+    onChange({ ...table, rows: table.rows.map((r, ri) => (ri === i ? r.map((c, cj) => (cj === j ? value : c)) : r)) })
+  return (
+    <div className="space-y-2" data-testid="workflow-source-table">
+      <p className={fieldLabel}>{locator}</p>
+      <p className="text-xs text-muted-foreground">
+        {blanks > 0
+          ? `Read ${blanks === 1 ? 'the blank figure' : `the ${blanks} blank figures`} off the document — a rate as it is printed, “8.6%”. Then connect this step to a calculation and choose which cells fill it.`
+          : 'Connect this step to a calculation, then choose which cells fill its inputs on the connection.'}
+      </p>
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full border-collapse text-xs">
+          <thead>
+            <tr className="border-b border-border">
+              {table.columns.map((c, j) => (
+                <th key={j} scope="col" className="whitespace-nowrap px-2 py-1.5 text-left font-semibold">{c}</th>
+              ))}
+              <th className="w-6" aria-hidden />
+            </tr>
+          </thead>
+          <tbody>
+            {table.rows.map((r, i) => (
+              <tr key={i} className="border-b border-border/60 last:border-0">
+                {r.map((c, j) => (
+                  <td key={j} className="p-0.5">
+                    <input
+                      value={c}
+                      onChange={e => setCell(i, j, e.target.value)}
+                      aria-label={j === 0 ? `Row ${i + 1}: ${table.columns[0]}` : `${r[0] || `Row ${i + 1}`}: ${table.columns[j]}`}
+                      placeholder={j === 0 ? '' : '—'}
+                      className={cn(
+                        'h-7 w-full rounded px-1.5 tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                        j === 0 ? 'min-w-[9rem] bg-transparent' : 'min-w-[4.5rem] bg-background',
+                        j > 0 && c.trim() === '' && 'ring-1 ring-amber-500/40',
+                      )}
+                      data-testid="workflow-source-cell"
+                      data-row={i}
+                      data-col={j}
+                    />
+                  </td>
+                ))}
+                <td className="p-0.5">
+                  <button
+                    type="button"
+                    onClick={() => onChange({ ...table, rows: table.rows.filter((_, ri) => ri !== i) })}
+                    disabled={table.rows.length <= 1}
+                    aria-label={`Remove ${r[0] || `row ${i + 1}`}`}
+                    className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-30"
+                  >
+                    <X className="h-3.5 w-3.5" aria-hidden />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => onChange({ ...table, rows: [...table.rows, table.columns.map(() => '')] })}
+          className={secondaryButton}
+          data-testid="workflow-source-add-row"
+        >
+          <Plus className="h-4 w-4" aria-hidden />
+          Add a row
+        </button>
+        <button type="button" onClick={onReset} className={secondaryButton} data-testid="workflow-source-reset">
+          <RotateCcw className="h-4 w-4" aria-hidden />
+          Start over
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const KIND_HINT = { date: 'dates', number: 'values', text: 'text' } as const
 
 /** An uploaded CSV: its columns, with what each holds, and its first rows. */
@@ -497,6 +711,9 @@ function CsvMapEditor({ table, spec, map, onChange }: { table: CsvTable; spec: T
     else delete next[key]
     onChange(next)
   }
+  // A table whose first column labels its rows (a source's coverages) offers
+  // its rows by those labels: "Collision", not "Row 7".
+  const rowNames = table.rows.length > 0 && columnKind(table, 0) === 'text' && new Set(table.rows.map(r => r[0])).size === table.rows.length
   const columnOptions = (
     <>
       <option value="-1">—</option>
@@ -581,9 +798,9 @@ function CsvMapEditor({ table, spec, map, onChange }: { table: CsvTable; spec: T
                   className={selectClass}
                   aria-label={`${field.label}: row`}
                 >
-                  <option value={-1}>Last row</option>
-                  <option value={0}>First row</option>
-                  {table.rows.slice(1, 200).map((_, i) => <option key={i + 1} value={i + 1}>Row {i + 2}</option>)}
+                  <option value={-1}>Last row{rowNames ? ` (${table.rows[table.rows.length - 1]?.[0]})` : ''}</option>
+                  <option value={0}>{rowNames ? table.rows[0]?.[0] : 'First row'}</option>
+                  {table.rows.slice(1, 200).map((r, i) => <option key={i + 1} value={i + 1}>{rowNames ? r[0] : `Row ${i + 2}`}</option>)}
                 </select>
               )}
             </span>
@@ -612,7 +829,7 @@ export function EdgePanel({
   layout: PanelLayout
   onClose: () => void
   onUpdate: (note: string) => void
-  /** A CSV connection's mapping, changed. */
+  /** A CSV's or a source table's connection mapping, changed. */
   onUpdateMap: (map: CsvMapping) => void
   onRemove: () => void
   onSelectStep: (id: string) => void
@@ -623,7 +840,8 @@ export function EdgePanel({
   if (!from || !to) return null
   const kind = edgeKind(workflow, edge, resolve)
   const target = stepTool(to)
-  const mapping = from.ref === CSV_DATA && from.csv && target ? { table: from.csv, spec: target } : null
+  const table = stepTable(from)
+  const mapping = table && target ? { table, spec: target } : null
   const fields = runs.get(to.id)?.piped.find(p => p.from === from.id)?.fields ?? []
   const a = stepName(from)
   const b = stepName(to)

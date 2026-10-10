@@ -266,10 +266,10 @@ describe('deskPlace', () => {
     expect(deskPlace('/nowhere').tab).not.toBe(deskPlace('/').tab)
   })
 
-  it('reads Cowork as two tabs, with a source or deliverable a sheet over its shelf', () => {
-    expect(deskPlace('/cowork').tab).not.toBe(deskPlace('/cowork/deliverables').tab)
+  it('reads Cowork as two tabs, with a source a sheet over its shelf', () => {
+    expect(deskPlace('/cowork').tab).not.toBe(deskPlace('/cowork/workflows').tab)
     expect(deskPlace('/cowork/sources/osfi')).toEqual({ tab: deskPlace('/cowork').tab, depth: 1 })
-    expect(deskPlace('/cowork/deliverables/abc')).toEqual({ tab: deskPlace('/cowork/deliverables').tab, depth: 1 })
+    expect(deskPlace('/cowork/workflows')).toEqual({ tab: deskPlace('/cowork/workflows').tab, depth: 0 })
   })
 })
 

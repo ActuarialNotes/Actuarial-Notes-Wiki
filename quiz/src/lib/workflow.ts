@@ -1,14 +1,19 @@
 /**
- * **The Workflow Builder** (docs/workflow-builder.md) — a workflow as data:
- * data, calculations and concepts as steps on a grid, joined by directed
- * connections that say what flows into what, and the pure functions that keep
- * one valid and run it.
+ * **Workflows** (docs/workflows.md), Cowork's second place — a workflow
+ * as data: sources, data, calculations and concepts as steps on a grid, joined
+ * by directed connections that say what flows into what, and the pure
+ * functions that keep one valid and run it.
  *
- * Four kinds of step:
+ * Five kinds of step:
  * - **data** — a Data Sources tool (a published table: life table, price
  *   index, yield curve), the reader's own data described in words, or a CSV
  *   they uploaded (`lib/workflowCsv.ts`), its columns mapped onto the inputs
  *   of the steps it connects to;
+ * - **source** — a document from Cowork's Sources (`data/coworkSources.ts`),
+ *   by its resource id: what the work rests on, named. A document that
+ *   publishes a table (FSRA's loss-trend benchmarks) brings the table's shape
+ *   onto the board as the step's `csv`, which the reader fills in from the
+ *   document and maps onto a calculation exactly as an uploaded CSV is;
  * - **tool** — a calculation: any other Actuarial Tool (`lib/tools`);
  * - **concept** — a vault concept page: the method, definition or judgment a
  *   step rests on;
@@ -34,8 +39,9 @@
 import { defaultInput, runTool, toolById, ToolInputError, type ToolHandoff, type ToolInput, type ToolResult, type ToolSpec } from './tools'
 import { STEP, fits, freeCellNear, nearestFit, type Cell } from './workflowGrid'
 import { csvInput, guessMapping, parseCsvTable, parseMapping, type CsvMapping, type CsvTable } from './workflowCsv'
+import type { SourceResource } from './coworkSources'
 
-export type StepKind = 'data' | 'tool' | 'concept' | 'workflow'
+export type StepKind = 'source' | 'data' | 'tool' | 'concept' | 'workflow'
 
 /** The `ref` of a data step that is the reader's own data, described in words. */
 export const CUSTOM_DATA = 'custom'
@@ -49,8 +55,8 @@ export interface WorkflowNode {
   kind: StepKind
   /**
    * A tool's id (`reserving.chain_ladder`), a concept page's name,
-   * `CUSTOM_DATA` or `CSV_DATA`, or — for a sub-workflow — a library
-   * workflow's id or `template:<id>`.
+   * `CUSTOM_DATA` or `CSV_DATA`, a Cowork resource's id for a source, or — for
+   * a sub-workflow — a library workflow's id or `template:<id>`.
    */
   ref: string
   col: number
@@ -59,11 +65,11 @@ export interface WorkflowNode {
   note?: string
   /** A tool step's own input — what the reader set on its card. */
   input?: ToolInput
-  /** The reader's own data: its name (a sub-workflow's title, as last seen)… */
+  /** The reader's own data: its name (a sub-workflow's or a source's title, as last seen)… */
   label?: string
   /** …and what it holds — a description, or the figures pasted in. */
   data?: string
-  /** An uploaded CSV, as it was read. */
+  /** An uploaded CSV, as it was read — or a source's table, as the reader has filled it in. */
   csv?: CsvTable
 }
 
@@ -105,13 +111,22 @@ export function newWorkflow(id: string, now: number, title = EMPTY_TITLE): Workf
 
 /** The tool behind a data or tool step (none for a concept, the reader's own data or a sub-workflow). */
 export function stepTool(node: Pick<WorkflowNode, 'kind' | 'ref'>): ToolSpec | undefined {
-  if (node.kind === 'concept' || node.kind === 'workflow' || node.ref === CUSTOM_DATA || node.ref === CSV_DATA) return undefined
+  if (node.kind === 'concept' || node.kind === 'workflow' || node.kind === 'source' || node.ref === CUSTOM_DATA || node.ref === CSV_DATA) return undefined
   return toolById(node.ref)
+}
+
+/**
+ * The table a step holds, whose columns a connection can map onto a tool's
+ * inputs: an uploaded CSV, or a source's table. None for anything else.
+ */
+export function stepTable(node: Pick<WorkflowNode, 'kind' | 'ref' | 'csv'>): CsvTable | undefined {
+  return node.ref === CSV_DATA || node.kind === 'source' ? node.csv : undefined
 }
 
 /** A step's name, as its card prints it. */
 export function stepName(node: WorkflowNode): string {
   if (node.kind === 'concept') return node.ref
+  if (node.kind === 'source') return node.label?.trim() || 'Source'
   if (node.kind === 'workflow') return node.label?.trim() || 'Workflow'
   if (node.ref === CSV_DATA) return node.csv?.name || 'Your CSV'
   if (node.ref === CUSTOM_DATA) return node.label?.trim() || 'Your data'
@@ -120,6 +135,7 @@ export function stepName(node: WorkflowNode): string {
 
 /** What the kind of step is called. */
 export const KIND_LABEL: Record<StepKind, string> = {
+  source: 'Source',
   data: 'Data',
   tool: 'Calculation',
   concept: 'Concept',
@@ -201,6 +217,17 @@ export function exitSpecs(node: WorkflowNode, resolve?: WorkflowResolver, depth 
   }
   const spec = stepTool(node)
   return spec ? [spec] : []
+}
+
+/**
+ * A Cowork document as a step: named by its title, and — when it publishes a
+ * table — carrying that table's columns and rows as the step's data, cell for
+ * cell, blanks and all (`SourceResource.table`), for the reader to fill in.
+ */
+export function sourceStep(resource: Pick<SourceResource, 'id' | 'title' | 'table'>): NewStep {
+  const step: NewStep = { kind: 'source', ref: resource.id, label: resource.title }
+  if (resource.table) step.csv = { name: resource.title, columns: [...resource.table.columns], rows: resource.table.rows.map(r => [...r]) }
+  return step
 }
 
 /** The kind a tool makes a step of: a Data Sources tool is data, every other a calculation. */
@@ -331,9 +358,9 @@ export function connect(wf: Workflow, from: string, to: string, now: number): Wo
 }
 
 /**
- * Draw `from → to` as the reader does: a connection out of a CSV into a tool
- * starts with a guess at which columns fill which inputs (`guessMapping`), for
- * the reader to check on the connection's panel.
+ * Draw `from → to` as the reader does: a connection out of a CSV or a source's
+ * table into a tool starts with a guess at which columns fill which inputs
+ * (`guessMapping`), for the reader to check on the connection's panel.
  */
 export function link(wf: Workflow, from: string, to: string, now: number): Workflow {
   const next = connect(wf, from, to, now)
@@ -341,8 +368,9 @@ export function link(wf: Workflow, from: string, to: string, now: number): Workf
   const source = wf.nodes.find(n => n.id === from)
   const target = wf.nodes.find(n => n.id === to)
   const spec = target && stepTool(target)
-  if (source?.ref !== CSV_DATA || !source.csv || !spec) return next
-  const map = guessMapping(source.csv, spec)
+  const table = source && stepTable(source)
+  if (!table || !spec) return next
+  const map = guessMapping(table, spec)
   return Object.keys(map).length ? updateEdge(next, from, to, { map }, now) : next
 }
 
@@ -388,8 +416,9 @@ export function edgeKind(wf: Workflow, e: Pick<WorkflowEdge, 'from' | 'to'> & { 
   if (!from || !to) return 'feeds'
   if (from.kind === 'concept') return 'informs'
   if (to.kind === 'concept') return 'applies'
-  // A CSV is a link once its columns are mapped onto the next tool's inputs.
-  if (from.ref === CSV_DATA) {
+  // A CSV or a source's table is a link once its columns are mapped onto the
+  // next tool's inputs; a source with no table only ever feeds.
+  if (from.ref === CSV_DATA || from.kind === 'source') {
     const edge = wf.edges.find(x => x.from === e.from && x.to === e.to) ?? e
     return stepTool(to) && edge.map && Object.keys(edge.map).length ? 'handoff' : 'feeds'
   }
@@ -461,7 +490,10 @@ function carriedInto(
   upstream: StepRun | undefined,
   spec: ToolSpec,
 ): Partial<ToolInput> {
-  if (from.ref === CSV_DATA) return from.csv ? csvInput(from.csv, spec, edge.map) : {}
+  if (from.ref === CSV_DATA || from.kind === 'source') {
+    const table = stepTable(from)
+    return table ? csvInput(table, spec, edge.map) : {}
+  }
   const out: Partial<ToolInput> = {}
   for (const result of upstream?.exits ?? []) {
     const handoff = toolById(result.tool)?.next?.find(h => h.tool === spec.id)
@@ -481,7 +513,8 @@ const errorText = (err: unknown) => (err instanceof ToolInputError ? `${err.fiel
  * Run every calculation in order, each on its own input with whatever a link
  * carries from the steps before it laid over the top — so a chain reads live,
  * the way one card does. A link is an engine hand-off from a calculation (or
- * from a sub-workflow's last calculations), or a CSV's mapped columns.
+ * from a sub-workflow's last calculations), or a CSV's or a source table's
+ * mapped columns.
  *
  * A sub-workflow is run whole, on its own steps' inputs, with what links into
  * it laid over its first calculations (`overrides`, by the inner step's id); it
@@ -604,7 +637,7 @@ export function carriedTile(upstream: ToolResult, input: ToolInput, fields: read
 // ─── Reading it back ─────────────────────────────────────────────────────────
 
 const isObject = (v: unknown): v is Record<string, unknown> => v !== null && typeof v === 'object' && !Array.isArray(v)
-const KINDS: StepKind[] = ['data', 'tool', 'concept', 'workflow']
+const KINDS: StepKind[] = ['source', 'data', 'tool', 'concept', 'workflow']
 
 /**
  * A stored workflow, read field by field: localStorage is the reader's own,
@@ -630,7 +663,7 @@ export function parseWorkflow(raw: unknown): Workflow | null {
     if (typeof n.label === 'string') node.label = n.label
     if (typeof n.data === 'string') node.data = n.data
     if (isObject(n.input)) node.input = n.input as ToolInput
-    if (n.ref === CSV_DATA) {
+    if (n.ref === CSV_DATA || n.kind === 'source') {
       const csv = parseCsvTable(n.csv)
       if (csv) node.csv = csv
     }

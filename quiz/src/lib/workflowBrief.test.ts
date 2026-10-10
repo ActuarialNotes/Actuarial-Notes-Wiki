@@ -57,4 +57,22 @@ describe('the brief, at more than one level', () => {
     expect(brief).toContain('```csv\nQuarter,Index\n2022Q1,100\n2022Q2,101\n```')
     expect(brief).toContain('Mapped into step 2 (Trend Fit): Points ← period: Quarter, value: Index')
   })
+
+  it('names a source step\'s document and carries its table as read, blanks said to be unread', async () => {
+    const { sourceStep } = await import('./workflow')
+    const { COWORK_RESOURCES, COWORK_ENTITIES } = await import('@/data/coworkSources')
+    const fsra = COWORK_RESOURCES.find(r => r.id === 'fsra-ppa-loss-trend-benchmarks')!
+    let wf = addStep(newWorkflow('w', 0), sourceStep(fsra), 1).workflow
+    wf = addStep(wf, { kind: 'tool', ref: 'ratemaking.trend_factor' }, 1, 'n1').workflow
+    const lookup = (ref: string) => {
+      const resource = COWORK_RESOURCES.find(r => r.id === ref)
+      return resource && { resource, publisher: COWORK_ENTITIES.find(e => e.id === resource.entityId)?.name }
+    }
+    const brief = describeWorkflow(wf, evaluateWorkflow(wf), undefined, lookup)
+    expect(brief).toContain(`### 1. ${fsra.title} — Source`)
+    expect(brief).toContain(`Published at: ${fsra.url}`)
+    expect(brief).toContain('a blank cell is a figure not read yet')
+    expect(brief).toContain('```csv\nCoverage,Past trend,Future trend, low,Future trend, high\n'.replace('Future trend, low', '"Future trend, low"').replace('Future trend, high', '"Future trend, high"'))
+    expect(HOW_TO_RUN).toMatch(/never fill it in/)
+  })
 })

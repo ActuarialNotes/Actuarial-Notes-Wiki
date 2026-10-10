@@ -23,7 +23,7 @@ const APPROVED_PRO = { ...APPROVED, isPro: true }
 describe('modeForPath', () => {
   it('claims the cowork tree for cowork', () => {
     expect(modeForPath('/cowork')).toBe('cowork')
-    expect(modeForPath('/cowork/deliverables')).toBe('cowork')
+    expect(modeForPath('/cowork/workflows')).toBe('cowork')
     expect(modeForPath('/cowork/sources/fsra')).toBe('cowork')
   })
 
@@ -120,6 +120,12 @@ describe('canEnterMode', () => {
     expect(canEnterMode('cowork', PRO)).toBe(false)
     expect(canEnterMode('cowork', FREE)).toBe(false)
     expect(canEnterMode('cowork', GUEST)).toBe(false)
+  })
+
+  it('opens cowork to every viewer in the preview build, signed out included', () => {
+    expect(canEnterMode('cowork', { ...GUEST, previewOpen: true })).toBe(true)
+    expect(isModeVisible('cowork', { ...FREE, previewOpen: true })).toBe(true)
+    expect(showsModeSwitcher({ ...GUEST, previewOpen: true })).toBe(true)
   })
 })
 

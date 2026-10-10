@@ -173,7 +173,6 @@ const STATIC_LABELS: Record<string, string> = {
   '/review': 'Review',
   '/battle': 'Quiz Battle',
   '/craft': 'Concept Craft',
-  '/tools/workflow': 'Workflow Builder',
   '/project': 'Projects',
   '/store': 'Store',
   '/store/gems': 'Gem Shop',
@@ -182,7 +181,7 @@ const STATIC_LABELS: Record<string, string> = {
   '/research': 'Research',
   '/cowork': 'Sources',
   '/cowork/sources': 'Sources',
-  '/cowork/deliverables': 'Deliverables',
+  '/cowork/workflows': 'Workflows',
   '/actuaria': 'Actuaria',
   '/actuaria/map': 'Star map',
   '/actuaria/battle': 'Monte Carlo Station',
@@ -208,7 +207,6 @@ export function placeLabel(path: string): string {
   if (pathname.startsWith('/project/')) return 'Project'
   if (pathname.startsWith('/craft/')) return 'Concept Craft'
   if (pathname.startsWith('/cowork/sources/')) return 'Source'
-  if (pathname.startsWith('/cowork/deliverables/')) return 'Deliverable'
   if (pathname.startsWith('/actuaria/sector')) return 'Sector'
   if (pathname.startsWith('/actuaria/simulation')) return 'Simulation'
   if (pathname.startsWith('/actuaria/raid')) return 'Raid'

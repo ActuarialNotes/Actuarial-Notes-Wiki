@@ -21,6 +21,7 @@ interface ImportMetaEnv {
    * the game layer signed out. See `ACTUARIA_OPEN_TO_ALL` in lib/featureFlags.ts.
    */
   readonly VITE_ACTUARIA_PREVIEW?: string
+  readonly VITE_COWORK_PREVIEW?: string
 }
 
 // Google Analytics, defined by `initAnalytics()` (lib/analytics.ts) only on a

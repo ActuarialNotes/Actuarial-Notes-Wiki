@@ -430,6 +430,45 @@ export const COWORK_RESOURCES: SourceResource[] = [
     ],
   },
   {
+    id: 'fsra-ppa-loss-trend-benchmarks',
+    entityId: 'fsra',
+    title: 'Private passenger automobile loss trend benchmarks (data as of December 31, 2024)',
+    kind: 'guideline',
+    /** the edition applies to rate filings submitted on or after 11 December 2025 */
+    published: '2025-12-11',
+    summary: 'The benchmark loss trend rates — past trend and a range of future trends, by coverage — and reform factors FSRA reviews an Ontario auto rate filing against.',
+    wikiRef: {
+      kind: 'resource',
+      name: 'FSRA Private Passenger Automobile Loss Trend Benchmarks (2025)',
+      path: 'Resources/Benchmarks/FSRA Private Passenger Automobile Loss Trend Benchmarks (2025).md',
+    },
+    url: 'https://www.fsrao.ca/industry/auto-insurance/regulatory-framework/guidance-auto-insurance/ontario-private-passenger-automobile-annual-review-based-industry-data-december-31-2024-0',
+    practiceAreas: ['pc'],
+    functions: ['pricing'],
+    assumptions: [
+      { label: 'Loss trend, by coverage', locator: 'Loss trend benchmarks: past trend' },
+      { label: 'Future trend range, by coverage', locator: 'Loss trend benchmarks: future trend' },
+      { label: 'Reform factors, by coverage', locator: 'Reform factors' },
+      { label: 'Experience basis', value: 'GISA Ontario PPA industry data as of December 31, 2024', locator: 'Guidance, data' },
+    ],
+    // The figures are not transcribed: FSRA's page could not be read when this
+    // entry was written. The rows are its coverages; the reader fills in the
+    // rates from FSRA's page on the workflow step.
+    table: {
+      locator: 'Loss trend benchmarks, by coverage',
+      columns: ['Coverage', 'Past trend', 'Future trend, low', 'Future trend, high'],
+      rows: [
+        'Bodily Injury',
+        'Property Damage',
+        'Direct Compensation – Property Damage',
+        'Accident Benefits – Total',
+        'Uninsured Automobile',
+        'Collision',
+        'Comprehensive',
+      ].map(coverage => [coverage, '', '', '']),
+    },
+  },
+  {
     id: 'fsra-risk-management',
     entityId: 'fsra',
     title: 'FSRA risk management guidance',

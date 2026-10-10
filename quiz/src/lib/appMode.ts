@@ -11,7 +11,7 @@
  * This module is the one definition. `components/ModeSwitcher.tsx` renders the
  * pill from it, `Sidebar.tsx` picks which nav rows to show by it, and `App.tsx`
  * reads `modeForPath` to keep the two honest. Pure and tested, so the answer to
- * "which mode is /cowork/deliverables?" can't drift between the three.
+ * "which mode is /cowork/workflows?" can't drift between the three.
  *
  * Availability is a property of the mode, not of a surface: Cowork is Pro-only
  * and in Preview, and both facts live here so the pill, the nav and the route
@@ -65,7 +65,7 @@ export const APP_MODES: AppModeSpec[] = [
   {
     id: 'cowork',
     label: 'Cowork',
-    tagline: 'Source library and actuarial deliverables',
+    tagline: 'Source library and actuarial workflows',
     home: '/cowork',
     routes: ['/cowork'],
     access: 'pro',
@@ -124,6 +124,11 @@ export interface ModeViewer {
   isPro: boolean
   /** The signed-in account's email — what Preview approval is keyed on. */
   email?: string | null
+  /**
+   * The preview build's override (`COWORK_OPEN_TO_ALL`): every Preview mode
+   * visible to, and open to, every viewer. Set by the e2e suite's build alone.
+   */
+  previewOpen?: boolean
 }
 
 /**
@@ -133,7 +138,7 @@ export interface ModeViewer {
  */
 export function isModeVisible(id: AppMode, viewer: ModeViewer): boolean {
   const spec = modeSpec(id)
-  if (!spec.preview) return true
+  if (!spec.preview || viewer.previewOpen) return true
   return viewer.signedIn && isPreviewApproved(viewer.email)
 }
 

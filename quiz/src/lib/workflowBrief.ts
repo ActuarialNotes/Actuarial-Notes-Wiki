@@ -1,5 +1,5 @@
 /**
- * **A workflow, for Claude** (docs/workflow-builder.md) — the brief *Copy for
+ * **A workflow, for Claude** (docs/workflows.md) — the brief *Copy for
  * Claude* puts on the clipboard, to paste into Claude or ChatGPT with the
  * Actuarial Notes connector added (docs/ai-connector.md).
  *
@@ -26,7 +26,11 @@ import {
   type WorkflowEdge,
   type WorkflowResolver,
 } from './workflow'
-import { csvText } from './workflowCsv'
+import { csvText, type CsvTable } from './workflowCsv'
+import { formatPublished, type SourceResource } from './coworkSources'
+
+/** What the brief says about a source step's document: the catalogue's entry, and who published it. */
+export type SourceLookup = (ref: string) => { resource: SourceResource; publisher?: string } | undefined
 
 const INPUT_LIMIT = 3000
 
@@ -58,6 +62,7 @@ export const HOW_TO_RUN = [
   '- For a concept step, `get_concept` and use what the page says — a method\'s steps, a definition, a judgment — in the steps it informs.',
   '- A sub-workflow step is a workflow of its own: run its steps in the order listed under it. What links into it goes into its first steps; its last steps hand on to what follows.',
   '- For data I uploaded, the columns mapped into a tool are already in that tool\'s input; use the rest of the file only as the steps say.',
+  '- A source step is a published document I work from. Its figures are the ones I read off it into the table shown; a blank cell is a figure I have not read yet — ask me for it, never fill it in.',
   '- A judgment left at its default is my call, not a selection: say which you ran at their defaults.',
   '- Invent no data. If a step needs figures the workflow does not hold, say exactly what is missing rather than assuming a value.',
   '- Quote every warning a tool returns.',
@@ -97,8 +102,26 @@ function innerLines(run: StepRun | undefined, depth: number): string[] {
   return lines
 }
 
+/** Which cells of a table a connection maps into a calculation, said in one line. */
+function mappingLines(wf: Workflow, table: CsvTable, outOf: WorkflowEdge[], label: (id: string) => string): string[] {
+  const lines: string[] = []
+  for (const e of outOf) {
+    const to = wf.nodes.find(n => n.id === e.to)
+    const spec = to && stepTool(to)
+    if (!spec || !e.map) continue
+    const said = Object.entries(e.map).map(([key, m]) => {
+      const field = spec.fields.find(f => f.key === key)?.label ?? key
+      if (m.kind === 'triangle') return `${field} ← the whole table, as a triangle`
+      if (m.kind === 'cell') return `${field} ← ${table.columns[m.column] ?? '?'}, ${m.row < 0 ? 'last row' : `row ${m.row + 1}`}`
+      return `${field} ← ${Object.entries(m.columns).map(([c, j]) => `${c}: ${table.columns[j] ?? '?'}`).join(', ')}`
+    })
+    if (said.length) lines.push(`Mapped into ${label(e.to)}: ${said.join('; ')}`)
+  }
+  return lines
+}
+
 /** The workflow as a brief for an assistant with the Actuarial Notes connector. */
-export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resolve?: WorkflowResolver): string {
+export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resolve?: WorkflowResolver, sources?: SourceLookup): string {
   const order = runOrder(wf)
   const number = new Map(order.map((n, i) => [n.id, i + 1]))
   const label = (id: string) => {
@@ -140,19 +163,24 @@ export function describeWorkflow(wf: Workflow, runs: Map<string, StepRun>, resol
       if (node.csv) {
         lines.push(`My data, uploaded as ${node.csv.name} (${node.csv.rows.length} rows):`)
         lines.push('', '```csv', csvText(node.csv), '```')
-        for (const e of outOf) {
-          const to = wf.nodes.find(n => n.id === e.to)
-          const spec = to && stepTool(to)
-          if (!spec || !e.map) continue
-          const said = Object.entries(e.map).map(([key, m]) => {
-            const field = spec.fields.find(f => f.key === key)?.label ?? key
-            if (m.kind === 'triangle') return `${field} ← the whole file, as a triangle`
-            if (m.kind === 'cell') return `${field} ← ${node.csv!.columns[m.column] ?? '?'}, ${m.row < 0 ? 'last row' : `row ${m.row + 1}`}`
-            return `${field} ← ${Object.entries(m.columns).map(([c, j]) => `${c}: ${node.csv!.columns[j] ?? '?'}`).join(', ')}`
-          })
-          if (said.length) lines.push(`Mapped into ${label(e.to)}: ${said.join('; ')}`)
-        }
+        lines.push(...mappingLines(wf, node.csv, outOf, label))
       } else lines.push('My uploaded data — the file was lost. Ask me for it.')
+    } else if (node.kind === 'source') {
+      const found = sources?.(node.ref)
+      if (found) {
+        const { resource, publisher } = found
+        lines.push(`A document I work from: ${[publisher, resource.title].filter(Boolean).join(', ')} (${formatPublished(resource.published)}).`)
+        if (resource.url) lines.push(`Published at: ${resource.url}`)
+        if (resource.sample) lines.push('A sample entry: it stands for this kind of document, not a particular one. Do not cite it as a document.')
+        lines.push(`What it is: ${resource.summary}`)
+      } else {
+        lines.push(`A document I work from: ${stepName(node)}.`)
+      }
+      if (node.csv) {
+        lines.push(`Its table, as I have read it off the document (${node.csv.rows.length} rows; a blank cell is a figure not read yet):`)
+        lines.push('', '```csv', csvText(node.csv), '```')
+        lines.push(...mappingLines(wf, node.csv, outOf, label))
+      }
     } else if (node.ref === CUSTOM_DATA) {
       lines.push(node.data?.trim() ? `My data:\n\n${node.data.trim()}` : 'My own data — I described none. Say what this step needs and ask me for it.')
     } else {

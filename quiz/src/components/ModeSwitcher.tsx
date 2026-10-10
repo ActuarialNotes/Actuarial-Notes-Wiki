@@ -16,6 +16,7 @@ import { ProBadge } from '@/components/ProBadge'
 import { placeMenu, type MenuPlacement } from '@/lib/menuPlacement'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { COWORK_OPEN_TO_ALL } from '@/lib/featureFlags'
 import { cn } from '@/lib/utils'
 
 /**
@@ -72,7 +73,7 @@ export function ModeSwitcher({ mode, onNavigate, className }: ModeSwitcherProps)
   const { user } = useAuth()
   const { isPro } = useSubscription()
 
-  const viewer: ModeViewer = { signedIn: !!user, isPro, email: user?.email }
+  const viewer: ModeViewer = { signedIn: !!user, isPro, email: user?.email, previewOpen: COWORK_OPEN_TO_ALL }
   const active = modeSpec(mode)
 
   const measure = useCallback(() => {

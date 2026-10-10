@@ -3,12 +3,20 @@ import { Link } from 'react-router-dom'
 import { Check, ClipboardCopy, Copy, X } from 'lucide-react'
 import { connectorUrl } from '@/lib/aiConnector'
 import type { StepRun, Workflow, WorkflowResolver } from '@/lib/workflow'
-import { describeWorkflow } from '@/lib/workflowBrief'
+import { describeWorkflow, type SourceLookup } from '@/lib/workflowBrief'
+import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
 import { cn } from '@/lib/utils'
 import type { PanelLayout } from './WorkflowPanels'
 
+/** A source step's document, from the catalogue, with its publisher's name. */
+const lookupSource: SourceLookup = ref => {
+  const resource = COWORK_RESOURCES.find(r => r.id === ref)
+  if (!resource) return undefined
+  return { resource, publisher: COWORK_ENTITIES.find(e => e.id === resource.entityId)?.name }
+}
+
 /**
- * **Run it in Claude** (docs/workflow-builder.md) — the workflow as a brief
+ * **Run it in Claude** (docs/workflows.md) — the workflow as a brief
  * (`lib/workflowBrief.ts`) for Claude or ChatGPT with the Actuarial Notes
  * connector added. The app calls no model and holds no key: the reader's
  * assistant runs every calculation through the connector, on the same engine
@@ -31,7 +39,7 @@ export function WorkflowClaudePanel({
 }) {
   const [copied, setCopied] = useState<'brief' | 'url' | null>(null)
   const steps = workflow.nodes.length
-  const brief = describeWorkflow(workflow, runs, resolve)
+  const brief = describeWorkflow(workflow, runs, resolve, lookupSource)
   const url = connectorUrl()
 
   const copy = async (what: 'brief' | 'url', text: string) => {

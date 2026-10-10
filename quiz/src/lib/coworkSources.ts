@@ -23,7 +23,18 @@
  */
 
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
-import type { ActuarialFunction, PracticeArea } from '@/lib/coworkFacets'
+
+/** Whose book of business a document is about. */
+export type PracticeArea = 'life' | 'pc' | 'pensions' | 'erm'
+
+/** Which actuarial job a document serves. */
+export type ActuarialFunction =
+  | 'pricing'
+  | 'underwriting'
+  | 'reserving'
+  | 'capital'
+  | 'financial-reporting'
+  | 'advisory'
 
 /** What kind of organisation publishes it — the filter the entity list offers. */
 export type EntityCategory =
@@ -165,11 +176,30 @@ export interface SourceResource {
   practiceAreas: PracticeArea[]
   functions: ActuarialFunction[]
   /**
-   * What attaching this document to a deliverable contributes to its
-   * assumptions table. This is the mechanical half of "the analysis populates
-   * itself": the basis is the document, so the row can name it.
+   * What the document supplies to the work built on it — listed on its step
+   * in a workflow, each row naming where in the document it comes from.
    */
   assumptions?: ResourceAssumption[]
+  /**
+   * A table the document publishes, which a workflow can take as data: put on
+   * a board as a **source** step, it brings these columns and rows, and a
+   * connection maps them onto a calculation's inputs the way an uploaded CSV's
+   * are (`lib/workflow.ts`, `stepTable`).
+   *
+   * The shape is transcribed — the document's own columns and its row labels —
+   * and a value cell is left **blank** unless the figure has been read off the
+   * publisher. The reader fills the blanks in from the document on the step,
+   * so a figure on a board is always one somebody read, never one we supplied.
+   */
+  table?: ResourceTable
+}
+
+export interface ResourceTable {
+  /** Where in the document the table is. */
+  locator: string
+  columns: string[]
+  /** One row per line of the document's table; `''` where the figure is not transcribed. */
+  rows: string[][]
 }
 
 export interface ResourceAssumption {
@@ -178,8 +208,8 @@ export interface ResourceAssumption {
    * Absent when the document supplies the *row* but not the number — a figure
    * the reader has to read off their own data, or a sample entry standing in
    * for a document Cowork does not yet carry. A blank value with a locator is
-   * the honest form of "populated": the analysis knows what it needs and where
-   * it comes from, and does not invent it.
+   * the honest form of "populated": the work knows what it needs and where it
+   * comes from, and does not invent it.
    */
   value?: string
   /** Where in the document it comes from — a section, a table, a page. */

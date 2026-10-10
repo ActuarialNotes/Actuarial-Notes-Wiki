@@ -22,7 +22,6 @@ import { CheckMark } from '@/components/CheckMark'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
 import { ToolCard } from '@/components/tools/ToolCard'
-import { WorkflowLogo } from '@/components/workflow/WorkflowLogo'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePageHead } from '@/hooks/usePageHead'
@@ -101,18 +100,6 @@ function Catalogue() {
           )
         ) : (
           <>
-            {/* The Workflow Builder: the tools chained together, with their data
-                and the concepts behind them — one row above the areas, the way
-                Concept Craft sits above the Quiz tab's exams. */}
-            <ListPanel>
-              <ListRow
-                to="/tools/workflow"
-                data-testid="workflow-builder-entry"
-                leading={<WorkflowLogo size="lg" />}
-                title="Workflow Builder"
-                subtitle="Chain data, calculations and concepts, then deploy it with AI"
-              />
-            </ListPanel>
             {AREAS.map(a => {
               const tools = TOOLS.filter(t => t.area === a.id)
               if (!tools.length) return null

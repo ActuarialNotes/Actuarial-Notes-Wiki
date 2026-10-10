@@ -63,8 +63,8 @@ export function ToolCard({
   /** Drawn inside another card's source sheet: no sources of its own, no Send to… */
   embedded?: boolean
   /**
-   * Fields another step fills (the Workflow Builder's links): their values are
-   * drawn on the primary colour, the colour of a link (docs/workflow-builder.md).
+   * Fields another step fills (a workflow's links): their values are
+   * drawn on the primary colour, the colour of a link (docs/workflows.md).
    */
   linked?: ReadonlySet<string>
 }) {
@@ -401,7 +401,7 @@ function InputBlock({ field, label, children }: { field: string; label: string |
 }
 
 /** A date input: the browser's own picker, holding the ISO date the engine reads. */
-/** A linked value's paint: the primary colour, which is what a link is (docs/workflow-builder.md). */
+/** A linked value's paint: the primary colour, which is what a link is (docs/workflows.md). */
 const LINKED = 'border-primary bg-primary text-primary-foreground'
 
 function DateControl({ field, value, linked = false, onChange }: { field: DateField; value: string; linked?: boolean; onChange: (v: string) => void }) {

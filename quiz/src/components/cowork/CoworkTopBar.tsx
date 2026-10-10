@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, FileSpreadsheet, FileText, Gavel, Landmark, Newspaper, Scale, Table2 } from 'lucide-react'
+import { BookOpen, FileText, Gavel, Landmark, Newspaper, Scale, Table2 } from 'lucide-react'
 import {
   FloatingSearchBar,
   FloatingSearchInput,
@@ -19,9 +19,6 @@ import {
   type SourceResource,
 } from '@/lib/coworkSources'
 import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
-import { deliverableTypeSpec } from '@/lib/coworkDeliverables'
-import { deliverableDisplayTitle } from '@/data/coworkDeliverables'
-import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 
 /**
  * Cowork's top bar — the search, the page strip, and (below `lg`) the way into
@@ -42,14 +39,7 @@ import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
  * questions, and a publisher's row is not a heading over their documents: it is
  * the way to the page those documents are on.
  *
- * A deliverable is the third kind of answer, and it is listed from anywhere in
- * the mode rather than only on the page that holds them: the bar is the mode's
- * one search, so "where is that reserve analysis" is a question it can be asked
- * standing in front of a source. Only a query finds one — the dropdown never
- * opens on an empty field, so the deliverables page is not shadowed by a list
- * of its own contents.
- *
- * There are **no tabs here**. Sources and Deliverables are the mode's two
+ * There are **no tabs here**. Sources and Workflows are the mode's two
  * places and the sidebar is where a place is chosen, the same as every route in
  * Study mode; a second row of tabs restating the nav cost a phone a row of
  * chrome to say what the drawer already says.
@@ -99,7 +89,6 @@ export function CoworkTopBar({
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
-  const deliverables = useCoworkDeliverables(s => s.deliverables)
 
   // A new route is a new question. Same rule as the wiki's bar.
   useEffect(() => {
@@ -137,20 +126,9 @@ export function CoworkTopBar({
 
   const publishers = useMemo(() => new Map(COWORK_ENTITIES.map(e => [e.id, e] as const)), [])
 
-  // The reader's own work, matched the same way the catalogue is: every term
-  // has to appear somewhere in the title or the type.
-  const matchingDeliverables = useMemo(() => {
-    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
-    if (!terms.length || inSource) return []
-    return deliverables.filter(d => {
-      const haystack = [deliverableDisplayTitle(d), deliverableTypeSpec(d.type).label].join(' ').toLowerCase()
-      return terms.every(t => haystack.includes(t))
-    })
-  }, [deliverables, query, inSource])
-
   const hasQuery = query.trim().length > 0
   const isExpanded = active && hasQuery
-  const found = results.entities.length + results.resources.length + matchingDeliverables.length
+  const found = results.entities.length + results.resources.length
 
   function openEntity(entity: SourceEntity) {
     dismiss()
@@ -240,30 +218,6 @@ export function CoworkTopBar({
                         </li>
                       )
                     })}
-
-                    {matchingDeliverables.map(deliverable => (
-                      <li key={`deliverable:${deliverable.id}`}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            dismiss()
-                            navigate(`/cowork/deliverables/${deliverable.id}`)
-                          }}
-                          data-sound="open"
-                          className="flex w-full min-w-0 items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
-                        >
-                          <FileSpreadsheet className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-sm">
-                              {highlightMatch(deliverableDisplayTitle(deliverable), query)}
-                            </span>
-                            <span className="block truncate text-[11px] text-muted-foreground">
-                              {deliverableTypeSpec(deliverable.type).label}
-                            </span>
-                          </span>
-                        </button>
-                      </li>
-                    ))}
                   </>
                 )}
               </ul>

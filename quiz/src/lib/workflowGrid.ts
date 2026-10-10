@@ -1,6 +1,6 @@
 /**
- * **The Workflow Builder's grid** — the geometry of a board whose cards stay
- * where they are put (docs/workflow-builder.md). Where Concept Craft's board
+ * **The workflow board's grid** — the geometry of a board whose cards stay
+ * where they are put (docs/workflows.md). Where Concept Craft's board
  * is a force simulation (`lib/craftLayout.ts`) because a map of concepts is a
  * shape to be discovered, a workflow is a procedure to be read: nothing moves
  * on its own.

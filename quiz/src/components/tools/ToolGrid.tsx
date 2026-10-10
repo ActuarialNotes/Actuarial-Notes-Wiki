@@ -56,7 +56,7 @@ export function EditableTable({
   rows: DraftRow[]
   result?: ResultTable
   onChange: (rows: DraftRow[]) => void
-  /** Filled by another step (the Workflow Builder's links): the input cells are drawn on the primary colour. */
+  /** Filled by another step (a workflow's links): the input cells are drawn on the primary colour. */
   linked?: boolean
   /** The tool the grid belongs to: what its assumption columns can be filled from (§6.6). */
   toolId?: string

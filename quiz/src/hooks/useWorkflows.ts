@@ -11,7 +11,7 @@ import {
 } from '@/lib/workflow'
 
 /**
- * The reader's workflows (docs/workflow-builder.md): every one they have
+ * The reader's workflows (docs/workflows.md): every one they have
  * built, which is open, and which are in their **library** (`saved`) — the
  * ones the starting screen lists, and the + menu offers as sub-workflows. localStorage only, like Concept Craft's board —
  * a workflow is a plan for a calculation, not a record anyone else needs —
@@ -23,8 +23,8 @@ import {
 
 const STORAGE_KEY = 'actuarial_workflows_v1'
 /**
- * Where the first Workflow Builder kept a reader's own Anthropic API key. The
- * in-browser deploy that used it is gone (docs/workflow-builder.md, "Running it
+ * Where the first Workflow Builder (as Workflows was called) kept a reader's own Anthropic API key. The
+ * in-browser deploy that used it is gone (docs/workflows.md, "Running it
  * in Claude"); a key left behind is a secret no page should hold, so it is
  * deleted on the next visit.
  */

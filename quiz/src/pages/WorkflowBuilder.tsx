@@ -1,12 +1,12 @@
-// The Workflow Builder (`/tools/workflow`, docs/workflow-builder.md): data,
-// calculations and concepts as steps locked on a grid, joined by directed
-// connections, run live on the Actuarial Tools engine — and handed to Claude
-// as a brief for the Actuarial Notes connector. Concept Craft's board, with
-// the physics taken out.
+// Workflows (`/cowork/workflows`, docs/workflows.md), Cowork's second
+// place: documents from Sources, data, calculations and concepts as steps
+// locked on a grid, joined by directed connections, run live on the Actuarial
+// Tools engine — and handed to Claude as a brief for the Actuarial Notes
+// connector. Concept Craft's board, with the physics taken out.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Bookmark, BookmarkCheck, ChevronDown, ChevronLeft, ClipboardCopy, Maximize, Plus, Trash2, Workflow as WorkflowIcon, ZoomIn, ZoomOut } from 'lucide-react'
-import { backLabel, useBack } from '@/hooks/useBack'
+import { Bookmark, BookmarkCheck, ChevronDown, ClipboardCopy, Maximize, Plus, Trash2, Workflow as WorkflowIcon, ZoomIn, ZoomOut } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { ClearButton, ControlGroup, MapButton } from '@/components/craft/CraftControls'
 import { WorkflowAddMenu, type ConceptShelf } from '@/components/workflow/WorkflowAddMenu'
 import { WorkflowBoard, type WorkflowBoardCommands } from '@/components/workflow/WorkflowBoard'
@@ -22,6 +22,9 @@ import { useIsMobile } from '@/hooks/useIsMobile'
 import { usePageHead } from '@/hooks/usePageHead'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useCurrentWorkflow, useWorkflowResolver, useWorkflows } from '@/hooks/useWorkflows'
+import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
+import { COWORK_ENTITIES, COWORK_RESOURCES } from '@/data/coworkSources'
+import { entityById, resourceEntryRef, type SourceResource } from '@/lib/coworkSources'
 import { craftTopics } from '@/lib/conceptCraft'
 import { setWikiContentLookup } from '@/lib/github'
 import { setWikiIndexBundle } from '@/lib/wikiIndex'
@@ -56,8 +59,8 @@ import type { Cell } from '@/lib/workflowGrid'
 import { cn } from '@/lib/utils'
 
 const HEAD = {
-  title: 'Workflow Builder | Actuarial Notes',
-  description: 'Chain data, calculations and concepts into an actuarial workflow, run it live, and run it in Claude.',
+  title: 'Workflows | Actuarial Notes',
+  description: 'Chain sources, data, calculations and concepts into an actuarial workflow, run it live, and run it in Claude.',
   noindex: true,
 }
 
@@ -73,14 +76,16 @@ let notesRead: Notes | null = null
 /**
  * The vault, read once a visit: the concept pages the **+** offers and the
  * popup shows. Fetched with the page rather than bundled into it — the board
- * and its calculators open at once, and the notes follow.
+ * and its calculators open at once, and the notes follow. Cowork's own
+ * documents are registered with them (`lib/coworkContent.ts`), so a source
+ * step opens in the same reader as it does in Sources.
  */
 function useNotes(): Notes | null {
   const [notes, setNotes] = useState<Notes | null>(notesRead)
   useEffect(() => {
     if (notesRead) return
     let live = true
-    void import('virtual:wiki-content').then(({ default: bundle }) => {
+    void Promise.all([import('virtual:wiki-content'), import('@/lib/coworkContent')]).then(([{ default: bundle }]) => {
       setWikiContentLookup((path: string) => bundle.files[path])
       setWikiIndexBundle(bundle.index)
       const pages = new Map(bundle.index.filter(i => i.category === 'concept').map(i => [i.name.toLowerCase(), i.name] as const))
@@ -139,6 +144,8 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
   const openWorkflowById = useWorkflows(s => s.open)
   const setSaved = useWorkflows(s => s.setSaved)
   const saveTemplate = useWorkflows(s => s.saveTemplate)
+  const addToLibrary = useCoworkLibrary(s => s.addResource)
+  const navigate = useNavigate()
   const allWorkflows = useWorkflows(s => s.workflows)
   const resolve = useWorkflowResolver()
   // Sub-workflows read under what they are called now.
@@ -197,6 +204,12 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
     setAddOpen(false)
     play('collect')
     if (!added) return
+    // A document worked from is one the reader has taken: it joins their
+    // library in Sources (and its publisher, followed), as Add does there.
+    if (step.kind === 'source') {
+      const resource = COWORK_RESOURCES.find(r => r.id === step.ref)
+      if (resource) addToLibrary(resource)
+    }
     setCursor(added)
     const name = stepName({ id: added, col: 0, row: 0, ...step })
     say(after ? `Added ${name} after ${nameOf(after)}` : `Added ${name}`)
@@ -309,6 +322,19 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
     useConceptPopup.getState().openAt(list, index, null, null, null, { walk: 'corpus' })
   }, [workflow, isPhone])
 
+  // ── Reading a source ─────────────────────────────────────────────────────
+  // A walk of the workflow's documents, in the order the workflow runs — the
+  // same reader Sources opens a document in.
+  const readSource = useCallback((resource: SourceResource) => {
+    const docs = runOrder(workflow)
+      .filter(n => n.kind === 'source')
+      .map(n => COWORK_RESOURCES.find(r => r.id === n.ref))
+      .filter((r): r is SourceResource => !!r && resourceEntryRef(r) !== null)
+    const index = Math.max(0, docs.findIndex(r => r.id === resource.id))
+    if (isPhone) setPanel(null)
+    useConceptPopup.getState().openAt(docs.map(r => resourceEntryRef(r)!), index, null, null, null, { walk: 'corpus' })
+  }, [workflow, isPhone])
+
   // Esc steps back one layer: a port armed, then the panel. The popup and the
   // + mind their own.
   useEffect(() => {
@@ -335,7 +361,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
   const openEdge = panel?.kind === 'edge' ? workflow.edges.find(e => edgeKey(e) === panel.key) ?? null : null
   const forClaude = panel?.kind === 'claude'
   const panelOpen = !!openStep || !!openEdge || forClaude
-  const panelRem = openStep ? (openStep.kind === 'tool' || (openStep.kind === 'data' && openStep.ref !== 'custom') ? 30 : 22) : openEdge ? 26 : forClaude ? 26 : 22
+  const panelRem = openStep ? (openStep.kind === 'tool' || (openStep.kind === 'data' && openStep.ref !== 'custom') || (openStep.kind === 'source' && openStep.csv) ? 30 : 22) : openEdge ? 26 : forClaude ? 26 : 22
   // The open step's links: each step it is linked to, and the figure it carries — marked on that card.
   const marked = useMemo(() => {
     const out = new Map<string, number>()
@@ -359,6 +385,12 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
     return m
   }, [workflow.nodes])
   const usedConcepts = useMemo(() => new Set(workflow.nodes.filter(n => n.kind === 'concept').map(n => n.ref.toLowerCase())), [workflow.nodes])
+  const usedSources = useMemo(() => new Set(workflow.nodes.filter(n => n.kind === 'source').map(n => n.ref)), [workflow.nodes])
+  const openSource = useMemo(() => {
+    if (openStep?.kind !== 'source') return null
+    const resource = COWORK_RESOURCES.find(r => r.id === openStep.ref)
+    return resource ? { resource, entity: entityById(COWORK_ENTITIES, resource.entityId) ?? undefined } : null
+  }, [openStep])
 
   const panelView = openStep ? (
     <StepPanel
@@ -385,6 +417,9 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
       resolve={resolve}
       onOpenWorkflow={goInto}
       onNotice={say}
+      source={openSource}
+      onReadSource={readSource}
+      onSourcePage={id => navigate(`/cowork/sources/${id}`)}
     />
   ) : openEdge ? (
     <EdgePanel
@@ -460,8 +495,9 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
               <div className="space-y-1.5">
                 <h2 className="text-lg font-semibold">{parent ? 'An empty workflow' : 'Build a workflow'}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Add data, calculations and the concepts behind them, then drag from a step&rsquo;s dot to the next to say
-                  what flows where. Calculations the engine can chain fill each other in as you go.
+                  Add documents from your sources, data, calculations and the concepts behind them, then drag from a
+                  step&rsquo;s dot to the next to say what flows where. Calculations the engine can chain fill each other in
+                  as you go.
                 </p>
               </div>
               <button
@@ -562,6 +598,7 @@ function Builder({ workflow: stored }: { workflow: Workflow }) {
                 onClose={() => setAddOpen(false)}
                 usedTools={usedTools}
                 usedConcepts={usedConcepts}
+                usedSources={usedSources}
                 after={after ? nameOf(after) : null}
                 library={library}
                 canNest={ref => canNest(resolve, workflow.id, ref)}
@@ -611,20 +648,12 @@ function Header({
   /** Open another workflow from the menu. */
   onOpen?: (id: string) => void
 }) {
-  const back = useBack({ to: '/tools', label: 'Tools' })
   const [menuOpen, setMenuOpen] = useState(false)
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
+      {/* Workflows is one of Cowork's two places, chosen in the sidebar like
+          Sources — so no back arrow here, only the way into the drawer. */}
       <MobileNavButton className="lg:hidden" />
-      <button
-        type="button"
-        onClick={back.go}
-        aria-label={backLabel(back)}
-        title={backLabel(back)}
-        className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </button>
       <WorkflowLogo size="sm" className="hidden sm:flex" />
       {parent && onParent && (
         <button
@@ -649,7 +678,7 @@ function Header({
           data-testid="workflow-title"
         >
           <span className="min-w-0">
-            <span className="block truncate text-sm font-semibold leading-tight sm:text-base">{workflow?.title ?? 'Workflow Builder'}</span>
+            <span className="block truncate text-sm font-semibold leading-tight sm:text-base">{workflow?.title ?? 'Workflows'}</span>
             {workflow && (
               <span className="block truncate text-xs tabular-nums text-muted-foreground" data-testid="workflow-tally">
                 {workflow.nodes.length} {workflow.nodes.length === 1 ? 'step' : 'steps'} · {workflow.edges.length} {workflow.edges.length === 1 ? 'connection' : 'connections'}

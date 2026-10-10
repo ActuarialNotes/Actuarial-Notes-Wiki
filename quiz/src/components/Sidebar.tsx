@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
-  FileSpreadsheet,
   FlaskConical,
   Gem,
   GraduationCap,
@@ -23,6 +22,7 @@ import {
   ShoppingBag,
   Sparkles,
   Sun,
+  Workflow,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
@@ -46,7 +46,6 @@ import { useActuariaAccess } from '@/hooks/useActuariaAccess'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
-import { useCoworkDeliverables } from '@/hooks/useCoworkDeliverables'
 import { modeForPath } from '@/lib/appMode'
 import { ATTEMPT_VIEW_ICON, ATTEMPT_VIEW_LABEL, attemptRoute } from '@/lib/attemptViews'
 import { RESOURCES_ROUTE, studyGuidesSection, type StudyGuidesSection } from '@/lib/wikiRoutes'
@@ -214,14 +213,14 @@ function SidebarGroup({
 }
 
 /**
- * The nav rows of **Cowork** mode — the two tabs of the product, mirrored into
- * the sidebar so the drawer and the page agree about what Cowork contains.
+ * The nav rows of **Cowork** mode — its two places, Sources and Workflows.
+ * The workflow count is deliberately not a badge here: reading the workflow
+ * store would pull the tools engine into the main bundle with the sidebar.
  * Study's rows are not hidden behind a flag here; they are simply not this
  * mode's rows (see `lib/appMode.ts`).
  */
 function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: () => void }) {
   const libraryCount = useCoworkLibrary(s => s.entityIds.length + s.resourceIds.length)
-  const deliverableCount = useCoworkDeliverables(s => s.deliverables.length)
   // A source has its own page under /cowork/sources, and the nav is now the
   // only thing saying which of Cowork's two places you are in (the page carries
   // no tabs), so the Sources row has to stay lit while you are reading one.
@@ -247,18 +246,11 @@ function CoworkNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate: 
         }
       />
       <SidebarItem
-        to="/cowork/deliverables"
-        label="Deliverables"
-        icon={<FileSpreadsheet className="h-5 w-5 lg:h-4 lg:w-4" />}
+        to="/cowork/workflows"
+        label="Workflows"
+        icon={<Workflow className="h-5 w-5 lg:h-4 lg:w-4" />}
         collapsed={collapsed}
         onNavigate={onNavigate}
-        badge={
-          deliverableCount > 0 ? (
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-muted-foreground">
-              {deliverableCount}
-            </span>
-          ) : undefined
-        }
       />
     </>
   )

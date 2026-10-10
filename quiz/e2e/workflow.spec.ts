@@ -1,13 +1,16 @@
 import { test, expect, type Locator, type Page } from '@playwright/test'
 
-// The Workflow Builder (docs/workflow-builder.md): the way in from the Tools
-// catalogue onto an empty board, steps added through the + menu's pages, a
+// Workflows (docs/workflows.md), Cowork's second place: the way in from
+// Cowork's sidebar onto an empty board, steps added through the + menu's pages
+// (a document from Sources among them, its table filled in and mapped into a
+// calculation), a
 // template laid out and run live along its links — the linked field and the
 // figure it came from both on the primary colour, the link said in one line —
 // connections drawn by dragging from a step's port (and refused when they
 // would loop), a step moved anywhere and dropped on another landing beside
 // it, a line opened by tapping it, and the workflow copied as a brief for
-// Claude. Signed out throughout: workflows live in localStorage.
+// Claude. Signed out throughout: workflows live in localStorage, and the
+// suite's build opens Cowork to every viewer (VITE_COWORK_PREVIEW).
 
 type Point = { x: number; y: number }
 
@@ -36,15 +39,15 @@ async function restingBox(locator: Locator) {
 }
 
 async function openTemplate(page: Page, id: string) {
-  await page.goto('/tools/workflow')
+  await page.goto('/cowork/workflows')
   await page.locator(`[data-testid="workflow-template"][data-template="${id}"]`).click()
 }
 
-test.describe('workflow builder', () => {
-  test('opens from the Tools catalogue and adds a step of each kind through the + menu', async ({ page }) => {
-    await page.goto('/tools')
-    await page.getByTestId('workflow-builder-entry').click()
-    await expect(page).toHaveURL(/\/tools\/workflow$/)
+test.describe('workflows', () => {
+  test('opens from Cowork\'s sidebar and adds a step of each kind through the + menu', async ({ page }) => {
+    await page.goto('/cowork')
+    await page.getByRole('link', { name: 'Workflows' }).first().click()
+    await expect(page).toHaveURL(/\/cowork\/workflows$/)
     await expect(page.getByTestId('workflow-empty')).toBeVisible()
 
     const add = page.getByTestId('workflow-add')
@@ -197,7 +200,7 @@ test.describe('workflow builder', () => {
   })
 
   test('adds a template as one step, opens it to edit, and comes back up', async ({ page }) => {
-    await page.goto('/tools/workflow')
+    await page.goto('/cowork/workflows')
     await page.getByTestId('workflow-add').click()
     await page.getByTestId('workflow-add-workflows').click()
     await page.locator('[data-testid="workflow-add-template"][data-ref="rate-indication"]').click()
@@ -225,7 +228,7 @@ test.describe('workflow builder', () => {
   })
 
   test('uploads a CSV and links its columns into a calculation', async ({ page }) => {
-    await page.goto('/tools/workflow')
+    await page.goto('/cowork/workflows')
     await page.getByTestId('workflow-add').click()
     await page.getByTestId('workflow-add-data').click()
     await page.getByTestId('workflow-csv-input').setInputFiles({
@@ -260,5 +263,48 @@ test.describe('workflow builder', () => {
     await edge.getByTestId('workflow-map-points-period').selectOption('-1')
     await expect(page.locator('[data-testid="workflow-edge"][data-kind="handoff"]')).toHaveCount(0)
   })
-})
 
+  test('brings in FSRA\'s loss trend benchmarks from Sources and links a trend into a calculation', async ({ page }) => {
+    await page.goto('/cowork/workflows')
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-sources').click()
+    await page.getByTestId('workflow-add-search').fill('loss trend')
+    await page.locator('[data-testid="workflow-add-source"][data-ref="fsra-ppa-loss-trend-benchmarks"]').click()
+    const source = page.locator('[data-workflow-step][data-kind="source"]')
+    await expect(source).toHaveCount(1)
+    // The table comes with the publisher's rows and no figures: those are read off the document.
+    await expect(source.getByTestId('workflow-source-blanks')).toHaveText('21 figures to fill in')
+
+    // A Trend Factor after it: connected, but not linked until a cell is chosen.
+    await page.getByTestId('workflow-add').click()
+    await page.getByTestId('workflow-add-calc').click()
+    await page.getByTestId('workflow-add-area').filter({ hasText: 'Ratemaking' }).click()
+    await page.locator('[data-testid="workflow-add-tool"][data-ref="ratemaking.trend_factor"]').click()
+    await expect(page.locator('[data-testid="workflow-edge"][data-kind="feeds"]')).toHaveCount(1)
+
+    // Read Collision's past trend off the document into the table.
+    await source.click()
+    const panel = page.getByTestId('workflow-step-panel')
+    await expect(panel.getByTestId('workflow-read-source')).toBeVisible()
+    await panel.getByLabel('Collision: Past trend').fill('5%')
+    await expect(source.getByTestId('workflow-source-blanks')).toHaveText('20 figures to fill in')
+
+    // On the connection, the trend is that cell: the row is offered by its coverage.
+    await panel.getByRole('button', { name: /Trend Factor/ }).click()
+    const edge = page.getByTestId('workflow-edge-panel')
+    await edge.getByTestId('workflow-map-trend').selectOption({ label: 'Past trend (values)' })
+    await edge.getByLabel('Annual trend: row').selectOption({ label: 'Collision' })
+    await expect(page.locator('[data-testid="workflow-edge"][data-kind="handoff"]')).toHaveCount(1)
+
+    await page.keyboard.press('Escape')
+    await expect(edge).toHaveCount(0)
+    await step(page, 'Trend Factor').click()
+    const factor = page.getByTestId('workflow-step-panel')
+    await expect(factor.getByTestId('workflow-link-note')).toHaveText(/^Annual trend linked to .*December 31, 2024/)
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+
+    // Working from it puts it in the reader's library in Sources.
+    await page.goto('/cowork')
+    await expect(page.getByText('Something went wrong')).toHaveCount(0)
+  })
+})

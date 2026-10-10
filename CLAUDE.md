@@ -369,7 +369,12 @@ before touching that area**:
   (answer on top, inputs below, no Run button). Its ground rules: tools compute and people judge (every
   judgment an explicit input), nothing invented (no benchmark factors; examples and tables
   transcribed with their source), and no tool leaves Preview until it reproduces a published
-  worked example in CI. Read before building any of it.
+  worked example in CI. §18 is the **V2 review** and §11 its plan, built before Phase 2: a search
+  bar on `/tools`, assumptions picked from a column's header menu or a stepper rather than typed
+  (§6.6), a live figure on every card (§6.7, R11: it draws only what the tool computed), and
+  **Data Sources** (§4.11) — life tables, price indices, yield curves and published triangles,
+  each a dated snapshot extracted from the publisher's file, its licence named. Read before
+  building any of it.
 - `docs/stacked-pages.md` — the concept popup's **page stack** (Obsidian's stacked pages):
   a link followed inside the popup opens a new page on top of the one being read, and the
   pages behind it fold up into title bars — vertically, along the pane's short axis, so a

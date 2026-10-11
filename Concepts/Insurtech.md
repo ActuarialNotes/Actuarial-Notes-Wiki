@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: high
   last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bdd3a4def6746151135a2ae8b3ca5c301cfa30d9403072a4b53a756ec8fd5d68
+  content_hash: sha256:ec597a86cc7ee1b91d6e7c5cbac242e9038b1c5bd4deb785e33522a5d6a74d60
   sources:
     - "NAIC, Insurance Topics: Insurtech (Last Updated 2/18/2026), Background and Actions, read via WebFetch 2026-10-11 (curl refused; no hash) — https://content.naic.org/insurance-topics/insurtech"
     - "NAIC Model Bulletin: Use of Artificial Intelligence Systems by Insurers (adopted Dec 4, 2023), pp.1-2 (Background, Legislative Authority #1780), §3 and Guidelines 1.1-1.4, 4.0-4.2, §4, sha256:d260c950d67fa0cc60cfcabf7df9f8de1dcff0ba84b32b6a711bd5c0b76d28f8 — https://content.naic.org/sites/default/files/cmte-h-big-data-artificial-intelligence-wg-ai-model-bulletin.pdf.pdf"
@@ -14,7 +14,7 @@ verification:
     - "U.S. Treasury, Federal Insurance Office, Annual Report on the Insurance Industry (September 2025), p.6 (AI surveys, model bulletin) and p.72 (Parametric Insurance), sha256:a1ba63f18d5a6c3f0bf499d5f055b3d76ed54ee5d608e5480222569e1b248e47 — https://home.treasury.gov/system/files/311/Final%20FIO%202025%20Annual%20Report.pdf"
     - "NCOIL, Insurance Regulatory Sandbox Model Act (adopted Nov 19, 2022), §2(a), (c), (d), (e), (g), sha256:230115f18554e7ac1552a7edc895c8a9619f86bfbaa96983ec0d4634f228a5b8 — https://ncoil.org/wp-content/uploads/2025/12/NCOIL-Sandbox-Model-Adopted-Nov.-2022.pdf"
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.9 'Importance of Equitable Rates' and 'Adverse Selection', p.151 (PDF p.163), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-  open_findings: 3
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurtech.md
 ---

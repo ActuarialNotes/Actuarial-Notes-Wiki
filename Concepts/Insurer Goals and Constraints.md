@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1a3f654ba36c4c9f534f5e3a219fde4ffc4d7c02e434f499185c0aad17ed9744
+  content_hash: sha256:7a5bbba0cc7be7c176f05538386e54c62b52dbb73a93284ba18af492df840529
   sources:
     - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §6.4 Types of Insurance and Insurers (Stock Insurers; Mutual Insurers), sha256:627a6ed1d0a36f68e681bdcc3a027f60fd8537b741d67e2cbdea3d41eb76005d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s10-04-types-of-insurance-and-insurer.html"
     - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.2 Insurance Operations: Actuarial and Investment (investment paragraph: two businesses; assets cover reserves and leave adequate capital and surplus), sha256:0064ff8c9ff68c89296f1a67346ed0a2468f58d808fd560b9d5ad468da9db501 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-02-insurance-operations-actuarial.html"
@@ -14,7 +14,7 @@ verification:
     - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.1 pp.5, 11 (PDF pp.17, 23); Ch.8 p.145 (PDF p.157); Ch.13 pp.239-246 (PDF pp.251-258), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "IRMI Glossary, 'capacity', sha256:3415704b5ee0c824b7783afa78c17c89f84b733510356e74abb572b9a7cd9e6b — https://www.irmi.com/term/insurance-definitions/capacity"
     - "IRMI Glossary, 'Kenney ratio', sha256:29601c36922c9186f07f0fc8e5af26ab649858629e0be5e67c2485d666080cc0 — https://www.irmi.com/term/insurance-definitions/kenney-ratio"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurer Goals and Constraints.md
 ---

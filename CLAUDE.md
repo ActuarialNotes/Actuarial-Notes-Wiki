@@ -564,8 +564,8 @@ Other important `lib/` modules:
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
-  `ready` (P, FM, MAS-I, DISC-DA and DISC-IA — the CAS ones promoted by
-  `scripts/publication_readiness.py --check`), `beta` (MAS-II, DISC-RM, Exams 5, 6C, 7, 8 and 9,
+  `ready` (P, FM, MAS-I and the three DISCs — DISC-DA, DISC-RM, DISC-IA — the CAS ones promoted by
+  `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 7, 8 and 9,
   and PCPA) or `development` (Exam 6U and the SOA exams past FM — FAM, SRM, PA, ALTAM,
   ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — a syllabus outline with no
   question bank yet). The DISCs publish no papers — The Institutes sells their sample questions —

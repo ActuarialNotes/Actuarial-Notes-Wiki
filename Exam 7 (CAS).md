@@ -42,7 +42,7 @@ verification:
 >
 > 2. Calculate [[Unpaid Claims|unpaid claims estimates]].
 > 3. Test [[Unpaid Claims|unpaid claim estimates]] for [[Reasonableness Testing|reasonableness]].
-> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layer of Insurance|layers of coverage]].
+> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layer Development Factor|layers of coverage]].
 > 5. Forecast [[Premium Reserve|premium reserves]] (e.g., [[Retrospective Premium Reserve|reserves for retrospective premiums]]).
 >
 > **Unpaid Claim Stochastic Distributions**
@@ -50,7 +50,7 @@ verification:
 > 6. Estimate [[Parameter Estimation|parameters]] of [[Unpaid Claim Distribution|unpaid claims distributions]].
 > 7. Calculate the [[Moment|moments]] and [[Percentile|percentiles]] of [[Unpaid Claim Distribution|unpaid claim distributions]].
 > 8. Simulate [[Parameter Risk|parameter percentiles]] and [[Unpaid Claim Distribution|unpaid claims percentiles]].
-> 9. Calculate the [[Expected Value|mean]] and [[Prediction Error|prediction error]] of a [[Unpaid Claims|reserve]].
+> 9. Calculate the mean and [[Prediction Error|prediction error]] of a [[Unpaid Claims|reserve]].
 > 10. Derive [[Predictive Distribution|predictive distributions]] using [[Stochastic Reserving|stochastic methods]].
 >
 > **Unpaid Claim Output & Diagnostic Analysis**

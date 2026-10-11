@@ -8,8 +8,8 @@ type: multiple-choice
 bloom: understand
 wiki_link:
   - Concepts/Risk+Control
-  - Concepts/Insurer
-answer: "C"
+  - Concepts/Underwriting
+answer: "B"
 points: 1
 verification:
   status: in_review
@@ -23,19 +23,19 @@ verification:
   log: .verify/questions/exam-disc-rm/discrm-an-233.md
 ---
 
-An insurer's risk control representatives inspect boilers and pressure vessels for policyholders in a jurisdiction that requires such inspections, and also run free driver-safety seminars that reduce injuries on the road. Which pair of insurer risk control goals do these two services serve?
+Before quoting a metal fabricator's workers compensation policy, an underwriter orders a loss control inspection. The insurer's loss control representative recommends guards on the plant's presses, and the policy is issued subject to the fabricator's compliance with the recommendations. Which statement best describes what this loss control work does?
 
-- A) Earning a profit, and meeting customer needs
-- B) Meeting customer needs, and meeting legal requirements
-- C) Meeting legal requirements, and fulfilling a duty to society
-- D) Earning a profit, and fulfilling a duty to society
+- A) It finances the fabricator's losses, since the insurer pays for prevention in place of claims
+- B) It informs the underwriter's decision on the account and aims to prevent or reduce losses
+- C) It measures the fabricator's actual payroll so the final premium can be calculated
+- D) It ends the need to insure injuries at the presses, since guarding removes the exposure
 
 ## Explanation
 
-An insurer's risk control function supports four goals: earning a profit, meeting customer needs, fulfilling a duty to society by reducing injuries and damage, and meeting legal requirements such as the inspections some jurisdictions require for boilers and pressure vessels. The boiler inspections meet a legal requirement, and the seminars reduce injuries to the public. The answer is **C**.
+Underwriters order loss control inspections to help assess an account and decide whether to accept it, and a policy may be written subject to the insured's compliance with the loss control recommendations. The recommendations themselves are loss control: methods of preventing and reducing loss where the effort is economically feasible, which are particularly applicable to workers compensation exposures. The answer is **B**.
 
 **Why not the others**
 
-- **A** — Both services may help profit and customers indirectly, but neither names the legal requirement or the benefit to society that the stem describes.
-- **B** — Gets the boiler inspections right but misses that the seminars benefit the public, which is a duty to society rather than a customer need.
-- **D** — Gets the seminars right but misses that the boiler inspections are required by the jurisdiction.
+- **A** confuses risk control with risk financing. Risk control reduces how often or how badly losses occur, and financing pays for the losses that still happen. The guards change the losses, and the policy is what pays for them.
+- **C** describes a premium audit, which checks the exposure base, such as payroll, after the policy period to calculate the final premium.
+- **D** confuses loss prevention with avoidance. Only avoidance removes an exposure. Guarding the presses lowers the chance of injury, but the fabricator still runs them, so injuries can still happen and still need to be paid for.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Retrospective+Rating
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e2fb351946f2e925690c8ee7e997b364af51430b9f41607a4c2fe3b4b2bf1aae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-002.md
 ---
 
 An actuary estimating the premium asset on retrospectively rated policies compares two first-adjustment PDLD ratios (premium booked through 27 months divided by loss reported through 18 months):

@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Unpaid+Claim+Distribution
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:58ffa0f5f4af532397b01f2d2d3342ba49f4031e92272a3920a316e42260373c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-004.md
 ---
 
 A chain ladder analysis of a liability book gives a reserve estimate of $R = 4{,}000$ with a standard error of 2,600. Because the standard error is more than half the reserve, the actuary follows Mack (1994) and approximates the reserve distribution by a lognormal distribution whose mean and variance equal the reserve estimate and the square of its standard error.

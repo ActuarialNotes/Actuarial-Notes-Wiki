@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Aggregate+Excess+of+Loss
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:600563acf3003f160ad1732955caea7170eed65720b2ae7908bdf05cb6bfd4c8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-006.md
 ---
 
 A captive insurer's general liability losses for one accident year (in 000s) are:

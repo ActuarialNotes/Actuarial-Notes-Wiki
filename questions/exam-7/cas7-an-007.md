@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Aggregate+Excess+of+Loss
 answer: "E"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bcc496cd136206c92ab460da7120c7784b7f32b0c1a059f8fc91178e148e61df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-007.md
 ---
 
 A primary insurer estimates the losses it cedes to reinsurers. Determine which of the following statements about estimating its ceded losses are true.

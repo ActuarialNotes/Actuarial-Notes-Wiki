@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unpaid+Claim+Distribution
 answer: "B"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13a084306a0cfd5a9db1cd58b867d45d906cb5032eb7f79e99ba1f50a9db3d26
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-003.md
 ---
 
 A cumulative paid loss triangle has five accident years ($I = 5$). The amounts at development ages 1 and 2 for the four accident years that have reached age 2 are:

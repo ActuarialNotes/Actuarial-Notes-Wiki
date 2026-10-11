@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unpaid+Claim+Distribution
 answer: "A"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c68b0540d6b1860b4ea40818bc22badfed7f44a328cece73e1bc4aeeea541a0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-005.md
 ---
 
 An actuary runs four ODP bootstrap models on the same book and weights them by accident year to obtain a best estimate of the unpaid claim distribution, as in Shapland (2016). The mean unpaid claims and the weights are:

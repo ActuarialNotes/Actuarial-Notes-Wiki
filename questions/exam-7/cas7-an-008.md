@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Aggregate+Excess+of+Loss
 answer: "D"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:145c85af3ec68d3760264da5c81f236a107a0a5aa5dcfc89d70a708ba93cdbb9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-008.md
 ---
 
 Determine which of the following statements about types of reinsurance are true.

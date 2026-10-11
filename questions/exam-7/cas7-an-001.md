@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Retrospective+Rating
 answer: "C"
 points: 1
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:310dc4e494ecda3ebd9287dd1841b0397fd920a8873f8ae504a936db12f7a32b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-7/cas7-an-001.md
 ---
 
 An insurer estimates the premium asset on its retrospectively rated workers compensation policies with the PDLD method. The policy effective quarters below have had their first retro adjustment but not their second. Retro adjustments are made annually, and the plans allow at most four adjustments.

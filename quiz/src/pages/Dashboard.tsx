@@ -24,7 +24,6 @@ import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { CompletionCornerBadge } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
-import { StreakNavBadge } from '@/components/StreakBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -45,7 +44,7 @@ import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
 import { DashboardSearchBar } from '@/components/DashboardSearchBar'
-import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 const WELCOME_DISMISSED_KEY = 'quiz.dashboard.welcomeDismissed'
@@ -563,11 +562,11 @@ export default function Dashboard() {
   // pinned-header copies swap in once primaryActionsRef has scrolled past, so
   // all three have to scroll out together.
   const primaryActions = activeSyllabus ? (
-    <div ref={primaryActionsRef} className="flex flex-col gap-3">
+    <div ref={primaryActionsRef} className="flex flex-col gap-4">
       {/* Three across on a phone is tight, so the two wide actions drop to
           text-sm below sm and are allowed to wrap rather than overflow the
           row (Button is whitespace-nowrap by default). */}
-      <div className="flex gap-2 sm:gap-3">
+      <div className="flex gap-3">
         <Button
           variant="secondary"
           onClick={handleReadConcepts}
@@ -624,11 +623,11 @@ export default function Dashboard() {
         aria-hidden={isGuest}
       >
     <div
-      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-4"
+      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-6"
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Avatar + name — clicking opens the profile dropdown (same as desktop sidebar) */}
           <div
@@ -819,7 +818,7 @@ export default function Dashboard() {
                       active ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-100'
                     }`}
                   >
-                    <ExamLogo examKey={wikiExamIdToProgressKey(s.examId)} size="lg" />
+                    <ExamLogo examKey={wikiExamIdToProgressKey(s.examId)} size="md" />
                     {planDone && (
                       <CompletionCornerBadge label={`${s.examLabel}: today's study plan complete`} />
                     )}
@@ -827,12 +826,6 @@ export default function Dashboard() {
                 )
               })}
             </div>
-
-            {/* The study streak — renders nothing without a live streak. Gives
-                its place to the compact actions once they pin. */}
-            {STREAK_ENABLED && user && !actionsPinned && (
-              <div className="shrink-0"><StreakNavBadge /></div>
-            )}
 
             {/* Compact copies of the primary actions — only once the full-size
                 pair below has scrolled behind this row. Icon-only on phones,

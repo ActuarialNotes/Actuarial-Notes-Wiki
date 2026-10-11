@@ -11,6 +11,8 @@ import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { ExamLogo } from '@/components/ExamLogo'
 import { ProBadge } from '@/components/ProBadge'
+import { StreakNavBadge } from '@/components/StreakBadge'
+import { STREAK_ENABLED } from '@/lib/featureFlags'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
@@ -258,7 +260,7 @@ function MiniReadinessRing({ segments, pct, flash }: { segments: RingSegment[]; 
   return (
     <svg
       viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`}
-      className="h-full max-h-full w-full"
+      className="absolute inset-2 m-auto h-[calc(100%-1rem)] w-auto max-w-[calc(100%-1rem)]"
       aria-hidden="true"
       style={{
         filter: flash ? 'drop-shadow(0 0 8px rgba(34,197,94,0.55))' : 'none',
@@ -952,11 +954,15 @@ export function ReadinessCard({
               />
             </svg>
           )}
-          <CardContent className="p-6 space-y-4">
-            <div className="space-y-4">
+          <CardContent className="p-6">
+            <div className="space-y-5">
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-semibold">Today's Study Plan</h3>
                 <ProBadge />
+                {/* The study streak — renders nothing without a live streak. */}
+                {STREAK_ENABLED && (
+                  <span className="ml-auto shrink-0"><StreakNavBadge size="md" /></span>
+                )}
               </div>
 
               {/* Progress pills — shown when there's activity today */}
@@ -982,7 +988,7 @@ export function ReadinessCard({
               )}
 
               {/* Grouped concept list — topic heading with its concepts listed directly below */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {groupedPlanConcepts.map((group, groupIdx) => {
                   const isHighlighted = highlightedTopicIdx === groupIdx
                   return (
@@ -1380,16 +1386,16 @@ export function ReadinessCard({
 
   // The squares are buttons on a card surface — the same face `Card` paints.
   const squareClass =
-    'flex aspect-square min-w-0 flex-col items-center justify-center gap-1 rounded-xl bg-card p-2 text-center text-card-foreground shadow-sm transition-colors hover:bg-accent/60'
+    'relative flex aspect-square min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl bg-card p-2 text-center text-card-foreground shadow-sm transition-colors hover:bg-accent/60'
   const examDay = examDate ? new Date(examDate + 'T00:00:00') : null
 
   const readinessCardContent = (
-    <div className="order-none flex flex-col gap-4">
+    <div className="order-none flex flex-col gap-6">
       {/* Three squares in one line, the three numbers the dashboard is about:
           the day of the exam, how far off it is, and how ready the reader is
           for it. The first two open the Study Plan modal on its exam-date
           step; the third opens the Study Guide ring (`ringOpen`). */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-4">
         <button
           type="button"
           onClick={openExamDateStep}
@@ -1431,7 +1437,7 @@ export function ReadinessCard({
           ref={readinessSquareRef}
           type="button"
           onClick={() => setRingOpen(true)}
-          className={squareClass + ' relative'}
+          className={squareClass}
           aria-haspopup="dialog"
           aria-label={`Exam readiness: ${readinessPct}% — open the study guide`}
         >

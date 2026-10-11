@@ -90,7 +90,7 @@ function LevelRing({ size, level, ratio, met }: { size: number; level: number; r
   const offset = c * (1 - Math.min(1, Math.max(0, ratio)))
   const cx = size / 2
   const cy = size / 2
-  const color = met ? '#22c55e' : '#8b5cf6'
+  const color = met ? '#22c55e' : 'hsl(var(--foreground))'
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block shrink-0">
       <circle cx={cx} cy={cy} r={r} fill="hsl(var(--muted))" />
@@ -185,7 +185,7 @@ function LevelPopup({
       >
         {/* Header — level number with the level-progress bar beside it. */}
         <div className="mb-4 flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/15 text-sm font-extrabold tabular-nums text-violet-600 dark:text-violet-400">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-sm font-extrabold tabular-nums text-foreground">
             {xp.level}
           </span>
           <div className="min-w-0 flex-1">
@@ -195,7 +195,7 @@ function LevelPopup({
             </div>
             <div className="mt-1.5 flex items-center gap-2">
               <div className="flex-1">
-                <ProgressBar ratio={levelRatio} color="#8b5cf6" />
+                <ProgressBar ratio={levelRatio} color="hsl(var(--foreground))" />
               </div>
               <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">
                 {xp.xpIntoLevel}/{xp.xpForLevel}

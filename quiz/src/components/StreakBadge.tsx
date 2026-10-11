@@ -18,21 +18,24 @@ function flameClass(status: StreakStatus, count: number): string {
  * nav row (its `badge` slot). Renders nothing when there's no active streak, so
  * the row stays clean until the user has one.
  */
-export function StreakNavBadge() {
+export function StreakNavBadge({ size = 'sm' }: { size?: 'sm' | 'md' }) {
   const { currentStreak, status, loading } = useStreak()
   if (loading || currentStreak <= 0) return null
 
   const color = flameClass(status, currentStreak)
   return (
     <span
-      className="inline-flex items-center gap-1 text-[11px] font-semibold text-foreground tabular-nums"
+      className={cn(
+        'inline-flex items-center gap-1 font-semibold text-foreground tabular-nums',
+        size === 'md' ? 'text-sm' : 'text-[11px]',
+      )}
       title={
         status === 'at_risk'
           ? 'Study today to keep your streak alive'
           : `${currentStreak}-day study streak`
       }
     >
-      <Flame className={`h-3.5 w-3.5 ${color} ${status === 'active' ? 'streak-flame-pulse' : ''}`} />
+      <Flame className={`${size === 'md' ? 'h-4 w-4' : 'h-3.5 w-3.5'} ${color} ${status === 'active' ? 'streak-flame-pulse' : ''}`} />
       {currentStreak} day{currentStreak === 1 ? '' : 's'}
     </span>
   )

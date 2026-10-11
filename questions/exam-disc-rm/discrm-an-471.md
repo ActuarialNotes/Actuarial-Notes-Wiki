@@ -11,12 +11,13 @@ wiki_link:
   - Concepts/Workers+Compensation+Underwriting
 answer: "C"
 points: 1
+off_syllabus: true
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:05f74f143306bff4aa0f35636fe4747b49e836975a88308b42fde0e32b7a70ef
+  content_hash: sha256:8fa1e143971ae3e201570efa7879b4e9cd7eb63a5c39b0cf2f81ef2d34a55144
   sources: []
   open_findings: 0
   open_critical: 0

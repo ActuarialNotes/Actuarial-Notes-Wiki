@@ -12,12 +12,13 @@ wiki_link:
   - Concepts/Risk+Treatment
 answer: "C"
 points: 1
+off_syllabus: true
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:522f88a6640ac548a93c0c0f4e357d12782e46d5247f50fe8738915a6cd6e342
+  content_hash: sha256:890b651b7253621417a7cbe42fd74ec152c8b21b5643fe638864038c83130e81
   sources:
     - "Biniam G., Bonga University, Risk Management and Insurance Chapter Two (lecture notes, 2020), pp.2-3, 10, sha256:37410f48587eebe39188d15f5aa51af832d85f8179229edc0b3d9dd322165f01 — http://ndl.ethernet.edu.et/bitstream/123456789/79433/7/RISK-%20Ch@2.pdf"
   open_findings: 0

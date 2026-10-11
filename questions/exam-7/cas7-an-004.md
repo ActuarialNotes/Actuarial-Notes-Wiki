@@ -61,7 +61,7 @@ The answer is **C**.
 
 **Why not the others**
 
-- **A** — the normal approximation gives 4,000 − 1.28 × 2,600 = 672. Mack's point is that the symmetric normal is a poor fit when the standard error exceeds half the reserve: its interval of $R \pm 2\,\text{s.e.}(R)$ then has a negative lower limit, although a negative reserve is not possible.
+- **A** — the normal approximation gives 4,000 - 1.28 × 2,600 = 672. Mack's point is that the symmetric normal is a poor fit when the standard error exceeds half the reserve: its interval of $R \pm 2\,\text{s.e.}(R)$ then has a negative lower limit, although a negative reserve is not possible.
 - **B** — taking $\sigma$ equal to the coefficient of variation (0.65) and $\sigma^2 = 0.65^2$ gives 1,409. The variance of the log is $\ln(1 + \text{CV}^2)$, not $\text{CV}^2$.
 - **D** — setting $\mu = \ln R$ gives 1,871. That makes $R$ the *median* of the lognormal; the moment match puts the mean at $R$, which needs $\mu = \ln R - \sigma^2/2$.
 - **E** — adding $\sigma^2/2$ to $\ln R$ instead of subtracting it gives 2,231.

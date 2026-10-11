@@ -50,20 +50,24 @@ $$
 \end{align*}
 $$
 
-**Modeled range.** Every model is given weight in some year, so all four are used. Each model's total mean unpaid is
+**Modeled range.** Every model is given weight in some year, so all four are used (Shapland counts a model as used if it is given at least some weight for any accident year). Each model's total mean unpaid is
 
 $$
 \begin{align*}
-\text{Paid CL} &= 40 + 150 + 620 = 810 \\
-\text{Incurred CL} &= 44 + 160 + 680 = 884 \\
-\text{Paid BF} &= 46 + 130 + 500 = 676 \\
-\text{Incurred BF} &= 41 + 140 + 540 = 721
+\text{Paid CL} &= 40 + 150 + 620 \\
+&= 810 \\
+\text{Incurred CL} &= 44 + 160 + 680 \\
+&= 884 \\
+\text{Paid BF} &= 46 + 130 + 500 \\
+&= 676 \\
+\text{Incurred BF} &= 41 + 140 + 540 \\
+&= 721
 \end{align*}
 $$
 
 so the modeled range is **676 to 884**, the parallel of a deterministic range across methods. Shapland's Figure 6.3 builds its total the same way: the modeled range of 4,099 to 5,650 runs from the lowest model total (paid BF) to the highest (incurred GLM), while the weighted range's totals add up the accident-year minimums and maximums.
 
-The weighted best estimate is $0.5(40) + 0.5(44) + 0.25(150 + 160 + 130 + 140) + 0.5(500) + 0.5(540) = 707$, inside both ranges. The weighted range is narrower because it ignores, year by year, models the actuary gave no weight to, which makes it the more representative view of the uncertainty in the actuarial central estimate. The answer is **A**.
+The weighted best estimate is 42 + 145 + 520 = 707 (each year's weighted mean), inside both ranges. The weighted range is narrower because it ignores, year by year, models the actuary gave no weight to, which makes it the more representative view of the uncertainty in the actuarial central estimate. The answer is **A**.
 
 **Why not the others**
 

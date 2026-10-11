@@ -24,11 +24,11 @@ An insurer estimates the premium asset on its retrospectively rated workers comp
 
 Calculate the premium asset for these quarters, in \$ millions.
 
-- A) 19.4
-- B) 22.4
-- C) 25.4
-- D) 27.0
-- E) 31.0
+- A) Less than 21.0
+- B) At least 21.0, but less than 24.0
+- C) At least 24.0, but less than 26.0
+- D) At least 26.0, but less than 29.0
+- E) At least 29.0
 
 ## Explanation
 
@@ -57,7 +57,7 @@ The answer is **C**.
 
 **Why not the others**
 
-- **A** (19.4) subtracts the interim return premium from the future premium instead of measuring the asset against what is booked today: 22.4 − (150 − 147) = 19.4.
+- **A** (19.4) subtracts the interim return premium from the future premium instead of measuring the asset against what is booked today: 22.4 - (150 - 147) = 19.4.
 - **B** (22.4) builds ultimate premium on the premium booked today (147) instead of the premium booked from the first retro adjustment, so the 3 of interim return premium is never recovered in the asset.
 - **D** (27.0) uses the simple average of the three PDLD ratios (0.60), ignoring that most of the remaining loss emerges in the second period and that the loss after the fourth adjustment earns no premium.
 - **E** (31.0) leaves the 5% emerging after the last adjustment out of the denominator ($\text{CPDLD} = 0.70$). The \$40 million still to emerge includes that loss, and it generates no premium.

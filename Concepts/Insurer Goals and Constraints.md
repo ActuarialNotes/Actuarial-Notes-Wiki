@@ -2,19 +2,24 @@
 verification:
   status: in_review
   confidence: null
-  last_checked: 2026-10-10
+  last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0dee0cc48b799a792411670a63302fd4212273c12a38c195a8a807d7d9dc2bc2
+  content_hash: sha256:1a3f654ba36c4c9f534f5e3a219fde4ffc4d7c02e434f499185c0aad17ed9744
   sources:
-    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.8 (PDF p.157), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
-    - "Rejda & McNamara, Principles of Risk Management and Insurance, 12th ed. (Pearson 2014), Ch.7 p.129, sha256:d287eea5870c8b2d7dcfd205f5c26283d5c3cb4f536965eb8c21a344c428aed0"
-    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), table of contents, chapters 4-12, sha256:b9329afa59c3f4ccbe1d34f742ce4d05b9557a8e95bcbf473b10fcd23a7a6d48 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/index.html"
-  open_findings: 0
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §6.4 Types of Insurance and Insurers (Stock Insurers; Mutual Insurers), sha256:627a6ed1d0a36f68e681bdcc3a027f60fd8537b741d67e2cbdea3d41eb76005d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s10-04-types-of-insurance-and-insurer.html"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.2 Insurance Operations: Actuarial and Investment (investment paragraph: two businesses; assets cover reserves and leave adequate capital and surplus), sha256:0064ff8c9ff68c89296f1a67346ed0a2468f58d808fd560b9d5ad468da9db501 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-02-insurance-operations-actuarial.html"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.3 Reinsurance, Legal and Regulatory Issues, Claims, and Management (Benefits of Reinsurance: capacity, rapidly expanding company, reinsurer's knowledge of rates and underwriting), sha256:85078f2f0eb5eeae7a77d336f6f5ff14be25519272bfc27d528e037c21424877 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-03-insurance-operations-reinsuran.html"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §8.1 Insurance Market Conditions (soft/hard markets, capacity, cash flow underwriting, break-even combined ratios by line, box on the 2008-2009 recession), sha256:7e7830b39c5a0cd17f75dbfeb2f0d2abe4e422df2b92c3f0218097ca48411d3d — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-01-insurance-market-conditions.html"
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §8.2 Insurance Regulation (objective of solvency; Table 8.4; commissioner's powers incl. grant all, part or none of a rate request; licensing capital and surplus; solvency regulations, investments, RBC, reserves; prior approval and file-and-use; trade practices), sha256:d6b9f53c3fd3c106c652f9ef8b46b21ee9199f1fda6e8951f64e4cf4b09bb021 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s12-02-insurance-regulation.html"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.1 pp.5, 11 (PDF pp.17, 23); Ch.8 p.145 (PDF p.157); Ch.13 pp.239-246 (PDF pp.251-258), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "IRMI Glossary, 'capacity', sha256:3415704b5ee0c824b7783afa78c17c89f84b733510356e74abb572b9a7cd9e6b — https://www.irmi.com/term/insurance-definitions/capacity"
+    - "IRMI Glossary, 'Kenney ratio', sha256:29601c36922c9186f07f0fc8e5af26ab649858629e0be5e67c2485d666080cc0 — https://www.irmi.com/term/insurance-definitions/kenney-ratio"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurer Goals and Constraints.md
 ---
 
-**Insurer Goals and Constraints** are what an [[Insurer|insurer]] is trying to achieve and what limits how far it can get there. A stock insurer is formed to make a profit for its owners, and a mutual's stated purpose is to provide low-cost insurance to the policyholders who own it. Either kind must stay [[Solvency|solvent]], able to pay claims when they come due after it has collected the premium, and that is also the main objective of insurance regulation. Its profit comes from underwriting and from investing the funds it holds. What limits it is the capital and surplus that back the business it writes, the rules on its rates, forms, licences and investments, the competitors its customers can buy from, the [[Underwriting Cycle|underwriting cycle]] and the economy, and its own systems and staff. Most decisions in [[Insurance Operations|insurance operations]], from a rate change to entering a new line, are made inside these limits.
+**Insurer Goals and Constraints** are what an [[Insurer|insurer]] is trying to achieve and what limits how far it can get there. A stock insurer is formed to make a profit for its owners, and a mutual's stated purpose is to provide low-cost insurance to the policyholders who own it. Either kind must stay solvent, able to pay claims when they come due after it has collected the premium, and that is also the main objective of insurance regulation. Its profit comes from underwriting and from investing the funds it holds. What limits it is the capital and surplus that back the business it writes, the rules on its rates, forms, licences and investments, the competitors its customers can buy from, the [[Underwriting Cycle|underwriting cycle]] and the economy, and its own systems and staff. Most decisions in [[Insurance Operations|insurance operations]], from a rate change to entering a new line, are made inside these limits.
 
 > $$\text{Profit} = \text{UW profit} + \text{Investment income}$$
 

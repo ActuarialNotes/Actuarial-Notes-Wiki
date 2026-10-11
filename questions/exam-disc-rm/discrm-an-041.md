@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:12b839d3a36c513616f45865ec32cd134dec1d603b3e0d84a4d1edfb12bc3cec
-  sources: []
+  content_hash: sha256:a8d2085284f5c7be7e7f195d0303ae2de1b144a12dbdda530154f7b390fe6ab0
+  sources:
+    - "IRMI Glossary, 'Kenney ratio', sha256:29601c36922c9186f07f0fc8e5af26ab649858629e0be5e67c2485d666080cc0 — https://www.irmi.com/term/insurance-definitions/kenney-ratio"
+    - "IRMI Glossary, 'capacity', sha256:3415704b5ee0c824b7783afa78c17c89f84b733510356e74abb572b9a7cd9e6b — https://www.irmi.com/term/insurance-definitions/capacity"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-041.md

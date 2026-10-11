@@ -12,12 +12,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b4f6d989e7c671f4bb9467b82cda2d86da2617df94e3a41c10c62c2ab8e41897
-  sources: []
+  content_hash: sha256:c7f314322d945e081244d6e282667f246e3d60fce26f3f2bd69e789260af6806
+  sources:
+    - "NAIC Producer Licensing Model Act (MO-218, January 2005), §3, §5A, §12A(5),(7), §13A-D, §18A-D, sha256:5b1eafdc7b1a841a97440f0e1e7c98e30c935855de4add58838c0f76aee37a34 — https://content.naic.org/sites/default/files/model-law-218.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-disc-rm/discrm-an-047.md

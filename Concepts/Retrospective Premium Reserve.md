@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:375f7617ddf887b55781596255a472b9063b63cfa75698c152fefd1f7a5593f7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9f0c2ca285e9297a6385ca0b54e3e53a74dca0433d11c2c60b2ec5b237bb6cb2
+  sources:
+    - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.1-13 (definition, EBNR, retro reserve, formulas 2.1-2.4, empirical lags, CPDLD), 17 (incremental capping ratio, eq. 5.2), 18 (collectibility), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
+    - "Feldblum, Discussion of Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXV, 1998, pp.274-315), PDF pp.1-2, 21-24, sha256:1c572191d2239553f306dc29ba1186f3c3477e06b1652562ab55acd4c8bc04ed — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins_Discussion_of_Paper.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Retrospective Premium Reserve.md
@@ -33,7 +35,7 @@ verification:
 - **Tie it to the loss reserve.** Future loss emergence should come from the same analysis that sets IBNR, so a reserve increase raises the premium asset consistently. The asset is collected from insureds after the fact, so collectability and collateral matter. See [[Premium Reserve]] for the other premium-sensitive reserves.
 
 > [!example]- PDLD and CPDLD Ratios from Plan Parameters {Example}
-> A book of retro plans has BPF $0.25$, TM $1.04$, LCF $1.10$ and ELR $0.65$. Losses emerge $80\%$ by the first adjustment, $12\%$ by the second and $8\%$ by the third (the last). The loss capping ratios are $0.90$, $0.60$ and $0.40$.
+> A book of retro plans has BPF $0.25$, TM $1.04$, LCF $1.10$ and ELR $0.65$. Losses emerge $80\%$ by the first adjustment, a further $12\%$ by the second and a further $8\%$ by the third (the last). The incremental loss capping ratios are $0.90$, $0.60$ and $0.40$.
 >
 > Compute the PDLD and CPDLD ratios.
 >

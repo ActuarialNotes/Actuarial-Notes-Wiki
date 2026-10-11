@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:310dc4e494ecda3ebd9287dd1841b0397fd920a8873f8ae504a936db12f7a32b
-  sources: []
+  sources:
+    - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.8 (PDLD after last adjustment zero), 11-13 (CPDLD weighting, ultimate = booked from prior adjustment + CPDLD x future loss; asset = ultimate - booked at valuation; interim booking), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-001.md

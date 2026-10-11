@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3bb67458d95b58cd042d3f8f46f076fd66636425df8b7dbff82d58f6695d1b5a
-  sources: []
-  open_findings: 0
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.9-10 (gross/ceded/net, default risk), 17-19 (quota share, surplus share), 21 (excess per risk), 24 (aggregate stop-loss protects net results), 26-29 (LOD vs risks-attaching, commutation), 39 (documenting historical terms), 50-51 (two approaches; ceded credibility), 55 (higher factors, tails and trend for reinsurance), 73-76 (quota share by year and by policy year on RA; Tables 3.13-3.15; stop-loss applies last), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.4-5 (task A.v.16), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Ceded Loss Reserve.md
 ---

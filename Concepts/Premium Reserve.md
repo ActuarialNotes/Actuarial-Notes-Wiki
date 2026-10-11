@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:da2100014da4ea8fbbea884decd51b9274c81bd6234ffd085cbb10d9086501ef
-  sources: []
-  open_findings: 0
+  sources:
+    - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.1-4, 13, 18, sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF p.22, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Premium Reserve.md
 ---

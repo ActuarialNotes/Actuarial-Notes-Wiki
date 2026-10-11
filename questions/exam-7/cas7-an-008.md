@@ -11,15 +11,17 @@ wiki_link:
   - Concepts/Treaty+Reinsurance
   - Concepts/Surplus+Share
   - Concepts/Aggregate+Excess+of+Loss
+  - Concepts/Ceded+Loss+Reserve
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:145c85af3ec68d3760264da5c81f236a107a0a5aa5dcfc89d70a708ba93cdbb9
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:902dd4551e50a0218c463d62ed4fb6b0bb552a015c839a5d6e81285dc5a670d0
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.14-15 (treaty: absence of individual underwriting; facultative underwriting mitigates adverse selection), 19 (proportion ceded = (limit - line)/limit, Table 1.3), 24 (aggregate excess applies to net retention, other reinsurance inures), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-008.md

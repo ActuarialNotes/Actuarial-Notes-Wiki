@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e25bf64f6907b71640daa01a82ae8442746e6092f5d64ce9fd48cc38c3bd1ebe
-  sources: []
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:102ae571d1abe4760e5abee7cfe692321bcfa185e494a1139ffbe1f263fdac5a
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 35-38, 39-41, 43-46, 50-56, 64-66, 70, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Reserving.md
@@ -18,7 +19,7 @@ verification:
 > $$\text{IBNR}_k = \text{ELR} \times \text{EP}_k \times (1 - \text{lag}_k)$$
 
 - This is the [[Cape Cod Method|Cape Cod]] (Stanard-Bühlmann) method with a reinsurance report lag. $C_k$ is reported loss for treaty year $k$, $\text{EP}_k$ its on-level earned premium, and $\text{lag}_k = 1/\text{CDF}_k$ the expected share reported. It suits long-tail casualty excess business, where a thin, late diagonal makes the chain ladder unreliable and pricing ELRs are hard to put on level.
-- **Why primary methods need adjusting** (Friedland, drawing on Patrik):
+- **Why primary methods need adjusting** (Friedland):
   - Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold.
   - As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers.
   - Rate-change data for on-leveling is weaker because contract terms change from year to year.

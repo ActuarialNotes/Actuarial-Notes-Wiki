@@ -13,12 +13,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e2fb351946f2e925690c8ee7e997b364af51430b9f41607a4c2fe3b4b2bf1aae
-  sources: []
+  sources:
+    - "Teng and Perkins, Estimating the Premium Asset on Retrospectively Rated Policies (PCAS LXXXIII, 1996, pp.611-647), PDF pp.7 (formula responds to parameters sold), 9-10 (1.460 average, upward trend, 'probably not' liberal parameters since formula 1.426 reflects plans sold; 'more likely ... improvement in loss experience ... within the boundaries of the retro maximum and the per accident limitation'), 10 (negative incremental ratios), 10-11 (worse experience lowers ratios), sha256:30efb7917ebbc6361393f76652a21d97e1915032f94667699904248d1bd900f1 — https://www.casact.org/sites/default/files/2021-03/7_Teng_and_Perkins.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-002.md

@@ -14,12 +14,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:600563acf3003f160ad1732955caea7170eed65720b2ae7908bdf05cb6bfd4c8
-  sources: []
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.73 (ceded = gross x % ceded; % may be quoted ceded or retained), 74-75 (Table 3.14: retained after QS and stop-loss = min(retained after QS, limit); paid and reported similarly), 76 (Table 3.15: XS removed first, then QS, then stop-loss; 'Stop-loss limits typically apply after all other reinsurance'), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-006.md

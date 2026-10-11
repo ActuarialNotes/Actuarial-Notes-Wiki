@@ -14,12 +14,13 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bcc496cd136206c92ab460da7120c7784b7f32b0c1a059f8fc91178e148e61df
-  sources: []
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.73 and fn 52 (QS factors identical; surplus share differs), 74 (risks-attaching: change applies by policy year of underlying risks, not accident year), 76 (stop-loss after all other reinsurance, protects net result), 24 (other reinsurance inures to the aggregate cover), 27-28 (LOD vs RA), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-007.md

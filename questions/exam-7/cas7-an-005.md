@@ -13,12 +13,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2c68b0540d6b1860b4ea40818bc22badfed7f44a328cece73e1bc4aeeea541a0
-  sources: []
+  sources:
+    - "Shapland, CAS Monograph 4 (2016), Section 6, p. 46 incl. footnotes 61-62 (PDF 54) and Figures 6.2-6.3, p. 47 (PDF 55), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-005.md

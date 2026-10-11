@@ -10,12 +10,15 @@ Code: "CAS Monograph No. 8"
 ISBN: "978-1-7370028-1-9"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3abd6b7e5e04c3baf7f4d5244105a42f87abd64e25789a1230a2f2dd761208ac
-  sources: []
+  sources:
+    - "Meyers, Stochastic Loss Reserving Using Bayesian MCMC Models, 2nd ed., CAS Monograph 8 (2019), title/copyright and contents (PDF 1-5), Preface, Sections 1-12, References and Appendix, pp. 1-85 (PDF 11-98), sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf"
+    - "Meyers Monograph 8 Errata (approved 8/13/2026), pp. 1-2, sha256:1d247890aeac3075180ace994cfc80d795370964859d7e85f0d1a94ef03e71b7 — https://www.casact.org/sites/default/files/2026-06/Monographs-8-Errata.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026 (v04 2026_9_16), tasks pp. 3-4; text references pp. 5-6, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers - 2019).md

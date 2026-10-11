@@ -7,12 +7,15 @@ date: "2007"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Verrall.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0f81e3c8dbb5d7837c9fcf748edd308038d8720cf308fe4a886a0fad6686ad2b
-  sources: []
+  sources:
+    - "Verrall, Obtaining Predictive Distributions for Reserves Which Incorporate Expert Opinion, Variance 1(1) 2007, pp. 53-80 (PDF 1-28): abstract, Sections 1-7, Tables 2-10, References, Appendix, sha256:da4a19ac50ec7756ad651c5632e73b71ff99f584d7db436772f94de1ec024506 — https://www.casact.org/sites/default/files/2021-03/7_Verrall.pdf"
+    - "Verrall (2007) Errata, p. 1, sha256:31a9f4561c52c555d338f120a43258d84a50779f14be747e95305b39bf6f7ea2 — https://www.casact.org/sites/default/files/2021-03/7_Verrall_Errata.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026 (v04 2026_9_16), tasks pp. 3-4; text references pp. 5-6, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Obtaining Predictive Distributions for Reserves Which Incorporate Expert Opinion (Verrall - 2007).md

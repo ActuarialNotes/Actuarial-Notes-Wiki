@@ -9,13 +9,13 @@ Code: "CAS Monograph No. 4"
 ISBN: "978-0-9968897-5-9"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4c0290439fb18e968bbd580f57f250d4836a95b7addb63204362d91b14fa0e7c
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Using the ODP Bootstrap Model (Shapland - 2016).md
 ---
@@ -167,6 +167,14 @@ A practitioner's guide to the over-dispersed Poisson (ODP) bootstrap model, whic
 
 ## Appendix E—GLM Bootstrap Results
 - Results of the GLM bootstrap model for the Taylor and Ashe (1983) data, as illustrated in Figures 5.9 through 5.12.
+
+## References
+
+## Selected Bibliography
+
+## Abbreviations and Notations
+
+## About the Author
 
 ## Errata
 - Contents page and page 23: the title of Section 4.3 should be "Using an L-Year Weighted Average", to be consistent with the notation used in the section (printed as "Using an N-Year Weighted Average").

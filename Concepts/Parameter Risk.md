@@ -1,12 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:316b2aa586c88a070f76c1619fc468b9a804c7900e51a82ebbf499857b424d40
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Parameter Risk.md
 ---
@@ -23,7 +23,7 @@ verification:
   - **MCMC:** the spread of the posterior draws.
 - **Parameter percentiles** are percentiles of the simulated or posterior parameter set, such as the 5th to 95th percentile of simulated ELRs or development factors. A reserve computed at the 95th-percentile parameter is **not** the 95th percentile of unpaid claims. Process risk sits on top, so the outcome percentile is wider (see [[Unpaid Claim Distribution]]).
 - **It grows with the number of parameters relative to the data.** A chain ladder fits a factor for every age. [[LDF Curve-Fitting and Stochastic Reserving (Clark - 2003)|Clark]] finds parameter variance far larger than process variance when his LDF method fits 12 parameters (an ultimate for each of ten years plus the two growth-curve parameters) to 55 data points. Replacing the ultimates with one Cape Cod ELR leaves 3 parameters, and the parameter standard deviation of the total reserve falls from $4{,}688{,}826$ to $3{,}143{,}967$; the total variance is cut in half. It concentrates in the most recent accident years, where a large CDF multiplies a thin diagonal. That is why a bootstrap CoV can turn up again for the latest year.
-- **It does not diversify with volume.** Process CoV shrinks roughly like $1/\sqrt{\text{volume}}$. A misestimated factor, however, is applied to every year, so a large book still carries it in full. In Marshall et al.'s framework, the random part of parameter risk is *independent risk*, while *parameter selection error* is internal systemic risk, a [[Model Risk|model risk]] (see [[Risk Margin]]).
+- **Its random part falls with volume; selection error does not.** In Marshall et al.'s framework, the random component of parameter risk is *independent risk*, which the law of large numbers makes smaller as the portfolio grows. *Parameter selection error* is internal systemic risk, also called model specification risk (a [[Model Risk|model risk]]), and is potentially common across claim groups (see [[Risk Margin]]).
 
 > [!example]- Process and Parameter Variance in a Cape Cod Fit {Example}
 > A Clark Cape Cod fit gives $\widehat{\text{ELR}} = 0.70$ with standard error $0.05$. On-level premium is $10{,}000$ (\$000s), the fitted growth curve says $40\%$ of ultimate is still unreported, and the ODP scale is $\sigma^2 = 50$. Ignore uncertainty in the curve parameters.
@@ -44,7 +44,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > The CoV is $15.2\%$ and parameter risk is $22\%$ of the variance. Suppose the book doubled with the same ELR uncertainty. Process variance would double, but parameter variance, which scales with $\hat R^2$, would quadruple. That is why parameter risk dominates for large books: their process risk has largely diversified away.
+> > The CoV is $15.2\%$ and parameter risk is $22\%$ of the variance. Suppose the book doubled with the same ELR uncertainty. Process variance would double, but parameter variance, which scales with $\hat R^2$, would quadruple.
 
 > [!example]- Parameter Percentile Versus Unpaid Percentile {Example}
 > A Bayesian model gives a posterior for the ELR that is approximately normal with mean $0.70$ and standard deviation $0.05$. Given the ELR, unpaid claims are approximately normal with mean $5{,}000 \times \text{ELR}$ and process standard deviation $300$.

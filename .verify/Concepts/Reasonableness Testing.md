@@ -143,3 +143,85 @@ created: 2026-10-16
 - checks_run: example recomputation done blind before reading the stated answers (three examples); every claim matched to the reading that should state it; full-text search of Shapland, Meyers, Friedland 2010 and 2022, Werner & Modlin, ASOP 23, Sahasrabuddhe, Siewert; Meyers and Shapland errata checked (no change on the pages used); wiki-links resolve
 - sources_checked: CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, Section 2, p.335 (credibility mixture U_c = cU_CL + (1-c)U_0), sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf; https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, Development Formula 2, p.13, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf; https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf, s.5.5.1, pp.41-43 (PDF 49-51): SE rises oldest to most recent; CoV generally decreases, may rise again in most recent years; min/max plausibility, sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf; https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf, s.3, pp.7-11 (PDF 17-21): uniformity of predicted percentiles, p-p plot, KS critical value 136/sqrt(n) at 5%, slanted S = light tails, Figure 3.2 Mack incurred, critical values 19.2 and 9.6, sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf; Estimating Unpaid Claims Using Basic Techniques, ch.3 p.37; ch.9 p.154; ch.14 pp.331-332 incl. fn 80-81; ch.15 pp.345-346, 350-351, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (5th ed. 2016), ch.3 p.37; ch.6 p.106, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; ASOP No. 23, Data Quality (2016), s.3.3 Review of Data, pp.3-4, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf; Friedland, Reserving for Reinsurance (CAS Exam 7 study note), ch.3 pp.61-62: longer reporting/payment patterns for reinsurance vs primary and non-proportional vs proportional, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf
 - note: Sweep of the claims C-001 left unchecked. Confirmed: Meyers' uniformity test, p-p plot, 136/sqrt(n) KS band at 5%, slanted S = light tails and the Mack-incurred finding (critical values 9.6 and 19.2 match Fig 3.2); Shapland's SE pattern and min/max check; Friedland's expected-emergence formula (ch.15 p.351), A/E and roll-forward monitoring, method comparison (ch.15 pp.345-346); credibility-between-CL-and-a-priori carried forward from e7rca (Mack 2000 s.2, Brosius Formula 2). One critical (BF IBNR identity), one major, five minor findings; disputed until the clean-up round restates them.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-001
+- status: resolved
+- note: Restated to Friedland ch.9 p.154: 'chain ladder IBNR is its ultimate times 1 - p_t, and BF IBNR is the expected claims times 1 - p_t.' The formula block is unchanged (Friedland ch.15 p.351).
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-002
+- status: resolved
+- note: Restated to Friedland ch.14 pp.331-332: 'Net claims and premium should not exceed gross, and net IBNR is generally no greater than gross IBNR.'
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-003
+- status: resolved
+- note: Restated to Friedland, Reserving for Reinsurance pp.61-62: 'Reinsurance should show longer reporting and payment patterns than primary insurance, and excess (non-proportional) cover longer than proportional.'
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-004
+- status: resolved
+- note: 'CoVs falling' changed to 'CoVs generally falling' (Shapland s.5.5.1 p.42).
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-005
+- status: resolved
+- note: The four sub-bullets replaced by three restated to the readings: review for appropriateness, reasonableness and comprehensiveness (W&M p.37, ASOP 23); internal consistency and comparison with the prior analysis's data where consistency can be expected (ASOP 23 s.3.3); first-age losses consistent year to year allowing for trend and portfolio changes, else examine claim counts (W&M p.106). Reconciliation and coding checks deleted from the ratemaking bullet.
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-006
+- status: resolved
+- note: 'IBNR-to-case, and paid-to-ultimate' replaced with Friedland ch.15 p.346's 'the implied average case outstanding and unreported claim on open and unreported claims'.
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- resolves: F-007
+- status: resolved
+- note: Paragraph deleted; the example now ends at the recomputed CL and BF updates.
+
+## [C-005] Comment
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- locus: Example 'A Jump in Average Premium'
+- note: Left as written. Its numbers recompute blind (845/820 = 1.030; 1,030/845 = 1.219; 1.03 x 1.02 x 1.02 = 1.072, the 'about 7%' upper bound) and its conclusion matches Friedland ch.3 p.37 ('Questionable values are not always incorrect values, but the actuary should generally investigate questionable values before using them') and ASOP 23 s.3.3's internal-consistency review. The three causes are offered as 'likely candidates', an illustration rather than a sourced claim. The page still says nothing specific to the Exam 8 objective that links it (reasonability by layer); that is a coverage gap for a writer, not an error. Brosius's own checks (C-002) were not added.
+
+## [C-006] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rtb
+- date: 2026-10-16
+- status_set: verified
+- confidence: medium
+- checks_run: all seven sweep findings restated or deleted to the readings; every remaining claim re-read against its source (Meyers s.3, Shapland s.5.5.1, Friedland 2010 chs.3/9/14/15, Friedland 2022 ch.3, Werner & Modlin chs.3/6, ASOP 23 s.3.3, Mack 2000 s.2, Brosius Formula 2); three examples recomputed blind; wiki-links unchanged
+- sources_checked: CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, Section 2, p.335 (credibility mixture U_c = cU_CL + (1-c)U_0), sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf; https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, Development Formula 2, p.13, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf; https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf, s.5.5.1, pp.41-43 (PDF 49-51): SE rises oldest to most recent; CoV generally decreases, may rise again in most recent years; min/max plausibility, sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf; https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf, s.3, pp.7-11 (PDF 17-21): uniformity of predicted percentiles, p-p plot, KS critical value 136/sqrt(n) at 5%, slanted S = light tails, Figure 3.2 Mack incurred, critical values 19.2 and 9.6, sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf; Estimating Unpaid Claims Using Basic Techniques, ch.3 p.37; ch.9 p.154; ch.14 pp.331-332 incl. fn 80-81; ch.15 pp.345-346, 350-351, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf; Werner & Modlin, Basic Ratemaking (5th ed. 2016), ch.3 p.37; ch.6 p.106, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; ASOP No. 23, Data Quality (2016), s.3.3 Review of Data, pp.3-4, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf; Friedland, Reserving for Reinsurance (CAS Exam 7 study note), ch.3 pp.61-62: longer reporting/payment patterns for reinsurance vs primary and non-proportional vs proportional, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf
+- note: Verified after the clean-up round. Medium rather than high: the first example's diagnosis is an illustration resting on ASOP 23's general consistency review, and the page has no Exam 8 content for the objective that links it.

@@ -1,10 +1,10 @@
 ---
 verification:
-  status: disputed
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-16
   last_checked_by: agent:validate-v1
-  content_hash: sha256:db7b0cb0622430c1d93d296e616f6c29eb74d9ccea759bc93dbf7f53015467b9
+  content_hash: sha256:c98e4354b8f19ac8a9935a2d11a3ac98bf903b81a4c97ad0492123e2c6bd419b
   sources:
     - "CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, Section 2, p.335 (credibility mixture U_c = cU_CL + (1-c)U_0), sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
     - "https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, Development Formula 2, p.13, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf"
@@ -14,8 +14,8 @@ verification:
     - "Werner & Modlin, Basic Ratemaking (5th ed. 2016), ch.3 p.37; ch.6 p.106, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
     - "ASOP No. 23, Data Quality (2016), s.3.3 Review of Data, pp.3-4, sha256:784c57a1379b189b234452dc7fe18d391ae86e7f5fb8815d14d35400eb3e7bdf — https://www.actuarialstandardsboard.org/wp-content/uploads/2017/01/asop023_185.pdf"
     - "Friedland, Reserving for Reinsurance (CAS Exam 7 study note), ch.3 pp.61-62: longer reporting/payment patterns for reinsurance vs primary and non-proportional vs proportional, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
-  open_findings: 7
-  open_critical: 1
+  open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Reasonableness Testing.md
 ---
 

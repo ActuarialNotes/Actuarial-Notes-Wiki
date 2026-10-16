@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6676868f3f49590082097f8b04611ed74e43dd38f4d85a91747cc2eb0f9fe3d2
+  content_hash: sha256:6f4ac38f46bf2a34bb73ce1632ae4143115297ff585db1a3452405106d889efe
   sources: []
   open_findings: 0
   open_critical: 0

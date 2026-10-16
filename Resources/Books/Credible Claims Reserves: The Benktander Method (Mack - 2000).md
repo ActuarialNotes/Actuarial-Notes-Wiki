@@ -7,12 +7,14 @@ date: "2000"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:26058507f71dcc08bf60d7d85a42bcee05aa8552175a35f9cb42a86e7390c409
-  sources: []
+  sources:
+    - "CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, pp.333-347 (PDF pp.1-15), Sections 1-7, Theorems 1-5, Table 1, Figure 1; correction note PDF p.17, sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
+    - "https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf, pp.3-5, tasks A.i-A.iv and the Brosius, Hurlimann and Mack - Benktander citations, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Credible Claims Reserves: The Benktander Method (Mack - 2000).md"

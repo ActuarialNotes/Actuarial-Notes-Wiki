@@ -7,12 +7,14 @@ date: "1993"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6ec678eac5eda628a74b181aafec612d5a7fbebf5963d33901d4394cfbd60bd2
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:42a7240edff00cf8d3348f284ded0f85ae13e1feddade811c6cd217ae8506168
+  sources:
+    - "https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, pp.1-19, all sections, Tables 1-10, Development Formulas 1-3, Appendix, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf"
+    - "https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf, pp.3-5, tasks A.i-A.iv and the Brosius, Hurlimann and Mack - Benktander citations, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Loss Development Using Credibility (Brosius - 1993).md
@@ -72,7 +74,7 @@ A study note describing a method that applies credibility directly to the loss d
 - With a series of past years assumed to share a common $Y$ and $X$, estimating the covariance, variance and means from the data turns Formula 1 into the least squares procedure: but for sampling error, least squares gives the best linear approximation to the Bayesian estimate, regardless of the distributions of $X$ and $Y$.
 - On Table 2's data, $L(x) \approx 0.969x + 2.344$ against the true $Q(x) = x + 2$, with an MSE of about 2.081 — better than the best link ratio estimate.
 - Even when the method works perfectly the fit need not show a high correlation, because $Var_X(Y \mid X)$ is not zero.
-- A simulation test of least-squares development: over 20 trials of seven years each (Table 4), least squares beats the link ratio method with $c = \bar{Y}/\bar{X}$ in the great majority of cases (average MSE 3.658 against 6.384); its poorer results show negative coefficients, and the link ratio method is biased (an average ratio of 2.122 against the unbiased 2.000).
+- A simulation test of least-squares development: over 20 trials of seven years each (Table 4), least squares beats the link ratio method with $c = \bar{Y}/\bar{X}$ in the great majority of cases (average MSE 3.658 against 6.384); some of its poorer results (trials 6 and 12) show a negative coefficient and can be weeded out, and the link ratio method is biased (an average ratio of 2.122 against the unbiased 2.000).
 - When is least-squares development appropriate? When random chance, rather than systematic shifts in the book of business, is the primary cause of fluctuations; known distortions should be corrected first — a constant-dollar basis for [[Inflation|inflation]], division by an exposure measure for a growing book, or techniques such as those of [[Berquist-Sherman Method|Berquist and Sherman]].
 
 ## A credibility form of the development formula

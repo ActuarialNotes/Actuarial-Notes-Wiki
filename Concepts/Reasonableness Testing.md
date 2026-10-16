@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:db7b0cb0622430c1d93d296e616f6c29eb74d9ccea759bc93dbf7f53015467b9
-  sources: []
+  sources:
+    - "CREDIBLE CLAIMS RESERVES: THE BENKTANDER METHOD, Section 2, p.335 (credibility mixture U_c = cU_CL + (1-c)U_0), sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
+    - "https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf, Development Formula 2, p.13; parameter checks p.4; Table 9 cross-check p.18, sha256:de06a701db8825c8a6384bf92f577a5fe6ccfab627379f21199df35396a2a690 — https://www.casact.org/sites/default/files/2021-03/7_Brosius.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reasonableness Testing.md

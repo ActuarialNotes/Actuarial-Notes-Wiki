@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6975728eddfb567fd4e6af1b400b58b85a9271c738a80843d1916e5d24e0a30a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Liabilities for General Insurance (Insurance Regulation Committee - 2023).md
 ---
 ![[IAA Risk Book - Liabilities for General Insurance (Insurance Regulation Committee - 2023) - Cover.svg]]
 

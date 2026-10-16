@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2019"
 date: "2019"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69d6f2b9826888ce884536c1f78c2738be6985f4c0b1af382171239e5b495441
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Economic Scenario Generators – three-part series (SOA:).md"
 ---
 ![[Economic Scenario Generators – three-part series (SOA:) - Cover.svg]]
 

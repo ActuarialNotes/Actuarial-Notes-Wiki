@@ -1,11 +1,21 @@
 ---
-Title: "Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions"
+Title: "Regulatory Capital Adequacy for Life Insurance Companies – A Comparison of Four Jurisdictions (2025)"
 Authors: "Ben Leiser, Janine Bender and Brian Kaul"
 Publisher: "Society of Actuaries Research Institute"
 Year: "2025"
 date: "2025"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2025/erm191.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1be08b70abb738bc319bed4e3f3e1b92654b41f850745e9a6e08717e684a27d5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Regulatory Capital Adequacy for Life Insurance Companies - A Comparison of Four Jurisdictions (SOA Research - 2025).md
 ---
 ![[Regulatory Capital Adequacy for Life Insurance Companies - A Comparison of Four Jurisdictions (SOA Research - 2025) - Cover.svg]]
 

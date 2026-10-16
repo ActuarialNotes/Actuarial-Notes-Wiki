@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3eb61386d7b2a2d9b1058c6fedf4152462de5334f5b2c52f92a8e730844ad71
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-107-25 - Lapse Supported Insurance Analysis.md
 ---
 ![[ILA101-107-25 - Lapse Supported Insurance Analysis - Cover.svg]]
 

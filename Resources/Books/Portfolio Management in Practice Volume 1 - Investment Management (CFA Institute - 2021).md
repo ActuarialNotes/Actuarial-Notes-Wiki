@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Textbook"
 ISBN: "978-1-119-74369-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:23e77e4cf6349dd72845290dfb9bdce571e3520b6021dee5d09cc39371c900ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Portfolio Management in Practice Volume 1 - Investment Management (CFA Institute - 2021).md
 ---
 ![[Portfolio Management in Practice Volume 1 - Investment Management (CFA Institute - 2021) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e18e7203a2d6fc918f961ef5fdf4de636f993a84bf5a14ba57a200d4d1325d0f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-106-25 - Accounting for Buy-ins.md
 ---
 ![[RET201-106-25 - Accounting for Buy-ins - Cover.svg]]
 

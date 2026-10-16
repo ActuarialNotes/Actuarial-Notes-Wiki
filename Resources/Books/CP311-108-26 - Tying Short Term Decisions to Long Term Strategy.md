@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CP311-108-26"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/tying-short-term-decisions-to-long-term-strategy)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a0cccd637b0e274f1e5610b0706774a99fb54cbf7b0025e357440840dfa57616
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-108-26 - Tying Short Term Decisions to Long Term Strategy.md
 ---
 ![[CP311-108-26 - Tying Short Term Decisions to Long Term Strategy - Cover.svg]]
 

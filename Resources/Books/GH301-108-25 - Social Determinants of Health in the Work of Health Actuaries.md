@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH301-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a0e93f964f291b78ffc06f50622833c86119b33a0b2f1cdfcb0787fd7ee4c629
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-108-25 - Social Determinants of Health in the Work of Health Actuaries.md
 ---
 ![[GH301-108-25 - Social Determinants of Health in the Work of Health Actuaries - Cover.svg]]
 

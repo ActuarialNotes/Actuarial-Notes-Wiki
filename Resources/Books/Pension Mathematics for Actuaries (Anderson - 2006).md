@@ -7,6 +7,16 @@ date: "2006"
 Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-56698-559-8"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fef008a03c691a5ba17c207729c7173b6f2d3b3c9a60cb624239eeb62e936e7f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Pension Mathematics for Actuaries (Anderson - 2006).md
 ---
 ![[Pension Mathematics for Actuaries (Anderson - 2006) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2011"
 Type: "Educational Note"
 Code: "Document 211039"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/211039e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dd81700f242f0befd08412cb0e3db30e756182008966485dcb367adfaf36525f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Educational Note - Financial Risks Inherent in Multi-Employer Pension Plans and Target Benefit Pension Plans (CIA - 2011).md
 ---
 ![[Educational Note - Financial Risks Inherent in Multi-Employer Pension Plans and Target Benefit Pension Plans (CIA - 2011) - Cover.svg]]
 

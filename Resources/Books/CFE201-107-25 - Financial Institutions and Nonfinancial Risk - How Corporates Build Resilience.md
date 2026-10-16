@@ -7,6 +7,16 @@ date: "2022"
 Type: "Paper"
 Code: "CFE201-107-25"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/financial-institutions-and-nonfinancial-risk-how-corporates-build-resilience)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2d5a0daf0642d30f43bbfafa30e46772e0bd245f7fef20476b686fa31174686
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-107-25 - Financial Institutions and Nonfinancial Risk - How Corporates Build Resilience.md
 ---
 ![[CFE201-107-25 - Financial Institutions and Nonfinancial Risk - How Corporates Build Resilience - Cover.svg]]
 

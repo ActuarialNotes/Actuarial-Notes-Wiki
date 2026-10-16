@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223110"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223110e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d0314b303220d7ffddcce217fc78f41e6e0cb2ba4422d75bd9c36bd6932b9749
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Expenses in Funding Valuations for Pension Plans (CIA Revised Educational Note - 2023).md
 ---
 ![[Expenses in Funding Valuations for Pension Plans (CIA Revised Educational Note - 2023) - Cover.svg]]
 

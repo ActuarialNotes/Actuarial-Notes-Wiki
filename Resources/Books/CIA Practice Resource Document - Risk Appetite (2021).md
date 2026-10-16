@@ -7,6 +7,16 @@ date: "2021"
 Type: "Report"
 Code: "221124"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/221124e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2620ae523e75cafadda98f4c7e034d7287d3a6f9c288e46c1672136c958b8f02
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Practice Resource Document - Risk Appetite (2021).md
 ---
 ![[CIA Practice Resource Document - Risk Appetite (2021) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2019"
 Type: "Paper"
 Code: "CFE101-118-25"
 Available from: "[corporatefinanceinstitute.com](https://corporatefinanceinstitute.com/resources/capital_markets/what-is-basis-risk/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:be1e3688bf8385b4a5bd67434751bea22383808d05f7b434fd8da9df49d117d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-118-25 - What is Basis Risk Definition and Types of Basis Risk.md
 ---
 ![[CFE101-118-25 - What is Basis Risk Definition and Types of Basis Risk - Cover.svg]]
 

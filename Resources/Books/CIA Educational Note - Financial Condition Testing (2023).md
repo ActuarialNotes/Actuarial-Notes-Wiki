@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "223010"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223010e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:35f44cf5f1bf6a1ed369ecb7934b2d5f059d6fc0ffb163e6102516b971e1e396
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - Financial Condition Testing (2023).md
 ---
 ![[CIA Educational Note - Financial Condition Testing (2023) - Cover.svg]]
 
@@ -75,7 +85,7 @@ A CIA educational note that provides guidance and support to actuaries of life a
 - 12. Technology and cyber risk
 
 ## Related readings
-- [[CIA Educational Note - Financial Condition Testing (2025)]] — document 225095, which replaced this note
+- [[CIA FCT 1]] — document 225095, which replaced this note
 
 ## Sources
 - [Educational Note—Financial Condition Testing, January 2023, document 223010 (CIA)](https://www.cia-ica.ca/publications/223010e/) — the document: title page, memorandum, table of contents, and the numbered sections, sub-headings and appendices (read from the 60-page PDF the page serves, an archived copy, sha256 5502a6c0c143d68852377d0e92c15559af43b28ed56481dd75c4faf5edf5d3e0)

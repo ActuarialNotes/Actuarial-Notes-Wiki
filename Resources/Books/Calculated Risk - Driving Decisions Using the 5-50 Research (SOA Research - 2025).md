@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/calculated-risk-driving.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b852faa1abbd07894bb1ac1498c76af80d4c2a56e16cce45b1f6e4439f33be5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Calculated Risk - Driving Decisions Using the 5-50 Research (SOA Research - 2025).md
 ---
 ![[Calculated Risk - Driving Decisions Using the 5-50 Research (SOA Research - 2025) - Cover.svg]]
 

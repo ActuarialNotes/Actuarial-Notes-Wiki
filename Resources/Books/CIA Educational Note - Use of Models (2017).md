@@ -7,6 +7,16 @@ date: "2017"
 Type: "Educational Note"
 Code: "217007"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6C_CIA_Models.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:75d027c7641be8e44a70f8eacba01026c3f885be91c4f1c22a9a5f2a0ea2b621
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - Use of Models (2017).md
 ---
 ![[CIA Educational Note - Use of Models (2017) - Cover.svg]]
 

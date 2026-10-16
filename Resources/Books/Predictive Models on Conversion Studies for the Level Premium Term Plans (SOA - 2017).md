@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/2017-03-predictive-models-conversion-studies.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3282032abd3bb12c8d8f6953dc356852dcc76995cfcd8d9f0f221a5d75b170b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Predictive Models on Conversion Studies for the Level Premium Term Plans (SOA - 2017).md
 ---
 ![[Predictive Models on Conversion Studies for the Level Premium Term Plans (SOA - 2017) - Cover.svg]]
 

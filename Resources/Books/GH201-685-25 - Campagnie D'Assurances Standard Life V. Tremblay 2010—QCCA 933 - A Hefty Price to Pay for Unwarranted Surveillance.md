@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-685-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:094d47ce617fabdb45331e9d4c3db1bd0302a2056ce04ab0e2650e161ed4d138
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-685-25 - Campagnie D'Assurances Standard Life V. Tremblay 2010—QCCA 933 - A Hefty Price to Pay for Unwarranted Surveillance.md"
 ---
 ![[GH201-685-25 - Campagnie D'Assurances Standard Life V. Tremblay 2010—QCCA 933 - A Hefty Price to Pay for Unwarranted Surveillance - Cover.svg]]
 

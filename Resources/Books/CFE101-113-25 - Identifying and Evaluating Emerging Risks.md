@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Report"
 Code: "CFE101-113-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bd87325fa0791a3714c1731498028aeeba4149abfe49f49396380a4128b0ed3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-113-25 - Identifying and Evaluating Emerging Risks.md
 ---
 ![[CFE101-113-25 - Identifying and Evaluating Emerging Risks - Cover.svg]]
 

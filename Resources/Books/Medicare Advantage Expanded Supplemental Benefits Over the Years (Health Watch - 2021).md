@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/sections/health/health-newsletter/2021/march-special/hw-2021-03-sp-lee/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46b5076d697aa0aea3cc54ad036d817bcfe3f6352da9de2e9946a2d8e62fe741
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Medicare Advantage Expanded Supplemental Benefits Over the Years (Health Watch - 2021).md
 ---
 ![[Medicare Advantage Expanded Supplemental Benefits Over the Years (Health Watch - 2021) - Cover.svg]]
 

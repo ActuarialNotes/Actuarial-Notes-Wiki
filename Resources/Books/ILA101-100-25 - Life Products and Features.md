@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d27d309002956f279d3b9933f981518b87e07a88c0a619146f12f566e7b36013
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-100-25 - Life Products and Features.md
 ---
 ![[ILA101-100-25 - Life Products and Features - Cover.svg]]
 

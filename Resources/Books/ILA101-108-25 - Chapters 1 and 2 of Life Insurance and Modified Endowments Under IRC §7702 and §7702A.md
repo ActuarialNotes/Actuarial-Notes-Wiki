@@ -8,6 +8,16 @@ Edition: "2nd"
 Type: "Textbook"
 Code: "ILA101-108-25"
 ISBN: "9780991336319"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46d067d107eda734678c59bfb5777721e5365d9ba5615f66f02b14e13965a425
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/ILA101-108-25 - Chapters 1 and 2 of Life Insurance and Modified Endowments Under IRC §7702 and §7702A.md"
 ---
 ![[ILA101-108-25 - Chapters 1 and 2 of Life Insurance and Modified Endowments Under IRC §7702 and §7702A - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2024"
 Type: "Report"
 Code: "CP321-116-25"
 Available from: "[kff.org](https://www.kff.org/medicare/retiree-health-benefits-going-going-nearly-gone/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37ce506ed4198c50099889b2d3421d81f0e821eb48eaf5ef650c9451a3994150
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-116-25 - Retiree Health Benefits - Going.md
 ---
 ![[CP321-116-25 - Retiree Health Benefits - Going - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "CP311-107-26"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/a-new-operating-model-for-a-new-world)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cfd97ceadb365765f3950d305602ca369e9f55bbaec510988a1cbf3beb473de9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-107-26 - A New Operating Model for a New World.md
 ---
 ![[CP311-107-26 - A New Operating Model for a New World - Cover.svg]]
 

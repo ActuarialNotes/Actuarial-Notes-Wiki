@@ -6,6 +6,16 @@ Year: "2002"
 date: "2002"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/pension-forum/2002/september/pfn0209.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7ab51f909b2a515358f53c793f6ba7656f63688fa25fbabe89335f4321c9dea4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Asset Valuation Methods under ERISA (Pension Forum - 2002).md
 ---
 ![[Asset Valuation Methods under ERISA (Pension Forum - 2002) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222073"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222073e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:560d3aa7aebe431a1496d1810ae027598ecf24ccc9e011660b6b541e5ca84629
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - IFRS 17 Market Consistent Valuation of Financial Guarantees for Life and Health Insurance Contracts (2022).md
 ---
 ![[CIA Educational Note - IFRS 17 Market Consistent Valuation of Financial Guarantees for Life and Health Insurance Contracts (2022) - Cover.svg]]
 

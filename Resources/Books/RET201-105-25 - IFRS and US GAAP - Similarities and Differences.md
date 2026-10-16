@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3dc2114d0d2a535689e18ab1960bb19297a3b32eebc7f2adbcd56ea4859bd0a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-105-25 - IFRS and US GAAP - Similarities and Differences.md
 ---
 ![[RET201-105-25 - IFRS and US GAAP - Similarities and Differences - Cover.svg]]
 

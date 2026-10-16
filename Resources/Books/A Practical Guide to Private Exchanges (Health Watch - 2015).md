@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/hsn-2015-iss-78-shelton-petta.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b83d90e138be4dadce5b3fb16f29b3a0340a4774cad8fdef15e88c7b4a99869e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A Practical Guide to Private Exchanges (Health Watch - 2015).md
 ---
 ![[A Practical Guide to Private Exchanges (Health Watch - 2015) - Cover.svg]]
 

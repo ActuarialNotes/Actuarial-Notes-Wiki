@@ -7,6 +7,16 @@ date: "2026"
 Type: "Standard of Practice"
 Code: "Part 1000"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/226011e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:586c4880b0f1dee73c1e3deac67e871a7f8562b514b49fd51a280bf4d4991d95
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Part 1000 of the CIA Standards of Practice - General (CIA - 2026).md
 ---
 ![[Part 1000 of the CIA Standards of Practice - General (CIA - 2026) - Cover.svg]]
 

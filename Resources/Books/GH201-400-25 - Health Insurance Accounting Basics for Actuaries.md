@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-400-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:25fb7eff770d7db0758912de1d8c19ba171d95b8213c57bab048a3ba774596bf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-400-25 - Health Insurance Accounting Basics for Actuaries.md
 ---
 ![[GH201-400-25 - Health Insurance Accounting Basics for Actuaries - Cover.svg]]
 

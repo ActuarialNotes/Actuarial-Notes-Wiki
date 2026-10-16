@@ -7,6 +7,16 @@ date: "2021"
 Edition: "11th"
 Type: "Textbook"
 ISBN: "978-0-13-693997-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:09c1a1d003f932443360fce2108155c9a9febd614e76bce7d89f5e3ca25dfab0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Options (Futures - 2021).md
 ---
 ![[Options (Futures - 2021) - Cover.svg]]
 

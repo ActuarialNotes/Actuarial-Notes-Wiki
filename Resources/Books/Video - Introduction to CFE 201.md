@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2027"
 date: "2027"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:121989c62e5b5b9a5670bc8713e7d1712929a75f0afb483f66e8a126d8760bf8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Introduction to CFE 201.md
 ---
 ![[Video - Introduction to CFE 201 - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2025"
 Edition: "4th"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2020/post-retirement-strategies-secure-chart.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:50639edb643565681f548987b26cacc20bb964c3cbf50ad37853c4a42633e25d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Managing Post-Retirement Risks - Strategies for a Secure Retirement (SOA - 2025).md
 ---
 ![[Managing Post-Retirement Risks - Strategies for a Secure Retirement (SOA - 2025) - Cover.svg]]
 

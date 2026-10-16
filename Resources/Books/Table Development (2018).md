@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Research/table-development.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:22670b65115b1a1d64e20cf5f17c9e016cb6e0350e31d703e475baf62877c8cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Table Development (2018).md
 ---
 ![[Table Development (2018) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Paper"
 Code: "GH201-715-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:76e0ab72eca39957ecfcf4bcb64cd0254df7689e560dc9fafd872972fa5f0912
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-715-25 - Ontario's New Drug Plan Will Require a Swap of Brand-Name Biologic Medications for Cheaper Versions.md"
 ---
 ![[GH201-715-25 - Ontario's New Drug Plan Will Require a Swap of Brand-Name Biologic Medications for Cheaper Versions - Cover.svg]]
 

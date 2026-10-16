@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eea64f0ae74499c552f544676e5e3aad2462ef45b8daa46ea9ceb7c95d8f331f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - The Variety of Short-Term Health and Group Benefits.md
 ---
 ![[Video - The Variety of Short-Term Health and Group Benefits - Cover.svg]]
 

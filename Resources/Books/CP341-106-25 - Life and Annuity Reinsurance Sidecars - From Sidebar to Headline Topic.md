@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CP341-106-25"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/life-annuity-sidecars-sidebar-to-headline)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2187df4967076b8cc8aad4e53514f23aaa82e750ff487c87c6be87465d7884c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-106-25 - Life and Annuity Reinsurance Sidecars - From Sidebar to Headline Topic.md
 ---
 ![[CP341-106-25 - Life and Annuity Reinsurance Sidecars - From Sidebar to Headline Topic - Cover.svg]]
 

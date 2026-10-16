@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "GH301-112-26"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/py2025-aco-reach-rta-tailwind)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d89c01eea87beb52813f1f772625bdbdced5807b24529e513037d25fdf9100a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-112-26 - PY2025 ACO REACH RTA Tailwind.md
 ---
 ![[GH301-112-26 - PY2025 ACO REACH RTA Tailwind - Cover.svg]]
 

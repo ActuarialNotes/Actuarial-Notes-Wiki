@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CP341-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:991d50590f565e5d01042c359194babe73ff4ac24b5b492d8a98a0b99015d585
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-103-25 - The Rising Tide of Offshore Life Reinsurance Raises Yellow Caution Flag.md
 ---
 ![[CP341-103-25 - The Rising Tide of Offshore Life Reinsurance Raises Yellow Caution Flag - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2016"
 Type: "Guideline"
 Code: "Guideline G4"
 Available from: "[clhia.ca](https://www.clhia.ca/Industry/clhia-guidelines/g04-coordination-of-benefits-group-health-and-dental)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0b16a4eb900a1b8669444795b3189030493905a5bba0fe6008f4a132775d49ec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-671-26 - CLHIA Guideline G4 - Coordination of Benefits-Group Health and Dental.md
 ---
 ![[GH201-671-26 - CLHIA Guideline G4 - Coordination of Benefits-Group Health and Dental - Cover.svg]]
 

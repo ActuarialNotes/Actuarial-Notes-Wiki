@@ -7,6 +7,16 @@ date: "2026"
 Type: "Educational Note"
 Code: "Document 226049"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/226049e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f7df6534bf55d91bf0e01e5365c0bef58e987538fda4c476d4b125dd73b33d31
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Selection of Mortality Assumptions for Pension Plan Actuarial Valuations (CIA Educational Note - 2026).md
 ---
 ![[Selection of Mortality Assumptions for Pension Plan Actuarial Valuations (CIA Educational Note - 2026) - Cover.svg]]
 

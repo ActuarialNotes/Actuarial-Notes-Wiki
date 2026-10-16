@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Code: "CP341-118-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f3da513d4b08c0399b8c1012a74138c995cc687a99a62d3a8fff249ba8e3309f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-118-25 - Management of Collateralised Reinsurance.md
 ---
 ![[CP341-118-25 - Management of Collateralised Reinsurance - Cover.svg]]
 

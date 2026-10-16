@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/rsn-2013-issue76.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e05633124cb902ec3788005ec9c447e580586908c5f894a2728a19c78966a1e2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Life Insurance Acceleration Riders (SOA Reinsurance News - 2013).md
 ---
 ![[Life Insurance Acceleration Riders (SOA Reinsurance News - 2013) - Cover.svg]]
 

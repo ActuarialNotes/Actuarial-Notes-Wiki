@@ -5,6 +5,16 @@ Publisher: "Canadian Association of Pension Supervisory Authorities"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4558e51b8d8b482ba7c6fd0362dedadfa82f0df9da81402a3d48c2e1703501cc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-113-25 - Canadian Association of Pension Supervisory Authorities (CAPSA) Communique Spring 2023.md
 ---
 ![[RET301-113-25 - Canadian Association of Pension Supervisory Authorities (CAPSA) Communique Spring 2023 - Cover.svg]]
 

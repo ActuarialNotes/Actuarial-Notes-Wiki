@@ -7,6 +7,16 @@ date: "2026"
 Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-64756-353-0"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:409d3373ea0b0cd4208f538755860c0246b7f10d130453ce70892c20c7594d37
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Individual Health Insurance (Leida - 2026).md
 ---
 ![[Individual Health Insurance (Leida - 2026) - Cover.svg]]
 
@@ -14,6 +24,7 @@ A textbook on the individual health insurance market, now in its third edition, 
 
 > [!info] On the syllabus
 > - [[Exam CP-321 (SOA)|Exam CP-321]] — Chapter 2, The Products, Sections 2.7-2.9 (Outcomes 1b, 1c); Chapter 4, Managing Antiselection, Sections 4.1-4.5 (2e); Chapter 6, Reserves and Liabilities (3a-3g).
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2b, 2c, 2d; study note GH101-100-26, Chapter 5 (Setting Premium Rates) of Individual Health Insurance, Leida, Hans, 3rd Edition, 2026.
 
 ## Acknowledgments
 
@@ -302,3 +313,5 @@ A textbook on the individual health insurance market, now in its third edition, 
 - [Individual Health Insurance, 3rd Edition, sample pages (ACTEX Learning)](https://www.actexlearning.com/samples/ACTEX-Individual_Health_Insurance-3E-SAMPLE.pdf) — the book itself: title page, authors, copyright year, the full table of contents with its section numbers (matched to the PDF's bookmarks, 39 pages, sha256 041c488d2ac6d29f…) and the preface; the divisions and sections above are copied from it
 - [Individual Health Insurance, 3rd Edition (ACTEX Learning)](https://www.actexlearning.com/fellowship-textbooks/individual-health-insurance-3e) — the publisher's description, the authors and the printed edition's ISBN
 - [CP 321 Syllabus, Nov 2026/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf) — the citation (3rd Edition, 2026) and the chapters and sections assigned
+- [GH 101 Intro Study Note, November 2026 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-11-gh-101-intro-study-note.pdf) — the study-note code GH101-100-26 and its title (Chapter 5 of Individual Health Insurance, Third Edition)
+- [GH 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf) — the citation (Chapter 5 of Individual Health Insurance, Leida, 3rd Edition, 2026) and the learning outcomes

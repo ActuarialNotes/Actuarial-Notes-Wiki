@@ -7,6 +7,16 @@ date: "2020"
 Type: "Paper"
 Code: "RET101-116-25"
 Available from: "[aon.com](https://www.aon.com/unitedkingdom/retirement-investment/defined-contribution/collective-defined-contribution/whitepaper-the-case-for-collective-dc)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8b3f23006f154e77186012a1b684c7b1469984a3ef924359a4e78e13dd023ceb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-116-25 - The Case for Collective DC.md
 ---
 ![[RET101-116-25 - The Case for Collective DC - Cover.svg]]
 

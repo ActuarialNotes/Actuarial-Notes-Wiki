@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2021/modeling-enrollee-choice.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8351a3d5f491854bb79aa692e9a7d7231044d325432244e2132e4a50ddfa59fc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Modeling Effects of Enrollee Choice (SOA - 2021).md
 ---
 ![[Modeling Effects of Enrollee Choice (SOA - 2021) - Cover.svg]]
 

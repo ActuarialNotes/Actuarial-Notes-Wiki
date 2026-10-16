@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a344c06a760401271c497553250f7439bd4175f2e9cf880dae386f770dbaf888
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Non-Life Perils and Coverages (Insurance Regulation Committee - 2023).md
 ---
 ![[IAA Risk Book - Non-Life Perils and Coverages (Insurance Regulation Committee - 2023) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2004"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "9780975914601"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e054aff1c5f2605871ae3c54adb2b7e801b998e7457cbdcdbecf44019a83801
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Data (Bertsimas - 2004).md
 ---
 ![[Data (Bertsimas - 2004) - Cover.svg]]
 

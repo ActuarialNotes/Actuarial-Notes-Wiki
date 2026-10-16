@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Code: "CFE101-110-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9494b03c63e439066cf4f2d437e47b971c3cae728fc9be986bffd53f45842865
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-110-25 - IAA Paper - Importance of Climate-Related Risks for Actuaries.md
 ---
 ![[CFE101-110-25 - IAA Paper - Importance of Climate-Related Risks for Actuaries - Cover.svg]]
 

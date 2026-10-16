@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-651-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:95d4c0e6254fdf9f53d8dceb02f4df38572417c1aa0a967498fb87c6796908ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-651-25 - The High-Stakes Battle of Medications.md
 ---
 ![[GH201-651-25 - The High-Stakes Battle of Medications - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Report"
 Code: "INV201-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d4e9e6126f36ed060d669b13a73faec15aafb662f36ffe5fcfc70f04d0cd4f6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-106-25 - Variable Annuity Volatility Management - An Era of Risk-Control.md
 ---
 ![[INV201-106-25 - Variable Annuity Volatility Management - An Era of Risk-Control - Cover.svg]]
 

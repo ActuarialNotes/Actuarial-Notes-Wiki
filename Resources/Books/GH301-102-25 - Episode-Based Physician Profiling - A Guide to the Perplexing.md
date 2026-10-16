@@ -7,6 +7,16 @@ date: "2008"
 Type: "Paper"
 Code: "GH301-102-25"
 Available from: "[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC2518017/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:90fccdf3f455a5b87d529563869443e1f648f16646628b8def97dd31b04a58f9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-102-25 - Episode-Based Physician Profiling - A Guide to the Perplexing.md
 ---
 ![[GH301-102-25 - Episode-Based Physician Profiling - A Guide to the Perplexing - Cover.svg]]
 

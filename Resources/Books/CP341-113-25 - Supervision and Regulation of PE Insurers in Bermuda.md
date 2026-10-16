@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CP341-113-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b9bcb0190dbdfbc635c60b17c8a0a60d2c7bc84dee1e34410ca2888f5ec20b93
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-113-25 - Supervision and Regulation of PE Insurers in Bermuda.md
 ---
 ![[CP341-113-25 - Supervision and Regulation of PE Insurers in Bermuda - Cover.svg]]
 

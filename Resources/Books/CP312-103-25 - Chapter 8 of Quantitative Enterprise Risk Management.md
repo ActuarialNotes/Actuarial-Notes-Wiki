@@ -7,6 +7,16 @@ date: "2022"
 Type: "Study Note"
 Code: "CP312-103-25"
 ISBN: "978-1-009-09846-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2051741deaf7e70a79be688aad51c00fa0a5fc742ea3715825fcd68c3cd4094b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-103-25 - Chapter 8 of Quantitative Enterprise Risk Management.md
 ---
 ![[CP312-103-25 - Chapter 8 of Quantitative Enterprise Risk Management - Cover.svg]]
 

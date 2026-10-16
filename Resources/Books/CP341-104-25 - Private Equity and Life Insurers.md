@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CP341-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cf69aa6dc555244227f7db06e8ea4a9499ab6187f976a61bad66c9bfbc4acff8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-104-25 - Private Equity and Life Insurers.md
 ---
 ![[CP341-104-25 - Private Equity and Life Insurers - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "INV101-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:203db7bd4da23ba1c78c5183710c65c4ed9772e0b5fc9611e8f1361799b86487
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-104-25 - The Hidden Dangers of Passive Investing.md
 ---
 ![[INV101-104-25 - The Hidden Dangers of Passive Investing - Cover.svg]]
 

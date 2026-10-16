@@ -7,6 +7,16 @@ date: "2024"
 Type: "Report"
 Code: "Document 224043"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224043e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96497d7bd3d0afb5bb90041eaeabf995ed5a71b8952fd220129007de46501182
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Mortality Improvements Research (CIA Report - 2024).md
 ---
 ![[Mortality Improvements Research (CIA Report - 2024) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2016"
 Type: "Study Note"
 Code: "CP312-109-25"
 ISBN: "978-3-319-29774-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ed4d1305d4bad19987cfccfe58f3c7b675c9f91214546f80a73097a91d3bee8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-109-25 - Chapter 7 (Sec. 7.2 only) of Modelling in Life Insurance - A Management Perspective.md
 ---
 ![[CP312-109-25 - Chapter 7 (Sec. 7.2 only) of Modelling in Life Insurance - A Management Perspective - Cover.svg]]
 

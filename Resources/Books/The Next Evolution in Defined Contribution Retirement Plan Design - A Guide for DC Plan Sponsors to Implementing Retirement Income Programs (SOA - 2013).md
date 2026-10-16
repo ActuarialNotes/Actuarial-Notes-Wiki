@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-2013-next-evol-dc-design.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5998a40bce6bb76dafacb0fbcb9cc0605457a9bbb32c1eac350a6712d4f3adb6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Next Evolution in Defined Contribution Retirement Plan Design - A Guide for DC Plan Sponsors to Implementing Retirement Income Programs (SOA - 2013).md
 ---
 ![[The Next Evolution in Defined Contribution Retirement Plan Design - A Guide for DC Plan Sponsors to Implementing Retirement Income Programs (SOA - 2013) - Cover.svg]]
 

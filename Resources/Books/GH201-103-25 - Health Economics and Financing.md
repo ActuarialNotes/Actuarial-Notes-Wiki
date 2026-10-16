@@ -8,6 +8,16 @@ Edition: "6th"
 Type: "Textbook"
 Code: "GH201-103-25"
 ISBN: "9781119815686"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:771e209b10790256a653ac4c74c21a2bba7f9a3b2b2a5632d242d97acdfe6e1f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-103-25 - Health Economics and Financing.md
 ---
 ![[GH201-103-25 - Health Economics and Financing - Cover.svg]]
 

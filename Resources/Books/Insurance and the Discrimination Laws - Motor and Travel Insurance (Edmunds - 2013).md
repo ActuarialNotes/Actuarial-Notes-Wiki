@@ -7,6 +7,16 @@ date: "2013"
 Type: "Report"
 Code: "SN04601"
 Available from: "[commonslibrary.parliament.uk](https://commonslibrary.parliament.uk/research-briefings/sn04601/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:94b2abc1bfdb87b158f0fbd77d299b5183699160781ccfa751927b24c9a0f789
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance and the Discrimination Laws - Motor and Travel Insurance (Edmunds - 2013).md
 ---
 ![[Insurance and the Discrimination Laws - Motor and Travel Insurance (Edmunds - 2013) - Cover.svg]]
 

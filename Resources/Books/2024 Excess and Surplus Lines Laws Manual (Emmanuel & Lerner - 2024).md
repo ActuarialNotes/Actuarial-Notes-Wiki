@@ -5,6 +5,16 @@ Publisher: "Troutman Pepper Locke LLP"
 Year: "2025"
 date: "2025"
 Type: "Guide"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:337f1f9479e8747145c56562ecd484457f305165960844111e42ad78c4786e1e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/2024 Excess and Surplus Lines Laws Manual (Emmanuel & Lerner - 2024).md"
 ---
 ![[2024 Excess and Surplus Lines Laws Manual (Emmanuel & Lerner - 2024) - Cover.svg]]
 

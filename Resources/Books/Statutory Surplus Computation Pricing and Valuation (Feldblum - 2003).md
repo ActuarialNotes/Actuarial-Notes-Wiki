@@ -7,6 +7,16 @@ date: "2003"
 Edition: "5th"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_Feldblum_Surplus.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7b23337d59b2393c2b0865b69db3fb6cee40c82fd6dffc1c9ad7d550887c3f66
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Statutory Surplus Computation Pricing and Valuation (Feldblum - 2003).md
 ---
 ![[Statutory Surplus Computation Pricing and Valuation (Feldblum - 2003) - Cover.svg]]
 

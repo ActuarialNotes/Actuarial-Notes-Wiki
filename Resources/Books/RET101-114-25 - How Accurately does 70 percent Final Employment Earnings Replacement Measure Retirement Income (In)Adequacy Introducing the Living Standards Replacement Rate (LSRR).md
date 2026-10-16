@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Paper"
 Available from: "[cambridge.org](https://www.cambridge.org/core/journals/astin-bulletin-journal-of-the-iaa/article/how-accurately-does-70-final-employment-earnings-replacement-measure-retirement-income-inadequacy-introducing-the-living-standards-replacement-rate-lsrr/0A52D9DC1B08B10EF2FDC6B1A66BDA42)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dcd99f17d90f8bdc2ee1f94b52bccdc1c6d45360f5befb856ed433299f4abd4a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-114-25 - How Accurately does 70 percent Final Employment Earnings Replacement Measure Retirement Income (In)Adequacy Introducing the Living Standards Replacement Rate (LSRR).md
 ---
 ![[RET101-114-25 - How Accurately does 70 percent Final Employment Earnings Replacement Measure Retirement Income (In)Adequacy Introducing the Living Standards Replacement Rate (LSRR) - Cover.svg]]
 

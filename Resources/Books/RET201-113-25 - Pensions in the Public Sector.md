@@ -7,6 +7,16 @@ date: "2001"
 Type: "Textbook"
 Code: "RET201-113-25"
 ISBN: "978-0-8122-3578-4"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:613aa2509e6a200aaa36c3fff18b9de7ff249d4e1820ffd062e9e4d35dda8964
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-113-25 - Pensions in the Public Sector.md
 ---
 ![[RET201-113-25 - Pensions in the Public Sector - Cover.svg]]
 

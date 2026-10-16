@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[canada.ca](https://www.canada.ca/en/patented-medicine-prices-review/services/npduis/analytical-studies/slide-presentations/biosimilars-cadth-2021.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6fc86d46c6bdef3866aac83ffaf94564b654179e63c2e51599a71105a6a8f231
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Biosimilars in Canada - Building Momentum in the Wake of Recent Switching Policies (2021).md
 ---
 ![[Biosimilars in Canada - Building Momentum in the Wake of Recent Switching Policies (2021) - Cover.svg]]
 

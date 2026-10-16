@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3da42448c0c347a80b6cc80f64878ba282435f8ee7f960b9297b5fed5bdc3bb5
+  content_hash: sha256:8e34917bae006e8a61e3a8ae09f9a7d9272908862ac9abdfd6e867f81cad9850
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
   open_findings: 0
@@ -107,7 +107,7 @@ verification:
 >
 > - [[Video - Introduction to CFE 201|Video: Introduction to CFE 201]]
 >      - Background
-> - [[Valuation (Tim Koller - 2025)|Valuation, Measuring and Managing the Value of Companies, Tim Koller, Marc Goedhart, David Wessels, 8th Edition, 2025]]
+> - [[Valuation - Measuring and Managing the Value of Companies (Koller - 2025)|Valuation, Measuring and Managing the Value of Companies, Tim Koller, Marc Goedhart, David Wessels, 8th Edition, 2025]]
 >      - Ch. 10: Framework for Valuation (excluding “Problematic Modifications to Discounted Cash Flow” and “Alternatives to Discounted Cash Flow” sections) (1a, 1b)
 >      - Ch. 27: Cross Border Valuation (excluding “Using Translated Foreign-Currency Financial Statements” section) (1a, 1b, 1c)
 >      - Ch. 35: Capital Structure, Dividends, and Share Repurchases, “Setting a Target Capital Structure” section only (pp 679-688) (1a, 1b, 1c)

@@ -7,6 +7,17 @@ date: "2018"
 Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-63588-494-4"
+description: "Volume I of the fifth edition of ACTEX's statutory valuation textbook: basic principles, the valuation process, model governance and formula-based reserves."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5c1ad2c7c4467930dbf9819c67f716eac0cb7be9557227ac87ffb649c4b89900
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Statutory Valuation of Individual Life and Annuity Contracts (Volume I - 2018).md
 ---
 ![[Statutory Valuation of Individual Life and Annuity Contracts (Volume I - 2018) - Cover.svg]]
 

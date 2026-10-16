@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/resources/research-report/2018/variable-annuity-guaranteed-utilization.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ebab283d7f220b709f55ae090f2d428f1dee2ae3d119fd511392b6cf7852e771
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Variable Annuity Guaranteed Living Benefits Utilization (SOA LIMRA Research - 2018).md
 ---
 ![[Variable Annuity Guaranteed Living Benefits Utilization (SOA LIMRA Research - 2018) - Cover.svg]]
 

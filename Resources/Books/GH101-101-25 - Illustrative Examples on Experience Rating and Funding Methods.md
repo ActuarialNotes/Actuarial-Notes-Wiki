@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH101-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:873e5e00aaf3466effd0cb829cf88d1eff97c51bdaadac2a776927954a034218
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH101-101-25 - Illustrative Examples on Experience Rating and Funding Methods.md
 ---
 ![[GH101-101-25 - Illustrative Examples on Experience Rating and Funding Methods - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "CFE201-114-27"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3f52686c5378d330d232d5066b05fc5be1489ade696555ceeb5596d817635f9b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-114-27 - Managing Allocations Effectively in the Insurance Sector.md
 ---
 ![[CFE201-114-27 - Managing Allocations Effectively in the Insurance Sector - Cover.svg]]
 

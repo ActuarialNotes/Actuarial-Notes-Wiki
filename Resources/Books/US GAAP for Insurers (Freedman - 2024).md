@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Edition: "3rd"
 Type: "Textbook"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c75347fe40629425db62a7ea7f6bff77dbf9d99cc4ba415c3bfa4af298e5eea8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/US GAAP for Insurers (Freedman - 2024).md
 ---
 ![[US GAAP for Insurers (Freedman - 2024) - Cover.svg]]
 

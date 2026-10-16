@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://www.theactuarymagazine.org/state-regulation-of-prescription-drugs-in-the-united-states/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:28b5b76d08f787b3712778526d413101e8d8863d2689333d7207e3ed6ec1d056
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/State Regulation of Prescription Drugs in the United States (The Actuary - 2021).md
 ---
 ![[State Regulation of Prescription Drugs in the United States (The Actuary - 2021) - Cover.svg]]
 

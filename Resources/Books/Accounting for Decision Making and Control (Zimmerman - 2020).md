@@ -7,6 +7,16 @@ date: "2020"
 Edition: "10th"
 Type: "Textbook"
 ISBN: "978-1-259-96949-2"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:99330e06e159ad19884034ab50a4066fe7761d10d14a1a13e4a56d23f9d44b38
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Accounting for Decision Making and Control (Zimmerman - 2020).md
 ---
 ![[Accounting for Decision Making and Control (Zimmerman - 2020) - Cover.svg]]
 

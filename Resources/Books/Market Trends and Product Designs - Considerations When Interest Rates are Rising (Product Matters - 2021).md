@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/pm-2021-11-sun-moench-strother-ruscito-lee-mu.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:616a9470f855036634cebe6614a5653c7a1cc1e51219a65cd24601f790b04011
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Market Trends and Product Designs - Considerations When Interest Rates are Rising (Product Matters - 2021).md
 ---
 ![[Market Trends and Product Designs - Considerations When Interest Rates are Rising (Product Matters - 2021) - Cover.svg]]
 

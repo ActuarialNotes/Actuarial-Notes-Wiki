@@ -5,6 +5,16 @@ Publisher: "ASTIN Bulletin"
 Year: "2008"
 date: "2008"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d41045898d48700e783ccb2c6b2dc1b599bd0f69d3411f355242b0b0f96fd156
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors (Couret and Venter - 2008).md
 ---
 ![[Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors (Couret and Venter - 2008) - Cover.svg]]
 

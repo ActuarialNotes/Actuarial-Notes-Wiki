@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 55"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:41804b5974604929877c966266aa0175904c6e8d91960ac3f091435c0a5ac56c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 55 Unpaid Claims Losses and Loss Adjustment Expenses (NAIC - 2024).md
 ---
 ![[SSAP 55 Unpaid Claims Losses and Loss Adjustment Expenses (NAIC - 2024) - Cover.svg]]
 

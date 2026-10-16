@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "CFE201-119-27"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d7ef9dbb12018e1869941f1206b0e0eb229dbb380254e06a19466f8e22e7e26
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-119-27 - How Insurers Can Supercharge Their Strategy with AI.md
 ---
 ![[CFE201-119-27 - How Insurers Can Supercharge Their Strategy with AI - Cover.svg]]
 

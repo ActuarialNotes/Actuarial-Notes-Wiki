@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "INV101-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b58c5ee950f3050dc594fd049187d4ad62c52878506a9852b971ea04a8b0530f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-102-25 - High-Yield Bond Primer.md
 ---
 ![[INV101-102-25 - High-Yield Bond Primer - Cover.svg]]
 

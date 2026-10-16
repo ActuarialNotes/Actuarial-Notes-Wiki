@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222085"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222085e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6a6c9b32db14a95e73c35799394729acd1d17ea9a3b5883b6dfa350110fbe1ef
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - IFRS 17 Estimates of Future Cash Flows for Life and Health Insurance Contracts (2022).md
 ---
 ![[CIA Educational Note - IFRS 17 Estimates of Future Cash Flows for Life and Health Insurance Contracts (2022) - Cover.svg]]
 

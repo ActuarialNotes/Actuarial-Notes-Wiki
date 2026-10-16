@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Study Note"
 Code: "CP311-113-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7c17b3a6fca548a09f27659455e432c58ed6cf71b5b0bd89fe1d7b220cfe7b9d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP311-113-26 - Bazerman & Moore.md"
 ---
 ![[CP311-113-26 - Bazerman & Moore - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2024"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "979-8-89016-246-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d0891f4e6cd7409f9eabd6453ac8d315312abcd4d423e8951f0e928189e6de5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insuring Long-Term Care (Eaton - 2024).md
 ---
 ![[Insuring Long-Term Care (Eaton - 2024) - Cover.svg]]
 

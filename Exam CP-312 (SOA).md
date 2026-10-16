@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757
   extracted_at: 2026-10-09
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d5955a568273c1c44eeb9c207133aa7600fe8e4752a590be50e86970faf39405
+  content_hash: sha256:442eeed4481a5db8a4a486ace9353ff855ff1846b77080e637c738b2b08c71ef
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-312, all pages, sha256:7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
   open_findings: 1
@@ -175,7 +175,7 @@ verification:
 >      - Outcomes 3a, 3b
 > - [[CP312-115-26 - Guideline E23 – Model Risk Management|CP312-115-26: Guideline E23 – Model Risk Management]]
 >      - Outcomes 3a, 3b
-> - [[Model Validation for Insurance Enterprise Risk and Capital Models (CAS/CIA/SOA - 2014)|Model Validation for Insurance Enterprise Risk and Capital Models, CAS/CIA/SOA, Apr 2014 (excluding Appendices)]]
+> - [[Model Validation for Insurance Enterprise Risk and Capital Models (Stricker, Wang & Strommen - 2014)|Model Validation for Insurance Enterprise Risk and Capital Models, CAS/CIA/SOA, Apr 2014 (excluding Appendices)]]
 >      - Outcomes 3a
 > - [[Adding Value with Model Validation (The Modeling Platform - 2017)|Adding Value with Model Validation, The Modeling Platform, Nov 2017]]
 >      - Outcomes 3a, 3b

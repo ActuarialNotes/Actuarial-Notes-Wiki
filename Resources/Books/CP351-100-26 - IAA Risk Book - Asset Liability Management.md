@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "CP351-100-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8478a8364afd3d23ff09609256bd2773ce5d70e0f0d2841071f64425ff1f1070
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-100-26 - IAA Risk Book - Asset Liability Management.md
 ---
 ![[CP351-100-26 - IAA Risk Book - Asset Liability Management - Cover.svg]]
 

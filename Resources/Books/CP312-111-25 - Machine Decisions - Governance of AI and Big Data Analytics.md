@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Report"
 Code: "CP312-111-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:11259d397b0359894aa41f9aac996000eca29bd10497b67e45af3f3f2a7f13bf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-111-25 - Machine Decisions - Governance of AI and Big Data Analytics.md
 ---
 ![[CP312-111-25 - Machine Decisions - Governance of AI and Big Data Analytics - Cover.svg]]
 

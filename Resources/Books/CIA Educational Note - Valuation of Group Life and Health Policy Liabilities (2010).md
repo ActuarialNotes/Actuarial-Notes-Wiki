@@ -7,6 +7,16 @@ date: "2010"
 Type: "Educational Note"
 Code: "210034"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/210034e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:00eb84d59c355d0c94bdb1de5845644eae97ee0e71ddda20e0acc365fb5b2141
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - Valuation of Group Life and Health Policy Liabilities (2010).md
 ---
 ![[CIA Educational Note - Valuation of Group Life and Health Policy Liabilities (2010) - Cover.svg]]
 

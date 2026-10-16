@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-661-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c6fa981a18af7b7bd5f30985b5b26ee7be1d0706ab84ca7f2c557b9a173f9321
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-661-25 - Employee Life and Health Trusts & Health and Welfare Trusts.md"
 ---
 ![[GH201-661-25 - Employee Life and Health Trusts & Health and Welfare Trusts - Cover.svg]]
 

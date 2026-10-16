@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2024"
 date: "2024"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e2f1d1be842dc209e11d4c269303bef94e21532b541c551883087a6525f50800
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Liquidity Risk (AAA - 2024).md
 ---
 ![[Liquidity Risk (AAA - 2024) - Cover.svg]]
 

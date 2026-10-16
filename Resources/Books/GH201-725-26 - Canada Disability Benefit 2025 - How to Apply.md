@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Guide"
 Code: "GH201-725-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:79e7fb2bda6269dbcac996f676560c3f4b8feff6ced2de7a178d6a5aa7e18638
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-725-26 - Canada Disability Benefit 2025 - How to Apply.md
 ---
 ![[GH201-725-26 - Canada Disability Benefit 2025 - How to Apply - Cover.svg]]
 

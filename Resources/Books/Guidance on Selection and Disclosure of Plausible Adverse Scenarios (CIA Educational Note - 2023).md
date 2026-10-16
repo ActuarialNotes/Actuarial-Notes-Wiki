@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223063"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223063e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:64e904a275f1dafb964c14a5a4b63627619b05ac18e1e2a07403813eee873cb0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Guidance on Selection and Disclosure of Plausible Adverse Scenarios (CIA Educational Note - 2023).md
 ---
 ![[Guidance on Selection and Disclosure of Plausible Adverse Scenarios (CIA Educational Note - 2023) - Cover.svg]]
 

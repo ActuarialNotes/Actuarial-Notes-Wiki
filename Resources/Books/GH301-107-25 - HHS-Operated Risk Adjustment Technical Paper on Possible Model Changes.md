@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Code: "GH301-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f293d78500e88afe0d8e8f36d500df104eb615e12f21e21b1244d57f8a20d7c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-107-25 - HHS-Operated Risk Adjustment Technical Paper on Possible Model Changes.md
 ---
 ![[GH301-107-25 - HHS-Operated Risk Adjustment Technical Paper on Possible Model Changes - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP351-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:095085753e67d91a7c4920518a0ef9673ea15a5a72a104ca9660ab471586777b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-101-25 - ALM for Life.md
 ---
 ![[CP351-101-25 - ALM for Life - Cover.svg]]
 

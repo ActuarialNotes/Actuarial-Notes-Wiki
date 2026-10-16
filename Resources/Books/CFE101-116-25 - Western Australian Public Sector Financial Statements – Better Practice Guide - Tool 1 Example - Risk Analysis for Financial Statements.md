@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Guide"
 Code: "Report 28: 2020-21"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e9006e69132da4c8a2d9e3847e5d8cb6b6a0f62b64ae57785b6d7546bde168d8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CFE101-116-25 - Western Australian Public Sector Financial Statements – Better Practice Guide - Tool 1 Example - Risk Analysis for Financial Statements.md"
 ---
 ![[CFE101-116-25 - Western Australian Public Sector Financial Statements – Better Practice Guide - Tool 1 Example - Risk Analysis for Financial Statements - Cover.svg]]
 

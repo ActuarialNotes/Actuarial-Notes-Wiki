@@ -5,6 +5,16 @@ Publisher: "The Geneva Association"
 Year: "2020"
 date: "2020"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ace853c05c841f6ba853b3bad69ade9910c5216268acbdb23fca92cd1ecac44
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Social Inflation - Navigating the Evolving Claims Environment (The Geneva Association - 2020).md
 ---
 ![[Social Inflation - Navigating the Evolving Claims Environment (The Geneva Association - 2020) - Cover.svg]]
 

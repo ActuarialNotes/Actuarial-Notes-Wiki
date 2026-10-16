@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:238cd5eb9a9ebd4ce3be41d37493bf5a5c47538e4a78bb0e41ff20a3c170fd5f
+  content_hash: sha256:3894f4ab7f21c500bea202a3128745a9afb07c6fe1345b88fc4d89e15deafdba
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A CAS study note (3 October 2011) on rating agencies' financial strength ratings
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C2–C4; pp. 1–7, including Appendix A; not Section 4, Appendices B–D, formulæ or the endnotes.
+> - [[Exam 6U (CAS)|Exam 6U]] — objective A2; pp. 1–7 and 14–15 (stopping at Best's Capital Adequacy Ratio) and Appendix A; not Section 4, Section 5 from Best's Capital Adequacy Ratio on p. 15, Appendices B–D, or the endnotes.
 
 ## Introduction
 - [[Rating Agency|Rating agencies]] give credit ratings for corporate, municipal and government bonds and financial strength ratings for life and property-casualty insurers; bond ratings are the primary work of Standard and Poor's, Moody's and Fitch, insurance ratings that of A. M. Best's.
@@ -75,3 +76,4 @@ A CAS study note (3 October 2011) on rating agencies' financial strength ratings
 - [Rating Agencies (CAS, 2011)](https://www.casact.org/sites/default/files/2021-03/6C_Feldblum.pdf) — the document: title and date, section and appendix headings, and the text of pp. 1–7 and Appendix A
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned pages and exclusions
 - [Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2020)](https://www.casact.org/sites/default/files/2021-03/6C_CAS_Financial_Reporting.pdf) — the author's given name, from its list of the CAS study notes it relied on (p. 4)
+- [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation and the assigned pages and exclusions

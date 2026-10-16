@@ -8,6 +8,16 @@ Edition: "3rd"
 Type: "Textbook"
 Code: "ILA101-119-26"
 ISBN: "978-0-9913363-7-1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1e47e915e2c6f60b14dbee6cd0f34d95bd850caa33232881897165e3ca00df64
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-119-26 - Chapter 5 of US GAAP for Insurers.md
 ---
 ![[ILA101-119-26 - Chapter 5 of US GAAP for Insurers - Cover.svg]]
 

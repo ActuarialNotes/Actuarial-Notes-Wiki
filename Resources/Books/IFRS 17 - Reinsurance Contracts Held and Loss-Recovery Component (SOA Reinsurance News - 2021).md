@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/sections/reinsurance/reinsurance-newsletter/2021/february/rsn-2021-02-cheung/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c4425bae28b90575fb310aebef3e9cdd23924d577c37f80301000a05cb42e35
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IFRS 17 - Reinsurance Contracts Held and Loss-Recovery Component (SOA Reinsurance News - 2021).md
 ---
 ![[IFRS 17 - Reinsurance Contracts Held and Loss-Recovery Component (SOA Reinsurance News - 2021) - Cover.svg]]
 

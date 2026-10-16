@@ -7,6 +7,16 @@ date: "2021"
 Type: "Standard of Practice"
 Code: "ASOP No. 22"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2021/11/asop022_203.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bf4bad33a96125ed24c024b8ee97a51492c717e185c38fa829cfc34ac21013c6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 22 - Statements of Actuarial Opinion Based on Asset Adequacy Analysis for Life Insurance.md
 ---
 ![[ASOP 22 - Statements of Actuarial Opinion Based on Asset Adequacy Analysis for Life Insurance - Cover.svg]]
 

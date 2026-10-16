@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guide"
 Code: "GH201-644-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cb84d204c6ff942ce98d6b88da11aa9f974982d7f5e0451efcfb5fee0e33756f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-644-25 - TACCESS - An Advisor's Guide to Understanding How Taxes Impact Group Insurance Benefits in Canada.md"
 ---
 ![[GH201-644-25 - TACCESS - An Advisor's Guide to Understanding How Taxes Impact Group Insurance Benefits in Canada - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Code: "CP312-114-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fae0280a07bf953c96bb62fcb7e996c22cfa953935dc7a01fa72754c64085212
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-114-26 - Rise of the Machines - Application of Machine Learning to Mortgage Pre-Payment Modeling.md
 ---
 ![[CP312-114-26 - Rise of the Machines - Application of Machine Learning to Mortgage Pre-Payment Modeling - Cover.svg]]
 

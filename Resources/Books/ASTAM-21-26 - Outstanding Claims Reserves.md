@@ -7,6 +7,16 @@ date: "2022"
 Type: "Study Note"
 Code: "ASTAM-21-26"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-astam-21-26-study-note.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4bbcdb4a9c37cd3eb9ef0d79fbbfad23227879c883fb64b1d0d56bd255f55b78
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASTAM-21-26 - Outstanding Claims Reserves.md
 ---
 ![[ASTAM-21-26 - Outstanding Claims Reserves - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/hsn-2020-iss-06-gleed-karcher-petroske.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4c362e772f1cfcb6236a703cf7351c53bc862f3c93c1c16499cba4ea94b977ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Changing with the Times - The Past and the Future of ACA Risk Adjustment (Health Watch - 2020).md
 ---
 ![[Changing with the Times - The Past and the Future of ACA Risk Adjustment (Health Watch - 2020) - Cover.svg]]
 

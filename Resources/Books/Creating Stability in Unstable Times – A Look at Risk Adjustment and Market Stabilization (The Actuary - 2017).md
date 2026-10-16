@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://theactuarymagazine.org/creating-stability-unstable-times/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:405689e981ccd963ef5002c15ce5a85080c1ea1cbe013b7a58fe2247de23cb2d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Creating Stability in Unstable Times – A Look at Risk Adjustment and Market Stabilization (The Actuary - 2017).md"
 ---
 ![[Creating Stability in Unstable Times – A Look at Risk Adjustment and Market Stabilization (The Actuary - 2017) - Cover.svg]]
 

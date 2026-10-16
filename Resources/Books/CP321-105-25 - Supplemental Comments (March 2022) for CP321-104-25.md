@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Study Note"
 Code: "CP321-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:21ff75e14072521032c650eb8c0664d07a229e12c2bf8f9a6d2125d11212eab6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-105-25 - Supplemental Comments (March 2022) for CP321-104-25.md
 ---
 ![[CP321-105-25 - Supplemental Comments (March 2022) for CP321-104-25 - Cover.svg]]
 

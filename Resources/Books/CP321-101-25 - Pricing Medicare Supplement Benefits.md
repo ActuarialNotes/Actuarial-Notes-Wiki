@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Study Note"
 Code: "CP321-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a0237bb175f9bbcbe827a1d9bcc3d2473473921fe45bac88828fff4be74f0549
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-101-25 - Pricing Medicare Supplement Benefits.md
 ---
 ![[CP321-101-25 - Pricing Medicare Supplement Benefits - Cover.svg]]
 

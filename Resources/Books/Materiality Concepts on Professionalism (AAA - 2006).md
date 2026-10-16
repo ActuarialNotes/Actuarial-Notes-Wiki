@@ -6,6 +6,16 @@ Year: "2006"
 date: "2006"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_AAA_Materiality.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3e156bfa94f6540699b2d4773f76026bc2d79126a3e94a5b98f8179e546dafc8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Materiality Concepts on Professionalism (AAA - 2006).md
 ---
 ![[Materiality Concepts on Professionalism (AAA - 2006) - Cover.svg]]
 
@@ -13,6 +23,7 @@ A discussion paper (June 2006, Professionalism Series No. 8) prepared by the Tas
 
 > [!info] On the syllabus
 > - [[Exam 6U (CAS)|Exam 6U]] — objective C7; the whole discussion paper (Professionalism Series, 2006, No. 8, June 2006).
+> - [[Exam GI-302 (SOA)|Exam GI-302]] — Outcomes 4a; the discussion paper (Task Force on Materiality, AAA, 2006, No. 8), pp. 1-8, 13-17 and 19-20 (as the syllabus states it)
 
 ## Preface
 - The paper was developed for discretionary use by actuaries, is intended to stand on its own and be freely interpreted, and yields to the Code of Professional Conduct wherever they conflict.
@@ -52,8 +63,9 @@ A discussion paper (June 2006, Professionalism Series No. 8) prepared by the Tas
 ## Appendix Helpful Sources for Use in Selecting Materiality Standards
 
 ## Related readings
-- [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]] — the standard whose intended-audience framework the paper uses
+- [[ASOP 41 - Actuarial Communications]] — the standard whose intended-audience framework the paper uses
 
 ## Sources
 - [Materiality: Concepts on Professionalism (AAA, June 2006)](https://www.casact.org/sites/default/files/2021-03/6U_AAA_Materiality.pdf) — the document: title, series, date, preface, table of contents and the text of its sections (26 pages, sha256 57cf621660598db4…); the Appendix's extracts were not read
 - [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation and its listing as an online publication
+- [SOA Exam GI-302 Syllabus, Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf) — the citation (Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8), the pages assigned and the outcome it serves

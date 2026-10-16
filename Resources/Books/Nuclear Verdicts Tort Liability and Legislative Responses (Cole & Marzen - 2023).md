@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2023"
 date: "2023"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:62b7fce475b43983f418193d8f142356054d5d86e7b47e4713fdf176afebaf44
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Nuclear Verdicts Tort Liability and Legislative Responses (Cole & Marzen - 2023).md"
 ---
 ![[Nuclear Verdicts Tort Liability and Legislative Responses (Cole & Marzen - 2023) - Cover.svg]]
 

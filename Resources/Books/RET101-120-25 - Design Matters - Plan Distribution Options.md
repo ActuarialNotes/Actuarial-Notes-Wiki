@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Paper"
 Code: "RET101-120-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a178fa41cfc28cacda9f698a317d77bc201519677c2b8ad3ca6e81909c8c9a4b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-120-25 - Design Matters - Plan Distribution Options.md
 ---
 ![[RET101-120-25 - Design Matters - Plan Distribution Options - Cover.svg]]
 

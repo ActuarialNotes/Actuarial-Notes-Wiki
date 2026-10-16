@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "GH201-653-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:343c02d9d3b3a1b6c9adf66cb4a01dd30f6faedc6a05106d9bf16606379ae920
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-653-25 - Telus Health Note - How Much Does that Drug Cost.md
 ---
 ![[GH201-653-25 - Telus Health Note - How Much Does that Drug Cost - Cover.svg]]
 

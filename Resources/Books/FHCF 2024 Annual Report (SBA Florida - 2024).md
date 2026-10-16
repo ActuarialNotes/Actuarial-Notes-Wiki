@@ -5,6 +5,16 @@ Publisher: "State Board of Administration of Florida"
 Year: "2024"
 date: "2024"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:44046889b10ed4ca4541779548809c20a542325c455542b63a15d59c4b4ba177
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/FHCF 2024 Annual Report (SBA Florida - 2024).md
 ---
 ![[FHCF 2024 Annual Report (SBA Florida - 2024) - Cover.svg]]
 

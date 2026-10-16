@@ -1,10 +1,20 @@
 ---
-Title: "eLearning Module: FSA: Terminology and Analytical Use of Data for Healthcare Actuaries"
+Title: "eLearning Module - FSA - Terminology and Analytical Use of Data for Healthcare Actuaries"
 Authors: "Society of Actuaries"
 Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1aee49566b6800960253279ca2829d66ef56e4302f3ac1328f9d86492293b940
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/eLearning Module - FSA - Terminology and Analytical Use of Data for Healthcare Actuaries.md
 ---
 ![[eLearning Module - FSA - Terminology and Analytical Use of Data for Healthcare Actuaries - Cover.svg]]
 

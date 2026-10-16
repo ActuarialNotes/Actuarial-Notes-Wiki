@@ -7,6 +7,16 @@ date: "2013"
 Type: "Standard of Practice"
 Code: "ASOP No. 25"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop025_174.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5a7d7533c94e5ac513be2053410ed55a9d3ffbf3542e8f6120823d84e6cedfe0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 25 - Credibility Procedures (ASB - 2013).md
 ---
 ![[ASOP 25 - Credibility Procedures (ASB - 2013) - Cover.svg]]
 
@@ -14,6 +24,8 @@ The Actuarial Standards Board's guidance to actuaries selecting or developing cr
 
 > [!info] On the syllabus
 > - [[Exam 8 (CAS)|Exam 8]] — objectives A2–A3.
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f; the whole standard, excluding Appendices.
+> - [[Exam GI-101 (SOA)|Exam GI-101]] — Outcomes 1l.
 
 ## Transmittal Memorandum
 - The original standard, adopted in 1996, was a product of the ASB's Health and Casualty Committees and was limited to accident and health, group term life, and property/casualty coverages; in 2011 the ASB asked the Life Committee to consider widening its scope.
@@ -83,3 +95,5 @@ The Actuarial Standards Board's guidance to actuaries selecting or developing cr
 ## Sources
 - [ASOP No. 25, Credibility Procedures (Actuarial Standards Board, December 2013)](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop025_174.pdf) — the document: title page, table of contents, transmittal memorandum, sections 1 to 4 and the appendixes (read in full; sha256 04693d357236c800665202064f3eaa45307d92bb5648c0b36fcd5ce94a5d00d3)
 - [CAS Exam 8 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf) — the citation and the assigned task statements (A2-A3)
+- [GH 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf) — the citation (ASOP 25, excluding Appendices) and the learning outcome it is assigned to (2f)
+- [GI 101 Ratemaking and Reserving syllabus, Nov 2026 / Mar 2027 / Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf) — the citation (Actuarial Standards Board of the American Academy of Actuaries, No. 25, Credibility Procedures, 2013) and the assigned outcome (1l)

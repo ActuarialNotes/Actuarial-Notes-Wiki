@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7e85b3c4545e7836523051a861edb9d1b19c6dfcb1005f67d0b0059b97ae1828
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Reinsurance (Insurance Regulation Committee - 2023).md
 ---
 ![[IAA Risk Book - Reinsurance (Insurance Regulation Committee - 2023) - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2007"
 date: "2007"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e318018fad35c6bc6e1322256a3944e567fc90b8309fbb7710d0848038d5ea7e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Premium Deficiency Reserves Discussion Paper (AAA - 2007).md
 ---
 ![[Premium Deficiency Reserves Discussion Paper (AAA - 2007) - Cover.svg]]
 

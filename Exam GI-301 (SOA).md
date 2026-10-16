@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:0ed9d17be3ae31159426e7342d3aa11f56c376e6aaf74de50b81ebdc59d8e644
+  content_hash: sha256:d22281f5bb6c8faf48b682d70c725679979164a15063e348f345736366b553d3
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
@@ -199,11 +199,11 @@ verification:
 >      - Outcomes 4a-c
 > - [[Classification Ratemaking (Minimum Bias and GLMs - 2025)|Classification Ratemaking, Minimum Bias and GLMs, SOA, May 2025, section 4]]
 >      - Outcomes 6a
-> - [[Actuarial Standards of Practice (2011)|Actuarial Standards of Practice, No. 12, Risk Classification (for All Practice Areas), Actuarial Standards Board of the American Academy of Actuaries, Last Revised 2011 (excluding Appendix 2)]]
+> - [[ASOP 12 - Risk Classification (ASB - 2005)|Actuarial Standards of Practice, No. 12, Risk Classification (for All Practice Areas), Actuarial Standards Board of the American Academy of Actuaries, Last Revised 2011 (excluding Appendix 2)]]
 >      - Outcomes 6b
 > - [[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)|Estimating the Premium Asset on Retrospectively Rated Policies, Teng, M. and Perkins, M., Casualty Actuarial Society, 1996 Proceedings, Vol. LXXXIII, pp. 611-647 (excluding section 5)]]
 >      - Outcomes 6f
-> - [[This article may be accessed at www.casact.org through the following navigation|This article may be accessed at www.casact.org through the following navigation:]]
+> - This article may be accessed at www.casact.org through the following navigation:
 >      - Publications & Research
 >      - Browse research -> [Author Last Name = Teng, Year Published = 1996] -> Search
 >      - Result: Estimating the Premium Asset on Retrospectively Rated Policies

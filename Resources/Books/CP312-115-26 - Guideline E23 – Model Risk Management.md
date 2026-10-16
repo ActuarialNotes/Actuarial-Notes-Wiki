@@ -7,6 +7,16 @@ date: "2025"
 Type: "Guideline"
 Code: "Guideline E-23"
 Available from: "[osfi-bsif.gc.ca](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/guideline-e-23-model-risk-management-2027)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a22014cb2eb91b8c5b5ad53d2d44d7ccbc8947ff13e2f03b55184be72fd384ac
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP312-115-26 - Guideline E23 – Model Risk Management.md"
 ---
 ![[CP312-115-26 - Guideline E23 – Model Risk Management - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Report"
 Code: "CP341-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46f05ac48b072235ebfcb96c619e59d225301319e73463f078b01cff50b2455e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-100-25 - The Essential Guide to Reinsurance.md
 ---
 ![[CP341-100-25 - The Essential Guide to Reinsurance - Cover.svg]]
 

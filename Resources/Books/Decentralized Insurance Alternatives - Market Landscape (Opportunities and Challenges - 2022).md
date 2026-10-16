@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/decentralized-ins-alt.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8a28b3a375d5c404ff9dbb06a1df732179cc6c2049aee42f86910fae41efe553
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Decentralized Insurance Alternatives - Market Landscape (Opportunities and Challenges - 2022).md
 ---
 ![[Decentralized Insurance Alternatives - Market Landscape (Opportunities and Challenges - 2022) - Cover.svg]]
 

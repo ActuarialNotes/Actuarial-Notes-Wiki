@@ -5,6 +5,16 @@ Publisher: "Canadian Association of Pension Supervisory Authorities"
 Year: "2020"
 date: "2020"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b5cf0adebd83256989a5ecec9645ffd01a14be5ad1b3f134594e4b7263723c0c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-107-25 - CAPSA - Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans.md
 ---
 ![[RET301-107-25 - CAPSA - Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2018"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-63588-413-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:344e6d0171d6fd9fd2be014b22b0e3102917b68bd5ae7522adb823e337a64438
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Healthcare Risk Adjustment and Predictive Modeling (Duncan - 2018).md
 ---
 ![[Healthcare Risk Adjustment and Predictive Modeling (Duncan - 2018) - Cover.svg]]
 

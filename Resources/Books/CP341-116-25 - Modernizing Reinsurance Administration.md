@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Report"
 Code: "CP341-116-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8e0a7397ed351c90a02177731d16b1b89d6a5afdea2b4349d809b0342a3edfa1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-116-25 - Modernizing Reinsurance Administration.md
 ---
 ![[CP341-116-25 - Modernizing Reinsurance Administration - Cover.svg]]
 

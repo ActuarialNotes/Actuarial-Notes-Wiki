@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:206545c4600a39a5e232aa882cbe23f57a2ae886a1fa4e9af691698d65f72769
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-108-25 - Alternative Approaches to Calculating Service and Interest Cost under FASB ASC Topic 715.md
 ---
 ![[RET201-108-25 - Alternative Approaches to Calculating Service and Interest Cost under FASB ASC Topic 715 - Cover.svg]]
 

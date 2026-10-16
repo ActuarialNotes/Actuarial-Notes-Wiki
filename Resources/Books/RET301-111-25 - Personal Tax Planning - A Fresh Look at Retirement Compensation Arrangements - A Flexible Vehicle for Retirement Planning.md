@@ -5,6 +5,16 @@ Publisher: "Canadian Tax Foundation"
 Year: "2013"
 date: "2013"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:51a83b4a22398828f2733fbcdc4fb190d67b436b77c086da720961d5ee09f712
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-111-25 - Personal Tax Planning - A Fresh Look at Retirement Compensation Arrangements - A Flexible Vehicle for Retirement Planning.md
 ---
 ![[RET301-111-25 - Personal Tax Planning - A Fresh Look at Retirement Compensation Arrangements - A Flexible Vehicle for Retirement Planning - Cover.svg]]
 

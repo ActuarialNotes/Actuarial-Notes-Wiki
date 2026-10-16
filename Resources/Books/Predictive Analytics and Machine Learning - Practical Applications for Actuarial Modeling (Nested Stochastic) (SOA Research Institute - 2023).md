@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/predictive-analytics-and-machine-learning.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:67fb5e160fef3a30d216c5ed9d7ebfaa141f5b271e5b4f49d10e870f52a3c5dc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Predictive Analytics and Machine Learning - Practical Applications for Actuarial Modeling (Nested Stochastic) (SOA Research Institute - 2023).md
 ---
 ![[Predictive Analytics and Machine Learning - Practical Applications for Actuarial Modeling (Nested Stochastic) (SOA Research Institute - 2023) - Cover.svg]]
 

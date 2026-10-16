@@ -7,6 +7,16 @@ date: "2026"
 Type: "Guide"
 Code: "GH201-724-26"
 Available from: "[retraitequebec.gouv.qc.ca](https://www.retraitequebec.gouv.qc.ca/en/citizens/retirement-planning/applying-your-retirement-pension/retirement-pension-quebec-pension-plan/calculation-your-retirement-pension/adjustment-retirement-pension-disabled-persons)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:04669e681905a08a4d20f959b26250087b6bf490a3067b6ec4de0434f45ee822
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-724-26 - Adjustment of the Retirement Pension for Disabled Persons Between Ages 60 and 65.md
 ---
 ![[GH201-724-26 - Adjustment of the Retirement Pension for Disabled Persons Between Ages 60 and 65 - Cover.svg]]
 

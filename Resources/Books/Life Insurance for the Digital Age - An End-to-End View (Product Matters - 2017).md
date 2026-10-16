@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/pro-2017-iss108-nayak-abrokwah.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:54c77fcfe39494a6e3364684294df74f0d116ed0670faaa9cd03c2533c684c10
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Life Insurance for the Digital Age - An End-to-End View (Product Matters - 2017).md
 ---
 ![[Life Insurance for the Digital Age - An End-to-End View (Product Matters - 2017) - Cover.svg]]
 

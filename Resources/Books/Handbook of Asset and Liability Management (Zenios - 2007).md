@@ -7,6 +7,16 @@ date: "2007"
 Edition: "1st"
 Type: "Textbook"
 ISBN: "978-0-444-52802-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:512da8253e8866a71b232eedce8a11f811699caa6dc329797b5ddc47abb9ba6d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Handbook of Asset and Liability Management (Zenios - 2007).md
 ---
 ![[Handbook of Asset and Liability Management (Zenios - 2007) - Cover.svg]]
 

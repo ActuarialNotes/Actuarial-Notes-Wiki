@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Study Note"
 Code: "CP311-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eb804e4ded4421b215eaf0c1e504bdc43667dcec07d7f25e298b51e5e2f74c4d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-106-25 - Chapter 19 of Quantitative Enterprise Risk Management.md
 ---
 ![[CP311-106-25 - Chapter 19 of Quantitative Enterprise Risk Management - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2024/primer-generative-ai.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d660a33acc84e3fe668cf8213ed0f7ff764a10afdea93751240a190aaba6162
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A Primer on Generative AI for Actuaries (2024).md
 ---
 ![[A Primer on Generative AI for Actuaries (2024) - Cover.svg]]
 

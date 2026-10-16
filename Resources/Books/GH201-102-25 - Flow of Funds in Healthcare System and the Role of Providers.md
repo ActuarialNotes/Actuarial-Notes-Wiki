@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b70f8ee1d542fade762e39f1a106e83c5dda93ce74834de77d49e509a7bc4e5e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-102-25 - Flow of Funds in Healthcare System and the Role of Providers.md
 ---
 ![[GH201-102-25 - Flow of Funds in Healthcare System and the Role of Providers - Cover.svg]]
 

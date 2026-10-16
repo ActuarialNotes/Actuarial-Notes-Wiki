@@ -7,6 +7,16 @@ date: "2020"
 Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-119-62805-7"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:421ae609fe0852e261591d12db997f49e91e9b94f4045a4296fd44645f358788
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Financial Statement Analysis (Robinson et al - 2020).md
 ---
 ![[International Financial Statement Analysis (Robinson et al - 2020) - Cover.svg]]
 

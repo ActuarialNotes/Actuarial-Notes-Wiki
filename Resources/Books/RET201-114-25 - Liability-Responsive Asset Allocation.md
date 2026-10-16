@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-114-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1ada29045e32e7e6cfbd3a92f8733ac74c6d141fd8d5c5e64da54e8188f84193
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-114-25 - Liability-Responsive Asset Allocation.md
 ---
 ![[RET201-114-25 - Liability-Responsive Asset Allocation - Cover.svg]]
 

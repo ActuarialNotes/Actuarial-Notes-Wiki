@@ -6,6 +6,16 @@ Year: "1989"
 date: "1989"
 Type: "Case Law"
 Code: "[1989] 1 S.C.R. 1219"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ca967ed222210bc5a2189655e8de4e183437280c522cc8ae41786d4953d73af
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-709-25 - Brooks V. Canada Safeway Ltd.md
 ---
 ![[GH201-709-25 - Brooks V. Canada Safeway Ltd - Cover.svg]]
 

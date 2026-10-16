@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Textbook"
 ISBN: "978-1-118-95916-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9aa06da0420c1131fc49e0655ae3623182bd88cdded945104ea47b2b6ff7279e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Volatility Smile (Derman - 2016).md
 ---
 ![[The Volatility Smile (Derman - 2016) - Cover.svg]]
 

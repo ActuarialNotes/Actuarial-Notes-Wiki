@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Guideline"
 Code: "ILA201-802-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:106f112da05f5b04ff9a251e1e567c2c6b16c401e5c736c9fd1cd071ff2eb5f2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-802-25 - NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual.md
 ---
 ![[ILA201-802-25 - NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual - Cover.svg]]
 

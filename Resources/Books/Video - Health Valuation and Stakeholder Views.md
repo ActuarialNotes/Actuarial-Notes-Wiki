@@ -5,6 +5,17 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+description: "An SOA video, Health Valuation and Stakeholder Views, listed as background under Reserving in the GH 201 syllabus."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:34c0310261244388022506a34978b4084f770a91fd53dd7bc8eae1dcf9f396f2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Health Valuation and Stakeholder Views.md
 ---
 ![[Video - Health Valuation and Stakeholder Views - Cover.svg]]
 

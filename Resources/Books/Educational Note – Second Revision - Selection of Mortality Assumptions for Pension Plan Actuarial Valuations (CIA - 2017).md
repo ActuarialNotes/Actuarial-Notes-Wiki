@@ -7,6 +7,16 @@ date: "2017"
 Type: "Educational Note"
 Code: "Document 217128"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/217128e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8818b5ce1f5fa60207c1098ae7334660ce32a3ed65acf23e8646bfdd84453ff9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Educational Note – Second Revision - Selection of Mortality Assumptions for Pension Plan Actuarial Valuations (CIA - 2017).md"
 ---
 ![[Educational Note – Second Revision - Selection of Mortality Assumptions for Pension Plan Actuarial Valuations (CIA - 2017) - Cover.svg]]
 

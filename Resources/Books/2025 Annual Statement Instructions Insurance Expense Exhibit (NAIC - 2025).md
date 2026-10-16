@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2025"
 date: "2025"
 Type: "Instructions"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3f3e0646a4f8153d8255f5717ee92bde46aec6cae5821bdce13047de74cfe3f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/2025 Annual Statement Instructions Insurance Expense Exhibit (NAIC - 2025).md
 ---
 ![[2025 Annual Statement Instructions Insurance Expense Exhibit (NAIC - 2025) - Cover.svg]]
 

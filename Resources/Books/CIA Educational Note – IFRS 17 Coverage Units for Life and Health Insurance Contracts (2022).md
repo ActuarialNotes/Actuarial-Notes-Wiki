@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222175"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222175e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:943707b4fde704adc81a00e342bc1a980591de1d9d7e6c567930fec1c5e0af82
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CIA Educational Note – IFRS 17 Coverage Units for Life and Health Insurance Contracts (2022).md"
 ---
 ![[CIA Educational Note – IFRS 17 Coverage Units for Life and Health Insurance Contracts (2022) - Cover.svg]]
 
@@ -14,6 +24,7 @@ A CIA educational note that gives guidance on the selection of coverage units, t
 
 > [!info] On the syllabus
 > - [[Exam GH-201C (SOA)|Exam GH-201C]] — Financial Statements, outcomes 2e and 2f; the December 2022 note, excluding sections 3.1.2, 3.1.3, 3.2 and 3.4.
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — International Financial Reporting Requirements, outcomes 1a and 1b; CIA Educational Note: IFRS 17 Coverage Units for Life and Health Insurance Contracts, Dec 2022.
 
 ## 1 Introduction
 
@@ -46,3 +57,4 @@ A CIA educational note that gives guidance on the selection of coverage units, t
 ## Sources
 - [Educational Note: IFRS 17 – Coverage Units for Life and Health Insurance Contracts, December 2022, document 222175 (CIA)](https://www.cia-ica.ca/publications/222175e/) — the document: title page, memorandum, introduction, and the table of contents with the numbered sub-headings in the text (read from the 27-page PDF the page serves, sha256 2ad3e348f7061d9033905fe7e81cd522c8cc980c9a8fae1c852e9608f419a33e)
 - [SOA GH 201-C Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) — the citation and the assigned outcomes and exclusions
+- [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation and the assigned outcomes

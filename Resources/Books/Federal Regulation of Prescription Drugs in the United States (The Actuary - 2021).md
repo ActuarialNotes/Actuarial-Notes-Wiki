@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://www.theactuarymagazine.org/federal-regulation-of-prescription-drugs-in-the-united-states/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:72e1a56c891ad0f29054cb547771dd8a3d18258f175a64749d80defe8203c88a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Federal Regulation of Prescription Drugs in the United States (The Actuary - 2021).md
 ---
 ![[Federal Regulation of Prescription Drugs in the United States (The Actuary - 2021) - Cover.svg]]
 

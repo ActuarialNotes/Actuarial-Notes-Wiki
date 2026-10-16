@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Edition: "2nd"
 Type: "Textbook"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2e7dfd8e214966aa7cad5b5d5d4157792441394cda87f8b174d6417b29e56c7e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Personal Insurance (Cook - 2013).md
 ---
 ![[Personal Insurance (Cook - 2013) - Cover.svg]]
 

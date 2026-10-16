@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/overview-nges.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3c51f1e645c19eba08e989e9b79af01ec6629607231910981833c36f4b6ab16
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Overview of Nonguaranteed Elements (NGEs) (SOA Research Institute - 2022).md
 ---
 ![[Overview of Nonguaranteed Elements (NGEs) (SOA Research Institute - 2022) - Cover.svg]]
 

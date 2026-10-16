@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-alm-gi.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5a87b40d43aa0e0b6e85eb08f9cd3f614b9c3cd8c4f4414358361ee1724d3dfe
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ALM Strategies for General Insurers (SOA - 2025).md
 ---
 ![[ALM Strategies for General Insurers (SOA - 2025) - Cover.svg]]
 

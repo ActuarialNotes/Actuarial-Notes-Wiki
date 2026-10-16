@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Code: "CP312-113-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c4f97873f8988d29acf0e28fb9ece37688646825098c078726e2d33334f95b9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-113-26 - Importance of Climate-Related Risks for Actuaries.md
 ---
 ![[CP312-113-26 - Importance of Climate-Related Risks for Actuaries - Cover.svg]]
 

@@ -6,6 +6,17 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-301-study-note-class-ratemaking.pdf)"
+description: "An SOA study note combining three 2013 articles on classification ratemaking, one-way relativities and the minimum bias method, and minimum bias and generalized linear models."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8257795a9087d2b6c306588851c126b8855631621fcb51409b8ae5a257888ea4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Classification Ratemaking (Minimum Bias and GLMs - 2025).md
 ---
 ![[Classification Ratemaking (Minimum Bias and GLMs - 2025) - Cover.svg]]
 

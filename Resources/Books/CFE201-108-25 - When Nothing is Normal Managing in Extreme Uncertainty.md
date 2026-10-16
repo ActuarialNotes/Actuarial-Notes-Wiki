@@ -7,6 +7,16 @@ date: "2020"
 Type: "Paper"
 Code: "CFE201-108-25"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/when-nothing-is-normal-managing-in-extreme-uncertainty)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:005cd28bc7a133054c8b5704811271816df2d80c06c6a45131b81ceeb8b2d731
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-108-25 - When Nothing is Normal Managing in Extreme Uncertainty.md
 ---
 ![[CFE201-108-25 - When Nothing is Normal Managing in Extreme Uncertainty - Cover.svg]]
 

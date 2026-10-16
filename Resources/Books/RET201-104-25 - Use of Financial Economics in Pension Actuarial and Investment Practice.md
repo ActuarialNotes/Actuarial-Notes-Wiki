@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:400758e5f5fb71073e7085ad5796d2971ab809ec37fd0251057806ba59e860af
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-104-25 - Use of Financial Economics in Pension Actuarial and Investment Practice.md
 ---
 ![[RET201-104-25 - Use of Financial Economics in Pension Actuarial and Investment Practice - Cover.svg]]
 

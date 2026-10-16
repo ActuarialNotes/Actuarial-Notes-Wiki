@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP321-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4dce4dbc8ea92ea930de20fafbee58315a45f9dec9d7730e0296219c00a07f0d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-108-25 - ALM for Life.md
 ---
 ![[CP321-108-25 - ALM for Life - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "CFE201-103-25"
 Available from: "[thismatter.com](https://thismatter.com/money/banking/bank-profits.htm)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:393c06c464d1f6002b6345bb703bce1a4937f53c210e2c469843ae0ece6e75b3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-103-25 - Bank Profitability.md
 ---
 ![[CFE201-103-25 - Bank Profitability - Cover.svg]]
 

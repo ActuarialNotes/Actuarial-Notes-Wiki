@@ -7,6 +7,16 @@ date: "2026"
 Edition: "1st"
 Type: "Textbook"
 Code: "SABE02"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e77537647db388afd87955378474b817c0a7a41cfa0b94b943a583af6e48962f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Excerpts from Business Law for Insurance Professionals.md
 ---
 ![[Excerpts from Business Law for Insurance Professionals - Cover.svg]]
 

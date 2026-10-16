@@ -7,6 +7,16 @@ date: "2022"
 Type: "Paper"
 Code: "ILA201-608-25"
 Available from: "[kpmg.com](https://kpmg.com/ch/en/insights/taxes/ifrs-17-tax-contractual-service-margin.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7d9e2b8bde61d5c4fc85d8081d72de513ba0035008c921671702dc2052055782
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-608-25 - IFRS 17 - Tax and the Contractual Service Margin.md
 ---
 ![[ILA201-608-25 - IFRS 17 - Tax and the Contractual Service Margin - Cover.svg]]
 

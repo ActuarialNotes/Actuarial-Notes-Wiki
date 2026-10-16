@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e76c1158b213533d6fce7888a0be52afd1bc6177a4efa81f21bb5059cd3f870c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-106-25 - Experience Assumptions for Individual Life Insurance and Annuities.md
 ---
 ![[ILA101-106-25 - Experience Assumptions for Individual Life Insurance and Annuities - Cover.svg]]
 

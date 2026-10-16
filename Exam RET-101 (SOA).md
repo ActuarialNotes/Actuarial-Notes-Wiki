@@ -5,11 +5,11 @@ syllabus:
   source_sha256: d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cc7a4f448d854001ad4cd78663bf0e41bf5ed2634b686197ceb3a51bb69c5d8a
+  content_hash: sha256:2b41eede1acf2bf6667ee78f06ce2cda7dc7c6da99a0a85e854720565838d1c5
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for RET-101, all pages, sha256:d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf"
   open_findings: 0
@@ -262,7 +262,7 @@ verification:
 >      - Outcomes 2a
 > - [[RET101-114-25 - How Accurately does 70 percent Final Employment Earnings Replacement Measure Retirement Income (In)Adequacy Introducing the Living Standards Replacement Rate (LSRR)|RET101-114-25: How Accurately does 70% Final Employment Earnings Replacement Measure Retirement Income (In)Adequacy? Introducing the Living Standards Replacement Rate (LSRR): (sections 3.1, 3.2, 3.4, 4 & 5 and Appendices background only)]]
 >      - Outcomes 2c
-> - [[RET101-111-25 - Risk Management and Public Plan Retirement Systems - Appendices B and C only|RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices B and C only (remainder is background)]]
+> - [[Risk Management and Public Plan Retirement Systems (AAA)|RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices B and C only (remainder is background)]]
 >      - Outcomes 2b
 > - [[Primer on Retirement Income Strategy Design and Evaluation (SOA Research - 2023)|Primer on Retirement Income Strategy Design and Evaluation, SOA Research, Jan 2023, Executive Summary, Sections 1, 2, 5, 6 & Appendix A]]
 >      - Outcomes 2a, 2d
@@ -279,7 +279,7 @@ verification:
 >      - Outcomes 2d
 > - [[Educational Note - Financial Risks Inherent in Multi-Employer Pension Plans and Target Benefit Pension Plans (CIA - 2011)|Educational Note: Financial Risks Inherent in Multi-Employer Pension Plans and Target Benefit Pension Plans, CIA, May 2011]]
 >      - Outcomes 2b
-> - [[RET101-111-25 - Risk Management and Public Plan Retirement Systems - Appendices A-C only|RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices A-C only (remainder is background)]]
+> - [[Risk Management and Public Plan Retirement Systems (AAA)|RET101-111-25: Risk Management and Public Plan Retirement Systems - Appendices A-C only (remainder is background)]]
 >      - Outcomes 3a
 > - [[Pension Risk Transfer - Evaluating Impact and Barriers for De-Risking Strategies (SOA - 2021)|Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, SOA, Jun 2021 (pp. 8-19 only)]]
 >      - Outcomes 3c

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[nirsonline.org](https://www.nirsonline.org/research/hybridhandbook/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2532e8f78e171c55db1626a9420332ee742b827bc1c22c5f8b50fad4538bfea9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-104-25 - The Hybrid Handbook - Not All Hybrids are Created Equal.md
 ---
 ![[RET101-104-25 - The Hybrid Handbook - Not All Hybrids are Created Equal - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e971f0085a6aeaf2c0e0cc1adb8ebf325aef463c57b4c15a26718d24acc07dcb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-107-25 - Introduction (A58).md
 ---
 ![[RET201-107-25 - Introduction (A58) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2018"
 Type: "Report"
 Code: "GH201-695-25"
 Available from: "[canadiangenerics.ca](https://canadiangenerics.ca/a-joint-statement-from-the-pan-canadian-pharmaceutical-alliance-and-the-canadian-generic-pharmaceutical-association/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:db5772983dc608700eb121cd2b36180756462b4aec1ffa682134c81a944778eb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-695-25 - A Joint Statement from the pan-Canadian Pharmaceutical Alliance and the Canadian Generic Pharmaceutical Association.md
 ---
 ![[GH201-695-25 - A Joint Statement from the pan-Canadian Pharmaceutical Alliance and the Canadian Generic Pharmaceutical Association - Cover.svg]]
 

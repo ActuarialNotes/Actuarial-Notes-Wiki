@@ -5,6 +5,16 @@ Publisher: "Cardinalis 1 LLC"
 Year: "2024"
 date: "2024"
 Type: "Textbook"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f30394155603d140b7edc7e278c095b7a826a692898865d735d80576f36a5a42
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Long-Term Actuarial Models Part II (Cardinal - 2024).md
 ---
 ![[Long-Term Actuarial Models Part II (Cardinal - 2024) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2015"
 Type: "Guideline"
 Code: "AGN-005"
 Available from: "[fsrao.ca](https://www.fsrao.ca/determination-solvency-liability-adjustment)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b4e63cb553b5d1ba8d05dc46488bf7f1e9cbe1fea0a60a0a57e2e0ff26e39f79
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-100-25 - Financial Services Commission of Ontario - Actuarial Guidance Note - Determination of the Solvency Liability Adjustment.md
 ---
 ![[RET301-100-25 - Financial Services Commission of Ontario - Actuarial Guidance Note - Determination of the Solvency Liability Adjustment - Cover.svg]]
 

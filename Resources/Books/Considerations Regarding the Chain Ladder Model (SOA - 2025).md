@@ -6,6 +6,17 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-301-study-note-chain-ladder.pdf)"
+description: "An SOA study note on when the chain ladder method applies, how to test its assumptions, and how its prediction error is calculated."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3cde30f53dab0ef646f78f7940c0be34cf661292d51b4589274f1bd22cba0afd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Considerations Regarding the Chain Ladder Model (SOA - 2025).md
 ---
 ![[Considerations Regarding the Chain Ladder Model (SOA - 2025) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-716-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46c022a4e82266cdc15a2d7ad5e6514c6e8ea3d4bd8d177b87ff0a6244affb80
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-716-25 - Legislative Changes to EI Sickness Benefits.md
 ---
 ![[GH201-716-25 - Legislative Changes to EI Sickness Benefits - Cover.svg]]
 

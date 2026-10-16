@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Paper"
 Code: "INV201-109-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8616efa44101323ac7235896a0b633d66b30e280cd9732db84f97e22c76f01c5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-109-25 - Investment Instruments with Volatility Target Mechanism.md
 ---
 ![[INV201-109-25 - Investment Instruments with Volatility Target Mechanism - Cover.svg]]
 

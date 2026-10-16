@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Code: "CP351-110-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:67a4acf13781c7a410771b8c9ce637e53e239c2d8f851d426bcd5913ca4acfa2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-110-25 - New Frontiers - Backing Long-term Insurance Liabilities with Non-fixed-income Assets.md
 ---
 ![[CP351-110-25 - New Frontiers - Backing Long-term Insurance Liabilities with Non-fixed-income Assets - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2023"
 date: "2023"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dbaf3d927edb4d927330d3027e51fd5828fb3530ae450ae3d003c85e9b661960
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Considerations Regarding Dynamic Lapses in Actuarial Modeling (American Academy of Actuaries - 2023).md
 ---
 ![[Considerations Regarding Dynamic Lapses in Actuarial Modeling (American Academy of Actuaries - 2023) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2022"
 Type: "Textbook"
 Code: "INV101-107-26"
 ISBN: "978-1-009-09846-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c19211dacd5fd969a66db84aab480ce44bcb80526b001a2fa32a4e2966694a7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-107-26 - Chapter 12 of Quantitative Enterprise Risk Management.md
 ---
 ![[INV101-107-26 - Chapter 12 of Quantitative Enterprise Risk Management - Cover.svg]]
 

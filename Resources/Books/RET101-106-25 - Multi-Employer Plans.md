@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2022bc7988bcfe5260138c077439f59a98d7bf1ee37a3705dbd279c37087c9e0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-106-25 - Multi-Employer Plans.md
 ---
 ![[RET101-106-25 - Multi-Employer Plans - Cover.svg]]
 

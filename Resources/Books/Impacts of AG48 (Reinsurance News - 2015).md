@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/reinsurance-section-news/2015/november/rsn-2015-iss-83-bucich-rahil-shaw.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:81095af6b03efaba3e92916fbf106cc80050d251299923f54472c450536352c9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Impacts of AG48 (Reinsurance News - 2015).md
 ---
 ![[Impacts of AG48 (Reinsurance News - 2015) - Cover.svg]]
 

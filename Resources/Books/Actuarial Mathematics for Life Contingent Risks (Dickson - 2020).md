@@ -7,6 +7,16 @@ date: "2020"
 Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-108-47808-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d772035144e19c93ae5b1ae101e5c00952b1ca38c1303e87a9baa2993564bf7d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Actuarial Mathematics for Life Contingent Risks (Dickson - 2020).md
 ---
 ![[Actuarial Mathematics for Life Contingent Risks (Dickson - 2020) - Cover.svg]]
 

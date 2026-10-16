@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Available from: "[actuary.org](https://actuary.org/alternatives-for-pension-cost-recognition-implementation-approaches-using-bond-models/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5953cb45ae725e12416721307a091d82533c29f01ac2e88cb3e88de5ed12e560
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Alternatives for Pension Cost Recognition—Implementation Approaches Using Bond Models (AAA - 2016).md"
 ---
 ![[Alternatives for Pension Cost Recognition—Implementation Approaches Using Bond Models (AAA - 2016) - Cover.svg]]
 

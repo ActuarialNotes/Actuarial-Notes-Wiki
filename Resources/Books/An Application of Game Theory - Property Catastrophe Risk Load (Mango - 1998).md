@@ -6,6 +6,16 @@ Year: "1998"
 date: "1998"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/proceed_proceed98_980157.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e3a39f548b0fbaedaa1826d2bc22fba034f69f7730232c8b33005b4d316c146
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/An Application of Game Theory - Property Catastrophe Risk Load (Mango - 1998).md
 ---
 ![[An Application of Game Theory - Property Catastrophe Risk Load (Mango - 1998) - Cover.svg]]
 

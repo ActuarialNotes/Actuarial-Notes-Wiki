@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-117-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:924de16ed45a3762f01ef8696531a04f165013a50dc654217b571386f083ed94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-117-25 - Pension Plan Immunization Strategies - How Close Can You Get.md
 ---
 ![[RET201-117-25 - Pension Plan Immunization Strategies - How Close Can You Get - Cover.svg]]
 

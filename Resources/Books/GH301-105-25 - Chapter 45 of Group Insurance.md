@@ -8,6 +8,16 @@ Edition: "8th"
 Type: "Study Note"
 Code: "GH301-105-25"
 ISBN: "978-1-64756-350-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:925fa6eb0fcc8276a350a6edc2852db2965328b7a2c8a409e511502193458eec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-105-25 - Chapter 45 of Group Insurance.md
 ---
 ![[GH301-105-25 - Chapter 45 of Group Insurance - Cover.svg]]
 

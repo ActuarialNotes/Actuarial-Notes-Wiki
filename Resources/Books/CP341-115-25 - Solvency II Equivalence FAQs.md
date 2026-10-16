@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Guide"
 Code: "CP341-115-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f5a5df6041e2d9c908d3f5dc0534520c3622fbd02be937074c86fe144813b79e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-115-25 - Solvency II Equivalence FAQs.md
 ---
 ![[CP341-115-25 - Solvency II Equivalence FAQs - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2010"
 date: "2010"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c56ef9d50f21bdab63c9b3eeb3ec1b3c80989e5d90e1347511a48e3dc0886afc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk Management and Public Plan Retirement Systems (AAA).md
 ---
 ![[Risk Management and Public Plan Retirement Systems (AAA) - Cover.svg]]
 
@@ -12,6 +22,7 @@ A report to the Board of Directors of the American Academy of Actuaries from its
 
 > [!info] On the syllabus
 > - [[Exam RET-201 (SOA)|Exam RET-201]] — Risk Management and Public Plan Retirement Systems, AAA (Appendices only; pp. 1-33 background); outcome 5b.
+> - [[Exam RET-101 (SOA)|Exam RET-101]] — RET101-111-25; Appendices B and C only (the remainder is background); Outcomes 2b. The SOA course strategy guide says the appendices discuss the structure and governance of public retirement plans in the U.S., some of it relevant to other countries; RET101-111-25; outcome 3a; Appendices A-C only (the remainder is background).
 
 ## Introduction and Executive Summary
 - The Task Force
@@ -65,3 +76,6 @@ A report to the Board of Directors of the American Academy of Actuaries from its
 - [PPPTF Report to American Academy of Actuaries Board of Directors: Risk Management and Public Plan Retirement Systems](https://www.actuary.org/sites/default/files/files/PPPTF_Final_Report_c_0.pdf) — the document, read from the 56-page PDF (sha256 1feba1dd1210b7ef8e76ea18eb23c01a650e007cf3a6685d8be4640912b53d92): title page, the introduction for the lead, the printed table of contents and the headings under it; the title page prints no date, so the year is from the file's creation date, October 2010
 - [RET 201 Syllabus, Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf) — the citation ("Risk Management and Public Plan Retirement Systems, AAA (Appendices only; pp. 1-33 background)") and the learning outcome; the report's printed pages 1-33 are the main text and the appendices begin on printed page 34
 - [RET 201 Course Strategy Guide, 2026-2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-strat-guide.pdf) — the statement that the reading covers funding considerations specific to public plans
+- [RET 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf) — the title, the appendices assigned and the outcome
+- [RET 101 Course Strategy Guide, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-strat-guide.pdf) — what the SOA says the appendices cover
+- [RET 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf) — the citation (RET101-111-25, Appendices A-C only; the same reading is assigned elsewhere as Appendices B and C only) and the learning outcome

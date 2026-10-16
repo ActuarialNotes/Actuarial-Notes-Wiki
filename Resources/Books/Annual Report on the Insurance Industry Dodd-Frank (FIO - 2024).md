@@ -5,6 +5,16 @@ Publisher: "U.S. Department of the Treasury"
 Year: "2024"
 date: "2024"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f8326c1114a4f09abe62179fbf06b2ed4d392749ca3300ca151df71bfc5e5674
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Annual Report on the Insurance Industry Dodd-Frank (FIO - 2024).md
 ---
 ![[Annual Report on the Insurance Industry Dodd-Frank (FIO - 2024) - Cover.svg]]
 

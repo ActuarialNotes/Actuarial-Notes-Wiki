@@ -6,6 +6,16 @@ Year: "2004"
 date: "2004"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/health-section-news/2004/october/hsn-2004-iss48-DobsonSnook.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:90ec8b97ecd76ba1e7f08024d1ea35090c0d62bfd2b201060e85c32bdc55db9e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Read. Think. Write (Health Section News - 2004).md
 ---
 ![[Read. Think. Write (Health Section News - 2004) - Cover.svg]]
 

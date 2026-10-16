@@ -6,13 +6,23 @@ Year: "2010"
 date: "2010"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-new-approach.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:04a80c0440edc087ab96479aff57667d737392c4acf3d515161b2f7e43aae95e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A New Approach for Managing Operational Risk (SOA - 2010).md
 ---
 ![[A New Approach for Managing Operational Risk (SOA - 2010) - Cover.svg]]
 
 A research report sponsored by the Joint Risk Management Section of the Society of Actuaries, the Canadian Institute of Actuaries and the Casualty Actuarial Society, prepared by Towers Perrin and OpRisk Advisory. Originally published in December 2009 and revised in July 2010, it asks whether there is a better approach to managing operational risk than the traditional audit-based one, and outlines a top-down Modern ORM approach and why the methods commonly used today may not adequately meet the challenge.
 
 > [!info] On the syllabus
-> - [[Exam CFE-101 (SOA)|Exam CFE-101]] — A New Approach for Managing Operational Risk, SOA, Jul 2010 (section 8); outcome 3.2f.
+> - [[Exam CFE-101 (SOA)|Exam CFE-101]] — A New Approach for Managing Operational Risk, SOA, Jul 2010 (section 8); outcome 3.2f; Ch. 8 (the syllabus cites it as "A New Approach for Managing Operational Risk, SOA, Jul 2010 (section 8)"); outcomes 2.2h, 3.2f.
 
 ## 1 Executive Summary
 

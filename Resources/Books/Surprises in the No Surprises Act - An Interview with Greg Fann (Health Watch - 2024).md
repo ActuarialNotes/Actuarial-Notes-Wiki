@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/sections/health/health-newsletter/2024/september/hw-2024-09-bohn/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ee5ead89444ca335a7b61e306fa31f47e2c1d1935da15ccf1b47d88f7f8010e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Surprises in the No Surprises Act - An Interview with Greg Fann (Health Watch - 2024).md
 ---
 ![[Surprises in the No Surprises Act - An Interview with Greg Fann (Health Watch - 2024) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Code: "CFE101-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:008af576ac25d0d657a5364d850d30549a3443ef1b8ea08a9838bcb240e496e4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-102-25 - Leveraging COSO Across the Three Lines of Defenses.md
 ---
 ![[CFE101-102-25 - Leveraging COSO Across the Three Lines of Defenses - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Report"
 Code: "INV101-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:875cdc2b5de636fd642920a90c44ce3f5a72e3625d6c175ab43fcabcb91127b9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-103-25 - Elements of an Investment Policy Statement for Institutional Investors.md
 ---
 ![[INV101-103-25 - Elements of an Investment Policy Statement for Institutional Investors - Cover.svg]]
 

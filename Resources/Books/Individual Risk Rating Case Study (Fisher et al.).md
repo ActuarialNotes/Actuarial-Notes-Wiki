@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al_Case_Study.xlsx)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0a499dc8bce6737915e9ab46f4918753497e58224b98809c03a8b075656f3b21
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Individual Risk Rating Case Study (Fisher et al.).md
 ---
 ![[Individual Risk Rating Case Study (Fisher et al.) - Cover.svg]]
 

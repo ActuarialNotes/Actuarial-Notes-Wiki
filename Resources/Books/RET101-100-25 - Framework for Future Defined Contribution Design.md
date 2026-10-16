@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:82f40399b6015989dcc37fa90826c887a6ee961575590459128a63bd4ab41b03
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-100-25 - Framework for Future Defined Contribution Design.md
 ---
 ![[RET101-100-25 - Framework for Future Defined Contribution Design - Cover.svg]]
 

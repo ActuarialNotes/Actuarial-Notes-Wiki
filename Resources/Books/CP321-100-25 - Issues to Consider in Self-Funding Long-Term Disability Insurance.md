@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP321-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3be3cf3538a6d8cb9cec05c47088500090ab00e2023c516c223c47f08199330b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-100-25 - Issues to Consider in Self-Funding Long-Term Disability Insurance.md
 ---
 ![[CP321-100-25 - Issues to Consider in Self-Funding Long-Term Disability Insurance - Cover.svg]]
 

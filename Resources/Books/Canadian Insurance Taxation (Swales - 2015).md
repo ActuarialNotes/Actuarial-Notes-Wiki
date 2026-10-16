@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Edition: "4th"
 Type: "Textbook"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:50b022b38efcb3584aa845c1598d0175c7ac2ee9be99d49f18e64d668cf65566
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Canadian Insurance Taxation (Swales - 2015).md
 ---
 ![[Canadian Insurance Taxation (Swales - 2015) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2016"
 Type: "Textbook"
 Code: "CP321-109-25"
 ISBN: "978-3-319-29774-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:645582506cbee55a7e7948dddc46440390efba415dc5a4ee1787e16faf062ffb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP321-109-25 - Chapter 3 of Modelling in Life Insurance – A Management Perspective.md"
 ---
 ![[CP321-109-25 - Chapter 3 of Modelling in Life Insurance – A Management Perspective - Cover.svg]]
 

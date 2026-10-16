@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6bcacadd14452c11b890ca5808530eab79e4253b5c463e6299a953739545d268
+  content_hash: sha256:97d15a12ab23103a19aa99bbe9477611edda6914ac4833829d4a45a16f2298ba
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ A CIA educational note guiding actuaries of life and P&C insurers in performing 
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C4 and C5; the August 2025 note, with no sections excluded.
+> - [[Exam GH-201C (SOA)|Exam GH-201C]] — Financial Statements, outcomes 2b and 2c; the August 2025 note, pp. 1-46 and 61.
 
 ## Preamble
 - 2025 Updates
@@ -138,3 +139,4 @@ A CIA educational note guiding actuaries of life and P&C insurers in performing 
 ## Sources
 - [Financial Condition Testing (CIA, 2025)](https://www.cia-ica.ca/publications/225095e/) — the landing page (publication date, accession no. 225095, the 2025 updates) and its PDF: title page, contents, preamble, the text of Sections 1–4 and the appendix headings, with the text of Appendix B §§1–2 and Appendix C
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope
+- [SOA GH 201-C Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) — the citation and the assigned pages and outcomes

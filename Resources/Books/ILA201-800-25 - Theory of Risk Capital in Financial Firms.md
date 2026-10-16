@@ -6,6 +6,16 @@ Year: "1993"
 date: "1993"
 Type: "Paper"
 Code: "ILA201-800-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f8696126e437fc8e54cf09a1a9b272f2cc491c4048515c6b9b3962982af8522
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-800-25 - Theory of Risk Capital in Financial Firms.md
 ---
 ![[ILA201-800-25 - Theory of Risk Capital in Financial Firms - Cover.svg]]
 

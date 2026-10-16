@@ -7,6 +7,16 @@ date: "2016"
 Type: "Standard of Practice"
 Code: "ASOP No. 21"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop-021_183.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a95fd9d1fb2a919a5c76b2360728326fe2a5762b0cf93f887e219b2df0da14f3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 21 - Responding to or Assisting Auditors or Examiners in Connection with Financial Audits.md
 ---
 ![[ASOP 21 - Responding to or Assisting Auditors or Examiners in Connection with Financial Audits - Cover.svg]]
 

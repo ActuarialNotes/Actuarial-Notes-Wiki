@@ -7,6 +7,16 @@ date: "2003"
 Type: "Textbook"
 Code: "INV101-108-26"
 ISBN: "978-0-691-09046-7"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c4200685e9f7c30374851f4f64326a5defc7fc6d2a435c82a04f74d2886ad3dc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-108-26 - Chapters 3 and 5 of Credit Risk.md
 ---
 ![[INV101-108-26 - Chapters 3 and 5 of Credit Risk - Cover.svg]]
 

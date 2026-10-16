@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guide"
 Code: "CP341-109-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b29331f17203a77d96664b56c5e8688f6c07fd252b8031f2f6528408bf8625ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-109-25 - Guide to Reciprocal Jurisdiction.md
 ---
 ![[CP341-109-25 - Guide to Reciprocal Jurisdiction - Cover.svg]]
 

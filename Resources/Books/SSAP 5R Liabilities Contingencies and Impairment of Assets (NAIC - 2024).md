@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 5R"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9616900568da4930fc36fb74216978512064660ae1a4d8fae504c9f014663d5f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 5R Liabilities Contingencies and Impairment of Assets (NAIC - 2024).md
 ---
 ![[SSAP 5R Liabilities Contingencies and Impairment of Assets (NAIC - 2024) - Cover.svg]]
 

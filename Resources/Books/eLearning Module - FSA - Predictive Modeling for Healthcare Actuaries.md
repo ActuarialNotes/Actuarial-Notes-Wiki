@@ -1,10 +1,20 @@
 ---
-Title: "eLearning Module: FSA: Predictive Modeling for Healthcare Actuaries"
+Title: "eLearning Module - FSA - Predictive Modeling for Healthcare Actuaries"
 Authors: "Society of Actuaries"
 Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d7b8f46a4007af8206895c67023a7388fc56859ac9271fef0e06cc21c0838da0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/eLearning Module - FSA - Predictive Modeling for Healthcare Actuaries.md
 ---
 ![[eLearning Module - FSA - Predictive Modeling for Healthcare Actuaries - Cover.svg]]
 

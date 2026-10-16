@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-402-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b8ff25bb33fb0acc42951fddcfaa9c204f915d1817b44e4a1db5b85757222c72
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-402-25 - RBC Calculation Examples.md
 ---
 ![[GH201-402-25 - RBC Calculation Examples - Cover.svg]]
 

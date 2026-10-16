@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Textbook"
 ISBN: "978-0-470-60973-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a39fbbc5cd083ad8b9b71023911f9a1f9e3e0b97364ba27195ae94e3a68f5afd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Handbook of Traditional and Alternative Investment Vehicles (Anson - 2011).md
 ---
 ![[The Handbook of Traditional and Alternative Investment Vehicles (Anson - 2011) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2008"
 date: "2008"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/health-watch-newsletter/2008/january/hsn-2008-iss57-damler-winkelman.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:17656dc9c7c1112dc1a7da0f4e060852a125c2b59cf0888e2e8b753714167ca6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk Adjustment in State Medicaid Programs (Health Watch - 2008).md
 ---
 ![[Risk Adjustment in State Medicaid Programs (Health Watch - 2008) - Cover.svg]]
 

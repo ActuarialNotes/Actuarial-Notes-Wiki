@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/pro-2017-iss106.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0071c44af691312092227d263b60e047da78ceaa93f0cd4797ba3ba1ccd1364
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Term Conversions - Pricing and Reserves (Product Matters - 2017).md
 ---
 ![[Term Conversions - Pricing and Reserves (Product Matters - 2017) - Cover.svg]]
 

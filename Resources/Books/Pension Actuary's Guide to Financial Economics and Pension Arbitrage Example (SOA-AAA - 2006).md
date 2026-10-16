@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries and American Academy of Actuaries"
 Year: "2006"
 date: "2006"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86ca53e71aaa2753a100840c6689e3e90ab581ed60d5ab7deabdf36a66488adc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Pension Actuary's Guide to Financial Economics and Pension Arbitrage Example (SOA-AAA - 2006).md"
 ---
 ![[Pension Actuary's Guide to Financial Economics and Pension Arbitrage Example (SOA-AAA - 2006) - Cover.svg]]
 

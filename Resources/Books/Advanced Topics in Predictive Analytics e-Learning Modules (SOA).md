@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2022"
 date: "2022"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5d895970dd98907dd162fad349813bec7d439597b1a78bde7d898edbe95fb546
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Advanced Topics in Predictive Analytics e-Learning Modules (SOA).md
 ---
 ![[Advanced Topics in Predictive Analytics e-Learning Modules (SOA) - Cover.svg]]
 

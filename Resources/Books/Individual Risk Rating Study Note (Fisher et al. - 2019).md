@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9ca3d3c50de36f0e99902b1b624324ba9823e0fd6711339f69f4354cba181171
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Individual Risk Rating Study Note (Fisher et al. - 2019).md
 ---
 ![[Individual Risk Rating Study Note (Fisher et al. - 2019) - Cover.svg]]
 

@@ -8,6 +8,16 @@ Edition: "2nd"
 Type: "Textbook"
 Code: "RET201-101-25"
 ISBN: "978-1-56698-200-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71688ca86d20b747382534a1368da66a6ad45d0cfcef6d82a39de8ceab6f0f4f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-101-25 - A Problem-Solving Approach to Pension Funding and Valuations.md
 ---
 ![[RET201-101-25 - A Problem-Solving Approach to Pension Funding and Valuations - Cover.svg]]
 

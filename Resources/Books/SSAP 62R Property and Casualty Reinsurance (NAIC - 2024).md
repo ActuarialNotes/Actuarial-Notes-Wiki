@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 62R"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:57a9003dcea17ec2d104a1772ec8302acb7973bd4d9d97ab32554344c15e2957
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 62R Property and Casualty Reinsurance (NAIC - 2024).md
 ---
 ![[SSAP 62R Property and Casualty Reinsurance (NAIC - 2024) - Cover.svg]]
 

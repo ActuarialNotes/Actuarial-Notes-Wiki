@@ -7,6 +7,16 @@ date: "2021"
 Edition: "8th"
 Type: "Textbook"
 ISBN: "978-1-64756-350-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0d42231eec9fe4281effbd3798310dc2450d67a49217c085cb8c7db361a5d36b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Group Insurance (Skwire - 2021).md
 ---
 ![[Group Insurance (Skwire - 2021) - Cover.svg]]
 

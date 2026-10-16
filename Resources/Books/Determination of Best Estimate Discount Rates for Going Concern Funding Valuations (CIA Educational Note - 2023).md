@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223077"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223077e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:712f5852013c50e716d1f5b3f06a29c8dd3de5a3c5e4fe83bf35c91610393dd8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Determination of Best Estimate Discount Rates for Going Concern Funding Valuations (CIA Educational Note - 2023).md
 ---
 ![[Determination of Best Estimate Discount Rates for Going Concern Funding Valuations (CIA Educational Note - 2023) - Cover.svg]]
 

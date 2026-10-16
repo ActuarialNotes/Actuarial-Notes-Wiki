@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-718-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f0733139de21e3313474b7c892220dbb5f8c4287bc7a87ec36c2ff04e0ebe88
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-718-25 - An Update on Canada's National Strategy for Drugs for Rare Diseases.md"
 ---
 ![[GH201-718-25 - An Update on Canada's National Strategy for Drugs for Rare Diseases - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96deb9f44e106be0983ecfba02ea57fda37705c7240a1df6b422aebedfac2b1d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-103-25 - Actuarial Equivalence Calculations.md
 ---
 ![[RET201-103-25 - Actuarial Equivalence Calculations - Cover.svg]]
 

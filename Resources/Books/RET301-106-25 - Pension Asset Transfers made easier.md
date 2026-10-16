@@ -5,6 +5,16 @@ Publisher: "Hicks Morley Hamilton Stewart Storie LLP"
 Year: "2014"
 date: "2014"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5fc13c2679868b1d3232b175c6c89d7217002c0852c6bd164df9829d9db3acf0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-106-25 - Pension Asset Transfers made easier.md
 ---
 ![[RET301-106-25 - Pension Asset Transfers made easier - Cover.svg]]
 

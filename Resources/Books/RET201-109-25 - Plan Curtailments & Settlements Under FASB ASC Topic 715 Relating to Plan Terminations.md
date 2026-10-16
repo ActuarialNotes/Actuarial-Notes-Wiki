@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-109-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:68baa3f61eed1aac6d038236ae8a2cdad8d5e294c97d195f07e73095bb593fde
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/RET201-109-25 - Plan Curtailments & Settlements Under FASB ASC Topic 715 Relating to Plan Terminations.md"
 ---
 ![[RET201-109-25 - Plan Curtailments & Settlements Under FASB ASC Topic 715 Relating to Plan Terminations - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2014"
 Edition: "1st"
 Type: "Textbook"
 ISBN: "978-1-119-96583-1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8ca95ee464bc3ded5cfabfc2e7c003380c66661068d5c43ee69e642f922e1d49
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Problems and Solutions in Mathematical Finance - Stochastic Calculus (Chin - 2014).md
 ---
 ![[Problems and Solutions in Mathematical Finance - Stochastic Calculus (Chin - 2014) - Cover.svg]]
 

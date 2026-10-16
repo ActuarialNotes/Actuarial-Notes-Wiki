@@ -7,6 +7,16 @@ date: "2022"
 Type: "Study Note"
 Code: "ALTAM-21-23"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2023/2023-07-altam-21-23.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96f0ea173cf68ecfefa785931a7b7986815a203debc878981cb9a2a5b1d536fb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ALTAM-21-23 - Variable Annuity Guarantees.md
 ---
 ![[ALTAM-21-23 - Variable Annuity Guarantees - Cover.svg]]
 

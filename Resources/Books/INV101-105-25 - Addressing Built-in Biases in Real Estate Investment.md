@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Report"
 Code: "INV101-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7b858c39dd98b17774053358aa86e9f5f14a4c0d30d64e07134f7c67c6ca2763
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-105-25 - Addressing Built-in Biases in Real Estate Investment.md
 ---
 ![[INV101-105-25 - Addressing Built-in Biases in Real Estate Investment - Cover.svg]]
 

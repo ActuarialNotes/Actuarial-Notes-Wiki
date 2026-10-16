@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/learn-from-bank-failures.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:864fd84c2ffc457fe725ee349bdda528efd152f2c4c6b1d6b5dc6255f01e6da7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/What Can Insurers and Pension Funds Learn from Bank Failures.md
 ---
 ![[What Can Insurers and Pension Funds Learn from Bank Failures - Cover.svg]]
 

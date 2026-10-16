@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Paper"
 Code: "INV101-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9af2540fc8019bfbb334e3abf7a51358648f8ff0ed81b715b72731c10eb2de64
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-101-25 - Overview of Investing in Private Corporate Debt - Fabozzi in JPM.md
 ---
 ![[INV101-101-25 - Overview of Investing in Private Corporate Debt - Fabozzi in JPM - Cover.svg]]
 

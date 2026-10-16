@@ -7,6 +7,16 @@ date: "2017"
 Type: "Standard of Practice"
 Code: "ASOP No. 5"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2017/04/asop005_186.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bf13146238e0a2091994a15ec1661cb5b11225971c4ab18120c6d1b804240813
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 5 - Incurred Health and Disability Claims.md
 ---
 ![[ASOP 5 - Incurred Health and Disability Claims - Cover.svg]]
 

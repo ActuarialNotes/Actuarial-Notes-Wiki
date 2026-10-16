@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-premium-persist-assump-report.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b115e4df88b3733385c36ed32401a1ad101a07b3d3f853c792c3d840d9efc002
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Report on Premium Persistency Assumptions Study of Flexible Premium Universal Life Products (2012).md
 ---
 ![[Report on Premium Persistency Assumptions Study of Flexible Premium Universal Life Products (2012) - Cover.svg]]
 

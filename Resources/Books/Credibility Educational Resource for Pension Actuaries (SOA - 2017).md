@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/static-pages/sections/retirement/credibility-resource-pension.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c4d53e4cc81357cb36f9efc3c8e4b95bdaac701aac02e83be758d3ffa72860c0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Credibility Educational Resource for Pension Actuaries (SOA - 2017).md
 ---
 ![[Credibility Educational Resource for Pension Actuaries (SOA - 2017) - Cover.svg]]
 

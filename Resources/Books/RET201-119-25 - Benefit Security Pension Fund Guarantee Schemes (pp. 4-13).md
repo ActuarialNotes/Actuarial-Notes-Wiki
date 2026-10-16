@@ -6,6 +6,16 @@ Year: "2007"
 date: "2007"
 Type: "Paper"
 Code: "OECD Working Paper on Insurance and Private Pensions No. 5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c8fea295318f36a38d2c134b9d044d6e15b772e0a7df6f02161f4c6c03f333fa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-119-25 - Benefit Security Pension Fund Guarantee Schemes (pp. 4-13).md
 ---
 ![[RET201-119-25 - Benefit Security Pension Fund Guarantee Schemes (pp. 4-13) - Cover.svg]]
 

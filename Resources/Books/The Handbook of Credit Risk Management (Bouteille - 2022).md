@@ -7,6 +7,16 @@ date: "2022"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-119-83563-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6ecfa65ed8c30516b6b62e8dac04fd93b240a0ddeb72798dca577bb5dd256d07
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Handbook of Credit Risk Management (Bouteille - 2022).md
 ---
 ![[The Handbook of Credit Risk Management (Bouteille - 2022) - Cover.svg]]
 

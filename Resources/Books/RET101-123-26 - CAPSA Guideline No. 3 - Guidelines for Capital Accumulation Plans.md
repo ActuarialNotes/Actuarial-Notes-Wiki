@@ -7,6 +7,16 @@ date: "2024"
 Type: "Guideline"
 Code: "Guideline No. 3"
 Available from: "[capsa-acor.org](https://www.capsa-acor.org/Documents/View/2099)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c37d9fc9af7f5a34969df7c158e65aa0a24d37e072fda061146fe26307c65dfc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-123-26 - CAPSA Guideline No. 3 - Guidelines for Capital Accumulation Plans.md
 ---
 ![[RET101-123-26 - CAPSA Guideline No. 3 - Guidelines for Capital Accumulation Plans - Cover.svg]]
 

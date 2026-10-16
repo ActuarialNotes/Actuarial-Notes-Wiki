@@ -7,6 +7,16 @@ date: "2021"
 Type: "Paper"
 Code: "CFE101-127-26"
 Available from: "[ai.wharton.upenn.edu](https://ai.wharton.upenn.edu/artificial-intelligence-risk-governance/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7af22a1152109688eedc3d1550cc431d118ac47185b4e3e07efdb08b876aaaf6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CFE101-127-26 - Artificial Intelligence Risk & Governance.md"
 ---
 ![[CFE101-127-26 - Artificial Intelligence Risk & Governance - Cover.svg]]
 

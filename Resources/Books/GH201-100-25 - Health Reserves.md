@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42be772d15237ff683666bb2bba5a0109af8ea6ef4125a3b5afb2f4500277010
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-100-25 - Health Reserves.md
 ---
 ![[GH201-100-25 - Health Reserves - Cover.svg]]
 

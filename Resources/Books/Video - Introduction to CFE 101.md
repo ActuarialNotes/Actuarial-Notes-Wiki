@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c5109a456260f02c9f9efde5ddb408a0a7a70bd5c4dd1399580bae27c0385cb4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Introduction to CFE 101.md
 ---
 ![[Video - Introduction to CFE 101 - Cover.svg]]
 

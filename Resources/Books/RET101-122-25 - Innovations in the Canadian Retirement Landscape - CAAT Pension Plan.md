@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-122-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ccfcc77314fab6b775fe3cb9fb97bb75a61cb882719d2460da261fd7ffe9356f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-122-25 - Innovations in the Canadian Retirement Landscape - CAAT Pension Plan.md
 ---
 ![[RET101-122-25 - Innovations in the Canadian Retirement Landscape - CAAT Pension Plan - Cover.svg]]
 

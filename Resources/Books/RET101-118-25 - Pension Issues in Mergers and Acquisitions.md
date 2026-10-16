@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Paper"
 Code: "RET101-118-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:26bdf86b38468c1d60b51985190b6c081d39915d66fc424653bc13e6e667b880
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-118-25 - Pension Issues in Mergers and Acquisitions.md
 ---
 ![[RET101-118-25 - Pension Issues in Mergers and Acquisitions - Cover.svg]]
 

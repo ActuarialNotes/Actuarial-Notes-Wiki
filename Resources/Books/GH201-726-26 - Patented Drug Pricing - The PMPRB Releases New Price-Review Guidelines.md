@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "GH201-726-26"
 Available from: "[cassels.com](https://cassels.com/insights/patented-drug-pricing-the-pmprb-releases-new-price-review-guidelines/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:17f95cd739e9c092da5dfb025e3c2450e6b8fb609b3c7c68f8ab2be3222366c9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-726-26 - Patented Drug Pricing - The PMPRB Releases New Price-Review Guidelines.md
 ---
 ![[GH201-726-26 - Patented Drug Pricing - The PMPRB Releases New Price-Review Guidelines - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Study Note"
 Code: "RET101-107-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96fe94373cbe895c293cd656971b70934a7ab0b21bbe93588dc402fd2890052b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-107-26 - Introduction and Overview of Retirement Plan Investments.md
 ---
 ![[RET101-107-26 - Introduction and Overview of Retirement Plan Investments - Cover.svg]]
 

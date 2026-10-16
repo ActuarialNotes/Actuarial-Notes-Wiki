@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/live-impact-health.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a7f6af4b588ad50e66e93b09de7636d9a7d3d6d72e74744bbb82fe649adc6c4b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/How Does Where You Live Impact Your Health (SOA Research Institute - 2022).md
 ---
 ![[How Does Where You Live Impact Your Health (SOA Research Institute - 2022) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2021/2021-pension-risk-transfer.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a03b12553cfeaad5474c5db440cd3768cb9fb7da3e8c5ff0fb924a42a2dd8468
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Pension Risk Transfer - Evaluating Impact and Barriers for De-Risking Strategies (SOA - 2021).md
 ---
 ![[Pension Risk Transfer - Evaluating Impact and Barriers for De-Risking Strategies (SOA - 2021) - Cover.svg]]
 
@@ -13,7 +23,7 @@ A June 2021 report for the Society of Actuaries' Aging & Retirement Strategic Re
 
 > [!info] On the syllabus
 > - [[Exam RET-101 (SOA)|Exam RET-101]] — Outcomes 3c, 4n; pp. 8-19 only.
-> - [[Exam RET-201 (SOA)|Exam RET-201]] — Outcomes 3a, 4c, 4d; excluding the Appendices.
+> - [[Exam RET-201 (SOA)|Exam RET-201]] — Outcomes 3a, 4c, 4d; excluding the Appendices; Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, Jun 2021 (excluding Appendices); outcomes 5a, 5b.
 
 ## 1 Executive Summary
 

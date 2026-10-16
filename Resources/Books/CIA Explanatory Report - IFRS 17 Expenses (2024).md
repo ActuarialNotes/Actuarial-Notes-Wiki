@@ -7,6 +7,16 @@ date: "2024"
 Type: "Report"
 Code: "224129"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224129e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c7b0f07670b30cbc4c01164e4482c1d1ba3c165daf41c8750ad238e263f329d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Explanatory Report - IFRS 17 Expenses (2024).md
 ---
 ![[CIA Explanatory Report - IFRS 17 Expenses (2024) - Cover.svg]]
 

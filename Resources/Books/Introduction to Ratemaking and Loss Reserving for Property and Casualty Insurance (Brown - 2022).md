@@ -7,6 +7,16 @@ date: "2022"
 Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-64756-787-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e793240acb12a3a749e0815788d341b3bbc7f5ab2c5ed5cff7bf6ebc356032f9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Brown - 2022).md
 ---
 ![[Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Brown - 2022) - Cover.svg]]
 

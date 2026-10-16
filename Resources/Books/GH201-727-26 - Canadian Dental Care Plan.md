@@ -7,6 +7,16 @@ date: "2026"
 Type: "Guide"
 Code: "GH201-727-26"
 Available from: "[canada.ca](https://www.canada.ca/en/services/benefits/dental/dental-care-plan.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0a74dc1a14a71fc917db613b3b36bb843487f87a56716b7f605b488c7f410018
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-727-26 - Canadian Dental Care Plan.md
 ---
 ![[GH201-727-26 - Canadian Dental Care Plan - Cover.svg]]
 

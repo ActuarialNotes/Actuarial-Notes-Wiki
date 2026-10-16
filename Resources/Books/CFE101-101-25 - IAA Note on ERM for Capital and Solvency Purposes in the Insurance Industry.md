@@ -6,6 +6,16 @@ Year: "2009"
 date: "2009"
 Type: "Report"
 Code: "CFE101-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1fa7cf8683ed7e0936fa07db855f13d8e195d2eb80725c58f44f3174ebfcc158
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-101-25 - IAA Note on ERM for Capital and Solvency Purposes in the Insurance Industry.md
 ---
 ![[CFE101-101-25 - IAA Note on ERM for Capital and Solvency Purposes in the Insurance Industry - Cover.svg]]
 

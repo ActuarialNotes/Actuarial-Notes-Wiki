@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ed024cf46e4729ed97bc36132ba5ddc0116907f6acf50ecdccb2b5fd5d2fec9f
+  content_hash: sha256:eb93abbd074f96f53265e7b9b6dceae5ebad07d628ba2ca727345116bc446464
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf"
   open_findings: 0
@@ -178,16 +178,16 @@ verification:
 >      - Outcomes 1a-1f
 > - [[Canadian Institute of Actuaries Standards of Practice - Insurance (2024)|Canadian Institute of Actuaries Standards of Practice - Insurance, Jun 2024, sections 1400, 1510, 1700, 2100, 2200 & 2300]]
 >      - Outcomes 1d, 1g
-> - [[GH201-693-26 - OSFI Guidelines for Life Insurance Capital Adequacy Test (LICAT) Read introductions to all chapters below|GH201-693-26: OSFI Guidelines for Life Insurance Capital Adequacy Test (LICAT) Read introductions to all chapters below:]]
+> - [[ILA201-604-25 - OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT)|GH201-693-26: OSFI Guidelines for Life Insurance Capital Adequacy Test (LICAT) Read introductions to all chapters below:]]
 >      - Ch. 1: Overview and General Requirements (2b, 2c, 2f)
 >      - Ch. 2: Available Capital, sections 2.1-2.2 (2b, 2c, 2f)
 >      - Ch. 6: Insurance Risk, sections 6.1-6.6 & 6.8 (2b, 2c, 2f)
 >      - Ch. 11: Aggregation and Diversification of Risks (2b, 2c, 2f)
-> - [[CIA Educational Note - Financial Condition Testing (2025)|CIA Educational Note - Financial Condition Testing, Aug 2025, pp. 1-46 & 61]]
+> - [[CIA FCT 1|CIA Educational Note - Financial Condition Testing, Aug 2025, pp. 1-46 & 61]]
 >      - Outcomes 2b, 2c
 > - [[CIA Educational Note - Sources of Earnings Calculations – Group Life and Health (2010)|CIA Educational Note - Sources of Earnings Calculations – Group Life and Health, Oct 2010]]
 >      - Outcomes 2b, 2c, 2f
-> - [[Comparison of IFRS 17 to Current CIA Standards of Practice (2022)|Comparison of IFRS 17 to Current CIA Standards of Practice, Jun 2022 (excluding sections 3.3, 7.2.1, 7.2.2, 7.2.3, 7.2.5 & 8.1.1)]]
+> - [[CIA IFRS 17 - Comparison|Comparison of IFRS 17 to Current CIA Standards of Practice, Jun 2022 (excluding sections 3.3, 7.2.1, 7.2.2, 7.2.3, 7.2.5 & 8.1.1)]]
 >      - Outcomes 2e, 2f
 > - [[CIA Educational Note – IFRS 17 Coverage Units for Life and Health Insurance Contracts (2022)|CIA Educational Note – IFRS 17 Coverage Units for Life and Health Insurance Contracts, Dec 2022 (excluding sections 3.1.2, 3.1.3, 3.2 & 3.4)]]
 >      - Outcomes 2e, 2f
@@ -296,5 +296,5 @@ verification:
 >      - Outcomes 5a-5d
 > - [[GH201-103-25 - Health Economics and Financing|GH201-103-25: Health Economics and Financing, Getzen, Thomas and Kobernick, Michael, 6th Edition, 2022: Sections 5.4-5.6, 6.2-6.3, 7.4-7.5, 8.4-8.5, 13.2-13.3]]
 >      - Outcomes 5a, 5b, 5c
-> - [[Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA/CIA - 2014)|Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer, SOA/CIA, Sep 2013, pp. 1-3, 51-54 & 82]]
+> - [[Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA-CIA - 2014)|Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer, SOA/CIA, Sep 2013, pp. 1-3, 51-54 & 82]]
 >      - Outcomes 5d

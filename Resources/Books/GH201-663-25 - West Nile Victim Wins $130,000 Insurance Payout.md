@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-663-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ec73bf210bdda92d2464bbbdb5446aab6bec94810e3460b4200cf15962b78ed8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-663-25 - West Nile Victim Wins $130,000 Insurance Payout.md"
 ---
 ![[GH201-663-25 - West Nile Victim Wins $130,000 Insurance Payout - Cover.svg]]
 

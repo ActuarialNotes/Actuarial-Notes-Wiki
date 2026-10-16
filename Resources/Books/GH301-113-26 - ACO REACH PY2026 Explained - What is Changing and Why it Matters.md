@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "GH301-113-26"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/aco-reach-py2026-what-is-changing)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2cb73b85a6c1a8057a03a6804bae24f9fadd4284eb0606a82cd65951216ff99f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-113-26 - ACO REACH PY2026 Explained - What is Changing and Why it Matters.md
 ---
 ![[GH301-113-26 - ACO REACH PY2026 Explained - What is Changing and Why it Matters - Cover.svg]]
 

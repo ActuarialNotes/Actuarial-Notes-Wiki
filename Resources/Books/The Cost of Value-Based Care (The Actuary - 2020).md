@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://theactuarymagazine.org/the-cost-of-value-based-care/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa8b7d4a782a5d92e166519d5cc04dea1c3018ce42bc7d74d08dbba89f0c19d1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Cost of Value-Based Care (The Actuary - 2020).md
 ---
 ![[The Cost of Value-Based Care (The Actuary - 2020) - Cover.svg]]
 

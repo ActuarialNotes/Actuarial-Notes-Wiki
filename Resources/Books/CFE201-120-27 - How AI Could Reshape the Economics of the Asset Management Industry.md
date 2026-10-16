@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "CFE201-120-27"
 Available from: "[mckinsey.com](https://www.mckinsey.com/industries/financial-services/our-insights/how-ai-could-reshape-the-economics-of-the-asset-management-industry)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:61d1a77117b32612bd8fa3c037d54943534c22e40b957e380ee2ea17b17d765d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-120-27 - How AI Could Reshape the Economics of the Asset Management Industry.md
 ---
 ![[CFE201-120-27 - How AI Could Reshape the Economics of the Asset Management Industry - Cover.svg]]
 

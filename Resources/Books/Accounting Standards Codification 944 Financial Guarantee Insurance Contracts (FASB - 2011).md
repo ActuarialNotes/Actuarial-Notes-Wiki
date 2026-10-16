@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Guideline"
 Code: "ASC 944-020-15"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7fab8dbda36ef5ee121f6da511ce4b1635a7985ebc4a2627c9dfaba79657ce61
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Accounting Standards Codification 944 Financial Guarantee Insurance Contracts (FASB - 2011).md
 ---
 ![[Accounting Standards Codification 944 Financial Guarantee Insurance Contracts (FASB - 2011) - Cover.svg]]
 

@@ -8,6 +8,16 @@ Type: "Monograph"
 Code: "CAS Monograph No. 13"
 ISBN: "978-1-7370028-6-4"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:deda285a68ae7355264405737582980e2bb1b6ca6531496fb89f8096bb02583f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Penalized Regression and Lasso Credibility (Holmes and Casotto - 2025).md
 ---
 ![[Penalized Regression and Lasso Credibility (Holmes and Casotto - 2025) - Cover.svg]]
 

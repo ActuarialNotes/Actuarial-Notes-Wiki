@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CFE201-111-27"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/life-annuity-sidecars-sidebar-to-headline)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a4f7003965583208a3a673313abd108566d1cb1b0a7ea6c7bd83d3f5bc92ce61
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CFE201-111-27 - Life & Annuity Reinsurance Sidecars - From Sidebar to Headline Topic.md"
 ---
 ![[CFE201-111-27 - Life & Annuity Reinsurance Sidecars - From Sidebar to Headline Topic - Cover.svg]]
 

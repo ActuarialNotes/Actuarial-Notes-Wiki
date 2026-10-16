@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guide"
 Code: "GH201-702-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:00d1aaef281ad236d0a0a5137574dc333280775dbf20cb0ce15bb67d112d0f0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-702-25 - OHIP+ Pharmacy Redesign Update - FAQS For Patients.md
 ---
 ![[GH201-702-25 - OHIP+ Pharmacy Redesign Update - FAQS For Patients - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2025"
 date: "2025"
 Type: "Study Note"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d9a1b25d33d6115352c2a8e509a5c3c483df2eb30e3d9ee880e70866443b4b8f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/General Insurance - U.S. Policies and Coverages (SOA - 2025).md
 ---
 ![[General Insurance - U.S. Policies and Coverages (SOA - 2025) - Cover.svg]]
 

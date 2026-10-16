@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71d71b937ef63cc7db12a11d535dc890ea282139bc4e473d5168ee179e2fd019
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IFRS 17 Spreadsheet Model.md
 ---
 ![[IFRS 17 Spreadsheet Model - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Paper"
 Code: "CP311-111-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:daf9201e35df73a05e1d581f51f279553800f32b876aa907365e1b690c37d407
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-111-26 - Deciding How to Decide.md
 ---
 ![[CP311-111-26 - Deciding How to Decide - Cover.svg]]
 

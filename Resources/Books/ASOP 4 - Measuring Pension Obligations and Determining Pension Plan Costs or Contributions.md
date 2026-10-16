@@ -7,6 +7,16 @@ date: "2021"
 Type: "Standard of Practice"
 Code: "ASOP No. 4"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2022/02/asop004_205.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d534b0d79321ae721e767019ca5ec32412ca6e9f8d267d70ed422a0dedd45b2e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 4 - Measuring Pension Obligations and Determining Pension Plan Costs or Contributions.md
 ---
 ![[ASOP 4 - Measuring Pension Obligations and Determining Pension Plan Costs or Contributions - Cover.svg]]
 

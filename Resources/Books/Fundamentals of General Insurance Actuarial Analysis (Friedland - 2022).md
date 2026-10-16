@@ -7,6 +7,16 @@ date: "2022"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-9913363-2-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5ab4bcee701cd597933887b371c04dbbfa3b5642cedfa967f3cf4b601f50f744
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fundamentals of General Insurance Actuarial Analysis (Friedland - 2022).md
 ---
 ![[Fundamentals of General Insurance Actuarial Analysis (Friedland - 2022) - Cover.svg]]
 

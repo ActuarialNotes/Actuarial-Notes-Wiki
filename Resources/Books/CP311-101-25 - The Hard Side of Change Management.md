@@ -6,6 +6,16 @@ Year: "2005"
 date: "2005"
 Type: "Paper"
 Code: "CP311-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8367d34eaa4940460dfa9c1424c3999b15aafd1ce5130a8e1806808e6ae77c0c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-101-25 - The Hard Side of Change Management.md
 ---
 ![[CP311-101-25 - The Hard Side of Change Management - Cover.svg]]
 

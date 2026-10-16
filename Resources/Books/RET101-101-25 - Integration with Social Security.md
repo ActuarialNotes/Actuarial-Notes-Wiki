@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:812228f943e9b0643690e89ffa3e28bee88c10ab8536eaeeb920c40e504f09c5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-101-25 - Integration with Social Security.md
 ---
 ![[RET101-101-25 - Integration with Social Security - Cover.svg]]
 

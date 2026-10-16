@@ -5,6 +5,16 @@ Publisher: "CRO Forum"
 Year: "2013"
 date: "2013"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:54802c60b632a6a5c7f9bfe74e9882c45dbc9f8575aa9962c476039560d0d2cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/ILA201-100-25 - Diversification - Consideration on Modelling Aspects & Related Fungibility and Transferability.md"
 ---
 ![[ILA201-100-25 - Diversification - Consideration on Modelling Aspects & Related Fungibility and Transferability - Cover.svg]]
 

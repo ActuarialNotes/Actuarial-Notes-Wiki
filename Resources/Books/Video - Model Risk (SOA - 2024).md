@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Course"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/2025-cp-312-model-risk-notes.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc2086d1fda20c44f5b344b4505cc5e371033990d6150f6d043ff95d4154dcd6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Model Risk (SOA - 2024).md
 ---
 ![[Video - Model Risk (SOA - 2024) - Cover.svg]]
 

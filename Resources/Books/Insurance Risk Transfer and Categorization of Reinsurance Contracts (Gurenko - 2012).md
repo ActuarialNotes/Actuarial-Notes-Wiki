@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Paper"
 Code: "Policy Research Working Paper 6299"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c970a0eb2160d6bcf6ae73d63f606506dd77843f3210d94c104ce7e71550b78
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance Risk Transfer and Categorization of Reinsurance Contracts (Gurenko - 2012).md
 ---
 ![[Insurance Risk Transfer and Categorization of Reinsurance Contracts (Gurenko - 2012) - Cover.svg]]
 

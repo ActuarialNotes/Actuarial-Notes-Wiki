@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CP321-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7e08b00c2c22754b38418aea0cb5e26297a25367698c925830c21a0066b50996
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-106-25 - Excerpt from AAA Application of ASU 2018-12 to the Accounting for Long-Duration Contracts under U.S. GAAP.md
 ---
 ![[CP321-106-25 - Excerpt from AAA Application of ASU 2018-12 to the Accounting for Long-Duration Contracts under U.S. GAAP - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Code: "CP321-115-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c87581f54988e3bc1e2d1ce788ace8f67cf43c080902748d58c4fa1268bbd57d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-115-25 - Mercer Quick Poll - 2022 Post-Retirement Benefit Trends - Supporting a Challenging Labour Environment.md
 ---
 ![[CP321-115-25 - Mercer Quick Poll - 2022 Post-Retirement Benefit Trends - Supporting a Challenging Labour Environment - Cover.svg]]
 

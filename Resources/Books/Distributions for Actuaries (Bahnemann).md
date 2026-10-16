@@ -8,6 +8,16 @@ Type: "Monograph"
 Code: "CAS Monograph No. 2"
 ISBN: "978-0-9624762-8-0"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:55abb0771dd9a881f3a513181f93d57fea3522d82073e0cfbbac31d4698cdb14
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Distributions for Actuaries (Bahnemann).md
 ---
 ![[Distributions for Actuaries (Bahnemann) - Cover.svg]]
 

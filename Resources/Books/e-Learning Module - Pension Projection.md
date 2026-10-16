@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2020"
 date: "2020"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4fa6f2b8d67a4925214d95652517e17931224a4da93c087745166e322aa7edc8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/e-Learning Module - Pension Projection.md
 ---
 ![[e-Learning Module - Pension Projection - Cover.svg]]
 

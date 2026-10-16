@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8cd10c37642e7a7e77e4925054080b6124d0a0d2f2c8de943fabbc268c0f53db
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 9 Subsequent Events (NAIC - 2024).md
 ---
 ![[SSAP 9 Subsequent Events (NAIC - 2024) - Cover.svg]]
 

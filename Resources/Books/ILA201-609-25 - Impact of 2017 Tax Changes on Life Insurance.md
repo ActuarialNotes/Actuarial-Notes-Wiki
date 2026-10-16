@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Code: "ILA201-609-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6ac990958609b9070cee1cf9c741fbfe41f8021f8906bd2d5b250501f8426b48
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-609-25 - Impact of 2017 Tax Changes on Life Insurance.md
 ---
 ![[ILA201-609-25 - Impact of 2017 Tax Changes on Life Insurance - Cover.svg]]
 

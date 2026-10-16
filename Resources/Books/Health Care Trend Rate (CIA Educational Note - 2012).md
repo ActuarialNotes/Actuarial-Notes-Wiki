@@ -7,6 +7,16 @@ date: "2012"
 Type: "Educational Note"
 Code: "212031"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/212031e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e043231f03f175c0159b18e61e6a67669f59ab6f294f90401ce8a5ad0563ece1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Health Care Trend Rate (CIA Educational Note - 2012).md
 ---
 ![[Health Care Trend Rate (CIA Educational Note - 2012) - Cover.svg]]
 

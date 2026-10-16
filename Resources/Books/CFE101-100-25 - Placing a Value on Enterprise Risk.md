@@ -6,6 +6,16 @@ Year: "2009"
 date: "2009"
 Type: "Paper"
 Code: "CFE101-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c150c035d65df9a6fb00e1086bffe172ff4463b994b12728fa4535db87b9ad6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-100-25 - Placing a Value on Enterprise Risk.md
 ---
 ![[CFE101-100-25 - Placing a Value on Enterprise Risk - Cover.svg]]
 

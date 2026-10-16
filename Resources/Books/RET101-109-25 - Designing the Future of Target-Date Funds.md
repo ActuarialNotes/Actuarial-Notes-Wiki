@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-109-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd061f8995358c844e4363ea92de243f86d600fe165b9f935a36d7e5f9f2083a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-109-25 - Designing the Future of Target-Date Funds.md
 ---
 ![[RET101-109-25 - Designing the Future of Target-Date Funds - Cover.svg]]
 

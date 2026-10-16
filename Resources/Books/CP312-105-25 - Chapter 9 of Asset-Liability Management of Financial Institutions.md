@@ -7,6 +7,16 @@ date: "2003"
 Type: "Study Note"
 Code: "CP312-105-25"
 ISBN: "978-1-84374-060-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aad9fd954624c4be14c162feb7c36b41be1b55b6553b8b7785865a16a01769b6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-105-25 - Chapter 9 of Asset-Liability Management of Financial Institutions.md
 ---
 ![[CP312-105-25 - Chapter 9 of Asset-Liability Management of Financial Institutions - Cover.svg]]
 

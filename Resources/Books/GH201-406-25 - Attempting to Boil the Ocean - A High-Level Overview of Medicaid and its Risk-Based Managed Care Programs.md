@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-406-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7797f9c15b2362db6f7274c2a0bf984ecb051cb27b5b8976b0c3d04cbc9c5228
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-406-25 - Attempting to Boil the Ocean - A High-Level Overview of Medicaid and its Risk-Based Managed Care Programs.md
 ---
 ![[GH201-406-25 - Attempting to Boil the Ocean - A High-Level Overview of Medicaid and its Risk-Based Managed Care Programs - Cover.svg]]
 

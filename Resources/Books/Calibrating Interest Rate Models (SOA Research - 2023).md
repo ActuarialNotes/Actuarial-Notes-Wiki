@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/interest-rate-model-calibration-study.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef5ef88bccaf25305601962bdc8f5cfd4afd8aaea985e3907be69475ed4fa93d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Calibrating Interest Rate Models (SOA Research - 2023).md
 ---
 ![[Calibrating Interest Rate Models (SOA Research - 2023) - Cover.svg]]
 

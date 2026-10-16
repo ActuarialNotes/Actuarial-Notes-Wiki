@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ea4a642b89500b806b64080621ee023b9196143720027c467ffef3ff7f7d9a14
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-102-25 - Defined Contribution Plan Success Factors.md
 ---
 ![[RET101-102-25 - Defined Contribution Plan Success Factors - Cover.svg]]
 

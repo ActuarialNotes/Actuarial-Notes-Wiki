@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/research-2016-analysis-tbp-plan-design.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2ca9bfbbf79dc9e4cfaf82168596407e225f040f1f5bb2be9341a5645192dbd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Analysis of Target Benefit Plan Design Options (SOA - 2016).md
 ---
 ![[Analysis of Target Benefit Plan Design Options (SOA - 2016) - Cover.svg]]
 

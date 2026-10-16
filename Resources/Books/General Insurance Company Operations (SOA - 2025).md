@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-gi-operations.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f9a437db77cf6e634fb1846ef78d4e9c58934cd348e366bcadb82c7f3c92cbb1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/General Insurance Company Operations (SOA - 2025).md
 ---
 ![[General Insurance Company Operations (SOA - 2025) - Cover.svg]]
 

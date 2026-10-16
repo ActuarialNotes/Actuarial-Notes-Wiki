@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Report"
 Code: "CFE101-123-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c383cb01a6bd4642545330e730ceb48922bbbec0bf038c6389e17858dfe17bec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-123-26 - The Complete Guide to Strategic Risk Management.md
 ---
 ![[CFE101-123-26 - The Complete Guide to Strategic Risk Management - Cover.svg]]
 

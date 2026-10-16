@@ -7,6 +7,16 @@ date: "2004"
 Type: "Guideline"
 Code: "S900-510"
 Available from: "[fsrao.ca](https://www.fsrao.ca/application-employer-payment-surplus-full-wind-pension-plan)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:884b9488b8fd99513eaacb6df9b388d3096768af8aee7a9d3a2b180903dd02a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-112-25 - FSRA Guidance - Application by Employer for Payment of Surplus on Full Wind Up of a Pension Plan.md
 ---
 ![[RET301-112-25 - FSRA Guidance - Application by Employer for Payment of Surplus on Full Wind Up of a Pension Plan - Cover.svg]]
 

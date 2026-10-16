@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9
   extracted_at: 2026-10-09
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:ad898081a0fe94c049fc95b9c0f9dc7ead65991c583ec4d0150b443c6b676887
+  content_hash: sha256:3e135b36a821bbf5cc25719b80e49f6b939efa8b7b5e88d35c597a12b8850556
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   open_findings: 1
@@ -198,18 +198,18 @@ verification:
 >      - Outcomes 2d
 > - [[Government Provision of General Insurance (SOA - 2025)|Government Provision of General Insurance, SOA, May 2025, sections 1-3, 5, 6, and 9]]
 >      - Outcomes 2e
-> - [[Private Flood Insurance and the National Flood Insurance Program (Congressional Research Service - 2023)|Private Flood Insurance and the National Flood Insurance Program, CRS Report R45242, Congressional Research Service, Updated Jan 2023, pp. 1-21 (excluding the section “NFIP Reauthorization and Legislation” on pp. 5-6, and Table 1 on pp. 9)]]
+> - [[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023)|Private Flood Insurance and the National Flood Insurance Program, CRS Report R45242, Congressional Research Service, Updated Jan 2023, pp. 1-21 (excluding the section “NFIP Reauthorization and Legislation” on pp. 5-6, and Table 1 on pp. 9)]]
 >      - Outcomes 2e
 > - [[Issues Paper - Use of Credit Scores by Insurers Canadian Council of Insurance Regulators (Insurers - 2011)|Issues Paper: Use of Credit Scores by Insurers Canadian Council of Insurance Regulators, Credit Scoring Working Group, Jun 2011, pp. 5-16]]
 >      - Outcomes 2f
-> - [[Price Optimization White Paper (2015)|Price Optimization White Paper, Casualty Actuarial and Statistical (C) Task Force, National Association of Insurance Commissioners, Nov 2015, pp. 6-16 (paragraphs 15-49)]]
+> - [[Price Optimization White Paper (NAIC - 2015)|Price Optimization White Paper, Casualty Actuarial and Statistical (C) Task Force, National Association of Insurance Commissioners, Nov 2015, pp. 6-16 (paragraphs 15-49)]]
 >      - Outcomes 2g
 > - [[Captive Insurance (SOA - 2025)|Captive Insurance, SOA, May 2025]]
 >      - Outcomes 2h
 > - [[Tort Law – Topics for General Insurance Actuaries (SOA - 2025)|Tort Law – Topics for General Insurance Actuaries, SOA, May 2025, sections 1-5 (excluding 5.1 & 5.5) Note: Regarding the table in 5.4 (pp. 35-37), candidates are only expected to be familiar with the cases BMW of North America v. Gore and State Farm Mutual Auto. v. Campbell.]]
 >      - Outcomes 3b-d, 3i
 >      - Outcomes 3i
-> - [[Government Provision of General Insurance (SOA)|Government Provision of General Insurance, SOA, Section 10, Appendix – No-Fault Insurance]]
+> - [[Government Provision of General Insurance (SOA - 2025)|Government Provision of General Insurance, SOA, Section 10, Appendix – No-Fault Insurance]]
 >      - Outcomes 3e
 > - [[Social Inflation - Navigating the Evolving Claims Environment (The Geneva Association - 2020)|Social Inflation: Navigating the Evolving Claims Environment, The Geneva Association, Dec 2020 (pp. 6-17, 19-34 & 36-38)]]
 >      - Outcomes 3h-i
@@ -221,7 +221,7 @@ verification:
 >      - Outcomes 4c
 > - [[IAA Risk Book - Liabilities for General Insurance (Insurance Regulation Committee - 2023)|IAA Risk Book: Liabilities for General Insurance, Insurance Regulation Committee, International Actuarial Association, May 2023 (pp. 2-22)]]
 >      - Outcomes 5a
-> - [[General Insurance Financial Reporting Topics (Society of Actuaries - 2021)|General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:]]
+> - [[General Insurance Financial Reporting Topics (SOA - 2021)|General Insurance Financial Reporting Topics, Society of Actuaries, 5th Edition, 2021:]]
 >      - Ch. 1: Accounting Concepts for General Insurance (5b-c)
 >      - Ch. 2: Accounting for Insurance Contracts (excluding 2.3.3-2.3.4, 2.5.1-2.5.2.1, 2.7.2-2.7.4 & 2.8 after the Insight box on pp. 36) (5b-c)
 >      - Ch. 4: Accounting for Reinsurance Contracts (excluding 4.4.2, 4.6.3-4.6.5, 4.8.3 & 4.9) (5b-c)

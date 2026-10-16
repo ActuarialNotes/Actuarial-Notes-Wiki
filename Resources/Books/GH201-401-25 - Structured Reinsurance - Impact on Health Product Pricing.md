@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Available from: "[guycarp.com](https://www.guycarp.com/insights/2024/12/structured-reinsurance-impact-on-health-product-pricing.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:40786e5c42f5878b5c806d665a020e161f7100c26edf7bdc7a9052bd7a08e4cb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-401-25 - Structured Reinsurance - Impact on Health Product Pricing.md
 ---
 ![[GH201-401-25 - Structured Reinsurance - Impact on Health Product Pricing - Cover.svg]]
 

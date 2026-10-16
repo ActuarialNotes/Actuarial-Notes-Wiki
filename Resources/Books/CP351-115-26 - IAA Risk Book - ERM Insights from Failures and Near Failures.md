@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CP351-115-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:422088de9c8926c3ad5f6e95585e4f4912e7bfb0004f4b26bd26aa80dadc47f9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-115-26 - IAA Risk Book - ERM Insights from Failures and Near Failures.md
 ---
 ![[CP351-115-26 - IAA Risk Book - ERM Insights from Failures and Near Failures - Cover.svg]]
 

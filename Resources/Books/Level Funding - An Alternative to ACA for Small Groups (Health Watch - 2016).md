@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/hsn-2016-iss-80-slater.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:03f245dcf32c8a9e1d384e6282828f1c37d0798127c371d35c480e97bb9c1267
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Level Funding - An Alternative to ACA for Small Groups (Health Watch - 2016).md
 ---
 ![[Level Funding - An Alternative to ACA for Small Groups (Health Watch - 2016) - Cover.svg]]
 

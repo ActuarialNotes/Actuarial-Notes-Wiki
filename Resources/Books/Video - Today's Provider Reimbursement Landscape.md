@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Course"
 Available from: "[soa.org](https://www.soa.org/prof-dev/recordings/2025/march/provider-reimbursement-landscape/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:43d4547ff25b30750c24528d6efb521a0d052978c63ae287f2a630e2280d2e54
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Video - Today's Provider Reimbursement Landscape.md"
 ---
 ![[Video - Today's Provider Reimbursement Landscape - Cover.svg]]
 

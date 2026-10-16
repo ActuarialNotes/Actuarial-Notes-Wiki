@@ -7,6 +7,16 @@ date: "2024"
 Type: "Standard of Practice"
 Code: "ASOP No. 36"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2024/09/asop036_213.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:53a9cb3a10cabe8ede64c336b6313e0d4aec3c151d231298e80101eeb3447b73
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Actuarial Standard of Practice No. 36 Statements of Actuarial Opinion on P&C Loss Reserves (ASB - 2024).md"
 ---
 ![[Actuarial Standard of Practice No. 36 Statements of Actuarial Opinion on P&C Loss Reserves (ASB - 2024) - Cover.svg]]
 

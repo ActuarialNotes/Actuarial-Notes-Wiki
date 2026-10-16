@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/hsn-2019-iss88-busch.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d7e57efe08890059e4d01dc4fd7c10115a7f7ec1b4a95f5bc2feea6b0e1a59c7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Consumers to the Rescue A Primer on HDHPs and HSAs (Health Watch - 2019).md
 ---
 ![[Consumers to the Rescue A Primer on HDHPs and HSAs (Health Watch - 2019) - Cover.svg]]
 

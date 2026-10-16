@@ -7,6 +7,16 @@ date: "2024"
 Type: "Standard of Practice"
 Code: "Part 6000"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223179e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8338abc902a71ab0a450121ee09a9965b3b07185755c3afcfa4bba82e9657e0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Practice-Specific Standards for Non-Pension Employee Future Benefit Plans (Effective February 1 (2024).md
 ---
 ![[Practice-Specific Standards for Non-Pension Employee Future Benefit Plans (Effective February 1 (2024) - Cover.svg]]
 

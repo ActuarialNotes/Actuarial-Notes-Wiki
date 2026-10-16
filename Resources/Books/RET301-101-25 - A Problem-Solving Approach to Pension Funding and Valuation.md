@@ -7,6 +7,16 @@ date: "2014"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-62542-841-7"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5250396c1d107bf3e08e1cf52e0c67556a0f028a16a64b3881654940c48acdcf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-101-25 - A Problem-Solving Approach to Pension Funding and Valuation.md
 ---
 ![[RET301-101-25 - A Problem-Solving Approach to Pension Funding and Valuation - Cover.svg]]
 

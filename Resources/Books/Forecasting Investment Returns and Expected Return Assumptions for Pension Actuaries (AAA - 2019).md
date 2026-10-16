@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2019"
 date: "2019"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c6733afb6279630dedd773731aa925f4b3970231091cc23c259fa709148d2a73
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Forecasting Investment Returns and Expected Return Assumptions for Pension Actuaries (AAA - 2019).md
 ---
 ![[Forecasting Investment Returns and Expected Return Assumptions for Pension Actuaries (AAA - 2019) - Cover.svg]]
 

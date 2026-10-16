@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-2016-economic-capital-life-insurance-report.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:82e0047bac327328d0beddb0d68dc91a10c78a59e50030395c86987e74d5f412
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Economic Capital for Life Insurance Companies (SOA Research Paper - 2016).md
 ---
 ![[Economic Capital for Life Insurance Companies (SOA Research Paper - 2016) - Cover.svg]]
 

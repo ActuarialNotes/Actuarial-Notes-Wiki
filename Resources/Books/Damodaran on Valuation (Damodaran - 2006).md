@@ -7,6 +7,16 @@ date: "2006"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "9780471751212"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8b10320df2627ab1dc68423de5f3ab27a1710ccc3aab91445f97b2635e9190d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Damodaran on Valuation (Damodaran - 2006).md
 ---
 ![[Damodaran on Valuation (Damodaran - 2006) - Cover.svg]]
 

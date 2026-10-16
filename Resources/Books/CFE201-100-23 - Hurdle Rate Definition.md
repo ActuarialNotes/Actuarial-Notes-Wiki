@@ -7,6 +7,16 @@ date: "2020"
 Type: "Paper"
 Code: "CFE201-100-23"
 Available from: "[corporatefinanceinstitute.com](https://corporatefinanceinstitute.com/resources/valuation/hurdle-rate-definition/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f464af903de6edc6179164905cb215c5f5e28819f555bd02af0260eba1ce12c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-100-23 - Hurdle Rate Definition.md
 ---
 ![[CFE201-100-23 - Hurdle Rate Definition - Cover.svg]]
 

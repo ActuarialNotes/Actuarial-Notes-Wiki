@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2020"
 date: "2020"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5e2586544a310f77592db554f3de78adf54bb3c207a4309c8ad49b9efd267130
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Regulatory Review of Predictive Models White Paper (CASTF - 2020).md
 ---
 ![[Regulatory Review of Predictive Models White Paper (CASTF - 2020) - Cover.svg]]
 

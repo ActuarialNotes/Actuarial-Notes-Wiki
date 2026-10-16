@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH301-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0db9e76e57ca18989f637b64dded2840ff0c4898f7446c7d5762f13309869eaa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-104-25 - The Application of Tiering in Healthcare.md
 ---
 ![[GH301-104-25 - The Application of Tiering in Healthcare - Cover.svg]]
 

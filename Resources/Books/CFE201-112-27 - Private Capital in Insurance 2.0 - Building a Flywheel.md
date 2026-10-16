@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CFE201-112-27"
 Available from: "[mckinsey.com](https://www.mckinsey.com/industries/financial-services/our-insights/private-capital-in-insurance-2-point-0-building-the-flywheel)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8126521c03da4c9d322bd8798761c36bdfb07f0b515edf4169c6d521ce162704
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-112-27 - Private Capital in Insurance 2.0 - Building a Flywheel.md
 ---
 ![[CFE201-112-27 - Private Capital in Insurance 2.0 - Building a Flywheel - Cover.svg]]
 

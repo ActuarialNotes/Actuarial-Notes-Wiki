@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2026/2026-02-ml256-int-reins.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc4509cd6edad427b15069afde6c0ab5e91035356d3f84e64efcd1fa86505e76
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Reinsurance Landscape Overview for United States Life and Annuities (SOA Research Institute).md
 ---
 ![[International Reinsurance Landscape Overview for United States Life and Annuities (SOA Research Institute) - Cover.svg]]
 

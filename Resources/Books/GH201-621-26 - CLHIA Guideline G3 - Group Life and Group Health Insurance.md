@@ -7,6 +7,16 @@ date: "2026"
 Type: "Guideline"
 Code: "Guideline G3"
 Available from: "[clhia.ca](https://www.clhia.ca/Industry/clhia-guidelines/g03-group-life-and-group-health-insurance)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b26ef67ccd8c9e1ecdc8cd491a9d8fd90a83873a3c23a4f8f3a276cf03f0e799
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-621-26 - CLHIA Guideline G3 - Group Life and Group Health Insurance.md
 ---
 ![[GH201-621-26 - CLHIA Guideline G3 - Group Life and Group Health Insurance - Cover.svg]]
 

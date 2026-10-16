@@ -6,6 +6,16 @@ Year: "1959"
 date: "1959"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d20456d6e6e28b87881a51ca9c708ca173dca888eb19f757cbdbc04b2252bb54
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (Bailey and Simon - 1959).md
 ---
 ![[An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (Bailey and Simon - 1959) - Cover.svg]]
 

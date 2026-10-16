@@ -7,6 +7,16 @@ date: "2016"
 Type: "Guide"
 Code: "PE0025ORG"
 Available from: "[fsrao.ca](https://www.fsrao.ca/questions-and-answers-2016-agreement-respecting-multi-jurisdictional-pension-plans)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e62eaeb33f6e048baf05c60acb0c5ab8db3db3e96f3b3703744b25bda104e7b3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-114-25 - FSRA - Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans.md
 ---
 ![[RET301-114-25 - FSRA - Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans - Cover.svg]]
 

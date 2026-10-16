@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:399dcff9498c101260536085684f7a4787d3caaa1e69e9cc5988ae396a2c7b80
+  content_hash: sha256:92efabc0ca2b17abf726546df864d5067081d0f12220a240cfb0d1c2025c18a0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ OSFI Guideline E-19 sets out OSFI's expectations for the Own Risk and Solvency A
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C2–C4; the whole guideline.
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — Management and Evaluation of Life Insurance Risks, outcome 3c; ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19).
 
 ## I Introduction
 - The [[ORSA]] is a tool to enhance an insurer's understanding of the interrelationships between its risk profile and capital needs; as a dynamic forward-looking process, stress and scenario testing should be an important component of it.
@@ -81,3 +82,4 @@ OSFI Guideline E-19 sets out OSFI's expectations for the Own Risk and Solvency A
 - [Own Risk and Solvency Assessment (OSFI, 2017)](https://www.casact.org/sites/default/files/2021-03/6C_OSFI_ORSA.pdf) — the document (the CAS-hosted copy the content outline links): title page with number E-19, date and effective date, table of contents, and the text of Sections I–V and the Appendix
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope
 - [Property and Casualty Large Insurance Exposures and Investment Concentration (OSFI, 2025)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/property-casualty-large-insurance-exposures-investment-concentration) — that the current Guideline B-2 carries the number the Introduction cites
+- [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation (reading ILA201-606-25) and the assigned outcome; the syllabus names no date, so the page describes Guideline E-19 as dated December 2017

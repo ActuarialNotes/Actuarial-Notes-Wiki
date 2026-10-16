@@ -7,6 +7,16 @@ date: "2019"
 Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-119-52378-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4b8d4fb32b176a46b378f2fb9bb033532472416a0afedcb4136b251687b779b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Loss Models - From Data to Decisions (Klugman - 2019).md
 ---
 ![[Loss Models - From Data to Decisions (Klugman - 2019) - Cover.svg]]
 

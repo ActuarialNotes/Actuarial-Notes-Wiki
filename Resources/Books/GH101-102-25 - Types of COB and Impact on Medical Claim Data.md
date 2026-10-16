@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH101-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c6c182a7e0e6d4efae2f846901362be394de2efc44f88391d2b2fb5698d9caaa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH101-102-25 - Types of COB and Impact on Medical Claim Data.md
 ---
 ![[GH101-102-25 - Types of COB and Impact on Medical Claim Data - Cover.svg]]
 

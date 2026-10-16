@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:18c95421d9985c09c13748c84eb0090085ca092ecdc0a48b4112272201b87ef6
+  content_hash: sha256:a76022570cfb47d358f3ea359350fa59599ce394aef709b4ccd911944e77e2e4
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A CAS E-Forum paper (Spring 2009) on the nuances that can trip up an actuary tes
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C1 and C3; Appendices A and B are for information only and will not be directly tested.
+> - [[Exam 6U (CAS)|Exam 6U]] — objective D2; Appendices A and B may be used to better understand the calculation, but candidates are not responsible for the data.
 
 ## 1 Introduction
 - 1.1 Risk Transfer in Current Literature
@@ -85,3 +86,4 @@ A CAS E-Forum paper (Spring 2009) on the nuances that can trip up an actuary tes
 ## Sources
 - [Common Pitfalls and Practical Considerations in Risk Transfer Analysis (CAS, 2009)](https://www.casact.org/sites/default/files/2021-03/6C_Freihaut_and_Vendetti.pdf) — the document: title, authors, abstract, section headings and the text of Sections 1–4
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation (which names the Fall 2009 E-Forum; the paper's own running head reads Spring 2009) and the assigned scope
+- [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation (the Casualty Actuarial Society E-Forum, Spring 2009) and the assigned scope

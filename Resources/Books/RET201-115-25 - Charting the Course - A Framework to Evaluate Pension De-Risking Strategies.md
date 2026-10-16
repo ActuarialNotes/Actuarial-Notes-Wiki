@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-115-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:15d79d8b5460593db620cdb7fc061d5dd172069225f5ab27c11f4d446eb30e21
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-115-25 - Charting the Course - A Framework to Evaluate Pension De-Risking Strategies.md
 ---
 ![[RET201-115-25 - Charting the Course - A Framework to Evaluate Pension De-Risking Strategies - Cover.svg]]
 

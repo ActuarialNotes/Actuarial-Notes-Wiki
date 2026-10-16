@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-696-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:253b8339e38f88cf8dc44f5e1a179403dad7639a9d9c60ef6b8c3bd594e4e329
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-696-25 - Ensuring the Accessibility.md
 ---
 ![[GH201-696-25 - Ensuring the Accessibility - Cover.svg]]
 

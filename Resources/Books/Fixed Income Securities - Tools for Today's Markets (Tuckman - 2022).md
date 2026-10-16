@@ -7,6 +7,16 @@ date: "2022"
 Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-119-83555-4"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d01ff904cd8ede3af28c3f71e7355b16e84376f818be2f6046179bd9cecc3c3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Fixed Income Securities - Tools for Today's Markets (Tuckman - 2022).md"
 ---
 ![[Fixed Income Securities - Tools for Today's Markets (Tuckman - 2022) - Cover.svg]]
 

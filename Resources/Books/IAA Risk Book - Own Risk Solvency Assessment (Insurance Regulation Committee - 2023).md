@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f30de5fdc2cd503abfb33700a84e3acf653ba1ddf78f310d55ef0556e319c7e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Own Risk Solvency Assessment (Insurance Regulation Committee - 2023).md
 ---
 ![[IAA Risk Book - Own Risk Solvency Assessment (Insurance Regulation Committee - 2023) - Cover.svg]]
 

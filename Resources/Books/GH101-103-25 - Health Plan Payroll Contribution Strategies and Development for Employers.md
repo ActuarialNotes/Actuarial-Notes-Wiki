@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH101-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12863c56f50aec1b1c6509379e33e8ef0c113bdfa1b19199803786d5f5bda2b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH101-103-25 - Health Plan Payroll Contribution Strategies and Development for Employers.md
 ---
 ![[GH101-103-25 - Health Plan Payroll Contribution Strategies and Development for Employers - Cover.svg]]
 

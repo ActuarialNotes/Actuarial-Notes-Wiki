@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2018"
 date: "2018"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d4b2bfab073914f75b6e97e7e9382329f6940695d6498813c7e70d1b80392ba7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Retained Property Casualty Insurance Related Risk Interaction of Actuarial Analysis and Accounting (AAA - 2018).md
 ---
 ![[Retained Property Casualty Insurance Related Risk Interaction of Actuarial Analysis and Accounting (AAA - 2018) - Cover.svg]]
 

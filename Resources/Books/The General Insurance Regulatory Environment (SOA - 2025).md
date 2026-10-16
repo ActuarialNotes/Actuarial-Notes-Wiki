@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-gi-regulatory.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f656eb7e7db3623d45d755c97c68418c8d91ada01e81305ad43d00e6eb9a420f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The General Insurance Regulatory Environment (SOA - 2025).md
 ---
 ![[The General Insurance Regulatory Environment (SOA - 2025) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2019"
 Type: "Textbook"
 Code: "CFE101-112-25"
 ISBN: "978-1-119-55439-4"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d5e2592beb553e0fd3477e39e86382029d69aef3aa919cb3730ea87d923a1874
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-112-25 - Internal Controls Toolkit.md
 ---
 ![[CFE101-112-25 - Internal Controls Toolkit - Cover.svg]]
 

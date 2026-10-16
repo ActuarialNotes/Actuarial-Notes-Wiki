@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2019"
 date: "2019"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:463089c14deb13524447244fccc8d9465ff6732ba166a07cf49d5802c39d3517
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019).md
 ---
 ![[Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019) - Cover.svg]]
 

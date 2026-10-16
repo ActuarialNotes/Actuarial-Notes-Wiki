@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CRS R45242"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a1fd276982cfdafaf20344ac39d018693beb6210683ed2bf1ab5b1a7676fcc6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023).md"
 ---
 ![[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023) - Cover.svg]]
 
@@ -13,6 +23,7 @@ A Congressional Research Service report (updated January 9, 2023) on the role of
 
 > [!info] On the syllabus
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives B1–B3; the Summary and pp. 1–21 (Congressional Research Service R45242, updated January 9, 2023).
+> - [[Exam GI-201 (SOA)|Exam GI-201]] — outcome 2e; pp. 1-21, excluding the section "NFIP Reauthorization and Legislation" on pp. 5-6 and Table 1 on p. 9
 
 ## Summary
 - The NFIP is the main source of primary flood insurance coverage in the United States, collecting over $4.6 billion in premiums, fees and surcharges for over five million policies; one of the primary reasons for creating the NFIP in 1968 was the withdrawal of private insurers from providing flood coverage.
@@ -62,3 +73,4 @@ A Congressional Research Service report (updated January 9, 2023) on the role of
 ## Sources
 - [Private Flood Insurance and the National Flood Insurance Program (CRS Report R45242, updated January 9, 2023)](https://www.everycrsreport.com/files/2023-01-09_R45242_0215c25b34147ea4ad21d0a520bf71e25498ee7b.pdf) — the document, as archived by EveryCRSReport.com: title page, summary, contents, introduction and the section headings (31 pages, sha256 d4a40d9f2f2247d0e9ddca98303425be40ecc063457675239787877d58d95e90); the CRS's own site could not be reached from here, and the CAS's file for this reading is a one-page pointer to the report
 - [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation ("updated January 9, 2023") and the assigned pages
+- [GI 201 Syllabus, Nov 2026/Mar 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) — the citation and the pages assigned

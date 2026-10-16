@@ -6,6 +6,16 @@ Year: "2009"
 date: "2009"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/journals/actuarial-practice-forum/2009/march/apf-2009-03-frasca-lasorella.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01dd1b7e082c5f8b36ad35636d3004b44387351a23e2d1c32821d81159a650ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Embedded Value - Practice and Theory (Actuarial Practice Forum - 2009).md
 ---
 ![[Embedded Value - Practice and Theory (Actuarial Practice Forum - 2009) - Cover.svg]]
 

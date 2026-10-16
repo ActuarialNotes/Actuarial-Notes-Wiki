@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Code: "CFE101-119-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:97d2b77f35c93ed3f6b7a9628d1c20e635ba5e93341176a4da73e9c143951035
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-119-25 - IAA Risk Book.md
 ---
 ![[CFE101-119-25 - IAA Risk Book - Cover.svg]]
 

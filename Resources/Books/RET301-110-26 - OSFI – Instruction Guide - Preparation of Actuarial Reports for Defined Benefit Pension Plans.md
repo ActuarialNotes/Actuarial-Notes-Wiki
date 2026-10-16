@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Instructions"
 Available from: "[osfi-bsif.gc.ca](https://www.osfi-bsif.gc.ca/en/supervision/pensions/administering-pension-plans/guidance-topic/preparation-actuarial-reports-defined-benefit-pension-plans)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7a85995d830be8e76b64a9a282f171611f1c73cb2f9f57be3d38370752b188b2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/RET301-110-26 - OSFI – Instruction Guide - Preparation of Actuarial Reports for Defined Benefit Pension Plans.md"
 ---
 ![[RET301-110-26 - OSFI – Instruction Guide - Preparation of Actuarial Reports for Defined Benefit Pension Plans - Cover.svg]]
 

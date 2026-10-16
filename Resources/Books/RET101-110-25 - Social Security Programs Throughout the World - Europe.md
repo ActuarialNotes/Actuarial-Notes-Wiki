@@ -7,6 +7,16 @@ date: "2018"
 Type: "Report"
 Code: "SSA Publication No. 13-11801"
 Available from: "[ssa.gov](https://www.ssa.gov/policy/docs/progdesc/ssptw/2018-2019/europe/index.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8861b3cace2d5dbfdc93cad9be206c5f252532abfe8a20d1b9730bf8663d57b3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-110-25 - Social Security Programs Throughout the World - Europe.md
 ---
 ![[RET101-110-25 - Social Security Programs Throughout the World - Europe - Cover.svg]]
 

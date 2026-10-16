@@ -6,6 +6,16 @@ Year: "2006"
 date: "2006"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/pubs/apf0702_01.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ded8f5566fe9789e21fd45da37895107b0f3d2a7c3906e67f1f5eea6536fe5b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A Multi-Stakeholder Approach to Capital Adequacy (Conning Research).md
 ---
 ![[A Multi-Stakeholder Approach to Capital Adequacy (Conning Research) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Research/experience-study-calculations.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f4c5e03a6c8737c3143a0504d7eaa66c02cd370f97396b255c80d222a0a2140
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Experience Study Calculations (SOA - 2016).md
 ---
 ![[Experience Study Calculations (SOA - 2016) - Cover.svg]]
 

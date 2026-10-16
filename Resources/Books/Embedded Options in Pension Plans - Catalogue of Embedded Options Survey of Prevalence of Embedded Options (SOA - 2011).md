@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-catalogue-survey-report.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ac6a2a33f82fa6a6edd6f54b4a3a782bd81f0c6d80860ee10264ecc3e4af4a4c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Embedded Options in Pension Plans - Catalogue of Embedded Options Survey of Prevalence of Embedded Options (SOA - 2011).md
 ---
 ![[Embedded Options in Pension Plans - Catalogue of Embedded Options Survey of Prevalence of Embedded Options (SOA - 2011) - Cover.svg]]
 

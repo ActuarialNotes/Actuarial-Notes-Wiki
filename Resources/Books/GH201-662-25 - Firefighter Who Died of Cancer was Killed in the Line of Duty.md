@@ -7,6 +7,16 @@ date: "2007"
 Type: "Paper"
 Code: "GH201-662-25"
 Available from: "[hrreporter.com](https://www.hrreporter.com/chrr-plus/employment-law/firefighter-who-died-of-cancer-was-killed-in-the-line-of-duty-court-says/307258)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:95f0ca8b8700731296549b7c31e650bcad8b38885a36ec8e5e43114db0acf750
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-662-25 - Firefighter Who Died of Cancer was Killed in the Line of Duty.md
 ---
 ![[GH201-662-25 - Firefighter Who Died of Cancer was Killed in the Line of Duty - Cover.svg]]
 

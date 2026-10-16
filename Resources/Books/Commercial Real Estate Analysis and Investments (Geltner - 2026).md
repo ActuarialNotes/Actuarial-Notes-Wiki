@@ -7,6 +7,16 @@ date: "2026"
 Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-041-07639-1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7f819d44eaaead32caf42a8f967347a7077b0ded675485b70f46f818d418c162
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Commercial Real Estate Analysis and Investments (Geltner - 2026).md
 ---
 ![[Commercial Real Estate Analysis and Investments (Geltner - 2026) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Guideline"
 Available from: "[capsa-acor.org](https://www.capsa-acor.org/Documents/View/673)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9388d12c5b265d682da772a9aa91b18af44cfbc13cb5a9da88dc811c3897ee80
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-102-25 - CAPSA Guidance Solvency or Hypothetical Wind-up Liabilities Based on Actual Life Insurance Company Annuity Quotation.md
 ---
 ![[RET301-102-25 - CAPSA Guidance Solvency or Hypothetical Wind-up Liabilities Based on Actual Life Insurance Company Annuity Quotation - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2014"
 date: "2014"
 Type: "Textbook"
 ISBN: "9781625422118"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:545617951b468b07c92ddc1c1dafb8c7491b43e387c6276e8cd9c090dc8aa398
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Art and Science of Life Insurance Distribution (Bennett - 2014).md
 ---
 ![[The Art and Science of Life Insurance Distribution (Bennett - 2014) - Cover.svg]]
 

@@ -7,6 +7,17 @@ date: "2018"
 Edition: "5th"
 Type: "Textbook"
 ISBN: "978-1-63588-541-5"
+description: "Volume II of the fifth edition of ACTEX's statutory valuation textbook: principle-based reserves, experience studies, and risk-based capital."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:499d1f11a8c2098f835d91b087947af9c58ae123cbd5445a57169756256a47d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Statutory Valuation of Individual Life and Annuity Contracts (Volume II - 2018).md
 ---
 ![[Statutory Valuation of Individual Life and Annuity Contracts (Volume II - 2018) - Cover.svg]]
 

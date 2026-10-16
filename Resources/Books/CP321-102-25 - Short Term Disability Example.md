@@ -7,6 +7,16 @@ date: "2020"
 Type: "Study Note"
 Code: "CP321-102-25"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2021/spring/intro-study-note/ghdp-study-note.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dfe5c4fa06a3661ac7a0932e610cb332b9db2f4044820196b35aee48e7f356b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-102-25 - Short Term Disability Example.md
 ---
 ![[CP321-102-25 - Short Term Disability Example - Cover.svg]]
 

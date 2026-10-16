@@ -5,11 +5,11 @@ syllabus:
   source_sha256: a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:69e70dc64e83fbdf2685ade0238203f1e381fa04aaa7347fe77dd8ba60e03baa
+  content_hash: sha256:2143cd41f908a2eec74652962396eda4306bf77b68fb8aa9765081baaeceec79
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf"
   open_findings: 0
@@ -163,7 +163,7 @@ verification:
 >      - Outcomes 1h
 > - [[Life Reinsurance Treaty Recapture Provisions (SOA - 2020)|Life Reinsurance Treaty Recapture Provisions, SOA, Jun 2020]]
 >      - Outcomes 2a
-> - [[Risk Transfer Practice Note (2022)|Risk Transfer Practice Note, AAA November 2022]]
+> - [[Risk Transfer Practice Note (AAA - 2022)|Risk Transfer Practice Note, AAA November 2022]]
 >      - Outcomes 2b
 > - [[CP341-105-25 - Lapse Risk and Capital Management Strategies - Back in the Spotlight|CP341-105-25: Lapse Risk and Capital Management Strategies: Back in the Spotlight, pp. 8-12]]
 >      - Outcomes 2b
@@ -179,7 +179,7 @@ verification:
 >      - Outcomes 3c
 > - [[CP341-110-25 - LICAT Guideline 2025|CP341-110-25: LICAT Guideline 2025, Chapter 10: Credit for Reinsurance]]
 >      - Outcomes 3d
-> - [[CP341-111-25 - OSFI Guideline B3|CP341-111-25: OSFI Guideline B3, Sound Reinsurance Practices and Procedures]]
+> - [[OSFI Reinsurance|CP341-111-25: OSFI Guideline B3, Sound Reinsurance Practices and Procedures]]
 >      - Outcomes 3d
 > - [[CP341-112-25 - IFRS 17 Pocket Guide on Reinsurance Contracts Held|CP341-112-25: IFRS 17 Pocket Guide on Reinsurance Contracts Held]]
 >      - Outcomes 3e

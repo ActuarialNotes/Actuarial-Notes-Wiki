@@ -6,6 +6,16 @@ Year: "2027"
 date: "2027"
 Type: "Study Note"
 Code: "RET201-121-27"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b44f412009ab87ce689818ccdd38ceab16260ce1f2b4a14c66da14a193c360ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-121-27 - Introduction to Retirement Plan Funding.md
 ---
 ![[RET201-121-27 - Introduction to Retirement Plan Funding - Cover.svg]]
 

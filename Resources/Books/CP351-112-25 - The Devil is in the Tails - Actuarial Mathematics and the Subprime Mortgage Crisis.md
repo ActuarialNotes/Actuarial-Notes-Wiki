@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Paper"
 Code: "CP351-112-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c4d9cb2c39b86ae3b1d97cbf37fa28f5a03ae1bbc8952110f49806fac90eb964
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-112-25 - The Devil is in the Tails - Actuarial Mathematics and the Subprime Mortgage Crisis.md
 ---
 ![[CP351-112-25 - The Devil is in the Tails - Actuarial Mathematics and the Subprime Mortgage Crisis - Cover.svg]]
 

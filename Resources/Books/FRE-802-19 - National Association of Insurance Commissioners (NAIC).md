@@ -7,6 +7,16 @@ date: "2018"
 Type: "Guideline"
 Code: "FRE-802-19"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2023/spring/study-note/fre-802-19.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:63bce8802bd940a474934ce64c672d0c9342ead900204b2f6e6a6080e353f1b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/FRE-802-19 - National Association of Insurance Commissioners (NAIC).md
 ---
 ![[FRE-802-19 - National Association of Insurance Commissioners (NAIC) - Cover.svg]]
 

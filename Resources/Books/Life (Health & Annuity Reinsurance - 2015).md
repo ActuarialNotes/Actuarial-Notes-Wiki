@@ -7,6 +7,16 @@ date: "2015"
 Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-62542-476-1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e42943f4d6f00ca90964f535a9e4799028e4511358942e7931e89af5e80788a7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Life (Health & Annuity Reinsurance - 2015).md"
 ---
 ![[Life (Health & Annuity Reinsurance - 2015) - Cover.svg]]
 

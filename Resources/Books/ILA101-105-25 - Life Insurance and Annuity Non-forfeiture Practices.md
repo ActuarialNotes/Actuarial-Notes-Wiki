@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:91c32d6abd78b5248dc4fc7616bbb4318a05ea3578fcd9212d8089861aa004ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-105-25 - Life Insurance and Annuity Non-forfeiture Practices.md
 ---
 ![[ILA101-105-25 - Life Insurance and Annuity Non-forfeiture Practices - Cover.svg]]
 

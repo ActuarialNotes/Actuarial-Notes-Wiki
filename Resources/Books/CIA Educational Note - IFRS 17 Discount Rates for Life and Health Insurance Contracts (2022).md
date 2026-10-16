@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222097"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222097e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84044677a70886644721156ccab1f6013041c4a01c12531ba86bc15c57dfb862
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - IFRS 17 Discount Rates for Life and Health Insurance Contracts (2022).md
 ---
 ![[CIA Educational Note - IFRS 17 Discount Rates for Life and Health Insurance Contracts (2022) - Cover.svg]]
 

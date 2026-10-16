@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://www.theactuarymagazine.org/potential-abuses-within-u-s-pharmaceutical-patent-regulation/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:09fa5a07f8b1cc798a2d1d628d25524e667b283411eb7ec5041e9897be38041d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Potential Abuses Within U.S. Pharmaceutical Patent Regulation (The Actuary - 2021).md
 ---
 ![[Potential Abuses Within U.S. Pharmaceutical Patent Regulation (The Actuary - 2021) - Cover.svg]]
 

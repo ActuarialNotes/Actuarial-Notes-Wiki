@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "CP311-109-26"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/advanced-fp-and-a-practices-for-a-volatile-macroeconomic-and-business-environment)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4e28223a0b4d8625480f3169255a7406db09a483b2ec071afe90278b9a062f1b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP311-109-26 - Advanced FP&A Practices for a Volatile Macroeconomic and Business Environment.md"
 ---
 ![[CP311-109-26 - Advanced FP&A Practices for a Volatile Macroeconomic and Business Environment - Cover.svg]]
 

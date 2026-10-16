@@ -7,6 +7,16 @@ date: "2020"
 Type: "Study Note"
 Code: "CP312-104-25"
 ISBN: "978-3-030-51750-2"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:56135f99d17c0a93f3406b7ae9a77af885ae877e0437e20713bc968f7ee8b169
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-104-25 - Chapter 7 of Derivatives Theory and Practice.md
 ---
 ![[CP312-104-25 - Chapter 7 of Derivatives Theory and Practice - Cover.svg]]
 

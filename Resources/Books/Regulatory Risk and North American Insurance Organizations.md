@@ -6,6 +6,16 @@ Year: "2014"
 date: "2014"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/research-2014-reg-risk.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3778e4420b89b3d6b8d76a2ccb075dba876f1662f1f36eba541a1debea6bc505
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Regulatory Risk and North American Insurance Organizations.md
 ---
 ![[Regulatory Risk and North American Insurance Organizations - Cover.svg]]
 

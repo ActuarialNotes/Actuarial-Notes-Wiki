@@ -7,6 +7,16 @@ date: "2023"
 Type: "Paper"
 Code: "ILA201-607-25"
 Available from: "[oliverwyman.com](https://www.oliverwyman.com/our-expertise/insights/2023/mar/ifrs-17-and-navigating-financial-condition-testing.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5db34ad6b1cd9f2db7586be27c25bad8301f3674e4826b3ee41703d50c390b94
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-607-25 - IFRS 17 and Navigating Financial Condition Testing.md
 ---
 ![[ILA201-607-25 - IFRS 17 and Navigating Financial Condition Testing - Cover.svg]]
 

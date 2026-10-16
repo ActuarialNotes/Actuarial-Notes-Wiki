@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2021/p2p-insurance-blockchain.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aac4fa979d0e7e450987d03b556f1b468d61ab36a3741d4ea7456878dd90fa9f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Peer-to-Peer Insurance - Blockchain Implications (SOA - 2021).md
 ---
 ![[Peer-to-Peer Insurance - Blockchain Implications (SOA - 2021) - Cover.svg]]
 

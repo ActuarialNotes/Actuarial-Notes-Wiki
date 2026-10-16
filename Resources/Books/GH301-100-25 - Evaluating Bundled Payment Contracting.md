@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Paper"
 Code: "GH301-100-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:766be32db36abb555db897cc160ad82fc90e79fb812bfae1a1c0010f208b66bd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-100-25 - Evaluating Bundled Payment Contracting.md
 ---
 ![[GH301-100-25 - Evaluating Bundled Payment Contracting - Cover.svg]]
 

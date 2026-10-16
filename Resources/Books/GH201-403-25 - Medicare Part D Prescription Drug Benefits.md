@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-403-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1e1a46d4914929ea82243e864b268653d98b70e8f72714e6afaf81ddd3e1f798
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-403-25 - Medicare Part D Prescription Drug Benefits.md
 ---
 ![[GH201-403-25 - Medicare Part D Prescription Drug Benefits - Cover.svg]]
 

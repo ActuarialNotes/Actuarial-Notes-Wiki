@@ -8,6 +8,16 @@ Edition: "6th"
 Type: "Textbook"
 Code: "RET201-100-25"
 ISBN: "978-0-433-49105-7"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e25688f37a511b264b9c54c34ebef32a9728ef7edb02701f385e82c9361f2da7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-100-25 - Chapter 15 of Canadian Pensions and Retirement Income Planning.md
 ---
 ![[RET201-100-25 - Chapter 15 of Canadian Pensions and Retirement Income Planning - Cover.svg]]
 

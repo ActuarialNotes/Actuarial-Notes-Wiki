@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Paper"
 Code: "ILA201-801-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9a1629b8489b19219f8ace25f2e1a3cb8cf8c801925d907445fc61955fead3e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-801-25 - Diversification of Longevity and Mortality Risk.md
 ---
 ![[ILA201-801-25 - Diversification of Longevity and Mortality Risk - Cover.svg]]
 

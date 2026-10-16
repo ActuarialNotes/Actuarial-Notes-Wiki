@@ -6,6 +6,16 @@ Year: "2008"
 date: "2008"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_McCarty.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c85d5f9ab74780a8d6f57d3ac8c6699b35e0a60808499f5c2ed7279e478c5954
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Testimony on the Impact of Credit-Based Insurance Scoring (McCarty - 2008).md
 ---
 ![[Testimony on the Impact of Credit-Based Insurance Scoring (McCarty - 2008) - Cover.svg]]
 

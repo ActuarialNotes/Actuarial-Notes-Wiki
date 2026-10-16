@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2019"
 date: "2019"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:391a933cc92caaea2a344c54b443f1df6bb8bb80a330db4bc6293565b94a8896
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Selecting Investment Return Assumptions - Considerations When Using Arithmetic and Geometric Averages (AAA - 2019).md
 ---
 ![[Selecting Investment Return Assumptions - Considerations When Using Arithmetic and Geometric Averages (AAA - 2019) - Cover.svg]]
 

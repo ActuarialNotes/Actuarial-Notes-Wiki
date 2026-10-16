@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Report"
 Code: "CFE101-122-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9159033bdfc85a6455b8bdb625ee7a3f5ea5b1e01d53330477692eed4bbe2c48
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-122-26 - The Changing Nature of Conduct Risk.md
 ---
 ![[CFE101-122-26 - The Changing Nature of Conduct Risk - Cover.svg]]
 

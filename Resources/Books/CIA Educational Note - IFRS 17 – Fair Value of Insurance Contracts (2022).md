@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222088"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222088e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5dc16471f6b63258bd9d3a6af30c567d6c09222a434c881f0420264977698967
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CIA Educational Note - IFRS 17 – Fair Value of Insurance Contracts (2022).md"
 ---
 ![[CIA Educational Note - IFRS 17 – Fair Value of Insurance Contracts (2022) - Cover.svg]]
 

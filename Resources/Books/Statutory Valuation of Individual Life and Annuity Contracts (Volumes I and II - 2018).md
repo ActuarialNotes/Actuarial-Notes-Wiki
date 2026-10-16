@@ -6,6 +6,17 @@ Year: "2018"
 date: "2018"
 Edition: "5th"
 Type: "Textbook"
+description: "Both volumes of the fifth edition of ACTEX's statutory valuation textbook, with the sections of each that the SOA assigns."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ec5f92db2fc82410557c1a45775c4e3f5094276e4ea63539821c611a69656b4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Statutory Valuation of Individual Life and Annuity Contracts (Volumes I and II - 2018).md
 ---
 ![[Statutory Valuation of Individual Life and Annuity Contracts (Volumes I and II - 2018) - Cover.svg]]
 

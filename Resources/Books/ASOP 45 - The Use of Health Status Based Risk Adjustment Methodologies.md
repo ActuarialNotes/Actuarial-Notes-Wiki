@@ -7,6 +7,16 @@ date: "2012"
 Type: "Standard of Practice"
 Code: "ASOP No. 45"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop045_164.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:eb7334fa66aa567f59edf53dda6bed5a18de52e71eb027b86784287ef4f23cde
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 45 - The Use of Health Status Based Risk Adjustment Methodologies.md
 ---
 ![[ASOP 45 - The Use of Health Status Based Risk Adjustment Methodologies - Cover.svg]]
 

@@ -8,6 +8,16 @@ Edition: "1st"
 Type: "Textbook"
 Code: "INV201-105-25"
 ISBN: "978-1-4987-4216-0"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa8139d089081e5a0ce03122937dcce2f159e37b18dec6b8692b4873e160c71e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-105-25 - An Introduction to Computational Risk Management of Equity-Linked Insurance.md
 ---
 ![[INV201-105-25 - An Introduction to Computational Risk Management of Equity-Linked Insurance - Cover.svg]]
 

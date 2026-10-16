@@ -6,6 +6,16 @@ Year: "2005"
 date: "2005"
 Type: "Paper"
 Code: "RET101-117-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c49906f408110d63e48c16db1290a1ecc4dc779207c49d74260b6acd0a3a7084
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-117-25 - Implementing Early Retirement Incentive Programs - A Step-by-Step Guide.md
 ---
 ![[RET101-117-25 - Implementing Early Retirement Incentive Programs - A Step-by-Step Guide - Cover.svg]]
 

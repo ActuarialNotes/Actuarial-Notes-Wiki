@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223065"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223065e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dbdadc8065a0ec91fd90da5a0f09919bb38e1df28f17e177ec797ae8663b28ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Calculation of Incremental Cost on a Hypothetical Wind-Up or Solvency Basis (CIA Educational Note - 2023).md
 ---
 ![[Calculation of Incremental Cost on a Hypothetical Wind-Up or Solvency Basis (CIA Educational Note - 2023) - Cover.svg]]
 

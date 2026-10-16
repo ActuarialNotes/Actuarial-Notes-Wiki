@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Standard of Practice"
 Code: "ISAP 1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0904ebf7ba2ece545a0819f4242be225dacfb7f5c4fe9fe6e035146e9f05c887
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Standard of Actuarial Practice 1 (General Actuarial Practice - 2018).md
 ---
 ![[International Standard of Actuarial Practice 1 (General Actuarial Practice - 2018) - Cover.svg]]
 

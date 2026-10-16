@@ -6,6 +6,16 @@ Year: "1989"
 date: "1989"
 Type: "Paper"
 Code: "INV201-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8ee74864a2e721ce21c82d86e7f198567b6ffc199ec08d8d8a7b12baf8c98ea1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-102-25 - How to Use the Holes in Black-Scholes.md
 ---
 ![[INV201-102-25 - How to Use the Holes in Black-Scholes - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-710-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cbd315258dac010219f2888ceaecb409d8de4040d71e83f1c90ac3a5da1c7eef
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-710-25 - Termination of Benefits Coverage at Age 65 Declared Unconstitutional.md
 ---
 ![[GH201-710-25 - Termination of Benefits Coverage at Age 65 Declared Unconstitutional - Cover.svg]]
 

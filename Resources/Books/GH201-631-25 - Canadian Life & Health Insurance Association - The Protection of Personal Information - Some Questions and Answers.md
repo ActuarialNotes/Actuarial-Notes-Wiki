@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guide"
 Code: "GH201-631-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b5b5407b7342ef526b80492b0dfa5687ae3129b91f716e3fb166355b5fd705d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-631-25 - Canadian Life & Health Insurance Association - The Protection of Personal Information - Some Questions and Answers.md"
 ---
 ![[GH201-631-25 - Canadian Life & Health Insurance Association - The Protection of Personal Information - Some Questions and Answers - Cover.svg]]
 

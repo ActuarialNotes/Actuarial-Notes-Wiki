@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Paper"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/Medicare-Advantage-Eight-critical-considerations)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c27316eb3454c6ef30ba3ff5c329e297b6a295b0fef60f7634cb78dfe46eaaad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-404-25 - Medicare Advantage - Eight Critical Considerations for Every Organization as ESRD Eligibility Expands in 2021.md
 ---
 ![[GH201-404-25 - Medicare Advantage - Eight Critical Considerations for Every Organization as ESRD Eligibility Expands in 2021 - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2026"
 Type: "Report"
 Code: "Document 226032"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/226032e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:904de645a3a34a14c82a740838767db866478bad9f15173aac23799db765d5de
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/2024 Canadian Pensioner Mortality Research Project (CIA Report - 2024).md
 ---
 ![[2024 Canadian Pensioner Mortality Research Project (CIA Report - 2024) - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2018"
 date: "2018"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:145b9e9f6cfa18691484d85d4a3f00a676c1e013fa5efddada9b739496e2c119
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Uses of Catastrophe Model Output (AAA - 2018).md
 ---
 ![[Uses of Catastrophe Model Output (AAA - 2018) - Cover.svg]]
 

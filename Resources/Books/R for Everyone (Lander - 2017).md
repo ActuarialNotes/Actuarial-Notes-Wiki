@@ -7,6 +7,16 @@ date: "2017"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-13-454692-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:918d5f78f5244e2f47b85f658b1be23ba12707b0eca37487d8740a8c531b5756
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/R for Everyone (Lander - 2017).md
 ---
 ![[R for Everyone (Lander - 2017) - Cover.svg]]
 

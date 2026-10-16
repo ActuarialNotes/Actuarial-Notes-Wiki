@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "RET201-111-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e8c6d88bacc43d4ab55975534688503d0be0467f63e1f05532236d26012041e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-111-25 - FASB Accounting Standards Codification Topic 715.md
 ---
 ![[RET201-111-25 - FASB Accounting Standards Codification Topic 715 - Cover.svg]]
 

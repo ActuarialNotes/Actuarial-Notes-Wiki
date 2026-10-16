@@ -8,6 +8,16 @@ Edition: "2nd"
 Type: "Textbook"
 Code: "INV201-101-25"
 ISBN: "978-1-032-28826-0"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:deb89506db6171ba4d3dbce2a260b83ad61e3765d83d2526ed717af0a46b162b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-101-25 - Chapter 6 of Introduction to Stochastic Finance with Market Examples by Privault.md
 ---
 ![[INV201-101-25 - Chapter 6 of Introduction to Stochastic Finance with Market Examples by Privault - Cover.svg]]
 

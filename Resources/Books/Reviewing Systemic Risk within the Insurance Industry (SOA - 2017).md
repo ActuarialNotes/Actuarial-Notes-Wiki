@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/reviewing-systemic-risk.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:59f3fbb573edda9d485285d39cbbcf393e4af6f9e3a927f65ac46de571549743
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Reviewing Systemic Risk within the Insurance Industry (SOA - 2017).md
 ---
 ![[Reviewing Systemic Risk within the Insurance Industry (SOA - 2017) - Cover.svg]]
 

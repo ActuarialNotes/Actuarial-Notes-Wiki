@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2021"
 date: "2021"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:905445575e0141009cad2fea31628c7aa4a1a42fdb3925ae5a9e8d45a4058715
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/FAQ on Certain Insurance Reserves Held by Insurance Companies for the Purpose of Determining U.S. Taxable Income after the Passage of the Tax Cuts and Jobs Act of 2017 (Insurance - 2017).md
 ---
 ![[FAQ on Certain Insurance Reserves Held by Insurance Companies for the Purpose of Determining U.S. Taxable Income after the Passage of the Tax Cuts and Jobs Act of 2017 (Insurance - 2017) - Cover.svg]]
 

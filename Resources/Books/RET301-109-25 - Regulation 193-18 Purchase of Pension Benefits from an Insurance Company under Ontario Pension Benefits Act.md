@@ -7,6 +7,16 @@ date: "2019"
 Type: "Legislation"
 Code: "O. Reg. 193/18"
 Available from: "[ontario.ca](https://www.ontario.ca/laws/regulation/180193)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8658d7ab0aea3c3ae46e70a8058f6c185abedcf2f0a608878fef8dcc858603ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-109-25 - Regulation 193-18 Purchase of Pension Benefits from an Insurance Company under Ontario Pension Benefits Act.md
 ---
 ![[RET301-109-25 - Regulation 193-18 Purchase of Pension Benefits from an Insurance Company under Ontario Pension Benefits Act - Cover.svg]]
 

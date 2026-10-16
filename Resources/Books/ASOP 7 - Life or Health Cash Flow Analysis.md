@@ -7,6 +7,16 @@ date: "2025"
 Type: "Standard of Practice"
 Code: "ASOP No. 7"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2026/01/asop007_219.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4235f2ddc5bca52bc8487ca44cccd02c74d358f2f486913799d8d5b3f67528b9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 7 - Life or Health Cash Flow Analysis.md
 ---
 ![[ASOP 7 - Life or Health Cash Flow Analysis - Cover.svg]]
 

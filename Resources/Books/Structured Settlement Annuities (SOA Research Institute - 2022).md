@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/structured-settlements.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de53e452970f757f3d010198768c67e77122c0bf9b051add8e69e2aa7cc2306a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Structured Settlement Annuities (SOA Research Institute - 2022).md
 ---
 ![[Structured Settlement Annuities (SOA Research Institute - 2022) - Cover.svg]]
 

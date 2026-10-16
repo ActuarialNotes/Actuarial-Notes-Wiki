@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Paper"
 Code: "INV201-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fbdfd12d52ef6d3d0bdb50d348b1d337b03450e33276bcf84ef9c846abfbdeff
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-108-25 - Mitigating Interest Rate Risk in Variable Annuities - An Analysis of Hedging Effectiveness under Model Risk.md
 ---
 ![[INV201-108-25 - Mitigating Interest Rate Risk in Variable Annuities - An Analysis of Hedging Effectiveness under Model Risk - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2018"
 Type: "Paper"
 Code: "CFE201-115-27"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/reorganizing-to-capture-maximum-value-quickly)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a3c2b32999e60ea733eb78ed82a3cdee1b0e90b1dea2c6a99e26fc56f703536c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-115-27 - Reorganizing to Capture Maximum Value Quickly.md
 ---
 ![[CFE201-115-27 - Reorganizing to Capture Maximum Value Quickly - Cover.svg]]
 

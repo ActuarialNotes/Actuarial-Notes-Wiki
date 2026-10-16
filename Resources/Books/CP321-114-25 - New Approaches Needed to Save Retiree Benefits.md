@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP321-114-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d273e51c1d53846777742a46ffc2cc9d26077a79b05fe2cf9abf73d9de687cb7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-114-25 - New Approaches Needed to Save Retiree Benefits.md
 ---
 ![[CP321-114-25 - New Approaches Needed to Save Retiree Benefits - Cover.svg]]
 

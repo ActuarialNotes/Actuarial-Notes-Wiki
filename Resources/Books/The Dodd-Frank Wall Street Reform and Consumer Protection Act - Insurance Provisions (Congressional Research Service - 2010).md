@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Report"
 Code: "CRS Report R41372"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:212f255354946689d78c8e1734aa920904f4d2f536c754eee47cf605fee09e32
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Dodd-Frank Wall Street Reform and Consumer Protection Act - Insurance Provisions (Congressional Research Service - 2010).md
 ---
 ![[The Dodd-Frank Wall Street Reform and Consumer Protection Act - Insurance Provisions (Congressional Research Service - 2010) - Cover.svg]]
 

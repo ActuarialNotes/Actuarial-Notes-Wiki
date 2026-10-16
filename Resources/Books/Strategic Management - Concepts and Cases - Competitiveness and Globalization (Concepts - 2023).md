@@ -7,6 +7,16 @@ date: "2023"
 Edition: "14th"
 Type: "Textbook"
 ISBN: "9780357716762"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:06c7b75f6709415755d67e550f810e569e3a0561513cad0b7576d36883077278
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Strategic Management - Concepts and Cases - Competitiveness and Globalization (Concepts - 2023).md
 ---
 ![[Strategic Management - Concepts and Cases - Competitiveness and Globalization (Concepts - 2023) - Cover.svg]]
 

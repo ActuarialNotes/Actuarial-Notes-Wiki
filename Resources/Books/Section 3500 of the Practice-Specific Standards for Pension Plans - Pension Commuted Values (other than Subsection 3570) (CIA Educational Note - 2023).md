@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223084"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223084e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bbc7fd1e94d7e420fb1d437c8ce9f27abb5a0d9981fe9428f857dc949453a17
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Section 3500 of the Practice-Specific Standards for Pension Plans - Pension Commuted Values (other than Subsection 3570) (CIA Educational Note - 2023).md
 ---
 ![[Section 3500 of the Practice-Specific Standards for Pension Plans - Pension Commuted Values (other than Subsection 3570) (CIA Educational Note - 2023) - Cover.svg]]
 

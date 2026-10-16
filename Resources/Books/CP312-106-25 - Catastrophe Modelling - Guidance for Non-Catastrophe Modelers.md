@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Report"
 Code: "CP312-106-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9632bbfc787713cd8f1a1859618dd7625750e0d8190e6c7e7b11d53f1f9ffb0e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-106-25 - Catastrophe Modelling - Guidance for Non-Catastrophe Modelers.md
 ---
 ![[CP312-106-25 - Catastrophe Modelling - Guidance for Non-Catastrophe Modelers - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2013"
 Type: "Paper"
 Code: "GH201-660-25"
 Available from: "[mondaq.com](https://www.mondaq.com/canada/employee-benefits--compensation/244790/self-funded-disability-plans-time-running-out-on-federally-regulated-employers)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8be051063e76033ce32adfa79fbb2cbc25a007ed3674067c48c3838040b12645
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-660-25 - Self-Funded Disability Plans - Time Running Out on Federally Regulated Employers.md
 ---
 ![[GH201-660-25 - Self-Funded Disability Plans - Time Running Out on Federally Regulated Employers - Cover.svg]]
 

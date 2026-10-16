@@ -6,6 +6,16 @@ Year: "1992"
 date: "1992"
 Type: "Paper"
 Code: "CP351-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:160c173af188b5ca48ba8fddd608e22c5560a4e7a8cfaa1f99ad313cb954f02d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-107-25 - Key Rate Durations - Measures of Interest Rate Risk.md
 ---
 ![[CP351-107-25 - Key Rate Durations - Measures of Interest Rate Risk - Cover.svg]]
 

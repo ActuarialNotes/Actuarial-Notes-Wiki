@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/the-modeling-platform/2019/november/mp-2019-is10-robidoux.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c17ded15f882ebf945a0fabbc2afbdd39b6e49bd61d361b09b1ac5712edfb5ae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Importance of Centralization of Actuarial Modeling Functions (The Modeling Platform - 2019).md
 ---
 ![[The Importance of Centralization of Actuarial Modeling Functions (The Modeling Platform - 2019) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2003"
 Type: "Textbook"
 Code: "CP351-105-25"
 ISBN: "978-1-84374-060-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:763dfa7a4019bfbea51e6b5dd6291d302a067582224f0c18d2f51ba8be304667
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-105-25 - Chapter 16 of Asset-Liability Management of Financial Institutions.md
 ---
 ![[CP351-105-25 - Chapter 16 of Asset-Liability Management of Financial Institutions - Cover.svg]]
 

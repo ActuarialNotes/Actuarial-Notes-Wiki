@@ -6,6 +6,16 @@ Year: "1990"
 date: "1990"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0aec5f31ca8df9bf622ed1544099230d272f5c2b5a23c7369139bf84e59c5c19
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/An Example of Credibility and Shifting Risk Parameters (Mahler - 1990).md
 ---
 ![[An Example of Credibility and Shifting Risk Parameters (Mahler - 1990) - Cover.svg]]
 

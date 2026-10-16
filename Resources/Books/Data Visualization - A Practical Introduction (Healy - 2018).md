@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Textbook"
 ISBN: "978-0-691-18162-2"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d9b536040f91fb08d682bf18b5e8d3245be19f10e5448fa40135ca3c392c9347
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Data Visualization - A Practical Introduction (Healy - 2018).md
 ---
 ![[Data Visualization - A Practical Introduction (Healy - 2018) - Cover.svg]]
 

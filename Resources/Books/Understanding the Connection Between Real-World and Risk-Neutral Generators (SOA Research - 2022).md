@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/understanding-the-connection.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1abc9521c3bf1438b88a9a1cb5ca26a001c0d5608f6c20b6c5ddd95738b5cfa6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Understanding the Connection Between Real-World and Risk-Neutral Generators (SOA Research - 2022).md
 ---
 ![[Understanding the Connection Between Real-World and Risk-Neutral Generators (SOA Research - 2022) - Cover.svg]]
 

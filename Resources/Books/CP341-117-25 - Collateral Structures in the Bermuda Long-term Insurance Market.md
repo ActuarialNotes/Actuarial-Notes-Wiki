@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Code: "CP341-117-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2c36bd1fcdf08ec855238d61ac77e2996548e9c0bd3482fc9a158137f116f21b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-117-25 - Collateral Structures in the Bermuda Long-term Insurance Market.md
 ---
 ![[CP341-117-25 - Collateral Structures in the Bermuda Long-term Insurance Market - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-121-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3cbca9893b308d770671a26bc95fafec72e4f0fb44f87e74b971c358c22f5dd6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-121-25 - The Big Chill.md
 ---
 ![[RET101-121-25 - The Big Chill - Cover.svg]]
 

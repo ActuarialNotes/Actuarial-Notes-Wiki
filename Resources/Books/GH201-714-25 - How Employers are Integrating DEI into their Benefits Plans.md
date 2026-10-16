@@ -7,6 +7,16 @@ date: "2022"
 Type: "Paper"
 Code: "GH201-714-25"
 Available from: "[benefitscanada.com](https://www.benefitscanada.com/archives_/benefits-canada-archive/how-employers-are-integrating-dei-into-their-benefits-plans/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5ac3a5fc77aa0e912b6ac8276493509035bc44de23dc67d12f963c90805d3b33
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-714-25 - How Employers are Integrating DEI into their Benefits Plans.md
 ---
 ![[GH201-714-25 - How Employers are Integrating DEI into their Benefits Plans - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Available from: "[am.jpmorgan.com](https://am.jpmorgan.com/us/en/asset-management/adv/insights/retirement-insights/future-of-dc-plans-key-trends-for-2025-and-beyond/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dc522ea8eeafe74eb91381017285495aa3ee550c8580f9ed90f06d104dd39e86
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-124-26 - The Future of DC Plans - Key Trends for 2025 and Beyond.md
 ---
 ![[RET101-124-26 - The Future of DC Plans - Key Trends for 2025 and Beyond - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2025"
 Type: "Educational Note"
 Code: "Document 225103"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/225103e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42bb2472f2a46d5400c09ad1bfdd842adeb659350139082c73addc45e599778f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Assumptions for Hypothetical Wind-Up and Solvency Valuations with Effective Dates on or after June 30 (2025).md
 ---
 ![[Assumptions for Hypothetical Wind-Up and Solvency Valuations with Effective Dates on or after June 30 (2025) - Cover.svg]]
 

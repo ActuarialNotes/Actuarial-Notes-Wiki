@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/the-modeling-platform/2017/november/mp-2017-iss6-hall-minnes-natchev.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3bd4fd9aafefca9b85f696e62f1f3ad3da6cd1e5387c2263b58e19dc67b01ab9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Adding Value with Model Validation (The Modeling Platform - 2017).md
 ---
 ![[Adding Value with Model Validation (The Modeling Platform - 2017) - Cover.svg]]
 

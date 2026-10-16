@@ -7,6 +7,16 @@ date: "2025"
 Type: "Legislation"
 Code: "O. Reg. 310/13"
 Available from: "[ontario.ca](https://www.ontario.ca/laws/regulation/130310)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fcebfbd6dffb5321253bad0960100fcf413aeca3d66067b42152c70bb69f3679
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-105-26 - Regulation 310-13 Asset Transfers under Ontario Pension Benefits Act.md
 ---
 ![[RET301-105-26 - Regulation 310-13 Asset Transfers under Ontario Pension Benefits Act - Cover.svg]]
 

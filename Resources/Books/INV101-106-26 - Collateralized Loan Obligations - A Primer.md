@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Paper"
 Code: "INV101-106-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f417cc9fc5ed7e928e519c22a31359d67db1b8d4946c1a0c3a8927cbb266563c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-106-26 - Collateralized Loan Obligations - A Primer.md
 ---
 ![[INV101-106-26 - Collateralized Loan Obligations - A Primer - Cover.svg]]
 

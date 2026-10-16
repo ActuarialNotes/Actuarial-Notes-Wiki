@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Code: "CP351-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dfce6572e09a242b0f1d41f577653bff2830b45c47b11544121c5bd97ac31cbd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-108-25 - Life Insurance Risk.md
 ---
 ![[CP351-108-25 - Life Insurance Risk - Cover.svg]]
 

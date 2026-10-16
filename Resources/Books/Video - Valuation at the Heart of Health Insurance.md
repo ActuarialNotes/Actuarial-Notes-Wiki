@@ -5,6 +5,17 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+description: "An SOA video, Valuation at the Heart of Health Insurance, listed as background under Reserving in the GH 201 syllabus."
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:58b68d989fb5fce6b0db06886a7a6680e690e6b59f4b82cb3671d9d66d95cb0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Valuation at the Heart of Health Insurance.md
 ---
 ![[Video - Valuation at the Heart of Health Insurance - Cover.svg]]
 

@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:32c3a0a6c2e17a551b698a5cfa3f068e87a9b939682e6154992e9bb23426dcc4
+  content_hash: sha256:7232da80d8ea541b417e2e145e01a779f7e14912a2ced22840ef57b3985f9039
   sources:
     - "SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf"
   open_findings: 0
@@ -143,9 +143,9 @@ verification:
 >      - Ch. 6: Insurer Formation, Licensing, and Marketing Regulation (pp. 6.3-6.5, 6.11-6.12 & 6.14-6.17, ending at “Licensing Priority and Process” on pg. 6.17) (2d, 2e)
 >      - Ch. 11: Solvency Regulation (pp. 11.3-11.10, 11.22-11.23 (starting at “Priority Examination Scheduling” on pg. 11.22 and ending at “Association Examinations” on pg. 11.23) & 11.25-11.26 (ending at “Risk-Based Capital” on pg. 11.26)) (2f)
 >      - Ch. 12: Insolvency Regulation (pp. 12.5-12.17 (starting at “Regulatory Control After Insolvency” on pg. 12.5 and ending at “Interstate Insolvency Remedies” on pg. 12.17)) (2f)
-> - [[The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC White Paper - 2013)|The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative, NAIC White Paper, Aug 2013 (sections 2, 3 & 5; excluding Section 2 paragraphs 27-28, 33-34 & Appendices, Section 3 paragraphs 13-15, 20-21, 23-32, 38-39 & Section 5 paragraphs 9, 20-45, 48-50, 61-86, 90, 92 & 95-104)]]
+> - [[The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC - 2013)|The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative, NAIC White Paper, Aug 2013 (sections 2, 3 & 5; excluding Section 2 paragraphs 27-28, 33-34 & Appendices, Section 3 paragraphs 13-15, 20-21, 23-32, 38-39 & Section 5 paragraphs 9, 20-45, 48-50, 61-86, 90, 92 & 95-104)]]
 >      - Outcomes 2a-d, 2f
-> - [[The Economic Crisis and Lessons from (and for) U.S. Insurance Regulation (Journal of Insurance Regulation - 2009)|The Economic Crisis and Lessons from (and for) U.S. Insurance Regulation, Journal of Insurance Regulation, National Association of Insurance Commissioners, 2009, pp. 6-13 (ending at “Lessons from State Insurance Regulation” on pg. 13)]]
+> - [[The Economic Crisis and Lessons from U.S. Insurance Regulation (Vaughn - 2009)|The Economic Crisis and Lessons from (and for) U.S. Insurance Regulation, Journal of Insurance Regulation, National Association of Insurance Commissioners, 2009, pp. 6-13 (ending at “Lessons from State Insurance Regulation” on pg. 13)]]
 >      - Outcomes 2a-d, 2f
 > - [[The Dodd-Frank Wall Street Reform and Consumer Protection Act - Insurance Provisions (Congressional Research Service - 2010)|The Dodd-Frank Wall Street Reform and Consumer Protection Act: Insurance Provisions, Congressional Research Service, CRS Report R41372, Aug 2010]]
 >      - Outcomes 2a-d, 2f
@@ -159,10 +159,10 @@ verification:
 >      - Ch. 14: The General Insurance Actuarial Opinion [(sections 14.2.2-14.4.1, 14.6 & 14.8 (excluding 14.2.6.3 and all other Canadian specific references)] (4c)
 > - [[Risk Transfer Practice Note (AAA - 2022)|Risk Transfer Practice Note, AAA, 2022, Section 6]]
 >      - Outcomes 3a-c
-> - [[National Association of Insurance Commissioners (Property / Casualty - 2025)|National Association of Insurance Commissioners, Official NAIC Annual Statement Blank, Property / Casualty, for the 2025 reporting year]]
+> - [[Official 2025 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2025)|National Association of Insurance Commissioners, Official NAIC Annual Statement Blank, Property / Casualty, for the 2025 reporting year]]
 >      - pp. 2-19, 20-29 (Schedule F) & 33-93 (Schedule P)
 >      - Outcomes 3a-c
-> - [[NAIC|NAIC, Accounting Practices and Procedures Manual, Statements of Statutory Accounting Principles (SSAP)]]
+> - [[Accounting Practices and Procedures Manual Statements of Statutory Accounting Principles (NAIC - 2025)|NAIC, Accounting Practices and Procedures Manual, Statements of Statutory Accounting Principles (SSAP)]]
 >      - SSAP 5, Liabilities, Contingencies and Impairment of Assets, paragraphs 1-13, 31-33 (3a-c)
 >      - SSAP 9, Subsequent Events, paragraphs 1-13 (3a-c)
 >      - SSAP 29, Prepaid Expenses, paragraphs 1-4 (3a-c)
@@ -172,7 +172,7 @@ verification:
 >      - SSAP 63, Underwriting Pools and Associations Including Intercompany Pools, paragraphs 1-11 (3a-c)
 >      - SSAP 65, Property and Casualty Contracts, paragraphs 1-47 (3a-c)
 >      - SSAP 66, Retrospectively Rated Contracts, paragraphs 1-14 (excluding 7.b, 9.b, 9.c) These are included in Appendix IV of Statements of Actuarial Opinion on Property and Casualty Reserves, 2025 (3a-c)
-> - [[Materiality (Concepts on Professionalism - 2006)|Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8 (pp. 1-8, 13-17 & 19-20)]]
+> - [[Materiality Concepts on Professionalism (AAA - 2006)|Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8 (pp. 1-8, 13-17 & 19-20)]]
 >      - Outcomes 4a
 > - [[Actuarial Standards of Practice|Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries (excluding Appendices for all the ASOPs listed below)]]
 >      - No. 1: Introductory Actuarial Standard of Practice (4b)
@@ -184,5 +184,5 @@ verification:
 >      - No. 41: Actuarial Communications (4b)
 >      - No. 43: Property/Casualty Unpaid Claim Estimates (4b)
 >      - No. 56: Modeling (4b)
-> - [[Statements of Actuarial Opinion on Property and Casualty Loss Reserves (Practice Note - 2025)|Statements of Actuarial Opinion on Property and Casualty Loss Reserves, Practice Note, AAA, Committee on Property and Liability Financial Reporting, 2025 (excluding Appendix I‒Section I.3, Appendix II‒Section IV, and Appendix IV)]]
+> - [[Statements of Actuarial Opinion on Property and Casualty Loss Reserves Practice Note (COPLFR - 2024)|Statements of Actuarial Opinion on Property and Casualty Loss Reserves, Practice Note, AAA, Committee on Property and Liability Financial Reporting, 2025 (excluding Appendix I‒Section I.3, Appendix II‒Section IV, and Appendix IV)]]
 >      - Outcomes 4c

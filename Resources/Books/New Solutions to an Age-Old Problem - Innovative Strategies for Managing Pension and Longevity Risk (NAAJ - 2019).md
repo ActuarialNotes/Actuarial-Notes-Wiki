@@ -5,6 +5,16 @@ Publisher: "Taylor & Francis (North American Actuarial Journal)"
 Year: "2019"
 date: "2019"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bbf8a98f6d7c63521b3da9e48b6306429152f0a12152bf6358793be24831dde1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/New Solutions to an Age-Old Problem - Innovative Strategies for Managing Pension and Longevity Risk (NAAJ - 2019).md
 ---
 ![[New Solutions to an Age-Old Problem - Innovative Strategies for Managing Pension and Longevity Risk (NAAJ - 2019) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/sdoh_act_data_workstreams.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aec1d15c640348b3efecce43bfc603516b3bc2f42e5ca1c757f9fd55659e49a1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Social, Physical and Cultural Determinants of Health (SOA Research Institute - 2023).md"
 ---
 ![[Social, Physical and Cultural Determinants of Health (SOA Research Institute - 2023) - Cover.svg]]
 

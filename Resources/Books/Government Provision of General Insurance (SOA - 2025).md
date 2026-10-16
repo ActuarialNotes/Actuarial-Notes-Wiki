@@ -6,13 +6,23 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-govt-provision.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fd6c0a8f31c35c7c3662788865022935c8e3c0bb75830d5b26ab55d03e47fe3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Government Provision of General Insurance (SOA - 2025).md
 ---
 ![[Government Provision of General Insurance (SOA - 2025) - Cover.svg]]
 
 A Society of Actuaries study note, revised May 2025, on government involvement in the business of insurance. It names two key functions, regulation of the private insurance industry and the provision of insurance programs, and goes on to the reasons for government provision and to programs by line of business and country: agricultural, automobile, property, workers compensation, other general insurance lines, health insurance and residual markets.
 
 > [!info] On the syllabus
-> - [[Exam GI-201 (SOA)|Exam GI-201]] — outcome 2e; sections 1-3, 5, 6 and 9
+> - [[Exam GI-201 (SOA)|Exam GI-201]] — outcome 2e; sections 1-3, 5, 6 and 9; outcome 3e; section 10, Appendix – No-Fault Insurance
 
 ## 1 Introduction
 

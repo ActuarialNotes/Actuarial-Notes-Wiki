@@ -7,6 +7,16 @@ date: "2018"
 Type: "Textbook"
 Code: "INV101-100-25"
 ISBN: "978-1-944960-37-7"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d86a7a6ac700c423cd773203584878af4bef6149f4a50ee017a55f959846c83a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV101-100-25 - Chapters 3 and 4 of Alternative Investments - A Primer for Investment Professionals.md
 ---
 ![[INV101-100-25 - Chapters 3 and 4 of Alternative Investments - A Primer for Investment Professionals - Cover.svg]]
 

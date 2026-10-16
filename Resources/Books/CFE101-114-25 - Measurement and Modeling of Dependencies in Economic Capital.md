@@ -7,6 +7,16 @@ date: "2010"
 Type: "Paper"
 Code: "CFE101-114-25"
 Available from: "[actuaries.org.uk](https://www.actuaries.org.uk/sites/default/files/documents/pdf/sm20100510.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:df0a3fb576d389c5042695fb840148338af19f940f55e0adcecf10f5dd995cdd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-114-25 - Measurement and Modeling of Dependencies in Economic Capital.md
 ---
 ![[CFE101-114-25 - Measurement and Modeling of Dependencies in Economic Capital - Cover.svg]]
 

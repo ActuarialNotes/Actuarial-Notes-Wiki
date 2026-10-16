@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "GH201-706-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:781101a05b10f60c2abb927af392bada829f4b7e8d135696ecf668ab157f320d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-706-25 - PMPRB-Framework Modernization.md
 ---
 ![[GH201-706-25 - PMPRB-Framework Modernization - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "CP321-103-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0fa8a576bfd8af1dfdb4cea647f6b8ed2f7008d4094b5045fa1bfed9223ccc7a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-103-26 - Long-Term Care Insurance Multistate Rate Review Framework.md
 ---
 ![[CP321-103-26 - Long-Term Care Insurance Multistate Rate Review Framework - Cover.svg]]
 

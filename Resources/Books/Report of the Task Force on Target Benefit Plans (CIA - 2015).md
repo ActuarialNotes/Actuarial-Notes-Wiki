@@ -7,6 +7,16 @@ date: "2015"
 Type: "Report"
 Code: "Document 215043"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/215043e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2bfe8bef9ec3f8eddd6513efd2f79d421b038e8b97d003f6869f7eae1455624f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Report of the Task Force on Target Benefit Plans (CIA - 2015).md
 ---
 ![[Report of the Task Force on Target Benefit Plans (CIA - 2015) - Cover.svg]]
 

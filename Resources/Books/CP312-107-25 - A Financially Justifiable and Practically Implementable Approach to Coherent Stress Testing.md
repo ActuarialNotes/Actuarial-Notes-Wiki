@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Paper"
 Code: "CP312-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5f633459d2a0d71f2c55084e4ef90235cfdea88e7e76693cc209cf87c6fde6fd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-107-25 - A Financially Justifiable and Practically Implementable Approach to Coherent Stress Testing.md
 ---
 ![[CP312-107-25 - A Financially Justifiable and Practically Implementable Approach to Coherent Stress Testing - Cover.svg]]
 

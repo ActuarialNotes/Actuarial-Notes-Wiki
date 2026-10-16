@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-721-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e9d7217e54b044c2be1aadfc061bf4603ab35220ed2b25d1e9d3f2745d16cdf5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-721-25 - The Quebec Act Respecting Prescription Drug Insurance (ARPDI).md
 ---
 ![[GH201-721-25 - The Quebec Act Respecting Prescription Drug Insurance (ARPDI) - Cover.svg]]
 

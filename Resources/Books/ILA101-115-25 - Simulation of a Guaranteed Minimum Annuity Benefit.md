@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Study Note"
 Code: "ILA101-115-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9b1aed72eac9f9b49d19ec50b20f1471a6336524fc1e9efe580eccaeac7d9326
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-115-25 - Simulation of a Guaranteed Minimum Annuity Benefit.md
 ---
 ![[ILA101-115-25 - Simulation of a Guaranteed Minimum Annuity Benefit - Cover.svg]]
 

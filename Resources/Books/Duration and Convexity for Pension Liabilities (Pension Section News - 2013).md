@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/pension-section-news/2013/september/psn-2013-iss81-mccaulay.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc091c703e6904eeed6bc23b12eebd2790f8ea1afed091d3f21568f37a924b5a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Duration and Convexity for Pension Liabilities (Pension Section News - 2013).md
 ---
 ![[Duration and Convexity for Pension Liabilities (Pension Section News - 2013) - Cover.svg]]
 

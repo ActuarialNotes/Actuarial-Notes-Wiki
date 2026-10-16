@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Available from: "[actuaries.org.uk](https://www.actuaries.org.uk/system/files/field/document/IFRS17_CSMWorkingParty_SessionalPaper_5Oct2020.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8cfbe8e2de4c7f2e04889a31b7b4ceb9e8ba4ea9b60e66e9c5bb827e3e1b622c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-601-25 - The IFRS 17 Contractual Service Margin - A Life Insurance Perspective.md
 ---
 ![[ILA201-601-25 - The IFRS 17 Contractual Service Margin - A Life Insurance Perspective - Cover.svg]]
 

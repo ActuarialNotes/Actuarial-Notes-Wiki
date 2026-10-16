@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Textbook"
 ISBN: "978-1-4987-4216-0"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6de6eb6eba7941b05a50a354521c8e53c0d2730c20c379d52dbf2124da79cfd7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/An Introduction to Computational Risk Management of Equity-Linked Insurance (Feng - 2018).md
 ---
 ![[An Introduction to Computational Risk Management of Equity-Linked Insurance (Feng - 2018) - Cover.svg]]
 

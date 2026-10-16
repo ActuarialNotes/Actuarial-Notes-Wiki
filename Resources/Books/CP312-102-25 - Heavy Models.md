@@ -7,6 +7,16 @@ date: "2014"
 Type: "Paper"
 Code: "CP312-102-25"
 Available from: "[actuaries.org.uk](https://www.actuaries.org.uk/system/files/documents/pdf/proxy-models-working-party-paper-240214.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:804ebd85b3471d9bf1a12f1bb8ac56fa237f22ca716b4ed2b18fc73e88771c33
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-102-25 - Heavy Models.md
 ---
 ![[CP312-102-25 - Heavy Models - Cover.svg]]
 

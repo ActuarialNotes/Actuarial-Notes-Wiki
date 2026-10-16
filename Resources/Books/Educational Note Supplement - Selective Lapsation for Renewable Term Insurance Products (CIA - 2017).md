@@ -7,6 +7,16 @@ date: "2017"
 Type: "Educational Note"
 Code: "Document 217019"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/217019e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e5ef91797bc61d49ff800509ce23314703249dcbfe3494dd5d74da8b2683883e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Educational Note Supplement - Selective Lapsation for Renewable Term Insurance Products (CIA - 2017).md
 ---
 ![[Educational Note Supplement - Selective Lapsation for Renewable Term Insurance Products (CIA - 2017) - Cover.svg]]
 

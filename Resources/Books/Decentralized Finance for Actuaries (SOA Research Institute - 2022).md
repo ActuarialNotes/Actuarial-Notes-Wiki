@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/decentralized-finance.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3b5693d33302183a8713129644d97c38f444d19aae9acdbfc636a8d7b622ff0f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Decentralized Finance for Actuaries (SOA Research Institute - 2022).md
 ---
 ![[Decentralized Finance for Actuaries (SOA Research Institute - 2022) - Cover.svg]]
 

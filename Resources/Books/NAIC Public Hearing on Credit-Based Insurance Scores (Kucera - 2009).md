@@ -6,6 +6,16 @@ Year: "2009"
 date: "2009"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_Kucera.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a0666a96fc40ef058ba6a5ef391a42def8fdfe90faac5e8b2fe3515d41478a83
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/NAIC Public Hearing on Credit-Based Insurance Scores (Kucera - 2009).md
 ---
 ![[NAIC Public Hearing on Credit-Based Insurance Scores (Kucera - 2009) - Cover.svg]]
 

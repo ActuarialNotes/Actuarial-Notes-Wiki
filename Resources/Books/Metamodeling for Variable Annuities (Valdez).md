@@ -7,6 +7,16 @@ date: "2019"
 Edition: "1st"
 Type: "Textbook"
 ISBN: "978-0-8153-4858-0"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:beef2f845b01711aa1c888556fe256c1264996b57ffd65d9c018949182678171
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Metamodeling for Variable Annuities (Valdez).md
 ---
 ![[Metamodeling for Variable Annuities (Valdez) - Cover.svg]]
 

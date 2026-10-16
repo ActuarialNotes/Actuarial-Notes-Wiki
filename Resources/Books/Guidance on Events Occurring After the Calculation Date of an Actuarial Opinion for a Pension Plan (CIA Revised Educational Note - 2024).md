@@ -7,6 +7,16 @@ date: "2024"
 Type: "Educational Note"
 Code: "Document 224065"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224065e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e24a58a70abe77963ff23f8d17bd8e84865acc478b03e15aacb3cc692ce0a907
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Guidance on Events Occurring After the Calculation Date of an Actuarial Opinion for a Pension Plan (CIA Revised Educational Note - 2024).md
 ---
 ![[Guidance on Events Occurring After the Calculation Date of an Actuarial Opinion for a Pension Plan (CIA Revised Educational Note - 2024) - Cover.svg]]
 

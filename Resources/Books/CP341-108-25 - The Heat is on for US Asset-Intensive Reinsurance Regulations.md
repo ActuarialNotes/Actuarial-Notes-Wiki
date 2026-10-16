@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Code: "CP341-108-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f2fd9e8b60f34170daefd98d598406d6c566bb03fe7d04fe2e0d623ff26de107
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-108-25 - The Heat is on for US Asset-Intensive Reinsurance Regulations.md
 ---
 ![[CP341-108-25 - The Heat is on for US Asset-Intensive Reinsurance Regulations - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Code: "GH301-110-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bdc37ed47f4abba51e2a9897268f2c6903dbf2abb904f444933851faf884b6ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-110-25 - UMass Risk Adjustment Project for MassHealth Payment and Care Delivery Reform - Describing the 2017 Payment Model.md
 ---
 ![[GH301-110-25 - UMass Risk Adjustment Project for MassHealth Payment and Care Delivery Reform - Describing the 2017 Payment Model - Cover.svg]]
 

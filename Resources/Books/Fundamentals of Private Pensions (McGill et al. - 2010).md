@@ -7,6 +7,16 @@ date: "2010"
 Edition: "9th"
 Type: "Textbook"
 ISBN: "978-0-19-954451-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d03d659978fee09726523102ea6b9b0fe893a729604d495e26c5ff3299769d8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fundamentals of Private Pensions (McGill et al. - 2010).md
 ---
 ![[Fundamentals of Private Pensions (McGill et al. - 2010) - Cover.svg]]
 

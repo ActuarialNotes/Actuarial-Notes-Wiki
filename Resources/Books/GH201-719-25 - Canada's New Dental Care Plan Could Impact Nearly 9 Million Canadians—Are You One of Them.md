@@ -7,6 +7,16 @@ date: "2023"
 Type: "Paper"
 Code: "GH201-719-25"
 Available from: "[cbc.ca](https://www.cbc.ca/news/canada/canada-dental-care-plan-benefit-1.7055975)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ee76f8dd7d98ab727887baeade065b41bc09b0957d3718ff43c79fb3f00cd90
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-719-25 - Canada's New Dental Care Plan Could Impact Nearly 9 Million Canadians—Are You One of Them.md"
 ---
 ![[GH201-719-25 - Canada's New Dental Care Plan Could Impact Nearly 9 Million Canadians—Are You One of Them - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/communities/health/archived/2018/self-insurance-strategic-report.zip)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:44653f686a1d8725cceb20b636a4a03415fb1865a4eb4645762736a78ad52076
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Role of the Actuary in Self-Insurance (2018).md
 ---
 ![[The Role of the Actuary in Self-Insurance (2018) - Cover.svg]]
 

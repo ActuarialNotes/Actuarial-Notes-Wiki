@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Study Note"
 Code: "CP321-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de94fb8233d3d7d8447b547adbf72aa815be92233361513b5644774aa8de61a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-107-25 - Health Insurance Accounting Basics for Actuaries.md
 ---
 ![[CP321-107-25 - Health Insurance Accounting Basics for Actuaries - Cover.svg]]
 

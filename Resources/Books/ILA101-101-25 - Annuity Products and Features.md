@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4b307a7a44a714f8e618bca5ca52cae10dd4058d5ce5ebda6f8d8e39ee0ecef9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-101-25 - Annuity Products and Features.md
 ---
 ![[ILA101-101-25 - Annuity Products and Features - Cover.svg]]
 

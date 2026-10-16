@@ -7,6 +7,16 @@ date: "2015"
 Type: "Standard of Practice"
 Code: "ASOP No. 49"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2015/03/asop049_179.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5b257af170f7610e021f3935c59d12dfb306cb22baa1de96a314b8c0075d0ea4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 49 - Medicaid Managed Care Capitation Rate Development and Certification.md
 ---
 ![[ASOP 49 - Medicaid Managed Care Capitation Rate Development and Certification - Cover.svg]]
 

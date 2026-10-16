@@ -5,11 +5,11 @@ syllabus:
   source_sha256: fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:006b630594aa86d0de03dabbce1a328939153b70b06d14e2dba6f57eccb2e6ee
+  content_hash: sha256:578974a17d86ddb1da6cbe6c93da4bad0e4534919105bc47ea65805480f7ac03
   sources:
     - "SOA, Nov 2026/Jul 2027 syllabus PDF for RET-301, all pages, sha256:fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf"
   open_findings: 0
@@ -208,10 +208,10 @@ verification:
 >      - Ch. 23: Pensions for the Highly Paid (3b)
 >      - Ch. 15: Pension Plan Valuation Concepts (excluding Section 1525) (4a, 4b)
 >      - Ch. 23: Pensions for the Highly Paid (4a, 4b)
-> - [[RET301-103-26 - R.R.O. 1990|RET301-103-26: R.R.O. 1990, Reg 909: General Regulations under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)]]
+> - [[RET301-103-26 - R.R.O. 1990, Reg 909 General Regulations under Ontario Pension Benefits Act|RET301-103-26: R.R.O. 1990, Reg 909: General Regulations under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)]]
 >      - Outcomes 3a, 3b
 >      - Outcomes 4a, 4b
-> - [[RET301-104-26 - R.S.O. 1990|RET301-104-26: R.S.O. 1990, Ch. P.8 under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)]]
+> - [[RET301-104-26 - R.S.O. 1990, Ch. P.8 under Ontario Pension Benefits Act|RET301-104-26: R.S.O. 1990, Ch. P.8 under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP and historical funding relief is background only)]]
 >      - Outcomes 3a, 3b
 >      - Outcomes 4a, 4b
 > - [[RET301-105-26 - Regulation 310-13 Asset Transfers under Ontario Pension Benefits Act|RET301-105-26: Regulation 310/13 Asset Transfers under Ontario Pension Benefits Act (Legislation in this note pertaining to JSPP & MEPP is background only)]]

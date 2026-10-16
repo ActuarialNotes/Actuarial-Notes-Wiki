@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2020"
 date: "2020"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6e4160497df2380bb8a335aae3bc4b627379bf2407f2ba8b0bc04b51ac407d90
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Importance of Centralization of Actuarial Modeling Functions (The Modeling Platform - 2020).md
 ---
 ![[The Importance of Centralization of Actuarial Modeling Functions (The Modeling Platform - 2020) - Cover.svg]]
 

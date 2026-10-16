@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2025"
 date: "2025"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6999411387884ddf96a5c6110d856af9d6cc7c87a67e6b4f82a2bd089abce1a4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Plan Sponsor Perspective.md
 ---
 ![[Video - Plan Sponsor Perspective - Cover.svg]]
 

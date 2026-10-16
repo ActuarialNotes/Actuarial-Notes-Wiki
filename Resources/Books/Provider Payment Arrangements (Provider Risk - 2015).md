@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Research/Projects/research-2015-10-provider-payment-report.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4ffdbf877cf901142c29f81999d9dae22e15246f2ea1bec0b3c7d15ab9e15f80
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Provider Payment Arrangements (Provider Risk - 2015).md
 ---
 ![[Provider Payment Arrangements (Provider Risk - 2015) - Cover.svg]]
 

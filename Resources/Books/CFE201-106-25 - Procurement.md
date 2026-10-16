@@ -7,6 +7,16 @@ date: "2022"
 Type: "Paper"
 Code: "CFE201-106-25"
 Available from: "[mckinsey.com](https://www.mckinsey.com/industries/chemicals/our-insights/procurement-early-warning-systems-and-the-next-disruption)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:08e6cbb62b21d43226499f195eae52f94518eb9ee895cf9ebf515962f1c9ae56
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-106-25 - Procurement.md
 ---
 ![[CFE201-106-25 - Procurement - Cover.svg]]
 

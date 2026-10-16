@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "ILA201-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:09a30ba23335aafd2c6a5934669cde98890be149868112c1f1a8a508d7404f1d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-101-25 - Life in-force Management - Improving Consumer Value and Long-Term Profitability.md
 ---
 ![[ILA201-101-25 - Life in-force Management - Improving Consumer Value and Long-Term Profitability - Cover.svg]]
 

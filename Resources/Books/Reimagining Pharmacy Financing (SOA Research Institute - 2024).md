@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2024/reimagining-pharmacy-financing.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5bc9c77697f2381bbe61b963f86901ce97fc4841a98ef095dcc5b6899f505a95
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Reimagining Pharmacy Financing (SOA Research Institute - 2024).md
 ---
 ![[Reimagining Pharmacy Financing (SOA Research Institute - 2024) - Cover.svg]]
 

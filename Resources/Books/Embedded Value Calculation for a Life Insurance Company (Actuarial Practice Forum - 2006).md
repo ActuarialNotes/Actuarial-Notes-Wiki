@@ -6,6 +6,16 @@ Year: "2006"
 date: "2006"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/journals/actuarial-practice-forum/2006/october/APF0610_2.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86164d08c49768b00c17c6617c15f842c69add6aa07872f42f3595fef8072721
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Embedded Value Calculation for a Life Insurance Company (Actuarial Practice Forum - 2006).md
 ---
 ![[Embedded Value Calculation for a Life Insurance Company (Actuarial Practice Forum - 2006) - Cover.svg]]
 

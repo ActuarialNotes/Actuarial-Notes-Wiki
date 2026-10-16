@@ -7,6 +7,16 @@ date: "2020"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-0-262-04469-1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0745b8c9c52d59e5c3d7cc0203a51753e5173f19f447b95caa2f2847abcd2001
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fundamentals of Machine Learning for Predictive Data Analytics (Kelleher - 2020).md
 ---
 ![[Fundamentals of Machine Learning for Predictive Data Analytics (Kelleher - 2020) - Cover.svg]]
 

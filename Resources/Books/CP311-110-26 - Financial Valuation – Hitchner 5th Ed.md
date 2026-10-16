@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Study Note"
 Code: "CP311-110-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:14e193c776f0f6f1489e0060e8834e471bdca02d533f33541e490151a98a8761
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP311-110-26 - Financial Valuation – Hitchner 5th Ed.md"
 ---
 ![[CP311-110-26 - Financial Valuation – Hitchner 5th Ed - Cover.svg]]
 

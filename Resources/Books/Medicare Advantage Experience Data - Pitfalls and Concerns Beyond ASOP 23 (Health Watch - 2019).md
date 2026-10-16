@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/library/newsletters/health-watch-newsletter/2019/february/hsn-2019-iss88-angeloni.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:74ae5dee28753ac90d70c60de09837878c5604061b66d6d6e80446f2630e787e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Medicare Advantage Experience Data - Pitfalls and Concerns Beyond ASOP 23 (Health Watch - 2019).md
 ---
 ![[Medicare Advantage Experience Data - Pitfalls and Concerns Beyond ASOP 23 (Health Watch - 2019) - Cover.svg]]
 

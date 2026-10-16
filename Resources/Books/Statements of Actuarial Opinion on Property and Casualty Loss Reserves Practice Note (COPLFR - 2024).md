@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2025"
 date: "2025"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:80cc009b1a50be3a86748ff12f56eb7e354780caa91081a1a4452eb0b0d831aa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Statements of Actuarial Opinion on Property and Casualty Loss Reserves Practice Note (COPLFR - 2024).md
 ---
 ![[Statements of Actuarial Opinion on Property and Casualty Loss Reserves Practice Note (COPLFR - 2024) - Cover.svg]]
 
@@ -12,6 +22,7 @@ The 2025 Property and Casualty Practice Note of the American Academy of Actuarie
 
 > [!info] On the syllabus
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives C5–C9; the 2025 practice note, excluding Appendix I.1.3 (NAIC Title SAO Instructions) and Appendix IV (SSAPs); the SSAPs reproduced in Appendix IV are separate readings (the content outline lists SSAPs 5R, 9, 53, 62R and 66 there as readings for tasks C1–C2).
+> - [[Exam GI-302 (SOA)|Exam GI-302]] — Outcomes 4c; the 2025 practice note, excluding Appendix I Section I.3, Appendix II Section IV and Appendix IV (as the syllabus states it)
 
 ## 1 Introduction
 - 1.1 What are practice notes?
@@ -108,3 +119,4 @@ The 2025 Property and Casualty Practice Note of the American Academy of Actuarie
 ## Sources
 - [Statements of Actuarial Opinion on Property and Casualty Loss Reserves, 2025 (AAA Property and Casualty Practice Note)](https://actuary.org/wp-content/uploads/2025/12/casualty-practice-note-pcloss2025.pdf) — the document: title page, introduction, table of contents and its section and appendix headings (348 pages, sha256 299cb328818f8669014180a0e1c8543121996b2f9c94f83ea0d8f131d3afe4c3); the sections' text was not read beyond the introduction, so they are listed by heading only
 - [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation (2025), the excluded appendices, and the note that SSAPs in Appendix IV are separate readings; the Exam 6U page links this reading under the name “COPLFR - 2024”, but the outline cites the 2025 practice note
+- [SOA Exam GI-302 Syllabus, Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf) — the citation (Statements of Actuarial Opinion on Property and Casualty Loss Reserves, Practice Note, AAA, Committee on Property and Liability Financial Reporting, 2025), the excluded sections and appendices and the outcome it serves

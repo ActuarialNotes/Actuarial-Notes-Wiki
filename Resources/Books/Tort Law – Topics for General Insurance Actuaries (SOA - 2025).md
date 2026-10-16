@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-tort-law.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca619b6d5d43e6ff5ca5df2e0df8ccbff1d64fda13a24e41c5d8c62868a734de
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Tort Law – Topics for General Insurance Actuaries (SOA - 2025).md"
 ---
 ![[Tort Law – Topics for General Insurance Actuaries (SOA - 2025) - Cover.svg]]
 

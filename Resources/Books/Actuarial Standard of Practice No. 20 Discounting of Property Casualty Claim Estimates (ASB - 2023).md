@@ -7,6 +7,16 @@ date: "2023"
 Type: "Standard of Practice"
 Code: "ASOP No. 20"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2023/07/asop020_209.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8dfdf79f3c9315206deb4f7c53c0309b7a2ec24180df73bdd338fb9985a89e01
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Actuarial Standard of Practice No. 20 Discounting of Property Casualty Claim Estimates (ASB - 2023).md
 ---
 ![[Actuarial Standard of Practice No. 20 Discounting of Property Casualty Claim Estimates (ASB - 2023) - Cover.svg]]
 

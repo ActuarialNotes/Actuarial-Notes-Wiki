@@ -6,6 +6,16 @@ Year: "2009"
 date: "2009"
 Type: "Report"
 Code: "GAO-09-642"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9af41732c7f3bce1103a2559bdde4a38ccf1f2a2b1d740b88cdc8be010f9d240
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-112-25 - Private Pensions - Alternative Approaches Could Address Retirement Risks Faced by Workers but Pose Tradeoffs.md
 ---
 ![[RET101-112-25 - Private Pensions - Alternative Approaches Could Address Retirement Risks Faced by Workers but Pose Tradeoffs - Cover.svg]]
 

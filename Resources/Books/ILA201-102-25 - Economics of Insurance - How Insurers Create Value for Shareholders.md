@@ -6,6 +6,16 @@ Year: "2001"
 date: "2001"
 Type: "Report"
 Code: "ILA201-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1b1e24f89d819004b41c4b9afb701f0cbee28e24ebc99185732ee7627643270e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-102-25 - Economics of Insurance - How Insurers Create Value for Shareholders.md
 ---
 ![[ILA201-102-25 - Economics of Insurance - How Insurers Create Value for Shareholders - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Textbook"
 ISBN: "978-0-521-13596-2"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:37e99cb5fecfd8437995a95d89ffafe613c9a81794a1c5da95888b7ed45af98c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Regression Modeling with Actuarial and Financial Applications (Frees - 2010).md
 ---
 ![[Regression Modeling with Actuarial and Financial Applications (Frees - 2010) - Cover.svg]]
 

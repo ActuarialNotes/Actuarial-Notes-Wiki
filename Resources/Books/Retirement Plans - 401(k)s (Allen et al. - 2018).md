@@ -7,6 +7,16 @@ date: "2018"
 Edition: "12th"
 Type: "Textbook"
 ISBN: "978-1-259-72067-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecbbaa876675506163ea7745e554548f6bf9d5ebcc9419d4fbf8201c2c60f220
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Retirement Plans - 401(k)s (Allen et al. - 2018).md
 ---
 ![[Retirement Plans - 401(k)s (Allen et al. - 2018) - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2025"
 date: "2025"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e3eda5d5a0eb40069c77b0e969c6dedaeef014d7252b1711fc66d36351633c69
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Actuarial Roles in Health.md
 ---
 ![[Video - Actuarial Roles in Health - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Available from: "[cia-ica.ca](https://cia-ica.ca/publications/221021e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:96ccbd2fa5894378977ab3c90e1446a2ee62499bb4489205129ae11fec81755a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Pharmacare - Is There a Pill for That (CIA - 2021).md
 ---
 ![[Pharmacare - Is There a Pill for That (CIA - 2021) - Cover.svg]]
 

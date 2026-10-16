@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Paper"
 Code: "ILA101-112-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73911c37559148377d6b6ec3ff1885ba36122ce61894deaa884eeef9cbac0d77
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-112-25 - Revisiting the Role of Insurance Company ALM within a Risk Management Framework.md
 ---
 ![[ILA101-112-25 - Revisiting the Role of Insurance Company ALM within a Risk Management Framework - Cover.svg]]
 

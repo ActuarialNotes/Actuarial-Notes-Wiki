@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "CFE101-120-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a16b1effabdb7abe90d8ae96d9dfc9cb3732cad9f13156c344205d94052ceeb5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-120-25 - IAA Risk Book.md
 ---
 ![[CFE101-120-25 - IAA Risk Book - Cover.svg]]
 

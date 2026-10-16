@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Guide"
 Code: "Manual Notice GL-MU-2019-CGLES-001"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73a166936256d2485db50348e5e4937c76b77f42a15f07a0a4c2ad16d1753db1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CGL Experience and Schedule Rating Plan (ISO).md
 ---
 ![[CGL Experience and Schedule Rating Plan (ISO) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 66"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3454aebd89f2a4a01befc5744e7356b58cbfc7b09de4ebf3994141d9b57aa166
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 66 Retrospectively Rated Contracts (NAIC - 2024).md
 ---
 ![[SSAP 66 Retrospectively Rated Contracts (NAIC - 2024) - Cover.svg]]
 

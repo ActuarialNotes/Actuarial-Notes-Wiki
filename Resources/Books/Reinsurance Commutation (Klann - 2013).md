@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_Klann.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12bc63d5c73995a3b8c4f01171c344d7eabdedc7e8e4baffc208d7babf4e1d08
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Reinsurance Commutation (Klann - 2013).md
 ---
 ![[Reinsurance Commutation (Klann - 2013) - Cover.svg]]
 

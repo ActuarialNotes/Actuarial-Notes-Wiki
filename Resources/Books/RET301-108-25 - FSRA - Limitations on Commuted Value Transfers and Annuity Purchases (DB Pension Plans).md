@@ -7,6 +7,16 @@ date: "2020"
 Type: "Guideline"
 Code: "PE0202APP"
 Available from: "[fsrao.ca](https://www.fsrao.ca/industry/pensions/regulatory-framework/guidance/limitations-commuted-value-transfers-and-annuity-purchases-db-pension-plans)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:539ed6807a68e129c17a6574502950274e9a802bb9cf622039f22e08fe5fc627
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET301-108-25 - FSRA - Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans).md
 ---
 ![[RET301-108-25 - FSRA - Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans) - Cover.svg]]
 

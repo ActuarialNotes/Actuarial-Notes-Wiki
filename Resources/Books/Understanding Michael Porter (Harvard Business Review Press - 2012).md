@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Textbook"
 ISBN: "9781422160596"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bea87951a79ad61093f4941ff94356d0a6331a875c9eba2f91146324f77de685
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Understanding Michael Porter (Harvard Business Review Press - 2012).md
 ---
 ![[Understanding Michael Porter (Harvard Business Review Press - 2012) - Cover.svg]]
 

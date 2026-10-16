@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Paper"
 Code: "CP341-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e08fcb4116e4705a24d5f6b6b2d3bd8e6ed4008e3d3bf575dfc9f803a29c2355
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-105-25 - Lapse Risk and Capital Management Strategies - Back in the Spotlight.md
 ---
 ![[CP341-105-25 - Lapse Risk and Capital Management Strategies - Back in the Spotlight - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2014"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-62542-112-8"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4e2718b7812be024332dd81dd1932cc17e793b24b7d37be196d5c66ecd1f55a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Managing and Evaluating Healthcare Intervention Programs (Duncan - 2014).md
 ---
 ![[Managing and Evaluating Healthcare Intervention Programs (Duncan - 2014) - Cover.svg]]
 

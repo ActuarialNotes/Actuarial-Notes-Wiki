@@ -7,6 +7,16 @@ date: "2014"
 Type: "Textbook"
 Code: "INV201-100-25"
 ISBN: "978-1-4398-9242-8"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f4472be410abd818fd7f05236536ea03b58be39f0a5cceb583d94777bae8e048
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/INV201-100-25 - Chapter 5 of Financial Mathematics – A Comprehensive Treatment.md"
 ---
 ![[INV201-100-25 - Chapter 5 of Financial Mathematics – A Comprehensive Treatment - Cover.svg]]
 

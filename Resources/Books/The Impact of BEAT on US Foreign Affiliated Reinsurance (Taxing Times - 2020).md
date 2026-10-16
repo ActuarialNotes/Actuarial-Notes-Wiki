@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2020"
 date: "2020"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f5f4fc414974e8d361acd7970658c3f318f62eb597f6cf69dca911b8184fa71d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Impact of BEAT on US Foreign Affiliated Reinsurance (Taxing Times - 2020).md
 ---
 ![[The Impact of BEAT on US Foreign Affiliated Reinsurance (Taxing Times - 2020) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2014"
 date: "2014"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/Files/Research/Projects/research-2014-model-valid-ins.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fd542423b3a099c67706497eb140f080dfa1b8ceeda47a6e8800545cfab3fd29
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Model Validation for Insurance Enterprise Risk and Capital Models (Stricker, Wang & Strommen - 2014).md"
 ---
 ![[Model Validation for Insurance Enterprise Risk and Capital Models (Stricker, Wang & Strommen - 2014) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:574a10fb062665ffbd551506646ab2f0719df1cf1459efff566cdd2fd86d7d97
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-102-25 - Understanding Profitability in Life Insurance.md
 ---
 ![[ILA101-102-25 - Understanding Profitability in Life Insurance - Cover.svg]]
 

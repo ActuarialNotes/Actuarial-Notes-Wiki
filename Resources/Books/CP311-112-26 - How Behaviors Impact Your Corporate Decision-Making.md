@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Code: "CP311-112-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa112cbc7d8a36040d40a1b2471352b20ce0eaee882a1c2991ace749c3f68508
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-112-26 - How Behaviors Impact Your Corporate Decision-Making.md
 ---
 ![[CP311-112-26 - How Behaviors Impact Your Corporate Decision-Making - Cover.svg]]
 

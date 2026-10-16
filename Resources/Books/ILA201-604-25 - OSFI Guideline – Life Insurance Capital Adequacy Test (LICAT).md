@@ -7,6 +7,16 @@ date: "2025"
 Type: "Guideline"
 Code: "Guideline A"
 Available from: "[osfi-bsif.gc.ca](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/life-insurance-capital-adequacy-test-guideline-2025)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:69e2ba4b9d4c0296064715f8b67016fa430379c808e427c8243f635654b700a2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/ILA201-604-25 - OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT).md"
 ---
 ![[ILA201-604-25 - OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT) - Cover.svg]]
 
@@ -14,6 +24,7 @@ OSFI's Life Insurance Capital Adequacy Test (LICAT) guideline, which establishes
 
 > [!info] On the syllabus
 > - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — Capital Management, outcome 2a; ILA201-604-25: OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT), November 2024, Ch. 1-6 (excluding Sections 4.2-4.4).
+> - [[Exam GH-201C (SOA)|Exam GH-201C]] — Financial Statements, outcomes 2b, 2c and 2f; read the introductions to all chapters, and the following: Ch. 1 Overview and General Requirements; Ch. 2 Available Capital, sections 2.1-2.2; Ch. 6 Insurance Risk, sections 6.1-6.6 and 6.8; Ch. 11 Aggregation and Diversification of Risks (the syllabus reading GH201-693-26).
 
 ## 1 Overview and General Requirements
 - 1.1 Overview
@@ -107,3 +118,4 @@ OSFI's Life Insurance Capital Adequacy Test (LICAT) guideline, which establishes
 - [Life Insurance Capital Adequacy Test – Guideline (2025) (OSFI)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/life-insurance-capital-adequacy-test-guideline-2025) — the landing page: publication details (guideline A, effective January 1, 2025, issued November 21, 2024) and the note that a Regulatory Notice of May 22, 2025 adjusts the guideline
 - [Life Insurance Capital Adequacy Test – Guideline (2025), PDF, 214 pages (OSFI)](https://www.osfi-bsif.gc.ca/sites/default/files/documents/2025-licat-guideline-ligne-directrice-tsav-en.pdf) — the document: title, preamble, and the chapter and section headings from its bookmarks (sha256 4953dacbdecc6e2b248447bfe65ebfef59788988c6cb02f905f12eabebd459f5)
 - [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation (reading ILA201-604-25, November 2024) and the assigned chapters and exclusions; the SOA-hosted reading is not itself available, so the 2025 guideline above (issued November 21, 2024) is the version read
+- [SOA GH 201-C Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) — the citation ("GH201-693-26: OSFI Guidelines for Life Insurance Capital Adequacy Test (LICAT)") and the assigned chapters and sections; the SOA-hosted reading is not itself available, so the 2025 guideline above is the version read

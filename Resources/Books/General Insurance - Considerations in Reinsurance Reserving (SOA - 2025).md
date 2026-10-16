@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-301-study-note-reinsurance-reserving.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:29011b47103e664f87cb1b9e4b2e231236f8fb9ebb9c0336e44bf899e6a1f3f5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/General Insurance - Considerations in Reinsurance Reserving (SOA - 2025).md
 ---
 ![[General Insurance - Considerations in Reinsurance Reserving (SOA - 2025) - Cover.svg]]
 

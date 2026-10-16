@@ -7,6 +7,16 @@ date: "2025"
 Type: "Report"
 Code: "CFE201-118-27"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/quantumblack/our-insights/seizing-the-agentic-ai-advantage)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4f41654bf197da7388585554e5bdd84e0c4101bda860ce2cfcf3d4bf5f768a7a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-118-27 - Seizing the Agentic AI Advantage.md
 ---
 ![[CFE201-118-27 - Seizing the Agentic AI Advantage - Cover.svg]]
 

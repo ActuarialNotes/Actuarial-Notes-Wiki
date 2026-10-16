@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Report"
 Code: "CP341-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:de0c0a767de55be42b83176996b3096bfc42df30c56ca363336baba94f959647
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-101-25 - Capital Markets Bureau Primer - Private Equity.md
 ---
 ![[CP341-101-25 - Capital Markets Bureau Primer - Private Equity - Cover.svg]]
 

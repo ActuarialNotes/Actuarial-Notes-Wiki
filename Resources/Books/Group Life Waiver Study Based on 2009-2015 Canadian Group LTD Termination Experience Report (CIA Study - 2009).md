@@ -7,6 +7,16 @@ date: "2020"
 Type: "Report"
 Code: "Document 220015"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/220015e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f9f6ac2b66b1f8a4e98232eb44def771e0e50e0b672fecb3af28e7908d583622
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Group Life Waiver Study Based on 2009-2015 Canadian Group LTD Termination Experience Report (CIA Study - 2009).md
 ---
 ![[Group Life Waiver Study Based on 2009-2015 Canadian Group LTD Termination Experience Report (CIA Study - 2009) - Cover.svg]]
 

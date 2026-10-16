@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET101-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f23fcbe4c2a5bdae3200dd537eca51bcf9ef4ffeea3cc5e9ddb5e666e0cf3b0b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-103-25 - Phased Retirement - An Important Part of the Evolving Retirement Scene.md
 ---
 ![[RET101-103-25 - Phased Retirement - An Important Part of the Evolving Retirement Scene - Cover.svg]]
 

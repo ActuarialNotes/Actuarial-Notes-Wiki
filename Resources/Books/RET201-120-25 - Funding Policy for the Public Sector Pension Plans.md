@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Guideline"
 Available from: "[canada.ca](https://www.canada.ca/en/treasury-board-secretariat/services/pension-plan/plan-information/funding-policy-public-sector-pension-plans.html)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:334a8c22e4cfa8093dd9e6cb57d1f2e5038f9064ad08b114d9cbbf093d8a0b81
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-120-25 - Funding Policy for the Public Sector Pension Plans.md
 ---
 ![[RET201-120-25 - Funding Policy for the Public Sector Pension Plans - Cover.svg]]
 

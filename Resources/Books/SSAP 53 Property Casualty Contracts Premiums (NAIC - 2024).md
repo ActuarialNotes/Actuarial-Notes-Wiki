@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 53"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dc29de9b707f294d7350aa18dd91e29c410e4180b7b8353a78eb0c3c4db10d9e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 53 Property Casualty Contracts Premiums (NAIC - 2024).md
 ---
 ![[SSAP 53 Property Casualty Contracts Premiums (NAIC - 2024) - Cover.svg]]
 

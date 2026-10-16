@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/pro-2015-iss91-hrischenko.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8fd4813b55f78e2da9538e64f34a62a4c8da6543a02d48f4c72172e475be93f9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Evolving Strategies to Improve Inforce Post-Level Term Profitability (Product Matters - 2015).md
 ---
 ![[Evolving Strategies to Improve Inforce Post-Level Term Profitability (Product Matters - 2015) - Cover.svg]]
 

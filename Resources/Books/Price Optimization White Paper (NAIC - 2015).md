@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_NAIC_Price.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8c845c18111fe1e7a80f505c6c3ca1fe268ef4368e44088cc64582de4094d6cf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Price Optimization White Paper (NAIC - 2015).md
 ---
 ![[Price Optimization White Paper (NAIC - 2015) - Cover.svg]]
 
@@ -13,6 +23,7 @@ A white paper of the NAIC's Casualty Actuarial and Statistical (C) Task Force, d
 
 > [!info] On the syllabus
 > - [[Exam 6U (CAS)|Exam 6U]] — objective A5; pp. 1-16 (the Task Force's white paper, November 2015, as the content outline states it)
+> - [[Exam GI-201 (SOA)|Exam GI-201]] — outcome 2g; pp. 6-16 (paragraphs 15-49)
 
 ## I Scope
 - The paper gives background research on [[Price Optimization|price optimization]], identifies its potential benefits and drawbacks and presents options for state regulatory responses; the Task Force expresses no opinion on the policy decisions states have made or may make.
@@ -51,3 +62,4 @@ A white paper of the NAIC's Casualty Actuarial and Statistical (C) Task Force, d
 ## Sources
 - [Price Optimization White Paper (NAIC Casualty Actuarial and Statistical (C) Task Force, November 19, 2015)](https://www.casact.org/sites/default/files/2021-03/6U_NAIC_Price.pdf) — the document: title, section and appendix headings and the text of Scope and of the recommendations and state considerations (22 pages, sha256 9c7db398166cedfb…); the paper carries no bookmarks and sections II to VI are listed by heading only
 - [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation and the pages assigned
+- [GI 201 Syllabus, Nov 2026/Mar 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) — the citation (the Task Force's white paper, November 2015), the pages and paragraphs assigned and the learning outcome

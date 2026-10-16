@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[content.naic.org](https://content.naic.org/insurance-topics/risk-retention-groups)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ce34c17477315d23e35126fe91f5d4a4f4f948aad1f0b803108fb96773bb3c12
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk Retention Groups (NAIC - 2023).md
 ---
 ![[Risk Retention Groups (NAIC - 2023) - Cover.svg]]
 

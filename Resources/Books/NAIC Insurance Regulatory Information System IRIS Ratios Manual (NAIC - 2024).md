@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2025"
 date: "2025"
 Type: "Guideline"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0f52b41deb839d6df68ba6f5c3cbc3fd274ddabc010dc7b5dbe8d664208f1cc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/NAIC Insurance Regulatory Information System IRIS Ratios Manual (NAIC - 2024).md
 ---
 ![[NAIC Insurance Regulatory Information System IRIS Ratios Manual (NAIC - 2024) - Cover.svg]]
 

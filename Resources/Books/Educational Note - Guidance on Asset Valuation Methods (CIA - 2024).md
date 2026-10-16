@@ -7,6 +7,16 @@ date: "2024"
 Type: "Educational Note"
 Code: "Document 224027"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224027e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d5c494210b89d741b9e4608d178a39081dae7a53d939c63bf1210bf6677b8ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Educational Note - Guidance on Asset Valuation Methods (CIA - 2024).md
 ---
 ![[Educational Note - Guidance on Asset Valuation Methods (CIA - 2024) - Cover.svg]]
 

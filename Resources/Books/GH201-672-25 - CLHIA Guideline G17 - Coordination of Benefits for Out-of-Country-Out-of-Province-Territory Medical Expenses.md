@@ -7,6 +7,16 @@ date: "2013"
 Type: "Guideline"
 Code: "Guideline G17"
 Available from: "[clhia.ca](https://www.clhia.ca/Industry/clhia-guidelines/g17-co-ordination-of-benefits-for-out-of-country-out-of-province-territory-medical-expenses)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:45e4267fc178ef0887d9fa4c44b440701742a6816a0bb75eb69abbf6da131f6f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-672-25 - CLHIA Guideline G17 - Coordination of Benefits for Out-of-Country-Out-of-Province-Territory Medical Expenses.md
 ---
 ![[GH201-672-25 - CLHIA Guideline G17 - Coordination of Benefits for Out-of-Country-Out-of-Province-Territory Medical Expenses - Cover.svg]]
 

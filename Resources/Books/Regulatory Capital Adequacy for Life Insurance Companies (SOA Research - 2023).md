@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/erm-191-reg-capital-with-final-visuals.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fe309da1c6965cb50061b46065bc841cb5c25d07b5172160cdbb1d3a6ce141ac
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Regulatory Capital Adequacy for Life Insurance Companies (SOA Research - 2023).md
 ---
 ![[Regulatory Capital Adequacy for Life Insurance Companies (SOA Research - 2023) - Cover.svg]]
 
@@ -13,6 +23,8 @@ A research report, dated July 2023, that introduces the concept of capital and c
 
 > [!info] On the syllabus
 > - [[Exam CP-351 (SOA)|Exam CP-351]] — the whole report; outcome 2c.
+> - [[Exam ILA-101 (SOA)|Exam ILA-101]] — Outcomes 4d; the report with its companion Excel spreadsheet, Comparison of Jurisdictions Tool.
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — Outcomes 2a; the report with its companion Excel spreadsheet, Comparison of Jurisdictions Tool.
 
 ## Executive Summary
 
@@ -63,3 +75,6 @@ A research report, dated July 2023, that introduces the concept of capital and c
 ## Sources
 - [Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions (SOA Research Institute, July 2023)](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/erm-191-reg-capital-with-final-visuals.pdf) — the document: title page, authors, contents page, and the executive summary for the lead
 - [CP 351 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf) — the citation and the learning outcome; no sections are excluded
+- [Comparison of Jurisdictions Tool (companion Excel spreadsheet)](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/soa-capital-adequacy.xlsm) — the companion workbook the ILA-101 syllabus links; its contents were not read for this page
+- [SOA Exam ILA-101 syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf) — the citation and the assigned outcome (4d)
+- [SOA Exam ILA-201I syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation and the assigned outcome (2a)

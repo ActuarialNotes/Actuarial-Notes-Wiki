@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-647-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9501f4290a8aa25f039e7a0172f30ff1f252b203a08b6358cbe3c0c1d7aa84df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-647-25 - Protecting Canadians' Long Term Disability Benefits.md"
 ---
 ![[GH201-647-25 - Protecting Canadians' Long Term Disability Benefits - Cover.svg]]
 

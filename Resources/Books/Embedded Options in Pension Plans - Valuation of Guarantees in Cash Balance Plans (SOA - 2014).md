@@ -6,6 +6,16 @@ Year: "2014"
 date: "2014"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-emb-opt-val-cash-report.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d0c1a8859a1bf3ac9f177b13ea306e9d49e2415964d378985b5453d6e43ac2f3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Embedded Options in Pension Plans - Valuation of Guarantees in Cash Balance Plans (SOA - 2014).md
 ---
 ![[Embedded Options in Pension Plans - Valuation of Guarantees in Cash Balance Plans (SOA - 2014) - Cover.svg]]
 

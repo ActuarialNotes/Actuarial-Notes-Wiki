@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Code: "CFE101-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bb3e2601d51b65e9d6c73be6868097650f76c6c3f65f8b4092856e0b9483ce15
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-103-25 - ORSA and the Regulator.md
 ---
 ![[CFE101-103-25 - ORSA and the Regulator - Cover.svg]]
 

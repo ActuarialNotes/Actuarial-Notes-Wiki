@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/sections/health/health-newsletter/2023/september/hw-2023-09-howard/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1f47d1f4f95f99d77fdb374d7de9529041b9c0e9a02bbed7cfab7829c28fec3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Critical Illness Turns 40! (Health Watch - 2023).md"
 ---
 ![[Critical Illness Turns 40! (Health Watch - 2023) - Cover.svg]]
 

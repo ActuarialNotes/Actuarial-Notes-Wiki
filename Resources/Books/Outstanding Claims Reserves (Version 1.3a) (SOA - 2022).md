@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-301-study-note-outstanding-reserves.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dfecefe00a673c19f6404230154e39b662c285f77ac1d8bbc9b115de3e8a5e6e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Outstanding Claims Reserves (Version 1.3a) (SOA - 2022).md
 ---
 ![[Outstanding Claims Reserves (Version 1.3a) (SOA - 2022) - Cover.svg]]
 

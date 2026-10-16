@@ -7,6 +7,16 @@ date: "2025"
 Type: "Guideline"
 Code: "Guideline A"
 Available from: "[osfi-bsif.gc.ca](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/life-insurance-capital-adequacy-test-2025-chapter-10-credit-reinsurance)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1e0fe73c73e5e73727858f2827f2499fb486818159d49a1304102469032a5071
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-110-25 - LICAT Guideline 2025.md
 ---
 ![[CP341-110-25 - LICAT Guideline 2025 - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a2f8d682ad180422ef0bd6a04aa7ddb537cfba4f9ab6a75b66083f2d5236bd7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Materiality (Proportionality and Similar Terms - 2023).md
 ---
 ![[IAA Risk Book - Materiality (Proportionality and Similar Terms - 2023) - Cover.svg]]
 

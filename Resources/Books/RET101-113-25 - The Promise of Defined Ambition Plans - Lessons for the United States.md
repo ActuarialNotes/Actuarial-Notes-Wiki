@@ -7,6 +7,16 @@ date: "2016"
 Type: "Paper"
 Code: "RET101-113-25"
 ISBN: "9780198755449"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e2c7d5472cf18fbcc4a0efb8af98fdb51db5812dc9a08db91dbd2534fd45416e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-113-25 - The Promise of Defined Ambition Plans - Lessons for the United States.md
 ---
 ![[RET101-113-25 - The Promise of Defined Ambition Plans - Lessons for the United States - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "ILA101-110-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ac497e5d778c0060ddf00d057617ce474f0d38fb549f01c3a9ea6848cde388c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-110-25 - Fundamentals of the Principle-Based Approach to Statutory Reserves for Life Insurance.md
 ---
 ![[ILA101-110-25 - Fundamentals of the Principle-Based Approach to Statutory Reserves for Life Insurance - Cover.svg]]
 

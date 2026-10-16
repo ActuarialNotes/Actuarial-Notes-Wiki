@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-648-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ea1b0dd3467b4aaf6e756960bf5a1a193e5df3fad2c6a54d26882d8cfd8e5f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-648-25 - Canadian Life and Health Insurance Industry Agreement to Protect Canadians' Drug Coverage.md"
 ---
 ![[GH201-648-25 - Canadian Life and Health Insurance Industry Agreement to Protect Canadians' Drug Coverage - Cover.svg]]
 

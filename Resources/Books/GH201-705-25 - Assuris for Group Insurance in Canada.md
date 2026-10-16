@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-705-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f86d716067267715c7e1b648f0ee33a92238ac0b643f83bfc47a2c40fc4fc8e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-705-25 - Assuris for Group Insurance in Canada.md
 ---
 ![[GH201-705-25 - Assuris for Group Insurance in Canada - Cover.svg]]
 

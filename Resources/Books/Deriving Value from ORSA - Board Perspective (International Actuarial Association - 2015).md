@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2015"
 date: "2015"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:df55a6141731285e9ec79a374370eebefac01f7a9bec15113063dc018408b072
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Deriving Value from ORSA - Board Perspective (International Actuarial Association - 2015).md
 ---
 ![[Deriving Value from ORSA - Board Perspective (International Actuarial Association - 2015) - Cover.svg]]
 

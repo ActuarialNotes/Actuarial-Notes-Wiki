@@ -6,6 +6,16 @@ Year: "2011"
 date: "2011"
 Type: "Report"
 Available from: "[ccir-ccrra.org](https://www.ccir-ccrra.org/CreditScoringWorkingGroup)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ad177c906b7adeb5bd84a03d2372cc1dd9a5865f06025b2464e96105e6a63908
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Issues Paper - Use of Credit Scores by Insurers Canadian Council of Insurance Regulators (Insurers - 2011).md
 ---
 ![[Issues Paper - Use of Credit Scores by Insurers Canadian Council of Insurance Regulators (Insurers - 2011) - Cover.svg]]
 

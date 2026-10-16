@@ -7,6 +7,16 @@ date: "2016"
 Type: "Study Note"
 Code: "CP312-100-25"
 ISBN: "978-3-319-29774-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73483ebb2760787fdd5866115a66a9955331f776819b71277816b77fc263ea7a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-100-25 - Chapter 3 of Modelling in Life Insurance - A Management Perspective.md
 ---
 ![[CP312-100-25 - Chapter 3 of Modelling in Life Insurance - A Management Perspective - Cover.svg]]
 

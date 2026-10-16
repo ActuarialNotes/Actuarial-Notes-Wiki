@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Legislation"
 Code: "CP341-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c1b439433a3dc7f915b243a4625f22fa59b7e41c160a7c3ba8a2892cfec9ec02
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-107-25 - NAIC Model Laws - Credit for Reinsurance Model Law.md
 ---
 ![[CP341-107-25 - NAIC Model Laws - Credit for Reinsurance Model Law - Cover.svg]]
 

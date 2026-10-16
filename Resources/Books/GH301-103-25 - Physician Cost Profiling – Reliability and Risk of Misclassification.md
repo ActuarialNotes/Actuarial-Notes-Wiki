@@ -7,6 +7,16 @@ date: "2010"
 Type: "Paper"
 Code: "GH301-103-25"
 Available from: "[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC2878194/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:afde872dacd3ea116d82ffca32fbb38f4833b0d8b3d4fcee29586a05fd59c71c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH301-103-25 - Physician Cost Profiling – Reliability and Risk of Misclassification.md"
 ---
 ![[GH301-103-25 - Physician Cost Profiling – Reliability and Risk of Misclassification - Cover.svg]]
 

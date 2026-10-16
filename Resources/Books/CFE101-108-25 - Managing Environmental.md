@@ -7,6 +7,16 @@ date: "2022"
 Type: "Guide"
 Code: "CFE101-108-25"
 Available from: "[unepfi.org](https://www.unepfi.org/publications/managing-environmental-social-and-governance-risks-in-life-health-insurance-business/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d3344023521c678385ec83e351c35f17d786b27e47a99c5da4fc7746c93e907e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-108-25 - Managing Environmental.md
 ---
 ![[CFE101-108-25 - Managing Environmental - Cover.svg]]
 

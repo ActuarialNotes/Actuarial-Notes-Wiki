@@ -6,6 +6,16 @@ Year: "1999"
 date: "1999"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/asset-valuation-methods.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:399e9b1feee58a9ba06d19b07e95043a212e67329af64438d14538d4653d73fe
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Survey of Asset Valuation Methods for Defined Benefit Pension Plans (SOA).md
 ---
 ![[Survey of Asset Valuation Methods for Defined Benefit Pension Plans (SOA) - Cover.svg]]
 

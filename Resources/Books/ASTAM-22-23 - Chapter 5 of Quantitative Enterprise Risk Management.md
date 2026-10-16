@@ -7,6 +7,16 @@ date: "2022"
 Type: "Study Note"
 Code: "ASTAM-22-23"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2023/2023-exam-astam-22-23.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ee604708aa567edc650c82e579d9a1297a88f74ffced837357424aeda8e8bb8a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASTAM-22-23 - Chapter 5 of Quantitative Enterprise Risk Management.md
 ---
 ![[ASTAM-22-23 - Chapter 5 of Quantitative Enterprise Risk Management - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "Allstate Insurance Company and Liberty Mutual Group"
 Year: "2025"
 date: "2025"
 Type: "Regulatory Return"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:86320ea56597fd8264dd12dee69008630bef32f0a1e16e3220f98cca6b198933
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/NAIC Annual Statement Examples Allstate Liberty Mutual (NAIC - 2024).md
 ---
 ![[NAIC Annual Statement Examples Allstate Liberty Mutual (NAIC - 2024) - Cover.svg]]
 

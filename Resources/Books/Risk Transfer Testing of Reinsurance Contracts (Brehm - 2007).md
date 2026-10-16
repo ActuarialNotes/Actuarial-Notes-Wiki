@@ -6,6 +6,16 @@ Year: "2007"
 date: "2007"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-07/Risk-Transfer-Ruhm-Brehm.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cf08fdc847d7fb2f4959790935429c8e9b7f64cbc83d5e5b3ef51a1927a8b681
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk Transfer Testing of Reinsurance Contracts (Brehm - 2007).md
 ---
 ![[Risk Transfer Testing of Reinsurance Contracts (Brehm - 2007) - Cover.svg]]
 

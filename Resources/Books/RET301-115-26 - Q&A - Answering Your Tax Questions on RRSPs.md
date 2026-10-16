@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Available from: "[bdo.ca](https://www.bdo.ca/insights/q-a-answering-your-tax-questions-on-rrsp-tfsa-and-the-new-fhsa)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8524b42bc0509a0dd1f5c412fcd93258f47052d4506f9a12e2934d91a2310720
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/RET301-115-26 - Q&A - Answering Your Tax Questions on RRSPs.md"
 ---
 ![[RET301-115-26 - Q&A - Answering Your Tax Questions on RRSPs - Cover.svg]]
 

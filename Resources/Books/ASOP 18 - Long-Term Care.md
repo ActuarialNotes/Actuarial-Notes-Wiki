@@ -7,6 +7,16 @@ date: "2022"
 Type: "Standard of Practice"
 Code: "ASOP No. 18"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2022/04/asop018_206-.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:76bff69b2f3720898ab2218c5625d7b3757b943d713ab2379cdd03bafa5948b7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 18 - Long-Term Care.md
 ---
 ![[ASOP 18 - Long-Term Care - Cover.svg]]
 

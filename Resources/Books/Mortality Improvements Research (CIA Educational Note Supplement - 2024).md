@@ -7,6 +7,16 @@ date: "2024"
 Type: "Educational Note"
 Code: "Document 224064"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224064e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9bc5f67beff05a1bc72cfa14672232e0b2f88d0ed06a4ba2f4227a9563e75e5c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Mortality Improvements Research (CIA Educational Note Supplement - 2024).md
 ---
 ![[Mortality Improvements Research (CIA Educational Note Supplement - 2024) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2024"
 Type: "Standard of Practice"
 Code: "224061"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/224061e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fa3c09da1c30fc18a2e9fb3c1c1bcff4819d7ae0ce0f7f9843228d70844890c6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Canadian Institute of Actuaries Standards of Practice - Insurance (2024).md
 ---
 ![[Canadian Institute of Actuaries Standards of Practice - Insurance (2024) - Cover.svg]]
 

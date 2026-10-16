@@ -7,12 +7,23 @@ date: "2021"
 Edition: "9th"
 Type: "Textbook"
 ISBN: "978-1-260-47389-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5e1a3af0dba4417e79285a44196f5f2cffb61a2880071d4e59e8a40f5ec2f475
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Handbook of Fixed Income Securities (Fabozzi - 2021).md
 ---
 ![[Handbook of Fixed Income Securities (Fabozzi - 2021) - Cover.svg]]
 
 A reference on fixed income securities and their derivatives, with chapters written by leading experts in their fields. The publisher describes the ninth edition as revised and updated for a market that has changed dramatically since the last edition, covering the basics of fixed income analytics, Treasury, agency, municipal and corporate bonds, mortgage-backed and asset-backed securities, the yield curve and the term structure, valuation and relative value, credit analysis, portfolio management and strategies, derivative instruments and their applications, and performance attribution analysis.
 
 > [!info] On the syllabus
+> - [[Exam ILA-101 (SOA)|Exam ILA-101]] — outcome 5d: Ch. 10 (Corporate Bonds), pp. 235-262, excluding exhibits 10-1 and 10-2; and Ch. 21 (An Overview of Mortgages and the Mortgage Market)
 > - [[Exam INV-101 (SOA)|Exam INV-101]] — outcome 1a: Ch. 1 (Overview of the Types and Features of Fixed Income Securities), Ch. 2 (Risks Associated with Investing in Fixed Income Securities) and Ch. 7 (U.S. Treasury Securities), background only; Ch. 10 (Corporate Bonds); Ch. 11 (Leveraged Loans); Ch. 21 (An Overview of Mortgages and the Mortgage Market); Ch. 22 (Agency Mortgage Passthrough), pp. 471-491 before the Anatomy of the Agency Passthrough Market section; Ch. 23 (Agency Collateralized Mortgage Obligations), pp. 499-520 before the Exotics section; and Ch. 60 (Financing Positions in the Bond Market)
 
 ## Part One Introduction

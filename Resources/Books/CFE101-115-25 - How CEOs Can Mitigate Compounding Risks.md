@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CFE101-115-25"
 Available from: "[mckinsey.com](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/how-ceos-can-mitigate-compounding-risks)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:80263521616e73b5b65de386cae3e0ea94c9374cb4fae89ec5ad862d1b52daa0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-115-25 - How CEOs Can Mitigate Compounding Risks.md
 ---
 ![[CFE101-115-25 - How CEOs Can Mitigate Compounding Risks - Cover.svg]]
 

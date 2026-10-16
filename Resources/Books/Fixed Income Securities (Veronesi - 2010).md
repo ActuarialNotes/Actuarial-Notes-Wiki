@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Textbook"
 ISBN: "978-0-470-10910-6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b6e4d0388efe3c1148a3978f904c5a2ba9b00367093293b91f03ca06514c710f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fixed Income Securities (Veronesi - 2010).md
 ---
 ![[Fixed Income Securities (Veronesi - 2010) - Cover.svg]]
 

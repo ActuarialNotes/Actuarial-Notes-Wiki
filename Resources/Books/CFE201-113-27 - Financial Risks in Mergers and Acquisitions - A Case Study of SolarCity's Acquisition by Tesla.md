@@ -7,6 +7,16 @@ date: "2023"
 Type: "Paper"
 Code: "CFE201-113-27"
 Available from: "[drpress.org](https://drpress.org/ojs/index.php/fbem/article/view/13324)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:adaa7cc3d15dab5ddb4f9a4e75075c6c50b75310af756d06215d1755c799f20d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CFE201-113-27 - Financial Risks in Mergers and Acquisitions - A Case Study of SolarCity's Acquisition by Tesla.md"
 ---
 ![[CFE201-113-27 - Financial Risks in Mergers and Acquisitions - A Case Study of SolarCity's Acquisition by Tesla - Cover.svg]]
 

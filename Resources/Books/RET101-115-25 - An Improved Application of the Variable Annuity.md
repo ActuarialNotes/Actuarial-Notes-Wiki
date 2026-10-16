@@ -7,6 +7,16 @@ date: "2017"
 Type: "Report"
 Code: "RET101-115-25"
 Available from: "[globalriskinstitute.org](https://globalriskinstitute.org/publication/an-improved-application-of-the-variable-annuity/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a9397d45d709743f0a87f1fb5b529f54e244a1b00dfc13b8039f506eddb54526
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET101-115-25 - An Improved Application of the Variable Annuity.md
 ---
 ![[RET101-115-25 - An Improved Application of the Variable Annuity - Cover.svg]]
 

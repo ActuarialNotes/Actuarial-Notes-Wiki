@@ -7,6 +7,16 @@ date: "2022"
 Type: "Educational Note"
 Code: "222090"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/222090e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8d2081d65f5b8ddade0726ed792776396af6ca9c650ab7e78d89ac27c4cb7773
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CIA Educational Note - IFRS 17 Risk Adjustment for Non-Financial Risk for Life and Health Insurance Contracts (2022).md
 ---
 ![[CIA Educational Note - IFRS 17 Risk Adjustment for Non-Financial Risk for Life and Health Insurance Contracts (2022) - Cover.svg]]
 

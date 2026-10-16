@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://theactuarymagazine.org/value-based-care-framework/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fca5451f9ff16358b4ba0a925df462360d29528853285c37bf6539494bd3fdcf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Value-Based Care Framework (The Actuary - 2020).md
 ---
 ![[Value-Based Care Framework (The Actuary - 2020) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-722-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f3f6565805545e59a131a3d3949b17671cdc90dfd515a882f5795fc76c17e41
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-722-25 - Navigating Group Insurance Laws in Quebec.md
 ---
 ![[GH201-722-25 - Navigating Group Insurance Laws in Quebec - Cover.svg]]
 

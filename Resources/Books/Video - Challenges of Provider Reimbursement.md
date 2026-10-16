@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Course"
 Available from: "[soa.org](https://www.soa.org/prof-dev/recordings/2025/march/challenges-provider-reimbursement/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b42e905f6613d9dd16e8ce1f38a310cdf3bb90a9ba29317922c4142e4781787e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Video - Challenges of Provider Reimbursement.md
 ---
 ![[Video - Challenges of Provider Reimbursement - Cover.svg]]
 

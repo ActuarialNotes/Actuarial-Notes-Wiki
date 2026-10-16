@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/pension-risk-transfer.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8bd20f23e4dc608c270e7730c5823442215522a435abe8444c1d1ff6aebbab01
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Pension Risk Transfer in Canada and the U.S (SOA Research Institute - 2022).md
 ---
 ![[Pension Risk Transfer in Canada and the U.S (SOA Research Institute - 2022) - Cover.svg]]
 

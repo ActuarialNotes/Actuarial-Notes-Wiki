@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-2013-iss-in-app-cred.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b7f2fc1fa9004c473ef0baf89522afaac54aff468b463cdd9ced6da19cda8a03
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Issues In Applying Credibility to Group Long-Term Disability Insurance (2013).md
 ---
 ![[Issues In Applying Credibility to Group Long-Term Disability Insurance (2013) - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2025"
 date: "2025"
 Type: "Guideline"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9a68619a16ef9baf41e2d6b4fee87252d15e4506490766ffe701b6bdd54c2b37
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Accounting Practices and Procedures Manual Preamble (NAIC - 2025).md
 ---
 ![[Accounting Practices and Procedures Manual Preamble (NAIC - 2025) - Cover.svg]]
 

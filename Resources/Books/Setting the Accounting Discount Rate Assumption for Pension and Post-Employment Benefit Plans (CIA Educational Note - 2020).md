@@ -7,6 +7,16 @@ date: "2020"
 Type: "Educational Note"
 Code: "220174"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/220174e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ff0b303d928dfdc4cc8cbf367bcaf2a64f17769b521d1f3d148fb94bdc6fb37
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Setting the Accounting Discount Rate Assumption for Pension and Post-Employment Benefit Plans (CIA Educational Note - 2020).md
 ---
 ![[Setting the Accounting Discount Rate Assumption for Pension and Post-Employment Benefit Plans (CIA Educational Note - 2020) - Cover.svg]]
 

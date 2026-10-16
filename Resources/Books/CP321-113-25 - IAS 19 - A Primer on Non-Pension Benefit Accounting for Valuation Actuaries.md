@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP321-113-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b24229bd19aa03ff95afb73d42dffe7226757f661411da7425d8b8b044ade058
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-113-25 - IAS 19 - A Primer on Non-Pension Benefit Accounting for Valuation Actuaries.md
 ---
 ![[CP321-113-25 - IAS 19 - A Primer on Non-Pension Benefit Accounting for Valuation Actuaries - Cover.svg]]
 

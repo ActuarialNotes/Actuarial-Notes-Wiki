@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Report"
 Code: "CRS R45707"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7ea6b52376326be6c81acc1dfb7231e11eedcee0071b99d2b86713c092b9e240
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Terrorism Risk Insurance Overview and Issue Analysis (Webel - 2019).md
 ---
 ![[Terrorism Risk Insurance Overview and Issue Analysis (Webel - 2019) - Cover.svg]]
 

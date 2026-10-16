@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2025"
 date: "2025"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d18bb765928cd5a1f036305be4776fc9fc55afbb7faa0ef14be587577de3cdd6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Selecting and Documenting Pension Assumptions Other Than Discount Rate and Investment Return (AAA - 2025).md
 ---
 ![[Selecting and Documenting Pension Assumptions Other Than Discount Rate and Investment Return (AAA - 2025) - Cover.svg]]
 

@@ -7,6 +7,16 @@ date: "2010"
 Type: "Textbook"
 Code: "CP312-101-25"
 ISBN: "978-0-9813968-2-8"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:53bd685e4b303fdc50e4a10d28a3e63a5cb5ba0ce514e38feb541f67c094e8c9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP312-101-25 - Stochastic Modeling.md
 ---
 ![[CP312-101-25 - Stochastic Modeling - Cover.svg]]
 

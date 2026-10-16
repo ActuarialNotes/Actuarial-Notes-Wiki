@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Guideline"
 Code: "SSAP No. 65"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:34a166eabec8e80d21b6f7125d10b28ee5fd2b48792deedd2a127c6c32c47196
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/SSAP 65 Property and Casualty Contracts (NAIC - 2024).md
 ---
 ![[SSAP 65 Property and Casualty Contracts (NAIC - 2024) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/registered-index-linked-annuities.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f7f24b66a73f6660d43c43592c8ddcd7f6830d872c24bb05506e513d54f63e9c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Registered Index-Linked Annuities (SOA Research Institute - 2022).md
 ---
 ![[Registered Index-Linked Annuities (SOA Research Institute - 2022) - Cover.svg]]
 

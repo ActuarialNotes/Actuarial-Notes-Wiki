@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Code: "CFE101-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ef75c737e19676a824371b7813e76b519f3be2592e19ccf150419377b3fc58f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-105-25 - Agency Theory and Asymmetric Information.md
 ---
 ![[CFE101-105-25 - Agency Theory and Asymmetric Information - Cover.svg]]
 

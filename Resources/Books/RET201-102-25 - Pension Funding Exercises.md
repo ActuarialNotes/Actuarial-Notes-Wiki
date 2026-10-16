@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8a94a1f2fea67c287000c06e8c3c046447e3cebd5a4db50f69261840bccf2bfa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-102-25 - Pension Funding Exercises.md
 ---
 ![[RET201-102-25 - Pension Funding Exercises - Cover.svg]]
 

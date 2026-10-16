@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2022/mechanics-dividends.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42a0a49671da7f525a58f7bc902d8eab62d30c562d62b7112011dca8cbcc9312
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Mechanics of Dividends (SOA Research Institute - 2022).md
 ---
 ![[Mechanics of Dividends (SOA Research Institute - 2022) - Cover.svg]]
 

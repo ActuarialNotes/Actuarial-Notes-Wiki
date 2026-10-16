@@ -7,6 +7,16 @@ date: "2018"
 Type: "Standard of Practice"
 Code: "ASOP No. 42"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2018/04/asop042_191.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:99132a1fed86103fe01458f617c44bb75ab2851c24b89351ed044ba520dd1a5a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 42 - Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims.md
 ---
 ![[ASOP 42 - Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims - Cover.svg]]
 

@@ -8,6 +8,16 @@ Type: "Monograph"
 Code: "CAS Monograph No. 16"
 ISBN: "978-1-7370028-8-8"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e9631686cc214b7719ac4251d794007fab6f8cb88ed1f234f6bfb83583cf9a3b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges (Chalk et al.).md"
 ---
 ![[From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges (Chalk et al.) - Cover.svg]]
 

@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:85cc895786b0f86fdde83ebc69505e3ae85866f2ca2f951264e0c9f8c2e2cbc2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Professional Standards (Insurance Regulation Committee - 2023).md
 ---
 ![[IAA Risk Book - Professional Standards (Insurance Regulation Committee - 2023) - Cover.svg]]
 

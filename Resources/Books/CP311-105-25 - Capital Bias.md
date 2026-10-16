@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP311-105-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6c54919a755379717c1c344014d5a61886c54b2017a460e68c4da057c79a5eeb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP311-105-25 - Capital Bias.md
 ---
 ![[CP311-105-25 - Capital Bias - Cover.svg]]
 

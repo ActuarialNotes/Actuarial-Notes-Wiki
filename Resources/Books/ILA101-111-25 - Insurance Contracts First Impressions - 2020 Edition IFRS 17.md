@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Report"
 Code: "ILA101-111-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:22ff63545dfec41bb1c6d209f491fb9a8d0a1555a20a43ead8f697a82b50d305
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA101-111-25 - Insurance Contracts First Impressions - 2020 Edition IFRS 17.md
 ---
 ![[ILA101-111-25 - Insurance Contracts First Impressions - 2020 Edition IFRS 17 - Cover.svg]]
 

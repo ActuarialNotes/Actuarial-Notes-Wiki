@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_Cedar.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fd0ffa6e6d5795157078eacacd3071a6043e4217b0597de2d12154a9a7d4bba5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Reinsurance Accounting and Strategy for the Actuary (Cedar & Thompson - 2020).md"
 ---
 ![[Reinsurance Accounting and Strategy for the Actuary (Cedar & Thompson - 2020) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-405-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1000a2cd2f0a5a5665676a63279d1968aefc0a4fedfaa9ff612b2f75d3ad1747
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-405-25 - A Hard Pill to Swallow - Appreciating the Mathematical Dynamics of the Affordable Care Act.md
 ---
 ![[GH201-405-25 - A Hard Pill to Swallow - Appreciating the Mathematical Dynamics of the Affordable Care Act - Cover.svg]]
 

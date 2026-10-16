@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "GH201-659-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:861a4aeb8b5bd60670ed9031c9c00ec9657479b7f435f1ad42f5f29e1f1e97ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-659-25 - Ontario 2014 Budget Will Forbid Employers from Self-Insuring Long Term Disability Plan to Employees.md
 ---
 ![[GH201-659-25 - Ontario 2014 Budget Will Forbid Employers from Self-Insuring Long Term Disability Plan to Employees - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Educational Note"
 Code: "IAN 100"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:46c8e36712c53700460ca435c42cf1b7c2417fa4507d8c64b70683e9b9f9724a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ILA201-600-25 - International Actuarial Note 100 - Application of IFRS 17.md
 ---
 ![[ILA201-600-25 - International Actuarial Note 100 - Application of IFRS 17 - Cover.svg]]
 

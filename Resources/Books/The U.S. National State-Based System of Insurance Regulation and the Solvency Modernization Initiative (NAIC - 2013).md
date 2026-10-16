@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/6U_NAIC_Solvency_Regulatory_Framework.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e68c0bb02f96f102d7314362f5a2c2a84d30c7fc977c41caa06e77d8f8882830
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC - 2013).md
 ---
 ![[The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC - 2013) - Cover.svg]]
 
@@ -13,6 +23,7 @@ An NAIC white paper, dated August 14, 2013, that explains the U.S. solvency regu
 
 > [!info] On the syllabus
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives A2, A4 and C3; not Section 2 paragraphs 15-18, 26-28, 32-34 and 41-42, Appendix 1 and Appendix 2; not Section 3 paragraphs 9, 13-15, 23-32 and 38-39; not Section 4; not Section 5 paragraphs 9, 20-29, 30-45 and 61-86 (as the content outline states it)
+> - [[Exam GI-302 (SOA)|Exam GI-302]] — Outcomes 2a-d, 2f; sections 2, 3 and 5, excluding Section 2 paragraphs 27-28, 33-34 and the Appendices, Section 3 paragraphs 13-15, 20-21, 23-32 and 38-39, and Section 5 paragraphs 9, 20-45, 48-50, 61-86, 90, 92 and 95-104 (as the syllabus states it)
 
 ## 1 Introduction
 - Implementation of the U.S. Financial Regulatory Mission
@@ -90,3 +101,4 @@ An NAIC white paper, dated August 14, 2013, that explains the U.S. solvency regu
 ## Sources
 - [The U.S. National State-Based System of Insurance Financial Regulation and the Solvency Modernization Initiative (NAIC, August 14, 2013)](https://www.casact.org/sites/default/files/2021-03/6U_NAIC_Solvency_Regulatory_Framework.pdf) — the document: title page, table of contents and the section and sub-section headings (76 pages, sha256 77020d3a75a8043a…); the title page prints "Financial Regulation" where the syllabus citation reads "Regulation", and names the Solvency Modernization Initiative (E) Task Force as drafter
 - [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation and the paragraphs and sections excluded from the assignment
+- [SOA Exam GI-302 Syllabus, Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf) — the citation (The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative, NAIC White Paper, Aug 2013), the sections and paragraphs assigned and the outcomes it serves

@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/rating-agency-perspectives.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:059bda066301a0c28103f772714f4d509051898c871f1de62676ed538873f8c1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Rating Agency Perspectives on Insurance Company Capital (SOA Research Institute - 2023).md
 ---
 ![[Rating Agency Perspectives on Insurance Company Capital (SOA Research Institute - 2023) - Cover.svg]]
 
@@ -14,6 +24,7 @@ A research paper to aid students and practitioners in understanding how rating a
 > [!info] On the syllabus
 > - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — Management and Evaluation of Life Insurance Risks, outcome 3b; Rating Agency Perspectives on Insurance Company Capital, SOA Research Institute, Aug 2023 (excluding Appendices).
 > - [[Exam ILA-201U (SOA)|Exam ILA-201U]] — Management and Evaluation of Life Insurance Risks, outcome 3b; Rating Agency Perspectives on Insurance Company Capital, SOA Research Institute, Aug 2023 (excluding Appendices).
+> - [[Exam CFE-101 (SOA)|Exam CFE-101]] — Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices); outcomes 1.3a, 2.2c, 3.3b.
 
 ## Executive Summary
 
@@ -56,3 +67,4 @@ A research paper to aid students and practitioners in understanding how rating a
 - [Rating Agency Perspectives on Insurance Company Capital (SOA Research Institute, August 2023)](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/rating-agency-perspectives.pdf) — the document: title page, authors and sponsors, table of contents and the executive summary for the lead
 - [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation, the exclusion of the appendices and the assigned outcome for ILA 201-I
 - [SOA ILA 201-U Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf) — the citation, the exclusion of the appendices and the assigned outcome for ILA 201-U
+- [CFE 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf) — the citation, the exclusion of the appendices and the learning outcomes

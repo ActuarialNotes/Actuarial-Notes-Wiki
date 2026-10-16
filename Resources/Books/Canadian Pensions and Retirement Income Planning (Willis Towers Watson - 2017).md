@@ -7,6 +7,16 @@ date: "2017"
 Edition: "6th"
 Type: "Textbook"
 ISBN: "9780433491057"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4be7180d50b7263b6a768b57c1861c2ff1f6d59a308cdd79e67a1f3ddf1baa86
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Canadian Pensions and Retirement Income Planning (Willis Towers Watson - 2017).md
 ---
 ![[Canadian Pensions and Retirement Income Planning (Willis Towers Watson - 2017) - Cover.svg]]
 

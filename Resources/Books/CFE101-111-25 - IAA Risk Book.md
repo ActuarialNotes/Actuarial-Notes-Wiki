@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Report"
 Code: "CFE101-111-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dc2e4a08b462c4c236a7a36f227dc5a582a5f36d98b88698ef1a18e4fda29ad8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-111-25 - IAA Risk Book.md
 ---
 ![[CFE101-111-25 - IAA Risk Book - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Course"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2020/spring/intro-study-notes/targeted-improvements-interactive-model.xlsx)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b063db8c594fad4abe21850f2654a277f4d577987cb3cab0971c9d00b2aafb89
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Targeted Improvements Interactive Model.md
 ---
 ![[Targeted Improvements Interactive Model - Cover.svg]]
 

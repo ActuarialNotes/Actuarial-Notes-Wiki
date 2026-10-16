@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/fr-2019-iss118-strother-adduci-kern.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e8fd357e567dfe2543130ee83852db77ba44eed475a1e3e2762c36776c13bed3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Implementation Considerations for VA Market Risk Benefits (The Financial Reporter - 2019).md
 ---
 ![[Implementation Considerations for VA Market Risk Benefits (The Financial Reporter - 2019) - Cover.svg]]
 

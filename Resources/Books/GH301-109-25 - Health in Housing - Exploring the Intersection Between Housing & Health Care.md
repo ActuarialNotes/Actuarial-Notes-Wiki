@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Code: "GH301-109-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:01c64fd341fc417721994f08e069584dc6d7ee7bcac51193c596b2cf52265a7e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH301-109-25 - Health in Housing - Exploring the Intersection Between Housing & Health Care.md"
 ---
 ![[GH301-109-25 - Health in Housing - Exploring the Intersection Between Housing & Health Care - Cover.svg]]
 

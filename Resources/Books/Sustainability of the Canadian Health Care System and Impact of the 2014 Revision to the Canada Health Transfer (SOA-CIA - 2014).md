@@ -6,6 +6,16 @@ Year: "2013"
 date: "2013"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/research/projects/research-2013-can-healthcare.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6b969c12398d7759c1741eca51fad431dcd122258ec04c8f88d05960b3c20423
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA-CIA - 2014).md
 ---
 ![[Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA-CIA - 2014) - Cover.svg]]
 

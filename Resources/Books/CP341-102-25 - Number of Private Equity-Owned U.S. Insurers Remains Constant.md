@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Report"
 Code: "CP341-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f0df0fb8d53f5aa9f460752c421353bcae16892ef086531d96d74d39437f6568
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP341-102-25 - Number of Private Equity-Owned U.S. Insurers Remains Constant.md
 ---
 ![[CP341-102-25 - Number of Private Equity-Owned U.S. Insurers Remains Constant - Cover.svg]]
 

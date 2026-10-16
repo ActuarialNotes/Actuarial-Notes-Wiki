@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2025"
 date: "2025"
 Type: "Regulatory Return"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c0c1fee059529868b968f1e32a1586949503e1ce1999a8e25513add70f574045
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Official 2025 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2025).md
 ---
 ![[Official 2025 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2025) - Cover.svg]]
 
@@ -12,6 +22,7 @@ The NAIC's Property/Casualty Annual Statement Blank, the forms on which a proper
 
 > [!info] On the syllabus
 > - [[Exam GI-302 (SOA)|Exam GI-302]] — Outcomes 3a-c; the Official NAIC Annual Statement Blank, Property / Casualty, for the 2025 reporting year, pp. 2-19, 20-29 (Schedule F) and 33-93 (Schedule P) (as the syllabus states it)
+> - [[Exam 6U (CAS)|Exam 6U]] — objectives C1–C2; Official 2025 NAIC Annual Statement Blanks, Property and Casualty (individual and consolidated basis), pp. 2-13, the Notes to the Financial Statement (p. 14, cited for reference only; candidates are responsible for the Notes as described in the Odomirok reading), and Schedules D (pp. SI04 through SI10), F (pp. 20-29), H (pp. 30-32) and P (pp. 33-93); candidates are not responsible for page numbers and may base answers on either the 2025 annual statement or the study materials where they differ (as the content outline states it)
 
 ## Financial Statements
 - Jurat Page
@@ -193,3 +204,4 @@ The NAIC's Property/Casualty Annual Statement Blank, the forms on which a proper
 ## Sources
 - [NAIC 2026 Annual Statement Blanks – Property / Casualty](https://content.naic.org/sites/default/files/publication-asb-prop.pdf) — the document: the blank's title page and its bookmark outline of statements, exhibits and schedules (263 pages, sha256 1d41f75ea0794eb4b69cd14aaaabe395280301ca8fab710e6128e503c9bd1bbd); that file is the 2026 edition, not the 2025 edition the syllabus prescribes, which could not be reached, so the forms listed here may differ from the 2025 blank; Schedule P's per-line parts 2 to 4 are summarized rather than listed
 - [SOA Exam GI-302 Syllabus, Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf) — the citation (National Association of Insurance Commissioners, Official NAIC Annual Statement Blank, Property / Casualty, for the 2025 reporting year), the pages assigned and the outcomes it serves
+- [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation (Official 2025 NAIC Annual Statement Blanks, Property and Casualty), the assigned pages and schedules, and the objectives it serves

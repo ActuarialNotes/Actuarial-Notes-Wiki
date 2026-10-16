@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Guide"
 Code: "GH201-694-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1c2a7aa798ad90a48f1afd790a30911470a40703265dee1de1f6d7948a5c412f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-694-25 - Guide to Canada Benefits Legislation.md
 ---
 ![[GH201-694-25 - Guide to Canada Benefits Legislation - Cover.svg]]
 

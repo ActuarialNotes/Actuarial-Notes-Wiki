@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2025"
 date: "2025"
 Type: "Guideline"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dcc0e35fc154ac3e3a069af23889b5d4c0a50f4642812ab33b89d31d5eb229a9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Accounting Practices and Procedures Manual Statements of Statutory Accounting Principles (NAIC - 2025).md
 ---
 ![[Accounting Practices and Procedures Manual Statements of Statutory Accounting Principles (NAIC - 2025) - Cover.svg]]
 

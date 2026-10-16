@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/study-note/2025-11-gi-201-study-note-ubi-telematics.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ab394e07c30e21211422bd3a5f55047e2ee27b0a5c0fba796c49dbaa088b3c25
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Usage Based Insurance and Telematics (SOA - 2025).md
 ---
 ![[Usage Based Insurance and Telematics (SOA - 2025) - Cover.svg]]
 

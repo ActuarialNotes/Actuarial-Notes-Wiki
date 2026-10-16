@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Report"
 Code: "CFE101-126-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bdec49ad4e0452a7c676a7b338b35b50232b002af6d749acfa1f23717dff7caf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-126-26 - Cyber Risk Management - Theories.md
 ---
 ![[CFE101-126-26 - Cyber Risk Management - Theories - Cover.svg]]
 

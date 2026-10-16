@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-112-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6dffd754810326c7a1ba2e0b001afb5f16570b2be9146f1093531a19430047ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/RET201-112-25 - Accounting for Plan Splits & Plan Mergers Under U.S. GAAP.md"
 ---
 ![[RET201-112-25 - Accounting for Plan Splits & Plan Mergers Under U.S. GAAP - Cover.svg]]
 

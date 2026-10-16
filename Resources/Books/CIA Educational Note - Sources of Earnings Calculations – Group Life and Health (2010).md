@@ -7,6 +7,16 @@ date: "2010"
 Type: "Educational Note"
 Code: "210069"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/210069e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:32656d9d733c9f94e6fd516b2fe6ac1800c65341b6b4467039ea47e42d4849d0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CIA Educational Note - Sources of Earnings Calculations – Group Life and Health (2010).md"
 ---
 ![[CIA Educational Note - Sources of Earnings Calculations – Group Life and Health (2010) - Cover.svg]]
 

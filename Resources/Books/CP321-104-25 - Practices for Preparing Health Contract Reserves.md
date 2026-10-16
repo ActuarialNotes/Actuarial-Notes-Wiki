@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Report"
 Code: "CP321-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ec324afc8d65a1340b2625460f73e37d60b4406cbeac67b0c8cb68674151d3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP321-104-25 - Practices for Preparing Health Contract Reserves.md
 ---
 ![[CP321-104-25 - Practices for Preparing Health Contract Reserves - Cover.svg]]
 

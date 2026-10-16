@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/sections/financial-reporting/financial-reporting-newsletter/2024/november/fr-2024-11-zhang/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:60a9dddc9728852136faec50752a3964ae5b8995fb0970ca528fe8548f20b6c2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fully Reinsured Business - Are the Financial Implications Neutralized (The Financial Reporter - 2024).md
 ---
 ![[Fully Reinsured Business - Are the Financial Implications Neutralized (The Financial Reporter - 2024) - Cover.svg]]
 

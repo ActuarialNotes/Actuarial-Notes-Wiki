@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH301-111-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fff605af1a2428b12a05883cdfcdc15e3ab9a4049751a144d4f4cf74c916c996
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-111-25 - MassHealth Social Determinants of Health Risk Adjustment Model - Version 4.0.md
 ---
 ![[GH301-111-25 - MassHealth Social Determinants of Health Risk Adjustment Model - Version 4.0 - Cover.svg]]
 

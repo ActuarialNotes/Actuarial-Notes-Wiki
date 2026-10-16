@@ -7,6 +7,16 @@ date: "2012"
 Edition: "6th"
 Type: "Textbook"
 ISBN: "9780470920459"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:85c9cc236c27b422cfc65bbbb14deb2454a018617a5250a28e27b59c28a687a3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Handbook of Budgeting (Lalli - 2012).md
 ---
 ![[Handbook of Budgeting (Lalli - 2012) - Cover.svg]]
 

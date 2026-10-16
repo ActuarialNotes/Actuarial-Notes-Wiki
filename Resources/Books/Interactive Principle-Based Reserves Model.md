@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Course"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2020/spring/intro-study-notes/interactive-principle-based-reserves.xlsx)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:43b67ec5225144805b533e75f877dce1b1802f6aa80c36498bed14ab39f6556e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Interactive Principle-Based Reserves Model.md
 ---
 ![[Interactive Principle-Based Reserves Model - Cover.svg]]
 

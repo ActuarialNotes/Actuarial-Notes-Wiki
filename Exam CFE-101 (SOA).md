@@ -5,11 +5,11 @@ syllabus:
   source_sha256: a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:078904a0a457388e030d79f23ba9a8325cc96014fe949715efeb8f5054f6b6d1
+  content_hash: sha256:326b04195b752be0063a0acf3d025784639f975ca4cdc9d8779714f3a795102e
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf"
   open_findings: 0
@@ -218,7 +218,7 @@ verification:
 > - [[CFE101-124-26 - Design|CFE101-124-26: Design, Calibration & Reporting of Effective Key Risk Indicators]]
 >      - Outcomes 1.3a
 >      - Outcomes 2.1c, 2.2h
-> - [[Rating Agency Perspectives on Insurance Company Capital (SOA Research - 2023)|Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices)]]
+> - [[Rating Agency Perspectives on Insurance Company Capital (SOA Research Institute - 2023)|Rating Agency Perspectives on Insurance Company Capital, SOA Research, Aug 2023 (excluding Appendices)]]
 >      - Outcomes 1.3a
 >      - Outcomes 2.2c
 >      - Outcomes 3.3b
@@ -262,11 +262,11 @@ verification:
 > - [[CFE101-112-25 - Internal Controls Toolkit|CFE101-112-25: Internal Controls Toolkit, Doxey, Ch. 1, pp. 11-17 & 27-35]]
 >      - Outcomes 1.2c
 >      - Outcomes 3.2b, 3.2f
-> - [[CFE101-127-26 - Artificial Intelligence Risk and Governance|CFE101-127-26: Artificial Intelligence Risk and Governance]]
+> - [[CFE101-127-26 - Artificial Intelligence Risk & Governance|CFE101-127-26: Artificial Intelligence Risk and Governance]]
 >      - Outcomes 2.1a -2.1c, 2.2h
 > - [[CFE101-113-25 - Identifying and Evaluating Emerging Risks|CFE101-113-25: Identifying and Evaluating Emerging Risks]]
 >      - Outcomes 2.1a -2.1c
-> - [[A New Approach for Managing Operational Risk|A New Approach for Managing Operational Risk, Ch. 8]]
+> - [[A New Approach for Managing Operational Risk (SOA - 2010)|A New Approach for Managing Operational Risk, Ch. 8]]
 >      - Outcomes 2.2h
 > - [[CFE101-114-25 - Measurement and Modeling of Dependencies in Economic Capital|CFE101-114-25: Measurement and Modeling of Dependencies in Economic Capital, Ch. 4 & 7]]
 >      - Outcomes 2.2c, 2.2e, 2.2g

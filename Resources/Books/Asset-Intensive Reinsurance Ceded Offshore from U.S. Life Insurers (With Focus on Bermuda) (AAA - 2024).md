@@ -5,6 +5,16 @@ Publisher: "American Academy of Actuaries"
 Year: "2024"
 date: "2024"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e42a48fb4dfe3017ff7da927660a477419b06df12b824a8bc6c63bc522d57296
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Asset-Intensive Reinsurance Ceded Offshore from U.S. Life Insurers (With Focus on Bermuda) (AAA - 2024).md
 ---
 ![[Asset-Intensive Reinsurance Ceded Offshore from U.S. Life Insurers (With Focus on Bermuda) (AAA - 2024) - Cover.svg]]
 

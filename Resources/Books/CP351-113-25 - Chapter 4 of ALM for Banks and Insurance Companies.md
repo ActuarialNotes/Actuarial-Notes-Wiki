@@ -7,6 +7,16 @@ date: "2015"
 Type: "Textbook"
 Code: "CP351-113-25"
 ISBN: "978-1-84821-883-3"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:33e9b8f54eb24d11a6c7dbeaa91f488f7bb4bebb25871ddb6026c2b644c6e368
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-113-25 - Chapter 4 of ALM for Banks and Insurance Companies.md
 ---
 ![[CP351-113-25 - Chapter 4 of ALM for Banks and Insurance Companies - Cover.svg]]
 

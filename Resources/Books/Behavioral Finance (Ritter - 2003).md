@@ -5,6 +5,16 @@ Publisher: "Pacific-Basin Finance Journal"
 Year: "2003"
 date: "2003"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e3ff878e7cdd8dead60f639783754fec1d562b7eb2e7d7432a0f8b94fd67aac5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Behavioral Finance (Ritter - 2003).md
 ---
 ![[Behavioral Finance (Ritter - 2003) - Cover.svg]]
 

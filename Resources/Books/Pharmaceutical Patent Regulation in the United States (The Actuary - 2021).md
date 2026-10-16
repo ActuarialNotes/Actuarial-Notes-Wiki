@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[theactuarymagazine.org](https://www.theactuarymagazine.org/pharmaceutical-patent-regulation-in-the-united-states/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:460aa473c3f1f7ae9cc12983909746bf8b4f77e26fae7ee24f09b833f87fd7bd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Pharmaceutical Patent Regulation in the United States (The Actuary - 2021).md
 ---
 ![[Pharmaceutical Patent Regulation in the United States (The Actuary - 2021) - Cover.svg]]
 

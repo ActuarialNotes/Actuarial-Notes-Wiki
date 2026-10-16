@@ -7,6 +7,16 @@ date: "2023"
 Type: "Paper"
 Code: "GH201-720-25"
 Available from: "[cbc.ca](https://www.cbc.ca/news/health/seniors-dental-care-plan-canada-1.7058085)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0b67d28072806c90c4e95dea38a94b76745f8784f3c6bc617bd58915eb11a9aa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-720-25 - Seniors Spend Thousands on Dental Work.md
 ---
 ![[GH201-720-25 - Seniors Spend Thousands on Dental Work - Cover.svg]]
 

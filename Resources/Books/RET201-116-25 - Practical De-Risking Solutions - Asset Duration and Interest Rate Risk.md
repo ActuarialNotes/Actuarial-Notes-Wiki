@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "RET201-116-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0d0fc9248faaaa9f46d47d500e40f005dc3b365691a37ce4b5a452c3b068fc1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/RET201-116-25 - Practical De-Risking Solutions - Asset Duration and Interest Rate Risk.md
 ---
 ![[RET201-116-25 - Practical De-Risking Solutions - Asset Duration and Interest Rate Risk - Cover.svg]]
 

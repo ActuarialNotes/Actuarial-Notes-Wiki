@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Textbook"
 ISBN: "978-1-009-09846-5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7fef78790cb49fb41403faac954081dc79871a4743e9664f49a278e154d8fb99
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Quantitative Enterprise Risk Management (Hardy - 2022).md
 ---
 ![[Quantitative Enterprise Risk Management (Hardy - 2022) - Cover.svg]]
 

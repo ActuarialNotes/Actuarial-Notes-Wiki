@@ -6,6 +6,16 @@ Year: "2005"
 date: "2005"
 Type: "Paper"
 Code: "INV201-104-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:604c8dfd87dfa6f3aba68054cf1a4fb39c9165784a388232877739b8b67799d2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/INV201-104-25 - Which Free Lunch Would You Like Today.md
 ---
 ![[INV201-104-25 - Which Free Lunch Would You Like Today - Cover.svg]]
 

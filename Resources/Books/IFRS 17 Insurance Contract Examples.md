@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e0f596345e143832bc4290107a8c090a15e66c0c26116c59265bff12bb4dc5db
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IFRS 17 Insurance Contract Examples.md
 ---
 ![[IFRS 17 Insurance Contract Examples - Cover.svg]]
 

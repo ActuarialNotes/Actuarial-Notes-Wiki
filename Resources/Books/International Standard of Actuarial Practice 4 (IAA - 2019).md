@@ -6,6 +6,16 @@ Year: "2019"
 date: "2019"
 Type: "Standard of Practice"
 Code: "ISAP 4"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1d6b8fdaa114d85e73e27c443e3c2e605852234b46b72f29b5ca10bceafab0b0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Standard of Actuarial Practice 4 (IAA - 2019).md
 ---
 ![[International Standard of Actuarial Practice 4 (IAA - 2019) - Cover.svg]]
 

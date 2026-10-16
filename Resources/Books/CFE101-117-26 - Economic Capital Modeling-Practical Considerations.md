@@ -7,6 +7,16 @@ date: "2025"
 Type: "Report"
 Code: "CFE101-117-26"
 Available from: "[milliman.com](https://www.milliman.com/en/insight/economic-capital-modeling-practical-considerations-2024)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d72436580969f75d2edae5b1641e5801f9b00efcd96cc7b1c4b0c22be7896e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-117-26 - Economic Capital Modeling-Practical Considerations.md
 ---
 ![[CFE101-117-26 - Economic Capital Modeling-Practical Considerations - Cover.svg]]
 

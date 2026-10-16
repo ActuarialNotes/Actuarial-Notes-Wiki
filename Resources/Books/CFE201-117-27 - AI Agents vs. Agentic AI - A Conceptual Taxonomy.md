@@ -7,6 +7,16 @@ date: "2025"
 Type: "Paper"
 Code: "CFE201-117-27"
 Available from: "[arxiv.org](https://arxiv.org/abs/2505.10468v4)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:08178ef320ff1202e6ae4172217b6db647971523169bb5b4008f94f8dba0fa1a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-117-27 - AI Agents vs. Agentic AI - A Conceptual Taxonomy.md
 ---
 ![[CFE201-117-27 - AI Agents vs. Agentic AI - A Conceptual Taxonomy - Cover.svg]]
 

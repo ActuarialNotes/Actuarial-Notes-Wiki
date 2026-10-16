@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2024/impact-technology-healthcare.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aa6160f810524e1b825e2070dda5110cd8dd4a7c41f323920c06a74e9b2ef8dd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Closing the Analytical Loop - Technology Assessments and Actuarial Methods (SOA Research Institute - 2025).md
 ---
 ![[Closing the Analytical Loop - Technology Assessments and Actuarial Methods (SOA Research Institute - 2025) - Cover.svg]]
 

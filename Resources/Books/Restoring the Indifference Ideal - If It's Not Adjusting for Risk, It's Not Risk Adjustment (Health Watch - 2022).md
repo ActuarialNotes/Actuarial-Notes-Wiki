@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Paper"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/2025/fall/syllabi/archived-pdfs/hw-2022-06-fann.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c07031a6eb2cd1938a0ca492b975b7e5b0b4344ba27c312cb342f8cb9de0cba1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Restoring the Indifference Ideal - If It's Not Adjusting for Risk, It's Not Risk Adjustment (Health Watch - 2022).md"
 ---
 ![[Restoring the Indifference Ideal - If It's Not Adjusting for Risk, It's Not Risk Adjustment (Health Watch - 2022) - Cover.svg]]
 

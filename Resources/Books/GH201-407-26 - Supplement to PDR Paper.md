@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Study Note"
 Code: "GH201-407-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:211b2eef8011410a315ae09c15dba8f55f6a950cdecc5cb090a848e2a7a14f91
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-407-26 - Supplement to PDR Paper.md
 ---
 ![[GH201-407-26 - Supplement to PDR Paper - Cover.svg]]
 

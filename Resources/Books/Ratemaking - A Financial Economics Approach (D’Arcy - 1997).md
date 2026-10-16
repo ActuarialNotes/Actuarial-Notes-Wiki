@@ -6,6 +6,16 @@ Year: "1997"
 date: "1997"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/proceed_proceed97_97301.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:520ac8f2458a13f819111e16772bf3a6dfcaab1cab70171990c77ac31da93006
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Ratemaking - A Financial Economics Approach (D’Arcy - 1997).md"
 ---
 ![[Ratemaking - A Financial Economics Approach (D’Arcy - 1997) - Cover.svg]]
 

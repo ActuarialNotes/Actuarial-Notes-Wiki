@@ -7,6 +7,16 @@ date: "2026"
 Type: "Guide"
 Code: "GH201-723-26"
 Available from: "[retraitequebec.gouv.qc.ca](https://www.retraitequebec.gouv.qc.ca/en/citizens/disability/disability-benefits-quebec-pension-plan/disability-pension)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:045816042a152123fd3d4a1bd19bb90f39df309144fc6c41e604b81601a69719
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-723-26 - Disability Pension under the Quebec Pension Plan.md
 ---
 ![[GH201-723-26 - Disability Pension under the Quebec Pension Plan - Cover.svg]]
 

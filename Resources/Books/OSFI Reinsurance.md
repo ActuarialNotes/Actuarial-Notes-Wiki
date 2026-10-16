@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:13038b6790ae44c01b61130f0d9d46871bc7f4911fd6611b6f9c625cbfe5392e
+  content_hash: sha256:b904d46e2b0e6caaaa979d123520ddae87891fa2dd2efdb004064836a0c07cf0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,8 @@ OSFI's guideline setting out its expectations for effective reinsurance practice
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objective C5; the guideline of January 2025, with no sections excluded.
+> - [[Exam CP-341 (SOA)|Exam CP-341]] — Outcomes 3d; the whole guideline (CP341-111-25: OSFI Guideline B3, Sound Reinsurance Practices and Procedures).
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — International Financial Reporting Requirements, outcomes 1a and 1b; ILA201-602-25: OSFI B-3 Sound Reinsurance Practices and Procedures (no date or sections excluded in the syllabus).
 
 ## I Key Principles
 - 1 A FRI should have a sound and comprehensive reinsurance risk management policy that is overseen by senior management.
@@ -68,3 +70,5 @@ OSFI's guideline setting out its expectations for effective reinsurance practice
 ## Sources
 - [Sound Reinsurance Practices and Procedures – Guideline (OSFI, 2025)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/sound-reinsurance-practices-procedures-guideline-2025) — the document: its information panel (type, category, date, number), introduction, Sections I–III and footnotes
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope
+- [CP 341 Syllabus, Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf) — the citation ("CP341-111-25: OSFI Guideline B3, Sound Reinsurance Practices and Procedures") and the learning outcome it is assigned to; the syllabus names no date, so the page describes the January 2025 guideline OSFI currently publishes
+- [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation (reading ILA201-602-25) and the assigned outcomes; the syllabus names no date, so the page describes the January 2025 guideline OSFI currently publishes

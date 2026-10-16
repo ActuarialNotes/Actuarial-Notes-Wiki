@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CP341-114-25"
 Available from: "[skadden.com](https://www.skadden.com/insights/publications/2024/05/the-bermuda-monetary-authoritys-approach)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c7ffab5b424205cfb286610dd8edb38bd7d0ac179dde135a81efdd37f0cf79da
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP341-114-25 - The Bermuda Monetary Authority's Approach to Private Equity-Owned (Re)insurers.md"
 ---
 ![[CP341-114-25 - The Bermuda Monetary Authority's Approach to Private Equity-Owned (Re)insurers - Cover.svg]]
 

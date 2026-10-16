@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6U_Brandt_Maxwell_RMAD_CAS_Study_Note.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca0f63055be3246690e45dd455a1417301bb12d54d6a770f0a47093d4e6b5553
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Risk of Material Adverse Deviation Study Note (Brandt & Maxwell - 2023).md"
 ---
 ![[Risk of Material Adverse Deviation Study Note (Brandt & Maxwell - 2023) - Cover.svg]]
 

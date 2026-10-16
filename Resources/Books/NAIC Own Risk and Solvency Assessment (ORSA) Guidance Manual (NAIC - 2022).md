@@ -5,6 +5,16 @@ Publisher: "National Association of Insurance Commissioners"
 Year: "2022"
 date: "2022"
 Type: "Guideline"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4e447ef6aec45d5f7724f5dc69e75ca37ae0e1fd5263c65f971a66916da015fe
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual (NAIC - 2022).md
 ---
 ![[NAIC Own Risk and Solvency Assessment (ORSA) Guidance Manual (NAIC - 2022) - Cover.svg]]
 

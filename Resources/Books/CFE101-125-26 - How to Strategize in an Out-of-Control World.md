@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Code: "CFE101-125-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8e5e9118b31a2d05b9a92bb2043367efe3cc8b149ce52caff27b9ac300c11b09
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-125-26 - How to Strategize in an Out-of-Control World.md
 ---
 ![[CFE101-125-26 - How to Strategize in an Out-of-Control World - Cover.svg]]
 

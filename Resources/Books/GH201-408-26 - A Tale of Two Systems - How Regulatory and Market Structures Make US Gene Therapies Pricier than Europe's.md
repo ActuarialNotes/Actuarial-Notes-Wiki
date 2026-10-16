@@ -6,6 +6,16 @@ Year: "2026"
 date: "2026"
 Type: "Study Note"
 Code: "GH201-408-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1f656a4dc70cf3400e74db1ff661de48ae297144830b6c22cc57c15c30ffe633
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-408-26 - A Tale of Two Systems - How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe's.md"
 ---
 ![[GH201-408-26 - A Tale of Two Systems - How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe's - Cover.svg]]
 

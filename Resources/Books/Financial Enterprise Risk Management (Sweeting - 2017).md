@@ -7,6 +7,16 @@ date: "2017"
 Edition: "2nd"
 Type: "Textbook"
 ISBN: "978-1-107-18461-9"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:230a0f6e89ab1cf8ee924c766b3ef7b0214fee1b6b8b83c84298ccf47df789cc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Financial Enterprise Risk Management (Sweeting - 2017).md
 ---
 ![[Financial Enterprise Risk Management (Sweeting - 2017) - Cover.svg]]
 

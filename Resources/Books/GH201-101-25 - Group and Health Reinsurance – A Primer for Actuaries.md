@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "GH201-101-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8da97f83ff614b048ae2a37e8135ec35a2bf82fdb6b6ed60917f153012695fbf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-101-25 - Group and Health Reinsurance – A Primer for Actuaries.md"
 ---
 ![[GH201-101-25 - Group and Health Reinsurance – A Primer for Actuaries - Cover.svg]]
 

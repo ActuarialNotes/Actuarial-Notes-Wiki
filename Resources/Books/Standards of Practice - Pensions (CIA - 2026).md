@@ -7,6 +7,16 @@ date: "2026"
 Type: "Standard of Practice"
 Code: "Part 3000"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/226011e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6bc0bec80be4c200a4e2eeb501a65e10f88935af25f6e10b375c603ea2ed63e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Standards of Practice - Pensions (CIA - 2026).md
 ---
 ![[Standards of Practice - Pensions (CIA - 2026) - Cover.svg]]
 

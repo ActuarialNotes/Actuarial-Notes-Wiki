@@ -7,6 +7,16 @@ date: "2006"
 Type: "Educational Note"
 Code: "Document 206134"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/206134e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f020b8fb1b6d22bd7643269bdd091417e224fb5eba1134ed804a2e0f5687d33a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Best Estimate Assumption for Expenses (CIA Educational Note - 2006).md
 ---
 ![[Best Estimate Assumption for Expenses (CIA Educational Note - 2006) - Cover.svg]]
 

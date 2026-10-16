@@ -7,6 +7,16 @@ date: "2021"
 Type: "Paper"
 Code: "GH301-106-25"
 Available from: "[pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC7883853/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f1292928cc37faa528ae46d01f4bc899e477d12fedd834b2d62c1a06a292851f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH301-106-25 - End-of-Life Outcomes with or without Early Palliative Care - A Propensity Score Matched.md
 ---
 ![[GH301-106-25 - End-of-Life Outcomes with or without Early Palliative Care - A Propensity Score Matched - Cover.svg]]
 

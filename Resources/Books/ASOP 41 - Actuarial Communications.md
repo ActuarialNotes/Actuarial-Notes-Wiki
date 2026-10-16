@@ -7,6 +7,16 @@ date: "2010"
 Type: "Standard of Practice"
 Code: "ASOP No. 41"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop041_120.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:add83532a63eedc4b02fab43ee679635bde9d1c6192bbd5dc67c02b16db8a77c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/ASOP 41 - Actuarial Communications.md
 ---
 ![[ASOP 41 - Actuarial Communications - Cover.svg]]
 
@@ -17,6 +27,7 @@ The Actuarial Standards Board's guidance to actuaries on actuarial communication
 > - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f; the standard excluding its Appendices.
 > - [[Exam GH-201U (SOA)|Exam GH-201U]] — Outcomes 1g; the standard excluding its Appendices.
 > - [[Exam GH-301 (SOA)|Exam GH-301]] — Outcomes 3c; the standard excluding its Appendices.
+> - [[Exam 6U (CAS)|Exam 6U]] — objective C6; the standard as adopted in December 2010 (the content outline cites it as an online publication).
 
 ## Transmittal Memorandum
 - The version then in effect had been in force for eight years and applied to all U.S. actuaries in all areas of practice; the ASB had received comments about a lack of clarity and confusion in its wording and structure.
@@ -82,9 +93,10 @@ The Actuarial Standards Board's guidance to actuaries on actuarial communication
 ## Appendix 2 Comments on the Second Exposure Draft and Responses
 
 ## Related readings
-- [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]] — the same standard, as the CAS Exam 6U content outline cites it
+- [[ASOP 41 - Actuarial Communications]] — the same standard, as the CAS Exam 6U content outline cites it
 
 ## Sources
 - [Actuarial Standard of Practice No. 41, Actuarial Communications (Doc. No. 120, ASB, December 2010)](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop041_120.pdf) — the document: title, adoption date, effective date, the transmittal memorandum, the table of contents, and sections 1 and 2 (read from the PDF, 27 pages, sha256 7b3cb1144736290c…)
 - [CP 321 Syllabus, Nov 2026/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cp-321/2026-2027-cp-321-syllabus.pdf) — the citation ("ASOP 41: Actuarial Communications (excluding Appendices)") and the learning outcome
 - [GH 101 Syllabus, 2026-2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf), [GH 201U Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf) and [GH 301 Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf) — the same citation and the learning outcomes for each
+- [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation ("December 2010") and its listing as an online publication

@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Report"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/resources/research-report/2023/ret-income-strat-de.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1d01e55752a89d2793ac6d9eb66b0a3e637176cc9aeb7db1226c32ba72d4f84e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Primer on Retirement Income Strategy Design and Evaluation (SOA Research - 2023).md
 ---
 ![[Primer on Retirement Income Strategy Design and Evaluation (SOA Research - 2023) - Cover.svg]]
 

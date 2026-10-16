@@ -6,6 +6,16 @@ Year: "2022"
 date: "2022"
 Type: "Paper"
 Code: "INV201-107-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d6f664f1f38df79410d1db8bde5fc1d66139dc654ac99e62f05f4592eff361ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/INV201-107-25 - It's RILA time - An introduction to registered index-linked annuities.md"
 ---
 ![[INV201-107-25 - It's RILA time - An introduction to registered index-linked annuities - Cover.svg]]
 

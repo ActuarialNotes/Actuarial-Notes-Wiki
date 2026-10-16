@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Paper"
 Code: "CP312-112-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:585260e97b3f9f48351fafa99538b8638b9e3a9d2759a3a19d255da6550bf1ee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/CP312-112-26 - Here it GOES Again - Reviewing the NAIC's Second Industry Field Test of the Generator of Economic Scenarios.md"
 ---
 ![[CP312-112-26 - Here it GOES Again - Reviewing the NAIC's Second Industry Field Test of the Generator of Economic Scenarios - Cover.svg]]
 

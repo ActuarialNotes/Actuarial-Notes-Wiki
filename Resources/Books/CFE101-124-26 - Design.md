@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Paper"
 Code: "CFE101-124-26"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cce578f9b3f5898537880ec30cf51e9b4761c4f123904f40974663556ca17bd8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE101-124-26 - Design.md
 ---
 ![[CFE101-124-26 - Design - Cover.svg]]
 

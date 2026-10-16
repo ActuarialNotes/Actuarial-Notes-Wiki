@@ -7,6 +7,16 @@ date: "2023"
 Type: "Educational Note"
 Code: "Document 223186"
 Available from: "[cia-ica.ca](https://www.cia-ica.ca/publications/223186e/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ded0391240e9fcf1b99c0f58467e084b6a12fe9189ba1ee9aa93dde470ad95b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Reflecting Increasing Maximum Pensions Under the Income Tax Act in Solvency (CIA Revised Educational Note - 2023).md
 ---
 ![[Reflecting Increasing Maximum Pensions Under the Income Tax Act in Solvency (CIA Revised Educational Note - 2023) - Cover.svg]]
 

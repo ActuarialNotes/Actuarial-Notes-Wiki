@@ -7,6 +7,16 @@ date: "2021"
 Type: "Paper"
 Code: "GH201-713-25"
 Available from: "[benefitscanada.com](https://www.benefitscanada.com/archives_/benefits-canada-archive/how-will-the-potential-work-from-anywhere-boom-post-pandemic-impact-benefits-plans/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0f333ddc6ee39ae66f399be66a202aa6e4b2a78bdffb33d38dd618872ecf1f4a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH201-713-25 - How Will the Potential Work-from-Anywhere Boom Post-Pandemic Impact Benefit Plans.md
 ---
 ![[GH201-713-25 - How Will the Potential Work-from-Anywhere Boom Post-Pandemic Impact Benefit Plans - Cover.svg]]
 

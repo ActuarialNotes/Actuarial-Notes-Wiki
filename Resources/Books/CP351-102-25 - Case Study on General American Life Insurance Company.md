@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Study Note"
 Code: "CP351-102-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b2f98acae286cd07a4b35f089c028bc9462d0139230b9ffbb57a73c9943a7d53
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CP351-102-25 - Case Study on General American Life Insurance Company.md
 ---
 ![[CP351-102-25 - Case Study on General American Life Insurance Company - Cover.svg]]
 

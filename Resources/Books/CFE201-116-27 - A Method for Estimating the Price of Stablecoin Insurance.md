@@ -7,6 +7,16 @@ date: "2024"
 Type: "Paper"
 Code: "CFE201-116-27"
 Available from: "[kansascityfed.org](https://www.kansascityfed.org/research/economic-review/a-method-for-estimating-the-price-of-stablecoin-insurance/)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7e97e82492ca86b8e0acbb5d1fff054b2a53bdd8c257a0e4a7be89fddcb6085d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/CFE201-116-27 - A Method for Estimating the Price of Stablecoin Insurance.md
 ---
 ![[CFE201-116-27 - A Method for Estimating the Price of Stablecoin Insurance - Cover.svg]]
 

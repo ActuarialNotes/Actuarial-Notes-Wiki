@@ -4,7 +4,7 @@ Authors: "Society of Actuaries"
 Publisher: "Society of Actuaries"
 Year: "2025"
 date: "2025"
-Type: "Report"
+Type: "Study Note"
 Code: "GH301-111-25"
 ---
 ![[GH301-111-25 - MassHealth Social Determinants of Health Risk Adjustment Model - Version 4.0 - Cover.svg]]
@@ -19,5 +19,6 @@ A reading in the Society of Actuaries' GH 301 course on the MassHealth Social De
 
 ## Sources
 - [GH 301 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf) — the citation ("GH301-111-25: MassHealth Social Determinants of Health Risk Adjustment Model: Version 4.0, pp. 1-9") and the learning outcome; the syllabus names no author, publisher or date, so the Society of Actuaries as issuer and the year 2025 are taken from the reading's code
+- [GH 301 Introductory Study Note, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-11-gh-301-intro-study-note.pdf) — the listing of GH301-111-25 among the course's study notes in its Appendix, under the title as printed there
 - [GH 301 Course Strategy Guide, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-strat-guide.pdf) — the description of the Social Determinants of Health topic's supplemental papers on the Massachusetts Medicaid risk adjustment model
 - [MassHealth Risk Adjustment Methodology (Mass.gov)](https://www.mass.gov/lists/masshealth-risk-adjustment-methodology) — checked for the document; it lists the 2016 UMass summary report and the FAQ for the 2017 payment model, and no Version 4.0 file

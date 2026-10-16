@@ -52,8 +52,8 @@ A research report, dated October 2023 and sponsored by the SOA's Quantitative Fi
     - 4.1.2 The two-factor Hull-white model
     - 4.1.3 Hull-white model calibration
 - 4.2 Yield curve interpolation: one-factor model
-    - 4.2.1 Fitting an n degree polynomial for r(0,t)
-    - 4.2.2 Fitting a Nelson-Siegel Curve to r(0,t)
+    - 4.2.1 Fitting an n degree polynomial for $r_{0,t}$
+    - 4.2.2 Fitting a Nelson-Siegel Curve to $r_{0,t}$
 - 4.3 Calibration of the One-Factor Hull-White Model
 - 4.4 Calibration of the Two-Factor Hull-White Model
 

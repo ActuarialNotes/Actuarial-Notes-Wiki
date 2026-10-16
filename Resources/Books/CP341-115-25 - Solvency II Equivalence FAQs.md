@@ -46,9 +46,6 @@ A four-page April 2016 question-and-answer sheet from the Bermuda Monetary Autho
 
 ## What's next for Bermuda?
 
-## Related readings
-- [[CP341-100-25 - The Essential Guide to Reinsurance|CP341-100-25: The Essential Guide to Reinsurance]] — also describes Solvency II, under its section The regulatory framework
-
 ## Sources
 - [Solvency II Equivalence FAQs (Bermuda Monetary Authority, April 2016)](https://www.bma.bm/viewPDF/documents/2019-01-01-09-32-59-Bermuda-Solvency-II-Equivalence-FAQs-April-2016.pdf) — the document: title, date and the question headings, and the text of the answers on what Solvency II is, how it came about, what equivalence means and the captives answer; the SOA's copy of the study note is not published, so the identification of "CP341-115-25: Solvency II Equivalence FAQs" with this document is by title
 - [CP 341 Syllabus, Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf) — the citation as study note CP341-115-25 and the learning outcome it is assigned to

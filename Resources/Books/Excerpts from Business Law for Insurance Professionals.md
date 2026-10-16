@@ -2,6 +2,8 @@
 Title: "Excerpts from Business Law for Insurance Professionals"
 Authors: "The Institutes"
 Publisher: "Institutes Custom Publishing"
+Year: "2026"
+date: "2026"
 Edition: "1st"
 Type: "Textbook"
 Code: "SABE02"
@@ -17,7 +19,7 @@ A booklet of excerpts from The Institutes' Business Law for Insurance Profession
 > No copy of this booklet is published online; The Institutes supplies it to candidates under code SABE02. This page records its citation and assignment from the syllabus.
 
 ## Sources
-- [GI 201 Syllabus, Nov 2026/Mar 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) — the citation, the pages assigned and the learning outcomes; the syllabus prints no year for the booklet, so this page carries none
+- [GI 201 Syllabus, Nov 2026/Mar 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf) — the citation, the pages assigned and the learning outcomes; the syllabus prints no year for the booklet, so the page carries the year of the sitting it is cited in (Nov 2026/Mar 2027)
 - [GI 201 Introductory Study Note, Nov 2026/Mar 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-11-gi-201-intro-study-note.pdf) — the booklet's title, publisher and order code SABE02
 - [Exam Book List and Information for Ordering Textbooks and Study Manuals (SOA)](https://www.soa.org/education/exam-req/resources/edu-txt-manuals.aspx) — first edition, Institutes Custom Publishing, former study note FRE-103-14
 - [General Insurance Track Reading Materials (SOA, 2015)](https://www.soa.org/globalassets/assets/Files/Edu/edu-2015-08-reading-materials.pdf) — the description of the booklet's chapters in the lead

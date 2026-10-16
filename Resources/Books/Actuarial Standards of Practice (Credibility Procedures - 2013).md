@@ -8,7 +8,7 @@ Type: "Standard of Practice"
 Code: "ASOP No. 25"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop025_174.pdf)"
 ---
-![[ASOP 25 - Credibility Procedures (ASB - 2013) - Cover.svg]]
+![[Actuarial Standards of Practice (Credibility Procedures - 2013) - Cover.svg]]
 
 The Actuarial Standards Board's guidance to actuaries selecting or developing credibility procedures and applying them to sets of data. This revised edition (Doc. No. 174), developed by the Credibility Task Force of the General Committee and adopted in December 2013, widened the original 1996 standard beyond accident and health, group term life and property/casualty coverages to every practice area. It is effective for professional services performed on or after May 1, 2014.
 

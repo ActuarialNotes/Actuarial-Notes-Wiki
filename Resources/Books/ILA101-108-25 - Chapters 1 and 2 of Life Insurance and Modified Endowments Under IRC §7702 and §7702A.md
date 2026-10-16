@@ -11,7 +11,7 @@ ISBN: "9780991336319"
 ---
 ![[ILA101-108-25 - Chapters 1 and 2 of Life Insurance and Modified Endowments Under IRC §7702 and §7702A - Cover.svg]]
 
-The second edition (2015) of the Society of Actuaries' textbook on the federal tax definition of life insurance and on modified endowment contracts under Internal Revenue Code sections 7702 and 7702A. The SOA's study-note list for ILA 101 reproduces its Chapters 1 and 2 under the code ILA101-108-25. The book itself could not be read, so this page lists its chapters from the SOA's 2021 supplement to it, whose chapter titles correspond to the textbook's.
+The second edition (2015) of the Society of Actuaries' textbook on the federal tax definition of life insurance and on modified endowment contracts under Internal Revenue Code sections 7702 and 7702A. The SOA's study-note list for ILA 101 lists its Chapters 1 and 2 as a study note under the code ILA101-108-25. The book itself could not be read, so this page lists its chapters from the SOA's 2021 supplement to it, whose chapter titles correspond to the textbook's.
 
 > [!info] On the syllabus
 > - [[Exam ILA-101 (SOA)|Exam ILA-101]] — ILA101-108-25: Chapters 1 and 2 of Life Insurance and Modified Endowments Under IRC §7702 and §7702A, Desrochers, 2nd Edition; outcomes 3b.

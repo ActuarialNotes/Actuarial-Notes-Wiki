@@ -1,12 +1,14 @@
 ---
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-11
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
   last_checked_by: agent:validate-v1
-  content_hash: sha256:102ae571d1abe4760e5abee7cfe692321bcfa185e494a1139ffbe1f263fdac5a
+  content_hash: sha256:da477903858a55725883d5d66cb0ffcc4a7cccac61f9f57d43815eb7f0631c0a
   sources:
-    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 35-38, 39-41, 43-46, 50-56, 64-66, 70, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 35-40, 43, 45-47, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), PDF pp.159-160 (Ch.9: % unreported = 1.00 minus the inverse of the reported CDF), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Reserving.md
@@ -27,7 +29,7 @@ verification:
   - Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold.
   - As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers.
   - Rate-change data for on-leveling is weaker because contract terms change from year to year.
-- **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business is often excluded, and asbestos, environmental and abuse exposures are not suited to triangle methods at all.
+- **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business may be excluded, and some of it (asbestos, environmental and abuse) may not suit triangle methods.
 - **Segmentation.** Friedland quotes Patrik's priority list:
   - line of business;
   - contract type (treaty, facultative, finite);
@@ -71,7 +73,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > One loss of $200$ moves the development ultimate by $1{,}667$ and the BF ultimate by $200$. That is the leverage Friedland warns of when the CDF is large. Bornhuetter-Ferguson trades it for dependence on the ELR. Reinsurance rate changes are hard to quantify, so the premium on-level adjustment behind that ELR is where to look first.
+> > One loss of $200$ moves the development ultimate by $1{,}667$ and the BF ultimate by $200$. That is the leverage Friedland warns of when the CDF is large. Bornhuetter-Ferguson trades it for dependence on the ELR. Reinsurance rate changes are hard to quantify, yet the ELR still has to reflect them.
 
 > [!example]- Trend Leverage in an Excess Layer {Example}
 > A cedant's large claims develop by a further $5\%$ in severity. Claim values are $\$480$K, $\$900$K and $\$950$K, and the treaty is $\$500$K excess of $\$500$K.

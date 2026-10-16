@@ -47,3 +47,23 @@ created: 2026-10-11
 - checks_run: as in the sweep pass; locators corrected
 - sources_checked: Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.9-10 (gross/ceded/net, default risk), 17-19 (quota share, surplus share), 21 (excess per risk), 24 (aggregate stop-loss protects net results), 26-29 (LOD vs risks-attaching, commutation), 39 (documenting historical terms), 50-51 (two approaches; ceded credibility), 55 (higher factors, tails and trend for reinsurance), 73-76 (quota share by year and by policy year on RA; Tables 3.13-3.15; stop-loss applies last), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf; CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.4-5 (task A.v.16), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf
 - note: F-001 (minor, unsourced asset characterisation) stays open for a writer.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rdc
+- date: 2026-10-16
+- resolves: F-001
+- status: resolved
+- note: Fixed by the writer (fix D): the clause 'carried as a reinsurance recoverable asset' is gone from the lead, and the last bullet is now 'It carries credit risk.' Checked against Friedland PDF p.10 (default risk: 'the risk that the reinsurer is unable to meet its contractual obligations ... the assumed liability falls back to the ceding company who has the contractual relationships with the underlying insured or policyholder') and pp.26-29 (commutation: reinsurer pays present value for full termination; cedants commute partly to 'avoid the credit risk associated with its reinsurer'; the ceding actuary must know of commuted contracts).
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/e7rdc
+- date: 2026-10-16
+- status_set: verified
+- confidence: high
+- checks_run: the edited lead and credit-risk bullet against pp.10, 26-29; every other bullet re-read against the pages cited; both examples recomputed blind (Ex.1: XS 400/0, QS 1,380/900 -> unpaid 480, SL 220/0, ceded unpaid 1,100, net unpaid 900 = 2,000 - 1,100; Ex.2: ceded IBNR 600 and 0; 12% ceded -> net ult 9,680, ceded IBNR 620); links; objective A16
+- sources_checked: Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.9-10 (gross/ceded/net, default risk), 17-21 (quota share, surplus share, excess per risk), 24 (aggregate stop-loss protects net results), 26-29 (LOD vs risks-attaching, commutation), 39 (historical terms), 45 (reporting lags and thresholds), 50-51 (two approaches; ceded credibility), 55 (higher factors, tails and trend), 73-76 (quota share by year and policy year on RA; Tables 3.13-3.15; stop-loss applies last), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf; CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf
+- note: F-001 closed; the only reason for medium confidence in the earlier passes is gone.

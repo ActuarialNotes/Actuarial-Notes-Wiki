@@ -13,7 +13,7 @@ verification:
   log: .verify/Concepts/Ceded Loss Reserve.md
 ---
 
-**Ceded loss reserves** are the part of an insurer's unpaid claims (case reserves plus IBNR, and loss adjustment expense where the treaty covers it) expected to be recovered from reinsurers under the contracts in force. From the cedant's side they are the unpaid portion of [[Ceded Losses|ceded losses]], carried as a reinsurance recoverable asset.
+**Ceded loss reserves** are the part of an insurer's unpaid claims (case reserves plus IBNR, and loss adjustment expense where the treaty covers it) expected to be recovered from reinsurers under the contracts in force. From the cedant's side they are the unpaid portion of [[Ceded Losses|ceded losses]].
 
 > $$\text{Ceded unpaid} = \text{Gross unpaid} - \text{Net unpaid}$$
 
@@ -30,7 +30,7 @@ verification:
   - on excess of loss cessions, ceded IBNR is a *larger* share of ceded ultimate than gross IBNR is of gross, because excess cessions develop late;
   - on excess of loss cessions, implied ceded development factors exceed gross ones. On a quota share the gross, ceded and net factors are identical.
 - **Why ceded data is harder.** Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable. The treaty history must be kept alongside the data.
-- **It is an asset with credit risk.** Recoverables can be disputed, commuted ([[Commutations]]) or lost to a reinsurer's insolvency ([[Reinsurance Credit Risk]]), and the cedant stays liable to its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
+- **It carries credit risk.** Recoveries can be commuted ([[Commutations]]) or lost if the reinsurer cannot meet its obligations ([[Reinsurance Credit Risk]]). The liability then falls back on the cedant, which keeps the contract with its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
 
 > [!example]- Inuring Order Across Three Covers {Example}
 > For one accident year the gross ultimate is $5{,}000$ and gross paid is $3{,}000$ (\$000s). One large claim has an ultimate of $600$ and paid of $100$. The cedant has three covers, inuring in this order:

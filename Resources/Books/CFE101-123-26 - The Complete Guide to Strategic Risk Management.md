@@ -20,4 +20,4 @@ A study note in the Society of Actuaries' CFE 101 Enterprise Risk Management cou
 
 ## Sources
 - [CFE 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf) — the reading code, its title, the assignment and the learning outcomes; the syllabus names no author or publisher, so the SOA is given here as the issuing body of the study note
-- [CFE 101 Study Note appendix (SOA, 2026)](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-intro-study-note.pdf) — lists the study note under the code CFE101-123-26, and gives 2026 as the year of the code
+- [CFE 101 Study Note appendix (SOA, 2026)](https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-intro-study-note.pdf) — lists the study note under the code CFE101-123-26; the year given on this page is the suffix of that code

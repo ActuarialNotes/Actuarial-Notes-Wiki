@@ -42,7 +42,7 @@ verification:
 - **Outputs are wider.** The spread of indicated IBNR across methods is larger than primary; see [[Range of Indications]]. External patterns such as RAA data help but mix unlike contracts. The cedant's side is [[Ceded Loss Reserve]], and cover types are in [[Types of Reinsurance]].
 
 > [!example]- Development vs Bornhuetter-Ferguson on an Immature Excess Year {Example}
-> A reinsurer's casualty excess business for accident year 2024, at 12 months (\$000s): earned premium $6{,}000$, reported losses $360$, and a selected pattern with $12\%$ reported, a CDF to ultimate of $1/0.12 = 8.333$. The on-level expected loss ratio from pricing is $70\%$.
+> A reinsurer's casualty excess business for accident year 2024, at 12 months (\$000s): earned premium $6{,}000$, reported losses $360$, and a selected development pattern with $12\%$ reported (a CDF to ultimate of $1/0.12 = 8.333$). The on-level expected loss ratio from pricing is $70\%$.
 >
 > Compare the development and Bornhuetter-Ferguson IBNR. Then suppose one more loss of $200$ had been reported by the same date.
 >

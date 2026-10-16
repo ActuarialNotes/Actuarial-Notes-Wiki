@@ -13,48 +13,44 @@ verification:
   log: .verify/Concepts/Premium Reserve.md
 ---
 
-**A premium reserve**, in unpaid-claim work, is a balance-sheet estimate of premium that will still be billed or returned on coverage already provided. The final premium depends on events after the valuation date: losses on loss-sensitive contracts, exposure audits, or reinsurance adjustment clauses. It is estimated like a loss reserve and must be consistent with it. It is distinct from the [[Unearned Premium|unearned premium reserve]], which provides for coverage not yet given.
+**A premium reserve**, in unpaid-claim work, is the estimate of premium still to be collected or returned on loss-sensitive policies once the losses that determine it have developed: the expected ultimate premium less the premium booked so far. On retrospectively rated policies a positive balance is the **premium asset**, which many insurers call earned but not reported (EBNR) premium. It is estimated alongside the loss reserve, from the same expected future loss emergence.
 
 > $$\text{Premium reserve} = \text{Expected ultimate premium} - \text{Premium booked to date}$$
 
-- **Sign.** A positive reserve is an asset: additional premium receivable, called the premium asset, accrued retrospective premium, or earned but unbilled (EBUB) premium. A negative reserve is a liability for return premium.
-- **Where it arises.**
-  - **Retrospectively rated policies:** premium moves with the insured's losses within a minimum and maximum. See [[Retrospective Premium Reserve]].
-  - **Audit-rated policies**, such as workers compensation on payroll or general liability on sales: the deposit premium is trued up to audited exposure after expiry. See [[Premium Audit]].
-  - **Reinsurance:** [[Reinstatements|reinstatement premiums]] triggered by losses to a layer, swing-rated or loss-rated premiums, and loss-sensitive commissions such as [[Sliding Scale Commissions|sliding scales]] and [[Profit Commission|profit commissions]].
-- **It must move with the loss reserve.** If IBNR rises on a loss-sensitive book, so does the premium that those losses will generate. Estimating each on its own basis misstates the net position. Teng and Perkins' PDLD method makes the link explicit by projecting premium development from loss development.
-- **Collectability.** Premium billed after the fact carries credit risk. Only the collectable, or admitted, portion supports the balance sheet, and collateral held against it matters.
+- **Retrospectively rated policies** are the main case. Premium is a function of the insured's losses, through the basic premium, loss conversion factor and tax multiplier, between a minimum and a maximum. See [[Retrospective Rating]] and [[Retrospective Premium Reserve]].
+- **Sign.** A retro rated policy returns premium for good loss experience, so the balance can be either way. A positive balance is an asset; its admitted portion is reported as the "Asset for Accrued Retrospective Premiums". Berry's and Fitzgibbon's **retro reserve** is the same quantity with the opposite sign.
+- **It must move with the loss reserve.** Teng and Perkins' [[PDLD Ratio|PDLD method]] projects premium from loss. The cumulative PDLD ratio is the premium expected per dollar of loss still to emerge, so:
 
-> [!example]- Reinstatement Premium Owed on a Catastrophe Layer {Example}
-> A cedant buys a $\$10$M xs $\$10$M catastrophe layer for an annual premium of $\$2$M. It has one reinstatement at $100\%$, pro rata as to amount. After a hurricane, reported losses to the layer are $\$4$M and the actuary estimates layer IBNR of $\$2$M. Reinstatement premium has been billed on reported losses only.
+  > $$\text{Future premium} = \text{CPDLD} \times \text{Expected future loss emergence}$$
+
+  A higher loss reserve on a retro book therefore means a larger premium asset. The ratio is usually above 1 at the first adjustment, because the basic premium is included and few losses are capped yet. It falls below 1 later, as a decreasing share of each further dollar of loss produces additional premium.
+- **Collectability.** A secured premium asset raises little question. For the unsecured portion, a provision for bad debt is needed.
+- **Outside retro plans.** Teng and Perkins note there may also be a premium asset on prospectively rated policies from changes in exposure, but they leave it aside. In reinsurance, [[Reinstatements|reinstatement premium]] also depends on losses; Friedland says to track it separately, since it may be earned immediately and can distort the premium-to-loss relationships used to select expected loss ratios.
+
+> [!example]- Premium Asset by the CPDLD Method {Example}
+> A retro book is valued at 12/31 (\$000s), using cumulative PDLD ratios of $1.492$ before the first retro adjustment and $0.556$ after it.
 >
-> What premium reserve is needed?
+> | Policy period | Adjustments so far | Expected future loss emergence | Premium booked |
+> |---|---|---|---|
+> | Recent | none | $12{,}000$ | $18{,}400$ |
+> | Older | one | $2{,}500$ | $14{,}200$ |
+>
+> For the recent periods, the future loss emergence is their whole expected loss, and the booked premium has not yet been adjusted for losses. Estimate the premium reserve.
 >
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Ultimate reinstatement} &= \frac{6}{10} \times 2 \times 100\% \\
-> > &= 1.2 \\
-> > \text{Billed} &= \frac{4}{10} \times 2 \\
-> > &= 0.8 \\
-> > \text{Reserve} &= 1.2 - 0.8 \\
-> > &= 0.4
+> > \text{Ult premium}_{\text{recent}} &= 12{,}000 \times 1.492 \\
+> > &= 17{,}904 \\
+> > \text{Reserve}_{\text{recent}} &= 17{,}904 - 18{,}400 \\
+> > &= -496 \\
+> > \text{Ult premium}_{\text{older}} &= 14{,}200 + 2{,}500 \times 0.556 \\
+> > &= 15{,}590 \\
+> > \text{Reserve}_{\text{older}} &= 15{,}590 - 14{,}200 \\
+> > &= 1{,}390
 > > \end{align*}
 > > $$
 > >
-> > The cedant owes a further $\$0.4$M of premium as the IBNR emerges. It is a liability for the cedant, offsetting part of the $\$2$M ceded IBNR recovery, and an asset for the reinsurer. Booking the ceded IBNR without it would overstate the cedant's net recovery.
-
-> [!example]- Earned but Unbilled Audit Premium {Example}
-> A workers compensation book has $\$30$M of deposit premium on expired policies not yet audited. Over the last five years, final audited premium has averaged $4\%$ above deposit on this book. Payroll growth has been faster this year than in any of the five.
->
-> Estimate the premium reserve.
->
-> > [!answer]-
-> > $$
-> > \begin{align*}
-> > \text{EBUB} &= 0.04 \times \$30\text{M} \\
-> > &= \$1.2\text{M}
-> > \end{align*}
-> > $$
+> > The total is a premium asset of $894$. The recent periods carry return premium of $496$: booked premium exceeds what their expected losses will generate.
 > >
-> > That is the historical indication, and it is probably *low*. Audit premium reflects payroll growth that deposits did not anticipate, and this year's growth exceeds the base period's. The actuary should adjust the ratio for the current payroll environment and check the collection rate on past audit billings. Audit premium on terminated or insolvent insureds is often uncollectable, so a collectability haircut is also needed.
+> > If the loss reserve on the older periods rose by $400$, their premium asset would rise by $400 \times 0.556 = 222$. Booking the higher loss reserve without it would understate the net position. Any unsecured part of the $1{,}390$ also needs a bad-debt provision.

@@ -23,6 +23,10 @@ A three-page CAPSA Communiqué (Summer 2020) announcing that eight governments h
 - The waiting period before a government can withdraw from the agreement is shortened from three years to eighteen months (sections 21(2), (3) and (4)).
 - CAPSA is working on a Commentary Guide for the 2020 Agreement and administrative procedures to facilitate its implementation.
 
+## Related readings
+- [[RET301-113-25 - Canadian Association of Pension Supervisory Authorities (CAPSA) Communique Spring 2023|RET301-113-25: CAPSA Communique Spring 2023]] — the 2023 amendment bringing in Manitoba and Newfoundland and Labrador
+- [[RET301-114-25 - FSRA - Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans|RET301-114-25: FSRA: Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans]] — the Q&A on the 2016 Agreement that the 2020 Agreement replaces
+
 ## Sources
 - [Communique Summer 2020 - Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans (CAPSA)](https://www.capsa-acor.org/Documents/View/1790) — the document: its three pages of text, read in full; CAPSA's Communiqués and Other Publications page lists it under this title
 - [Communiques and Other Publications (CAPSA)](https://www.capsa-acor.org/CommuniquesandOtherPublications) — the listing that gives the Communiqué's title and identifies the SOA citation "CAPSA: Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans" with it

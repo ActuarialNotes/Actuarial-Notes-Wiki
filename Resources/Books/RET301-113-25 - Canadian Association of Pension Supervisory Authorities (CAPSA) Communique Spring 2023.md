@@ -32,6 +32,10 @@ The Canadian Association of Pension Supervisory Authorities' Communiqué for Spr
 - An integrated Risk Management Guideline combining the current Risk Management, Cyber Risk, Environmental, Social and Governance (ESG) Considerations, and Leverage and Effective Management of Associated Risks guidelines will be released for consultation in spring 2023.
 - The integrated guideline also incorporates Investment Risk, Use of Third Parties and Target Benefits.
 
+## Related readings
+- [[RET301-107-25 - CAPSA - Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans|RET301-107-25: CAPSA: Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans]] — the Communiqué announcing the 2020 Agreement that this one amends
+- [[RET301-114-25 - FSRA - Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans|RET301-114-25: FSRA: Questions and Answers on 2016 Agreement Respecting Multi-Jurisdictional Pension Plans]] — the Q&A on the earlier 2016 Agreement
+
 ## Sources
 - [Communique Spring 2023 (CAPSA)](https://www.capsa-acor.org/Documents/View/2036) — the document: its three pages of text, read in full; the headings are those printed in the newsletter
 - [Communiques and Other Publications (CAPSA)](https://www.capsa-acor.org/CommuniquesandOtherPublications) — the listing that gives the title "Communique Spring 2023"

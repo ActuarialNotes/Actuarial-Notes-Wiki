@@ -43,6 +43,9 @@ Ontario Regulation 193/18, made under the Pension Benefits Act, R.S.O. 1990, c. 
 ## 7 Omitted
 - Provides for the coming into force of the regulation.
 
+## Related readings
+- [[RET301-108-25 - FSRA - Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans)|RET301-108-25: FSRA - Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans)]] — assigned for the same outcomes, 3a and 3b
+
 ## Sources
 - [O. Reg. 193/18: Purchase of Pension Benefits from an Insurance Company, Section 43.1 of the Act (e-Laws, Ontario)](https://www.ontario.ca/laws/regulation/180193) — the document: title, consolidation period and amendment history, section headings and the text of each section; the 2019 year is the start of the consolidation period read, since the SOA citation gives no version
 - [RET 301 Syllabus, Nov 2026/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf) — the citation as study note RET301-109-25 and the learning outcomes it is assigned to

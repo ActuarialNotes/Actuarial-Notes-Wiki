@@ -46,6 +46,10 @@ A question-and-answer guide on the 2016 Agreement Respecting Multi-jurisdictiona
 
 ## More Information
 
+## Related readings
+- [[RET301-107-25 - CAPSA - Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans|RET301-107-25: CAPSA: Adoption of the 2020 Agreement Respecting Multi-Jurisdictional Pension Plans]] — the Communiqué announcing the 2020 Agreement, which replaces the 2016 Agreement
+- [[RET301-113-25 - Canadian Association of Pension Supervisory Authorities (CAPSA) Communique Spring 2023|RET301-113-25: CAPSA Communique Spring 2023]] — the 2023 amendment to the 2020 Agreement
+
 ## Sources
 - [Questions and Answers on 2016 Agreement Respecting Multi-jurisdictional Pension Plans (FSRA)](https://www.fsrao.ca/questions-and-answers-2016-agreement-respecting-multi-jurisdictional-pension-plans) — the document: FSRA's guidance page (number PE0025ORG, deactivated 2022-03-31) and the eight-page PDF capture of the FSCO web page it links (fsrao.ca/media/7121/download), from which the introduction, the section headings and the questions were read, and the answers to Q12 and Q201
 - [RET 301 Syllabus, Nov 2026/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf) — the citation as study note RET301-114-25 and the learning outcomes it is assigned to

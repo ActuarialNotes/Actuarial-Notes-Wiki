@@ -48,6 +48,9 @@ FSRA Approach Guidance No. PE0202APP, effective May 22, 2020. It outlines how th
 ## Appendix
 - Filing a Valuation Subsequent to Filing a Form 10
 
+## Related readings
+- [[RET301-109-25 - Regulation 193-18 Purchase of Pension Benefits from an Insurance Company under Ontario Pension Benefits Act|RET301-109-25: Regulation 193/18 Purchase of Pension Benefits from an Insurance Company]] — assigned for the same outcomes, 3a and 3b
+
 ## Sources
 - [Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans), Approach No. PE0202APP (FSRA)](https://www.fsrao.ca/industry/pensions/regulatory-framework/guidance/limitations-commuted-value-transfers-and-annuity-purchases-db-pension-plans) — the document: title, approach number, effective date, section headings and the points in the Purpose and Scope, Rationale and Background, Principles and Effective Date sections
 - [Limitations on Commuted Value Transfers and Annuity Purchases (DB Pension Plans) (FSRA, PDF)](https://www.fsrao.ca/media/1796/download) — the PDF copy of the same text, whose bookmarks give the section headings

@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4aa77feec39be90b70474e17048fd50a1f87a9d55380e7f4eea3eb93742d5f9b
-  sources: []
+  sources:
+    - "Marshall et al., A Framework for Assessing Risk Margins (2008), Sections 1.2, 2.2, 2.5-2.7 (pp.4-27), Figure 3 p.21, Section 4.1 pp.31-36, sha256:534ad0edf3b2294d2d1421b1d17df1fc0837f1fe3a4e430db347a6abbcc8c774 — https://www.casact.org/sites/default/files/2021-03/7_Marshall_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk Margin.md

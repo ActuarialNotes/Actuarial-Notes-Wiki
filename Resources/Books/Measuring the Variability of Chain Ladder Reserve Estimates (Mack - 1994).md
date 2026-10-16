@@ -7,12 +7,14 @@ date: "1994"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Mack_1994.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1bca0951f5ea809d199345c17af2f1825b83a94ced33de3bdde3f8fe5f028f03
-  sources: []
+  sources:
+    - "Mack, Measuring the Variability of Chain Ladder Reserve Estimates (CAS Forum, Spring 1994), pp.101-182 (PDF pp.1-82): abstract, Chapters 1-7, Appendices A-H, Figures 1-13, sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/2021-03/7_Mack_1994.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026, PDF pp.3-6, tasks A1-A17 and the complete text references (Version Exam_7_CO_2026_F v04), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Measuring the Variability of Chain Ladder Reserve Estimates (Mack - 1994).md

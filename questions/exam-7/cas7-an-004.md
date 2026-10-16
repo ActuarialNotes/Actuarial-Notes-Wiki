@@ -14,12 +14,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:58ffa0f5f4af532397b01f2d2d3342ba49f4031e92272a3920a316e42260373c
-  sources: []
+  sources:
+    - "Mack, Measuring the Variability of Chain Ladder Reserve Estimates (1994), Chapter 4 pp.118-119 (PDF pp.18-19), eq. (10), sha256:f20a3d7ff26247fb26839073418b918b9823e6908829f9ae8f889f636e1a9da5 — https://www.casact.org/sites/default/files/2021-03/7_Mack_1994.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-7/cas7-an-004.md

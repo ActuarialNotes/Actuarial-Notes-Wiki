@@ -7,12 +7,15 @@ date: "2003"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Clark.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:359ff4c6f2338e259650a343477d227818030b85b5a840bf8381fa76596601d8
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:356590f9fe11a3972e92ca419ee4dd22b4a61502c9d9a513075dfdb4311c82e2
+  sources:
+    - "Clark, LDF Curve-Fitting and Stochastic Reserving: A Maximum Likelihood Approach (CAS Forum, Fall 2003), CAS Forum Fall 2003 pp.41-92 (PDF pp.1-52): Sections 1-5, Tables 1.1-2.1, References, Appendices A-C, sha256:1db0baa8ca6aef6711e6483601de5be6e180f016b1110a7fb0e49765c0953b9e — https://www.casact.org/sites/default/files/2021-03/7_Clark.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026, PDF pp.3-6, tasks A1-A17 and the complete text references (Version Exam_7_CO_2026_F v04), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "SOA GI-301 syllabus, Mar 2027/Jul 2027, PDF pp.2-3 and 6, Topic 1 resources (Venter pp. 812-838, outcomes 1a-d; Clark, outcomes 1e-g) and Topic 4 (Marshall et al., outcomes 4a-c), sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/LDF Curve-Fitting and Stochastic Reserving (Clark - 2003).md
@@ -23,7 +26,7 @@ A paper applying maximum likelihood estimation to model the distribution of loss
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objectives A2–A3, A6–A8 and A11; the whole paper.
-> - [[Exam GI-301 (SOA)|Exam GI-301]] — Publications & Research (1e-g); Browse research -> [Author Last Name = Clark, Year Published = 2003] -> Search (1e-g); Result: LDF Curve-Fitting and Stochastic Reserving: A Maximum Likelihood Approach (1e-g).
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — outcomes 1e-g; the whole paper.
 
 ## Introduction
 - The paper focuses on one statistical model of the loss reserving process, using [[Maximum Likelihood Estimation|maximum likelihood estimation]] with the common Loss Development Factor and [[Cape Cod Method|Cape Cod]] techniques; most of it is a practical example of using the techniques and interpreting the output.

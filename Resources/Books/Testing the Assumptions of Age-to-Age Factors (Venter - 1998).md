@@ -7,12 +7,17 @@ date: "1998"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/proceed_proceed98_980807.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e9e75ea1bb9525f6506605d3c150552a84c5367c46a94bf642ce2e302f3b84e1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b27638040fa983e7e865e63186601799840da5f4fa0cd50753c9564475fcb9bc
+  sources:
+    - "Venter, Testing the Assumptions of Age-to-Age Factors (PCAS LXXXV, 1998), PCAS LXXXV pp.807-847 (PDF pp.1-41): every section, Tables 1-11, Exhibits 1-3, Appendix, sha256:58523222aa33f1b8c82455818e8c2da1b8f24aee7d83badf8c88d2f71a638dcb — https://www.casact.org/sites/default/files/database/proceed_proceed98_980807.pdf"
+    - "Errata to Venter, Version 1.0, January 31, 2020, p.1, correction to p.833, sha256:3c4ef100522d01a4b919ca28cbbb5d7362a8206b7d83b7e5683955b0d5d11c3d — https://forum.casact.org/article/164288-testing-the-assumptions-of-age-to-age-factors/attachment/351760.pdf"
+    - "Erratum to Venter, approved 4/22/2026, p.1, Table 3 p.823 (rendered and read), sha256:bce086ac02bbd54518fc622d9e51e69c46d8645aa789422a137fef9a5c0418f0 — https://forum.casact.org/article/164288-testing-the-assumptions-of-age-to-age-factors/attachment/351759.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026, PDF pp.3-6, tasks A1-A17 and the complete text references (Version Exam_7_CO_2026_F v04), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
+    - "SOA GI-301 syllabus, Mar 2027/Jul 2027, PDF pp.2-3 and 6, Topic 1 resources (Venter pp. 812-838, outcomes 1a-d; Clark, outcomes 1e-g) and Topic 4 (Marshall et al., outcomes 4a-c), sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Testing the Assumptions of Age-to-Age Factors (Venter - 1998).md
@@ -23,7 +28,7 @@ Gary Venter's paper introduces tests of the assumptions under which age-to-age f
 
 > [!info] On the syllabus
 > - [[Exam 7 (CAS)|Exam 7]] — objectives A2, A6 and A12; the whole paper, including errata and updated errata.
-> - [[Exam GI-301 (SOA)|Exam GI-301]] — Publications & Research (1a-d); Browse research -> [Author Last Name = Venter, Year Published = 1998] -> Search (1a-d); Result: Testing the Assumptions of Age-to-Age Factors (1a-d).
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — outcomes 1a-d; pp. 812–838.
 
 ## Introduction
 - In "Measuring the Variability of Chain Ladder Reserve Estimates" Thomas Mack presented the assumptions needed for the typical age-to-age factor method of loss development, the [[Chain Ladder Method|chain ladder]], to be least-squares optimal, and introduced several tests of them; this paper summarizes his results, introduces other tests, and addresses what to do when the assumptions fail.

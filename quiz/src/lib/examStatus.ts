@@ -6,10 +6,10 @@ import type { ItemStatus } from '@/data/tracks'
 //
 // Three states:
 //   'ready'       — a mature syllabus page plus a full question bank, all of it
-//                   fact checked (P, FM, MAS-I and the three DISCs — the CAS exams
+//                   fact checked (P, FM, MAS-I, the three DISCs and Exam 7 — the CAS exams
 //                   that pass every gate of `scripts/publication_readiness.py`)
 //   'beta'        — usable, still being filled out (MAS-II, Exams 5,
-//                   6C, 7, 8 and 9 — their banks converted from the released
+//                   6C, 8 and 9 — their banks converted from the released
 //                   papers — and PCPA, which has no paper to convert)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
@@ -27,7 +27,7 @@ import type { ItemStatus } from '@/data/tracks'
 export type ExamStatus = 'ready' | 'beta' | 'development'
 
 /** Exams whose material is finished enough to carry no status label at all. */
-const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA'])
+const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', 'CAS-7'])
 
 /**
  * Exams that exist only as a syllabus outline so far. Greyed out wherever they

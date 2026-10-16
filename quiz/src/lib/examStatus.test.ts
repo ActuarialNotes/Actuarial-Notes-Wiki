@@ -3,18 +3,19 @@ import { examRowAction, examStatus, isExamBeta, isExamInDevelopment, EXAM_STATUS
 import { wikiExamIdToProgressKey } from './wikiParser'
 
 describe('examStatus', () => {
-  it('treats P, FM, MAS-I and the three DISCs as ready — no status label', () => {
+  it('treats P, FM, MAS-I, the three DISCs and Exam 7 as ready — no status label', () => {
     expect(examStatus('P')).toBe('ready')
     expect(examStatus('FM')).toBe('ready')
     expect(examStatus('MAS-I')).toBe('ready')
     expect(examStatus('CAS-DA')).toBe('ready')
     expect(examStatus('CAS-RM')).toBe('ready')
     expect(examStatus('CAS-IA')).toBe('ready')
+    expect(examStatus('CAS-7')).toBe('ready')
     expect(EXAM_STATUS_LABEL[examStatus('P')]).toBeNull()
   })
 
   it('treats the exams that are usable but unfinished as beta', () => {
-    for (const key of ['MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-7', 'CAS-8', 'CAS-9']) {
+    for (const key of ['MAS-II', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-8', 'CAS-9']) {
       expect(examStatus(key)).toBe('beta')
       expect(isExamBeta(key)).toBe(true)
       expect(isExamInDevelopment(key)).toBe(false)
@@ -31,7 +32,7 @@ describe('examStatus', () => {
     // With no page named, the key reads as the variant that can be studied.
     expect(examStatus('CAS-6')).toBe('beta')
     // A variant id only matters on the key it is a variant of.
-    expect(examStatus('CAS-7', '6U')).toBe('beta')
+    expect(examStatus('CAS-8', '6U')).toBe('beta')
   })
 
   it('matches the progress keys the exam pages resolve to', () => {

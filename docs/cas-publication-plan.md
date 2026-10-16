@@ -329,7 +329,7 @@ first (§1), because a fact check of the wrong page wastes the check.
 |---|---|---|---|
 | 1 | **MAS-I** → ready ✔ (10 Oct 2026) | Fix 2 catch-alls (*Probability Distributions*, *System Reliability*); verify the 117 `masi-an-*` questions against the concept pages and readings already verified | Cheapest promotion. Its concepts, readings and published questions are already checked. |
 | 2 | **DISC-DA, RM, IA** → beta ✔, then ready ✔ (DA and IA 10 Oct, RM 11 Oct 2026) | §3: write the 67 pages and the three banks (development → beta), then fact check pages, banks and the three textbook pages | The user's priority, and the only exams where links had to be redesigned. No past papers, so no paper packets: everything is reading packets on free primary documents. |
-| 3 | **Exam 7** → ready | Write questions for 7 concepts; verify 17 concepts, 15 readings, 118 questions (8 papers, keyed by paper, which clears 64 of Exam 9's questions too) | Smallest concept set of the papers exams. |
+| 3 | **Exam 7** → ready ✔ (16 Oct 2026, §4.1) | Write questions for 7 concepts; verify 17 concepts, 15 readings, 118 questions (8 papers, keyed by paper, which clears 64 of Exam 9's questions too) | Smallest concept set of the papers exams. |
 | 4 | **Exam 8** → ready | Write the **10 missing reading pages**, then drop `"source_pages": "partial"`; questions for 6 concepts; fix 1 catch-all (*Rating Class*); verify 26 concepts, 12 readings, 132 questions | Shares papers with 9. |
 | 5 | **Exam 9** → ready | Questions for 10 concepts; verify 53 concepts, 9 readings, the remaining questions on its own 7 papers | Most of its bank arrives verified through 3 and 4. |
 | 6 | **Exam 5** → ready | Fix 6 catch-alls (*Loss Reserving* stands in for 9 reserving objectives); questions for 7 concepts; the page is in review against the re-issued Fall 2026 outline (v02); verify 68 concepts, 6 readings, 349 questions on 14 papers (find Spring 2018's booklet first) | Largest single bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM. |
@@ -340,6 +340,42 @@ first (§1), because a fact check of the wrong page wastes the check.
 
 As each exam passes `--check`, promote it in the same PR as the run that got it there, and cite the
 script's output in the PR.
+
+### 4.1 The Exam 7 campaign (11–16 Oct 2026)
+
+`publication_readiness.py --check 7` passed all seven gates on 16 Oct 2026, and Exam 7 was promoted to
+**ready**. How it got there, run `2026-10-11T02:10Z`:
+
+- **Links first.** Two objective links were retargeted (A9's "mean" no longer links the Exam P
+  *Expected Value*; A4's "layers of coverage" goes to *Layer Development Factor*, not the pricing page
+  *Layer of Insurance*), and the study guide was re-verified (`e7sg`).
+- **Eight paper packets** (`e7p12`–`e7p19`), each covering the Exam 7 questions filed under Exam 9 too:
+  199 questions, all verified. Every question was recomputed from its blind stem first. The packets
+  corrected arithmetic slips copied from CAS's printed sample answers (each noting what CAS printed),
+  restored examiner's report paragraphs the converter drops, and retargeted wrong links (IFRS 17 *Net
+  Income*, Exam 5 *Loss Ratio Method*, the Canadian *Rating Agency*).
+- **G6.** Eight vault-written questions (`cas7-an-001`–`008`) for the six concepts with none, and an Exam
+  7 section on *Predictive Distribution*, each checked by a different agent from the writer.
+- **Four reading packets** (`e7ra`–`e7rd`) verified the 15 readings and the 15 concept pages. Pages that
+  claimed more than their readings say were cut back to them: *Reinsurance Reserving* (Cape Cod, in no
+  Exam 7 reading), *Premium Reserve* (Teng & Perkins' retro premium asset only), *Ceded Loss Reserve*.
+  Two real errors were caught: *Range of Indications* summed yearly minima for Shapland's modeled range,
+  and *Reasonableness Testing* took BF IBNR off the BF ultimate. Pages shared with other exams had their
+  other half checked too (*Predictive Distribution* for MAS-II, against Mahler & Dean, medium; *Risk
+  Margin* for Exam 6C, against OSFI's MCT guideline and the CIA's IFRS 17 note).
+
+**Left for a maintainer** (minor findings; the questions stay verified and served):
+
+- **Questions on readings no longer on the syllabus.** Patrik's reinsurance chapter (Stanard-Bühlmann,
+  credibility IBNR, reinsurance reserving problems): 2012 q10, 2013 q10, 2015 q13, 2016 q16–q17, 2017
+  q16, 2018 q14, q16, 2019 q13 (2017 q14–q15 lean on it unflagged). Brehm's ERM and Goldfarb: 2018 q1
+  parts a–c, 2019 q1 parts e and g. England & Verrall: 2012 q9. Keep, split, or mark `off_syllabus`.
+- **2012 q20** is current Exam 7 material filed under Exam 9; moving the file would orphan its log.
+- **The converter drops each CAS examiner's report's opening paragraph** (before "Part a"). The Exam 7
+  packets restored it by hand where they found it; `pdf_extract.py` should be fixed, and other CAS banks
+  likely have the same gap.
+- **Canadian pages on U.S. questions**: *Rating Agency*, *Concentration Risk* and *Risk Transfer* (linked
+  from the Exam 7 preamble) lead with Canada.
 
 ## 5. Decisions only a maintainer can make
 

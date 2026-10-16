@@ -9,7 +9,7 @@ Code: "GH201-408-26"
 ---
 ![[GH201-408-26 - A Tale of Two Systems - How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe's - Cover.svg]]
 
-A Society of Actuaries study note, listed in the GH 201U syllabus as GH201-408-26: A Tale of Two Systems: How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe’s. The syllabus assigns it for the outcome on describing and evaluating the regulatory environment, and the Introductory Study Note marks it as included in the Revision set of study notes.
+A Society of Actuaries study note, listed in the GH 201U syllabus as GH201-408-26: A Tale of Two Systems: How Regulatory and Market Structures Make US Gene Therapies Pricier than Europe’s. The syllabus assigns it for the outcome on describing the major applicable laws and regulations and evaluating their impact, and the Introductory Study Note marks it as included in the Revision set of study notes.
 
 > [!info] On the syllabus
 > - [[Exam GH-201U (SOA)|Exam GH-201U]] — Outcomes 3b.

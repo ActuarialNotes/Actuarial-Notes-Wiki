@@ -57,3 +57,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (Phase D alias table, slash-separated phrases such as "legal cases/issues" now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified before it (same source PDF, same sha256).
 - sources_checked: SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.
+
+## [C-006] Validation pass — verified (delta re-check)
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-17T22:54Z/ad0b
+- date: 2026-10-17
+- status_set: verified
+- confidence: high
+- checks_run: Delta re-check after PR #1629 (commit 3ee3ec5, 'retarget exam links'). Last verified 2026-10-10 at commit 92845495: that version's recorded content_hash recomputes. git diff 92845495..HEAD: 6 line(s) changed, all in Readings/Source Material reading lines; with [[target|display]] reduced to its display text the page is byte-identical to the verified version (only link targets moved). Every new target resolves to an existing Resources/Books page describing the document the citation names, and each target page's On the syllabus callout names this exam. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block; each changed reading line, links stripped, located verbatim in the PDF text. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors. SOA's exam page for this exam, fetched today, links this one syllabus PDF.
+- sources_checked: SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf
+- note: Verified high. Words unchanged since the 2026-10-10 verification; only reading-link targets moved, each to the page for the same document. The COPLFR practice-note link target's file name carries 2024 while the reading (and the target page's own Year) say 2025: same document, a resource-page naming matter. Concept-link targets were not changed by the delta and were not judged.

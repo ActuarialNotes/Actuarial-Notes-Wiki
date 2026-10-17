@@ -57,3 +57,30 @@ created: 2026-10-17
 - proposed_action: Add an Exam 8 section on two-stage territory modelling with an offset, citing Goldburd §9.2 and Chalk Ch.8 (new prose: for an author).
 - applied: false
 - fingerprint: bc2971ce1985
+
+## [F-001/R] Unsourced Canadian claims removed
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-001
+- status: resolved
+- note: Deleted the claims that some provinces prohibit territory in auto rating, that public auto insurers use coarse territories or none, and that Ontario has examined postal-code rating in the GTA, and the unsourced income/race correlation sentence. Kept Ontario's limits, now listed in full from FSCO Technical Notes (Oct 2016) §17 (PDF p.8, sha256:b2ca7a6cdf4e19924f8f4dcb0e2890d723ba9ee3bcd31c31277e72a298f6d2a0): 3 years of insurer data and 2,500 annualized average vehicles for a new territory; max 55 in Ontario, 10 in Toronto; contiguity; +/-10% between newly formed adjoining territories; one definition for all coverages; large claims capped. Fairness now rests on the Exam 6C reading CIA, Territory Pricing Considerations in P&C Insurance (Mar 2024, doc. 224032), §1.1, §2, §4, §6, PDF pp.3-5 (https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=323292&fid=323290, sha256:c65816631dc97df85caafaf03842e29d17baf625863c0f37c6a9b805d408fa70) and Chalk et al. §8.8.3 (PDF p.152). The drivers, smoothing and cross-subsidy bullets were rewritten to Werner & Modlin, Basic Ratemaking, Ch.11 (PDF pp.200-204) and Ch.9 (PDF pp.163-164), sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf. Needs re-verification.
+
+## [F-002/R] Example exposure conversion fixed
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-002
+- status: resolved
+- note: Dropped the '12,000 exposure-years' clause: the answer now says an earned exposure is already an exposure-year, so B has 2,400 exposure-years over five years (480 a year vs A's 3,600). Recomputed in Python: combined PP 11,904,000/20,400 = 583.53; B relativity 910/583.53 = 1.5595 -> 1.56; 0.45(1.56)+0.55 = 1.252 -> 1.25 (unchanged). Added a parenthetical comparing B's 480 earned car-years a year with FSCO §17's 2,500 annualized average vehicles for a new territory. The unsourced claim that a regulator will reject a proxy boundary was softened to the CIA §6 fairness scrutiny.
+
+## [F-003/R] Exam 8 A7 section added
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-003
+- status: resolved
+- note: New section 'Territory in a Classification Model (Exam 8)': log-link GLM formula with ln(territory loss cost) as offset; offset definition and logging from Goldburd et al. §2.6 (PDF pp.27-28); territory modelled outside the GLM, entered as an offset so class variables 'will not proxy for them', and the two-way iteration converging over years, from Goldburd §9.2 (PDF pp.100-101, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757); Chalk et al., CAS Monograph 16, §8.2-8.3 (PDF pp.143-146: GLM without zip code, geospatial smoothing of its output, GAM second stage with log stage-1 expected frequency as offset, pred2 = pred1 x geographic effect), §8.9.1 leakage (PDF pp.146, 153) and §8.9.2 zip-to-area-group tables (PDF pp.154-155), sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74; and the CIA §2 steps for 6C. New worked example 'Offsetting a Class Plan for Territory' (modelled on Goldburd §2.6's combined territory + deductible offset), recomputed in Python: ln 310 + ln 0.95 = 5.7366 - 0.0513 = 5.6853; 310 x 0.95 x 1.12 = 329.84. Added tip and exam-traps callouts.

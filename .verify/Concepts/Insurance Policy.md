@@ -42,3 +42,21 @@ created: 2026-10-17
 - proposed_action: Verify each bullet in that exam's pass and cite the reading, or remove what no reading supports.
 - applied: false
 - fingerprint: eb544bc4e276
+
+## [F-001/R] Retro timing attributed to Fisher
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-001
+- status: resolved
+- note: Removed the NCCI attribution. The sentence now follows Fisher et al., Individual Risk Rating, Ch.2 §3 (PDF p.26, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81): for incurred loss retrospective plans losses are 'typically' first evaluated 6 months after expiration (18 months of development) and annually thereafter, with a typical partial return of premium at the first evaluation and additional premium later (footnote 5, PDF p.22: the chapter is not specific to NCCI's or ISO's plans).
+
+## [F-002/R] Other-exam bullets sourced or removed
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-002
+- status: resolved
+- note: Anatomy: the unsourced list of policy parts was replaced by pointers to the verified pages Insurance Policy Structure and Policy Provisions; the payment-function sentence now rests on the SOA Exam P syllabus (Nov 2026) objective e, PDF p.3 (sha256:bed27462961aa988fc66c90fefa34af47ea324e2ab9109889c4e4f8f78d97397 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-11-exam-p-syllabus.pdf). Exam 6C: removed 'utmost good faith', the broad/narrow/contra proferentem reading rules and the deemed-statutory-conditions claim (no 6C reading found that states them). Replaced with (a) Whiten v. Pilot Insurance Co., 2002 SCC 18, [2002] 1 S.C.R. 595 at 639-640 (one of the Landmark Legal cases; https://decisions.scc-csc.ca/scc-csc/scc-csc/en/1956/1/document.do, sha256:fa9bdddc4551ad4445af241523212e6199d687659c382a4ec0b337d7f283300a): the insurer's duty of good faith and fair dealing is independent of and in addition to the duty to pay, and 'the mutual "good faith" obligation in insurance contracts'; (b) Ontario Insurance Act s.233 and s.233(2) as quoted in Marshall, Fair Benefits Fairly Delivered (2017), PDF p.70, and SABS as O. Reg. 34/10, PDF pp.23, 90 (https://www.casact.org/sites/default/files/2021-03/6C_Marshall.pdf, sha256:326913d5117f8dc2cc937a10f31f2d6fa712b509e040cd63220c2a8843b9d8fc). Exam 9: no free copy of the C3 readings (Mildenhall & Major; Cummins 2000) could be read, so the capital-consumption pricing bullet and its example 'Same Expected Loss, Different Price' were removed. The risk-load term is now sourced to the CAS Statement of Principles Regarding P&C Insurance Ratemaking, PDF p.4 (sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140), with only a pointer to Risk-Adjusted Pricing for Exam 9 objective C3. Needs re-verification.

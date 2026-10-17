@@ -42,3 +42,21 @@ created: 2026-10-17
 - proposed_action: Quote the glossary verbatim.
 - applied: false
 - fingerprint: a542e3272dbf
+
+## [F-001/R] CAS ratemaking sense added
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-001
+- status: resolved
+- note: Page now opens with both senses. New section 'Risk as the Insured (Ratemaking)' quotes ASOP No. 12 §2.7 verbatim (PDF p.8, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7), with §2.4 and §2.9 (PDF p.8); Fisher et al., Individual Risk Rating Ch.1 §1 (PDF p.8, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81) 'The mod merely indicates the risk's expected loss relative to other risks in its class'; and the CAS Statement of Principles Regarding P&C Insurance Ratemaking (Exam 5 reading; https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140), PDF p.2 'When the experience of an individual risk does not provide a credible basis...' and PDF p.4 'Risk—The rate should include a charge for the risk of random variation from the expected costs.' The SOA/ERM sense is kept under 'Risk as Uncertainty (Risk Management)'; an Exam traps callout distinguishes the two. Needs re-verification.
+
+## [F-002/R] Glossary quoted verbatim
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-17T23:41Z/5923
+- date: 2026-10-17
+- resolves: F-002
+- status: resolved
+- note: The SOA Actuarial Glossary (2022) entry is now quoted verbatim: '(1) Possibility of failing to meet objectives. (2) Can only be defined in context.' (PDF p.60, sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953).

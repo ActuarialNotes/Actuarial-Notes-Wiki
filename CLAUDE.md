@@ -1083,9 +1083,20 @@ Other important `lib/` modules:
   concepts" from a cached (possibly stale) study plan and the local send-time math. The
   actual sending happens server-side in the `daily-plan-email` edge function, which
   mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
-  contract as the league SQL). Prefs live in `user_email_prefs`
+  contract as the league SQL; `duplicationContracts.test.ts` runs both copies against
+  golden vectors, and holds the SQL rollover to `leagues.ts` the same way). Prefs live in `user_email_prefs`
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
+- `learningSignals.ts` — the **learning instrumentation** (roadmap L1): whether studying
+  *worked*, as pure functions `lib/analytics.ts` sends. `concept_retention` — a concept
+  answered for the first time after its decay window (`decayIfStale` steps it down), with
+  `retained` its first answer, once per decay episode (keyed by `last_correct_at`, the keys
+  kept in localStorage), fired by `quizStore` before any mastery write for quizzes and the
+  fix-mistakes reviewer; `reminder_opened` / `reminder_session` — a landing whose
+  `utm_source` names a reminder (`REMINDER_SOURCES`; the daily email's CTA carries
+  `daily-plan-email`, held to the edge function's source by the test) and the first quiz
+  finished within six hours of it; and `mistake_reviewed` from `MistakesReviewModal`.
+  Read `docs/analytics-and-monitoring.md`, "Reading the learning events", before using them.
 - `mathFocus.ts` — math focus mode: tapping a rendered equation magnifies it in a
   full-screen overlay with Previous/Next through the equations around it. This module
   is the decision layer (what counts as a hit, which equations form one set, how far
@@ -1541,8 +1552,8 @@ via `supabase secrets set`, never as `VITE_*`.
   push to `main` when `supabase/functions/**` changes.
 - `.github/workflows/verify-check.yml` — the VERIFY gate on every PR (fails on a false
   verification claim or an edited log entry; repairs and commits back what is merely stale).
-- `.github/workflows/validate-sweep.yml` — the Monday VALIDATE sweep. Opens a PR, never
-  pushes to `main`.
+- `.github/workflows/validate-sweep.yml` — the VALIDATE sweep, run by hand (no schedule —
+  roadmap D19). Opens a PR, never pushes to `main`.
 
 ## Deployment
 

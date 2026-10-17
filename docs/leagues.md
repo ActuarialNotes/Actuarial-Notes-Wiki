@@ -97,8 +97,14 @@ promote = min(10, ceil(n / 3))    demote = min(5, floor(n / 5))
 
 **The formulas are deliberately duplicated** in `league_rollover_if_due()` (SQL)
 and `promoteCount`/`demoteCount`/`zoneForRank` (TS, used only to render the zone
-dividers). They're one-liners so they can't drift far, and `leagues.test.ts`
-locks the TS side — if a zone test needs changing, change the SQL too.
+dividers). `leagues.test.ts` locks the TS side, and
+`quiz/src/lib/duplicationContracts.test.ts` holds the two together: it reads the
+constants off the newest `league_rollover_if_due()` (and the cohort cap off
+`league_assign_member()`) in `supabase/migrations/`, evaluates the SQL's CASE with
+them, and checks every rank, cohort size and tier moves where the board says it
+will. If a zone test needs changing, change the SQL too — a new migration is
+picked up automatically, and a reshaped CASE fails loudly until the reader is
+updated.
 
 ## The week
 

@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "mcp:local": "node scripts/mcp-local.mjs",
     "tools:bundle": "node scripts/tools-bundle.mjs",
+    "size": "node scripts/bundle-budget.mjs",
     "lint": "eslint src",
     "test": "vitest run",
     "test:e2e": "playwright test",

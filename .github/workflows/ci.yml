@@ -51,6 +51,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      # What every reader downloads before first paint, gzipped, against a
+      # budget (scripts/bundle-budget.mjs) — the question bank once sat in the
+      # entry chunk and made it 3.7 MB.
+      - name: Bundle size budget
+        run: npm run size
+
   e2e:
     name: e2e smoke (playwright)
     runs-on: ubuntu-latest

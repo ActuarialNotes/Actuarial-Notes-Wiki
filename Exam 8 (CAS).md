@@ -1,10 +1,10 @@
 ---
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7d708e5a6d8258920e704614742dedf9b1bcb1c7b9e73005206fc332270b731e
+  content_hash: sha256:333683a5f44e8538849a07e4771969e8c4f9ef6e10318868591da7fd1c6e928f
   sources:
     - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (the 'October 2026 Content Outline'; Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
     - "CAS, Exam 8 — Advanced Ratemaking exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026 11:59 pm; fee $850 ($680 students); refund deadline October 6, 2026; 'October 2026 Content Outline' the only outline linked, sha256:84844040018c40dc5cab1a0f521698ce32383120b414c520dae1de8c3ca62c77 — https://www.casact.org/exam/exam-8-advanced-ratemaking"
@@ -31,8 +31,8 @@ verification:
 > 2. Evaluate [[Classification Ratemaking|classification ratemaking models]] (e.g., [[Model Benchmarking|benchmark]], recalibrate [[Rating Variable|variables]], [[Model Implementation|implementation]]).
 > 3. Measure and assess [[Model Fit|model fit]].
 > 4. Measure [[Statistical Significance|statistical significance]] & [[Credibility|credibility]] of [[Rating Class|rate classes]] including [[Loss Cost|estimates of loss costs]] of [[Rating Class|rate classes]].
-> 5. Evaluate the validity of [[Rating Class|rate classes]].
-> 6. Calculate the [[Loss Cost|loss cost]] of a [[Rating Class|class or group]].
+> 5. Evaluate the [[Rate Class Validity|validity of rate classes]].
+> 6. Calculate the [[Loss Cost|loss cost]] of a [[Rating Class|class]] or group.
 > 7. Describe approaches to control for and integrate [[Rating Factors|rating factors]] using [[Predictive Analytics|predictive models]] for further analysis (e.g., [[Territorial Rating|territorial]], [[Increased Limits|limits]]).
 > 8. Describe approaches to [[Predictive Analytics|modeling]] with [[High Dimensional Variables|high dimensional variables]] (e.g., [[Vehicle Make and Model|vehicle make and model]], [[Workers Compensation Classification|workers compensation classes]]).
 > 9. Evaluate combinations of [[Frequency-Severity Models|ratemaking component models]] (e.g., [[Frequency-Severity Models|frequency/severity]]).

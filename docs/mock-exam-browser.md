@@ -78,7 +78,7 @@ frontmatter are inconsistent (`Spring`, `spring`, `Sp`), so `normalizeSession` f
 without it one sitting splits into two rows.
 
 The first entry in the shelf is always **Mix**: the generated, syllabus-distributed practice
-exam (`MOCK_EXAM_QUESTIONS` in `Landing.tsx`), which is all this source was before there
+exam (`PRACTICE_EXAM_QUESTIONS` in `lib/pastExams.ts`), which is all this source was before there
 was a browser. Selecting it is `selectedSitting === null`, exactly as before.
 
 ### Scope of the catalogue
@@ -128,11 +128,11 @@ The examining bodies serve no CORS headers, so the browser cannot fetch these ta
 itself — the request is blocked before it starts. The fetch therefore happens server-side:
 
 ```
-PastExamBrowser ← Landing ← applyPassRates(rows, records)
-                              ↑
-              hooks/useExamPassRates → GET /api/pass-rates?exam=Exam%205
-                                              ↓  (Vercel function)
-                                        fetch(source) → extractPassRateRecords()
+PastExamBrowser ← PastPaperShelf ← Landing ← applyPassRates(rows, records)
+                                               ↑
+                               hooks/useExamPassRates → GET /api/pass-rates?exam=Exam%205
+                                                               ↓  (Vercel function)
+                                                         fetch(source) → extractPassRateRecords()
 ```
 
 | Piece | Where |
@@ -187,7 +187,7 @@ paper anyone can sit) and `applyPassRates` drops them.
 Selecting a sitting sets `selectedSitting` in `Landing.tsx`, which already fed everything
 downstream and still does:
 
-- `currentPool` filters the bank to that sitting, so the deck card's count and the shuffle
+- the builder's pool (`builderPool`, `lib/quizBuilder.ts`) filters the bank to that sitting, so the deck card's count and the shuffle
   draw from that paper only;
 - `handleStart` passes `year` / `session` to `/quiz`, and the sitting's full question count
   as `count` (a past paper is sat whole, not sampled) — and in the paper's own order:

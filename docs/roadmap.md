@@ -242,8 +242,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 These are in order within each lane.
 
 **Engineering health:**
-- **E5: split the god components.** `Landing.tsx` first, because it is the one still
-  growing; then `Flashcards.tsx`.
+- **E5: split the god components.** `Landing.tsx` is split (1,720 → 697 lines); next
+  `Flashcards.tsx`.
 - **E6:** golden-vector tests binding `lib/leagues.ts` to its SQL, and `lib/dailyEmail.ts`
   to its edge function.
 - **E7:** an error collector (an endpoint or Sentry).
@@ -350,7 +350,7 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 | E2 | Required status checks on `main` | ⬜ | **Now** | Maintainer action (D14). Without it, E1 decays again. |
 | E3 | Question bank out of the entry chunk; CI size budget | ✅ 2026-10-17 | — | `fetchAllQuestions` dynamic-imports `virtual:questions-content` (one lazy chunk; per-exam chunks would only pay once a surface asks for one exam's questions). Entry 3,667 → 730 kB gzip. `npm run size` in `ci.yml`, budget 900 kB. Was P3.3. |
 | E4 | Dependency vulnerabilities and Dependabot | 🟡 | **Now** | Done: `npm audit fix` (15 → 14, 2 high → 0); `.github/dependabot.yml`, npm and Actions weekly. Left: `react-router` 6 → 7 and `katex` (majors, moderate advisories); `uuid` via `@fortune-sheet` has no fix; lift the Supabase pin (2.39 → 2.1xx) in its own PR, tested against a real project — Dependabot ignores it until then. |
-| E5 | Split the god components | ⬜ | Next | `Landing` 1,720 (growing), `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
+| E5 | Split the god components | 🟡 | Next | `Landing` split to 697 (the builder's logic in `lib/quizBuilder.ts`, its parts in `components/landing/`); `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
 | E6 | Golden vectors for the duplication contracts | ⬜ | Next | `leagues.ts` ↔ the leagues SQL; `dailyEmail.ts` ↔ the edge function. The pattern to copy is `passRates`. |
 | E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). |
 | E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |

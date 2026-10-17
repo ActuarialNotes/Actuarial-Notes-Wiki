@@ -3,7 +3,7 @@
 // This is the pure core behind the "questions left today" badge that appears on
 // every surface a plan-completing quiz can be launched from (see
 // components/TodayQuizBadge.tsx and hooks/useTodayQuizCount.ts). It mirrors the
-// "Today's Quiz" auto-sizing on the Quiz tab (Landing.tsx's todaysPlanFullCount)
+// "Today's Quiz" auto-sizing on the Quiz tab (hooks/useTodaysPlanQuiz.ts's todaysPlanFullCount)
 // so the badge always matches the size of the quiz the surface actually starts.
 
 import { minQuestionsToCoverConcepts } from '@/lib/studyPlan'
@@ -25,7 +25,7 @@ const NO_PLAN: TodayPlanCount = { count: 0, complete: false }
  * plan is already done. Drops concepts already done today (`doneConceptSlugs`,
  * built with `planDoneConceptSlugs` so it matches the checklist's ticks) so the
  * count matches what the next launched quiz will actually contain — same as
- * Landing.tsx's buildTodaysPlanSelection. When
+ * `todaysPlanSelection` in lib/quizBuilder.ts. When
  * everything's done it reports `complete` and falls back to the full plan's
  * count (a re-launch keeps those questions available for extra practice), so
  * callers that hide a finished plan should check `complete`, not `count` —

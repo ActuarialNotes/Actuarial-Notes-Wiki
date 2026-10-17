@@ -12,7 +12,7 @@
 // few questions at the target still fills the quiz from its neighbours rather
 // than coming up short.
 
-import type { Difficulty } from './parser'
+import type { Difficulty, QuizMode } from './parser'
 
 /** Where the lean points: 0 is Easy, ½ is Med, 1 is Hard. */
 export type DifficultyTarget = number
@@ -173,4 +173,25 @@ export function saveDifficultyLevels(levels: readonly Difficulty[]): void {
   } catch {
     /* ignore quota/private-mode errors */
   }
+}
+
+/**
+ * The builder's choice as a question test — what every count on the Quiz tab
+ * reads through (`inLevels` in pages/Landing.tsx). A practice exam ignores it,
+ * since it is sat as the paper sets it, and a set with every level ticked
+ * filters nothing.
+ */
+export function inDifficultyLevels(
+  mode: QuizMode,
+  levels: readonly Difficulty[],
+): (q: { difficulty: Difficulty }) => boolean {
+  const all = isAllDifficultyLevels(levels)
+  return q => mode !== 'quiz' || all || levels.includes(q.difficulty)
+}
+
+/** How many questions each level holds in a pool — said under each level's name. */
+export function difficultyLevelCounts(pool: readonly { difficulty: Difficulty }[]): Record<Difficulty, number> {
+  const counts: Record<Difficulty, number> = { easy: 0, medium: 0, hard: 0 }
+  for (const q of pool) if (q.difficulty in counts) counts[q.difficulty]++
+  return counts
 }

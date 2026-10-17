@@ -25,6 +25,9 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
 import { useBack } from '@/hooks/useBack'
+import type { BackOptions } from '@/lib/navTrail'
+
+const EXAM_LIST_ONLY: BackOptions = { only: path => path.split(/[?#]/)[0] === '/wiki' }
 
 const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
@@ -157,9 +160,10 @@ export default function WikiExam() {
     <ExamLogo examKey={progressKey} size="md" />
   ), [progressKey])
 
-  // Back to wherever the reader opened this exam from — the Dashboard, the
-  // quiz builder, a search — and up to the exam list for one who landed here.
-  const back = useBack({ to: '/wiki', label: 'All exams' })
+  // Always back to the exam list: the browser's Back when the reader came
+  // from it (its filters and scroll intact), and up to it from anywhere else —
+  // the Dashboard, the quiz builder, a search, or outside the app.
+  const back = useBack({ to: '/wiki', label: 'All exams' }, EXAM_LIST_ONLY)
   const backLink = useMemo(() => <FloatingSearchBack back={back} />, [back])
 
   // How far along this exam's material is — 'ready' (P/FM), 'beta', or

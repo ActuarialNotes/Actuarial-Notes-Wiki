@@ -134,6 +134,13 @@ export interface BackOptions {
    * screen skips the quiz it reviewed, which would only start a new one.
    */
   skip?: (path: string) => boolean
+  /**
+   * The only place this page goes back to. The page left is the target when
+   * it passes, and otherwise there is none and the control leads up to its
+   * fallback — an exam's study guide always returns to the exam list, never
+   * to the Dashboard or quiz it was opened from.
+   */
+  only?: (path: string) => boolean
 }
 
 /** The sign-in screens: never a place to go back to. */
@@ -157,6 +164,7 @@ export function backTarget(trail: NavTrail, options: BackOptions = {}): BackTarg
     const there = pathnameOf(entry.path)
     if (there === here || isAuthPath(there)) continue
     if (options.skip?.(entry.path)) continue
+    if (options.only && !options.only(entry.path)) return null
     return { delta: i - trail.index, entry }
   }
   return null

@@ -1,5 +1,9 @@
 # Codebase & roadmap assessment — 2026-08-31
 
+> **Historical snapshot.** Every recommendation and flag below was re-checked against the code
+> on 2026-10-17 and folded into `docs/roadmap.md` (Appendix B records what changed). Read the
+> roadmap for current status; keep this file as the record of the August audit.
+
 **Roadmap used:** `docs/roadmap.md` (last updated 2026-07-24). It is the only roadmap for
 this product; `docs/actuarial-agent-product-plan.md` is a plan for a *different* product
 line and is deliberately out of scope here. There is no `ROADMAP.md`, `PLAN.md`, `TODO.md`,

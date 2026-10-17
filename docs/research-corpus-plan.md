@@ -63,6 +63,12 @@ Available from: "[host](https://...)"
 - [x] Verify `type: benchmark` flows through `ResourceHeatmap.tsx` / `ResourceMonthCards.tsx` / `ConceptPopup` reader — `TimelineKind`, `KIND_LABEL`, `KIND_BADGE`, `KIND_ORDER`, and `TIMELINE_KINDS` already covered `'benchmark'`; only `pathToEntryRef` in `wikiRoutes.ts` was missing a `resources/benchmarks/` case (now added) so `[[wikilinks]]` into the new directory resolve correctly. `npm run build` and `npx vitest run` both pass.
 - [x] New `source_url` / `source_type` / `pdf_url` frontmatter fields are documented above in "Target schema A" — this plan doc is the durable reference.
 
+> **Parked (2026-10-17) — and the checklist below is not maintained.** The Research tab is off
+> (`docs/roadmap.md` item **R1**). The timeline folders hold about a dozen pages, but several
+> topics now exist as `Resources/Books/` pages written for the exam syllabi (OSFI MCT, ORSA,
+> stress testing, climate and reinsurance guidance, about 55 CIA pages) and were never ticked
+> here. Reconcile against `Resources/` before treating an unticked box as missing.
+
 ## How to use this plan
 
 1. Work section by section. Each `- [ ]` is one vault page.

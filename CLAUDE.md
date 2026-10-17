@@ -140,6 +140,13 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
 
 The `docs/` folder holds design docs for the trickiest logic — **read the relevant one
 before touching that area**:
+- `docs/roadmap.md` — **the one roadmap**, and how development is governed: every product
+  line's status, the Now / Next / Later priorities (by lane), the ranking rules (§0.3: an
+  unbacked promise — a red gate, a pipeline that isn't running — outranks any feature), the
+  definition of done, the register of decisions only the maintainer makes (§6 — build with the
+  listed default, or ask), and an index of every subplan with its health. A PR that changes an
+  item's status updates its line there in the same PR; new work goes under §3.4 *Proposed*.
+  Read it before starting anything that isn't a small fix.
 - `docs/concept-learning-progression.md` — the 5-state mastery ladder (New → L1 → L2 → L3,
   with Forgotten/decay), implemented in `quiz/src/lib/mastery.ts`
 - `docs/study-plan-generation.md` — how daily study plans are scheduled/paced/cached,

@@ -1,468 +1,725 @@
-# Development Roadmap — Actuarial Notes Wiki
+# Roadmap: Actuarial Notes
 
-_Last updated: 2026-07-24_
+_Last reviewed: **2026-10-17** against `main` @ `1a47980` · Next review due: **2026-10-31**_
 
-This roadmap turns the current product into a best-in-class **gamified learning app for
-actuarial students**. It is grounded in a detailed review of the codebase as it stands
-today, and it is ordered so that foundational safety nets come before big feature bets.
+This is the **one roadmap** for everything in this repository: Study Mode, the content vault,
+Fact Check, the AI connector, Actuarial Tools, Cowork, and the experiments around them. It
+says what exists, what is next and in what order, who decides, and where the detail lives.
+The detail itself stays in the **subplans** (§8). This document holds their status and their
+priority relative to each other.
 
-> Read `CLAUDE.md` first for the map of the repo. This document assumes that context and
-> focuses on _where we're going_, not _what exists_. A **sibling** plan,
-> `docs/actuarial-agent-product-plan.md`, covers a *separate* product line (an AI Actuarial
-> Agent for doing actuarial work) — it is deliberately not part of this roadmap, which
-> plans the exam-prep learning app only.
-
-**What changed in this revision (2026-07-24).** Two open items moved off the "not started"
-line since 2026-07-11, both via the same pure-lib + flag + tests template:
-- **The first reminder channel shipped (P1.3 → 🟡).** An opt-in **daily study-plan email**
-  (`DAILY_PLAN_EMAIL_ENABLED`, `lib/dailyEmail.ts`, `docs/daily-plan-email.md`) sends a
-  morning list of today's scheduled concepts, with a user-picked send time
-  (implementation intention, §2.2.7), quiet days, and learning-state framing — exactly the
-  design §2.2(6–7) called for. Web push (still blocked on the P1.6 service worker) is the
-  remaining half.
-- **The error-review loop got its first surface (P2.8 → 🟡).** A **recent-mistakes review
-  card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`) surfaces recently-missed
-  questions, each tagged with the concept most likely to blame, and re-asks them in place
-  (`components/MistakesReviewModal.tsx`) — one question at a time, answered with the quiz's
-  own card and paged with Previous/Next. The spaced re-ask scheduling and
-  high-confidence-error prioritization (which waits on P2.7) remain.
-
-The prior revision's re-framing still holds: with the engagement loop built, the center of
-gravity is **learning quality** (§2.2), and Phase 3's god-component debt keeps growing —
-`Flashcards.tsx` has climbed past **3,450 lines**.
+> Read `CLAUDE.md` first for the map of the repo. This document is about *where we are going
+> and in what order*, not about how a module works.
 
 ---
 
-## 1. Where we are today
+## 0. How this document governs the work
 
-The product is already substantial and, in several areas, genuinely sophisticated.
+### 0.1 Who decides what
 
-**Strengths worth protecting**
+| Role | Who | Decides |
+|---|---|---|
+| **Maintainer** | Jordan | What is in **Now**; every decision in §6; anything that changes an account, a secret, a repo setting, money, or who can see a product; promoting an exam's status. |
+| **Contributors** | Claude Code sessions, and any human contributor | How to build an item; proposing items; moving an item they finished to ✅; keeping this file and the subplans in step with the code. |
 
-- **A real learning engine.** The 5-state mastery ladder with Ebbinghaus-style decay
-  (`lib/mastery.ts`, `docs/concept-learning-progression.md`), backward-scheduled study
-  plans (`lib/studyPlan.ts`), and syllabus-weighted readiness scoring (`lib/readiness.ts`)
-  are the true moat. Most competitors have gamification _or_ a learning model — this has
-  both.
-- **A complete, learning-aligned engagement loop.**
-  Daily streaks with freeze/repair mechanics (`lib/streak.ts`), XP weighted toward hard
-  and decaying concepts with configurable daily goals (`lib/xp.ts`), a personalized
-  daily-quest board that pays the gem economy (`lib/quests.ts` + `data/quests.ts`), and
-  opt-in weekly XP leagues (`lib/leagues.ts`, `docs/leagues.md`) — every reward fires for
-  behaviour the mastery model says improves retention, not raw volume. Now joined by the
-  first **re-engagement channel** (the opt-in daily study-plan email, `lib/dailyEmail.ts`)
-  and a **recent-mistakes review card** (`lib/recentMistakes.ts`) that pulls missed
-  questions back in front of the learner.
-- **A large, structured content vault.** ~915 questions across `exam-p` (376), `exam-fm`
-  (350), `exam-mas-i` (90), and `exam-5` (99), plus concept and exam wiki pages with a
-  canonical topic→concept→objective ontology (`scripts/ontology_map.py`), now gated by
-  content-validation CI.
-- **Working monetization + sync plumbing.** Supabase auth/sync, Stripe checkout/portal/
-  webhook edge functions, a gems economy, cosmetics, characters/avatars, designation
-  banners, and a Store.
-- **A mostly-pure, testable `lib/` layer.** ~527 tests across 33 files concentrate on the
-  trickiest logic (mastery, study plan, parsing, ontology, all four gamification engines,
-  and now the daily-email derivation and recent-mistakes ranking), with a 6-spec Playwright
-  smoke suite covering the signed-out critical paths.
-- **A large finished-but-parked feature.** The Research tab (Canadian P&C corpus + AI
-  "Ask") is fully built behind two feature flags — optionality, not dead weight.
+A contributor may **propose** a new item or a priority change, by adding it to §3.4
+*Proposed* in a PR. A contributor may not promote an item into Now, or settle a decision
+listed in §6. When a session hits one of those decisions, it builds with the default listed
+there, or it stops and asks.
 
-### 1.1 Gap scorecard
+### 0.2 Status and priority vocabulary
 
-The original review identified eight gaps. Most are closed; the table is kept as the
-scorecard of record.
+**Status:**
 
-| # | Gap | Status |
-|---|-----|--------|
-| G1 | No CI for the app | ✅ **Closed.** `.github/workflows/ci.yml` gates every `quiz/**` PR on lint, ~527 unit tests, `tsc` + production build, and the Playwright E2E smoke suite. |
-| G2 | No error monitoring or funnel analytics | ✅ **Closed.** `lib/errorMonitoring.ts` (dependency-free capture → pluggable sinks, source maps on) + `lib/analytics.ts` (typed event catalogue) + `lib/funnel.ts` (activation funnel: `signup → first_quiz → first_correct → concept_collected → day2_return`). |
-| G3 | Core retention loop missing (streak/XP/goal/leaderboards/reminders) | 🟡 **Mostly closed.** Streaks (P1.1), XP + daily goal (P1.2), quests (P1.4), and leagues (P4.1) are live behind flags. **Reminders (P1.3) are now half-closed** — the opt-in daily study-plan email brings lapsing users back through the inbox; web push still waits on the P1.6 service worker. |
-| G4 | Thin gem economy | ✅ **Closed.** Daily quests are the earn loop (user-claimed, never auto-paid); the Store is the sink; earn/spend events are instrumented so the balance can be watched. |
-| G5 | God components | ❌ **Open — and growing faster.** `Flashcards.tsx` **grew to 3,450** (+614 since the last revision — the flashcard-experience work all landed inside it), `ReadinessCard.tsx` 1,808, `Settings.tsx` 1,349, `Landing.tsx` 1,198. The E2E safety net P3.1 was waiting on has existed for a while; this is the oldest unaddressed risk and the debt is compounding. |
-| G6 | No E2E tests | ✅ **Closed.** `quiz/e2e/` — auth, quiz, collect, store, wiki, home specs — runs in CI against a built preview with inert Supabase placeholders. |
-| G7 | Weak comprehension-check gate | ✅ **Closed by removal.** The gate is gone: a card is now collected when its concept first reaches Level 1 (`docs/flashcard-collection.md`). _Previously:_ `comprehension-checks/<exam-id>/*.md` holds 183 authored misconception-fork questions (Exam P/FM/MAS-I, one file per concept) and the collect-then-quiz flow shipped (`PreQuizCollectGate`). Concepts without an authored check still fall back to the guessable masked-definition question — the Exam 5 batch remains (P1.5). |
-| G8 | Manual content pipeline | ✅ **Closed.** `content-validation.yml` + `scripts/validate_content.py` fail the PR on bad frontmatter, duplicate ids, or answer-key drift. |
+| Mark | Meaning |
+|---|---|
+| ✅ | Shipped and working. |
+| 🟢 | Shipped, but needs an operating step only the maintainer can take (a secret, a deploy, a setting). |
+| 🟡 | Partially shipped. |
+| ⬜ | Not started. |
+| 🅿️ | Parked. Built or designed, but deliberately off. Don't build on it, and don't delete it. |
+| 🗑 | Retired. Superseded or removed; kept here so nobody re-plans it. |
 
----
+**Priority tiers:**
+- **Now** is being worked on, or is the very next thing in its lane. Keep it to about **five
+  items per lane**.
+- **Next** is queued in order, and is the next to pull when a Now item closes.
+- **Later** is wanted but not sequenced yet.
+- **Parked** waits for a decision or a precondition, which the item names.
 
-## 2. Guiding principles
+### 0.3 How an item is ranked
 
-### 2.1 Engineering principles (unchanged, proven out)
+Score a candidate by asking these questions **in order**. The first question that gets a
+"yes" decides its tier.
 
-1. **Protect the learning engine.** Every gamification feature must reinforce spaced
-   repetition, not fight it. Rewards should fire for _behaviour that improves retention_
-   (revisiting a decaying concept, clearing a hard question), not raw volume.
-2. **Foundations before features.** Ship CI, monitoring, and E2E coverage _before_ the big
-   engagement bets. _(Done — and it worked: the four gamification engines shipped in quick
-   succession on top of that safety net, each as a pure tested module behind a flag.)_
-3. **Small, pure, tested modules.** Keep new logic in `lib/` as pure functions with vitest
-   coverage; keep React thin. Split god components as we touch them.
-4. **Flag-gate every risky launch.** Follow the established `featureFlags.ts` pattern so new
-   surfaces can ship dark and roll out gradually.
-5. **Measure everything that matters.** No engagement feature ships without an event that
-   tells us whether it worked (D1/D7 retention, streak length, quiz completion).
+1. **Is a promise to the reader unbacked?** This covers a badge with no pipeline behind it, a
+   feature that is switched on but not actually operating, or a gate that has gone red.
+   → **Now.** Trust comes before features. *(Example: a red CI that every PR merges over.)*
+2. **Does it unblock two or more other items?** → **Now** or the top of **Next**. *(Example:
+   the retention event that every A/B test waits on.)*
+3. **Does it move a learner's exam readiness?** Weigh it by how many candidates sit that
+   exam. → **Next**, ordered by learner impact divided by cost.
+4. **Is it a new surface or a new product line?** → **Later**, until rules 1–3 are clear
+   for the lane it lives in.
 
-### 2.2 Learning-science principles (new — the lens for everything that remains)
+There are two standing tie-breakers:
+- **Finish before you start.** A 🟡 item outranks a ⬜ item of the same value.
+- **Operate before you extend.** A shipped system that isn't running outranks a new
+  feature for that system.
 
-With the engagement loop built, the differentiator is no longer _that_ students come back
-daily but _what the daily session does to their exam readiness_. The remaining roadmap is
-designed against the strongest findings in learning science and gamified-learning
-research:
+### 0.4 Definition of done
 
-1. **Retrieval practice beats re-reading (the testing effect).** Already the product's
-   spine — quizzes and flashcards are retrieval, not review. Protect it: never add a
-   passive surface (video, summary reading) that awards the same XP as retrieval.
-2. **Spacing and desirable difficulty.** The decay model already forces spaced revisits,
-   and XP already pays more for hard + decaying concepts. The open gap is **interleaving**
-   (P2.6): sessions currently block by concept/topic, but mixing related topics within a
-   session measurably improves discrimination between similar concepts — exactly the skill
-   actuarial exams test (which distribution? which reserving method?).
-3. **Metacognitive calibration.** Exam readiness is as much about _knowing what you know_
-   as knowing it. Students are systematically overconfident; a confidence prompt before
-   revealing the answer, plus a calibration view (confidence vs. correctness), turns every
-   question into calibration training (P2.7). This also sharpens the readiness score.
-4. **Errors are the highest-value learning events.** A missed question is worth more than
-   ten correct ones — _if_ it gets elaborative feedback and a delayed re-test. The
-   comprehension-check bank already annotates which misconception each distractor targets;
-   the question bank should close the same loop with an error-review queue (P2.8).
-5. **Scaffold novices, fade for experts (the expertise-reversal effect).** A student's
-   first contact with a concept should be a worked example / the concept card (the collect
-   gate is this), not a cold retrieval attempt. The collect-then-quiz flow shipped;
-   finishing the authored comprehension checks (P1.5) completes the scaffold.
-6. **Self-Determination Theory as the gamification rubric.** Sustainable motivation needs
-   **competence** (mastery ladder, XP levels, readiness score), **autonomy** (configurable
-   daily goals, user-claimed quest rewards, opt-in leagues), and **relatedness** (leagues).
-   The shipped mechanics already respect all three — keep it that way. Specifically:
-   - **Guard against the overjustification effect.** Extrinsic rewards layered on an
-     intrinsically motivated activity can crowd out the intrinsic motivation. Gems/XP must
-     stay _informational_ (signalling learning progress) rather than _controlling_
-     (the reason to study). Watch the quest-completion vs. study-plan-adherence ratio: if
-     users start optimizing quests instead of their plan, the quest catalogue needs
-     rebalancing, not richer rewards.
-   - **Loss-aversion mechanics need compassion.** Streak freezes and same-day repair are
-     already built. Reminders (P1.3) follow the same rule — the shipped daily email is
-     opt-in, skips quiet days, and is framed as an invitation (today's scheduled concepts)
-     rather than a threat ("you'll lose your streak!"); web push must clear the same bar.
-   - **Leaderboards demotivate the bottom half if naively framed.** The shipped leagues
-     mitigate this correctly (opt-in, 30-person cohorts, weekly reset, promotion for the
-     top rather than shaming the bottom). Any future social surface must clear the same
-     bar.
-7. **Implementation intentions beat willpower.** "I will study at 7am on the train" works;
-   "I'll study more" doesn't. The reminder system (P1.3) lets users pick a study time and
-   anchors the nudge to it — the shipped daily email already does this with a per-user
-   local send hour, and web push should inherit the same anchor. That single design choice
-   is what makes reminders a pedagogy feature rather than a growth hack.
+An item is ✅ only when all of the following are true:
+
+- It is merged with **CI green**.
+- It is behind a flag in `lib/featureFlags.ts` if it is a risky or new surface.
+- Its logic is in **pure, tested `lib/` modules**.
+- It sends the **analytics events** that tell us whether it worked. *(This is the half of
+  the template that slipped in August and September; see E-L1.)*
+- Its **doc** under `docs/` is written or updated, and `CLAUDE.md` names it.
+- Its **line in this roadmap is updated in the same PR.**
+
+### 0.5 Keeping this file true
+
+- **In every PR:** when a PR changes an item's status, it updates that item's line here.
+  When a PR starts something that isn't on this roadmap, it adds the item, normally under
+  §3.4 *Proposed*.
+- **Every two weeks, in a review pass:**
+  - Re-measure §2 with the commands in Appendix A.
+  - Move items between tiers.
+  - Append an entry to Appendix B.
+  - Update the "Last reviewed" date at the top.
+- **Subplans keep their own detail.** When a subplan's status changes, update the subplan
+  first, then its one-line summary here. If this file and a subplan disagree about
+  *status*, the code wins and both get fixed. If they disagree about *how* to build
+  something, the subplan wins.
+- **Don't track work in GitHub issues.** The repo uses none. Planning happens here, in
+  the subplans, and in PR titles.
 
 ---
 
-## 3. Phased roadmap
+## 1. The products at a glance
 
-Phases are ordered by dependency, not calendar. Each lists **exit criteria** so "done" is
-unambiguous. Status markers: ✅ shipped · 🟡 partial · ⬜ not started.
-
-### Phase 0 — Foundations & safety nets ✅ COMPLETE
-
-_Goal: make the codebase safe to iterate on quickly._
-
-- ✅ **P0.1 — App CI pipeline.** _Shipped:_ `.github/workflows/ci.yml` runs lint,
-  ~527 unit tests, `tsc` + production build, and the E2E suite on every PR touching
-  `quiz/**`, with concurrency-cancellation and path filtering.
-- ✅ **P0.2 — Content-validation CI.** _Shipped:_ `content-validation.yml` +
-  `scripts/validate_content.py` reproduce the app parser's contract (frontmatter keys,
-  duplicate ids, answer keys) so content drift fails the PR instead of silently dropping
-  questions in-app.
-- ✅ **P0.3 — Error monitoring.** _Shipped, adapted:_ instead of a Sentry SDK, a
-  dependency-free capture layer (`lib/errorMonitoring.ts`) normalizes errors and fans out
-  to pluggable sinks (dev console, GA4 `exception`, optional `VITE_ERROR_ENDPOINT`
-  beacon), wired into the ErrorBoundary and global handlers; Vite emits source maps.
-  Upgrading to a full SDK later is a one-line `registerErrorSink`.
-- ✅ **P0.4 — Structured product analytics.** _Shipped:_ `lib/analytics.ts` is a typed
-  event catalogue (wrong/missing params are compile errors) covering engagement,
-  reliability, and the activation funnel; `lib/funnel.ts` gates funnel events to
-  fire-once-per-device. Every gamification engine shipped with its events
-  (`streak_extended`, `xp_earned`, `daily_goal_met`, `quest_claimed`, `league_joined`, …).
-- ✅ **P0.5 — E2E smoke suite.** _Shipped:_ 6 Playwright specs (auth, quiz, collect,
-  store, wiki, home) run in CI against a built preview with inert Supabase placeholders —
-  no secrets needed, every asserted flow works signed-out.
-
-**Exit criteria — met:** every PR is gated by lint + typecheck + unit + E2E smoke +
-content validation; crashes and the activation funnel are instrumented.
-
-### Phase 1 — The core engagement loop 🟡 MOSTLY SHIPPED
-
-_Goal: give students a reason to come back **every day**._
-
-The loop exists: a returning user sees a streak, a daily-goal ring, and a quest board on
-open, and a lapsing user now gets an opt-in morning email. What remains is (a) the
-**push** channel that reaches users off-inbox (P1.3 web push + P1.6 service worker) and
-(b) finishing the comprehension-check content so the collect scaffold is genuine
-everywhere (P1.5, Exam 5 only now).
-
-- ✅ **P1.1 — Daily streak system.** _Shipped:_ pure engine in `lib/streak.ts`
-  (timezone-correct day boundaries, Duolingo-style auto-consumed freeze tokens, same-day
-  gem repair), persisted via `user_streaks`/localStorage, surfaced in
-  Sidebar/Dashboard. Gated by `STREAK_ENABLED`.
-- ✅ **P1.2 — Daily goal + XP.** _Shipped:_ `lib/xp.ts` — per-answer XP weighted toward
-  hard and decaying concepts (the reward aligns with the learning model), a level curve,
-  configurable `DAILY_GOALS` presets; level ring + XP popup on the Dashboard, goal picker
-  in Settings. Gated by `XP_ENABLED`.
-- 🟡 **P1.3 — Streak-aware reminders.** _Email half shipped:_ the opt-in **daily
-  study-plan email** (`DAILY_PLAN_EMAIL_ENABLED`, `lib/dailyEmail.ts` +
-  `supabase/functions/daily-plan-email`, `docs/daily-plan-email.md`) lands in the inbox
-  each morning with today's scheduled concepts — built to the §2.2(6–7) rules: **opt-in
-  only**, a user-picked local send hour (the implementation-intention anchor), quiet days
-  when nothing is scheduled, and learning-state framing (today's plan, not a streak
-  threat). **Remaining:** web push for users who don't open email (needs the P1.6 service
-  worker), and instrumenting reminder→session conversion so we can prove it brings users
-  back rather than trains them to ignore notifications. The email is the higher-value
-  channel for working actuaries; push is the follow-on.
-- ✅ **P1.4 — Quests / daily challenges.** _Shipped:_ personalized 3-quest daily board
-  (`lib/quests.ts` + authored catalogue in `data/quests.ts`) — one always-achievable core
-  quest, a revive quest only when concepts have actually decayed, a focus quest from
-  today's study plan; rewards are **claimed by the user, never auto-paid** (autonomy,
-  §2.2.6). Gated by `QUESTS_ENABLED`.
-- 🟡 **P1.5 — Fix the collection gate (G7).** _Half shipped:_ the collect-then-quiz flow
-  is done (`PreQuizCollectGate` soft-prompts New concepts before a quiz), and
-  `comprehension-checks/<exam-id>/*.md` holds 183 authored questions covering the
-  **Exam P, FM, and MAS-I** syllabi (one markdown file per concept), each built around a
-  misconception fork (the correct answer is never the concept's name or definition — see
-  the `flashcard-comprehension-check` skill). **Remaining:** author the Exam 5 batch;
-  until then those concepts fall back to the guessable masked-definition question, which
-  undermines the scaffold (§2.2.5) exactly where novices need it.
-- ⬜ **P1.6 — PWA / installability & offline.** _Not started._ Service worker + manifest;
-  make the existing `localMasteryStore` / `dailyProgressStore` offline fallbacks
-  first-class so a session on the subway still counts toward the streak. Also the
-  prerequisite for P1.3 web push. Pedagogy angle: commute-time micro-sessions are the
-  natural spaced-repetition cadence for working actuarial students.
-
-**Exit criteria:** D1 and D7 retention measurably improve _(instrumented, needs
-observation window)_; a returning user sees streak + daily goal + at least one quest on
-open ✅; reminders demonstrably bring users back 🟡 _(email channel live; conversion not
-yet instrumented, push not built)_; every collectible concept has an authored
-comprehension check 🟡 _(Exam P/FM/MAS-I done; Exam 5 remaining)_.
-
-### Phase 2 — Learning depth & content quality ← **CURRENT FOCUS**
-
-_Goal: make the studying itself better, which is the real reason students stay. With the
-engagement loop live, this phase is now the product's competitive frontier — and every
-item here is a direct application of §2.2._
-
-- ⬜ **P2.1 — Adjustable spaced-repetition tuning.** Expose decay/interval parameters
-  (currently constants in `mastery.ts`) as a tunable, per-exam config; A/B the intervals
-  against the per-concept retention metric now that P0.4 events exist. Upper CAS exams
-  (essay/calculation-heavy) plausibly need different decay curves than P/FM
-  multiple-choice recall.
-- 🟡 **P2.2 — Exam simulation mode.** _Partially shipped:_ a `mock-exam` quiz mode exists
-  (answers revealed at the end, self-grading flow for written questions) — the right
-  **summative** assessment skeleton, distinct from the immediate-feedback formative quiz
-  mode. **Remaining:** real sitting structure — timed sessions, syllabus-weighted question
-  assembly mirroring `data/examSittings.ts`, a post-exam readiness delta, and a "what to
-  review next" hand-off into the study plan. Time pressure is itself a skill actuarial
-  candidates must train; no other feature can substitute for it.
-- ⬜ **P2.3 — Question quality loop.** In-app "report this question" + an
-  explanation-quality signal, feeding a review queue. Close the loop the README already
-  promises (human review of AI content). Prerequisite for scaling the bank toward upper
-  exams (P2.4) without eroding trust.
-- 🟡 **P2.4 — Content coverage expansion.** _Ongoing:_ ~915 questions live, but coverage
-  is lopsided — per the 2026-06-30 report, 147 of 381 concepts (38.6%) have linked
-  questions: Exam FM is near-complete (80/81), Exam P strong (50/60), everything else thin
-  (17/240). Priorities: (a) close the 10 remaining Exam P concept gaps, (b) grow
-  `exam-mas-i` (90) and `exam-5` (99) toward parity, (c) extend toward CAS 6/7/8/9 whose
-  wiki pages exist but have no banks. Content-validation CI (P0.2) and the converter
-  skills (`cas-exam-converter`, `soa-exam-converter`) de-risk the bulk imports.
-- ◻️ **P2.5 — Richer mastery analytics for the learner.** _Shipped, then removed:_ the
-  "Fading Concepts" Dashboard card and its `MASTERY_ANALYTICS_ENABLED` flag are gone —
-  the Dashboard says enough about pacing without a second card repeating it. The pure
-  engine (`lib/masteryAnalytics.ts`) stays, and the heatmap's day panel still reads it,
-  so a future surface can be rebuilt on top of it.
-- ⬜ **P2.6 — Interleaved practice** _(new, §2.2.2)._ Quiz and study-plan session assembly
-  currently blocks by concept/topic. Add an interleaving mode that mixes questions from
-  related concepts within a session (the ontology in `scripts/ontology_map.py` +
-  `lib/conceptMatch.ts` already knows what "related" means). Interleaving is one of the
-  most robust effects in the literature precisely because it trains *discrimination* —
-  choosing the right distribution/method — which is the dominant failure mode on actuarial
-  exams. Keep the assembler pure in `lib/`, flag-gate, and A/B against blocked practice
-  using per-concept retention.
-- ⬜ **P2.7 — Confidence & calibration** _(new, §2.2.3)._ An optional one-tap confidence
-  prompt (sure / unsure / guessing) before the answer reveal; store it alongside
-  correctness. Surface a calibration view in Mastery insights ("when you're *sure*,
-  you're right 71% of the time") and feed high-confidence errors into the P2.8 queue —
-  those are the most dangerous misconceptions a candidate carries into an exam. Low
-  friction, high signal; also sharpens `readiness.ts`.
-- 🟡 **P2.8 — Error-review loop ("mistakes deck")** _(§2.2.4)._ _First surface shipped:_ a
-  **recent-mistakes review card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`)
-  surfaces the questions a learner most recently missed and, for each, flags the concept(s)
-  most likely to blame (weighted by miss-rate × current mastery), then re-asks them in place
-  (`components/MistakesReviewModal.tsx`) — answer as many as you like, in any order, and the
-  answers are banked on close exactly as a quiz's are (`recordReviewAnswers` in
-  `stores/quizStore.ts`), so a corrected question drops off the list. This closes the
-  "missed questions vanish after /review" gap for
-  *recent* misses. **Remaining:** turn it into a true spaced mistakes deck — queue misses
-  for a delayed re-ask (e.g. 2–3 days later, interleaved into normal sessions via P2.6),
-  prioritized by high-confidence errors once P2.7 lands. And extend the
-  misconception-annotation pattern proven in `comprehension-checks/` to explanation
-  content: name *why* the tempting wrong answer is wrong, not just why the right one is
-  right — that's what elaborative feedback means.
-
-**Exit criteria:** measurable lift in per-concept retention; every active exam has
-adequate question coverage; a question-quality feedback loop is live; mock exams are
-timed and sitting-shaped; interleaving and calibration are live and A/B-validated.
-
-### Phase 3 — Maintainability & scale ❌ NOT STARTED — now the oldest unpaid debt
-
-_Goal: keep velocity high as the surface grows. The E2E safety net this phase was
-sequenced behind (P0.5) has existed for a while; meanwhile Phase 1/2 features kept
-landing on top of the god components — the flashcard-experience work pushed
-`Flashcards.tsx` past **3,450 lines** (+614 since the last revision). Start paying this
-down alongside Phase 2, beginning with the file the next feature touches._
-
-- ⬜ **P3.1 — Decompose god components (G5).** Split `Flashcards.tsx` (**3,450 lines** —
-  now by far the worst offender and still growing) into view/logic/subcomponents with
-  extracted hooks; then `ReadinessCard` (1,808), `Settings` (1,349), `Landing` (1,198).
-  Extract pure logic into `lib/` with tests as you go. Do these opportunistically whenever
-  a feature touches the file, plus one dedicated pass on `Flashcards.tsx` — which is
-  overdue given how much recent work compounded there. The E2E collect/quiz specs are the
-  regression net.
-- ⬜ **P3.2 — Design-system consolidation.** Codify `components/ui/` primitives and shared
-  tokens (colours already in `index.css` / `examColors.ts`); document a11y-checked
-  patterns so new gamification surfaces are consistent and accessible.
-- 🟡 **P3.3 — Performance budget.** Route-level lazy loading exists (6 lazy routes in
-  `App.tsx`). **Remaining:** track bundle size in CI, extend lazy-loading to
-  Store/Flashcards, and set an LCP/INP budget verified in the E2E run.
-- ⬜ **P3.4 — Accessibility pass.** Keyboard + screen-reader audit of the core loop
-  (quiz, collect modal, store). Only 2 files currently respect
-  `prefers-reduced-motion` — the gamification surfaces added since (level ring, quest
-  overlays, collect animation, league board) need the same treatment. Accessible design
-  is also cognitive-load design (§2.2): animation that celebrates must never interrupt
-  the retrieval attempt itself.
-
-**Exit criteria:** no single component over ~600 lines on the core path; bundle and Core
-Web Vitals budgets enforced in CI; core flow passes an a11y audit.
-
-### Phase 4 — Growth, social & monetization
-
-_Goal: turn engaged users into a growing, paying base — only after the loop (Phase 1 ✅)
-and depth (Phase 2 ← in progress) are proven._
-
-- ✅ **P4.1 — Leaderboards & light social.** _Shipped 2026-07-10:_ opt-in weekly XP
-  leagues, per-exam, Duolingo-style promotion/relegation (see `docs/leagues.md`) —
-  privacy-first (snapshot-on-join / delete-on-leave, RPC-only board reads, no user ids
-  exposed), surfaced as the League tab in the Level popup. Study-group leaderboards
-  deferred. Gated by `LEAGUES_ENABLED`. _Watch (§2.2.6): weekly league retention split by
-  final rank — if bottom-quartile finishers churn, add effort-based framing before any
-  further social surface._
-- ⬜ **P4.2 — Referrals.** Gem/Pro-day rewards for inviting a study buddy; instrument
-  virality (K-factor) via the P0.4 analytics.
-- ⬜ **P4.3 — Monetization depth.** Revisit the free/Pro boundary now that the loop
-  exists: Pro study-plan features, cosmetics, streak freezes, and exam-simulation
-  packs (P2.2 makes this a natural Pro unit). The Stripe plumbing is already in
-  place — this is packaging, not new infrastructure. One boundary per §2.2.6: never
-  paywall the core retrieval loop or the decay-driven review queue — monetize
-  convenience and depth, not the pedagogy.
-- ⬜ **P4.4 — Re-enable the Research tab.** Follow `docs/research-ai-disabled.md`'s
-  re-enable checklist to light up the parked Canadian P&C corpus + AI "Ask" as a
-  differentiated offering for upper-exam candidates. Ship dark, then roll out. Sequencing
-  note: most valuable after P2.4 extends question banks toward CAS 6+, when upper-exam
-  candidates actually inhabit the app.
-
-**Exit criteria:** a working referral loop with measured K-factor; a Pro tier whose
-value is tied to the engagement loop; a data-backed decision on Research reactivation.
+| Product | Who it's for | State | Gate | Subplan |
+|---|---|---|---|---|
+| **Study Mode** (quiz, flashcards, study plan, readiness, gamification) | Exam candidates | ✅ live | — | §4.2; `concept-learning-progression.md`, `study-plan-generation.md`, `exam-readiness.md` |
+| **Content vault**: 43 exam pages (12 CAS, 31 SOA), 1,389 concepts, 748 resources, 3,341 questions | Candidates and practitioners | ✅ live. 7 exams ready, 6 beta, 30 in development | `examStatus.ts` | §4.3; `cas-publication-plan.md`, `CONCEPT_GAPS_PLAN.md` |
+| **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 48.6% of files verified; the weekly sweep has never run the agent | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
+| **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
+| **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
+| **Cowork**: Sources and Workflows | Practitioners | 🟡 Preview, one approved account | `COWORK_ENABLED` + `PREVIEW_APPROVED_EMAILS` | §4.5; `cowork.md`, `workflows.md`, `cowork-source-inventory.md` |
+| **Projects**: the PCPA simulator | PCPA candidates | ✅ live, 3 briefs | — | `pcpa-project.md` |
+| **Quiz Battle** | Candidates | ✅ live | — | `quiz-battle.md` |
+| **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
+| **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |
+| **Actuaria Online** (game layer) | Candidates | 🟡 phases 0–3 built, one approved account | `ACTUARIA_ENABLED` + `ACTUARIA_APPROVED_EMAILS` | `actuaria-online.md` |
+| **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
+| **Simulated learner** | Us, for content QA | 🟡 offline pipeline built; no live run has succeeded | — | `simulated-learner.md` |
+| **Research tab** (Canadian P&C corpus + AI Ask) | Upper-exam candidates | 🅿️ parked | `RESEARCH_TAB_ENABLED` / `RESEARCH_AI_ENABLED` = false | `research-ai-disabled.md`, `research-corpus-plan.md` |
+| **Actuarial Agent** (an in-app agent) | Practitioners | 🅿️ Phase A shipped *as the connector*; the in-app part waits on decision D2 | — | `actuarial-agent-product-plan.md` |
 
 ---
 
-## 4. Cross-cutting best practices (adopted — keep applying)
+## 2. Where we are: measured 2026-10-17
 
-- **Branch/PR hygiene.** Small, focused, imperative-titled PRs on `claude/<slug>`
-  branches, every one gated by CI. _(Working as intended.)_
-- **Every feature ships flag-gated + instrumented + tested.** The four gamification
-  engines each shipped as a pure `lib/` module + tests + feature flag + analytics events.
-  This is now the proven template — every Phase 2 item follows it.
-- **Migrations stay forward-only and dated** (`YYYYMMDD_description.sql`); the
-  gamification tables (`user_streaks`, `user_xp`, `user_quests`, leagues) all landed with
-  RLS from day one, and leagues correctly went further: cross-user reads/writes only
-  through SECURITY DEFINER RPCs.
-- **Keep parked code compiling.** Don't "clean up" flag-gated Research code as dead — both
-  branches must typecheck (the `: boolean` annotation pattern in `featureFlags.ts`).
-- **Human-in-the-loop content.** Per the README, no AI-authored concept/exam content ships
-  without review; the P2.3 quality loop operationalizes this. The authored comprehension
-  checks (P1.5) and their per-distractor misconception annotations are the quality bar
-  for new question content.
+These numbers were re-derived from the code, not copied from older documents. The commands
+are in Appendix A.
 
----
+**Engineering health**
 
-## 5. Success metrics
+| Measure | Value | Trend since 2026-08-31 |
+|---|---|---|
+| Unit tests | 214 files, **4,178 tests, all passing** | ↑ from 1,392 |
+| Lint | 0 errors, 45 warnings | ↓ from 53 warnings |
+| E2E | 23 specs, 94 tests. **11 failing in CI**: cowork ×4, exam-pdf ×2, tour ×3, reveal, wiki. Store is flaky | ↓ from 3 failing |
+| CI on `main` | **Red since 2026-08-23.** The last green run was #596 on 2026-08-21. PRs merge over red | ⚠️ about 8 weeks |
+| Entry chunk | **14,196 kB raw / 3,667 kB gzip**. `virtual:questions-content` is still imported eagerly in `main.tsx` | ⚠️ 3.2× larger |
+| `_virtual_wiki-content` chunk | 13,359 kB raw / 4,158 kB gzip (lazy) | ↑ |
+| Bundle-size check in CI | none | — |
+| Components over 600 / over 1,000 lines | 25 / 5 `.tsx` files. The largest: `Flashcards` 3,181, `ReadinessCard` 1,722, `Landing` 1,720 (still growing), `Settings` 1,131, `Search` 1,079 | `Landing` +287 |
+| `prefers-reduced-motion` | used in 12 files | ↑ from 5 |
+| `npm audit --omit=dev` | **15 vulnerabilities**: 2 high (`js-yaml`, `ws`), 9 moderate (including `dompurify`, `react-router`), 4 low. No Dependabot | ↑ from 6 |
+| Supabase | 48 migrations, 10 edge functions | — |
+| Merged PRs | about 128 since 2026-08-31 (#1374 → #1630) | — |
 
-Phase 0 instrumented these; later phases are judged on evidence, not vibes.
+**Content and Fact Check**
 
-| Category | Metric | Why | Status |
-|----------|--------|-----|--------|
-| Activation | % new users completing a first quiz on day 0 | Proves onboarding works | Instrumented (`lib/funnel.ts`) |
-| Retention | D1 / D7 / D30 return rate | The core health metric; Phase 1's target | Instrumented (`day2_return` + GA4) |
-| Engagement | Median streak length; daily-goal completion rate | Measures the loop directly | Instrumented (`streak_extended`, `daily_goal_met`) |
-| Re-engagement | Daily-email → session conversion rate | Proves reminders bring users back rather than train them to ignore (§2.2.7) | ⬜ needs a send→open→session event (P1.3 follow-on) |
-| Learning | Per-concept retention (correct on revisit after decay window) | Proves the engine, not just usage | Needs a dedicated event — prerequisite for P2.1/P2.6 A/Bs |
-| Calibration | Confidence-accuracy gap (P2.7) | Overconfidence is the exam-day killer | ⬜ ships with P2.7 |
-| Economy | Gem earn/spend balance; quest completion rate; quest-vs-plan adherence ratio (§2.2.6) | Detects a broken/inflationary economy — or reward-chasing displacing learning | Partially instrumented (`quest_claimed`) |
-| Social | League weekly retention by final rank | Detects leaderboard demotivation (§2.2.6) | ⬜ needs a rollover-retention query |
-| Reliability | Crash-free session rate | Gated by P0.3 monitoring | Instrumented (`exception` events) |
-| Monetization | Trial→paid conversion; Pro retention | Judges Phase 4 packaging | Existing Stripe data |
+| Bank | Questions | Concepts covered in its own bank | Exam status |
+|---|---:|---|---|
+| Exam P | 716 | 65 / 72 | ready |
+| Exam FM | 461 | 91 / 91 | ready |
+| MAS-I | 281 | 178 / 178 | ready |
+| DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | ready |
+| Exam 7 | 144 | 26 / 29 | ready (2026-10-16) |
+| MAS-II | 146 | 79 / 109 | beta |
+| Exam 5 | 349 | 129 / 138 | beta |
+| Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
+| Exam 8 | 139 | 32 / 38 | beta |
+| Exam 9 | 270 (149 off-syllabus) | 56 / 66 | beta |
+| PCPA, 6U | none | 0 / 30, 0 / 80 | beta, development |
+| SOA past FM (29 exams) | none | — | development |
 
----
+Fact Check status by file type:
 
-## 6. Risk register
+| | Verified | In review | Disputed | Stale | Unverified | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Concepts | 608 | 9 | 2 | 0 | 770 | 1,389 |
+| Exam pages | 21 | 3 | 0 | **19** | 0 | 43 |
+| Questions | 2,012 | 1 | 0 | 2 | 1,326 | 3,341 |
+| Resources | 40 | 0 | 0 | 0 | 708 | 748 |
+| **All** | **2,681 (48.6%)** | 13 | 2 | 21 | 2,804 | 5,521 |
 
-- **Gamification vs. learning integrity.** Volume-based rewards can encourage grinding
-  easy questions. _Mitigation (live):_ XP and quests weight hard + decaying concepts;
-  revive quests only appear when concepts have actually decayed. _Watch:_ per-concept
-  retention (Phase 2), not just minutes.
-- **Overjustification / reward dependence** _(new)._ As the economy grows, extrinsic
-  rewards can crowd out intrinsic motivation to learn (§2.2.6). _Mitigation:_ keep
-  rewards claim-based and informational; monitor the quest-vs-plan adherence ratio; do
-  not raise reward sizes to fix engagement dips — fix the learning value instead.
-- **Streak burnout / dark patterns.** Aggressive reminders erode trust. _Mitigation:_
-  freezes + same-day repair are live; the shipped daily email is opt-in with quiet days
-  and learning-state framing — hold web push (P1.3) to the same bar, and judge both on
-  reminder→session conversion, not sends (the conversion event is not yet wired).
-- **Leaderboard demotivation** _(new)._ Bottom-of-cohort finishes can churn exactly the
-  strugglers who most need the app. _Mitigation:_ leagues are opt-in and reset weekly;
-  add the rank-split retention metric before building any further social surface.
-- **Refactor regressions.** Splitting `Flashcards.tsx` risks breaking the collect flow.
-  _Mitigation:_ the E2E net (P0.5) now exists — but it only covers signed-out paths, so
-  extend specs to the signed-in collect/mastery flow before the P3.1 dedicated pass.
-- **God-component compounding** _(elevated further)._ Each Phase 1/2 feature that landed
-  inside `Flashcards`/`ReadinessCard` made the eventual split harder — `Flashcards.tsx`
-  gained **+614 lines** since the last revision (now 3,450) as the flashcard-experience
-  work all landed in place. _Mitigation:_ enforce the "split as you touch" rule from P3.1
-  now, and treat the `Flashcards.tsx` dedicated pass as no longer deferrable.
-- **Economy inflation.** Quests added a real earn loop. _Mitigation:_ the earn/spend
-  balance metric exists — actually review it before adding new sources (referrals P4.2
-  will add another).
-- **Scope creep from Research.** It's a big surface. _Mitigation:_ keep it parked until
-  Phase 4 and gate reactivation on the depth work (P2.4 upper-exam content) landing first.
+There are **2 open critical findings**, both on Exam 6C: *MCT* and *Capital Required*. The
+percentage verified fell from 49.9% because about 1,560 new pages were added unverified,
+not because anything regressed.
+
+**Built, but not operating.** These are the "promise unbacked" items, and they rank first:
+
+- **CI is red,** so the gate isn't stopping anything.
+- **The weekly Validate Sweep has never run the agent.** Its runs skip the agent step,
+  so `ANTHROPIC_API_KEY` is evidently not set, and the 2026-10-05 run failed at "Check the record". Every one of the 24 `_runs` summaries
+  is from a hand-run session.
+- **Reader reports aren't syncing.** The sync step has no Supabase credentials, so readers'
+  reports never reach the `.verify` logs.
+- **The daily study-plan email may not be sending.** It was found undeployed on 2026-09-28
+  and then wired into `deploy-functions.yml`, but no record shows the Resend setup or a
+  successful smoke test.
+- **Listen recordings play nowhere.** Two have been built; none has been uploaded.
+- **Errors aren't collected.** `VITE_ERROR_ENDPOINT` is unset, so production errors reach
+  only GA4 `exception` events.
 
 ---
 
-## 7. Suggested immediate next steps
+## 3. Priorities
 
-Since the last revision the Exam FM comprehension-check batch, the daily-email reminder
-channel (P1.3 half), and the recent-mistakes card (P2.8 first surface) all shipped. The
-next three, in order:
+Each lane runs in parallel; within a lane, items are worked in the order listed. IDs refer
+to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 
-1. **P2.7 — Confidence & calibration.** Now the highest-leverage open item: it is a small
-   surface (one tap per question), a pure-lib engine, and it has a *concrete downstream
-   consumer already built* — the recent-mistakes card (P2.8) can immediately prioritize
-   high-confidence errors once confidence is captured. It also upgrades readiness scoring
-   and trains the metacognitive skill exams actually punish.
-2. **P2.2 (finish) — Timed, sitting-shaped mock exams.** The mode skeleton exists; adding
-   the timer, weighted assembly from `data/examSittings.ts`, and the post-exam readiness
-   delta turns it into the product's summative-assessment pillar — and the natural Pro
-   unit for P4.3.
-3. **Instrument + extend the two just-shipped surfaces.** Add the reminder→session
-   conversion event the daily email (P1.3) needs to prove it works, and grow the
-   recent-mistakes card into a true spaced mistakes deck (P2.8) — delayed re-asks
-   interleaved into normal sessions. Both are small follow-ons that turn a shipped surface
-   into a measured, complete one. Then author the Exam 5 comprehension-check batch (P1.5).
+### 3.1 Now
 
-In parallel, apply the P3.1 "split as you touch" rule to whichever god component the
-next feature lands in — and schedule the dedicated `Flashcards.tsx` pass, now 3,450 lines
-and still the fastest-growing file. The debt is growing faster than it's being paid.
+**Lane 1, engineering health (fix the gate first):**
+1. **E1: get CI green, then enforce it.** Fix the 11 e2e failures. Gate `tour.spec.ts` on
+   `TOUR_ENABLED` rather than deleting it. Then **D14**: make the CI checks required on
+   `main`. Until this is done, every other "✅ with tests" in this file is weaker than it
+   looks.
+2. **E3: move the question bank out of the entry chunk, and add a size budget to CI.**
+   This is a contained change to `vite.config.ts` and `main.tsx`. It unblocks E12 (the PWA)
+   and stops every question added from slowing the first paint for every reader.
+3. **E4: dependency hygiene.** Run `npm audit fix`, add `.github/dependabot.yml`, and
+   either document or lift the exact pin on `@supabase/supabase-js@2.39.0`.
+4. **E10: small cruft.**
+   - Move or delete the 4 stranded question files.
+   - Resolve the stray `comprehension-checks/exam-9/` file.
+   - Document the `+` space encoding in `wiki_link` in `CLAUDE.md`.
+   - Fix the stale `README.md` exam table and counts (G7).
+
+**Lane 2, operations (maintainer actions; no code needed):**
+1. **V1: give the Validate Sweep its secrets** (`ANTHROPIC_API_KEY`, the Supabase service
+   role), or decide not to run it on a schedule (D19). Then re-run it, and fix the
+   "Check the record" failure.
+2. **V2: get reader reports syncing**, using the same Supabase credentials.
+3. **G1: confirm the daily email is live.** Complete the Resend domain, edge secrets and
+   vault secrets, then run the smoke test (`daily-plan-email.md`), and record the result
+   in that doc.
+
+**Lane 3, content and Fact Check:**
+1. **C0: refresh the generated reports.**
+   - Regenerate `Validation Status.md` and `Concepts Without Review Questions.md`; both
+     fail `--check`.
+   - Refresh CONCEPT_GAPS' generated half, which still lists 633 missing resource pages
+     where there are now 0.
+   - Drop Exam 8's `"source_pages": "partial"` from `exam_catalog.json`.
+2. **V3: delta re-verify the 19 stale exam pages** (6U and 18 FSA pages). Only their links
+   were retargeted, in #1629, so the re-check is cheap.
+3. **V4 (Wave 3a): verify FM Q351–Q462**, 112 questions. This is the cheapest packet in the
+   vault, and it completes a ready exam.
+4. **C1: take Exam 8 to ready** (CAS publication plan step 4):
+   - fix the *Rating Class* catch-all;
+   - write questions for 6 concepts;
+   - verify 23 concepts, 12 readings and 132 questions.
+
+### 3.2 Next
+
+These are in order within each lane.
+
+**Engineering health:**
+- **E5: split the god components.** `Landing.tsx` first, because it is the one still
+  growing; then `Flashcards.tsx`.
+- **E6:** golden-vector tests binding `lib/leagues.ts` to its SQL, and `lib/dailyEmail.ts`
+  to its edge function.
+- **E7:** an error collector (an endpoint or Sentry).
+
+**Learning engine:**
+- **L1: instrument learning.** Add `concept_retention`, `reminder_opened` /
+  `reminder_session` and `mistake_reviewed`. Every A/B test in this lane waits on L1.
+- **L2:** confidence and calibration.
+- **L3:** a spaced mistakes deck. It consumes L2.
+- **L4:** finish the Practice Exam: syllabus-weighted assembly, a post-exam readiness
+  delta, and a hand-off to what to review next.
+
+**Content:**
+- **C2:** Exam 9.
+- **C3:** Exam 5.
+- **C4:** MAS-II.
+- **C5:** 6C. It is blocked on decisions D8 and V6.
+- **C9: write the SOA ASA-prelim publication plan.** None exists today.
+- **C13:** fix the converter dropping the opening paragraph of each examiner's report.
+- **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
+  link fixes).
+
+**Experiences:**
+- **X2:** a human review of Concept Craft's 5,587 AI-written relation labels. README's rule
+  is that nothing is published 100% AI-written without review.
+- **X8:** the visual-noise backlog, §3.3–§3.8, plus the edits it calls for in the style
+  guide.
+
+**AI and practitioner:**
+- **A2:** the rest of Tools §15 items 0–1: the Search page's Tools pill, grid undo, Tail
+  Factor, and Annuity solving for any unknown.
+- **A3:** replace Cowork's 24 sample entries with real documents.
+
+**Growth:**
+- **G2:** a path-preserving redirect from `wiki.actuarialnotes.com`, and Search Console.
+- **G3:** confirm the GA4 admin checklist is done.
+
+### 3.3 Later and parked
+
+**Later:**
+- E8 the accessibility pass
+- E9 codifying `components/ui/` against the style guide
+- E11 running the Supabase SQL tests in CI
+- E12 PWA and offline
+- L5 interleaving
+- L6 tunable spacing
+- L7 web push
+- C6 a PCPA bank
+- C7 6U
+- C10 the FSA modules
+- C12 the rest of the syllabus pipeline
+- C14 concept figures for the upper exams
+- C15 more distribution simulators
+- C16 resource-page leftovers
+- A1 personal progress over the connector (OAuth)
+- A2 Tools Phase 2 and later
+- G4 monetization packaging
+- G6 the leagues deferrals
+- X3 opening Actuaria to a cohort
+- X4 Listen at scale
+- X5 a simulated-learner live run
+- X6 more Projects briefs
+
+**Parked:**
+
+| Item | What would bring it back |
+|---|---|
+| R1 the Research tab | A decision to re-launch it, with E1, E3 and the upper-exam content (C2–C5) done first |
+| R2 comprehension checks | Decision D11 |
+| R3 the onboarding tour | A simpler rebuild |
+| A5 the in-app agent | Decision D2 |
+| G5 referrals | The economy metrics actually being read |
+| X3b Actuaria Phase 4 | Decision D16 |
+
+### 3.4 Proposed (not yet ranked)
+
+_Contributors add items here in a PR. The maintainer ranks them at the next review._
+
+- None yet.
+
+---
+
+## 4. Tracks
+
+Each track lists every open item, with its status, its tier and a link to the subplan that
+holds the detail. Shipped work is summarised once, at the head of its track, so this file
+doesn't repeat `CLAUDE.md`.
+
+### 4.1 E: Engineering health
+
+Shipped: app CI (`ci.yml`), content-validation CI, VERIFY CI (`verify-check.yml`), error
+capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 events),
+23 e2e specs, route-level lazy loading (15 `lazyRoute` routes), and the style guide.
+
+| ID | Item | Status | Tier | Notes and subplan |
+|---|---|---|---|---|
+| E1 | CI green on `main` | ⬜ red since 2026-08-23 | **Now** | 11 failing e2e tests. Gate `tour.spec.ts` on `TOUR_ENABLED`. Was P0.1 / P0.5. |
+| E2 | Required status checks on `main` | ⬜ | **Now** | Maintainer action (D14). Without it, E1 decays again. |
+| E3 | Question bank out of the entry chunk; CI size budget | ⬜ regressed (3.67 MB gzip entry) | **Now** | Make `virtual:questions-content` per exam and loaded with a dynamic import. Was P3.3. |
+| E4 | Dependency vulnerabilities and Dependabot | ⬜ | **Now** | 15 production vulnerabilities, 2 of them high. `uuid` via `@fortune-sheet` has no fix available. |
+| E5 | Split the god components | ⬜ | Next | `Landing` 1,720 (growing), `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
+| E6 | Golden vectors for the duplication contracts | ⬜ | Next | `leagues.ts` ↔ the leagues SQL; `dailyEmail.ts` ↔ the edge function. The pattern to copy is `passRates`. |
+| E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). |
+| E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |
+| E9 | Codify `components/ui/` against the style guide | 🟡 | Later | The style guide *is* the design system; the primitives aren't codified against it. Was P3.2. |
+| E10 | Cruft | ⬜ | **Now** | The 4 stranded question files; the stray `comprehension-checks/exam-9/` file; the `+` encoding written into `CLAUDE.md`; 45 lint warnings. |
+| E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand after touching the Actuaria migrations. |
+| E12 | PWA and offline | ⬜ | Later | Blocked on E3. Was P1.6. |
+
+### 4.2 L: The learning engine (Study Mode)
+
+Shipped:
+- the mastery ladder with decay;
+- the study plan (syllabus or heaviest-first order);
+- the readiness score, its ring and its delta arrow;
+- streaks, XP and the daily goal, quests and leagues;
+- the daily study-plan email (built; see G1);
+- the recent-mistakes card;
+- **timed quizzes** (`quizTiming.ts`, 2026-09-25) and the **reveal mode** choice;
+- the Practice Exam format and the past-paper shelf, the PDF reader, and live pass rates;
+- quiz resume, question filters, the difficulty filter, and tappable concept mentions;
+- flashcards collected at Level 1, with the level-up ceremony;
+- flashcard sync across devices.
+
+| ID | Item | Status | Tier | Notes and subplan |
+|---|---|---|---|---|
+| L1 | Learning instrumentation | ⬜ | **Next, first** | Add `concept_retention` (a decayed concept answered correctly on revisit), `reminder_opened` / `reminder_session` and `mistake_reviewed`. Without them, §7's Learning and Re-engagement rows can't be measured. |
+| L2 | Confidence and calibration | ⬜ | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Was P2.7. |
+| L3 | Spaced mistakes deck | 🟡 the card has shipped | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. Was P2.8. |
+| L4 | Finish the Practice Exam | 🟡 timer and reveal ✅ | Next | Still to do: sitting-shaped, syllabus-weighted assembly; a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
+| L5 | Interleaving in quiz assembly | ⬜ | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
+| L6 | Tunable spaced-repetition intervals | ⬜ | Later | `DECAY_DAYS_*` are constants in `mastery.ts`. Needs L1. Was P2.1. |
+| L7 | Web push reminders | ⬜ | Later | Blocked on E12. Same rules as the email: opt-in, quiet days, framed as an invitation. Was half of P1.3. |
+| — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
+| — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
+| — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
+
+### 4.3 C: Content and publication
+
+Subplans:
+- `cas-publication-plan.md`: the seven gates, the CAS order of work, and its decisions.
+- `CONCEPT_GAPS_PLAN.md`: phases A–D are done.
+- `syllabus-pipeline.md` and `syllabus-pipeline-review.md`.
+- `pdf-question-pipeline.md`.
+- `resource-pages.md`.
+- `concept-figures.md`.
+- `distribution-simulators.md`.
+- The `question-writer` skill.
+
+The **rule** for this track: an exam changes status only through
+`python3 scripts/publication_readiness.py --check <exam>`.
+
+| ID | Item | Status | Tier | Notes |
+|---|---|---|---|---|
+| C0 | Refresh the generated reports | ⬜ stale | **Now** | `Validation Status.md` and `Concepts Without Review Questions.md` both fail `--check`. CONCEPT_GAPS still says 633 missing resources (there are 0). Exam 8's `source_pages: partial` should go. |
+| C1 | Exam 8 → ready | 🟡 2 of 7 gates | **Now** | CAS plan step 4. The *Rating Class* catch-all; 23 concepts; 12 readings (pages exist, none verified); 6 concepts with no question; 0 of 132 questions verified. |
+| C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Step 5. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
+| C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Step 6. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
+| C4 | MAS-II → ready | 🟡 1 of 7 | Next | Step 7. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
+| C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Step 8. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
+| C6 | A PCPA bank | ⬜ | Later | Step 9. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
+| C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Step 10. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
+| C8 | Close P and FM's own gaps | 🟡 each 5 of 7 | **Now** (via V4) | FM: Q351–Q462 unverified; the *Term of Annuity* catch-all. P: *Insurer* is in review; 6 generic concepts have no question. |
+| C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
+| C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
+| C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
+| C12 | Syllabus pipeline packages 4–6 and 8 | 🟡 | Later | Provenance `syllabus:` blocks for the 14 hand-made pages; a concept-page lint. `syllabus-pipeline-review.md` §5. |
+| C13 | The converter drops the opening paragraph of each examiner's report | ⬜ | Next | `pdf_extract.py`, found during the Exam 7 campaign. |
+| C14 | Concept figures for 6U, 7, 8, 9, PCPA and the DISCs | ⬜ | Later | Builders exist only for P, FM, MAS-I, MAS-II, 5 and 6C. |
+| C15 | More distribution simulators | ⬜ | Later | Pareto (both forms), Generalized Pareto, Weibull, Uniform, t, χ², F, GEV. All 10 static SVG embeds are already replaced. |
+| C16 | Resource-page leftovers | ⬜ | Later | 3 texts whose contents aren't available; Baer/Rendall (`resource-pages.md` §5). |
+
+### 4.4 V: Fact Check (VERIFY)
+
+Subplans: `verification.md` (the rules), `verification-plan.md` (the waves) and
+`validation-agent.md`.
+
+Waves 0 and 1 are done. Wave 2 is mostly done.
+
+| ID | Item | Status | Tier | Notes |
+|---|---|---|---|---|
+| V1 | The scheduled sweep actually runs | ⬜ never has | **Now** | Maintainer: set the secrets (D19). The 2026-10-05 run failed at "Check the record". |
+| V2 | Reader reports sync into the logs | ⬜ | **Now** | Same credentials as V1. Only 2 `human:` comments have ever reached the logs. |
+| V3 | Delta re-check of the 19 stale exam pages | ⬜ | **Now** | 6U and 18 FSA pages, made stale by link retargeting in #1629. |
+| V4 | Wave 3a: FM Q351–Q462 | ⬜ | **Now** | 112 questions in one cached packet. |
+| V5 | Waves 3b–5 | 🟡 Exam 7 and the DISCs done | rides C1–C7 | Each exam's campaign carries its own packets. |
+| V6 | The 2 open critical findings | ⬜ | Next | 6C's *MCT* and *Capital Required* (×1.5 vs ÷1.5). |
+| V7 | Run summaries for the Exam 7 and DISC-RM runs | ⬜ | Next | The 2026-10-11 runs have no `_runs` summary. Housekeeping. |
+| V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
+
+### 4.5 A: AI and practitioner products
+
+Subplans:
+- `ai-connector.md`
+- `actuarial-tools.md` (§15 next, §16 built)
+- `cowork.md`, `workflows.md`, `cowork-source-inventory.md`
+- `actuarial-agent-product-plan.md`
+
+Shipped:
+- **The MCP connector:** search, fetch, syllabi, concepts, practice and marking, prompts,
+  and the Agent Skill. It speaks both protocol eras.
+- **Actuarial Tools:** 35 tools, each reproducing published work in CI, and run over MCP.
+- **Cowork Sources:** 22 publishers, 50 documents, 26 of them real.
+- **Workflows:** the library, sub-workflows, CSV data, source tables, and *Run in Claude*.
+
+A standing rule: **the app calls no model and holds no key** (see the decision log, §6.2).
+
+| ID | Item | Status | Tier | Notes |
+|---|---|---|---|---|
+| A1 | Connector: personal progress (OAuth) and directory listings | ⬜ | Later | `ai-connector.md`, "Not yet". The listings happen outside the repo. |
+| A2 | Tools: the rest of V2, then Phase 1 | 🟡 | Next | The Search page's Tools pill; grid undo; "From a saved run"; Tail Factor; Annuity solving for whichever of PV, payment, *n* or *i* is unknown; yield-to-worst. After that: the MCP prompts, the `%%tool%%` marker, saved runs, HTTP/OpenAPI, and analytics (§8.6). Phase 2 tools and later are **Later**. Blocked datasets wait on D3. |
+| A3 | Cowork: fill the corpus | 🟡 P1 inventory done | Next | Replace the 24 samples with real documents. 703 `Resources/Books/` pages aren't listed in Cowork (the inventory's §4 count is stale). The P2 rows are open (IFRS 17 needs its vault page first). |
+| A4 | Cowork: who can see it | 🅿️ one account | — | Waits on D1. After Preview, Cowork is planned to be Pro-only (D13). |
+| A5 | An in-app Actuarial Agent | 🅿️ | Parked | Phase A was delivered *outside* the app, by the connector. Phases B–D (the ontology layer, an eval harness, task assistants) wait on D2. |
+| A6 | Doc hygiene in the AI plans | 🟡 | Next | §16's "not built … all of V2" line is fixed (2026-10-17). Still to fix: §11 says "tools mode". The datasets are bundled into `engine.js`, not under `ai/datasets/`. Workflows overtook Phase 4's "Analyses". |
+
+### 4.6 G: Growth, engagement and money
+
+Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md`,
+`store.md`.
+
+| ID | Item | Status | Tier | Notes |
+|---|---|---|---|---|
+| G1 | Confirm the daily email sends | 🟢 built; live state unknown | **Now** | Maintainer: Resend, the secrets, the smoke test. Record the outcome in the doc. |
+| G2 | SEO outside the repo | ⬜ | Next | A path-preserving `wiki.actuarialnotes.com` redirect (today it sends every path to the home page); submitting the sitemap. |
+| G3 | The GA4 admin checklist | ⬜ unverified | Next | 8 manual steps in `analytics-and-monitoring.md`. |
+| G4 | Monetization packaging | 🟡 "Pro" rename; Today's Study Plan is Pro-only | Later | Stripe hasn't changed since July. Waits on D13. Rule: never paywall the core retrieval loop. Was P4.3. |
+| G5 | Referrals | 🅿️ | Parked | Was P4.2. Comes back once the gem economy's metrics (§7) are actually read. |
+| G6 | Leagues' deliberate deferrals | ⬜ | Later | Realtime boards, study-group leagues (Actuaria's cohorts are the model to copy), league history. |
+| G7 | README is stale | ⬜ | **Now** (with E10) | Its exam table shows MAS-I, the DISCs and 7 as Beta / In development, and its counts are old (about 900 concepts, 2,000+ questions, about 140 sources). |
+
+### 4.7 X: Experiences and experiments
+
+| ID | Item | Status | Tier | Notes and subplan |
+|---|---|---|---|---|
+| X1 | Quiz Battle | ✅ | — | `quiz-battle.md` "Next": its ideas (more players, written papers, a rating) are deliberately out. |
+| X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,587 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
+| X3 | Actuaria: from one account to a cohort | 🟡 phases 0–3 built | Later | With one account, no cohort reaches `CREW_MIN`, so the risk pool and raids lie dormant. Waits on D1. Phase 4 (ranked play) is parked (D16). |
+| X4 | Listen recordings at scale | 🟡 | Later | Upload the first two; split long scripts; fix the numbers stall; choose the voice and the access tier (D12). |
+| X5 | Simulated learner: a first live run | ⬜ refused by the model's safeguards | Later | `simulations/runs/` is empty. Rework the persona prompt, then run it. |
+| X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
+| X7 | Store: Amazon prices | 🟢 | Later | Needs the `AMAZON_CREATORS_*` environment variables, or stays `price: null`. |
+| X8 | The visual-noise backlog | 🟡 §3.1, §3.2 and §3.9 done | Next | §3.3–§3.8 are open (the line references in the doc are stale), plus the style-guide edits in §6. The "Hover the graph" hint is false on touch screens. |
+
+### 4.8 R: Parked
+
+| ID | Item | Status | What would bring it back |
+|---|---|---|---|
+| R1 | The Research tab | 🅿️ both flags off | A maintainer decision, after E1 and E3, and after the upper-exam content (C2–C5). Two doc fixes are needed now: `research-ai-disabled.md` doesn't mention `RESEARCH_TAB_ENABLED`, and `research-corpus-plan.md`'s checklist hasn't been maintained (its boxes are unticked, though some of the topics now exist as `Resources/Books/` pages). Was P4.4. |
+| R2 | Comprehension checks (357 files) | 🅿️ rendered nowhere | D11: delete them, or keep them parked. |
+| R3 | The onboarding tour | 🅿️ `TOUR_ENABLED = false` | A simpler rebuild. Its e2e spec must follow the flag (E1). |
+
+---
+
+## 5. Dependencies to keep in mind
+
+- **E1 → everything.** A refactor (E5) without a working regression net is a gamble.
+- **E3 → E12 → L7.** You can't build a PWA on a 3.7 MB entry, and push needs a service
+  worker.
+- **L1 → L5, L6, and §7's Learning and Re-engagement metrics.**
+- **L2 → L3.** The mistakes deck is prioritised by confidence.
+- **V1/V2 → the credibility of every Fact Check badge**, and the README's claim of review.
+- **C (each exam) ↔ V (its packets).** An exam campaign is a verification campaign.
+- **`lib/tools/` → `quiz/api/_tools/engine.js` (`npm run tools:bundle`) → the connector →
+  Workflows' *Run in Claude*.** Tool names are public API.
+- **Cowork's growth is resource-page growth.** A real document enters Cowork only as a
+  `Resources/Books/` page.
+- **Actuaria → Quiz Battle.** It uses one reducer, so Actuaria's Phase 4 would change Quiz
+  Battle's "nothing saved" rule.
+- **The approved-email lists.** The same one address is the whole of both the Cowork list
+  and the Actuaria list. Actuaria's list is also mirrored in SQL. Opening either product to
+  more people (D1) means changing each place.
+
+---
+
+## 6. Decisions
+
+### 6.1 Open: the maintainer's to make
+
+Where a default is given, sessions build with it until the decision is made.
+
+| ID | Decision | Source | Blocks | Default meanwhile |
+|---|---|---|---|---|
+| D1 | Who beyond the one approved account sees **Cowork** and **Actuaria** | `appMode.ts`, `actuaria/access.ts` | A4, X3 | Approved accounts only |
+| D2 | Is an **in-app agent** still wanted, given that the app calls no model? If yes: student or practitioner first, in-app or separate, and how it's priced | agent plan §12 | A5 | No in-app agent; the connector is the agent surface |
+| D3 | **Dataset licence terms** for the SOA tables, the CAS triangles, and the Bank of Canada data | tools §14 #6 | A2 datasets | Leave them out |
+| D4 | Tools access and pricing; HTTP API keys; open-sourcing the engine | tools §14 #2–8 | A2 HTTP | Free; no HTTP endpoint |
+| D5 | Does a bank written entirely by the vault count as **ready**? The DISCs were promoted on that assumption | CAS plan §5 D1 | the C track | Yes, but record it |
+| D6 | Verify the **off-syllabus** questions (249 CAS)? | CAS D2, verification §7.3 | V5 sizing | No |
+| D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | CAS D3, verification §7.6 | C9, MAS-II | Yes |
+| D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | CAS D4, verification §7.2 | C3, C5 | — (needs a call) |
+| D9 | The **46 orphan concepts** | verification §7.4 | V5 | Leave them unverified |
+| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | CAS §4.1 | — | Keep them as they are |
+| D11 | **Delete** the retired comprehension checks (the folder, the parser, the skill), or keep them parked | `flashcard-collection.md` | R2 | Keep them parked |
+| D12 | Listen: the voice; whether it is Pro-only | `listen-recordings.md` | X4 | The test voice; free |
+| D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
+| D14 | **Make CI a required check on `main`** | the 2026-08-31 assessment | E2 | — (a repo setting) |
+| D15 | The 9 ambiguous concept-gap targets, and the 21 stubs | CONCEPT_GAPS §13 | C11 | Link the existing pages, as proposed |
+| D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
+| D17 | The DISC link design | CAS D5 | — | The current design |
+| D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
+| D19 | Run the Validate Sweep on a schedule (API cost) or by hand | `validation-agent.md` | V1 | By hand |
+
+### 6.2 Settled: don't re-open without a new reason
+
+- **Nothing is invented.** Figures, ratios, links, chapters and prices are transcribed with
+  their source, never constructed. This holds across the vault, the Store, Tools, Cowork
+  and the pass rates.
+- **The app calls no model and holds no key.** The in-browser API-key deploy in Workflows
+  was removed as a security risk. *Run in Claude* goes through the connector instead.
+- **Comprehension checks no longer gate collection.** A card is collected at Level 1
+  (2026-09-25).
+- **The Exam Readiness Score is the one readiness number.** Keystone concepts were removed
+  (2026-10-02).
+- **The Fading Concepts card was removed.** The heatmap keeps its engine.
+- **The onboarding tour is parked**, pending a simpler rebuild.
+- **The Research tab stays parked.** Stop re-litigating it at every review (the 2026-08-31
+  assessment). See R1 for what would bring it back.
+- **Referrals are parked** until the economy metrics are read.
+- **Quiz Battle saves nothing.** Matchmaking pairs on the exam alone.
+- **The Store sells nothing.** The Gem Shop is the only place gems are spent.
+- **An exam's status changes only through `publication_readiness.py --check`.**
+- **CAS D6 was settled the open-source way** (2026-10-11).
+- **Actuaria D1 is resolved.** D2–D8 are built with their defaults.
+- **The Actuarial Agent's Phase A ships as the MCP connector, outside the app.**
+
+---
+
+## 7. Success metrics
+
+| Category | Metric | Status |
+|---|---|---|
+| Activation | % of new users finishing a first quiz on day 0 | Instrumented (`lib/funnel.ts`) |
+| Retention | D1 / D7 / D30 return | Instrumented (`day2_return` + GA4) |
+| Engagement | Median streak; daily-goal completion | Instrumented |
+| Learning | Per-concept retention: correct on revisit after the decay window | ⬜ L1 |
+| Re-engagement | Daily email → session conversion | ⬜ L1, and G1 first |
+| Calibration | The gap between confidence and accuracy | ⬜ L2 |
+| Economy | Gems earned vs spent; quest-vs-plan adherence | 🟡 `quest_claimed` only |
+| Social | League retention by final rank | ⬜ needs a rollover query |
+| Content trust | % of files verified (48.6%); open critical findings (2); stale files (21) | Measured (`Validation Status.md`) |
+| Publication | Exams ready (7 of 43); gates passed per beta exam | Measured (`publication_readiness.py`) |
+| Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; **CI is red** |
+| Performance | Entry chunk gzip (today 3,667 kB); LCP / INP | ⬜ E3 adds the budget |
+| Monetization | Trial → paid; Pro retention | Stripe data |
+
+---
+
+## 8. Plan index
+
+Every planning document in the repo, what it is for, and how healthy it is. A doc marked
+**needs refresh** says something about status that the code no longer bears out; its row in
+§4 gives the true status.
+
+| Document | Role | Covers | State | Last touched |
+|---|---|---|---|---|
+| `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
+| `docs/cas-publication-plan.md` | Subplan: CAS exams to ready | C1–C7 | Active, current | 2026-10-16 |
+| `docs/verification-plan.md` | Subplan: verification waves | V1–V8 | Active. Its snapshot is from 9 Oct | 2026-10-09 |
+| `CONCEPT_GAPS_PLAN.md` | Subplan: missing concept pages | C11 | Phases A–D done. **Needs refresh** (its generated half) | 2026-10-10 |
+| `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
+| `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
+| `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
+| `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
+| `docs/syllabus-pipeline-review.md` | Review and work packages | C12 | Packages 1–3 and 9 done; 4–8 partial | 2026-10-05 |
+| `docs/actuarial-agent-product-plan.md` | Plan: an in-app agent | A5 | 🅿️ Phase A shipped as the connector; the rest waits on D2 | 2026-10-09 |
+| `docs/research-corpus-plan.md` | Plan: the Research corpus | R1 | 🅿️ its checklist hasn't been maintained | 2026-10-05 |
+| `docs/research-ai-disabled.md` | Re-enable checklist | R1 | 🅿️ Needs to mention `RESEARCH_TAB_ENABLED` | 2026-06-14 |
+| `docs/comprehension-check-backlog.md` | Backlog | R2 | 🅿️ parked | 2026-10-05 |
+| `docs/assessment-2026-08-31.md` | A one-off audit | — | **Historical.** Its recommendations are folded in here | 2026-10-05 |
+| `docs/validation-agent-first-run.md` | A first-run record | — | Historical; every item closed | — |
+| `docs/pcpa-project.md`, `quiz-battle.md`, `concept-craft.md`, `store.md`, `workflows.md`, `cowork.md`, `ai-connector.md`, `listen-recordings.md`, `simulated-learner.md`, `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md` | Feature design docs. Each has a short "next", "not yet" or "deferrals" list | X, A and G rows | Reference | various |
+| All other `docs/*.md` | How a module works | — | Reference; no open items | various |
+
+---
+
+## 9. Principles
+
+These hold for every item in §4. When two items tie on §0.3, the one that serves these
+principles better wins.
+
+**Engineering:**
+- **Foundations before features.** A red gate, a stalled pipeline or a bloated entry chunk
+  comes before a new surface.
+- **Small, pure, tested modules.** Logic goes in `lib/`; React stays thin. Split a big file
+  as you touch it.
+- **Flag every risky launch.** Annotate the flag `: boolean`, so both branches still
+  compile. Never "clean up" parked code as if it were dead.
+- **Measure what matters.** No engagement or learning feature ships without the event
+  that judges it.
+- **Operate what you build.** A system with a badge on screen (Fact Check, the email, the
+  recordings) has to be running before it is extended.
+
+**Learning science** (the lens for Study Mode; the reasoning is in the 2026-07-24 revision
+of this file, in git history):
+1. **Retrieval beats re-reading.** Never pay the same XP for a passive surface.
+2. **Spacing and desirable difficulty.** Decay forces revisits, and XP favours hard and
+   decaying concepts. Interleaving (L5) is the open gap.
+3. **Calibration.** Knowing what you know matters as much as knowing it (L2).
+4. **Errors are the most valuable learning events.** A miss deserves elaborative feedback
+   and a re-test after a delay (L3).
+5. **Scaffold novices.** A first contact with a concept should be the concept page (the
+   pre-quiz concept list), not a cold retrieval attempt.
+6. **Self-determination, not coercion.** Rewards are informational and claimed by the
+   learner; streak mechanics are forgiving; leagues are opt-in and reset weekly. Don't
+   raise rewards to fix an engagement dip; fix the learning value instead.
+7. **Implementation intentions.** A reminder fires at the time the learner chose, and
+   reads as an invitation.
+
+**Content:** nothing is invented; the vault is never 100% AI-written without human review;
+a fact is verified only against a citable source (`verification.md`, P1).
+
+---
+
+## 10. Risks
+
+| Risk | Signal | Mitigation |
+|---|---|---|
+| **The gate is decorative.** CI has been red for 8 weeks and PRs merge over it | CI on `main` | E1 + E2 now. Treat a red `main` as a stop-the-line event. |
+| **Trust surfaces with nothing behind them** (Fact Check, the email, Listen) | the §2 "built, not operating" list | Operate before extending. Lane 2 of Now. |
+| **The bundle grows with the content** | entry chunk gzip | E3 + a CI budget. Every new question currently slows first paint for everyone. |
+| **Breadth outruns depth.** About 128 PRs since August, mostly new surfaces, while Phase 2 learning items didn't move | §4.2 rows unchanged at a review | §0.3 rule 4: new surfaces wait until their lane's rules 1–3 are clear. |
+| **AI-written content without review** (Craft labels, concept-gap pages) | unverified counts | X2, V8. The README's promise of human review. |
+| **Gamification drifting from learning** | quest-vs-plan ratio; per-concept retention | L1 first; keep rewards claim-based. |
+| **Products gated to one account** | D1 open | Decide D1. A cohort feature can't be tested by one person. |
+| **Dependency vulnerabilities** | `npm audit` | E4 + Dependabot. |
+| **Copied logic drifting apart** (leagues SQL, email edge function) | none today | E6 golden vectors. |
+| **God components spreading** | line counts | E5; split as you touch. |
+
+---
+
+## Appendix A: Re-measuring §2
+
+Run these at every review. They are read-only, apart from `npm run build`, which writes to
+`quiz/dist/`.
+
+```bash
+# Engineering
+cd quiz && npm ci && npm test && npm run lint && npm run build   # build prints chunk sizes
+npm audit --omit=dev
+find src -name '*.tsx' -not -name '*.test.tsx' | xargs wc -l | sort -n | tail -15
+grep -rl 'prefers-reduced-motion' src | wc -l
+ls e2e/*.spec.ts | wc -l
+# CI on main: GitHub → Actions → CI, branch main (or the GitHub MCP tool actions_list)
+
+# Content and Fact Check (from the repo root)
+python3 scripts/publication_readiness.py              # CAS gates; --body SOA, --exam <id> for detail
+python3 scripts/verify_check.py                       # 0 errors expected
+python3 scripts/generate_validation_status.py --check # exit 1 = Validation Status.md is stale
+python3 scripts/generate_coverage_report.py --check   # exit 1 = the coverage report is stale
+python3 scripts/find_concept_gaps.py                  # --check exits 1 while a pinned gap is open
+for d in questions/*/; do echo "$d $(find "$d" -name '*.md' | wc -l)"; done
+ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
+```
+
+## Appendix B: Revision history
+
+- **2026-10-17. Consolidation.** This file became the one roadmap for every product line,
+  absorbing:
+  - the 2026-07-24 learning-app roadmap (whose phases are mapped onto tracks E, L and G);
+  - the 2026-08-31 assessment (now historical);
+  - the status of every subplan.
+
+  It also added the governance rules (§0), the decision register (§6) and the plan index
+  (§8). What changed since 2026-07-24:
+  - **Shipped:** timed quizzes and the reveal mode (P2.2 is mostly done); the report flow
+    (P2.3); VERIFY at scale (49% verified); seven exams ready; banks for 5, 6C, 7, 8, 9,
+    MAS-II and the DISCs (3,341 questions); the AI connector; Actuarial Tools; Cowork and
+    Workflows; Quiz Battle; Concept Craft; the Store; Actuaria phases 0–3; Projects (PCPA);
+    SEO prerendering; the PDF → bank and syllabus pipelines.
+  - **Retired:** P1.5 (comprehension checks) and P2.5 (the fading concepts card).
+  - **Regressed:** CI red since 08-23; the entry chunk 3.2× larger; production
+    vulnerabilities 6 → 15.
+  - **Unchanged:** P2.1, P2.6, P2.7, P2.8 (the deck), P1.6, P3.1–P3.4, P4.2–P4.4.
+- **2026-07-24.** The daily study-plan email (P1.3, half) and the recent-mistakes card
+  (P2.8, first surface).
+- **2026-07-11 and earlier.** Phases 0 and 1 shipped: CI, monitoring, analytics, e2e,
+  streaks, XP, quests, leagues.

@@ -1271,7 +1271,7 @@ method's concept pages in the concept popup, loading the wiki bundle on that fir
 `e2e/tools.spec.ts` covers the sidebar, a live recompute, an error kept to one line, Send to…,
 a run link and the phone fit.
 
-**Not built yet**, from §3–§11, besides all of V2 (§11, §18): the six Phase 1 tools and pieces in §15; the agent eval (§9.4);
+**Not built yet**, from §3–§11 (V2 is built, apart from what §16.1 lists): the six Phase 1 tools and pieces in §15; the agent eval (§9.4);
 `POST /api/tools/{id}` and the OpenAPI export (§7.2); saved runs and Analyses (§6.5, §8.5);
 analytics events (§8.6); the notation and working as KaTeX rather than plain text.
 

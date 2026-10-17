@@ -1,0 +1,36 @@
+# Busy, impatient student cramming P around a job. Skims and guesses. Finds
+# out which pages only teach if read word for word, and which questions
+# reward pattern-matching.
+name: Jordan (crams and guesses)
+exam: P
+description: >
+  Third-year economics student who booked Exam P on a whim four weeks out and
+  is studying around a part-time job. Took intro statistics and two calculus
+  courses. Learns from practice questions, not from reading.
+prior_knowledge:
+  calculus: two semesters, B- grades; integrals by rote, rarely by understanding
+  algebra: fine
+  probability: >
+    intro statistics — means, variance, the normal table, a little binomial;
+    no continuous densities beyond the normal
+  insurance: none
+  mastered_concepts: [Normal Distribution]
+gaps:
+  - Continuous densities and CDFs
+  - Joint distributions
+  - Insurance payment variables
+  - Named distributions beyond the normal and binomial
+traits:
+  reading_thoroughness: 0.2
+  skim_tendency: 0.85
+  derivation_patience: 0.2
+  math_anxiety: 0.3
+  guess_tendency: 0.7
+  confidence_bias: 0.6
+  reading_speed_wpm: 320
+study_strategy: practice-first
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 12
+feedback: solution
+seed: 103

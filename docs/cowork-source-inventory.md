@@ -126,6 +126,12 @@ is where a reader looks for them.
 
 ## 4. The cheapest work available: vault pages with no Cowork row
 
+> **Counts stale (re-measured 2026-10-17).** `Resources/Books/` now holds **729** pages and
+> Cowork links **26** of them, so about **703** have no Cowork row — by publisher, SOA 189,
+> CIA 55, CAS 38, NAIC 26, AAA 20, IAA 20, ASB 15, OSFI 13. None of the 51 pages named below
+> has been added yet, and all still exist. The reasoning below holds; re-run the count before
+> working from its numbers. Roadmap item **A3**.
+
 After the P1 pass, **73** of the vault's 97 `Resources/Books/` pages have no Cowork resource
 pointing at them. 22 of those are out of scope or need fixing first — 18 exam-preparation
 texts from academic publishers, and 4 pages carrying no `Publisher:` front matter at all

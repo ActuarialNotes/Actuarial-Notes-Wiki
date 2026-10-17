@@ -6,7 +6,13 @@ This is a **product plan for a new product line**: an AI **Actuarial Agent** gro
 the [Actuarial Notes Knowledge Base](https://wiki.actuarialnotes.com) (this repo's content
 vault) and the [Actuarial Ontology](https://github.com/Actuarial-Notes/Actuarial-Ontology).
 
-> **This is not the roadmap.** `docs/roadmap.md` plans the *gamified learning app* for exam
+> **Roadmap status (2026-10-17):** `docs/roadmap.md` now tracks this plan as item **A5**,
+> parked on decision **D2** — whether an in-app agent is still wanted now that the app calls
+> no model and holds no key (`docs/workflows.md`), and Phase A ships as the MCP connector.
+> §13's next steps (prototype on the Research tab's Ask, an endpoint on the `api/chat.js`
+> pattern) predate that stance; don't start them until D2 is decided.
+>
+> **This is a separate product line.** `docs/roadmap.md` plans the *gamified learning app* for exam
 > candidates — mastery, streaks, quests, study plans. That product answers "help me pass my
 > exam." This plan answers a different question — "help me *do* actuarial work" — and is
 > deliberately kept separate: different users, different value proposition, different trust

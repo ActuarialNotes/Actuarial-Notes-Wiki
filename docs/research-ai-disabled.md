@@ -8,6 +8,11 @@ to re-enable.
 
 ## The switch
 
+> **Two flags, not one (2026-10-17).** Since this note was written the whole tab gained its own
+> gate, `RESEARCH_TAB_ENABLED` (also `false`): it drops the nav entry and redirects
+> `/research` to `/wiki`. Flipping `RESEARCH_AI_ENABLED` alone shows nothing while the tab is
+> off. Re-enabling is a maintainer decision — `docs/roadmap.md` item **R1**.
+
 `quiz/src/lib/featureFlags.ts`:
 
 ```ts

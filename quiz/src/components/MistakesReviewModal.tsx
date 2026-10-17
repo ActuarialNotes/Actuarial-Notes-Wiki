@@ -14,6 +14,8 @@ import { recordReviewAnswers, type QuizResponse } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
+import { trackMistakeReviewed } from '@/lib/analytics'
+import { daysSince } from '@/lib/learningSignals'
 
 interface Props {
   /** The missed questions to work through, most recent first. */
@@ -179,10 +181,17 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, o
 
   function commit(answer: string) {
     if (!question || responses[question.id]) return
+    const correct = isAnswerCorrect(question, answer)
     // Right answers get the arpeggio; wrong ones stay silent and end the run —
     // same contract as the quiz (docs/sound-design.md).
-    if (isAnswerCorrect(question, answer)) play('correct')
+    if (correct) play('correct')
     else resetCombo('correct')
+    trackMistakeReviewed({
+      question_id: question.id,
+      exam: question.exam,
+      is_correct: correct,
+      days_since_miss: daysSince(current?.answeredAt, new Date()) ?? 0,
+    })
     setResponses(prev => ({
       ...prev,
       [question.id]: { chosen: answer, timeSpent: Math.round((Date.now() - shownAt.current) / 1000) },

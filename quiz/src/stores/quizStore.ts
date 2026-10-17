@@ -17,7 +17,8 @@ import { LEAGUES_ENABLED, QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
-import { trackConceptCollected } from '@/lib/analytics'
+import { trackConceptCollected, trackConceptRetention } from '@/lib/analytics'
+import type { RetentionAnswer } from '@/lib/learningSignals'
 import type { PendingAnswer } from '@/lib/pendingAnswer'
 import { normalizeSearch, type QuizSessionStatus } from '@/lib/quizResume'
 
@@ -66,6 +67,22 @@ function conceptsForQuestion(q: Question): string[] {
     if (slug) names.add(slug)
   }
   return [...names]
+}
+
+// The answered questions, in order, as the retention signal reads them
+// (lib/learningSignals.ts): which concepts each touched and whether it was right.
+function retentionAnswers(
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+  manualGrades: Record<string, SelfGrade>,
+): RetentionAnswer[] {
+  const answers: RetentionAnswer[] = []
+  for (const q of questions) {
+    const chosen = responses[q.id]?.chosen
+    if (chosen === undefined) continue
+    answers.push({ exam: q.exam, concepts: conceptsForQuestion(q), isCorrect: effectiveIsCorrect(q, chosen, manualGrades) })
+  }
+  return answers
 }
 
 // The answered questions of a completed quiz, reduced to the shape both the XP
@@ -657,6 +674,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }).map(q => q.id)
     const correctCount = correctIds.length
 
+    // Before any mastery write: which decayed concepts did this quiz revisit,
+    // and were they still known? (roadmap L1)
+    trackConceptRetention(retentionAnswers(questions, responses, manualGrades), priorMasteryRecords)
 
     if (!userId) {
       // Unauthenticated: no DB to fetch from, so compute transitions from the
@@ -897,6 +917,9 @@ export async function recordReviewAnswers(
   const correctCount = answered.filter(q =>
     effectiveIsCorrect(q, responses[q.id]!.chosen, manualGrades),
   ).length
+
+  // A missed question's concepts can be past their decay window too.
+  trackConceptRetention(retentionAnswers(answered, responses, manualGrades), priorMasteryRecords)
 
   let masteryTransitions: MasteryTransition[]
   if (userId) {

@@ -43,7 +43,7 @@ import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
-import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect } from '@/lib/analytics'
+import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect, trackReminderSession } from '@/lib/analytics'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -519,6 +519,7 @@ export default function Quiz() {
         return r && isAnswerCorrect(q, r.chosen)
       }).length
       trackQuizCompleted({ mode, exam: storeQuestions[0]?.exam ?? 'Unknown', question_count: storeQuestions.length, correct_count: correctCount })
+      trackReminderSession({ exam: storeQuestions[0]?.exam ?? 'Unknown', question_count: storeQuestions.length, correct_count: correctCount })
       playSound('complete')
       // Persist essay self-grades collected on the reveal='end' self-grade screen
       // into the store (keyed `${id}__${label}`) so they're saved with the session

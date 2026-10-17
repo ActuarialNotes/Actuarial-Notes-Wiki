@@ -6,7 +6,7 @@ import { supabase } from './lib/supabase'
 import { hydrateFromSharedCookie } from './lib/hydrateSession'
 import type { Session } from '@supabase/supabase-js'
 import { initErrorMonitoring } from './lib/errorMonitoring'
-import { identifyUser, initAnalytics, trackDay2ReturnOnBoot } from './lib/analytics'
+import { identifyUser, initAnalytics, trackDay2ReturnOnBoot, trackReminderOpenedOnBoot } from './lib/analytics'
 
 // Capture uncaught errors and unhandled rejections from the very first tick,
 // before any React render can throw.
@@ -15,6 +15,9 @@ initErrorMonitoring()
 // Decide whether this visit is measured (production, a person, not opted out)
 // and start Google Analytics if so — see lib/analytics.ts.
 initAnalytics()
+// A landing from the daily study-plan email — read off the URL now, before the
+// router or a redirect can drop its query (lib/learningSignals.ts).
+trackReminderOpenedOnBoot()
 
 async function bootstrap() {
   // Detect email confirmation before getSession() strips the hash.

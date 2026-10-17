@@ -120,6 +120,7 @@ limits (`fitParams`: 100 characters; page params longer).
 | Pages & people | `page_view`, `first_interaction` |
 | Reading — no URL of their own | `content_view` (`content_type`, `content_name`, `surface`: `popup` for the concept popup's open page, `reader` for the PDF reader), `search` (GA4's recommended event: `search_term`, `search_scope`) |
 | Studying | `quiz_started`, `question_answered`, `quiz_completed`, `flashcard_reviewed`, `search_query` (a quiz built on the Search page), `battle_started` (`format`: `same_screen` / `room_host` / `room_guest` / `matched`), `project_started`, `craft_combined` (a pair dropped together on a Concept Craft board — `exam`, `topic`, `outcome`, the connection's `strength` and how many concepts a new one `made`) `craft_topic_completed` and `craft_medal_won` (the `medal`, with how many `connections` it was won in on a board of how many `concepts`; docs/concept-craft.md) |
+| Learning (roadmap L1, `lib/learningSignals.ts`) | `concept_retention` (a concept answered for the first time after its decay window: `concept`, `exam`, `retained` — that answer — its earned `level` and `days_since_correct`; once per decay episode per device, from `quizStore` for quizzes and the fix-mistakes reviewer), `reminder_opened` (a landing with a reminder's `utm_source`; `channel`), `reminder_session` (the first quiz finished within 6 h of that landing: `channel`, `exam`, `question_count`, `correct_count`, `minutes_after_open`), `mistake_reviewed` (a missed question answered again in the reviewer: `question_id`, `exam`, `is_correct`, `days_since_miss`) |
 | Gamification | `streak_extended`, `xp_earned`, `daily_goal_met`, `quest_completed`, `quest_claimed`, `daily_quests_cleared`, `league_joined`, `league_left` |
 | Money & accounts | `upgrade_clicked`, `store_outbound_clicked` (product, seller, aisle — docs/store.md), `login`, `sign_up` |
 | Reliability | `exception` (from `errorMonitoring.ts`) |
@@ -186,14 +187,30 @@ Several of these must be done in GA4 itself — the code can't:
    explorations of anything older).
 5. **Admin → Custom definitions**, so the params show in reports — event-scoped:
    `content_type`, `content_name`, `surface`, `search_scope`, `input_type`, `mode`,
-   `exam`, `format`, `project`, `language`, `product`, `seller`, `aisle`, `concept`;
+   `exam`, `format`, `project`, `language`, `product`, `seller`, `aisle`, `concept`,
+   `retained`, `level`, `channel`, `is_correct`;
    user-scoped: `account_type`, `credential_track`, `theme`; custom metric:
-   `seconds_to_interaction` (seconds).
+   `seconds_to_interaction` (seconds), and for the learning events `days_since_correct`,
+   `days_since_miss` and `minutes_after_open`.
 6. **Admin → Key events**: `sign_up` (re-mark it if `signup` was one), `first_quiz`,
    `quiz_completed`, `day2_return`, `upgrade_clicked`.
 7. **Admin → Reporting identity → Observed** (user id, then device).
 8. Check it works: open `https://quiz.actuarialnotes.com/?ga_debug=1` and watch
    **Admin → DebugView**.
+
+### Reading the learning events
+
+The roadmap's §7 *Learning* and *Re-engagement* rows, as GA4 explorations:
+
+- **Per-concept retention** — `concept_retention` with `retained = true` ÷ all
+  `concept_retention`; break it down by `level` and bucket `days_since_correct` to see
+  whether the decay windows in `mastery.ts` (`DECAY_DAYS_*`) are too long or too short
+  (L6 tunes them on this).
+- **Email → session conversion** — users with `reminder_session` ÷ users with
+  `reminder_opened`; the email's sends are counted server-side (`last_sent_date`), so
+  opens ÷ sends needs the edge function's run log.
+- **Mistakes fixed** — `mistake_reviewed` with `is_correct = true` ÷ all, by
+  `days_since_miss` — the baseline the spaced mistakes deck (L3) is measured against.
 
 ### Adding an event
 

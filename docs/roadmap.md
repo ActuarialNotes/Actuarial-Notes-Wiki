@@ -281,7 +281,7 @@ These are in order within each lane.
   link fixes).
 
 **Experiences:**
-- **X2:** a human review of Concept Craft's 5,587 AI-written relation labels. README's rule
+- **X2:** a human review of Concept Craft's 5,598 AI-written relation labels. README's rule
   is that nothing is published 100% AI-written without review.
 - **X8:** the visual-noise backlog, §3.3–§3.8, plus the edits it calls for in the style
   guide.
@@ -515,7 +515,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
 | X1 | Quiz Battle | ✅ | — | `quiz-battle.md` "Next": its ideas (more players, written papers, a rating) are deliberately out. |
-| X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,587 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
+| X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,598 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
 | X3 | Actuaria: from one account to a cohort | 🟡 phases 0–3 built | Later | With one account, no cohort reaches `CREW_MIN`, so the risk pool and raids lie dormant. Waits on D1. Phase 4 (ranked play) is parked (D16). |
 | X4 | Listen recordings at scale | 🟡 | Later | Upload the first two; split long scripts; fix the numbers stall; choose the voice and the access tier (D12). |
 | X5 | Simulated learner: a first live run | ⬜ refused by the model's safeguards | Later | `simulations/runs/` is empty. Rework the persona prompt, then run it. |

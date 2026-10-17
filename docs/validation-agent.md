@@ -43,7 +43,7 @@ file is band 2, so the tiebreak *is* the sweep order:
   heaviest weight among its `wiki_link` concepts. An exam page scores 100: it is
   the syllabus every other page inherits from.
 - **Student traffic**, when a `--traffic` JSON file of attempt counts is supplied
-  (the weekly sweep passes one pulled from `question_responses`). Dampened —
+  (one can be pulled from `question_responses`; the sweep workflow doesn't pass one yet). Dampened —
   `min(hits, 500) / 10` — so a heavily-attempted easy question still ranks below
   a load-bearing concept on half the syllabus. A local run has no Supabase
   credentials, so traffic is optional and its absence changes nothing else.
@@ -81,6 +81,23 @@ the same sweep in August. Emits, in order:
 
 The line: the agent may make the vault say what the source says. It may not
 decide what is true.
+
+## How a sweep is run
+
+**By hand, not on a schedule** (roadmap D19, decided 2026-10-17: an agent run
+costs API spend, and nobody reads a weekly PR nobody asked for). Two ways in:
+
+- **In a Claude Code session:** `/validate <path-or-glob> [--depth]`, or launch the
+  `validate` agent on a packet from `docs/verification-plan.md`. This is how every
+  run in `.verify/_runs/` so far was made.
+- **From GitHub:** Actions → *Validate Sweep* → *Run workflow*
+  (`.github/workflows/validate-sweep.yml`, `workflow_dispatch` only). It needs
+  `ANTHROPIC_API_KEY` as a repository secret for the agent step, and
+  `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` for the reader-report sync; without
+  them it prints the batch it would have taken and stops.
+
+Putting it back on a schedule is one `schedule:` trigger in that workflow (the
+comment at its head keeps the old cron line).
 
 ## Output of a run
 

@@ -1,6 +1,12 @@
 name: Validate Sweep
 
-# The weekly VERIFY sweep (docs/validation-agent.md).
+# The VERIFY sweep (docs/validation-agent.md), run by hand.
+#
+# It has no schedule: the maintainer decided (roadmap D19, 2026-10-17) not to
+# pay for a weekly agent run for now. Start it from Actions → Validate Sweep →
+# Run workflow, or run `/validate` in a Claude Code session. To put it back on a
+# schedule, restore the `schedule:` trigger below (Mondays 06:00 UTC was
+# `cron: '0 6 * * 1'`) — the rest of the job is unchanged.
 #
 #   1. Pull reader reports out of `content_reports` and append them to the
 #      sidecar logs, so the agent reads this week's reports as context.
@@ -11,9 +17,6 @@ name: Validate Sweep
 # It never pushes to main. Every finding, fix and status change arrives as a pull
 # request a human merges — the agent proposes, a human decides (spec §6.4).
 on:
-  schedule:
-    # Mondays 06:00 UTC — a fresh batch waiting at the start of the week.
-    - cron: '0 6 * * 1'
   workflow_dispatch:
     inputs:
       target:
@@ -50,8 +53,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Reader reports first, so a report filed on Tuesday is in the agent's
-      # context on Monday. Skipped without credentials rather than failing the
+      # Reader reports first, so a report filed since the last sweep is in the
+      # agent's context. Skipped without credentials rather than failing the
       # run — the sweep is still worth doing with no new reports.
       - name: Sync reader reports
         env:

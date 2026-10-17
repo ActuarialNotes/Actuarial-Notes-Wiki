@@ -26,10 +26,10 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 
 | | | |
 |---|---|---|
-| **Exam pages** | 14 | One per exam. Learning objectives with their syllabus weights, the concepts under each objective, and the assigned readings with the chapters that are examinable. `Exam *.md` |
-| **Concepts** | ~900 | One idea per page: a precise definition, the formula in LaTeX, worked examples with the answer folded away, and a figure where a picture helps. `Concepts/` |
-| **Sources** | ~140 | One real document per page: textbooks, papers, CAS study notes, CIA educational notes, OSFI guidelines, standards of practice and regulatory returns. Each page gives the document's own outline and which exams assign it. Alongside them is a dated timeline of Canadian P&C regulation and events. `Resources/` |
-| **Practice questions** | 2,000+ | SOA sample questions and CAS past papers, each tagged to its concepts and learning objective, with a worked solution. Questions from the written-answer papers (Exams 5, 7, 8 and 9) also carry the examiner's report. `questions/<exam>/` |
+| **Exam pages** | 43 | One per exam: 12 CAS and 31 SOA, the FSA modules included. Learning objectives with their syllabus weights, the concepts under each objective, and the assigned readings with the chapters that are examinable. `Exam *.md` |
+| **Concepts** | ~1,400 | One idea per page: a precise definition, the formula in LaTeX, worked examples with the answer folded away, and a figure where a picture helps. `Concepts/` |
+| **Sources** | ~750 | One real document per page: textbooks, papers, CAS study notes, CIA educational notes, OSFI guidelines, standards of practice and regulatory returns. Each page gives the document's own outline and which exams assign it. Alongside them is a dated timeline of Canadian P&C regulation and events. `Resources/` |
+| **Practice questions** | 3,300+ | SOA sample questions, CAS past papers and the vault's own questions, each tagged to its concepts and learning objective, with a worked solution. Questions from the written-answer papers (Exams 5, 7, 8 and 9) also carry the examiner's report. `questions/<exam>/` |
 | **Guides** | ~45 | How to study for the exams in general, plus format, pacing, scoring and exam-day advice for P, FM, MAS-I, MAS-II and Exam 5. `Guides/` |
 
 ### Exam coverage
@@ -38,16 +38,17 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 |---|---|---|---|---|
 | [P](Exam%20P-1%20(SOA).md) | SOA | Probability | Complete | SOA sample questions |
 | [FM](Exam%20FM-2%20(SOA).md) | SOA | Financial Mathematics | Complete | SOA sample questions |
-| [MAS-I](Exam%20MAS-I%20(CAS).md) | CAS | Modern Actuarial Statistics I | Beta | 2018–2019 papers |
+| [MAS-I](Exam%20MAS-I%20(CAS).md) | CAS | Modern Actuarial Statistics I | Complete | 2018–2019 papers, plus the vault's own |
 | [MAS-II](Exam%20MAS-II%20(CAS).md) | CAS | Modern Actuarial Statistics II | Beta | 2018–2019 papers |
 | [5](Exam%205%20(CAS).md) | CAS | Basic Techniques for Ratemaking and Estimating Claim Liabilities | Beta | 2013–2019 papers |
 | [6C](Exam%206C%20(CAS).md) | CAS | Regulation and Financial Reporting (Canada) | Beta | 2013–2019 papers |
 | [6U](Exam%206U%20(CAS).md) | CAS | Regulation and Financial Reporting (United States) | In development | — |
-| [7](Exam%207%20(CAS).md) | CAS | Advanced Estimation of Claims Liabilities | Beta | 2012–2019 papers |
+| [7](Exam%207%20(CAS).md) | CAS | Advanced Estimation of Claims Liabilities | Complete | 2012–2019 papers |
 | [8](Exam%208%20(CAS).md) | CAS | Advanced Ratemaking | Beta | 2012–2019 papers |
 | [9](Exam%209%20(CAS).md) | CAS | Risk Management for Actuaries | Beta | 2012–2019 papers |
 | [PCPA](Exam%20PCPA%20(CAS).md) | CAS | Property and Casualty Predictive Analytics | Beta | Project simulator |
-| [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | In development | — |
+| [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | Complete | The vault's own (The Institutes publish none) |
+| FAM, SRM, PA, ALTAM, ASTAM, ATPA and the 23 FSA modules | SOA | The ASA and FSA exams past FM | In development | — |
 
 **Complete:** syllabus, concept pages and question bank are all in place. **Beta:** usable, and
 still being filled out. **In development:** the syllabus is mapped, but its concept pages and
@@ -112,8 +113,8 @@ against it is recorded in an append-only log under `.verify/`. The rules behind 
 
 The app and the connector show each page's status, so you always know whether you're reading
 something checked. [`Validation Status.md`](Validation%20Status.md) is the running tally. As of
-September 2026 the whole Exam P question bank is verified against the SOA's published
-solutions, and most other pages have not been fact checked yet.
+October 2026 about half of all content files are verified — the whole Exam P, MAS-I, Exam 7,
+DISC-DA and DISC-IA question banks among them — and the rest have not been fact checked yet.
 
 Found a mistake? Open the Fact Check panel on any page or question in the app and choose
 **Report an issue**. Reports feed into the same log. The design is written up in

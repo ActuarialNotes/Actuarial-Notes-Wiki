@@ -581,11 +581,11 @@ Other important `lib/` modules:
   questions to convert — because its page and the Projects tab's simulator are material
   to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
-  `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. Exam 8
-  was promoted before all its readings had `Resources/Books/` pages, so it carries
-  `"source_pages": "partial"` in `scripts/exam_catalog.json` and `syllabus_lint.py` warns
-  about a missing source on it rather than failing — drop the key once the pages exist (Exam 9's
-  nine now do, and its key is gone). The DISC pages
+  `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. A beta exam
+  promoted before all its readings had `Resources/Books/` pages carries
+  `"source_pages": "partial"` in `scripts/exam_catalog.json`, and `syllabus_lint.py` warns
+  about a missing source on it rather than failing — drop the key once the pages exist. No
+  exam carries it today (Exam 9's and then Exam 8's readings all have pages). The DISC pages
   (`Exam DISC-DA (CAS).md` …) transcribe The Institutes' course syllabi, which carry no
   section weights — `"weighted": false` in `scripts/exam_catalog.json`, and the app counts
   each topic equally. The one definition; the exam rows on both tabs dim
@@ -1361,7 +1361,14 @@ compile — don't "clean up" the flagged code as dead.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an
-  `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
+  `## Explanation` section (LaTeX via `$$...$$`). A `wiki_link` entry is the concept's vault
+  path with no `.md` and **every space written `+`** — `Concepts/Bayes+Theorem`, never
+  `Concepts/Bayes Theorem` — and every reader of it (`parser.ts`, `studyPlan.ts`,
+  `questionFilters.ts`, `knowledgeBase.ts` …) turns the `+` back into a space before matching.
+  A question file sits **directly** in its bank's folder: the build collects
+  `questions/<exam-id>/*.md` and nothing deeper (`validate_content.py` warns about a nested
+  one — the four under `exam-p/probability/`, `exam-p/statistics/` and `exam-fm/interest/` are
+  early seed questions VERIFY can't yet move, since a log may not be renamed). Current banks: `exam-p`, `exam-fm`,
   `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
   (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the
   thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /
@@ -1459,6 +1466,7 @@ npm run build      # tsc + vite build
 npm run lint       # eslint src --ext ts,tsx
 npm test           # vitest run
 npm run mcp:local  # after a build: the AI connector at http://localhost:8787/api/mcp
+npm run size       # after a build: first-paint bytes against the CI budget
 ```
 
 Vite plugins (`vite.config.ts`) bundle the markdown content at build time via virtual
@@ -1472,7 +1480,12 @@ modules that read directly from the repo root:
   could add one and never see it appear. **Which exams exist is a build-time fact; keep
   it off the network.**
 - `virtual:wiki-content` — `Exam*.md`, `Concepts/`, `Resources/Books/`
-- `virtual:questions-content` — `questions/`
+- `virtual:questions-content` — `questions/`, as a chunk of its own: `fetchAllQuestions`
+  (`lib/github.ts`) dynamic-imports it the first time anything asks for a question. It is
+  ~11 MB, and it used to be imported eagerly in `main.tsx`, which put it in the entry chunk
+  every reader downloads before first paint. **Never import it statically** —
+  `npm run size` (`scripts/bundle-budget.mjs`, a CI step) fails a build whose first paint
+  (the entry script, what it preloads and its CSS, gzipped) is over budget
 - `virtual:comprehension-checks` — `comprehension-checks/<exam-id>/`
 - `virtual:exam-guides` — the tip pages under `Guides/<exam page>/` (their markdown rides
   along in `virtual:wiki-content`; bundled but unrendered — see `lib/examGuides.ts`). A

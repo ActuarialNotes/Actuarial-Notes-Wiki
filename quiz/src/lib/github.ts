@@ -149,11 +149,30 @@ async function collectMdUrlsViaContents(dirPath: string): Promise<string[]> {
   return urls
 }
 
-let bundledQuestions: string[] | null = null
-export function setBundledQuestions(questions: string[]): void { bundledQuestions = questions }
+// The question bank is bundled at build time (`virtual:questions-content`),
+// but as a chunk of its own, fetched the first time anything asks for a
+// question — not in the entry chunk, where it was most of the bytes every
+// reader downloaded before first paint, whether or not they opened a quiz.
+// A failed chunk load (a deploy replaced it mid-visit) is forgotten so the
+// next call tries again, and this call falls back to GitHub below.
+let bundledQuestions: Promise<string[]> | null = null
+function loadBundledQuestions(): Promise<string[]> {
+  bundledQuestions ??= import('virtual:questions-content').then(
+    mod => mod.default,
+    err => {
+      bundledQuestions = null
+      throw err
+    },
+  )
+  return bundledQuestions
+}
 
 export async function fetchAllQuestions(): Promise<string[]> {
-  if (bundledQuestions) return bundledQuestions
+  try {
+    return await loadBundledQuestions()
+  } catch (err) {
+    console.warn('fetchAllQuestions: the bundled question bank failed to load, fetching from GitHub:', err)
+  }
   const cached = readCache()
   if (cached) return cached
 

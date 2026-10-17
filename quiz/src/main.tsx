@@ -5,12 +5,8 @@ import App from './App'
 import { supabase } from './lib/supabase'
 import { hydrateFromSharedCookie } from './lib/hydrateSession'
 import type { Session } from '@supabase/supabase-js'
-import bundledQuestions from 'virtual:questions-content'
-import { setBundledQuestions } from './lib/github'
 import { initErrorMonitoring } from './lib/errorMonitoring'
 import { identifyUser, initAnalytics, trackDay2ReturnOnBoot } from './lib/analytics'
-
-setBundledQuestions(bundledQuestions)
 
 // Capture uncaught errors and unhandled rejections from the very first tick,
 // before any React render can throw.

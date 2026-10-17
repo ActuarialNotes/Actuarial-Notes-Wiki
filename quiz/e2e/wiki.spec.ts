@@ -90,18 +90,21 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki\/resources$/)
     await expect(page.getByRole('heading', { name: 'Resources' })).toBeVisible()
     await expect(nav.getByRole('link', { name: 'Resources' })).toHaveAttribute('aria-current', 'page')
+    // The exam is chosen on the strip of exam logos under the SOA/CAS picker,
+    // and choosing All again clears it.
+    await page.getByRole('radiogroup', { name: 'Examining body' }).getByRole('radio', { name: 'CAS' }).click()
     const cards = page.locator('main').getByRole('button').filter({ has: page.locator('p.font-semibold') })
+    await expect.poll(() => cards.count()).toBeGreaterThan(10)
     const all = await cards.count()
-    expect(all).toBeGreaterThan(10)
 
-    await page.getByRole('button', { name: /^Exam\b/ }).click()
-    await page.getByRole('button', { name: /^Exam 7\b/ }).click()
+    const strip = page.getByRole('radiogroup', { name: 'Exam' })
+    await strip.getByRole('radio', { name: /^Exam 7\b/ }).click()
     await expect(page).toHaveURL(/\/wiki\/resources\?exam=Exam\+7$/)
     await expect.poll(() => cards.count()).toBeLessThan(all)
     // Every card left on the shelf is an Exam 7 reading.
     for (const card of await cards.all()) await expect(card.getByText('Exam 7', { exact: true })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Clear' }).click()
+    await strip.getByRole('radio', { name: 'All exams' }).click()
     await expect(page).toHaveURL(/\/wiki\/resources$/)
     await expect.poll(() => cards.count()).toBe(all)
   })

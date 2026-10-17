@@ -1,0 +1,30 @@
+# Dependency updates (roadmap E4). Weekly, grouped, so a week's bumps arrive as
+# one or two PRs that CI judges rather than a stream of them.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /quiz
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Minor and patch releases together; a major version gets a PR of its own,
+      # since it is the one that can need code changes.
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Pinned exactly at 2.39.0 on purpose. Lifting it changes auth and sync
+      # for every signed-in reader, which the e2e suite (signed out, placeholder
+      # Supabase) cannot test, so it is a deliberate PR of its own, tested
+      # against a real project — roadmap E4.
+      - dependency-name: '@supabase/supabase-js'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ['*']

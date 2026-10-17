@@ -90,14 +90,17 @@ test.describe('store', () => {
     await expect(sheet.getByRole('rowheader')).toHaveCount(0)
     await expect(sheet.getByText('Price', { exact: true }).locator('visible=true')).toHaveCount(1)
 
+    // Exactly two columns fit on the screen, so the table is a comparison, not a
+    // list. The sheet sizes its columns from its own measured width, a frame
+    // after it opens, so this waits for that rather than reading the first draw.
+    const firstHead = sheet.getByRole('columnheader').first()
+    await expect.poll(async () => Math.abs((await firstHead.boundingBox())!.width * 2 - 390)).toBeLessThan(2)
+    const head = await firstHead.boundingBox()
+    const second = await sheet.getByRole('columnheader').nth(1).boundingBox()
+    expect(second!.x + second!.width).toBeLessThanOrEqual(390 + 1)
     // The first product's price lies in the first product's column.
-    const head = await sheet.getByRole('columnheader').first().boundingBox()
     const cell = await sheet.getByRole('cell').filter({ hasText: /\$\d/ }).first().boundingBox()
     expect(Math.abs(head!.x - cell!.x)).toBeLessThan(2)
-    // Exactly two columns fit on the screen, so the table is a comparison, not a list.
-    const second = await sheet.getByRole('columnheader').nth(1).boundingBox()
-    expect(Math.abs(head!.width * 2 - 390)).toBeLessThan(2)
-    expect(second!.x + second!.width).toBeLessThanOrEqual(390 + 1)
 
     // A swipe snaps to the next column, so the pair is still whole.
     await sheet.locator('div.overflow-auto').evaluate(el => el.scrollBy({ left: 40 }))

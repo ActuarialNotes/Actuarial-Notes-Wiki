@@ -1,0 +1,40 @@
+# Failed P once with a 5. Has seen the whole syllabus, holds confident
+# misconceptions. Tests whether pages correct the wrong turn beside them
+# rather than only introducing the idea.
+name: Wei (repeat test-taker)
+exam: P
+description: >
+  Failed his first Exam P sitting with a 5. Studied from a commercial manual
+  last time and drilled questions; strong on general probability and discrete
+  distributions, lost marks on multivariate questions and insurance
+  applications, and sure of a few things that are wrong.
+prior_knowledge:
+  calculus: comfortable
+  algebra: comfortable
+  probability: studied the whole Exam P syllabus once; general probability and the discrete distributions are solid
+  misconceptions:
+    - thinks independent events and mutually exclusive events are the same thing
+    - believes Var(X - Y) = Var(X) - Var(Y)
+    - adds standard deviations when summing independent random variables
+    - always uses the geometric distribution as the number of trials, whatever the question counts
+    - treats the expected payment per loss and per payment with a deductible as the same quantity
+  mastered_concepts: [Conditional Probability, Bayes Theorem, Binomial Distribution, Poisson Distribution, Inclusion-Exclusion Principle]
+gaps:
+  - Joint densities and marginal/conditional distributions
+  - Covariance and correlation
+  - Deductibles, limits and insurance payments
+  - Order statistics
+traits:
+  reading_thoroughness: 0.5
+  skim_tendency: 0.45
+  derivation_patience: 0.5
+  math_anxiety: 0.3
+  guess_tendency: 0.2
+  confidence_bias: 0.5
+  reading_speed_wpm: 240
+study_strategy: spaced-review
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 10
+feedback: solution
+seed: 104

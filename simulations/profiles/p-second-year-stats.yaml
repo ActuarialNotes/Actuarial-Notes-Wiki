@@ -1,0 +1,39 @@
+# The candidate the vault is most often written for: a second-year stats
+# student with the calculus and one probability course. What the coursework
+# never taught them (insurance payments, no aid sheet, non-rectangular double
+# integrals) is where the guides have to do the work.
+name: Aisha (second-year statistics student)
+exam: P
+description: >
+  Twenty-year-old in the second year of a statistics degree, sitting Exam P in
+  the summer. Took one probability course (A-) and has single- and
+  multivariable calculus. Has never seen an insurance problem and has always
+  had a formula sheet in exams.
+prior_knowledge:
+  calculus: single- and multivariable calculus; double integrals over rectangles comfortably, non-rectangular regions shakily
+  algebra: fluent
+  probability: >
+    one university course — axioms, conditional probability, Bayes, discrete and
+    continuous random variables, expectation and variance, binomial, Poisson and
+    normal; always with a formula sheet
+  insurance: none — has never met a deductible, a policy limit or coinsurance
+  mastered_concepts: [Conditional Probability, Bayes Theorem, Binomial Distribution, Normal Distribution]
+gaps:
+  - Insurance payment variables (deductibles, limits, coinsurance)
+  - Joint distributions over non-rectangular regions
+  - Order statistics and transformations
+  - Memorizing distributions without a formula sheet
+traits:
+  reading_thoroughness: 0.75
+  skim_tendency: 0.2
+  derivation_patience: 0.7
+  math_anxiety: 0.2
+  guess_tendency: 0.1
+  confidence_bias: 0.2
+  reading_speed_wpm: 250
+study_strategy: read-then-practice
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 8
+feedback: solution
+seed: 101

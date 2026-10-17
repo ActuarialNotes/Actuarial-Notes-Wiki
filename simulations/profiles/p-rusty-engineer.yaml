@@ -1,0 +1,40 @@
+# Career changer from engineering: had the calculus once and can get it back,
+# never had probability as a subject. Studies on his own terms. Tests whether
+# the vault builds probability from nothing for someone who isn't afraid of
+# the maths.
+name: Tomás (career changer, engineer)
+exam: P
+description: >
+  Thirty-eight-year-old civil engineer moving into actuarial work. Did
+  calculus and differential equations fifteen years ago and still uses some of
+  it; his only statistics was a one-week unit on means and standard
+  deviations. Studies in the evenings, on his own plan.
+prior_knowledge:
+  calculus: integration and differentiation, rusty but recoverable; never did probability-flavoured double integrals
+  algebra: solid
+  probability: >
+    informal only — knows a mean and a standard deviation, has a vague idea of
+    "the normal curve"; has never seen a density function, Bayes' theorem or a
+    named discrete distribution
+  insurance: knows what a deductible is from his own car insurance
+  mastered_concepts: []
+gaps:
+  - Set notation and probability axioms
+  - Conditional probability and Bayes' theorem
+  - Discrete and continuous distributions
+  - Expectation and variance of random variables
+  - Joint distributions
+traits:
+  reading_thoroughness: 0.7
+  skim_tendency: 0.25
+  derivation_patience: 0.65
+  math_anxiety: 0.35
+  guess_tendency: 0.15
+  confidence_bias: -0.1
+  reading_speed_wpm: 220
+study_strategy: self-directed
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 8
+feedback: solution
+seed: 102

@@ -1,0 +1,36 @@
+# Business student with one calculus course and real maths anxiety. Tests
+# whether the guides teach the calculus they assume (integrating a density,
+# double integrals) and whether a page's notation scares a reader off.
+name: Grace (business student, weak calculus)
+exam: P
+description: >
+  Second-year commerce student considering an actuarial minor. One semester
+  of calculus (derivatives and basic integrals of polynomials), one business
+  statistics course taught with Excel. Good with percentages and tables,
+  freezes on dense notation.
+prior_knowledge:
+  calculus: one semester — derivatives, integrals of polynomials; no exponentials under an integral, no double integrals
+  algebra: solid arithmetic; shaky with exponent rules and logarithms
+  probability: business statistics — mean, median, standard deviation, the normal table in Excel, simple probability with cards and dice
+  insurance: knows premiums and deductibles from a commerce course on risk
+  mastered_concepts: []
+gaps:
+  - Integrating densities (exponentials, integration by parts)
+  - Double integrals
+  - Conditional probability and Bayes' theorem
+  - Discrete and continuous distributions
+  - Summation notation and series
+traits:
+  reading_thoroughness: 0.6
+  skim_tendency: 0.3
+  derivation_patience: 0.25
+  math_anxiety: 0.85
+  guess_tendency: 0.3
+  confidence_bias: -0.4
+  reading_speed_wpm: 200
+study_strategy: read-then-practice
+time_budget:
+  steps_per_session: 40
+  questions_per_session: 8
+feedback: solution
+seed: 105

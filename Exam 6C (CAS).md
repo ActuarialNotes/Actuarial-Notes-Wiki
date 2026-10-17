@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9bf165a6265ccc43a428661986fae4f8d39dfd0fcc28b02e21ec17c2f4b038ee
+  content_hash: sha256:49e21cbb984a9dcaf0620c7c3cb1e4fe946f0f42a37945abf5347554456ebc9f
   sources:
     - "CAS, Exam Content Outline — Canada Regulation and Financial Reporting – Exam 6C, Fall 2026 (the 'October 2026 Content Outline'; v04 2026-05-26, 14 pp.), PDF pp.1-14, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf"
     - "CAS, Exam 6C-Regulation and Financial Reporting (Canada) exam page, read 2026-10-09: window October 19-27, 2026; the October 2026 Content Outline is the only outline linked; no errata or syllabus update — https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada"
@@ -174,7 +174,7 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 >      - C2-C4
 > - [[OSFI Target Capital]]
 >      - C2-C4
-> - [[PACICC]]
+> - [[Resources/Books/PACICC|PACICC]]
 >      - B1-B3
 > - [[FSCO Coverages]]
 >      - A1

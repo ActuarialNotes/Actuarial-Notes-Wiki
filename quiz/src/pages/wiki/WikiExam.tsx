@@ -21,6 +21,8 @@ import { todayISO } from '@/lib/studyPlan'
 import { examPageIdFromFile, examProgressKeyFromFile, todaysPlanConcepts } from '@/lib/examMenu'
 import { examStatus } from '@/lib/examStatus'
 import { buildObjectiveIndex, isSyllabusConcept } from '@/lib/syllabusChapters'
+import { documentPathsByName, extractSourceMaterial, sourceEntryRef } from '@/lib/sourceMaterial'
+import { buildWikiIndex } from '@/lib/wikiIndex'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 import { useWikiPageHead } from '@/hooks/useWikiPageHead'
@@ -196,20 +198,40 @@ export default function WikiExam() {
     [content],
   )
 
-  const conceptList = useMemo(
-    () => pageRefs.filter(isSyllabusConcept),
-    [pageRefs],
+  // The Source Material callout lists readings, not concepts — however they
+  // are named — so the concept walk is read off the rest of the page. The
+  // callout is the page's last section, so leaving it out moves no mention
+  // the occurrence walk counts before it.
+  const sourceMaterial = useMemo(
+    () => (content ? extractSourceMaterial(content) : null),
+    [content],
   )
+
+  const conceptList = useMemo(
+    () => (sourceMaterial ? extractWikiLinksFromText(sourceMaterial.markdown).filter(isSyllabusConcept) : []),
+    [sourceMaterial],
+  )
+
+  // Resource pages by name, from the wiki index: what tells a reading named
+  // `[[OSFI MCT]]` apart from a concept (see `sourceEntryRef`).
+  const [documentPaths, setDocumentPaths] = useState<Map<string, string>>(() => new Map())
+  useEffect(() => {
+    let cancelled = false
+    buildWikiIndex()
+      .then(items => { if (!cancelled) setDocumentPaths(documentPathsByName(items)) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   // Document-ordered concept mentions (dimmed repeats included), each tagged
   // with its occurrence index among same-name links. Drives which mention the
   // popup highlights and lets prev/next stop on every occurrence — while the
   // concept count stays the deduped `conceptList.length`.
   const conceptOccurrences = useMemo(() => {
-    if (!content) return []
+    if (!sourceMaterial) return []
     const counts = new Map<string, number>()
     const out: { name: string; occurrence: number }[] = []
-    for (const r of extractWikiLinkOccurrences(content)) {
+    for (const r of extractWikiLinkOccurrences(sourceMaterial.markdown)) {
       if (!isSyllabusConcept(r)) continue
       const key = r.name.toLowerCase()
       const occ = counts.get(key) ?? 0
@@ -217,7 +239,7 @@ export default function WikiExam() {
       out.push({ name: r.name, occurrence: occ })
     }
     return out
-  }, [content])
+  }, [sourceMaterial])
 
   // Which learning objective each concept belongs to — the syllabus's own
   // sections, read off the `[!example]` callouts. The popup uses it to cut its
@@ -262,6 +284,14 @@ export default function WikiExam() {
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()
     const refs: WikiEntryRef[] = []
+    // The shelf's readings first, in its order, each as the page its card opens.
+    for (const entry of sourceMaterial?.entries ?? []) {
+      const ref = sourceEntryRef(entry, documentPaths.get(entry.name.toLowerCase()))
+      const key = ref.name.toLowerCase()
+      if (ref.kind === 'concept' || seen.has(key)) continue
+      seen.add(key)
+      refs.push(ref)
+    }
     for (const r of pageRefs) {
       if (r.kind === 'resource' || (r.kind === 'concept' && / \([^)]*\d{4}\)$/.test(r.name))) {
         const key = r.name.toLowerCase()
@@ -272,7 +302,7 @@ export default function WikiExam() {
       }
     }
     return refs.length > 0 ? refs : null
-  }, [pageRefs])
+  }, [pageRefs, sourceMaterial, documentPaths])
 
   useEffect(() => {
     setExamId(wikiExamId)
@@ -299,17 +329,18 @@ export default function WikiExam() {
 
   // A reading opens in the popup on the Source Material walk, the way a card on
   // the page's shelf does.
-  const openResource = useCallback((name: string) => {
-    const resList = resourceRefs ?? [{ kind: 'resource' as const, name }]
-    const resIdx = resList.findIndex(r => r.name.toLowerCase() === name.toLowerCase())
-    openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
+  const openResource = useCallback((ref: WikiEntryRef) => {
+    const listed = resourceRefs ?? []
+    const at = listed.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+    const resList = at >= 0 ? listed : [{ ...ref, kind: ref.kind === 'concept' ? 'resource' as const : ref.kind }]
+    openAt(resList, Math.max(at, 0), `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences, objectives })
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs, objectives])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false
     if (ref.kind === 'resource' || / \([^)]*\d{4}\)$/.test(ref.name)) {
       e.preventDefault()
-      openResource(ref.name)
+      openResource(ref)
       return true
     }
     if (ref.kind !== 'concept') return false
@@ -333,9 +364,11 @@ export default function WikiExam() {
         o => o.name.toLowerCase() === ref.name.toLowerCase() && o.occurrence === clickedOcc,
       ),
     )
+    // A concept off the walk (one linked only as a reading) opens on its own
+    // rather than at the walk's first stop.
     openAt(
-      conceptList.length > 0 ? conceptList : [ref],
-      idx >= 0 ? idx : 0,
+      idx >= 0 ? conceptList : [ref],
+      Math.max(idx, 0),
       `${examFileName}.md`,
       studyPlanRefs,
       resourceRefs,
@@ -400,7 +433,7 @@ export default function WikiExam() {
   useEffect(() => {
     if (!resourceParam || pageRefs.length === 0 || popupOpenedRef.current) return
     popupOpenedRef.current = true
-    openResource(resourceParam)
+    openResource({ kind: 'resource', name: resourceParam })
   }, [resourceParam, pageRefs, openResource])
 
   return (

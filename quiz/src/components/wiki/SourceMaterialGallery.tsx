@@ -3,12 +3,13 @@ import { X } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { splitAuthors } from '@/lib/authorNames'
 import { MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import {
   filterSourcesByObjectives,
   objectiveFilterOptions,
+  sourceEntryRef,
   type SourceMaterialEntry,
   type SyllabusObjective,
 } from '@/lib/sourceMaterial'
@@ -105,9 +106,9 @@ export function SourceMaterialGallery({ entries, objectives = NO_OBJECTIVES, onO
       <div className="source-material-gallery grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-start gap-3">
         {shown.map(entry => {
           const meta = documents.get(entry.name.toLowerCase())
-          // Bare names resolve to kind 'concept', exactly as the same link does in
-          // the article body, so the popup and the active-link highlight agree.
-          const ref = hrefToEntryRef(entry.target) ?? { kind: 'concept' as const, name: entry.name }
+          // A reading with a resource page opens that page, whatever its link
+          // calls it — a bare `[[OSFI MCT]]` would otherwise look in Concepts/.
+          const ref = sourceEntryRef(entry, meta?.path)
           const title = meta?.title ?? entry.label
           // Standards name the same body as author and publisher — say it once,
           // as the resource page's own card does.

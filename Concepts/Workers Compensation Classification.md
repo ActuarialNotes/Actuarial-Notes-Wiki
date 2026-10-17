@@ -1,12 +1,17 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:6ddbbd80351c1d984dcef47edc5e9d772d10c8fa7ce934a8e112994c2853eae6
-  sources: []
-  open_findings: 0
+  sources:
+    - "Robertson, NCCI's 2007 Hazard Group Mapping (Variance 3:2, 2009), abstract, §1, Tables 3-4, PDF pp.1-2, 7-9, sha256:458f17d0e4279114ba2c895fd4c7a5bf58de1ebf82fbd27d60ef08af120e3d4b — https://www.casact.org/sites/default/files/2021-07/NCCI-2007-Hazard-Robertson.pdf"
+    - "Couret & Venter, Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), 2008), PDF pp.1-3, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf"
+    - "Chalk et al., From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph 16, 1st ed., §6.4.1 fn.33, PDF p.92, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf"
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), Ch.6 intro, PDF p.174, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §10.1, PDF pp.105-106, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Workers Compensation Classification.md
 ---

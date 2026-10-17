@@ -13,12 +13,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c770a6a87be5adc5a8cebf018df9e2401c023464cbfc5bf1964670312f2ee4d3
-  sources: []
+  sources:
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.4 §3, PDF p.105, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-8/cas8-an-011.md

@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2d92659736934bef69fe273a9bf71935edb9672927b1a13f556f6ace74de81db
-  sources: []
+  sources:
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), Ch.6 consistency of ILFs, PDF pp.181-182, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-8/cas8-an-010.md

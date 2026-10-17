@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:182c46217d5a2a96460c2aafd44ad3e538071615a00d5a178a12431d42ce484c
-  sources: []
-  open_findings: 0
+  sources:
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §1-3, §7, PDF pp.21-26, 30, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Insurance Policy.md
 ---

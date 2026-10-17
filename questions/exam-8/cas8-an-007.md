@@ -13,12 +13,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e23dbb1ed547d5a81ce8e8395772f46538c1937b5490378540092e230b637f28
-  sources: []
+  sources:
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §6 Clash Coverage, PDF pp.29-30, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-8/cas8-an-007.md

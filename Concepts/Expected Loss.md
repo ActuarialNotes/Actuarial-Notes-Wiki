@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:353a6bef7e2b0e53d076f51859d149b1274b95465c4e2010e3d0ae86ae9eed95
-  sources: []
+  sources:
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §5.1, Ch.6 intro, PDF pp.154-155, 174, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.3 §1.2, §3.1, PDF pp.44, 66, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Expected Loss.md

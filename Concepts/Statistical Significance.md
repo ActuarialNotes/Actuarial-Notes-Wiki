@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5f6943f75a29baba55d42a387c3b14b284b3fd2a3d54b6ae2d52c06014509ad1
-  sources: []
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §2.3, §2.4.3, §5.3, §6.2.1, PDF pp.18-20, 25-26, 57, 74-76, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "CAS Monograph 5 errata sheet (approved 28 Jan 2026), p.65-66 corrections, sha256:4622f59623aded645b229235ab0579a527823942ff35dce531033fe534b6735b — https://www.casact.org/sites/default/files/2026-02/Monograph_No_5_Errata_Sheet.pdf"
+    - "ASOP No. 12, Risk Classification (Actuarial Standards Board, Dec 2005, doc. 132), §3.2.1-3.2.2, PDF pp.9-10, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf"
+    - "Mahler, An Example of Credibility and Shifting Risk Parameters (PCAS LXXVII, 1990), §4.2, PDF pp.11-12, sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58 — https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Statistical Significance.md

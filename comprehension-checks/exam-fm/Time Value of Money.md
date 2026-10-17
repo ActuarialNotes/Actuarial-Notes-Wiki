@@ -1,7 +1,7 @@
 ---
 concept: "Time Value of Money"
-exam: exam-9
-topic: "Financial Mathematics"
+exam: exam-fm
+topic: "Time Value of Money"
 correct: A
 ---
 At an annual effective interest rate of 10%, what is the present value of \$1,210 payable in two years?

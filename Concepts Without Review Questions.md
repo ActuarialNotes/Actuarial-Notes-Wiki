@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
-> Generated 2026-10-10 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **991 of 2066 syllabus concept entries (48%)** have at least one question in their exam's own bank.
+> Generated 2026-10-17 by `scripts/generate_coverage_report.py` — edit the script, not this page.
+> **997 of 2065 syllabus concept entries (48%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -43,18 +43,18 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
 | [[Exam MAS-II (CAS)]] | `exam-mas-ii` (146) | 79 / 109 | 72% | 0 / 4 |
 | [[Exam DISC-DA (CAS)]] | `exam-disc-da` (70) | 42 / 42 | 100% | 0 / 10 |
-| [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (146) | 65 / 65 | 100% | 0 / 15 |
+| [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (144) | 65 / 65 | 100% | 0 / 15 |
 | [[Exam DISC-IA (CAS)]] | `exam-disc-ia` (221) | 97 / 97 | 100% | 0 / 16 |
 | [[Exam 5 (CAS)]] | `exam-5` (349) | 129 / 138 | 93% | 0 / 2 |
 | [[Exam PCPA (CAS)]] | none | 0 / 30 | 0% | 3 / 3 |
 | [[Exam 6C (CAS)]] | `exam-6c` (321) | 137 / 159 | 86% | 0 / 3 |
 | [[Exam 6U (CAS)]] | none | 0 / 80 | 0% | 4 / 4 |
-| [[Exam 7 (CAS)]] | `exam-7` (118) | 20 / 30 | 67% | 0 / 1 |
+| [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (132) | 32 / 38 | 84% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **991 / 2066** | **48%** | |
+| **Total** | | **997 / 2065** | **48%** | |
 
-108 concept pages are linked from no exam's learning objectives and are not counted.
+107 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
 
@@ -73,7 +73,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *4 of 36 uncovered*
 
 - [[Random Variable]] — tagged in another bank (2)
-- [[Insurer]] — tagged in another bank (4)
+- [[Insurer]] — tagged in another bank (3)
 - [[Policyholder]]
 - [[Claim]] — tagged in another bank (4)
 
@@ -1978,7 +1978,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 - [[Statistical Learning]] — tagged in another bank (4)
 - [[Sampling Distribution]] — tagged in another bank (1)
-- [[Bootstrap]] — tagged in another bank (17)
+- [[Bootstrap]] — tagged in another bank (18)
 - [[Residual Sum of Squares]] — tagged in another bank (9)
 - [[Out-of-Bag Error]]
 - [[Variable Importance]]
@@ -2032,7 +2032,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *6 of 76 uncovered*
 
-- [[Insurer]] — tagged in another bank (4)
+- [[Insurer]] — tagged in another bank (3)
 - [[Risk]]
 - [[Underwriting Year]]
 - [[Types of Insurance]]
@@ -2127,7 +2127,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Insurance Finance Income or Expenses]]
 - [[Other Comprehensive Income Option]]
 - [[Transition to IFRS 17]]
-- [[Insurer]] — tagged in another bank (4)
+- [[Insurer]] — tagged in another bank (3)
 - [[Base Solvency Buffer]]
 - [[Climate Risk]]
 - [[Educational Note]]
@@ -2244,22 +2244,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam 7 (CAS)
 
-*10 of 30 syllabus concepts have no question in `questions/exam-7/`.*
+*3 of 29 syllabus concepts have no question in `questions/exam-7/`.*
 
 ### A. Estimation of Claims Liabilities {100%}
 
-*10 of 30 uncovered*
+*3 of 29 uncovered*
 
 - [[Actuarial Principles]]
 - [[Actuarial Standards of Practice]] — tagged in another bank (1)
-- [[Risk Transfer]] — tagged in another bank (17)
-- [[Premium Reserve]]
-- [[Parameter Estimation]] — tagged in another bank (1)
-- [[Moment]] — tagged in another bank (3)
-- [[Expected Value]] — tagged in another bank (102)
-- [[Range of Indications]]
-- [[Ceded Loss Reserve]]
-- [[Types of Reinsurance]] — tagged in another bank (7)
+- [[Risk Transfer]] — tagged in another bank (16)
 
 ## Exam 8 (CAS)
 
@@ -2305,7 +2298,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *4 of 22 uncovered*
 
-- [[Insurer]] — tagged in another bank (4)
+- [[Insurer]] — tagged in another bank (3)
 - [[Insurance Pricing]]
 - [[Insurance Policy]] — tagged in another bank (6)
 - [[Prepayment Risk]]

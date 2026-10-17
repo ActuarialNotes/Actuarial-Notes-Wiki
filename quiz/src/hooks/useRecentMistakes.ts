@@ -37,8 +37,9 @@ export function useRecentMistakes(
   const [rows, setRows] = useState<MistakeResponseRow[]>([])
   const [loading, setLoading] = useState(false)
 
+  const userId = user?.id
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setRows([])
       return
     }
@@ -47,7 +48,7 @@ export function useRecentMistakes(
     supabase
       .from('question_responses')
       .select('question_id, is_correct, answered_at')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .order('answered_at', { ascending: false })
       .limit(2000)
       .then(({ data }: { data: MistakeResponseRow[] | null }) => {
@@ -55,13 +56,13 @@ export function useRecentMistakes(
       })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
-  }, [user?.id])
+  }, [userId])
 
   // Refetch when a quiz is saved on this device so a just-missed question shows
   // up (and a just-corrected one drops off) without a page reload.
   useEffect(() => {
-    if (!user?.id) return
-    const uid = user.id
+    if (!userId) return
+    const uid = userId
     const refetch = () => {
       supabase
         .from('question_responses')
@@ -73,7 +74,7 @@ export function useRecentMistakes(
     }
     window.addEventListener('quiz-session-saved', refetch)
     return () => window.removeEventListener('quiz-session-saved', refetch)
-  }, [user?.id])
+  }, [userId])
 
   const examQuestions = useMemo<Question[]>(
     () => (examTopic ? questions.filter(q => q.exam === examTopic) : questions),

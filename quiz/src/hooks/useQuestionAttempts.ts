@@ -49,28 +49,28 @@ export function useQuestionAttempts(): {
       .finally(() => { if (!isStale()) setLoading(false) })
   }, [])
 
+  const userId = user?.id
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setByQuestionId(new Map())
       return
     }
     let cancelled = false
     setLoading(true)
-    fetchAttempts(user.id, () => cancelled)
+    fetchAttempts(userId, () => cancelled)
     return () => { cancelled = true }
-  }, [user?.id, fetchAttempts])
+  }, [userId, fetchAttempts])
 
   // Answers are written from the quiz and the fix-mistakes reviewer, both of
   // which signal `quiz-session-saved` once the responses have landed. Without
   // this the chip a learner is looking at keeps showing the tally from before
   // they answered, until a reload.
   useEffect(() => {
-    if (!user?.id) return
-    const uid = user.id
-    const refetch = () => fetchAttempts(uid)
+    if (!userId) return
+    const refetch = () => fetchAttempts(userId)
     window.addEventListener('quiz-session-saved', refetch)
     return () => window.removeEventListener('quiz-session-saved', refetch)
-  }, [user?.id, fetchAttempts])
+  }, [userId, fetchAttempts])
 
   return { byQuestionId, loading, tracked: !!user }
 }

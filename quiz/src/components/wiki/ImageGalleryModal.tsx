@@ -56,6 +56,7 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
   const containerRef = useRef<HTMLDivElement>(null)
   const zoomRef = useRef(1)
   const applyZoomRef = useRef<(z: number) => void>(() => {})
+  const goToRef = useRef<(i: number) => void>(() => {})
   const dragState = useRef<{ sx: number; sy: number; px: number; py: number } | null>(null)
   const hasMoved = useRef(false)
   const activePointers = useRef<Map<number, { x: number; y: number }>>(new Map())
@@ -101,12 +102,13 @@ export function ImageGalleryModal({ images, initialIndex, placement = 'fullscree
 
   useEffect(() => { zoomRef.current = zoom }, [zoom])
   useEffect(() => { applyZoomRef.current = applyZoom })
+  useEffect(() => { goToRef.current = goTo })
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
-      else if (e.key === 'ArrowLeft' && canPrev) goTo(index - 1)
-      else if (e.key === 'ArrowRight' && canNext) goTo(index + 1)
+      else if (e.key === 'ArrowLeft' && canPrev) goToRef.current(index - 1)
+      else if (e.key === 'ArrowRight' && canNext) goToRef.current(index + 1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

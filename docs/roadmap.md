@@ -129,16 +129,16 @@ are in Appendix A.
 
 | Measure | Value | Trend since 2026-08-31 |
 |---|---|---|
-| Unit tests | 214 files, **4,178 tests, all passing** | ↑ from 1,392 |
+| Unit tests | 214 files, **4,181 tests, all passing** | ↑ from 1,392 |
 | Lint | 0 errors, 45 warnings | ↓ from 53 warnings |
-| E2E | 23 specs, 94 tests. **11 failing in CI**: cowork ×4, exam-pdf ×2, tour ×3, reveal, wiki. Store is flaky | ↓ from 3 failing |
+| E2E | 23 specs, 116 tests. **All passing locally** (113 passed, 3 tour tests skipped while `TOUR_ENABLED` is off), one worker, no retries, on 2026-10-17. Fixed: tour ×3 (gated on the flag), exam-pdf ×2, wiki, flashcard-focus and the flaky store test, all of them tests that had fallen behind the UI | was 11 failing |
 | CI on `main` | **Red since 2026-08-23.** The last green run was #596 on 2026-08-21. PRs merge over red | ⚠️ about 8 weeks |
-| Entry chunk | **14,196 kB raw / 3,667 kB gzip**. `virtual:questions-content` is still imported eagerly in `main.tsx` | ⚠️ 3.2× larger |
+| Entry chunk | **2,626 kB raw / 730 kB gzip** (first paint, entry + CSS: 749 kB). The question bank is a lazy 11.6 MB chunk since E3; it was 14,196 kB / 3,667 kB | ↓ 5× |
 | `_virtual_wiki-content` chunk | 13,359 kB raw / 4,158 kB gzip (lazy) | ↑ |
-| Bundle-size check in CI | none | — |
+| Bundle-size check in CI | `npm run size`: first paint ≤ 900 kB gzip (E3) | new |
 | Components over 600 / over 1,000 lines | 25 / 5 `.tsx` files. The largest: `Flashcards` 3,181, `ReadinessCard` 1,722, `Landing` 1,720 (still growing), `Settings` 1,131, `Search` 1,079 | `Landing` +287 |
 | `prefers-reduced-motion` | used in 12 files | ↑ from 5 |
-| `npm audit --omit=dev` | **15 vulnerabilities**: 2 high (`js-yaml`, `ws`), 9 moderate (including `dompurify`, `react-router`), 4 low. No Dependabot | ↑ from 6 |
+| `npm audit --omit=dev` | **14 vulnerabilities, 0 high** (10 moderate, 4 low) after `npm audit fix`. What's left needs a major upgrade (`react-router` 7, `katex`) or has no fix (`uuid` via `@fortune-sheet`). Dependabot configured | ↓ from 15 (2 high) |
 | Supabase | 48 migrations, 10 edge functions | — |
 | Merged PRs | about 128 since 2026-08-31 (#1374 → #1630) | — |
 
@@ -198,20 +198,22 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 ### 3.1 Now
 
 **Lane 1, engineering health (fix the gate first):**
-1. **E1: get CI green, then enforce it.** Fix the 11 e2e failures. Gate `tour.spec.ts` on
-   `TOUR_ENABLED` rather than deleting it. Then **D14**: make the CI checks required on
-   `main`. Until this is done, every other "✅ with tests" in this file is weaker than it
+1. **E1: get CI green, then enforce it.** 🟡 2026-10-17: the e2e suite passes locally
+   (`tour.spec.ts` follows `TOUR_ENABLED`; the other failures were tests behind the UI). Left:
+   see CI go green on `main` with this change, then **D14**: make the CI checks required on
+   `main`. Until both are done, every other "✅ with tests" in this file is weaker than it
    looks.
-2. **E3: move the question bank out of the entry chunk, and add a size budget to CI.**
-   This is a contained change to `vite.config.ts` and `main.tsx`. It unblocks E12 (the PWA)
-   and stops every question added from slowing the first paint for every reader.
-3. **E4: dependency hygiene.** Run `npm audit fix`, add `.github/dependabot.yml`, and
-   either document or lift the exact pin on `@supabase/supabase-js@2.39.0`.
-4. **E10: small cruft.**
-   - Move or delete the 4 stranded question files.
-   - Resolve the stray `comprehension-checks/exam-9/` file.
-   - Document the `+` space encoding in `wiki_link` in `CLAUDE.md`.
-   - Fix the stale `README.md` exam table and counts (G7).
+2. ~~**E3: move the question bank out of the entry chunk, and add a size budget to CI.**~~
+   ✅ 2026-10-17: `fetchAllQuestions` dynamic-imports the bank; the entry is 730 kB gzip
+   (from 3,667), and `npm run size` holds first paint to 900 kB in CI. E12 is unblocked.
+3. **E4: dependency hygiene.** 🟡 2026-10-17: `npm audit fix` (0 high left), and
+   `.github/dependabot.yml` (weekly, grouped). The `@supabase/supabase-js@2.39.0` pin is
+   documented there and kept out of Dependabot. Left: the majors (`react-router` 7,
+   `katex`), and lifting the Supabase pin in a PR of its own, tested signed in.
+4. **E10: small cruft.** 🟡 2026-10-17: the stray check moved to `exam-fm`, the `+`
+   encoding is in `CLAUDE.md`, and the README is current (G7 ✅). Left:
+   - the 4 stranded question files, which VERIFY can't move or delete (see §3.4);
+   - the 45 lint warnings.
 
 **Lane 2, operations (maintainer actions; no code needed):**
 1. **V1: give the Validate Sweep its secrets** (`ANTHROPIC_API_KEY`, the Supabase service
@@ -223,12 +225,9 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    in that doc.
 
 **Lane 3, content and Fact Check:**
-1. **C0: refresh the generated reports.**
-   - Regenerate `Validation Status.md` and `Concepts Without Review Questions.md`; both
-     fail `--check`.
-   - Refresh CONCEPT_GAPS' generated half, which still lists 633 missing resource pages
-     where there are now 0.
-   - Drop Exam 8's `"source_pages": "partial"` from `exam_catalog.json`.
+1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
+   passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
+   Exam 8's `"source_pages": "partial"` dropped.
 2. **V3: delta re-verify the 19 stale exam pages** (6U and 18 FSA pages). Only their links
    were retargeted, in #1629, so the re-check is cheap.
 3. **V4 (Wave 3a): verify FM Q351–Q462**, 112 questions. This is the cheapest packet in the
@@ -323,7 +322,13 @@ These are in order within each lane.
 
 _Contributors add items here in a PR. The maintainer ranks them at the next review._
 
-- None yet.
+- **V9: a way to move or retire a content file under VERIFY.** P3 (append-only) forbids
+  deleting or renaming a `.verify/` log, and `verify_check.py` fails a log whose `target:` no
+  longer exists, so a fact-checked file can't be moved or deleted at all. That blocks E10's
+  4 stranded question files (`exam-p/probability/`, `exam-p/statistics/`, `exam-fm/interest/`),
+  all verified, which the build never collects. One shape: an appended `moved_to:` /
+  `retired:` entry that the gate accepts in place of the target. It changes the VERIFY
+  rules, so it is the maintainer's call. *(Proposed 2026-10-17.)*
 
 ---
 
@@ -341,18 +346,18 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
-| E1 | CI green on `main` | ⬜ red since 2026-08-23 | **Now** | 11 failing e2e tests. Gate `tour.spec.ts` on `TOUR_ENABLED`. Was P0.1 / P0.5. |
+| E1 | CI green on `main` | 🟡 green locally, 2026-10-17 | **Now** | Fixed: `tour.spec.ts` skips while `TOUR_ENABLED` is off; `exam-pdf` (zoom is keys and gestures now; Read PDF stacks in the popup), `wiki` (the exam strip replaced the Exam dropdown), `flashcard-focus` (cards got shorter) and `store` (a race on the measured column width). The cowork and reveal failures no longer reproduce. Left: a green CI run on `main`. Was P0.1 / P0.5. |
 | E2 | Required status checks on `main` | ⬜ | **Now** | Maintainer action (D14). Without it, E1 decays again. |
-| E3 | Question bank out of the entry chunk; CI size budget | ⬜ regressed (3.67 MB gzip entry) | **Now** | Make `virtual:questions-content` per exam and loaded with a dynamic import. Was P3.3. |
-| E4 | Dependency vulnerabilities and Dependabot | ⬜ | **Now** | 15 production vulnerabilities, 2 of them high. `uuid` via `@fortune-sheet` has no fix available. |
+| E3 | Question bank out of the entry chunk; CI size budget | ✅ 2026-10-17 | — | `fetchAllQuestions` dynamic-imports `virtual:questions-content` (one lazy chunk; per-exam chunks would only pay once a surface asks for one exam's questions). Entry 3,667 → 730 kB gzip. `npm run size` in `ci.yml`, budget 900 kB. Was P3.3. |
+| E4 | Dependency vulnerabilities and Dependabot | 🟡 | **Now** | Done: `npm audit fix` (15 → 14, 2 high → 0); `.github/dependabot.yml`, npm and Actions weekly. Left: `react-router` 6 → 7 and `katex` (majors, moderate advisories); `uuid` via `@fortune-sheet` has no fix; lift the Supabase pin (2.39 → 2.1xx) in its own PR, tested against a real project — Dependabot ignores it until then. |
 | E5 | Split the god components | ⬜ | Next | `Landing` 1,720 (growing), `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
 | E6 | Golden vectors for the duplication contracts | ⬜ | Next | `leagues.ts` ↔ the leagues SQL; `dailyEmail.ts` ↔ the edge function. The pattern to copy is `passRates`. |
 | E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). |
 | E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |
 | E9 | Codify `components/ui/` against the style guide | 🟡 | Later | The style guide *is* the design system; the primitives aren't codified against it. Was P3.2. |
-| E10 | Cruft | ⬜ | **Now** | The 4 stranded question files; the stray `comprehension-checks/exam-9/` file; the `+` encoding written into `CLAUDE.md`; 45 lint warnings. |
+| E10 | Cruft | 🟡 | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`. Left: the 4 stranded question files (blocked on V9, §3.4); 45 lint warnings (34 `only-export-components`, 11 `exhaustive-deps`). |
 | E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand after touching the Actuaria migrations. |
-| E12 | PWA and offline | ⬜ | Later | Blocked on E3. Was P1.6. |
+| E12 | PWA and offline | ⬜ | Later | E3 is done, so nothing blocks it now. Was P1.6. |
 
 ### 4.2 L: The learning engine (Study Mode)
 
@@ -399,7 +404,7 @@ The **rule** for this track: an exam changes status only through
 
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
-| C0 | Refresh the generated reports | ⬜ stale | **Now** | `Validation Status.md` and `Concepts Without Review Questions.md` both fail `--check`. CONCEPT_GAPS still says 633 missing resources (there are 0). Exam 8's `source_pages: partial` should go. |
+| C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
 | C1 | Exam 8 → ready | 🟡 2 of 7 gates | **Now** | CAS plan step 4. The *Rating Class* catch-all; 23 concepts; 12 readings (pages exist, none verified); 6 concepts with no question; 0 of 132 questions verified. |
 | C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Step 5. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
 | C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Step 6. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
@@ -474,7 +479,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | G4 | Monetization packaging | 🟡 "Pro" rename; Today's Study Plan is Pro-only | Later | Stripe hasn't changed since July. Waits on D13. Rule: never paywall the core retrieval loop. Was P4.3. |
 | G5 | Referrals | 🅿️ | Parked | Was P4.2. Comes back once the gem economy's metrics (§7) are actually read. |
 | G6 | Leagues' deliberate deferrals | ⬜ | Later | Realtime boards, study-group leagues (Actuaria's cohorts are the model to copy), league history. |
-| G7 | README is stale | ⬜ | **Now** (with E10) | Its exam table shows MAS-I, the DISCs and 7 as Beta / In development, and its counts are old (about 900 concepts, 2,000+ questions, about 140 sources). |
+| G7 | README is stale | ✅ 2026-10-17 | — | The exam table follows `examStatus.ts` (MAS-I, 7 and the DISCs complete; the SOA exams past FM listed as in development), and the counts are current (43 exam pages, ~1,400 concepts, ~750 sources, 3,300+ questions). |
 
 ### 4.7 X: Experiences and experiments
 
@@ -502,8 +507,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 ## 5. Dependencies to keep in mind
 
 - **E1 → everything.** A refactor (E5) without a working regression net is a gamble.
-- **E3 → E12 → L7.** You can't build a PWA on a 3.7 MB entry, and push needs a service
-  worker.
+- **E3 → E12 → L7.** E3 is done (a 730 kB entry); push still needs E12's service worker.
 - **L1 → L5, L6, and §7's Learning and Re-engagement metrics.**
 - **L2 → L3.** The mistakes deck is prioritised by confidence.
 - **V1/V2 → the credibility of every Fact Check badge**, and the README's claim of review.
@@ -588,7 +592,7 @@ Where a default is given, sessions build with it until the decision is made.
 | Content trust | % of files verified (48.6%); open critical findings (2); stale files (21) | Measured (`Validation Status.md`) |
 | Publication | Exams ready (7 of 43); gates passed per beta exam | Measured (`publication_readiness.py`) |
 | Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; **CI is red** |
-| Performance | Entry chunk gzip (today 3,667 kB); LCP / INP | ⬜ E3 adds the budget |
+| Performance | Entry chunk gzip (today 730 kB, budget 900 kB for first paint); LCP / INP | 🟡 the budget is in CI; LCP / INP unmeasured |
 | Monetization | Trial → paid; Pro retention | Stripe data |
 
 ---
@@ -604,7 +608,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
 | `docs/cas-publication-plan.md` | Subplan: CAS exams to ready | C1–C7 | Active, current | 2026-10-16 |
 | `docs/verification-plan.md` | Subplan: verification waves | V1–V8 | Active. Its snapshot is from 9 Oct | 2026-10-09 |
-| `CONCEPT_GAPS_PLAN.md` | Subplan: missing concept pages | C11 | Phases A–D done. **Needs refresh** (its generated half) | 2026-10-10 |
+| `CONCEPT_GAPS_PLAN.md` | Subplan: missing concept pages | C11 | Phases A–D done; generated half refreshed | 2026-10-17 |
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
@@ -665,7 +669,7 @@ a fact is verified only against a citable source (`verification.md`, P1).
 |---|---|---|
 | **The gate is decorative.** CI has been red for 8 weeks and PRs merge over it | CI on `main` | E1 + E2 now. Treat a red `main` as a stop-the-line event. |
 | **Trust surfaces with nothing behind them** (Fact Check, the email, Listen) | the §2 "built, not operating" list | Operate before extending. Lane 2 of Now. |
-| **The bundle grows with the content** | entry chunk gzip | E3 + a CI budget. Every new question currently slows first paint for everyone. |
+| **The bundle grows with the content** | entry chunk gzip | E3 done: the bank is lazy and `npm run size` fails CI over 900 kB. The lazy chunks (questions 2.9 MB, wiki 4.2 MB gzip) still grow with every page. |
 | **Breadth outruns depth.** About 128 PRs since August, mostly new surfaces, while Phase 2 learning items didn't move | §4.2 rows unchanged at a review | §0.3 rule 4: new surfaces wait until their lane's rules 1–3 are clear. |
 | **AI-written content without review** (Craft labels, concept-gap pages) | unverified counts | X2, V8. The README's promise of human review. |
 | **Gamification drifting from learning** | quest-vs-plan ratio; per-concept retention | L1 first; keep rewards claim-based. |
@@ -702,6 +706,8 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 
 ## Appendix B: Revision history
 
+- **2026-10-17, later. The first Now items.** E3, C0 and G7 are ✅. E1 is green locally,
+  awaiting CI. E4 and E10 are 🟡. Proposed V9 (§3.4): VERIFY can't move or retire a file.
 - **2026-10-17. Consolidation.** This file became the one roadmap for every product line,
   absorbing:
   - the 2026-07-24 learning-app roadmap (whose phases are mapped onto tracks E, L and G);

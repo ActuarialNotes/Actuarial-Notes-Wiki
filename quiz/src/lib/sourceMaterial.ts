@@ -17,6 +17,7 @@
 // is under no objective, and a code the page doesn't number is offered bare.
 
 import { splitWeightTag } from './examWeight'
+import { hrefToEntryRef, pathToEntryRef, type WikiEntryRef } from './wikiRoutes'
 
 export interface SourceMaterialEntry {
   /** Canonical page name — the last path segment of the [[target]]. */
@@ -128,6 +129,29 @@ export function extractSourceMaterial(md: string): {
   ].join('\n')
 
   return { markdown, entries }
+}
+
+/**
+ * The page a reading opens. A syllabus names its readings however it likes —
+ * `[[CIA Discount Rates]]`, `[[Basic Ratemaking (Werner - 2016)]]` — and a bare
+ * name reads as a concept, which sends the reader to a `Concepts/` page that
+ * isn't there. So where the wiki index has a resource page by the reading's
+ * name (`documentPath`, its repo path), that page decides; a link that already
+ * says where it goes, or a reading with no resource page, keeps its link.
+ */
+export function sourceEntryRef(entry: SourceMaterialEntry, documentPath?: string): WikiEntryRef {
+  const linked = hrefToEntryRef(entry.target) ?? { kind: 'concept' as const, name: entry.name }
+  if (linked.kind !== 'concept' || !documentPath) return linked
+  return pathToEntryRef(documentPath) ?? linked
+}
+
+/** Resource pages' repo paths by lowercased page name — `sourceEntryRef`'s lookup. */
+export function documentPathsByName(items: readonly { category: string; name: string; path: string }[]): Map<string, string> {
+  const map = new Map<string, string>()
+  for (const item of items) {
+    if (item.category === 'document') map.set(item.name.toLowerCase(), item.path)
+  }
+  return map
 }
 
 // ---------------------------------------------------------------------------

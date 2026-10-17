@@ -1,14 +1,16 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'fs'
+import { existsSync, readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import {
   cleanReadingDetail,
+  documentPathsByName,
   extractSourceMaterial,
   filterSourcesByObjectives,
   objectiveFilterOptions,
   parseSyllabusObjectives,
   readingObjectives,
+  sourceEntryRef,
   SOURCE_MATERIAL_MARKER,
   type SourceMaterialEntry,
 } from './sourceMaterial'
@@ -342,6 +344,46 @@ describe('Exam MAS-I (CAS).md source material', () => {
       const cited = readingObjectives(entry.detail)
       expect(cited, entry.name).not.toEqual([])
       for (const code of cited) expect(codes.has(code), `${entry.name}: ${code}`).toBe(true)
+    }
+  })
+})
+
+describe('sourceEntryRef', () => {
+  const entry = (target: string): SourceMaterialEntry => {
+    const name = target.split('/').pop()!
+    return { name, target, label: name }
+  }
+
+  it('opens a bare-named reading as the resource page the index has for it', () => {
+    expect(sourceEntryRef(entry('CIA Discount Rates'), 'Resources/Books/CIA Discount Rates.md'))
+      .toEqual({ kind: 'resource', name: 'CIA Discount Rates' })
+  })
+
+  it('keeps a bare name with no resource page a concept', () => {
+    expect(sourceEntryRef(entry('Actuarial Standards of Practice')))
+      .toEqual({ kind: 'concept', name: 'Actuarial Standards of Practice' })
+  })
+
+  it('keeps a link that already says where it goes', () => {
+    expect(sourceEntryRef(entry('Resources/Books/PACICC'), 'Resources/Books/PACICC.md'))
+      .toEqual({ kind: 'resource', name: 'PACICC' })
+  })
+
+  // Every reading on every exam page opens a page that exists: the bug was
+  // Exam 6C's `[[CIA Discount Rates]]` opening Concepts/CIA Discount Rates.md.
+  it('sends every exam page reading to a file in the vault', () => {
+    const books = readdirSync(path.join(REPO_ROOT, 'Resources/Books'))
+      .filter(f => f.endsWith('.md'))
+      .map(f => ({ category: 'document', name: f.slice(0, -3), path: `Resources/Books/${f}` }))
+    const paths = documentPathsByName(books)
+    const exams = readdirSync(REPO_ROOT).filter(f => /^Exam .*\.md$/.test(f))
+    for (const exam of exams) {
+      const md = readFileSync(path.join(REPO_ROOT, exam), 'utf8')
+      for (const e of extractSourceMaterial(md).entries) {
+        const ref = sourceEntryRef(e, paths.get(e.name.toLowerCase()))
+        const file = ref.kind === 'resource' ? `Resources/Books/${ref.name}.md` : `Concepts/${ref.name}.md`
+        expect(existsSync(path.join(REPO_ROOT, file)), `${exam}: ${e.target} → ${file}`).toBe(true)
+      }
     }
   })
 })

@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e00201cd0da1da4d35263e61d070ff5266dc0ef59f4d45def269bb662eb2d72e
+  content_hash: sha256:a5df1a8e76e3413c024586ea9f8b9cf93cf8d1a4c8cdcdbfefd654402c501e0a
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201I, all pages, sha256:3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf"
   open_findings: 0
@@ -107,7 +107,7 @@ verification:
 >      - Outcomes 1a, 1b
 > - [[ILA201-601-25 - The IFRS 17 Contractual Service Margin - A Life Insurance Perspective|ILA201-601-25: The IFRS 17 Contractual Service Margin: A Life Insurance Perspective (Sections 2-4.8)]]
 >      - Outcomes 1a, 1b
-> - [[CIA Educational Note - IFRS 17 Coverage Units for Life and Health Insurance Contracts (2022)|CIA Educational Note: IFRS 17 Coverage Units for Life and Health Insurance Contracts, Dec 2022]]
+> - [[CIA Educational Note – IFRS 17 Coverage Units for Life and Health Insurance Contracts (2022)|CIA Educational Note: IFRS 17 Coverage Units for Life and Health Insurance Contracts, Dec 2022]]
 >      - Outcomes 1a, 1b
 > - [[CIA Educational Note - IFRS 17 Estimates of Future Cash Flows for Life and Health Insurance Contracts (2022)|CIA Educational Note: IFRS 17 Estimates of Future Cash Flows for Life and Health Insurance Contracts, Jun 2022]]
 >      - Outcomes 1a, 1b
@@ -121,15 +121,15 @@ verification:
 >      - Outcomes 1a, 1b
 > - [[CIA Educational Note - IFRS 17 – Fair Value of Insurance Contracts (2022)|CIA Educational Note: IFRS 17 – Fair Value of Insurance Contracts, Jun 2022]]
 >      - Companion Excel Spreadsheet: Educational Note: IFRS 17 – Fair Value of Insurance Contracts (1a, 1b)
-> - [[ILA201-602-25 - OSFI B-3 Sound Reinsurance Practices and Procedures|ILA201-602-25: OSFI B-3 Sound Reinsurance Practices and Procedures]]
+> - [[OSFI Reinsurance|ILA201-602-25: OSFI B-3 Sound Reinsurance Practices and Procedures]]
 >      - Outcomes 1a, 1b
-> - [[ILA201-603-25 - OSFI Guideline E15 - Appointed Actuary – Legal Requirements|ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023]]
+> - [[OSFI AA|ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023]]
 >      - Outcomes 1a, 1b
-> - [[Regulatory Capital Adequacy for Life Insurance Companies - A Comparison of Four Jurisdictions (SOA Research Institute - 2023)|Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023]]
+> - [[Regulatory Capital Adequacy for Life Insurance Companies (SOA Research - 2023)|Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023]]
 >      - Companion Excel Spreadsheet: Comparison of Jurisdictions Tool (2a)
 > - [[ILA201-604-25 - OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT)|ILA201-604-25: OSFI Guideline – Life Insurance Capital Adequacy Test (LICAT), November 2024, Ch. 1-6 (excluding Sections 4.2-4.4)]]
 >      - Outcomes 2a
-> - [[ILA201-605-25 - OSFI Guideline A-4 Internal Target Capital Ratio for Insurance Companies|ILA201-605-25: OSFI Guideline A-4 Internal Target Capital Ratio for Insurance Companies, Dec 2017]]
+> - [[OSFI Target Capital|ILA201-605-25: OSFI Guideline A-4 Internal Target Capital Ratio for Insurance Companies, Dec 2017]]
 >      - Outcomes 2a
 > - [[A Multi-Stakeholder Approach to Capital Adequacy (Conning Research)|A Multi-Stakeholder Approach to Capital Adequacy, Conning Research, Actuarial Practice Forum]]
 >      - Outcomes 2b
@@ -141,7 +141,7 @@ verification:
 >      - Outcomes 3a, 3b
 > - [[Rating Agency Perspectives on Insurance Company Capital (SOA Research Institute - 2023)|Rating Agency Perspectives on Insurance Company Capital, SOA Research Institute, Aug 2023 (excluding Appendices)]]
 >      - Outcomes 3b
-> - [[ILA201-606-25 - OSFI - Own Risk and Solvency Assessment (E-19)|ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19)]]
+> - [[OSFI ORSA|ILA201-606-25: OSFI: Own Risk and Solvency Assessment (E-19)]]
 >      - Outcomes 3c
 > - [[ILA201-101-25 - Life in-force Management - Improving Consumer Value and Long-Term Profitability|ILA201-101-25: Life in-force Management: Improving Consumer Value and Long-Term Profitability]]
 >      - Outcomes 4a

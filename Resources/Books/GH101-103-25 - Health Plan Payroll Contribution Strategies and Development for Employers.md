@@ -1,0 +1,33 @@
+---
+Title: "Health Plan Payroll Contribution Strategies and Development for Employers"
+Authors: "Society of Actuaries"
+Publisher: "Society of Actuaries"
+Year: "2025"
+date: "2025"
+Type: "Study Note"
+Code: "GH101-103-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:12863c56f50aec1b1c6509379e33e8ef0c113bdfa1b19199803786d5f5bda2b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/GH101-103-25 - Health Plan Payroll Contribution Strategies and Development for Employers.md
+---
+![[GH101-103-25 - Health Plan Payroll Contribution Strategies and Development for Employers - Cover.svg]]
+
+A six-page Society of Actuaries study note (code GH101-103-25) for the GH 101 course. The SOA's course strategy guide describes it as an overview of the topic and of the decisions an employer makes when setting a benefit strategy, with some simple math.
+
+> [!info] On the syllabus
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 4b; study note GH101-103-25.
+
+> [!note] Contents unavailable
+> No copy of this study note is published; the SOA supplies it with the course study notes. This page records its citation, what the SOA says about it, and its assignment from the syllabus.
+
+## Sources
+- [GH 101 Intro Study Note, November 2026 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-11-gh-101-intro-study-note.pdf) — the study-note code GH101-103-25 and its title; no author, date or copy of the note is given, so the issuing body is the Society of Actuaries and the year is the one in the code
+- [GH 101 Course Strategy Guide, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-strat-guide.pdf) — what the SOA says about the note: a 6-page overview of the topic and the decisions an employer makes when setting a benefit strategy, with some simple math
+- [GH 101 Syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf) — the reading (GH101-103-25) and its learning outcome

@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5936c0f3d04d8bd2fdcb32c7d38467241dc5f2fb70d78c350374c195bb43a0a0
+  content_hash: sha256:d814a3d414a278b5ec5c535802ae0c19d23f57a1e376927ef89c29fc9566ce3f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A CAS text on financial reporting and taxation as they affect reserving and stat
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C4 and C5; Chapters 1–5 (excluding Part III), 25 and 27.
+> - [[Exam 6U (CAS)|Exam 6U]] — objectives A2, C1–C7 and C9–C10; Edition 5, excluding Part VII (the Canadian introduction and Chapters 27–29) and Appendix II, including errata (as the content outline states it)
 
 ## Part I Introduction
 - 1 Financial Reporting in the Property/Casualty Insurance Industry
@@ -145,3 +146,4 @@ A CAS text on financial reporting and taxation as they affect reserving and stat
 ## Sources
 - [Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2020)](https://www.casact.org/sites/default/files/2021-03/6C_CAS_Financial_Reporting.pdf) — the document: title page, foreword, table of contents and bookmarks, and the text of Chapters 1–5, 25 and 27
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation (which gives the edition as Edition 5) and the assigned chapters
+- [CAS Exam 6U Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf) — the citation (Edition 5, 2020) and the exclusions

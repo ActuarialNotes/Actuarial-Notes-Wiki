@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6ed399108732f34834a619a42ddf24204772a67ea6eb2bb465c64dccf2c669b8
+  content_hash: sha256:78b546bc4bd10ac02aafdea9770930f914aeb0108ba7ff6ff5e77c97bb524a05
   sources:
     - "CAS, Exam Content Outline — United States Regulation and Financial Reporting – Exam 6U, Fall 2026 (Exam_6U_CO_2026_F v02 2026_4_2, 12 pp.), PDF pp.1-12, sha256:11d626dc3093e467832cce0b86eca970c6add2904bb028d36f4c5b6e80356951 — https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf"
     - "CAS, Exam 6U — Regulation and Financial Reporting (US) exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026; refund deadline October 6, 2026; fee $850 ($680 students); 'October 2026 Content Outline' the only outline linked, sha256:ec11b08b8decba6cb4c7372bbb5b3a6afdf164ae5042fbc1b9017d996008713c — https://www.casact.org/exam/exam-6u-regulation-and-financial-reporting-us"
@@ -78,7 +78,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - C6, C7
 > - [[Actuarial Standard of Practice No. 36 Statements of Actuarial Opinion on P&C Loss Reserves (ASB - 2024)]]
 >      - C7
-> - [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]]
+> - [[ASOP 41 - Actuarial Communications]]
 >      - C6
 > - [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
 >      - C6
@@ -104,7 +104,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - A3
 > - [[Annual Report on the Insurance Industry Dodd-Frank (FIO - 2024)]]
 >      - A3
-> - [[Rating Agencies (Feldblum - 2011)]]
+> - [[Feldblum]]
 >      - A2
 > - [[Statutory Surplus Computation Pricing and Valuation (Feldblum - 2003)]]
 >      - C1–C2
@@ -112,7 +112,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - D2
 > - [[FHCF 2024 Annual Report (SBA Florida - 2024)]]
 >      - B1–B3
-> - [[Common Pitfalls and Practical Considerations in Risk Transfer Analysis (Freihaut & Vendetti - 2009)]]
+> - [[Freihaut and Vendetti]]
 >      - D2
 > - [[Government Insurers Study Note]]
 >      - B1–B3
@@ -148,7 +148,7 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - D2
 > - [[NAIC Insurance Regulatory Information System IRIS Ratios Manual (NAIC - 2024)]]
 >      - A2, C3, C7
-> - [[Official 2024 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2024)]]
+> - [[Official 2025 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2025)]]
 >      - C1–C2
 > - [[NAIC Annual Statement Examples Allstate Liberty Mutual (NAIC - 2024)]]
 >      - C1
@@ -156,11 +156,11 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 >      - A5
 > - [[Risk Retention Groups (NAIC - 2023)]]
 >      - A3
-> - [[Financial Reporting Through the Lens of a Property Casualty Actuary (Odomirok et al. - 2020)]]
+> - [[CAS Financial Reporting]]
 >      - A2, C1–C7, C9–C10
-> - [[Insurance Regulation Chapters 2-8 (Porter - 2008)]]
+> - [[Insurance Regulation (Porter - 2008)]]
 >      - A1–A2
-> - [[Insurance Regulation Chapter 12 (Porter - 2008)]]
+> - [[Insurance Regulation (Porter - 2008)]]
 >      - A2, B1
 > - [[The Economic Crisis and Lessons from U.S. Insurance Regulation (Vaughn - 2009)]]
 >      - A2, A4

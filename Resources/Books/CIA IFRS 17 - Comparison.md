@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4075e3b7bb7cfa0f6ff2202fe9adff7b9fe3518a3d29b22e67099c4bb0d587aa
+  content_hash: sha256:48ec7b9d843220ca6c272b3369c6d9f43d8782e334281df0cf3cf9f47b627380
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ A CIA educational note identifying the key differences between IFRS 17 and the C
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objective C1; excluding 3.2, 5.3, 7.2, 8.1.2, Appendix A, Appendix B and Appendix D.
+> - [[Exam GH-201C (SOA)|Exam GH-201C]] — Financial Statements, outcomes 2e and 2f; the June 2022 note, excluding sections 3.3, 7.2.1, 7.2.2, 7.2.3, 7.2.5 and 8.1.1.
 
 ## 1 Introduction
 - [[IFRS 17]] becomes effective in Canada on January 1, 2023; the note gives actuaries an overview of how IFRS 17 measurement of liabilities compares with current practice in Canada.
@@ -129,3 +130,4 @@ A CIA educational note identifying the key differences between IFRS 17 and the C
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope, with its exclusions
 - [IFRS 17 Risk Adjustment for Non-Financial Risk for Property and Casualty Insurance Contracts (CIA, 2024)](https://www.cia-ica.ca/publications/224090e/) — its preamble, stating that it revises the June 2022 note
 - [IFRS 17 Discount Rates and Cash Flow Considerations for Property and Casualty Insurance Contracts (CIA, 2025)](https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=628504&fid=628505) — its preamble, stating that it was originally published in June 2022
+- [SOA GH 201-C Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) — the citation and the assigned outcomes, with its exclusions

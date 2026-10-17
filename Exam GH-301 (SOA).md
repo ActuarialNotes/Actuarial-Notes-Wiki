@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b80c918194c369b6e885b5b1a23e4a6a4c33e8202f694b13319d53e200630995
+  content_hash: sha256:1aff49e8a2fb3decff9e09182c8cad8779dab4a7639b6830519c4986347ba548
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-301, all pages, sha256:2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd — https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf"
   open_findings: 0
@@ -197,7 +197,7 @@ verification:
 >      - Outcomes 3c
 > - [[ASOP 45 - The Use of Health Status Based Risk Adjustment Methodologies|ASOP 45: The Use of Health Status Based Risk Adjustment Methodologies (excluding Appendices)]]
 >      - Outcomes 3c
-> - [[1 Risk Adjustment in this course refers to adjusting revenue or capitation rates as applicable to the US health insurance market. This is distinct from the IFRS concept of risk adjustment|1 Risk Adjustment in this course refers to adjusting revenue or capitation rates as applicable to the US health insurance market. This is distinct from the IFRS concept of risk adjustment.]]
+> - 1 Risk Adjustment in this course refers to adjusting revenue or capitation rates as applicable to the US health insurance market. This is distinct from the IFRS concept of risk adjustment.
 > - [[eLearning Module - FSA - Terminology and Analytical Use of Data for Healthcare Actuaries|eLearning Module: FSA: Terminology and Analytical Use of Data for Healthcare Actuaries]]
 >      - Outcomes 4a-4h
 > - [[GH301-108-25 - Social Determinants of Health in the Work of Health Actuaries|GH301-108-25: Social Determinants of Health in the Work of Health Actuaries]]
@@ -210,7 +210,7 @@ verification:
 >      - Outcomes 5d
 > - [[How Does Where You Live Impact Your Health (SOA Research Institute - 2022)|How Does Where You Live Impact Your Health?, SOA Research Institute, Mar 2022, Sections 3 & 5]]
 >      - Outcomes 5d
-> - [[Social (SOA Research Institute - 2023)|Social, Physical and Cultural Determinants of Health: Their Incorporation into Actuarial Data and Workstreams, SOA Research Institute, Apr 2023, Sections 3-6]]
+> - [[Social, Physical and Cultural Determinants of Health (SOA Research Institute - 2023)|Social, Physical and Cultural Determinants of Health: Their Incorporation into Actuarial Data and Workstreams, SOA Research Institute, Apr 2023, Sections 3-6]]
 >      - Outcomes 5b, 5c
 > - [[eLearning Module - FSA - Predictive Modeling for Healthcare Actuaries|eLearning Module: FSA: Predictive Modeling for Healthcare Actuaries]]
 >      - Outcomes 6a-6e

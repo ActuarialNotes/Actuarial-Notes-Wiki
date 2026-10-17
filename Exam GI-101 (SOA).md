@@ -5,11 +5,11 @@ syllabus:
   source_sha256: deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8bbb4f4d201b9672253d5937305405cb256cc8fad4cb25e9dbb87c900d6aac7b
+  content_hash: sha256:d9d194ae7be116b7b724d159b4c5068aec1a79088f518449d3075ced99c2c4b8
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GI-101, all pages, sha256:deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf"
   open_findings: 0
@@ -161,5 +161,5 @@ verification:
 >      - Part 7: Ratemaking (Chapters 30 through 32) (6a-h)
 >      - Appendices A through C, and F (excluding A.3.6, A.5) (6a-h)
 >      - Appendices A through C, and F (excluding A.3.6, A.5) (7a-f)
-> - [[Actuarial Standards of Practice (Credibility Procedures - 2013)|Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries, No. 25, Credibility Procedures, 2013]]
+> - [[ASOP 25 - Credibility Procedures (ASB - 2013)|Actuarial Standards of Practice, Actuarial Standards Board of the American Academy of Actuaries, No. 25, Credibility Procedures, 2013]]
 >      - Outcomes 1l

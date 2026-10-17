@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7bcacda0a1e1f3a6161084c88f5216e70dbb41669b67c68bf0c74aa618627f9f
+  content_hash: sha256:20c29e9d92d9d36dedb7cf682720f70a99d4f0b81fd4cf74831e1e177e4a04c2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ OSFI Guideline E-15 describes the role of the Appointed Actuary in federally reg
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objective C5; the whole guideline.
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — International Financial Reporting Requirements, outcomes 1a and 1b; ILA201-603-25: OSFI Guideline E15: Appointed Actuary – Legal Requirements, Qualifications and External Review, Aug 2023 (OSFI titles its August 2023 guideline "… Qualifications and Peer Review").
 
 ## 1 Introduction
 - Other OSFI guidelines and memoranda add to the [[Appointed Actuary]]'s responsibilities; the annual Memorandum to the Appointed Actuary, issued in separate life and P&C versions, is particularly important.
@@ -79,3 +80,4 @@ OSFI Guideline E-15 describes the role of the Appointed Actuary in federally reg
 ## Sources
 - [Appointed Actuary: Legal Requirements, Qualifications and Peer Review – Guideline (2023) (OSFI, 2023)](https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/appointed-actuary-legal-requirements-qualifications-peer-review-guideline-2023) — the document: number E-15, date August 31, 2023, sector, section headings and the text of Sections 1–5
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope
+- [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation (reading ILA201-603-25, August 2023) and the assigned outcomes

@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4499e383d664cc13f615319a8af432aeb03c4cb0218d2255c0a96db127bdd132
+  content_hash: sha256:b1c6fe9a2ee769a3c9b90061978aff5f42f4186f4e97b7467a194dce98d56fa3
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
   open_findings: 0
@@ -143,7 +143,7 @@ verification:
 >      - Risk Inventory, Taxonomy, Calibration (1c)
 > - [[CP351-105-25 - Chapter 16 of Asset-Liability Management of Financial Institutions|CP351-105-25: Chapter 16 of Asset/Liability Management of Financial Institutions, Tilman 2003]]
 >      - Outcomes 1d
-> - [[CP351-106-25 - Liability Driven Investment Explained Chapters 1-2|CP351-106-25: Liability Driven Investment Explained Chapters 1-2]]
+> - [[CP351-106-25 - Liability Driven Investment Explained|CP351-106-25: Liability Driven Investment Explained Chapters 1-2]]
 >      - Outcomes 1d
 > - [[CP351-107-25 - Key Rate Durations - Measures of Interest Rate Risk|CP351-107-25: Key Rate Durations: Measures of Interest Rate Risk]]
 >      - Outcomes 2a

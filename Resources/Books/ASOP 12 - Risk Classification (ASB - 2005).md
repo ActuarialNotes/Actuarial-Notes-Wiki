@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:48a6dcdeeaaf76da46116d8bbc9486cd39c91f2a840a2ec9d3c893d305b18fda
+  content_hash: sha256:f1d6364a98b5eb4fbddc5a621f41a7bb14a013152b657fa844a5388db77ed98b
   sources: []
   open_findings: 0
   open_critical: 0
@@ -26,6 +26,7 @@ The Actuarial Standards Board's guidance for actuaries designing, reviewing, or 
 > - [[Exam 5 (CAS)|Exam 5]] — objectives A4–A5; the standard as revised in 2005 and updated for deviation language in 2011.
 > - [[Exam 8 (CAS)|Exam 8]] — objective A2.
 > - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f.
+> - [[Exam GI-301 (SOA)|Exam GI-301]] — Outcomes 6b; ASOP No. 12 as last revised in 2011, excluding Appendix 2.
 
 ## Transmittal Memorandum
 
@@ -98,3 +99,4 @@ The Actuarial Standards Board's guidance for actuaries designing, reviewing, or 
 - [Risk Classification (for All Practice Areas), ASOP No. 12 (Actuarial Standards Board, 2005)](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf) — the document (Doc. No. 132): title page, table of contents, transmittal memorandum, sections 1–4 and appendix 1
 - [ASOP No. 12, CAS copy](https://www.casact.org/sites/default/files/2021-03/5_ASOP_12.pdf) — the copy the Exam 5 content outline links; byte-identical to the ASB's PDF
 - [CAS Exam 5 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf) — the citation and the assigned objectives
+- [GI 301 Syllabus, Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf) — the citation and the assignment (outcome 6b, last revised 2011, excluding Appendix 2)

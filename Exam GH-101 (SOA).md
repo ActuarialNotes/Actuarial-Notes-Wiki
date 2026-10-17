@@ -5,11 +5,11 @@ syllabus:
   source_sha256: fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1ede8673ee689cfdd7511cfc5b62cd58b867a2f89204d024973360bfce509aaa
+  content_hash: sha256:e3afec353d3f2bb17a225b0d821f9d21a3a9f7512edb448f877da539c300999f
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-101, all pages, sha256:fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806 — https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf"
   open_findings: 0
@@ -135,7 +135,7 @@ verification:
 >      - Ch. 29: Group Insurance Underwriting (3a)
 >      - Ch. 30: Managing Selection in a Multiple-Choice Environment (3c)
 >      - Ch. 34: Health Risk Adjustment (pp. 579-585) (3b)
-> - [[GH101-100-26 - Chapter 5 of Individual Health Insurance|GH101-100-26: Chapter 5 of Individual Health Insurance, Leida, Hans, 3rd Edition, 2026]]
+> - [[Individual Health Insurance (Leida - 2026)|GH101-100-26: Chapter 5 of Individual Health Insurance, Leida, Hans, 3rd Edition, 2026]]
 >      - Outcomes 2b, 2c, 2d
 > - [[Closing the Analytical Loop - Technology Assessments and Actuarial Methods (SOA Research Institute - 2025)|Closing the Analytical Loop: Technology Assessments and Actuarial Methods, SOA Research Institute, Jan 2025]]
 >      - Outcomes 2c
@@ -143,7 +143,7 @@ verification:
 >      - Outcomes 2f
 > - [[ASOP 23 - Data Quality (ASB - 2016)|ASOP 23: Data Quality (excluding Appendices)]]
 >      - Outcomes 2f
-> - [[ASOP 25 - Credibility Procedures|ASOP 25: Credibility Procedures (excluding Appendices)]]
+> - [[ASOP 25 - Credibility Procedures (ASB - 2013)|ASOP 25: Credibility Procedures (excluding Appendices)]]
 >      - Outcomes 2f
 > - [[ASOP 41 - Actuarial Communications|ASOP 41: Actuarial Communications (excluding Appendices)]]
 >      - Outcomes 2f

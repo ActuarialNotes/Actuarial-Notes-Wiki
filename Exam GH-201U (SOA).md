@@ -5,11 +5,11 @@ syllabus:
   source_sha256: dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:48b89b5854c275f0e5592b970da4a09218fc0e9637354449341ce9f5c4358621
+  content_hash: sha256:417fbe56e7f1b80657986906cdf7583423a84312c8a97a6d7610fa7258659b49
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201U, all pages, sha256:dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf"
   open_findings: 0
@@ -196,5 +196,5 @@ verification:
 >      - Outcomes 5a-5d
 > - [[GH201-103-25 - Health Economics and Financing|GH201-103-25: Health Economics and Financing, Getzen, Thomas and Kobernick, Michael, 6th Edition, 2022: Sections 5.4 - 5.6, 6.2 - 6.3, 7.4 - 7.5, 8.4 - 8.5, 13.2 - 13.3]]
 >      - Outcomes 5a, 5c
-> - [[Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA/CIA - 2014)|Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer, SOA/CIA, Sep 2013, pp. 1-3, 51-54, 82]]
+> - [[Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer (SOA-CIA - 2014)|Sustainability of the Canadian Health Care System and Impact of the 2014 Revision to the Canada Health Transfer, SOA/CIA, Sep 2013, pp. 1-3, 51-54, 82]]
 >      - Outcomes 5d

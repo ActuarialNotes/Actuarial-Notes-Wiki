@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49
   extracted_at: 2026-10-05
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:699e03ee30b2ff0397941034d381267a2c273bd88d253576b9aa416b6664acae
+  content_hash: sha256:cbc56ebe3205a78fc0a727f1fef8294343920c2423b48d3f693b07f8451b86c9
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-101, all pages, sha256:6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf"
   open_findings: 0
@@ -152,7 +152,7 @@ verification:
 >      - Outcomes 1c
 > - [[ILA101-103-25 - Ch. 9 of Life Insurance Products and Finance|ILA101-103-25: Ch. 9 of Life Insurance Products and Finance, Atkinson and Dallas]]
 >      - Outcomes 1c
-> - [[ILA101-104-25 - Ch. 11|ILA101-104-25: Ch. 11, pp. 499-512 of Life Insurance Products and Finance, Atkinson and Dallas]]
+> - [[ILA101-103-25 - Ch. 9 of Life Insurance Products and Finance|ILA101-104-25: Ch. 11, pp. 499-512 of Life Insurance Products and Finance, Atkinson and Dallas]]
 >      - Outcomes 1c
 > - [[ILA101-105-25 - Life Insurance and Annuity Non-forfeiture Practices|ILA101-105-25: Life Insurance and Annuity Non-forfeiture Practices]]
 >      - Outcomes 1d
@@ -203,7 +203,7 @@ verification:
 >      - Outcomes 4b
 > - [[ILA101-111-25 - Insurance Contracts First Impressions - 2020 Edition IFRS 17|ILA101-111-25: Insurance Contracts First Impressions: 2020 Edition IFRS 17, (only Sections 1.1-1.2, 3.1, 5.1-5.3, 6.1-6.4, 14.1-14.2, 15.1-15.2, 17.1-17.3, 20.1)]]
 >      - Outcomes 4c
-> - [[Regulatory Capital Adequacy for Life Insurance Companies - A Comparison of Four Jurisdictions (SOA Research Institute - 2023)|Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023]]
+> - [[Regulatory Capital Adequacy for Life Insurance Companies (SOA Research - 2023)|Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research Institute, Jul 2023]]
 >      - Companion Excel Spreadsheet: Comparison of Jurisdictions Tool (4d)
 > - [[ILA101-112-25 - Revisiting the Role of Insurance Company ALM within a Risk Management Framework|ILA101-112-25: Revisiting the Role of Insurance Company ALM within a Risk Management Framework]]
 >      - Outcomes 5a
@@ -216,7 +216,7 @@ verification:
 >      - Ch. 4: Pricing and Valuation (excluding Section 4.7) (5c)
 > - [[ILA101-115-25 - Simulation of a Guaranteed Minimum Annuity Benefit|ILA101-115-25: Simulation of a Guaranteed Minimum Annuity Benefit, Freedman, 2019]]
 >      - Excel Model - Stochastic Simulation of a GMAB Option (Accompanies Simulation of a GMAB) (5c)
-> - [[ILA-117-25 - Ch. 10|ILA-117-25: Ch. 10, pp. 235-262, excluding exhibits 10-1 & 10-2, and Ch. 21 of Handbook of Fixed Income Securities, Fabozzi, F.J.]]
+> - [[Handbook of Fixed Income Securities (Fabozzi - 2021)|ILA-117-25: Ch. 10, pp. 235-262, excluding exhibits 10-1 & 10-2, and Ch. 21 of Handbook of Fixed Income Securities, Fabozzi, F.J.]]
 >      - Outcomes 5d
 > - [[Life (Health & Annuity Reinsurance - 2015)|Life, Health & Annuity Reinsurance, Tiller, John E. and Tiller, Denise, 4th Edition, 2015]]
 >      - Ch. 1: Basic Terms and Concepts (pp. 3-16 & 22) (5e)

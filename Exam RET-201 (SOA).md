@@ -5,11 +5,11 @@ syllabus:
   source_sha256: 794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44
   extracted_at: 2026-10-09
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-10
   last_checked_by: agent:validate-v1
-  content_hash: sha256:95fda82e0d1559e2d20c8d8888afaa0aecd41bc4457d39d600a755963e7f9465
+  content_hash: sha256:43b2bd7c8732b3459822271a3aa6e375ec0e4778f73e2f5aa0a1f02f0a28259b
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
   open_findings: 1
@@ -188,7 +188,7 @@ verification:
 >      - Outcomes 3c
 > - [[Selecting Investment Return Assumptions - Considerations When Using Arithmetic and Geometric Averages (AAA - 2019)|Selecting Investment Return Assumptions: Considerations When Using Arithmetic and Geometric Averages, AAA, Jul 2019]]
 >      - Outcomes 2a-2d
-> - [[Pension Actuary's Guide to Financial Economics and Pension Arbitrage Example (SOA/AAA - 2006)|Pension Actuary’s Guide to Financial Economics and Pension Arbitrage Example, SOA/AAA, 2006]]
+> - [[Pension Actuary's Guide to Financial Economics and Pension Arbitrage Example (SOA-AAA - 2006)|Pension Actuary’s Guide to Financial Economics and Pension Arbitrage Example, SOA/AAA, 2006]]
 >      - Outcomes 2b
 > - [[RET201-104-25 - Use of Financial Economics in Pension Actuarial and Investment Practice|RET201-104-25: Use of Financial Economics in Pension Actuarial and Investment Practice]]
 >      - Outcomes 2b
@@ -200,7 +200,7 @@ verification:
 >      - Outcomes 3a-3d
 > - [[RET201-111-25 - FASB Accounting Standards Codification Topic 715|RET201-111-25: FASB Accounting Standards Codification Topic 715 (excluding all subsections ending in 00, 20, 60 & 65, and 20-S00, 20-S50, 20-S55, 20-S99, 30-55, 60-55, 70-55 & 80-55)]]
 >      - Outcomes 3a-3d
-> - [[Corporate Pension Risk Management and Corporate Finance (SOA - 2015)|Corporate Pension Risk Management and Corporate Finance, SOA, Aug 2015]]
+> - [[Corporate Pension Risk Management and Corporate Finance - Bridging the Gap between Theory and Practice in Pension Risk Management (2015)|Corporate Pension Risk Management and Corporate Finance, SOA, Aug 2015]]
 >      - Outcomes 3b
 > - [[RET201-106-25 - Accounting for Buy-ins|RET201-106-25: Accounting for Buy-ins]]
 >      - Outcomes 3a
@@ -233,7 +233,7 @@ verification:
 >      - Outcomes 4d
 > - [[RET201-121-27 - Introduction to Retirement Plan Funding|RET201-121-27: Introduction to Retirement Plan Funding]]
 >      - Outcomes 5a, 5b
-> - [[Pension Risk Transfer - Evaluating Impact and Barriers for De-Risking Strategies (2021)|Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, Jun 2021 (excluding Appendices)]]
+> - [[Pension Risk Transfer - Evaluating Impact and Barriers for De-Risking Strategies (SOA - 2021)|Pension Risk Transfer: Evaluating Impact and Barriers for De-Risking Strategies, Jun 2021 (excluding Appendices)]]
 >      - Outcomes 5a, 5b
 > - [[RET201-119-25 - Benefit Security Pension Fund Guarantee Schemes (pp. 4-13)|RET201-119-25: Benefit Security Pension Fund Guarantee Schemes (pp. 4-13)]]
 >      - Outcomes 5a

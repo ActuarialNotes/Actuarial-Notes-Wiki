@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:95fb5451e83482d4e596122e378ce1c805ec6ebda8a0dfea706536512568147a
+  content_hash: sha256:b8dac7ba54be0a32dc846bc9d9a3079b6acdccaf8716fddaa1d08e0c9d3f252d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ OSFI's guideline setting out its expectations for the capital and solvency asses
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C2–C4; Guideline A-4, December 2017, with no sections excluded.
+> - [[Exam ILA-201I (SOA)|Exam ILA-201I]] — Capital Management, outcome 2a; ILA201-605-25: OSFI Guideline A-4 Internal Target Capital Ratio for Insurance Companies, Dec 2017.
 
 ## I The Role of Capital in OSFI's Risk Assessment Process
 - OSFI evaluates the inherent risk in each significant activity and the quality of risk management applied to it, rates each activity's net risk and direction, combines these into the Overall Net Risk (ONR), and then develops a Composite Risk Rating after considering earnings, capital and liquidity.
@@ -60,3 +61,4 @@ OSFI's guideline setting out its expectations for the capital and solvency asses
 ## Sources
 - [Regulatory Capital and Internal Capital Targets, Guideline A-4 (OSFI, 2017)](https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf) — the document (the CAS-hosted copy): its cover page, table of contents and Sections I–IV
 - [CAS Exam 6C Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf) — the citation and the assigned scope
+- [SOA ILA 201-I Syllabus, Nov 2026/Mar 2027/Jul 2027](https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf) — the citation (reading ILA201-605-25, December 2017) and the assigned outcome; OSFI's guideline of that date is titled "Regulatory Capital and Internal Capital Targets"

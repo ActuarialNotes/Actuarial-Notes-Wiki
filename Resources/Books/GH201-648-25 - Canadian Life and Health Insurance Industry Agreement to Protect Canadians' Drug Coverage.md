@@ -1,0 +1,33 @@
+---
+Title: "Canadian Life and Health Insurance Industry Agreement to Protect Canadians’ Drug Coverage"
+Authors: "Society of Actuaries"
+Publisher: "Society of Actuaries"
+Year: "2025"
+date: "2025"
+Type: "Paper"
+Code: "GH201-648-25"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0ea1b0dd3467b4aaf6e756960bf5a1a193e5df3fad2c6a54d26882d8cfd8e5f7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/GH201-648-25 - Canadian Life and Health Insurance Industry Agreement to Protect Canadians' Drug Coverage.md"
+---
+![[GH201-648-25 - Canadian Life and Health Insurance Industry Agreement to Protect Canadians' Drug Coverage - Cover.svg]]
+
+A reading listed in the SOA’s GH 201C introductory study note as GH201-648-25 (former code GHVR-648-15), titled “Canadian Life and Health Insurance Industry Agreement to Protect Canadians’ Drug Coverage”. The syllabus assigns it for outcomes 3b of the course.
+
+> [!info] On the syllabus
+> - [[Exam GH-201C (SOA)|Exam GH-201C]] — GH201-648-25: Canadian Life and Health Insurance Industry Agreement to Protect Canadians’ Drug Coverage; outcomes 3b.
+
+> [!note] Contents unavailable
+> The SOA supplies this reading as a study note and no copy of it could be found published online.
+> This page records its citation and assignment from the syllabus and the introductory study note.
+
+## Sources
+- [GH 201C Introductory Study Note, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-11-gh-201c-intro-study-note.pdf) — the reading’s code and title in the study-note appendix; former code GHVR-648-15; Authors, Publisher and Year are those of the issuing body and the year in the reading’s code as the syllabus and the study note print them; neither names the document’s author, publisher or date.
+- [GH 201C Valuation and Regulation, Canada syllabus, Nov 2026/Mar 2027/Jul 2027 (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf) — the reading as assigned (“GH201-648-25: Canadian Life and Health Insurance Industry Agreement to Protect Canadians’ Drug Coverage”) and the learning outcomes it serves

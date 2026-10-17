@@ -91,18 +91,20 @@ test.describe("examiner's report viewer", () => {
     await expect(panel.getByRole('button', { name: 'Next page' })).toBeDisabled()
     await expect.poll(() => canvasIsDrawn(page)).toBe(true)
 
-    // Zoom starts fitted to the panel and is dragged up from there — the
-    // slider replaced the +/- pair, so the readout beside it is what moves.
-    const zoom = panel.getByRole('slider', { name: 'Zoom' })
-    // The bottom of the range is the whole page on screen, which is well below
-    // 1× on a panel this wide — hence reading it off the control.
-    const fit = (await zoom.getAttribute('min')) ?? ''
-    await expect(zoom).toHaveValue(fit)
-    await zoom.fill('2')
-    await expect(panel.getByText('2.0×')).toBeVisible()
-    // And a way back to the fit it opened at.
-    await panel.getByRole('button', { name: 'reset' }).click()
-    await expect(zoom).toHaveValue(fit)
+    // Zoom starts with the whole page fitted to the panel. There is no zoom
+    // control in the chrome — pinch, ctrl+wheel and the `+`/`−` keys are the
+    // zoom — so the page's box, sized for the zoom asked for, is what moves.
+    const pageBox = panel.locator('canvas').locator('..')
+    const width = async () => (await pageBox.boundingBox())?.width ?? 0
+    const fit = await width()
+    expect(fit).toBeGreaterThan(0)
+    await page.keyboard.press('+')
+    await expect.poll(width).toBeGreaterThan(fit)
+    // And back down to the fit it opened at, which is also the floor.
+    await page.keyboard.press('-')
+    await expect.poll(width).toBeCloseTo(fit, 0)
+    await page.keyboard.press('-')
+    await expect.poll(width).toBeCloseTo(fit, 0)
   })
 
   test('expands, saves, and closes', async ({ page }) => {
@@ -161,44 +163,43 @@ test.describe("examiner's report viewer", () => {
 })
 
 test.describe('source document read from the concept popup', () => {
-  test('opens over a full-screen resource page and owns the keys', async ({ page }) => {
+  test('stacks on the resource page that offered it and owns the keys', async ({ page }) => {
     await page.route('**/api/exam-pdf**', route =>
       route.fulfill({ status: 200, contentType: 'application/pdf', body: SAMPLE_PDF }),
     )
     // A resource page is most often read *inside* the popup, reached from an
     // exam page's Source Material shelf — which is where a candidate meets it.
+    // The shelf's card carries the standard's title; its code is in the metadata.
     await page.goto('/wiki/exam/Exam+5+(CAS)')
-    await page.getByRole('link', { name: /ASOP No\. 43/ }).first().click()
+    await page.getByRole('link', { name: /Property\/Casualty Unpaid Claim Estimates/ }).first().click()
 
-    const popup = page.getByRole('complementary', { name: /^Concept:/ })
-    await expect(popup).toBeVisible()
+    const concept = page.getByRole('complementary', { name: /^Concept:/ })
+    await expect(concept).toBeVisible()
 
-    // Full screen: the popup now covers the sidebar and the bottom nav.
-    await popup.getByRole('button', { name: 'Focus mode' }).click()
-    await expect(popup).toHaveAttribute('data-focus', 'true')
+    // Full screen first: the document has to keep the popup's focus mode.
+    await concept.getByRole('button', { name: 'Focus mode' }).click()
+    await expect(concept).toHaveAttribute('data-focus', 'true')
 
-    await popup.getByRole('link', { name: /Read ASOP No\. 43/ }).click()
+    await concept.getByRole('link', { name: /^Read Property\/Casualty Unpaid Claim Estimates/ }).click()
 
-    // The reader has to open *over* the page that asked for it: it wears the
-    // popup's shell, and the popup's focus-mode layer used to bury it.
-    const reader = page.getByRole('complementary', { name: /ASOP No\. 43/ })
-    await expect(reader).toBeVisible()
-    await expect(reader).toHaveAttribute('data-host-focus', 'true')
-    const [readerLayer, popupLayer] = await Promise.all([
-      reader.evaluate(el => Number(getComputedStyle(el).zIndex)),
-      popup.evaluate(el => Number(getComputedStyle(el).zIndex)),
-    ])
-    expect(readerLayer).toBeGreaterThan(popupLayer)
-    // And no strip of that page showing along the bottom, where the nav it has
-    // already covered would otherwise be kept clear.
-    await expect(reader).toHaveCSS('bottom', '0px')
+    // The document opens as the next page of the popup's own stack
+    // (docs/stacked-pages.md), not as a second panel over it: the same pane,
+    // still full screen, now reading the PDF.
+    const doc = page.getByRole('complementary', { name: /^Document:/ })
+    await expect(doc).toBeVisible()
+    await expect(doc).toHaveAttribute('data-focus', 'true')
+    await expect(concept).toHaveCount(0)
+    await expect(doc.getByText('1 of 2')).toBeVisible()
     await expect.poll(() => canvasIsDrawn(page)).toBe(true)
 
-    // The keys belong to the document while it is up: Esc closes the reader and
-    // leaves the concept behind it exactly where it was.
+    // The keys belong to the document while it is up: the arrows turn its
+    // pages, and Esc closes it, landing back on the page that offered it,
+    // exactly as it was left.
+    await page.keyboard.press('ArrowRight')
+    await expect(doc.getByText('2 of 2')).toBeVisible()
     await page.keyboard.press('Escape')
-    await expect(reader).toHaveCount(0)
-    await expect(popup).toBeVisible()
-    await expect(popup).toHaveAttribute('data-focus', 'true')
+    await expect(doc).toHaveCount(0)
+    await expect(concept).toBeVisible()
+    await expect(concept).toHaveAttribute('data-focus', 'true')
   })
 })

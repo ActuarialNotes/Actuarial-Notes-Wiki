@@ -9,12 +9,14 @@ Code: "CAS Monograph No. 16"
 ISBN: "978-1-7370028-8-8"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e9631686cc214b7719ac4251d794007fab6f8cb88ed1f234f6bfb83583cf9a3b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ce466f43e8fcc63384085bfbae61369bdab603929ea837b0e41b5146d1c12586
+  sources:
+    - "Chalk, Deacon, Guillen and Martinelli, From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph Series Number 16 (Casualty Actuarial Society, copyright 2025; commissioned by the Exam 8 Working Group), 189 pp., PDF pp.1-15 read (cover, title, copyright page with ISBN 978-1-7370028-8-8 print, contents, acknowledgments, about the authors, chapters 1-2 opening) and the 147-entry bookmark outline, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges (Chalk et al.).md"
@@ -25,6 +27,10 @@ A CAS monograph, commissioned by the Exam 8 Working Group, that uses case studie
 
 > [!info] On the syllabus
 > - [[Exam 8 (CAS)|Exam 8]] — objectives A7–A8; CAS Monograph #16, 1st edition.
+
+## Acknowledgments
+
+## About the Authors
 
 ## 1 Introduction
 - 1.1 Objectives

@@ -7,12 +7,14 @@ date: "1990"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0aec5f31ca8df9bf622ed1544099230d272f5c2b5a23c7369139bf84e59c5c19
-  sources: []
+  sources:
+    - "Mahler, 'An Example of Credibility and Shifting Risk Parameters', PCAS LXXVII (1990) pp.225-282, CAS PDF (scan with OCR text layer), 84 pp., abstract and introduction read, every section and appendix heading located in the OCR text (the 10 the OCR garbles read in context), and PDF pp.32 and 42 checked as page images, sha256:101593b055845cf0882738352dde247da6c40bb5f029f394b5c1ebc597dfdb58 — https://www.casact.org/sites/default/files/database/proceed_proceed90_90225.pdf (byte-identical to casact.org 2021-03/8_Mahler.pdf, the copy the Exam 8 outline links)"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Example of Credibility and Shifting Risk Parameters (Mahler - 1990).md

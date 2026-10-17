@@ -9,12 +9,15 @@ Code: "CAS Monograph No. 2"
 ISBN: "978-0-9624762-8-0"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:55abb0771dd9a881f3a513181f93d57fea3522d82073e0cfbbac31d4698cdb14
-  sources: []
+  sources:
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph Series Number 2 (Casualty Actuarial Society, copyright 2015), 215 pp., PDF pp.1-11 read (cover, abstract, title page, copyright page with ISBNs 978-0-9624762-8-0 print / -9-7 electronic, contents pp.7-8, foreword, preface), sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "CAS, Distributions for Actuaries Errata (1 p.), sha256:e03ea8f6bce776b3ea3cf1439f1fc06a965d8edb7c05f025ee0cf23584de2bed — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann_Errata.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Distributions for Actuaries (Bahnemann).md

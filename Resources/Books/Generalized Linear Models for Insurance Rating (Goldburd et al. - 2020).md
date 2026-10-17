@@ -10,13 +10,19 @@ Code: "CAS Monograph No. 5"
 ISBN: "978-1-7333294-3-9"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1f63ae8d8cc1de1f2cfa49a13f716fc94243157952a33ec60bfd43b5966324eb
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bdf2d94bcea9ab2b681c643a0e2e8c08eec3b08246e26836e66f8a02be19569d
+  sources:
+    - "Goldburd, Khare, Tevet and Guller, Generalized Linear Models for Insurance Rating, CAS Monograph Series Number 5, Second Edition (2025 revision) (Casualty Actuarial Society; copyright page prints 'Copyright 2025' and, at its foot, 'Copyright 2019'; ISBN 978-1-7333294-3-9 print), 122 pp., PDF pp.1-9 (cover, abstract, title, copyright, contents pp.5-7, acknowledgments), Chapter 1 (PDF p.11), Chapter 7 and the Bibliography read, plus the 104-entry bookmark outline, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Same monograph, Second Edition 2020 printing (Copyright 2020, same four authors, same ISBNs), 122 pp., compared page by page with the 2025 revision: text differs only on PDF pp.1, 3, 4, 8 (edition label, copyright year, editorial board) and pp.22-23, 48-49; contents and Chapter 7 identical, sha256:06f7c01d4c80af9a9c6672cb0ace7814c533499b4662b783218f23d12cc46318 — https://www.casact.org/sites/default/files/database/monographs_papers_05-goldburd-khare-tevet.pdf"
+    - "CAS, Errata, Generalized Linear Models for Insurance Rating, 2nd Edition (2025 revision), approved 1/28/2026, sha256:4622f59623aded645b229235ab0579a527823942ff35dce531033fe534b6735b — https://www.casact.org/sites/default/files/2026-02/Monograph_No_5_Errata_Sheet.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), text references (Goldburd et al., 2nd edition, 2020, Chapter 7, C10-11), sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "CAS, PCPA Content Outline v.8 (updated 9.9.2026), Domain B tasks B1-B2 and text references (Goldburd et al., 2nd edition, 2020, Chapter 7, domain B), sha256:e22ce369f08e1feec88b1ed8a9273c67fd585b1c62193ea3105fe1fe8077189f — https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020).md
 ---
@@ -27,7 +33,7 @@ A comprehensive guide to creating an insurance rating plan using generalized lin
 > [!info] On the syllabus
 > - [[Exam MAS-II (CAS)|Exam MAS-II]] — objectives C10–C11; Chapter 7.
 > - [[Exam PCPA (CAS)|Exam PCPA]] — objectives B1–B2; Chapter 7.
-> - [[Exam 8 (CAS)|Exam 8]] — objectives A1, A4–A8.
+> - [[Exam 8 (CAS)|Exam 8]] — objectives A1, A3–A5, A9 (the outline prints "A1, A3-A5, -A9"); 2nd edition, 2025, including errata.
 
 ## 1 Introduction
 - The authors know of no single text for the practising actuary that serves as a definitive reference for the use of GLMs in [[Classification Ratemaking|classification ratemaking]]; the monograph aims to give the reader the tools to build a market-ready classification plan from raw premium and loss data.
@@ -162,5 +168,5 @@ A comprehensive guide to creating an insurance rating plan using generalized lin
 - [Generalized Linear Models for Insurance Rating, 2nd ed., 2025 revision (Casualty Actuarial Society, 2025)](https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf) — the document at the address both content outlines link: title page, abstract, contents, Chapter 1, Chapter 7 and the Bibliography
 - [Generalized Linear Models for Insurance Rating, 2nd ed. (Casualty Actuarial Society, 2020)](https://www.casact.org/sites/default/files/database/monographs_papers_05-goldburd-khare-tevet.pdf) — the 2020 printing the outlines cite: the copyright page and ISBNs; its contents and Chapter 7 compared with the 2025 revision and found identical
 - [CAS Monograph No. 5 (Casualty Actuarial Society)](https://www.casact.org/monograph/cas-monograph-no-5) — the series number, the 2025 revision's description and its errata sheet link
-- [CAS Exam MAS-II Content Outline, v04 (December 2024)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the citation (2nd edition, 2020) and Chapter 7 for objectives C10–C11
+- [CAS Exam MAS-II Content Outline, v06 (January 2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the citation (2nd edition, 2020) and Chapter 7 for objectives C10–C11
 - [CAS PCPA Exam & Project Content Outline, v.8 (September 2026)](https://www.casact.org/sites/default/files/2024-05/Exam_PCPA_2025_F_Content_Outlines.pdf) — the citation and Chapter 7 for Domain B

@@ -7,12 +7,15 @@ date: "1959"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d20456d6e6e28b87881a51ca9c708ca173dca888eb19f757cbdbc04b2252bb54
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f54eae6d1f54777f0a0e54a82b53c916d6ece4dc3462890539c81573929872a5
+  sources:
+    - "Bailey and Simon, 'An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car', PCAS XLVI (1959) pp.159-164, CAS PDF (scan with OCR text layer), 6 pp. read in full, Table 1 heading (PDF p.4) and Appendix I (PDF p.6) also read as page images, sha256:3e44bb5b3d17e96aaae61b27b0d72889043c44feb049a3ca3444095101f456e2 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon.pdf"
+    - "Hazam, discussion of Bailey and Simon, Discussions of Papers Read at the November 1959 Meeting, PCAS XLVII (1960) pp.150-152, 3 pp. read in full, sha256:48b8d420ffd358904509532447e15d50df0d5b1756c2026f81e8d058a02f09e4 — https://www.casact.org/sites/default/files/2021-03/8_Bailey_Simon_Discussion_of_Paper.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/An Actuarial Note on the Credibility of Experience of a Single Private Passenger Car (Bailey and Simon - 1959).md
@@ -42,13 +45,13 @@ A six-page note, in the Proceedings of the Casualty Actuarial Society, that uses
 - Given one year's experience, adding a second year increases the credibility roughly two-fifths; given two years, a third year increases it by one-sixth of its two-year value.
 
 ## Tables 1 to 4
-- Table 1 — Canada excluding Saskatchewan, policy years 1957 and 1958 as of June 30, 1958; private passenger automobile liability, non-farmers: earned car years, earned premium at present B rates, number of claims incurred and claim frequency per $1000 of premium, by merit rating and class.
+- Table 1 — Canada excluding Saskatchewan, policy years 1957 and 1958 as of June 30, 1959; private passenger automobile liability, non-farmers: earned car years, earned premium at present B rates, number of claims incurred and claim frequency per $1000 of premium, by merit rating and class.
 - Table 2 — Credibility and claim frequency by class.
 - Table 3 — Credibility of a two or three-year period relative to one year.
 - Table 4 — Class 1 with losses used instead of number of claims.
 
 ## Appendix I
-- Illustrates, with a model of 100,000 risks at a true claim frequency of .06, 100,000 at .10 and 50,000 at .20 and a Poisson approximation, that credibilities would vary approximately in proportion to the number of years for the first few years and typical frequencies.
+- Illustrates, with a model of 100,000 risks at a true claim frequency of .05, 100,000 at .10 and 50,000 at .20 and a Poisson approximation, that credibilities would vary approximately in proportion to the number of years for the first few years and typical frequencies.
 
 ## Appendix II
 - Using the Poisson distribution as an approximation, the average number of claims produced by risks with one or more claims is m/(1 − e^(−m)); for the Class 1 claim frequency of .087 per car, risks that had one or more claims last year averaged 1.044 claims.

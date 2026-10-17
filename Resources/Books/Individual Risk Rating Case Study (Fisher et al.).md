@@ -7,12 +7,15 @@ date: "2019"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al_Case_Study.xlsx)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0a499dc8bce6737915e9ab46f4918753497e58224b98809c03a8b075656f3b21
-  sources: []
+  sources:
+    - "CAS, Case Study for 'Individual Risk Rating Study Note' (Excel workbook, 21 sheets: Introduction, Step 1-10 and their answer sheets), Introduction and the ten Step sheets read cell by cell, docProps creator 'Liberty Mutual', created 2016-06-30, modified 2021-03-10, sha256:d1110d51591018fad4286d1c6bcb3dccfa9fbdac87422a044c707ed1f70b3350 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al_Case_Study.xlsx"
+    - "Fisher, McTaggart, Petker and Pettingell, Individual Risk Rating, CAS Study Note, October 31, 2019 (© Casualty Actuarial Society, 2019), 123 pp., PDF pp.1-6 read (title page, contents pp.4-5, foreword) and the 135-entry bookmark outline, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Individual Risk Rating Case Study (Fisher et al.).md

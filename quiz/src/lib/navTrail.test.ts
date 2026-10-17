@@ -105,6 +105,23 @@ describe('backTarget', () => {
     })
   })
 
+  it('leads only where the page allows, else nowhere', () => {
+    const onlyWiki = { only: (path: string) => path.split(/[?#]/)[0] === '/wiki' }
+    const fromDashboard = walk([
+      [0, 'a', '/dashboard', 'POP'],
+      [1, 'b', '/wiki/exam/exam-p-1', 'PUSH'],
+    ])
+    expect(backTarget(fromDashboard, onlyWiki)).toBeNull()
+    const fromList = walk([
+      [0, 'a', '/wiki?body=cas', 'POP'],
+      [1, 'b', '/wiki/exam/exam-p-1', 'PUSH'],
+    ])
+    expect(backTarget(fromList, onlyWiki)).toEqual({
+      delta: -1,
+      entry: { key: 'a', path: '/wiki?body=cas' },
+    })
+  })
+
   it('is nothing for a reader who came in from outside, or across a gap', () => {
     expect(backTarget(walk([[0, 'a', '/wiki/resources', 'POP']]))).toBeNull()
     expect(backTarget(walk([[3, 'a', '/wiki/resources', 'POP']]))).toBeNull()

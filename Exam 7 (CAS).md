@@ -2,18 +2,11 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bc30ac0f6daf04c1a8dca25f8ab0cf921afd6316155545a1860e7cb83e9883b7
+  content_hash: sha256:a9a0d841156d1a2f41c118b0d67cab8dac00b98d094412e1856b76a68d18ade9
   sources:
-    - "CAS, Exam Content Outline — Advanced Estimation of Claims Liabilities – Exam 7, Fall 2026 (the 'October 2026 Content Outline'; Exam_7_CO_2026_F v04 2026_9_16, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
-    - "CAS, Exam 7 — Advanced Estimation of Claims Liabilities exam page, read 2026-10-09: window October 19 - October 27, 2026; register by Sep. 29, 2026 11:59 pm; fee $850 ($680 full-time students); refund deadline October 6, 2026; 'October 2026 Content Outline' the only outline linked, sha256:a1f1961b2d543a917412958c43136b75ce082e9c16e08a2d541fd081a211a279 — https://www.casact.org/exam/exam-7-advanced-estimation-claims-liabilities"
-    - "Mack, Credible Claims Reserves: The Benktander Method, ASTIN Bulletin 30(2) 2000 pp.333-347, PDF p.1 and p.15, sha256:8e9e86f6dd4ed6a402d5380dd446ebeba5e2c3d921f90828ad485a8cfb508086 — https://www.casact.org/sites/default/files/2021-03/7_Mack_2000.pdf"
-    - "Clark, LDF Curve-Fitting and Stochastic Reserving, CAS Forum Fall 2003, PDF pp.1-2, sha256:1db0baa8ca6aef6711e6483601de5be6e180f016b1110a7fb0e49765c0953b9e — https://www.casact.org/sites/default/files/2021-03/7_Clark.pdf"
-    - "Meyers, CAS Monograph 8 (2nd ed.), PDF p.4 (Copyright 2019), sha256:3c01999f6c8a170dc412968658d4f7d673d637e74cb27d84b4173ea60532d2d1 — https://www.casact.org/sites/default/files/2021-02/08-Meyers.pdf"
-    - "Shapland, CAS Monograph 4, PDF p.4 (Copyright 2016), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
-    - "Taylor and McGuire, CAS Monograph 3, PDF p.4 (Copyright 2016), sha256:d9ca082d0e8e8c0ed514e5e526cf0372cc457f4b5c94e4ff774cd6fc9e24249a — https://www.casact.org/sites/default/files/2021-03/7_Taylor.pdf"
-    - "Friedland, Reserving for Reinsurance, CAS Study Note, PDF pp.1-3, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf, PDF pp.3-5 (tasks A.ii.3 and A.iii.4; Sahasrabuddhe and Siewert citations A.ii.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Exam 7 (CAS).md
@@ -42,7 +35,7 @@ verification:
 >
 > 2. Calculate [[Unpaid Claims|unpaid claims estimates]].
 > 3. Test [[Unpaid Claims|unpaid claim estimates]] for [[Reasonableness Testing|reasonableness]].
-> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layer of Insurance|layers of coverage]].
+> 4. Estimate [[Unpaid Claims|unpaid claims]] for various [[Layer Development Factor|layers of coverage]].
 > 5. Forecast [[Premium Reserve|premium reserves]] (e.g., [[Retrospective Premium Reserve|reserves for retrospective premiums]]).
 >
 > **Unpaid Claim Stochastic Distributions**
@@ -50,7 +43,7 @@ verification:
 > 6. Estimate [[Parameter Estimation|parameters]] of [[Unpaid Claim Distribution|unpaid claims distributions]].
 > 7. Calculate the [[Moment|moments]] and [[Percentile|percentiles]] of [[Unpaid Claim Distribution|unpaid claim distributions]].
 > 8. Simulate [[Parameter Risk|parameter percentiles]] and [[Unpaid Claim Distribution|unpaid claims percentiles]].
-> 9. Calculate the [[Expected Value|mean]] and [[Prediction Error|prediction error]] of a [[Unpaid Claims|reserve]].
+> 9. Calculate the mean and [[Prediction Error|prediction error]] of a [[Unpaid Claims|reserve]].
 > 10. Derive [[Predictive Distribution|predictive distributions]] using [[Stochastic Reserving|stochastic methods]].
 >
 > **Unpaid Claim Output & Diagnostic Analysis**

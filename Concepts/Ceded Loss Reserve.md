@@ -1,17 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3bb67458d95b58cd042d3f8f46f076fd66636425df8b7dbff82d58f6695d1b5a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:58c111bafcd135b1d80b1c47fe84ba61387a0b09355fba02d50462ff6385c1ae
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.9-10 (gross/ceded/net, default risk), 17-21 (quota share, surplus share, excess per risk), 24 (aggregate stop-loss protects net results), 26-29 (LOD vs risks-attaching, commutation), 39 (historical terms), 45 (reporting lags and thresholds), 50-51 (two approaches; ceded credibility), 55 (higher factors, tails and trend), 73-76 (quota share by year and policy year on RA; Tables 3.13-3.15; stop-loss applies last), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Ceded Loss Reserve.md
 ---
 
-**Ceded loss reserves** are the part of an insurer's unpaid claims (case reserves plus IBNR, and loss adjustment expense where the treaty covers it) expected to be recovered from reinsurers under the contracts in force. From the cedant's side they are the unpaid portion of [[Ceded Losses|ceded losses]], carried as a reinsurance recoverable asset.
+**Ceded loss reserves** are the part of an insurer's unpaid claims (case reserves plus IBNR, and loss adjustment expense where the treaty covers it) expected to be recovered from reinsurers under the contracts in force. From the cedant's side they are the unpaid portion of [[Ceded Losses|ceded losses]].
 
 > $$\text{Ceded unpaid} = \text{Gross unpaid} - \text{Net unpaid}$$
 
@@ -28,7 +30,7 @@ verification:
   - on excess of loss cessions, ceded IBNR is a *larger* share of ceded ultimate than gross IBNR is of gross, because excess cessions develop late;
   - on excess of loss cessions, implied ceded development factors exceed gross ones. On a quota share the gross, ceded and net factors are identical.
 - **Why ceded data is harder.** Trend is leveraged into excess layers, reporting thresholds delay notice, and a change in retention makes prior ceded years non-comparable. The treaty history must be kept alongside the data.
-- **It is an asset with credit risk.** Recoverables can be disputed, commuted ([[Commutations]]) or lost to a reinsurer's insolvency ([[Reinsurance Credit Risk]]), and the cedant stays liable to its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
+- **It carries credit risk.** Recoveries can be commuted ([[Commutations]]) or lost if the reinsurer cannot meet its obligations ([[Reinsurance Credit Risk]]). The liability then falls back on the cedant, which keeps the contract with its policyholders. See [[Reinsurance Recovery]] and, for the reinsurer's side of the same liability, [[Reinsurance Reserving]].
 
 > [!example]- Inuring Order Across Three Covers {Example}
 > For one accident year the gross ultimate is $5{,}000$ and gross paid is $3{,}000$ (\$000s). One large claim has an ultimate of $600$ and paid of $100$. The cedant has three covers, inuring in this order:

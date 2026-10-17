@@ -7,12 +7,15 @@ date: "2010"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Sahasrabuddhe.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8c2b11ebad90ee2c34b815e3f211f4208c45adcbccfa437217e8241a6e7eea80
-  sources: []
+  sources:
+    - "Sahasrabuddhe, Claims Development by Layer (CAS E-Forum Fall 2010, rev. Jan 2, 2013), PDF pp.1-14 text and bookmark outline, p.23 Example 3 exhibit, sha256:42ecb7ecc7270a462e397a1d4d5c8d42e50b4bc9719122b4c53873dfc84fd5a3 — https://www.casact.org/sites/default/files/2021-03/7_Sahasrabuddhe.pdf"
+    - "Sahasrabuddhe, Errata to Claims Development by Layer, p.1, sha256:0f73306a697fd764ca98b3138b416563585f8800e4f169166e359b59ce3142ca — https://www.casact.org/sites/default/files/2021-03/7_Sahasrabuddhe_Errata.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF p.5 (Sahasrabuddhe A.ii.3 = task 4, including errata), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Claims Development by Layer (Sahasrabuddhe - 2010).md

@@ -205,7 +205,7 @@ are mostly four-option multiple choice on a short insurance scenario, written wi
 it, and at least two for every new specific page. No published DISC questions exist to convert:
 The Institutes sells its course guide and publishes no samples.
 
-### 3.4 Fact check, then promote (beta 10 Oct 2026; DISC-DA and DISC-IA ready the same day)
+### 3.4 Fact check, then promote (beta 10 Oct 2026; DISC-DA and DISC-IA ready the same day, DISC-RM 11 Oct)
 
 G2, G3 and G6 pass on all three DISCs, so they moved from development to beta and joined the
 DEFAULT track. The fact check runs as twelve packets, one per writer's area plus one for the
@@ -236,7 +236,7 @@ this at the end of 10 Oct 2026:
 |---|---|---:|---|
 | **DISC-DA** | **ready** | 7/7 | nothing |
 | **DISC-IA** | **ready** | 7/7 | nothing |
-| **DISC-RM** | beta | 5/7 | only decision D6 (below) |
+| **DISC-RM** | beta → **ready** 11 Oct 2026 | 5/7 → 7/7 | D6, settled 11 Oct (§3.6) |
 
 On DISC-RM, everything else passes: the study guide, the course page, 62 of 65 concept pages, and
 141 of 146 questions. The three pages left are *Insurer Goals and Constraints*, *Insurance
@@ -291,6 +291,34 @@ against the course text, or they are rewritten to what open sources say, or the 
 retired. That choice is decision D6. *Insurtech* is in the same position, because no open text is
 current enough.
 
+### 3.6 D6 settled the open-source way (11 Oct 2026)
+
+The maintainer chose to rewrite rather than buy the course text. Writers rewrote each page to what
+free sources state, and a different agent fact checked the result (runs `2026-10-11T02:10Z/dv14a`
+and `dv14b`):
+
+- *Insurer Goals and Constraints* drops the four goals and the internal/external split. It now says
+  what Baranoff et al. (Saylor), Werner & Modlin (Ch. 1, 8 and 13) and IRMI's glossary say: profit
+  and solvency as the aims, and capacity (the Kenney ratio, reinsurance), regulatory and
+  operational constraints, marketing considerations and the underwriting cycle as the limits.
+  Verified at medium.
+- *Insurance Marketing* drops the list of marketing activities. It now covers distribution, producer
+  licensing, compensation disclosure and the limits on advertising, from Baranoff §11.1 and the NAIC
+  Producer Licensing and Unfair Trade Practices model acts. Verified at high.
+- *Insurtech* rests on dated primary sources: the NAIC topic page, the NAIC AI model bulletin (2023)
+  and its adoption map (as of 1 Apr 2026), the IAIS FinTech report (2017) and AI application paper
+  (2025), the FIO's 2025 report and NCOIL's sandbox model act. Verified at high. **It will date**:
+  the adoption count needs refreshing when the NAIC map moves.
+- Questions 041 (the Kenney ratio), 047 (the model act's compensation disclosure) and 233 (what an
+  underwriter's loss control inspection is for) were rewritten to test what the pages now teach.
+- Questions 035 and 471 tested the essential/desirable/available split, which no page teaches. A
+  question can't be deleted (its log must keep a target), so they are **retired** as
+  `off_syllabus: true`: kept for the record, out of quiz draws, with a log comment saying why.
+
+`publication_readiness.py --check disc-rm` then passed all seven gates, and DISC-RM was promoted to
+**ready**. The cost of this route: those sections no longer teach the course's own framing, so a
+candidate should expect The Institutes' lists on the exam itself.
+
 ## 4. Order of work
 
 Each step is a campaign: one sweep run and one resolve run, batched by source as in
@@ -300,8 +328,8 @@ first (§1), because a fact check of the wrong page wastes the check.
 | # | Exam | What it takes | Why here |
 |---|---|---|---|
 | 1 | **MAS-I** → ready ✔ (10 Oct 2026) | Fix 2 catch-alls (*Probability Distributions*, *System Reliability*); verify the 117 `masi-an-*` questions against the concept pages and readings already verified | Cheapest promotion. Its concepts, readings and published questions are already checked. |
-| 2 | **DISC-DA, RM, IA** → beta ✔, then ready (DISC-DA ✔ 10 Oct 2026) | §3: write the 67 pages and the three banks (development → beta), then fact check pages, banks and the three textbook pages | The user's priority, and the only exams where links had to be redesigned. No past papers, so no paper packets: everything is reading packets on free primary documents. |
-| 3 | **Exam 7** → ready | Write questions for 7 concepts; verify 17 concepts, 15 readings, 118 questions (8 papers, keyed by paper, which clears 64 of Exam 9's questions too) | Smallest concept set of the papers exams. |
+| 2 | **DISC-DA, RM, IA** → beta ✔, then ready ✔ (DA and IA 10 Oct, RM 11 Oct 2026) | §3: write the 67 pages and the three banks (development → beta), then fact check pages, banks and the three textbook pages | The user's priority, and the only exams where links had to be redesigned. No past papers, so no paper packets: everything is reading packets on free primary documents. |
+| 3 | **Exam 7** → ready ✔ (16 Oct 2026, §4.1) | Write questions for 7 concepts; verify 17 concepts, 15 readings, 118 questions (8 papers, keyed by paper, which clears 64 of Exam 9's questions too) | Smallest concept set of the papers exams. |
 | 4 | **Exam 8** → ready | Write the **10 missing reading pages**, then drop `"source_pages": "partial"`; questions for 6 concepts; fix 1 catch-all (*Rating Class*); verify 26 concepts, 12 readings, 132 questions | Shares papers with 9. |
 | 5 | **Exam 9** → ready | Questions for 10 concepts; verify 53 concepts, 9 readings, the remaining questions on its own 7 papers | Most of its bank arrives verified through 3 and 4. |
 | 6 | **Exam 5** → ready | Fix 6 catch-alls (*Loss Reserving* stands in for 9 reserving objectives); questions for 7 concepts; the page is in review against the re-issued Fall 2026 outline (v02); verify 68 concepts, 6 readings, 349 questions on 14 papers (find Spring 2018's booklet first) | Largest single bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM. |
@@ -312,6 +340,42 @@ first (§1), because a fact check of the wrong page wastes the check.
 
 As each exam passes `--check`, promote it in the same PR as the run that got it there, and cite the
 script's output in the PR.
+
+### 4.1 The Exam 7 campaign (11–16 Oct 2026)
+
+`publication_readiness.py --check 7` passed all seven gates on 16 Oct 2026, and Exam 7 was promoted to
+**ready**. How it got there, run `2026-10-11T02:10Z`:
+
+- **Links first.** Two objective links were retargeted (A9's "mean" no longer links the Exam P
+  *Expected Value*; A4's "layers of coverage" goes to *Layer Development Factor*, not the pricing page
+  *Layer of Insurance*), and the study guide was re-verified (`e7sg`).
+- **Eight paper packets** (`e7p12`–`e7p19`), each covering the Exam 7 questions filed under Exam 9 too:
+  199 questions, all verified. Every question was recomputed from its blind stem first. The packets
+  corrected arithmetic slips copied from CAS's printed sample answers (each noting what CAS printed),
+  restored examiner's report paragraphs the converter drops, and retargeted wrong links (IFRS 17 *Net
+  Income*, Exam 5 *Loss Ratio Method*, the Canadian *Rating Agency*).
+- **G6.** Eight vault-written questions (`cas7-an-001`–`008`) for the six concepts with none, and an Exam
+  7 section on *Predictive Distribution*, each checked by a different agent from the writer.
+- **Four reading packets** (`e7ra`–`e7rd`) verified the 15 readings and the 15 concept pages. Pages that
+  claimed more than their readings say were cut back to them: *Reinsurance Reserving* (Cape Cod, in no
+  Exam 7 reading), *Premium Reserve* (Teng & Perkins' retro premium asset only), *Ceded Loss Reserve*.
+  Two real errors were caught: *Range of Indications* summed yearly minima for Shapland's modeled range,
+  and *Reasonableness Testing* took BF IBNR off the BF ultimate. Pages shared with other exams had their
+  other half checked too (*Predictive Distribution* for MAS-II, against Mahler & Dean, medium; *Risk
+  Margin* for Exam 6C, against OSFI's MCT guideline and the CIA's IFRS 17 note).
+
+**Left for a maintainer** (minor findings; the questions stay verified and served):
+
+- **Questions on readings no longer on the syllabus.** Patrik's reinsurance chapter (Stanard-Bühlmann,
+  credibility IBNR, reinsurance reserving problems): 2012 q10, 2013 q10, 2015 q13, 2016 q16–q17, 2017
+  q16, 2018 q14, q16, 2019 q13 (2017 q14–q15 lean on it unflagged). Brehm's ERM and Goldfarb: 2018 q1
+  parts a–c, 2019 q1 parts e and g. England & Verrall: 2012 q9. Keep, split, or mark `off_syllabus`.
+- **2012 q20** is current Exam 7 material filed under Exam 9; moving the file would orphan its log.
+- **The converter drops each CAS examiner's report's opening paragraph** (before "Part a"). The Exam 7
+  packets restored it by hand where they found it; `pdf_extract.py` should be fixed, and other CAS banks
+  likely have the same gap.
+- **Canadian pages on U.S. questions**: *Rating Agency*, *Concentration Risk* and *Risk Transfer* (linked
+  from the Exam 7 preamble) lead with Canada.
 
 ## 5. Decisions only a maintainer can make
 
@@ -331,6 +395,6 @@ script's output in the PR.
   gives only titles, and the course text isn't available to confirm what each section covers. Any
   section that turns out to be broader or narrower than its page can be re-linked without touching
   the verified words.
-- **D6, frameworks only the course states** (§3.5). Either check the DISC-RM frameworks above
-  against The Institutes' course text, or rewrite those pages and questions to open sources, which
-  would drop the course's own framing.
+- **D6, frameworks only the course states** (§3.5). **Settled 11 Oct 2026: rewritten to open
+  sources** (§3.6). Checking against The Institutes' text remains possible later, and would let the
+  course's own lists come back.

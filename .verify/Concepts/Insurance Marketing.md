@@ -74,3 +74,57 @@ created: 2026-10-10
 - checks_run: re-check after this run's authorized edits: every changed sentence checked against the sources listed; links resolve; earlier checks of unchanged content carried forward
 - sources_checked: Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 Internet marketing; mass merchandising, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html; Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), table of contents, chapters 4-12, sha256:b9329afa59c3f4ccbe1d34f742ce4d05b9557a8e95bcbf473b10fcd23a7a6d48 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/index.html
 - note: Left in_review: F-001 open (see comment).
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14a
+- date: 2026-10-11
+- resolves: F-001
+- status: resolved
+- note: Confirmed in this sweep: the five-activity list (market research, target marketing, advertising and promotion, CRM, product development) is no longer on the page (D6 rewrite, commit 149b4c72); every remaining bullet was checked against BBK §7.1, the NAIC Producer Licensing Model Act and the NAIC Unfair Trade Practices Act.
+
+## [F-003] Managerial and group marketing called 'salaried' where the source does not
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14a
+- date: 2026-10-11
+- severity: nit
+- status: open
+- locus: Life and health marketing bullet
+- claim: 'a managerial system, in which a salaried branch manager runs an office the insurer pays for' and 'Group plans are sold to employers by agents or brokers, sometimes with a salaried group representative.'
+- evidence: BBK §7.1 Managerial (Branch Office) System: the branch manager 'is a company employee who is compensated by a combination of salary, bonus, and commissions'; Group and Supplemental: 'An agent may be assisted in this specialized field by a group sales representative' (the group rep is called salaried only in direct negotiations between employers and insurers).
+- source_rank: 2
+- proposed_action: Restate: 'a branch manager employed by the insurer runs an office the insurer pays for'; 'sometimes assisted by a group sales representative'.
+- applied: false
+- fingerprint: 1d6202754baa
+
+## [C-005] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14a
+- date: 2026-10-11
+- status_set: in_review
+- checks_run: D6 rewrite checked bullet by bullet against BBK §7.1, PLMA §§3, 5A, 12A, 13, 18 and UTPA §4A, 4B, 4I; both examples recomputed (S1=-250, S3=150; C=5,000) and the disclosure answer checked against §18A(1)-(2); links resolved and checked for country framing
+- sources_checked: Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.1 Insurance Operations: Marketing, Underwriting, and Administration (Marketing intro; Life/Health; General Agency; Managerial; Group and Supplemental; Property/Casualty; Independent Agency; Direct Writers and Exclusive Agents; Brokers; Internet; Mass Merchandising; Service), sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html; NAIC Producer Licensing Model Act (MO-218, January 2005), §3, §5A, §12A(5),(7), §13A-D, §18A-D, sha256:5b1eafdc7b1a841a97440f0e1e7c98e30c935855de4add58838c0f76aee37a34 — https://content.naic.org/sites/default/files/model-law-218.pdf; NAIC Unfair Trade Practices Act (MO-880, Spring 2024), §4A(1),(4), §4B, §4I(1) Rebates, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf
+- note: F-001 resolved (activity list gone). One nit open for the clean-up run.
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14b
+- date: 2026-10-11
+- resolves: F-003
+- status: resolved
+- note: Restated to BBK §7.1: 'a branch manager employed by the insurer runs an office the insurer pays for'; 'sometimes assisted by a group sales representative'.
+
+## [C-006] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14b
+- date: 2026-10-11
+- status_set: verified
+- confidence: high
+- checks_run: re-check after this run's one authorized edit (Life and health bullet restated to BBK §7.1); every claim checked in sweep run dv14a against BBK §7.1 and the two NAIC model acts read this session
+- sources_checked: Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.1 Insurance Operations: Marketing, Underwriting, and Administration (Marketing intro; Life/Health; General Agency; Managerial; Group and Supplemental; Property/Casualty; Independent Agency; Direct Writers and Exclusive Agents; Brokers; Internet; Mass Merchandising; Service), sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html; NAIC Producer Licensing Model Act (MO-218, January 2005), §3, §5A, §12A(5),(7), §13A-D, §18A-D, sha256:5b1eafdc7b1a841a97440f0e1e7c98e30c935855de4add58838c0f76aee37a34 — https://content.naic.org/sites/default/files/model-law-218.pdf; NAIC Unfair Trade Practices Act (MO-880, Spring 2024), §4A(1),(4), §4B, §4I(1) Rebates, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf
+- note: No finding open. High: the licensing, disclosure and advertising rules are read from the NAIC model acts themselves; the distribution bullets from the open text.

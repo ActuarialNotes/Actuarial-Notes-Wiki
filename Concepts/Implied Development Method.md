@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6676868f3f49590082097f8b04611ed74e43dd38f4d85a91747cc2eb0f9fe3d2
+  content_hash: sha256:6f4ac38f46bf2a34bb73ce1632ae4143115297ff585db1a3452405106d889efe
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,7 +23,7 @@ verification:
   - Limits are indexed for inflation so experience years can be combined. At $10\%$ cost inflation, losses over a \$100,000 deductible one year match those over \$110,000 the next. Siewert's index of $1.095$ makes a current \$250,000 limit equivalent to \$228,311 a year earlier.
 - **Strengths and weakness.** It gives an excess estimate at early maturities even when no excess losses have emerged. Limited factors are more stable than excess ones. Its by-product, ultimate deductible losses, feeds the service revenue asset: a loss multiplier on deductible losses, less known recoveries (see [[Deductible Recovery]]). Its weakness, in Siewert's words, is that its focus is misplaced: one would like to recognize excess development explicitly.
 - **The alternatives Siewert compares it with.** $P$ is premium, $E$ the expected loss ratio, $\chi$ the per-occurrence charge and $O_t$ the observed loss.
-  - The **[[Loss Ratio Method|loss ratio]] approach** sets excess losses at $P \cdot E \cdot \chi$ from pricing. It is practical for immature years but ignores emerging experience.
+  - The **loss ratio approach** sets excess losses at $P \cdot E \cdot \chi$ from pricing. It is practical for immature years but ignores emerging experience.
   - **Direct development** applies an [[Excess Loss Development Factor|excess loss development factor]] to reported excess losses. It is leveraged and volatile, and it gives nothing when nothing has emerged.
   - **Credibility weighting** takes $Z = 1/\text{LDF}_t$, giving the [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] result $O_t + E(\text{LDF}_t - 1)/\text{LDF}_t$. It is stable and tied to pricing, but it ignores actual experience to the extent of the complement of credibility.
   - The implicit and explicit methods need not give the same reserve. Their underlying factors should balance, though, to the unlimited factor.

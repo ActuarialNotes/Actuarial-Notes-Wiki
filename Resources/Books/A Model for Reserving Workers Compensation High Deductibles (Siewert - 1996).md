@@ -7,12 +7,14 @@ date: "1996"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Siewert.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b324fb720c03b94489a713b43b456a87381f45e7bddbc0a3755dababcb3ae6e7
-  sources: []
+  sources:
+    - "Siewert, A Model for Reserving Workers Compensation High Deductibles (CAS Forum Summer 1996, pp.217-244), PDF pp.1-28 text; formulas 3.1-3.4, 4.1-4.14 and 5.1 and Tables 4-10 read from page images pp.5, 8, 12, 13, 18, 21, sha256:3c340e8fd550816e5c0a4612c20350eb56c5cc3d5c928c0d4c7d1408c66a091c — https://www.casact.org/sites/default/files/2021-03/7_Siewert.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF p.5 (Siewert A.ii.3 = task 4, pp.217-244), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/A Model for Reserving Workers Compensation High Deductibles (Siewert - 1996).md

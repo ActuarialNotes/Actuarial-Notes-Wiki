@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:39679006e3bab2ce02abf4c241c394817d14463c18217f6d10a73c095e343453
-  sources: []
+  sources:
+    - "Sahasrabuddhe, Claims Development by Layer (CAS E-Forum Fall 2010, rev. Jan 2, 2013), PDF pp.1-14 (eqs 2.4, 3.1, 3.2, 3.7, 3.8-3.10, Section 3.3 properties, 4.1, 4.2, 5), p.23 Example 3, sha256:42ecb7ecc7270a462e397a1d4d5c8d42e50b4bc9719122b4c53873dfc84fd5a3 — https://www.casact.org/sites/default/files/2021-03/7_Sahasrabuddhe.pdf"
+    - "Sahasrabuddhe, Errata to Claims Development by Layer, p.1, sha256:0f73306a697fd764ca98b3138b416563585f8800e4f169166e359b59ce3142ca — https://www.casact.org/sites/default/files/2021-03/7_Sahasrabuddhe_Errata.pdf"
+    - "Siewert, A Model for Reserving Workers Compensation High Deductibles (CAS Forum Summer 1996, pp.217-244), PDF pp.12-13, 16 (eqs 4.2, 4.3, 4.10), sha256:3c340e8fd550816e5c0a4612c20350eb56c5cc3d5c928c0d4c7d1408c66a091c — https://www.casact.org/sites/default/files/2021-03/7_Siewert.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Layer Development Factor.md

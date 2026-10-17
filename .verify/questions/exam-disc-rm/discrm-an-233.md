@@ -44,3 +44,48 @@ created: 2026-10-10
 - status_set: in_review
 - checks_run: Re-read after the option rewrite: four distinct pairs, key C unchanged in meaning, blind answer C.
 - note: Still in_review: the four insurer risk control goals the question tests (profit, customer needs, duty to society, legal requirements) are The Institutes' framework and appear in no source readable this run; Risk Control no longer states them.
+
+## [F-002] Tagged to Underwriting rather than the DISC page Underwriting Process
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14a
+- date: 2026-10-11
+- severity: minor
+- status: open
+- locus: frontmatter wiki_link
+- claim: wiki_link includes Concepts/Underwriting (alongside Concepts/Risk+Control).
+- evidence: docs/cas-publication-plan.md §3.5 rule 3: the DISC-RM underwriting lines were relinked from Underwriting (in_review; life/health material no free source covers) to Underwriting Process; Exam DISC-RM (CAS).md links only [[Underwriting Process]]. Concepts/Underwriting Process.md (verified) teaches what the stem tests: step 1 gathers loss control inspections, step 6 monitors a policy written subject to loss control recommendations - the same two facts RIEA Steps 2 and 6 state.
+- source_rank: 4
+- proposed_action: Retag Concepts/Underwriting -> Concepts/Underwriting+Process.
+- applied: false
+- fingerprint: b9f04e30a462
+
+## [C-003] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14a
+- date: 2026-10-11
+- status_set: in_review
+- checks_run: blind answer from the stem: B (the key sits in the frontmatter above the stem and was in view when the file was opened; the answer was worked from the stem and the sources, not from the key or explanation); every option checked against a source; explanation checked; answerable from Concepts/Risk Control.md (Insurer risk control; Risk control and underwriting) and Concepts/Underwriting Process.md
+- sources_checked: Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.1 Insurance Operations: Marketing, Underwriting, and Administration (Marketing intro; Life/Health; General Agency; Managerial; Group and Supplemental; Property/Casualty; Independent Agency; Direct Writers and Exclusive Agents; Brokers; Internet; Mass Merchandising; Service), sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html; Risk & Insurance Education Alliance, 'Six Steps of the Underwriting Process' (30 Jan 2023), Steps 2 and 6, sha256:9523dc56c968ea8773752c7b139b3d9895b0229df9d716e2dd3a3cc843481d17 — https://www.riskeducation.org/six-steps-of-the-underwriting-process/; Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §4.4 Risk Management Alternatives (loss prevention, loss reduction, avoidance), sha256:5da3c20b87e2a72ff64a492c44f23e70c966629c990a5dfd9739b0ec09c59eb8 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s08-04-risk-management-alternatives-t.html; IRMI Glossary, 'premium audit', sha256:d539808a25b9734bcf2d57f11809bb1b69dacba9241f112156dc3ec1930bcd1e — https://www.irmi.com/term/insurance-definitions/premium-audit
+- note: Key B agrees with BBK §7.1 (engineering and loss control: prevention and reduction where economically feasible, particularly workers compensation) and RIEA Steps 2 and 6. A: control is not financing (BBK §4.4). C: premium audit (IRMI). D: prevention lowers probability, avoidance removes the exposure (BBK §4.4). Retag finding open for the clean-up run.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14b
+- date: 2026-10-11
+- resolves: F-002
+- status: resolved
+- note: wiki_link Concepts/Underwriting -> Concepts/Underwriting+Process (verified page; steps 1 and 6 teach the loss control inspection and follow-up the stem describes).
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-11T02:10Z/dv14b
+- date: 2026-10-11
+- status_set: verified
+- confidence: medium
+- checks_run: re-check after the retag (Concepts/Underwriting -> Concepts/Underwriting+Process; target exists and teaches the stem's facts); stem, options, key and explanation unchanged since the sweep check
+- sources_checked: Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.1 Insurance Operations: Marketing, Underwriting, and Administration (Marketing intro; Life/Health; General Agency; Managerial; Group and Supplemental; Property/Casualty; Independent Agency; Direct Writers and Exclusive Agents; Brokers; Internet; Mass Merchandising; Service), sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html; Risk & Insurance Education Alliance, 'Six Steps of the Underwriting Process' (30 Jan 2023), Steps 2 and 6, sha256:9523dc56c968ea8773752c7b139b3d9895b0229df9d716e2dd3a3cc843481d17 — https://www.riskeducation.org/six-steps-of-the-underwriting-process/; Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §4.4 Risk Management Alternatives (loss prevention, loss reduction, avoidance), sha256:5da3c20b87e2a72ff64a492c44f23e70c966629c990a5dfd9739b0ec09c59eb8 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s08-04-risk-management-alternatives-t.html; IRMI Glossary, 'premium audit', sha256:d539808a25b9734bcf2d57f11809bb1b69dacba9241f112156dc3ec1930bcd1e — https://www.irmi.com/term/insurance-definitions/premium-audit
+- note: No finding open. Medium: open textbook, an education provider's article and a glossary.

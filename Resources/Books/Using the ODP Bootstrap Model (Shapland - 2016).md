@@ -9,12 +9,15 @@ Code: "CAS Monograph No. 4"
 ISBN: "978-0-9968897-5-9"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:4c0290439fb18e968bbd580f57f250d4836a95b7addb63204362d91b14fa0e7c
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f24206aea41f5da691d69834eb6fb66caf48992a448739b0d00a08a904b4d175
+  sources:
+    - "Shapland, Using the ODP Bootstrap Model: A Practitioner's Guide, CAS Monograph 4 (2016), title/copyright pp. (PDF 1-4), contents pp. iii-iv (PDF 5-6) and PDF bookmarks; Sections 1-9 and Supplementary Materials, pp. 1-62 (PDF 9-70); Appendix D-E intros (PDF 112, 116), sha256:51b072243c0fe839cd776d9dc77532c544e2d52e025a29610e1aaea2cff07abf — https://www.casact.org/sites/default/files/2021-03/7_Shapland.pdf"
+    - "Shapland, Monograph 4 Errata, p. 1, sha256:0ed7707772c959ff87c1f424bcd5793af45b149edf3313ed5f157b82eb28efa8 — https://www.casact.org/sites/default/files/2021-02/Errata-ODP-Bootstrap-Monograph_4.pdf"
+    - "CAS Exam 7 Content Outline, Fall 2026 (v04 2026_9_16), tasks pp. 3-4; text references pp. 5-6, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Using the ODP Bootstrap Model (Shapland - 2016).md
@@ -167,6 +170,14 @@ A practitioner's guide to the over-dispersed Poisson (ODP) bootstrap model, whic
 
 ## Appendix E—GLM Bootstrap Results
 - Results of the GLM bootstrap model for the Taylor and Ashe (1983) data, as illustrated in Figures 5.9 through 5.12.
+
+## References
+
+## Selected Bibliography
+
+## Abbreviations and Notations
+
+## About the Author
 
 ## Errata
 - Contents page and page 23: the title of Section 4.3 should be "Using an L-Year Weighted Average", to be consistent with the notation used in the section (printed as "Using an N-Year Weighted Average").

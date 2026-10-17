@@ -7,12 +7,14 @@ date: "2023"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
+  last_checked_by: agent:validate-v1
   content_hash: sha256:18ddd77c806e56021703084a12e11a466cd0a68304197f6d9dc2cec788dc5368
-  sources: []
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.1-77 (title, copyright, printed contents pp.3-5, bookmark outline, preface, Chapters 1-3 text and Tables 1.1-3.15), sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (task A.v.15-17; Friedland citation A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Reserving for Reinsurance (Friedland - 2022).md

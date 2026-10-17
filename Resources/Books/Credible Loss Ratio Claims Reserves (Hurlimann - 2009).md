@@ -7,12 +7,15 @@ date: "2009"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/7_Hurlimann.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
   content_hash: sha256:feebe0a19b5f5b9928b6d86c6e0bdc52b300449f136d1973a97ff3e661ba2706
-  sources: []
+  sources:
+    - "https://www.casact.org/sites/default/files/2021-03/7_Hurlimann.pdf, pp.81-99, Sections 1-7, Theorems 3.1-6.1, Remark 6.1, Tables 7.1-7.12, References, sha256:83ebe8ec5758fdb800e168175d6b7f2a6862a2d85bf8314875fcc7d5d1453c28 — https://www.casact.org/sites/default/files/2021-03/7_Hurlimann.pdf"
+    - "https://www.casact.org/sites/default/files/2021-03/7_Hurlimann_Errata.pdf, pp.1-3, all five errata, sha256:bd95821b415ce7a18b25b190c073f52571b6b754516e779a7da19bb9e9f290fb — https://www.casact.org/sites/default/files/2021-03/7_Hurlimann_Errata.pdf"
+    - "https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf, pp.3-5, tasks A.i-A.iv and the Brosius, Hurlimann and Mack - Benktander citations, sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Credible Loss Ratio Claims Reserves (Hurlimann - 2009).md

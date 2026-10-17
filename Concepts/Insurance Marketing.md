@@ -1,70 +1,71 @@
 ---
 verification:
-  status: in_review
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: high
+  last_checked: 2026-10-11
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d07251df969838adc46867d9d3cdb56e5cc24bd3d1a1448f92a446bf0f1fed7f
+  content_hash: sha256:2f53ab6c5fe9a9ac02e1a32eb6010d0d3cd3918cad4d82fa70a91482307cb7df
   sources:
-    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), s11-01 Internet marketing; mass merchandising, sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
-    - "Baranoff et al., Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012), table of contents, chapters 4-12, sha256:b9329afa59c3f4ccbe1d34f742ce4d05b9557a8e95bcbf473b10fcd23a7a6d48 — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/index.html"
-  open_findings: 1
+    - "Baranoff, Brockett & Kahane, Risk Management for Enterprises and Individuals v1.0 (Saylor Academy 2012, CC BY-NC-SA), §7.1 Insurance Operations: Marketing, Underwriting, and Administration (Marketing intro; Life/Health; General Agency; Managerial; Group and Supplemental; Property/Casualty; Independent Agency; Direct Writers and Exclusive Agents; Brokers; Internet; Mass Merchandising; Service), sha256:9abf601a8c7e62c112667b15df20471c0a07e5e32ff1dea40448eec0afdccf7e — https://saylordotorg.github.io/text_risk-management-for-enterprises-and-individuals/s11-01-insurance-operations-marketing.html"
+    - "NAIC Producer Licensing Model Act (MO-218, January 2005), §3, §5A, §12A(5),(7), §13A-D, §18A-D, sha256:5b1eafdc7b1a841a97440f0e1e7c98e30c935855de4add58838c0f76aee37a34 — https://content.naic.org/sites/default/files/model-law-218.pdf"
+    - "NAIC Unfair Trade Practices Act (MO-880, Spring 2024), §4A(1),(4), §4B, §4I(1) Rebates, sha256:e27f5324468298edb8af55d6166ac73a928c7fcd2571340a51bb342a1bf7367e — https://content.naic.org/sites/default/files/model-law-880.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Marketing.md
 ---
 
-**Insurance Marketing** is the set of activities by which an [[Insurer|insurer]] learns what customers need, decides which customers to serve, and develops, promotes and keeps selling the products that meet those needs at a profit. An insurer's main marketing activities are market research, target marketing, advertising and promotion, customer relationship management and product development. Marketing decides who the customers are, and [[Insurance Distribution Systems|distribution]] decides how they are reached.
+**Insurance Marketing** is the part of [[Insurance Operations|insurance operations]] that brings an [[Insurer|insurer]]'s policies to buyers, and from the consumer's point of view it is the first glimpse of the insurer. Insurance is bought through agents, through brokers or, in some cases, directly from the insurer, in person or online, and the marketing arrangements differ by segment of the industry: individual life and health, group and supplemental, and property-casualty. Whoever sells, solicits or negotiates insurance must hold a state producer license, and what an insurer or producer says to sell a policy is limited by the state's unfair trade practices law.
 
-> $$\text{CLV} = \sum_{t=1}^{\infty} \frac{m\, r^{t-1}}{(1+i)^t} - A$$
+> $$C = c \times P$$
 
-> $$\text{CLV} = \frac{m}{1 + i - r} - A$$
+> $$S = n\,\big(P_{\text{agent}} - P_{\text{no-load}}\big) - F$$
 
-> $$\text{CPA} = \frac{\text{Campaign cost}}{\text{New policies}}$$
+- **Symbols:** $C$ is the commission a producer earns on a policy, $c$ the commission rate and $P$ the premium. In the second line, $S$ is what a buyer saves over $n$ years by buying a no-load policy, sold without sales commission, on a fee-only planner's advice: $P_{\text{agent}}$ is the annual premium of the commissioned policy, $P_{\text{no-load}}$ that of the no-load policy, and $F$ is the planner's fee. The buyer is ahead only if $S > 0$, that is, if the commission saved offsets the fee.
+- **Property-casualty marketing:** Most property-casualty insurance is sold through agents or brokers paid by commission, with some sold by salaried representatives or by direct methods. The independent agency system and the exclusive agency system account for most sales ([[Insurance Distribution Systems]]).
+- **Independent agents:** Independent agents usually represent several insurers, pay all their agency's expenses and are paid by commission plus bonus. They own the expirations, the right to contact the customer at renewal, which stays with the agent if the agent stops representing an insurer and gives an agency its market value.
+- **Exclusive agents and direct writers:** Direct writers sell through exclusive agents, who may represent only their company or an affiliated group, or through salaried employees. Their commissions are lower than independent agents' because the insurer absorbs some of the expenses an independent agent would pay, and the insurer owns the expirations.
+- **Brokers:** A broker solicits business from the insured and acts as the insured's legal agent when placing coverage, while an agent legally represents the insurer. In about half the states a broker must also be an agent of the insurer, and many states call both [[Insurance Producer|producers]]. Brokers matter most in commercial property, liability, employee benefits and marine insurance, and for large insureds.
+- **Life and health marketing:** Most life and health insurance is sold by producers whose commissions are built into the premium, under a general agency system, in which an independent general agent recruits and supervises subagents in a territory and earns an override on their commissions, or a managerial system, in which a branch manager employed by the insurer runs an office the insurer pays for. Group plans are sold to employers by agents or brokers, sometimes assisted by a group sales representative.
+- **Direct response and mass merchandising:** Mass merchandising sells insurance by mail, telephone, television or e-mail, often through a sponsor such as an employer, trade association, university or creditor, and buyers respond directly to the insurer. It can cost the buyer less, but a direct response insurer cannot give the counselling a good agent can, and some campaigns combine a mailing with an agent's follow-up.
+- **The internet:** Buyers compare prices and coverage on insurers' websites and on sites that collect a questionnaire and return quotes from several insurers. The sale is often not finished online, since the internet makes the connection with an agent or underwriter.
+- **Producer licensing:** Under the NAIC Producer Licensing Model Act, a person may not sell, solicit or negotiate insurance in a state without a license for that line of authority, and a resident applicant must pass a written examination ([[Insurance Licensing]]). An insurer or producer may not pay a commission to, and an unlicensed person may not accept one for, business that required a license. The commissioner may suspend, revoke or refuse to renew a license for causes including intentionally misrepresenting the terms of a policy or application and committing an unfair trade practice.
+- **Compensation disclosure:** Contingent commissions, paid to brokers for bringing in better business, came under investigation in 2004, and since then regulators have looked for more transparency in how producers disclose what they are paid. The model act's compensation disclosure section requires a producer who is paid by the customer, or who represents the customer, to obtain the customer's documented acknowledgment and disclose the amount of any compensation from the insurer before the purchase. An appointed agent who takes nothing from the customer need only disclose that it will be paid by the insurer, or that it represents the insurer.
+- **Advertising and sales limits:** The NAIC Unfair Trade Practices Act prohibits any illustration, sales presentation, omission or comparison that misrepresents a policy's benefits or terms or an insurer's financial condition, any advertisement or statement about insurance that is untrue, deceptive or misleading, and rebates or other inducements not specified in the policy unless the law expressly allows them ([[State Market Conduct Regulation]]).
 
-- **Symbols:** Customer lifetime value (CLV) is the [[Present Value|present value]] of the margin a customer brings over the life of the relationship, less the cost of acquiring them. $m$ is the annual margin per customer after losses and expenses, received at the end of each policy year, $r$ is the retention rate at each renewal, $i$ is the discount rate and $A$ is the acquisition cost. The second form is the sum of the geometric series, valid when $r < 1 + i$. CPA is the cost per acquired policy of a campaign.
-- **Market research:** The insurer gathers information about customers, competitors and the market to find unmet needs and judge whether a product will sell. Sources include its own policy and claims data, surveys and focus groups, producers' reports from the field, and industry and government statistics.
-- **Target marketing:** Rather than selling everything to everyone, the insurer divides the market into segments with similar needs, such as by geography, demographics, life stage, type of business or buying behaviour, and chooses the segments it can serve profitably. It then positions its products and prices for those segments. Segmentation for marketing chooses whom to pursue, while [[Classification Ratemaking|risk classification]] in rating decides what each risk pays.
-- **Advertising and promotion:** Advertising builds awareness of the insurer's brand and products, and promotion supports sales through producers, sponsorships, and digital and social media campaigns. Direct response insurers rely on it most, because advertising is how their customers find them.
-- **Customer relationship management:** CRM uses data on each customer's policies, contacts and claims to serve them well, keep them at renewal and offer them other products they need. Retention is valuable because, as the CLV formula shows, a customer kept for longer spreads the acquisition cost over more years of margin.
-- **Product development:** Marketing identifies the needs a new or revised product should meet, and it works with underwriting, actuarial, claims, legal and compliance to design, price, file and launch it. The [[Product Development Process|product development process]] describes the steps.
-- **Constraints:** Insurance marketing works within [[State Market Conduct Regulation|market conduct regulation]], which prohibits misrepresenting policies, unfair discrimination and unfair inducements, and within [[Risk Classification Restrictions|limits on rating variables]] that some jurisdictions apply to targeting and pricing.
-
-> [!example]- Choosing a Target Segment by Lifetime Value {Example}
-> A personal lines insurer is choosing between two segments for a new marketing campaign. With illustrative figures, young renters buying online bring an annual margin of \$60, renew at 70% and cost \$120 to acquire. Homeowners who bundle auto and home bring a margin of \$150, renew at 88% and cost \$350 to acquire, much of it in producer commission and advertising. Using a 5% discount rate, find the CLV of a customer in each segment.
+> [!example]- Is a No-Load Policy Cheaper? {Example}
+> With illustrative figures, a buyer can buy a policy through an agent for \$1,200 a year, commission included, or, on a fee-only planner's advice, a comparable no-load policy for \$1,000 a year. The planner charges a one-time fee of \$450. Find the buyer's saving from the no-load route if the buyer keeps the policy for (a) one year and (b) three years.
 >
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{CLV}_{\text{renters}} &= \frac{60}{1.05 - 0.70} - 120 \\
-> > &= 171.43 - 120 \\
-> > &= 51.43 \\
-> > \text{CLV}_{\text{bundled}} &= \frac{150}{1.05 - 0.88} - 350 \\
-> > &= 882.35 - 350 \\
-> > &= 532.35
+> > S_1 &= 1 \times (1{,}200 - 1{,}000) - 450 \\
+> > &= -250 \\
+> > S_3 &= 3 \times (1{,}200 - 1{,}000) - 450 \\
+> > &= 600 - 450 \\
+> > &= 150
 > > \end{align*}
 > > $$
-> > A bundled homeowner is worth about ten times as much as a young renter, even though it costs nearly three times as much to acquire. Retention drives the difference: at 88%, the margin is earned for many more years. The insurer might still market to renters as a way to win them as future homeowners, but that is a bet on retention that the research should check.
+> > Over one year the agent-sold policy is \$250 cheaper, because the \$200 of commission saved does not cover the fee. Over three years the no-load route saves \$150. Whether the buyer's total cost is lower depends on whether the commission saved offsets the planner's fee, and the comparison leaves out the advice an agent gives.
 
-> [!example]- Judging a Campaign by Cost per Acquisition {Example}
-> The insurer spends \$400,000 on a digital campaign aimed at the bundled segment. It produces 2,500 quotes, of which 20% become policies. Using the CLV from the previous example before acquisition cost (\$882.35), and supposing the campaign is the only acquisition cost, is the campaign worth running?
+> [!example]- What Must the Producer Disclose? {Example}
+> In a state that follows the NAIC Producer Licensing Model Act, a broker charges a manufacturer a \$2,000 fee to place its property insurance. The insurer chosen also pays the broker a commission of 10% on the \$50,000 premium. Separately, an appointed agent sells a homeowners policy for the insurer that appointed her and charges the customer nothing. What must each disclose, and when?
 >
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{New policies} &= 0.20 \times 2{,}500 \\
-> > &= 500 \\
-> > \text{CPA} &= \frac{400{,}000}{500} \\
-> > &= 800
+> > C &= 0.10 \times 50{,}000 \\
+> > &= 5{,}000
 > > \end{align*}
 > > $$
-> > Each new customer costs \$800 and is worth \$882.35 before acquisition cost, so the campaign adds about \$82 of value per customer, or about \$41,000 in total. The margin is thin: a retention rate a few points lower, or a lower quote-to-policy rate, would make it unprofitable, so the insurer should track both against the assumptions.
+> > The broker is paid by the customer, so before the purchase it must obtain the manufacturer's documented acknowledgment that it will also be paid by the insurer, and disclose the amount, \$5,000. Had the amount not been known yet, it would disclose how the commission is calculated and, if possible, a reasonable estimate. The agent takes nothing from the customer and represents an insurer that appointed her, so before the purchase she need only disclose that she will be paid by the insurer, or that she represents the insurer.
 
 > [!tip]- How it appears on the exam
-> - **DISC-RM:** The marketing and distribution section covers insurer marketing activities. Questions describe an activity, such as a survey of small business owners, a campaign aimed at new homeowners or a loyalty program, and ask which marketing activity it is.
-> - **DISC-RM:** Application questions ask how an insurer should identify a target market or respond to a change in customer needs, and how marketing relates to distribution, underwriting and product development.
+> - **DISC-RM:** The marketing and distribution section asks how property-casualty insurance reaches buyers: given a description, name the system (independent agent, exclusive agent, direct writer, broker, direct response), say who owns the expirations, or say whom an agent and a broker represent.
+> - **DISC-RM:** Questions on marketing's limits ask what a producer needs before selling (a license for the line), what it must tell a customer about its pay, and which sales statements or inducements a state's unfair trade practices law prohibits.
 
 > [!warning]- Exam traps
-> - **Marketing is not selling:** Selling is one part of marketing. Market research, targeting, CRM and product development all come before or after the sale, and an answer that equates marketing with producers selling policies is incomplete.
-> - **Targeting is not rating:** Choosing which segments to market to is a marketing decision. Charging each risk the right rate is an underwriting and pricing decision, governed by rating rules and regulation.
-> - **Acquisition is not the whole cost:** Comparing segments on acquisition cost alone ignores how long the customer stays. A cheaper customer who leaves after a year can be worth less than an expensive one who stays for ten.
-> - **Retention in the formula:** In the CLV formula, the retention rate multiplies the margin for each additional year, so $r$ enters the denominator as $1 + i - r$. Using $1 - r$ ignores discounting and overstates the value.
+> - **Agent or broker:** An agent legally represents the insurer and a broker the insured, even though the insurer pays both and many states call both producers.
+> - **Who owns the expirations:** Independent agents own them, so the account can follow the agent. Under an exclusive agent or a direct writer, the insurer owns them.
+> - **No-load is not automatically cheaper:** A no-load policy saves the commission, but the planner's fee has to be paid too. Compare the commission saved over the time the policy is held with the fee.
+> - **The license is for selling, soliciting or negotiating:** A person who only receives an assigned commission without selling, soliciting or negotiating need not be licensed, but paying a commission to an unlicensed person who did sell is prohibited.
+> - **Disclosure depends on who pays and whom the producer represents:** The full disclosure, documented acknowledgment and the amount, applies when the customer pays the producer or the producer represents the customer, not to an appointed agent paid only by the insurer.

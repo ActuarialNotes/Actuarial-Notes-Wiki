@@ -1,28 +1,35 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e25bf64f6907b71640daa01a82ae8442746e6092f5d64ce9fd48cc38c3bd1ebe
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-16
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:da477903858a55725883d5d66cb0ffcc4a7cccac61f9f57d43815eb7f0631c0a
+  sources:
+    - "Friedland, Reserving for Reinsurance (CAS Study Note — Exam 7, (c)2023 CAS; cited by the outline as 2022), PDF pp.10, 26-28, 35-40, 43, 45-47, 50-56, 66, 69-72, sha256:6da495a26206ececf40a3c3fc8fb3db04556c940242f5bcffe2b21b7e4445ceb — https://www.casact.org/sites/default/files/2022-11/Exam7_Study_Note_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, Version 3, 2010), PDF pp.159-160 (Ch.9: % unreported = 1.00 minus the inverse of the reported CDF), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "CAS, Exam 7 Content Outline, Fall 2026 (Exam_7_CO_2026_F v04 2026_9_16), PDF pp.3-6 (tasks A.ii.4 = 5, A.v.1-3 = 15-17; Teng and Perkins excluding Section 5 with Feldblum Sections 1-2; Friedland A.v.1-A.v.3), sha256:be1833c4f35a9344e33b1c48336dca9724d6556890997b3d8715f9de709ca5ed — https://www.casact.org/sites/default/files/2026-03/Exam_7_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reinsurance Reserving.md
 ---
 
-**Reinsurance reserving** is the estimation of unpaid claims on reinsurance: a reinsurer's assumed liabilities, and the ceded liabilities of a cedant. It uses the same basic techniques as primary reserving (development, expected claims, BF, Cape Cod). Their data and assumptions have to be adapted to longer reporting lags, manuscript contracts, thinner and less detailed data, treaty-year aggregation, and the leverage an attachment point exerts on development and trend.
+**Reinsurance reserving** is the estimation of unpaid losses on reinsurance: a reinsurer's assumed business (and what it retrocedes), and the ceded business of a primary insurer. The development, expected and Bornhuetter-Ferguson methods are the ones most often used. Their mechanics are the same as for primary insurance, but their assumptions differ. Reporting lags are longer, data are thinner and less homogeneous, contracts are manuscript, results are often aggregated by treaty year, and an attachment point leverages development and trend.
 
-> $$\text{ELR} = \frac{\sum_k C_k}{\sum_k \text{EP}_k \times \text{lag}_k}$$
+> $$\text{Ultimate} = \text{Reported} + \text{Expected losses} \times \%\,\text{Unreported}$$
 
-> $$\text{IBNR}_k = \text{ELR} \times \text{EP}_k \times (1 - \text{lag}_k)$$
+> $$\text{Expected losses} = \text{ELR} \times \text{Earned premium}$$
 
-- This is the [[Cape Cod Method|Cape Cod]] (Stanard-Bühlmann) method with a reinsurance report lag. $C_k$ is reported loss for treaty year $k$, $\text{EP}_k$ its on-level earned premium, and $\text{lag}_k = 1/\text{CDF}_k$ the expected share reported. It suits long-tail casualty excess business, where a thin, late diagonal makes the chain ladder unreliable and pricing ELRs are hard to put on level.
-- **Why primary methods need adjusting** (Friedland, drawing on Patrik):
+- This is the reported [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]] method; the paid version uses paid losses and $\%\,\text{Unpaid}$. The share unreported, $1 - 1/\text{CDF}$, comes from the selected development pattern, from the reinsurer's own data or from external data.
+- **The three methods** (Friedland):
+  - **Development.** Reinsurers use it most with reported and paid losses, and with premiums. It assumes future development resembles the past and that claim processing, mix, limits and reinsurance terms (retention, participation) have been consistent.
+  - **Expected.** The usual estimate is an expected loss ratio times earned premium. The ELR draws on pricing, industry data and adjusted history. It is used when entering a new line, after changes that make the history irrelevant, when development factors for immature years are too leveraged, or when data for other methods are missing. Reinsurers seldom have the claim counts and exposures that frequency-severity or exposure approaches need.
+  - **Bornhuetter-Ferguson.** It is relied on almost as often as the development method. It assumes losses reported to date say nothing about those still to come. That makes it stable where a large CDF would turn one large loss into a large swing in the development projection.
+- **Why primary methods need adjusting** (Friedland):
   - Claims reach the reinsurer only after the cedant has reported and assessed them. Excess claims arrive later still, once they approach the retention or a reporting threshold.
   - As a result, early development factors and tails are higher than primary, especially for non-proportional covers, and trend is leveraged in excess layers.
   - Rate-change data for on-leveling is weaker because contract terms change from year to year.
-- **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business is often excluded, and asbestos, environmental and abuse exposures are not suited to triangle methods at all.
+- **Data realities.** Data often arrive as summary reports rather than claim detail; the detailed [[Bordereau|bordereau]], mainly a pro rata practice, has largely been supplanted by summary reporting. Claim counts are seldom usable. Reported losses include the reinsurer's **additional case reserves** (ACRs) on top of cedant case reserves. Several currencies must be restated at a common exchange rate, or the development factors absorb exchange movements. Catastrophe losses are estimated event by event and removed from the triangles. Discontinued business may be excluded, and some of it (asbestos, environmental and abuse) may not suit triangle methods.
 - **Segmentation.** Friedland quotes Patrik's priority list:
   - line of business;
   - contract type (treaty, facultative, finite);
@@ -36,41 +43,37 @@ verification:
 - **Experience period.** Reinsurers often analyse by **treaty (underwriting) year**. Immature treaty years must have their ultimates reduced for premium not yet earned, and results are allocated to accident year through earning patterns. Losses-occurring-during and risks-attaching contracts cover different claims, so the actuary must know which applies.
 - **Outputs are wider.** The spread of indicated IBNR across methods is larger than primary; see [[Range of Indications]]. External patterns such as RAA data help but mix unlike contracts. The cedant's side is [[Ceded Loss Reserve]], and cover types are in [[Types of Reinsurance]].
 
-> [!example]- Cape Cod IBNR for Casualty Excess Treaties {Example}
-> A reinsurer's casualty excess treaties (\$000s):
+> [!example]- Development vs Bornhuetter-Ferguson on an Immature Excess Year {Example}
+> A reinsurer's casualty excess business for accident year 2024, at 12 months (\$000s): earned premium $6{,}000$, reported losses $360$, and a selected development pattern with $12\%$ reported (a CDF to ultimate of $1/0.12 = 8.333$). The on-level expected loss ratio from pricing is $70\%$.
 >
-> | Treaty year | Earned premium | Reported | Lag |
-> |---|---|---|---|
-> | 2022 | $4{,}000$ | $1{,}800$ | $60\%$ |
-> | 2023 | $5{,}000$ | $1{,}100$ | $35\%$ |
-> | 2024 | $6{,}000$ | $360$ | $12\%$ |
->
-> Premiums are on-level. Compute Cape Cod IBNR and compare with the chain ladder.
+> Compare the development and Bornhuetter-Ferguson IBNR. Then suppose one more loss of $200$ had been reported by the same date.
 >
 > > [!answer]-
 > > $$
 > > \begin{align*}
-> > \text{Used-up premium} &= 2{,}400 + 1{,}750 + 720 \\
-> > &= 4{,}870 \\
-> > \text{ELR} &= 3{,}260 / 4{,}870 \\
-> > &= 66.9\%
+> > \text{Development ult} &= 360 / 0.12 \\
+> > &= 3{,}000 \\
+> > \text{Expected losses} &= 0.70 \times 6{,}000 \\
+> > &= 4{,}200 \\
+> > \text{BF ult} &= 360 + 4{,}200 \times 0.88 \\
+> > &= 4{,}056
 > > \end{align*}
 > > $$
+> >
+> > IBNR is $2{,}640$ by the development method and $3{,}696$ by Bornhuetter-Ferguson.
+> >
+> > With $560$ reported instead:
 > >
 > > $$
 > > \begin{align*}
-> > \text{IBNR}_{2022} &= 0.669 \times 4{,}000 \times 0.40 \\
-> > &= 1{,}071 \\
-> > \text{IBNR}_{2023} &= 0.669 \times 5{,}000 \times 0.65 \\
-> > &= 2{,}176 \\
-> > \text{IBNR}_{2024} &= 0.669 \times 6{,}000 \times 0.88 \\
-> > &= 3{,}534
+> > \text{Development ult} &= 560 / 0.12 \\
+> > &= 4{,}667 \\
+> > \text{BF ult} &= 560 + 3{,}696 \\
+> > &= 4{,}256
 > > \end{align*}
 > > $$
 > >
-> > The Cape Cod total is $6{,}781$. The chain ladder ($C/\text{lag} - C$) gives $1{,}200$, $2{,}043$ and $2{,}640$, a total of $5{,}883$.
-> >
-> > The gap is almost all 2024. With only $12\%$ reported, the chain ladder rests on $360$ of losses multiplied by $8.3$. Cape Cod instead applies the book's own loss ratio to the $88\%$ still to come. At this lag Cape Cod is the more defensible answer, but its ELR is only as good as the on-level adjustment to premium. Reinsurance rate changes are hard to measure, so that adjustment is where to look first.
+> > One loss of $200$ moves the development ultimate by $1{,}667$ and the BF ultimate by $200$. That is the leverage Friedland warns of when the CDF is large. Bornhuetter-Ferguson trades it for dependence on the ELR. Reinsurance rate changes are hard to quantify, yet the ELR still has to reflect them.
 
 > [!example]- Trend Leverage in an Excess Layer {Example}
 > A cedant's large claims develop by a further $5\%$ in severity. Claim values are $\$480$K, $\$900$K and $\$950$K, and the treaty is $\$500$K excess of $\$500$K.

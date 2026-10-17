@@ -49,3 +49,10 @@ created: 2026-10-10
 - run_id: 2026-10-10T21:00Z/dv13
 - date: 2026-10-10
 - note: D6: the essential/desirable/available split this question tests was deleted from Concepts/Insurance as a Risk Management Technique in dv13 because no independent source states it (only Bonga lecture notes). No vault page now teaches the content. Stays in_review until D6 is decided (source found and content restored, or question retired).
+
+## [C-007] Retired under D6
+- entry_type: comment
+- author: agent:lead
+- date: 2026-10-11
+- locus: frontmatter
+- note: Retired (off_syllabus: true) under decision D6, resolved the open-source way (docs/cas-publication-plan.md §3.5): the essential/desirable/available insurance split this question tests is stated only in The Institutes' course text, and it was removed from Insurance as a Risk Management Technique, so no vault page teaches it. Kept for the record; the quiz no longer serves it.

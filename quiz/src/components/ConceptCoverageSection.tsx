@@ -7,6 +7,7 @@ import { CompletionCornerBadge } from '@/components/CheckMark'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
 import { PRACTICE_EXAM_LABEL } from '@/lib/pastExams'
+import { formatScore, scoreColorClass } from '@/lib/quizScore'
 import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 import type { MasteryTransition } from '@/stores/quizStore'
@@ -31,11 +32,6 @@ const OUTCOME_COLOR: Record<QuestionOutcome, string> = {
   correct: '#22c55e',   // green-500
   partial: '#eab308',   // yellow-500
   incorrect: '#ef4444', // red-500
-}
-
-// Trim a fractional score to a tidy label: "2" not "2.0", "1.5", "0.33".
-export function formatScore(n: number): string {
-  return String(Math.round(n * 100) / 100)
 }
 
 export interface ScoreSummary {
@@ -263,21 +259,6 @@ interface ConceptCoverageSectionProps {
    * pinned header, the same way the Dashboard swaps in its compact actions.
    */
   actionsRef?: Ref<HTMLDivElement>
-}
-
-// Score → headline colour. Exported so the pinned header on /review prints the
-// same percentage in the same colour as the card it replaces.
-export function scoreColorClass(percentage: number): string {
-  return percentage >= 70 ? 'text-green-500'
-    : percentage >= 50 ? 'text-amber-500'
-    : 'text-red-500'
-}
-
-// True only when a question earned *full* credit — used by callers that filter
-// "incorrect" questions (a partial still counts as not-fully-correct, so it
-// stays in the review list). Partial-credit scoring lives in questionCredit.
-export function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
-  return questionCredit(q, chosen, manualGrades) >= 1
 }
 
 export function ConceptCoverageSection({

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { navProgressPercent } from '@/components/NavProgressBar'
 import {
+  navProgressPercent,
   MAX_NAV_SEGMENTS,
   navSegments,
   scrubKeyTarget,

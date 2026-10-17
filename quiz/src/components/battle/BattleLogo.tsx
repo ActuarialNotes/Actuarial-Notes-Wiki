@@ -1,5 +1,6 @@
 import { Swords } from 'lucide-react'
-import { LogoTile, type LogoTileSize } from '@/components/LogoTile'
+import { LogoTile } from '@/components/LogoTile'
+import type { LogoTileSize } from '@/lib/logoTile'
 import { PLAYER_HUES } from '@/lib/battleDisplay'
 
 /**

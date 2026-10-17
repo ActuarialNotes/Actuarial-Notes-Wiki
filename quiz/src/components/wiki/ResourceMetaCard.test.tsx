@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ResourceMetaCard } from './ResourceMetaCard'
-import { extractImages } from './WikiArticle'
+import { extractImages } from '@/lib/wikiMarkdown'
 import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 
 const HOGG = `---

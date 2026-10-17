@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Loader2, X } from 'lucide-react'
-import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
+import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
+import { effectiveOutcome } from '@/lib/quizScore'
 import { QuestionCard } from '@/components/QuestionCard'
 import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'

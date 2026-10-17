@@ -1,4 +1,5 @@
-import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/components/AvatarDisplay'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/lib/avatar'
 import { MNEMONICS } from '@/data/mnemonics'
 import { Lightbulb } from 'lucide-react'
 

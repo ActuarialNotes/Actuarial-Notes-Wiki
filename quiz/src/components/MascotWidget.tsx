@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Lock } from 'lucide-react'
-import { parseAvatarUrl, serializeAvatar, type AnimalType, ANIMAL_TYPES, ANIMAL_LABELS } from '@/components/AvatarDisplay'
+import { parseAvatarUrl, serializeAvatar, type AnimalType, ANIMAL_TYPES, ANIMAL_LABELS } from '@/lib/avatar'
 import { getAnimalPalette, COSMETICS, type AnimalPalette } from '@/lib/cosmetics'
 import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'

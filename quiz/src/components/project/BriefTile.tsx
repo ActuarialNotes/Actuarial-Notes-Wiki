@@ -1,5 +1,6 @@
 import { Car, Droplets, FolderKanban, Store, type LucideIcon } from 'lucide-react'
-import { LogoTile, type LogoTileSize } from '@/components/LogoTile'
+import { LogoTile } from '@/components/LogoTile'
+import type { LogoTileSize } from '@/lib/logoTile'
 import { programmeOf } from '@/data/projects'
 import { examAccentStyle } from '@/lib/examColors'
 import type { CaseId } from '@/lib/pcpaData'

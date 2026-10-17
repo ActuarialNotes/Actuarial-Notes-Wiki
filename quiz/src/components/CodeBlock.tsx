@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import type { Components } from 'react-markdown'
 
 /**
  * How fenced code and inline code render on every markdown surface in the app —
- * question stems, explanations, wiki articles, exam guides.
+ * question stems, explanations, wiki articles, exam guides. The components
+ * react-markdown is handed are `components/codeComponents.tsx`.
  *
  * The vault uses fenced blocks for **console output**: an R model summary, a
  * `summary()` table, a worked triangle. That output only reads as a table while
@@ -21,10 +21,6 @@ import type { Components } from 'react-markdown'
  * paints a zinc box on the wiki and hangs backtick quotes off inline code), so
  * the same panel appears on every surface whether or not it sits in `prose`.
  */
-
-// Inline code — a chip in running text.
-const CODE_CLASS =
-  'not-prose rounded border border-border bg-muted px-1 py-0.5 font-mono text-[0.9em]'
 
 // The panel: an inset region, so a border rather than a shadow (style guide §6.2).
 const PANEL_CLASS = 'not-prose my-3 max-w-full rounded-lg border border-border bg-muted'
@@ -54,7 +50,7 @@ const SCROLLER_CLASS = [
  * costs one extra tab stop, while a block that doesn't would otherwise be
  * unreadable without a mouse.
  */
-function CodeBlock({ children }: { children: ReactNode }) {
+export function CodeBlock({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLPreElement>(null)
   const [moreRight, setMoreRight] = useState(false)
 
@@ -93,23 +89,4 @@ function CodeBlock({ children }: { children: ReactNode }) {
       </pre>
     </div>
   )
-}
-
-/** Block-level surfaces: a fenced block becomes a scrollable panel. */
-export const codeComponents: Components = {
-  pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
-  code: ({ children }) => <code className={CODE_CLASS}>{children}</code>,
-}
-
-/**
- * Inline surfaces (answer options, search rows) render markdown inside a
- * `<span>`, where a `<pre>` would be invalid nesting. A fence there is a
- * mistake in the content rather than console output, so it degrades to
- * monospace text that wraps with the rest of the line.
- */
-export const inlineCodeComponents: Components = {
-  pre: ({ children }) => (
-    <span className="font-mono text-[0.9em] whitespace-pre-wrap">{children}</span>
-  ),
-  code: ({ children }) => <code className={CODE_CLASS}>{children}</code>,
 }

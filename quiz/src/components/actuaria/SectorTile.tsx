@@ -6,7 +6,7 @@
 
 import { Lock } from 'lucide-react'
 import { ExamLogo } from '@/components/ExamLogo'
-import { logoTileEdge, type LogoTileSize } from '@/components/LogoTile'
+import { logoTileEdge, type LogoTileSize } from '@/lib/logoTile'
 import { cn } from '@/lib/utils'
 
 export function SectorTile({

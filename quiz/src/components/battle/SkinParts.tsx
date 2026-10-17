@@ -8,7 +8,7 @@ import type { ReactNode } from 'react'
 import { ActuariaMark } from '@/components/actuaria/ActuariaMark'
 import { HudFrame } from '@/components/actuaria/HudFrame'
 import { BattleLogo } from '@/components/battle/BattleLogo'
-import { logoTileEdge, type LogoTileSize } from '@/components/LogoTile'
+import { logoTileEdge, type LogoTileSize } from '@/lib/logoTile'
 import { useBattleSkin } from '@/hooks/useBattleSkin'
 
 export function SkinLogo({ size = 'lg' }: { size?: LogoTileSize }) {

@@ -1,15 +1,21 @@
 // The maths behind a *scrubbable* progress bar — dragging along the bar to move
 // through the sequence it measures, the way a video's timeline works.
 //
-// This is the inverse of `navProgressPercent` in `components/NavProgressBar`:
-// that turns a position into a fill, this turns a place on the track back into
-// a position. Keeping the two consistent is the whole job — if they disagree,
-// the bar lands on an item whose fill doesn't reach the finger, which reads as
-// the drag being off by one.
+// This is the inverse of `navProgressPercent` (below, the fill
+// `components/NavProgressBar` draws): that turns a position into a fill, this
+// turns a place on the track back into a position. Keeping the two consistent
+// is the whole job — if they disagree, the bar lands on an item whose fill
+// doesn't reach the finger, which reads as the drag being off by one.
 //
 // Pure, so the awkward parts — a pointer dragged past either end of the track, a
 // track that hasn't been laid out yet, an empty sequence — are settled here
 // rather than inside a pointer handler.
+
+/** Percentage filled for a 1-indexed position, clamped to 0–100. */
+export function navProgressPercent(current: number, total: number): number {
+  if (!Number.isFinite(current) || !Number.isFinite(total) || total <= 0) return 0
+  return Math.min(100, Math.max(0, (current / total) * 100))
+}
 
 /**
  * How far along a track a pointer landed, as 0–1.

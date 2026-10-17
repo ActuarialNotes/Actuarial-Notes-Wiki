@@ -3,24 +3,12 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
 import type { Question } from '@/lib/parser'
+import { formatDate, formatTime } from '@/lib/sessionFormat'
 
 export interface SessionDetail {
   loading: boolean
   error: string | null
   items: Array<{ response: QuestionResponse; question: Question | null }>
-}
-
-export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    month: 'short', day: 'numeric', year: 'numeric',
-  })
-}
-
-export function formatTime(seconds: number | null): string {
-  if (seconds === null || seconds < 0) return '—'
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return m > 0 ? `${m}m ${s}s` : `${s}s`
 }
 
 export function ScoreBar({ session }: { session: QuizSession }) {

@@ -23,7 +23,7 @@ import {
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import { readTodayLevelUps } from '@/lib/dailyProgressStore'
 
 export interface UseStudyPlanResult {

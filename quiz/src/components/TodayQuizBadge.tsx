@@ -24,7 +24,7 @@ const CORNER_SIZES = {
   lg: 'h-6 min-w-[1.5rem] px-1.5 text-xs shadow ring-2 ring-background',
 } as const
 
-export function todayQuizBadgeLabel(count: number): string {
+function todayQuizBadgeLabel(count: number): string {
   return `${count} question${count === 1 ? '' : 's'} left in today's study plan`
 }
 

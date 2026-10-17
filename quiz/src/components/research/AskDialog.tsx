@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Loader2, X, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FIELD, Field, chipClass } from './ProjectScopeFields'
+import { FIELD, Field } from './ProjectScopeFields'
+import { chipClass } from './chipClass'
 import { DEPARTMENTS } from '@/lib/researchProjectMeta'
 
 interface AskDialogProps {

@@ -9,7 +9,8 @@ import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
-import { ResearchFilterPanel, useActiveFilterCount } from './ResearchFilterPanel'
+import { ResearchFilterPanel } from './ResearchFilterPanel'
+import { useActiveFilterCount } from '@/hooks/useActiveFilterCount'
 
 interface ResearchTopSearchProps {
   onAsk: (query: string) => void

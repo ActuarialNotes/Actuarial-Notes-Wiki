@@ -4,7 +4,7 @@
 // Pro cloud TTS) consume the same tokens so the word-highlighting logic is
 // engine-agnostic.
 
-import { stripFrontmatter, BREADCRUMB_RE } from '@/components/wiki/WikiArticle'
+import { stripFrontmatter, BREADCRUMB_RE } from '@/lib/wikiMarkdown'
 import { cleanWikiLinks } from '@/lib/wikiParser'
 import { latexToSpeech } from '@/lib/mathSpeech'
 

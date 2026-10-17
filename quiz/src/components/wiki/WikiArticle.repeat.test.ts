@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { rewriteWikilinks } from './WikiArticle'
+import { rewriteWikilinks } from '@/lib/wikiMarkdown'
 
 // rewriteWikilinks marks the 2nd+ mention of a concept *within the same
 // [!example] learning-objective callout* with a `#repeat` href fragment, which

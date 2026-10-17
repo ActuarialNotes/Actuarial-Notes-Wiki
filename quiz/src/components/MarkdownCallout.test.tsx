@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { calloutComponents } from './MarkdownCallout'
+import { calloutComponents } from './calloutComponents'
 
 const MD = [
   '> [!example]- Time Value of Money {5-15%}',

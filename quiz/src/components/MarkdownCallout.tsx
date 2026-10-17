@@ -1,4 +1,4 @@
-import { useState, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType, Fragment } from 'react'
+import { useState, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType, type ComponentProps, Fragment } from 'react'
 import {
   ChevronDown,
   Info,
@@ -10,7 +10,7 @@ import {
   Quote,
   Pencil,
 } from 'lucide-react'
-import type { Components } from 'react-markdown'
+import type { ExtraProps } from 'react-markdown'
 import { ExamWeightLabel } from '@/components/ExamWeightLabel'
 import { parseExamWeight, splitWeightTag } from '@/lib/examWeight'
 
@@ -461,33 +461,36 @@ function hasRenderedMath(node: ReactNode): boolean {
   return false
 }
 
-export const calloutComponents: Components = {
-  blockquote(props) {
-    const { children, ...rest } = props
-    const match = matchCallout(children)
-    const isMathBlock = !match && hasRenderedMath(children)
+/**
+ * The markdown `blockquote`: an Obsidian callout when its first line is a
+ * `[!type]` header, otherwise a plain box — a math focus target when it holds a
+ * formula. Handed to react-markdown by `components/calloutComponents.ts`.
+ */
+export function CalloutBlockquote(props: ComponentProps<'blockquote'> & ExtraProps) {
+  const { children, ...rest } = props
+  const match = matchCallout(children)
+  const isMathBlock = !match && hasRenderedMath(children)
 
-    if (!match) {
-      return (
-        <blockquote
-          {...rest}
-          // `data-math-block` makes the whole box — padding included — the tap
-          // target for math focus mode; the press itself is silent because the
-          // overlay it opens plays the panel cue. See components/MathFocus.tsx.
-          data-math-block={isMathBlock ? '' : undefined}
-          data-sound={isMathBlock ? 'none' : undefined}
-          className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
-            isMathBlock ? ' cursor-zoom-in hover:ring-2 hover:ring-primary/40 transition-shadow' : ''
-          }`}
-        >
-          {children}
-        </blockquote>
-      )
-    }
+  if (!match) {
     return (
-      <Callout type={match.type} fold={match.fold} title={match.title}>
-        {match.body}
-      </Callout>
+      <blockquote
+        {...rest}
+        // `data-math-block` makes the whole box — padding included — the tap
+        // target for math focus mode; the press itself is silent because the
+        // overlay it opens plays the panel cue. See components/MathFocus.tsx.
+        data-math-block={isMathBlock ? '' : undefined}
+        data-sound={isMathBlock ? 'none' : undefined}
+        className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
+          isMathBlock ? ' cursor-zoom-in hover:ring-2 hover:ring-primary/40 transition-shadow' : ''
+        }`}
+      >
+        {children}
+      </blockquote>
     )
-  },
+  }
+  return (
+    <Callout type={match.type} fold={match.fold} title={match.title}>
+      {match.body}
+    </Callout>
+  )
 }

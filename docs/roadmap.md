@@ -1,6 +1,6 @@
 # Roadmap: Actuarial Notes
 
-_Last reviewed: **2026-10-17** against `main` @ `1a47980` · Next review due: **2026-10-31**_
+_Last reviewed: **2026-10-17** against `main` @ `1a47980` (and updated by the next-phase branch) · Next review due: **2026-10-31**_
 
 This is the **one roadmap** for everything in this repository: Study Mode, the content vault,
 Fact Check, the AI connector, Actuarial Tools, Cowork, and the experiments around them. It
@@ -246,10 +246,17 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 3. ~~**V4 (Wave 3a): verify FM Q351–Q462.**~~ ✅ 2026-10-17: all 112 verified (runs `48b2`,
    `63b1`); every key agrees. 12 minor findings stay open: 10 topic tags that aren't in
    `ontology_map.py`, and SOA's own day-1/day-10 wording on fm-358.
-4. **C1: take Exam 8 to ready** (CAS publication plan step 4):
-   - fix the *Rating Class* catch-all;
-   - write questions for 6 concepts;
-   - verify 23 concepts, 12 readings and 132 questions.
+4. **C1: take Exam 8 to ready** (CAS publication plan step 4). 🟡 2026-10-17: **5 of 7
+   gates.** Done: the *Rating Class* catch-all (a new *Rate Class Validity* page); 11
+   vault-written questions for the 6 untested concepts; the page, 23 of 24 concepts, 11 of 12
+   readings and every on-syllabus question on the 8 papers verified (166; 34 of them Exam 9's).
+   Left, and neither can be done from the repo alone:
+   - **G4:** *Risk*'s ERM section has 3 minor findings. Its reading, Brehm et al., has no free
+     copy, so the section needs that reading or needs cutting. The CAS sense the exam uses is
+     verified.
+   - **G5:** the ISO CGL rating plan is supplied only in the CAS study kit. The maintainer
+     either reads a copy or accepts it as unverifiable (new decision **D20**).
+   Then `publication_readiness.py --check 8`, and the promotion is the maintainer's.
 
 ### 3.2 Next
 
@@ -434,7 +441,7 @@ The **rule** for this track: an exam changes status only through
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 2 of 7 gates | **Now** | CAS plan step 4. The *Rating Class* catch-all; 23 concepts; 12 readings (pages exist, none verified); 6 concepts with no question; 0 of 132 questions verified. |
+| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | CAS plan step 4. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
 | C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Step 5. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
 | C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Step 6. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
 | C4 | MAS-II → ready | 🟡 1 of 7 | Next | Step 7. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
@@ -580,6 +587,8 @@ Where a default is given, sessions build with it until the decision is made.
 | D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
 | D17 | The DISC link design | CAS D5 | — | The current design |
 | D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
+| D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | It stays `in_review`, and the gate stays red |
+| D21 | Goldburd et al.: describe the 2025 revision Exam 8 assigns on the existing 2020 page, keep 2020 with a note, or give Exam 8 its own page (F-003 on that page) | C1 run `f01e` | — | The page as it is |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -737,6 +746,15 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 
 ## Appendix B: Revision history
 
+- **2026-10-17, the next phase.** The Now lanes, worked through:
+  - **Engineering:** lint at 0 (E10); E6 golden vectors ✅; E5's `Landing.tsx` split
+    (1,720 → 697); E1's new blocker found: Actions have recorded no run since 2026-10-10.
+  - **Operations:** D19 settled, so the sweep runs by hand (V1 ✅); V2 and G1 still need the
+    maintainer's secrets.
+  - **Learning:** L1 ✅, so every Learning-lane experiment can now be measured.
+  - **Content and Fact Check:** V3 ✅ and V4 ✅; C1 from 2 to 5 of 7 gates. The vault is
+    **54.6% verified (3,022 of 5,533)**, up from 48.6%. 3 files are stale, down from 21.
+  - New decisions D20 and D21; proposed C17, C18 and V10.
 - **2026-10-17, later. The first Now items.** E3, C0 and G7 are ✅. E1 is green locally,
   awaiting CI. E4 and E10 are 🟡. Proposed V9 (§3.4): VERIFY can't move or retire a file.
 - **2026-10-17. Consolidation.** This file became the one roadmap for every product line,

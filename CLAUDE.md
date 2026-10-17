@@ -595,8 +595,8 @@ Other important `lib/` modules:
   Move an exam out of development here (and in `scripts/exam_catalog.json`, which
   `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
   track in `data/tracks.ts`, which `data/tracks.test.ts` requires to offer every studiable
-  exam. The quiz builder offers any exam with a question bank (its hand-kept `EXAMS` in
-  `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`) and would show an
+  exam. The quiz builder offers any exam with a question bank (its hand-kept `QUIZ_EXAMS` in
+  `lib/quizBuilder.ts`, practice-exam sizes in `PRACTICE_EXAM_QUESTIONS` in `lib/pastExams.ts`) and would show an
   in-development one dimmed, under the same dashed *In Development* tag. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
@@ -675,10 +675,20 @@ Other important `lib/` modules:
   on screen are marked. On by default for a quiz, off for a practice exam — the settings menu's
   *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
   panel's concept rows open the same popup. Pure and tested.
+- `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
+  exams it offers and their track headings (`QUIZ_EXAMS`, `quizTrackGroups`), an exam's
+  concepts in syllabus order and grouped by objective, today's plan's pool
+  (`todaysPlanSelection`), the pool each source covers (`builderPool`), the draw's size and
+  signature, and the `/quiz` address every launch writes (`quizLaunchUrl` — each kind keeps
+  its key order, since a quiz resumes by its address). The page holds only the state that
+  joins it to what it draws — `components/landing/` (the exam ladder, the concept groups,
+  Today's Plan, the past-paper shelf, the action bar) and the `useQuizExamScreen` /
+  `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` / `useShuffledDraw` /
+  `useDashboardAutostart` hooks. Pure and tested.
 - `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
   mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
   an unticked level is out of the pool, so the deck card's count, the count clamp and
-  Today's Plan pool all move with it (`inLevels` in `pages/Landing.tsx`), and each level
+  Today's Plan pool all move with it (`inDifficultyLevels`, the quiz builder's `inLevels`), and each level
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
   ticked). The module also keeps the older weighted *lean* (`drawByDifficulty` /

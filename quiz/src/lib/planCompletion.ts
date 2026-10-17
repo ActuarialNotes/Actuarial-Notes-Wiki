@@ -4,7 +4,7 @@
 // Dashboard's "Today" card checklist, the study-guide header's "Today's Study
 // Plan" list (`components/wiki/WikiFloatingSearch.tsx`), *and* the sizing of the
 // quiz those surfaces launch — the "questions left today" badge
-// (`lib/todayPlanCount.ts`) and the plan quiz built in `pages/Landing.tsx`.
+// (`lib/todayPlanCount.ts`) and the plan quiz the Quiz tab builds (`lib/quizBuilder.ts`).
 // The rule lives here so a concept can't read as ticked off on the checklist yet
 // still be asked for by the badge.
 //

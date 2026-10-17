@@ -3,11 +3,13 @@ import type { Difficulty } from './parser'
 import {
   DIFFICULTY_LEVELS,
   difficultyFromParam,
+  difficultyLevelCounts,
   difficultyLevelsFromParam,
   difficultyLevelsFromStored,
   difficultyLevelsToParam,
   difficultyWeight,
   drawByDifficulty,
+  inDifficultyLevels,
   normalizeDifficultyLevels,
   orderByDifficulty,
   toggleDifficultyLevel,
@@ -137,5 +139,20 @@ describe('difficulty levels', () => {
     expect(difficultyLevelsFromStored(null)).toEqual(DIFFICULTY_LEVELS)
     expect(difficultyLevelsFromStored('nope')).toEqual(DIFFICULTY_LEVELS)
     expect(difficultyLevelsFromStored('medium,hard')).toEqual(['medium', 'hard'])
+  })
+
+  it('filters a quiz to the levels ticked, and never a practice exam', () => {
+    const easy = { difficulty: 'easy' as Difficulty }
+    const hard = { difficulty: 'hard' as Difficulty }
+    expect(inDifficultyLevels('quiz', ['easy'])(easy)).toBe(true)
+    expect(inDifficultyLevels('quiz', ['easy'])(hard)).toBe(false)
+    expect(inDifficultyLevels('quiz', [...DIFFICULTY_LEVELS])(hard)).toBe(true)
+    expect(inDifficultyLevels('mock-exam', ['easy'])(hard)).toBe(true)
+  })
+
+  it('counts a pool by level', () => {
+    const pool = (['easy', 'hard', 'hard'] as Difficulty[]).map(difficulty => ({ difficulty }))
+    expect(difficultyLevelCounts(pool)).toEqual({ easy: 1, medium: 0, hard: 2 })
+    expect(difficultyLevelCounts([])).toEqual({ easy: 0, medium: 0, hard: 0 })
   })
 })

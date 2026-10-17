@@ -184,11 +184,27 @@ def words(text: str) -> list[str]:
     return re.findall(r"[a-z]{4,}", _delatex(text).lower())
 
 
-def locate(stem: str, pages: dict[int, str], max_span: int = 3) -> dict:
+# How close a run carrying the question's printed number has to score to the
+# best run overall to be preferred. Below this the number is more likely a
+# stray line (a table row starting "12.") than the question's own heading.
+MARKED_RUN_SHARE = 0.8
+
+
+def question_marker(num: int) -> re.Pattern:
+    """The question's own heading in a booklet: its number alone at the start
+    of a line, as `432.` or `432)` — never `432.50` or a number mid-sentence."""
+    return re.compile(rf"(?m)^\s*{num}\s*[.)](?=\s|$)")
+
+
+def locate(stem: str, pages: dict[int, str], max_span: int = 3, num: int | None = None) -> dict:
     """Find the run of consecutive pages that best holds `stem`, and diff it.
 
     Scored on the stem's numbers and words found in the run, less a little per
-    page so a question is not padded with its neighbours' pages. Returns the
+    page so a question is not padded with its neighbours' pages. When the
+    question's number is given, a run whose pages print it as a heading wins
+    over a better-scoring one that doesn't, unless it scores far worse — a
+    booklet can hold two near-identical questions (SOA FM prints Q437 again as
+    Q453), and only the number tells them apart. Returns the
     pages, the stem numbers the run lacks (counted as a multiset, so a number
     printed twice has to be there twice), word recall and a verdict:
 
@@ -199,7 +215,9 @@ def locate(stem: str, pages: dict[int, str], max_span: int = 3) -> dict:
     s_nums, s_words = Counter(numbers(stem)), Counter(words(stem))
     total_n, total_w = sum(s_nums.values()), sum(s_words.values())
     order = sorted(pages)
+    marker = question_marker(num) if num is not None else None
     best: tuple[float, list[int], Counter, Counter] | None = None
+    best_marked: tuple[float, list[int], Counter, Counter] | None = None
     for i in range(len(order)):
         for span in range(1, max_span + 1):
             run = order[i:i + span]
@@ -214,6 +232,10 @@ def locate(stem: str, pages: dict[int, str], max_span: int = 3) -> dict:
             score = got_n * 2 + got_w - PAGE_PENALTY * (span - 1)
             if best is None or score > best[0]:
                 best = (score, run, p_nums, p_words)
+            if marker and marker.search(joined) and (best_marked is None or score > best_marked[0]):
+                best_marked = (score, run, p_nums, p_words)
+    if best is not None and best_marked is not None and best_marked[0] >= MARKED_RUN_SHARE * best[0]:
+        best = best_marked
     if best is None:
         return {"pages": [], "missing_numbers": sorted(s_nums.elements()), "word_recall": 0.0,
                 "missing_words": [], "verdict": "diverges"}
@@ -382,7 +404,7 @@ def build_packet(members: list[dict], records: list[dict], urls: list[str], labe
         _fm, body = V.split_frontmatter(text)
         stem = blind_stem(body)
         record = by_num.get(m["num"])
-        loc = locate(diffable(stem), booklet)
+        loc = locate(diffable(stem), booklet, num=m["num"])
         checks = mechanical_checks(m, body, record)
         ocr_hit = sorted(set(loc["pages"]) & set(meta.get("ocr_pages") or []))
         n = m["num"]

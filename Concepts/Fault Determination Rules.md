@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:099cc1e94cbcb14d0ed046df739dc617648bec2253c8473644c2fac7648fc8bc
+  content_hash: sha256:edb538558d99cf6d886130342b605aa57727444e7ea6cf363fc85a5303a870df
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,7 +13,7 @@ verification:
 
 **The Fault Determination Rules** are a regulation prescribing, by accident scenario, the percentage of fault assigned to each driver in an automobile collision. They apply to first-party coverages — [[Direct Compensation Property Damage|DCPD]] and collision — and are applied **mechanically from the physical facts**, without regard to weather, road conditions, driver skill, or evidence about who was actually careless.
 
-- **The rules are diagrammatic.** Ontario's Regulation 664 sets out numbered scenarios — rear-end, left turn across traffic, lane change, parking lot, uncontrolled intersection — each with a fixed apportionment, usually $0/100$, $50/50$ or $25/75$.
+- **The rules are diagrammatic.** Ontario's Fault Determination Rules (R.R.O. 1990, Reg. 668) set out numbered scenarios — rear-end, left turn across traffic, lane change, parking lot, uncontrolled intersection — each with a fixed apportionment, usually $0/100$, $50/50$ or $25/75$.
 - **Mechanical application is the point.** Certainty and speed are worth more than accuracy in a high-volume, low-severity coverage. Two adjusters looking at the same collision reach the same answer without negotiation, which is what makes DCPD's low expense ratio achievable.
 - **They can be "wrong" in the individual case**, and the exam expects candidates to say so: a driver who rear-ends another because that driver braked maliciously is still $100\%$ at fault under the rules. The regulation trades individual justice for administrative efficiency.
 - The rules govern **first-party recovery and rating**; they do not bind a court in a [[Tort Litigation|tort]] action for bodily injury, where common-law negligence and contributory negligence apply and can produce a different apportionment on the same facts.

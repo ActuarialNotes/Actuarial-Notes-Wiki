@@ -162,11 +162,11 @@ batched by source. The order is the CAS plan's, refreshed:
 |---|---|---:|---|---|
 | — | MAS-I, DISCs, Exam 7 | 7 / 7 | Done (10, 11 and 16 Oct 2026; Appendix A) | |
 | 1 | **Exam P, FM** (C8) | 5, 6 / 7 | Phase 1 | Already `ready`; the gates must hold |
-| 2 | **Exam 8** (C1) | 5 / 7 | *Risk*'s ERM section (its reading, Brehm, has no free copy — source it or cut it); the ISO CGL rating plan, in the CAS study kit only (D20) | Shares papers with 9; 34 of 9's questions already cleared |
-| 3 | **Exam 9** (C2) | 3 / 7 | Questions for 10 concepts; verify 48 concepts, 9 readings, the 23 unverified served questions on its own 7 papers | Most of its bank arrived verified through 7 and 8 |
-| 4 | **Exam 5** (C3) | 1 / 7 | D8 (the re-issued Fall 2026 v02 outline); 2 catch-alls (*Loss Reserving* stands in for reserving objectives); questions for 7 concepts; verify 60 concepts, 4 readings, 349 questions on 14 papers (find Spring 2018's booklet first) | Largest bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM |
-| 5 | **MAS-II** (C4) | 1 / 7 | The *Bühlmann Credibility* catch-all; questions for 28 concepts; verify 67 concepts, 2 readings (commercial: medium, D7), 126 questions on 3 fully scanned papers (OCR first) | Scanned papers make each question dear |
-| 6 | **Exam 6C** (C5) | 2 / 7 | D8 (F-001, domain C renumbering); the two criticals (V6, Phase 1); questions for 22 concepts; verify 141 concepts, 67 readings, 321 questions | Most concepts and readings, all free Canadian documents |
+| 2 | **Exam 8** (C1) | 6 / 7 | Only G5: the ISO CGL rating plan, in the CAS study kit only (D20). *Risk* verified 18 Oct (run `rsk1`): its uncertainty half now quotes the SOA and SRA glossaries, the unsourced claims cut | Shares papers with 9; 34 of 9's questions already cleared |
+| 3 | **Exam 9** (C2) | 4 / 7 | G6 ✅ (`cas9-an-001`–`010`, nine verified; `009` in review — no reading teaches its PSA prepayment mechanics, so C5 wants a question a writer builds on Panning or Coval, Jurek & Stafford); verify 46 concepts, 9 readings, the 23 unverified questions on its own 7 papers | Most of its bank arrived verified through 7 and 8 |
+| 4 | **Exam 5** (C3) | 3 / 7 | G3 and G6 ✅ (catch-alls re-linked; `cas5-an-001`–`007`, verified; *Claim Reserve*, newly linked, tagged on `cas5-2016s-q16`). D8 (the re-issued Fall 2026 v02 outline; the page is stale after the re-linking); verify 60 concepts, 4 readings, 349 questions on 14 papers (find Spring 2018's booklet first). Its reports were **paraphrased** when the bank was written, not transcribed — each paper's packet restores the report as printed, opening paragraph included (C13) | Largest bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM |
+| 5 | **MAS-II** (C4) | 3 / 7 | G3 and G6 ✅ (`masii-an-001`–`023`, 22 verified; `023` in review with the page's F-002 — does the outline's exclusion of Cowpertwait §3.4 take exponential smoothing off the syllabus?). Verify 67 concepts, 2 readings (commercial: medium, D7), 126 questions on 3 fully scanned papers (OCR first); the page is stale after the re-linking | Scanned papers make each question dear |
+| 6 | **Exam 6C** (C5) | 3 / 7 | G6 ✅ (`cas6c-an-001`–`022`, all verified; `005` and `018` carry minor scope findings — IBC's consumer code and the IFRS 17 transition approaches are in no 6C reading). D8 (F-001, domain C renumbering); verify 137 concepts, 67 readings, 321 questions (83 got their report paragraph back, C13) | Most concepts and readings, all free Canadian documents |
 | 7 | **PCPA** (C6) | 4 / 7 | A vault-written bank (29 concepts, most shared with MAS-I/II: tags plus a few new questions, D5); verify 9 concepts and 12 readings (several commercial) | No paper exists; the Projects simulator is the real practice |
 | 8 | **ASA prelims** (C9) | 2–3 / 7 | §4 Phase 3 — the plan itself doesn't exist yet | The next exams to become studiable, sat by far more candidates |
 | 9 | **Exam 6U** (C7) | 3 / 7 | Read every link for country first; a vault-written bank for 66 concepts; verify 56 concepts and 45 readings (all pages exist, none verified); its objective codes don't match its numbering | Furthest CAS exam from ready |
@@ -193,7 +193,7 @@ Open fact-check items outside the campaigns:
   guideline ÷1.5), and the majors that share the source (*Solvency*, *Supervisory Target Capital
   Ratio*: LICAT's name for the MCT denominator). → Phase 1.
 - **V10** — FM's topic tags not in `scripts/ontology_map.py`. → Phase 1.
-- **V7** — run summaries for the 2026-10-11 Exam 7 and DISC-RM runs. Housekeeping. → Phase 2.
+- ~~**V7**~~ ✅ 18 Oct: the 2026-10-11 Exam 7 and DISC-RM run summaries, reconstructed from the logs.
 - **V8** — the 363 concept-gap pages written in phases A–D are AI-drafted and `unverified`; they
   need human review (CONCEPT_GAPS D5). → rides each exam's campaign; Phase 4 for the rest.
 - **Exam P's sample PDFs were re-issued again** (found 18 Oct): the SOA's sample questions and
@@ -247,10 +247,9 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
 
 ### 3.5 Questions and the conversion pipeline
 
-- **C13 — the converter drops each CAS examiner's report's opening paragraph** (before "Part a"),
-  found in the Exam 7 campaign, which restored it by hand. Fix `pdf_extract.py`, then find the
-  gap mechanically in the other CAS banks (5, 6C, 8, 9, MAS-II) and restore it in each paper's
-  packet. **Do it before those banks' campaigns** — otherwise each packet restores it by hand.
+- ~~**C13 — the converter drops each CAS examiner's report's opening paragraph**~~ ✅ 18 Oct: the
+  writer fixed, 83 questions restored, 49 verified Exam 7 and 8 questions left for their packets
+  (Phase 2's progress table). `report_gaps.py list` re-measures it.
 - **Vault-written banks** — G6 gaps in every beta exam (§3.1), whole banks for PCPA and 6U, and
   later the SOA development exams, all through the `question-writer` skill, each question checked
   by a different agent from its writer.
@@ -341,8 +340,7 @@ Phase 1 left for later is in §3.2 (V10's four retags, Exam P's re-issued sample
 is verification the packet tooling makes cheap. The converter comes first because its gap is in
 every CAS bank about to be checked.
 
-1. **C13**, the converter's dropped opening paragraph: fix `pdf_extract.py`, list the affected
-   questions mechanically, restore them in each paper's packet.
+1. ~~**C13**, the converter's dropped opening paragraph~~ ✅ (below).
 2. **Exam 8** (C1): the last two gates wait on outside sources (*Risk*'s ERM section, the ISO CGL
    plan, D20). Promote when they pass.
 3. **Exam 9** (C2) → **Exam 5** (C3, after D8) → **MAS-II** (C4) → **Exam 6C** (C5, after D8) →
@@ -352,6 +350,15 @@ every CAS bank about to be checked.
 5. Housekeeping: V7's missing run summaries; the "(as printed)" notes on Exam 8's papers.
 
 **Exit test:** every beta exam passes `--check`, or is blocked only by a decision in §6.
+
+**Progress (18 Oct 2026):**
+
+| Item | Roadmap | Status |
+|---|---|---|
+| The converter's dropped report paragraph | C13 | ✅ The drop was `question_write.py`'s, not `pdf_extract.py`'s: the extractor kept the paragraph, but the writer wrote it only when no part had commentary of its own. It now opens the first part's `### Examiner Report` (`with_overall_report`, tested). `scripts/report_gaps.py` re-read 47 of the 50 written-answer CAS papers (Exam 5 2013 Spring and Fall and 6C 2014 Fall don't segment) and restored the paragraph verbatim on **83** unverified Exam 6C and 9 questions. Left for their papers' delta packets: **49 verified** questions (Exam 7: 33 across 2012, 2014, 2015, 2017–2019; Exam 8: 16 across 2014–2019) — `report_gaps.py list` names them. Exam 5's bank paraphrased its reports, so its packets restore them as printed |
+| Exam 8's G4: *Risk* | C1 | ✅ verified (run `rsk1`). Exam 8 is 6 / 7, held only by D20 |
+| G3 and G6 on every beta exam with a bank | — | ✅ Exam 5's two catch-alls and MAS-II's one broken up: each phrase re-linked so no page stands in, renamed, for more than two lines (*Claim Reserve* for "reserve analysis", *Empirical Bayes Credibility* for "structural parameters") — unlinking them would fail `test_syllabus_lib`'s every-noun-phrase-linked rule. 62 vault-written questions for the 67 untested concepts — Exam 5 7, Exam 9 10, MAS-II 23, Exam 6C 22 — each checked by a different agent from its writer. `--hold` warns only on PCPA, which has no bank (C6). Of the 62: **60 verified**, 2 `in_review` (`cas9-an-009`, `masii-an-023`). The checkers also opened findings on concept pages: *Contractual Service Margin*'s formula had its sign backwards (critical, fixed the same day to CIA note 222092 §4.6, the page back to `unverified`), and *Fault Determination Rules* (O. Reg. 668, not 664) and *Other Comprehensive Income Option* (PAA's locked-in date) were restated; *Lift* and *Predictive Accuracy* use the marketing definition of lift, not the readings', and want their reading packets |
+| Housekeeping: V7 | V7 | ✅ the two run summaries reconstructed from the per-file logs |
 
 ### Phase 3 — The SOA ASA prelims
 

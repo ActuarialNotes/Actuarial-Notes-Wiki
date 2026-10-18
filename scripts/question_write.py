@@ -151,20 +151,36 @@ def split_explanation_override(text: str) -> dict[str, str]:
     return out
 
 
+def with_overall_report(parts: list[dict], overall: str | None) -> list[dict]:
+    """Seat the report's commentary on the question as a whole among its parts.
+
+    The bank's format has no slot for it — every `### Examiner Report` in a
+    question file is per-part — so it rides on one. Where parts carry their
+    own commentary it opens the first of them, which is where the report
+    prints it: the opening paragraph above `Part a` ("Candidates were expected
+    to…"). Dropping it there was C13 (`docs/content-plan.md` §3.5). A report
+    that comments on no part in particular — every pre-2014 report, and some
+    later questions — goes under the last part instead: the point at which the
+    whole question has been answered, so it gives nothing away. Either way it
+    is the publisher's text unchanged.
+    """
+    overall = (overall or "").strip()
+    if not parts or not overall:
+        return parts
+    first = next((i for i, p in enumerate(parts) if (p.get("report") or "").strip()), None)
+    if first is None:
+        return [*parts[:-1], dict(parts[-1], report=overall)]
+    seated = dict(parts[first], report=f"{overall}\n\n{parts[first]['report'].strip()}")
+    return [*parts[:first], seated, *parts[first + 1 :]]
+
+
 def part_sections(record: dict, explanation: str | None) -> str:
     """`## Part a (…)` sections for a CAS multi-part question."""
     overrides = split_explanation_override(explanation) if explanation else {}
     whole = overrides.get("", "")
     out: list[str] = []
     parts = record.get("parts") or []
-    # A report that comments on the question as a whole and on no part in
-    # particular — every pre-2014 report, and some later questions — would
-    # otherwise ship no commentary at all. It goes under the last part: the
-    # point at which the whole question has been answered, so it gives nothing
-    # away, and it is the publisher's text unchanged.
-    overall = (record.get("examiner_report") or "").strip()
-    if parts and overall and not any((p.get("report") or "").strip() for p in parts):
-        parts = [*parts[:-1], dict(parts[-1], report=overall)]
+    parts = with_overall_report(parts, record.get("examiner_report"))
     for part in parts:
         label = part["label"]
         header = f"## Part {label}"
@@ -202,10 +218,9 @@ def render(record: dict, judgment: dict, explanation: str | None = None) -> str:
         chunks.append(body)
 
     if record["type"] == "multi-part" and record.get("parts"):
-        # The record also carries the report's *overall* commentary, which the
-        # bank's format has no slot for — every `### Examiner Report` in a
-        # question file is per-part. It stays in records.jsonl rather than
-        # being written into a section the app does not render.
+        # The report's *overall* commentary rides on a part
+        # (`with_overall_report`), since every `### Examiner Report` in a
+        # question file is per-part.
         sections = part_sections(record, explanation)
         if sections:
             chunks.append(sections)

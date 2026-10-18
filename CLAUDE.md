@@ -181,7 +181,8 @@ before touching that area**:
   `soa-exam-converter` / `cas-exam-converter` skills: the four stages that turn an
   examiner's report or a sample-question booklet into `questions/<bank>/*.md`, and which
   of them cost model tokens (`pdf_extract.py` → `question_classify.py` →
-  `question_write.py` → `question_lint.py`, all of them free but the review residue).
+  `question_write.py` → `question_lint.py`, all of them free but the review residue;
+  `report_gaps.py` finds and restores the examiner's-report paragraphs the writer used to drop).
   The rule to keep: **nothing a PDF prints is ever retyped by a model** — prompts,
   exhibits, options, answer keys, point values and publisher solutions are extracted
   mechanically, and a model is asked only for what is genuinely a judgment. Read before

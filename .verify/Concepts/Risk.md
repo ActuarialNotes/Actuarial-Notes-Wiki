@@ -115,3 +115,89 @@ created: 2026-10-17
 - checks_run: all cached sources re-hashed against their sha256; every quote diffed against its source; Exam 8 objective wording against the Fall 2026 content outline; full-text search of both glossaries for every term in the risk-management section
 - sources_checked: SOA Actuarial Glossary (2022), entries "Risk" (PDF p.60), "Financial Risk" (p.32), "Operational Risk" (p.48), sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953 — https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf; Society for Risk Analysis Glossary (2018), §1.1 Risk (PDF p.4), §1.13 Resilience (PDF pp.6-7), sha256:0701d3716beb7ef322991178d1c2a2c220933f2fcdb204335af3c975254b18cc — https://www.sra.org/wp-content/uploads/2020/04/SRA-Glossary-FINAL.pdf; ASOP No. 12, Risk Classification (Actuarial Standards Board, Dec 2005, doc. 132), §2.4, §2.7, §2.9, PDF p.8, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf; Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §1, PDF p.8, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf; CAS, Statement of Principles Regarding Property and Casualty Insurance Ratemaking (May 1988; reinstated May 2021), Principle 2 PDF p.2, Considerations 'Individual Risk Rating' and 'Risk' PDF p.4, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf; CAS Exam 8 Content Outline, Fall 2026 (October 2026 administration), Domain A task 7 (PDF p.3), Experience Rating and Retrospective and Loss Sensitive Rating statements (PDF p.4), sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf
 - note: F-001 and F-002 fixes confirmed. ASOP 12 §2.7 quote verbatim, §2.4 examples and §2.9 'a set of risks grouped together under a risk classification system' verbatim (PDF p.8); Fisher Ch.1 §1 'merely indicates the risk's expected loss relative to other risks in its class' verbatim and debit-mod usage (PDF p.8); Exam 8 outline 'other risks in the same class' verbatim (PDF p.4); Statement of Principles quotes verbatim (Principle 2 PDF p.2; 'individual risk's experience' and the Risk consideration PDF p.4); SOA glossary quote now verbatim (PDF p.60). Left in_review because the risk-management section carries content no source supports (F-003, F-004, F-005), none of it touched by the revision. No content edits.
+
+## [F-006] Closing sentence on contexts using different definitions is unsourced
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- severity: minor
+- status: open
+- locus: Alternative Definitions of Risk, closing paragraph
+- claim: These definitions are applied in different contexts within risk management. Fields such as finance, audit, or emergency response each adopt different definitions of risk to fit their use cases.
+- evidence: SRA Glossary (2018) §1.1 (PDF p.4) lists the definitions but assigns none of them to a field; the only context remark is 'The suitability of these metrics/descriptions depends on the situation.' Full-text search of the SRA and SOA glossaries for 'audit' and 'emergency response' finds no such attribution. No other source on the page or log supports it.
+- source_rank: 3
+- proposed_action: Delete the paragraph.
+- applied: true
+- fingerprint: 198841c3a774
+
+## [F-007] ISO 31000 cited directly but not read
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- severity: nit
+- status: open
+- locus: Alternative Definitions of Risk, ISO quote and its citation
+- claim: Risk is the effect of uncertainty on objectives. — ISO 31000 - Risk Management - Guidelines, ISO - 2018
+- evidence: ISO 31000:2018 is a paid standard and was not read in any pass (C-001, C-002). The SRA Glossary §1.1 (PDF p.4) states verbatim 'ISO defines risk as the effect of uncertainty on objectives.', so the claim is supported, but only at second hand through the SRA.
+- source_rank: 3
+- proposed_action: Quote the SRA sentence and cite the SRA Glossary instead of ISO 31000.
+- applied: true
+- fingerprint: 5e8695042f16
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- resolves: F-003
+- status: resolved
+- note: Lead sentence ('categorized based on the type of objective') and the Strategic/Business Risk row deleted (no source; SOA Actuarial Glossary has no Strategic or Business Risk entry). Remaining rows restated as verbatim SOA Actuarial Glossary (2022) entries: Financial Risk 'Financial impact from financial transactions.' (PDF p.32) and Operational Risk 'Operational risk summarizes the risks a company undertakes when it attempts to operate within a given field or industry. It is the risk remaining after determining financing and systematic risk, and includes risks resulting from breakdowns in internal procedures, people and systems.' (PDF p.48), sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953. Heading relabelled 'Financial and Operational Risk'; [[Business Risk]] link dropped.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- resolves: F-004
+- status: resolved
+- note: SRA list restated verbatim from SRA Glossary §1.1 (PDF p.4, sha256:0701d3716beb7ef322991178d1c2a2c220933f2fcdb204335af3c975254b18cc): overall qualitative definitions 3, 5 and 7 quoted; the 'probability times severity' and 'triple' items moved under 'risk metrics/descriptions (examples)' as metrics 1 ('The combination of probability and magnitude/severity of consequences') and 3 (the triplet (si,pi,ci)), followed by SRA's own caveat 'None of these examples can be viewed as risk itself, and the appropriateness of the metric/description can always be questioned.' The 'effect of uncertainty' bullet removed from the SRA list; it is ISO's (see F-007).
+
+## [F-005/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- resolves: F-005
+- status: resolved
+- note: 'The Impact of a Risk Definition' section deleted (no source; links to Risk Taxonomies, Decision-Making and Risk as a Commodity dropped with it). Resilience section restated to SRA Glossary §1.13's first overall qualitative definition, verbatim: 'Resilience is the ability of the system to sustain or restore its basic functionality following a risk source or an event (even unknown).' (PDF p.6, sha256:0701d3716beb7ef322991178d1c2a2c220933f2fcdb204335af3c975254b18cc); 'bounce back' and the claim that resilient organizations can take more risk deleted.
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- resolves: F-006
+- status: resolved
+- note: Paragraph deleted in this run.
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- resolves: F-007
+- status: resolved
+- note: Quote now reads 'ISO defines risk as the effect of uncertainty on objectives.' cited to SRA Glossary §1.1 (PDF p.4); ISO 31000 citation removed.
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T13:46Z/rsk1
+- date: 2026-10-18
+- status_set: verified
+- confidence: high
+- checks_run: every quote on the page diffed against the cached source text (sha256 re-read from cache meta); full-text search of both glossaries for each term in the risk-management section; Exam 8 sense re-checked against ASOP 12, Fisher, the Statement of Principles and the Fall 2026 outline
+- sources_checked: SOA Actuarial Glossary (2022), entries "Risk" (PDF p.60), "Financial Risk" (p.32), "Operational Risk" (p.48), sha256:9e6976838bc6d827be402fba326a3f977bc566bc5700470e9208ec59a93bf953 — https://www.soa.org/4a537f/globalassets/assets/files/edu/actuarial-glossary.pdf; Society for Risk Analysis Glossary (2018), §1.1 Risk (PDF p.4), §1.13 Resilience (PDF p.6), sha256:0701d3716beb7ef322991178d1c2a2c220933f2fcdb204335af3c975254b18cc — https://www.sra.org/wp-content/uploads/2020/04/SRA-Glossary-FINAL.pdf; ASOP No. 12, Risk Classification (Actuarial Standards Board, Dec 2005, doc. 132), §2.4, §2.7, §2.9, PDF p.8, sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf; Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.1 §1, PDF p.8, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf; CAS, Statement of Principles Regarding Property and Casualty Insurance Ratemaking (May 1988; reinstated May 2021), Principle 2 PDF p.2, Considerations 'Individual Risk Rating' and 'Risk' PDF p.4, sha256:f240ea62dd033aac827c2073e56c0a4061d5c84531e5cf6be02d333a8f9f2140 — https://www.casact.org/sites/default/files/2021-05/Statement-Of-Principles-Ratemaking.pdf; CAS Exam 8 Content Outline, Fall 2026 (October 2026 administration), Experience Rating statement (PDF p.4), sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf
+- note: F-003..F-007 resolved by deletion or verbatim restatement (content-plan §1.2 rule 2); no new prose. Every remaining claim is a verbatim quote or a direct restatement of a cited source: ASOP 12 §2.4/§2.7/§2.9, Fisher Ch.1 §1, Statement of Principles PDF pp.2,4, Exam 8 outline PDF p.4 (insured sense, unchanged since C-002); SOA glossary pp.32/48/60, SRA §1.1 and §1.13 (uncertainty sense). Brehm et al. not cited.

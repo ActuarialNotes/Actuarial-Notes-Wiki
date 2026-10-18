@@ -244,6 +244,10 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
    ×1.5); V10's topic tags and C18's slips done, bar four FM retags. Next is Phase 2: the
    converter (C13), then the beta exams.
+0a. **Content plan, Phase 2** (in progress, 2026-10-18): C13 done (the writer fixed, 83 report
+   paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
+   60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Next: the fact-check campaigns,
+   Exam 9 → 5 → MAS-II → 6C, then PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -290,7 +294,6 @@ These are in order within each lane.
 - **C4:** MAS-II.
 - **C5:** 6C. It is blocked on decisions D8 and V6.
 - **C9: write the SOA ASA-prelim publication plan.** None exists today.
-- **C13:** fix the converter dropping the opening paragraph of each examiner's report.
 - **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
   link fixes).
 
@@ -449,11 +452,11 @@ gates through `--hold` in CI.
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | Content plan Phase 2. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
-| C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Phase 2. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
-| C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Phase 2. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
-| C4 | MAS-II → ready | 🟡 1 of 7 | Next | Phase 2. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
-| C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Phase 2. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
+| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. *Risk* verified 18 Oct; only the ISO CGL plan is left (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
+| C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct (10 vault-written questions, 9 verified; `cas9-an-009` wants a C5 question a reading teaches). Left: 46 concepts, 9 readings, 23 questions on its own papers. |
+| C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Settle the findings against the v02 outline (D8); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
+| C4 | MAS-II → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct (23 vault-written questions, 22 verified). The papers are scanned. The page's F-002 (is exponential smoothing on the syllabus?) holds `masii-an-023`. |
+| C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. Blocked on D8 (F-001). 137 concepts, 67 readings and 321 questions to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
@@ -461,7 +464,7 @@ gates through `--hold` in CI.
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
 | C12 | Syllabus pipeline packages 4–6 and 8 | 🟡 | Later | Provenance `syllabus:` blocks for the 14 hand-made pages; a concept-page lint. `syllabus-pipeline-review.md` §5. |
-| C13 | The converter drops the opening paragraph of each examiner's report | ⬜ | Next | `pdf_extract.py`, found during the Exam 7 campaign. |
+| C13 | The converter drops the opening paragraph of each examiner's report | ✅ 2026-10-18 | — | The drop was `question_write.py`'s (it wrote the paragraph only when no part had commentary of its own); it now opens the first part's report. `report_gaps.py` re-read 47 of the 50 written-answer CAS papers and restored it verbatim on 83 unverified Exam 6C and 9 questions. Left for their papers' delta packets: 49 verified Exam 7 and 8 questions. Exam 5's bank paraphrased its reports, so it waits for its own packets. Three papers the extractor can't segment (Exam 5 2013 Spring and Fall, 6C 2014 Fall) weren't surveyed. |
 | C14 | Concept figures for 6U, 7, 8, 9, PCPA and the DISCs | ⬜ | Later | Builders exist only for P, FM, MAS-I, MAS-II, 5 and 6C. |
 | C15 | More distribution simulators | ⬜ | Later | Pareto (both forms), Generalized Pareto, Weibull, Uniform, t, χ², F, GEV. All 10 static SVG embeds are already replaced. |
 | C16 | Resource-page leftovers | ⬜ | Later | 3 texts whose contents aren't available; Baer/Rendall (`resource-pages.md` §5). |
@@ -482,7 +485,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V4 | Wave 3a: FM Q351–Q462 | ✅ 2026-10-17 | — | All 112 verified (runs `48b2`, `63b1`). 12 minor findings open: 10 topics not in `ontology_map.py` (add them, or retag), and fm-358's day-1/day-10 wording, which is SOA's. `verify_paper.py` now uses a question's printed number to pick its page. |
 | V5 | Waves 3b–5 | 🟡 Exam 7 and the DISCs done | rides C1–C7 | Each exam's campaign carries its own packets. |
 | V6 | The 2 open critical findings | ✅ 2026-10-18 | — | Runs `1567`, `dd77`: *MCT*, *Capital Required*, *Supervisory Target Capital Ratio*, *Probable Maximum Loss* verified; the ×1.5 and LICAT's "Base Solvency Buffer" fixed on 20 more pages (now `in_review`); the 6C figure builder fixed. Left: *Registered Reinsurance* F-002 (major), for a writer. |
-| V7 | Run summaries for the Exam 7 and DISC-RM runs | ⬜ | Next | The 2026-10-11 runs have no `_runs` summary. Housekeeping. |
+| V7 | Run summaries for the Exam 7 and DISC-RM runs | ✅ 2026-10-18 | — | Reconstructed from the per-file logs: `.verify/_runs/2026-10-11T02-10Z-e7.md` and `…-dv14.md`. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
 
 ### 4.5 A: AI and practitioner products

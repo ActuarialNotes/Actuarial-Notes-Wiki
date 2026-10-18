@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7027ad059a865ae21ba8342aaf33c98d6fc607623432f794a11f4770f369401c
+  content_hash: sha256:1d5c35e5c53b3540e91481ffb9f55a7d0a313e4eb4294e83c2805c533eef3fe8
   sources:
     - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
     - "CAS, Exam MAS-II — Modern Actuarial Statistics-II exam page, read 2026-10-09: windows July 29 - August 4, 2026 and October 28 - November 5, 2026 (register by Sep. 29, 2026); '2026 Content Outline' the only outline linked, sha256:0b8e99645a8185c88b514201e1b60ed881d27b51442f616af4baab416d4f2f48 — https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii"
@@ -41,7 +41,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 3. Determine the [[Full Credibility Standard|standard for full credibility]] and apply the [[Partial Credibility|square-root rule]] for [[Partial Credibility|partial credibility]]
 > 4. Compute the [[Bühlmann Credibility|Bühlmann structural parameters]] — the [[Expected Value of Process Variance]] ([[Expected Value of Process Variance|EPV]]) and the [[Variance of Hypothetical Means]] ([[Variance of Hypothetical Means|VHM]]) — and the [[Bühlmann Credibility|credibility constant]] $k$ they define
 > 5. Derive the [[Posterior Distribution|posterior]] and [[Predictive Distribution|predictive distributions]] under a [[Conjugate Prior|conjugate prior]], and recognize when the [[Bayesian Credibility|Bayesian]] and [[Bühlmann Credibility|Bühlmann estimates]] [[Exact Credibility|coincide]]
-> 6. Estimate the [[Bühlmann Credibility|structural parameters]] from [[Risk Experience|data]] using [[Empirical Bayes Credibility|empirical Bayes (non-parametric and semi-parametric)]] methods
+> 6. Estimate the [[Empirical Bayes Credibility|structural parameters]] from [[Risk Experience|data]] using [[Empirical Bayes Credibility|empirical Bayes (non-parametric and semi-parametric)]] methods
 > 7. Select an appropriate [[Complement of Credibility|complement of credibility]]
 > 
 > ### Credibility procedures
@@ -49,7 +49,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > - [[Bühlmann Credibility]] — [[Expected Value of Process Variance]], [[Variance of Hypothetical Means]]
 > - [[Bühlmann-Straub Credibility]] — [[Exposure Base|unequal exposures]]
 > - [[Bayesian Credibility]] — [[Conjugate Prior]], [[Predictive Distribution]]
-> - [[Empirical Bayes Credibility]] — [[Bühlmann Credibility|structural parameters]] estimated from [[Risk Experience|experience]]
+> - [[Empirical Bayes Credibility]] — [[Empirical Bayes Credibility|structural parameters]] estimated from [[Risk Experience|experience]]
 > 
 > **Readings:** Tse
 

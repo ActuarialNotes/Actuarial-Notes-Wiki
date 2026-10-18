@@ -290,6 +290,19 @@ and dropped the question: forty Exam 5 questions sat in the vault and never
 reached a quiz. `quiz/src/lib/questionBank.test.ts` now parses every file in the
 bank and fails on one that comes back empty.
 
+A CAS report often opens a question's commentary with a paragraph on the
+question as a whole ("Candidates were expected to…") before `Part a`. Stage 1
+keeps it as the record's `examiner_report`; the bank's format has no slot for
+it, so the writer seats it on a part (`with_overall_report`): at the head of the
+first part's `### Examiner Report`, where the report prints it, or under the last
+part when no part has commentary of its own. Until C13 (October 2026) it was
+written only in the second case, so most multi-part questions converted before
+then shipped without it. `scripts/report_gaps.py list` re-reads every CAS paper's
+report and scores each question file on whether it carries the paragraph
+(`present`, `paraphrased` — a bank written before this pipeline reworded it —
+or `missing`); `apply` writes the missing ones back verbatim, leaving verified
+files for their paper's packet to restore as a delta.
+
 Two judgments move a question off its paper's own bank, both set in
 `judgments.jsonl` rather than in the record:
 

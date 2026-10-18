@@ -224,8 +224,7 @@ export const SYLLABUS_VINTAGES: Readonly<Record<string, readonly SyllabusEdition
       },
     },
   ],
-  // MAS-II: 5 readings → 5 → 6. Salis's study note is on the 2026 outline and
-  // not yet on the exam page, so the shelf adds it to the 2026 list itself.
+  // MAS-II: 5 readings → 5 → 6, the sixth Salis's study note on the 2026 outline.
   'Exam MAS-II': [
     {
       label: 'Spring 2026',
@@ -233,8 +232,7 @@ export const SYLLABUS_VINTAGES: Readonly<Record<string, readonly SyllabusEdition
         url: 'https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf',
         title: 'MAS-II Content Outline, Spring 2026 (MASII_CO_S_2026 v06 2026_1_13)',
       },
-      added: ['Salis'],
-      titles: { Salis: 'Measures of Predictive Accuracy (Salis, CAS Study Note, November 2025)' },
+      added: ['Measures of Predictive Accuracy (Salis - 2025)'],
     },
     {
       label: 'Spring 2025',

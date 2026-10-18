@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:4083d1b0c452bcb9dfc67ce7f785d0c7f9ddff8f839cb25d1e109cb06dd789c3
+  content_hash: sha256:bef49249b15bf54be3ff7479fb023981454b826b1772e1c6a85180b0d6622c22
   sources:
     - "SOA, current syllabus PDF for ATPA, all pages, sha256:16d5e74841e90fdb61402248cb585dc8d7a3ceedbf678341478145a9e2fb4410 — https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf"
   open_findings: 0
@@ -54,12 +54,12 @@ The Advanced Topics in Predictive Analytics course provides candidates with the 
 >    - Create [[Data Pipeline|data sets]] as a final product of extracting and transforming data that can be used in a predictive model.
 > 3. Assess the accuracy and quality of data.
 >    - Describe how [[Data Quality|data collection practices]] and assumptions affect [[Data Quality|data quality]].
->    - Validate the data for [[Data Quality|internal consistency]].
+>    - Validate the data for [[Data Validation|internal consistency]].
 > 4. Explain the terminology and structure of [[Relational Database|relational databases]] and be able to use common keys between collections of data to merge information from multiple sources.
 > 5. Clean and organize data by performing each of the following:
 >    - Check for [[Outlier|outliers]], both univariate and multivariate
 >    - [[Missing Data|Handle missing data]] (including understanding the types of [[Missing Data|missing data]]) by selecting the appropriate action from deletion of the record, [[Missing Data|imputation]], and adding a missing value flag.
-> 6. Detect possible biases introduced when [[Data Pipeline|preparing data]] for a predictive model.
+> 6. Detect possible biases introduced when [[Data Preparation|preparing data]] for a predictive model.
 
 > [!example]- Advanced Predictive Analytics Models {30–45%}
 > The Candidate will fit a variety of models and select one appropriate to the circumstances and intended use.

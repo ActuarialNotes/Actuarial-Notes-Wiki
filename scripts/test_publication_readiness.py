@@ -32,6 +32,14 @@ class RenamedTest(unittest.TestCase):
         self.assertTrue(pr.renamed(link("[[Commercial General Liability|CGL Coverage B]]"), "Commercial General Liability"))
         self.assertTrue(pr.renamed(link("[[Tidy Data|Dataframes]]"), "Tidy Data"))
 
+    def test_an_acronym_of_the_page_name_is_not_renamed(self):
+        self.assertFalse(pr.renamed(link("[[Defined Benefit Plan|DB plan]]"), "Defined Benefit Plan"))
+        self.assertFalse(pr.renamed(link("[[Defined Benefit Plan|DB]]"), "Defined Benefit Plan"))
+        self.assertTrue(pr.renamed(link("[[Defined Benefit Plan|DB funding]]"), "Defined Benefit Plan"))
+
+    def test_lives_names_a_life(self):
+        self.assertFalse(pr.renamed(link("[[Joint Life|joint lives]]"), "Joint Life"))
+
     def test_parenthetical_in_the_page_name_is_ignored(self):
         self.assertFalse(pr.renamed(link("[[Central Limit Theorem (CLT)|central limit theorem]]"), "Central Limit Theorem (CLT)"))
 

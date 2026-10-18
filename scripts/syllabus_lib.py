@@ -391,6 +391,8 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
         nxt = matches[i + 1].group(0).lower() if i + 1 < len(matches) else ""
         if w == "defined" and nxt.startswith(("benefit", "contribution")):
             run.append(m)                    # "defined benefit plan" is a name, not a verb
+        elif w == "state" and run and not re.search(r"[^\s]", between):
+            run.append(m)                    # "multiple state models": a noun inside a phrase
         elif w in BREAK_WORDS or w.strip("-") in BREAK_WORDS or w in VERBS or len(w) == 1 or _adverb(w):
             flush()
         else:

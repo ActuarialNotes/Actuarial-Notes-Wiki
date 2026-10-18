@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1071 of 2223 syllabus concept entries (48%)** have at least one question in their exam's own bank.
+> **1071 of 2226 syllabus concept entries (48%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -15,13 +15,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam P-1 (SOA)]] | `exam-p` (716) | 71 / 72 | 99% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
 | [[Exam PAF (SOA)]] | none | 0 / 2 | 0% | 2 / 2 |
-| [[Exam FAM (SOA)]] | none | 0 / 85 | 0% | 10 / 10 |
+| [[Exam FAM (SOA)]] | none | 0 / 86 | 0% | 10 / 10 |
 | [[Exam SRM (SOA)]] | none | 0 / 41 | 0% | 5 / 5 |
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
 | [[Exam ALTAM (SOA)]] | none | 0 / 64 | 0% | 7 / 7 |
 | [[Exam ASTAM (SOA)]] | none | 0 / 58 | 0% | 6 / 6 |
-| [[Exam ATPA (SOA)]] | none | 0 / 29 | 0% | 4 / 4 |
+| [[Exam ATPA (SOA)]] | none | 0 / 31 | 0% | 4 / 4 |
 | [[Exam FAP (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam APC (SOA)]] | none | 0 / 1 | 0% | 2 / 2 |
 | [[Exam CFE-101 (SOA)]] | none | 0 / 31 | 0% | 3 / 3 |
@@ -64,7 +64,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
-| **Total** | | **1071 / 2223** | **48%** | |
+| **Total** | | **1071 / 2226** | **48%** | |
 
 105 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -163,7 +163,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam FAM (SOA)
 
-*No question bank yet — all 85 syllabus concepts are uncovered.*
+*No question bank yet — all 86 syllabus concepts are uncovered.*
 
 ### Short-Term Insurance and Reinsurance Coverages {5–10%}
 
@@ -266,7 +266,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Mortality Models {10–15%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Life Table]]
 - [[Future Lifetime Random Variable]]
@@ -274,6 +274,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Mortality]]
 - [[Moment]]
 - [[Standard Actuarial Notation]]
+- [[Survival Model]]
 - [[Fractional Age Assumption]]
 
 ### Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
@@ -472,10 +473,10 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *18 of 18 uncovered — **no questions at all***
 
+- [[Multiple State Model]]
 - [[Joint Life]]
 - [[Annuity Contract]]
 - [[Mortality]]
-- [[Multiple State Model]]
 - [[State-Dependent Insurance]]
 - [[Health Insurance]]
 - [[Continuing Care Retirement Community]]
@@ -493,7 +494,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Premium and Policy Valuation for Long-Term State-Dependent Coverages {12–20%}
 
-*14 of 14 uncovered — **no questions at all***
+*15 of 15 uncovered — **no questions at all***
 
 - [[Random Variable]]
 - [[Expenses]]
@@ -509,11 +510,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Equivalence Principle]]
 - [[Policy Value]]
 - [[Thiele's Differential Equation]]
+- [[Multiple State Model]]
 
 ### Joint Life Insurance and Annuities {8–16%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
+- [[Multiple State Model]]
 - [[Joint Life]]
 - [[Annuity Contract]]
 - [[Future Lifetime Random Variable]]
@@ -699,7 +702,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ATPA (SOA)
 
-*No question bank yet — all 29 syllabus concepts are uncovered.*
+*No question bank yet — all 31 syllabus concepts are uncovered.*
 
 ### Ethical Foundations {5–10%}
 
@@ -710,16 +713,18 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Working with Data {20–30%}
 
-*8 of 8 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Predictive Analytics]]
 - [[Data Pipeline]]
 - [[Data Quality]]
 - [[Data Warehouse]]
 - [[Tidy Data]]
+- [[Data Validation]]
 - [[Relational Database]]
 - [[Outlier]]
 - [[Missing Data]]
+- [[Data Preparation]]
 
 ### Advanced Predictive Analytics Models {30–45%}
 

@@ -9,7 +9,7 @@ verification:
   confidence: high
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e01c65aac10d9826b93825e057dcbc792a43d5f0d18d743c17a08b08df6eaffd
+  content_hash: sha256:0faf60dd10d44a40f71a01c5f59b5487418b732e4cae80ec13ab1c29e5cdcca0
   sources:
     - "SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
@@ -121,9 +121,9 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > The Candidate will understand key concepts concerning parametric and [[Life Table|non-parametric mortality]] models for [[Future Lifetime Random Variable|individual lives]].
 >
 > 1. Understand [[Parametric Survival Model|parametric survival models]], [[Life Table|life tables]], and the relationships between them.
-> 2. Given a [[Parametric Survival Model|parametric survival model]], calculate survival and [[Future Lifetime Random Variable|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]].
-> 3. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for [[Future Lifetime Random Variable|future lifetime distributions]] and [[Moment|moments]], including select and ultimate functions.
-> 4. Given a [[Life Table|life table]], calculate survival and [[Future Lifetime Random Variable|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]], using appropriate [[Fractional Age Assumption|fractional age assumptions]] where necessary.
+> 2. Given a [[Parametric Survival Model|parametric survival model]], calculate survival and [[Mortality|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]].
+> 3. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for [[Survival Model|future lifetime distributions]] and [[Moment|moments]], including select and ultimate functions.
+> 4. Given a [[Life Table|life table]], calculate survival and [[Mortality|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]], using appropriate [[Fractional Age Assumption|fractional age assumptions]] where necessary.
 > 5. Understand and apply select [[Life Table|life tables]].
 
 > [!example]- Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}

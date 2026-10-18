@@ -103,9 +103,29 @@ def stub_reason(rel: str) -> str | None:
     return None
 
 
+IRREGULAR_STEMS = {"lives": "life"}
+
+
 def _stems(text: str) -> list[str]:
-    """Lower-cased words cut to a five-letter stem — "Auditing" and "Audit", "Plots" and "Plot" agree."""
-    return [re.sub(r"s$", "", w)[:5] for w in re.sub(r"[^a-z0-9 ]+", " ", text.lower().replace("'s", "")).split()]
+    """Lower-cased words cut to a five-letter stem — "Auditing" and "Audit", "Plots" and "Plot",
+    "lives" and "Life" agree."""
+    words = re.sub(r"[^a-z0-9 ]+", " ", text.lower().replace("'s", "")).split()
+    return [re.sub(r"s$", "", IRREGULAR_STEMS.get(w, w))[:5] for w in words]
+
+
+def _expand_acronyms(display: str, page_name: str) -> str:
+    """`display` with each capitalised acronym spelled out as the run of page-name words whose
+    initials it is: "DB plan" for *Defined Benefit Plan* reads "Defined Benefit plan"."""
+    words = re.sub(r"[^A-Za-z0-9 ]+", " ", page_name).split()
+
+    def spell(m: re.Match) -> str:
+        acronym = m.group(0)
+        for i in range(len(words) - len(acronym) + 1):
+            run = words[i:i + len(acronym)]
+            if "".join(w[0] for w in run).upper() == acronym:
+                return " ".join(run)
+        return acronym
+    return re.sub(r"\b[A-Z]{2,}\b", spell, display)
 
 
 def renamed(link: VL.Link, page_name: str) -> bool:
@@ -119,7 +139,11 @@ def renamed(link: VL.Link, page_name: str) -> bool:
         return False
     shown = set(_stems(link.display))
     page = set(_stems(re.sub(r"\s*\([^)]*\)", "", page_name)))
-    return not (page <= shown or shown <= page)
+    if page <= shown or shown <= page:
+        return False
+    # An acronym of the page's own name shortens it ("DB plan"), but an acronym followed by
+    # words of its own still names something else ("CGL Coverage B").
+    return not set(_stems(_expand_acronyms(link.display, page_name))) <= page
 
 
 def unresolved_links(page: Path, vault: VL.Vault, wiki_id: str, tables: dict) -> list[str]:

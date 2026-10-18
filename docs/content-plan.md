@@ -196,6 +196,12 @@ Open fact-check items outside the campaigns:
 - **V7** — run summaries for the 2026-10-11 Exam 7 and DISC-RM runs. Housekeeping. → Phase 2.
 - **V8** — the 363 concept-gap pages written in phases A–D are AI-drafted and `unverified`; they
   need human review (CONCEPT_GAPS D5). → rides each exam's campaign; Phase 4 for the rest.
+- **Exam P's sample PDFs were re-issued again** (found 18 Oct): the SOA's sample questions and
+  solutions now hash `24980e6d…` / `e10d2649…`, not the `e47245…` / `efade8…` several Exam P
+  concept pages cite. No gate fails (a page stays verified against the copy it read), but the next
+  Exam P sweep re-cites the new files as a delta, as Wave 1 did after the last re-issue.
+- **V10's leftovers** — fm-370, fm-379, fm-391 and fm-421: a topic paired with another syllabus
+  section, or not a syllabus term ("Premium"). Each needs a retag and a delta re-check.
 - **V9** (proposed) — VERIFY can't move or retire a file, so E10's four stranded question files
   and any mis-named page stay where they are. A rule change; the maintainer's.
 - **Off-syllabus questions** (249 CAS) ride their paper's packet if D6 says verify them.
@@ -250,6 +256,10 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
   by a different agent from its writer.
 - **SOA published material** — where the SOA publishes sample questions or past written-answer
   papers for an ASA prelim (Phase 3 lists which, from the SOA's own pages), convert them with `soa-exam-converter` (Phase 3), never retyped.
+- **`standardize_questions.py` is unsafe to run** (found 18 Oct): it applies `ontology_map.py` to
+  every bank by topic string, and ten CAS questions — fifteen with V10's additions (Exam 9's *Yield
+  Curve*, *Convexity*, *Real Rate of Interest*) — share a string with a P / FM key. Scope it to the
+  P and FM banks before anyone runs it.
 - **Exam 7 leftovers (D10)**: questions on readings no longer on the syllabus (Patrik, Brehm /
   Goldfarb, England & Verrall), and 2012 q20 filed under Exam 9. Default: keep them as they are.
 - **The converter's printed slips**: open minor findings on the Exam 8 papers are mostly CAS's own
@@ -263,6 +273,8 @@ From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and 
 - **C18** — two slips V3 found: the Atkinson & Dallas page carries only the Ch. 9 code
   (ILA101-103-25) though ILA-101 also assigns Ch. 11 (ILA101-104-25); the COPLFR page's file name
   says 2024 but its `Year` is 2025. → Phase 1.
+- **Atkinson & Dallas** (ILA-101): its lead names only the Ch. 9 reading (F-002), and its chapter
+  list rests on one library catalogue that wouldn't load; `in_review` until a catalogue confirms it.
 - **C16** — three study-kit texts with no contents available (Agricultural Programs, KPMG
   Regulatory Oversight, McDonald) and Baer / Rendall's, which couldn't be fetched.
 - **D21** — Goldburd et al.: Exam 8 assigns the 2025 revision; the page describes 2020.
@@ -308,13 +320,13 @@ ones held behind a maintainer's decision.
 
 | Item | Roadmap | Status |
 |---|---|---|
-| The `--hold` guard: a ready exam can't silently lose a structural gate | new | PHASE1_HOLD |
-| Exam FM: *Term of Annuity*'s three "finite term" links removed (the words unchanged), the page re-verified against the SOA syllabus | C8 | PHASE1_FM |
-| Exam P G6: vault-written questions for the six untested concepts, each checked by a different agent from its writer | C8 | PHASE1_P_G6 |
-| Exam P G4: *Insurer*'s two unsourced bullets sourced or restated, the page verified | C8 | PHASE1_P_G4 |
-| 6C's two criticals (*MCT*, *Capital Required*) and the majors on the same source; the MCT figure's builder | V6 | PHASE1_V6 |
-| FM's topic tags into `ontology_map.py`; fm-358's printed wording | V10 | PHASE1_V10 |
-| Two resource-page slips (Atkinson & Dallas's codes, COPLFR's year) | C18 | PHASE1_C18 |
+| The `--hold` guard: a ready exam can't silently lose a structural gate | new | ✅ `publication_readiness.py --hold`, in `content-validation.yml`, tested |
+| Exam FM: *Term of Annuity*'s three "finite term" links removed (the words unchanged), the page re-verified against the SOA syllabus | C8 | ✅ FM 7 / 7 (run `7679`; the syllabus PDF unchanged). The noun-phrase linker now treats *finite* as a qualifier (`syllabus_lib.BREAK_WORDS`), or its test would demand the link back |
+| Exam P G6: vault-written questions for the six untested concepts, each checked by a different agent from its writer | C8 | ✅ `p-an-001`–`009` (runs `7432` and PHASE1_P9). The first `p-an-009` tested a jointly continuous pair, which the Nov 2026 syllabus excludes (multivariate is discrete-only); it was rewritten as a percentile of one continuous variable |
+| Exam P G4: *Insurer*'s two unsourced bullets sourced or restated, the page verified | C8 | ✅ verified, medium (run `66d2`): Exam 9's capital-cost bullet restated to Zhang and Feldblum (*Variance*) and Mildenhall & Major's free excerpt; the forms of insurer to Florida's statutes and Lloyd's. Re-check against Cummins (2000) when an Exam 9 sweep reaches it |
+| 6C's two criticals (*MCT*, *Capital Required*) and the majors on the same source; the MCT figure's builder | V6 | ✅ no open critical in the vault (run `1567`): *MCT*, *Capital Required*, *Supervisory Target Capital Ratio* verified; the same ×1.5 fixed on five more pages; `figures_exam_6c.py` fixed and four figures redrawn. The 18 majors it recorded on pages naming the MCT denominator "Base Solvency Buffer" (LICAT's term): PHASE1_MAJORS |
+| FM's topic tags into `ontology_map.py`; fm-358's printed wording | V10 | 🟡 13 topics added to `ontology_map.py`, 8 findings resolved, fm-358's wording closed as SOA's own (run `7679`). Left: fm-370, 379, 391 and 421 need a retag (their topic sits under another section, or isn't a syllabus term), which makes each stale until re-checked |
+| Two resource-page slips (Atkinson & Dallas's codes, COPLFR's year) | C18 | ✅ Atkinson & Dallas drops the wrong `Code` (both codes stay in its syllabus callout; the page is `in_review`, its chapter list unconfirmed). COPLFR's `Year` is right — the file name is the slip, which waits on V9 |
 
 ### Phase 2 — Fix the converter, then finish the beta exams
 

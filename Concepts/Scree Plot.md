@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:117af22a86fa204743029cad47d2445313cd8644e91dd0fea23ef2e4c46daa9e
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:5e132f1bebf260865d3b3cc5e7f1d3010a3178b3bf8010c6deb7b38e0e78ea77
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §12.2.3-12.2.4, pp.504-508 (PDF 511-515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Scree Plot.md
 ---
@@ -18,7 +19,7 @@ A **scree plot** graphs the eigenvalues (or the [[Proportion of Variance Explain
 - The name is geological: the steep face is the components that matter, the rubble at the base is noise
 - **Read the elbow, not the last drop.** Components after the bend add little variance each and are usually not interpretable
 - Companion rules: keep $\lambda_m > 1$ on standardized data (each component must beat one original variable), or keep enough components to reach a cumulative PVE target
-- The choice is **a judgement call** — there is no response to validate against, which is the general condition of [[Unsupervised Learning]]. A vague elbow means the data have no low-dimensional structure
+- The choice is **a judgement call** — there is no response to validate against, which is the general condition of [[Unsupervised Learning]]
 - A cumulative-PVE plot beside the scree plot makes the tradeoff explicit
 
 ![[Media/Figures/Scree_Plot.svg|340]]

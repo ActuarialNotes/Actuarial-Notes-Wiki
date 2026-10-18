@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1de157e986f8fb3ff2c5c374b70201ea7cb80837ace1fdd26aa097ee31b14591
-  sources: []
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), Ch.9 §9.1 (differencing), §9.2 (backshift), §9.3-9.5 (AR, MA, ARIMA definition, Table 9.1 special cases, ACF/PACF identification), §9.9 (seasonal ARIMA), read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods (public domain), 6.4.4.6 Box-Jenkins Model Identification, sha256:f6bec26320777b285bb8a39e47608912daa869d9303a23d4d47dc3f5678e8ee7 — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc446.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/ARIMA.md

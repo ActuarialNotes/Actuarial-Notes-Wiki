@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:4903c8d87cfa06cad347c8a3e6b0e2d19a6ddd2b1dba505ae0958d7029af484d
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b667c6e92ce7ca4650a60eefd924eb0850e546c79e1dc86b140cdea73df117ca
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §2.2.3 'K-Nearest Neighbors', printed pp.39-42 (PDF pp.50-53); §3.5, printed pp.105-108 (PDF pp.115-118); §4.7.6, printed p.183 (PDF p.193), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/K-Nearest Neighbors.md
 ---
@@ -36,4 +37,4 @@ verification:
 > A KNN classifier is applied to binary insurance outcome data with $K=1$ and $K=50$. Describe the expected difference in the decision boundaries.
 >
 > > [!answer]-
-> > $K=1$ produces a **highly irregular, jagged** decision boundary that passes through every training point (zero training error). $K=50$ produces a **much smoother** boundary that may misclassify some training observations but generalizes better to new data.
+> > $K=1$ produces a **highly irregular, jagged** decision boundary (zero training error). $K=50$ produces a **much smoother** boundary that may misclassify some training observations.

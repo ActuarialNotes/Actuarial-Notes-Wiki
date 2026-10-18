@@ -151,7 +151,7 @@ are in Appendix A.
 | MAS-I | 281 | 178 / 178 | ready |
 | DISC-DA / RM / IA | 70 / 146 / 221 | 100% each | ready |
 | Exam 7 | 144 | 26 / 29 | ready (2026-10-16) |
-| MAS-II | 146 | 79 / 109 | beta |
+| MAS-II | 168 | 98 / 98 | beta |
 | Exam 5 | 349 | 129 / 138 | beta |
 | Exam 6C | 394 (73 off-syllabus) | 137 / 159 | beta |
 | Exam 8 | 139 | 32 / 38 | beta |
@@ -246,8 +246,9 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    converter (C13), then the beta exams.
 0a. **Content plan, Phase 2** (in progress, 2026-10-18): C13 done (the writer fixed, 83 report
    paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
-   60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Next: the fact-check campaigns,
-   Exam 9 → 5 → MAS-II → 6C, then PCPA's bank (C6).
+   60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Exam 9's first round done (held by
+   D22); MAS-II's first round done 18 Oct (4 / 7, held by D23 and three files). Next: Exam 5
+   (after D8) → 6C (after D8), then PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -455,7 +456,7 @@ gates through `--hold` in CI.
 | C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. *Risk* verified 18 Oct; only the ISO CGL plan is left (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
 | C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct. First round 18 Oct (content plan Appendix A.4): 128 of 131 on-syllabus questions, 24 of 60 concepts and 7 of 9 readings verified. Left: three questions in review (decisions for a maintainer), and 36 concepts and 2 readings that rest on texts no session could read — Brehm et al., Mildenhall & Major, Grossi & Kunreuther (study kit or sold) and the Cummins (2000, 2008) and Coval-Jurek-Stafford journal texts (**D22**). |
 | C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Settle the findings against the v02 outline (D8); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
-| C4 | MAS-II → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct (23 vault-written questions, 22 verified). The papers are scanned. The page's F-002 (is exponential smoothing on the syllabus?) holds `masii-an-023`. |
+| C4 | MAS-II → ready | 🟡 4 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct; first campaign round 18 Oct (content plan Appendix A.5): 167 of 168 questions, 96 of 98 concepts and all 6 readings verified (G5 ✅; Salis's study note, missing from the page, added). Left: the page's F-001 — it carries more tasks than the outline's 21 (**D23**); Fall 2019 Q35's explanation; *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread). |
 | C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. Blocked on D8 (F-001). 137 concepts, 67 readings and 321 questions to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
@@ -602,6 +603,8 @@ Where a default is given, sessions build with it until the decision is made.
 | D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | It stays `in_review`, and the gate stays red |
 | D21 | Goldburd et al.: describe the 2025 revision Exam 8 assigns on the existing 2020 page, keep 2020 with a note, or give Exam 8 its own page (F-003 on that page) | C1 run `f01e` | — | The page as it is |
 | D22 | Exam 9's unread readings: Brehm et al., Mildenhall & Major and Grossi & Kunreuther (study kit or sold, chapters unread), and the Cummins (2000, 2008) and Coval, Jurek & Stafford journal texts (paywalled, or SSRN/AEA blocked to the sessions): supply a copy, or name a free author-posted one a session can reach (the 2012 archived Wharton paper for Cummins 2000; SSRN 1057401 for Cummins 2008) | C2 run `6bfb` and the campaign's other reading packets | Exam 9's G4 and G5 | The 36 concept pages stay `in_review`, and the gates stay red |
+| D23 | MAS-II's page carries 36 tasks where the 2026 outline lists 21: restore the outline's tasks (dropping about ten concepts that are in the readings and tagged on paper questions, *Posterior Distribution* and *AIC* among them), or keep the vault's finer tasks and mark which are its own | C4 run `4700` (page F-001) | MAS-II's G1 | The page as it is, `in_review` |
+| D24 | MAS-II's 2019 papers test McElreath's Bayesian/MCMC reading (about 35 questions: MCMC, multilevel models, HPDIs, DIC, WAIC), which the 2026 outline no longer assigns: mark them `off_syllabus`, or keep them in quiz draws | C4 runs `f8d6`, `9dbf` | MAS-II's bank | Keep them as they are (verified, served) |
 
 ### 6.2 Settled: don't re-open without a new reason
 

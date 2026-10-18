@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:933b27c812b02687a9a55abbad676d656c21788af4c8f37fc84559507de6a668
-  sources: []
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.4 Moving average models (definition, invertibility, MA(1) constraint), §9.5 identification, §9.8 MA(q) forecast variance, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Moving Average Model.md

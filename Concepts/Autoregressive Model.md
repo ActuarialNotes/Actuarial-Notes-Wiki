@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:510dcd274ffc36f1c322bd8c4937a9787b80776186974aecc94fe3a38d01fcf6
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:060559827defa3518d475d173506e0b12cfe0ed355f28c591c747a45a5c2258a
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.3 Autoregressive models (AR(1) cases, stationarity constraints), §9.4 (AR(1) as MA(∞) with weights phi^j), §9.5 identification, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §5.5 prediction intervals, read 2026-10-18, sha256:d72117b50768eed014ba8ec8bc835940cdfa2b34ca7ec76b22ce2b0484877f9a — https://otexts.com/fpp3/toolbox.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Autoregressive Model.md
@@ -20,7 +22,7 @@ An **autoregressive model of order $p$**, AR($p$), regresses a [[Time Series]] o
 - **AR(1)**: $\mathrm{Corr}(Y_t, Y_{t-k}) = \phi^{k}$, mean $\mu = c/(1-\phi)$, variance $\sigma^2/(1-\phi^2)$
 - [[Stationarity]] requires all roots of $\phi(B) = 0$ **outside** the unit circle; for AR(1) that is $\lvert\phi\rvert < 1$, and $\phi = 1$ is a [[Random Walk]]
 - **Identification:** the [[Autocorrelation Function|ACF]] tails off geometrically, the [[Partial Autocorrelation Function|PACF]] cuts off after lag $p$
-- $\phi$ near 1 means slow mean reversion and long memory; $\phi$ near 0 means the series is nearly [[White Noise]]. Negative $\phi$ gives an alternating, oscillating series
+- $\phi$ near 1 means slow mean reversion; $\phi$ near 0 means the series is nearly [[White Noise]]. Negative $\phi$ gives an alternating, oscillating series
 - Forecasts decay geometrically back to the mean: $\hat Y_{t+h} = \mu + \phi^{h}(Y_t - \mu)$
 
 ![[Media/Figures/Autoregressive_Model.svg|340]]

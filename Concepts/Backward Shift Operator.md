@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:568b4e65afdbc6a2c1812df3ee3fbbc0f8309fcab720e5f953ea5323fd1a4482
-  sources: []
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.2 Backshift notation, §9.4 AR(1) as MA(∞), §9.5 ARIMA in backshift form, §9.8 ARIMA(3,1,1) expansion and forecasting steps, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Backward Shift Operator.md

@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1010 of 2066 syllabus concept entries (49%)** have at least one question in their exam's own bank.
+> **1071 of 2142 syllabus concept entries (50%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -9,14 +9,21 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 | Exam | Bank (questions served) | Concepts covered | % | Objectives with no questions |
 |---|---|---|---|---|
+| [[Exam VEE-MS (SOA)]] | none | 0 / 17 | 0% | 1 / 1 |
+| [[Exam VEE-ECON (SOA)]] | none | 0 / 2 | 0% | 1 / 1 |
+| [[Exam VEE-AF (SOA)]] | none | 0 / 9 | 0% | 2 / 2 |
 | [[Exam P-1 (SOA)]] | `exam-p` (716) | 71 / 72 | 99% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
+| [[Exam PAF (SOA)]] | none | 0 / 2 | 0% | 2 / 2 |
 | [[Exam FAM (SOA)]] | none | 0 / 71 | 0% | 10 / 10 |
 | [[Exam SRM (SOA)]] | none | 0 / 33 | 0% | 5 / 5 |
+| [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 22 | 0% | 5 / 5 |
 | [[Exam ALTAM (SOA)]] | none | 0 / 62 | 0% | 7 / 7 |
 | [[Exam ASTAM (SOA)]] | none | 0 / 47 | 0% | 6 / 6 |
 | [[Exam ATPA (SOA)]] | none | 0 / 23 | 0% | 3 / 3 |
+| [[Exam FAP (SOA)]] | none | 0 / 9 | 0% | 4 / 4 |
+| [[Exam APC (SOA)]] | none | 0 / 1 | 0% | 2 / 2 |
 | [[Exam CFE-101 (SOA)]] | none | 0 / 29 | 0% | 3 / 3 |
 | [[Exam CFE-201 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam CP-311 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
@@ -40,23 +47,88 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam RET-101 (SOA)]] | none | 0 / 30 | 0% | 4 / 4 |
 | [[Exam RET-201 (SOA)]] | none | 0 / 22 | 0% | 5 / 5 |
 | [[Exam RET-301 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
+| [[Exam DMAC (SOA)]] | none | 0 / 2 | 0% | 4 / 4 |
+| [[Exam FAC (SOA)]] | none | 0 / 0 | — | 0 / 0 |
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
-| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (146) | 79 / 109 | 72% | 0 / 4 |
+| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (168) | 100 / 102 | 98% | 0 / 4 |
 | [[Exam DISC-DA (CAS)]] | `exam-disc-da` (70) | 42 / 42 | 100% | 0 / 10 |
 | [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (144) | 65 / 65 | 100% | 0 / 15 |
 | [[Exam DISC-IA (CAS)]] | `exam-disc-ia` (221) | 97 / 97 | 100% | 0 / 16 |
-| [[Exam 5 (CAS)]] | `exam-5` (349) | 129 / 138 | 93% | 0 / 2 |
+| [[Exam 5 (CAS)]] | `exam-5` (356) | 137 / 139 | 99% | 0 / 2 |
 | [[Exam PCPA (CAS)]] | none | 0 / 30 | 0% | 3 / 3 |
-| [[Exam 6C (CAS)]] | `exam-6c` (321) | 137 / 159 | 86% | 0 / 3 |
+| [[Exam 6C (CAS)]] | `exam-6c` (343) | 159 / 159 | 100% | 0 / 3 |
 | [[Exam 6U (CAS)]] | none | 0 / 80 | 0% | 4 / 4 |
+| [[Exam 6I (CAS)]] | none | 0 / 32 | 0% | 5 / 5 |
+| [[Exam 6T (CAS)]] | none | 0 / 3 | 0% | 2 / 2 |
+| [[Exam COP (CAS)]] | none | 0 / 2 | 0% | 2 / 2 |
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
-| [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **1010 / 2066** | **49%** | |
+| [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
+| **Total** | | **1071 / 2142** | **50%** | |
 
 107 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
+
+## Exam VEE-MS (SOA)
+
+*No question bank yet — all 17 syllabus concepts are uncovered.*
+
+### Mathematical Statistics
+
+*17 of 17 uncovered — **no questions at all***
+
+- [[Random Sample]]
+- [[Sampling Distribution]]
+- [[Estimator]]
+- [[Maximum Likelihood Estimation]]
+- [[Bias]]
+- [[Variance]]
+- [[Mean Square Error]]
+- [[Consistency]]
+- [[Efficiency]]
+- [[Minimum Variance]]
+- [[Confidence Interval]]
+- [[Parameter Estimation]]
+- [[Hypothesis Testing]]
+- [[Neyman-Pearson Lemma]]
+- [[Power of a Test]]
+- [[Likelihood Ratio Test]]
+- [[Chi-Square Goodness-of-Fit Test]]
+
+## Exam VEE-ECON (SOA)
+
+*No question bank yet — all 2 syllabus concepts are uncovered.*
+
+### Macroeconomics
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Interest Rate]]
+- [[Inflation]]
+
+## Exam VEE-AF (SOA)
+
+*No question bank yet — all 9 syllabus concepts are uncovered.*
+
+### Accounting
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Life Insurance Company Taxation]]
+- [[Accounting Standards]]
+- [[Income Statement]]
+- [[Balance Sheet]]
+- [[Cash Flow Statement]]
+- [[Financial Statements]]
+- [[Financial Position]]
+
+### Corporate Finance
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Capital Budgeting]]
+- [[Internal Rate of Return]]
 
 ## Exam P-1 (SOA)
 
@@ -71,6 +143,23 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 ## Exam FM-2 (SOA)
 
 *Every syllabus concept has at least one question.*
+
+## Exam PAF (SOA)
+
+*No question bank yet — all 2 syllabus concepts are uncovered.*
+
+### Role of the Professional Actuary
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Actuary]]
+
+### What Actuaries Do
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Risk]]
 
 ## Exam FAM (SOA)
 
@@ -276,6 +365,23 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Variance]]
 - [[K-Means Clustering]]
 - [[Hierarchical Clustering]]
+
+## Exam ASF (SOA)
+
+*No question bank yet — all 3 syllabus concepts are uncovered.*
+
+### External Forces
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[External Environment]]
+- [[Risk]]
+
+### Actuarial Solutions
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Model Validation]]
 
 ## Exam PA (SOA)
 
@@ -591,6 +697,59 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Shapley Value]]
 - [[Lift]]
 - [[Model Governance]]
+
+## Exam FAP (SOA)
+
+*No question bank yet — all 9 syllabus concepts are uncovered.*
+
+### FAP Risk in Actuarial Problems
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Risk]]
+- [[Asset-Liability Management]]
+- [[Regulatory Capital]]
+
+### Designing and Pricing an Actuarial Solution
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Funding]]
+
+### Model Selection and Solution Design
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Funding]]
+- [[Constraint]]
+- [[Solvency II]]
+
+### Selection of Initial Assumptions
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Constraint]]
+- [[Corporate Governance]]
+- [[Risk]]
+- [[Regulatory Reporting]]
+
+## Exam APC (SOA)
+
+*No question bank yet — all 1 syllabus concepts are uncovered.*
+
+### E-Learning Module
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Actuarial Standards of Practice]]
+
+### Case Discussion
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Actuarial Standards of Practice]]
 
 ## Exam CFE-101 (SOA)
 
@@ -1929,64 +2088,55 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Executive Retirement Plan]]
 - [[Plan Sponsor]]
 
+## Exam DMAC (SOA)
+
+*No question bank yet — all 2 syllabus concepts are uncovered.*
+
+### Integrated Decision-Making Process
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Decision-Making]]
+
+### Investigate Options
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Decision-Making]]
+- [[Actuary]]
+
+### Make Decision
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Decision-Making]]
+- [[Actuary]]
+
+### Implement Decision
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Actuary]]
+
+## Exam FAC (SOA)
+
+*No question bank yet — all 0 syllabus concepts are uncovered.*
+
 ## Exam MAS-I (CAS)
 
 *Every syllabus concept has at least one question.*
 
 ## Exam MAS-II (CAS)
 
-*30 of 109 syllabus concepts have no question in `questions/exam-mas-ii/`.*
-
-### A. Introduction to Credibility {15–25%}
-
-*4 of 20 uncovered*
-
-- [[Frequency]] — tagged in another bank (21)
-- [[Severity]] — tagged in another bank (27)
-- [[Risk Experience]] — tagged in another bank (3)
-- [[Exposure Base]] — tagged in another bank (25)
+*2 of 102 syllabus concepts have no question in `questions/exam-mas-ii/`.*
 
 ### B. Linear Mixed Models {10–20%}
 
-*5 of 27 uncovered*
+*2 of 27 uncovered*
 
 - [[Variance]] — tagged in another bank (61)
 - [[Expected Value]] — tagged in another bank (104)
-- [[Residual]] — tagged in another bank (3)
-- [[BIC]] — tagged in another bank (3)
-- [[Summary Statistics]] — tagged in another bank (1)
-
-### C. Statistical Learning {40–50%}
-
-*19 of 46 uncovered*
-
-- [[Statistical Learning]] — tagged in another bank (4)
-- [[Sampling Distribution]] — tagged in another bank (1)
-- [[Bootstrap]] — tagged in another bank (18)
-- [[Residual Sum of Squares]] — tagged in another bank (9)
-- [[Out-of-Bag Error]]
-- [[Variable Importance]]
-- [[Neural Network]] — tagged in another bank (1)
-- [[Activation Function]]
-- [[Hidden Layer]]
-- [[Backpropagation]]
-- [[Extended Linear Model]] — tagged in another bank (2)
-- [[Predictive Accuracy]] — tagged in another bank (2)
-- [[Lift]] — tagged in another bank (3)
-- [[AUROC]] — tagged in another bank (2)
-- [[Confusion Matrix]] — tagged in another bank (4)
-- [[Double Lift Chart]] — tagged in another bank (1)
-- [[Quantile Plot]] — tagged in another bank (2)
-- [[Mean Square Error]] — tagged in another bank (10)
-- [[Standard Deviation]] — tagged in another bank (23)
-
-### D. Time Series with Constant Variance {15–25%}
-
-*3 of 21 uncovered*
-
-- [[Partial Autocorrelation Function]]
-- [[Residual]] — tagged in another bank (3)
-- [[Exponential Smoothing]]
 
 ## Exam DISC-DA (CAS)
 
@@ -2002,26 +2152,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam 5 (CAS)
 
-*9 of 138 syllabus concepts have no question in `questions/exam-5/`.*
-
-### A. Ratemaking {45–55%}
-
-*3 of 80 uncovered*
-
-- [[Close Year]]
-- [[Data Quality]] — tagged in another bank (1)
-- [[Linear Trend]]
+*2 of 139 syllabus concepts have no question in `questions/exam-5/`.*
 
 ### B. Estimating Claim Liabilities (Reserving) {45–55%}
 
-*6 of 76 uncovered*
+*2 of 77 uncovered*
 
-- [[Insurer]] — tagged in another bank (6)
-- [[Risk]] — tagged in another bank (1)
-- [[Underwriting Year]]
-- [[Types of Insurance]]
-- [[Tort Litigation]] — tagged in another bank (22)
-- [[Tort Reform]] — tagged in another bank (22)
+- [[Insurer]] — tagged in another bank (8)
+- [[Risk]] — tagged in another bank (2)
 
 ## Exam PCPA (CAS)
 
@@ -2077,44 +2215,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam 6C (CAS)
 
-*22 of 159 syllabus concepts have no question in `questions/exam-6c/`.*
-
-### A. Regulation of Insurance and Canadian Insurance Law {20–25%}
-
-*5 of 46 uncovered*
-
-- [[Autorité des marchés financiers]]
-- [[Canadian Council of Insurance Regulators]]
-- [[Direct Compensation Property Damage]]
-- [[Fault Determination Rules]]
-- [[Code of Consumer Rights and Responsibilities]]
-
-### B. Canadian Government and Industry Insurance Programs {10–15%}
-
-*1 of 22 uncovered*
-
-- [[Plan de Répartition des Risques]]
-
-### C. Canadian Financial Reporting, Solvency, and Professional Responsibility {60–70%}
-
-*16 of 97 uncovered*
-
-- [[Quarterly Return]]
-- [[Contractual Service Margin]]
-- [[Contract Boundary]]
-- [[Coverage Units]]
-- [[Loss Component]]
-- [[Insurance Acquisition Cash Flows]]
-- [[Insurance Revenue]]
-- [[Insurance Service Expenses]]
-- [[Insurance Service Result]]
-- [[Insurance Finance Income or Expenses]]
-- [[Other Comprehensive Income Option]]
-- [[Transition to IFRS 17]]
-- [[Insurer]] — tagged in another bank (6)
-- [[Base Solvency Buffer]]
-- [[Climate Risk]]
-- [[Educational Note]]
+*Every syllabus concept has at least one question.*
 
 ## Exam 6U (CAS)
 
@@ -2226,6 +2327,108 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Insurer]]
 - [[Schedule F]]
 
+## Exam 6I (CAS)
+
+*No question bank yet — all 32 syllabus concepts are uncovered.*
+
+### A. Regulation of Insurance {15–20%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Insurance Industry]]
+- [[Market Conduct Regulation]]
+- [[Risk-Based Capital]]
+- [[Risk Transfer]]
+- [[Government and Industry Insurance Programs]]
+- [[Voluntary Private Insurance Market]]
+- [[Health Insurance]]
+- [[Terrorism Insurance]]
+- [[Financial Reporting]]
+- [[Rate Regulation]]
+
+### B. Solvency {15–25%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Solvency]]
+- [[Solvency Regulation]]
+- [[ORSA]]
+- [[Enterprise Risk Management]]
+- [[Capital]]
+- [[Regulatory Capital]]
+- [[Financial Reporting]]
+
+### C. Financial Reporting {35–40%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[IFRS 17]]
+- [[Risk-Based Capital]]
+- [[Economic Capital]]
+- [[Accounting Frameworks]]
+- [[GAAP]]
+- [[Financial Health]]
+
+### D. International Reinsurance {5–15%}
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[Reinsurance Accounting]]
+- [[Reinsurance]]
+- [[Risk Transfer]]
+- [[Financial Health]]
+- [[Capital]]
+- [[Insurer]]
+- [[Reinsurance Credit Risk]]
+- [[Commutations]]
+- [[Financial Statements]]
+- [[Risk Transfer Testing]]
+- [[Insurance Premium]]
+
+### E. Professional Responsibilities of the Actuary in Financial Reporting {10–20%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Professional Responsibilities of the Actuary]]
+- [[Insurance Law]]
+- [[Financial Reporting]]
+- [[Insurer]]
+- [[Statement of Actuarial Opinion]]
+- [[Financial Statements]]
+
+## Exam 6T (CAS)
+
+*No question bank yet — all 3 syllabus concepts are uncovered.*
+
+### AICT Exam 6GA3 — Actuarial Standard of Practice and Accounting
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Actuarial Standards of Practice]]
+- [[Insurance Accounting]]
+
+### AICT Exam 6GB3 — Insurance Regulations and Discipline
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Insurance Regulation]]
+
+## Exam COP (CAS)
+
+*No question bank yet — all 2 syllabus concepts are uncovered.*
+
+### E-Modules
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Actuarial Standards of Practice]]
+
+### The Course
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[American Academy of Actuaries]]
+
 ## Exam 7 (CAS)
 
 *3 of 29 syllabus concepts have no question in `questions/exam-7/`.*
@@ -2244,35 +2447,4 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam 9 (CAS)
 
-*10 of 66 syllabus concepts have no question in `questions/exam-9/`.*
-
-### A. Catastrophe and Reinsurance {25–35%}
-
-*2 of 24 uncovered*
-
-- [[Facultative Reinsurance]] — tagged in another bank (2)
-- [[Ratemaking]] — tagged in another bank (6)
-
-### B. Risk and Return {20–30%}
-
-*4 of 13 uncovered*
-
-- [[Insurance Profitability]]
-- [[Insurance Margin]]
-- [[Insurance Leverage]] — tagged in another bank (5)
-- [[Insurance Pricing]]
-
-### C. Financial Risk Management (FRM) {20–30%}
-
-*4 of 22 uncovered*
-
-- [[Insurer]] — tagged in another bank (6)
-- [[Insurance Pricing]]
-- [[Insurance Policy]] — tagged in another bank (7)
-- [[Prepayment Risk]]
-
-### D. Enterprise Risk Management (ERM) {15–25%}
-
-*1 of 13 uncovered*
-
-- [[Risk]] — tagged in another bank (1)
+*Every syllabus concept has at least one question.*

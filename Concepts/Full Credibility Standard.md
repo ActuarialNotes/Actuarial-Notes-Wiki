@@ -1,24 +1,27 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f24f0490da27cb0b0255e8bf4dee18a45fe3038d1743fb9c1b49fb272383ed51
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:cc93054a524e4ea9baf6967ed4802041de48837e38541a69209e3064b56b5541
+  sources:
+    - "Frees et al., Loss Data Analytics (open text), Ch. 9 Experience Rating Using Credibility Theory, Ch. 9 §§9.2–9.6, sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, Contents pp. ix–x (PDF pp.11–12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+    - "CAS Exam MAS-II Content Outline 2026, p.2 Domain A; p.4 Tse Chs 6.1–6.3, 7.1–7.4, 8.1–8.2, 9.1–9.2, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Full Credibility Standard.md
 ---
 
-The **full credibility standard** is the volume of experience at which [[Limited Fluctuation Credibility|classical credibility]] assigns $Z = 1$. It is the smallest expected claim count $n_F$ for which the observed mean stays within $\pm k$ of the true mean with probability $p$.
+The **full credibility standard** is the volume of experience at which [[Limited Fluctuation Credibility|classical credibility]] assigns $Z = 1$. It is the smallest expected claim count $n_F$ for which the observed value stays within $100k\%$ of its expected value with probability $p$.
 
-> $$n_F = \left(\frac{z_{(1+p)/2}}{k}\right)^{2}\left(\frac{\sigma_S^{2}}{\mu_S^{2}}\right)$$
+> $$n_F = \left(\frac{z_{(1+p)/2}}{k}\right)^{2}\left[\frac{\sigma_N^{2}}{\mu_N} + \left(\frac{\sigma_X}{\mu_X}\right)^{2}\right]$$
 >
 > $$\text{where } z_{(1+p)/2} \text{ is the standard normal quantile and } k \text{ the tolerance}$$
 
 - $p$ is the **probability level** (how often the estimate must land inside the range) and $k$ the **range parameter** (how wide "inside" is) — the pair $(p, k)$ defines the standard, not the data
-- **Frequency**, Poisson: $\sigma_N^2/\mu_N^2 = 1/\lambda$, so the standard reduces to $n_F = (z/k)^2$ expected claims
+- **Frequency**, Poisson: $\sigma_N^2/\mu_N = 1$ and there is no severity term, so the standard reduces to $n_F = (z/k)^2$ expected claims
 - **Severity**: $n_F = (z/k)^2 \cdot \mathrm{CV}_X^2$ claims, where $\mathrm{CV}_X = \sigma_X/\mu_X$ is the [[Coefficient of Variation]] of claim size
 - **[[Aggregate Loss Model|Aggregate]]** loss with Poisson frequency: $n_F = (z/k)^2\left(1 + \mathrm{CV}_X^2\right)$ claims
 - A standard stated in claims converts to exposures by dividing by the expected claim frequency per exposure

@@ -248,9 +248,10 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
    60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Exam 9's first round done; MAS-II's
    first round done 18 Oct (4 / 7). D8, D22, D23 and D24 settled 18 Oct (D20's default stands),
-   so the phase waits on no decision: next, the Exam 5, 6C and MAS-II page edits they call for,
-   MAS-II's McElreath questions `off_syllabus`, Exam 9's held questions and open-text packets,
-   then Exam 5 → 6C → PCPA's bank (C6).
+   and applied the same day: Exam 5's and MAS-II's pages verified (G1 ✅ on both), 6C's
+   re-transcribed (`in_review`, three older findings open), 29 McElreath questions
+   `off_syllabus`, Exam 9's held questions settled bar `cas9-an-009` (content plan, Phase 2).
+   Next: Exam 9's open-text packets (D22), then Exam 5's papers → 6C → PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.

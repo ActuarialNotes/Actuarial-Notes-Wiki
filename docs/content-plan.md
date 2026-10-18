@@ -364,6 +364,17 @@ stands — Exam 8 stays beta until the ISO manual is read. The work they unblock
    packets (D22).
 4. Then the campaigns as §3.1 orders them: Exam 5's papers, 6C's, PCPA's bank.
 
+**Applied (18 Oct 2026, runs `d3cd`, `1a77`, `f608`, `201b`, `7ded`, `326e`):**
+
+| Item | Status |
+|---|---|
+| Exam 5's page (D8) | ✅ **verified, high** (run `1a77`): A18 added, every task and preamble in the v02 outline's words, the vault's additions on `*Key concepts:*` lines (concept set unchanged), Werner's and Friedland's chapter scopes. G1 passes. Two minor findings open for a maintainer: *Close Year* (A3) and *Self-Insured Retention* (A14) are in neither reading's text, so they may not belong on those lines |
+| Exam 6C's page (D8) | 🟡 `in_review` (run `f608`): domain C in the Fall 2026 outline's order and words, every task and preamble verbatim, F-002's scope, the objective filter off (`%%objective-filter: off%%` in the callout, read by `extractSourceMaterial`). Still open: F-008 (three retired readings, the 67-source count), F-009 (the readings' page and section limits), F-010 (domain C's title, which 233 questions carry), and two new minors (F-011, F-012: six key concepts not found in a readable reading) |
+| MAS-II's page (D23) | ✅ **verified, medium** (run `201b`): the outline's 21 tasks, the vault's concepts on `*Key concepts:*` lines. G1 passes. One minor open: *Exact Credibility* is Tse §8.4, outside the assigned 8.1–8.2 |
+| MAS-II's McElreath questions (D24) | ✅ 29 `off_syllabus`, re-passed (run `326e`); 5 left served (above). The flags left *Credibility* and *Variable Selection* with no served question, so `masii-an-024` and `-025` were written and checked by another agent (verified, medium; run `7ded`). G6 holds |
+| Exam 9's held questions | ✅ 2013 Q15 and 2014 Q16 carry their notes and are verified (medium). *Prepayment Risk* is cut back to the outline's words and verified (medium, run `326e`). **Left:** `cas9-an-009` (PSA mechanics, in no C5 reading) is the only served question on *Prepayment Risk* — 2016 Q12 and 2019 Q9 are `off_syllabus` — so replacing it with a question on Panning or CJS would leave the concept untested (G6). Waits on the maintainer |
+| Concept Craft | 225 relation labels written for the connections the re-linked lines created (`craftRelations.json`, 5,823 labels), unreviewed like the rest |
+
 **Progress (18 Oct 2026):**
 
 | Item | Roadmap | Status |
@@ -447,7 +458,7 @@ build with the default until the decision is made.
 | D20 | — | A reading with no public copy (the ISO CGL plan) | ✅ settled 18 Oct 2026: **the default stands.** P1 is not loosened: the page stays `in_review`, Exam 8 stays beta, until someone reads the study-kit manual |
 | D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
 | D23 | — | MAS-II's page has 36 tasks where the 2026 outline has 21 (F-001): restore the outline's (about ten in-reading concepts tagged on paper questions would leave the syllabus) or keep the vault's | ✅ settled 18 Oct 2026: **the outline's 21 tasks, verbatim**; the vault's finer concepts (*Posterior Distribution*, *AIC* …) stay on the syllabus on `*Key concepts:*` lines — D8's rule |
-| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are |
+| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are. Applied to 29; five of the 34 the packets listed are answerable from a current reading (2019S Q24 from West; 2019F Q22, 25, 32, 37 from MAS-I, which MAS-II assumes) and stay served |
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words and `cas9-an-009` replaced by a C5 question on what Panning or CJS teach |

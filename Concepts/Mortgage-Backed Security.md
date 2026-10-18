@@ -8,7 +8,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:228bc9e4408f820be7f182b10fe08ea2d6386c2517f7a62f30911a31c2d2b7dd
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Mortgage-Backed Security.md
 ---

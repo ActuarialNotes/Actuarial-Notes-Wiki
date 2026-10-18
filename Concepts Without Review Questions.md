@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1071 of 2226 syllabus concept entries (48%)** have at least one question in their exam's own bank.
+> **1112 of 2226 syllabus concept entries (50%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -16,7 +16,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
 | [[Exam PAF (SOA)]] | none | 0 / 2 | 0% | 2 / 2 |
 | [[Exam FAM (SOA)]] | none | 0 / 86 | 0% | 10 / 10 |
-| [[Exam SRM (SOA)]] | none | 0 / 41 | 0% | 5 / 5 |
+| [[Exam SRM (SOA)]] | `exam-srm` (77) | 41 / 41 | 100% | 0 / 5 |
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
 | [[Exam ALTAM (SOA)]] | none | 0 / 64 | 0% | 7 / 7 |
@@ -64,7 +64,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
-| **Total** | | **1071 / 2226** | **48%** | |
+| **Total** | | **1112 / 2226** | **50%** | |
 
 105 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -320,75 +320,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam SRM (SOA)
 
-*No question bank yet — all 41 syllabus concepts are uncovered.*
-
-### Basics of Statistical Learning {5–10%}
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Statistical Learning]]
-- [[Unsupervised Learning]]
-- [[Bias-Variance Tradeoff]]
-- [[Cross-Validation]]
-- [[Model Validation]]
-
-### Linear Models {40–50%}
-
-*16 of 16 uncovered — **no questions at all***
-
-- [[Generalized Linear Model]]
-- [[Ordinary Least Squares]]
-- [[Exponential Family]]
-- [[Probability Distributions]]
-- [[Link Function]]
-- [[Linear Regression]]
-- [[Model Diagnostics]]
-- [[Variable Transformation]]
-- [[AIC]]
-- [[BIC]]
-- [[Likelihood Ratio Test]]
-- [[Fitted Values]]
-- [[Confidence Interval]]
-- [[Prediction Interval]]
-- [[Regularization]]
-- [[K-Nearest Neighbors]]
-
-### Time Series Models {10–15%}
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Time Series]]
-- [[Random Walk]]
-- [[Stationarity]]
-- [[Autocorrelation Function]]
-- [[Exponential Smoothing]]
-- [[ARCH Model]]
-- [[Fitted Values]]
-- [[Confidence Interval]]
-
-### Decision Trees {20–25%}
-
-*9 of 9 uncovered — **no questions at all***
-
-- [[Decision Tree]]
-- [[Train-Test Split]]
-- [[Overfitting]]
-- [[Classification Tree]]
-- [[Regression Tree]]
-- [[Bagging]]
-- [[Boosting]]
-- [[Random Forest]]
-- [[Hyperparameter]]
-
-### Unsupervised Learning Techniques {10–15%}
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Principal Components Analysis]]
-- [[Clustering]]
-- [[Proportion of Variance Explained]]
-- [[K-Means Clustering]]
-- [[Hierarchical Clustering]]
+*Every syllabus concept has at least one question.*
 
 ## Exam ASF (SOA)
 

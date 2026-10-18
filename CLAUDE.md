@@ -11,6 +11,11 @@ wordmark (`lib/appMode.ts`). **Study Mode** is everything below; **Cowork** is t
 product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
 `lib/appMode.ts`; everyone else sees no pill at all) — see "Cowork" at the end of this file and `docs/cowork.md`.
 
+Across Study Mode floats the **Tutor** — the reader's own Gem Shop character, in the corner of
+every page, walking an Exam 5 candidate through the exam, purely algorithmically (no model).
+Preview, one approved account (`lib/tutor/access.ts`); see "The Tutor" at the end of this file
+and `docs/tutor.md`.
+
 1. **Content vault** (repo root) — an Obsidian-style markdown wiki: exam syllabus pages
    (`Exam *.md`), concept pages (`Concepts/*.md`), resource/timeline pages
    (`Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md`), and a practice-question
@@ -81,7 +86,9 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
   Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
-  deck and a connection's card), `components/research/` (flag-gated).
+  deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
+  practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
+  rest), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -387,6 +394,14 @@ before touching that area**:
   are not the account's; the lobby pairs on the exam alone, since a rating would have to be
   stored), and only click-markable multiple choice is raced. Read before touching anything
   named `battle*` or `Matchmaking`.
+- `docs/tutor.md` — **the Tutor**, the plan and the build spec: the learning science it is
+  built on (retrieval, spacing, successive relearning, interleaving, calibration, worked
+  examples), the walk through the exam (phases from the exam date and the syllabus met), the
+  *moments* a part is served and the quiet rules that keep it unobtrusive, the item (one
+  lettered part of a past paper, its kind read off the command word), the memory model
+  (FSRS-4.5, gaps capped by the days left), the diagnosis of what is confusing, and who can
+  use it (`TUTOR_STAGE`: preview → beta for Pro → open). Read before touching anything under
+  `lib/tutor/`, `components/tutor/` or `tutorStore`.
 - `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
   `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
   `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
@@ -1288,7 +1303,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1702,3 +1717,35 @@ to know before changing it:
    first. `search`/`fetch` keep ChatGPT's exact result shapes; tool names are public API.
 3. **The export and the endpoint are versioned together.** Change the export's shape → bump
    `KNOWLEDGE_BASE_VERSION` and `SUPPORTED_KB_VERSION` in the same change.
+
+## The Tutor
+
+The reader's own Gem Shop character — the animal and colourway on their account, drawn by the same
+`AvatarDisplay` the shop draws (`lib/tutor/character.ts`; the fox until they pick one) — in the
+bottom-right corner of every page (`components/tutor/`), for the accounts its
+rollout stage admits — **Preview**: `TUTOR_APPROVED_EMAILS` in `lib/tutor/access.ts`, one
+account; **Beta** (one line, `TUTOR_STAGE = 'beta'`) adds every Pro subscriber. To anyone else
+it doesn't exist and its lazy chunk is never fetched. It walks an **Exam 5** candidate through
+the exam and is **purely algorithmic**: no model, no generated text — every word of feedback is
+the vault's (concept page, sample answer, examiners' report) or a templated sentence about the
+candidate's own record (`lib/tutor/copy.ts`). `docs/tutor.md` is the full account; four things
+to know before changing it:
+
+1. **The engine is `lib/tutor/`, all pure and tested.** `items.ts` (a question's lettered parts
+   as items, each part's concepts and kind), `examinerNotes.ts` (the report's lost-credit
+   sentences, verbatim), `memory.ts` (FSRS-4.5 + the exam-horizon cap), `log.ts` (the
+   append-only event log and its fold — relearning, flags, calibration), `scheduler.ts` (the
+   next step: relearn → due → new, page first), `journey.ts` (phases, the exam date),
+   `diagnosis.ts` (what is confusing), `moments.ts` (when to speak), `context.ts` (what is on
+   screen), `bank.ts` (answers into the rest of the app). `tutorVault.test.ts` runs it over the
+   real Exam 5 bank.
+2. **It keeps a scheduler, never a score.** Levels are the mastery ladder's and readiness is
+   `computeExamReadiness`'s; the Tutor prints neither of its own and pays no reward of its own.
+   Its answers are banked through `recordReviewAnswers`, one part as a one-part question under
+   its question's id with only its own concepts, so they count everywhere a quiz answer does.
+3. **Its record is an event log** in localStorage (`actuarial_tutor_v1:<user id>`); everything
+   it knows is `foldLog(events, ladderSeeds, now)`. Don't store derived state.
+4. **The quiet rules are the feature.** No bubble during a quiz, a battle, the PDF reader, a
+   focused field or focus mode; bubbles 8 minutes apart; two declines of a kind and it stops for
+   the day (`moments.ts`).
+

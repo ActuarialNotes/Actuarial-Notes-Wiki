@@ -27,6 +27,7 @@ import FlashcardSync from '@/components/FlashcardSync'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
 import Toast from '@/components/Toast'
 import { ResumeDock } from '@/components/ResumeDock'
+import { TutorHost } from '@/components/tutor/TutorHost'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -478,6 +479,12 @@ export default function App({ initialSession }: { initialSession: Session | null
             <PdfReaderHost />
             {/* A quiz in progress, or a place in the battle queue, from anywhere else in the app. */}
             <ResumeDock />
+            {/* The Tutor (docs/tutor.md) — the reader's own character, for the
+                accounts its rollout admits; a crash in it removes the Tutor,
+                never the page. */}
+            <ErrorBoundary fallback={null}>
+              <TutorHost />
+            </ErrorBoundary>
             <Toast />
           </div>
         </ExamProgressProvider>

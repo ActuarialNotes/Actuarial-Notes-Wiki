@@ -114,6 +114,16 @@ export interface AnalyticsEventMap {
   /** A missed question answered again in the fix-mistakes reviewer. */
   mistake_reviewed: { question_id: string; exam: string; is_correct: boolean; days_since_miss: number }
 
+  // ── The Tutor (docs/tutor.md §12) ─────────────────────────────────────────
+  /** A bubble shown, accepted or declined — which moments are worth an interruption. */
+  tutor_offer: { kind: string; exam: string; response: string }
+  /** A part answered in the Tutor; `days_since_last` is −1 for a concept's first. */
+  tutor_answer: { exam: string; kind: string; grade: string; confidence: string; relearn: boolean; days_since_last: number }
+  /** "I'm confused", and what about. */
+  tutor_confused: { exam: string; reason: string }
+  /** A practice session ended. */
+  tutor_session: { exam: string; items: number; minutes: number; phase: string }
+
   // ── Reliability (from lib/errorMonitoring.ts) ─────────────────────────────
   exception: { description: string; fatal: boolean }
 
@@ -619,6 +629,23 @@ export function trackReminderSession(
 /** A missed question answered again in the fix-mistakes reviewer. */
 export function trackMistakeReviewed(params: AnalyticsEventMap['mistake_reviewed']) {
   track('mistake_reviewed', params)
+}
+
+/** The Tutor's events (docs/tutor.md §12). */
+export function trackTutorOffer(params: AnalyticsEventMap['tutor_offer']) {
+  track('tutor_offer', params)
+}
+
+export function trackTutorAnswer(params: AnalyticsEventMap['tutor_answer']) {
+  track('tutor_answer', params)
+}
+
+export function trackTutorConfused(params: AnalyticsEventMap['tutor_confused']) {
+  track('tutor_confused', params)
+}
+
+export function trackTutorSession(params: AnalyticsEventMap['tutor_session']) {
+  track('tutor_session', params)
 }
 
 /**

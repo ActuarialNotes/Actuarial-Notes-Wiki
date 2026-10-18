@@ -113,6 +113,7 @@ An item is ✅ only when all of the following are true:
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
 | **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |
 | **Actuaria Online** (game layer) | Candidates | 🟡 phases 0–3 built, one approved account | `ACTUARIA_ENABLED` + `ACTUARIA_APPROVED_EMAILS` | `actuaria-online.md` |
+| **Tutor** (a guided walk through the exam; purely algorithmic) | Exam 5 candidates | 🟡 Phase 1 built, Preview: one approved account | `TUTOR_ENABLED` + `TUTOR_STAGE` / `TUTOR_APPROVED_EMAILS` | `tutor.md` |
 | **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
 | **Simulated learner** | Us, for content QA | 🟡 offline pipeline built; no live run has succeeded | — | `simulated-learner.md` |
 | **Research tab** (Canadian P&C corpus + AI Ask) | Upper-exam candidates | 🅿️ parked | `RESEARCH_TAB_ENABLED` / `RESEARCH_AI_ENABLED` = false | `research-ai-disabled.md`, `research-corpus-plan.md` |
@@ -385,6 +386,16 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `scripts/ontology_map.py`. Either add the nine topics there (each is a syllabus term with
   a concept page), or retag the questions, which makes them stale until re-verified.
   *(2026-10-17.)*
+- **L9: a written part counts for what the reader marked it.** The quiz records a written
+  part's self-grade (`manualGrades`) but `effectiveIsCorrect` skips essay parts, and a
+  question with no graded part left returns **correct**: 144 of Exam 5's 278 lettered
+  questions and 58 of its 72 unlettered ones are written-only, so pressing *Check answers*
+  on one levels up every concept it is tagged with, whatever was written. The same holds
+  for the written CAS banks (6C, 7, 8, 9). Proposed: a written part counts as its
+  self-grade (full credit correct, partial and no credit not — the rule the Tutor already
+  uses, `lib/tutor/bank.ts`), and an ungraded one counts for nothing. It changes how every
+  CAS written exam's mastery and readiness move, so it is the maintainer's call.
+  *(Found planning the Tutor, 2026-10-18.)*
 
 ---
 
@@ -433,12 +444,13 @@ Shipped:
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
 | L1 | Learning instrumentation | ✅ 2026-10-17 | — | `concept_retention` (the first answer on a concept past its decay window, once per decay episode, `retained` true or false), `reminder_opened` / `reminder_session` (the email's `utm_source`, then the first quiz within 6 h), `mistake_reviewed`. Pure rules in `lib/learningSignals.ts`; GA4 custom definitions to add are in `analytics-and-monitoring.md` (G3). |
-| L2 | Confidence and calibration | ⬜ | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Was P2.7. |
-| L3 | Spaced mistakes deck | 🟡 the card has shipped | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. Was P2.8. |
+| L2 | Confidence and calibration | 🟡 in the Tutor (L8), Exam 5 | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Built inside the Tutor (`lib/tutor/`); the quiz itself still has no tap. Was P2.7. |
+| L3 | Spaced mistakes deck | 🟡 the card has shipped; successive relearning in the Tutor | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. The Tutor relearns a missed part in-session, then +1 and +3 days (`log.ts`). Was P2.8. |
 | L4 | Finish the Practice Exam | 🟡 timer and reveal ✅ | Next | Still to do: sitting-shaped, syllabus-weighted assembly; a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
-| L5 | Interleaving in quiz assembly | ⬜ | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
+| L5 | Interleaving in quiz assembly | 🟡 in the Tutor's sessions | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
 | L6 | Tunable spaced-repetition intervals | ⬜ | Later | `DECAY_DAYS_*` are constants in `mastery.ts`. Needs L1. Was P2.1. |
 | L7 | Web push reminders | ⬜ | Later | Blocked on E12. Same rules as the email: opt-in, quiet days, framed as an invitation. Was half of P1.3. |
+| L8 | **The Tutor** | 🟡 Phase 1 built 2026-10-18, Preview | Next | `tutor.md`. The reader's own Gem Shop character, floating on every page, walking an Exam 5 candidate through the exam: phases from the exam date, a part served at the moment it is worth most (after reading, when due, to relearn a miss), an FSRS-4.5 scheduler capped by the days left, confidence before every reveal, self-grades banked through `recordReviewAnswers`, and a diagnosis of what is confusing (sure-and-wrong, persistent misses, confusable siblings on one syllabus line, shaky foundations, the weakest kind of part, calibration) with the examiners' reports quoted verbatim. No model. Next: Phase 2 (debrief, timed sets, a `user_tutor_events` sync table), then Beta for Pro (D25). |
 | — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
 | — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
 | — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
@@ -576,9 +588,10 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
   `Resources/Books/` page.
 - **Actuaria → Quiz Battle.** It uses one reducer, so Actuaria's Phase 4 would change Quiz
   Battle's "nothing saved" rule.
-- **The approved-email lists.** The same one address is the whole of both the Cowork list
-  and the Actuaria list. Actuaria's list is also mirrored in SQL. Opening either product to
-  more people (D1) means changing each place.
+- **The approved-email lists.** The same one address is the whole of the Cowork list, the
+  Actuaria list and the Tutor's. Actuaria's list is also mirrored in SQL. Opening any of them
+  to more people (D1, D25) means changing each place; the Tutor's next step is one line
+  (`TUTOR_STAGE = 'beta'`).
 
 ---
 
@@ -613,6 +626,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D22 | Exam 9's unread readings: Brehm et al., Mildenhall & Major and Grossi & Kunreuther (study kit or sold, chapters unread), and the Cummins (2000, 2008) and Coval, Jurek & Stafford journal texts (paywalled, or SSRN/AEA blocked to the sessions): supply a copy, or name a free author-posted one a session can reach (the 2012 archived Wharton paper for Cummins 2000; SSRN 1057401 for Cummins 2008) | C2 run `6bfb` and the campaign's other reading packets | Exam 9's G4 and G5 | The 36 concept pages stay `in_review`, and the gates stay red |
 | D23 | MAS-II's page carries 36 tasks where the 2026 outline lists 21: restore the outline's tasks (dropping about ten concepts that are in the readings and tagged on paper questions, *Posterior Distribution* and *AIC* among them), or keep the vault's finer tasks and mark which are its own | C4 run `4700` (page F-001) | MAS-II's G1 | The page as it is, `in_review` |
 | D24 | MAS-II's 2019 papers test McElreath's Bayesian/MCMC reading (about 35 questions: MCMC, multilevel models, HPDIs, DIC, WAIC), which the 2026 outline no longer assigns: mark them `off_syllabus`, or keep them in quiz draws | C4 runs `f8d6`, `9dbf` | MAS-II's bank | Keep them as they are (verified, served) |
+| D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -677,6 +691,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
+| `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
 | `docs/syllabus-pipeline-review.md` | Record: the pipeline's design review | C12 | Record; its open packages are in the content plan §3.4 | 2026-10-18 |
 | `docs/actuarial-agent-product-plan.md` | Plan: an in-app agent | A5 | 🅿️ Phase A shipped as the connector; the rest waits on D2 | 2026-10-09 |
@@ -770,6 +785,11 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-18, the Tutor.** L8 proposed and built to Phase 1 in Preview (`docs/tutor.md`):
+  Exam 5, one approved account, no model. It carries the first working versions of L2
+  (confidence), L3 (successive relearning) and L5 (interleaving), inside its own sessions.
+  Planning it found L9 (§3.4): written-only questions count as correct in quizzes.
 
 - **2026-10-18, the Content Plan.** The content subplans are consolidated into
   `docs/content-plan.md` (the CAS publication plan folded in and removed; the verification plan

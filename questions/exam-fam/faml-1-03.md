@@ -10,6 +10,8 @@ wiki_link:
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
   - Concepts/Annuity+Contract
   - Concepts/Universal+Life+Insurance
+  - Concepts/Long-Term+Insurance+Coverage
+  - Concepts/Annuities
 answer: "C"
 points: 1
 verification:
@@ -17,7 +19,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8b0b90a44c7ba9d85d380b3b075ba145fd3cf2b4aaee19d29ee4230261e07e25
+  content_hash: sha256:078108717a96ed36dbe8f6f5b2b768b8f33a16bf00fb2ddb8f7a811c8de53c4b
   sources: []
   open_findings: 0
   open_critical: 0

@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Limited+Expected+Value
   - Concepts/Pareto+Distribution
   - Concepts/Coinsurance
+  - Concepts/Short-Term+Insurance+Coverage
 answer: "C"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3a4430b50ea9a8f38b2fe419ddd6100b0440779f6961db1faf517b218fca4803
+  content_hash: sha256:e0b56e467b1b26592d992cbae8d58aaf93a5a676cbaad2a87d13fb2d94382270
   sources: []
   open_findings: 0
   open_critical: 0

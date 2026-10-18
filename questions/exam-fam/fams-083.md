@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Frequency+Distribution
   - Concepts/Binomial+Distribution
+  - Concepts/Probability+Distributions
 answer: "A"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6d4d8296204298c2a3d563089c73abc5e7a3744c4fe28f54ce1ffc59ac0945d6
+  content_hash: sha256:49b583a16941eb00764d263ba7e1744405468e8084bf06c0d4fafecf8e0272e7
   sources: []
   open_findings: 0
   open_critical: 0

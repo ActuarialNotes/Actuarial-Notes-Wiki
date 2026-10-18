@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Endowment+Insurance
   - Concepts/Pure+Endowment
   - Concepts/Annuity+Immediate
+  - Concepts/Expected+Value
 answer: "B"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4c62b5103e9da8a26d5eadda0c54b690ef57f8e849a66ca94791f89d7a3ecc11
+  content_hash: sha256:68da1d05eb34c329cfd2de8d4720a25bb119169cf2a78ab7bff1d04ac190f278
   sources: []
   open_findings: 0
   open_critical: 0

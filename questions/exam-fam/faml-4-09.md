@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
   - Concepts/Term+Life+Insurance
   - Concepts/Pure+Endowment
+  - Concepts/Expected+Value
 answer: "D"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:41da05beb632cbd3ca2318ed45b2439147e4de2eca7b783f4c75b4e1f46d1ee9
+  content_hash: sha256:9de33c1287508d7c0199446a4b274605ef38746857f1cae559563d312f852e4a
   sources: []
   open_findings: 0
   open_critical: 0

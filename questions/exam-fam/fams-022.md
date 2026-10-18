@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Frequency+Distribution
   - Concepts/Panjer+Recursion
+  - Concepts/Probability+Distributions
 answer: "B"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2cf8b295f199842815785bbc5e18f6f57d81e8d10095695e62eb2eddef6a5a0d
+  content_hash: sha256:31a458209eb122255c4572ae8eed14bf67fae5b1053c68cfbd7bac17cc792bb9
   sources: []
   open_findings: 0
   open_critical: 0

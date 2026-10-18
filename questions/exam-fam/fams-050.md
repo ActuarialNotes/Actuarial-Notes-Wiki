@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Inflation
   - Concepts/Pareto+Distribution
   - Concepts/Deductible
+  - Concepts/Insurance+Premium
 answer: "D"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8055c14c217530ae330401a12eaf6844d4feb4df269dabdf15a094a514eacd26
+  content_hash: sha256:aa1b18fb80d823ba4ee7fd3b6d86d971cd931f0414fb8f04a9a3d938beebb1de
   sources: []
   open_findings: 0
   open_critical: 0

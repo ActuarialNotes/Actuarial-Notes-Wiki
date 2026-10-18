@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Loss+Trend
   - Concepts/Development+Factor
   - Concepts/Permissible+Loss+Ratio
+  - Concepts/Ratemaking
 answer: "D"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6f555ca8a7de0f7eff35bf28aa46ff52af8c261161e5d41c04fad4f3bf60b1b5
+  content_hash: sha256:588ccf795f95f862a91e0404aee1e4549aebc8d20371e977200abb9cb3ed583e
   sources: []
   open_findings: 0
   open_critical: 0

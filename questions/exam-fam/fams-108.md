@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Binomial+Option+Pricing+Model
   - Concepts/Risk-Neutral+Valuation
   - Concepts/European+Option
+  - Concepts/Payoff
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ab9002eaf96b4022b6847926b5d68eb4e1bb2618146af820d6fa46896a756cde
+  content_hash: sha256:676199275d876b397091a10e3e688a98505836ee74b5cab0f0093d5b333c881d
   sources: []
   open_findings: 0
   open_critical: 0

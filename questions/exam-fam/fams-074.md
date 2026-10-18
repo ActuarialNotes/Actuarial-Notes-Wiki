@@ -10,6 +10,8 @@ wiki_link:
   - Concepts/Layer+of+Insurance
   - Concepts/Excess+of+Loss
   - Concepts/Catastrophe+Loss
+  - Concepts/Claim
+  - Concepts/Insurer
 answer: "D"
 points: 1
 verification:
@@ -17,7 +19,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5db57a1d1151bbda80f828b7fd35431ae1a5530b8d8ca3c83559496e39d190e2
+  content_hash: sha256:1e9fd3edc052fad10e42a53877ccbb85de942e108b502607c8c92ae7a18feb8e
   sources: []
   open_findings: 0
   open_critical: 0

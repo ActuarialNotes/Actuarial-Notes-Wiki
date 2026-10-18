@@ -8,6 +8,8 @@ type: multiple-choice
 wiki_link:
   - Concepts/Mixture+Distribution
   - Concepts/Pareto+Distribution
+  - Concepts/Probability
+  - Concepts/Severity
 answer: "A"
 points: 1
 verification:
@@ -15,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:192f1141beb34ca2ccc1f0d0384b749fc1250b06468b70f027d974aaf818d959
+  content_hash: sha256:8827f7c659a165138c13a568b40399c7e3d4141e3039a6e1e115fd969f79ccd0
   sources: []
   open_findings: 0
   open_critical: 0

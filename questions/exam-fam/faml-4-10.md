@@ -9,6 +9,8 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
   - Concepts/Pure+Endowment
   - Concepts/Term+Life+Insurance
+  - Concepts/Standard+Actuarial+Notation
+  - Concepts/Random+Variable
 answer: "D"
 points: 1
 verification:
@@ -16,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:210393271e0c3ff219f0456bacd5ba69927ecf0f06f0a3ab2fed810fe4b0d36e
+  content_hash: sha256:791f57167af47f851a9e3eb30d793eb37113776fbc1f7316d4f131ff26f45eff
   sources: []
   open_findings: 0
   open_critical: 0

@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Expected+Loss+Method
   - Concepts/Loss+Reserving
+  - Concepts/Unpaid+Claims
 answer: "A"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e75b7c16565387ca41f5e61fd7bfda2bdec16acf1661b9519a7b591b2bab58c7
+  content_hash: sha256:059d7f655f0b197b92b597978214739a6d8285f6534ce5506b99ecc430b89705
   sources: []
   open_findings: 0
   open_critical: 0

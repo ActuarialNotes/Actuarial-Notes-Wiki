@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
   - Concepts/Life+Table
   - Concepts/Interest+Rate
+  - Concepts/Interest
 answer: "C"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e436d3983d8d0a35e7a7aaf77f6ae1122d249ada596459435563fb2b60235ed8
+  content_hash: sha256:4c10dbe890ba6ab12655b82723e22070fe6a1981688629d644b2c5c942cca98b
   sources: []
   open_findings: 0
   open_critical: 0

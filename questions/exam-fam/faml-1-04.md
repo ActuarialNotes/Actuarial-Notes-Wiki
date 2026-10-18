@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Disability+Income+Insurance
   - Concepts/Critical+Illness+Insurance
   - Concepts/Long-Term+Care+Insurance
+  - Concepts/Long-Term+Insurance+Coverage
 answer: "B"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a4c4c9a4d61e11ff701801a47a218daa7328720c30a7792a0ec52e2a05d056b5
+  content_hash: sha256:5e6e7cda5667bcfcd6fd867cdccd842b64b99eaf4adf502176186d80a15f5ad5
   sources: []
   open_findings: 0
   open_critical: 0

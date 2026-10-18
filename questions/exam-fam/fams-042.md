@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Deductible
+  - Concepts/Convolution
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bf5045625ffa2fcabdb7a7d2404b399be992e681e1b056a1dac7b4e77c84dc65
+  content_hash: sha256:d45e0210b209bcf38e25832b7490b4a2c9b40ee65e464156653e97f85b49860c
   sources: []
   open_findings: 0
   open_critical: 0

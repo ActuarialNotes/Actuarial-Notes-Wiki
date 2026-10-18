@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Limited+Expected+Value
   - Concepts/Grouped+Data
   - Concepts/Uniform+Continuous+Distribution
+  - Concepts/Moment
 answer: "C"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:75ff119f9256639cc1019f6a2a9023392226045f9948fad1c7e84d399816067c
+  content_hash: sha256:3f74ccd14bb9246df44adb5d2e10ebde7df1b881da2dbfa531e4dc69f6e26e84
   sources: []
   open_findings: 0
   open_critical: 0

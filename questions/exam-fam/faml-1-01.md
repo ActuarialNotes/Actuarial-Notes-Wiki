@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Adverse+Selection
   - Concepts/Life+Annuity
   - Concepts/Pure+Endowment
+  - Concepts/Annuities
 answer: "C"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:22612d8f3ad76be815de5fc6bcc1896cbe926fb77bd9758b124b9cb253ca62d6
+  content_hash: sha256:fb0e30044a433daf198ea69187850963263f3c814acfbdf1b85f2aedbc954960
   sources: []
   open_findings: 0
   open_critical: 0

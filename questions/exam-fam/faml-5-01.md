@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Life+Annuity
   - Concepts/Continuous+Annuity
   - Concepts/Future+Lifetime+Random+Variable
+  - Concepts/Random+Variable
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:8ce0f6f20527ddfe5221b97bc5ee3eb17a8f7e782bf5767a10e51c1115e7dece
+  content_hash: sha256:2c8bc6bb0e7a5086804b755eaccbba467f2893e29c6b1deefe75a7a291da8a65
   sources: []
   open_findings: 0
   open_critical: 0

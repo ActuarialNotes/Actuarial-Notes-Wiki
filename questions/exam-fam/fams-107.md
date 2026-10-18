@@ -10,6 +10,8 @@ wiki_link:
   - Concepts/Loss+Ratio+Method
   - Concepts/Trend
   - Concepts/Variable+Expenses
+  - Concepts/Ratemaking
+  - Concepts/Profit+and+Contingency+Provision
 answer: "C"
 points: 1
 verification:
@@ -17,7 +19,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:141b59fb79c9a46d27c6dcd449e0f4bfb65aab4176d4e7d63c85bf4c1bef0b6c
+  content_hash: sha256:914cd68b960840c054eb4977d80072c1bcacb83d87831e4259151cc89d284a18
   sources: []
   open_findings: 0
   open_critical: 0

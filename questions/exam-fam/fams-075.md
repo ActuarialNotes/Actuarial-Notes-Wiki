@@ -10,6 +10,8 @@ wiki_link:
   - Concepts/Excess+of+Loss
   - Concepts/Limited+Expected+Value
   - Concepts/Reinsurance
+  - Concepts/Claim
+  - Concepts/Insurer
 answer: "B"
 points: 1
 verification:
@@ -17,7 +19,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:430c709b3d58e69c4910fd8a900b6c41cbdee662887a0025d79cae0e5a2405aa
+  content_hash: sha256:7c880b6d2df79e83fbc131f593dff09fb2c2a35fa66dea82bec4fa61259659d2
   sources: []
   open_findings: 0
   open_critical: 0

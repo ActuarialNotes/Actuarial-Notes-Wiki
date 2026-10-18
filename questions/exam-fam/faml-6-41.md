@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Term+Life+Insurance
+  - Concepts/Insurance+Premium
 answer: "B"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a96910866894c42d30a8368db2b4fd4cb407ddca5d90b3cf7475b5bb30b477b1
+  content_hash: sha256:3c621adecdff8225948221676e682bafa25b905bba9242efb7627abacd8c2b21
   sources: []
   open_findings: 0
   open_critical: 0

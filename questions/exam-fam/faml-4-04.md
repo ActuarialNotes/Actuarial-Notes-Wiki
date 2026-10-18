@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Whole+Life+Insurance
   - Concepts/Variance
   - Concepts/Future+Lifetime+Random+Variable
+  - Concepts/Payable+Continuously
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0ec67b97a2701bb3d2eae8ea477bb1774f31634dad7b4c7fa08b5538dc451beb
+  content_hash: sha256:2087ce6ec33013772a78bc0c29502ea4d42e98dc71ac5255041892e03d9151e0
   sources: []
   open_findings: 0
   open_critical: 0

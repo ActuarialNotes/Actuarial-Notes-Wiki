@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Limited+Fluctuation+Credibility
   - Concepts/Partial+Credibility
   - Concepts/Full+Credibility+Standard
+  - Concepts/Credibility
 answer: "C"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1047a5a01e4c653f00eb7f80ee9c52048f2ca28dc6b2bfd4e6227d097e806a30
+  content_hash: sha256:ee26b9cbfb98dc9faff7f273068e077835456aba9ef1b04afa552ab1a5f36dd1
   sources: []
   open_findings: 0
   open_critical: 0

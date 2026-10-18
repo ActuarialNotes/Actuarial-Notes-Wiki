@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Variance
   - Concepts/Frequency+Distribution
+  - Concepts/Convolution
 answer: "B"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:273b9f5d5090ec33328ef903f185a919124ecc26ccc8be5abd8c78b8c2bb0b65
+  content_hash: sha256:602d92f5cbba8f3b3a24e5a51e3c79768d90cf0c560c67f8ad5e8a469cd04598
   sources: []
   open_findings: 0
   open_critical: 0

@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Poisson+Distribution
   - Concepts/Severity+Distribution
+  - Concepts/Moment
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:6f07be38eb9647bce5edccc2183f24abb68c93b154c2bf7e3a721ece260a28dc
+  content_hash: sha256:3cfec8e6c3a0c1768e448b3256d370e8b92e275de525f340982715e9c48fd5f3
   sources: []
   open_findings: 0
   open_critical: 0

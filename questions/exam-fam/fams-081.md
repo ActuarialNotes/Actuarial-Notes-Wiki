@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Inflation
   - Concepts/Exponential+Distribution
   - Concepts/Deductible
+  - Concepts/Scale+and+Shape+Parameters
 answer: "D"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bbba6fa611842eca878f9dc12c0e1931b675af0f84bbb1c7ac87ebfc4b746e78
+  content_hash: sha256:dad03d68c51193b8c4724bf5bf6ddde2a2d058b01cd61b3db8ca72971929d58d
   sources: []
   open_findings: 0
   open_critical: 0

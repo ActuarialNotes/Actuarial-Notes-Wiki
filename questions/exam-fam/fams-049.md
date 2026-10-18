@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Censoring
   - Concepts/Weibull+Distribution
+  - Concepts/Severity
 answer: "E"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:610b356b5874ce9a1d9931cce9467bc08cbc984ed2f876300af756abe8ab45ec
+  content_hash: sha256:5a0f99d0c0e6bfe612d33f806b4988a647decbbbcc6c66907bfe01db83d71430
   sources: []
   open_findings: 0
   open_critical: 0

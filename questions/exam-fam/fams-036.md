@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Inflation
   - Concepts/Pareto+Distribution
   - Concepts/Limited+Expected+Value
+  - Concepts/Scale+and+Shape+Parameters
 answer: "B"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:64d9f8abec5b63bab9db0980725666657a600134b8665ee378e0f767f8425a7f
+  content_hash: sha256:ab066719382f36c48a62ceb65103054ddffb0c1c7c3472a6355067051daee302
   sources: []
   open_findings: 0
   open_critical: 0

@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Limited+Expected+Value
   - Concepts/Policy+Limit
   - Concepts/Coinsurance
+  - Concepts/Short-Term+Insurance+Coverage
 answer: "B"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:809d403b6ebea869060207d37d40e1dc815a394724724e6356d09500bb955561
+  content_hash: sha256:f8997ed95761c024869252d945fbfd2374446818afde9f420fe6bca8b4658368
   sources: []
   open_findings: 0
   open_critical: 0

@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Aggregate+Loss+Model
   - Concepts/Poisson+Distribution
+  - Concepts/Payment
 answer: "B"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bcbf3c9ce79707a8874e1057302a04df45f8c1f5191a6de123c5ca8c5b88ea08
+  content_hash: sha256:2fda81f0bb556589bb12d8c8f2e15d19595a88e65a77c608e6ee7e3ed497a9f3
   sources: []
   open_findings: 0
   open_critical: 0

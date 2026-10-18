@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Variance
   - Concepts/Frequency+Distribution
+  - Concepts/Probability
 answer: "E"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:406acc93a8056083f95d617a64b2e8dc4e952ec3189830b385eb8e94db3d51bc
+  content_hash: sha256:281e35d88a9cb2e0912eac18feba729fe1cfa157e4e0a6d840871a6d36fdd1fb
   sources: []
   open_findings: 0
   open_critical: 0

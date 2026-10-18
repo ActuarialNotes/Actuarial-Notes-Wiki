@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Limited+Expected+Value
   - Concepts/Lognormal+Distribution
   - Concepts/Normal+Approximation
+  - Concepts/Risk
 answer: "C"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b025dbfc343d2b6677578bc44308c68089cb56a307ffd7f73095a275c6067c94
+  content_hash: sha256:af6cc4e62cd5c0aa54b0341cb973574459d40d27e2d5da05b3526f863f0cc626
   sources: []
   open_findings: 0
   open_critical: 0

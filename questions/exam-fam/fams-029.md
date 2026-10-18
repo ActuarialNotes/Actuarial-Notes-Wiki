@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Aggregate+Loss+Model
   - Concepts/Deductible
+  - Concepts/Payment
 answer: "C"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:a819b18ed99eaf921a142ba922b20920a63be8f4b6a0fe9ddef99a12f40eb1ea
+  content_hash: sha256:84089b4127ae69a22e3a7ff1ea5f6368b647f9b044764c1f94e8d9ee614b48cd
   sources: []
   open_findings: 0
   open_critical: 0

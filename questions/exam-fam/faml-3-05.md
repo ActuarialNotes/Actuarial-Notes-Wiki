@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Fractional+Age+Assumption
   - Concepts/Life+Table
+  - Concepts/Standard+Actuarial+Notation
 answer: "E"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:84b0cf1d1c7f3dbc07ea6616f03678dfff6bfb02efe3832ae26de943a5c61211
+  content_hash: sha256:49cd0d0fe00fce9368e9094391615b49be58de15e6f5168a0a8df5a2ee7c1ca8
   sources: []
   open_findings: 0
   open_critical: 0

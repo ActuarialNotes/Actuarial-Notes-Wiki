@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Chain+Ladder+Method
   - Concepts/Development+Factor
   - Concepts/Reserve
+  - Concepts/Unpaid+Claims
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4a9252bd6aabf7e3b91370fcce9915f9ee6dc98869850441615d087a4d482f3d
+  content_hash: sha256:ba2eb768157bc2e8127bf5de0f4a4b00dc7084dcdbb6293ce559df97c52c4c88
   sources: []
   open_findings: 0
   open_critical: 0

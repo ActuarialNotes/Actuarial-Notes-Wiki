@@ -9,6 +9,7 @@ wiki_link:
   - Concepts/Continuous+Annuity
   - Concepts/Deferred+Annuity
   - Concepts/Life+Annuity
+  - Concepts/Payable+Continuously
 answer: "A"
 points: 1
 verification:
@@ -16,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cc364508952f52b4d4b0df3c096452038625f435c19aee4574723567413f1872
+  content_hash: sha256:908e4802418169d2f0605ace7d376a62e348885ed6b71a6ee3181c5e857baf2a
   sources: []
   open_findings: 0
   open_critical: 0

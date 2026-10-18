@@ -10,6 +10,7 @@ wiki_link:
   - Concepts/Limited+Fluctuation+Credibility
   - Concepts/Full+Credibility+Standard
   - Concepts/Aggregate+Loss+Model
+  - Concepts/Credibility
 answer: "C"
 points: 1
 verification:
@@ -17,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b375c9c97381d93f9c08634250979a1aa9e9e2118c5f7e2f1a1d9e82c8cd2474
+  content_hash: sha256:dec3cd4b0614cfc3b5bb9fb52fe1d0e325b422aeb841c0f035ac2a394e7f1607
   sources: []
   open_findings: 0
   open_critical: 0

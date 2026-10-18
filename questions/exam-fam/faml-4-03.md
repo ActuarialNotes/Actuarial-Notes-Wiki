@@ -8,6 +8,7 @@ type: multiple-choice
 wiki_link:
   - Concepts/Endowment+Insurance
   - Concepts/Interest+Rate
+  - Concepts/Interest
 answer: "D"
 points: 1
 verification:
@@ -15,7 +16,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5b53eebd57e7a87bbb0e5de95821640ec5f51b6ad8b3dea48337d937729e93bb
+  content_hash: sha256:c2ae91ee4f1f9b7446c99eaa1930242d949d00d02721b11dde1535db678fe16d
   sources: []
   open_findings: 0
   open_critical: 0

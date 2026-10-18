@@ -64,31 +64,31 @@ Verified once, then edited. The check no longer speaks for what is on the page.
 
 | Page | Checked | Sources |
 |---|---|---:|
+| `Exam ALTAM (SOA).md` | 2026-10-18 | 1 |
+| `Exam ASTAM (SOA).md` | 2026-10-18 | 1 |
+| `Exam ATPA (SOA).md` | 2026-10-18 | 1 |
+| `Exam CFE-101 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CFE-201 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CP-311 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CP-312 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CP-321 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CP-341 (SOA).md` | 2026-10-18 | 1 |
+| `Exam CP-351 (SOA).md` | 2026-10-18 | 1 |
+| `Exam FAM (SOA).md` | 2026-10-18 | 1 |
 | `Exam FM-2 (SOA).md` | 2026-10-18 | 5 |
-| `questions/exam-5/cas5-an-001.md` | 2026-10-18 | 1 |
-| `questions/exam-5/cas5-an-002.md` | 2026-10-18 | 1 |
-| `questions/exam-5/cas5-an-003.md` | 2026-10-18 | 1 |
-| `questions/exam-5/cas5-an-004.md` | 2026-10-18 | 1 |
-| `questions/exam-5/cas5-an-005.md` | 2026-10-18 | 4 |
-| `questions/exam-5/cas5-an-006.md` | 2026-10-18 | 2 |
-| `questions/exam-5/cas5-an-007.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-001.md` | 2026-10-18 | 2 |
-| `questions/exam-6c/cas6c-an-002.md` | 2026-10-18 | 4 |
-| `questions/exam-6c/cas6c-an-003.md` | 2026-10-18 | 2 |
-| `questions/exam-6c/cas6c-an-004.md` | 2026-10-18 | 2 |
-| `questions/exam-6c/cas6c-an-005.md` | 2026-10-18 | 2 |
-| `questions/exam-6c/cas6c-an-006.md` | 2026-10-18 | 2 |
-| `questions/exam-6c/cas6c-an-007.md` | 2026-10-18 | 3 |
-| `questions/exam-6c/cas6c-an-008.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-009.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-010.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-011.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-012.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-013.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-014.md` | 2026-10-18 | 4 |
-| `questions/exam-6c/cas6c-an-015.md` | 2026-10-18 | 3 |
-| `questions/exam-6c/cas6c-an-016.md` | 2026-10-18 | 1 |
-| `questions/exam-6c/cas6c-an-017.md` | 2026-10-18 | 2 |
+| `Exam GH-201C (SOA).md` | 2026-10-18 | 1 |
+| `Exam GH-201U (SOA).md` | 2026-10-18 | 1 |
+| `Exam GH-301 (SOA).md` | 2026-10-18 | 1 |
+| `Exam GI-101 (SOA).md` | 2026-10-18 | 1 |
+| `Exam GI-201 (SOA).md` | 2026-10-18 | 1 |
+| `Exam GI-301 (SOA).md` | 2026-10-18 | 1 |
+| `Exam GI-302 (SOA).md` | 2026-10-18 | 1 |
+| `Exam ILA-101 (SOA).md` | 2026-10-18 | 1 |
+| `Exam ILA-201I (SOA).md` | 2026-10-18 | 1 |
+| `Exam ILA-201U (SOA).md` | 2026-10-18 | 1 |
+| `Exam INV-201 (SOA).md` | 2026-10-18 | 1 |
+| `Exam PA (SOA).md` | 2026-10-18 | 1 |
+| `Exam RET-101 (SOA).md` | 2026-10-18 | 1 |
 
 ---
 

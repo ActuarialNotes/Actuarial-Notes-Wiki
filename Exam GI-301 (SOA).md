@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d22281f5bb6c8faf48b682d70c725679979164a15063e348f345736366b553d3
+  content_hash: sha256:96e6af78c4af6a179dae37ab5fe26c49717b11e5a7f3be40d47bdb70b1652d24
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
@@ -85,7 +85,7 @@ verification:
 > - A Framework for Assessing Risk Margins, Marshall, K., Collings, S., Hodson, M., and O’Dowd, C., Institute of Actuaries of Australia 16th General Insurance Seminar, Nov 2008 (4a-c)
 
 > [!example]- Monitoring Results {0–10%}
-> The candidate will understand the methods to monitor actual versus expected [[Experience|experience]].
+> The candidate will understand the methods to monitor actual versus expected experience.
 >
 > 1. Identify and describe approaches for [[Monitoring|monitoring]] results.
 > 2. Prepare a comparison of actual to expected [[Claim|claims]].
@@ -103,7 +103,7 @@ verification:
 > 3. Price for [[Deductible Rating|deductible options]] and [[Increased Limits|increased limits]].
 > 4. Develop rates for [[Claims Made Coverage|claims-made contracts]].
 > 5. Understand and apply techniques for [[Individual Risk Rating|individual risk rating]].
-> 6. Estimate the [[Retrospective Premium Reserve|premium asset]] for retrospectively [[Retrospective Rating|rated policies]].
+> 6. Estimate the [[Retrospective Premium Reserve|premium asset]] for [[Retrospective Rating|retrospectively rated policies]].
 >
 > **Readings:**
 > - Fundamentals of General Insurance Actuarial Analysis, Friedland, J., 2nd Edition, SOA, 2022 (6a, 6b)
@@ -125,12 +125,12 @@ verification:
 > [!example]- Reinsurance {15–20%}
 > The candidate will understand the fundamentals of [[Reinsurance|reinsurance]] and demonstrate knowledge of [[Reinsurance Reserving|reinsurance reserving]], the fundamental techniques of [[Reinsurance Pricing|reinsurance pricing]] and [[Risk Transfer Testing|risk transfer testing]] of [[Reinsurance|reinsurance contracts]].
 >
-> 1. Understand the types of [[Reinsurance|reinsurance]] and key [[Reinsurance|reinsurance]] terms.
+> 1. Understand the [[Types of Reinsurance|types of reinsurance]] and key [[Reinsurance|reinsurance]] terms.
 > 2. Explain the [[Principal|principal]] functions of [[Reinsurance|reinsurance]].
-> 3. Analyze and describe the various types of [[Reinsurance|reinsurance]].
+> 3. Analyze and describe the various [[Types of Reinsurance|types of reinsurance]].
 > 4. Understand the issues encountered when applying [[Loss Development|loss development]] methods to [[Reinsurance|reinsurance]].
 > 5. Calculate the price of a [[Reinsurance|reinsurance contract]].
-> 6. Apply an aggregate distribution model to a [[Reinsurance Pricing|reinsurance pricing]] scenario.
+> 6. Apply an [[Aggregate Loss Model|aggregate distribution]] model to a [[Reinsurance Pricing|reinsurance pricing]] scenario.
 > 7. Describe considerations involved in [[Reinsurance Pricing|pricing property catastrophe covers]].
 > 8. Understand the application of a [[Reinstatements|reinstatement premium]].
 > 9. Test for [[Risk Transfer|risk transfer]] in [[Reinsurance|reinsurance contracts]].
@@ -152,7 +152,7 @@ verification:
 >
 > 1. Understand the purpose and development of [[Catastrophe|catastrophe]] models.
 > 2. Understand the type of output produced by [[Catastrophe|catastrophe]] models.
-> 3. Understand how catastrophe model [[Output|output]] can be used in actuarial tasks.
+> 3. Understand how catastrophe [[Model Output|model output]] can be used in actuarial tasks.
 > 4. Allocate a [[Catastrophe Risk Load|property catastrophe risk load]] among different accounts.
 >
 > **Readings:**

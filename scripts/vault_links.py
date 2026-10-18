@@ -152,10 +152,12 @@ class Vault:
         self.root = root
         self.by_name: dict[str, str] = {}
         self.by_lower: dict[str, list[str]] = {}
+        self.by_term: dict[str, list[str]] = {}    # by `normalize_term`: "Long-Term …" under "long term …"
         for rel in _page_paths(root):
             name = os.path.splitext(os.path.basename(rel))[0]
             self.by_name.setdefault(name, rel)
             self.by_lower.setdefault(name.lower(), []).append(name)
+            self.by_term.setdefault(normalize_term(name), []).append(name)
 
     def resolve(self, target: str) -> tuple[str, str | None]:
         """(`exact` | `case` | `missing`, the vault-relative path it lands on)."""
@@ -220,8 +222,9 @@ def canonical_page(term: str, vault: Vault, wiki_id: str | None = None,
     for cand in vault.by_lower.get(term.strip().lower(), []):
         if vault.is_concept(cand):
             return cand
-    spaced = key
-    for cand in vault.by_lower.get(spaced, []):
+    # The page's name spelled another way: "long term insurance coverage" is
+    # *Long-Term Insurance Coverage*.
+    for cand in vault.by_lower.get(key, []) + vault.by_term.get(key, []):
         if vault.is_concept(cand):
             return cand
     return None

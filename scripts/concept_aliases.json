@@ -674,7 +674,27 @@
     "iaa": "International Actuarial Association",
     "otc": "Derivative Instrument",
     "lemma": "Itō Calculus",
-    "put": "Payoff"
+    "put": "Payoff",
+    "chain ladder": "Chain Ladder Method",
+    "bornhuetter ferguson": "Bornhuetter-Ferguson Method",
+    "mack's model": "Mack Chain Ladder Model",
+    "expected loss ratio": "Expected Loss Method",
+    "limited fluctuation": "Limited Fluctuation Credibility",
+    "whole life": "Whole Life Insurance",
+    "hypothesis test": "Hypothesis Testing",
+    "chi square goodness of fit": "Chi-Square Goodness-of-Fit Test",
+    "maximum likelihood estimator": "Maximum Likelihood Estimation",
+    "maximum likelihood estimate": "Maximum Likelihood Estimation",
+    "principal component": "Principal Components Analysis",
+    "principal components": "Principal Components Analysis",
+    "cluster": "Clustering",
+    "cluster analysis": "Clustering",
+    "tree based": "Decision Tree",
+    "compound poisson": "Compound Poisson Process",
+    "aggregate distribution": "Aggregate Loss Model",
+    "offset": "Offset Variable",
+    "graph": "Data Visualization",
+    "continuous payment frequency": "Payable Continuously"
   },
   "namesakes": {
     "deductible": { "default": "Deductible", "5-1": "Deductible Rating" },
@@ -694,6 +714,7 @@
     "life insurance reserve": { "default": "Policy Value", "ila-101": "Commissioners Reserve Valuation Method" },
     "government regulation": { "default": "Insurance Regulation", "ret-301": "Canadian Pension Legislation" },
     "reporting requirement": { "default": "Regulatory Reporting", "ret-301": "Canadian Pension Legislation" },
-    "cap": { "default": "Cap on Non-Pecuniary Damages", "inv-201": "Payoff" }
+    "cap": { "default": "Cap on Non-Pecuniary Damages", "inv-201": "Payoff" },
+    "distribution": { "default": "Probability Distributions", "gi-201": "Insurance Distribution Systems" }
   }
 }

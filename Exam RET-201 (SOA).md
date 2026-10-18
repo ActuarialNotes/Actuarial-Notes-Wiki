@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:43b2bd7c8732b3459822271a3aa6e375ec0e4778f73e2f5aa0a1f02f0a28259b
+  content_hash: sha256:e79569d768db473c7d45a604fd7445eca9be07aad347c9d0b3c9033adc2cab5d
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for RET-201, all pages, sha256:794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-201/2026-2027-ret-201-syllabus.pdf"
   open_findings: 1
@@ -30,9 +30,9 @@ verification:
 > The candidate will understand how to apply/synthesize the methods and models used to value [[Pension Plan|pension benefits]] for various purposes.
 >
 > 1. Differentiate between the various purposes for valuing [[Pension Plan|pension plans]]
-> 2. Perform [[Going-Concern Valuation|periodic valuations]] of [[Going-Concern Valuation|ongoing plans]], calculating [[Normal Cost|normal cost]] and actuarial [[Actuarial Accrued Liability|accrued liability]], using a variety of cost methods
+> 2. Perform [[Going-Concern Valuation|periodic valuations]] of [[Going-Concern Valuation|ongoing plans]], calculating [[Normal Cost|normal cost]] and [[Actuarial Accrued Liability|actuarial accrued liability]], using a variety of cost methods
 > 3. Analyze and communicate the pattern of [[Actuarial Cost Method|cost recognition]] that arises under a variety of cost methods
-> 4. Analyze and communicate the impact on [[Asset Valuation Method|cost stability]] of a variety of [[Asset Valuation Method|asset valuation]] methods
+> 4. Analyze and communicate the impact on [[Asset Valuation Method|cost stability]] of a variety of [[Asset Valuation Method|asset valuation methods]]
 >
 > **Readings:**
 > - RET201-100-25: Chapter 15 (Sections 1500 through 1515) of Canadian Pensions and Retirement Income Planning (remaining material is background only; legislative requirements will not be tested) (1a)
@@ -61,7 +61,7 @@ verification:
 >
 > 1. Evaluate [[Appropriateness|appropriateness]] of current assumptions
 > 2. Describe and explain the different perspectives on the selection and development of assumptions, including [[Financial Economics|financial economics]]
-> 3. Recommend appropriate assumptions and [[Defend|defend]] the selection
+> 3. Recommend appropriate assumptions and defend the [[Selection|selection]]
 > 4. Evaluate [[Actual Experience|actual experience]], including comparisons to assumptions
 >
 > **Readings:**
@@ -75,14 +75,14 @@ verification:
 > - Credibility Educational Resource for Pension Actuaries, SOA, Aug 2017 (2d)
 
 > [!example]- Accounting Standards {35–45%}
-> The candidate will understand how to perform [[Valuation|valuations]] and prepare disclosure information for [[Retirement Plan|retirement income plans]] under applicable accounting standards.
+> The candidate will understand how to perform [[Valuation|valuations]] and prepare disclosure information for [[Retirement Plan|retirement income plans]] under applicable [[Accounting Standards|accounting standards]].
 >
-> 1. Perform calculations in accordance with applicable accounting [[Standard|standards]], including:
+> 1. Perform calculations in accordance with applicable [[Accounting Standards|accounting standards]], including:
 >    - Annual accounting [[Valuation|valuations]]
 >    - [[Plan Curtailment|Plan curtailment]] and termination/windup
 >    - [[Plan Merger and Spin-Off|Plan mergers]], acquisitions and [[Plan Merger and Spin-Off|spinoffs]]
 > 2. Advise [[Plan Sponsor|plan sponsors]] on common accounting methods, costs and disclosures for [[Retirement Plan|retirement plans]] under various standards and interpretations
-> 3. Demonstrate the sensitivity of financial measures to given changes in [[Plan|plan]] design
+> 3. Demonstrate the sensitivity of financial measures to given changes in [[Plan Design|plan design]]
 > 4. Perform and interpret the results of projections for short-term planning including the effect of proposed [[Plan|plan]] changes
 >
 > **Readings:**
@@ -108,7 +108,7 @@ verification:
 > The candidate will recognize and appropriately reflect the role of [[Investment Policy Statement|retirement plan investments]] in managing [[Plan Sponsor|plan sponsor risk]] and make recommendations.
 >
 > 1. Evaluate the interaction of [[Investment Policy Statement|plan investments]] with various [[Valuation|valuation]] methods and assumptions
-> 2. Evaluate how factors including [[Investment Policy Statement|cash flow requirements]], various [[Plan Design|plan designs]] and various [[Economic Environments Affect Setting Investment Strategy|economic environments affect setting investment strategy]]
+> 2. Evaluate how factors including [[Investment Policy Statement|cash flow requirements]], various [[Plan Design|plan designs]] and various [[Economic Environment|economic environments]] affect setting [[Investment Strategy|investment strategy]]
 > 3. Describe strategies and techniques for [[Asset-liability|asset/liability]] management
 > 4. Provide advice and analysis to [[Plan Sponsor|plan sponsors]] regarding the mitigation of [[Market Risk|investment risks]]
 >

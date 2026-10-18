@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:eb93abbd074f96f53265e7b9b6dceae5ebad07d628ba2ca727345116bc446464
+  content_hash: sha256:d235b5ec1a8df2ec905e7ddf0f57f1deb8a4f909876f82bb23b34bea3ef64b2f
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf"
   open_findings: 0
@@ -35,7 +35,7 @@ verification:
 > 4. Describe, calculate, and evaluate the impact of environmental factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claim Processing|claim processing]] changes, etc.)
 > 5. Evaluate [[Data Quality|data resources]] and appropriateness for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate non-IBNR types of [[Reserve|reserves]] and explain when each is required
-> 7. Apply applicable [[Best Practice|best practices]] related to reserving
+> 7. Apply [[Best Practice|applicable best practices]] related to reserving
 >
 > **Readings:**
 > - Video: Valuation at the Heart of Health Insurance (Background)
@@ -152,7 +152,7 @@ verification:
 > The candidate will understand how to describe the flow of funds in the [[Health Care System|health care system]] and the role of providers in the system.
 >
 > 1. Establish a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
-> 2. Describe the role [[Physicians Play|physicians play]] and their influence on the flow of funds
+> 2. Describe the role physicians play and their influence on the flow of [[Fund|funds]]
 > 3. Describe the [[Health Care System|market power]] of hospitals and how [[Health Care System|provider systems]] compete for patients, physicians, and contracts
 > 4. Compare the flow of funds in the US and [[Health Care Insurance|Canadian health care systems]] and evaluate the value of different systems
 >

@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2b41eede1acf2bf6667ee78f06ce2cda7dc7c6da99a0a85e854720565838d1c5
+  content_hash: sha256:80d78b4a34a15303a60c8b357b7c65f6311187a39c628d01708b0726ff4a86b0
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for RET-101, all pages, sha256:d33bc465548ca0595f8f716f3bcd30ef23c54843c4ed46a6d01ba46c67d10bc6 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-101/2026-2027-ret-101-syllabus.pdf"
   open_findings: 0
@@ -29,7 +29,7 @@ verification:
 > [!example]- Benefit Plan Structure, Features and Investments {30–50%}
 > The candidate will understand how to analyze different types of designs for [[Retirement Plan|retirement plans]] and [[Investment Policy Statement|retirement plan investments]].
 >
-> 1. Describe the structure of the following [[Plan|plans]]:
+> 1. Describe the structure of the following plans:
 >    - [[Defined Benefit Plan|Traditional defined benefit plans]]
 >    - [[Defined Contribution Plan|Defined contribution]] and [[Defined Contribution Plan|savings plans]]
 >    - [[Hybrid Plan|Hybrid plans]]
@@ -96,7 +96,7 @@ verification:
 >    - [[Retirement Plan|Retirement plans]] involving more than one employer, and
 >    - [[Social Insurance|Social insurance plans]]
 > 3. Evaluate [[Replacement Ratio|benefit adequacy]] and measure [[Replacement Ratio|replacement income]] for members of a particular plan given other sources of [[Replacement Ratio|retirement income]]
-> 4. Describe ways in which [[Retirement Plan|retirement plan]] design can manage the range of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]]
+> 4. Describe ways in which [[Plan Design|retirement plan design]] can manage the range of [[Risk|risks]] faced by [[Retirement Plan|plan participants]] and [[Retiree|retirees]]
 >
 > **Readings:**
 > - Fundamentals of Private Pensions, McGill et al., 9th Edition, 2010
@@ -146,7 +146,7 @@ verification:
 > - Embedded Options in Pension Plans: Catalogue of Embedded Options Survey of Prevalence of Embedded Options, SOA, Aug 2011, pp. 1-17 (3b)
 
 > [!example]- Benefit Plan Design Recommendation {15–25%}
-> The candidate will understand how to evaluate sponsors’ goals for the [[Retirement Plan|retirement plan]], evaluate alternative plan types and features, and recommend a plan design appropriate to address those goals.
+> The candidate will understand how to evaluate sponsors’ goals for the [[Retirement Plan|retirement plan]], evaluate alternative plan types and features, and recommend a [[Plan Design|plan design]] appropriate to address those goals.
 >
 > 1. Describe ways to identify and prioritize the sponsor’s goals related to the design of the [[Retirement Plan|retirement plan]]
 > 2. Assess the [[Tradeoff|tradeoffs]] between different goals
@@ -154,13 +154,13 @@ verification:
 > 4. State relationships or recognize contradictions between a [[Plan Design|sponsor’s plan]] design goals and [[Retirement Risk|retirement risks]] faced by [[Retiree|retirees]]
 > 5. State relationship or recognize contradictions between sponsor’s goals and [[Tax Treatment of Retirement Plans|taxpayers’ perspective]] when evaluating [[Defined Benefit Plan|benefit plan]] design
 > 6. Identify the ways that regulation impacts the [[Plan Design|sponsor’s plan]] design goals
-> 7. Design retirement programs that manage [[Retirement Risk|retirement risk]], are consistent with sponsor’s objectives and [[Promote Employee Behavior Consistent|promote employee behavior consistent]] with sponsor’s objectives.
-> 8. Evaluate the pros and cons from both a sponsor and [[Employee Perspective|employee perspective]] of [[Introducing Option|introducing options]] that impact the [[Labor Force Demographics|labor force demographics]]
-> 9. Recommend a method to integrate benefits provided by [[Social Insurance|social insurance]] with [[Plan Design|retirement plan designs]] in order to meet the [[Plan Sponsor'|plan sponsor’s]] particular goals and defend the recommendation
+> 7. Design retirement programs that manage [[Retirement Risk|retirement risk]], are consistent with sponsor’s objectives and promote [[Employee Behavior Consistent|employee behavior consistent]] with sponsor’s objectives.
+> 8. Evaluate the pros and cons from both a sponsor and employee perspective of introducing options that impact the [[Labor Force Demographics|labor force demographics]]
+> 9. Recommend a method to integrate benefits provided by [[Social Insurance|social insurance]] with [[Plan Design|retirement plan designs]] in order to meet the [[Plan Sponsor's|plan sponsor’s]] particular goals and defend the recommendation
 > 10. Recommend an appropriate plan type and [[Plan Design|plan design features]] for providing [[Pension Plan|retirement benefits]] and defend the recommendations
 > 11. Assess the potential effects, including tax implications, of various investments and [[Investment Policy Statement|investment policies]] on all of the stakeholders
 > 12. Identify and assess the sources of [[Market Risk|investment risk]] applicable to [[Investment Policy Statement|retirement fund assets]]
-> 13. Explain and apply restrictions on [[Plan Design|plan design features]] to a proposed plan design, taking into accounting the use of [[Tax Treatment of Retirement Plans|tax incentives]] and understanding conflicts between regulations and design objectives
+> 13. Explain and apply restrictions on [[Plan Design|plan design features]] to a proposed [[Plan Design|plan design]], taking into accounting the use of [[Tax Treatment of Retirement Plans|tax incentives]] and understanding conflicts between regulations and design objectives
 > 14. Identify changes that could reduce [[Plan Sponsor|sponsor risk]].
 >
 > **Readings:**

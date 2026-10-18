@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:8e34917bae006e8a61e3a8ae09f9a7d9272908862ac9abdfd6e867f81cad9850
+  content_hash: sha256:cdf8db46e5811f4840c8a4221aea1096d57f6b150cd552a1a91bfa7f6d3bb6f0
   sources:
     - "SOA, Mar 2027/Jul 2027 syllabus PDF for CFE-201, all pages, sha256:512a1a8de09701c25003379b05cc0ee60ed483cfa0f5fae20edf1fac53d637dd — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-201/2026-2027-cfe-201-syllabus.pdf"
   open_findings: 0
@@ -27,7 +27,7 @@ verification:
 ## Learning Objectives
 
 > [!example]- Corporate Finance {15–29%}
-> The candidate will understand how an [[Organization Optimiz|organization optimizes]] its [[Corporate Finance|corporate finance]] decisions based on its business objectives.
+> The candidate will understand how an organization optimizes its [[Corporate Finance|corporate finance]] decisions based on its business objectives.
 >
 > 1. Recommend an [[Capital Structure|optimal capital structure]] for given business objectives and the [[Porter's Five Forces|competitive environment]]
 > 2. Evaluate and apply the methods to determine the value of a business or project, including the impact of financial and non-financial factors on [[Capital Budgeting|capital budgeting]] and allocation decisions
@@ -64,9 +64,9 @@ verification:
 > - CFE201-113-27: Financial Risks in Mergers and Acquisitions: A Case Study of SolarCity’s Acquisition by Tesla (2a)
 
 > [!example]- Managerial Accounting and Operational Excellence {9–20%}
-> The candidate will understand how managerial accounting and [[Operational Excellence|operational processes]] impact an [[Key Financial Measures|organization’s performance]] evaluation and [[Decision Making|decision making]].
+> The candidate will understand how [[Managerial Accounting|managerial accounting]] and [[Operational Excellence|operational processes]] impact an [[Key Financial Measures|organization’s performance]] evaluation and [[Decision-Making|decision making]].
 >
-> 1. Assess how managerial accounting can [[Managerial Accounting|drive decision making]] and impact behavior and performance evaluation
+> 1. Assess how [[Managerial Accounting|managerial accounting]] can [[Managerial Accounting|drive decision making]] and impact behavior and performance evaluation
 > 2. Assess and recommend methods used to allocate costs and how these methods can [[Managerial Accounting|distort perceived performance]]
 > 3. Recommend [[Best Practice|best practices]] in [[Operational Excellence|business processes]] to achieve [[Operational Excellence|operational excellence]]
 >
@@ -82,7 +82,7 @@ verification:
 > - CFE201-115-27: Reorganizing to Capture Maximum Value Quickly (3c)
 
 > [!example]- Evolving Quantitative Methods and Technologies {25–45%}
-> The candidate will understand the appropriate application of [[Evolving Quantitative|evolving quantitative]] methods and technologies that help to manage the business.
+> The candidate will understand the appropriate application of evolving quantitative methods and technologies that help to manage the business.
 >
 > 1. Evaluate the appropriateness of applying evolving methods and technologies to manage specific [[Business|business]] issues
 > 2. Apply evolving methods and technologies for quantifying and managing [[Business Risk|business risks]] and opportunities

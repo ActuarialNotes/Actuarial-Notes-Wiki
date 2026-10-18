@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:417fbe56e7f1b80657986906cdf7583423a84312c8a97a6d7610fa7258659b49
+  content_hash: sha256:a57a8f6234c11071ef1cfe411baf8f66e6875b21054bf1c50fa39360113ad6cc
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201U, all pages, sha256:dacc1adf422384f1af37f21851c9d3187859d822b4db37293adc8b63de9b844e — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201u/2026-2027-gh-201u-syllabus.pdf"
   open_findings: 0
@@ -32,10 +32,10 @@ verification:
 > 1. Describe the types of [[Claim Reserve|claim reserves]]
 > 2. Explain the limitations and biases of the [[Claim Reserve|traditional valuation]] methods
 > 3. Calculate appropriate [[Claim Reserve|claim reserves]] given data
-> 4. Describe, calculate, and evaluate the impact of environmental factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing|claims processing]] changes, etc.)
+> 4. Describe, calculate, and evaluate the impact of environmental factors on [[Reserve|reserve]] calculations ([[Trend|trend]], [[Seasonality|seasonality]], [[Claims Processing Changes|claims processing changes]], etc.)
 > 5. Evaluate [[Data Quality|data resources]] and appropriateness for calculating [[Reserve|reserves]]
 > 6. Describe, calculate, and evaluate non-IBNR types of [[Reserve|reserves]] and explain when each is required
-> 7. Apply applicable [[Best Practice|best practices]] related to reserving
+> 7. Apply [[Best Practice|applicable best practices]] related to reserving
 >
 > **Readings:**
 > - Video: Valuation at the Heart of Health Insurance (Background)
@@ -52,13 +52,13 @@ verification:
 > - ASOP 42: Health and Disability Actuarial Assets and Liabilities Other than Liabilities for Incurred Claims (excluding Appendices) (1g)
 
 > [!example]- Financial Statements {25–35%}
-> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with Statutory Accounting Standards and [[GAAP]].
+> The candidate will understand how to prepare and interpret [[Financial Statements|insurance company financial statements]] in accordance with Statutory [[Accounting Standards]] and [[GAAP]].
 >
 > 1. Prepare a [[Financial Statement|financial statement]] in accordance with Generally Accepted Accounting Principles ([[GAAP]])
 > 2. Interpret the results of both statutory and [[GAAP|GAAP statements]] from the viewpoint of stakeholders, including regulators, senior management, and investors
 > 3. Project financial outcomes and recommend [[Strategy|strategy]]
 > 4. Evaluate [[Regulatory Capital|capital needs]] using [[Risk-Based Capital|RBC]] and the use of [[Reinsurance|reinsurance]] to mitigate [[Regulatory Capital|capital strain]]
-> 5. Apply applicable [[Best Practice|best practices]] related to [[Financial Statements|financial statements]]
+> 5. Apply [[Best Practice|applicable best practices]] related to [[Financial Statements|financial statements]]
 >
 > **Readings:**
 > - Read. Think. Write., Health Section News, Oct 2004 (2e)
@@ -114,7 +114,7 @@ verification:
 > The candidate will understand how to describe the flow of funds in the [[Health Care System|health care system]] and the role of providers in the system.
 >
 > 1. Establish a framework of how [[Health Care System|funds flow]] through the [[Health Care System|health care system]]
-> 2. Describe the role [[Physicians Play|physicians play]] and their influence on the flow of funds
+> 2. Describe the role physicians play and their influence on the flow of [[Fund|funds]]
 > 3. Describe the [[Health Care System|market power]] of hospitals and how [[Health Care System|provider systems]] compete for patients, physicians, and contracts
 > 4. Describe the flow of funds in the [[Health Care Insurance|Canadian healthcare system]] and the roles of the provider and government
 >

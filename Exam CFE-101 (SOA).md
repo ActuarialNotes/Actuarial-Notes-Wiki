@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:326b04195b752be0063a0acf3d025784639f975ca4cdc9d8779714f3a795102e
+  content_hash: sha256:1cd6a9b2c8a2d5458c2edbde4627d04bd7cf5d1566a77cd0a23afc3bb1a7e464
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CFE-101, all pages, sha256:a0ad67196006f8749a8a104bb785cf7e3fc7a53d781e0325c0de40315d0d5f84 — https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf"
   open_findings: 0
@@ -35,14 +35,14 @@ verification:
 >
 > **2. The Internal Environment**
 >
-> 1. Recommend an appropriate [[Enterprise Risk|enterprise risk]] management framework for an organization
+> 1. Recommend an appropriate [[Enterprise Risk Management|enterprise risk management]] framework for an organization
 > 2. Analyze the [[Enterprise Risk Management|ERM]] roles and responsibilities of the people within an organization and how the different groups can collaborate effectively
 > 3. Demonstrate an understanding of [[Corporate Governance|governance]] issues, such as agency, compliance and [[Operational Risk|legal risks]] and the need for audit and [[Market Conduct Regulation|market conduct compliance activities]]
 > 4. Evaluate the elements and structure of a [[Successful Risk|successful risk]] management function
 >
 > **3. The External Environment**
 >
-> 1. Examine the impact of the [[External Environment|external environment]] on an [[Organization's Ability|organization’s ability]] to achieve its objectives
+> 1. Examine the impact of the [[External Environment|external environment]] on an organization’s ability to achieve its objectives
 >
 > **Readings:**
 > - Video: Introduction to CFE 101 (Background)
@@ -85,12 +85,12 @@ verification:
 > **2. Risk Assessment**
 >
 > 1. Determine the implication of [[Risk|risks]] on the [[Balance Sheet|balance sheet]] and [[Income Statement|income statement]]
-> 2. Describe the properties and limitations of [[Common Risk|common risk]] measures (e.g., VaR and TVaR)
+> 2. Describe the properties and limitations of common [[Risk Measure|risk measures]] (e.g., VaR and TVaR)
 > 3. Demonstrate [[Risk Diversification|risk aggregation]] techniques that illustrate the concept of [[Risk Diversification|risk diversification]]
 > 4. Demonstrate the use of scenario analysis and [[Stress Testing|stress testing]] in the measurement of [[Risk|risks]]
 > 5. Demonstrate the use of techniques to assess [[Concentration Risk|risk accumulations]] and [[Compounding Risk|compounding risks]]
-> 6. Demonstrate an understanding of model [[Risk|risk]]
-> 7. Propose an appropriate modelling technique that [[Meets Organizational Need|meets organizational needs]] to analyze [[Risk|risks]]
+> 6. Demonstrate an understanding of [[Model Risk|model risk]]
+> 7. Propose an appropriate modelling technique that meets [[Organizational Need|organizational needs]] to analyze [[Risk|risks]]
 > 8. Analyze [[Risk|risks]] that are not easily quantifiable, such as operational, environmental and [[Contagion Risk|contagion-related risks]]
 >
 > **Readings:**
@@ -127,7 +127,7 @@ verification:
 > - Regulatory Capital Adequacy for Life Insurance Companies: A Comparison of Four Jurisdictions, SOA Research, 2025 (excluding Appendices) (2.2d)
 
 > [!example]- Embedding ERM into Decision-Making {28–46%}
-> The candidate will understand how an organization can articulate its approach to [[Risk|risk]] and how to assess [[Risk|risk]] and [[Business Strategy|return trade-offs]]. The candidate will understand the approaches for managing [[Risk|risk]]. The candidate will understand different concepts of [[Risk Capital|risk capital]], [[Risk|risk]] measures in [[Economic Capital|capital assessment]] and techniques to allocate [[Risk Capital|risk capital]] once aggregated.
+> The candidate will understand how an organization can articulate its approach to [[Risk|risk]] and how to assess [[Risk|risk]] and [[Business Strategy|return trade-offs]]. The candidate will understand the approaches for managing [[Risk|risk]]. The candidate will understand different concepts of [[Risk Capital|risk capital]], [[Risk Measure|risk measures]] in [[Economic Capital|capital assessment]] and techniques to allocate [[Risk Capital|risk capital]] once aggregated.
 >
 > **1. Making Decisions**
 >
@@ -147,7 +147,7 @@ verification:
 >
 > 1. Explain how to develop a [[Capital|capital]] model for a hypothetical organization
 > 2. Demonstrate a conceptual understanding of economic measures of value and [[Regulatory Capital|capital requirements]] (e.g., EVA, embedded value, [[Economic Capital|economic capital]], regulatory measures, and accounting measures) and their uses in [[Decision-Making|decision-making processes]]
-> 3. Apply [[Risk|risk]] measures (such as VaR and TVaR) and demonstrate how to use them in value and [[Economic Capital|capital assessment]]
+> 3. Apply [[Risk Measure|risk measures]] (such as VaR and TVaR) and demonstrate how to use them in value and [[Economic Capital|capital assessment]]
 > 4. Demonstrate the use of techniques to allocate [[Risk|risk]] once aggregated
 > 5. Propose techniques of attributing the “cost” of [[Risk Capital|risk/capital strategies]] to [[Business Unit|business units]] in order to [[Risk-Adjusted Performance|gauge performance]] (e.g. returns on [[Risk Capital|marginal capital]])
 >

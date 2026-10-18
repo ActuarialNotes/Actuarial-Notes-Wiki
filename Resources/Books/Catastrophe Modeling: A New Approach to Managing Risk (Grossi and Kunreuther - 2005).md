@@ -8,12 +8,17 @@ Edition: "1st"
 Type: "Textbook"
 ISBN: "978-0-387-23082-5"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e89e8ebf691c4fdf00253b1ecfbcab60a2789a564d472716c8be4ccb78e3d67f
-  sources: []
+  sources:
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), pp.3,5,7: tasks A4-A5 and C7, readings table (Grossi & Kunreuther Ch.2-6 incl. Section 2.4 errata, Book; Cummins CAT Bond, RMIR 11(1) pp.23-47, SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "CAS Syllabus Committee, Clarification and Errata to Catastrophe Modeling (Grossi & Kunreuther), March 29 2021, pp.1-3: OEP/AEP/CEP definitions, corrected OEP formula, Table 2.1 with AAL = sum p_i L_i, sha256:8677464a4952483b031c9559d96f083629d4e22a14281c604368665f4d9c63a6 — https://www.casact.org/sites/default/files/2021-05/8_Grossi_Kunreuther_Errata_2021.pdf"
+    - "Grossi & Kunreuther, Catastrophe Modeling (Springer 2005), publisher-supplied Table of Contents as listed by the Miami University campus store (ISBN13 9780387230825): every part, chapter and section title with page ranges, sha256:86c6ec3d2c1469916105a654f4738b6c84ad427bb7565a6e66fb449cb32864d4 — https://campusstore.miamioh.edu/catastrophe-modeling-grossi-patricia/bk/9780387230825"
+    - "Springer Nature Link book page, Catastrophe Modeling: A New Approach to Managing Risk (DOI 10.1007/b100669): editors, Huebner International Series on Risk, Insurance and Economic Security vol. 25, edition 1, (c)2005, ISBNs 978-0-387-23082-5 / 978-0-387-24105-0 / eBook 978-0-387-23129-7, description (read via WebFetch, no file hash) — https://link.springer.com/book/10.1007/b100669"
+    - "Knowledge at Wharton, 'Catastrophe Modeling: A New Approach to Managing Risk' (review of the book): AIR, EQECAT, RMS; rate setting, portfolio management, risk financing; model cities Oakland, Long Beach, Miami; terrorism chapter; EP curves; Charleston comparison of the three models' EP curves, sha256:74ad376140119309f29ea7501394a48d4aaf34f22e2e14feebf4f997ecde2ced — https://knowledge.wharton.upenn.edu/article/catastrophe-modeling-a-new-approach-to-managing-risk/"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Catastrophe Modeling: A New Approach to Managing Risk (Grossi and Kunreuther - 2005).md"

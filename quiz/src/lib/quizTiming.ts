@@ -27,6 +27,9 @@ export const EXAM_PACE: Record<string, ExamPace> = {
   'Probability': { minutes: 180, per: 'question', units: 30 },
   // Guides/Exam FM-2 (SOA): 2.5 hours, 30 multiple-choice questions.
   'Financial Mathematics': { minutes: 150, per: 'question', units: 30 },
+  // No format guide yet; the SOA's own syllabus (`Exam FAM (SOA).md`, its
+  // opening line): three and one-half hours, 34 multiple-choice questions.
+  'Exam FAM': { minutes: 210, per: 'question', units: 34 },
   // No format guide yet; the SOA's own syllabus (`Exam SRM (SOA).md`, its
   // opening line): three and one-half hours, 35 multiple-choice questions.
   'Exam SRM': { minutes: 210, per: 'question', units: 35 },

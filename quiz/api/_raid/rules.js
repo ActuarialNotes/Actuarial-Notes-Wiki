@@ -24,7 +24,7 @@ export function kbExamKey(progressKey) {
  * Seconds a raid question gets — Quiz Battle's *Exam pace* (`roundSecondsFor`):
  * the sitting's own time per question from lib/quizTiming.ts, else three minutes.
  */
-const PACE_SECONDS = { P: 360, FM: 300, SRM: 360, 'MAS-I': 320, 'MAS-II': 320 }
+const PACE_SECONDS = { P: 360, FM: 300, FAM: 371, SRM: 360, 'MAS-I': 320, 'MAS-II': 320 }
 export const FALLBACK_PACE_SECONDS = 180
 
 export function raidPaceSeconds(kbKey) {

@@ -46,6 +46,7 @@ export interface QuizExam {
 export const QUIZ_EXAMS: readonly QuizExam[] = [
   { value: 'Probability', label: 'Exam P-1', tracks: ['ASA', 'ACAS'], progressKey: 'P' },
   { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'], progressKey: 'FM' },
+  { value: 'Exam FAM', label: 'Exam FAM', tracks: ['ASA'], progressKey: 'FAM' },
   { value: 'Exam SRM', label: 'Exam SRM', tracks: ['ASA'], progressKey: 'SRM' },
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'], progressKey: 'MAS-I' },
   { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'], progressKey: 'MAS-II' },

@@ -267,7 +267,7 @@ unique selected
 typical possible potential commonly effectively specifically especially optimally respective hypothetical
 significant additional relevant
 particular applicable once
-finite
+finite thereby
 might you your essential best initial common good while vague final single
 """.split())
 
@@ -285,7 +285,7 @@ deriving counting valued built relate accommodate assumed know requires coincide
 measured identified check smooth control sit gather import manipulate refine run improve incorporate
 provided present relates stripping indicated
 harnessing working addressing planning creating selecting maximizing identifying analyzing
-examining modifying classifying
+examining modifying classifying modify
 offered offering considered considering developing validate comply mitigate translate advise prioritize
 calibrate analyzed faced accommodated created conducting applied measuring checking deciding encountered
 achieving extracting adding intended predicting quantifying constructing solving determined referenced

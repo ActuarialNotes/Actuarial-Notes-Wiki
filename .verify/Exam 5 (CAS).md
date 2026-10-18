@@ -175,3 +175,89 @@ created: 2026-10-09
 - status_set: in_review
 - checks_run: Re-recorded after the link-only edit; findings and checks as in this run's earlier pass.
 - note: in_review: F-001, F-002, F-006, F-007, F-008 still open.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Maintainer decision D8 (2026-10-18, docs/content-plan.md §6): transcribe CAS's words; the vault's additions go on marked *Key concepts:* lines. Added A18 'Understand qualitative considerations for developing and filing rate proposals.' (Fall 2026 v02 p.4), 'rate proposals' linked to Considerations for Implementing Rates.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-002
+- status: resolved
+- note: Maintainer decision D8 (2026-10-18, docs/content-plan.md §6): transcribe CAS's words; the vault's additions go on marked *Key concepts:* lines. Every Domain A and B task restored to the v02 outline's words (pp.3-5), A10 included ('Demonstrate the reasonable handling of events ... Covid-19'); the vault-added clauses' links moved to *Key concepts:* lines under A3, A6, A7, A9, A11, A14, B6, B8, B9. The page's concept set is unchanged (diffed against HEAD: nothing lost, nothing gained).
+
+## [F-006/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-006
+- status: resolved
+- note: Maintainer decision D8 (2026-10-18, docs/content-plan.md §6): transcribe CAS's words; the vault's additions go on marked *Key concepts:* lines. Source Material: Werner & Modlin now reads 'A1–A15, A17–A18 — Chapters 1, 3–16, including errata; Chapter 2 is excluded, and the Appendices are examinable'; Friedland 'B1–B20 — all chapters; the Appendices are excluded' (p.6).
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-007
+- status: resolved
+- note: Maintainer decision D8 (2026-10-18, docs/content-plan.md §6): transcribe CAS's words; the vault's additions go on marked *Key concepts:* lines. Domain B preamble restored to p.4's words: '... for both insurance entities and also for non-insurance entities that retain risk.' The '(e.g., self-insureds)' example and the Loss Reserving pointer removed (Loss Reserving stays linked on B9).
+
+## [F-008/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-008
+- status: resolved
+- note: Lead now names the 15-minute scheduled break (p.1); A8 keeps the outline's 'exponential, and linear analyses' and B4 its 'versus'.
+
+## [F-009] Key concept Close Year on A3 is in none of Domain A's readings
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:20Z/1a77
+- date: 2026-10-18
+- severity: minor
+- status: open
+- locus: Learning Objectives, A3, *Key concepts:* line
+- claim: A3's Key concepts line lists Close Year among the ratemaking data aggregations.
+- evidence: CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795) p.4 gives Domain A's readings as Werner & Modlin, CAS Ratemaking Principles, ASOP 12, 13, 43; A3 itself lists calendar, policy, accident, report year and in-force only. Full-text search of Werner & Modlin, Basic Ratemaking, 5th ed. May 2016 (https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c) (all 422 pp.) finds 'close year', 'closed year' and 'closing' zero times; Werner's Ch.3 aggregation methods are CY, AY, PY, RY. Friedland, Estimating Unpaid Claims Using Basic Techniques, 3rd version July 2010 (https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464) also has no 'close year'/'closed year' (it uses closed claim counts, e.g. pp.67-80, for disposal rates, not as an aggregation). The concept page itself says 'Close year is rarely a ratemaking basis.' A candidate reading A3 is sent to a concept no assigned reading teaches.
+- source_rank: 1
+- proposed_action: Maintainer: drop Close Year from A3's Key concepts (it then leaves the syllabus concept set unless another line carries it), or move it to a Domain B line if the closed-claim material in Friedland is what is meant. Not applied: changes the concept set.
+- applied: false
+- fingerprint: 6274b98ce865
+
+## [F-010] Key concept Self-Insured Retention on A14 is not in Werner
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:20Z/1a77
+- date: 2026-10-18
+- severity: minor
+- status: open
+- locus: Learning Objectives, A14, *Key concepts:* line
+- claim: A14's Key concepts line lists Self-Insured Retention among the alternative ratemaking procedures.
+- evidence: A14's readings are Domain A's (CAS Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795) p.4). Full-text search of Werner & Modlin, Basic Ratemaking, 5th ed. May 2016 (https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c) finds 'self-insured retention', 'SIR' and 'self-insur' zero times; Werner's Ch.15 (Commercial Lines Rating Mechanisms, pp.301-323) covers large deductible policies (pp.315-316), experience, schedule and retrospective rating, and mentions self-insurance only in passing ('retrospectively rated insurance is similar to self-insurance'). Self-insurance is Friedland material (Friedland, Estimating Unpaid Claims Using Basic Techniques, 3rd version July 2010 (https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464) Ch.1-3, e.g. self-insurers, self-insureds), i.e. Domain B, where the page already links Self-Insured Retention from the B preamble's 'non-insurance entities'.
+- source_rank: 1
+- proposed_action: Maintainer: drop Self-Insured Retention from A14's Key concepts (it stays on the syllabus through the B preamble link). Not applied: editorial concept choice.
+- applied: false
+- fingerprint: 9c622c453109
+
+## [C-004] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:20Z/1a77
+- date: 2026-10-18
+- status_set: verified
+- confidence: high
+- checks_run: Mechanical task-by-task diff by number, link aliases taken as the page's words, Key concepts lines excluded, against outline pp.3-5: A 18/18 and B 20/20 tasks identical; the only difference is B16, where the outline prints 'etc..' (doubled period, CAS typo) and the page 'etc.' — not filed. Both domain preambles word for word (pp.3, 4). Domain titles and weights A 45-55%, B 45-55% (p.3). Readings lines A (Werner & Modlin, CAS Ratemaking Principles, ASOP 12, 13, 43) and B (Friedland, ASOP 43) match pp.4-5. Lead: 4-hour exam, 4.5-hour appointment, 15-minute scheduled break match p.1 ('ACAS pathway' is not stated in the outline; consistent with data/tracks.ts, rank 4 only). Source Material: six readings = p.6's six citations; codes Werner A1-A15, A17-A18, Friedland B1-B20, ASOP 12 A4-A5, ASOP 13 A4, A8, ASOP 43 A4, B2, Principles A4, A16 all match; Werner scope 'Chapters 1, 3-16, including errata; Chapter 2 excluded; Appendices examinable' and Friedland 'all chapters; Appendices excluded' match p.6 in substance ('examinable' renders 'integral part ... used for creating questions'). Key concepts scope: every A-line term found in Werner outside Ch.2 (pp.25-47) except Close Year (F-009) and Self-Insured Retention (F-010); Limited Expected Value is in scope under Werner's own name, limited average severity (Ch.11, pp.205-210) — noted, not filed, the concept page maps the two. B-line terms (paid, incurred, case outstanding/reserves, age-to-age, cumulative development factor, severity, IBNR, ultimate) all in Friedland's chapters. syllabus_lint: 0 errors, 0 warnings.
+- sources_checked: CAS, Exam Content Outline — Basic Techniques for Ratemaking and Estimating Claim Liabilities (Exam 5), Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15, 6 pp.; https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf, sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795), pp.1-6; Werner, G. and Modlin, C., Basic Ratemaking, CAS, Fifth Edition, May 2016 (https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c), bookmark outline and full-text search for each Key concepts term; Friedland, J.F., Estimating Unpaid Claims Using Basic Techniques, CAS, Third Version, July 2010 (https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf, sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464), full-text search for each Domain B Key concepts term
+- note: Verified: every task, both preambles, the weights, the lead and Source Material agree with the Fall 2026 v02 outline. Two minor editorial findings left open (F-009 Close Year on A3, F-010 Self-Insured Retention on A14: Key concepts not in Domain A's readings); no major or critical finding is open.

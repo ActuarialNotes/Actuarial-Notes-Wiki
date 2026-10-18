@@ -15,6 +15,12 @@
 // `parseSyllabusObjectives` names them from the page's own `[!example]`
 // callouts. Nothing is inferred either way: a reading that opens with no codes
 // is under no objective, and a code the page doesn't number is offered bare.
+//
+// A page can also switch the filter off with an Obsidian comment inside the
+// callout, `%%objective-filter: off …%%` — for an outline whose reading table
+// cites its tasks under another numbering than the tasks it prints (Exam 6C's
+// Fall 2026 domain C). The codes still parse, so a filter would appear, but it
+// would file each reading under the wrong task.
 
 import { splitWeightTag } from './examWeight'
 import { hrefToEntryRef, pathToEntryRef, type WikiEntryRef } from './wikiRoutes'
@@ -34,6 +40,9 @@ export interface SourceMaterialEntry {
 }
 
 export const SOURCE_MATERIAL_MARKER = '%%source-material%%'
+
+/** `%%objective-filter: off%%` — anything may follow `off`, as a reason. */
+const FILTER_OFF_RE = /^%%\s*objective-filter:\s*off\b[\s\S]*%%\s*$/
 
 // `> [!answer]- Source Material {6 Sources}` — the `>` may carry no space, the
 // fold marker may be `-`, `+` or absent, and the count tag is optional.
@@ -81,10 +90,12 @@ export function cleanReadingDetail(text: string): string {
 export function extractSourceMaterial(md: string): {
   markdown: string
   entries: SourceMaterialEntry[]
+  /** False when the callout carries `%%objective-filter: off%%`. */
+  objectiveFilter: boolean
 } {
   const lines = md.split('\n')
   const start = lines.findIndex(isSourceMaterialHeader)
-  if (start === -1) return { markdown: md, entries: [] }
+  if (start === -1) return { markdown: md, entries: [], objectiveFilter: true }
 
   // The block runs to the first line that leaves the blockquote or opens a
   // different callout.
@@ -96,9 +107,14 @@ export function extractSourceMaterial(md: string): {
   // Set while a top-level bullet was skipped (no link, or a source already
   // listed) so its indented readings don't land on the entry above it.
   let skipping = false
+  let objectiveFilter = true
 
   for (const raw of lines.slice(start + 1, end)) {
     const body = raw.replace(/^>[ \t]?/, '')
+    if (FILTER_OFF_RE.test(body.trim())) {
+      objectiveFilter = false
+      continue
+    }
     const bullet = /^(\s*)-\s*(.*)$/.exec(body)
     if (!bullet) continue
     const indent = bullet[1].length
@@ -131,7 +147,7 @@ export function extractSourceMaterial(md: string): {
     ...lines.slice(end),
   ].join('\n')
 
-  return { markdown, entries }
+  return { markdown, entries, objectiveFilter }
 }
 
 /**
@@ -194,8 +210,8 @@ function objectiveSummary(text: string): string {
  * is a `> [!example]- A. Title {weight}` callout and an objective a numbered
  * item inside it, coded by the section's letter and the item's own number —
  * so a page that numbers each section from 1 (6C: A1–A3, B1–B3, C1–C5) and one
- * that numbers straight through (Exam 5: A1–A17, B18–B42) both come out as the
- * readings cite them. A callout with no letter numbers nothing.
+ * that numbers straight through (A1–A17, B18–B37) both come out as the page
+ * prints them. A callout with no letter numbers nothing.
  */
 export function parseSyllabusObjectives(md: string): SyllabusObjective[] {
   const objectives: SyllabusObjective[] = []
@@ -297,8 +313,8 @@ export interface ObjectiveFilterOption {
  *
  * A shelf with a reading that cites a code the page doesn't number gets no
  * filter at all: its readings and its objectives are numbered two different
- * ways (Exam 5 numbers its objectives A1–A17 then B18–B42, its readings cite
- * B1–B42), and a filter that named some codes and left others bare would be
+ * ways (Exam 6U's readings cite codes from an earlier outline than its
+ * objectives' numbering), and a filter that named some codes and left others bare would be
  * guessing which numbering a reader means. Nor does a shelf with fewer than two
  * objectives to tell apart.
  */

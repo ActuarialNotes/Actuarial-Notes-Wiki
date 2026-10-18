@@ -1,12 +1,18 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2160eedbdc7e68f7e88bfb7f5bebc47ae2df6350bf857726b25c4bb2db755cef
+  content_hash: sha256:78f4b465ee4a9179f4d7ca5ee1fa3b64dbca1318ba79d20fa340f256ee33ea41
   sources:
-    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06), PDF pp.3-4 (Domain C tasks and readings; Complete Text References) incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6: delivery p.1, domains and weights p.2, Domain A-D preambles, tasks and readings pp.2-3, Complete Text References p.4, Assumed Knowledge p.5, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "James et al., An Introduction to Statistical Learning 2nd ed., CAS-hosted PDF, full-text search located by bookmark section (2.2, 4.4, 8.1-8.2, 10.1-10.7, 12.1-12.4), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goldburd, Khare, Tevet & Guller, GLMs for Insurance Rating, CAS Monograph 5, 2nd ed., full-text search, Ch.7 Model Validation and Selection, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II (Nov 2025), full-text search, sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
+    - "Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed Contents pp.ix-x (PDF pp.11-12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf"
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-6, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
+    - "West, Welch & Galecki, Linear Mixed Models 3rd ed., Routledge product page, Table of Contents (Chs 1-9, Apps A-C), sha256:92d5e15fd36f955bae4b032095aa1b1f6ce8ab8c20ff57d7df47283321d6454a — https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321"
   open_findings: 1
   open_critical: 0
   log: .verify/Exam MAS-II (CAS).md
@@ -31,13 +37,10 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 
 > Candidates should understand and be able to calculate [[Credibility|credibility weighted estimates]].
 > 
-> 1. Calculate [[Limited Fluctuation Credibility|classical]] ([[Limited Fluctuation Credibility]]), [[Bühlmann Credibility]], [[Bühlmann-Straub Credibility]], and [[Bayesian Credibility]]-weighted estimates for [[Frequency|frequency]], [[Severity|severity]], and [[Aggregate Loss Model|aggregate loss]]
-> 2. Understand the framework used for the [[Limited Fluctuation Credibility|classical]] ([[Limited Fluctuation Credibility|limited fluctuation]]), [[Bühlmann Credibility|Bühlmann]], [[Bühlmann-Straub Credibility|Bühlmann-Straub]], and [[Bayesian Credibility|Bayesian]] [[Credibility|credibility procedures]]
-> 3. Determine the [[Full Credibility Standard|standard for full credibility]] and apply the [[Partial Credibility|square-root rule]] for [[Partial Credibility|partial credibility]]
-> 4. Compute the [[Bühlmann Credibility|Bühlmann structural parameters]] — the [[Expected Value of Process Variance]] ([[Expected Value of Process Variance|EPV]]) and the [[Variance of Hypothetical Means]] ([[Variance of Hypothetical Means|VHM]]) — and the [[Bühlmann Credibility|credibility constant]] $k$ they define
-> 5. Derive the [[Posterior Distribution|posterior]] and [[Predictive Distribution|predictive distributions]] under a [[Conjugate Prior|conjugate prior]], and recognize when the [[Bayesian Credibility|Bayesian]] and [[Bühlmann Credibility|Bühlmann estimates]] [[Exact Credibility|coincide]]
-> 6. Estimate the [[Empirical Bayes Credibility|structural parameters]] from [[Risk Experience|data]] using [[Empirical Bayes Credibility|empirical Bayes (non-parametric and semi-parametric)]] methods
-> 7. Select an appropriate [[Complement of Credibility|complement of credibility]]
+> 1. Calculate [[Limited Fluctuation Credibility|classical (limited fluctuation)]], [[Bühlmann Credibility|Bühlmann]], [[Bühlmann-Straub Credibility|Bühlmann-Straub]], and [[Bayesian Credibility|Bayesian credibility]]-weighted estimates for [[Frequency|frequency]], [[Severity|severity]], and [[Aggregate Loss Model|aggregate loss]]
+>    - *Key concepts:* [[Full Credibility Standard]] · [[Partial Credibility]] · [[Expected Value of Process Variance]] · [[Variance of Hypothetical Means]] · [[Empirical Bayes Credibility]] · [[Risk Experience]] · [[Complement of Credibility]]
+> 2. Understand the framework used for the [[Limited Fluctuation Credibility|classical (limited fluctuation)]], [[Bühlmann Credibility|Bühlmann]], [[Bühlmann-Straub Credibility|Bühlmann-Straub]], and [[Bayesian Credibility|Bayesian]] [[Credibility|credibility procedures]]
+>    - *Key concepts:* [[Posterior Distribution]] · [[Predictive Distribution]] · [[Conjugate Prior]] · [[Exact Credibility]]
 > 
 > ### Credibility procedures
 > - [[Limited Fluctuation Credibility]] — [[Full Credibility Standard]], [[Partial Credibility]]
@@ -50,15 +53,16 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 
 > [!example]- B. Linear Mixed Models {10–20%}
 > 
-> Candidates should understand the [[Model Structure|structure]] of [[Linear Mixed Model]]s, including how to accommodate models with [[Clustered Data|correlated observations]] or models where the [[Variance|variance]] is either not assumed to be [[Variance Function|constant]] or a [[Variance Function|function]] of the [[Expected Value|mean]].
+> Candidates should understand the [[Model Structure|structure]] of [[Linear Mixed Model|linear mixed models]], including how to accommodate models with [[Clustered Data|correlated observations]] or models where the [[Variance|variance]] is either not assumed to be [[Variance Function|constant]] or a [[Variance Function|function]] of the [[Expected Value|mean]].
 > 
-> 1. Understand the assumptions behind the [[Linear Mixed Model]] design, and distinguish [[Fixed Effects|fixed effects]] from [[Random Effects|random effects]]
-> 2. Understand how to use a [[Hierarchical Model]], including [[Random Intercept and Slope|random intercept and random slope]] specifications and [[Nested and Crossed Factors|nested]] versus [[Nested and Crossed Factors|crossed grouping factors]]
-> 3. Interpret the [[Variance Components|variance components]] and the implied [[Covariance Structure|covariance structure]] of the [[Residual|residuals]], and compute the [[Intraclass Correlation]]
-> 4. Fit a [[Linear Mixed Model|mixed model]] by [[Restricted Maximum Likelihood]] ([[Restricted Maximum Likelihood|REML]]) or [[Maximum Likelihood Estimation|maximum likelihood]], and know which of the two a given comparison requires
-> 5. Interpret [[Model Output|output]] from a [[Linear Mixed Model]] and make appropriate choices when evaluating [[Model Selection|modeling options]], using the [[Likelihood Ratio Test]], [[AIC]] and [[BIC]]
-> 6. Interpret [[Linear Mixed Model|linear mixed model]] [[Model Diagnostics|diagnostics]] and [[Summary Statistics|summary statistics]] to evaluate the [[Model Structure|model structure]] and [[Variable Selection|variable selection]]
-> 7. Recognize the [[Best Linear Unbiased Predictor]] ([[Best Linear Unbiased Predictor|BLUP]]) of a [[Random Effects|random effect]] as a [[Credibility|credibility-weighted estimate]]
+> 1. Understand the assumptions behind the [[Linear Mixed Model|linear mixed model]] design
+>    - *Key concepts:* [[Fixed Effects]] · [[Random Effects]]
+> 2. Understand how to use a [[Hierarchical Model|hierarchical model]]
+>    - *Key concepts:* [[Random Intercept and Slope]] · [[Nested and Crossed Factors]] · [[Variance Components]] · [[Covariance Structure]] · [[Residual]] · [[Intraclass Correlation]]
+> 3. Interpret [[Model Output|output]] from a [[Linear Mixed Model|linear mixed model]] and make appropriate choices when evaluating [[Model Selection|modeling options]]
+>    - *Key concepts:* [[Restricted Maximum Likelihood]] · [[Maximum Likelihood Estimation]] · [[Likelihood Ratio Test]] · [[AIC]] · [[BIC]]
+> 4. Interpret [[Linear Mixed Model|linear mixed model]] [[Model Diagnostics|diagnostics]] and [[Summary Statistics|summary statistics]] to evaluate the [[Model Structure|linear mixed model structure]] and [[Variable Selection|variable selection]]
+>    - *Key concepts:* [[Best Linear Unbiased Predictor]]
 > 
 > ### Model components
 > - [[Fixed Effects]] — the [[Fixed Effects|population-average part]], $X\beta$
@@ -73,19 +77,25 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 
 > Candidates should understand the mechanics of the [[Statistical Learning|algorithms]] identified in the tasks below and recognize their inherent strengths and weaknesses to be able to select the most appropriate procedure for the [[Statistical Learning|learning task]] at hand.
 > 
-> 1. Distinguish [[Supervised Learning|supervised]] from [[Unsupervised Learning|unsupervised]] learning, and explain the [[Bias-Variance Tradeoff|bias-variance tradeoff]] behind [[Test Error|test-error]] behaviour
-> 2. Compute [[K-Nearest Neighbors]] ([[K-Nearest Neighbors|KNN]])
-> 3. Prune [[Decision Tree]]s by [[Tree Pruning|cost-complexity pruning]]
-> 4. Calculate [[Node Impurity|summary statistics]] for a set of [[Decision Tree|decision trees]] (e.g., [[Gini Index]], [[Entropy]], [[Residual Sum of Squares]])
-> 5. Understand the assumptions underlying different [[Tree Ensemble]] methods — [[Bagging|bagging]], [[Random Forest|random forests]] and [[Boosting|boosting]] — and the improvements they can make to [[Decision Tree|decision trees]]
-> 6. Read [[Out-of-Bag Error|out-of-bag error]] and [[Variable Importance|variable importance]] from a [[Tree Ensemble|fitted ensemble]]
-> 7. Compute elements of [[Principal Components Analysis]] ([[Principal Components Analysis|PCA]]) (e.g., [[Loading Vector|loading vectors]], [[Proportion of Variance Explained|variance explained]])
-> 8. Interpret [[Principal Components Analysis]] ([[Principal Components Analysis|PCA]]) [[Model Output|software outputs]], including the [[Scree Plot|scree plot]]
-> 9. Perform the computations behind [[Clustering]] procedures (e.g., [[K-Means Clustering]], [[Hierarchical Clustering|hierarchical clustering]])
-> 10. Interpret [[Clustering|clustering procedure]] [[Model Output|outputs]], including the [[Dendrogram|dendrogram]] and the choice of [[Linkage|linkage]]
-> 11. Interpret [[Neural Network]] results, including the role of the [[Activation Function|activation function]], [[Hidden Layer|hidden layers]], and [[Backpropagation|backpropagation]]
-> 12. Calculate measures of [[Predictive Accuracy|model predictive accuracy]] (e.g., [[Lift]], [[Gini Index]], [[AUROC]], the [[Confusion Matrix|confusion matrix]])
-> 13. Compare models via [[Predictive Accuracy|predictive performance measures]] (e.g., [[Double Lift Chart|double lift chart]], [[Quantile Plot|quantile plot]])
+> 1. Compute [[K-Nearest Neighbors|K-nearest neighbors (KNN)]]
+>    - *Key concepts:* [[Supervised Learning]] · [[Unsupervised Learning]] · [[Bias-Variance Tradeoff]] · [[Test Error]]
+> 2. Prune [[Decision Tree|decision trees]]
+>    - *Key concepts:* [[Tree Pruning]]
+> 3. Calculate the [[Node Impurity|summary statistics]] for a set [[Decision Tree|decision of trees]] (e.g., [[Gini Index|Gini index]], [[Entropy|entropy]], [[Residual Sum of Squares|residual sum of squares]])
+> 4. Understand the assumptions underlying different [[Tree Ensemble|tree ensemble]] methods and the improvements they can make to [[Decision Tree|decision trees]]
+>    - *Key concepts:* [[Bagging]] · [[Random Forest]] · [[Boosting]] · [[Out-of-Bag Error]] · [[Variable Importance]]
+> 5. Compute elements of [[Principal Components Analysis|principal components analysis (PCA)]] (e.g., [[Loading Vector|loading vectors]], [[Proportion of Variance Explained|variance explained]])
+> 6. Interpret [[Principal Components Analysis|principal components analysis (PCA)]] [[Model Output|software outputs]]
+>    - *Key concepts:* [[Scree Plot]]
+> 7. Perform the computations behind [[Clustering|clustering]] procedures (e.g., [[K-Means Clustering|K-means]], [[Hierarchical Clustering|hierarchical]])
+> 8. Interpret [[Clustering|clustering procedures]] [[Model Output|outputs]]
+>    - *Key concepts:* [[Dendrogram]] · [[Linkage]]
+> 9. Interpret [[Neural Network|neural network]] results
+>    - *Key concepts:* [[Activation Function]] · [[Hidden Layer]] · [[Backpropagation]]
+> 10. Calculate measures of [[Predictive Accuracy|model predictive accuracy]] (e.g., [[Lift]], [[Gini Index|Gini index]], [[AUROC]])
+>    - *Key concepts:* [[Confusion Matrix]]
+> 11. Compare models via [[Predictive Accuracy|predictive performance measures]] (e.g., [[Double Lift Chart|double lift chart]])
+>    - *Key concepts:* [[Quantile Plot]]
 > 
 > ### Learning framework
 > - [[Statistical Learning]] — the overall framework these methods sit in
@@ -113,13 +123,13 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 
 > Candidates should understand the basic applications of the [[ARIMA|Auto Regressive Integrated Moving Average]] ([[ARIMA]]) [[Time Series|time series]] model.
 > 
-> 1. Model relationships of current and [[Backward Shift Operator|past values]] of a [[Time Series|statistic/metric]] using [[Autoregressive Model|autoregressive]] and [[Moving Average Model|moving average]] terms
-> 2. Test a [[Time Series|series]] for [[Stationarity|stationarity]] and achieve it by [[Differencing|differencing]]; recognize [[White Noise|white noise]] and the [[Random Walk|random walk]] as limiting cases
-> 3. Identify a model from the [[Autocorrelation Function]] ([[Autocorrelation Function|ACF]]) and [[Partial Autocorrelation Function]] ([[Partial Autocorrelation Function|PACF]]), and check [[Residual|residuals]] against the same [[Correlogram|plots]]
-> 4. Understand the framework of [[ARIMA]] models (e.g., [[Deterministic and Stochastic Trend|trends]] and [[Seasonality|seasonality]])
-> 5. Separate a [[Time Series|series]] into [[Deterministic and Stochastic Trend|trend]], [[Seasonality|seasonal]] and [[Time Series Decomposition|irregular parts]] by [[Time Series Decomposition|decomposition]]
-> 6. Calculate [[Deterministic and Stochastic Trend|trends]] and [[Seasonality|seasonality]] using [[Time Series]] with [[Linear Regression|regression]] (e.g., [[Deterministic and Stochastic Trend|deterministic vs. stochastic trend]])
-> 7. Interpret [[Time Series|time series]] [[Model Output|output]] to make [[Time Series Forecast|forecasts]], with [[Prediction Interval|prediction intervals]]
+> 1. Model relationships of current and [[Backward Shift Operator|past values]] of a [[Time Series|statistic/metric]]
+>    - *Key concepts:* [[Autoregressive Model]] · [[Moving Average Model]] · [[Stationarity]] · [[Differencing]] · [[White Noise]] · [[Random Walk]] · [[Autocorrelation Function]] · [[Partial Autocorrelation Function]] · [[Correlogram]]
+> 2. Understand the framework of [[ARIMA]] models (e.g., [[Deterministic and Stochastic Trend|trends]] and [[Seasonality|seasonality]])
+>    - *Key concepts:* [[Time Series Decomposition]]
+> 3. Calculate [[Deterministic and Stochastic Trend|trends]] and [[Seasonality|seasonality]] using [[Time Series|time series]] with [[Linear Regression|regression]] (e.g., [[Deterministic and Stochastic Trend|deterministic vs. stochastic trend]])
+> 4. Interpret [[Time Series|time series]] [[Model Output|output]] to make [[Time Series Forecast|forecasts]]
+>    - *Key concepts:* [[Prediction Interval]]
 > 
 > ### Building blocks
 > - [[Stationarity]] · [[White Noise]] · [[Random Walk]] · [[Differencing]]

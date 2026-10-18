@@ -83,7 +83,7 @@ that were found didn't say what they were. Now every pair connects, with a stren
 read for it however faint (*Any pair*, below), the board **scores** what is found —
 the stronger the connection the more, popping off the line that scored it — and every
 connection says, in one to five words, **what one concept is to the other**
-(*Relations*): written for the vault's 5,598 connections, and read off the vault for
+(*Relations*): written for the vault's connections (5,857 labels), and read off the vault for
 any other pair. The graph's own connections — the ones the notes tie together — still
 make concepts and still count toward a pack being complete; a pair the notes barely
 tie makes nothing, scores little and is drawn as a dashed hairline. Since every pair
@@ -219,7 +219,7 @@ priori in** *Bornhuetter-Ferguson Method*; *Credibility* **trades off against**
 *Severity* **together make Pure Premium** (`relationSentence`). `relationOf` takes the
 first of these that says something:
 
-1. **Written** — `data/craftRelations.json`, one label for each of the graph's 5,598
+1. **Written** — `data/craftRelations.json`, 5,857 labels, one for each of the graph's
    connections across the thirty topics, keyed by `pairKey` with its direction first.
    Written by Claude for this board from the pair's quoted sentence and what it makes,
    **not yet reviewed** — like any AI-written vault content they want a human read,

@@ -73,7 +73,7 @@ VERIFICATION_KEYS = (
     "log",
 )
 
-ENTRY_TYPES = ("finding", "correction", "comment", "question", "resolution")
+ENTRY_TYPES = ("finding", "correction", "comment", "question", "resolution", "withdrawal")
 SEVERITIES = ("critical", "major", "minor", "nit")
 ENTRY_STATUSES = ("open", "resolved", "wontfix", "superseded")
 
@@ -439,6 +439,16 @@ class VerificationLog:
             if entry.status in CLOSING_STATUSES:
                 closed.add(entry.entry_id)
         return [f for f in self.findings() if f.entry_id not in closed]
+
+    @property
+    def withdrawn(self) -> bool:
+        """The content file was withdrawn from the vault (a `withdrawal` entry).
+
+        A log is append-only, so it outlives the file it was about: a withdrawn
+        file's log stays as the record of why, and its missing target is not an
+        error.
+        """
+        return any(e.entry_type == "withdrawal" for e in self.entries)
 
     def open_critical(self) -> list[LogEntry]:
         return [f for f in self.open_findings() if f.severity == "critical"]

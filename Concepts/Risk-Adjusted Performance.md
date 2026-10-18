@@ -1,17 +1,15 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:86e79f985e8be91301affe1ad37cb50b8aba593e8cc0586e475a7b76996fe6c4
+  content_hash: sha256:571dc09255fc2b197232a7040a723967e07edeb029c8bda556f10fe03824f9df
   sources:
-    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.1-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
+    - "Goldfarb, Risk-Adjusted Performance Measurement for P&C Insurers (CAS study note, rev. Oct 2010), pp.3-5, 9-11, 31-44, sha256:b0ee2f3239c7f53d07401d4c56828d9a1129d5c1f7b660603d811a50019d7b8e — https://www.casact.org/sites/default/files/database/studynotes_goldfarb8.2.pdf"
+    - "Ward & Lee, Practical Application of the Risk-Adjusted Return on Capital Framework (CAS Forum 2002), pp.113, 120-125 (PDF pp.35, 42-47), sha256:8fba670b85d32b9ddcb5477e4dde607564737f24c7b39489347ec575b247ff4d — https://www.casact.org/sites/default/files/database/forum_02sforum_02sf079.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
-    - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.5-6 (notation), 19-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
-    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), pp.4-5, 7 (Domains B and C; text references; study-note and errata hyperlinks), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-    - "CAS abstract record, Cummins, Allocation of Capital in the Insurance Industry (RMIR vol. 3 no. 1, pp.7-27, 2000): abstract, sha256:e794f5454cd27647fe926819fa474a13934475e091a93c69aa752413e234b2f8 — https://www.casact.org/abstract/allocation-capital-insurance-industry"
-    - "CAS Exam 9 Working Group, Note to Allocation of Capital in the Insurance Industry (Cummins), January 2026, pp.1-3 (r_E = r_A(1+k1+k2) + r1 s1 + r2 s2; corrected r_i = -(k_i/s_i) r_F + beta_i (r_M - r_F)), sha256:b5768e1c98dd51f4bc86b133f9da30de2cb0497d65f0e34af4861cb122c305fc — https://www.casact.org/sites/default/files/2026-01/Exam_9_Erratum_Cummins_Capital-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Risk-Adjusted Performance.md
@@ -23,10 +21,10 @@ verification:
 
 > $$\text{EVA}_i = \text{NOI}_i - k\,C_i$$
 
-- $\text{NOI}_i$ is the unit's after-tax net operating income — underwriting result plus investment income on the funds it generates, including the capital allocated to it; $C_i$ is its allocated capital; $k$ the hurdle rate. Since $\text{EVA}_i = (\text{RAROC}_i - k)\,C_i$, a unit creates value exactly when its RAROC exceeds the hurdle.
-- **RAROC ranks, EVA sizes.** RAROC is a ratio and flatters small, high-margin units; EVA is in dollars and adds across units (when the allocation is complete), so it is the measure to use when deciding where to grow. Maximising RAROC can shrink the firm below the size that maximises value.
+- $\text{NOI}_i$ is the unit's net operating income (pre- or after-tax, with the hurdle on the same basis) — underwriting result plus investment income on the funds it generates; $C_i$ is its allocated capital; $k$ the hurdle rate. Conventions differ on the capital itself: some credit the line with investment income on its allocated capital as well as on its reserves, others credit only the policyholder-supplied funds — as CAS's model solution to Exam 9 Spring 2013 Q15 does — so state which is used. Since $\text{EVA}_i = (\text{RAROC}_i - k)\,C_i$, a unit creates value exactly when its RAROC exceeds the hurdle.
+- **RAROC ranks, EVA sizes.** RAROC is a ratio; EVA is in dollars and adds across units (when the allocation is complete), which is the advantage of a profitability measure denominated in dollars.
 - **Measure economics, not accounting.** Reserves should be at present value and the investment income on them credited to the line. A long-tailed line holds capital for several years, so its charge must cover every year the capital is tied up — a single year's capital understates its cost.
-- **The verdict depends on the allocation.** RAROC and EVA inherit whatever capital allocation feeds them (see the example on [[Business Unit]]). Use the same allocation for [[Risk-Adjusted Pricing]] and for performance measurement.
+- **The verdict depends on the allocation.** RAROC and EVA inherit whatever capital allocation feeds them: two reasonable allocations can rank the same two units in opposite orders (see the example on [[Business Unit]], and [[Risk-Adjusted Pricing]] for the same capital used to set prices).
 - **Acting on it.** A unit below its hurdle can be repriced, reinsured (lowering its capital), re-underwritten or shrunk; one comfortably above it is a candidate for growth. This is the "evaluate economic performance" step of [[Financial Risk Management]].
 
 > [!example]- RAROC and EVA Across Three Lines {Example}

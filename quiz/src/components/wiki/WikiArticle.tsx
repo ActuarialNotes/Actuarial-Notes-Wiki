@@ -113,13 +113,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     const stripped = normalizeVaultMath(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
     // An exam page's source-material callout becomes a gallery of resource
     // cards; lift its entries out before the wikilinks are rewritten.
-    const { markdown: body, entries } = extractSourceMaterial(stripped)
+    const { markdown: body, entries, objectiveFilter } = extractSourceMaterial(stripped)
     return {
       processed: stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(body))),
       sourceMaterial: entries,
       // The learning objectives name the shelf's filter — read only where
-      // there is a shelf to filter.
-      objectives: entries.length > 0 ? parseSyllabusObjectives(body) : [],
+      // there is a shelf to filter, and the page hasn't switched it off.
+      objectives: entries.length > 0 && objectiveFilter ? parseSyllabusObjectives(body) : [],
     }
   }, [markdown])
 

@@ -1,15 +1,16 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7758a96885cc5d966a7af47efb8b1a4ba1ee67e6e56205a46ea16dc1bd7af607
+  content_hash: sha256:699c09ca30aead3d9dd7f1e2050c7263d1e12bd8ba4fb5e691d1d289e94d0b30
   sources:
-    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.1-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
+    - "CAS Exam 9 Practice Items and Solutions (2026; retired Spring 2026 items), Items 3 (M&M 11.3: cost of capital i = [g(s)-s]/[1-g(s)], g(s) = (s+i)/(1+i), LR = s/g(s)) and 4 (M&M pp.317-318: Shapley allocation), sha256:9cf61c6c2597a9a1a6d2d548d83f78a1a56e73778226176ab30308aa85f615fb — https://www.casact.org/sites/default/files/2026-08/Exam9_PracticeItems_2026.xlsx"
+    - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.1-9 (notation p.5-6), 18-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
+    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.4-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
-    - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.5-6 (notation), 19-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
-    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), pp.4-5, 7 (Domains B and C; text references; study-note and errata hyperlinks), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Return on Capital.md
@@ -26,9 +27,9 @@ verification:
 - $M = P - L$ is the [[Insurance Margin|margin]] and $Q = a - P$ the capital. $\nu$ and $\delta$ are the **risk discount factor** and **risk discount rate**, the analogues of $v$ and $d$ in interest theory ([[Discount Factor]], [[Discount Rate]]): capital is paid in at the start and the margin, like interest, is earned at the end. The same identities hold — $\delta = \iota\nu$ and $\nu + \delta = 1$.
 - Capital is the present value, at the risk discount factor, of what investors expect back: $Q = \nu(a - L)$. Premium follows as $P = L + \iota Q = \nu L + \delta a$ — see [[Insurance Pricing]].
 - **Return is margin times leverage**: $\iota = (M/P)(P/Q)$. A return target can be met by pricing (margin) or by capital management ([[Insurance Leverage|leverage]]).
-- **The target** comes from the [[Cost of Capital|cost of capital]] — the return investors need to support the firm's market value — often blended with the cheaper, fixed costs of debt and reinsurance into a weighted average ([[Capital Structure]]).
+- **The target** comes from the [[Cost of Capital|cost of capital]] — the return investors need to support the firm's market value — blended with the known costs of debt and reinsurance into a weighted average over the capital actually used ([[Capital Structure]]).
 - **Expected is not reported.** Pricing uses the expected return on allocated capital. Reported return on equity is net income over book surplus, including investment income, realised gains and reserve development on prior years; the two answer different questions.
-- **Constant or varying?** A constant cost of capital charges the same $\iota$ on every layer of capital. Pricing with a distortion $g$ implies a return of $(g(s) - s)/(1 - g(s))$ on the layer of assets whose attachment probability is $s$; for most distortions (the constant-cost-of-capital one excepted) it falls as layers become more remote — as in bond markets, where safer layers of capital earn lower spreads. See [[Risk-Adjusted Performance]] for return by line.
+- **Constant or varying?** A constant cost of capital charges the same $\iota$ on every layer of capital. Pricing with a distortion $g$ implies a return of $(g(s) - s)/(1 - g(s))$ on the layer of assets whose attachment probability is $s$; for most distortions (the constant-cost-of-capital one excepted) it falls as layers become more remote, so a better-capitalised insurer has a lower percentage cost of capital. See [[Risk-Adjusted Performance]] for return by line.
 
 > [!example]- Return, Risk Discount Factor and Rate {Example}
 > A portfolio is written at premium $105$ with expected loss $95$ and is supported by assets of $180$. Find $\iota$, $\nu$ and $\delta$, and confirm $P = \nu L + \delta a$.

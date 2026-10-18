@@ -1420,10 +1420,16 @@ compile — don't "clean up" the flagged code as dead.
   its text. A reading line that opens with learning-objective codes (`A1, C1-C5`) gives
   the shelf a **Learning objective** filter (`readingObjectives` / `objectiveFilterOptions`
   in `lib/sourceMaterial.ts`), each code named from the page's own numbered objectives —
-  but only where every cited code is one the page numbers. Exam 5, 6C, 7, 8, 9, MAS-I,
+  but only where every cited code is one the page numbers. Exam 5, 7, 8, 9, MAS-I,
   MAS-II and PCPA have it; Exam 6U cites codes from an earlier outline than its objectives'
-  numbering, so it gets none until the two agree. `sourceMaterial.test.ts` holds Exam 6C's and MAS-I's readings to
-  their objectives.
+  numbering, so it gets none until the two agree; and a page can switch it off with
+  `%%objective-filter: off …%%` inside its Source Material callout — Exam 6C does, because
+  CAS's Fall 2026 reading table kept the Fall 2025 numbering of the domain C tasks it
+  reworded (`extractSourceMaterial(md).objectiveFilter`). A task's `*Key concepts:*` line
+  (editorial, marked) keeps a concept on the syllabus that the outline's own words don't
+  name — the exam pages transcribe CAS's and the SOA's words and put the vault's additions
+  there (content decision D8). `sourceMaterial.test.ts` holds Exam 5's, 6C's and MAS-I's
+  readings to their objectives.
 - **Every** content file (`questions/`, `Concepts/`, `Resources/`, root `Exam *.md`) carries a
   `verification:` block as the last key of its YAML frontmatter — including concept and exam
   pages, which is why they now have frontmatter at all (`WikiArticle` already stripped it).

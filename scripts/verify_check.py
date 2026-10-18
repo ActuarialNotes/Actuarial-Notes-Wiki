@@ -199,8 +199,11 @@ def check_log_file(path: Path) -> list[Problem]:
         problems.append(
             Problem("error", rel, f"target must be {expected_target!r}, found {log.target!r}")
         )
-    if log.target and not (REPO_ROOT / log.target).is_file():
+    if log.target and not (REPO_ROOT / log.target).is_file() and not log.withdrawn:
         problems.append(Problem("error", rel, f"target {log.target!r} does not exist"))
+    if log.target and log.withdrawn and (REPO_ROOT / log.target).is_file():
+        problems.append(Problem("error", rel, f"target {log.target!r} is recorded as withdrawn "
+                                              "but is still in the vault"))
 
     seen: set[str] = set()
     for entry in log.entries:

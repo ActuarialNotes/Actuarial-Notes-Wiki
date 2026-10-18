@@ -106,7 +106,7 @@ checked against.
 
 | Exam | Papers | Questions (on-syllabus / off) | Notes |
 |---|---:|---:|---|
-| Exam 5 | 14 | 349 / 0 | **Spring 2018's link is the examiner's report alone**: 30 pages, with no booklet. The original exam needs finding first. Exam 5 is also the regression suite: a sweep has to re-find the known transcription errors (`docs/validation-agent.md`, "Bootstrapping"). |
+| Exam 5 | 14 | 349 / 0 | **Spring 2018's link is the examiner's report alone**: 30 pages, with no booklet. The booklet is CAS's workbook `april_may_sp18-5.xls` (one sheet per question; found 18 Oct 2026). Exam 5 is also the regression suite: a sweep has to re-find the known transcription errors (`docs/validation-agent.md`, "Bootstrapping"). |
 | Exam 6C | 13 | 321 / 73 | The off-syllabus questions are pre-IFRS 17 valuation, BCAR and U.S. regulation. |
 | Exam 7 | 8 | 182 / 18 | Spring 2012–2019, including 64 questions filed in `exam-9`. |
 | Exam 8 | 8 | 166 / 7 | Fall 2012–2019, including 34 questions filed in `exam-9`. |

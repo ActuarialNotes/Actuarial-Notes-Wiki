@@ -38,11 +38,11 @@ import {
 // added marked and what it dropped put back on request, `sourceMaterialShelf`)
 // — less the Exam strip, since the page is one exam. Beside them, a
 // **Learning objective** filter narrows the shelf to the sources read for the
-// objectives chosen (any of them) — on 6C, the readings for C2's IFRS 17
-// valuation rather than all sixty-seven. The codes come off each reading
-// assignment and the names off the page's own objectives
-// (`objectiveFilterOptions`); a page whose two numberings don't agree gets no
-// such filter rather than a half-named one.
+// objectives chosen (any of them) — on Exam 5, the readings for one reserving
+// task rather than the whole shelf. The codes come off each reading assignment
+// and the names off the page's own objectives (`objectiveFilterOptions`); a page
+// whose two numberings don't agree gets no such filter rather than a half-named
+// one, and a page can switch it off (`%%objective-filter: off%%`, Exam 6C).
 
 export interface SourceMaterialGalleryProps {
   entries: SourceMaterialEntry[]

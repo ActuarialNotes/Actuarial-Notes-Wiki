@@ -69,7 +69,7 @@ describe('the examiners’ notes', () => {
   it('quote the report word for word', () => {
     const item = items.find(i => i.id === 'cas5-2013f-q5#a')!
     expect(itemNotes(item).map(n => n.text)).toContain(
-      'Candidates struggled with the large loss factor — many did not calculate it correctly, and others did not apply it correctly.',
+      'Candidates struggled with the large loss factor.',
     )
     for (const note of itemNotes(item)) expect(item.examinerReport.replace(/\s+/g, ' ')).toContain(note.text.split('\n')[0])
   })

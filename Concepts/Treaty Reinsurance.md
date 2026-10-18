@@ -1,19 +1,22 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bcba13f11f9b101c65931dce5336d68143fd511de920326cc22cc1a85eb6fb82
+  content_hash: sha256:c590cbd3a34c2462bb8104ced3f107b2df17fefcd6c9928b9b384b563cc876ba
   sources:
-    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (scope), p.4 (losses occurring / risks attaching), p.9 (follow the fortunes), p.14 (GNEPI/GNWPI, subject premium net of inuring reinsurance), pp.14-21 (experience/exposure rating, credibility), pp.45-46 (risks attaching cat cover, interlocking clause), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 1
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (facultative as variations on the same themes), p.3 (proportional treaty), p.4 (losses occurring / risks attaching), p.9 (follow the fortunes, adjustable features), p.14 (per risk excess; GNEPI/GNWPI net of inuring reinsurance), pp.14-21 (experience and exposure rating), p.18 (single-risk exposure factor 93%-49% = 44%; exposure above IV), p.29 (casualty exposure factor E[x;min(PL,AP+Lim)] - E[x;min(PL,AP)] over E[x;PL]), pp.36-43 (aggregate covers), p.43 (facultative certificates inure to cat cover), pp.45-46 (risks attaching cat cover, interlocking clause), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "IRMI Insurance Definitions, treaty reinsurance, definition (cedant agrees to cede classes; reinsurer accepts all qualifying business; cedant assured its risks are reinsured), Types of Treaty Reinsurance, sha256:895c96d7bd919d52198d86e98bc4109e0d09b9088b2d33c8a3370fe87802ed9a — https://www.irmi.com/term/insurance-definitions/treaty-reinsurance"
+    - "Singapore Reinsurers' Association, Glossary of Reinsurance Terms, entries Automatic Treaty, Facultative Reinsurance (proportional and excess of loss; faculty to accept or reject), Obligatory Treaty, sha256:b953321c537f6d447ae917f92e3e6e2315942bd5ce2e76aedffb5f6bdedf45aa — https://sg-reinsurers.org.sg/glossary-reinsurance-terms"
+    - "Odomirok, Kennedy & Pantaleo, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2020), printed pp.63-66 (reinsurance note: unsecured recoverables incl. paid losses billed not collected, ceded reserves and ceded UPR; LOC, trust, funds withheld; disputes; commutation; concentration), pp.111-112 and 119-127 (Schedule F: provision for reinsurance as a liability, change to surplus; authorized/unauthorized; overdue; RBC credit charge), p.244 (RBC R1 fixed income incl. interest rates and default; R3 receivables and reinsurance recoverables), p.376 (treaty and facultative reinsurance; unregistered reinsurance collateral), p.412 glossary (facultative reinsurance), sha256:74917dcb2ca8b1cf210a7fd66b08d4c90d844a13dd14b2c71690a18e51eb4a5c — https://www.casact.org/sites/default/files/2021-03/6U_CAS_Financial_Reporting.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.3 Domain A task 2 (loss cost of treaty, facultative and other contracts; reading Clark), p.5 Domain C task C5 'Estimate and manage interest rate and credit risk (e.g., default, prepayment, reinsurance)' and C6-C7; pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Treaty Reinsurance.md
 ---
 
-**Treaty Reinsurance** is reinsurance of a defined portfolio (a line, a class or a whole book) under one agreement. Every risk within the treaty's terms is ceded automatically and the reinsurer must accept it without seeing it, so the contract is priced on the **portfolio**, as a rate on subject premium, not risk by risk.
+**Treaty Reinsurance** is reinsurance of a defined portfolio (a line, a class or a whole book) under one agreement, typically for a year. The cedant agrees to cede the classes of business the treaty covers and the reinsurer agrees to accept all business qualifying under it, so the contract is priced on the **portfolio**, as a rate on subject premium, not risk by risk.
 
 > $$\text{Treaty premium} = \text{Rate} \times \text{Subject premium}$$
 
@@ -22,7 +25,7 @@ verification:
 - **Subject premium** is the premium on the business the treaty covers: net of any reinsurance that *inures* to it (a surplus share, facultative certificates) but gross of the treaty being priced. It is called GNEPI (gross net earned premium income) on a losses-occurring basis and GNWPI (gross net written premium income) on a risks-attaching basis.
 - **Losses occurring vs risks attaching.** A *losses-occurring* treaty covers losses that occur during the treaty period, whenever the policy incepted. It is priced on earned premium and [[Accident Year|accident-year]] losses. A *risks-attaching* treaty covers losses on policies written during the period, which can occur up to a policy term after the treaty expires. It is priced on written premium and [[Policy Year|policy-year]] losses.
 - **Any structure can be written as a treaty:** [[Quota Share]], [[Surplus Share]], per-risk or per-occurrence [[Excess of Loss]], [[Aggregate Excess of Loss]]. It is priced by experience rating (the treaty's own or "as-if" history, developed, trended and brought to current rate level) and by exposure rating (the current risk profile, through [[Exposure Curves]] or [[Increased Limits|ILFs]]), and the two are blended with [[Credibility|credibility]]. See [[Reinsurance Pricing]].
-- **Automatic cession cuts both ways.** The cedant gets certain, immediate capacity. The reinsurer depends on the cedant's underwriting and claims handling. In theory it "follows the fortunes" of the cedant, but in practice the two results can differ a great deal, which is why treaties carry [[Reinsurance Contract Provisions|adjustable provisions]].
+- **Automatic cession cuts both ways.** The cedant is assured that every risk within the treaty's terms is reinsured. The reinsurer accepts business it has not underwritten risk by risk, so it shares the results of the cedant's underwriting: in theory it "follows the fortunes" of the cedant, but in practice the two results can differ a great deal, which is why treaties carry [[Reinsurance Contract Provisions|adjustable provisions]].
 - Contrast [[Facultative Reinsurance]], where each risk is offered, underwritten and priced on its own, and the reinsurer may decline it.
 
 > [!example]- Losses Occurring or Risks Attaching? {Example}

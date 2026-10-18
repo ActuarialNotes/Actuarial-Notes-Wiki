@@ -2,11 +2,11 @@
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-02
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:e3f3cbb9be8c7264b8d9d7fbe7edc2d86196f4ca6fa81ef6f36bb0c37f42cd18
+  content_hash: sha256:c3b8c7c6118d0782b72f25c1a0d0ab5e1200af511c277a0d152ec54afa55406d
   sources:
-    - "SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7 incl. p.7 link annotations, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
+    - "SOA Financial Mathematics Exam syllabus, December 2026 (7 pp.), pp.1-7, Topic 2 learning outcome b) re-read on p.3 this pass, sha256:b4189b65d60ab3c9250a8bf5ed48a28a8365c92ab7d673aba25d50ee339edb39 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-12-exam-fm-syllabus.pdf"
     - "SOA study note FM-24-17, Alps, Using Duration and Convexity to Approximate Change in Present Value (2017), title page p.1 and contents p.2, sha256:530436d4707ecadba3a7bef6e1a9661b8d9e9bb173486edfb6924bc4a4992040 — https://www.soa.org/globalassets/assets/Files/Edu/2017/fm-duration-convexity-present-value.pdf"
     - "SOA, Notation and terminology used for Exam FM, p.1 (title), sha256:f6cfa778c3c08d8118ff41f1cda86eda553cf5542b73ade914082fa55a292a0c — https://www.soa.org/globalassets/assets/Files/Edu/2019/exam-fm-notation-terminology2.pdf"
     - "SOA Exam FM Sample Questions and Solutions (rev. Aug 2026), p.1 of each, sha256:d20b5cf2b78cb4cddb3dc556e0df62c40b7d510b7941b546809cc58c4b71a069 and sha256:ae4ec6082b43944a0c44cefaf02cdc24cf2e011dcd57366ea5f9cb32d3323f69 — https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf, https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf"
@@ -46,11 +46,11 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 30 multipl
 > 1. Define and recognize the definitions of the following terms: [[Annuity Immediate|Annuity-Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
 >    - *Key concepts:* [[Decreasing Annuity]], [[Continuous Annuity]]
 > 2. For each of the following types of [[Annuities|annuity]]/[[Cash Flow|cash flows]], given sufficient information of [[Annuity Immediate|immediate]] or [[Annuity Due|due]], [[Present Value|present value]], [[Future Value|future value]], [[Current Value|current value]], [[Interest Rate|interest rate]], [[Payment Amount|payment amount]], and [[Term of Annuity|term of annuity]], calculate any remaining item.
->	- [[Level Annuity]], [[Term of Annuity|finite term]].
+>	- [[Level Annuity]], finite term.
 >	- [[Level Perpetuity]].
 >	- [[Non-level Annuities]]/cash flows.
->		- [[Arithmetic Progression]], [[Term of Annuity|finite term]] and [[Perpetuity|perpetuity]].
->		- [[Geometric Progression]], [[Term of Annuity|finite term]] and [[Perpetuity|perpetuity]].
+>		- [[Arithmetic Progression]], finite term and [[Perpetuity|perpetuity]].
+>		- [[Geometric Progression]], finite term and [[Perpetuity|perpetuity]].
 >		- Other [[Non-level Annuities|non-level annuities]]/[[Cash Flow|cash flows]].
 
 > [!example]- Loans {15–25%}

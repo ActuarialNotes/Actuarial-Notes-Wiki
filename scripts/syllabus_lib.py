@@ -267,6 +267,7 @@ unique selected
 typical possible potential commonly effectively specifically especially optimally respective hypothetical
 significant additional relevant
 particular applicable once
+finite
 """.split())
 
 VERBS = frozenset("""

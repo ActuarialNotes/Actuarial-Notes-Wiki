@@ -1,16 +1,13 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
   content_hash: sha256:2160eedbdc7e68f7e88bfb7f5bebc47ae2df6350bf857726b25c4bb2db755cef
   sources:
-    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-    - "CAS, Exam MAS-II — Modern Actuarial Statistics-II exam page, read 2026-10-18: '2026 Content Outline' the only outline linked; windows Oct 28 - Nov 5, 2026 and Jan 27 - Feb 2, 2027, sha256:a3a6e5a216691e4995b823b45d304f8ca8cbc70cdc4e07370734b8b167defe8f — https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii"
-    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-3 (1.5 Decomposition, 2.3 The correlogram, 3.4 Exponential smoothing and the Holt-Winters method), sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
-    - "West, Welch & Galecki, Linear Mixed Models 3rd ed., Routledge product page, Table of Contents (Ch.8 Models for Data with Crossed Random Factors), sha256:f12634bb020648718b44cad8b1038f03ba0a040c7ef9e5440308249d771ed765 — https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321"
-  open_findings: 2
+    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06), PDF pp.3-4 (Domain C tasks and readings; Complete Text References) incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Exam MAS-II (CAS).md
 ---

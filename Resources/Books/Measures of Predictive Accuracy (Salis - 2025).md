@@ -7,12 +7,14 @@ date: "2025"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6130a3417ae08ac923f23d78aa18cd2827b2eeeaafda05939899b50c046a101a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9d4f319a5d7932b47be28c6378f837b681d5707c9fb6c5abe5fc267c192e590f
+  sources:
+    - "Salis, Measures of Predictive Accuracy: Study Note for MAS-II (CAS, updated November 6, 2025), 12 pp., PDF pp.1-12, sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
+    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06), PDF pp.3-4 (Domain C tasks and readings; Complete Text References) incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Measures of Predictive Accuracy (Salis - 2025).md
@@ -44,7 +46,7 @@ A study note clarifying how some measures of predictive accuracy tested on the C
 ## 3 Measures of Model Lift
 - Section 7.2 of the GLM text describes measures of model lift, ways of quantifying the "economic value" of a model; the note clarifies the calculation of two of them.
 - 3.1 Lift
-    - Lift is "the vertical distance between the first and last quantiles" (GLM p. 77); in insurance it is usually measured as the ratio of the actual target rates in the last and first quantiles, and for a binary target it can also be the odds ratio, or in some contexts the difference.
+    - Lift is "the vertical distance between the first and last quantiles" (GLM p. 77); in insurance it is usually measured as the ratio of the actual target rates in the last and first quantiles; for a binary target it can also be the odds ratio; and in some contexts the difference is used.
     > $$L_{ratio} = \frac{Y_Q}{Y_1}$$
     - The MAS-II exam will not directly test the calculation of lift as a metric.
 - 3.2 Gini Index (for Lift)
@@ -58,7 +60,7 @@ A study note clarifying how some measures of predictive accuracy tested on the C
 - 4.1 Confusion Matrix Ratios
     - Table 7 names the ratios derived from a confusion matrix: the error rate; the true positive rate (sensitivity, recall, power); the false negative rate ([[Type II Error|Type II error]]); the true negative rate (specificity); the false positive rate ([[Type I Error|Type I error]], 1 – specificity); the positive predicted value (precision); the false discovery proportion; and the negative predicted value.
 - 4.2 AUROC
-    - Each point on the ROC curve is the (1 – specificity, sensitivity) pair at one discrimination threshold; in the note's example, 8 unique predicted probabilities give 9 unique discriminations, one threshold between each pair of them and one above and below them all.
+    - Each point on the ROC curve is the (1 – specificity, sensitivity) pair at one discrimination threshold; in the note's example, 8 unique predicted probabilities give 9 unique discriminations, seven thresholds between adjacent unique probabilities and one above and one below them all.
     - The AUROC is the area under the curve, a sum of trapezoids; the line of equality is not used.
     > $$AUROC = \sum_{j=1}^{J} \frac{1}{2}(x_j - x_{j-1})(y_{j-1} + y_j)$$
     - An equivalent formulation aggregates rows by unique predicted value in descending order, with $N$ and $P$ the numbers of actual negatives and positives; the note's example gives 0.74 either way.

@@ -162,3 +162,22 @@ created: 2026-10-09
 - checks_run: delta diff cb521624..HEAD (two re-links, consistent); casact.org exam page for a newer outline (none); F-002 settled by deletion against outline p.4 + Cowpertwait contents; F-001 and F-004 re-read against outline pp.2-4; syllabus_lint, test_syllabus_lib, test_syllabus_pipeline, publication_readiness --check MAS-II
 - sources_checked: CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf; CAS, Exam MAS-II — Modern Actuarial Statistics-II exam page, read 2026-10-18: '2026 Content Outline' the only outline linked; windows Oct 28 - Nov 5, 2026 and Jan 27 - Feb 2, 2027, sha256:a3a6e5a216691e4995b823b45d304f8ca8cbc70cdc4e07370734b8b167defe8f — https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii; Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-3 (1.5 Decomposition, 2.3 The correlogram, 3.4 Exponential smoothing and the Holt-Winters method), sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf; West, Welch & Galecki, Linear Mixed Models 3rd ed., Routledge product page, Table of Contents (Ch.8 Models for Data with Crossed Random Factors), sha256:f12634bb020648718b44cad8b1038f03ba0a040c7ef9e5440308249d771ed765 — https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321
 - note: in_review: F-002 resolved (exponential smoothing, cross-validation, bootstrap, regularization removed as outside the assigned readings). Two majors remain open: F-001 (36 vault tasks vs the outline's 21 - scope call, read logged) and F-004 (no Resources/Books page for the Salis study note - needs a writer). Rule 1: open major -> in_review.
+
+## [F-004/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:15Z/724f
+- date: 2026-10-18
+- resolves: F-004
+- status: resolved
+- note: Fixed by commit 552572f8: Source Material now lists [[Measures of Predictive Accuracy (Salis - 2025)]] with 'C3, C10 — CAS Study Note, November 2025' and the count reads {6 Sources}, matching outline p.4 (six citations; Salis 'CAS Study Note, November 2025', C3 & C10). The Resources/Books page exists and is verified in this run. The proposed action's last step, dropping the shelf's Salis workaround in quiz/src/data/syllabusVintages.ts, is a code change outside this page, left for the coordinator.
+
+## [C-005] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:15Z/724f
+- date: 2026-10-18
+- status_set: in_review
+- checks_run: delta only: git diff HEAD~1 (552572f8) — one Source Material bullet added and {5 Sources} -> {6 Sources}; bullet name, codes and scope vs outline p.4; position follows the outline's alphabetical citation order (Cowpertwait, Goldburd, James, Salis, Tse, West); link resolves; six bullets counted
+- sources_checked: CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06), PDF pp.3-4 (Domain C tasks and readings; Complete Text References) incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: in_review: the delta checks out against the outline (F-004 resolved). F-001 (36 vault tasks vs the outline's 21, a scope call for the maintainer) stays open as a major, so the page cannot be verified (rule 1). Nothing else on the page was touched.

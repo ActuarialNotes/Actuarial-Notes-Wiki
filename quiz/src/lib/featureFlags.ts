@@ -257,3 +257,26 @@ export const ACTUARIA_ENABLED: boolean = true
  * constant `false`.
  */
 export const ACTUARIA_OPEN_TO_ALL: boolean = import.meta.env.VITE_ACTUARIA_PREVIEW === 'on'
+
+/**
+ * **The Tutor** (docs/tutor.md) — the reader's own Gem Shop character as a
+ * quiet companion that walks a candidate
+ * through their exam: it serves a past-paper part at the moment it is worth
+ * most, schedules each concept's next check, and reads the record for what is
+ * confusing. Purely algorithmic: no model is called. ON, for Exam 5, and only
+ * for the accounts its rollout stage admits (`TUTOR_STAGE` and
+ * `TUTOR_APPROVED_EMAILS` in `lib/tutor/access.ts` — Preview: one account).
+ * Off, the Tutor is gone for everyone; its code is a lazy chunk either way, so it
+ * never weighs on anyone's first paint.
+ */
+export const TUTOR_ENABLED: boolean = true
+
+/**
+ * The preview override: the Tutor open to a signed-out viewer, as a guest, so
+ * the e2e suite can walk it without the approved account. Only the suite's
+ * build sets `VITE_TUTOR_PREVIEW=on` (playwright.config.ts) — and even there
+ * the Tutor appears only on a page that asks for it (`tutorPreviewRequested` in
+ * `lib/tutor/access.ts`), so no other spec ever meets it. No deployed build
+ * sets it, and there the comparison is a constant `false`.
+ */
+export const TUTOR_OPEN_TO_ALL: boolean = import.meta.env.VITE_TUTOR_PREVIEW === 'on'

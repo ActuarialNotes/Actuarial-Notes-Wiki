@@ -31,6 +31,10 @@ const buildEnv = {
   // same way, so Sources and Workflows are tested signed out
   // (e2e/cowork.spec.ts, e2e/workflow.spec.ts, `COWORK_OPEN_TO_ALL`).
   VITE_COWORK_PREVIEW: 'on',
+  // The Tutor is open to one approved account; the suite's build lets a page
+  // that asks for it (localStorage `actuarial_tutor_preview`) meet it signed
+  // out, so e2e/tutor.spec.ts walks it and no other spec ever sees the owl.
+  VITE_TUTOR_PREVIEW: 'on',
 }
 
 export default defineConfig({

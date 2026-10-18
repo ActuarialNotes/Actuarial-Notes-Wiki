@@ -2068,10 +2068,14 @@ summary .katex-display,
 .paper-chrome-rail { view-transition-name: paper-rail; }
 .paper-chrome-header { view-transition-name: paper-header; }
 .paper-chrome-resume { view-transition-name: paper-resume; }
+/* The Tutor (docs/tutor.md §9) is chrome the same way: it sits in the corner
+   of every page and belongs to none of them. */
+.paper-chrome-tutor { view-transition-name: paper-tutor; }
 
 ::view-transition-group(paper-rail),
 ::view-transition-group(paper-header),
-::view-transition-group(paper-resume) {
+::view-transition-group(paper-resume),
+::view-transition-group(paper-tutor) {
   z-index: 10;
   animation: none;
 }
@@ -2080,7 +2084,9 @@ summary .katex-display,
 ::view-transition-old(paper-header),
 ::view-transition-new(paper-header),
 ::view-transition-old(paper-resume),
-::view-transition-new(paper-resume) {
+::view-transition-new(paper-resume),
+::view-transition-old(paper-tutor),
+::view-transition-new(paper-tutor) {
   animation-duration: 180ms;
   animation-timing-function: ease-out;
 }
@@ -2325,4 +2331,58 @@ summary .katex-display,
 @media (prefers-reduced-motion: reduce) {
   .rainbow-glow::before,
   .rainbow-glow::after { animation: none; }
+}
+
+/* ── The Tutor's place on the page (docs/tutor.md §9) ──
+   The character rides above whatever is parked on the bottom edge — a page's action
+   bar or the concept popup's split pane — the way the resume dock does. Its
+   panel opens above it on a wide screen, and drops to the bottom of the screen
+   when the split pane leaves too little room above; on a phone it is a sheet. */
+.tutor-dock {
+  bottom: calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 1rem);
+}
+.tutor-panel-frame {
+  bottom: 0;
+  max-height: 88vh;
+}
+@media (min-width: 640px) {
+  .tutor-panel-frame {
+    --tutor-panel-bottom: max(1rem, min(calc(max(var(--concept-split-height, 0px), var(--action-bar-height, 0px)) + 4.75rem), calc(100vh - 34rem)));
+    bottom: var(--tutor-panel-bottom);
+    max-height: calc(100vh - var(--tutor-panel-bottom) - 1rem);
+  }
+}
+
+/* ── The Tutor's character (docs/tutor.md §9) ──
+   The reader's own Gem Shop character, drawn exactly as bought; its moods are
+   done to the drawing, never inside it. Still, as a companion should be: a slow
+   breath while the bank loads, a greyed doze in quiet mode, and one small hop
+   when a missed item comes back at full credit — each a state change, none a
+   performance. */
+.tutor-character--thinking { animation: tutor-breathe 1.8s ease-in-out infinite; }
+@keyframes tutor-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.tutor-character--quiet { filter: grayscale(1); opacity: 0.75; }
+.tutor-character--pleased { animation: tutor-hop 560ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes tutor-hop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+}
+.tutor-bubble { animation: tutor-bubble-in 220ms cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: bottom right; }
+@keyframes tutor-bubble-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.tutor-panel { animation: tutor-panel-in 200ms cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes tutor-panel-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tutor-character--thinking,
+  .tutor-character--pleased,
+  .tutor-bubble,
+  .tutor-panel { animation: none; }
 }

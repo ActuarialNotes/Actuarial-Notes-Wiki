@@ -618,13 +618,16 @@ Other important `lib/` modules:
   (`Exam *.md`, including the non-exam requirements), but most are still in development, so
   an exam can be tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
   DEFAULT track (what a new account lands on) to exams that *are*.
-- `data/tracks.ts` — the credential tracks. Each credential's sections run **Preliminary
-  Exams → Exams → `NON_EXAM_REQUIREMENTS`** ("Non-Exam Requirements": what the body requires
-  but doesn't call an exam — the VEEs, the DISCs, the SOA's modules and ATPA assessment, the
-  professionalism courses); the FSA's electives come before it, the FCAS lists its ACAS
-  requirements in one collapsed section and so has no group of its own. The Study Guides page
-  (`pages/wiki/WikiHome.tsx`) draws a credential in chunks, one heading per section, when it
-  has electives or that group, and titles a non-exam requirement's row without "Exam"
+- `data/tracks.ts` — the credential tracks. Each associate credential's sections run
+  **Preliminary Exams → Exams → `MODULES_AND_COURSES` → `VEE_CREDITS`** (the two
+  `NON_EXAM_SECTIONS`: what the body requires but doesn't call an exam — the DISCs, the SOA's
+  modules and ATPA assessment and the professionalism courses under the first, the VEEs under
+  the second). The FSA puts what every pathway shares first (its Modules and Courses — DMAC and
+  FAC — then Cross Practice) and then its six practice areas, marked `pathway: true`, which the
+  Study Guides page draws together under a *Pathways* heading as a grid of small lists; the FCAS
+  lists its ACAS requirements in one collapsed section and so has no group of its own. The Study
+  Guides page (`pages/wiki/WikiHome.tsx`) draws a credential in chunks, one heading per section,
+  when it has electives or a non-exam section, and titles a non-exam requirement's row without "Exam"
   (`requirementDisplayName` in `lib/wikiRoutes.ts` — `examDisplayName` keeps "Exam DISC-DA",
   which is the DISC banks' quiz label).
 - `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into

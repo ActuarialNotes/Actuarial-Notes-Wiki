@@ -25,6 +25,11 @@ export interface TrackSection {
   items: TrackItem[]
   collapsed?: boolean
   elective?: boolean
+  /**
+   * One of the FSA's six practice-area pathways: a candidate takes one. The
+   * Study Guides page draws them together, below what every pathway shares.
+   */
+  pathway?: boolean
 }
 
 export interface Track {
@@ -53,13 +58,15 @@ export interface Segment {
 }
 
 /**
- * The heading every credential files its non-exam requirements under — what
- * the body requires but doesn't call an exam: the VEE credits, courses and
- * e-learning modules, and the professionalism courses. The Study Guides page
- * draws each credential's sections under their own headings, so this one sits
- * below the exams rather than among them.
+ * The headings every credential files what it requires but doesn't call an
+ * exam under: the VEE credits, and the courses and e-learning modules (with
+ * the professionalism courses). The Study Guides page draws each credential's
+ * sections under their own headings, so these sit below the exams rather than
+ * among them.
  */
-export const NON_EXAM_REQUIREMENTS = 'Non-Exam Requirements'
+export const MODULES_AND_COURSES = 'Modules and Courses'
+export const VEE_CREDITS = 'VEE Credits'
+export const NON_EXAM_SECTIONS: ReadonlySet<string> = new Set([MODULES_AND_COURSES, VEE_CREDITS])
 
 export const TRACKS: Track[] = [
   {
@@ -132,19 +139,23 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        // Everything the SOA requires that it doesn't call an exam: the VEE
-        // credits, the e-learning modules (PAF, ASF), the ATPA assessment, the
-        // FAP course and the APC.
-        label: NON_EXAM_REQUIREMENTS,
+        // The e-learning modules (PAF, ASF), the ATPA assessment, the FAP
+        // course and the APC.
+        label: MODULES_AND_COURSES,
         items: [
-          { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', color: 'sky' },
-          { id: 'VEE-ECON', name: 'VEE Economics',               color: 'sky' },
-          { id: 'VEE-AF',   name: 'VEE Accounting & Finance',    color: 'sky' },
           { id: 'PAF',   name: 'PAF',        color: 'violet' },
           { id: 'ASF',   name: 'ASF',        color: 'pink' },
           { id: 'ATPA',  name: 'ATPA',       color: 'orange' },
           { id: 'FAP',   name: 'FAP',        color: 'amber' },
           { id: 'APC',   name: 'APC',        color: 'slate' },
+        ],
+      },
+      {
+        label: VEE_CREDITS,
+        items: [
+          { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', color: 'sky' },
+          { id: 'VEE-ECON', name: 'VEE Economics',               color: 'sky' },
+          { id: 'VEE-AF',   name: 'VEE Accounting & Finance',    color: 'sky' },
         ],
       },
     ],
@@ -175,17 +186,21 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        // The VEE credits, the three DISC courses and the Course on
-        // Professionalism — keyed `CAS-APC`, the key readers' progress is
-        // stored under.
-        label: NON_EXAM_REQUIREMENTS,
+        // The three DISC courses and the Course on Professionalism — keyed
+        // `CAS-APC`, the key readers' progress is stored under.
+        label: MODULES_AND_COURSES,
         items: [
-          { id: 'VEE-ECON', name: 'VEE Economics',            color: 'sky' },
-          { id: 'VEE-AF',   name: 'VEE Accounting & Finance', color: 'sky' },
           { id: 'CAS-IA',   name: 'CAS DISC IA', color: 'fuchsia' },
           { id: 'CAS-DA',   name: 'CAS DISC DA', color: 'fuchsia' },
           { id: 'CAS-RM',   name: 'CAS DISC RM', color: 'fuchsia' },
           { id: 'CAS-APC',  name: 'COP',         color: 'slate' },
+        ],
+      },
+      {
+        label: VEE_CREDITS,
+        items: [
+          { id: 'VEE-ECON', name: 'VEE Economics',            color: 'sky' },
+          { id: 'VEE-AF',   name: 'VEE Accounting & Finance', color: 'sky' },
         ],
       },
     ],
@@ -220,58 +235,16 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        label: 'Corporate Finance and ERM',
-        elective: true,
+        // Required on every pathway: the DMAC module and the FAC.
+        label: MODULES_AND_COURSES,
         items: [
-          { id: 'FSA-CFE101', name: 'CFE 101', color: 'lime' },
-          { id: 'FSA-CFE201', name: 'CFE 201', color: 'lime' },
+          { id: 'FSA-DMAC', name: 'DMAC', color: 'amber' },
+          { id: 'FSA-FAC',  name: 'FAC',  color: 'slate' },
         ],
       },
       {
-        label: 'Group and Health Insurance',
-        elective: true,
-        items: [
-          { id: 'FSA-GH101', name: 'GH 101',     color: 'green' },
-          { id: 'FSA-GH201', name: 'GH 201-U/C', color: 'green' },
-          { id: 'FSA-GH301', name: 'GH 301',     color: 'green' },
-        ],
-      },
-      {
-        label: 'General Insurance',
-        elective: true,
-        items: [
-          { id: 'FSA-GI101', name: 'GI 101', color: 'emerald' },
-          { id: 'FSA-GI201', name: 'GI 201', color: 'emerald' },
-          { id: 'FSA-GI301', name: 'GI 301', color: 'emerald' },
-          { id: 'FSA-GI302', name: 'GI 302', color: 'emerald' },
-        ],
-      },
-      {
-        label: 'Individual Life and Annuities',
-        elective: true,
-        items: [
-          { id: 'FSA-ILA101', name: 'ILA 101',     color: 'teal' },
-          { id: 'FSA-ILA201', name: 'ILA 201-U/I', color: 'teal' },
-        ],
-      },
-      {
-        label: 'Investment',
-        elective: true,
-        items: [
-          { id: 'FSA-INV101', name: 'INV 101', color: 'cyan' },
-          { id: 'FSA-INV201', name: 'INV 201', color: 'cyan' },
-        ],
-      },
-      {
-        label: 'Retirement Benefits',
-        elective: true,
-        items: [
-          { id: 'FSA-RET101', name: 'RET 101', color: 'yellow' },
-          { id: 'FSA-RET201', name: 'RET 201', color: 'yellow' },
-          { id: 'FSA-RET301', name: 'RET 301', color: 'yellow' },
-        ],
-      },
-      {
+        // Open to every pathway: its two further technical courses may come
+        // from here.
         label: 'Cross Practice',
         elective: true,
         items: [
@@ -283,11 +256,61 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        // The FSA Capstone Experience: the DMAC module and the FAC.
-        label: NON_EXAM_REQUIREMENTS,
+        label: 'Corporate Finance and ERM',
+        elective: true,
+        pathway: true,
         items: [
-          { id: 'FSA-DMAC', name: 'DMAC', color: 'amber' },
-          { id: 'FSA-FAC',  name: 'FAC',  color: 'slate' },
+          { id: 'FSA-CFE101', name: 'CFE 101', color: 'lime' },
+          { id: 'FSA-CFE201', name: 'CFE 201', color: 'lime' },
+        ],
+      },
+      {
+        label: 'Group and Health Insurance',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'FSA-GH101', name: 'GH 101',     color: 'green' },
+          { id: 'FSA-GH201', name: 'GH 201-U/C', color: 'green' },
+          { id: 'FSA-GH301', name: 'GH 301',     color: 'green' },
+        ],
+      },
+      {
+        label: 'General Insurance',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'FSA-GI101', name: 'GI 101', color: 'emerald' },
+          { id: 'FSA-GI201', name: 'GI 201', color: 'emerald' },
+          { id: 'FSA-GI301', name: 'GI 301', color: 'emerald' },
+          { id: 'FSA-GI302', name: 'GI 302', color: 'emerald' },
+        ],
+      },
+      {
+        label: 'Individual Life and Annuities',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'FSA-ILA101', name: 'ILA 101',     color: 'teal' },
+          { id: 'FSA-ILA201', name: 'ILA 201-U/I', color: 'teal' },
+        ],
+      },
+      {
+        label: 'Investment',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'FSA-INV101', name: 'INV 101', color: 'cyan' },
+          { id: 'FSA-INV201', name: 'INV 201', color: 'cyan' },
+        ],
+      },
+      {
+        label: 'Retirement Benefits',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'FSA-RET101', name: 'RET 101', color: 'yellow' },
+          { id: 'FSA-RET201', name: 'RET 201', color: 'yellow' },
+          { id: 'FSA-RET301', name: 'RET 301', color: 'yellow' },
         ],
       },
     ],

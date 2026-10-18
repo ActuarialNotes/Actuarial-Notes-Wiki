@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:99d02b0566eb71a359ebe3468265584e8d3a046ab15221aa651955ec6b34c098
-  sources: []
-  open_findings: 0
+  sources:
+    - "Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 read in full (PDF pp.1-37) with Tables 1-3, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Credit Risk.md
 ---

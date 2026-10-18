@@ -1,17 +1,19 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:1c80a5d6993983df0f6f28cd7872008494150282c873cee58a9ded38d8e19ac4
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:22762b736cc842341a2fdf5bf28d6fc66d9fcba4250c2b448ff7a26f9ee99275
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.9-12 (sliding scale terms and table, balanced plan, 31.0% expected commission and 96% technical ratio, historical check, carryforward approaches), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Sliding Scale Commissions.md
 ---
 
-**A Sliding Scale Commission** is a ceding commission on a proportional treaty that varies inversely with the treaty's actual loss ratio, between a stated minimum and maximum. A provisional commission is paid as premium is ceded and then adjusted as losses mature. It is the most common adjustable feature of a [[Quota Share]].
+**A Sliding Scale Commission** is a ceding commission on a proportional treaty that varies inversely with the treaty's actual loss ratio, between a stated minimum and maximum. A provisional commission is paid as premium is ceded and then adjusted as losses mature. It is a common adjustable feature of a [[Quota Share]].
 
 > $$c(\text{LR}) = \min\left(c_{\max},\; \max\left(c_{\min},\; c_0 + s\,(\text{LR}_0 - \text{LR})\right)\right)$$
 

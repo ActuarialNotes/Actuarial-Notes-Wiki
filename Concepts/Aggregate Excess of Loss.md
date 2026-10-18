@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ecc038cc1de6a999d96b681caff60944694cccfe313f146e42e5276a5812d205
-  sources: []
-  open_findings: 0
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.33-34 (AAD, phi_AAD, Table M analogy), pp.36 and 41-43 (aggregate models, collective risk cautions), p.42 (stop loss), p.43 (aggregate limit with reinstatements), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Aggregate Excess of Loss.md
 ---

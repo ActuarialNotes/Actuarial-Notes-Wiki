@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e8f56e6c35a46d36f1517ac2dc5d95baaa64308de95d024a199de3c9651031df
-  sources: []
+  sources:
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01, 2026-03-18), PDF pp.3-7: Domains B and D tasks, readings, and complete text references (Brehm et al.: tasks D1-D6; Chapters 1, 2 excl. 2.6, 3 excl. 3.4, 4, and 5 (5.4 only); source SK), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Financial Risk.md

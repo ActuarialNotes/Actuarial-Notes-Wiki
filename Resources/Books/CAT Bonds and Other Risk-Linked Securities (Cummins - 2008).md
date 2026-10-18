@@ -6,13 +6,13 @@ Year: "2008"
 date: "2008"
 Type: "Paper"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:d16bf8790f66d5c90afab4e759f0648c62cabddc66fdb45838d0629e823d0b4e
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/CAT Bonds and Other Risk-Linked Securities (Cummins - 2008).md
 ---

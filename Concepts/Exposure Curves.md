@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:0fdfe38cfb6341dfc29bd14299aba92de5c4a43f2831f420b65a261bd9fd97cd
-  sources: []
-  open_findings: 0
+  sources:
+    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 (§2.1-2.3 eqs (2.1)-(2.6), §3.2 eq (3.3), §4.1, §4.3 eqs (4.5)-(4.6), Fig. 4.2), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.17-19 (exposure curve P(p), layer = P((R+L)/IV) - P(R/IV)), pp.27-29 (casualty ILFs / exposure factor), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Exposure Curves.md
 ---

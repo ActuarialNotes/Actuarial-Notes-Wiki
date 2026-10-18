@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:bcba13f11f9b101c65931dce5336d68143fd511de920326cc22cc1a85eb6fb82
-  sources: []
-  open_findings: 0
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (scope), p.4 (losses occurring / risks attaching), p.9 (follow the fortunes), p.14 (GNEPI/GNWPI, subject premium net of inuring reinsurance), pp.14-21 (experience/exposure rating, credibility), pp.45-46 (risks attaching cat cover, interlocking clause), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Treaty Reinsurance.md
 ---

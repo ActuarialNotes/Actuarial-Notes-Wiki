@@ -1,12 +1,12 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:79e234bd9ba2b95dd2d01ed0bd008ed0702db62041d77cc3a3a9d75a265eb2aa
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Catastrophe Risk.md
 ---

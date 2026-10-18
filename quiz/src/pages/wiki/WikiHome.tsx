@@ -5,7 +5,7 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { requirementDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { NON_EXAM_REQUIREMENTS, TRACKS, type Track } from '@/data/tracks'
+import { NON_EXAM_SECTIONS, TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
@@ -43,6 +43,14 @@ function formatTargetDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
 }
 
+/** One heading's worth of a credential's list. */
+interface ExamChunk {
+  label: string
+  exams: WikiIndexItem[]
+  /** One of the FSA's practice-area pathways — drawn together, as a set to pick from. */
+  pathway: boolean
+}
+
 /** Everything an exam card shows, derived once per exam page. */
 interface ExamCardModel {
   exam: WikiIndexItem
@@ -69,6 +77,54 @@ function GroupHeading({ children }: { children: ReactNode }) {
       style={{ top: `${SEARCH_BAR_H}px` }}
     >
       {children}
+    </div>
+  )
+}
+
+function ChunkHeading({ children }: { children: ReactNode }) {
+  return (
+    <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+      {children}
+    </p>
+  )
+}
+
+/**
+ * A credential drawn by heading. What every route through it shares comes
+ * first, each heading over its own two-column list; the FSA's practice-area
+ * pathways — one of which a candidate takes — follow as one set: a "Pathways"
+ * heading over a grid of them, each pathway its own small list, so they read
+ * as alternatives rather than as more requirements.
+ */
+function ChunkedList({ chunks, cardModels }: { chunks: ExamChunk[]; cardModels: Map<string, ExamCardModel> }) {
+  const rows = (exams: WikiIndexItem[]) => exams.map(exam => {
+    const model = cardModels.get(exam.path)
+    if (!model) return null
+    return <ExamGuideRow key={exam.path} model={model} />
+  })
+  const shared = chunks.filter(c => !c.pathway)
+  const pathways = chunks.filter(c => c.pathway)
+  return (
+    <div className="space-y-5">
+      {shared.map(chunk => (
+        <div key={chunk.label}>
+          <ChunkHeading>{chunk.label}</ChunkHeading>
+          <ListPanel columns={2}>{rows(chunk.exams)}</ListPanel>
+        </div>
+      ))}
+      {pathways.length > 0 && (
+        <div className="pt-2">
+          <h3 className="mb-3 text-base font-semibold tracking-tight">Pathways</h3>
+          <div className="grid grid-cols-1 items-start gap-x-3 gap-y-5 sm:grid-cols-2">
+            {pathways.map(chunk => (
+              <div key={chunk.label}>
+                <ChunkHeading>{chunk.label}</ChunkHeading>
+                <ListPanel>{rows(chunk.exams)}</ListPanel>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -162,7 +218,7 @@ export default function WikiHome() {
 
     return credTracks.map(track => {
       const orderedExams: WikiIndexItem[] = []
-      const chunks: { label: string; exams: WikiIndexItem[] }[] = []
+      const chunks: ExamChunk[] = []
       const seenKeys = new Set<string>()
       for (const section of track.sections) {
         if (section.collapsed) continue
@@ -174,14 +230,16 @@ export default function WikiHome() {
           if (items) sectionExams.push(...items)
         }
         orderedExams.push(...sectionExams)
-        if (sectionExams.length > 0) chunks.push({ label: section.label, exams: sectionExams })
+        if (sectionExams.length > 0) {
+          chunks.push({ label: section.label, exams: sectionExams, pathway: !!section.pathway })
+        }
       }
       // A credential with elective tracks (the FSA's practice areas) or with
-      // non-exam requirements (the VEEs, the courses and modules, the
-      // professionalism courses) is drawn in chunks, so those sit under their
-      // own heading below the exams. One that is only a ladder (the FCAS,
-      // whose ACAS requirements are listed under the ACAS) stays one list.
-      const chunked = track.sections.some(s => s.elective || s.label === NON_EXAM_REQUIREMENTS)
+      // non-exam requirements (the courses and modules, the VEE credits) is
+      // drawn in chunks, so those sit under their own heading below the exams.
+      // One that is only a ladder (the FCAS, whose ACAS requirements are
+      // listed under the ACAS) stays one list.
+      const chunked = track.sections.some(s => s.elective || NON_EXAM_SECTIONS.has(s.label))
       return { track, exams: orderedExams, chunks: chunked ? chunks : null }
     })
   }, [examsByKey])
@@ -362,22 +420,7 @@ export default function WikiHome() {
                     (the FSA) is chunked by track instead: a small heading
                     over each track's own list. */}
                 {chunks ? (
-                  <div className="space-y-5">
-                    {chunks.map(chunk => (
-                      <div key={chunk.label}>
-                        <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          {chunk.label}
-                        </p>
-                        <ListPanel columns={2}>
-                          {chunk.exams.map(exam => {
-                            const model = cardModels.get(exam.path)
-                            if (!model) return null
-                            return <ExamGuideRow key={exam.path} model={model} />
-                          })}
-                        </ListPanel>
-                      </div>
-                    ))}
-                  </div>
+                  <ChunkedList chunks={chunks} cardModels={cardModels} />
                 ) : (
                   <ListPanel columns={2}>
                     {trackExams.map(exam => {

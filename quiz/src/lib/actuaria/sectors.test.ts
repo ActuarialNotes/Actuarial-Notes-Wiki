@@ -23,10 +23,15 @@ describe('sectors', () => {
   it('puts every exam of the track the vault covers on the map, in ladder order', () => {
     const sectors = buildSectors({ syllabi: SYLLABI, track: DEFAULT, progress: {} })
     const keys = sectors.map(s => s.key)
-    expect(keys.slice(0, 4)).toEqual(['P', 'FM', 'MAS-I', 'MAS-II'])
-    expect(keys).toContain('CAS-5')
-    expect(keys.indexOf('CAS-PCPA')).toBe(keys.indexOf('CAS-5') + 1)
-    expect(keys.indexOf('CAS-6')).toBe(keys.indexOf('CAS-PCPA') + 1)
+    // An SOA rung past FM (SRM) takes its hue from the SOA ladder, so it falls
+    // among the CAS rungs; the CAS rungs keep their own order around it.
+    const soaOnly = new Set(['FAM', 'SRM', 'PA', 'ALTAM', 'ASTAM', 'ATPA'])
+    expect(keys).toContain('SRM')
+    const cas = keys.filter(k => !soaOnly.has(k))
+    expect(cas.slice(0, 4)).toEqual(['P', 'FM', 'MAS-I', 'MAS-II'])
+    expect(cas).toContain('CAS-5')
+    expect(cas.indexOf('CAS-PCPA')).toBe(cas.indexOf('CAS-5') + 1)
+    expect(cas.indexOf('CAS-6')).toBe(cas.indexOf('CAS-PCPA') + 1)
     // One place per exam: Exam 6's regional pages share a key.
     expect(new Set(keys).size).toBe(keys.length)
     for (let i = 1; i < sectors.length; i++) expect(ladderRank(sectors[i].key)).toBeGreaterThan(ladderRank(sectors[i - 1].key))

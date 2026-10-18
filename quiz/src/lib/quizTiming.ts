@@ -2,7 +2,8 @@
 // paper, and the clock that counts it down.
 //
 // Every figure below is transcribed from the exam's own "Format and pacing"
-// guide in the vault (`Guides/<exam page>/Format and pacing.md`), never
+// guide in the vault (`Guides/<exam page>/Format and pacing.md`) — or, for
+// an exam with no guide yet, its syllabus page's own statement — never
 // estimated: the sitting's length over what it is budgeted by. A multiple-choice
 // paper is budgeted per *question* — each is worth the same — and a written one
 // per *point*, because its questions run from half a point to several and the
@@ -26,6 +27,9 @@ export const EXAM_PACE: Record<string, ExamPace> = {
   'Probability': { minutes: 180, per: 'question', units: 30 },
   // Guides/Exam FM-2 (SOA): 2.5 hours, 30 multiple-choice questions.
   'Financial Mathematics': { minutes: 150, per: 'question', units: 30 },
+  // No format guide yet; the SOA's own syllabus (`Exam SRM (SOA).md`, its
+  // opening line): three and one-half hours, 35 multiple-choice questions.
+  'Exam SRM': { minutes: 210, per: 'question', units: 35 },
   // Guides/Exam MAS-I (CAS): 4 hours, 45 multiple-choice questions.
   'Exam MAS-I': { minutes: 240, per: 'question', units: 45 },
   // Guides/Exam MAS-II (CAS): 4 hours, 45 multiple-choice questions.

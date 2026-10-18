@@ -67,5 +67,38 @@ class AssessTest(unittest.TestCase):
                 self.assertFalse(r["failing"]["written"], r["stubs"])
 
 
+
+
+
+def result(status: str, *failing: str) -> dict:
+    return {"exam": f"Exam X ({status})", "wiki_id": "x-1", "status": status,
+            "failing": {g: g in failing for g in pr.GATES}}
+
+
+class HoldTest(unittest.TestCase):
+    def test_a_ready_exam_failing_a_structural_gate_is_an_error(self):
+        for gate in pr.STRUCTURAL:
+            with self.subTest(gate=gate):
+                errors, warnings = pr.hold([result("ready", gate)])
+                self.assertEqual(len(errors), 1)
+                self.assertEqual(warnings, [])
+
+    def test_a_ready_exam_owed_a_fact_check_is_a_warning(self):
+        errors, warnings = pr.hold([result("ready", "page", "checked", "sources", "bank")])
+        self.assertEqual(errors, [])
+        self.assertEqual(len(warnings), 4)
+
+    def test_a_beta_exam_below_the_beta_bar_only_warns(self):
+        errors, warnings = pr.hold([result("beta", "specific", "questions", "checked")])
+        self.assertEqual(errors, [])
+        self.assertEqual(len(warnings), 2)
+
+    def test_a_development_exam_is_not_held(self):
+        self.assertEqual(pr.hold([result("development", *pr.GATES)]), ([], []))
+
+    def test_a_ready_exam_passing_every_gate_is_silent(self):
+        self.assertEqual(pr.hold([result("ready")]), ([], []))
+
+
 if __name__ == "__main__":
     unittest.main()

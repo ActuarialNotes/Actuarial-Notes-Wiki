@@ -103,7 +103,7 @@ An item is ✅ only when all of the following are true:
 | Product | Who it's for | State | Gate | Subplan |
 |---|---|---|---|---|
 | **Study Mode** (quiz, flashcards, study plan, readiness, gamification) | Exam candidates | ✅ live | — | §4.2; `concept-learning-progression.md`, `study-plan-generation.md`, `exam-readiness.md` |
-| **Content vault**: 43 exam pages (12 CAS, 31 SOA), 1,389 concepts, 748 resources, 3,341 questions | Candidates and practitioners | ✅ live. 7 exams ready, 6 beta, 30 in development | `examStatus.ts` | §4.3; `cas-publication-plan.md`, `CONCEPT_GAPS_PLAN.md` |
+| **Content vault**: 43 exam pages (12 CAS, 31 SOA), 1,389 concepts, 748 resources, 3,341 questions | Candidates and practitioners | ✅ live. 7 exams ready, 6 beta, 30 in development | `examStatus.ts` | §4.3; `content-plan.md` |
 | **Fact Check / VERIFY** | Every reader | 🟢 operating by hand. 48.6% of files verified; the weekly sweep has never run the agent | `FACT_CHECK_UI_ENABLED` | §4.4; `verification.md`, `verification-plan.md` |
 | **AI connector** (MCP server + Agent Skill) | Claude and ChatGPT users | ✅ live, read-only, no sign-in | — | §4.5; `ai-connector.md` |
 | **Actuarial Tools**: 32 calculators + 3 data sources | People and agents | ✅ live at `/tools` and over MCP | `TOOLS_ENABLED` | §4.5; `actuarial-tools.md` |
@@ -246,7 +246,7 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 3. ~~**V4 (Wave 3a): verify FM Q351–Q462.**~~ ✅ 2026-10-17: all 112 verified (runs `48b2`,
    `63b1`); every key agrees. 12 minor findings stay open: 10 topic tags that aren't in
    `ontology_map.py`, and SOA's own day-1/day-10 wording on fm-358.
-4. **C1: take Exam 8 to ready** (CAS publication plan step 4). 🟡 2026-10-17: **5 of 7
+4. **C1: take Exam 8 to ready** (content plan §3.1, step 2). 🟡 2026-10-17: **5 of 7
    gates.** Done: the *Rating Class* catch-all (a new *Rate Class Validity* page); 11
    vault-written questions for the 6 untested concepts; the page, 23 of 24 concepts, 11 of 12
    readings and every on-syllabus question on the 8 papers verified (166; 34 of them Exam 9's).
@@ -425,29 +425,29 @@ Shipped:
 
 ### 4.3 C: Content and publication
 
-Subplans:
-- `cas-publication-plan.md`: the seven gates, the CAS order of work, and its decisions.
-- `CONCEPT_GAPS_PLAN.md`: phases A–D are done.
-- `syllabus-pipeline.md` and `syllabus-pipeline-review.md`.
-- `pdf-question-pipeline.md`.
-- `resource-pages.md`.
-- `concept-figures.md`.
-- `distribution-simulators.md`.
-- The `question-writer` skill.
+Subplan: **`content-plan.md`, the one plan for the vault's content** (2026-10-18). It absorbed
+the CAS publication plan (now removed), the waves and decisions of `verification-plan.md`, and
+the open items of `CONCEPT_GAPS_PLAN.md`, `syllabus-pipeline-review.md`, `resource-pages.md`,
+`concept-figures.md` and `distribution-simulators.md`, and orders them in four phases: **1, ready
+means ready** (every `ready` exam passes its gates; no open critical) → **2, the converter, then
+the beta exams** → **3, the SOA ASA prelims** → **4, the rest**. The method docs stay where they
+are: `syllabus-pipeline.md`, `pdf-question-pipeline.md`, `resource-pages.md`,
+`verification-plan.md` (packets), the `question-writer` skill.
 
 The **rule** for this track: an exam changes status only through
-`python3 scripts/publication_readiness.py --check <exam>`.
+`python3 scripts/publication_readiness.py --check <exam>`, and a `ready` exam keeps its structural
+gates through `--hold` in CI.
 
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | CAS plan step 4. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
-| C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Step 5. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
-| C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Step 6. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
-| C4 | MAS-II → ready | 🟡 1 of 7 | Next | Step 7. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
-| C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Step 8. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
-| C6 | A PCPA bank | ⬜ | Later | Step 9. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
-| C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Step 10. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
+| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | Content plan Phase 2. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
+| C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Phase 2. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
+| C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Phase 2. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
+| C4 | MAS-II → ready | 🟡 1 of 7 | Next | Phase 2. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
+| C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Phase 2. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
+| C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
+| C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | 🟡 | Next | FM: Q351–Q462 verified (V4); left, the *Term of Annuity* catch-all. P: *Insurer* is in review; 6 generic concepts have no question. |
 | C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
@@ -573,19 +573,19 @@ Where a default is given, sessions build with it until the decision is made.
 | D2 | Is an **in-app agent** still wanted, given that the app calls no model? If yes: student or practitioner first, in-app or separate, and how it's priced | agent plan §12 | A5 | No in-app agent; the connector is the agent surface |
 | D3 | **Dataset licence terms** for the SOA tables, the CAS triangles, and the Bank of Canada data | tools §14 #6 | A2 datasets | Leave them out |
 | D4 | Tools access and pricing; HTTP API keys; open-sourcing the engine | tools §14 #2–8 | A2 HTTP | Free; no HTTP endpoint |
-| D5 | Does a bank written entirely by the vault count as **ready**? The DISCs were promoted on that assumption | CAS plan §5 D1 | the C track | Yes, but record it |
-| D6 | Verify the **off-syllabus** questions (249 CAS)? | CAS D2, verification §7.3 | V5 sizing | No |
-| D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | CAS D3, verification §7.6 | C9, MAS-II | Yes |
-| D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | CAS D4, verification §7.2 | C3, C5 | — (needs a call) |
-| D9 | The **46 orphan concepts** | verification §7.4 | V5 | Leave them unverified |
-| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | CAS §4.1 | — | Keep them as they are |
+| D5 | Does a bank written entirely by the vault count as **ready**? The DISCs were promoted on that assumption | content plan §6 (was CAS D1) | the C track | Yes, but record it |
+| D6 | Verify the **off-syllabus** questions (249 CAS)? | content plan §6 (was CAS D2) | V5 sizing | No |
+| D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | content plan §6 (was CAS D3) | C9, MAS-II | Yes |
+| D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | content plan §6 (was CAS D4) | C3, C5 | — (needs a call) |
+| D9 | The **46 orphan concepts** | content plan §6 | V5 | Leave them unverified |
+| D10 | Exam 7 leftovers: questions on dropped readings (Patrik, Brehm/Goldfarb, England & Verrall); 2012 q20 filed under Exam 9 | content plan Appendix A.3 | — | Keep them as they are |
 | D11 | **Delete** the retired comprehension checks (the folder, the parser, the skill), or keep them parked | `flashcard-collection.md` | R2 | Keep them parked |
 | D12 | Listen: the voice; whether it is Pro-only | `listen-recordings.md` | X4 | The test voice; free |
 | D13 | **The free / Pro boundary** (Cowork after Preview, Tools saved runs, practice packs) | old P4.3, `cowork.md` | G4, A4 | No change |
 | D14 | **Make CI a required check on `main`** | the 2026-08-31 assessment | E2 | — (a repo setting) |
 | D15 | The 9 ambiguous concept-gap targets, and the 21 stubs | CONCEPT_GAPS §13 | C11 | Link the existing pages, as proposed |
 | D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
-| D17 | The DISC link design | CAS D5 | — | The current design |
+| D17 | The DISC link design | content plan §6 (was CAS D5) | — | The current design |
 | D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
 | D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | It stays `in_review`, and the gate stays red |
 | D21 | Goldburd et al.: describe the 2025 revision Exam 8 assigns on the existing 2020 page, keep 2020 with a note, or give Exam 8 its own page (F-003 on that page) | C1 run `f01e` | — | The page as it is |
@@ -646,14 +646,15 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
-| `docs/cas-publication-plan.md` | Subplan: CAS exams to ready | C1–C7 | Active, current | 2026-10-16 |
-| `docs/verification-plan.md` | Subplan: verification waves | V1–V8 | Active. Its snapshot is from 9 Oct | 2026-10-09 |
-| `CONCEPT_GAPS_PLAN.md` | Subplan: missing concept pages | C11 | Phases A–D done; generated half refreshed | 2026-10-17 |
+| `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V10 | Active. Phase 1 in this PR | 2026-10-18 |
+| `docs/verification-plan.md` | Method: fact-check packets, tooling, sizing | V5 | Reference. Its waves and decisions moved to the content plan | 2026-10-18 |
+| `CONCEPT_GAPS_PLAN.md` | Record of phases A–D, and the generated gap worklist | C11 | Record; its open items are in the content plan §3.3 | 2026-10-18 |
+| `docs/cas-publication-plan.md` | — | — | 🗑 **Folded into `content-plan.md`** 2026-10-18 | — |
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
-| `docs/syllabus-pipeline-review.md` | Review and work packages | C12 | Packages 1–3 and 9 done; 4–8 partial | 2026-10-05 |
+| `docs/syllabus-pipeline-review.md` | Record: the pipeline's design review | C12 | Record; its open packages are in the content plan §3.4 | 2026-10-18 |
 | `docs/actuarial-agent-product-plan.md` | Plan: an in-app agent | A5 | 🅿️ Phase A shipped as the connector; the rest waits on D2 | 2026-10-09 |
 | `docs/research-corpus-plan.md` | Plan: the Research corpus | R1 | 🅿️ its checklist hasn't been maintained | 2026-10-05 |
 | `docs/research-ai-disabled.md` | Re-enable checklist | R1 | 🅿️ Needs to mention `RESEARCH_TAB_ENABLED` | 2026-06-14 |

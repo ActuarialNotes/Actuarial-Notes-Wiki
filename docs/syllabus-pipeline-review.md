@@ -1,5 +1,9 @@
 # Exam Syllabus Conversion Pipeline — Review and Recommendations
 
+> **Record.** The pipeline this review designed is built (`docs/syllabus-pipeline.md`). Its
+> open work packages (4–6 and 8) and the link-name fix the FSA pages need are tracked in
+> `docs/content-plan.md` §3.4; its owner decisions are D18 there.
+
 *Review date: 2026-09-25. Written as a hand-off brief for the agent that implements it.
 Every number below was measured on the vault at that date; re-run the commands in
 §6 before starting, because they will have drifted.*

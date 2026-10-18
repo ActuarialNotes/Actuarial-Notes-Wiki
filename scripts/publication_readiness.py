@@ -4,8 +4,8 @@ publication_readiness.py — how far each exam is from `ready`, gate by gate.
 
 An exam leaves Beta / In Development (`quiz/src/lib/examStatus.ts`, mirrored in
 `scripts/exam_catalog.json`) when a student can trust everything behind it.
-This script is the one definition of "everything", so the promotion plan
-(`docs/cas-publication-plan.md`) is measured rather than argued:
+This script is the one definition of "everything", so the content plan
+(`docs/content-plan.md`) is measured rather than argued:
 
   G1 page       the exam page is `verified`
   G2 written    every link in a learning objective lands on a page, and every
@@ -34,6 +34,16 @@ Usage:
   python3 scripts/publication_readiness.py --exam disc-ia  # one exam, every failing item
   python3 scripts/publication_readiness.py --json out.json
   python3 scripts/publication_readiness.py --check 5-1     # exit 1 unless every gate passes
+  python3 scripts/publication_readiness.py --hold          # CI: every `ready` exam still holds
+
+`--hold` is the promise kept (docs/content-plan.md, Phase 1). An exam marked
+`ready` has passed every gate once; the structural gates (G2 written, G3
+specific, G6 questions) are a fact about the vault's pages, links and bank, so a
+PR that breaks one on a ready exam fails. The fact-check gates (G1, G4, G5, G7)
+move with every edit — any edit makes a file `stale` (P4), and the record is
+repaired, not authored, in CI — so they are printed as warnings, the re-check a
+ready exam is now owed. A beta exam below the development → beta bar (G2, G3,
+G6) is a warning too: it is the worklist, not a regression.
 """
 
 from __future__ import annotations
@@ -58,6 +68,9 @@ STUB_WORDS = 100        # find_concept_gaps.STUB_WORDS
 MAX_ITEMS = 2           # G3: more renamed links than this to one concept page is a catch-all
 
 GATES = ("page", "written", "specific", "checked", "sources", "questions", "bank")
+# The gates a page, link or bank edit can break; the rest are the fact check's.
+STRUCTURAL = ("written", "specific", "questions")
+
 GATE_LABELS = {
     "page": "G1 page verified",
     "written": "G2 concepts written",
@@ -268,12 +281,31 @@ def detail(r: dict) -> str:
     return "\n".join(out)
 
 
+def hold(results: list[dict]) -> tuple[list[str], list[str]]:
+    """Errors (a ready exam failing a structural gate) and warnings, for `--hold`."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    for r in results:
+        failing = [g for g in GATES if r["failing"][g]]
+        if r["status"] == "ready":
+            for g in failing:
+                (errors if g in STRUCTURAL else warnings).append(
+                    f"{r['exam']} is ready but fails {GATE_LABELS[g]} (--exam {r['wiki_id']} lists the items)")
+        elif r["status"] == "beta":
+            for g in failing:
+                if g in STRUCTURAL:
+                    warnings.append(f"{r['exam']} is beta but fails {GATE_LABELS[g]}")
+    return errors, warnings
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--body", default="CAS", help="CAS (default), SOA or all")
     ap.add_argument("--exam", help="one exam (wiki id, exam id, bank or page): print every failing item")
     ap.add_argument("--check", metavar="EXAM", help="exit 1 unless EXAM passes every gate")
     ap.add_argument("--json", metavar="PATH", help="write the full assessment as JSON")
+    ap.add_argument("--hold", action="store_true",
+                    help="exit 1 if a ready exam fails a structural gate (G2, G3, G6); warn on the rest")
     args = ap.parse_args()
 
     vault, tables, catalog = VL.Vault(), VL.load_aliases(), VL.load_catalog()
@@ -286,6 +318,17 @@ def main() -> int:
         r = assess(exam, vault, tables)
         print(detail(r))
         return 1 if args.check and not r["ready"] else 0
+
+    if args.hold:
+        results = [assess(e, vault, tables) for e in catalog if (REPO_ROOT / e["page"]).exists()]
+        errors, warnings = hold(results)
+        for w in warnings:
+            print(f"warning: {w}")
+        for e in errors:
+            print(f"error: {e}")
+        ready = sum(r["status"] == "ready" for r in results)
+        print(f"hold: {ready} ready exam(s), {len(errors)} error(s), {len(warnings)} warning(s)")
+        return 1 if errors else 0
 
     exams = [e for e in catalog if args.body.lower() == "all" or e["body"] == args.body.upper()]
     results = [assess(e, vault, tables) for e in exams if (REPO_ROOT / e["page"]).exists()]

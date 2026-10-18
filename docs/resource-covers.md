@@ -33,8 +33,10 @@ is not the authored title, so the card is not repeating the chrome.
 
 Two things about the shape are deliberate: the chips are outlined and the action
 button filled, so the passive facts never read as things to press; and the card is
-sized to its content (`w-fit`) rather than stretched across the pane, because a
-citation block with a third of its width empty reads as a layout bug.
+always full width (`w-full`), as is the *On the syllabus* card under it: sized to
+its content, the card stopped at an arbitrary point short of the pane's edge, a
+different width from the card beneath it and the text below, and read as a layout
+bug.
 
 ## Where a cover is served from
 

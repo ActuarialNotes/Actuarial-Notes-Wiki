@@ -304,13 +304,13 @@ export function ConceptPagePanel({
                 onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
               />
               {/* The citation block: the metadata card, and under it the
-                  exams it is a reading for — one column, one width. */}
+                  exams it is a reading for — one column, the pane's width. */}
               {resourceMeta && (
-                <div className="mb-4 flex w-fit max-w-full flex-col gap-3">
+                <div className="mb-4 flex flex-col gap-3">
                   <ResourceMetaCard
                     meta={resourceMeta}
                     compact
-                    className="mb-0 w-full"
+                    className="mb-0"
                     // Its document opens as the next page of the stack, with
                     // this one folded into a bar above it — a link, not a lid.
                     onReadPdf={onOpenPdf}

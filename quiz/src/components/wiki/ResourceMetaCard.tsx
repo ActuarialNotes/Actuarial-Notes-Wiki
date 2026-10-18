@@ -79,11 +79,12 @@ export function ResourceMetaCard({
         // `border` — the popup this can sit in is itself `bg-card`, so the fill
         // alone leaves no edge; the hairline is what makes it a card there
         // (style-guide §6.2: an inset region takes the border, not a shadow).
-        // `w-fit` — sized to its content rather than stretched across the pane.
-        // A citation block with a third of its width empty reads as a bug.
+        // `w-full` — the card spans its column, the same width as the syllabus
+        // card under it and the text below. Sized to its content, it stopped
+        // short of the pane's edge at an arbitrary place and read as a bug.
         // `items-center` — the jacket is usually the taller column, so anchoring
         // the text to the top of it left the card bottom-heavy with dead space.
-        'not-prose flex w-fit max-w-full items-center gap-4 rounded-lg border border-border bg-card',
+        'not-prose flex w-full items-center gap-4 rounded-lg border border-border bg-card',
         compact ? 'mb-3 p-3' : 'mb-4 p-4',
         className,
       )}

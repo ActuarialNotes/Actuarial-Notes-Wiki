@@ -163,7 +163,7 @@ batched by source. The order is the CAS plan's, refreshed:
 | — | MAS-I, DISCs, Exam 7 | 7 / 7 | Done (10, 11 and 16 Oct 2026; Appendix A) | |
 | 1 | **Exam P, FM** (C8) | 5, 6 / 7 | Phase 1 | Already `ready`; the gates must hold |
 | 2 | **Exam 8** (C1) | 6 / 7 | Only G5: the ISO CGL rating plan, in the CAS study kit only (D20). *Risk* verified 18 Oct (run `rsk1`): its uncertainty half now quotes the SOA and SRA glossaries, the unsourced claims cut | Shares papers with 9; 34 of 9's questions already cleared |
-| 3 | **Exam 9** (C2) | 4 / 7 | G6 ✅ (`cas9-an-001`–`010`, nine verified; `009` in review — no reading teaches its PSA prepayment mechanics, so C5 wants a question a writer builds on Panning or Coval, Jurek & Stafford); verify 46 concepts, 9 readings, the 23 unverified questions on its own 7 papers | Most of its bank arrived verified through 7 and 8 |
+| 3 | **Exam 9** (C2) | 4 / 7 | First round done 18 Oct (Appendix A.4): G7 128 / 131, G5 7 / 9, G4 24 / 60. Left: three questions in review on a maintainer's call (2013 Q15, 2014 Q16, `cas9-an-009`), and 36 concepts and 2 readings resting on texts no session could read (D22) | Most of its bank arrived verified through 7 and 8 |
 | 4 | **Exam 5** (C3) | 3 / 7 | G3 and G6 ✅ (catch-alls re-linked; `cas5-an-001`–`007`, verified; *Claim Reserve*, newly linked, tagged on `cas5-2016s-q16`). D8 (the re-issued Fall 2026 v02 outline; the page is stale after the re-linking); verify 60 concepts, 4 readings, 349 questions on 14 papers (find Spring 2018's booklet first). Its reports were **paraphrased** when the bank was written, not transcribed — each paper's packet restores the report as printed, opening paragraph included (C13) | Largest bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM |
 | 5 | **MAS-II** (C4) | 3 / 7 | G3 and G6 ✅ (`masii-an-001`–`023`, 22 verified; `023` in review with the page's F-002 — does the outline's exclusion of Cowpertwait §3.4 take exponential smoothing off the syllabus?). Verify 67 concepts, 2 readings (commercial: medium, D7), 126 questions on 3 fully scanned papers (OCR first); the page is stale after the re-linking | Scanned papers make each question dear |
 | 6 | **Exam 6C** (C5) | 3 / 7 | G6 ✅ (`cas6c-an-001`–`022`, all verified; `005` and `018` carry minor scope findings — IBC's consumer code and the IFRS 17 transition approaches are in no 6C reading). D8 (F-001, domain C renumbering); verify 137 concepts, 67 readings, 321 questions (83 got their report paragraph back, C13) | Most concepts and readings, all free Canadian documents |
@@ -359,6 +359,7 @@ every CAS bank about to be checked.
 | Exam 8's G4: *Risk* | C1 | ✅ verified (run `rsk1`). Exam 8 is 6 / 7, held only by D20 |
 | G3 and G6 on every beta exam with a bank | — | ✅ Exam 5's two catch-alls and MAS-II's one broken up: each phrase re-linked so no page stands in, renamed, for more than two lines (*Claim Reserve* for "reserve analysis", *Empirical Bayes Credibility* for "structural parameters") — unlinking them would fail `test_syllabus_lib`'s every-noun-phrase-linked rule. 62 vault-written questions for the 67 untested concepts — Exam 5 7, Exam 9 10, MAS-II 23, Exam 6C 22 — each checked by a different agent from its writer. `--hold` warns only on PCPA, which has no bank (C6). Of the 62: **60 verified**, 2 `in_review` (`cas9-an-009`, `masii-an-023`). The checkers also opened findings on concept pages: *Contractual Service Margin*'s formula had its sign backwards (critical, fixed the same day to CIA note 222092 §4.6, the page back to `unverified`), and *Fault Determination Rules* (O. Reg. 668, not 664) and *Other Comprehensive Income Option* (PAA's locked-in date) were restated; *Lift* and *Predictive Accuracy* use the marketing definition of lift, not the readings', and want their reading packets |
 | Housekeeping: V7 | V7 | ✅ the two run summaries reconstructed from the per-file logs |
+| Exam 9's first round: 23 questions on its own papers, 9 readings, 46 concepts | C2 | 🟡 Four paper packets (`0ccf`, `9371`, `e85d`, `6aa0`) and five reading packets (`0103`, `9c55`, `770a`, `6bfb`, `8a71`). **21 of 23 questions verified**; the report paragraph restored on 11, sample answers on 5. **Seven readings verified** (Clark, Bernegger, Panning high; Brehm, Mildenhall & Major, Grossi & Kunreuther, Cummins 2000 medium, against outline, contents and catalogue). **Ten concepts verified** (Clark's reinsurance pages); the 36 others wait on D22. Errors fixed: Bernegger's MBBEFD special cases swapped (major); CJS's ratings had lost their notches; operational risk called a Solvency II module. Open for the resolve run: *Economic Value*'s EVA = M − ιQ is identically zero; *Prepayment Risk* is in no C5 reading |
 
 ### Phase 3 — The SOA ASA prelims
 
@@ -431,6 +432,7 @@ build with the default until the decision is made.
 | D18 | syllabus-pipeline-review §4 | The review's owner decisions D1–D4, applied but never written up | As applied |
 | D20 | — | A reading with no public copy (the ISO CGL plan) | `in_review`; Exam 8's G5 stays red |
 | D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
+| D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | The 36 concepts and 2 readings stay `in_review`; G4 and G5 stay red |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |
 
@@ -758,6 +760,54 @@ candidate should expect The Institutes' lists on the exam itself.
   likely have the same gap.
 - **Canadian pages on U.S. questions**: *Rating Agency*, *Concentration Risk* and *Risk Transfer* (linked
   from the Exam 7 preamble) lead with Canada.
+
+### A.4 The Exam 9 campaign, first round (18 Oct 2026)
+
+Run on the packet tooling, one agent per packet; `--check 9` still fails G4, G5 and G7 (4 / 7).
+
+- **Paper packets.** The 23 on-syllabus unverified questions on the seven Spring 2013–2019 papers
+  (`0ccf`: 2013–2014; `9371`: 2015–2016; `e85d`: 2017–2019; `6aa0`: 2014 Q16), each recomputed from
+  its blind stem first. 21 verified; every stem number matched the booklet. Restored: the examiner's
+  report paragraph on the question as a whole on 11 questions (C13 had left these, unverified, for
+  their packets), and dropped or run-together sample answers on 5. CAS's own slips marked "(as
+  printed)" (2015 Q15's 1.575M, 2017 Q20's "mangers"). The off-syllabus 149 were left, by D6.
+- **Reading packets.** Clark and Bernegger (`0103`), Panning and Coval, Jurek & Stafford (`9c55`),
+  Grossi & Kunreuther and Cummins 2008 (`770a`), Mildenhall & Major and Cummins 2000 (`6bfb`),
+  Brehm et al. (`8a71`). Only Clark, Bernegger and Panning could be read whole. CJS was read as the
+  authors' HBS working paper 09-060 (the AEA's PDF returns 403); only Mildenhall & Major's Chapter 1
+  and index are free; Brehm and Grossi are study-kit or sold; both Cummins articles are paywalled,
+  and their author-posted copies (SSRN 1057401; a 2012 archived Wharton paper) were blocked to the
+  sessions. So the readings' own pages were verified at medium against the outline, the printed
+  contents and catalogue records, and the concept pages resting on unread chapters were left
+  `in_review`, every worked example recomputed. That is D22.
+- **What it caught.** Bernegger's page paired the MBBEFD special cases with the wrong
+  Maxwell-Boltzmann / Bose-Einstein / Fermi-Dirac cases (major, fixed to p.103). CJS's page had lost
+  the notches on its ratings (BBB−, BB+). Two pages called operational risk a Solvency II module (it
+  is Art. 107's separate requirement; *Risk Taxonomies* fixed, *Operational Risk* open). *Economic
+  Value* writes EVA as M − ιQ, which is zero under the vault's own ι = M/Q (open). *Insurance Market
+  Imperfections* omits competition, one of task C1's three examples (open).
+
+**Left for a maintainer:**
+
+- **2013 Q15** — the RAROC/EVA key rests on two assumptions the stem doesn't state (no investment
+  income on capital; losses at year end); the vault's *Risk-Adjusted Performance* page takes the other
+  reading. Cummins 2000 would settle it (D22).
+- **2014 Q16** part b — the checker ranked the CDO² tranche riskiest, from CJS p.11; CAS ranks it
+  safest (the junior tranche absorbs first losses) and accepted "any ranking with a valid
+  explanation". Accept the key's reading and re-pass, or add a note.
+- **`cas9-an-009` and *Prepayment Risk*** — the outline names prepayment under C5, but neither C5
+  reading mentions it (Panning: no "prepay", "mortgage" or "callable"; CJS only as mortgage default).
+  Cut the page back to the outline's words and write a C5 question on what Panning or CJS teach, or
+  name a source.
+- **Minor, open:** 2015 Q18 tags *Line of Business* (a ratemaking page) where *Business Unit* fits;
+  2019 Q10's CAS sample 3 prices the tranche on 1,000, not the stem's 500; 2013 Q13 tests catastrophe
+  risk swaps, which no concept page covers (Cummins 2008 does); *Business Risk* lacks Brehm's
+  strategic-risk material, examined five times on Exam 7 — a writer's job; *Catastrophe Modelling*'s
+  one source is dead (404) and it covers little of A4–A5; ten unsourced claims on the Clark pages
+  (*Reinstatements*' pricing formula is in no source); *Treaty* and *Facultative Reinsurance* want a
+  reading that defines them.
+- **A slip of this round:** two agents shared a scratch file for their run id, so `8a71`'s entries on
+  the eleven Brehm logs carry `0103`'s run id; each log has an `8a71` comment saying which are its own.
 
 ## Appendix B — Fact-check wave records
 

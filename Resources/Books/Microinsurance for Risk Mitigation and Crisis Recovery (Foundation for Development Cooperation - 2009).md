@@ -7,6 +7,16 @@ date: "2009"
 Type: "Report"
 Code: "Brief 7"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6I_FDC_Microinsurance_for_Risk_Mitigation_and_Crisis_Recovery.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f558b927188d16c75a7712d40d9c3099fb8519b50ace928c11194d9cacd5e6e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Microinsurance for Risk Mitigation and Crisis Recovery (Foundation for Development Cooperation - 2009).md
 ---
 ![[Microinsurance for Risk Mitigation and Crisis Recovery (Foundation for Development Cooperation - 2009) - Cover.svg]]
 

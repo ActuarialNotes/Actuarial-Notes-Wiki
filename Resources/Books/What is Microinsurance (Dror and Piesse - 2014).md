@@ -6,6 +6,16 @@ Year: "2014"
 date: "2014"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6I_Dror_Piesse_What_is_Microinsurance.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6f45be50a08dcc9d0c87f61aacf3d9428fa7ab38bc6e5460adbfd37dbafdf976
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/What is Microinsurance (Dror and Piesse - 2014).md
 ---
 ![[What is Microinsurance (Dror and Piesse - 2014) - Cover.svg]]
 

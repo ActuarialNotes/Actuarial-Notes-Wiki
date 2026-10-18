@@ -7,6 +7,16 @@ date: "2021"
 Type: "Report"
 Code: "EYG no. 008978-20Gbl"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_EY_PAA_Eligibility.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38cdcf6847b575698f4963a8439b1c997905f7a0871b32734363161ca27c2729
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Determining Eligibility of the Premium Allocation Approach under IFRS 17 for Non-Life Insurers (EY - 2021).md
 ---
 ![[Determining Eligibility of the Premium Allocation Approach under IFRS 17 for Non-Life Insurers (EY - 2021) - Cover.svg]]
 

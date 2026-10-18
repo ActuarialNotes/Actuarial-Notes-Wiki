@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6I_Atreya_Comparison_of_Residential_Flood_Insurance_Markets.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:119f584e2a1ca4d323c629584889341dbdfc2588225aa72d68f6d59666473806
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A Comparison of Residential Flood Insurance Markets in 25 Countries (Atreya et al. - 2015).md
 ---
 ![[A Comparison of Residential Flood Insurance Markets in 25 Countries (Atreya et al. - 2015) - Cover.svg]]
 

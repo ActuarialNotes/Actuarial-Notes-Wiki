@@ -7,6 +7,16 @@ date: "2017"
 Type: "Paper"
 Code: "Law and Economic Research Paper No. E574"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Avraham.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:363ea65ab8bdb342d47380e1d97a417ff95a608a91e6829cc6a049489917a558
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Discrimination and Insurance (Avraham - 2017).md
 ---
 ![[Discrimination and Insurance (Avraham - 2017) - Cover.svg]]
 

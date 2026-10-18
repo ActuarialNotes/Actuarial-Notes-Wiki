@@ -6,6 +6,16 @@ Year: "2023"
 date: "2023"
 Type: "Paper"
 Code: "NBER Working Paper No. 31292"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d2b8f56cecbd4ff62a094c1e6214198cebc5aa71be049aae9b9f3e196b6c9eb7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Chinese Insurance Markets - Developments and Prospects (Fang and Xu - 2023).md
 ---
 ![[Chinese Insurance Markets - Developments and Prospects (Fang and Xu - 2023) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2004"
 date: "2004"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_IAA_Solvency.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c0bdd5a5b2a72a28df19a603923b14c5472248f403ca1c8ad6e707deb44b069e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/A Global Framework for Insurer Solvency Assessment (IAA - 2004).md
 ---
 ![[A Global Framework for Insurer Solvency Assessment (IAA - 2004) - Cover.svg]]
 

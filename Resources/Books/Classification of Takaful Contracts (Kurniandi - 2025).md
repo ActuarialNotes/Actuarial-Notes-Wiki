@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2025"
 date: "2025"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c7e176068f337008b76a058397428d64711349bc9f3e871734709dc62a738dba
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Classification of Takaful Contracts (Kurniandi - 2025).md
 ---
 ![[Classification of Takaful Contracts (Kurniandi - 2025) - Cover.svg]]
 

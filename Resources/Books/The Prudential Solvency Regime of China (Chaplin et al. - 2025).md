@@ -5,6 +5,16 @@ Publisher: "Skadden, Arps, Slate, Meagher & Flom LLP"
 Year: "2025"
 date: "2025"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:81aa0156aa2852e33cc7edfbb3e90d423ffc78cc0b5565f5d80794c4e7d9ed42
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Prudential Solvency Regime of China (Chaplin et al. - 2025).md
 ---
 ![[The Prudential Solvency Regime of China (Chaplin et al. - 2025) - Cover.svg]]
 

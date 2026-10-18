@@ -6,6 +6,16 @@ Year: "1999"
 date: "1999"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/database/forum_99fforum_99ff259.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d3bce5e51d10ef24a9c0a96ba6026c6f4a1cd11bc8a3d0e951fa432f07c50b37
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Uncollectible Reinsurance Reserves (Ollodart - 1999).md
 ---
 ![[Uncollectible Reinsurance Reserves (Ollodart - 1999) - Cover.svg]]
 

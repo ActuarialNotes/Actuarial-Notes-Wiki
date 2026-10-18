@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2025-04/CAS_Research-Paper-on-IFRS-17.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e8327ea989cdfe46a4def2e7e000cab45cacffad39b1a72d5179db49ec5ac092
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Actuarial Considerations Associated with IFRS 17 Implementation for General Insurers in Asia (Cai et al. - 2025).md
 ---
 ![[Actuarial Considerations Associated with IFRS 17 Implementation for General Insurers in Asia (Cai et al. - 2025) - Cover.svg]]
 

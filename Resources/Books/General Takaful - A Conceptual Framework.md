@@ -5,6 +5,16 @@ Publisher: "Bank Negara Malaysia"
 Year: "2005"
 date: "2005"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1072a45a928fcd5a0b11ebfc893176d55ef64222e29ae8d5aeba991d4e1f13fc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/General Takaful - A Conceptual Framework.md
 ---
 ![[General Takaful - A Conceptual Framework - Cover.svg]]
 

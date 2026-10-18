@@ -5,6 +5,16 @@ Publisher: "International Association of Insurance Supervisors"
 Year: "2024"
 date: "2024"
 Type: "Guideline"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a2c4bd077fcefe158d3f4aafbd12e1b2a388ee14149a152cd467fa0beb7dc937
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance Core Principles - ICP1 and ICP2 (IAIS - 2024).md
 ---
 ![[Insurance Core Principles - ICP1 and ICP2 (IAIS - 2024) - Cover.svg]]
 

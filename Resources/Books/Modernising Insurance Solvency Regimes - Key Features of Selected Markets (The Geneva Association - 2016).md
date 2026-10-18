@@ -6,6 +6,16 @@ Year: "2016"
 date: "2016"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Geneva.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:0044c6adcd130e57deca2144994e657b55e9211358749e945f6f3fe4d44d0a83
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Modernising Insurance Solvency Regimes - Key Features of Selected Markets (The Geneva Association - 2016).md
 ---
 ![[Modernising Insurance Solvency Regimes - Key Features of Selected Markets (The Geneva Association - 2016) - Cover.svg]]
 

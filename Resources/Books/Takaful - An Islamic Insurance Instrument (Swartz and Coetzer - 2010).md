@@ -6,6 +6,16 @@ Year: "2010"
 date: "2010"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Swartz.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e05a7e7a236ec7bbcb89f3c390b676cd8de1f5614583373e1bc914f65e9965df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Takaful - An Islamic Insurance Instrument (Swartz and Coetzer - 2010).md
 ---
 ![[Takaful - An Islamic Insurance Instrument (Swartz and Coetzer - 2010) - Cover.svg]]
 

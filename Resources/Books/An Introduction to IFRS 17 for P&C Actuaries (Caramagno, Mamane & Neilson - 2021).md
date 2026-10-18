@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-09/6I_IFRS_Study_Note.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d12192ca9c3ee07f5fde10f122ba701d247fbe4a6865015f89e3252865efb6ab
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/An Introduction to IFRS 17 for P&C Actuaries (Caramagno, Mamane & Neilson - 2021).md"
 ---
 ![[An Introduction to IFRS 17 for P&C Actuaries (Caramagno, Mamane & Neilson - 2021) - Cover.svg]]
 

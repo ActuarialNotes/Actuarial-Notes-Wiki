@@ -6,6 +6,16 @@ Year: "2017"
 date: "2017"
 Type: "Guideline"
 Code: "PG1"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a8430a588c0c3b8202fb898791764308e32acc636f0f19bd8b13a1b252e7d080
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/PG 1 - Principles of Professionalism (IAA - 2025).md
 ---
 ![[PG 1 - Principles of Professionalism (IAA - 2025) - Cover.svg]]
 

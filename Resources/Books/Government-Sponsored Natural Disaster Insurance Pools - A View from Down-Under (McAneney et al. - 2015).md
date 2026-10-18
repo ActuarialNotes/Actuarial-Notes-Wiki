@@ -6,6 +6,16 @@ Year: "2015"
 date: "2015"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_McAneney.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8bf8787b70d2e585a9c9e951308da244a9eca59c04f7308e7c97c96a68b7f2bb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Government-Sponsored Natural Disaster Insurance Pools - A View from Down-Under (McAneney et al. - 2015).md
 ---
 ![[Government-Sponsored Natural Disaster Insurance Pools - A View from Down-Under (McAneney et al. - 2015) - Cover.svg]]
 

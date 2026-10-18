@@ -5,6 +5,16 @@ Publisher: "Fundación MAPFRE"
 Year: "2024"
 date: "2024"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f9da8c7fffb46d856736da3d4d9623ab9908be01118cf9dc265222f20d919310
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance Solvency Regulation Systems - An Analysis of Progress Toward Risk-Based Regulations (MAPFRE - 2024).md
 ---
 ![[Insurance Solvency Regulation Systems - An Analysis of Progress Toward Risk-Based Regulations (MAPFRE - 2024) - Cover.svg]]
 

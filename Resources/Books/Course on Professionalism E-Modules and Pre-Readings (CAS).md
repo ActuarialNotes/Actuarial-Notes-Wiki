@@ -5,6 +5,16 @@ Publisher: "Casualty Actuarial Society"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3eecfbf459f9343e269bc8f700d8bc215e13812fa96094cafa6f80220130bba9
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Course on Professionalism E-Modules and Pre-Readings (CAS).md
 ---
 ![[Course on Professionalism E-Modules and Pre-Readings (CAS) - Cover.svg]]
 

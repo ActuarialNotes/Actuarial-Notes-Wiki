@@ -7,6 +7,16 @@ date: "2021"
 Type: "Report"
 Code: "EYG No. 005427-21Gbl"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2023-05/6I_EY_Applying_IFRS17.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7549503b515e9328a201ee821656616a0e02d74fdbdc4eac359ea89e33705568
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Applying IFRS 17 (EY - 2021).md
 ---
 ![[Applying IFRS 17 (EY - 2021) - Cover.svg]]
 

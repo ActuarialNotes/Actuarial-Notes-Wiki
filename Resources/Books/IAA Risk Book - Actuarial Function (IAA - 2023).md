@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2023"
 date: "2023"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d39a1680a6bb3992cf15e6175402edd495f0c136d7f601223b1452f988be8011
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Actuarial Function (IAA - 2023).md
 ---
 ![[IAA Risk Book - Actuarial Function (IAA - 2023) - Cover.svg]]
 

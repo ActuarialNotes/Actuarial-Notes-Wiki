@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0904ebf7ba2ece545a0819f4242be225dacfb7f5c4fe9fe6e035146e9f05c887
+  content_hash: sha256:5c4f0799875e928a466600401de1d7397c6fca6f6d105767bdb121541da88e77
   sources: []
   open_findings: 0
   open_critical: 0

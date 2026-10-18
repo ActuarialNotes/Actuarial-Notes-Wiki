@@ -36,8 +36,13 @@ export interface ExamMonogram {
  * with the shorter line on top (`ALTAM` → AL / TAM), which keeps the letter
  * that distinguishes ALTAM from ASTAM on the line the eye reads first.
  */
+// A key whose letters aren't the requirement's name: the CAS's Course on
+// Professionalism is stored under `CAS-APC`, the key readers' progress has
+// always been kept under, but the CAS calls it the COP.
+const MONOGRAM_NAMES: Record<string, string> = { 'CAS-APC': 'COP' }
+
 export function examMonogramLines(examKey: string): string[] {
-  const name = examKey.replace(/^CAS-/, '').trim().toUpperCase()
+  const name = (MONOGRAM_NAMES[examKey] ?? examKey).replace(/^CAS-/, '').trim().toUpperCase()
   if (!name) return ['?']
   if (name.length <= 3) return [name]
 

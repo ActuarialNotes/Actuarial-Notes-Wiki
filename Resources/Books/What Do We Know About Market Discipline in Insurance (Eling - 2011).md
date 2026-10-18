@@ -7,6 +7,16 @@ date: "2011"
 Type: "Paper"
 Code: "Working Papers on Risk Management and Insurance No. 101"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Eling_1.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:405c0f83c37a3a65dff898f4c88a278acb3cf7ad38350a9a509705bfeb54a01d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/What Do We Know About Market Discipline in Insurance (Eling - 2011).md
 ---
 ![[What Do We Know About Market Discipline in Insurance (Eling - 2011) - Cover.svg]]
 

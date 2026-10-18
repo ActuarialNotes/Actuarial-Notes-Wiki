@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Guide"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_IFRS_Example.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:71760c47bcf0a19d833ee12753a28d80a9ec5cbbe8aa8ee72c4279a335b03225
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Reinsurance Contracts Held - An Example of Proportional Coverage (IFRS Foundation).md
 ---
 ![[Reinsurance Contracts Held - An Example of Proportional Coverage (IFRS Foundation) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Frees.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fe8591754393424925e66ddef533c00e10d14d194de84195a81835109c92e362
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/The Discriminating (Pricing) Actuary (Frees and Huang - 2021).md
 ---
 ![[The Discriminating (Pricing) Actuary (Frees and Huang - 2021) - Cover.svg]]
 

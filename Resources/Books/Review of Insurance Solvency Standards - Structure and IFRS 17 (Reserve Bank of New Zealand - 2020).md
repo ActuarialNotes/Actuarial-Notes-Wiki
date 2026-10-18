@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_New_Zealand.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1ee8279f77724ec903b5d3fc9764fdf79df4a5a690f89044a1e601b18f8a8b36
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Review of Insurance Solvency Standards - Structure and IFRS 17 (Reserve Bank of New Zealand - 2020).md
 ---
 ![[Review of Insurance Solvency Standards - Structure and IFRS 17 (Reserve Bank of New Zealand - 2020) - Cover.svg]]
 

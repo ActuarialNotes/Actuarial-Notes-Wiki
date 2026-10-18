@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d65531244355f9420f5c9c323be1d159c23f9de06a426e8128fcddba8a023ef6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Associateship Professionalism Course e-Learning Module (SOA).md
 ---
 ![[Associateship Professionalism Course e-Learning Module (SOA) - Cover.svg]]
 

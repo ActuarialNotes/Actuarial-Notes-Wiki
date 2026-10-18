@@ -10,7 +10,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9a2f8d682ad180422ef0bd6a04aa7ddb537cfba4f9ab6a75b66083f2d5236bd7
+  content_hash: sha256:5c3afd83c7131bf2b66fb897dc1ae798c4a1726d6cb7f4ee80f94155e1843788
   sources: []
   open_findings: 0
   open_critical: 0

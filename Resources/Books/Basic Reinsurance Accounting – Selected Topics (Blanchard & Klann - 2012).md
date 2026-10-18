@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Blanchard_and_Klann.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef9f180e9ee3f89f55050500f3357be3f713a0af019f5d1a15f474136e49245d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: ".verify/Resources/Books/Basic Reinsurance Accounting – Selected Topics (Blanchard & Klann - 2012).md"
 ---
 ![[Basic Reinsurance Accounting – Selected Topics (Blanchard & Klann - 2012) - Cover.svg]]
 

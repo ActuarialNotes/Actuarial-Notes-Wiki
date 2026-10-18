@@ -6,6 +6,16 @@ Year: "2021"
 date: "2021"
 Type: "Paper"
 Code: "JIR-ZA-40-03"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aad700dd4e8a04310aab10d270bca72e6fc148fb1c73f4a3ba81281643427ef1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance Regulation in Europe - An Analysis of Effectiveness and Efficiency (Eling - 2021).md
 ---
 ![[Insurance Regulation in Europe - An Analysis of Effectiveness and Efficiency (Eling - 2021) - Cover.svg]]
 

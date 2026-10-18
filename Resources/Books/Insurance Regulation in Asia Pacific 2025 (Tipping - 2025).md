@@ -6,6 +6,16 @@ Year: "2025"
 date: "2025"
 Edition: "11th"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a4f398c9ec68d3063330834a060c3f9d3c03f5421da22a2a0c7f6f15db539ce2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Insurance Regulation in Asia Pacific 2025 (Tipping - 2025).md
 ---
 ![[Insurance Regulation in Asia Pacific 2025 (Tipping - 2025) - Cover.svg]]
 

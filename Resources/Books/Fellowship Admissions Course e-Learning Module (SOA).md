@@ -5,6 +5,16 @@ Publisher: "Society of Actuaries"
 Year: "2026"
 date: "2026"
 Type: "Course"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:047119d0650f740db543da44c7cfc56205749cc79c7426ab93fd1decf050938c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Fellowship Admissions Course e-Learning Module (SOA).md
 ---
 ![[Fellowship Admissions Course e-Learning Module (SOA) - Cover.svg]]
 

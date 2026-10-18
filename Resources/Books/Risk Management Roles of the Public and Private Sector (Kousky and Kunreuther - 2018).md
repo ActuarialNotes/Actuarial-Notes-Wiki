@@ -5,6 +5,16 @@ Publisher: "Wiley"
 Year: "2018"
 date: "2018"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:85b803c54d09ff35ce0e688c6695f49a5752ef865c9d2b6719235afa9f3c0a16
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Risk Management Roles of the Public and Private Sector (Kousky and Kunreuther - 2018).md
 ---
 ![[Risk Management Roles of the Public and Private Sector (Kousky and Kunreuther - 2018) - Cover.svg]]
 

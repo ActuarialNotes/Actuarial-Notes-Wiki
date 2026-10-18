@@ -5,6 +5,16 @@ Publisher: "Actuarial Institute of Chinese Taipei"
 Year: "2026"
 date: "2026"
 Type: "Instructions"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:64915e118dc4133c33759043cefe9bacbfd3210d7024df4855daeec17d71d719
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/AICT Exams 6GA3 and 6GB3 Study Materials (AICT).md
 ---
 ![[AICT Exams 6GA3 and 6GB3 Study Materials (AICT) - Cover.svg]]
 

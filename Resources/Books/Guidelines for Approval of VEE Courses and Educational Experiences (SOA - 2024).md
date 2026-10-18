@@ -6,6 +6,16 @@ Year: "2024"
 date: "2024"
 Type: "Guideline"
 Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/edu-vee-guidelines.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d2f89ce32795ab0dfb00fa5eec98605cb9da8292032d1bef8526155b4677b30
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Guidelines for Approval of VEE Courses and Educational Experiences (SOA - 2024).md
 ---
 ![[Guidelines for Approval of VEE Courses and Educational Experiences (SOA - 2024) - Cover.svg]]
 

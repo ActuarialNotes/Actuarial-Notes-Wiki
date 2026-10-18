@@ -7,6 +7,16 @@ date: "2020"
 Type: "Report"
 Code: "EYG No. 007724-20Gbl"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_EY_Illustrative_Financials.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9f34b45039ad3dbfbeb817463aa967c189ddd97931a0e87b5ef3f03c257875c8
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Good General Insurance (International) Limited - Illustrative Disclosures (EY - 2020).md
 ---
 ![[Good General Insurance (International) Limited - Illustrative Disclosures (EY - 2020) - Cover.svg]]
 

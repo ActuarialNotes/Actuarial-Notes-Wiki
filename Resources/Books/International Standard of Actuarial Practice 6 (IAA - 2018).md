@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Standard of Practice"
 Code: "ISAP 6"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af14e6cd01f13e9df826bf4993338c079ca20d0de6f78e801dc718a789339d57
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Standard of Actuarial Practice 6 (IAA - 2018).md
 ---
 ![[International Standard of Actuarial Practice 6 (IAA - 2018) - Cover.svg]]
 

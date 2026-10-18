@@ -6,6 +6,16 @@ Year: "2018"
 date: "2018"
 Type: "Standard of Practice"
 Code: "ISAP 5"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:08dd333ca33d9e694e98d846057ea187f280cecc0d296932f90a210bff107a3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/International Standard of Actuarial Practice 5 (IAA - 2018).md
 ---
 ![[International Standard of Actuarial Practice 5 (IAA - 2018) - Cover.svg]]
 

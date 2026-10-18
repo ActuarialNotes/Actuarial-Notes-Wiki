@@ -6,6 +6,16 @@ Year: "2004"
 date: "2004"
 Type: "Report"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_OCED.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ca0d2a3fdeeeb950037596738957186513f8617dd5abca3eecbf474508e6e422
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Summary on Private Health Insurance in OECD Countries (OECD - 2004).md
 ---
 ![[Summary on Private Health Insurance in OECD Countries (OECD - 2004) - Cover.svg]]
 

@@ -6,6 +6,16 @@ Year: "2012"
 date: "2012"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-05/6I_Klein.pdf)"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:15bf549cc04452d5ed35515bc9da4cc1b46270e61ff3948f065b12b5f8a6239f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Principles for Insurance Regulation - An Evaluation of Current Practices and Potential Reforms (Klein - 2012).md
 ---
 ![[Principles for Insurance Regulation - An Evaluation of Current Practices and Potential Reforms (Klein - 2012) - Cover.svg]]
 

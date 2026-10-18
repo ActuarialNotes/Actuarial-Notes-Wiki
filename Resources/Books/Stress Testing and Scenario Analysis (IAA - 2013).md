@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2013"
 date: "2013"
 Type: "Paper"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3450533ebc806906c03c68776c1a34e081a80191d990981ae817ac4c60a71af2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/Stress Testing and Scenario Analysis (IAA - 2013).md
 ---
 ![[Stress Testing and Scenario Analysis (IAA - 2013) - Cover.svg]]
 

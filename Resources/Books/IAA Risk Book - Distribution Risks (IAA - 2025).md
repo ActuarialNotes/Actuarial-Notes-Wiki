@@ -5,6 +5,16 @@ Publisher: "International Actuarial Association"
 Year: "2025"
 date: "2025"
 Type: "Report"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c56b51e894d76a2ab0701adad26ffc72d345220670b32a6ec93a07a2f114c4ec
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/IAA Risk Book - Distribution Risks (IAA - 2025).md
 ---
 ![[IAA Risk Book - Distribution Risks (IAA - 2025) - Cover.svg]]
 

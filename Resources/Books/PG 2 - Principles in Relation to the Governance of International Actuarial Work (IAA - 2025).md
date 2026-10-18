@@ -6,6 +6,16 @@ Year: "2020"
 date: "2020"
 Type: "Guideline"
 Code: "PG2"
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4858a681e2b11f76cac5348ef4a178943e9abba9fbc696b71f9656932f77d4f3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/Resources/Books/PG 2 - Principles in Relation to the Governance of International Actuarial Work (IAA - 2025).md
 ---
 ![[PG 2 - Principles in Relation to the Governance of International Actuarial Work (IAA - 2025) - Cover.svg]]
 

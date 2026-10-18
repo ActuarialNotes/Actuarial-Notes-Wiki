@@ -15,12 +15,13 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1e853048ed362929ec54680a3463ca94286af9962e2553e6ffabf598072adbc7
-  sources: []
+  sources:
+    - "CIA, Educational Note: IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, Document 222092), preamble and memorandum (educational notes not binding; not necessarily the only accepted practice; responsibility lies with the actuary; may no longer appropriately illustrate; AGC approval under the Policy on Due Process for guidance other than standards), PDF pp.1-3, sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-022.md

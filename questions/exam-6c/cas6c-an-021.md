@@ -12,12 +12,13 @@ wiki_link:
   - Concepts/Stress+Testing
 points: 4
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1762728186243860f551f04e46c4095f7b973106183087af1bc2b527c2f15253
-  sources: []
+  sources:
+    - "OSFI, Guideline B-15 Climate Risk Management (March 7, 2025 web text), Overview: physical risks (acute, chronic), transition risks, liability risks, sha256:6c8535a7b0f7d65a16c2eb5abb2b60631eb711ef8d01cf140a98935542ae9c6a — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/climate-risk-management"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-021.md

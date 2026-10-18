@@ -244,6 +244,10 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
    ×1.5); V10's topic tags and C18's slips done, bar four FM retags. Next is Phase 2: the
    converter (C13), then the beta exams.
+0a. **Content plan, Phase 2** (in progress, 2026-10-18): C13 done (the writer fixed, 83 report
+   paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
+   59 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Next: the fact-check campaigns,
+   Exam 9 → 5 → MAS-II → 6C, then PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -452,7 +456,7 @@ gates through `--hold` in CI.
 | C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct (10 vault-written questions, 9 verified; `cas9-an-009` wants a C5 question a reading teaches). Left: 46 concepts, 9 readings, 23 questions on its own papers. |
 | C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Settle the findings against the v02 outline (D8); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
 | C4 | MAS-II → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct (23 vault-written questions, 22 verified). The papers are scanned. The page's F-002 (is exponential smoothing on the syllabus?) holds `masii-an-023`. |
-| C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Phase 2. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
+| C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. Blocked on D8 (F-001). 137 concepts, 67 readings and 321 questions to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |

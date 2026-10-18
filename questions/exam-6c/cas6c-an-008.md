@@ -14,12 +14,13 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8fceaacf393d332db20970ce3e203f5990b53dd81028afd781a61ac2782fd699
-  sources: []
+  sources:
+    - "CIA, Educational Note: IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, Document 222092), §4.6 Contractual service margin, PDF p.17 (\"the CSM is set at the amount such that no profit is recognized ... with a floor of zero\"), sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-008.md

@@ -12,12 +12,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:c1d9be3c1f0fa294c7cf0cf030dceee422c7a659498ccda416e7e6d9f069a5bd
-  sources: []
+  sources:
+    - "Ontario, R.R.O. 1990, Regulation 664: Automobile Insurance (CAS 6C reading, consolidation from July 1, 2020), s. 8(1)-(2), PDF p.4, sha256:6982cbc772530787a622ef78a51595686ec2af17f11b20be28ca50ea699a38c9 — https://www.casact.org/sites/default/files/2021-03/6C_Ontario_Reg_664.pdf"
+    - "Marshall, Fair Benefits Fairly Delivered: A Review of the Auto Insurance System in Ontario (2017), Direct Compensation row, PDF p.14, sha256:326913d5117f8dc2cc937a10f31f2d6fa712b509e040cd63220c2a8843b9d8fc — https://www.casact.org/sites/default/files/2021-03/6C_Marshall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-004.md

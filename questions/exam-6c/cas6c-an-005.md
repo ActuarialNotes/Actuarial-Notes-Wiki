@@ -13,13 +13,15 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:364406333b9d8e781253c83289f33d510d8074a2689ef821ac8d3945fb81cdd2
-  sources: []
-  open_findings: 0
+  sources:
+    - "Insurance Bureau of Canada, Code of Consumer Rights and Responsibilities (web page), Right to timely and transparent claims handling; Right to complaint resolution; Responsibility to update your information, sha256:8b4058d1d856bdfb1c687f94b1eb3aa6dad483eb8c41ef11fc1a70084f4d5d9c — https://ibc.ca/insurance-basics/how-insurance-works/code-of-consumer-rights-and-responsibilities"
+    - "CAS, Exam 6C Content Outline, Fall 2026 (v04 2026-05-26), Section A readings list (IBC Code of Conduct = credit-information code), checked for scope, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-005.md
 ---

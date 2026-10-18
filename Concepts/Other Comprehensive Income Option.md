@@ -4,14 +4,14 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1c5b14590087ba0cbc03df7c9e713409a38c8283a1f5c0faf5b9170d122edf2e
+  content_hash: sha256:f9ac390db9674fe80d7151ba174916cb9df6abf696fe2e1306d77bdd9bcf10d4
   sources: []
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Other Comprehensive Income Option.md
 ---
 
-**The Other Comprehensive Income Option** is the [[IFRS 17]] accounting policy choice to present the effect of **changes in discount rates** on insurance contract liabilities in **other comprehensive income** rather than in profit or loss, leaving a systematic finance expense — based on the rate locked in at initial recognition — in profit.
+**The Other Comprehensive Income Option** is the [[IFRS 17]] accounting policy choice to present the effect of **changes in discount rates** on insurance contract liabilities in **other comprehensive income** rather than in profit or loss, leaving a systematic finance expense — based on the rate locked in at initial recognition (for a group under the premium allocation approach, at the date of the incurred claims) — in profit.
 
 > $$\text{IFIE} = \underbrace{\text{Systematic amount (locked-in rate)}}_{\text{profit or loss}} + \underbrace{\text{Rate change effect}}_{\text{OCI}}$$
 

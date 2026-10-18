@@ -14,12 +14,13 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:590eda18e8d6db3d8aae51d0a4dfcfd015b6ede0722274fe7c0816f642a97d44
-  sources: []
+  sources:
+    - "CIA, Educational Note: IFRS 17 Discount Rates and Cash Flow Considerations for P&C Insurance Contracts (2025, Document 225109), §2 Terminology (IFIE definition and components), PDF p.9; §11 and §11.2 (changes in payment patterns and risk adjustment belong in insurance service expense), PDF pp.29-31, sha256:ba5d55e4e3429fa74681b03719336d5e186a812856f0445a5c4f8438fec5c4dc — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=628504&fid=628505"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-016.md

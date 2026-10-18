@@ -13,13 +13,16 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ffbdb78cacc533852ba8e4a4bd6f59db9bba0f59e9d7e9f01094bef797678541
-  sources: []
-  open_findings: 0
+  sources:
+    - "IFRS Foundation, Effects Analysis: IFRS 17 Insurance Contracts (May 2017), \"Transition reliefs\", PDF p.70, sha256:156f2c7cf410073ee10bf04ac667db7ddf22c0167c96e3c3b635d02db062d5ae — https://www.ifrs.org/-/media/project/insurance-contracts/ifrs-standard/ifrs-17-effects-analysis.pdf"
+    - "CIA, 2024 Guidance to the Appointed Actuary and Valuation Actuaries of P&C Insurers (Educational Note, Document 224092), §2, implementation for fiscal years beginning on or after January 1, 2023, PDF p.6, sha256:81e420f62420ec2448cd4ea8158bcc2bc28d2e2e190b9c692d11e15a357162bc — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=349793&fid=349794"
+    - "CAS, Exam 6C Content Outline, Fall 2026 (v04 2026-05-26), pp.1-14 searched: no transition topic in the outline, sha256:1bd4b2b802cf0976c797bc068c2903fa8deaf43d9366a85aadf5b34a568275c1 — https://www.casact.org/sites/default/files/2026-03/Exam_6C_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-018.md
 ---

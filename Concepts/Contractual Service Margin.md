@@ -2,9 +2,9 @@
 verification:
   status: unverified
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:77b145e481e8019a6e504744910f2e2852dc8fe26a3d499aa1bdb0293bdc8946
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:92fe0c7c3beffd794bc55255897638fc2cc5e39dea2294c9c6abc2e963f557a2
   sources: []
   open_findings: 0
   open_critical: 0
@@ -13,7 +13,7 @@ verification:
 
 **The Contractual Service Margin** (CSM) is the [[IFRS 17]] building block holding the **unearned profit** on a group of insurance contracts. At initial recognition it is set at exactly the amount that makes the total liability produce **no gain on day one**; it is then released to [[Insurance Revenue|revenue]] as coverage is provided, measured in [[Coverage Units]].
 
-> $$\text{CSM}_0 = -\bigl(\text{PV of future cash inflows} - \text{PV of outflows} - \text{RA}\bigr)$$
+> $$\text{CSM}_0 = \max\bigl(0,\; \text{PV of future cash inflows} - \text{PV of outflows} - \text{RA}\bigr)$$
 
 - **No day-one gain, but a day-one loss is recognised immediately.** If the fulfilment cash flows are *negative* in the insurer's favour there is profit, and it is deferred as CSM; if they are unfavourable the group is [[Onerous Contract|onerous]] and the loss goes straight to profit or loss with **no CSM at all**. The asymmetry is deliberate.
 - **Release over [[Coverage Units]].** Each period, the CSM is allocated to revenue in proportion to the coverage units provided that period out of the total expected — so a group covering more or larger risks in a period releases more profit then.

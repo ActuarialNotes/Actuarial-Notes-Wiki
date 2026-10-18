@@ -15,12 +15,14 @@ wiki_link:
 answer: "A"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:8877d932d96a5a549f942318257ecf3dc0b9ef4f003da421ee273ad1fb1d2224
-  sources: []
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A (web text), §1.1.1 and §1.1.2 (target-level requirements less diversification credit, divided by 1.5; MCT ratio = capital available / minimum capital required); §1.2.1 (100% minimum, 150% supervisory target), sha256:585e63316ba7e3c674c5ac1047133920fd38297869263118699be0f7d2a0f6c5 — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI, Life Insurance Capital Adequacy Test (2025), Chapter 1, §1.1.1 Total Ratio formula; §1.1.5 Base Solvency Buffer (scalar of 1.0); §1.2 (100% supervisory target, 90% minimum Total Ratio), sha256:70e662d110ef63afd283b7c8a089a8ac7a753e112be7eeaa15866229c3472392 — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/life-insurance-capital-adequacy-test-2025-chapter-1-overview-general-requirements"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-020.md

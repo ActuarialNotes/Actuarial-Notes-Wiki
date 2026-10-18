@@ -13,12 +13,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c6b2d300653059f79a79b2d6234ea97eda486ca6208501fca9b1278f994f8ae8
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d0afbddae0b8b63e5e221364c2f4799a6f03057ebbcf89c071fef590943fac24
+  sources:
+    - "FSCO, What do the coverages mean? (CAS 6C reading), Direct Compensation-Property Damage definition, PDF p.1, sha256:cc44bb568dcf03d8873e467c6e6082089877985f5e5a0cea8689df23b54d83d9 — https://www.casact.org/sites/default/files/2021-03/6C_FSCO_Coverages.pdf"
+    - "Marshall, Fair Benefits Fairly Delivered: A Review of the Auto Insurance System in Ontario (2017), table of mandatory/optional Ontario coverages, PDF p.14, sha256:326913d5117f8dc2cc937a10f31f2d6fa712b509e040cd63220c2a8843b9d8fc — https://www.casact.org/sites/default/files/2021-03/6C_Marshall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-003.md
@@ -51,4 +53,4 @@ The true set is II and III, so the answer is **D**.
 **Why not the others**
 
 - **A**, **B** and **C** each include statement I, which confuses DC-PD with collision coverage.
-- **E** would require all three statements to be true, or none, and statement I is false.
+- **E** would require all three statements to be true, and statement I is false.

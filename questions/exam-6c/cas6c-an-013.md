@@ -13,12 +13,13 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:423c12f147234e3b8b8d6df4f0c04ad85e57d3a791f311b98aa0c66f7333171f
-  sources: []
+  sources:
+    - "CIA, Educational Note: IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, Document 222092), §5.2, footnote 7 (\"earned premium\") and worked example, PDF pp.24-25; §5.5 (59(a) election for coverage of one year or less), PDF p.34, sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-013.md

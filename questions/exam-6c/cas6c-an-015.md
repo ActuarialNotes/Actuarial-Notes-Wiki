@@ -15,12 +15,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e47e19c87fd8772c4fd54b57b773eb8d071557bac1bab75966b3f30f460c8f53
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f7cac73fef9cc337bad49e07b3e6046d15fc9336c81a9a6173323b6735383c47
+  sources:
+    - "OSFI, P&C Core Financial Statement Quarterly Return PC1 (2023) (IFRS 17 workbook, CAS-hosted), page 20.22 Statement of Profit or Loss (lines 099-199 ISR; 310 insurance finance in Net Investment Result; 420 General and Operating Expenses), sha256:1de8ae31f568e91557650a1e78720e2ea7e310953e91ba5210444bea212afae0 — https://www.casact.org/sites/default/files/2022-05/6c_irfs17_core.xlsx"
+    - "OSFI, P&C Supervisory Quarterly Return PC2 (IFRS 17 workbook, CAS-hosted), page 60.25 column headings, sha256:80070b06f101a632278aaa3407c646c0ae7c5062be3925266490c8bc8daf4251 — https://www.casact.org/sites/default/files/2022-05/6c_pc_irfs17_qrt.xlsx"
+    - "CIA, Educational Note: IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, Document 222092), §5.2 worked example (\"Other Expenses\" below the ISR), PDF p.25, sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-015.md
@@ -54,7 +57,7 @@ $$
 \text{ISR} = \text{Insurance revenue} - \text{Insurance service expenses} - \text{Net expenses from reinsurance contracts held}
 $$
 
-Insurance service expenses are the three components on page 60.25: incurred claims and other insurance service expenses, amortization of insurance acquisition cash flows, and losses on onerous contracts.
+Page 60.25 breaks insurance service expenses into incurred claims and other insurance service expenses, amortization of insurance acquisition cash flows, losses and reversal of losses on onerous contracts, and adjustments to liabilities for incurred claims. The table has no adjustment to liabilities for incurred claims, so:
 
 $$
 \begin{aligned}

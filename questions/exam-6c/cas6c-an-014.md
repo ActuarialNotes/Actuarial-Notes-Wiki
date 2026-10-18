@@ -14,12 +14,16 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:725e78e4b9a72eb134f8793deaa37b3169fe0a0735fb442a1bf955e3c64863e1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:44f90e710643717a784b588f26d8b0375fd8f41c5bbae08d8f7491c0e0fee9a1
+  sources:
+    - "OSFI, P&C Supervisory Quarterly Return PC2 (IFRS 17 workbook, CAS-hosted), page 60.25 column headings (four insurance service expense columns; net expenses from reinsurance held incl. allocation of reinsurance premiums), sha256:80070b06f101a632278aaa3407c646c0ae7c5062be3925266490c8bc8daf4251 — https://www.casact.org/sites/default/files/2022-05/6c_pc_irfs17_qrt.xlsx"
+    - "OSFI, P&C Core Financial Statement Quarterly Return PC1 (2023) (IFRS 17 workbook, CAS-hosted), page 20.22 Statement of Profit or Loss (ISR; net investment result incl. interest revenue and insurance finance; general and operating expenses), sha256:1de8ae31f568e91557650a1e78720e2ea7e310953e91ba5210444bea212afae0 — https://www.casact.org/sites/default/files/2022-05/6c_irfs17_core.xlsx"
+    - "CIA, Educational Note: IFRS 17 – Actuarial Considerations Related to Liability for Remaining Coverage in P&C Insurance Contracts (June 2022, Document 222092), §5.2 worked example (amortization of IACF in Total Insurance Service Expenses), PDF p.25; §5.5 (non-attributable costs as \"other expenses\"), PDF p.34, sha256:a7e5ecea716dc20bffcc88045f20c950e71400ac3de3bfb1544736dac46a0333 — https://www.casact.org/sites/default/files/2023-05/6C_CIA_Educational_Note_IFRS_17_Actuarial_Considerations_Related_to_Liability.pdf"
+    - "CIA, Educational Note: IFRS 17 Discount Rates and Cash Flow Considerations for P&C Insurance Contracts (2025, Document 225109), §11 Insurance finance expense (unwinding of discount), PDF p.29, sha256:ba5d55e4e3429fa74681b03719336d5e186a812856f0445a5c4f8438fec5c4dc — https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=628504&fid=628505"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-6c/cas6c-an-014.md
@@ -37,7 +41,7 @@ Which of the following items is reported within insurance service expenses?
 
 ## Explanation
 
-OSFI's *Insurance Service Result* page (60.25 of the Supervisory Quarterly Return) breaks insurance service expenses into three columns: incurred claims and other insurance service expenses, **amortization of insurance acquisition cash flows**, and losses and reversals of losses on onerous contracts. The CIA's educational note on the LRC shows the same in its worked example: the 100 of acquisition cash flows amortized in the year sits inside "Total Insurance Service Expenses." The answer is **E**.
+OSFI's *Insurance Service Result* page (60.25 of the Supervisory Quarterly Return) breaks insurance service expenses into four columns: incurred claims and other insurance service expenses, **amortization of insurance acquisition cash flows**, losses and reversal of losses on onerous contracts, and adjustments to liabilities for incurred claims. The CIA's educational note on the LRC shows the same in its worked example: the 100 of acquisition cash flows amortized in the year sits inside "Total Insurance Service Expenses." The answer is **E**.
 
 **Why not the others**
 

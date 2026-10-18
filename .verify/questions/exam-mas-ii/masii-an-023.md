@@ -42,3 +42,32 @@ created: 2026-10-18
 - checks_run: blind recomputation in Python before reading the key; every distractor's stated reasoning reproduced; explanation worked line by line; wiki_link targets exist (spaces as +) and sit on Exam MAS-II (CAS).md; topic/learning_objective match the exam page domain; format per question-writer formats.md; validate_content.py clean
 - sources_checked: Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed., §8.1 Simple exponential smoothing, 'Flat forecasts', page read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/ses.html; NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.3.2 Forecasting with Single Exponential Smoothing, sha256:107a46792d21ed5714d01205286236b5dc51f32a09838c71324e81220ac0586d — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc432.htm; Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.1-2, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf; CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), p.4 Cowpertwait chapter scope, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
 - note: Recomputed: a11 = 154.0, a12 = 151.2, flat forecast 151.2, option C; swapped weights 166.0 then 145.2 (E, B); naive 140 (A); a11 154.0 (D). Arithmetic correct and the key matches FPP3, but open major F-001 (Cowpertwait §3.4 excluded from MAS-II) keeps it in_review under content-plan §1.2 rule 1. Minor F-002: multi-step rule unstated.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:08Z/4700
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Applied: off_syllabus: true added (a retag, content-plan §1.2 rule 2), decided with Exam MAS-II (CAS).md F-002, resolved this run by removing exponential smoothing from the MAS-II page. Basis: MAS-II outline 2026 p.4 excludes Cowpertwait Sections 3.3 and 3.4, and 3.4.1 is 'Exponential smoothing' (contents scan PDF p.3); no other current CAS reading assigns it as far as the outlines read (MAS-II pp.3-4). The question stays in the vault, findable by id and search, out of quiz draws.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:08Z/4700
+- date: 2026-10-18
+- resolves: F-002
+- status: resolved
+- note: Applied as the finding proposed: the stem now states 'The forecast for every future month equals the latest smoothed level.' before the ask, which is FPP3 §8.1's flat forecast function (read today, sha256:be59a506...); the NIST bootstrapping reading no longer applies, and the key C (151.2) follows.
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:08Z/4700
+- date: 2026-10-18
+- status_set: verified
+- confidence: medium
+- checks_run: blind recomputation (a11 = 0.2*170 + 0.8*150 = 154.0; a12 = 0.2*140 + 0.8*154.0 = 151.2; flat forecast 151.2) before re-reading the key C; distractors A 140 naive, B 145.2 and E 166.0 swapped weights, D 154.0 a11; explanation line by line; new stem sentence against FPP3 §8.1; off_syllabus key per CLAUDE.md conventions; validate_content.py clean
+- sources_checked: Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed., §8.1 Simple exponential smoothing, 'Flat forecasts': 'all forecasts take the same value, equal to the last level component', page read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/ses.html; CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf; Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-3 (1.5 Decomposition, 2.3 The correlogram, 3.4 Exponential smoothing and the Holt-Winters method), sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf
+- note: verified, medium: the method is checked against an open text (FPP3, rank 3) rather than the Cowpertwait section, which is commercial and in any case excluded from MAS-II; now off_syllabus. Both findings resolved.

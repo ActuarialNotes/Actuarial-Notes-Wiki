@@ -11,18 +11,18 @@ wiki_link:
   - Concepts/Time+Series+Forecast
 answer: "C"
 points: 2
+off_syllabus: true
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f6096379a230b86c3453e80d626518091d4a2452cd9b23a35c3d0f291fe4e1e
+  content_hash: sha256:b55226f500cabfcfce35e89bb616aa8c6a543fac27553cd728418d3a633ab15f
   sources:
-    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed., §8.1 Simple exponential smoothing, 'Flat forecasts', page read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/ses.html"
-    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.3.2 Forecasting with Single Exponential Smoothing, sha256:107a46792d21ed5714d01205286236b5dc51f32a09838c71324e81220ac0586d — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc432.htm"
-    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.1-2, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
-    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), p.4 Cowpertwait chapter scope, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
-  open_findings: 2
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed., §8.1 Simple exponential smoothing, 'Flat forecasts': 'all forecasts take the same value, equal to the last level component', page read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/ses.html"
+    - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-3 (1.5 Decomposition, 2.3 The correlogram, 3.4 Exponential smoothing and the Holt-Winters method), sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-023.md
 ---
@@ -34,6 +34,8 @@ a_t = \alpha x_t + (1 - \alpha)\,a_{t-1}
 $$
 
 The smoothed level after month 10 is $a_{10} = 150$. The counts for months 11 and 12 are $x_{11} = 170$ and $x_{12} = 140$.
+
+The forecast for every future month equals the latest smoothed level.
 
 Calculate the forecast of the claim count for month 15, made at the end of month 12.
 

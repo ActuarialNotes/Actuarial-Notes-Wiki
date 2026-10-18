@@ -41,3 +41,46 @@ created: 2026-10-18
 - proposed_action: State the simplification in the stem, or net the diversification credit.
 - applied: false
 - fingerprint: 1061de1890f7
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:50Z/dd77
+- date: 2026-10-18
+- resolves: F-002
+- status: resolved
+- note: Applied (the finding's first option): the stem now ends '(Ignore the change the switch makes to the operational risk margin and the Diversification Credit.)' — ch.7's 8.50%-of-CR0 component moves with the market risk margin too, so both are named. Arithmetic unchanged and recomputed: 0.30 x 90 = 27; 185 + 27/1.5 = 203; 310/203 = 152.7%; 310/185 = 167.6%; 0.73 x 3.87/27 = 10.5%. The stem's 30% equity factor matches §5.3.1.
+
+## [F-003] Diversification credit said to be between market and insurance risk
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:50Z/dd77
+- date: 2026-10-18
+- severity: minor
+- status: open
+- locus: last bullet ('It is the counterparty to the Diversification Credit')
+- claim: '... which recognises that market risk and insurance risk do not crystallise together.'
+- evidence: MCT 2024 ch.8: 'an explicit credit for diversification is permitted between the sum of credit and market risk requirements, and the insurance risk requirement'; §8.1 A = credit + market risk. The bullet leaves credit risk out of the block. OSFI, Minimum Capital Test Guideline (2024), Guideline A, §5.3.1 (30% common-share factor), ch.7, ch.8 §8.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024
+- source_rank: 1
+- proposed_action: Name the blocks as ch.8 does.
+- applied: true
+- fingerprint: 29a42ec91b92
+
+## [F-003/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:50Z/dd77
+- date: 2026-10-18
+- resolves: F-003
+- status: resolved
+- note: Applied: the bullet now says the credit is permitted between the sum of the credit and market risk requirements and the insurance risk requirement, because losses across them are not perfectly correlated.
+
+## [C-001] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:50Z/dd77
+- date: 2026-10-18
+- status_set: in_review
+- checks_run: equity factor §5.3.1; ch.7 and ch.8 aggregation; example recomputed in Python
+- sources_checked: OSFI, Minimum Capital Test Guideline (2024), Guideline A, §5.3.1 (30% common-share factor), ch.7, ch.8 §8.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024
+- note: F-002 resolved; F-003 found and fixed. Interest rate, real estate, FX and IFRS 17 bullets not checked. The rest of the page was not checked in this packet; in_review until it is.

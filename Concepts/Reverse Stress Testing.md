@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:eb9bf64be370f9c3ba3a94536b6edebae901079f1535a82fcb1f02a19b26a487
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:316a80ca1b2cf308e480dff325c88e8095788b3501252b597ffa08874bcab91a
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Reverse Stress Testing.md
 ---
@@ -23,12 +25,12 @@ verification:
 ![[Media/Figures/Reverse_Stress_Testing.svg|340]]
 
 > [!example]- Working Backwards From Failure {Example}
-> An insurer with a $185\%$ MCT ratio, capital available of $\$370$ million and a base solvency buffer of $\$200$ million asks what would make it non-viable.
+> An insurer with a $185\%$ MCT ratio, capital available of $\$370$ million and minimum capital required of $\$200$ million asks what would make it non-viable.
 >
 > Conduct the reverse stress test.
 >
 > > [!answer]-
-> > **The target.** Non-viability requires the ratio below $100\%$, so capital available below $\$200$ million — a loss of **$\$170$ million after tax**, or roughly $\$233$ million pre-tax. (The buffer would also move, generally upward in stress, so this is conservative in the insurer's favour.)
+> > **The target.** Non-viability requires the ratio below $100\%$, so capital available below $\$200$ million — a loss of **$\$170$ million after tax**, or roughly $\$233$ million pre-tax. (Minimum capital required would also move, generally upward in stress, so this is conservative in the insurer's favour.)
 > >
 > > **What combinations reach $\$233$ million?**
 > >

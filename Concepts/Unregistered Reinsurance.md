@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a903070275ef3446d71c920aaf51e4febf05b152cfd3dd3bd9dba34f7fff51ea
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:8df7dde47aed2094653c70ad978c527bc4f1827239ed40533cb1ebd66518293e
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §2.3.1, §4.2.1, §4.3.2.2, §4.3.3.1, §4.3.3.2, §4.3.3.3, §4.3.3.4, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Unregistered Reinsurance.md
 ---
@@ -25,29 +27,29 @@ verification:
 ![[Media/Figures/Unregistered_Reinsurance.svg|340]]
 
 > [!example]- Is the Collateral Worth Its Cost? {Example}
-> An insurer cedes $\$50$ million of liabilities to an unregistered reinsurer. The reinsurer offers two terms: a treaty at a premium of $\$18$ million with no collateral, or the same treaty at $\$19.1$ million with a letter of credit securing the full $\$50$ million. Ceded liabilities reduce the [[Base Solvency Buffer]] by $18\%$ of the amount credited, and the insurer's cost of capital is $10\%$.
+> An insurer cedes $\$50$ million of liabilities to an unregistered reinsurer. The reinsurer offers two terms: a treaty at a premium of $\$18$ million with no collateral, or the same treaty at $\$19.1$ million with a letter of credit securing the full $\$50$ million. Under the [[MCT]], the amount recoverable from an unregistered reinsurer that is not covered by acceptable collateral is deducted from [[Capital Available]]. The insurer's cost of capital is $10\%$. (Assume the letter of credit is acceptable and within the guideline's aggregate limit on letters of credit, and ignore the capital requirement on the collateral itself.)
 >
 > Which should it take?
 >
 > > [!answer]-
-> > **Capital released by the collateralised option:**
+> > **Capital released by the collateralised option** — the deduction from capital available that the letter of credit removes:
 > >
-> > $$0.18 \times \$50\text{M} = \$9\text{M}$$
+> > $$\$50\text{M}$$
 > >
 > > **Annual value of that release**, at a $10\%$ cost of capital:
 > >
-> > $$0.10 \times \$9\text{M} = \$0.9\text{M}$$
+> > $$0.10 \times \$50\text{M} = \$5\text{M}$$
 > >
 > > **Cost of the collateral:**
 > >
 > > $$\$19.1\text{M} - \$18\text{M} = \$1.1\text{M}$$
 > >
-> > **On these numbers, the uncollateralised treaty is cheaper** — $\$1.1$ million to save $\$0.9$ million of capital cost. Strictly on the capital arithmetic, take the cheaper treaty.
+> > **On these numbers, the collateralised treaty is cheaper** — $\$1.1$ million to save $\$5$ million of capital cost. Strictly on the capital arithmetic, take the collateralised treaty.
 > >
 > > **But the arithmetic is not the whole decision**, and this is where candidates should push further:
 > >
 > > - **Collectability.** Without collateral, a $\$50$ million recoverable depends entirely on an offshore counterparty's willingness and ability to pay, enforceable only through foreign courts. The collateral is not merely a capital device; it is security.
-> > - **The [[MCT]] position.** If the insurer's ratio is comfortably above its internal target, $\$9$ million of released capital is worth little. If it is near target, that capital may be what allows the insurer to keep writing — and its marginal value is then far above $10\%$.
+> > - **The [[MCT]] position.** If the insurer's ratio is comfortably above its internal target, $\$50$ million of released capital is worth little. If it is near target, that capital may be what allows the insurer to keep writing — and its marginal value is then far above $10\%$.
 > > - **Concentration.** If this is one of several cessions to the same reinsurer, the aggregate uncollateralised exposure may breach the insurer's own counterparty limits under OSFI's reinsurance expectations.
 > >
 > > **The correct answer is conditional**, and saying so is the point: take the uncollateralised treaty if the capital is not needed and the counterparty is strong; take the collateral if either condition fails.

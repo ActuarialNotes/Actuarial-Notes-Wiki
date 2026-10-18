@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:cfe837cfc053f848a983cf3cb951648c156e8d0c642fbc659b4b803d1f219543
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:46a1795f8d3265c6d062098b073d4b99e82808e7455416dc423975c524f36419
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Canadian Annual Return.md
 ---
@@ -17,7 +19,7 @@ verification:
 - **Principal components:**
   - Audited **financial statements** — [[Financial Position|statement of financial position]], statement of income, [[Comprehensive Income|comprehensive income]], [[Statement of Changes in Equity|changes in equity]], cash flows, and [[Notes to Financial Statements|notes]].
   - **Supplementary exhibits** — premiums and claims by province and class of insurance, claims development (paid and incurred by accident year, the Canadian analogue to Schedule P), reinsurance ceded by reinsurer with [[Registered Reinsurance|registered]] and [[Unregistered Reinsurance|unregistered]] status, investment schedules.
-  - The **[[MCT]]** calculation, showing [[Capital Available]], [[Capital Required]] and the [[Base Solvency Buffer]].
+  - The **[[MCT]]** calculation, showing [[Capital Available]], [[Capital Required]] and minimum capital required.
   - The **Appointed Actuary's report and opinion** on [[Insurance Contract Liabilities]].
 - **The [[Quarterly Return]]** is a reduced version filed each quarter, giving OSFI a more frequent read on capital and results.
 - **The claims development exhibit** is the most heavily used by analysts: it shows how each accident year's estimate has moved over successive valuations, so persistent adverse or favourable development becomes visible and cannot be concealed by a single year's release.

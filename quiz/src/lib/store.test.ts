@@ -22,6 +22,10 @@ import {
   shortDate,
   showcase,
   storeShelf,
+  storeBodyForExam,
+  storeExam,
+  stockedExams,
+  itemMatchesFilter,
   type StudyProduct,
   comparableExams,
   comparisonFactLabels,
@@ -187,14 +191,31 @@ describe('exams', () => {
     for (const exam of STORE_EXAMS) expect(tracked.has(exam.key), exam.key).toBe(true)
   })
 
-  it('runs the accent ramp left to right', () => {
-    const hues = STORE_EXAMS.map(e => EXAM_HUES[e.key]).filter((h): h is number => h !== undefined)
-    expect(hues).toEqual([...hues].sort((a, b) => a - b))
+  it('runs the accent ramp left to right, on each body’s ladder', () => {
+    for (const body of ['SOA', 'CAS'] as const) {
+      const hues = STORE_EXAMS.filter(e => e.ladders.includes(body)).map(e => EXAM_HUES[e.key]).filter((h): h is number => h !== undefined)
+      expect(hues, body).toEqual([...hues].sort((a, b) => a - b))
+    }
+  })
+
+  it('splits the strip by body, with P and FM on both ladders', () => {
+    const items = buildStoreItems({ study: [], calculators: [] }, [])
+    const soa = stockedExams(items, 'SOA').map(e => e.key)
+    const cas = stockedExams(items, 'CAS').map(e => e.key)
+    expect(soa.slice(0, 8)).toEqual(['P', 'FM', 'FAM', 'SRM', 'PA', 'ALTAM', 'ASTAM', 'ATPA'])
+    expect(soa).toContain('FSA-GH101')
+    expect(soa).not.toContain('CAS-5')
+    expect(cas.slice(0, 3)).toEqual(['P', 'FM', 'MAS-I'])
+    expect(cas).not.toContain('FAM')
+    expect(storeBodyForExam('FAM', 'CAS')).toBe('SOA')
+    expect(storeBodyForExam('FM', 'CAS')).toBe('CAS')
+    expect(storeBodyForExam(null, 'SOA')).toBe('SOA')
   })
 
   it('reads the exam and aisle off the URL, and nothing else', () => {
     expect(parseStoreExam('FM')).toBe('FM')
-    expect(parseStoreExam('FAM')).toBeNull()
+    expect(parseStoreExam('FAM')).toBe('FAM')
+    expect(parseStoreExam('VEE-MS')).toBeNull()
     expect(parseStoreExam(null)).toBeNull()
     expect(parseAisle('calculators')).toBe('calculators')
     expect(parseAisle('cosmetics')).toBeNull()
@@ -202,9 +223,15 @@ describe('exams', () => {
   })
 
   it('maps every reading-list label to an exam', () => {
-    for (const label of ['Exam P-1', 'Exam FM-2', 'Exam MAS-I', 'Exam MAS-II', 'Exam 5', 'Exam PCPA', 'Exam 6C', 'Exam 6U', 'Exam 7', 'Exam 8', 'Exam 9']) {
+    for (const label of ['Exam P-1', 'Exam FM-2', 'Exam MAS-I', 'Exam MAS-II', 'Exam 5', 'Exam PCPA', 'Exam 6C', 'Exam 6U', 'Exam 7', 'Exam 8', 'Exam 9', 'Exam FAM', 'Exam SRM', 'Exam PA', 'Exam ALTAM', 'Exam ASTAM', 'Exam ATPA']) {
       expect(readingExamKey(label), label).toBeDefined()
     }
+    expect(readingExamKey('Exam DISC-IA')).toBe('CAS-IA')
+    expect(readingExamKey('Exam GH-201C')).toBe('FSA-GH201')
+    expect(readingExamKey('Exam 6T')).toBe('CAS-6')
+    // A requirement the Store doesn't carry keeps its readings off the shelf.
+    expect(readingExamKey('Exam VEE-MS')).toBeUndefined()
+    expect(readingExamKey('Exam APC')).toBeUndefined()
   })
 
   it('puts a book on the shelf of every exam that assigns it, once', () => {
@@ -290,10 +317,55 @@ describe('the shelf', () => {
   })
 })
 
+describe('body, region and search', () => {
+  const book = (exams: string[]): StoreBook => ({ name: 'b', title: 'Regulation', isbn: '1', type: 'Textbook', readings: exams.map(exam => ({ exam })) })
+  const product = (id: string, variant?: string): StudyProduct => ({
+    id,
+    kind: 'manual',
+    name: `Manual ${id}`,
+    exams: ['CAS-6'],
+    offer: { sellerId: 'actex', url: 'https://www.actexlearning.com/x', checked: '2026-10-18' },
+    ...(variant ? { variant } : {}),
+  })
+  const items = buildStoreItems({ study: [product('can', '6C'), product('us', '6U'), product('any')], calculators: [] }, [book(['Exam 6C']), book(['Exam FAM'])])
+  const shown = (filter: ShelfFilter) => items.filter(i => itemMatchesFilter(i, filter)).map(i => i.id)
+
+  it('narrows an exam to one region, keeping what is for every region', () => {
+    const six = shown({ exam: 'CAS-6', aisle: null, variant: '6U' })
+    expect(six).toContain('register-CAS-6')
+    expect(six).toContain('us')
+    expect(six).toContain('any')
+    expect(six).not.toContain('can')
+    expect(six.filter(id => id.startsWith('book-'))).toEqual([])
+    expect(shown({ exam: 'CAS-6', aisle: null, variant: '6C' })).toContain('can')
+    expect(storeExam('CAS-6')?.variants).toEqual(['6C', '6U', '6I', '6T'])
+  })
+
+  it('shows one body’s exams with no exam chosen', () => {
+    const soa = shown({ exam: null, aisle: null, body: 'SOA' })
+    expect(soa).toContain('register-FAM')
+    expect(soa).toContain('register-P')
+    expect(soa).not.toContain('register-CAS-5')
+    expect(soa).not.toContain('can')
+    const cas = shown({ exam: null, aisle: null, body: 'CAS' })
+    expect(cas).toContain('register-P')
+    expect(cas).not.toContain('register-FAM')
+  })
+
+  it('searches names, exams and sellers, and counts as a refinement', () => {
+    expect(shown({ exam: null, aisle: null, query: 'manual us' })).toEqual(['us'])
+    expect(shown({ exam: null, aisle: null, query: 'actex' })).toHaveLength(3)
+    expect(shown({ exam: null, aisle: null, query: 'Exam FAM' })).toContain('register-FAM')
+    expect(hasRefinement({ exam: null, aisle: null, query: ' fam ' })).toBe(true)
+    expect(hasRefinement({ exam: null, aisle: null, query: '  ' })).toBe(false)
+  })
+})
+
 describe('registrationUrgency', () => {
   it('leads with what can be registered for now, soonest deadline first', () => {
     const items = buildStoreItems({ study: [], calculators: [] }, [])
-    const order = registrationUrgency(items.filter(i => i.aisle === 'registration'), '2026-10-02').map(i => i.exams[0])
+    const cas = items.filter(i => i.aisle === 'registration' && storeExam(i.exams[0]!)?.ladders.includes('CAS'))
+    const order = registrationUrgency(cas, '2026-10-02').map(i => i.exams[0])
     // FM closes Nov 4 and PCPA Dec 9; P opens the week of Oct 26; the CAS
     // exams' October windows closed Sep 29.
     expect(order.slice(0, 2)).toEqual(['FM', 'CAS-PCPA'])

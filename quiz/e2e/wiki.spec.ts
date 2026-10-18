@@ -108,6 +108,22 @@ test.describe('wiki', () => {
     await expect(page).toHaveURL(/\/wiki\/resources$/)
     await expect.poll(() => cards.count()).toBe(all)
   })
+
+  // Exam 6's regional study guides (6C, 6U, 6I, 6T) are one logo on the strip;
+  // choosing it puts a region picker under the strip.
+  test('shows Exam 6 once and narrows it by region', async ({ page }) => {
+    await page.goto('/wiki/resources')
+    await page.getByRole('radiogroup', { name: 'Examining body' }).getByRole('radio', { name: 'CAS' }).click()
+    const strip = page.getByRole('radiogroup', { name: 'Exam' })
+    await expect(strip.getByRole('radio', { name: 'Exam 6', exact: true })).toHaveCount(1)
+    await strip.getByRole('radio', { name: 'Exam 6', exact: true }).click()
+    const regions = page.getByTestId('exam-variants')
+    await expect(regions).toBeVisible()
+    await regions.getByRole('radio', { name: 'Canada' }).click()
+    await expect(page).toHaveURL(/exam=Exam\+6C$/)
+    await regions.getByRole('radio', { name: 'All regions' }).click()
+    await expect(page).toHaveURL(/exam=Exam\+6C&exam=Exam\+6/)
+  })
 })
 
 // The study guide's sticky header carries an info button beside the version

@@ -63,6 +63,25 @@ where the subscription is taken through Stripe. It reads *Active* for a reader w
 | **Calculators** | `CALCULATORS` and `CALCULATOR_POLICIES` in `data/storeCatalog.ts` | a product card with the bodies whose lists carry it |
 | **Textbooks** | `virtual:store-books` (`lib/storeBooks.ts`) | the book's cover |
 
+The header is the Resources page's: the **search bar** on top (`StoreSearchBar`, `?q=` —
+it narrows every aisle at once and counts as a refinement, matching an item's name, its
+seller and authors, its exams and its kind: `itemMatchesQuery`), then the title with the
+**SOA / CAS** picker beside it — the same stored choice as the Study Guides and Quiz tabs
+(`lib/bodyFilter.ts`); a URL naming an exam opens on that exam's ladder
+(`storeBodyForExam`) — and under it the strip of that body's exams. The exams are
+`lib/storeExams.ts`: each carries the `ladders` it stands on (P and FM on both, the DISCs
+on CAS's, FAM through ATPA and the FSA exams on the SOA's). With no exam chosen, the shelf
+holds what is for one of the body's exams and the calculators its list allows
+(`itemMatchesBody`).
+
+An exam sat under a syllabus per region — CAS Exam 6 (6C, 6U, 6I, 6T), the SOA's GH 201
+and ILA 201 — is **one logo**; choosing it puts a **region picker** under the strip
+(`components/ExamVariantPicker.tsx`, `?region=6C`; the Resources page does the same,
+`lib/examVariants.ts`). A region narrows the textbooks to the ones that region's study
+guide assigns and the study materials to those written for it (`StudyProduct.variant`,
+set only where the seller's title names the region) or for the exam whichever region;
+the registration is one exam, one fee.
+
 Two choices narrow it, and both ride the URL (`?exam=FM&aisle=study`) so Back and a shared
 link keep them: the **exam strip** — the ladder's logos left to right, a radiogroup — and
 the **aisle pills**. With no aisle chosen, an aisle shows six products and "See all": for
@@ -193,7 +212,9 @@ online free wears a **Free online** sticker.
 | `quiz/src/components/store/useStoreDialog.ts` | What both dialogs do while open: focus, Tab, Escape, scroll lock |
 | `quiz/src/components/store/ProductArt.tsx` | The pictures: bound covers, product photos, the Store's book, the drawn calculator |
 | `quiz/src/components/store/SellerLogo.tsx` | A seller's logo tile, monogram fallback |
-| `quiz/src/lib/store.ts` | Types, aisles, exams, prices, registration status, the shelf (pure, tested) |
+| `quiz/src/lib/store.ts` | Types, aisles, prices, registration status, the shelf and its filters (pure, tested) |
+| `quiz/src/lib/storeExams.ts` | The exams the shelf narrows to, their ladders and regional variants |
+| `quiz/src/components/store/StoreSearchBar.tsx` | The Shop's floating search bar |
 | `quiz/src/lib/storeBooks.ts` | The textbook aisle from the vault (pure, tested; runs in `vite.config.ts`) |
 | `quiz/src/data/storeCatalog.ts` | Sellers, study materials, calculator policies and calculators |
 | `quiz/src/data/storeReviews.ts` | The quoted reviews and the sellers' printed ratings |

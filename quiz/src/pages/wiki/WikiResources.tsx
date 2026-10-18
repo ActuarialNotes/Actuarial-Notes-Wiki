@@ -5,6 +5,8 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamStrip } from '@/components/ExamStrip'
+import { ExamVariantPicker } from '@/components/ExamVariantPicker'
+import { groupExamVariants, variantRegion } from '@/lib/examVariants'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useExamProgress } from '@/contexts/examProgress'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
@@ -187,6 +189,12 @@ export default function WikiResources() {
   const chosenExam = selection.exam.size > 0 ? [...selection.exam][0] : null
   const body = bodyForExam(chosenExam, bodyOverride ?? defaultBody(selectedTrack), strips)
   const strip = strips[body]
+  // An exam with a syllabus per region (Exam 6's 6C, 6U, 6I, 6T) is one logo on
+  // the strip. Choosing it puts every variant on the shelf, and the region
+  // picker under the strip narrows it to one (`lib/examVariants.ts`).
+  const groups = useMemo(() => groupExamVariants(strip), [strip])
+  const chosenGroup = chosenExam ? groups.find(g => g.members.some(m => m.label === chosenExam)) ?? null : null
+  const chosenVariant = chosenGroup && chosenGroup.members.length > 1 && selection.exam.size === 1 ? chosenExam : null
   const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
@@ -242,10 +250,10 @@ export default function WikiResources() {
     setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
   }
 
-  // One exam at a time, or none. A vintage is an edition of one exam's
-  // syllabus, so another exam starts at its own newest.
-  function chooseExam(label: string | null) {
-    const exam = new Set(label ? [label] : [])
+  // One exam at a time — every region of it, or one — or none. A vintage is
+  // an edition of one exam's syllabus, so another exam starts at its own newest.
+  function chooseExam(label: string | readonly string[] | null) {
+    const exam = new Set(label === null ? [] : typeof label === 'string' ? [label] : label)
     const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
     setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
   }
@@ -295,11 +303,21 @@ export default function WikiResources() {
       </header>
 
       <ExamStrip
-        exams={strip.map(e => ({ value: e.label, name: e.label, logoKey: e.key }))}
-        value={chosenExam}
-        onChange={chooseExam}
+        exams={groups.map(g => ({ value: g.key, name: g.name, logoKey: g.key }))}
+        value={chosenGroup?.key ?? null}
+        onChange={key => chooseExam(key === null ? null : groups.find(g => g.key === key)!.members.map(m => m.label))}
         className="sm:-mx-6 sm:px-6"
       />
+
+      {chosenGroup && chosenGroup.members.length > 1 && (
+        <ExamVariantPicker
+          className="-mt-3"
+          examName={chosenGroup.name}
+          options={chosenGroup.members.map(m => ({ value: m.label, label: variantRegion(m.label) ?? m.label }))}
+          value={chosenVariant}
+          onChange={label => chooseExam(label ?? chosenGroup.members.map(m => m.label))}
+        />
+      )}
 
       <div className="-mt-3 flex flex-wrap items-center gap-2">
         {DROPDOWN_FACETS.map(facet => {
@@ -327,7 +345,9 @@ export default function WikiResources() {
           emptyTitle={
             selection.exam.size === 1
               ? 'No earlier edition of this exam’s syllabus is on file'
-              : 'Choose one exam to see its syllabus by edition'
+              : chosenGroup
+                ? 'Choose one region to see its syllabus by edition'
+                : 'Choose one exam to see its syllabus by edition'
           }
           surface="card"
           single

@@ -23,6 +23,8 @@ import { daysBetween } from './sittingTimeline'
 import { examAccentStyle } from './examColors'
 import { readingExamKey, type StoreBook } from './storeBooks'
 import { STORE_SELLERS } from '../data/storeCatalog'
+import { STORE_EXAMS, type ExamBody, type StoreExam } from './storeExams'
+import { rankMatch } from './appSearch'
 
 // ── Aisles ────────────────────────────────────────────────────────────────────
 
@@ -44,38 +46,9 @@ export function parseAisle(value: string | null | undefined): StoreAisle | null 
 
 // ── Exams ─────────────────────────────────────────────────────────────────────
 
-export type ExamBody = 'SOA' | 'CAS'
-
-export interface StoreExam {
-  /** The exam_progress key — `P`, `MAS-I`, `CAS-5`, `CAS-DA`. */
-  key: string
-  /** What the shelf calls it. */
-  name: string
-  /** Who sets it (and so whose calculator list applies). DISCs are The Institutes' courses: no list. */
-  body: ExamBody | null
-}
-
-/**
- * The exams the shelf can be narrowed to, in the order of the ladder — the
- * preliminary exams, the MAS exams and the DISCs, then the upper exams with
- * PCPA where it is sat, after Exam 5. Read left to right, the strip of exam
- * logos runs the accent ramp from blue to red (`lib/examColors.ts`).
- */
-export const STORE_EXAMS: readonly StoreExam[] = [
-  { key: 'P', name: 'Exam P', body: 'SOA' },
-  { key: 'FM', name: 'Exam FM', body: 'SOA' },
-  { key: 'MAS-I', name: 'Exam MAS-I', body: 'CAS' },
-  { key: 'MAS-II', name: 'Exam MAS-II', body: 'CAS' },
-  { key: 'CAS-IA', name: 'DISC-IA', body: null },
-  { key: 'CAS-DA', name: 'DISC-DA', body: null },
-  { key: 'CAS-RM', name: 'DISC-RM', body: null },
-  { key: 'CAS-5', name: 'Exam 5', body: 'CAS' },
-  { key: 'CAS-PCPA', name: 'PCPA', body: 'CAS' },
-  { key: 'CAS-6', name: 'Exam 6', body: 'CAS' },
-  { key: 'CAS-7', name: 'Exam 7', body: 'CAS' },
-  { key: 'CAS-8', name: 'Exam 8', body: 'CAS' },
-  { key: 'CAS-9', name: 'Exam 9', body: 'CAS' },
-]
+// The exams themselves live beside the textbook shelf that reads them at
+// bundle time (`lib/storeExams.ts`).
+export { STORE_EXAMS, type ExamBody, type StoreExam }
 
 const EXAM_BY_KEY = new Map(STORE_EXAMS.map(e => [e.key, e]))
 
@@ -234,6 +207,12 @@ export interface StudyProduct {
   windows?: string[]
   /** Which aisle it stands in — a course that includes the exam is sold as registration. */
   aisle?: 'study' | 'registration'
+  /**
+   * The one regional variant of its exam it is written for, as a study guide
+   * names it — `6C`, `6U` — where the seller's title says so. Absent, it is
+   * for the exam whichever variant (`EXAM_VARIANTS`).
+   */
+  variant?: string
 }
 
 /** What the examining bodies say about calculators, transcribed. */
@@ -680,6 +659,15 @@ export function itemMatchesExam(item: StoreItem, examKey: string): boolean {
 export interface ShelfFilter {
   exam: string | null
   aisle: StoreAisle | null
+  /**
+   * Whose ladder the shelf is (the SOA / CAS picker): with no exam chosen,
+   * what is for one of the body's exams, and the calculators its list allows.
+   */
+  body?: ExamBody | null
+  /** One regional variant of the chosen exam — `6C` — when it has variants. */
+  variant?: string | null
+  /** What the search bar holds: a name, a seller, an author, an exam. */
+  query?: string
   /** Only what costs nothing: a free course, a textbook its publisher puts online. */
   free?: boolean
   /** Price bands, any of them (OR). An item with no printed price is in none. */
@@ -688,14 +676,53 @@ export interface ShelfFilter {
   makers?: readonly string[]
 }
 
-/** Whether any of the free / price / maker filters is on — the shelf then shows every match, not a preview. */
+/** Whether any of the free / price / maker filters or a search is on — the shelf then shows every match, not a preview. */
 export function hasRefinement(filter: ShelfFilter): boolean {
-  return !!filter.free || (filter.prices?.length ?? 0) > 0 || (filter.makers?.length ?? 0) > 0
+  return !!filter.free || (filter.prices?.length ?? 0) > 0 || (filter.makers?.length ?? 0) > 0 || !!filter.query?.trim()
+}
+
+/** Whether an item is for one of a body's exams — or, a calculator, on its list. */
+export function itemMatchesBody(item: StoreItem, body: ExamBody): boolean {
+  if (item.type === 'calculator') return item.calculator.approvedBy.includes(body)
+  return item.exams.some(key => storeExam(key)?.ladders.includes(body))
+}
+
+/**
+ * Whether an item is for one regional variant of its exam: a textbook the
+ * variant's study guide assigns, a study material written for it or for the
+ * exam whichever variant, and the registration (one exam, one fee).
+ */
+export function itemMatchesVariant(item: StoreItem, variant: string): boolean {
+  if (item.type === 'book') return item.book.readings.some(r => r.exam === `Exam ${variant}`)
+  if (item.type === 'study') return !item.study.variant || item.study.variant === variant
+  return true
+}
+
+/** What an item is searched on, most identifying first: its name, its seller and makers, its exams, its kind. */
+function searchFields(item: StoreItem): string[] {
+  const kind = item.type === 'study' ? STUDY_KIND_LABEL[item.study.kind] : item.type === 'book' ? item.book.type : item.type === 'calculator' ? 'Calculator' : 'Registration'
+  return [
+    item.name,
+    ...item.makers.publishers,
+    ...item.makers.authors,
+    ...item.exams.map(key => storeExam(key)?.name ?? key),
+    ...(item.type === 'book' ? item.book.readings.map(r => r.exam) : []),
+    kind,
+  ]
+}
+
+/** Whether an item answers the search (`lib/appSearch.ts`'s matching: a prefix, a word, or every word). */
+export function itemMatchesQuery(item: StoreItem, query: string): boolean {
+  if (!query.trim()) return true
+  return searchFields(item).some(field => rankMatch(field, query) !== null)
 }
 
 /** Whether an item passes every filter but the aisle (AND across filters, OR within one). */
 export function itemMatchesFilter(item: StoreItem, filter: ShelfFilter): boolean {
   if (filter.exam && !itemMatchesExam(item, filter.exam)) return false
+  if (filter.exam && filter.variant && !itemMatchesVariant(item, filter.variant)) return false
+  if (!filter.exam && filter.body && !itemMatchesBody(item, filter.body)) return false
+  if (filter.query && !itemMatchesQuery(item, filter.query)) return false
   if (filter.free && !isFreeItem(item)) return false
   if (filter.prices?.length) {
     const band = priceBandOf(item)
@@ -838,9 +865,23 @@ export function makerOptions(items: readonly StoreItem[], filter: ShelfFilter): 
   return { publishers: tally(m => m.publishers), authors: tally(m => m.authors) }
 }
 
-/** The exams that have anything on the shelf, in ladder order — the strip. */
-export function stockedExams(items: readonly StoreItem[]): StoreExam[] {
-  return STORE_EXAMS.filter(exam => items.some(item => item.type !== 'calculator' && itemMatchesExam(item, exam.key)))
+/** The exams that have anything on the shelf, in ladder order — the strip; one body's ladder when given. */
+export function stockedExams(items: readonly StoreItem[], body?: ExamBody): StoreExam[] {
+  return STORE_EXAMS.filter(exam =>
+    (!body || exam.ladders.includes(body)) &&
+    items.some(item => item.type !== 'calculator' && itemMatchesExam(item, exam.key)),
+  )
+}
+
+/**
+ * The body a shelf opens on when its URL names an exam: the exam's own ladder
+ * if the picked body's doesn't hold it (a link to Exam FAM opens on SOA
+ * whatever was last picked), otherwise the one picked — the Resources page's
+ * rule (`bodyForExam` in `lib/resourceFilters.ts`).
+ */
+export function storeBodyForExam(examKey: string | null, picked: ExamBody): ExamBody {
+  const ladders = examKey ? storeExam(examKey)?.ladders : undefined
+  return !ladders || ladders.includes(picked) ? picked : ladders[0]!
 }
 
 // ── Pictures ──────────────────────────────────────────────────────────────────

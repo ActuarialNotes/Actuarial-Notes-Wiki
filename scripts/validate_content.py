@@ -68,6 +68,7 @@ EXAM_LABEL_BY_DIR = {
     "exam-fm": "Financial Mathematics",
     "exam-mas-i": "Exam MAS-I",
     "exam-mas-ii": "Exam MAS-II",
+    "exam-fam": "Exam FAM",
     "exam-srm": "Exam SRM",
     "exam-5": "Exam 5",
     "exam-6c": "Exam 6C",

@@ -8,13 +8,17 @@ Edition: "3rd"
 Type: "Textbook"
 ISBN: "978-1-032-01932-1"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:7f21e08f34c0cfc786e55729417c8f62cbdb8aa35ca5f96663b4114e66c29514
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:973467551ee8599cb9c2e3b4854b9fdaf8153ef0d399da68a9074863d85d7d3c
+  sources:
+    - "CAS Exam MAS-II Content Outline 2026, Domain B tasks B1-B4 p.2; Complete Text References p.4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+    - "Routledge product page, West, Welch & Galecki, Linear Mixed Models 3rd ed., Table of Contents, Description, copyright 2022, 3rd Edition, sha256:f12634bb020648718b44cad8b1038f03ba0a040c7ef9e5440308249d771ed765 — https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321"
+    - "Crossref chapter records, doi:10.1201/9781003181064, chapter records 10.1201/9781003181064-1 to -9 with page ranges, sha256:a8cdbef6cc9c2c83eab8698e747a5fa349f51fae41e0067293545b43425ec96c — https://api.crossref.org/works?filter=isbn:9781003181064&rows=40&select=DOI,title,page,type"
+    - "Google Books record, bibliographic information: C&H/CRC Press 2022, Edition 3, ISBN 1032019328/9781032019321, sha256:884c7013e108b134de403e20cf4c035a5b09b72fc5a1288c9f78f112defea374 — https://books.google.com/books?vid=ISBN9781032019321"
+  open_findings: 1
   open_critical: 0
   log: .verify/Resources/Books/Linear Mixed Models (West et al. - 2022).md
 ---
@@ -53,4 +57,4 @@ A step-by-step guide to fitting linear mixed models (LMMs) in SAS, SPSS, R, Stat
 - [Linear Mixed Models: A Practical Guide Using Statistical Software, 3rd Edition (Routledge)](https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321) — the publisher's page: authors, edition, year, the book description and the table of contents (nine chapters and three appendices)
 - [Crossref chapter records for the eBook (doi:10.1201/9781003181064)](https://api.crossref.org/works?filter=isbn:9781003181064&rows=40&select=DOI,title,page,type) — the full chapter titles, numbered 1–9 with page ranges
 - [Linear Mixed Models (Google Books)](https://books.google.com/books?vid=ISBN9781032019321) — the ISBN, publisher, year and edition
-- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the citation (3rd Edition, CRC Press, 2022) and the assigned scope
+- [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the citation (3rd Edition, CRC Press, 2022) and the assigned scope

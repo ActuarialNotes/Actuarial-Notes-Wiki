@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:24d61c1a90b3995e31d3ba7ec064beebe4088ed05e968b32db5bb455e2112a23
-  sources: []
+  sources:
+    - "SAS/STAT 13.1 User's Guide, Chapter 63: The MIXED Procedure (SAS Institute), Notation for the Mixed Model p.5236; Mixed Models Theory pp.5315-5322 (CS vs random intercept, ML/REML log-likelihoods, mixed model equations, BLUP/EBLUP, boundary mixture of chi-squares); Table 63.17 p.5303-5304, sha256:bbde853def15e236149d167e1b35f191c5b2d002efd59792b75f5d22449a72a1 — https://support.sas.com/documentation/onlinedoc/stat/131/mixed.pdf"
+    - "Killip, Mahfoud & Pearce, What Is an Intracluster Correlation Coefficient?, Ann. Fam. Med. 2(3), 2004 (open access), equations 1-2, effective sample size and design effect, sha256:515a0e983ed61c862dbd6609f458c9116598d84ce7a17a4f807e5357cbaa4f53 — https://pmc.ncbi.nlm.nih.gov/articles/PMC1466680/"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Intraclass Correlation.md

@@ -202,6 +202,8 @@ export function buildPastExamRows(questions: Question[], exam: string): PastExam
 export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
   'Probability': 30,
   'Financial Mathematics': 30,
+  // The SOA's syllabus (`Exam SRM (SOA).md`): 35 multiple-choice questions.
+  'Exam SRM': 35,
   'Exam MAS-I': 40,
   'Exam MAS-II': 42,
   'Exam 5': 25,

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import { FlaskConical } from 'lucide-react'
+import { HeaderLinkButton } from '@/components/HeaderLinkButton'
 
 /**
  * The way from the PCPA study guide to its project (`docs/pcpa-project.md`), in
@@ -12,13 +12,12 @@ import { FlaskConical } from 'lucide-react'
  */
 export function ExamProjectButton({ iconOnlyOnPhone = false }: { iconOnlyOnPhone?: boolean }) {
   return (
-    <Link
+    <HeaderLinkButton
       to="/project"
+      icon={FlaskConical}
+      label="Project"
       title="The PCPA project — build, validate and report on a GLM in a simulated project window"
-      className="not-prose inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground no-underline shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <FlaskConical className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-      <span className={iconOnlyOnPhone ? 'hidden sm:inline' : undefined}>Project</span>
-    </Link>
+      iconOnlyOnPhone={iconOnlyOnPhone}
+    />
   )
 }

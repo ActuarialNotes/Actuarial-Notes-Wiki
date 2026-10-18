@@ -6,6 +6,7 @@ import {
   examPageIdFromFile,
   examProgressKeyFromFile,
   examQuizTopic,
+  examStudyGuideFor,
   studyGuidesForResource,
   todaysPlanConcepts,
   todaysPlanRowState,
@@ -182,5 +183,28 @@ describe('studyGuidesForResource', () => {
   it('is empty for a resource no study guide lists', () => {
     expect(studyGuidesForResource(syllabi, 'Unlisted (Nobody - 2001)')).toEqual([])
     expect(studyGuidesForResource(syllabi, '')).toEqual([])
+  })
+})
+
+describe('examStudyGuideFor', () => {
+  const page = (fileName: string, examId: string) =>
+    ({ examId, examLabel: '', examTopic: '', topics: [], resources: [], fileName })
+  const syllabi = [
+    page('Exam P-1 (SOA)', 'P-1'),
+    page('Exam 5 (CAS)', '5'),
+    page('Exam 6U (CAS)', '6U'),
+    page('Exam 6C (CAS)', '6C'),
+  ]
+
+  it('finds the exam page a bank answers to', () => {
+    expect(examStudyGuideFor(syllabi, 'Probability')).toBe('Exam P-1 (SOA)')
+    expect(examStudyGuideFor(syllabi, 'Exam 5')).toBe('Exam 5 (CAS)')
+    // 6U shares 6C's progress key but not its bank.
+    expect(examStudyGuideFor(syllabi, 'Exam 6C')).toBe('Exam 6C (CAS)')
+  })
+
+  it('has none for a bank no page in hand quizzes from', () => {
+    expect(examStudyGuideFor(syllabi, 'Exam 9')).toBeUndefined()
+    expect(examStudyGuideFor(syllabi, '')).toBeUndefined()
   })
 })

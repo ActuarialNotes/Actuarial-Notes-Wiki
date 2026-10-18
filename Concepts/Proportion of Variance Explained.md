@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:5b445f73141540349bb54250ee26c640847d77ef36a43e0dd56b709bab6259f7
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b070218ed26858c000b099cdcaf2459ada24e53f61ca2cd7d0a1df2cbb2d8262
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §12.2.3-12.2.4, pp.504-508 (PDF 511-515), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Proportion of Variance Explained.md
 ---
@@ -19,7 +20,7 @@ The **proportion of variance explained (PVE)** is the share of the total varianc
 
 - $\lambda_m$ is the variance of the $m$-th score vector — the eigenvalue attached to the $m$-th [[Loading Vector]]
 - On **standardized** data $\sum_j \lambda_j = p$, so $\mathrm{PVE}_m = \lambda_m/p$ and a component with $\lambda_m > 1$ carries more than one variable's worth of variance (the Kaiser rule of thumb)
-- PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at $m = p$
+- PVE is **decreasing in $m$** by construction, and the cumulative curve rises to 1 at the last component, $m = \min(n-1, p)$
 - "Explained" means variance, **not** predictive power: a high-PVE component need not relate to the response at all, which is why PCA is [[Unsupervised Learning]]
 - The usual reading is off the [[Scree Plot]] or a cumulative-PVE target such as 90%
 

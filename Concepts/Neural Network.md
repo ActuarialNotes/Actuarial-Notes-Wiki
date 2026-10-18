@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:423950d3ede8e0689c4240c4f6c65a5b4e030e2af47a5f5e351b8f03bd0c0710
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:eaaeffd8045aaba6c9acf33d6dae5421a83717c3b4651fc79b93661dac59e69a
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §10.1-10.2, pp.404-410 (PDF 411-417); §10.7, pp.434-439 (PDF 441-446), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §4.4.2, pp.152-153 (PDF 160-161), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "Goodfellow, Bengio & Courville, Deep Learning (MIT Press 2016), author-hosted Ch.6 Deep Feedforward Networks, Ch.6 intro (multilayer perceptrons), sha256:14d53b99e734892233699b5814588592cb38a24c5437e811a012b135ba510ad2 — https://www.deeplearningbook.org/contents/mlp.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Neural Network.md
@@ -37,4 +40,4 @@ A **Neural Network** (also called an **artificial neural network** or **multilay
 > A neural network with a sigmoid output is used to predict claim fraud. For a new claim, the network outputs $\hat{p} = 0.82$. What does this mean, and how should a threshold be chosen?
 >
 > > [!answer]-
-> > $\hat{p} = 0.82$ means the network assigns an 82% estimated probability that the claim is fraudulent. The **classification threshold** (e.g., 0.5 for symmetric costs, or a higher/lower value based on relative costs of [[Type I Error|false positives]] and [[Type II Error|false negatives]]) determines the final class label. This threshold is typically tuned using an [[AUROC]] curve.
+> > $\hat{p} = 0.82$ means the network assigns an 82% estimated probability that the claim is fraudulent. The **classification threshold** (e.g., 0.5 for symmetric costs, or a higher/lower value based on relative costs of [[Type I Error|false positives]] and [[Type II Error|false negatives]]) determines the final class label. This threshold is typically examined with a [[AUROC|ROC curve]].

@@ -1,15 +1,17 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b0c31025ec831cfc993c36b81d43f4a9236b6f55079605d00c9ee6c1cc457b5a
+  content_hash: sha256:67ef0aefa912cefdb6a4b2fb6636fcb208d07ef1f4e310c3073d2b7dc29fcf1a
   sources:
-    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.1-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
+    - "Robbin, IRR, ROE, and PVI/PVE (CAS Forum Winter 2007), pp.189-191, 201-206, 227-229 (PDF pp.1-3, 13-18, 39-41), sha256:151252827511805261ec416c1454571361957b728d9fcce961f15c7fab268e7c — https://casact.org/sites/default/files/database/forum_07wforum_07w195.pdf"
+    - "Goldfarb, Risk-Adjusted Performance Measurement for P&C Insurers (CAS study note, rev. Oct 2010), pp.3-5, 9-11, 31-44, sha256:b0ee2f3239c7f53d07401d4c56828d9a1129d5c1f7b660603d811a50019d7b8e — https://www.casact.org/sites/default/files/database/studynotes_goldfarb8.2.pdf"
+    - "Ward & Lee, Practical Application of the Risk-Adjusted Return on Capital Framework (CAS Forum 2002), pp.113, 120-125 (PDF pp.35, 42-47), sha256:8fba670b85d32b9ddcb5477e4dde607564737f24c7b39489347ec575b247ff4d — https://www.casact.org/sites/default/files/database/forum_02sforum_02sf079.pdf"
+    - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.1-9 (notation p.5-6), 18-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.4-5, 7 (Domains B and C; text references), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
     - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
-    - "Major & Mildenhall, Pricing and Capital Allocation for Multiline Insurance Firms With Finite Assets in an Imperfect Market (arXiv:2008.12427v1, 2020), pp.5-6 (notation), 19-24 (eqs 18-25), sha256:a68e6551421c0861f18fdaebef82591dd173af6a781c66f6b2758a809994cca4 — https://arxiv.org/pdf/2008.12427v1"
-    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), pp.4-5, 7 (Domains B and C; text references; study-note and errata hyperlinks), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Cash Flows.md
@@ -20,10 +22,10 @@ verification:
 > $$\text{PV(losses)} = L \sum_{t} p_t\, v^{t}$$
 
 - $L$ is the nominal (undiscounted) expected loss, $p_t$ the **payout pattern** — the share of $L$ paid at time $t$, summing to $1$ — and $v = 1/(1+r)$ the [[Discount Factor|discount factor]] at a risk-free rate $r$. The sum is the **discount factor for the line**.
-- Premium is mostly collected before losses are paid. The gap earns investment income, and its length separates [[Short Tail Insurance|short-tail]] property, paid within about a year, from [[Long Tail Lines|long-tail]] liability and workers compensation, paid over many years.
+- Premium is mostly collected before losses are paid. The gap earns investment income, and its length separates [[Short Tail Insurance|short-tail]] property, paid quickly, from [[Long Tail Lines|long-tail]] liability and workers compensation, paid over many years.
 - **Capital is a cash flow too.** It must be held from inception until the liability is settled, so a long-tail line pays the [[Cost of Capital|cost of capital]] for more years. The investment-income credit and the longer capital commitment pull in opposite directions, and pricing has to reflect both — see [[Economic Value]].
 - The same patterns drive [[Loss Reserve Discounting]], asset–liability [[Duration|duration]] matching and the management of [[Interest Rate Risk]].
-- Pricing theory built on a one-period model, as in Mildenhall and Major, collapses the multi-year flows into one period by working with losses discounted to inception; the [[Insurance Pricing|premium]], [[Insurance Margin|margin]] and capital it produces are then present values.
+- Pricing theory built on a one-period model, as in Mildenhall and Major, collects premium at the start and pays losses at the end, with the risk-free rate set to zero and expenses excluded; the timing of real flows is dealt with outside that model, alongside its [[Insurance Pricing|premium]], [[Insurance Margin|margin]] and capital.
 
 > [!example]- Present Value of Losses: Property Versus Liability {Example}
 > Two lines each have nominal expected losses of $70$ per $100$ of premium. Property pays $90\%$ at the end of year 1 and $10\%$ at the end of year 2. Liability pays $10\%$, $20\%$, $25\%$, $25\%$ and $20\%$ at the ends of years 1 to 5. Discount at $4\%$.

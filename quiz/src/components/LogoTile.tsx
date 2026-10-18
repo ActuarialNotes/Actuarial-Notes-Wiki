@@ -6,35 +6,14 @@
 // same radius, same optical weight — rather than a 48px tile beside a loose
 // 20px glyph.
 //
-// The size is a single edge length in pixels and everything inside scales off
-// it, so the same tile works at 26px in a list row and 48px on a card. The
-// radius tracks the edge: a fixed `rounded-lg` reads as a very round tile at
-// 26px and a barely-rounded one at 48px.
+// The size is a single edge length in pixels (lib/logoTile.ts) and everything
+// inside scales off it, so the same tile works at 26px in a list row and 48px
+// on a card. The radius tracks the edge: a fixed `rounded-lg` reads as a very
+// round tile at 26px and a barely-rounded one at 48px.
 
 import type { CSSProperties, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
-
-export const LOGO_TILE_SIZES = {
-  /** A menu row, beside one line of body text — the "Get a copy" menu. */
-  xs: 20,
-  /** A list row or a pill. */
-  sm: 26,
-  /** The wiki header strip, where the tile stands in for the exam's title. */
-  md: 34,
-  /**
-   * A card, or a row of a grouped list (`ui/ListPanel.tsx`). One size for
-   * both exam lists — Study Guides and the quiz builder — so the same exam is
-   * the same object on either tab.
-   */
-  lg: 48,
-} as const
-
-export type LogoTileSize = keyof typeof LOGO_TILE_SIZES
-
-/** The edge length, in px, a tile of this size is drawn at. */
-export function logoTileEdge(size: LogoTileSize): number {
-  return LOGO_TILE_SIZES[size]
-}
+import { LOGO_TILE_SIZES, type LogoTileSize } from '@/lib/logoTile'
 
 export function LogoTile({
   size = 'md',

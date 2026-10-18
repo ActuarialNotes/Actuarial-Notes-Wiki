@@ -1,4 +1,5 @@
-import { AvatarDisplay, ANIMAL_TYPES, parseAvatarUrl } from '@/components/AvatarDisplay'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { ANIMAL_TYPES, parseAvatarUrl } from '@/lib/avatar'
 import { playerAccentStyle, playerInitials } from '@/lib/battleDisplay'
 import type { BattlePlayer, Seat } from '@/lib/battle'
 import { cn } from '@/lib/utils'

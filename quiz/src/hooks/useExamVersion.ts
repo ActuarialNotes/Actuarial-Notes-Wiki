@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { create } from 'zustand'
 import { useAuth } from '@/hooks/useAuth'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import {
   getSittingsForExam,
   selectVersion,

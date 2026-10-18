@@ -4,10 +4,11 @@ import { Calculator, Check, ChevronLeft, Gem, Loader2, Lock, Star } from 'lucide
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import { supabase } from '@/lib/supabase'
 import { playSound } from '@/lib/soundEngine'
-import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/components/AvatarDisplay'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/lib/avatar'
 import { ProBadge } from '@/components/ProBadge'
 import { COSMETICS, type Cosmetic, type CosmeticRarity } from '@/lib/cosmetics'
 import { CHARACTERS, type CharacterDefinition, type CharacterRarity } from '@/lib/characters'
@@ -22,7 +23,8 @@ import {
   parseBanner,
   type BannerEquip,
 } from '@/lib/banners'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/buttonVariants'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ShipGlyph } from '@/components/actuaria/ShipGlyph'

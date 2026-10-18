@@ -14,7 +14,11 @@ import {
   trackSignup,
   trackFirstQuiz,
   trackConceptCollected,
+  trackConceptRetention,
+  trackReminderOpenedOnBoot,
+  trackReminderSession,
 } from './analytics'
+import { emptyRecord } from './mastery'
 import { ANALYTICS_STORAGE, GA_MEASUREMENT_ID } from './analyticsPolicy'
 
 // analytics.ts sends via window.gtag and gates funnel milestones through
@@ -101,6 +105,45 @@ describe('activation-funnel wrappers', () => {
     const collectedCalls = gtag.mock.calls.filter(c => c[1] === 'concept_collected')
     expect(collectedCalls).toHaveLength(1)
     expect(collectedCalls[0]![2]).toEqual({ concept: 'Bayes Theorem' })
+  })
+})
+
+describe('learning wrappers (roadmap L1)', () => {
+  const now = new Date('2026-10-17T12:00:00Z')
+  const decayed = {
+    ...emptyRecord('u', 'P', 'Bayes Theorem'),
+    state: 'level1' as const,
+    correct_count: 1,
+    last_correct_at: '2026-10-01T12:00:00Z',
+  }
+  const answers = [{ exam: 'Exam P-1', concepts: ['Bayes Theorem'], isCorrect: true }]
+
+  it('concept_retention fires once per decay episode on this device', () => {
+    trackConceptRetention(answers, [decayed], now)
+    trackConceptRetention(answers, [decayed], now)
+    const calls = gtag.mock.calls.filter(c => c[1] === 'concept_retention')
+    expect(calls).toEqual([['event', 'concept_retention', {
+      concept: 'Bayes Theorem', exam: 'Exam P-1', retained: true, level: 'level1', days_since_correct: 16,
+    }]])
+  })
+
+  it('a reminder landing fires reminder_opened, then credits the first quiz only', () => {
+    vi.stubGlobal('sessionStorage', memoryStorage())
+    trackReminderOpenedOnBoot('?utm_source=daily-plan-email&utm_medium=email')
+    expect(gtag).toHaveBeenCalledWith('event', 'reminder_opened', { channel: 'email' })
+    const quiz = { exam: 'Exam P-1', question_count: 10, correct_count: 8 }
+    trackReminderSession(quiz)
+    trackReminderSession(quiz)
+    const sessions = gtag.mock.calls.filter(c => c[1] === 'reminder_session')
+    expect(sessions).toHaveLength(1)
+    expect(sessions[0][2]).toMatchObject({ channel: 'email', ...quiz })
+  })
+
+  it('an ordinary landing marks nothing', () => {
+    vi.stubGlobal('sessionStorage', memoryStorage())
+    trackReminderOpenedOnBoot('?topic=Exam+P-1')
+    trackReminderSession({ exam: 'Exam P-1', question_count: 10, correct_count: 8 })
+    expect(gtag).not.toHaveBeenCalled()
   })
 })
 

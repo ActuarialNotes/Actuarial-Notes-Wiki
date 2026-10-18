@@ -8,12 +8,17 @@ Type: "Standard of Practice"
 Code: "ASOP No. 12"
 Available from: "[actuarialstandardsboard.org](https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f1d6364a98b5eb4fbddc5a621f41a7bb14a013152b657fa844a5388db77ed98b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a493f847adcf61ab3374d152e2e14220c566d48992eca15662a032e5e8f00c17
+  sources:
+    - "Actuarial Standards Board, ASOP No. 12, Risk Classification (for All Practice Areas), Revised Edition, Doc. No. 132 (adopted December 2005, updated for deviation language effective May 1, 2011), 24 pp., PDF pp.1-16 read (title, contents, transmittal memorandum, sections 1-4, appendix 1, appendix 2 opening), sha256:7d4f2631a589bac24cf34b1f622e95aa7bfa979aaca96de27c651099c0b12dc7 — https://www.actuarialstandardsboard.org/wp-content/uploads/2014/02/asop012_132.pdf (byte-identical to casact.org 2021-03/5_ASOP_12.pdf and 2021-03/8_ASOP12.pdf)"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
+    - "CAS, Exam 5 Content Outline, Fall 2026 (Exam_5_CO_2026_F v02 2026_09_15), p.6 (ASOP 12 citation, A4-5), sha256:fd8373ae9bbe7e56b93f99cee304c76c1d29a9d0dc7f07e6ed500bd647f41795 — https://www.casact.org/sites/default/files/2026-03/Exam_5_CO_2026_Fall.pdf"
+    - "SOA, GH 101 – Benefits and Pricing syllabus, Nov 2026/Mar 2027/Jul 2027, pp.3-4 (ASOP 12 and ASOP 25, each 'excluding Appendices', outcome 2f), sha256:fb38566593b51f11720abf5149d56c97dd9fe9da3ba1b784894060c5ed065806 — https://www.soa.org/globalassets/assets/files/edu/2026/gh-101/2026-2027-gh-101-syllabus.pdf"
+    - "SOA, GI 301 – Further Topics in General Insurance syllabus, Mar 2027/Jul 2027, Topic 6 resources (ASOP No. 12, Last Revised 2011, excluding Appendix 2, outcome 6b), sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/ASOP 12 - Risk Classification (ASB - 2005).md
@@ -25,7 +30,7 @@ The Actuarial Standards Board's guidance for actuaries designing, reviewing, or 
 > [!info] On the syllabus
 > - [[Exam 5 (CAS)|Exam 5]] — objectives A4–A5; the standard as revised in 2005 and updated for deviation language in 2011.
 > - [[Exam 8 (CAS)|Exam 8]] — objective A2.
-> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f.
+> - [[Exam GH-101 (SOA)|Exam GH-101]] — Outcomes 2f; excluding Appendices.
 > - [[Exam GI-301 (SOA)|Exam GI-301]] — Outcomes 6b; ASOP No. 12 as last revised in 2011, excluding Appendix 2.
 
 ## Transmittal Memorandum

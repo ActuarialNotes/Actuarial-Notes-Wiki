@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navProgressPercent } from './NavProgressBar'
+import { navProgressPercent } from '@/lib/navScrub'
 
 describe('navProgressPercent', () => {
   it('fills proportionally to the 1-indexed position', () => {

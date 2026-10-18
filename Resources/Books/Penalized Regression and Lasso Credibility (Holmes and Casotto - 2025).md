@@ -9,12 +9,15 @@ Code: "CAS Monograph No. 13"
 ISBN: "978-1-7370028-6-4"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:deda285a68ae7355264405737582980e2bb1b6ca6531496fb89f8096bb02583f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1e9750c82151a554e8d6b337ad3f643c24cf646b1d2d9b016ac0be77fa0ababa
+  sources:
+    - "Holmes and Casotto, Penalized Regression and Lasso Credibility, CAS Monograph Series Number 13, 2025 Revision (Casualty Actuarial Society, copyright 2025; ISBN 978-1-7370028-6-4 print), 128 pp., PDF pp.1-11 read (cover, title, copyright, contents pp.5-7, editorial board, acknowledgments, about the authors, introduction), headings located in the body, References (PDF p.124) read, sha256:f6978accbd2bcd43284ec939dd90966430a3e36fc126aab4584241a13d7a28cd — https://www.casact.org/sites/default/files/2025-08/CAS_Monograph_13_2025_revision.pdf"
+    - "CAS, Errata, Penalized Regression and Lasso Credibility (2025 Revision), approved 12/5/2025, sha256:642022832e3ec1a7a08b587ae70a0e0d0d710ee30ab96f55b7907288e3b8e906 — https://www.casact.org/sites/default/files/2025-12/Monograph_13_Errata_sheet.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Penalized Regression and Lasso Credibility (Holmes and Casotto - 2025).md
@@ -25,6 +28,10 @@ A CAS monograph (2025 Revision) that reviews generalized linear models and intro
 
 > [!info] On the syllabus
 > - [[Exam 8 (CAS)|Exam 8]] — objectives A1, A3–A5; CAS Monograph #13, 2025 revision, including errata.
+
+## Acknowledgments
+
+## About the Authors
 
 ## Introduction
 

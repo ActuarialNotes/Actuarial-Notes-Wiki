@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { playSound } from '@/lib/soundEngine'
 import {
+  navProgressPercent,
   navSegments,
   scrubKeyTarget,
   scrubPositionAt,
@@ -84,12 +85,6 @@ export interface NavProgressBarProps {
    * chapters, and evenly spaced fictions would read as its real structure.
    */
   segments?: NavSegmentMark[]
-}
-
-/** Percentage filled for a 1-indexed position, clamped to 0–100. */
-export function navProgressPercent(current: number, total: number): number {
-  if (!Number.isFinite(current) || !Number.isFinite(total) || total <= 0) return 0
-  return Math.min(100, Math.max(0, (current / total) * 100))
 }
 
 /** The fill itself, shared by the readout and the scrubber. */

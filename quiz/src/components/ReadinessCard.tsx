@@ -5,7 +5,8 @@ import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Sett
 import { CheckMark } from '@/components/CheckMark'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/buttonVariants'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
@@ -626,9 +627,12 @@ export function ReadinessCard({
     if (selectedDay === todayISO()) setSelectedDayLevelUps(examCompletedToday)
   }, [selectedDay, examCompletedToday])
 
-  const displayConcepts = plan?.status === 'review_mode'
-    ? (plan?.reviewConcepts ?? [])
-    : (plan?.todaysConcepts ?? [])
+  const displayConcepts = useMemo(
+    () => plan?.status === 'review_mode'
+      ? (plan?.reviewConcepts ?? [])
+      : (plan?.todaysConcepts ?? []),
+    [plan],
+  )
 
   // Group today's plan concepts by their parent syllabus topic
   const groupedPlanConcepts = useMemo(() => {
@@ -796,11 +800,19 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openDayCompleteInfoTrigger])
 
+  // Only the two fields the label reads, so the callback below doesn't change
+  // identity whenever the syllabus object does.
+  const { examId: syllabusExamId, examTopic: syllabusExamTopic } = syllabus
+  const quizTopicValue = useMemo(
+    () => questionExamLabel({ examId: syllabusExamId, examTopic: syllabusExamTopic }),
+    [syllabusExamId, syllabusExamTopic],
+  )
+
   const handleStartQuiz = useCallback(() => {
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
 
-    const topicValue = questionExamLabel(syllabus)
+    const topicValue = quizTopicValue
 
     // No daily plan to sweep through — a free account, or a Pro one that
     // hasn't set a target date. The cascade is an animation *of the plan*, and
@@ -841,7 +853,7 @@ export function ReadinessCard({
       // today's plan (fewest questions covering every still-incomplete concept).
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)
     }, totalDelay)
-  }, [navigate, syllabus.examId, syllabus.examTopic, cascadeSteps])
+  }, [navigate, quizTopicValue, cascadeSteps])
 
   useEffect(() => {
     if (startQuizTrigger) handleStartQuiz()

@@ -1,11 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:513a5a1ad57e9a02ed943f314d9e94385d11292854a325b5b9e8b00c79c506a0
-  sources: []
+  sources:
+    - "Bahnemann, Distributions for Actuaries, CAS Monograph 2 (2015), §5.1, inflation section, Ch.6, PDF pp.154-155, 165-167, 174-176, 181-183, sha256:d4d172f9646852ab018ae3f0df95e5fbdbfabda4db55d6d4596977ed2eaa3ef8 — https://www.casact.org/sites/default/files/2021-03/8_Bahnemann.pdf"
+    - "Fisher, McTaggart, Petker & Pettingell, Individual Risk Rating (CAS Study Note, v3 Oct 2019), Ch.2 §5, PDF pp.27-29, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §9.1, PDF pp.99-100, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Excess and Deductible Rating.md

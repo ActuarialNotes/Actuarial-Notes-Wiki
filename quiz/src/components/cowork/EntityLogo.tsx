@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { LogoTile, logoTileEdge, type LogoTileSize } from '@/components/LogoTile'
+import { LogoTile } from '@/components/LogoTile'
+import { logoTileEdge, type LogoTileSize } from '@/lib/logoTile'
 import type { SourceEntity } from '@/lib/coworkSources'
 import { cn } from '@/lib/utils'
 

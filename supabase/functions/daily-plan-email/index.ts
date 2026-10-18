@@ -24,6 +24,11 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const APP_URL = 'https://quiz.actuarialnotes.com'
 // Where the preference lives: the Dashboard's bell. `?reminders=1` opens it.
 const PREFS_URL = `${APP_URL}/dashboard?reminders=1`
+// The session link carries UTM parameters: GA4 credits the visit to this email,
+// and the app reads `utm_source` on boot to fire `reminder_opened` (roadmap L1).
+// The source must be a key of REMINDER_SOURCES in quiz/src/lib/learningSignals.ts
+// — learningSignals.test.ts reads this file to hold the two together.
+const SESSION_URL = `${APP_URL}/quiz?utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan`
 const DEFAULT_FROM = 'Actuarial Notes <notifications@actuarialnotes.com>'
 
 // Keyed like EXAM_ID_TO_LABEL in quiz/src/lib/examIds.ts (exam_progress keys),
@@ -186,7 +191,7 @@ function renderHtml(sections: ExamSection[], friendlyDate: string): string {
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px 16px;">
     <h1 style="font-size:20px;color:#111827;margin:0;">Your study plan for ${escapeHtml(friendlyDate)}</h1>
     ${body}
-    <a href="${APP_URL}/quiz" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>
+    <a href="${escapeHtml(SESSION_URL)}" style="display:inline-block;margin-top:4px;padding:10px 22px;background:#4f46e5;color:#ffffff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">Start today's session</a>
     <p style="margin-top:28px;font-size:12px;color:#9ca3af;">
       You're receiving this because you turned on the daily study plan email.
       You can change the time or turn it off from the bell on your
@@ -212,7 +217,7 @@ function renderText(sections: ExamSection[], friendlyDate: string): string {
     }
     lines.push('')
   }
-  lines.push(`Start today's session: ${APP_URL}/quiz`)
+  lines.push(`Start today's session: ${SESSION_URL}`)
   lines.push(`Change the time or turn this email off: ${PREFS_URL}`)
   return lines.join('\n')
 }

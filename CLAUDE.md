@@ -595,8 +595,8 @@ Other important `lib/` modules:
   Move an exam out of development here (and in `scripts/exam_catalog.json`, which
   `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
   track in `data/tracks.ts`, which `data/tracks.test.ts` requires to offer every studiable
-  exam. The quiz builder offers any exam with a question bank (its hand-kept `EXAMS` in
-  `pages/Landing.tsx`, practice-exam sizes in `MOCK_EXAM_QUESTIONS`) and would show an
+  exam. The quiz builder offers any exam with a question bank (its hand-kept `QUIZ_EXAMS` in
+  `lib/quizBuilder.ts`, practice-exam sizes in `PRACTICE_EXAM_QUESTIONS` in `lib/pastExams.ts`) and would show an
   in-development one dimmed, under the same dashed *In Development* tag. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
@@ -675,10 +675,20 @@ Other important `lib/` modules:
   on screen are marked. On by default for a quiz, off for a practice exam — the settings menu's
   *Tap concepts to read them*, per mode, riding the URL as `links=1`/`links=0`. The quiz's **Info**
   panel's concept rows open the same popup. Pure and tested.
+- `quizBuilder.ts` — the **quiz builder** (the Quiz tab, `pages/Landing.tsx`) as data: the
+  exams it offers and their track headings (`QUIZ_EXAMS`, `quizTrackGroups`), an exam's
+  concepts in syllabus order and grouped by objective, today's plan's pool
+  (`todaysPlanSelection`), the pool each source covers (`builderPool`), the draw's size and
+  signature, and the `/quiz` address every launch writes (`quizLaunchUrl` — each kind keeps
+  its key order, since a quiz resumes by its address). The page holds only the state that
+  joins it to what it draws — `components/landing/` (the exam ladder, the concept groups,
+  Today's Plan, the past-paper shelf, the action bar) and the `useQuizExamScreen` /
+  `useTodaysPlanQuiz` / `useBuilderPool` / `useQuizBuilderSettings` / `useShuffledDraw` /
+  `useDashboardAutostart` hooks. Pure and tested.
 - `quizDifficulty.ts` — the quiz builder's **difficulty multi-select** (settings menu, quiz
   mode only): Easy / Med / Hard, any combination, at least one ticked. It is a *filter* —
   an unticked level is out of the pool, so the deck card's count, the count clamp and
-  Today's Plan pool all move with it (`inLevels` in `pages/Landing.tsx`), and each level
+  Today's Plan pool all move with it (`inDifficultyLevels`, the quiz builder's `inLevels`), and each level
   shows how many questions it holds. It rides the URL as `levels=easy,hard`
   (`QuestionFilter.difficulties`, applied by `filterQuestions`; omitted when every level is
   ticked). The module also keeps the older weighted *lean* (`drawByDifficulty` /
@@ -1083,9 +1093,20 @@ Other important `lib/` modules:
   concepts" from a cached (possibly stale) study plan and the local send-time math. The
   actual sending happens server-side in the `daily-plan-email` edge function, which
   mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
-  contract as the league SQL). Prefs live in `user_email_prefs`
+  contract as the league SQL; `duplicationContracts.test.ts` runs both copies against
+  golden vectors, and holds the SQL rollover to `leagues.ts` the same way). Prefs live in `user_email_prefs`
   (`hooks/useEmailPrefs.ts` + `components/DashboardRemindersModal.tsx`, the Dashboard's bell). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
+- `learningSignals.ts` — the **learning instrumentation** (roadmap L1): whether studying
+  *worked*, as pure functions `lib/analytics.ts` sends. `concept_retention` — a concept
+  answered for the first time after its decay window (`decayIfStale` steps it down), with
+  `retained` its first answer, once per decay episode (keyed by `last_correct_at`, the keys
+  kept in localStorage), fired by `quizStore` before any mastery write for quizzes and the
+  fix-mistakes reviewer; `reminder_opened` / `reminder_session` — a landing whose
+  `utm_source` names a reminder (`REMINDER_SOURCES`; the daily email's CTA carries
+  `daily-plan-email`, held to the edge function's source by the test) and the first quiz
+  finished within six hours of it; and `mistake_reviewed` from `MistakesReviewModal`.
+  Read `docs/analytics-and-monitoring.md`, "Reading the learning events", before using them.
 - `mathFocus.ts` — math focus mode: tapping a rendered equation magnifies it in a
   full-screen overlay with Previous/Next through the equations around it. This module
   is the decision layer (what counts as a hit, which equations form one set, how far
@@ -1541,8 +1562,8 @@ via `supabase secrets set`, never as `VITE_*`.
   push to `main` when `supabase/functions/**` changes.
 - `.github/workflows/verify-check.yml` — the VERIFY gate on every PR (fails on a false
   verification claim or an edited log entry; repairs and commits back what is merely stale).
-- `.github/workflows/validate-sweep.yml` — the Monday VALIDATE sweep. Opens a PR, never
-  pushes to `main`.
+- `.github/workflows/validate-sweep.yml` — the VALIDATE sweep, run by hand (no schedule —
+  roadmap D19). Opens a PR, never pushes to `main`.
 
 ## Deployment
 

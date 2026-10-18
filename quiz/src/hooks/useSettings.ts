@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
+import { useExamProgress, type ExamProgressRow } from '@/contexts/examProgress'
 import type { ItemStatus } from '@/data/tracks'
 import { resetProgressData } from '@/lib/resetProgress'
 

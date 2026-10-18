@@ -1,6 +1,6 @@
 # Roadmap: Actuarial Notes
 
-_Last reviewed: **2026-10-17** against `main` @ `1a47980` · Next review due: **2026-10-31**_
+_Last reviewed: **2026-10-17** against `main` @ `1a47980` (and updated by the next-phase branch) · Next review due: **2026-10-31**_
 
 This is the **one roadmap** for everything in this repository: Study Mode, the content vault,
 Fact Check, the AI connector, Actuarial Tools, Cowork, and the experiments around them. It
@@ -132,7 +132,7 @@ are in Appendix A.
 | Unit tests | 214 files, **4,181 tests, all passing** | ↑ from 1,392 |
 | Lint | 0 errors, 45 warnings | ↓ from 53 warnings |
 | E2E | 23 specs, 116 tests. **All passing locally** (113 passed, 3 tour tests skipped while `TOUR_ENABLED` is off), one worker, no retries, on 2026-10-17. Fixed: tour ×3 (gated on the flag), exam-pdf ×2, wiki, flashcard-focus and the flaky store test, all of them tests that had fallen behind the UI | was 11 failing |
-| CI on `main` | **Red since 2026-08-23.** The last green run was #596 on 2026-08-21. PRs merge over red | ⚠️ about 8 weeks |
+| CI on `main` | **Red since 2026-08-23** (last green: #596, 2026-08-21), and **no runs at all since 2026-10-10** (re-checked later on 2026-10-17). PRs merge without a gate | ⚠️ about 8 weeks |
 | Entry chunk | **2,626 kB raw / 730 kB gzip** (first paint, entry + CSS: 749 kB). The question bank is a lazy 11.6 MB chunk since E3; it was 14,196 kB / 3,667 kB | ↓ 5× |
 | `_virtual_wiki-content` chunk | 13,359 kB raw / 4,158 kB gzip (lazy) | ↑ |
 | Bundle-size check in CI | `npm run size`: first paint ≤ 900 kB gzip (E3) | new |
@@ -199,10 +199,13 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 
 **Lane 1, engineering health (fix the gate first):**
 1. **E1: get CI green, then enforce it.** 🟡 2026-10-17: the e2e suite passes locally
-   (`tour.spec.ts` follows `TOUR_ENABLED`; the other failures were tests behind the UI). Left:
-   see CI go green on `main` with this change, then **D14**: make the CI checks required on
-   `main`. Until both are done, every other "✅ with tests" in this file is weaker than it
-   looks.
+   (`tour.spec.ts` follows `TOUR_ENABLED`; the other failures were tests behind the UI).
+   **New blocker, the maintainer's:** the Actions API lists **no workflow run of any kind
+   after 2026-10-10 09:07 UTC** (#1613's merge), though all five workflows are `active` and
+   about 20 PRs have merged since. CI isn't red; it isn't running. Check the repository's
+   Actions settings and billing/minutes. Left after that: see CI go green on `main`, then
+   **D14**: make the CI checks required on `main`. Until both are done, every other "✅
+   with tests" in this file is weaker than it looks.
 2. ~~**E3: move the question bank out of the entry chunk, and add a size budget to CI.**~~
    ✅ 2026-10-17: `fetchAllQuestions` dynamic-imports the bank; the entry is 730 kB gzip
    (from 3,667), and `npm run size` holds first paint to 900 kB in CI. E12 is unblocked.
@@ -211,15 +214,24 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    documented there and kept out of Dependabot. Left: the majors (`react-router` 7,
    `katex`), and lifting the Supabase pin in a PR of its own, tested signed in.
 4. **E10: small cruft.** 🟡 2026-10-17: the stray check moved to `exam-fm`, the `+`
-   encoding is in `CLAUDE.md`, and the README is current (G7 ✅). Left:
-   - the 4 stranded question files, which VERIFY can't move or delete (see §3.4);
-   - the 45 lint warnings.
+   encoding is in `CLAUDE.md`, the README is current (G7 ✅), and **lint is at 0 warnings**
+   (the 11 `exhaustive-deps` fixed; the 34 `only-export-components` exports moved out of
+   their component files). Left: the 4 stranded question files, which VERIFY can't move or
+   delete (V9, §3.4).
+5. ~~**E6: golden vectors for the duplication contracts.**~~ ✅ 2026-10-17, pulled from Next:
+   `lib/duplicationContracts.test.ts` runs the email edge function's mirrored helpers
+   against the same vectors as `dailyEmail.ts`, and evaluates the newest leagues rollover
+   SQL against `leagues.ts` for every rank, cohort size and tier.
 
 **Lane 2, operations (maintainer actions; no code needed):**
-1. **V1: give the Validate Sweep its secrets** (`ANTHROPIC_API_KEY`, the Supabase service
-   role), or decide not to run it on a schedule (D19). Then re-run it, and fix the
-   "Check the record" failure.
-2. **V2: get reader reports syncing**, using the same Supabase credentials.
+1. ~~**V1: the Validate Sweep.**~~ ✅ 2026-10-17: **D19 settled — by hand, no schedule.** The
+   workflow's cron is gone (`workflow_dispatch` only), and `validation-agent.md` says how a
+   sweep is run. "Check the record" passes locally, PyMuPDF or not; it can't be re-checked
+   in CI until Actions run again (see E1).
+2. **V2: get reader reports syncing.** It needs `SUPABASE_URL` and
+   `SUPABASE_SERVICE_ROLE_KEY` as repository secrets, and a hand-run of the sweep (or
+   `python3 scripts/sync_reports.py --commit` locally) to move them, now that nothing runs
+   it weekly.
 3. **G1: confirm the daily email is live.** Complete the Resend domain, edge secrets and
    vault secrets, then run the smoke test (`daily-plan-email.md`), and record the result
    in that doc.
@@ -228,29 +240,38 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
-2. **V3: delta re-verify the 19 stale exam pages** (6U and 18 FSA pages). Only their links
-   were retargeted, in #1629, so the re-check is cheap.
-3. **V4 (Wave 3a): verify FM Q351–Q462**, 112 questions. This is the cheapest packet in the
-   vault, and it completes a ready exam.
-4. **C1: take Exam 8 to ready** (CAS publication plan step 4):
-   - fix the *Rating Class* catch-all;
-   - write questions for 6 concepts;
-   - verify 23 concepts, 12 readings and 132 questions.
+2. ~~**V3: delta re-verify the stale exam pages.**~~ ✅ 2026-10-17: the 18 FSA pages are
+   verified again (run `ad0b`). Exam 6U is back to `in_review` (its 2026-10-09 findings are
+   still open). 6C stays stale behind its critical findings (V6).
+3. ~~**V4 (Wave 3a): verify FM Q351–Q462.**~~ ✅ 2026-10-17: all 112 verified (runs `48b2`,
+   `63b1`); every key agrees. 12 minor findings stay open: 10 topic tags that aren't in
+   `ontology_map.py`, and SOA's own day-1/day-10 wording on fm-358.
+4. **C1: take Exam 8 to ready** (CAS publication plan step 4). 🟡 2026-10-17: **5 of 7
+   gates.** Done: the *Rating Class* catch-all (a new *Rate Class Validity* page); 11
+   vault-written questions for the 6 untested concepts; the page, 23 of 24 concepts, 11 of 12
+   readings and every on-syllabus question on the 8 papers verified (166; 34 of them Exam 9's).
+   Left, and neither can be done from the repo alone:
+   - **G4:** *Risk*'s ERM section has 3 minor findings. Its reading, Brehm et al., has no free
+     copy, so the section needs that reading or needs cutting. The CAS sense the exam uses is
+     verified.
+   - **G5:** the ISO CGL rating plan is supplied only in the CAS study kit. The maintainer
+     either reads a copy or accepts it as unverifiable (new decision **D20**).
+   Then `publication_readiness.py --check 8`, and the promotion is the maintainer's.
 
 ### 3.2 Next
 
 These are in order within each lane.
 
 **Engineering health:**
-- **E5: split the god components.** `Landing.tsx` first, because it is the one still
-  growing; then `Flashcards.tsx`.
-- **E6:** golden-vector tests binding `lib/leagues.ts` to its SQL, and `lib/dailyEmail.ts`
-  to its edge function.
+- **E5: split the god components.** `Landing.tsx` is split (1,720 → 697 lines); next
+  `Flashcards.tsx`.
 - **E7:** an error collector (an endpoint or Sentry).
 
 **Learning engine:**
-- **L1: instrument learning.** Add `concept_retention`, `reminder_opened` /
-  `reminder_session` and `mistake_reviewed`. Every A/B test in this lane waits on L1.
+- ~~**L1: instrument learning.**~~ ✅ 2026-10-17: `concept_retention`, `reminder_opened` /
+  `reminder_session` and `mistake_reviewed` (`lib/learningSignals.ts`; how to read them is in
+  `analytics-and-monitoring.md`). The email's link carries UTM parameters, so it deploys with
+  the edge function. L5, L6 and §7's two rows are unblocked; they need data to accrue.
 - **L2:** confidence and calibration.
 - **L3:** a spaced mistakes deck. It consumes L2.
 - **L4:** finish the Practice Exam: syllabus-weighted assembly, a post-exam readiness
@@ -267,7 +288,7 @@ These are in order within each lane.
   link fixes).
 
 **Experiences:**
-- **X2:** a human review of Concept Craft's 5,587 AI-written relation labels. README's rule
+- **X2:** a human review of Concept Craft's 5,598 AI-written relation labels. README's rule
   is that nothing is published 100% AI-written without review.
 - **X8:** the visual-noise backlog, §3.3–§3.8, plus the edits it calls for in the style
   guide.
@@ -329,6 +350,21 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   all verified, which the build never collects. One shape: an appended `moved_to:` /
   `retired:` entry that the gate accepts in place of the target. It changes the VERIFY
   rules, so it is the maintainer's call. *(Proposed 2026-10-17.)*
+- **C17: teach the syllabus writer the link names #1629 chose.** `syllabus_write.py --check`
+  is no longer clean on 15 of the 18 FSA pages: re-rendering for a new sitting would put
+  back the old, unwritten link names, and would link CP-312's "Part 1" citation to the
+  Part 2 (2020) page, because the two pages share a title. The writer needs a citation →
+  page table (or to read the existing page's links) before the next sitting is rendered.
+  *(Found by V3, 2026-10-17.)*
+- **C18: two resource-page slips found by V3.** The Atkinson & Dallas page carries the
+  Ch. 9 reading's code (ILA101-103-25) though ILA-101 also assigns its Ch. 11 under
+  ILA101-104-25, so that card shows the wrong code; the COPLFR page's file name says 2024
+  but its `Year` is 2025. *(2026-10-17.)*
+- **V10: settle the FM topic tags.** V4 left 10 minor findings on fm-358…406: their
+  `topic` values (*Effective Rate*, *Convexity*, *Real Rate of Interest* …) aren't in
+  `scripts/ontology_map.py`. Either add the nine topics there (each is a syllabus term with
+  a concept page), or retag the questions, which makes them stale until re-verified.
+  *(2026-10-17.)*
 
 ---
 
@@ -350,12 +386,12 @@ capture (`lib/errorMonitoring.ts`), typed analytics (`lib/analytics.ts`, 31 even
 | E2 | Required status checks on `main` | ⬜ | **Now** | Maintainer action (D14). Without it, E1 decays again. |
 | E3 | Question bank out of the entry chunk; CI size budget | ✅ 2026-10-17 | — | `fetchAllQuestions` dynamic-imports `virtual:questions-content` (one lazy chunk; per-exam chunks would only pay once a surface asks for one exam's questions). Entry 3,667 → 730 kB gzip. `npm run size` in `ci.yml`, budget 900 kB. Was P3.3. |
 | E4 | Dependency vulnerabilities and Dependabot | 🟡 | **Now** | Done: `npm audit fix` (15 → 14, 2 high → 0); `.github/dependabot.yml`, npm and Actions weekly. Left: `react-router` 6 → 7 and `katex` (majors, moderate advisories); `uuid` via `@fortune-sheet` has no fix; lift the Supabase pin (2.39 → 2.1xx) in its own PR, tested against a real project — Dependabot ignores it until then. |
-| E5 | Split the god components | ⬜ | Next | `Landing` 1,720 (growing), `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
-| E6 | Golden vectors for the duplication contracts | ⬜ | Next | `leagues.ts` ↔ the leagues SQL; `dailyEmail.ts` ↔ the edge function. The pattern to copy is `passRates`. |
-| E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). |
+| E5 | Split the god components | 🟡 | Next | `Landing` split to 697 (2026-10-17: the builder's logic in `lib/quizBuilder.ts`, its parts in `components/landing/`, checked against the Quiz-tab e2e specs locally); `Flashcards` 3,181, `ReadinessCard` 1,722, `Settings` 1,131, `Search` 1,079. Rule: split whatever file you touch. Was P3.1. |
+| E6 | Golden vectors for the duplication contracts | ✅ 2026-10-17 | — | `lib/duplicationContracts.test.ts`: the edge function's helpers are cut from its source and run on the same vectors as `dailyEmail.ts`; the newest `league_rollover_if_due()`'s constants are read and its CASE checked against `zoneForRank`. Proved by breaking each copy. |
+| E7 | An error collector | ⬜ | Next | `VITE_ERROR_ENDPOINT` or Sentry, through `registerErrorSink` (`analytics-and-monitoring.md`). Where errors are kept (Sentry, a Supabase table behind a service-role endpoint, or Vercel's short-lived logs) and the secret it needs are the maintainer's; a session can build whichever is chosen. |
 | E8 | Accessibility pass | 🟡 reduced motion in 12 files; no audit | Later | Add axe to e2e. Was P3.4. |
 | E9 | Codify `components/ui/` against the style guide | 🟡 | Later | The style guide *is* the design system; the primitives aren't codified against it. Was P3.2. |
-| E10 | Cruft | 🟡 | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`. Left: the 4 stranded question files (blocked on V9, §3.4); 45 lint warnings (34 `only-export-components`, 11 `exhaustive-deps`). |
+| E10 | Cruft | 🟡 | **Now** | Done: the stray check is in `exam-fm`; the `+` encoding and the one-level `questions/<bank>/` rule are in `CLAUDE.md`; lint at 0 warnings (2026-10-17). Left: the 4 stranded question files (blocked on V9, §3.4). |
 | E11 | `supabase/tests/run.sh` in CI | ⬜ | Later | Today it is run by hand after touching the Actuaria migrations. |
 | E12 | PWA and offline | ⬜ | Later | E3 is done, so nothing blocks it now. Was P1.6. |
 
@@ -376,7 +412,7 @@ Shipped:
 
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
-| L1 | Learning instrumentation | ⬜ | **Next, first** | Add `concept_retention` (a decayed concept answered correctly on revisit), `reminder_opened` / `reminder_session` and `mistake_reviewed`. Without them, §7's Learning and Re-engagement rows can't be measured. |
+| L1 | Learning instrumentation | ✅ 2026-10-17 | — | `concept_retention` (the first answer on a concept past its decay window, once per decay episode, `retained` true or false), `reminder_opened` / `reminder_session` (the email's `utm_source`, then the first quiz within 6 h), `mistake_reviewed`. Pure rules in `lib/learningSignals.ts`; GA4 custom definitions to add are in `analytics-and-monitoring.md` (G3). |
 | L2 | Confidence and calibration | ⬜ | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Was P2.7. |
 | L3 | Spaced mistakes deck | 🟡 the card has shipped | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. Was P2.8. |
 | L4 | Finish the Practice Exam | 🟡 timer and reveal ✅ | Next | Still to do: sitting-shaped, syllabus-weighted assembly; a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
@@ -405,14 +441,14 @@ The **rule** for this track: an exam changes status only through
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 2 of 7 gates | **Now** | CAS plan step 4. The *Rating Class* catch-all; 23 concepts; 12 readings (pages exist, none verified); 6 concepts with no question; 0 of 132 questions verified. |
+| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | CAS plan step 4. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
 | C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Step 5. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
 | C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Step 6. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
 | C4 | MAS-II → ready | 🟡 1 of 7 | Next | Step 7. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
 | C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Step 8. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Step 9. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Step 10. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
-| C8 | Close P and FM's own gaps | 🟡 each 5 of 7 | **Now** (via V4) | FM: Q351–Q462 unverified; the *Term of Annuity* catch-all. P: *Insurer* is in review; 6 generic concepts have no question. |
+| C8 | Close P and FM's own gaps | 🟡 | Next | FM: Q351–Q462 verified (V4); left, the *Term of Annuity* catch-all. P: *Insurer* is in review; 6 generic concepts have no question. |
 | C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
@@ -431,10 +467,10 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
-| V1 | The scheduled sweep actually runs | ⬜ never has | **Now** | Maintainer: set the secrets (D19). The 2026-10-05 run failed at "Check the record". |
-| V2 | Reader reports sync into the logs | ⬜ | **Now** | Same credentials as V1. Only 2 `human:` comments have ever reached the logs. |
-| V3 | Delta re-check of the 19 stale exam pages | ⬜ | **Now** | 6U and 18 FSA pages, made stale by link retargeting in #1629. |
-| V4 | Wave 3a: FM Q351–Q462 | ⬜ | **Now** | 112 questions in one cached packet. |
+| V1 | The sweep | ✅ settled 2026-10-17 | — | D19: **by hand, no schedule.** `validate-sweep.yml` is `workflow_dispatch` only; `validation-agent.md` § "How a sweep is run". "Check the record" passes locally with and without PyMuPDF. |
+| V2 | Reader reports sync into the logs | ⬜ | **Now** | Needs `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` as repo secrets, then a hand-run of the sweep (or `sync_reports.py --commit` locally): with no schedule, nothing moves them on its own. Only 2 `human:` comments have ever reached the logs. |
+| V3 | Delta re-check of the stale exam pages | ✅ 2026-10-17 | — | 18 FSA pages verified (run `ad0b`); 6U back to `in_review` (its open findings); 6C stays stale behind V6. Noted, not filed: `syllabus_write.py --check` is no longer clean on 15 of the 18 — re-rendering would undo #1629's link names. |
+| V4 | Wave 3a: FM Q351–Q462 | ✅ 2026-10-17 | — | All 112 verified (runs `48b2`, `63b1`). 12 minor findings open: 10 topics not in `ontology_map.py` (add them, or retag), and fm-358's day-1/day-10 wording, which is SOA's. `verify_paper.py` now uses a question's printed number to pick its page. |
 | V5 | Waves 3b–5 | 🟡 Exam 7 and the DISCs done | rides C1–C7 | Each exam's campaign carries its own packets. |
 | V6 | The 2 open critical findings | ⬜ | Next | 6C's *MCT* and *Capital Required* (×1.5 vs ÷1.5). |
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ⬜ | Next | The 2026-10-11 runs have no `_runs` summary. Housekeeping. |
@@ -486,7 +522,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
 | X1 | Quiz Battle | ✅ | — | `quiz-battle.md` "Next": its ideas (more players, written papers, a rating) are deliberately out. |
-| X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,587 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
+| X2 | Concept Craft: review the relation labels | ⬜ | Next | 5,598 AI-written labels in `data/craftRelations.json`. The doc's "two analytics events" should say three. Server-synced saves are Later. |
 | X3 | Actuaria: from one account to a cohort | 🟡 phases 0–3 built | Later | With one account, no cohort reaches `CREW_MIN`, so the risk pool and raids lie dormant. Waits on D1. Phase 4 (ranked play) is parked (D16). |
 | X4 | Listen recordings at scale | 🟡 | Later | Upload the first two; split long scripts; fix the numbers stall; choose the voice and the access tier (D12). |
 | X5 | Simulated learner: a first live run | ⬜ refused by the model's safeguards | Later | `simulations/runs/` is empty. Rework the persona prompt, then run it. |
@@ -498,7 +534,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 
 | ID | Item | Status | What would bring it back |
 |---|---|---|---|
-| R1 | The Research tab | 🅿️ both flags off | A maintainer decision, after E1 and E3, and after the upper-exam content (C2–C5). Two doc fixes are needed now: `research-ai-disabled.md` doesn't mention `RESEARCH_TAB_ENABLED`, and `research-corpus-plan.md`'s checklist hasn't been maintained (its boxes are unticked, though some of the topics now exist as `Resources/Books/` pages). Was P4.4. |
+| R1 | The Research tab | 🅿️ both flags off | A maintainer decision, after E1 and E3, and after the upper-exam content (C2–C5). One doc fix is open: `research-corpus-plan.md`'s checklist hasn't been maintained (its boxes are unticked, though some of the topics now exist as `Resources/Books/` pages). (`research-ai-disabled.md` does mention `RESEARCH_TAB_ENABLED`.) Was P4.4. |
 | R2 | Comprehension checks (357 files) | 🅿️ rendered nowhere | D11: delete them, or keep them parked. |
 | R3 | The onboarding tour | 🅿️ `TOUR_ENABLED = false` | A simpler rebuild. Its e2e spec must follow the flag (E1). |
 
@@ -506,7 +542,8 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 
 ## 5. Dependencies to keep in mind
 
-- **E1 → everything.** A refactor (E5) without a working regression net is a gamble.
+- **E1 → everything.** A refactor (E5) without a working regression net is a gamble —
+  which is why E5's split was checked against the e2e specs locally.
 - **E3 → E12 → L7.** E3 is done (a 730 kB entry); push still needs E12's service worker.
 - **L1 → L5, L6, and §7's Learning and Re-engagement metrics.**
 - **L2 → L3.** The mistakes deck is prioritised by confidence.
@@ -550,7 +587,8 @@ Where a default is given, sessions build with it until the decision is made.
 | D16 | Actuaria Phase 4: ranked play and seasons | `actuaria-online.md` §9 | X3b | Not built |
 | D17 | The DISC link design | CAS D5 | — | The current design |
 | D18 | The open owner decisions in `syllabus-pipeline-review.md` §4 (D2, D3: applied implicitly, never written up) | that doc | C12 | As applied |
-| D19 | Run the Validate Sweep on a schedule (API cost) or by hand | `validation-agent.md` | V1 | By hand |
+| D20 | A syllabus reading with no public copy (the ISO CGL plan, in the CAS study kit only): read a copy and verify it, or accept it as unverifiable for G5 | C1 | Exam 8's G5 | It stays `in_review`, and the gate stays red |
+| D21 | Goldburd et al.: describe the 2025 revision Exam 8 assigns on the existing 2020 page, keep 2020 with a note, or give Exam 8 its own page (F-003 on that page) | C1 run `f01e` | — | The page as it is |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -574,6 +612,8 @@ Where a default is given, sessions build with it until the decision is made.
 - **CAS D6 was settled the open-source way** (2026-10-11).
 - **Actuaria D1 is resolved.** D2–D8 are built with their defaults.
 - **The Actuarial Agent's Phase A ships as the MCP connector, outside the app.**
+- **D19: the Validate Sweep runs by hand, not on a schedule** (2026-10-17). Restoring the
+  workflow's `schedule:` trigger is the way back, once the API cost is worth it.
 
 ---
 
@@ -584,14 +624,14 @@ Where a default is given, sessions build with it until the decision is made.
 | Activation | % of new users finishing a first quiz on day 0 | Instrumented (`lib/funnel.ts`) |
 | Retention | D1 / D7 / D30 return | Instrumented (`day2_return` + GA4) |
 | Engagement | Median streak; daily-goal completion | Instrumented |
-| Learning | Per-concept retention: correct on revisit after the decay window | ⬜ L1 |
-| Re-engagement | Daily email → session conversion | ⬜ L1, and G1 first |
+| Learning | Per-concept retention: correct on revisit after the decay window | Instrumented (`concept_retention`, L1) |
+| Re-engagement | Daily email → session conversion | Instrumented (`reminder_opened` → `reminder_session`, L1); needs G1 live |
 | Calibration | The gap between confidence and accuracy | ⬜ L2 |
 | Economy | Gems earned vs spent; quest-vs-plan adherence | 🟡 `quest_claimed` only |
 | Social | League retention by final rank | ⬜ needs a rollover query |
 | Content trust | % of files verified (48.6%); open critical findings (2); stale files (21) | Measured (`Validation Status.md`) |
 | Publication | Exams ready (7 of 43); gates passed per beta exam | Measured (`publication_readiness.py`) |
-| Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; **CI is red** |
+| Reliability | Crash-free sessions; CI green on `main` | 🟡 the `exception` events exist; **CI is red, and hasn't run since 2026-10-10** |
 | Performance | Entry chunk gzip (today 730 kB, budget 900 kB for first paint); LCP / INP | 🟡 the budget is in CI; LCP / INP unmeasured |
 | Monetization | Trial → paid; Pro retention | Stripe data |
 
@@ -706,6 +746,15 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 
 ## Appendix B: Revision history
 
+- **2026-10-17, the next phase.** The Now lanes, worked through:
+  - **Engineering:** lint at 0 (E10); E6 golden vectors ✅; E5's `Landing.tsx` split
+    (1,720 → 697); E1's new blocker found: Actions have recorded no run since 2026-10-10.
+  - **Operations:** D19 settled, so the sweep runs by hand (V1 ✅); V2 and G1 still need the
+    maintainer's secrets.
+  - **Learning:** L1 ✅, so every Learning-lane experiment can now be measured.
+  - **Content and Fact Check:** V3 ✅ and V4 ✅; C1 from 2 to 5 of 7 gates. The vault is
+    **54.6% verified (3,022 of 5,533)**, up from 48.6%. 3 files are stale, down from 21.
+  - New decisions D20 and D21; proposed C17, C18 and V10.
 - **2026-10-17, later. The first Now items.** E3, C0 and G7 are ✅. E1 is green locally,
   awaiting CI. E4 and E10 are 🟡. Proposed V9 (§3.4): VERIFY can't move or retire a file.
 - **2026-10-17. Consolidation.** This file became the one roadmap for every product line,

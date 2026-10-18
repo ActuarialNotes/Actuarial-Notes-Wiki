@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { TRACKS } from '@/data/tracks'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'

@@ -5,9 +5,9 @@ syllabus:
   source_sha256: 794f48819c369ead198520af360c23a721ebf0edda1e0fc9d8c1e5542da0cc44
   extracted_at: 2026-10-09
 verification:
-  status: stale
-  confidence: null
-  last_checked: 2026-10-10
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
   content_hash: sha256:43b2bd7c8732b3459822271a3aa6e375ec0e4778f73e2f5aa0a1f02f0a28259b
   sources:

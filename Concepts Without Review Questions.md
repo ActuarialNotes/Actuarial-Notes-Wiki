@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-17 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **997 of 2065 syllabus concept entries (48%)** have at least one question in their exam's own bank.
+> **1004 of 2066 syllabus concept entries (49%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -50,9 +50,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 6C (CAS)]] | `exam-6c` (321) | 137 / 159 | 86% | 0 / 3 |
 | [[Exam 6U (CAS)]] | none | 0 / 80 | 0% | 4 / 4 |
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
-| [[Exam 8 (CAS)]] | `exam-8` (132) | 32 / 38 | 84% | 0 / 2 |
+| [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **997 / 2065** | **48%** | |
+| **Total** | | **1004 / 2066** | **49%** | |
 
 107 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -2033,7 +2033,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *6 of 76 uncovered*
 
 - [[Insurer]] — tagged in another bank (3)
-- [[Risk]]
+- [[Risk]] — tagged in another bank (1)
 - [[Underwriting Year]]
 - [[Types of Insurance]]
 - [[Tort Litigation]] — tagged in another bank (22)
@@ -2256,23 +2256,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam 8 (CAS)
 
-*6 of 38 syllabus concepts have no question in `questions/exam-8/`.*
-
-### A. Classification Ratemaking {60–80%}
-
-*2 of 18 uncovered*
-
-- [[Model Implementation]]
-- [[Vehicle Make and Model]]
-
-### B. Excess, Deductible, and Individual Risk Rating {20–40%}
-
-*4 of 22 uncovered*
-
-- [[Line of Business]] — tagged in another bank (8)
-- [[Risk]]
-- [[Insurance Policy]] — tagged in another bank (6)
-- [[Reasonableness Testing]] — tagged in another bank (13)
+*Every syllabus concept has at least one question.*
 
 ## Exam 9 (CAS)
 
@@ -2300,11 +2284,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 - [[Insurer]] — tagged in another bank (3)
 - [[Insurance Pricing]]
-- [[Insurance Policy]] — tagged in another bank (6)
+- [[Insurance Policy]] — tagged in another bank (7)
 - [[Prepayment Risk]]
 
 ### D. Enterprise Risk Management (ERM) {15–25%}
 
 *1 of 13 uncovered*
 
-- [[Risk]]
+- [[Risk]] — tagged in another bank (1)

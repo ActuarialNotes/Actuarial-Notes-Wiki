@@ -28,13 +28,15 @@ export function useProgress() {
       .finally(() => setLoading(false))
   }, [])
 
+  // Keyed on the id, not the user object — stable across token refreshes.
+  const userId = user?.id
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setSessions([])
       return
     }
-    fetchSessions(user.id)
-  }, [user?.id])  // key on id — stable across token refreshes
+    fetchSessions(userId)
+  }, [userId, fetchSessions])
 
   // Supabase realtime — reflects quiz completions from other devices instantly
   useEffect(() => {

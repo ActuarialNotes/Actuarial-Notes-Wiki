@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { useResearchStore } from '@/stores/researchStore'
 import { allAgents, allLinesOfBusiness } from '@/lib/researchOntology'
+import { useActiveFilterCount } from '@/hooks/useActiveFilterCount'
 
 // Jurisdictions that appear in the seeded agents' coverage (researchOntology.ts),
 // plus 'ATL' for the Atlantic-grouped multi-provincial filings. Includes
@@ -25,17 +26,6 @@ function chipClass(active: boolean): string {
       ? 'border-primary bg-primary/10 text-primary'
       : 'border-input text-muted-foreground hover:text-foreground hover:bg-accent/60'
   }`
-}
-
-/** Number of active filter selections, for badges on the search bar's Filters toggle. */
-export function useActiveFilterCount(): number {
-  const filters = useResearchStore(s => s.filters)
-  return (
-    filters.agentIds.length +
-    filters.provinces.length +
-    filters.linesOfBusiness.length +
-    (filters.dateFrom ? 1 : 0)
-  )
 }
 
 // Filter chip groups (Source, Jurisdiction, Line of business, Published) for the

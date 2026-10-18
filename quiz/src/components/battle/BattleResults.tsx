@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ClipboardList, Trophy, Handshake } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/buttonVariants'
 import { useBattleSkin } from '@/hooks/useBattleSkin'
 import { claimsReviewPath } from '@/lib/battleSkin'
 import { PlayerTile } from '@/components/battle/PlayerTile'

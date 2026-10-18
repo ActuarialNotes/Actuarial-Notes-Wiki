@@ -1,4 +1,5 @@
-import { LogoTile, type LogoTileSize } from '@/components/LogoTile'
+import { LogoTile } from '@/components/LogoTile'
+import type { LogoTileSize } from '@/lib/logoTile'
 import { cn } from '@/lib/utils'
 
 /**

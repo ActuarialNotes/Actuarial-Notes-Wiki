@@ -184,6 +184,29 @@ class PaperTests(unittest.TestCase):
         self.assertEqual(found["missing_numbers"], ["1250"])
         self.assertEqual(found["verdict"], "check")
 
+    def test_the_question_number_picks_between_near_identical_questions(self) -> None:
+        # SOA's FM set prints one question twice (Q437 and Q453); text alone
+        # can't tell them apart, the printed number can.
+        stem = "Determine which of the following statements about immunization is true for 1,000."
+        pages = {
+            185: "185\n437.\nDetermine which of the following statements about immunization is true for 1,000.",
+            192: "192\n453.\nDetermine which of the following statements about immunization is true for 1,000.",
+        }
+        self.assertEqual(P.locate(stem, pages, num=453)["pages"], [192])
+        self.assertEqual(P.locate(stem, pages, num=437)["pages"], [185])
+
+    def test_a_better_page_without_the_number_loses_only_narrowly(self) -> None:
+        stem = "Calculate the present value of payments of 1,000 at 5% for 10 years."
+        pages = {
+            141: "141\n333.\nCalculate the present value of payments of 1,000 at 5% for 10 years.",
+            183: "183\n432.\nCalculate the present value of payments of 1,000 at 5% for ten years.",
+            200: "200\n12. a table row\nnothing like the stem",
+        }
+        self.assertEqual(P.locate(stem, pages, num=432)["pages"], [183])
+        # A stray "12." line on an unrelated page is no reason to move.
+        self.assertEqual(P.locate(stem, pages, num=12)["pages"], [141])
+        self.assertFalse(P.question_marker(432).search("paid 432.50 in total"))
+
     def test_a_stem_the_booklet_does_not_hold_diverges(self) -> None:
         stem = "Bars show exposures by industry; a dotted line plots the factor 1.45, 1.6 and 0.82."
         found = P.locate(stem, {1: "Calculate the written premium for fiscal year 2018."})

@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4b464fe899d1f819c646b53b1b86755197ee78556971262fcc3c8ab104d3cf0d
-  sources: []
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), Ch.7 intro, §7.2-7.2.4, §3.9, PDF pp.44, 85-90, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Chalk et al., From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph 16, 1st ed., §3.6-3.7.1, PDF pp.32-33, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Benchmarking.md

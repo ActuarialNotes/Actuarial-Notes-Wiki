@@ -46,7 +46,7 @@ SCRIPTS = os.path.join(REPO_ROOT, "scripts")
 PAGE_DIRS = ("Concepts", "Resources", "Guides", "questions", "comprehension-checks")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".pdf")
 
-# The app's link regex (wikiParser.extractWikiLinks / WikiArticle.rewriteWikilinks),
+# The app's link regex (wikiParser.extractWikiLinks / wikiMarkdown.rewriteWikilinks),
 # with the embed marker captured so embeds can be told apart.
 LINK_RE = re.compile(r"(!?)\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
 

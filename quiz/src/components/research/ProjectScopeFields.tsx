@@ -9,6 +9,7 @@ import {
   subtypesForArtifact,
   type ArtifactType,
 } from '@/lib/researchProjectMeta'
+import { chipClass } from './chipClass'
 
 // Shared building blocks for the project onboarding wizard (NewProjectDialog)
 // and the post-creation scope editor (EditProjectScopeDialog) — kept in one
@@ -17,14 +18,6 @@ import {
 // 16px control text everywhere to stop iOS Safari from auto-zooming on focus.
 export const FIELD =
   'w-full rounded-md border border-input bg-background px-3 py-2 text-[16px] sm:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
-
-export function chipClass(active: boolean): string {
-  return `rounded-full border px-3 py-1.5 text-sm transition-colors ${
-    active
-      ? 'border-primary bg-primary/10 text-primary'
-      : 'border-input text-muted-foreground hover:text-foreground hover:bg-accent/60'
-  }`
-}
 
 export function Field({ title, hint, children }: { title: string; hint?: string; children: React.ReactNode }) {
   return (

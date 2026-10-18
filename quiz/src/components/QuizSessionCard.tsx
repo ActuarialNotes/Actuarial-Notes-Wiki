@@ -1,5 +1,5 @@
 import type { QuizSession } from '@/lib/supabase'
-import { formatTime } from '@/components/SessionRow'
+import { formatTime } from '@/lib/sessionFormat'
 
 function formatShortDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })

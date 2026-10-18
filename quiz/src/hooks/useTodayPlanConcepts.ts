@@ -10,7 +10,7 @@
 
 import { useMemo } from 'react'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { matchesSelectedVariant } from '@/data/examSittings'

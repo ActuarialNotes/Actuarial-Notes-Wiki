@@ -1,4 +1,4 @@
-import type { AnimalType } from '@/components/AvatarDisplay'
+import type { AnimalType } from '@/lib/avatar'
 
 export type AnimalMnemonics = Record<AnimalType, string>
 

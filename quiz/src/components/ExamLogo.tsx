@@ -20,7 +20,8 @@
 
 import { examAccentStyle } from '@/lib/examColors'
 import { examMonogram } from '@/lib/examLogo'
-import { LogoTile, logoTileEdge, type LogoTileSize } from '@/components/LogoTile'
+import { LogoTile } from '@/components/LogoTile'
+import { logoTileEdge, type LogoTileSize } from '@/lib/logoTile'
 import { cn } from '@/lib/utils'
 
 export function ExamLogo({

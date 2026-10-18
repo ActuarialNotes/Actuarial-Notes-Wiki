@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/examProgress'
 import { useTheme } from '@/hooks/useTheme'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { usePdfReader } from '@/hooks/usePdfReader'

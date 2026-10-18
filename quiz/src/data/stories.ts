@@ -1,4 +1,4 @@
-import type { AnimalType } from '@/components/AvatarDisplay'
+import type { AnimalType } from '@/lib/avatar'
 
 // Story mode (planned replacement for the old mnemonic feature): each concept
 // gets a short narrative per animal character, told by the user's chosen

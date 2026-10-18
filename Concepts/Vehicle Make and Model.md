@@ -1,12 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:ce8418861c4a0aed18287629b0810d8deee6dc5c14540c9394fc23c79a60fbd1
-  sources: []
-  open_findings: 0
+  sources:
+    - "Chalk et al., From GLMs to Comprehensive Insurance Pricing: Techniques and Challenges, CAS Monograph 16, 1st ed., §6.4.3-6.5, §6.7.3, PDF pp.93-96, 104, sha256:0b293634c3d6320eac9aca5d2f8ba4ca7954f20db8a462b24771c60b5e046d74 — https://www.casact.org/sites/default/files/2026-02/CAS_Monograph-16_From_GLMs.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §10.1, PDF pp.103-106, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "Insurance Bureau of Canada, CLEAR (Canadian Loss Experience Automobile Rating) web page, read 2026-10-17, The CLEAR methodology, steps 1-5, sha256:a3c67c8df97fafea3a2a0ae1190285f102e46902fae350ef58ecf4cf01f4ca33 — https://www.ibc.ca/pe/auto/buying-auto-insurance/how-auto-insurance-premiums/clear"
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Vehicle Make and Model.md
 ---

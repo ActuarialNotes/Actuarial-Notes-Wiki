@@ -5,7 +5,7 @@ An opt-in morning email that lists the concepts the [study plan](study-plan-gene
 ## User experience
 
 - **Opt in**: the Dashboard's reminders bell (signed-in only — the email goes to the account address). A toggle turns the email on, and a picker chooses the local send hour (default 8:00 AM). The browser's IANA timezone is stored alongside the hour and refreshed on every save, so the send time follows whichever device last touched the setting.
-- **The email**: one section per exam that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz; the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
+- **The email**: one section per exam that has a cached study plan, each with a pacing line (day number, pacing status, days to target), today's concept list (capped at 12, "+N more" beyond that), and the plan's "worth a refresher" concepts. A CTA links to the quiz (with UTM parameters — see *Measuring it*); the footer links to `/dashboard?reminders=1`, which opens the bell's modal, to change the time or turn it off.
 - **Quiet days**: if no exam has anything scheduled or worth reviewing, no email is sent.
 
 ## Architecture
@@ -15,7 +15,7 @@ The study plan is generated **client-side** and cached to `exam_progress.study_p
 - Cache generated **today** (another device already rebuilt it): use its `todaysConcepts` verbatim.
 - Cache from an **earlier day**: every `assignment` scheduled after the generation day up to and including today (catch-up for skipped days), deduped, in schedule order. Assignments *on* the generation day are excluded — they were that day's list.
 
-This derivation (`deriveTodaysConcepts`), the pacing phrasing, and the timezone math live in `quiz/src/lib/dailyEmail.ts` as the pure, **tested** source of truth, and are **mirrored verbatim** in the edge function (which cannot import from `quiz/src`) — the same duplication contract as the league math mirrored into SQL ([leagues.md](leagues.md)). Change one, update the other.
+This derivation (`deriveTodaysConcepts`), the pacing phrasing, and the timezone math live in `quiz/src/lib/dailyEmail.ts` as the pure, **tested** source of truth, and are **mirrored verbatim** in the edge function (which cannot import from `quiz/src`) — the same duplication contract as the league math mirrored into SQL ([leagues.md](leagues.md)). Change one, update the other: `quiz/src/lib/duplicationContracts.test.ts` cuts the mirror's functions out of the edge function, runs them against the same golden vectors as the originals, and fails when they disagree.
 
 ### Pieces
 
@@ -40,6 +40,18 @@ pg_cron fires the edge function **hourly** (on the hour) with an `x-cron-secret`
 Per-user failures are collected and reported in the response JSON (`{ checked, sent, skipped, errors }`) without aborting the run. A `{ "force": true }` body (still behind the cron secret) bypasses the hour match and the `last_sent_date` dedupe for manual testing; add `"user_id": "<uuid>"` to limit the run to one account, or a smoke test emails every opted-in user.
 
 The function is deployed with **`--no-verify-jwt`** (`.github/workflows/deploy-functions.yml`). pg_cron sends no user JWT, and with the gateway's JWT check on, every hourly call is refused with `401 UNAUTHORIZED_NO_AUTH_HEADER` before the function runs. The `x-cron-secret` check inside the function is the auth.
+
+### Measuring it
+
+The CTA's link carries `utm_source=daily-plan-email&utm_medium=email&utm_campaign=study-plan`.
+GA4 reads those for session attribution, and the app reads `utm_source` on boot
+(`trackReminderOpenedOnBoot` in `main.tsx`) to fire **`reminder_opened`**, then
+**`reminder_session`** for the first quiz finished within six hours of the open — the
+§7 *Re-engagement* metric in `docs/roadmap.md` is `reminder_session ÷ reminder_opened`.
+The rules are `quiz/src/lib/learningSignals.ts` (`REMINDER_SOURCES`), and
+`learningSignals.test.ts` reads this function's source to hold its `utm_source` to that
+table. The footer's preferences link carries none: a visit to change the time isn't a
+study session.
 
 ### Privacy / access model
 

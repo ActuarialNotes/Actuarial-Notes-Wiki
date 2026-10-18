@@ -5,13 +5,17 @@ Publisher: "ASTIN Bulletin"
 Year: "2008"
 date: "2008"
 Type: "Paper"
+Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d41045898d48700e783ccb2c6b2dc1b599bd0f69d3411f355242b0b0f96fd156
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c365cba1145c00dc5c508cd9ae2f688cfca61ff4239c34372f7359cc4c6b582a
+  sources:
+    - "Couret and Venter, 'Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation', ASTIN Bulletin 38(1), 73-85 (2008), CAS copy, 13 pp. read in full, sha256:ce50d8a0fbc395621d29dd153836b0303a269d94697bb1932b5f334b47ebba18 — https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf"
+    - "Same article, Cambridge Core PDF (doi:10.2143/AST.38.1.2030403), 13 pp., text compared word by word with the CAS copy: identical but for Cambridge's per-page download footer, sha256:a1e800e82d62e51f88291ea12c957b049de6c2ed2bff70df0c62795c4b6d6447 — https://www.cambridge.org/core/services/aop-cambridge-core/content/view/72B729B1DE0155A8D93A12F0AA216472/S0515036100015063a.pdf/using-multi-dimensional-credibility-to-estimate-class-frequency-vectors-in-workers-compensation.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors (Couret and Venter - 2008).md
@@ -43,6 +47,9 @@ An ASTIN Bulletin article (38(1), 73-85) that estimates the vector of claim freq
 ## 3 Conclusions
 - Individual class experience contains information relevant to future large loss relative frequency, and a correlated credibility approach using the relationships among injury-type frequencies within each class can utilize it.
 
+## References
+
 ## Sources
 - [Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (ASTIN Bulletin 38(1), doi:10.2143/AST.38.1.2030403)](https://www.cambridge.org/core/services/aop-cambridge-core/content/view/72B729B1DE0155A8D93A12F0AA216472/S0515036100015063a.pdf/using-multi-dimensional-credibility-to-estimate-class-frequency-vectors-in-workers-compensation.pdf) — the document: title page, abstract, section headings and the points under them
+- [Using Multi-Dimensional Credibility to Estimate Class Frequency Vectors in Workers Compensation (CAS copy)](https://www.casact.org/sites/default/files/2021-03/8_Couret_Venter.pdf) — the copy the Exam 8 content outline links; the same text as the publisher's PDF without its download footer
 - [CAS Exam 8 Content Outline, Fall 2026](https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf) — the citation and the assigned scope (A2–A4)

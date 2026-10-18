@@ -7,7 +7,7 @@ import {
   Y_LABELS,
   PAD_TOP,
   CHART_H,
-} from '@/components/ui/LearningProgressGraph'
+} from '@/lib/learningProgressGraph'
 import type { LevelEvent } from '@/lib/learningHistory'
 import type { AttemptDot } from '@/hooks/useConceptLearningHistory'
 

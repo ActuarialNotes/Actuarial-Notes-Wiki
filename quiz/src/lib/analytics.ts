@@ -30,6 +30,18 @@
 
 import { reachMilestone, recordVisitAndCheckDay2 } from './funnel'
 import {
+  conceptRetentionEvents,
+  minutesAfterOpen,
+  parseReminderVisit,
+  parseRetentionKeys,
+  reminderChannelFromSearch,
+  reminderSessionDue,
+  withRetentionKeys,
+  type ReminderVisit,
+  type RetentionAnswer,
+} from './learningSignals'
+import type { ConceptMasteryRecord } from './mastery'
+import {
   ANALYTICS_STORAGE,
   CONTROL_PARAMS,
   GA_MEASUREMENT_ID,
@@ -87,6 +99,20 @@ export interface AnalyticsEventMap {
   /** A Store product's link to its seller — the Store sells nothing itself (docs/store.md). */
   store_outbound_clicked: { product: string; seller: string; aisle: string }
   login: { method: string }
+
+  // ── Learning (roadmap L1, lib/learningSignals.ts) ─────────────────────────
+  /**
+   * A concept answered for the first time after its decay window — its last
+   * correct answer older than its level's interval. `retained` is that answer.
+   * Once per decay episode; the retention rate is retained ÷ all.
+   */
+  concept_retention: { concept: string; exam: string; retained: boolean; level: string; days_since_correct: number }
+  /** The app opened from a reminder's link (the daily study-plan email). */
+  reminder_opened: { channel: string }
+  /** The first quiz finished within a few hours of opening a reminder. */
+  reminder_session: { channel: string; exam: string; question_count: number; correct_count: number; minutes_after_open: number }
+  /** A missed question answered again in the fix-mistakes reviewer. */
+  mistake_reviewed: { question_id: string; exam: string; is_correct: boolean; days_since_miss: number }
 
   // ── Reliability (from lib/errorMonitoring.ts) ─────────────────────────────
   exception: { description: string; fatal: boolean }
@@ -538,6 +564,61 @@ export function trackFirstCorrect(params: AnalyticsEventMap['first_correct']) {
 /** First flashcard/concept ever collected on this device. */
 export function trackConceptCollected(params: AnalyticsEventMap['concept_collected']) {
   if (reachMilestone('concept_collected')) track('concept_collected', params)
+}
+
+// ── Learning (roadmap L1) ────────────────────────────────────────────────────
+// What each event means is lib/learningSignals.ts; these keep the little state
+// that makes each fire once — which decay episodes were reported (this device),
+// and whether this browser session came from a reminder.
+
+const RETENTION_KEYS = 'actuarial_retention_reported'
+const REMINDER_VISIT = 'actuarial_reminder_visit'
+
+/**
+ * Report the decayed concepts these answers revisit. Call with the mastery
+ * records as they stood *before* the answers were applied.
+ */
+export function trackConceptRetention(
+  answers: readonly RetentionAnswer[],
+  priorRecords: readonly ConceptMasteryRecord[],
+  now: Date = new Date(),
+): void {
+  const store = local()
+  const stored = parseRetentionKeys(safe(() => store?.getItem(RETENTION_KEYS) ?? null, null))
+  const { events, keys } = conceptRetentionEvents(answers, priorRecords, new Set(stored), now)
+  if (keys.length === 0) return
+  safe(() => store?.setItem(RETENTION_KEYS, JSON.stringify(withRetentionKeys(stored, keys))), undefined)
+  for (const event of events) track('concept_retention', event)
+}
+
+/**
+ * Call once on app boot, before anything rewrites the URL: a landing that
+ * carries a reminder's `utm_source` fires `reminder_opened` and marks the
+ * browser session as the reminder's.
+ */
+export function trackReminderOpenedOnBoot(search: string = typeof window === 'undefined' ? '' : window.location.search): void {
+  const channel = reminderChannelFromSearch(search)
+  if (!channel) return
+  const visit: ReminderVisit = { channel, openedAt: new Date().toISOString(), sessionReported: false }
+  safe(() => session()?.setItem(REMINDER_VISIT, JSON.stringify(visit)), undefined)
+  track('reminder_opened', { channel })
+}
+
+/** A quiz finished: if this session came from a reminder, its first quiz is the reminder's session. */
+export function trackReminderSession(
+  params: { exam: string; question_count: number; correct_count: number },
+  now: Date = new Date(),
+): void {
+  const store = session()
+  const visit = parseReminderVisit(safe(() => store?.getItem(REMINDER_VISIT) ?? null, null))
+  if (!visit || !reminderSessionDue(visit, now)) return
+  safe(() => store?.setItem(REMINDER_VISIT, JSON.stringify({ ...visit, sessionReported: true })), undefined)
+  track('reminder_session', { channel: visit.channel, ...params, minutes_after_open: minutesAfterOpen(visit, now) })
+}
+
+/** A missed question answered again in the fix-mistakes reviewer. */
+export function trackMistakeReviewed(params: AnalyticsEventMap['mistake_reviewed']) {
+  track('mistake_reviewed', params)
 }
 
 /**

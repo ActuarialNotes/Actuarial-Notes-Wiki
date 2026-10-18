@@ -1,8 +1,8 @@
 ---
 verification:
-  status: stale
+  status: in_review
   confidence: null
-  last_checked: 2026-10-09
+  last_checked: 2026-10-17
   last_checked_by: agent:validate-v1
   content_hash: sha256:78b546bc4bd10ac02aafdea9770930f914aeb0108ba7ff6ff5e77c97bb524a05
   sources:

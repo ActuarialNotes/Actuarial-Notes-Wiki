@@ -16,7 +16,7 @@ vi.mock('@/lib/streakStore', () => ({ recordStreakActivity: vi.fn() }))
 vi.mock('@/lib/xpStore', () => ({ recordXp: vi.fn() }))
 vi.mock('@/lib/questStore', () => ({ recordQuestProgress: vi.fn() }))
 vi.mock('@/lib/leagueStore', () => ({ recordLeagueXp: vi.fn() }))
-vi.mock('@/lib/analytics', () => ({ trackConceptCollected: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ trackConceptCollected: vi.fn(), trackConceptRetention: vi.fn() }))
 
 const collected = new Set<string>()
 const collect = vi.fn((name: string, _opts?: { silent?: boolean }) => void collected.add(name.toLowerCase()))

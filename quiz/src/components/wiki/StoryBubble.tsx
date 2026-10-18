@@ -1,4 +1,5 @@
-import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/components/AvatarDisplay'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/lib/avatar'
 import { STORIES } from '@/data/stories'
 import { Sparkles } from 'lucide-react'
 

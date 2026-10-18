@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
   content_hash: sha256:f0c1554f85a5023fe6131038741d247293c45bd47740c651f290033abb6506b8
-  sources: []
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2025 revision), §3.2, §3.8-3.9, §9.1, PDF pp.42-44, 99-100, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "FSCO, Technical Notes for Automobile Insurance (Oct 2016), §16, PDF p.8, sha256:b2ca7a6cdf4e19924f8f4dcb0e2890d723ba9ee3bcd31c31277e72a298f6d2a0 — https://www.casact.org/sites/default/files/2022-05/6C_FSCOTechNotes_102016.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Model Implementation.md

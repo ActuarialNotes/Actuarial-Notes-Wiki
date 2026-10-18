@@ -46,3 +46,14 @@ created: 2026-10-09
 - checks_run: Re-check after a link-only regeneration (Phase D alias table: variant spellings now point at the concept page they mean). syllabus_lint fidelity 0 errors; syllabus_write --check clean; the page with links stripped is byte-identical to the version verified before it (same source PDF, same sha256).
 - sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf
 - note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.
+
+## [C-005] Validation pass — verified (delta re-check)
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-17T22:54Z/ad0b
+- date: 2026-10-17
+- status_set: verified
+- confidence: high
+- checks_run: Delta re-check after PR #1629 (commit 3ee3ec5, 'retarget exam links'). Last verified 2026-10-10 at commit 2c83a177: that version's recorded content_hash recomputes. git diff 2c83a177..HEAD: 2 line(s) changed, all in Readings/Source Material reading lines; with [[target|display]] reduced to its display text the page is byte-identical to the verified version (only link targets moved). Every new target resolves to an existing Resources/Books page describing the document the citation names, and each target page's On the syllabus callout names this exam. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block; each changed reading line, links stripped, located verbatim in the PDF text. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors. SOA's exam page for this exam, fetched today, links this one syllabus PDF.
+- sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for CP-341, all pages, sha256:a00112b7e47d574941ad6c485d93062d39d06cc53e950bee0d762baef1d8dbcc — https://www.soa.org/globalassets/assets/files/edu/2026/cp-341/2026-2027-cp-341-syllabus.pdf
+- note: Verified high. Words unchanged since the 2026-10-10 verification; only reading-link targets moved, each to the page for the same document. Concept-link targets were not changed by the delta and were not judged.

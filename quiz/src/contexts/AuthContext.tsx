@@ -1,17 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 import { clearSharedCookie, readSharedCookie, writeSharedCookie } from '@/lib/sharedAuthCookie'
 import { hydrateFromSharedCookie } from '@/lib/hydrateSession'
-
-interface AuthContextValue {
-  user: User | null
-  session: Session | null
-  loading: boolean
-  signOut: () => Promise<void>
-}
-
-export const AuthContext = createContext<AuthContextValue | null>(null)
+import { AuthContext } from '@/contexts/auth'
 
 export function AuthProvider({ children, initialSession }: { children: ReactNode; initialSession: Session | null }) {
   const [user, setUser] = useState<User | null>(initialSession?.user ?? null)
@@ -71,10 +63,4 @@ export function AuthProvider({ children, initialSession }: { children: ReactNode
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuthContext() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuthContext must be used within AuthProvider')
-  return ctx
 }

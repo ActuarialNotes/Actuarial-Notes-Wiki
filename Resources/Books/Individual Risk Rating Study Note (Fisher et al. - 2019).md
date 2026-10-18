@@ -7,12 +7,14 @@ date: "2019"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9ca3d3c50de36f0e99902b1b624324ba9823e0fd6711339f69f4354cba181171
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-17
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b0de56ccda49b5a59ee60209d5ab74e44dfcce31e8cbcf8ac319e8e9c2a8c89c
+  sources:
+    - "Fisher, McTaggart, Petker and Pettingell, Individual Risk Rating, CAS Study Note, October 31, 2019 (© Casualty Actuarial Society, 2019), 123 pp., PDF pp.1-6 read (title page, contents pp.4-5, foreword) and the 135-entry bookmark outline, sha256:3182cd5d8ebccc92be67a246e61a527acda5b304b823448d99f8a2546ca07b81 — https://www.casact.org/sites/default/files/2021-03/8_Fisher_et_al.pdf"
+    - "CAS, Exam Content Outline — Advanced Ratemaking – Exam 8, Fall 2026 (Exam_8_CO_2026_F v03 2026_6_22, 6 pp.), PDF pp.1-6 incl. link annotations, sha256:306e7a7b6351597e46fd82fd74c294fce3afc8b1f9227ea8c001f3b081964521 — https://www.casact.org/sites/default/files/2026-03/Exam_8_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Individual Risk Rating Study Note (Fisher et al. - 2019).md
@@ -37,6 +39,7 @@ A CAS study note, dated October 31, 2019, that introduces the concepts and metho
 - 8 Split Loss Plans
 - 9 Schedule Rating
 - 10 Evaluating and Comparing Plans
+- Acknowledgments
 
 ## Chapter 2: Risk Sharing Through Retrospective Rating and Other Loss Sensitive Rating Plans
 - 1 Risk Sharing: Risk Retention and Risk Transfer
@@ -49,6 +52,7 @@ A CAS study note, dated October 31, 2019, that introduces the concepts and metho
 - 8 Setting Retention Levels
 - 9 Capital and Profit Provisions
 - 10 The Dissolution of Loss Sensitive Rating Plans for Long-Tailed Lines
+- Acknowledgments
 - Appendix to Chapter 2: Examples of Expected Cash Flow
 
 ## Chapter 3: Aggregate Excess Loss Cost Estimation
@@ -58,11 +62,13 @@ A CAS study note, dated October 31, 2019, that introduces the concepts and metho
 - 4 Estimating Limited Aggregate Excess Loss Costs
 - 5 Other Methods of Combining Per-Occurrence and Aggregate Excess Loss Cost
 - 6 Understanding Aggregate Loss Distributions
+- Acknowledgments
 
 ## Chapter 4: Concluding Remarks
 - 1 General Observations
 - 2 Sensitivity of Table M charges to the Accuracy of the Loss Pick or Rate Adequacy
 - 3 Consistency of Assumptions
+- Acknowledgments
 
 ## Solutions to Chapter Questions
 

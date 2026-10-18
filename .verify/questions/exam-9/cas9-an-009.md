@@ -35,3 +35,12 @@ created: 2026-10-18
 - date: 2026-10-18
 - locus: whole question
 - note: For the writer replacing this question (F-001). Both task C5 readings were read in full this run. PANNING (casact.org, 12 pp., sha256:9f569b0e…): no occurrence of 'prepay', 'mortgage', 'callable', 'convexity', 'MBS', 'credit' or 'reinsur'. The only mention of default is p.6, defining y: 'the risk-free interest rate, applicable to calculating the income from the firm's assets and for discounting the firm's future cash flows; default risk is considered in a separate forthcoming paper'. Panning's interest-rate content is the duration of franchise value: F = cr·S·(a+(b−1)y)/((1+y)(1+y−cr)) (p.8), D = (a−b+1)/((1+y)(a+by−y)) + 1/(1+y−cr) (p.9), Table 1 (p.9), total-value duration 6.70 and 5.18 (p.10), pricing strategy a=10%, b=1 → 7.62 and 3.27 (p.10), a=6.2%, b=1.763 for zero duration (p.11). COVAL, JUREK & STAFFORD (HBS Working Paper 09-060, the authors' institution's copy, sha256:887b5c53…; the published JEP PDF could not be fetched): no occurrence of 'prepay', 'pre-pay' or 'refinanc'. Mortgages appear only as collateral whose default behaviour drives tranche losses — p.16: subprime origination 'grew from $96.8 billion in 1996 to approximately $600 billion in 2006, accounting for 22 percent of all mortgages issued that year'; p.17: private-label MBS 'carried the dual risk of high rates of default due to the low credit quality of the borrowers; and high levels of default correlation as a result of pooling mortgages from similar geographic areas and vintages'; p.17: 'the probability of default and the expected recovery values have both been worse than expected'. Conclusion: neither reading teaches prepayment, PSA, CPR or SMM; the outline names prepayment only as an example in task C5 (p.5). A C5 replacement can be built on Panning's franchise-value duration or on CJS's default probability, default correlation and recovery sensitivity of tranches (Tables 2-3).
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Maintainer decision (2026-10-18, docs/content-plan.md §6): kept and served, as the only served question on Prepayment Risk (2016 Q12 and 2019 Q9 are off_syllabus; replacing it would leave the concept untested, G6). A note under the explanation now says the PSA/CPR/SMM conventions are outside both C5 readings and points to Mortgage-Backed Security; to be checked against an open text.

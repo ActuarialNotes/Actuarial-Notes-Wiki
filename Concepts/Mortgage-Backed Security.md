@@ -6,9 +6,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:228bc9e4408f820be7f182b10fe08ea2d6386c2517f7a62f30911a31c2d2b7dd
+  content_hash: sha256:a575c23f40dc72ee115e447e152f5213479b581250063b225afa4ae45e421493
   sources: []
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Mortgage-Backed Security.md
 ---
@@ -20,7 +20,7 @@ A **Mortgage-Backed Security** (MBS) is a bond whose cash flows come from a pool
 
 > $$\text{CF}_t = \text{Net interest}_t + \text{Scheduled principal}_t + \text{Prepayment}_t$$
 
-- **Symbols:** WAC is the pool's weighted average coupon, the mortgage rate the borrowers pay, and WAM its weighted average maturity in months. $t$ is the loan age in months. SMM and CPR, the monthly and annual prepayment rates, are defined on [[Prepayment Risk]], with $\text{SMM} = 1 - (1 - \text{CPR})^{1/12}$ applied to the balance left after scheduled principal.
+- **Symbols:** WAC is the pool's weighted average coupon, the mortgage rate the borrowers pay, and WAM its weighted average maturity in months. $t$ is the loan age in months. SMM (single monthly mortality) is the fraction of the balance left after the month's scheduled principal that is prepaid in the month; CPR (conditional prepayment rate) is its annualised equivalent, so $\text{SMM} = 1 - (1 - \text{CPR})^{1/12}$. The risk they measure is [[Prepayment Risk]].
 - **The fees:** The servicer keeps a fee for collecting payments and handling delinquencies, and the agency keeps a guarantee fee for promising timely payment. Investors receive the net coupon, so the passthrough rate is below the WAC.
 - **The PSA benchmark:** 100% PSA assumes a CPR of 0.2% in the first month, rising by 0.2% a month to 6% at month 30 and level after that. A pool is quoted as a multiple of it, such as 150 PSA, rather than as a model of borrower behavior.
 - **Agency credit:** Ginnie Mae securities carry the full faith and credit of the U.S. government, and Fannie Mae and Freddie Mac securities carry the guarantee of those government-sponsored enterprises. Agency MBS are therefore priced as rate products, and their spread over Treasuries pays mainly for the prepayment option.

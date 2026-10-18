@@ -17,3 +17,12 @@ created: 2026-10-18
 - proposed_action: Writer: define SMM and CPR on this page (the OCC Comptroller's Handbook, Interest Rate Risk, p.21, was the source the earlier Prepayment Risk check used) and drop the pointer to Prepayment Risk.
 - applied: false
 - fingerprint: 638ff774604f
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: SMM and CPR now defined on this page's Symbols bullet, the finding's proposed action; Prepayment Risk is linked as the risk they measure.

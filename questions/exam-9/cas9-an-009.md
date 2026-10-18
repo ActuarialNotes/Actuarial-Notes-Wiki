@@ -13,16 +13,16 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3fd74cc6eed4ceab8d55bf78b631d7ccd00ff274cb9fbd2da550d89ba2bfaae2
+  content_hash: sha256:a1b7e0219012c26876147729bd7ac227c2a3193ffc734a5f9d295e5e04158f36
   sources:
     - "OCC, Comptroller's Handbook: Interest Rate Risk (v1.0), pp.20-21 (CPR, single month mortality, 100% PSA: 0.2%/month to 6% at month 30), sha256:e96b2f0fe28b67db124aa7e56743b1b4e0b30c00d60461f124c1f776d96e2aac — https://www.occ.gov/publications-and-resources/publications/comptrollers-handbook/files/interest-rate-risk/pub-ch-interest-rate-risk.pdf"
     - "Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re, 2006), full text pp.1-12 searched, sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 1
+  open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-9/cas9-an-009.md
 ---
@@ -38,6 +38,9 @@ Calculate the prepayment the insurer should expect from the pool in month 10.
 - E) \$1,495,500
 
 ## Explanation
+
+> [!note] Outside the Exam 9 readings
+> Task C5 names prepayment as an example of interest rate and credit risk, but neither C5 reading (Panning; Coval, Jurek & Stafford) treats it. This question tests the market's standard conventions for measuring it — the PSA benchmark, CPR and SMM — which are on [[Mortgage-Backed Security]], not in an Exam 9 reading.
 
 At month 10, 100% PSA is a CPR of 10 × 0.2% = 2%, so 150% PSA is a CPR of 3%. The CPR is an annual rate; the single monthly mortality (SMM) is the monthly rate that compounds to it:
 

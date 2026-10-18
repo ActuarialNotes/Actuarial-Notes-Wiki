@@ -1,5 +1,5 @@
-import { AlertTriangle, Check, CheckCheck, RefreshCw } from 'lucide-react'
-import type { FactCheckTone, LogEntrySeverity } from '@/lib/verification'
+import { AlertTriangle, Check, CheckCheck, Clock, RefreshCw } from 'lucide-react'
+import type { FactCheckKind, FactCheckTone, LogEntrySeverity } from '@/lib/verification'
 
 /**
  * The one **Fact Check** palette.
@@ -27,17 +27,21 @@ export const FACT_CHECK_TONE_CLASSES: Record<FactCheckTone, string> = {
 }
 
 /**
- * A check mark is the feature's mark, so every state that is *about* checking
- * wears one: the double check for a page checked against a source, the single
- * check for one nobody has got to yet. The two states that are not about
- * checking — a page that changed underneath its pass, and one with something
- * known wrong on it — say that instead.
+ * A check mark is the feature's mark, so every verdict that is *about* checking
+ * wears one: the double check for a page checked against a source — amber or
+ * green, with or without something still open on it — and the single check
+ * for one nobody has got to yet. The verdicts that are not about a finished
+ * check say what they are instead: a page edited since (the re-check arrows), a
+ * check under way, and something known wrong.
  */
-export const FACT_CHECK_TONE_ICONS: Record<FactCheckTone, typeof Check> = {
-  green: CheckCheck,
-  amber: RefreshCw,
-  red: AlertTriangle,
-  grey: Check,
+export const FACT_CHECK_ICONS: Record<FactCheckKind, typeof Check> = {
+  checked: CheckCheck,
+  'checked-open': CheckCheck,
+  unchecked: Check,
+  stale: RefreshCw,
+  review: Clock,
+  issue: AlertTriangle,
+  disputed: AlertTriangle,
 }
 
 /**

@@ -9,7 +9,7 @@ import { questionSource } from '@/lib/questionSource'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
-import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
+import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_ICONS } from '@/lib/factCheckTone'
 import { factCheckBadge } from '@/lib/verification'
 import { FactCheckDialog } from '@/components/FactCheckBadge'
 import { PdfLinkButton } from '@/components/PdfLinkButton'
@@ -129,7 +129,7 @@ export function QuestionInfoDialog({
 
   const source = questionSource(question)
   const factCheck = factCheckBadge(question.verification)
-  const FactCheckIcon = FACT_CHECK_TONE_ICONS[factCheck.tone]
+  const FactCheckIcon = FACT_CHECK_ICONS[factCheck.kind]
   // The record is addressed by the question's own vault path, which only the
   // `verification:` block carries (`contentPathFromVerification`). With no
   // block there is nothing to open and nothing to report against.

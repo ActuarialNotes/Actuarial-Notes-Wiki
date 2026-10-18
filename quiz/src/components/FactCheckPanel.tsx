@@ -5,6 +5,7 @@ import {
   CircleSlash,
   ExternalLink,
   Flag,
+  History,
   Loader2,
   MessageSquare,
   Wrench,
@@ -21,19 +22,23 @@ import { cn } from '@/lib/utils'
 import {
   FACT_CHECK_DIFF,
   FACT_CHECK_TONE_CLASSES,
-  FACT_CHECK_TONE_ICONS,
+  FACT_CHECK_ICONS,
   SEVERITY_TONE,
 } from '@/lib/factCheckTone'
 import {
   parseVerificationLog,
+  checkerName,
   factCheckBadge,
+  factCheckOverview,
   findingOutcome,
   formatCheckedDate,
   logField,
   summarizeEvidence,
   summarizeLog,
   verificationLogPath,
+  type FactCheckTone,
   type FindingOutcome,
+  type LogEntry,
   type LogEntryGroup,
   type LogEntrySeverity,
   type LogSummary,
@@ -44,51 +49,34 @@ import {
 /**
  * The read-only **Fact Check** record for one page.
  *
- * A reader opens this with one question — *can I trust what I just read?* — and
- * the verdict answers it in a line. Everything else is the working behind that
- * verdict, and it is a lot: findings, the notes people have left, and the books
- * the page was read against. So the verdict is all the panel shows until it is
- * asked for more; the record unfolds under it on a tap. Everything the record
- * carries beyond that — content hashes, run ids, fingerprints, the page locator
- * a finding was written against — is auditor's material. It stays in the vault,
- * where `verify_check.py` can enforce it, and reaches the screen only through a
- * link's accessible name. Showing the work is the point; showing the paperwork
- * is not.
+ * A reader opens this with three questions, and the panel answers them in the
+ * order they are asked:
  *
- * Unfolded, the record is a stack of cards of one shape
- * (`components/FactCheckSection.tsx`) — **Open**, **Fixed**, **Notes**, then
- * **Checked against** — each naming what it holds and how many, so the folded
- * stack is itself the summary. Only Open starts unfolded: what is still wrong
- * with the page is what a reader came for.
+ *  1. **Can I trust it?** — the verdict and one sentence under it
+ *     (`factCheckOverview`): whether the page was checked, when, against how
+ *     many sources, and whether anything is still open. Always on screen, and
+ *     never contradicted by what is below it: the counts come from the page's
+ *     own `verification:` block, which needs no fetch.
+ *  2. **What's wrong with it?** — **Open issues**, the one section that starts
+ *     unfolded, each finding a row that opens into a diff.
+ *  3. **How do they know?** — **Checked against** (the sources, as the resource
+ *     card a resource page leads with) and **Check history** (each pass, newest
+ *     first: its date, the status it set and what it concluded, with what it
+ *     actually compared one tap further). **Fixed** and **Notes** follow.
  *
- *  - the **verdict tile** — the tinted mark from `lib/factCheckTone.ts` on the
- *    `rounded-xl bg-muted/50` block the question-info sheet leads with, and the
- *    disclosure for everything below it;
- *  - a **finding** as one row of its section, with its severity as a chip on the
- *    same four tones. Opened, it is a **diff**: what the page said, marked `−` on
- *    a red wash, over what the source says, marked `+` on a green one — the two
- *    things that disagree, side by side in the shape everyone already reads as
- *    *before / after*. Under it, what became of it (`findingOutcome`): fixed and
- *    when, with what the fix said; corrected on the page but not signed off; or
- *    the fix still only suggested. The date and author close it, quietly. The
- *    evidence is cut free of its hashes and URLs (`summarizeEvidence`), and the
- *    URLs come back as buttons to go and read the source;
- *  - a **source** as the resource card a resource page leads with, carrying the
- *    chapters and pages the claim was checked on
- *    (`components/FactCheckSources.tsx`).
+ * Every section is a card of one shape (`components/FactCheckSection.tsx`)
+ * that names what it holds and how many, so the folded stack is itself the
+ * summary. Everything the record carries beyond that — content hashes, run
+ * ids, fingerprints, the page locator a finding was written against — is
+ * auditor's material. It stays in the vault, where `verify_check.py` can
+ * enforce it, and the footer's **Full record** link goes to it.
  *
- * Sidecar logs are deliberately not bundled at build time — they grow without
- * bound and only matter when someone opens this panel — so the log is fetched
- * when the record is opened, not when the panel mounts. The verdict and the
- * sources come from the page's own `verification:` block and need no fetch.
+ * Sidecar logs are not bundled at build time — they grow without bound and
+ * only matter when someone opens this panel — so the log is fetched when the
+ * panel mounts. A page with nothing recorded has no log file at all, the
+ * normal state for most of the vault; a page whose block says it *was* checked
+ * but whose log can't be read says that, rather than "nothing recorded".
  */
-
-/**
- * Statuses whose verdict doesn't say what to do about it. `unverified` is not
- * one of them: "Not fact checked" is the whole story, and "Not yet checked
- * against a source" underneath it is the same sentence twice.
- */
-const NEEDS_DETAIL = new Set(['in_review', 'stale', 'disputed'])
 
 /** Worst first — the order the open section's breakdown and tile read in. */
 const SEVERITIES: LogEntrySeverity[] = ['critical', 'major', 'minor', 'nit']
@@ -101,102 +89,95 @@ interface FactCheckPanelProps {
   contentName?: string
 }
 
+type LogState =
+  | { kind: 'loading' }
+  | { kind: 'loaded'; log: VerificationLog | null }
+  | { kind: 'failed' }
+
 export function FactCheckPanel({
   verification,
   contentPath,
   contentName,
 }: FactCheckPanelProps) {
-  const [open, setOpen] = useState(false)
-  const [log, setLog] = useState<VerificationLog | null>(null)
-  const [loaded, setLoaded] = useState(false)
+  const [state, setState] = useState<LogState>({ kind: 'loading' })
   const [reporting, setReporting] = useState(false)
 
   const logPath = verification?.log || verificationLogPath(contentPath)
+  const everChecked = Boolean(verification && verification.status !== 'unverified')
 
-  // Fetched on the first unfolding rather than on mount: a reader who only
-  // wanted the verdict never pays for the log, and re-folding the record keeps
-  // what was already read.
   useEffect(() => {
-    if (!open || loaded) return
     let cancelled = false
+    setState({ kind: 'loading' })
     fetchWikiFile(logPath)
-      .then((raw) => { if (!cancelled) setLog(parseVerificationLog(raw)) })
-      // A page with nothing recorded yet has no log file at all. That is the
-      // normal state for most of the vault, not an error.
-      .catch(() => { if (!cancelled) setLog(null) })
-      .finally(() => { if (!cancelled) setLoaded(true) })
+      .then((raw) => { if (!cancelled) setState({ kind: 'loaded', log: parseVerificationLog(raw) }) })
+      // No log is the normal state of a page nobody has checked. For one the
+      // block says *was* checked, it means the record couldn't be reached.
+      .catch(() => {
+        if (!cancelled) setState(everChecked ? { kind: 'failed' } : { kind: 'loaded', log: null })
+      })
     return () => { cancelled = true }
-  }, [open, loaded, logPath])
-
-  // A path change is a different page's record — drop what was loaded for the
-  // last one rather than showing its findings under this page's verdict.
-  useEffect(() => {
-    setLog(null)
-    setLoaded(false)
-  }, [logPath])
+  }, [logPath, everChecked])
 
   const badge = factCheckBadge(verification)
-  const ToneIcon = FACT_CHECK_TONE_ICONS[badge.tone]
-  const checked = formatCheckedDate(verification?.lastChecked ?? null)
-  // One supporting line under the verdict, never two: what to do about the
-  // status where the label doesn't say, otherwise the date the label lacks.
-  const support = verification && NEEDS_DETAIL.has(verification.status)
-    ? badge.detail
-    : checked && !badge.label.endsWith(checked) ? checked : null
+  const overview = factCheckOverview(verification)
+  const VerdictIcon = FACT_CHECK_ICONS[badge.kind]
+  const log = state.kind === 'loaded' ? state.log : null
   const summary = log && log.entries.length > 0 ? summarizeLog(log) : null
 
   return (
-    <div className="space-y-5 text-sm">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        data-sound="tap"
-        className={cn('flex w-full items-center gap-3 rounded-xl bg-muted/50 p-3 text-left transition-colors hover:bg-muted', ROW_FOCUS)}
-      >
+    <div className="space-y-4 text-sm">
+      <div className="flex items-start gap-3">
         <span
           className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
             FACT_CHECK_TONE_CLASSES[badge.tone])}
         >
-          <ToneIcon className="h-4 w-4" aria-hidden />
+          <VerdictIcon className="h-4 w-4" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-medium leading-tight">{badge.label}</p>
-          {support && <p className="mt-0.5 text-xs text-muted-foreground">{support}</p>}
+          <p className="font-medium leading-tight">{overview.headline}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{overview.sentence}</p>
         </div>
-        <ChevronDown
-          className={cn('h-5 w-5 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
-          aria-hidden
+      </div>
+
+      <div className="space-y-2">
+        {summary && summary.open.length > 0 && (
+          <FactCheckSection
+            title="Open issues"
+            count={summary.open.length}
+            detail={severityBreakdown(summary.open)}
+            tone={worstTone(summary.open)}
+            icon={<AlertCircle className="h-4 w-4" aria-hidden />}
+            defaultOpen
+          >
+            <EntryList groups={summary.open} />
+          </FactCheckSection>
+        )}
+
+        {/* What the page was read against. Unfolded unless there are open
+            issues to read first — decided from the block, not the log, so
+            the card doesn't change its mind when the log arrives. */}
+        <FactCheckSources
+          sources={verification?.sources ?? []}
+          defaultOpen={!verification?.openFindings}
         />
-      </button>
 
-      {open && (
-        <div className="space-y-2">
-          {!loaded ? (
-            <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-              Loading
-            </p>
-          ) : (
-            <>
-              {summary ? (
-                <LogSections summary={summary} />
-              ) : verification && verification.status !== 'unverified' && (
-                <p className="text-sm text-muted-foreground">Nothing recorded yet.</p>
-              )}
+        {state.kind === 'loading' && everChecked && (
+          <p className="flex items-center gap-2 px-1 py-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            Loading the record
+          </p>
+        )}
+        {state.kind === 'failed' && (
+          <p className="px-1 py-2 text-sm text-muted-foreground">
+            Couldn’t load the details of this check. The full record has them.
+          </p>
+        )}
 
-              {/* What the page was actually read against, under the record: what
-                  has been *found* on a page is what a reader came for, and the
-                  books it was checked on are how they'd go and settle it
-                  themselves. Unfolded when it is all there is to show. */}
-              <FactCheckSources sources={verification?.sources ?? []} defaultOpen={!summary} />
-            </>
-          )}
-        </div>
-      )}
+        {summary && <RecordSections summary={summary} />}
+      </div>
 
       <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
-        {log ? (
+        {everChecked || log ? (
           <a
             href={githubBlobUrl(logPath)}
             target="_blank"
@@ -242,20 +223,25 @@ function worstTone(groups: LogEntryGroup[]) {
   return worst ? SEVERITY_TONE[worst] : 'grey'
 }
 
-/** The log's three sections, each a card that folds (`FactCheckSection`). */
-function LogSections({ summary }: { summary: LogSummary }) {
+/** The record below the sources: the checks, then what was fixed, then notes. */
+export function RecordSections({ summary }: { summary: LogSummary }) {
+  const latest = summary.checks[0]
+  const latestDate = latest ? formatCheckedDate(latest.entry.date) : null
   return (
     <>
-      {summary.open.length > 0 && (
+      {summary.checks.length > 0 && (
         <FactCheckSection
-          title="Open"
-          count={summary.open.length}
-          detail={severityBreakdown(summary.open)}
-          tone={worstTone(summary.open)}
-          icon={<AlertCircle className="h-4 w-4" aria-hidden />}
-          defaultOpen
+          title="Check history"
+          count={summary.checks.length}
+          detail={latestDate && summary.checks.length > 1 ? `Latest ${latestDate}` : null}
+          tone="grey"
+          icon={<History className="h-4 w-4" aria-hidden />}
         >
-          <EntryList groups={summary.open} />
+          <ul className="divide-y divide-border">
+            {summary.checks.map((group) => (
+              <CheckRow key={group.entry.id} entry={group.entry} />
+            ))}
+          </ul>
         </FactCheckSection>
       )}
       {summary.resolved.length > 0 && (
@@ -279,6 +265,80 @@ function LogSections({ summary }: { summary: LogSummary }) {
         </FactCheckSection>
       )}
     </>
+  )
+}
+
+const STATUS_LABEL: Record<string, { label: string; tone: FactCheckTone }> = {
+  verified: { label: 'Verified', tone: 'green' },
+  in_review: { label: 'Under review', tone: 'amber' },
+  stale: { label: 'Re-check needed', tone: 'amber' },
+  disputed: { label: 'Disputed', tone: 'red' },
+  unverified: { label: 'Not verified', tone: 'grey' },
+}
+
+/**
+ * One pass of the check history. Folded, it is *when* and *with what result*;
+ * opened, what the pass concluded and who ran it, with the itemised list of
+ * what it compared behind one more tap — that list is long, and it is the
+ * evidence for the conclusion rather than the conclusion.
+ */
+function CheckRow({ entry }: { entry: LogEntry }) {
+  const [open, setOpen] = useState(false)
+  const [showChecks, setShowChecks] = useState(false)
+  const status = STATUS_LABEL[logField(entry, 'status_set')] ?? null
+  const date = formatCheckedDate(entry.date) ?? entry.date
+  const confidence = logField(entry, 'confidence')
+  const note = logField(entry, 'note')
+  const checks = logField(entry, 'checks_run')
+  const meta = [checkerName(entry.author), confidence && `${confidence} confidence`]
+    .filter(Boolean).join(' · ')
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        data-sound="tap"
+        className={cn('flex w-full items-center gap-2.5 px-3 py-3 text-left transition-colors hover:bg-accent/50', ROW_FOCUS)}
+      >
+        <span className={cn('min-w-0 flex-1 text-sm tabular-nums', open && 'font-medium')}>{date}</span>
+        {status && (
+          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide',
+            FACT_CHECK_TONE_CLASSES[status.tone])}>
+            {status.label}
+          </span>
+        )}
+        <ChevronDown
+          className={cn('h-4 w-4 shrink-0 text-muted-foreground transition-transform', open && 'rotate-180')}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <div className="space-y-3 px-3 pb-4">
+          {note && <p className="break-words text-sm leading-relaxed">{note}</p>}
+          {checks && (
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowChecks((v) => !v)}
+                aria-expanded={showChecks}
+                data-sound="tap"
+                className={cn('inline-flex items-center gap-1 rounded-md text-xs font-medium text-muted-foreground transition-colors hover:text-foreground', ROW_FOCUS)}
+              >
+                What was compared
+                <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', showChecks && 'rotate-180')} aria-hidden />
+              </button>
+              {showChecks && (
+                <p className="mt-1.5 break-words text-xs leading-relaxed text-muted-foreground">{checks}</p>
+              )}
+            </div>
+          )}
+          {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
+        </div>
+      )}
+    </li>
   )
 }
 

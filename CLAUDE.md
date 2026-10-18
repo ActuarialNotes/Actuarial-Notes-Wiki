@@ -546,8 +546,10 @@ Other important `lib/` modules:
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
   both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
-  an exam page it is the same item in the menu the exam's title opens). The panel shows the
-  verdict alone until the reader taps it, then unfolds the record — findings first, then what it was **Checked against**.
+  an exam page it is the same item in the menu the exam's title opens). The panel leads with
+  the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
+  what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
+  **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each

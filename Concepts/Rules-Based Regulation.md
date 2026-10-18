@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:961b4cb715df23873089197c5a4a685237a13b3112ee47cb74ff1dc0dcc09a84
+  content_hash: sha256:367f883dcdb6c75284e090e5f9dd0aa2e5469f87432fe00fe07537da2b05707f
   sources: []
   open_findings: 0
   open_critical: 0
@@ -16,7 +16,7 @@ verification:
 > $$\text{Required capital} = \sum_i f_i \times E_i$$
 
 - **The factor formula.** $E_i$ is an exposure measure (claim liabilities or premium by class of business, asset values by type and credit rating) and $f_i$ a factor fixed by the regulator for every firm alike. The [[MCT]]'s risk margins are built this way, as are the U.S. [[Risk-Based Capital|RBC]] formula and the old EU Solvency I margin, which was a fixed percentage of premiums or claims.
-- **Canadian rules-based elements:** the MCT's prescribed factors, the $1.5$ multiplier that turns [[Capital Required]] into the [[Base Solvency Buffer]], the $100\%$ minimum and $150\%$ [[Supervisory Target Capital Ratio|supervisory target]], the [[Earthquake Exposure Risk Margin]] calculation, and the [[Registered Reinsurance|registration]] and collateral rules that decide whether ceded liabilities earn capital credit.
+- **Canadian rules-based elements:** the MCT's prescribed factors, the $1.5$ divisor that turns [[Capital Required]] at the target level into minimum capital required, the $100\%$ minimum and $150\%$ [[Supervisory Target Capital Ratio|supervisory target]], the [[Earthquake Exposure Risk Margin]] calculation, and the [[Registered Reinsurance|registration]] and collateral rules that decide whether ceded liabilities earn capital credit.
 - **Advantages:** objective and comparable across insurers; transparent and predictable; cheap to administer and to audit; enforceable, because a breach is a fact rather than a judgement; and resistant to inconsistency between supervisors.
 - **Disadvantages:** one size fits no one exactly; a risk the formula omits — [[Concentration Risk|concentration]], [[Climate Risk|climate]], reserve quality — attracts no capital; firms can satisfy the letter while defeating the purpose (regulatory arbitrage); rules lag product innovation; and compliance can replace risk management as the goal.
 - **Canada combines both deliberately.** The rules-based MCT supplies a comparable floor; [[ORSA]], the [[Internal Target Capital Ratio|internal target]] and [[FCT]] ask the principles-based question of whether that floor is enough for *this* insurer. [[Solvency II]] does the same with its standard formula, approved internal models and own-risk assessment.

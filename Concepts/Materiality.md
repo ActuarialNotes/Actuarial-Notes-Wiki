@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:a6e4c733ed0b1942f948146eb7beb8c9b74f3034e207fda2912ea0180ee09471
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Materiality.md
 ---

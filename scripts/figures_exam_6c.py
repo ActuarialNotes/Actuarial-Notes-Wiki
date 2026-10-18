@@ -20,10 +20,10 @@ families together, as on the other exams.
 
 *The running insurer* carries every solvency figure: capital available $248M
 against insurance, market, credit and operational risk margins of $92M, $54M,
-$21M and $17M less a $26M diversification credit — capital required $158M, a
-base solvency buffer of $237M, and an MCT ratio of 104.6%. It clears the 100%
-minimum and sits far below the 150% supervisory target, so the same company is
-the one being escalated, stress-tested and recapitalised across the figures.
+$21M and $17M less a $26M diversification credit — capital required at the
+target level $158M, which the MCT divides by 1.5 (MCT guideline §1.1.1) for a
+minimum capital required of $105.3M, and an MCT ratio of 235.4%. It clears the
+100% minimum, the 150% supervisory target and its own 185% internal target.
 
 The same company's statements carry the reporting figures: $1,240M of assets
 against $980M of liabilities, so equity is $260M and — after deducting $12M of
@@ -63,9 +63,9 @@ WID = 340   # the |NNN| every portrait embed asks for
 # ── the running insurer (solvency, $M) ───────────────────────────────────────
 CAP_AVAIL = 248.0
 M_INS, M_MKT, M_CRD, M_OPS, DIVERS = 92.0, 54.0, 21.0, 17.0, 26.0
-CAP_REQ = M_INS + M_MKT + M_CRD + M_OPS - DIVERS      # 158
-BSB = 1.5 * CAP_REQ                                    # 237
-MCT_RATIO = CAP_AVAIL / BSB                            # 104.6%
+CAP_REQ = M_INS + M_MKT + M_CRD + M_OPS - DIVERS      # 158, at the target level
+MIN_CAP_REQ = CAP_REQ / 1.5                            # 105.3 — MCT §1.1.1, ÷ 1.5
+MCT_RATIO = CAP_AVAIL / MIN_CAP_REQ                    # 235.4%
 MIN_RATIO, SUP_TARGET, INT_TARGET = 1.00, 1.50, 1.85
 
 # ── the running insurer's statements ($M) ────────────────────────────────────
@@ -386,8 +386,8 @@ def ccir() -> Fig:
 
 
 @figure("Solvency Regulation", "The running insurer's balance sheet as two "
-        "columns: assets standing just taller than liabilities plus required "
-        "capital", width=WID)
+        "columns: assets standing taller than liabilities plus minimum capital "
+        "required", width=WID)
 def solvency_regulation() -> Fig:
     f = vcard()
 
@@ -399,10 +399,11 @@ def solvency_regulation() -> Fig:
     f.rect(204, liab_top, 110, LIABS * scale, rx=6, fill=AMBER,
            fill_opacity="0.20", stroke=AMBER, stroke_width="1.3")
     f.text(259, liab_top + LIABS * scale / 2 + 4, "liabilities", cls="bold")
-    req_top = liab_top - BSB * scale
-    f.rect(204, req_top, 110, BSB * scale - 3, rx=6, fill=GREEN,
+    req_top = liab_top - MIN_CAP_REQ * scale
+    f.rect(204, req_top, 110, MIN_CAP_REQ * scale - 3, rx=6, fill=GREEN,
            fill_opacity="0.26", stroke=GREEN, stroke_width="1.3")
-    f.text(259, req_top + BSB * scale / 2 + 3, "required capital", cls="sm bold")
+    f.text(259, req_top + MIN_CAP_REQ * scale / 2 + 3, "required capital",
+           cls="sm bold")
     f.line(40, base - ASSETS * scale, 320, base - ASSETS * scale, cls="thin dash",
            stroke="var(--dim)", stroke_width="1.2")
     f.text(180, base - ASSETS * scale / 2 + 8, "≥", cls="bold",
@@ -2774,13 +2775,13 @@ def commutations() -> Fig:
     return f
 
 
-@figure("MCT", "A capital-ratio thermometer filled to the running insurer's 104.6%, "
-        "just above the 100% minimum line and well short of the 150% supervisory "
-        "and 185% internal targets", width=WID)
+@figure("MCT", "A capital-ratio thermometer filled to the running insurer's 235.4%, "
+        "above the 100% minimum line and the 150% supervisory and 185% internal "
+        "targets", width=WID)
 def mct() -> Fig:
     f = vcard()
 
-    py = _ladder(f, 120, 372, 90, 0.80, 2.00,
+    py = _ladder(f, 120, 372, 90, 0.80, 2.60,
                  [(MIN_RATIO, "100% minimum", ROSE),
                   (SUP_TARGET, "150% supervisory", AMBER),
                   (INT_TARGET, "185% internal", VIOLET)],
@@ -2844,21 +2845,22 @@ def capital_required() -> Fig:
     return f
 
 
-@figure("Base Solvency Buffer", "Four bars growing from the running insurer's $158M "
-        "of capital required to the $237M base solvency buffer (×1.5) and on to "
-        "$356M at the 150% target and $439M at 185%, with its $248M of capital "
+@figure("Base Solvency Buffer", "Four bars from the running insurer's $158M of "
+        "capital required at the target level: divided by 1.5, the $105M minimum "
+        "capital required the MCT ratio is measured against, then $158M at the "
+        "150% supervisory target and $195M at 185%, with its $248M of capital "
         "available cutting across them", width=WID)
 def base_solvency_buffer() -> Fig:
     f = vcard()
 
-    x0, s, h = 36, 0.64, 32
+    x0, s, h = 36, 1.0, 32
 
     def px(v):
         return x0 + v * s
 
-    rows = [("required", CAP_REQ, BLUE), ("buffer ×1.5", BSB, TEAL),
-            ("150% target", SUP_TARGET * BSB, AMBER),
-            ("185% internal", INT_TARGET * BSB, VIOLET)]
+    rows = [("required", CAP_REQ, BLUE), ("minimum ÷1.5", MIN_CAP_REQ, TEAL),
+            ("150% target", SUP_TARGET * MIN_CAP_REQ, AMBER),
+            ("185% internal", INT_TARGET * MIN_CAP_REQ, VIOLET)]
     for i, (label, v, colour) in enumerate(rows):
         y = 104 + i * 70
         f.text(x0, y - 8, label, cls="sm bold", anchor="start")
@@ -3096,12 +3098,12 @@ def probable_maximum_loss() -> Fig:
 
 @figure("Supervisory Target Capital Ratio", "A capital-ratio thermometer banded red "
         "below the 100% minimum, amber from there to the 150% supervisory target "
-        "and green above it — with the running insurer at 104.6%, low in the amber "
-        "band", width=WID)
+        "and green above it — with the running insurer at 235.4%, high in the "
+        "green band", width=WID)
 def supervisory_target_capital_ratio() -> Fig:
     f = vcard()
 
-    x, w, yb, yt, lo, hi = 124, 64, 376, 88, 0.60, 2.00
+    x, w, yb, yt, lo, hi = 124, 64, 376, 88, 0.60, 2.60
 
     def py(v):
         return yb - (v - lo) / (hi - lo) * (yb - yt)
@@ -3122,7 +3124,7 @@ def supervisory_target_capital_ratio() -> Fig:
     f.text(x + w / 2 + 16, py(1.78) + 4, "operate here", cls="sm dim",
            anchor="start")
 
-    # the running insurer, just above the floor
+    # the running insurer, above the target
     y = py(MCT_RATIO)
     f.polygon([(x - w / 2 - 2, y), (x - w / 2 - 12, y - 6), (x - w / 2 - 12, y + 6)],
               fill=BLUE)

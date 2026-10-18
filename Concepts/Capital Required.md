@@ -1,30 +1,34 @@
 ---
 verification:
-  status: disputed
-  confidence: null
-  last_checked: 2026-10-09
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f6c272a378f205d6b79a7ce4bc9d2b5eb7859283f1c3f537fca39313f5655d1a
-  sources: []
-  open_findings: 1
-  open_critical: 1
+  content_hash: sha256:736a7422db2f27615c02bd5980d65adbcc34b7d7cfb6e0fbd33cc18597564af2
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.1.5, §1.2.1; ch.4 intro, §4.2.1; §4.3.2.2, §4.3.3.1, §4.3.3.2; ch.5 intro, §5.1; ch.6 intro; §7.1, §7.2.2, §7.2.3, §7.2.4; ch.8, §8.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), pp.3, 5 (MCT capital requirement = minimum capital required; ORSA and internal targets), sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
+  open_critical: 0
   log: .verify/Concepts/Capital Required.md
 ---
 
-**Capital Required** is the [[MCT]]'s measure of how much capital an insurer's risk profile demands. It is built by computing a margin for each category of risk and subtracting a credit for the fact that they do not all crystallise together.
+**Capital Required** is the [[MCT]]'s measure of the capital an insurer's risks require at the target level: OSFI sets the MCT's capital requirements directly at $99\%$ of the expected shortfall (CTE $99\%$) over a one-year horizon, including a terminal provision. It is the sum of the requirements for each category of risk, less a credit for diversification, and dividing it by $1.5$ gives the **minimum capital required** against which the MCT ratio is measured.
 
 > $$\text{CR} = \text{Insurance} + \text{Market} + \text{Credit} + \text{Operational} - \text{Diversification}$$
+>
+> $$\text{Minimum Capital Required} = \frac{\text{CR}}{1.5}$$
 
-- **The four risk margins:**
-  - **[[Insurance Risk Margin|Insurance risk]]** — factors applied to [[Insurance Contract Liabilities|claim liabilities]] and premium liabilities by line, plus catastrophe and [[Earthquake Exposure Risk Margin|earthquake]] requirements. Usually the largest component for a P&C insurer.
-  - **[[Market Risk Margin|Market risk]]** — interest rate, equity, real estate, currency and other market exposures on the asset side.
-  - **[[Credit Risk Margin|Credit risk]]** — counterparty default on invested assets, receivables and reinsurance recoverables.
-  - **[[Operational Risk Margin|Operational risk]]** — a formula-based charge on premium, liabilities and growth.
-- **The [[Diversification Credit]]** recognises that insurance risk and market risk are not perfectly correlated, and reduces the total accordingly.
-- **The [[Base Solvency Buffer]] is $1.5 \times$ capital required**, and it is the denominator of the MCT ratio — so the effective requirement is that capital available exceed $1.5$ times capital required.
-- **Growth raises it.** Writing more business increases claim and premium liabilities and therefore the insurance risk margin, so an insurer growing fast needs capital simply to stand still — a mechanism that turns rapid growth into a capital problem before it turns into a loss problem.
-- **Reinsurance reduces it**, but only where the reinsurer is [[Registered Reinsurance|registered]] or the cession is collateralised, and buying reinsurance itself creates [[Credit Risk Margin|credit risk]] against the reinsurer. The net capital benefit is the reduction in insurance risk less the credit charge.
-- **The formula is standardised**, which makes insurers comparable but means it cannot capture every insurer's actual risk — which is exactly why [[ORSA]] requires the insurer to form its **own** view of required capital alongside it.
+- **The four risk requirements:**
+  - **[[Insurance Risk Margin|Insurance risk]]** — risk factors by class of insurance applied to the liability for incurred claims (net of reinsurance contracts held) and to unexpired coverage, plus requirements for unregistered reinsurance and for [[Earthquake Exposure Risk Margin|earthquake]] and nuclear catastrophes.
+  - **[[Market Risk Margin|Market risk]]** — interest rate, foreign exchange, equity, real estate, right-of-use asset and other market exposures.
+  - **[[Credit Risk Margin|Credit risk]]** — counterparty default on balance sheet assets and off-balance sheet exposures, and collateral held for unregistered reinsurance and self-insured retentions.
+  - **[[Operational Risk Margin|Operational risk]]** — a charge on capital required and on premiums, including premium growth above a $20\%$ threshold, capped at $30\%$ of capital required before the operational risk margin and diversification credit.
+- **The [[Diversification Credit]]** is allowed between the insurance risk requirement and the sum of the credit and market risk requirements, because losses across those categories are not perfectly correlated.
+- **Minimum capital required is capital required divided by $1.5$**, and it is the denominator of the MCT ratio. At the $100\%$ minimum, capital available equals two-thirds of capital required; at the $150\%$ [[Supervisory Target Capital Ratio|supervisory target]], it equals capital required. ([[Base Solvency Buffer]] is the name of the life insurers' LICAT denominator, not an MCT term.)
+- **Growth raises it.** The insurance risk factors are applied to the liability for incurred claims and to unexpired coverage, so writing more business raises the insurance risk requirement; and gross premiums received above a $20\%$ year-over-year growth threshold draw an additional operational risk charge of $2.5\%$ of the excess.
+- **Reinsurance reduces it, against charges elsewhere.** The insurance risk requirements are calculated net of reinsurance, but recoverables from [[Registered Reinsurance|registered]] reinsurers carry a [[Credit Risk Margin|credit risk]] factor; unregistered reinsurance earns credit only where it is secured by acceptable collateral, and the unsecured amount is deducted from capital available; and premiums paid for reinsurance contracts held draw a $2.5\%$ operational risk charge, because the operational risk remains with the ceding insurer.
+- **The formula is standardised.** The MCT is a standardized measure of capital adequacy and one of several indicators OSFI uses; its minimum and supervisory target rest on industry-wide simplifying assumptions, so OSFI expects each insurer to determine its own capital needs through its [[ORSA]].
 
 ![[Media/Figures/Capital_Required.svg|340]]
 
@@ -37,8 +41,8 @@ verification:
 > > **Before:**
 > >
 > > $$\begin{align*}
-> > \text{BSB} &= 1.5 \times \$140\text{M} = \$210\text{M} \\[4pt]
-> > \text{MCT} &= \frac{\$330\text{M}}{\$210\text{M}} = 157\%
+> > \text{MCR} &= \frac{\$140\text{M}}{1.5} = \$93.3\text{M} \\[4pt]
+> > \text{MCT} &= \frac{\$330\text{M}}{\$93.3\text{M}} = 354\%
 > > \end{align*}$$
 > >
 > > **After.** Insurance risk rises $20\%$ to $\$105.6$M, an increase of $\$17.6$M; the diversification credit rises $\$3$M:
@@ -46,12 +50,10 @@ verification:
 > > $$\begin{align*}
 > > \text{CR} &= \$140\text{M} + \$17.6\text{M} - \$3\text{M} \\
 > > &= \$154.6\text{M} \\[4pt]
-> > \text{BSB} &= 1.5 \times \$154.6\text{M} = \$231.9\text{M} \\[4pt]
-> > \text{MCT} &= \frac{\$330\text{M}}{\$231.9\text{M}} = 142\%
+> > \text{MCR} &= \frac{\$154.6\text{M}}{1.5} = \$103.1\text{M} \\[4pt]
+> > \text{MCT} &= \frac{\$330\text{M}}{\$103.1\text{M}} = 320\%
 > > \end{align*}$$
 > >
-> > **The ratio falls $15$ points and breaches the $150\%$ supervisory target — from growth alone, with no losses.** Break-even business adds nothing to capital available while adding materially to the buffer.
+> > **The ratio falls $33$ points from growth alone, with no losses** — still above the $150\%$ supervisory target. Break-even business adds nothing to capital available while adding to minimum capital required.
 > >
-> > **What this means in practice.** Growth must be *funded*. To hold $157\%$ the insurer needs capital available of $1.57 \times \$231.9 = \$364$ million, or $\$34$ million more than it has. The sources are retained earnings (so the growth must be **profitable**, not break-even), a capital injection, or reinsurance to hold the insurance risk margin down.
-> >
-> > **And this is the benign case.** [[PACICC]]'s failure research describes insurers that grew fast at *inadequate* rates — where capital available falls at the same time the buffer rises, and both sides of the ratio move against them at once.
+> > **What this means in practice.** Growth must be *funded*. To hold $354\%$ the insurer needs capital available to grow in step with capital required, to $\$330\text{M} \times \$154.6\text{M} / \$140\text{M} = \$364$ million, or $\$34$ million more than it has. The sources are retained earnings (so the growth must be **profitable**, not break-even), a capital injection, or reinsurance to hold the insurance risk margin down.

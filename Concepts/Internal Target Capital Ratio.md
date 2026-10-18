@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:9cf1eaf11b91bc14c74f005f1c909268ae023c11776a3dd8ee0d9d7f4979f2f8
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Internal Target Capital Ratio.md
 ---

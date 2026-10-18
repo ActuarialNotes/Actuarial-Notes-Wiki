@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:43c23b4a3171865cf69d2ff388b5ef5b34bfcd7eb34e84d31e62f879529eba80
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Financial Position.md
 ---

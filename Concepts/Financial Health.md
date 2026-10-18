@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:a48fbc32bd2d6066ee385cb8856f44004596b579def4a7a840f7a253f1b72fcb
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Financial Health.md
 ---

@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:f63efda1f3c891b275df19adb2f7b90a8b16e3104bdfb6b1c957a35a702b194b
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Capital Available.md
 ---

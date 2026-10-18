@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:3f5141a74246675c9da289cb4db08e9b830e00d0b1a42fbd14f2670f08bef3b6
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/MSA Ratios.md
 ---

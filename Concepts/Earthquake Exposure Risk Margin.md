@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:9a8b5355781e46dddae54512cbd06bf23e74bb4c70da8b7aa7436b93a733b6f3
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Earthquake Exposure Risk Margin.md
 ---

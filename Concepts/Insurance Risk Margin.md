@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d14a11c3ddf12d3cc3caa9ef905392ccfb325104ce904fbf00aa97db30561656
+  content_hash: sha256:1f7483a3aee19ed8439a1c5fa3b4da5892cce8301f81b86f76ab4e4a320bb020
   sources: []
-  open_findings: 0
+  open_findings: 2
   open_critical: 0
   log: .verify/Concepts/Insurance Risk Margin.md
 ---
@@ -46,7 +46,7 @@ verification:
 > > &= \$105\text{M}
 > > \end{align*}$$
 > >
-> > **An increase of $\$15$ million in the margin**, which flows through to a $\$22.5$ million increase in the [[Base Solvency Buffer]] ($1.5 \times$). On capital available of, say, $\$400$ million and a buffer of $\$210$ million, the ratio falls from $190\%$ to $172\%$ — with **no growth, no losses, and no change in the size of the balance sheet**.
+> > **An increase of $\$15$ million in the margin**, which flows through to a $\$10$ million increase in minimum capital required ($\$15\text{M} / 1.5$). On capital available of, say, $\$400$ million and minimum capital required of $\$210$ million, the ratio falls from $190\%$ to $182\%$ — with **no growth, no losses, and no change in the size of the balance sheet**.
 > >
 > > **What the strategy therefore requires.** Commercial liability must earn a higher return on capital than the personal property it replaces, or the shift destroys value even if both lines are profitable. The correct comparison is not loss ratio against loss ratio but **return on the capital each line consumes** — and this calculation is where that capital consumption becomes visible.
 > >

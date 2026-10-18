@@ -17,8 +17,8 @@ wiki_link:
 answer: "C"
 points: 2
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
   content_hash: sha256:653c2689da6a5823dd813d59a6083ae781ee1713d530a165b8cabf1d00576b3e

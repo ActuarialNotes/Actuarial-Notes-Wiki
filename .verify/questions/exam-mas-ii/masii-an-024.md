@@ -37,3 +37,14 @@ created: 2026-10-18
 - resolves: F-001
 - status: resolved
 - note: Statement III now names the level: '(at a 90% probability level throughout)', the checker's proposed action; the explanation already worked III at p = 90% (z = 1.645).
+
+## [C-002] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:25Z/7ded
+- date: 2026-10-18
+- status_set: verified
+- confidence: medium
+- checks_run: delta re-verification of git diff HEAD: only statement III changed ('with the probability level unchanged' -> 'at a 90% probability level throughout'); recomputed III at p = 90% (z = 1.645, Werner & Modlin's 1,082 standard): n_0 1,082 -> 4,329, Z 0.608 -> 0.304, halves, true; key C and the explanation (already worked at z = 1.645) unchanged and consistent; rest of the file unchanged since this run's earlier pass
+- sources_checked: Chapter 9 Experience Rating Using Credibility Theory | Loss Data Analytics, Ch.9 §9.1 (Z X̄ + (1−Z)M), §9.2.1 (λ_kp = (y_p/k)^2), §9.2.4 (Z = sqrt(n/n_0)), §9.3.1 (Z = n/(n+K), K = EPV/VHM; 'If the VHM increases then Z increases'), sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html; Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.12 Credibility, printed pp.217-221 (PDF 229-233): 1,082 claims at p=90%, k=5% (z=1.645); square-root rule; Z = N/(N+K), K = EVPV/VHM, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf; CAS Exam MAS-II Content Outline 2026, pp.2-4: Domain A tasks A1-A2, reading Tse Chs 6.1-6.3, 7.1-7.4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
+- note: Delta pass after the coordinator applied F-001's proposed action (resolution in run 2026-10-18T18:16Z/d3cd). Statement III is now true unconditionally, matching the explanation; no open findings. Confidence held at medium per roadmap D7 (Tse commercial).

@@ -18,6 +18,9 @@
 
 import { splitWeightTag } from './examWeight'
 import { hrefToEntryRef, pathToEntryRef, type WikiEntryRef } from './wikiRoutes'
+import type { WikiIndexItem } from './wikiIndex'
+import type { SyllabusEdition } from '../data/syllabusVintages'
+import { vintageShelf, vintageView, withCurrentExams, type VintageShelfEntry, type VintageView } from './resourceVintages'
 
 export interface SourceMaterialEntry {
   /** Canonical page name — the last path segment of the [[target]]. */
@@ -331,4 +334,50 @@ export function filterSourcesByObjectives(
 ): SourceMaterialEntry[] {
   if (selected.size === 0) return entries
   return entries.filter(entry => readingObjectives(entry.detail).some(code => selected.has(code)))
+}
+
+// ── The shelf, by edition ────────────────────────────────────────────────────
+//
+// The study guide's shelf offers the Resources page's filters, and the Vintage
+// one is the Resources page's `vintageView` / `vintageShelf` with the exam
+// fixed to the page's own: the newest edition by default (a retired reading the
+// page keeps for the record is off it until Dropped is pressed), an older one
+// walked back through the diffs — which can put readings on the shelf the page
+// no longer lists, so the whole index is passed in, not just the page's links.
+
+export interface SourceShelfEntry extends VintageShelfEntry {
+  /** The page's own line for this reading — absent for one only another edition assigns. */
+  source?: SourceMaterialEntry
+}
+
+export function sourceMaterialShelf(
+  entries: readonly SourceMaterialEntry[],
+  documents: readonly WikiIndexItem[],
+  exam: string | null,
+  vintageLabel: string | null,
+  showDropped: boolean,
+  editionsFor: (exam: string) => readonly SyllabusEdition[],
+): { shelf: SourceShelfEntry[]; vintage: VintageView | null } {
+  const key = (name: string) => name.trim().toLowerCase()
+  const byName = new Map<string, WikiIndexItem>()
+  for (const item of documents) if (item.category === 'document') byName.set(key(item.name), item)
+  const sources = new Map<string, SourceMaterialEntry>()
+  for (const entry of entries) if (!sources.has(key(entry.name))) sources.set(key(entry.name), entry)
+
+  // The page's readings first, in its order — one with no resource page as a
+  // bare item under the page's label — then every other resource.
+  const own: WikiIndexItem[] = [...sources.values()].map(entry => byName.get(key(entry.name)) ?? {
+    category: 'document',
+    name: entry.name,
+    path: '',
+    title: entry.label,
+    exams: exam ? [exam] : [],
+  })
+  const rest = [...byName.values()].filter(item => !sources.has(key(item.name)))
+  const books = withCurrentExams([...own, ...rest], editionsFor)
+  const vintage = exam ? vintageView(books, new Set([exam]), vintageLabel, editionsFor) : null
+  const base: VintageShelfEntry[] = vintage
+    ? vintageShelf(books, vintage, showDropped)
+    : books.slice(0, own.length).map(item => ({ item, change: null, stub: false }))
+  return { vintage, shelf: base.map(entry => ({ ...entry, source: sources.get(key(entry.item.name)) })) }
 }

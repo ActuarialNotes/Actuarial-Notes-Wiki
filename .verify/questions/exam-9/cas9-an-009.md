@@ -44,3 +44,29 @@ created: 2026-10-18
 - resolves: F-001
 - status: resolved
 - note: Maintainer decision (2026-10-18, docs/content-plan.md §6): kept and served, as the only served question on Prepayment Risk (2016 Q12 and 2019 Q9 are off_syllabus; replacing it would leave the concept untested, G6). A note under the explanation now says the PSA/CPR/SMM conventions are outside both C5 readings and points to Mortgage-Backed Security; to be checked against an open text.
+
+## [F-002] Stem ages the PSA ramp by the pool's life rather than the loans' age
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:42Z/0040
+- date: 2026-10-18
+- severity: nit
+- status: open
+- locus: stem, sentence 2
+- claim: At the start of month 10 of the pool's life ... 100% PSA is a conditional prepayment rate (CPR) of 0.2% per month of age
+- evidence: SIFMA/BMA Uniform Practices Ch. SF p.SF-6 §B.2c: 100% PSA assumes 0.2% CPR 'in the first month following origination of the mortgage loans (not the pool)', MONTH being the period in which the age of the mortgage loans increases from MONTH-1 to MONTH. The stem counts age from the pool's life; for a pool of newly originated loans the two coincide and the key (CPR 3% at 150% PSA, month 10) is unaffected, so this is wording only.
+- source_rank: 3
+- proposed_action: Writer: say the loans are in month 10 of their age (e.g. 'a pool of loans in their tenth month since origination') so the stem follows the PSA convention. Wording change, not applied by the checker.
+- applied: false
+- fingerprint: d0b90fd0198b
+
+## [C-003] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:42Z/0040
+- date: 2026-10-18
+- status_set: verified
+- confidence: medium
+- checks_run: blind recomputation from the stem before reading the key (CPR 0.2%x10x1.5 = 3%; SMM = 1-(0.97)^(1/12) = 0.0025350; x (50,000,000-150,000) = 126,372 = C); explanation line by line; each distractor recomputed to its stated error (A 83,855 at 100% PSA; B 124,625 at CPR/12; D 390,247 at CPR 9%; E 1,495,500 at CPR on one month); one keyed option, five distinct options; PSA ramp, CPR/SMM conversion and net-of-scheduled-principal convention against SIFMA Ch. SF; reinvestment claim against Fannie Mae prospectus; C5 wording in the note against the Exam 9 outline; validate_content.py; wiki_link targets exist
+- sources_checked: The Bond Market Association (SIFMA), Uniform Practices — Chapter SF, Standard Formulas for the Analysis of Mortgage-Backed Securities (02/01/99), Ch. SF, §B.2 a-c, pp.SF-5–SF-6, sha256:9ca07655579c51cd2d9bb783d4d3486e99150f19d99ddf7b0782573c1b738784 — https://www.sifma.org/wp-content/uploads/2017/08/chsf.pdf; Fannie Mae, Guaranteed MBS Pass-Through Securities (Mega Certificates) prospectus supplement, October 1, 1996, Reinvestment Risk p.2; Prepayment Considerations p.3, sha256:162dd92f71f1e30122ea74c2cbaa57fa4982fd537545f6ebfa74cd9e0fa6d690 — https://capmrkt.fanniemae.com/sites/g/files/koqyhd216/files/syndicated/mbs/megapros/FM_October_1_1996.pdf; CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), task C5 and its readings p.5, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf
+- note: Key C reproduced blind. SIFMA Ch. SF (rank 3): SF-6 §B.2c gives 100% PSA as 0.2% CPR in month 1 rising 0.2% a month to 6.0% at month 30, a multiple scaling the CPR (CPR = min{PSA/100 x 0.2 x max(1, min(MONTH,30)), 100}); SF-6 §B.2b (1-SMM/100)^12 = 1-CPR/100, so SMM is the compounded monthly rate and CPR/12 is wrong (B's error); SF-5 §B.2a SMM = 100(F_sched-F2)/F_sched, i.e. prepayment is SMM times the balance after scheduled amortisation, the explanation's convention. Fannie Mae's 1996 Mega prospectus p.3: in declining rate environments prepayments are likely to increase; p.2: reinvestment yields may be significantly lower — supports the explanation's closing sentence. Outline p.5 task C5 reads 'Estimate and manage interest rate and credit risk (e.g., default, prepayment, reinsurance)', as the note says; the note's claim that neither C5 reading treats prepayment rests on C-002 (both readings read earlier today) and F-001/R. No official solution exists (vault-written), hence medium. Open nit F-002: stem ages the ramp by pool life, SIFMA by loan age; no effect on the key.

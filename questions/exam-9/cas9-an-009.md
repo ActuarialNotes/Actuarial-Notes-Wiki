@@ -13,16 +13,16 @@ wiki_link:
 answer: "C"
 points: 1
 verification:
-  status: stale
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
   content_hash: sha256:a1b7e0219012c26876147729bd7ac227c2a3193ffc734a5f9d295e5e04158f36
   sources:
-    - "OCC, Comptroller's Handbook: Interest Rate Risk (v1.0), pp.20-21 (CPR, single month mortality, 100% PSA: 0.2%/month to 6% at month 30), sha256:e96b2f0fe28b67db124aa7e56743b1b4e0b30c00d60461f124c1f776d96e2aac — https://www.occ.gov/publications-and-resources/publications/comptrollers-handbook/files/interest-rate-risk/pub-ch-interest-rate-risk.pdf"
-    - "Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re, 2006), full text pp.1-12 searched, sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 0
+    - "The Bond Market Association (SIFMA), Uniform Practices — Chapter SF, Standard Formulas for the Analysis of Mortgage-Backed Securities (02/01/99), Ch. SF, §B.2 a-c, pp.SF-5–SF-6, sha256:9ca07655579c51cd2d9bb783d4d3486e99150f19d99ddf7b0782573c1b738784 — https://www.sifma.org/wp-content/uploads/2017/08/chsf.pdf"
+    - "Fannie Mae, Guaranteed MBS Pass-Through Securities (Mega Certificates) prospectus supplement, October 1, 1996, Reinvestment Risk p.2; Prepayment Considerations p.3, sha256:162dd92f71f1e30122ea74c2cbaa57fa4982fd537545f6ebfa74cd9e0fa6d690 — https://capmrkt.fanniemae.com/sites/g/files/koqyhd216/files/syndicated/mbs/megapros/FM_October_1_1996.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), task C5 and its readings p.5, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-9/cas9-an-009.md
 ---

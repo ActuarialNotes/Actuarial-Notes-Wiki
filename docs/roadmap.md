@@ -251,7 +251,8 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    and applied the same day: Exam 5's and MAS-II's pages verified (G1 ✅ on both), 6C's
    re-transcribed (`in_review`, three older findings open), 29 McElreath questions
    `off_syllabus`, Exam 9's held questions settled bar `cas9-an-009` (content plan, Phase 2).
-   Next: Exam 9's open-text packets (D22), then Exam 5's papers → 6C → PCPA's bank (C6).
+   Exam 9's open-text packets done the same day (34 of 35 concepts verified; 5 / 7, held by
+   *Enterprise Risk Management* and two readings). Next: Exam 5's papers → 6C → PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.

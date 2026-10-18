@@ -3,9 +3,9 @@ import { Compass } from 'lucide-react'
 import { CheckMark } from '@/components/CheckMark'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { examDisplayName, wikiRoute } from '@/lib/wikiRoutes'
+import { requirementDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { TRACKS, type Track } from '@/data/tracks'
+import { NON_EXAM_REQUIREMENTS, TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
 import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
@@ -84,7 +84,7 @@ function ExamGuideRow({ model, tourId }: { model: ExamCardModel; tourId?: string
   return (
     <ExamRow
       examKey={examId}
-      title={examDisplayName(exam.name)}
+      title={requirementDisplayName(exam.name)}
       topic={topic}
       status={contentStatus}
       to={wikiRoute({ kind: 'exam', name: exam.name })}
@@ -176,9 +176,12 @@ export default function WikiHome() {
         orderedExams.push(...sectionExams)
         if (sectionExams.length > 0) chunks.push({ label: section.label, exams: sectionExams })
       }
-      // Only a credential with elective tracks (the FSA's practice areas) is
-      // drawn in chunks; the others are one ladder and stay one list.
-      const chunked = track.sections.some(s => s.elective)
+      // A credential with elective tracks (the FSA's practice areas) or with
+      // non-exam requirements (the VEEs, the courses and modules, the
+      // professionalism courses) is drawn in chunks, so those sit under their
+      // own heading below the exams. One that is only a ladder (the FCAS,
+      // whose ACAS requirements are listed under the ACAS) stays one list.
+      const chunked = track.sections.some(s => s.elective || s.label === NON_EXAM_REQUIREMENTS)
       return { track, exams: orderedExams, chunks: chunked ? chunks : null }
     })
   }, [examsByKey])

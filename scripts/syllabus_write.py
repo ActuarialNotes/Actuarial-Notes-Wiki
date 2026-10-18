@@ -204,10 +204,16 @@ class Shelf:
                     self.pages.append((len(words), words, name))
         self.pages.sort(reverse=True)
 
-    def match(self, citation: str) -> str | None:
+    def match(self, citation: str, year: str | None = None) -> str | None:
+        """With `year` (a book list's dated citation), a page filed under
+        another year is another edition and doesn't match: Brown & Lennox's
+        2015 fourth edition is not the 2022 fifth's page."""
         cited = _norm_words(citation)
         for _, words, name in self.pages:
             if words in cited:
+                page_year = re.search(r"\b((?:19|20)\d{2})\)\s*$", name)
+                if year and page_year and page_year.group(1) != year:
+                    continue
                 return name
         return None
 
@@ -221,16 +227,29 @@ ASSIGNMENT_RE = re.compile(
 NON_AUTHORS = frozenset({"New York", "Cambridge", "Springer", "Wiley", "Boston"})
 
 
+DATED_RE = re.compile(r"^([A-Z][\w'’-]+),[^()]*?\b((?:19|20)\d{2})\.\s*(.+)$")
+
+
 def reading_target(citation: str, shelf: Shelf) -> str:
     """The page a citation should link: the shelf's own page for the work, or
     the name one would be written under — `Title (Author - Year)`, the vault's
     convention, or `CODE - Title` for an SOA study note."""
-    page = shelf.match(citation)
+    dated = DATED_RE.match(citation)
+    page = shelf.match(citation, dated.group(2) if dated else None)
     if page:
         return page
     # An assignment in brackets ("(sections 3.1, 3.2 …)", "(excluding pp. 27-29)")
     # says what to read, not what the work is called.
     citation = ASSIGNMENT_RE.sub("", citation).strip()
+    # A book list's author–date citation: `Segal, S., 2011. Title, Wiley.`,
+    # `Lessing, Julia. 2025. Title. Greenland, NH: ACTEX.` The title runs from
+    # the year to its edition, its first full stop, or the publisher.
+    dated = DATED_RE.match(citation)
+    if dated:
+        rest = dated.group(3)
+        title = re.split(r"\s*\(|\.\s", rest, maxsplit=1)[0] if re.search(r"\(|\.\s", rest) \
+            else rest.rsplit(", ", 1)[0]
+        return clean_name(title.strip(" ,.")) + f" ({dated.group(1)} - {dated.group(2)})"
     asop = re.match(r"^ASOP (?:No\.\s*)?(\d+):?\s*([^(,]+)", citation)
     if asop:
         return clean_name(f"ASOP {asop.group(1)} - {asop.group(2)}")
@@ -270,13 +289,19 @@ def split_note(citation: str) -> tuple[str, list[str]]:
 # ── the page ─────────────────────────────────────────────────────────────────
 
 def weight_tag(t: dict) -> str:
+    """`{lo–hi%}`, or nothing for a section an outline gives no weight (an
+    e-learning module's)."""
+    if not t.get("weight"):
+        return ""
     lo, hi = t["weight"]
     fmt = lambda x: f"{x:g}"
     return f"{{{fmt(lo)}%}}" if lo == hi else f"{{{fmt(lo)}–{fmt(hi)}%}}"
 
 
-def outcome_num(letter: str) -> int:
-    return ord(letter) - ord("a") + 1
+def outcome_num(o: dict) -> int:
+    """`a)` is 1. A module's objectives are bulleted, not lettered, and carry
+    their number (FAP's first module has more than twenty-six)."""
+    return o.get("num") or ord(o["letter"]) - ord("a") + 1
 
 
 def codes_note(codes: str) -> str:
@@ -298,7 +323,8 @@ def render(data: dict, vault: vl.Vault) -> str:
         "---",
     ]
     L += fm + ["", '<div class="exam-nav"', f'     data-current="{ident["exam_id"]}|{ident["name"]}">', "</div>", ""]
-    L.append(f"# Exam {ident['exam_id']}")
+    module = data.get("shape") == "module"
+    L.append(f"# {ident['exam_id']}" if module else f"# Exam {ident['exam_id']}")
     sittings = data["sitting"]
     if ident["fellowship"]:
         when = f" Its syllabus covers the {sittings} sittings." if sittings else ""
@@ -307,16 +333,21 @@ def render(data: dict, vault: vl.Vault) -> str:
     else:
         L.append(data["intro"][0] if data["intro"] else f"**{ident['name']}** is an exam of the Society of Actuaries.")
     L.append("")
-    if not ident["fellowship"] and len(data["intro"]) > 1:
-        L += ["> [!question]- About the exam", ">"]
-        for p in data["intro"][1:]:
-            L += [f"> {p}", ">"]
+    about = data["intro"][1:]
+    # A module's first paragraph can end on a colon over a list ("The concepts
+    # you will learn in this module include:"); the list stays with it.
+    while module and about and about[0].startswith("- "):
+        L += about.pop(0).split("\n") + [""]
+    if not ident["fellowship"] and about:
+        L += [f"> [!question]- About the {'module' if module else 'exam'}", ">"]
+        for p in about:
+            L += [f"> {line}" for line in p.split("\n")] + [">"]
         L.pop()
         L.append("")
     L += ["## Learning Objectives", ""]
 
     for t in data["topics"]:
-        L.append(f"> [!example]- {t['title']} {weight_tag(t)}")
+        L.append(f"> [!example]- {t['title']} {weight_tag(t)}".rstrip())
         if t["objective"]:
             L.append(f"> {linker.link(t['objective'])}")
         L.append(">")
@@ -327,7 +358,7 @@ def render(data: dict, vault: vl.Vault) -> str:
                     L.append(">")
                 L += [f"> **{o['group']}**", ">"]
                 group = o["group"]
-            n = outcome_num(o["letter"])
+            n = outcome_num(o)
             L.append(f"> {n}. {linker.link(o['text'])}")
             pad = " " * len(f"{n}. ")
             for b in o["bullets"]:
@@ -376,11 +407,11 @@ def expected_lines(data: dict) -> list[tuple[str, str]]:
     """(where, text) for every line of syllabus text the page must carry."""
     out = []
     for t in data["topics"]:
-        out.append((f"{t['title']}", f"{t['title']} {weight_tag(t)}"))
+        out.append((f"{t['title']}", f"{t['title']} {weight_tag(t)}".rstrip()))
         if t["objective"]:
             out.append((f"{t['title']} objective", t["objective"]))
         for o in t["outcomes"]:
-            out.append((f"{t['title']} {o['letter']})", f"{outcome_num(o['letter'])}. {o['text']}"))
+            out.append((f"{t['title']} {o['letter']})", f"{outcome_num(o)}. {o['text']}"))
             for b in o["bullets"]:
                 out.append((f"{t['title']} {o['letter']}) bullet", f"- {b}"))
     return out

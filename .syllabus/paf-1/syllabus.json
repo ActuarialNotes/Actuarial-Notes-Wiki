@@ -1,0 +1,191 @@
+{
+  "wiki_id": "paf-1",
+  "body": "SOA",
+  "shape": "module",
+  "title": "Pre-Actuarial Foundations",
+  "sitting": "",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/paf-objectives.pdf",
+  "source_sha256": "1ff54e013fa79a955a974217626e0ba054da02a8a08066df21345a455cfc3f7b",
+  "readings_url": "https://www.soa.org/globalassets/assets/files/edu/2026/edu-paf-booklist.pdf",
+  "readings_sha256": "5e23e7a2f8fda75b79bdbf633b325c0b40c7044f6254fc69c5647b5ded2905af",
+  "extracted_at": "2026-10-17",
+  "intro": [
+    "Welcome to the Pre-Actuarial Foundations Module! As you embark on this journey of discovery, we hope you will learn many important concepts and skills that will help you in your future actuarial career. The concepts you will learn in this module include:",
+    "- What is the role of the professional actuary – past, present, and future?\n- What do actuaries do in their day-to-day work?\n- How do actuaries use soft skills such as emotional intelligence in their work?\n- How do actuaries use emotional intelligence in leadership roles?",
+    "This module also contains an End-of-Module Test, an Interactive Scenario, and an End-of-Module Assessment.",
+    "**Module Objectives**",
+    "- Explain what actuaries are\n- Describe what actuaries do\n- Explain how emotional intelligence benefits you as an actuary\n- Explain how emotional intelligence benefits you as a leader"
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Role of the Professional Actuary",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "The purpose of this topic is to provide a brief history of the actuarial profession, to consider the future of the profession, to explore the role of today’s actuary, to detail the actuary’s skill sets and to review the profession’s codes of conduct.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Describe important historical events influencing the actuarial profession",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Describe today’s and tomorrow's actuarial practice",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Define “actuary”",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Identify the actuary’s knowledge, skills and abilities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe what an actuary contributes as a professional",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "What Actuaries Do",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "What do actuaries do, day-to-day? How do they identify, assess, and manage risk in various areas of specialization or function? How do they reduce financial insecurity? How do they protect individuals, companies, and other organizations from unforeseen or burdensome financial effects of random, contingent events? And how do they communicate most effectively to bring about their desired results? Actuaries focus on understanding the objectives of the financial security system. They understand that, in their work, tradeoffs are often needed. There are many stakeholders with disparate needs associated with modern financial security systems. Actuaries must work with the available products, plans, and programs to design policies to meet the stakeholders’ needs, whether within a private, public, or governmental financial security system.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Define risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Explain how financial security systems interact to combat financial insecurity",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Explain ways in which actuaries manage risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe the actuary’s contributions within each area of practice",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Identify services actuaries provide for financial security systems",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Describe how actuaries use the Actuarial Control Cycle to manage risk",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Explain why it is crucial for professional actuaries to be effective communicators",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Building Your Emotional Intelligence Skills",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "Actuaries need high emotional intelligence skills, as well as technical skills, to be successful in their work. This section will introduce you to the topic of Emotional Intelligence, the Reflect-Adapt-Relate model, and how Emotional Intelligence will help you to become a better actuary.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Define emotional intelligence and explain its importance to an actuary’s success in their career",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Plan specific actions to improve your emotional intelligence",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Use self-awareness techniques to identify emotional triggers",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Use adaptability approaches to manage impulses",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Use social awareness techniques to plan simple communication",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Recall the importance of identifying problems and proposing solutions in problem-solving processes.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Explain the importance of emotional intelligence to an actuarial leader’s success in their career",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Anway, K.L., et al., 2026. E-Learning Module Readings, Volume I: Foundations, (First Edition), Society of Actuaries.",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

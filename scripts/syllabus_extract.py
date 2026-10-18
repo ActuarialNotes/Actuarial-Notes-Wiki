@@ -35,7 +35,8 @@ only dependency and is imported lazily, as in pdf_extract.py.
 
 Usage:
     python3 scripts/syllabus_extract.py --wiki-id gh-101 --url <syllabus url> [--pdf local.pdf]
-    python3 scripts/syllabus_extract.py --all          # every SOA row of SOURCES below
+    python3 scripts/syllabus_extract.py --all          # every SOA row of SOURCES and MODULES below
+    python3 scripts/syllabus_extract.py --wiki-id paf-1   # an e-learning module's objectives
 
 Writes `.syllabus/<wiki id>/syllabus.json`; prints a one-line summary per exam.
 """
@@ -44,6 +45,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import os
 import re
@@ -90,6 +92,20 @@ SOURCES: dict[str, str] = {
     "ret-101": f"{SOA}/2026/ret-101/2026-2027-ret-101-syllabus.pdf",
     "ret-201": f"{SOA}/2026/ret-201/2026-2027-ret-201-syllabus.pdf",
     "ret-301": f"{SOA}/2026/ret-301/2026-2027-ret-301-syllabus.pdf",
+}
+
+# The SOA's e-learning modules publish no syllabus. Each has a "Module
+# Introduction and Objectives" document instead — the module's sections, a
+# paragraph on each and the objectives a candidate leaves it with, no weights —
+# and a book list (a PDF, or for DMAC a table on the FSA module book-list page).
+# Read off each module's soa.org page, 2026-10-17; `module_extract` reads them.
+MODULES: dict[str, dict[str, str]] = {
+    "paf-1": {"url": f"{SOA}/paf-objectives.pdf", "books": f"{SOA}/2026/edu-paf-booklist.pdf"},
+    "asf-1": {"url": f"{SOA}/asf-objectives.pdf", "books": f"{SOA}/2026/edu-asf-booklist.pdf"},
+    "fap-1": {"url": f"{SOA}/2023/fap-intro-objectives.pdf", "books": f"{SOA}/edu-fap-booklist.pdf"},
+    "dmac-1": {"url": f"{SOA}/dmac-objectives.pdf",
+               "books": "https://www.soa.org/education/exam-req/syllabus-study-materials/fsa-module-book-list/",
+               "books_table": "Decision Making and Communication Module"},
 }
 
 # Characters a PDF text layer carries that the vault spells plainly.
@@ -561,6 +577,253 @@ def extract(wiki_id: str, url: str, pdf_path: str) -> dict:
     return data
 
 
+# ── an e-learning module's "Introduction and Objectives" ─────────────────────
+#
+# One shape across the SOA's modules: a title, a *Module Introduction* and a
+# *Module Objectives* list, then a heading per section — a paragraph on it,
+# "After you complete this section, you will be able to:" and bulleted
+# objectives (`o` sub-bullets beneath some). FAP has a level more: a heading
+# per module of the course, a heading per section of each, and *Description:* /
+# *Objectives:* labels inside a section. The headings are told apart by their
+# type, not their wording — the body size is the most common one, the title the
+# largest, and a heading level is any other style used three times or more — so
+# a sentence set in the heading's words is never taken for one.
+
+INTRO_HEADINGS = re.compile(r"^(?:Module|FAP) Introduction$")
+INTRO_OBJECTIVES = re.compile(r"^(?:Module|FAP) Objectives$")
+MODULE_BULLET_RE = re.compile(r"^([•o▪])\s+(.*)$")
+MODULE_LABEL_RE = re.compile(r"^(Description|Objectives?):\s*(.*)$")
+MODULE_LEAD_IN_RE = re.compile(r"\bwill be able to(?: \w+)?:\s*$")
+
+
+def module_headings(pdf_path: str) -> tuple[str, list[tuple[int, str]]]:
+    """The document's title, and every heading in reading order with its level
+    (1 the outermost)."""
+    import pymupdf  # lazy
+
+    styled: list[tuple[tuple[float, str], str]] = []
+    weight: Counter = Counter()
+    with pymupdf.open(pdf_path) as doc:
+        for page in doc:
+            for block in page.get_text("dict")["blocks"]:
+                for line in block.get("lines", []):
+                    spans = [s for s in line["spans"] if s["text"].strip()]
+                    if not spans:
+                        continue
+                    style = (round(spans[0]["size"], 1), spans[0]["font"])
+                    text = norm(clean("".join(s["text"] for s in spans)))
+                    styled.append((style, text))
+                    weight[style] += len(text)
+    body = weight.most_common(1)[0][0]
+    title_style = max((s for s, _ in styled), key=lambda s: s[0])
+    uses = Counter(s for s, _ in styled)
+    levels = sorted({s for s in uses if body[0] < s[0] < title_style[0] and uses[s] >= 3},
+                    key=lambda s: -s[0])
+    title = norm(" ".join(t for s, t in styled if s == title_style))
+    return title, [(levels.index(s) + 1, t) for s, t in styled if s in levels]
+
+
+def module_lines(pdf_path: str) -> list[str]:
+    """The document as one stream of laid-out lines, less its page numbers and
+    copyright line. Not `strip_furniture`: a module's sections open pages with
+    the same words ("Section 1: Module Overview", "Description:"), which that
+    would take for a running header."""
+    out: list[str] = []
+    for lines in layout_pages(pdf_path):
+        for l in lines:
+            s = l.strip()
+            if re.fullmatch(r"\d{1,2}", s) or s.startswith("Copyright ©"):
+                continue
+            out.append(l.rstrip())
+        out.append("")
+    return out
+
+
+def module_tokens(lines: list[str]) -> list[tuple[str, str]]:
+    """Body lines as ("para" | "b1" | "b2" | "label" | "lead", text), each
+    wrapped line joined to the one it continues. A paragraph broken by a page
+    break (a blank, then a line starting in lower case) is one paragraph."""
+    out: list[list[str]] = []
+    indent_of = lambda l: len(l) - len(l.lstrip())
+    bullet_indent = None
+    gap = False
+    for raw in lines:
+        s = raw.strip()
+        if not s:
+            gap = True
+            continue
+        b = MODULE_BULLET_RE.match(s)
+        lab = MODULE_LABEL_RE.match(s)
+        if b:
+            out.append(["b1" if b.group(1) == "•" else "b2", b.group(2).strip()])
+            bullet_indent = indent_of(raw)
+        elif lab:
+            out.append(["label", lab.group(1)])
+            if lab.group(2):
+                out.append(["para", lab.group(2)])
+            bullet_indent = None
+        elif out and out[-1][0] in ("b1", "b2") and not gap and bullet_indent is not None and indent_of(raw) > bullet_indent:
+            out[-1][1] = join_wrapped(out[-1][1], s)
+        elif out and out[-1][0] == "para" and (not gap or s[:1].islower()):
+            out[-1][1] = join_wrapped(out[-1][1], s)
+        else:
+            out.append(["para", s])
+            bullet_indent = None
+        gap = False
+    for t in out:
+        t[1] = norm(t[1])
+        if t[0] == "para" and MODULE_LEAD_IN_RE.search(t[1]):
+            t[0] = "lead"
+    return [(k, v) for k, v in out]
+
+
+def _bullet_block(tokens: list[tuple[str, str]]) -> str:
+    return "\n".join(("    - " if k == "b2" else "- ") + v for k, v in tokens)
+
+
+def parse_module(lines: list[str], headings: list[tuple[int, str]]) -> tuple[list, list[dict]]:
+    """(intro, topics). A one-level document makes a topic of each section; FAP
+    makes one of each module, its sections the bold groups the outcomes sit
+    under and its *Module Overview* description the topic's objective. A
+    section's lead-in ("After you complete this section, you will be able to:")
+    is dropped, as an exam syllabus's "The Candidate will be able to:" is."""
+    two_levels = any(level == 2 for level, _ in headings)
+    queue = list(headings)
+    chunks: list[tuple[int, str, list[str]]] = []   # (level, heading, its lines)
+    for raw in lines:
+        s = norm(raw)
+        if queue and s == queue[0][1]:
+            level, text = queue.pop(0)
+            chunks.append((level, text, []))
+        elif chunks:
+            chunks[-1][2].append(raw)
+    intro: list[str] = []
+    topics: list[dict] = []
+    for level, heading, body in chunks:
+        tokens = module_tokens(body)
+        if INTRO_HEADINGS.match(heading):
+            for k, v in tokens:
+                if k == "para":
+                    intro.append(v)
+                elif k in ("b1", "b2"):
+                    if intro and intro[-1].startswith("- "):
+                        intro[-1] += "\n" + _bullet_block([(k, v)])
+                    else:
+                        intro.append(_bullet_block([(k, v)]))
+            continue
+        if INTRO_OBJECTIVES.match(heading):
+            intro.append(f"**{heading}**")
+            bullets = [(k, v) for k, v in tokens if k in ("b1", "b2")]
+            intro.append(_bullet_block(bullets))
+            intro += [v for k, v in tokens if k == "para"]
+            continue
+        if level == 1:
+            topics.append({"num": len(topics) + 1, "title": heading, "weight_raw": "", "weight": None,
+                           "objective": "", "outcomes": [], "resources": []})
+            group = None
+        elif not topics:
+            continue
+        else:
+            group = heading
+        topic = topics[-1]
+        overview = level == 1 or bool(re.search(r"\bModule Overview$", heading))
+        label = None
+        for k, v in tokens:
+            if k == "label":
+                label = v
+            elif k == "para":
+                # The paragraph on a section is the topic's objective; in FAP
+                # only the module overview's is, the sections' are dropped.
+                if overview and label != "Objectives" and not (two_levels and level == 1):
+                    topic["objective"] = norm(f"{topic['objective']} {v}")
+            elif k == "b1":
+                topic["outcomes"].append({"letter": "", "num": len(topic["outcomes"]) + 1, "text": v,
+                                          "bullets": [], "group": group})
+            elif k == "b2" and topic["outcomes"]:
+                topic["outcomes"][-1]["bullets"].append(v)
+    for t in topics:
+        for i, o in enumerate(t["outcomes"]):
+            o["letter"] = chr(ord("a") + i) if i < 26 else ""
+    return intro, topics
+
+
+def book_list(path: str, table: str | None) -> list[dict]:
+    """A module's book list: the numbered entries of its PDF, or the rows of
+    one table on an HTML book-list page (DMAC's)."""
+    if table:
+        with open(path, encoding="utf-8") as fh:
+            page = fh.read()
+        at = page.find(f"<strong>{table}</strong>")
+        if at < 0:
+            return []
+        body = page[at:page.find("</table>", at)]
+        rows = []
+        for row in re.findall(r"<tr>(.*?)</tr>", body, re.S)[0:]:
+            cell = re.search(r"<td[^>]*>(.*?)</td>", row, re.S)
+            text = norm(html.unescape(re.sub(r"<[^>]+>", " ", cell.group(1)))) if cell else ""
+            if text and text != table and text.upper() != "ERRATA":
+                rows.append({"citation": text, "codes": "", "parts": []})
+        return rows
+    entries: list[str] = []
+    number_at = None
+    for l in module_lines(path):
+        s = l.strip()
+        m = re.match(r"^\d+\.\s+(.*)$", s)
+        if m:
+            entries.append(m.group(1))
+            number_at = len(l) - len(l.lstrip())
+        elif entries and s:
+            if len(l) - len(l.lstrip()) <= number_at:
+                break
+            entries[-1] = join_wrapped(entries[-1], s)
+    return [{"citation": norm(e), "codes": "", "parts": []} for e in entries]
+
+
+def module_extract(wiki_id: str, spec: dict[str, str], pdf_path: str, books_path: str) -> dict:
+    with open(pdf_path, "rb") as fh:
+        sha = hashlib.sha256(fh.read()).hexdigest()
+    with open(books_path, "rb") as fh:
+        books_sha = hashlib.sha256(fh.read()).hexdigest()
+    title, headings = module_headings(pdf_path)
+    lines = module_lines(pdf_path)
+    intro_paras, topics = parse_module(lines, headings)
+    name = re.sub(r"\s+(?:Module\s+)?Introduction and Objectives$", "", title)
+    name = re.sub(r"\s+Module$", "", name)
+    return {
+        "wiki_id": wiki_id,
+        "body": "SOA",
+        "shape": "module",
+        "title": name,
+        "sitting": "",
+        "source_url": spec["url"],
+        "source_sha256": sha,
+        "readings_url": spec["books"],
+        "readings_sha256": books_sha,
+        "extracted_at": date.today().isoformat(),
+        "intro": intro_paras,
+        "topics": topics,
+        "readings": book_list(books_path, spec.get("books_table")),
+    }
+
+
+def run_module(wiki_id: str) -> dict:
+    spec = MODULES[wiki_id]
+    out = os.path.join(OUT_DIR, wiki_id)
+    os.makedirs(out, exist_ok=True)
+    pdf = os.path.join(out, "source.pdf")
+    books = os.path.join(out, "books.html" if spec.get("books_table") else "books.pdf")
+    for url, dest in ((spec["url"], pdf), (spec["books"], books)):
+        if not os.path.exists(dest):
+            fetch(url, dest)
+    data = module_extract(wiki_id, spec, pdf, books)
+    with open(os.path.join(out, "syllabus.json"), "w", encoding="utf-8") as fh:
+        json.dump(data, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    n_out = sum(len(t["outcomes"]) for t in data["topics"])
+    print(f"{wiki_id}: {len(data['topics'])} sections, {n_out} objectives, {len(data['readings'])} readings — {data['title']}")
+    return data
+
+
 def fetch(url: str, dest: str) -> None:
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (actuarial-notes syllabus_extract)"})
     with urllib.request.urlopen(req, timeout=60) as r, open(dest, "wb") as fh:
@@ -594,9 +857,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.all:
         for wid, url in SOURCES.items():
             run(wid, url, None)
+        for wid in MODULES:
+            run_module(wid)
         return 0
     if not args.wiki_id:
         ap.error("--wiki-id (or --all) is required")
+    if args.wiki_id in MODULES:
+        run_module(args.wiki_id)
+        return 0
     url = args.url or SOURCES.get(args.wiki_id)
     if not url:
         ap.error("--url is required for a wiki id not in SOURCES")

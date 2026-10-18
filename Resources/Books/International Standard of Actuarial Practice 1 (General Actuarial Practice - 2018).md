@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0904ebf7ba2ece545a0819f4242be225dacfb7f5c4fe9fe6e035146e9f05c887
+  content_hash: sha256:5c4f0799875e928a466600401de1d7397c6fca6f6d105767bdb121541da88e77
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A model standard of actuarial practice from the International Actuarial Associat
 
 > [!info] On the syllabus
 > - [[Exam GI-201 (SOA)|Exam GI-201]] — Outcomes 7b; the revision adopted December 2018.
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives B2, C1–C3, E2–E4; the standard, in the version dated April 2019 that the content outline cites.
 
 ## Preface
 

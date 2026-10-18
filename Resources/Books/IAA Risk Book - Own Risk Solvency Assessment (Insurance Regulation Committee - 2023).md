@@ -10,7 +10,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0f30de5fdc2cd503abfb33700a84e3acf653ba1ddf78f310d55ef0556e319c7e
+  content_hash: sha256:9b0b02c278335b662d2c3490be9f2296eb1b5f6e961a2a3c4a3a9af1283d71e0
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ An IAA Risk Book chapter (May 2023) from the Insurance Regulation Committee of t
 
 > [!info] On the syllabus
 > - [[Exam GI-201 (SOA)|Exam GI-201]] — outcome 6e; pp. 3-19, excluding sections 10.1 and 11
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives B3, E1, E4; the chapter (May 2023).
 
 ## Introducing the IAA Risk Book
 

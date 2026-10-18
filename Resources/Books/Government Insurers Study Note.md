@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:0aa2a63e78b42cad52b738a2e0ba56af0cfdabb38e81746701274dc3de46e79c
+  content_hash: sha256:1f77504a5d152af11da8236a73cad9de546e07515de56c8c3eee5cb74b4cca41
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A CAS study note (April 2017) on why U.S. federal and state governments act as i
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives B1–B3; pp. 1–5, excluding Crop Insurance.
+> - [[Exam 6I (CAS)|Exam 6I]] — objective A2; pp. 1–5, excluding Crop Insurance.
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives B1–B3.
 
 ## Introduction

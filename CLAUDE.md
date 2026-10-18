@@ -573,9 +573,13 @@ Other important `lib/` modules:
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (P, FM, MAS-I, the three DISCs — DISC-DA, DISC-RM, DISC-IA — and Exam 7, the CAS ones promoted by
   `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 8 and 9,
-  and PCPA) or `development` (Exam 6U and the SOA exams past FM — FAM, SRM, PA, ALTAM,
-  ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — a syllabus outline with no
-  question bank yet). The DISCs publish no papers — The Institutes sells their sample questions —
+  and PCPA) or `development` (Exams 6U, 6I and 6T, the SOA exams past FM — FAM, SRM, PA, ALTAM,
+  ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
+  requirements**: the three VEEs (`VEE-MS`, `VEE-ECON`, `VEE-AF`), the SOA's e-learning modules
+  PAF, ASF, FAP and DMAC (`FSA-DMAC`), its APC and FAC (`FSA-FAC`), and the CAS's Course on
+  Professionalism, page id `COP`, still keyed `CAS-APC` because readers' progress is stored
+  under it — a syllabus outline with no question bank yet). Exam 6T is the CAS's credit for
+  the Actuarial Institute of Chinese Taipei's Exams 6GA3 and 6GB3, not a CAS sitting. The DISCs publish no papers — The Institutes sells their sample questions —
   so their banks (`exam-disc-da` / `-rm` / `-ia`) are the vault's own, written for
   `docs/cas-publication-plan.md`. PCPA is beta with no bank — CAS releases no PCPA paper or sample
   questions to convert — because its page and the Projects tab's simulator are material
@@ -601,9 +605,19 @@ Other important `lib/` modules:
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through
   it (or `questionExamLabel`), never through `EXAM_ID_TO_LABEL[progressKey]`. The credential tracks in
-  `data/tracks.ts` list ~50 exams and the vault covers ten of them, so an exam can be
-  tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
+  `data/tracks.ts` list ~50 requirements and the vault has a page for every one of them
+  (`Exam *.md`, including the non-exam requirements), but most are still in development, so
+  an exam can be tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
   DEFAULT track (what a new account lands on) to exams that *are*.
+- `data/tracks.ts` — the credential tracks. Each credential's sections run **Preliminary
+  Exams → Exams → `NON_EXAM_REQUIREMENTS`** ("Non-Exam Requirements": what the body requires
+  but doesn't call an exam — the VEEs, the DISCs, the SOA's modules and ATPA assessment, the
+  professionalism courses); the FSA's electives come before it, the FCAS lists its ACAS
+  requirements in one collapsed section and so has no group of its own. The Study Guides page
+  (`pages/wiki/WikiHome.tsx`) draws a credential in chunks, one heading per section, when it
+  has electives or that group, and titles a non-exam requirement's row without "Exam"
+  (`requirementDisplayName` in `lib/wikiRoutes.ts` — `examDisplayName` keeps "Exam DISC-DA",
+  which is the DISC banks' quiz label).
 - `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into
   one guide per exam, in the reading order their `order:` frontmatter authors (a page with
   none sorts last rather than into the middle of the run). Pure and tested;

@@ -1,5 +1,28 @@
 import { describe, it, expect } from 'vitest'
-import { examDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
+import { examDisplayName, isNonExamRequirement, requirementDisplayName, studyGuidesSection, RESOURCES_ROUTE } from './wikiRoutes'
+
+describe('requirementDisplayName', () => {
+  it('titles a non-exam requirement without "Exam"', () => {
+    expect(requirementDisplayName('Exam VEE-MS (SOA).md')).toBe('VEE-MS')
+    expect(requirementDisplayName('Exam COP (CAS).md')).toBe('COP')
+    expect(requirementDisplayName('Exam DISC-DA (CAS)')).toBe('DISC-DA')
+    expect(requirementDisplayName('Exam ATPA (SOA).md')).toBe('ATPA')
+    expect(requirementDisplayName('Exam DMAC (SOA).md')).toBe('DMAC')
+  })
+
+  it('leaves an exam its "Exam"', () => {
+    expect(requirementDisplayName('Exam MAS-I (CAS).md')).toBe('Exam MAS-I')
+    expect(requirementDisplayName('Exam PA (SOA).md')).toBe('Exam PA')
+    expect(requirementDisplayName('Exam PCPA (CAS).md')).toBe('Exam PCPA')
+    expect(requirementDisplayName('Exam 6I (CAS).md')).toBe('Exam 6I')
+  })
+
+  it('knows a requirement by its exact id, not a prefix', () => {
+    expect(isNonExamRequirement('APC')).toBe(true)
+    expect(isNonExamRequirement('PA')).toBe(false)
+    expect(isNonExamRequirement('FAM')).toBe(false)
+  })
+})
 
 describe('examDisplayName', () => {
   it('drops the examining-body suffix', () => {

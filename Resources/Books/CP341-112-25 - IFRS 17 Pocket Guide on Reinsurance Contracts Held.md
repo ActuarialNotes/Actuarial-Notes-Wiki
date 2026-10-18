@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ebe41d0882e2382ce3c635bb379772744ef8318006f38a448f770468487d62a8
+  content_hash: sha256:fce811a8ebdae3b1bd94410f8d0afd3d89e1a2414fdc9f1d47fd2940391869f1
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A July 2018 IFRS Foundation pocket guide, in the Supporting IFRS Standards serie
 
 > [!info] On the syllabus
 > - [[Exam CP-341 (SOA)|Exam CP-341]] — Outcomes 3e; the whole pocket guide.
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives D4–D5; the whole pocket guide (Scott, IFRS Foundation, 2018).
 
 ## 1 Scope
 - Requirements

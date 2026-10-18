@@ -743,13 +743,21 @@ export function buildSeoPages(files: Record<string, string>, questionCounts: Rec
  * title takes the document's code or type.
  */
 function distinctTitles(pages: SeoPage[]): SeoPage[] {
-  const seen = new Map<string, number>()
-  for (const page of pages) seen.set(page.title, (seen.get(page.title) ?? 0) + 1)
-  return pages.map(page => {
-    if ((seen.get(page.title) ?? 0) < 2 || page.kind !== 'resource') return page
-    const tag = page.work?.code ?? page.work?.type ?? 'reading'
-    return { ...page, title: `${page.title.replace(` | ${SITE_NAME}`, '')} (${tag}) | ${SITE_NAME}` }
-  })
+  const counts = (list: SeoPage[]) => {
+    const seen = new Map<string, number>()
+    for (const page of list) seen.set(page.title, (seen.get(page.title) ?? 0) + 1)
+    return seen
+  }
+  const retag = (list: SeoPage[], tagOf: (page: SeoPage) => string | undefined) => {
+    const seen = counts(list)
+    return list.map(page => {
+      const tag = page.kind === 'resource' && (seen.get(page.title) ?? 0) > 1 ? tagOf(page) : undefined
+      return tag ? { ...page, title: `${page.title.replace(` | ${SITE_NAME}`, '')} (${tag}) | ${SITE_NAME}` } : page
+    })
+  }
+  const tagged = retag(pages, page => page.work?.code ?? page.work?.type ?? 'reading')
+  // Two editions of one book share a title and a type: the edition tells them apart.
+  return retag(tagged, page => editionPhrase(page.work?.edition).trim().replace(/^\((.*)\)$/, '$1') || undefined)
 }
 
 // ── Head ─────────────────────────────────────────────────────────────────────

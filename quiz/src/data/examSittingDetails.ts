@@ -252,11 +252,77 @@ const SOA_NO_SITTINGS = 'This exam’s sitting dates aren’t transcribed yet; i
  * For an exam key shared by several study guides (Exam 6's Canada and US
  * syllabi), the publisher page for each guide — by wiki exam id (`6c-1`).
  */
+// ── The non-exam requirements ─────────────────────────────────────────────────
+// Read 2026-10-17 off each requirement's own page: the SOA's module, course and
+// VEE pages, and the CAS's VEE and Course on Professionalism pages. None of
+// them is sat at a sitting, so each says why there is none rather than leaving
+// the panel to report a gap in a calendar.
+
+const SOA_VEE: SittingSource = { label: 'SOA — Validation by Educational Experience', url: `${SOA_EXAM}edu-vee/` }
+const CAS_VEE: SittingSource = { label: 'CAS — Validation by Educational Experience', url: 'https://www.casact.org/exams-admissions/validation-educational-experience' }
+const VEE_GUIDELINES: SittingSource = { label: 'SOA — Guidelines for Approval of VEE Courses', url: 'https://www.soa.org/globalassets/assets/files/edu/edu-vee-guidelines.pdf' }
+const VEE_FACTS = [
+  { label: 'Credit', value: 'Approved university coursework or an approved alternative, not an exam' },
+  { label: 'Apply', value: 'After passing two SOA, CAS or CIA actuarial exams' },
+]
+const VEE_NO_SITTINGS = 'A VEE is credit for coursework, so it has no sittings.'
+const MODULE_NO_SITTINGS = 'An e-learning module is taken online, at the candidate’s own pace, so it has no sittings.'
+
+function moduleAbout(name: string, page: string, objectives: string, facts: ExamAbout['facts'], noSittings = MODULE_NO_SITTINGS): ExamAbout {
+  return {
+    facts,
+    source: { label: `SOA — ${name}`, url: `${SOA_EXAM}${page}` },
+    factSources: [{ label: `SOA — ${name} module objectives`, url: objectives }],
+    noSittings,
+  }
+}
+
 const GUIDE_ABOUT: Record<string, ExamAbout> = {
   // The SOA exams past FM. The facts are transcribed from each exam's syllabus
   // (the PDF its study guide was converted from — data/examPdfLinks.ts); a
   // fellowship syllabus states no length or format, so those show none.
   // No sittings table holds them yet, so the panel says so.
+  'vee-ms': { facts: VEE_FACTS, source: SOA_VEE, factSources: [VEE_GUIDELINES], noSittings: VEE_NO_SITTINGS },
+  'vee-econ': { facts: VEE_FACTS, source: SOA_VEE, factSources: [VEE_GUIDELINES, CAS_VEE], noSittings: VEE_NO_SITTINGS },
+  'vee-af': { facts: VEE_FACTS, source: SOA_VEE, factSources: [VEE_GUIDELINES, CAS_VEE], noSittings: VEE_NO_SITTINGS },
+  'paf-1': moduleAbout('PAF', 'edu-exam-paf/', 'https://www.soa.org/globalassets/assets/files/edu/paf-objectives.pdf', [
+    { label: 'Format', value: 'e-Learning module, with an end-of-module test and assessment' },
+    { label: 'Access', value: '12 months from registration' },
+    { label: 'Fee', value: '$224' },
+  ]),
+  'asf-1': moduleAbout('ASF', 'course-info/edu-exam-asf/', 'https://www.soa.org/globalassets/assets/files/edu/asf-objectives.pdf', [
+    { label: 'Format', value: 'e-Learning module, with an end-of-module test and assessment' },
+    { label: 'Access', value: '12 months from registration' },
+    { label: 'Fee', value: '$224' },
+  ]),
+  'fap-1': moduleAbout('FAP', 'edu-module-fap-detail/', 'https://www.soa.org/globalassets/assets/files/edu/2023/fap-intro-objectives.pdf', [
+    { label: 'Format', value: 'e-Learning course: modules with end-of-module assessments, then a final assessment' },
+    { label: 'Access', value: '24 months from registration' },
+    { label: 'Fees', value: '$551 for the modules and assessments; $1,316 per final assessment attempt' },
+  ], 'FAP’s modules are taken online at the candidate’s own pace; its final assessment runs on a schedule the SOA posts separately, not transcribed here.'),
+  'dmac-1': moduleAbout('DMAC', 'edu-module-dmac-detail/', 'https://www.soa.org/globalassets/assets/files/edu/dmac-objectives.pdf', [
+    { label: 'Format', value: 'e-Learning module with a project component' },
+    { label: 'Eligibility', value: 'Registration details are emailed on earning the ASA' },
+    { label: 'Fee', value: '$337' },
+  ]),
+  'apc-1': {
+    facts: [
+      { label: 'Format', value: 'In person, or virtual: an e-Learning module and a case discussion' },
+      { label: 'Eligibility', value: 'By invitation, once every other ASA requirement is complete' },
+      { label: 'Fees', value: '$658 virtual; $847 in person' },
+    ],
+    source: { label: 'SOA — APC', url: `${SOA_EXAM}course-info/edu-apc-course-info/` },
+    noSittings: 'The APC is by invitation, and its schedule is on the SOA’s APC page.',
+  },
+  'fac-1': {
+    facts: [
+      { label: 'Format', value: 'An e-Learning module, then a one-day virtual or two-day in-person meeting' },
+      { label: 'Eligibility', value: 'By invitation, once every other FSA requirement is complete' },
+      { label: 'Fees', value: '$2,305 virtual; $2,953 in person' },
+    ],
+    source: { label: 'SOA — FAC', url: `${SOA_EXAM}course-info/edu-fac-course-info/` },
+    noSittings: 'The FAC is by invitation, and its schedule is on the SOA’s FAC page.',
+  },
   'fam-1': {
     facts: [{ label: 'Length', value: '3.5 hours' }, { label: 'Questions', value: '34 multiple choice' }, SOA_DELIVERY, SOA_UNOFFICIAL],
     source: { label: 'SOA — Exam FAM', url: `${SOA_EXAM}edu-exam-fam/` },
@@ -440,6 +506,30 @@ const GUIDE_ABOUT: Record<string, ExamAbout> = {
     facts: [CAS_LENGTH, CAS_DELIVERY, CAS_UPPER_ITEMS, CAS_UPPER_FEE],
     source: { label: 'CAS — Exam 6 United States', url: `${CAS_EXAM}exam-6u-regulation-and-financial-reporting-us` },
     factSources: [casOutline('Exam 6U', 'https://www.casact.org/sites/default/files/2026-03/Exam_6U_CO_2026_Fall.pdf'), CAS_FEES],
+  },
+  '6i-1': {
+    facts: [CAS_LENGTH, CAS_DELIVERY, CAS_UPPER_ITEMS, CAS_UPPER_FEE],
+    source: { label: 'CAS — Exam 6 International', url: `${CAS_EXAM}exam-6-international` },
+    factSources: [casOutline('Exam 6I', 'https://www.casact.org/sites/default/files/2026-03/Exam_6I_CO_2026_Fall.pdf'), CAS_FEES],
+  },
+  // 6T is credited from the AICT's own two exams, not sat at a CAS window: the
+  // CAS-6 sittings the version menu lists are the other versions'.
+  '6t-1': {
+    facts: [
+      { label: 'Sat as', value: 'The AICT’s Exams 6GA3 and 6GB3, administered by the AICT' },
+      { label: 'Credit', value: 'Both passed after January 1, 2010; requested from the CAS in writing' },
+    ],
+    source: { label: 'CAS — Exam 6 Taipei', url: `${CAS_EXAM}exam-6t-regulation-and-financial-reportingtaipei` },
+    factSources: [{ label: 'CAS — Exam 6-Taipei syllabus (2023)', url: 'https://www.casact.org/sites/default/files/2021-11/Exam6T_Syllabus.pdf' }],
+  },
+  'cop-1': {
+    facts: [
+      { label: 'Format', value: 'In person, with a virtual course in June and an Asia virtual course; e-modules and pre-work first' },
+      { label: 'Offered', value: 'February, June, August and December; February and August only on demand' },
+      { label: 'Places', value: 'First come, first served, by exam progress' },
+    ],
+    source: { label: 'CAS — Course on Professionalism', url: 'https://www.casact.org/exams-admissions/exams/acas-exams/course-professionalism' },
+    noSittings: 'The CAS lists each Course on Professionalism on its own page, and none is transcribed here yet.',
   },
 }
 

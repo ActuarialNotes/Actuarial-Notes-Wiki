@@ -20,6 +20,11 @@ describe('examMonogramLines', () => {
     expect(examMonogramLines('CAS-DA')).toEqual(['DA'])
   })
 
+  it('names the Course on Professionalism by its own letters, not its stored key', () => {
+    expect(examMonogramLines('CAS-APC')).toEqual(['COP'])
+    expect(examMonogramLines('APC')).toEqual(['APC'])
+  })
+
   it('splits a hyphenated name at its own hyphen', () => {
     expect(examMonogramLines('MAS-I')).toEqual(['MAS', 'I'])
     expect(examMonogramLines('MAS-II')).toEqual(['MAS', 'II'])

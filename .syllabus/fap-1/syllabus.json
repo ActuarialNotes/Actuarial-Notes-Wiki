@@ -1,0 +1,843 @@
+{
+  "wiki_id": "fap-1",
+  "body": "SOA",
+  "shape": "module",
+  "title": "Fundamentals of Actuarial Practice",
+  "sitting": "",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/2023/fap-intro-objectives.pdf",
+  "source_sha256": "306c2b0bc1883a2c225fc26ab84a3e3db40c18a92e4b763c15e0b5087dcd1224",
+  "readings_url": "https://www.soa.org/globalassets/assets/files/edu/edu-fap-booklist.pdf",
+  "readings_sha256": "a8f98d0ef8932b37973862c7431f90031cc8eaba41058c1df78fabd2ecee847a",
+  "extracted_at": "2026-10-17",
+  "intro": [
+    "FAP encompasses real-world applications and uses examples to demonstrate actuarial principles and practices. Practical techniques are presented to assist in your day-to-day work. You will also have opportunities to apply these principles and techniques in traditional and non-traditional actuarial practice areas. With the fundamentals in your toolkit, you will be better prepared to apply your learning to new areas of practice that may emerge during your actuarial career.",
+    "**FAP Objectives**",
+    "- Introducing you to financial security systems, common actuarial techniques, and practical experiences.\n- Describing actuarial practices, principles, approaches, methods, commonalities, problems, and solutions.\n- Explaining actuarial practices across the traditional areas of practice:\n    - Life insurance\n    - Property and casualty insurance\n    - Health insurance\n    - Retirement benefits\n- Explaining actuarial practices as applied directly on behalf of financial security system providers or as a consultant to those providers.\n- Preparing you to apply actuarial skills in nontraditional and emerging areas of practice.\n- Providing context for the specific mathematical and technical skills tested in the Preliminary Education examinations, some of which you may have already taken, others of which you might be studying for now:\n    - Probability\n    - Financial Mathematics\n    - Investment and Financial Markets\n    - Statistics for Risk Management\n    - Long-Term Mathematics\n    - Short-Term Actuarial Mathematics\n    - Statistics for Risk Modeling\n    - Predictive Analytics\n- Helping you prepare for your professional role as an Associate of the Society of Actuaries (ASA).",
+    "Each of these modules contains an End-of-Module Test and an Interactive Scenario. There are also four End-of-Module Assessments and one comprehensive Final Assessment."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "FAP Risk in Actuarial Problems",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "During your Risk in Actuarial Problems study, you will be exposed to typical actuarial problems and the processes used by actuaries to fully define problems. You will learn that problems revolve around risk and that identifying risks to be managed—i.e., looking below the surface—will help you to better define the real problem. You will learn how effective identification, analysis, and prioritization of various risks leads to a clearer definition of the problem and, ultimately, better solutions.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain Define the Problem within the context of the Control Cycle.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Explain the significance of identifying and defining the real problem and its associated risks.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Describe risks that actuaries manage within a financial security system.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe risk management for financial security systems from a global perspective.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Identify commonalities among problems in existing areas of actuarial practice.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Explain how Define the Problem fits within the context of the Control Cycle.",
+          "bullets": [],
+          "group": "Section 2: Why Define the Problem"
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Given an example of a financial security system failure, describe how a better problem definition could have been employed to help avoid the crisis.",
+          "bullets": [],
+          "group": "Section 2: Why Define the Problem"
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Recognize the significance of successfully defining problems.",
+          "bullets": [],
+          "group": "Section 2: Why Define the Problem"
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Identify risks related to financial security systems.",
+          "bullets": [],
+          "group": "Section 2: Why Define the Problem"
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Define risk in an actuarial context.",
+          "bullets": [],
+          "group": "Section 3: Introduction to Risk"
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Describe risk management.",
+          "bullets": [],
+          "group": "Section 3: Introduction to Risk"
+        },
+        {
+          "letter": "l",
+          "num": 12,
+          "text": "Define risk types that need to be managed within a financial security system.",
+          "bullets": [],
+          "group": "Section 3: Introduction to Risk"
+        },
+        {
+          "letter": "m",
+          "num": 13,
+          "text": "Explain how risk is transferred from a consumer to a financial security system.",
+          "bullets": [],
+          "group": "Section 3: Introduction to Risk"
+        },
+        {
+          "letter": "n",
+          "num": 14,
+          "text": "Explain risk classification.",
+          "bullets": [],
+          "group": "Section 3: Introduction to Risk"
+        },
+        {
+          "letter": "o",
+          "num": 15,
+          "text": "Determine factors or influences that are important to identify and analyze risks.",
+          "bullets": [],
+          "group": "Section 4: Define the Problem and Identify Risks"
+        },
+        {
+          "letter": "p",
+          "num": 16,
+          "text": "Use techniques commonly used in asset-liability management (ALM) with financial security systems.",
+          "bullets": [],
+          "group": "Section 4: Define the Problem and Identify Risks"
+        },
+        {
+          "letter": "q",
+          "num": 17,
+          "text": "Describe the various risk measures that are used in ALM.",
+          "bullets": [],
+          "group": "Section 4: Define the Problem and Identify Risks"
+        },
+        {
+          "letter": "r",
+          "num": 18,
+          "text": "Describe the capital requirements for a financial security system.",
+          "bullets": [],
+          "group": "Section 4: Define the Problem and Identify Risks"
+        },
+        {
+          "letter": "s",
+          "num": 19,
+          "text": "Describe the role of risk measurement tools when analyzing the risks in financial and non-financial organizations.",
+          "bullets": [],
+          "group": "Section 4: Define the Problem and Identify Risks"
+        },
+        {
+          "letter": "t",
+          "num": 20,
+          "text": "Describe aspects of actuarial work that are both fundamental and common to all practice areas.",
+          "bullets": [],
+          "group": "Section 5: Recognize Problem Commonalities"
+        },
+        {
+          "letter": "u",
+          "num": 21,
+          "text": "Categorize commonalities in actuarial problems.",
+          "bullets": [],
+          "group": "Section 5: Recognize Problem Commonalities"
+        },
+        {
+          "letter": "v",
+          "num": 22,
+          "text": "Prepare to communicate by answering six key communication questions.",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        },
+        {
+          "letter": "w",
+          "num": 23,
+          "text": "Eliminate and limit use of acronyms.",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        },
+        {
+          "letter": "x",
+          "num": 24,
+          "text": "Describe elements of effective presentations.",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        },
+        {
+          "letter": "y",
+          "num": 25,
+          "text": "Describe elements of effective memos and reports.",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        },
+        {
+          "letter": "z",
+          "num": 26,
+          "text": "Avoid common mistakes when communicating as an actuary.",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        },
+        {
+          "letter": "",
+          "num": 27,
+          "text": "Apply the principles of Actuarial Standards of Practice 41 (US), Standards of Practice 1700 (Canada), Section 8 Principle 6 (UK).",
+          "bullets": [],
+          "group": "Section 6: Communications"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Designing and Pricing an Actuarial Solution",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "In this module, Designing and Pricing an Actuarial Solution, you will further explore models by tying together what you have already learned into a framework for models that emphasizes pricing, reserving, and funding. Pricing is the function related to the determination of the cost for an individual to participate in a financial security system. Reserving is the function related to the determination of the amount of assets currently needed to be available to meet the financial security system’s obligations. Funding is the function related to the determination of the financial security system’s future capital needs and the allocation of current and future assets to meet those needs. The purposes and details of each of these types of models will be analyzed.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain how the fundamental actuarial formula provides the basis for all modeling.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Demonstrate how models are applied to develop pricing, reserving, and funding solutions.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Explain how models are applied on an individual and group basis in the different practice areas.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Apply primary and secondary models to practice area pricing, reserving, and funding problems.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe how the fundamental actuarial formula provides the basis for all modeling.",
+          "bullets": [],
+          "group": "Section 2: Overview of Actuarial Models"
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Describe how models are applied to develop pricing, reserving, and funding solutions.",
+          "bullets": [],
+          "group": "Section 2: Overview of Actuarial Models"
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Describe how models are applied on an individual and group basis in the different practice areas.",
+          "bullets": [],
+          "group": "Section 2: Overview of Actuarial Models"
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Explain how pricing models are used to solve pricing problems.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Explain how to use “secondary” models/methods to define parameters for pricing models.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Apply primary and secondary models to practice area pricing problems.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Explain how reserving models are used to solve for reserving problems.",
+          "bullets": [],
+          "group": "Section 4: Models for Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "l",
+          "num": 12,
+          "text": "Explain how to use “secondary” models/methods to define parameters for reserving models.",
+          "bullets": [],
+          "group": "Section 4: Models for Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "m",
+          "num": 13,
+          "text": "Apply primary and secondary models to practice area reserving problems.",
+          "bullets": [],
+          "group": "Section 4: Models for Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "n",
+          "num": 14,
+          "text": "For reserving purposes, the application of models to solve the fundamental simplified equation as noted above can be completed on a “prescribed basis” or using a “principles-based” approach.",
+          "bullets": [],
+          "group": "Section 4: Models for Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "o",
+          "num": 15,
+          "text": "Explain how funding models are used to solve funding problems.",
+          "bullets": [],
+          "group": "Section 5: Models for Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "p",
+          "num": 16,
+          "text": "Explain how to use “secondary” models/methods to define parameters for funding models. Apply models to practice area funding problems.",
+          "bullets": [],
+          "group": "Section 5: Models for Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "q",
+          "num": 17,
+          "text": "Summarize the fundamental concepts learned in the module in regard to pricing, reserving, and funding models within financial security systems.",
+          "bullets": [],
+          "group": "Section 6: Tying It All Together"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Model Selection and Solution Design",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "Designing and Pricing an Actuarial Solution focused on common actuarial models being used in the practice areas. A framework for thinking about models was introduced and you learned how the fundamental actuarial formula provides a basis for all modeling. You learned how models are applied to develop pricing, reserving, and funding solutions, as well as how they are applied on an individual and group basis in various practice areas. Finally, the application of primary and secondary models to practice area pricing, reserving, and funding problems was presented. Building on Designing and Pricing an Actuarial Solution, Model Selection and Solution Design provides an overview of the model selection and solution design process. This module begins with an explanation of how the model selection and model-building process fits within the context of the Control Cycle. A three-stage process for building and selecting models (i.e., define the problem, match the model to the problem, and design the solution) provides the basis for the remainder of the content within this module. Specific modeling steps that occur within each stage of the Control Cycle are also covered.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Review modeling techniques and models used in actuarial practice.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Define the business problem that needs to be modeled.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Match the model to the problem in context.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Design a solution.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Explain how the model definition and model-building process fits within the context of the Control Cycle.",
+          "bullets": [],
+          "group": "Section 2: The Module Control Cycle"
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Work through the process of defining and building a model.",
+          "bullets": [],
+          "group": "Section 2: The Module Control Cycle"
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Apply Control Cycle principles to the process of model design and building.",
+          "bullets": [],
+          "group": "Section 2: The Module Control Cycle"
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Describe the rationale for selecting a particular model.",
+          "bullets": [],
+          "group": "Section 2: The Module Control Cycle"
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Use the Model Control Cycle to solve a pricing problem.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Describe how different models can be applied to solve the same problem.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Determine which model is most appropriate for the presented pricing problem.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "l",
+          "num": 12,
+          "text": "Practice applying a model to solve a pricing problem.",
+          "bullets": [],
+          "group": "Section 3: Pricing Models"
+        },
+        {
+          "letter": "m",
+          "num": 13,
+          "text": "Evaluate YourHealth’s reserve methodology.",
+          "bullets": [],
+          "group": "Section 4: Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "n",
+          "num": 14,
+          "text": "Determine if YourHealth’s reserves are adequate.",
+          "bullets": [],
+          "group": "Section 4: Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "o",
+          "num": 15,
+          "text": "Determine the size of the reserve deficiency or surplus.",
+          "bullets": [],
+          "group": "Section 4: Reserving and the Allocation of Capital"
+        },
+        {
+          "letter": "p",
+          "num": 16,
+          "text": "Identify existing models that may be used or adapted for the business problem.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "q",
+          "num": 17,
+          "text": "Identify available data and determine its adequacy, appropriateness, and sensitivity.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "r",
+          "num": 18,
+          "text": "Identify required model inputs, assumptions, and constraints.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "s",
+          "num": 19,
+          "text": "Define the model to be used for the business problem.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "t",
+          "num": 20,
+          "text": "Understand the applications of Solvency II.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "u",
+          "num": 21,
+          "text": "Build and test the selected model.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "v",
+          "num": 22,
+          "text": "Confirm that the model output addresses the original business problem and that the results are reasonable and explainable.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        },
+        {
+          "letter": "w",
+          "num": 23,
+          "text": "Go back and forth between the Define the Model and Build the Model stages.",
+          "bullets": [],
+          "group": "Section 5: Funding and the Planning for Capital Needs"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Selection of Initial Assumptions",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "From your studies, you have learned quite a bit about assumptions. The definition of an assumption is “any non-factual, non-verifiable item that the actuary relies on in a model.” Assumptions may involve filling in a missing piece of data, projecting a future expectation, or hypothesizing about the relationship between two variables. The major types of assumptions are economic, demographic, and experience-based. Assumptions are important to actuaries and their stakeholders. How does an actuary select assumptions? What is the set of assumptions that are material to the business problem, solution, and model? What constraints or other determinants should be considered when selecting them? What methods and tools are available to actuaries when they need to quantify assumptions? These are the questions that will be answered in this module.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Recall and describe the major categories of assumptions.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Describe assumption constraints and determinants.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Describe methods and tools for quantifying assumptions.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe international considerations and constraints.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe the interdependency of assumptions.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Recognize the significance of assumptions to the success of ongoing risk management of the financial security system.",
+          "bullets": [],
+          "group": "Section 2: Overview of Selecting Assumptions"
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Identify types of actuarial assumptions.",
+          "bullets": [],
+          "group": "Section 2: Overview of Selecting Assumptions"
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Describe the processes used to select initial assumptions.",
+          "bullets": [],
+          "group": "Section 2: Overview of Selecting Assumptions"
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Identify assumption constraints and other determinants.",
+          "bullets": [],
+          "group": "Section 3: Assumption Constraints"
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Describe assumption constraints.",
+          "bullets": [],
+          "group": "Section 3: Assumption Constraints"
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Describe other determinants for assumptions.",
+          "bullets": [],
+          "group": "Section 3: Assumption Constraints"
+        },
+        {
+          "letter": "l",
+          "num": 12,
+          "text": "Identify the differences between principle-based and rule-based approaches, which will differ in applicable solvency regimes.",
+          "bullets": [],
+          "group": "Section 4: International Considerations and Constraints"
+        },
+        {
+          "letter": "m",
+          "num": 13,
+          "text": "Describe supplementary regulation and supervision, including corporate governance, risk and solvency assessment, supervisory review process, group supervision, and reporting requirements.",
+          "bullets": [],
+          "group": "Section 4: International Considerations and Constraints"
+        },
+        {
+          "letter": "n",
+          "num": 14,
+          "text": "Describe definitions and guidelines regarding corporate governance.",
+          "bullets": [],
+          "group": "Section 4: International Considerations and Constraints"
+        },
+        {
+          "letter": "o",
+          "num": 15,
+          "text": "Types of methods and tools used to quantify assumptions.",
+          "bullets": [],
+          "group": "Section 5: Methods and Tools for Quantifying Assumptions"
+        },
+        {
+          "letter": "p",
+          "num": 16,
+          "text": "Methods used to select initial assumption.",
+          "bullets": [],
+          "group": "Section 5: Methods and Tools for Quantifying Assumptions"
+        },
+        {
+          "letter": "q",
+          "num": 17,
+          "text": "Tools used to select assumptions.",
+          "bullets": [],
+          "group": "Section 5: Methods and Tools for Quantifying Assumptions"
+        },
+        {
+          "letter": "r",
+          "num": 18,
+          "text": "Apply assumptions concepts to realistic actuarial scenarios.",
+          "bullets": [],
+          "group": "Section 6: Applying Assumption Concepts"
+        },
+        {
+          "letter": "s",
+          "num": 19,
+          "text": "Describe interdependency.",
+          "bullets": [],
+          "group": "Section 7: Interdependency of Assumptions"
+        },
+        {
+          "letter": "t",
+          "num": 20,
+          "text": "Explain how assumptions are dependent on other assumptions.",
+          "bullets": [],
+          "group": "Section 7: Interdependency of Assumptions"
+        },
+        {
+          "letter": "u",
+          "num": 21,
+          "text": "Explain how assumptions are dependent on the product’s design.",
+          "bullets": [],
+          "group": "Section 7: Interdependency of Assumptions"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Monitoring Results",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "In previous modules of this course, you learned that the Control Cycle can be stated quite simply as three stages: Define the Problem, Design the Solution, and Monitor the Results. In past modules, you learned to Define the Problem and Design the Solution. In this module, you will explore the Monitor the Results stage of the Control Cycle.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Describe each element of the Monitoring Results Control Cycle.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Identify the results to be monitored.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Explain how to validate data gathered for monitoring results.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe possible methods of analyzing experience data.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Identify the source of experience deviations.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Identify possible solutions to problems resulting from experience deviations.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Explain the importance of appropriate communication and documentation while monitoring results.",
+          "bullets": [],
+          "group": "Section 1: Module Overview"
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Explain how the Monitor the Results stage fits within the context of the larger Control Cycle.",
+          "bullets": [],
+          "group": "Section 2: Introduction to Gathering Data"
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Describe each element of the Monitoring Results control cycle.",
+          "bullets": [],
+          "group": "Section 2: Introduction to Gathering Data"
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Describe the process of identifying and gathering data necessary to monitor the results.",
+          "bullets": [],
+          "group": "Section 2: Introduction to Gathering Data"
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Describe the process of validating data.",
+          "bullets": [],
+          "group": "Section 2: Introduction to Gathering Data"
+        },
+        {
+          "letter": "l",
+          "num": 12,
+          "text": "Apply concepts related to gathering data in an actuarial scenario.",
+          "bullets": [],
+          "group": "Section 2: Introduction to Gathering Data"
+        },
+        {
+          "letter": "m",
+          "num": 13,
+          "text": "Identify various methods for analyzing data when monitoring results.",
+          "bullets": [],
+          "group": "Section 3: Analyzing Results"
+        },
+        {
+          "letter": "n",
+          "num": 14,
+          "text": "Explain six data analysis methods including when to apply each.",
+          "bullets": [],
+          "group": "Section 3: Analyzing Results"
+        },
+        {
+          "letter": "o",
+          "num": 15,
+          "text": "Apply concepts related to analyzing results in an actuarial scenario.",
+          "bullets": [],
+          "group": "Section 3: Analyzing Results"
+        },
+        {
+          "letter": "p",
+          "num": 16,
+          "text": "Identify possible sources of error.",
+          "bullets": [],
+          "group": "Section 4: Providing Feedback"
+        },
+        {
+          "letter": "q",
+          "num": 17,
+          "text": "Identify possible solutions to problems caused by adverse experiences.",
+          "bullets": [],
+          "group": "Section 4: Providing Feedback"
+        },
+        {
+          "letter": "r",
+          "num": 18,
+          "text": "Explain the critical importance of appropriate communication and documentation.",
+          "bullets": [],
+          "group": "Section 4: Providing Feedback"
+        },
+        {
+          "letter": "s",
+          "num": 19,
+          "text": "Apply concepts related to providing feedback in actuarial scenarios.",
+          "bullets": [],
+          "group": "Section 4: Providing Feedback"
+        },
+        {
+          "letter": "t",
+          "num": 20,
+          "text": "Recall key actuarial concepts and principles related to Control Cycle elements.",
+          "bullets": [],
+          "group": "Section 5: Recap of the Control Cycle"
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Anway, K.L., et al., 2026. E-Learning Module Readings, Volume II: Fundamentals, Fundamentals of Actuarial Practice, (First Edition), Society of Actuaries.",
+      "codes": "",
+      "parts": []
+    },
+    {
+      "citation": "Brown, R. L. and Lennox, S., 2015. Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Fourth Edition), ACTEX Publications, Inc.",
+      "codes": "",
+      "parts": []
+    },
+    {
+      "citation": "Segal, S., 2011.Corporate Value of Enterprise Risk Management: The Next Step in Business Management, Wiley.",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

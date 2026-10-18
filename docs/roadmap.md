@@ -158,6 +158,8 @@ are in Appendix A.
 | Exam 9 | 270 (149 off-syllabus) | 56 / 66 | beta |
 | PCPA, 6U | none | 0 / 30, 0 / 80 | beta, development |
 | SOA past FM (29 exams) | none | — | development |
+| Exam 6I, Exam 6T | none | — | development |
+| Non-exam requirements (VEE ×3, PAF, ASF, FAP, APC, DMAC, FAC, COP) | none | — | development |
 
 Fact Check status by file type:
 
@@ -457,6 +459,7 @@ The **rule** for this track: an exam changes status only through
 | C14 | Concept figures for 6U, 7, 8, 9, PCPA and the DISCs | ⬜ | Later | Builders exist only for P, FM, MAS-I, MAS-II, 5 and 6C. |
 | C15 | More distribution simulators | ⬜ | Later | Pareto (both forms), Generalized Pareto, Weibull, Uniform, t, χ², F, GEV. All 10 static SVG embeds are already replaced. |
 | C16 | Resource-page leftovers | ⬜ | Later | 3 texts whose contents aren't available; Baer/Rendall (`resource-pages.md` §5). |
+| C17 | Study guides for every SOA and CAS requirement | ✅ 2026-10-18 | — | Pages for Exams 6I and 6T, the three VEEs, the SOA's PAF, ASF, FAP and DMAC modules (`syllabus_extract.py`'s module reader), the APC, the FAC and the CAS's Course on Professionalism, all `development`, with a `Resources/Books/` page for each new reading. Each credential's Study Guides list has a *Non-Exam Requirements* group (`NON_EXAM_REQUIREMENTS` in `data/tracks.ts`). Not covered: the Joint Board's EA exams on the FSA catalogue; 6T's version menu still lists the CAS-6 windows, which the AICT's exams don't follow. |
 
 ### 4.4 V: Fact Check (VERIFY)
 

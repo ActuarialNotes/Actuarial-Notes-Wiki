@@ -211,12 +211,13 @@ export const LOCALIZED_EXAMS: Record<string, ExamVariant[]> = {
     { id: 'US',  label: 'United States' },
     { id: 'CA',  label: 'Canada' },
     { id: 'INT', label: 'International' },
+    { id: 'TW',  label: 'Taipei' },
   ],
 }
 
 /** Maps a localized exam's chosen variant ID to the wiki examId whose syllabus matches it. */
 export const LOCALIZED_EXAM_VARIANT_IDS: Record<string, Record<string, string>> = {
-  'CAS-6': { US: '6U', CA: '6C', INT: '6U' },
+  'CAS-6': { US: '6U', CA: '6C', INT: '6I', TW: '6T' },
 }
 
 /**

@@ -10,7 +10,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:df55a6141731285e9ec79a374370eebefac01f7a9bec15113063dc018408b072
+  content_hash: sha256:3644d857d5ec65b874494c841e91f4ce8d2dfc48ccb79a2af2f364834c28b490
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ A paper of the International Actuarial Association, April 2015, produced by the 
 
 > [!info] On the syllabus
 > - [[Exam GI-201 (SOA)|Exam GI-201]] — Outcomes 6e; pp. 1-8.
+> - [[Exam 6I (CAS)|Exam 6I]] — objective B3; the whole paper.
 
 ## Preface
 - Why is ORSA relevant today?

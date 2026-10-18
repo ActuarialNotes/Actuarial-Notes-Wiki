@@ -38,6 +38,15 @@ export function wikiExamIdToProgressKey(examId: string): string {
   // (`CAS-DA`, `CAS-RM`, `CAS-IA`).
   const disc = examId.match(/^DISC-([A-Z]+)$/)
   if (disc) return `CAS-${disc[1]}`
+  // The three VEEs keep their own ids (`VEE-MS`, `VEE-ECON`, `VEE-AF`) — the
+  // CAS-number branch at the end would read them as `CAS-VEE-…`.
+  if (/^VEE-[A-Z]+$/.test(examId)) return examId
+  // The FSA's two required courses: the tracks key them `FSA-DMAC`, `FSA-FAC`.
+  if (examId === 'DMAC' || examId === 'FAC') return `FSA-${examId}`
+  // The CAS's Course on Professionalism has always been tracked as `CAS-APC`
+  // (it is the CAS's counterpart of the SOA's APC); the key is kept, since
+  // readers' progress is stored under it.
+  if (examId === 'COP') return 'CAS-APC'
   // The SOA's fellowship (FSA) exams: `GH-101`, `GH-201C`, `ILA-201U`. The
   // tracks key them `FSA-GH101`, one key for a course's regional variants (the
   // way Exam 6's variants share `CAS-6`) — so the `-C`/`-U` letter is dropped.

@@ -160,6 +160,28 @@ export function examIdFromFile(name: string): string {
   return withDash.toLowerCase()
 }
 
+// What a body requires but doesn't call an exam — the VEE credits, the DISC
+// courses, the SOA's e-learning modules and ATPA assessment, the professionalism
+// courses — is filed as `Exam … (Body).md` like every syllabus page (the
+// collectors read `Exam*.md`), and keeps that label wherever it is a quiz bank's
+// name (`Exam DISC-DA`). Only a list of requirements titles it without "Exam".
+const NON_EXAM_REQUIREMENT_RE = /^(?:VEE-[A-Z]+|DISC-[A-Z]+|PAF|ASF|ATPA|FAP|APC|DMAC|FAC|COP)$/
+
+/** True for a page's exam id (`VEE-MS`, `DISC-DA`, `COP`) that names no exam. */
+export function isNonExamRequirement(examId: string): boolean {
+  return NON_EXAM_REQUIREMENT_RE.test(examId)
+}
+
+// The title a requirement's row carries on the Study Guides page: the exam's
+// display name, or for a non-exam requirement the requirement on its own.
+//   "Exam MAS-I (CAS).md" → "Exam MAS-I"
+//   "Exam VEE-MS (SOA).md" → "VEE-MS"
+export function requirementDisplayName(name: string): string {
+  const label = examDisplayName(name)
+  const id = label.replace(/^Exam\s+/i, '')
+  return isNonExamRequirement(id) ? id : label
+}
+
 // Display name for an exam page: the file name without its `.md` extension and
 // without the examining-body suffix the vault files carry.
 //   "Exam P-1 (SOA).md"  → "Exam P-1"

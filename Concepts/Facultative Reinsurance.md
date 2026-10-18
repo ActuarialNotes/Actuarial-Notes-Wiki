@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a3072fb8b037311473de7f22deff61991840e3d5fd21f00fac8706da92b06881
+  content_hash: sha256:09524865494129ee62e5fa5b97cc703d0150b4ada71229501f1569668e48c721
   sources:
     - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (facultative as a variation on treaty themes), pp.17-18 (exposure curve and illustrative table: 20% -> 49%, 100% -> 93%, exposure above IV), p.29 (casualty exposure factor), p.43 (facultative certificates inure to cat cover), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
@@ -13,16 +13,16 @@ verification:
   log: .verify/Concepts/Facultative Reinsurance.md
 ---
 
-**Facultative Reinsurance** is reinsurance negotiated risk by risk: a submission, acceptance and agreement for **each individual risk or a defined group of risks** the cedant wants to reinsure. The cedant offers the risk, and the reinsurer underwrites and prices it on its own and is free to accept or decline. The cover is documented in a *facultative certificate* and is either **pro rata** (a share of the policy) or **excess** (a layer above the cedant's retention).
+**Facultative Reinsurance** is reinsurance negotiated risk by risk: a submission, acceptance and agreement for **each individual risk (or portion of one)** the cedant wants to reinsure. The cedant offers the risk, and the reinsurer underwrites and prices it on its own and is free to accept or decline. The cover is documented in a *facultative certificate* and is either **pro rata** (a share of the policy) or **excess** (a layer above the cedant's retention).
 
-> $$\text{Casualty XS share} = \frac{\text{ILF}\big(\min(PL,\, AP + Lim)\big) - \text{ILF}(AP)}{\text{ILF}(PL)}$$
+> $$\text{Casualty XS share} = \frac{\text{ILF}\big(\min(PL,\, AP + Lim)\big) - \text{ILF}\big(\min(PL,\, AP)\big)}{\text{ILF}(PL)}$$
 
 > $$\text{Property XS share} = G\!\left(\frac{AP + Lim}{IV}\right) - G\!\left(\frac{AP}{IV}\right)$$
 
 - $PL$ is the policy limit, $AP$ the cedant's retention (the certificate's attachment), $Lim$ the certificate limit and $IV$ the property's insured value. [[Increased Limits|ILFs]] are ratios of [[Limited Expected Value|limited expected values]]. $G$ is a property [[Exposure Curves|exposure curve]]: the share of expected loss below a given percentage of insured value. The share multiplies the policy's expected loss to give the certificate's [[Loss Cost|loss cost]].
-- **Uses.** A risk too large for treaty capacity; a class or hazard the treaties exclude; an unusual risk the cedant wants a second opinion on; or protecting treaty results, since facultative cessions usually *inure* to the treaties and shrink what they see.
-- **Pricing** is exposure rating of the individual risk plus underwriting judgment about it. There is no portfolio experience to rate. Clark treats facultative pricing as a variation on the treaty techniques rather than a separate method.
-- **Selection runs against the reinsurer.** The cedant chooses which risks to offer, so a facultative account tends to be worse than the cedant's average. That is why the reinsurer underwrites every certificate. It also costs more to administer per premium dollar than a [[Treaty Reinsurance|treaty]].
+- **Uses.** Individual risks that the cedant's treaties do not cover, or do not cover adequately — typically high-value or unusual risks that do not fit the treaties. Facultative certificates also *inure* to the benefit of the cedant's other covers: a catastrophe cover typically applies to the retained exposure net of them.
+- **Pricing** is per risk: the formulas above are Clark's exposure-rating factors applied to a single policy, which is how Clark works the property curve for one risk. Clark does not price facultative covers explicitly but treats them as "variations on the same themes" as treaty pricing, differing in accounting, loss sensitive features and the amount of judgment needed.
+- **Each submission is underwritten.** The cedant must represent the risk with all relevant data, and the reinsurer assesses it and is not obliged to accept it. Negotiating every risk separately is time-consuming and resource-intensive, unlike a [[Treaty Reinsurance|treaty]], which covers a range of policies under one contract.
 - Pro rata facultative works like a one-policy [[Quota Share]]. Excess facultative works like a one-policy [[Excess of Loss]] layer. See [[Types of Reinsurance]].
 
 > [!example]- Pricing a Casualty Excess Certificate with ILFs {Example}

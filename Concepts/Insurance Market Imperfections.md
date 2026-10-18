@@ -17,16 +17,17 @@ verification:
   log: .verify/Concepts/Insurance Market Imperfections.md
 ---
 
-**Insurance Market Imperfections** are the departures from a frictionless (Modigliani–Miller) market — taxes, costs of financial distress, agency conflicts, asymmetric information, regulation and costly external capital — that make capital expensive for an insurer to hold and to raise. They are why insurers behave as if they were risk-averse, why [[Reinsurance]] and hedging can add value, and why an insurance price must carry a margin beyond the market price of risk.
+**Insurance Market Imperfections** are the departures from a frictionless (Modigliani–Miller) market — taxes, costs of financial distress, agency conflicts, asymmetric information, competition, regulation and costly external capital — that make capital expensive for an insurer to hold and to raise. They are why insurers behave as if they were risk-averse, why [[Reinsurance]] and hedging can add value, and why an insurance price must carry a margin beyond the market price of risk.
 
 > $$P = \text{PV}(E[L]) + \text{Expenses} + \text{Risk premium} + \text{Frictional costs}$$
 
 - In a perfect market the premium would stop at the first three terms: the market's charge for systematic risk only, since diversifiable risk is free. Imperfections add the **frictional cost** term, which depends on the insurer's *total* risk and on how much capital it holds — the [[Cost of Capital]] charged on [[Risk Capital]].
-- **Taxes.** Investment income on capital held inside an insurer is taxed at the corporate level before shareholders receive it — a cost investors avoid by holding the same assets directly. Taxes are also convex: losses cannot always be offset in full or in time, so volatile income raises the expected tax bill.
-- **Financial distress.** Direct receivership costs are the smaller part. The larger costs are indirect: policyholders — who, unlike bondholders, are customers unable to diversify their insurer's default risk — move their business, agents and brokers steer away, a [[Rating Agency|rating]] downgrade shuts the insurer out of commercial lines, and the franchise value of future renewals is lost.
-- **Agency costs.** Managers may spend surplus capital on low-return growth or acquisitions instead of returning it. Shareholders, protected by limited liability, gain from taking more asset or underwriting risk once premiums are collected — at the policyholders' expense. Capital requirements and ratings exist partly to police this.
+- **Taxes.** Investment income on capital held inside an insurer is taxed at the corporate level before shareholders receive it — a cost investors avoid by holding the same assets directly. For most firms the tax function is also convex — losses cannot always be offset in full or in time — so volatile income raises the expected tax bill and hedging lowers it.
+- **Financial distress.** Policyholders — customers who, unlike investors, find it costly to diversify their insurer's default risk — pay less for, or buy less from, a weaker insurer: higher-[[Rating Agency|rated]] insurers get higher premiums and grow faster, and a failing insurer leaves its customers cancelling policies, pursuing claims and finding new cover. The cost reaches future business through reputation as well as the business in place.
+- **Agency costs.** Managers may spend surplus capital on low-return growth or acquisitions instead of returning it. Shareholders, protected by limited liability, gain from taking more asset or underwriting risk once premiums are collected — at the policyholders' expense.
 - **Asymmetric information.** Outsiders know less than management about reserve adequacy and exposure, so new equity raised after a large loss is sold at a discount, if at all. When external capital is costly the firm should act risk-averse toward risks it cannot hedge (the Froot–Stein argument). On the underwriting side the same problem appears as [[Adverse Selection]] and [[Moral Hazard]].
-- **Regulation.** Minimum capital standards ([[Risk-Based Capital]], the [[MCT]]), rate regulation and investment restrictions impose costs of their own and can bind before economic capital does.
+- **Competition.** The market is very competitive, and competing classification plans make the winning quote biased low (the winner's curse), which justifies a margin over expected loss even when the estimates are unbiased. When capacity is plentiful, insurers cut prices relative to competitors to buy market share, and an insurer that misallocates its capital writes unprofitable business and loses profitable business to competitors.
+- **Regulation.** Minimum capital standards ([[Risk-Based Capital]], the [[MCT]]), and rate regulation impose costs of their own, and a regulatory or rating-agency capital model is often the binding constraint on how much capital the insurer holds.
 - **Consequences.** Insurers price in a cost of capital, diversify, buy reinsurance at more than its expected loss, manage [[Financial Risk]], and after a catastrophe find capital scarce and prices rising — the hard-market side of the underwriting cycle.
 
 > [!example]- Convex Taxes Reward Smoothing {Example}
@@ -42,7 +43,7 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Expected after-tax income rises from $\$68.5$M to $\$79.0$M, so the hedge is worth $\$10.5$M a year even though it leaves pre-tax income unchanged on average. In a world without convex taxes it would be worth nothing. Carryforwards soften the effect in practice but do not remove it, because a deferred credit is worth less than an immediate one.
+> > Expected after-tax income rises from $\$68.5$M to $\$79.0$M, so the hedge is worth $\$10.5$M a year even though it leaves pre-tax income unchanged on average. In a world without convex taxes it would be worth nothing.
 
 > [!example]- Why Pay Twice the Expected Loss for Catastrophe Cover? {Example}
 > An insurer buys catastrophe excess-of-loss cover whose premium is about twice the modelled expected recovery. A director argues that in an efficient market this simply transfers value to the reinsurer. Evaluate the argument.

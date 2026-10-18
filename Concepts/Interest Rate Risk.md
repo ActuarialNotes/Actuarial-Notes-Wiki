@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:9aff20dbdb1dc50d300e69321cd01f0614f1f22ceec78ae5ec2987d672f0d273
+  content_hash: sha256:afee4a59138f1cd812ae4acd6755fefaf5a4e1073a652e425f7e8c56b53de20d
   sources:
     - "Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re Working Paper, July 2006), pp.1-12 read in full (title page, contents p.2, Sections 1-8, Table 1 p.9, formulas pp.6-9 read from the rendered pages), sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf"
     - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
@@ -19,11 +19,11 @@ verification:
 
 > $$\Delta V \approx -\left(A\,D_A - L\,D_L + F\,D_F\right)\Delta y$$
 
-- $A$ and $L$ are the market values of assets and liabilities, $S = A - L$ surplus, $D$ each item's [[Modified Duration|modified]] (or effective) duration, and $\Delta y$ a parallel yield change. $F$ is **franchise value** — the present value of profits on future renewals — and $V = A - L + F$ the firm's total economic value. Surplus duration $D_S = (A D_A - L D_L)/S$ shows how leverage amplifies any mismatch.
-- **Price and reinvestment risk.** Rising rates cut bond values ([[Price Risk]]); falling rates cut the yield on reinvested cash flows ([[Reinvestment Risk]]). The two offset when durations are matched, which is the basis of [[Duration Matching]] and [[Immunization]]; [[Convexity]] governs how well a match survives large moves.
-- **Beyond parallel shifts and fixed cash flows.** Key-rate durations capture twists in the curve. Assets with embedded options — mortgage-backed securities ([[Prepayment Risk]]) and [[Callable Bond|callable bonds]] — need effective duration and have negative convexity. P&C reserves are not fixed nominal amounts: claim inflation, which tends to move with rates, partly offsets the fall in their present value when rates rise.
+- $A$ and $L$ are the market values of assets and liabilities, $S = A - L$ surplus, $D$ each item's [[Modified Duration|modified]] (or effective) duration, and $\Delta y$ a parallel yield change. $F$ is **franchise value** — the present value of profits on future renewals — and $V = A - L + F$ the firm's total economic value. As with any portfolio, a total's duration is its dollar duration divided by its value, so surplus duration is $D_S = (A D_A - L D_L)/S$; because $S$ is much smaller than $A$, $D_S$ can be much larger than either $D_A$ or $D_L$.
+- **Price and reinvestment risk.** Rising rates cut bond values ([[Price Risk]]); falling rates cut the yield on reinvested cash flows ([[Reinvestment Risk]]). Over a horizon equal to the duration the two offset, which is the basis of [[Duration Matching]] and [[Immunization]] — matching the duration of the assets to that of the liabilities. [[Convexity]], the rate at which duration changes as rates change, governs how far a match drifts as rates move.
+- **Beyond parallel shifts and fixed cash flows.** A parallel-shift duration misses changes in the relationship between rates across maturities (*yield curve risk*). Assets with embedded options — mortgage-backed securities ([[Prepayment Risk]]) and [[Callable Bond|callable bonds]] — need effective duration, which allows for the change in cash flows as rates move, and have negative convexity. P&C reserves are not fixed nominal amounts: they are inflation-sensitive, and inflation-sensitive liabilities respond to interest rate changes like short-duration instruments.
 - **Franchise value (Panning).** ALM as usually practised manages only the balance sheet that accounting shows and ignores franchise value, which is invisible to accounting but can be a large share of market value. It has a long duration, especially when renewal premiums are priced to a fixed target return: a rate rise then shrinks both the discount factor and the premiums themselves. Hedging it with asset duration alone may require a zero or negative asset duration — infeasible, and alarming to regulators and rating agencies who see only the accounting numbers. Panning's alternative is a **pricing strategy** whose target return moves with interest rates, which shortens the duration of franchise value directly.
-- **Tools.** Duration and cash-flow matching, interest rate swaps and futures, and pricing policy. Interest rate risk is measured on the same economic balance sheet as the rest of the insurer's [[Financial Risk|financial risk]], and managed within [[Financial Risk Management]].
+- **Tools.** Cash-flow matching (dedication) and duration matching; derivatives such as futures, options and swaps; and, in Panning, pricing policy. Interest rate risk is one of the insurer's [[Financial Risk|financial risks]], managed within [[Financial Risk Management]].
 
 > [!example]- Surplus Duration and the Immunizing Asset Duration {Example}
 > Assets are $\$1{,}000$M with duration $4.5$; liabilities are $\$700$M with duration $2.5$. Estimate the change in surplus if yields rise $1\%$, and find the asset duration that would immunize surplus.

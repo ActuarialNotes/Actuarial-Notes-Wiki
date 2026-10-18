@@ -807,7 +807,8 @@ QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
         r"(?m)^[ \t]*(\d{1,3})\.(?:[ \t]*\n|[ \t]+)(?=\s*\S)(?!\s*\(\s*[\d.]+\s*points?\s*\))"
     )),
     ("N)", re.compile(r"(?m)^[ \t]*(\d{1,3})\)[ \t]+(?=\S)")),
-    ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
+    # The FAM-S solutions write `Question #27` but, for 28-32, `Question: #28`.
+    ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*:?[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
     ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")),
     ("**N.**", re.compile(r"(?m)^[ \t]*\*\*(\d{1,3})\.?\*\*[ \t]*")),
     # A scanned CAS booklet OCRs `1.` alone on its line with the point value
@@ -1000,6 +1001,58 @@ def _fill_keyless(bounds: list[Boundary], text: str) -> list[Boundary]:
 
 
 KEY_ANCHOR_RE = re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?(?=[ \t]*key[ \t]*:?[ \t]*[A-E]\b)")
+
+
+# FAM-L numbers its sample questions by the chapter of AMLCR they come from —
+# `7.41`, question 41 of Chapter 7 — and its solutions head each answer
+# `Question 7.41` over `Answer C`. A bare `3.0` is as common in an equation's
+# text layer as in a label, so the labels are read off the solutions'
+# headings (the one place they can't be noise) and found in the booklet in
+# that order. A label X.Y is numbered X·100 + Y, so the order and `--only`
+# ranges still work on plain integers.
+# Alone on its line: the version notes say `Question 7.41 added`.
+DECIMAL_HEADING_RE = re.compile(r"(?mi)^[ \t]*question[ \t]*:?[ \t]*(\d{1,2})\.(\d{1,2})[ \t]*$")
+
+
+SOURCE_NOTE_RE = re.compile(r"\s*\[[^\[\]]*\b(?:exam|question)\b[^\[\]]*\]\s*$", re.I)
+
+
+def decimal_labels(text: str) -> list[tuple[int, int]]:
+    """The `X.Y` labels a solutions document heads its answers with, in order."""
+    labels: list[tuple[int, int]] = []
+    for m in DECIMAL_HEADING_RE.finditer(text):
+        label = (int(m.group(1)), int(m.group(2)))
+        if label not in labels:
+            labels.append(label)
+    return labels
+
+
+def decimal_num(label: tuple[int, int]) -> int:
+    return label[0] * 100 + label[1]
+
+
+def decimal_bounds(text: str, labels: list[tuple[int, int]], heading: bool) -> list[Boundary]:
+    """Cut `text` at each label in turn, searching only past the last cut.
+
+    `heading` looks for `Question X.Y` (the solutions); otherwise for `X.Y`
+    alone on its line or `X.Y.` (the booklet). A label not found is skipped, and the
+    question before it runs on — which the record's warnings then show.
+    """
+    hits: list[tuple[int, int, int]] = []
+    pos = 0
+    for chap, num in labels:
+        lead = r"question[ \t]*:?[ \t]*" if heading else ""
+        # The booklet sets `1.1` alone, `1.2.` with a stop, `1.4.      A self-…` on one line.
+        tail = r"[ \t]*$" if heading else r"(?:\.|[ \t]*$)"
+        m = re.compile(rf"(?mi)^[ \t]*{lead}{chap}\.{num}{tail}").search(text, pos)
+        if not m:
+            continue
+        hits.append((decimal_num((chap, num)), m.start(), m.end()))
+        pos = m.end()
+    return [
+        Boundary(num=n, start=end, end=hits[i + 1][1] if i + 1 < len(hits) else len(text))
+        for i, (n, _start, end) in enumerate(hits)
+    ]
 
 
 def answer_key(text: str) -> dict[int, str]:
@@ -1523,15 +1576,20 @@ def soa_records(
     multi = accepted_answers(s_text) or accepted_answers(raw_key_text)
     for num, letters in multi.items():
         key.setdefault(num, letters[0])
+    labels = decimal_labels(s_text) if s_text else []
+    decimal = len(labels) >= 10
     sol_bounds = {b.num: b for b in segment(s_text)} if s_text else {}
+    if decimal:
+        sol_bounds = {b.num: b for b in decimal_bounds(s_text, labels, heading=True)}
+        key = {}
     # A solutions document that heads each solution `N.` over `Key: X` (the SOA's
     # SRM set) is cut on that pair: its equations' text layer is full of bare
     # numbered lines that the generic patterns take for question labels.
     keyed = segment(s_text, KEY_ANCHOR_RE) if s_text else []
-    if len(keyed) > len(sol_bounds) // 2 and len(keyed) >= len(key) // 2 and keyed:
+    if not decimal and len(keyed) > len(sol_bounds) // 2 and len(keyed) >= len(key) // 2 and keyed:
         sol_bounds = {b.num: b for b in _fill_keyless(keyed, s_text)}
 
-    bounds = segment(q_text)
+    bounds = decimal_bounds(q_text, labels, heading=False) if decimal else segment(q_text)
     source = "numbered"
     expected = max(key, default=0)
     if expected and len(bounds) < expected and any(
@@ -1546,10 +1604,19 @@ def soa_records(
     for bound in bounds:
         raw = q_text[bound.start : bound.end]
         # A sample set keeps a withdrawn question's number with nothing under it
-        # but `DELETED` (SRM's 17, 28, 47, 65): there is no question to write.
-        if re.fullmatch(r"\s*DELETED\s*", raw):
+        # but `DELETED` (SRM's 17, 28, 47, 65; FAM-S prints `Deleted.`): there
+        # is no question to write.
+        if re.fullmatch(r"(?i)\s*DELETED\.?\s*", raw):
             continue
         prompt, options = split_options(raw)
+        # FAM-L closes a question taken from a past paper with where it came
+        # from, `[Question 8 on the Fall 2014 exam]`, after option E — so it
+        # reads as part of E. It is the prompt's, kept as printed.
+        last = max(options, default=None)
+        note = SOURCE_NOTE_RE.search(options[last]) if last else None
+        if note:
+            options[last] = options[last][: note.start()].rstrip()
+            prompt = f"{prompt}\n\n{note.group(0).strip()}"
         pages = sorted({q_index[i] for i in range(bound.start, min(bound.end, len(q_index)))})
         scanned = [p for p in pages if by_number[p].scanned]
         ocred = [p for p in pages if by_number[p].ocred]
@@ -1585,7 +1652,10 @@ def soa_records(
                 "explanation works to and note that the key took both"
             )
 
-        record_id = f"{prefix}-{sitting}-q{bound.num}" if sitting else f"{prefix}-{bound.num:03d}"
+        if decimal:
+            record_id = f"{prefix}-{bound.num // 100}-{bound.num % 100:02d}"
+        else:
+            record_id = f"{prefix}-{sitting}-q{bound.num}" if sitting else f"{prefix}-{bound.num:03d}"
         record = {
             "num": bound.num,
             "id": record_id,
@@ -2231,8 +2301,12 @@ def points_label(value: float | None) -> str:
     return f"{shown} point" + ("" if number == 1 else "s")
 
 
-SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii", "srm": "srm"}
-SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii", "srm": "exam-srm"}
+# FAM's two sample sets each number from 1, so each keeps its own prefix in the
+# one bank: FAM-S (Topics 1-6, short-term) and FAM-L (Topics 7-10, long-term).
+SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii", "srm": "srm",
+              "fam-s": "fams", "fam-l": "faml"}
+SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii", "srm": "exam-srm",
+            "fam-s": "exam-fam", "fam-l": "exam-fam"}
 
 
 UNESCAPED_DOLLAR_RE = re.compile(r"(?<!\\)\$")
@@ -2528,7 +2602,7 @@ def _ranges(nums: list[int]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--exam", required=True, help="p | fm | mas-i | mas-ii | srm | 5 | 6 | 7 …")
+    ap.add_argument("--exam", required=True, help="p | fm | mas-i | mas-ii | srm | fam-s | fam-l | 5 | 6 | 7 …")
     ap.add_argument("--questions", help="question booklet PDF")
     ap.add_argument("--solutions", help="solutions / examiner's report PDF")
     ap.add_argument("--pdf", help="one combined PDF (CAS booklet + report)")

@@ -14,12 +14,16 @@ wiki_link:
   - Concepts/Frequency
 points: 4
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:38c4ddf2876a9fa68aeb5127b7d40848fba11b5003d0bf31efe7354dbbfaf3a0
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3f6bda980a8d174d02f8552debf843ec8df171396f3ce40d4ee905f0ca286090
+  sources:
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, v3 2010), Introduction to Part 3, printed pp.79-80 (PDF 85-86), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, v3 2010), Ch.3 Aggregation by Report Year, printed p.42 (PDF 48), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, v3 2010), Ch.7 When the development technique works, printed p.97 (PDF 103), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
+    - "Friedland, Estimating Unpaid Claims Using Basic Techniques (CAS, v3 2010), Appendix A, Frequency and Severity / Claims-Made, printed p.425 (PDF 431), sha256:5e9830823346d2001d9bdcebecd0d0d399cac32a9a63d5cf021a6c7f03d50464 — https://www.casact.org/sites/default/files/2021-03/5_Friedland.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-5/cas5-an-005.md
@@ -39,7 +43,7 @@ Paid claims and case outstanding already make up a high proportion of ultimate c
 A
 
 ### Explanation
-Friedland (Chapter 5) describes automobile physical damage and property as short-tail lines precisely because of the short period over which claims are reported and settled, so paid and case outstanding are most of ultimate early on. **B** is the opposite case. **C** and **D** describe the coverage trigger and the claim size distribution, not the length of the reporting and settlement period.
+Friedland (Introduction to Part 3) describes automobile physical damage and property as short-tail lines precisely because of the short period over which claims are reported and settled, so paid and case outstanding are most of ultimate early on. **B** is the opposite case. **C** and **D** describe the coverage trigger and the claim size distribution, not the length of the reporting and settlement period.
 
 ## Part b (1 point)
 Its experience should be kept separate from occurrence experience, and actuaries often prefer report-year aggregation for it.
@@ -81,4 +85,4 @@ IBNR is a large share of the unpaid claims at early maturities, and the cumulati
 B
 
 ### Explanation
-Friedland classifies medical malpractice occurrence as a long-tail line because of the lengthy reporting and settlement period, and her Chapter 5 comparison with automobile physical damage shows a far larger IBNR share for it. In Chapter 7 she notes that for long-tail lines the cumulative development factors for recent years can become very large, so projections are highly leveraged. **C** is tempting because medical malpractice is also written claims-made, but a claims-made policy covers only claims reported during its period, so claims not yet reported are not its liability; the large IBNR share belongs to the occurrence form.
+Friedland classifies medical malpractice occurrence as a long-tail line because of the lengthy reporting and settlement period, and her comparison with automobile physical damage (Introduction to Part 3) shows a far larger IBNR share for it. In Chapter 7 she notes that for long-tail lines the cumulative development factors for recent years can become very large, so projections are highly leveraged. **C** is tempting because medical malpractice is also written claims-made, but a claims-made policy covers claims reported during a certain period (Friedland, Appendix A), and the large IBNR share in Friedland's comparison is for medical malpractice *occurrence*.

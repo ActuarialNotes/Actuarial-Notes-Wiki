@@ -7,12 +7,19 @@ date: "2022"
 Type: "Textbook"
 ISBN: "978-1-119-75567-8"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:04f591aa34794fc4a637e2ff0d6c820a6716a2c2a55bb7c8ab9029fbb5a7ceb9
-  sources: []
+  sources:
+    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), publisher's reading sample, printed contents pp.vii-xi, copyright page, series title, sha256:f8c2eb81f35aad653286574f1060dcedb40f754caff8d2f0d370b181372f18a3 — https://content.e-bookshelf.de/media/reading/L-18329451-fda628fbb4.pdf"
+    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Chapter 1 excerpt, pp.1-11, sha256:af37057d34a0c9b927fa8d0246eaf121a500e385c6902a8f8db8b08e6a55fe2c — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-5.pdf"
+    - "Wiley product page, Pricing Insurance Risk: Theory and Practice: ISBN 978-1-119-75567-8, hardcover June 2022, 560 pages, description, sha256:cefadf71768e46a3cee406fbfc588a80942319bc5cd7aa4a5562b6c1488cf3b0 — https://www.wiley.com/en-us/pricing-insurance-risk-theory-and-practice-p-9781119755678"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), pp.4-5, 7 (Domains B and C; text references; study-note and errata hyperlinks), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "Mildenhall, Pricing Insurance Risk Book Errata (modified 2026-09-24), sha256:40e8b4cdfb37d28e020f03cdad355da74c1841767ae2ec1d790d4fd5d188a937 — https://blog.mynl.com/posts/publications/2022-01-20-Pricing-Insurance-Risk-Book/errata.html"
+    - "Mildenhall, Pricing Insurance Risk Book (authors' page), sha256:c2bae7eec4c829bd6904bfc23315a324dc9d2f7fc0157eb6d0aa7c10fce4e596 — https://blog.mynl.com/posts/publications/2022-01-20-Pricing-Insurance-Risk-Book/"
+    - "Mildenhall & Major, Pricing Insurance Risk (Wiley 2022), Index excerpt, pp.523-546, sha256:4e7a560b390d357308ca1274a4c35f13e03d3d7c36555455dd25125f675f3517 — https://media.wiley.com/product_data/excerpt/70/11197556/1119755670-10.pdf"
   open_findings: 0
   open_critical: 0
   log: ".verify/Resources/Books/Pricing Insurance Risk: Theory and Practice (Mildenhall and Major - 2022).md"

@@ -7,12 +7,15 @@ date: "2014"
 Type: "Study Note"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:848f74b684df42f7ca673f30e07b363721d1237881cdc17e02319ec89a108697
-  sources: []
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.1-52 (whole note; formula pages 17, 27-29, 32-34, 37, 40-42, 50 and the Supplement p.52 read from page images), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+    - "SOA GI 301 syllabus, Mar 2027/Jul 2027, p.9, Topic 7 (Clark, outcomes 7e-h), sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Basics of Reinsurance Pricing (Clark - 2014).md

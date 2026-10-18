@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:1e9bee56f94a65c058546ca640fea8812ee5761210595974b9e6a220221a93a0
-  sources: []
-  open_findings: 0
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), pp.22-23 (working layer, exposed excess, clash covers), p.29 (casualty exposure factor), pp.24-25 (ALAE pro rata vs part of loss), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Clash Cover.md
 ---

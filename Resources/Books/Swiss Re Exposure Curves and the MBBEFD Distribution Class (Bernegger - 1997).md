@@ -7,12 +7,14 @@ date: "1997"
 Type: "Paper"
 Available from: "[casact.org](https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf)"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:44e4fbf1cdc04f223acb080f5926045766c9cee64d9e1d33e50653b84ad1c5fb
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0b1e0fc949bf9c95753402c9314dbab1350f31fe7f87c9e93de5fad8853aa066
+  sources:
+    - "Bernegger, The Swiss Re Exposure Curves and the MBBEFD Distribution Class (ASTIN Bulletin 27(1), 1997), pp.99-111 (whole paper; every equation (2.1)-(4.6) and figure caption read from the page images, OCR text for the prose), sha256:5c07f557257622c9dd5f1886705a55de9f368fef1839dd405c87a8550f8a7c89 — https://www.casact.org/sites/default/files/2021-03/8_Bernegger.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Swiss Re Exposure Curves and the MBBEFD Distribution Class (Bernegger - 1997).md
@@ -74,7 +76,7 @@ A paper introducing a new two-parameter family of analytical functions, the MBBE
 > $$g = \frac{a+b}{(a+1)b}; \qquad a = \frac{(g-1)b}{1-gb}$$
 
     - The condition $0 \le p \le 1$ holds only for $g \ge 1$, and $G(x)$ is real only for $b \ge 0$; no other restrictions on the parameters are necessary.
-    - The cases $b = 1$ ($a = -1$), $b = 0$ or $g = 1$ ($a = 0$) and $b \cdot g = 1$ ($a = \infty$) are special cases, as are $b \cdot g > 1$ ($a < 0$) and $b \cdot g < 1$ ($a > 0$), which correspond to the MB, the BE and the FD distribution respectively.
+    - The cases $b = 1$ ($a = -1$), $b = 0$ or $g = 1$ ($a = 0$) and $b \cdot g = 1$ ($a = \infty$) must be treated as special cases; the cases $b \cdot g = 1$ ($a = \infty$), $b \cdot g > 1$ ($a < 0$) and $b \cdot g < 1$ ($a > 0$) correspond to the MB, the BE and the FD distribution respectively (cf. Figure 4.1).
     - All real, increasing and concave functions $G(x)$ on [0, 1] with $G(0) = 0$ and $G(1) = 1$ belonging to the MBBEFD class are given by the four-case function $G_{b,g}(x)$ (3.3): $x$ for $g = 1 \vee b = 0$; $\dfrac{\ln(1 + (g-1)x)}{\ln(g)}$ for $b = 1 \wedge g > 1$; $\dfrac{1 - b^x}{1 - b}$ for $bg = 1 \wedge g > 1$; and $\dfrac{\ln\!\left(\frac{(g-1)b + (1-gb)b^x}{1-b}\right)}{\ln(gb)}$ for $b > 0 \wedge b \ne 1 \wedge bg \ne 1 \wedge g > 1$.
     - Figure 3.1 shows sets of MBBEFD exposure curves, a) with constant total loss probability $p = 0.1$ ($g = 10$) and b) with constant expected value $\mu = E[x] = 0.1$; Figure 3.2 shows the corresponding distribution functions.
 - 3.3 Derivatives

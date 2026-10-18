@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:aa1b08337e35a6a7e344406d86c086b66c18840f049a0972cceaf52f1ec59af1
-  sources: []
-  open_findings: 0
+  sources:
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.9 (adjustable features, loss occurrence limit), pp.9-14 (sliding scale, carryforward, profit commission, loss corridor tables), pp.22-23 (clash), pp.33-35 (AAD, swing plan as retrospective rating), pp.38 (range-table method), pp.46-47 (finite risk, risk transfer), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reinsurance Contract Provisions.md
 ---

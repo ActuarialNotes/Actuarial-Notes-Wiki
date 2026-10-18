@@ -802,6 +802,10 @@ QUESTION_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("N. Solution", re.compile(
         r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?(?=[ \t]*solution[ \t]*[:.]?[ \t]*[A-E]\b)"
     )),
+    # The SOA SRM booklet does both: `1.` alone on its line, but `24. Sarah performs…`.
+    ("N. either", re.compile(
+        r"(?m)^[ \t]*(\d{1,3})\.(?:[ \t]*\n|[ \t]+)(?=\s*\S)(?!\s*\(\s*[\d.]+\s*points?\s*\))"
+    )),
     ("N)", re.compile(r"(?m)^[ \t]*(\d{1,3})\)[ \t]+(?=\S)")),
     ("Question N", re.compile(r"(?mi)^[ \t]*question[ \t]*#?[ \t]*(\d{1,3})\b[.:]?")),
     ("QUESTION N", re.compile(r"(?m)^[ \t]*QUESTION[ \t]*[:#]?[ \t]*(\d{1,3})\b")),
@@ -963,6 +967,8 @@ ANSWER_PATTERNS = [
     # The 2026 SOA FM solutions: `351.` over `Solution: C`, or `386.  Solution:  C`
     # — once `Solution.  E`, once `Solution B`.
     re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?[ \t]*solution[ \t]*[:.]?[ \t]*([A-E])\b"),
+    # The SOA SRM solutions: `1.` over `Key:  E` (once `24. Key: C`, once `Key E`).
+    re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?[ \t]*key[ \t]*:?[ \t]*([A-E])\b"),
     re.compile(r"(?mi)^[ \t]*(?:question[ \t]*#?[ \t]*)?(\d{1,3})[.):]?[ \t]*"
                r"(?:solution|answer)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b"),
     re.compile(r"(?mi)^[ \t]*(\d{1,3})[ \t]+([A-E])[ \t]*$"),
@@ -972,6 +978,28 @@ ANSWER_PATTERNS = [
     re.compile(r"(?mi)\bquestion[ \t]*#?[ \t]*(\d{1,3})\b[^A-E\n]{0,40}?"
                r"answer[ \t]*[:=-][ \t]*\(?([A-E])\)?"),
 ]
+
+
+def _fill_keyless(bounds: list[Boundary], text: str) -> list[Boundary]:
+    """Cut a solution the key-anchored segmentation skipped out of the one before
+    it: the SRM set prints Q7's solution under a bare `7.` with no `Key:` line,
+    so it rides on the end of Q6's. Only the missing number, alone on its line,
+    is looked for, so a stray number inside an equation can't cut a solution."""
+    out: list[Boundary] = []
+    for i, b in enumerate(bounds):
+        nxt = bounds[i + 1].num if i + 1 < len(bounds) else None
+        cur = b
+        for missing in range(b.num + 1, nxt or b.num + 1):
+            m = re.compile(rf"(?m)^[ \t]*{missing}\.[ \t]*\n").search(text, cur.start, cur.end)
+            if not m:
+                continue
+            out.append(Boundary(cur.num, cur.start, m.start()))
+            cur = Boundary(missing, m.end(), cur.end)
+        out.append(cur)
+    return out
+
+
+KEY_ANCHOR_RE = re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?(?=[ \t]*key[ \t]*:?[ \t]*[A-E]\b)")
 
 
 def answer_key(text: str) -> dict[int, str]:
@@ -1006,7 +1034,7 @@ def accepted_answers(text: str) -> dict[int, list[str]]:
     return found
 
 
-SOLUTION_ANSWER_RE = re.compile(r"(?i)\b(?:solution|answer)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b")
+SOLUTION_ANSWER_RE = re.compile(r"(?i)\b(?:solution|answer|key)[ \t]*[:=-]?[ \t]*\(?([A-E])\)?\b")
 
 
 def strip_solution_header(text: str) -> tuple[str, str | None]:
@@ -1496,6 +1524,12 @@ def soa_records(
     for num, letters in multi.items():
         key.setdefault(num, letters[0])
     sol_bounds = {b.num: b for b in segment(s_text)} if s_text else {}
+    # A solutions document that heads each solution `N.` over `Key: X` (the SOA's
+    # SRM set) is cut on that pair: its equations' text layer is full of bare
+    # numbered lines that the generic patterns take for question labels.
+    keyed = segment(s_text, KEY_ANCHOR_RE) if s_text else []
+    if len(keyed) > len(sol_bounds) // 2 and len(keyed) >= len(key) // 2 and keyed:
+        sol_bounds = {b.num: b for b in _fill_keyless(keyed, s_text)}
 
     bounds = segment(q_text)
     source = "numbered"
@@ -1511,6 +1545,10 @@ def soa_records(
     records: list[dict] = []
     for bound in bounds:
         raw = q_text[bound.start : bound.end]
+        # A sample set keeps a withdrawn question's number with nothing under it
+        # but `DELETED` (SRM's 17, 28, 47, 65): there is no question to write.
+        if re.fullmatch(r"\s*DELETED\s*", raw):
+            continue
         prompt, options = split_options(raw)
         pages = sorted({q_index[i] for i in range(bound.start, min(bound.end, len(q_index)))})
         scanned = [p for p in pages if by_number[p].scanned]
@@ -1537,6 +1575,9 @@ def soa_records(
             warnings.append("no worked solution found")
         if ocred:
             warnings.append(f"prompt read by OCR (page {_ranges(ocred)}) — spot-check it")
+        debris = equation_debris(prompt) or any(equation_debris(v) for v in options.values())
+        if debris:
+            warnings.append("equations scrambled in the text layer — transcribe the prompt from the page")
         accepted = multi.get(bound.num) or []
         if len(accepted) > 1:
             warnings.append(
@@ -1557,7 +1598,7 @@ def soa_records(
             "parts": [],
             "solution": mdmath.normalize_markdown(solution).strip(),
             "pages": {"question": pages, "solution": sol_pages},
-            "needs_vision": bool(scanned),
+            "needs_vision": bool(scanned) or debris,
             "ocr": bool(ocred),
             "prompt_source": source,
             "warnings": warnings,
@@ -1572,6 +1613,9 @@ def soa_records(
             )
         if len(accepted) > 1:
             record["accepted"] = accepted
+        flags = rewrite_flags(record)
+        if flags:
+            record["rewrite_flags"] = flags
         records.append(record)
     return records
 
@@ -1968,6 +2012,33 @@ def _broken_font(text: str) -> bool:
     return False
 
 
+# An equation set as an embedded object (MathType) comes out of the text layer
+# as its glyphs in drawing order: subscripts on lines of their own and the
+# operators strung together — `x x x x = - = = - =`, `y x β β ε = + +`. A line of
+# three or more such one- and two-character tokens is that debris, never prose.
+DEBRIS_TOKEN_RE = re.compile(r"^(?:[A-Za-zα-ωΑ-Ω]{1,2}|[-+=−–ˆ^()∑,.≤≥<>|]{1,3}|\d)$")
+
+
+def equation_debris(text: str) -> bool:
+    """Whether a passage carries an equation the text layer scrambled: a line of
+    debris, or the same debris one glyph to a line (`25`, `2`, `1`, `230`, `i`,
+    `i`, `e`, `=`, `=`, `∑`) — a quarter of the passage's lines, an operator among them."""
+    lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
+    glyphs = [t for t in lines if DEBRIS_TOKEN_RE.match(t) or re.fullmatch(r"\d{1,4}|[∑∏∫√]|[A-Za-z]( [A-Za-z])+", t)]
+    if len(glyphs) >= 4 and len(glyphs) >= 0.25 * len(lines) and any(re.search(r"[-+=−–∑]", x) for x in lines
+                                                                       if len(x) <= 12):
+        return True
+    for line in (text or "").splitlines():
+        # A glyph the PDF maps to the private-use area (an ellipsis, a brace)
+        # rides along with the debris, so it doesn't count against it.
+        tokens = [t for t in line.split() if not re.fullmatch(r"[\ue000-\uf8ff]+", t)]
+        hits = sum(1 for t in tokens if DEBRIS_TOKEN_RE.match(t))
+        if len(tokens) >= 3 and hits >= 0.8 * len(tokens) \
+                and any(re.search(r"[-+=−–]", t) for t in tokens):
+            return True
+    return False
+
+
 def unreadable_sample(text: str) -> str | None:
     """Why a sample answer will not read as a walkthrough, or None if it will.
 
@@ -1989,6 +2060,8 @@ def unreadable_sample(text: str) -> str | None:
         return "several calculation steps run onto one line"
     if _broken_font(text):
         return "characters from a font the PDF could not map"
+    if equation_debris(text):
+        return "equations the text layer scrambled"
     return None
 
 
@@ -2158,8 +2231,8 @@ def points_label(value: float | None) -> str:
     return f"{shown} point" + ("" if number == 1 else "s")
 
 
-SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii"}
-SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii"}
+SOA_PREFIX = {"p": "p", "fm": "fm", "mas-i": "masi", "mas-ii": "masii", "srm": "srm"}
+SOA_BANK = {"p": "exam-p", "fm": "exam-fm", "mas-i": "exam-mas-i", "mas-ii": "exam-mas-ii", "srm": "exam-srm"}
 
 
 UNESCAPED_DOLLAR_RE = re.compile(r"(?<!\\)\$")
@@ -2455,7 +2528,7 @@ def _ranges(nums: list[int]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    ap.add_argument("--exam", required=True, help="p | fm | mas-i | 5 | 6 | 7 …")
+    ap.add_argument("--exam", required=True, help="p | fm | mas-i | mas-ii | srm | 5 | 6 | 7 …")
     ap.add_argument("--questions", help="question booklet PDF")
     ap.add_argument("--solutions", help="solutions / examiner's report PDF")
     ap.add_argument("--pdf", help="one combined PDF (CAS booklet + report)")
@@ -2479,7 +2552,7 @@ def main(argv: list[str] | None = None) -> int:
     out = Path(args.out)
     (out / "pages").mkdir(parents=True, exist_ok=True)
     want_tables = not args.no_tables
-    cas = not re.fullmatch(r"p|fm|mas-i|mas-ii", args.exam.lower())
+    cas = args.exam.lower() not in SOA_PREFIX
 
     if args.ocr and not ocr_available():
         print("--ocr asked for but tesseract is not on PATH; "

@@ -246,7 +246,7 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    converter (C13), then the beta exams.
 0a. **Content plan, Phase 2** (in progress, 2026-10-18): C13 done (the writer fixed, 83 report
    paragraphs restored); every beta exam with a bank passes G3 and G6 (62 vault-written questions,
-   59 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Next: the fact-check campaigns,
+   60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Next: the fact-check campaigns,
    Exam 9 → 5 → MAS-II → 6C, then PCPA's bank (C6).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and

@@ -1389,7 +1389,10 @@ compile — don't "clean up" the flagged code as dead.
   and `parseExamSyllabus` reads its links — but the app doesn't: `lib/sourceMaterial.ts`
   lifts the entries out and `WikiArticle` renders them as
   `components/wiki/SourceMaterialGallery.tsx`, the same shelf of cover/title/metadata cards
-  the Resources page shows, with each card carrying its reading assignment. The
+  the Resources page shows, with each card carrying its reading assignment — and the
+  Resources page's own filters above it (Publisher, Year, Vintage with its Added / Dropped
+  row; `sourceMaterialShelf` in `lib/sourceMaterial.ts`, the marks shared through
+  `components/wiki/VintageChanges.tsx`), less the Exam strip, since the page is one exam. The
   metadata comes from the resource page's front matter via the wiki index, so a source with
   no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
   (`^[…]`) in a reading line are flattened into parentheses, and a `[[link]]` in a note to

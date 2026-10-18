@@ -21,7 +21,9 @@ import type { Question } from '@/lib/parser'
  * Sits beside the flag in the quiz's question bar, because that is the moment
  * the question gets asked: a candidate who half-recognises a question wants to
  * know which paper it was sat on, and one who thinks the answer is wrong wants
- * the file to report or fix. Neither is on screen anywhere else mid-quiz.
+ * the file to report or fix. Neither is on screen anywhere else mid-quiz. Every
+ * list of questions carries it too, on each row (`QuestionSearchRow`), so a
+ * question's source and fact check can be read before it is ever drawn.
  *
  * It is also where a question's **fact check** is read from. A concept page
  * carries that on its action menu and a resource page on its own, but a
@@ -136,7 +138,11 @@ export function QuestionInfoDialog({
   return (
     <OverlayPortal>
       <div
-        className="fixed inset-0 z-[80] flex items-center justify-center p-4 paper-scrim"
+        // z-[130], the record sheets' layer: a question list that opens this
+        // can itself be a z-[130] modal (the concept questions modal, the
+        // learning-progress modal), and a later sibling at the same layer
+        // paints on top.
+        className="fixed inset-0 z-[130] flex items-center justify-center p-4 paper-scrim"
         role="dialog"
         aria-modal="true"
         aria-label="Question info"

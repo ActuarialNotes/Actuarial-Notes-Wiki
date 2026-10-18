@@ -16,6 +16,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { dialogOpenOver } from '@/lib/layeredDialog'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
 import { FloatingSearchStrip } from '@/components/FloatingSearchBar'
 
@@ -103,6 +104,9 @@ export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearch
   useEffect(() => {
     if (!active) return
     function handleMouseDown(e: MouseEvent) {
+      // A row's Info dialog is portalled out of the panel; a press on it isn't
+      // a press outside the search.
+      if (dialogOpenOver(containerRef.current)) return
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         closeDropdown()
       }

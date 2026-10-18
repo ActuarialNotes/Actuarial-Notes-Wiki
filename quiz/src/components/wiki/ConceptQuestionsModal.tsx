@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Loader2, Play, X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
@@ -18,6 +18,7 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { tallyAttempts } from '@/lib/questionAttempts'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { dialogOpenOver } from '@/lib/layeredDialog'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -74,9 +75,11 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     return () => { cancelled = true }
   }, [conceptName])
 
+  const dialogRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      // A question's Info dialog, open over this one, takes its own Escape.
+      if (e.key === 'Escape' && !dialogOpenOver(dialogRef.current)) onClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -146,6 +149,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   return (
     <OverlayPortal>
     <div
+      ref={dialogRef}
       // z-[130]: openable from the concept popup, a flashcard and the collect
       // dialog (z-[120]) alike, so it sits above every host that can open it.
       className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto paper-scrim"

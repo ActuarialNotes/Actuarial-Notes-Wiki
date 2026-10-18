@@ -168,7 +168,8 @@ export function isAnswerCorrect(question: Question, chosen: string): boolean {
 
 export type QuestionOutcome = 'correct' | 'partial' | 'incorrect'
 
-// Fraction of credit [0,1] earned on a question, honouring manual grade
+// Fraction of credit [0,1] earned on a question — multi-part parts weighted by
+// their points — honouring manual grade
 // overrides and — crucially — awarding *partial* credit for multi-part
 // questions where only some graded parts are right (or a part was manually
 // graded 'partial'). `isAnswerCorrect` collapses these to a single boolean;
@@ -191,24 +192,29 @@ export function questionCredit(
     try {
       const parts = question.parts ?? []
       const chosenParts = JSON.parse(chosen) as Record<string, string>
+      // Each part is weighted by the points the paper gives it, so a 2-point
+      // part counts eight times a 0.25-point one. A question whose parts don't
+      // all carry points weighs them equally rather than zeroing the bare ones.
+      const weighted = parts.every(p => p.points > 0)
       let earned = 0
       let graded = 0
       for (const part of parts) {
+        const weight = weighted ? part.points : 1
         const override = manualGrades[`${question.id}__${part.label}`]
         if (override !== undefined) {
-          graded += 1
-          earned += override === 'correct' ? 1 : override === 'partial' ? 0.5 : 0
+          graded += weight
+          earned += weight * (override === 'correct' ? 1 : override === 'partial' ? 0.5 : 0)
           continue
         }
         // A written part (answer === '') counts only once the reader has
         // self-graded it; left ungraded, it is out of the tally.
         if (part.answer === '') continue
-        graded += 1
+        graded += weight
         const partChosen = chosenParts[part.label] ?? ''
         const right = part.type === 'multiple-choice'
           ? partChosen === part.answer
           : normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
-        earned += right ? 1 : 0
+        earned += right ? weight : 0
       }
       // Nothing graded (all written parts, none self-graded) earns nothing.
       return graded > 0 ? earned / graded : 0

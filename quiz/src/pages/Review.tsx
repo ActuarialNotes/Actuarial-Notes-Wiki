@@ -10,8 +10,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
-import { effectiveOutcome, formatScore, scoreColorClass } from '@/lib/quizScore'
-import { questionCredit } from '@/lib/parser'
+import { effectiveOutcome, formatScore, quizPoints, scoreColorClass } from '@/lib/quizScore'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
@@ -227,15 +226,13 @@ export default function Review() {
   }
 
   const { correctCount, totalQuestions, timeTakenSeconds } = session
-  // Score with partial credit: a partially-right question (e.g. a multi-part
-  // where only some graded parts landed) contributes its fraction, rather than
-  // counting as a full miss. correctCount stays the whole-question count that
-  // drives gems/streak; scoredPoints is what the results screen displays.
-  const scoredPoints = session.questions.reduce(
-    (sum, q) => sum + questionCredit(q, session.responses[q.id]?.chosen, session.manualGrades ?? {}),
-    0,
-  )
-  const percentage = totalQuestions > 0 ? Math.round((scoredPoints / totalQuestions) * 100) : 0
+  // Score by points with partial credit: each question earns its fraction of
+  // what it is worth (a 2.5-point question counts five times a 0.5-point one),
+  // rather than counting as a full hit or miss. correctCount stays the
+  // whole-question count that drives gems/streak; points is what the results
+  // screen displays.
+  const points = quizPoints(session.questions, session.responses, session.manualGrades ?? {})
+  const { percentage } = points
 
   // Level-ups the quiz produced. They drive the ceremony — where a New concept
   // reaching Level 1 plays the collect animation — and the results card below.
@@ -350,7 +347,7 @@ export default function Review() {
             {percentage}%
           </span>
           <span className="text-xs text-muted-foreground tabular-nums">
-            {formatScore(scoredPoints)}/{totalQuestions}
+            {formatScore(points.earned)}/{formatScore(points.possible)}{points.unitPoints ? '' : ' pts'}
           </span>
           <div className="flex-1" />
           {user && (
@@ -403,7 +400,8 @@ export default function Review() {
           mode: session.mode,
           percentage,
           correctCount,
-          scoredPoints,
+          scoredPoints: points.earned,
+          totalPoints: points.unitPoints ? undefined : points.possible,
           totalQuestions,
           timeTakenSeconds,
           conceptsLevelledUp: upwardTransitions.length,

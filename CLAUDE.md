@@ -736,8 +736,9 @@ Other important `lib/` modules:
   (`components/SelfGradeButtons.tsx`, the one Full credit / Partial / No credit control) — only
   while answers are revealed as the quiz goes. The grades are recorded (`manualGrades`) and
   scored: `questionCredit` counts a self-graded written part like a keyed one (full, half, none),
-  leaves an ungraded one out, and gives a question with nothing graded no credit — never a free
-  "correct"; the store's `effectiveIsCorrect` is that credit at 1.
+  each part weighted by its points, leaves an ungraded one out, and gives a question with nothing
+  graded no credit — never a free "correct"; the store's `effectiveIsCorrect` is that credit at 1.
+  The results screen weights each question by its `points` too (`quizPoints` in `lib/quizScore.ts`).
   Pure and tested; the flow is in `e2e/quiz.spec.ts`.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about

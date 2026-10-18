@@ -1,14 +1,17 @@
 ---
 verification:
-  status: in_review
-  confidence: null
+  status: verified
+  confidence: medium
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:bcba13f11f9b101c65931dce5336d68143fd511de920326cc22cc1a85eb6fb82
+  content_hash: sha256:c590cbd3a34c2462bb8104ced3f107b2df17fefcd6c9928b9b384b563cc876ba
   sources:
-    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (scope), p.4 (losses occurring / risks attaching), p.9 (follow the fortunes), p.14 (GNEPI/GNWPI, subject premium net of inuring reinsurance), pp.14-21 (experience/exposure rating, credibility), pp.45-46 (risks attaching cat cover, interlocking clause), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
-    - "CAS Exam 9 Content Outline, Fall 2026, pp.3, 7 (task A1-A3, readings Clark and Bernegger), sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
-  open_findings: 1
+    - "Clark, Basics of Reinsurance Pricing (CAS Study Note, revised 2014), p.2 (facultative as variations on the same themes), p.3 (proportional treaty), p.4 (losses occurring / risks attaching), p.9 (follow the fortunes, adjustable features), p.14 (per risk excess; GNEPI/GNWPI net of inuring reinsurance), pp.14-21 (experience and exposure rating), p.18 (single-risk exposure factor 93%-49% = 44%; exposure above IV), p.29 (casualty exposure factor E[x;min(PL,AP+Lim)] - E[x;min(PL,AP)] over E[x;PL]), pp.36-43 (aggregate covers), p.43 (facultative certificates inure to cat cover), pp.45-46 (risks attaching cat cover, interlocking clause), sha256:1c4429fee538cc8d90157c1849ca689a3a2173a2670fc57f212d866b493e2c63 — https://www.casact.org/sites/default/files/old/studynotes_clark_2014.pdf"
+    - "IRMI Insurance Definitions, treaty reinsurance, definition (cedant agrees to cede classes; reinsurer accepts all qualifying business; cedant assured its risks are reinsured), Types of Treaty Reinsurance, sha256:895c96d7bd919d52198d86e98bc4109e0d09b9088b2d33c8a3370fe87802ed9a — https://www.irmi.com/term/insurance-definitions/treaty-reinsurance"
+    - "Singapore Reinsurers' Association, Glossary of Reinsurance Terms, entries Automatic Treaty, Facultative Reinsurance (proportional and excess of loss; faculty to accept or reject), Obligatory Treaty, sha256:b953321c537f6d447ae917f92e3e6e2315942bd5ce2e76aedffb5f6bdedf45aa — https://sg-reinsurers.org.sg/glossary-reinsurance-terms"
+    - "Odomirok, Kennedy & Pantaleo, Financial Reporting Through the Lens of a Property/Casualty Actuary (CAS, 2020), printed pp.63-66 (reinsurance note: unsecured recoverables incl. paid losses billed not collected, ceded reserves and ceded UPR; LOC, trust, funds withheld; disputes; commutation; concentration), pp.111-112 and 119-127 (Schedule F: provision for reinsurance as a liability, change to surplus; authorized/unauthorized; overdue; RBC credit charge), p.244 (RBC R1 fixed income incl. interest rates and default; R3 receivables and reinsurance recoverables), p.376 (treaty and facultative reinsurance; unregistered reinsurance collateral), p.412 glossary (facultative reinsurance), sha256:74917dcb2ca8b1cf210a7fd66b08d4c90d844a13dd14b2c71690a18e51eb4a5c — https://www.casact.org/sites/default/files/2021-03/6U_CAS_Financial_Reporting.pdf"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.3 Domain A task 2 (loss cost of treaty, facultative and other contracts; reading Clark), p.5 Domain C task C5 'Estimate and manage interest rate and credit risk (e.g., default, prepayment, reinsurance)' and C6-C7; pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Treaty Reinsurance.md
 ---

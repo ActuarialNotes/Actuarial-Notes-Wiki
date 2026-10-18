@@ -2,10 +2,12 @@
 verification:
   status: verified
   confidence: medium
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b8499e2947221fcf5266348a65946f81fdd67f37814a79385e81fcfc521da1ca
+  content_hash: sha256:c9760db9706a4dcf72de48b50dac69577325b3dc5cf8d14e790eb07ce2e26cc0
   sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
     - "OSFI, Guideline B-9 Earthquake Exposure Sound Practices (PML500, gross/net PML, models), definitions of PML, PML500, gross/net PML; models, sha256:e826e5e04f4c4170671288527ae7bebd0ace06ac940254e7d5ecd3adbe92f37e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/earthquake-exposure-sound-practices"
     - "OSFI, Minimum Capital Test Guideline (2026), ch.1 (100% minimum, 150% supervisory target), ch.1 100% minimum, 150% supervisory target, sha256:80450516aa1bb0a7534ceedcf50e39966406ecdcd52d0109af4a94d3439959ce — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2026"
     - "IRMI Glossary, 'probable maximum loss (PML)', entry, sha256:f5a52026910edc505ad6eca7e31f08994d2ab6ffd9b55e16685b3e6d2cd4e8ee — https://www.irmi.com/term/insurance-definitions/probable-maximum-loss"
@@ -31,7 +33,7 @@ verification:
 ![[Media/Figures/Probable_Maximum_Loss.svg|340]]
 
 > [!example]- Sizing a Catastrophe Programme From the PML {Example}
-> An insurer's modelled earthquake PMLs are: $1$-in-$100$, $\$180$ million; $1$-in-$250$, $\$310$ million; $1$-in-$500$, $\$430$ million. Its reinsurance programme retains $\$40$ million and covers up to $\$350$ million. Capital available is $\$390$ million and the base solvency buffer is $\$230$ million.
+> An insurer's modelled earthquake PMLs are: $1$-in-$100$, $\$180$ million; $1$-in-$250$, $\$310$ million; $1$-in-$500$, $\$430$ million. Its reinsurance programme retains $\$40$ million and covers up to $\$350$ million. Capital available is $\$390$ million and minimum capital required under the [[MCT]] is $\$230$ million.
 >
 > Assess the adequacy of the programme.
 >

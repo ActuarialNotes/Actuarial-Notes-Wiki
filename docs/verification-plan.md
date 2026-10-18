@@ -6,8 +6,11 @@ is where the cost is. A file is cheap to load; the 100-page examiner's report or
 450-page reading behind it is not.
 
 Read `docs/verification.md` (the record and its five principles) and
-`docs/validation-agent.md` (how a sweep runs) first. This doc says **what to run next and
-how to group it**. It changes none of the rules: nothing reaches `verified` without a cited
+`docs/validation-agent.md` (how a sweep runs) first. This doc says **how to group the work**:
+the packets, the tooling that builds them, and what they cost. **What to run next** — the
+waves, their status and order, and the decisions that block them — is in
+`docs/content-plan.md` (§3.2, §4 and §6), which consolidated it with the other content plans
+on 18 Oct 2026. This doc changes none of the rules: nothing reaches `verified` without a cited
 source read in that run, and the log stays append-only.
 
 > **Snapshot: 9 Oct 2026**, measured from the vault and from the source documents
@@ -18,7 +21,9 @@ source read in that run, and the log stays append-only.
 > `python3 scripts/verify_route.py --fetch` and a paper's packet with
 > `python3 scripts/verify_paper.py build` (section 4).
 
-## 1. Where things stand
+## 1. The snapshot this method was sized on (9 Oct 2026)
+
+> Historical: today's numbers are `docs/content-plan.md` §2.
 
 **1,651 of 3,963 content files (41.7%) are verified.** Four campaigns produced almost all of
 them. Each one was a sweep that recorded findings, then a resolve run that fixed them.
@@ -168,7 +173,7 @@ Two consequences:
 - **9 CAS pages** (5, 6U, 7, 8, MAS-II, PCPA and the three DISCs) are hand-made. Each
   needs its content outline read against it, which is one PDF of 5–15 pages per exam. The
   6C, 9 and MAS-I runs are the template. **P** is stale, and needs only a delta check
-  (section 5, Wave 1).
+  (Wave 1, `docs/content-plan.md` Appendix B).
 
 ### Gaps no fact check can get past
 
@@ -253,76 +258,11 @@ the plan's prototype figures within a few concepts. A reading packet now names p
 *Basics of Reinsurance Pricing* covers 12 concepts on 22 of its 52 pages, *Clash Cover*
 on page 22 alone.
 
-## 5. The waves, in order
+## 5. The packet procedure
 
-The order is value per token. Clear what is known to be wrong first. Do what is nearly free
-next. Then go exam by exam, so each campaign ends with an exam whose questions, concepts,
-readings and page are all checked, which is the state a student can trust.
-
-### Wave 1: the backlog (bands 0 and 1). About 80 files. **Done** (run `2026-10-09T19:04Z/2db6`)
-
-> **Outcome** (`.verify/_runs/2026-10-09T19-04Z-2db6.md`): 79 files, 72 now verified (21
-> high, 50 medium, 1 low). All 64 backlog findings outside Exam 6C's page were closed,
-> including the four criticals; 84 more were found and 78 of them fixed in the run.
->
-> Left behind:
-> - **In review**, each for a source that couldn't be read: Close Year, Profit and
->   Contingency Provision, Insurer and fm-231.
-> - **Untouched:** Exam 6C's syllabus page, which waits on its F-001.
-> - **New open findings on four 6C pages:** *MCT* and *Capital Required* multiply by 1.5
->   where OSFI's guideline divides (critical); *Solvency* and *Supervisory Target Capital
->   Ratio* use LICAT's name for the denominator (major).
->
-> Two source drifts surfaced:
-> - SOA re-issued the Exam P sample PDFs under the same URLs. No key differs on the 565
->   questions matched; 109 still need a look.
-> - CAS revised the Fall 2026 Exam 5 outline in place (v02), and `Exam 5 (CAS).md` is out
->   of step with it.
->
-> Fold both into the Exam P re-check and the Exam 5 campaign.
-
-- **4 disputed concept pages** with open criticals: *Complement of Credibility*,
-  *Expense Ratio*, *Exposure Base* and *In-Force*. **Each needs a human decision**
-  (`docs/verification.md`: disputed means a person settles it). Put the four, each with its
-  evidence, to the maintainer in one list.
-- **56 other open findings on 41 files**, nearly all Exam 5 concepts against *Basic
-  Ratemaking*. Run them as one packet with that book loaded once. This is also the first
-  slice of the Werner packet in Wave 4.
-- **Exam 6C's syllabus page**: 8 open findings. F-001, the domain C renumbering, is a
-  maintainer's call already written up in run `9495`.
-- **30 stale files**: 13 P and 2 FM questions (mostly after a retag), 12 Books pages, 2 concepts, and
-  Exam P's page. Re-verify these **as a delta**. Diff the file between the commit its last
-  pass recorded and HEAD, then check only the change against the source the pass already
-  cited. A retag needs the ontology checked, not the question recomputed. This needs git
-  history: run `git fetch --unshallow` (or a deep enough `--deepen`) first, because the
-  session clone is shallow.
-
-### Wave 2: syllabus pages. 40 files, nearly mechanical.
-
-- The 29 SOA pages: re-fetch each PDF, compare its hash, run the lint, check the sitting,
-  and record the pass. **Batch all 29 in one run.**
-- The 9 CAS pages, one outline each. Run them in the same session as each exam's campaign
-  below if that's sooner, because the outline is also what that exam's resource pages are
-  checked against.
-
-### Waves 3–5: exam campaigns
-
-Each campaign is one sweep run ID, then one resolve run ID. Within each, packets run in
-parallel, one agent each.
-
-| # | Campaign | Packets | Files | Why this position |
-|---|---|---|---:|---|
-| 3a | **Exam FM Q351–Q462** | 1 paper (cached) | 112 | Cheapest packet in the vault, and it completes a `ready` exam. |
-| 3b | **Exam 5** | 14 papers; readings *Basic Ratemaking* and *Friedland*; exam page | ~420 | The largest CAS bank. Its two readings also serve FAM, GI and DISC concepts. It is also the regression suite. Resolve Spring 2018's missing booklet first. |
-| 3c | **Exam MAS-II** | 3 scanned papers; GLM (Goldburd) and the closed texts; exam page | ~190 | Completes the MAS track next to MAS-I. Scanned papers: OCR, then images for the residue. |
-| 3d | **Exams 7 and 8** (papers including the 98 questions filed under Exam 9) | 16 papers; Shapland, Mack, Marshall, Clark and other readings; 2 exam pages | ~430 | Keying packets by paper clears most of `exam-9` along the way. Write Exam 8's 10 missing reading pages first. |
-| 4a | **Exam 6C** | 13 papers; *CAS Financial Reporting* (split by chapter), the CIA IFRS 17 notes, Alberta Auto Reform and about 18 smaller readings | ~620 | The largest bank and the most concepts (163), but on free Canadian documents. 73 off-syllabus questions ride along. |
-| 4b | **Exam 9's own papers** | 7 papers; Exam 9 readings | ~200 | 149 of 172 questions are off-syllabus, so lowest student impact among the banks. |
-| 5 | **The rest**: 6U, PCPA, DISCs, FSA and SOA development exams, orphan concepts, timeline pages | Readings once their pages exist | ~300 | No question bank, and mostly no source pages yet. Timeline pages feed the flag-off Research tab, so they go last. |
-
-#### The packet procedure
-
-Every packet follows the same steps, whatever it holds.
+The waves — what is run in which order, and how far each has got — are
+`docs/content-plan.md` §3.2 and §4; Wave 1's record is its Appendix B. Every packet, in any
+wave, follows the same steps.
 
 1. **Load the source once.** Fetch it into the cache (`verify_sources.py`), then cite its
    sha256 in every pass.
@@ -367,16 +307,6 @@ would cost several times this.
 
 ## 7. Decisions only a maintainer can make
 
-These block parts of the plan, and none of them is the agent's to settle:
-
-1. **The four disputed criticals** (Wave 1).
-2. **Exam 6C F-001**: re-transcribe domain C's renumbered tasks, given the readings
-   keep their Fall 2025 codes (run `9495`).
-3. **Off-syllabus questions.** Verify them with their paper, as this plan proposes, or
-   leave them `unverified` as kept-for-the-record. They're out of quiz draws either way.
-4. **The 46 orphan concepts.** Link, merge or delete them before spending a fact check on
-   them.
-5. **Missing reading pages** for Exam 6U, Exam 8 and the FSA exams. Write them first
-   (recommended), or let concept agents verify against outline URLs directly.
-6. **The confidence ceiling for commercial-only sources.** MAS-I capped them at medium.
-   Confirm that this stands for MAS-II, ALTAM, FAM and SRM.
+Moved to the content decisions in `docs/content-plan.md` §6 (roadmap D6–D9, D20): the
+disputed criticals (settled in Wave 1), 6C's F-001, the off-syllabus questions, the orphan
+concepts, missing reading pages (settled: write them first) and the commercial-source ceiling.

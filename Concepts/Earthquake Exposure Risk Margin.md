@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9a8b5355781e46dddae54512cbd06bf23e74bb4c70da8b7aa7436b93a733b6f3
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a385931f1e9d0c98903c4110f13d7f0dd26aab6eb4fdaedaca0491d5a9c712b5
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Earthquake Exposure Risk Margin.md
@@ -40,7 +42,7 @@ verification:
 > >
 > > **Resources available:** the $\$25$ million earthquake reserve plus capital. The retained $\$140$ million is covered by $\$310$ million of capital available, so the requirement is met in the narrow sense.
 > >
-> > **But look at what it leaves.** After the event, capital available falls to roughly $\$310 - \$140 + \$25 = \$195$ million before tax effects. If the base solvency buffer is $\$185$ million, the MCT ratio falls from $168\%$ to about $105\%$ — barely above the minimum, and in the aftermath of a catastrophe that has also damaged the insurer's operations and its market.
+> > **But look at what it leaves.** After the event, capital available falls to roughly $\$310 - \$140 + \$25 = \$195$ million before tax effects. If minimum capital required is $\$185$ million, the [[MCT]] ratio falls from $168\%$ to about $105\%$ — barely above the minimum, and in the aftermath of a catastrophe that has also damaged the insurer's operations and its market.
 > >
 > > **What would improve it, in order of effectiveness:**
 > >

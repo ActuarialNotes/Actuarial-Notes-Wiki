@@ -92,6 +92,23 @@ ONTOLOGY: dict[str, tuple[str, str]] = {
     "Simple vs Compound Interest": ("Simple vs Compound Interest", FM_TVM),
     "Compound Interest": ("Compound Interest", FM_TVM),
     "Yield Rate": ("Yield Rate", FM_GENERAL),
+    # The topics of the SOA sample questions 351–462 (roadmap V10), each a term of
+    # the December 2026 FM syllabus, under the topic that lists it (1a/1c/1d, 3a/3b,
+    # 4a-4c, 5a/5b). Not "Premium" (fm-421): SOA lists "amortization of premium"
+    # and "call premium", never the bare word, and the key would reach every bank.
+    "Effective Rate": ("Effective Rate", FM_TVM),
+    "Effective Discount Rate": ("Effective Discount Rate", FM_TVM),
+    "Real Rate of Interest": ("Real Rate of Interest", FM_TVM),
+    "Equation of Value": ("Equation of Value", FM_TVM),
+    "Amortization Schedule": ("Amortization Schedule", FM_LOANS),
+    "Outstanding Balance": ("Outstanding Balance", FM_LOANS),
+    "Refinancing": ("Refinancing", FM_LOANS),
+    "Reinvestment of Coupons": ("Reinvestment of Coupons", FM_BONDS),
+    "Accumulation of Discount": ("Accumulation of Discount", FM_BONDS),
+    "Callable Bond": ("Callable Bond", FM_BONDS),
+    "Yield Curve": ("Yield Curve", FM_GENERAL),
+    "Convexity": ("Convexity", FM_GENERAL),
+    "Redington Immunization": ("Redington Immunization", FM_GENERAL),
 
     # broad exam-area topics that always carry a subtopic — kept as fallbacks
     "Financial Mathematics": ("Time Value of Money", FM_TVM),

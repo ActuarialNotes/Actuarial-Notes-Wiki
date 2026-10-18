@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3f5141a74246675c9da289cb4db08e9b830e00d0b1a42fbd14f2670f08bef3b6
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f27b8d0a3f0a2443edce7715ab4a0790f826aca798e5e50ddbf878b8e3c4495e
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/MSA Ratios.md
@@ -44,7 +46,7 @@ verification:
 > > 3. **Leverage of $2.8$ times surplus, double the industry.** The insurer is supporting twice as much business per dollar of capital, so the same loss ratio hurts twice as much.
 > > 4. **Reserves at $3.4$ times surplus** means a $10\%$ reserve deficiency wipes out $34\%$ of surplus. There is no room for error.
 > > 5. **Adverse development of $7\%$ of surplus** shows the error is already occurring, and given (3), the true deficiency may be larger than reported.
-> > 6. **[[MCT]] at $154\%$** — near the supervisory target, and with growth continuing the [[Base Solvency Buffer]] rises every quarter while losses reduce [[Capital Available]]. Both sides of the ratio move against it.
+> > 6. **[[MCT]] at $154\%$** — near the supervisory target, and with growth continuing minimum capital required rises every quarter while losses reduce [[Capital Available]]. Both sides of the ratio move against it.
 > >
 > > **The mechanism.** Growth is funded by capital the insurer does not have, at prices that do not cover cost, with reserves that are already proving light. This is precisely the sequence [[PACICC]]'s failure research describes, and the remedy — stop growing, raise rates, strengthen reserves, raise capital — is one the insurer will resist because it means shrinking.
 > >

@@ -111,9 +111,10 @@ comment at its head keeps the old cron line).
 
 ## What to run next
 
-`docs/verification-plan.md` is the plan for the unverified remainder of the vault: work
-packets keyed by source document (one past paper, or one reading plus its concepts and its
-resource page), the order to run them in, and the packet tooling (§4) that builds them —
+`docs/content-plan.md` is the plan for the unverified remainder of the vault: which exam's
+campaign is next, and the waves (§3.2, §4). `docs/verification-plan.md` is how a campaign's
+work is cut: packets keyed by source document (one past paper, or one reading plus its
+concepts and its resource page), the packet procedure, and the tooling (§4) that builds them —
 `verify_sources.py`, `verify_paper.py`, `verify_route.py`, `verify_record.py batch` and
 `verify_targets.py --by-source`.
 

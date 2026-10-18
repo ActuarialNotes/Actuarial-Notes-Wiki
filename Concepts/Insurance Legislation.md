@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:648f48091c91f49d0a73b5680878940339f89585d5b2fd16f85b23ba50e8c0c6
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9751942a93bd7d7a2a759eafe284a122881945e7ebdaa299e038e82ea498af6c
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Insurance Legislation.md
@@ -28,7 +30,7 @@ verification:
 >
 > 1. The requirement that a federally regulated insurer appoint an actuary.
 > 2. The [[Fault Determination Rules]] used to assign fault in an Ontario auto collision.
-> 3. The formula for an insurer's [[Base Solvency Buffer]].
+> 3. The formula for a P&C insurer's minimum capital required under the [[MCT]].
 >
 > > [!answer]-
 > > 1. **Statute** — [[Insurance Companies Act]], s. 357. Changing it requires an Act of Parliament.

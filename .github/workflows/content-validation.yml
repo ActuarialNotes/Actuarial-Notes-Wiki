@@ -10,7 +10,9 @@ name: Content Validation
 # structure, their links, and the question bank's learning objectives against
 # their sections (scripts/syllabus_lint.py), then the link graph of every
 # ready/beta exam (validate_links.py --studiable). Exams 6–9 are a syllabus
-# outline by design, so their unwritten pages warn rather than fail.
+# outline by design, so their unwritten pages warn rather than fail. Last, every
+# `ready` exam must still pass its structural publication gates
+# (publication_readiness.py --hold).
 #
 # The third gates the resource pages (docs/resource-pages.md): every
 # Resources/Books/ page in the one shape the standard defines, its syllabus
@@ -33,6 +35,8 @@ on:
       - 'scripts/syllabus_*.py'
       - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
+      - 'scripts/publication_readiness.py'
+      - 'scripts/generate_coverage_report.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
       - 'simulations/**'
@@ -50,6 +54,8 @@ on:
       - 'scripts/syllabus_*.py'
       - 'scripts/resource_*.py'
       - 'scripts/vault_links.py'
+      - 'scripts/publication_readiness.py'
+      - 'scripts/generate_coverage_report.py'
       - 'scripts/*.json'
       - '.claude/skills/actuarial-concept-definitions/validate_links.py'
       - 'simulations/**'
@@ -92,6 +98,13 @@ jobs:
 
       - name: Link graph of the studiable exams
         run: python3 .claude/skills/actuarial-concept-definitions/validate_links.py --studiable
+
+      # A ready exam keeps its structural gates (docs/content-plan.md, Phase 1):
+      # every objective link written, no catch-all, every concept with a served
+      # question. The fact-check gates print as warnings — an edit makes a page
+      # stale by design, and verify-check.yml repairs the record.
+      - name: Ready exams hold their gates
+        run: python3 scripts/publication_readiness.py --hold
 
   resources:
     name: lint resource pages

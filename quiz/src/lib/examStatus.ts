@@ -20,7 +20,7 @@ import type { ItemStatus } from '@/data/tracks'
 // An exam moves up when `scripts/publication_readiness.py --check` says so:
 // development → beta once every objective links a written, specific page and
 // every concept has a question; beta → ready once all of it is fact checked
-// (docs/cas-publication-plan.md).
+// (docs/content-plan.md).
 //
 // Surfaces read this rather than re-deriving "not P and not FM" locally: the
 // exam rows on the Study Guides and Quiz tabs (`components/ExamRow.tsx`, its

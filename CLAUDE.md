@@ -198,23 +198,29 @@ before touching that area**:
   how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
   compounding mechanism), and the line between what it may auto-fix and what it must only
   open a finding about.
-- `docs/verification-plan.md` — **the plan for fact checking the rest of the vault**, batched
-  by the source document each file is checked against rather than by folder: past papers as
-  packets (keyed by paper, so Exam 9's moved questions ride with their Exam 7/8 paper),
-  readings as packets (concept → syllabus task → reading → pages, with the reading's own
-  resource page in the same load), the near-mechanical syllabus pages, the Wave 0 tooling
-  (source cache, OCR'd booklets, blind-stem diffs, batch recording) and the maintainer
-  decisions that block parts of it. Read before planning or launching a VERIFY sweep.
-- `docs/cas-publication-plan.md` — **how a CAS exam leaves Beta / In Development**: the seven
-  gates `scripts/publication_readiness.py` measures (page verified, every objective link lands on
-  a written page, **no catch-all links** — one concept page standing in, under other names, for
-  more than two objective lines — concepts verified, readings written and verified, a served
-  question for every concept in the exam's own bank, the bank verified), each exam's baseline, the
-  order of the campaigns, and the DISC redesign: every lettered DISC section links a page about
-  *that* section (`CGL Coverage B`, `HO-3 Liability Exclusions`, `Chart Selection`, …), written
-  from the primary documents the course teaches (ISO forms, NAIC model acts, SSAPs, LII), with
-  the DISCs' own vault-written banks. Run `publication_readiness.py --check <exam>` before
-  promoting an exam in `examStatus.ts`.
+- `docs/verification-plan.md` — **how fact checking is batched**: by the source document each
+  file is checked against rather than by folder — past papers as packets (keyed by paper, so
+  Exam 9's moved questions ride with their Exam 7/8 paper), readings as packets (concept →
+  syllabus task → reading → pages, with the reading's own resource page in the same load) —
+  the source inventory, the Wave 0 tooling (source cache, OCR'd booklets, blind-stem diffs,
+  batch recording), the packet procedure and the sizing. *Which* packets run next is the
+  content plan's. Read before launching a VERIFY sweep.
+- `docs/content-plan.md` — **the one plan for the vault's content** (it absorbed the CAS
+  publication plan, the verification waves, the concept-gap and syllabus-pipeline leftovers):
+  the seven gates `scripts/publication_readiness.py` measures for both bodies (page verified,
+  every objective link lands on a written page, **no catch-all links** — one concept page
+  standing in, under other names, for more than two objective lines — concepts verified,
+  readings written and verified, a served question for every concept in the exam's own bank,
+  the bank verified), the rules every campaign keeps (read every link first, for the wrong page
+  and the wrong country; the clean-up round's limits; never cite an unauthorized copy), where
+  every exam stands, every open content item by workstream, the **phases** they are done in
+  (1: ready means ready; 2: the converter, then the beta exams; 3: the SOA ASA prelims; 4: the
+  rest), the content decisions, and the campaign records (the DISC redesign — one page per
+  lettered section, written from the primary documents the course teaches — and Exam 7).
+  `publication_readiness.py --hold` (CI, `content-validation.yml`) fails a PR that costs a
+  `ready` exam a structural gate (G2, G3, G6) and warns on the rest. Run
+  `publication_readiness.py --check <exam>` before promoting an exam in `examStatus.ts`. Read
+  before starting any content campaign.
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
@@ -581,7 +587,7 @@ Other important `lib/` modules:
   under it — a syllabus outline with no question bank yet). Exam 6T is the CAS's credit for
   the Actuarial Institute of Chinese Taipei's Exams 6GA3 and 6GB3, not a CAS sitting. The DISCs publish no papers — The Institutes sells their sample questions —
   so their banks (`exam-disc-da` / `-rm` / `-ia`) are the vault's own, written for
-  `docs/cas-publication-plan.md`. PCPA is beta with no bank — CAS releases no PCPA paper or sample
+  the DISC campaign (`docs/content-plan.md`, Appendix A.2). PCPA is beta with no bank — CAS releases no PCPA paper or sample
   questions to convert — because its page and the Projects tab's simulator are material
   to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from

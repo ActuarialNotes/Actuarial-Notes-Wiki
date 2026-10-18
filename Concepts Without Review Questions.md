@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
-> Generated 2026-10-17 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1004 of 2066 syllabus concept entries (49%)** have at least one question in their exam's own bank.
+> Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
+> **1010 of 2066 syllabus concept entries (49%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -9,7 +9,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 | Exam | Bank (questions served) | Concepts covered | % | Objectives with no questions |
 |---|---|---|---|---|
-| [[Exam P-1 (SOA)]] | `exam-p` (707) | 65 / 72 | 90% | 0 / 3 |
+| [[Exam P-1 (SOA)]] | `exam-p` (716) | 71 / 72 | 99% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
 | [[Exam FAM (SOA)]] | none | 0 / 71 | 0% | 10 / 10 |
 | [[Exam SRM (SOA)]] | none | 0 / 33 | 0% | 5 / 5 |
@@ -52,7 +52,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (121) | 56 / 66 | 85% | 0 / 4 |
-| **Total** | | **1004 / 2066** | **49%** | |
+| **Total** | | **1010 / 2066** | **49%** | |
 
 107 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -60,29 +60,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam P-1 (SOA)
 
-*7 of 72 syllabus concepts have no question in `questions/exam-p/`.*
+*1 of 72 syllabus concepts have no question in `questions/exam-p/`.*
 
 ### General Probability {23–30%}
 
 *1 of 19 uncovered*
 
 - [[Discrete Mathematics]]
-
-### Univariate Random Variables {44–50%}
-
-*4 of 36 uncovered*
-
-- [[Random Variable]] — tagged in another bank (2)
-- [[Insurer]] — tagged in another bank (3)
-- [[Policyholder]]
-- [[Claim]] — tagged in another bank (4)
-
-### Multivariate Random Variables {23–30%}
-
-*2 of 22 uncovered*
-
-- [[Discrete Random Variable]] — tagged in another bank (1)
-- [[Continuous Random Variable]] — tagged in another bank (1)
 
 ## Exam FM-2 (SOA)
 
@@ -1967,7 +1951,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *5 of 27 uncovered*
 
 - [[Variance]] — tagged in another bank (61)
-- [[Expected Value]] — tagged in another bank (102)
+- [[Expected Value]] — tagged in another bank (104)
 - [[Residual]] — tagged in another bank (3)
 - [[BIC]] — tagged in another bank (3)
 - [[Summary Statistics]] — tagged in another bank (1)
@@ -2032,7 +2016,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *6 of 76 uncovered*
 
-- [[Insurer]] — tagged in another bank (3)
+- [[Insurer]] — tagged in another bank (6)
 - [[Risk]] — tagged in another bank (1)
 - [[Underwriting Year]]
 - [[Types of Insurance]]
@@ -2127,7 +2111,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Insurance Finance Income or Expenses]]
 - [[Other Comprehensive Income Option]]
 - [[Transition to IFRS 17]]
-- [[Insurer]] — tagged in another bank (3)
+- [[Insurer]] — tagged in another bank (6)
 - [[Base Solvency Buffer]]
 - [[Climate Risk]]
 - [[Educational Note]]
@@ -2282,7 +2266,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *4 of 22 uncovered*
 
-- [[Insurer]] — tagged in another bank (3)
+- [[Insurer]] — tagged in another bank (6)
 - [[Insurance Pricing]]
 - [[Insurance Policy]] — tagged in another bank (7)
 - [[Prepayment Risk]]

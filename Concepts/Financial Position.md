@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:43c23b4a3171865cf69d2ff388b5ef5b34bfcd7eb34e84d31e62f879529eba80
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:4e48b0bf1c1af2f8fa66512d849cd8aaaff187c898e8d8e5a3f2f537bffba92a
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Financial Position.md
@@ -44,4 +46,4 @@ verification:
 > >
 > > **Why the deductions.** Goodwill and intangibles cannot be sold to pay claims; a deferred tax asset that depends on future profits is worthless precisely when the insurer is unprofitable, which is when capital is needed. The regulatory adjustments ask a single question of each asset: **would this absorb a loss?**
 > >
-> > **The practical consequence.** If the [[Base Solvency Buffer]] is $\$120$ million, the [[MCT]] ratio is $190/120 = 158\%$, not the $217\%$ that using equity would suggest. An acquisition that creates goodwill therefore consumes regulatory capital dollar for dollar even though it leaves accounting equity unchanged — a fact that shapes how Canadian insurers finance acquisitions.
+> > **The practical consequence.** If minimum capital required is $\$120$ million, the [[MCT]] ratio is $190/120 = 158\%$, not the $217\%$ that using equity would suggest. An acquisition that creates goodwill therefore consumes regulatory capital dollar for dollar even though it leaves accounting equity unchanged — a fact that shapes how Canadian insurers finance acquisitions.

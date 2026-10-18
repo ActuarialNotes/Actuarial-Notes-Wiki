@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:cd0ffc5ab61eca3b478267bdc4e8555d374f1393614a2603403643a5f2e9bc3a
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0e4ac4c5433b9ca73a6a4eeada9622eb17d708b0e8fb531181fd22bb38ff849c
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Stress Testing.md
@@ -32,7 +34,7 @@ verification:
 > >
 > > **Scenario test.** A recession over two years: equities $-25\%$; credit spreads widen, so corporate bond values fall and one holding defaults; claim frequency rises $6\%$ in commercial lines and fraud indicators rise in personal auto; premium volume falls $8\%$ as insureds reduce coverage; and reserve development turns adverse as claimants pursue larger settlements.
 > >
-> > *What it reveals:* the **correlation**. Each element alone is survivable; together they attack capital available (investment losses, underwriting losses) and the [[Base Solvency Buffer]] (adverse development raising liabilities) simultaneously. This is where the [[Diversification Credit]] assumption gets tested, and it is the test that changes decisions.
+> > *What it reveals:* the **correlation**. Each element alone is survivable; together they attack capital available (investment losses, underwriting losses) and minimum capital required (adverse development raising liabilities) simultaneously. This is where the [[Diversification Credit]] assumption gets tested, and it is the test that changes decisions.
 > >
 > > **Reverse stress test.** Ask: what combination would take the MCT ratio below $100\%$? Suppose the answer is a $1$-in-$250$ catastrophe combined with the failure of the insurer's largest reinsurer.
 > >

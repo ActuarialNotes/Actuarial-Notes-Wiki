@@ -4,7 +4,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:5a617de9fa56d9f7fd9b5fd6b8b2014851a9a1607beb74f0c6d9a7fab1edf3c0
+  content_hash: sha256:66d240ff8bfc5f5226a365ae19494c732b06a9f7341cf3cb66e633e7745808be
   sources: []
   open_findings: 0
   open_critical: 0
@@ -55,10 +55,10 @@ verification:
 > > &= \$181.7\text{M}
 > > \end{align*}$$
 > >
-> > and the [[Base Solvency Buffer]] is $1.5 \times \$181.7 = \$272.5$ million.
+> > and minimum capital required is $\$181.7 / 1.5 = \$121.1$ million.
 > >
-> > **Now suppose $\rho = 1$.** The square root becomes $110 + 83 = 193$, the credit falls to zero, capital required rises to $\$207$ million and the buffer to $\$310.5$ million — **$\$38.0$ million more**.
+> > **Now suppose $\rho = 1$.** The square root becomes $110 + 83 = 193$, the credit falls to zero, capital required rises to $\$207$ million and minimum capital required to $\$138.0$ million — **$\$16.9$ million more**.
 > >
-> > **What that means.** On capital available of $\$450$ million, the MCT ratio falls from $165\%$ to $145\%$ — through the supervisory target — purely from a correlation assumption. The diversification credit is worth $20$ points of MCT ratio, and it rests on a parameter nobody observes directly.
+> > **What that means.** On capital available of $\$450$ million, the MCT ratio falls from $372\%$ to $326\%$ purely from a correlation assumption. The diversification credit is worth $45$ points of MCT ratio, and it rests on a parameter nobody observes directly.
 > >
 > > **The practical conclusion for [[ORSA]]:** an insurer whose ratio depends materially on the credit should hold an internal target that survives the correlated case. Diversification is real in ordinary years and unreliable in the years capital is actually needed, and a capital plan that assumes otherwise is assuming away the scenario it exists for.

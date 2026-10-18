@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f63efda1f3c891b275df19adb2f7b90a8b16e3104bdfb6b1c957a35a702b194b
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f20115efdbfd479cf79c1652dd9bb7f7e16a78c25389f8617fba19e7064e0a13
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Capital Available.md
@@ -51,6 +53,6 @@ verification:
 > > \text{Capital available} &= \$277\text{M}
 > > \end{align*}$$
 > >
-> > **A $10\%$ fall in capital available from a movement in interest rates**, on bonds the insurer intends to hold to maturity and will suffer no realised loss on. If the [[Base Solvency Buffer]] were $\$180$ million, the [[MCT]] ratio falls from $171\%$ to $154\%$ — close to the supervisory target — for a reason unrelated to underwriting.
+> > **A $10\%$ fall in capital available from a movement in interest rates**, on bonds the insurer intends to hold to maturity and will suffer no realised loss on. If minimum capital required were $\$180$ million, the [[MCT]] ratio falls from $171\%$ to $154\%$ — close to the supervisory target — for a reason unrelated to underwriting.
 > >
 > > **The management response** is not to sell the bonds (which would realise the loss) but to recognise that the liabilities are also worth less at higher rates. If the insurer has elected the [[Other Comprehensive Income Option|OCI option]] on its liabilities, the offsetting liability gain also runs through OCI and the net effect is only the duration mismatch — which is the whole reason the option exists.

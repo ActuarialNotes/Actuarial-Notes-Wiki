@@ -1,5 +1,9 @@
 # Concept gaps plan
 
+> **The plan now lives in `docs/content-plan.md`** (§3.3 holds what is left of this one, and its
+> decisions are in §6). This file stays as the record of phases A–D and as the generated gap
+> worklist below the `gaps:begin` marker, which `find_concept_gaps.py --update-plan` rewrites.
+
 The concept pages the study guides link to that don't exist yet: found, ranked, and cut into
 batches to write. **Status: Phase A (batches 1–7) done — 44 pages written, 7 targets aliased to
 existing pages, study guides re-rendered. Phase B reviewed and planned (§8) with one example

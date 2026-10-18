@@ -1,0 +1,795 @@
+# Content Plan
+
+_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §9 · Re-measure at every
+roadmap review_
+
+This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
+and question banks, the fact check that stands behind them, and the generated figures and
+simulators drawn on them. It says what "ready" means, where every exam stands, every open piece
+of content work, and the order it is done in, as **phases**.
+
+It replaces the content subplans that used to sit beside the roadmap:
+
+| Was | Now |
+|---|---|
+| `docs/cas-publication-plan.md` — the seven gates, the CAS order of work, its decisions and its campaign records | **Folded in and removed.** The gates are §1, the order is §4, the decisions are §6, and the DISC and Exam 7 campaign records are Appendix A. |
+| `docs/verification-plan.md` — the waves, their status, and the maintainer's decisions | The waves are §3.2 and §4, the decisions are §6. **The method stays there**: one document per load, the source inventory, the Wave 0 packet tooling, the packet procedure and the sizing. |
+| `CONCEPT_GAPS_PLAN.md` — the missing concept pages (phases A–D) | Its open items are §3.3. **It stays** as the generated gap worklist (`find_concept_gaps.py --update-plan` writes its lower half) and the record of phases A–D. |
+| `docs/syllabus-pipeline-review.md` — work packages 1–9 | The open packages are §3.4. The review stays as the record of how the pipeline was designed. |
+| `docs/resource-pages.md` §5, `docs/concept-figures.md`, `docs/distribution-simulators.md` | Their leftovers are §3.6–§3.7. The docs stay as the standard and the how-to. |
+
+How it sits under the roadmap: `docs/roadmap.md` ranks the work **across lanes** and keeps the
+item IDs (C1…C18, V1…V10, D1…D21); this plan orders the **content lane** and groups those items
+into phases. A PR that moves a content item updates its line here *and* its line in the
+roadmap. Where the two disagree about status, the code wins and both get fixed (roadmap §0.5).
+
+> **In flight elsewhere.** Another session is adding the SOA and CAS exams the vault doesn't
+> have yet (new `Exam *.md` pages, `scripts/exam_catalog.json`, `examStatus.ts`, the tracks).
+> This plan doesn't duplicate that work: each new page enters §2 at `development` and joins
+> Phase 3 or 4 by its body and stage (§3.0).
+
+---
+
+## 1. What "ready" means: seven gates
+
+An exam is promoted when `python3 scripts/publication_readiness.py --check <exam>` passes. The
+script is the single definition, for both bodies, so the plan is measured rather than argued.
+
+| Gate | Passes when |
+|---|---|
+| **G1 page** | The exam page is `verified` against the examining body's outline. |
+| **G2 written** | Every link in a learning objective lands on a page, and no syllabus concept page is a stub. |
+| **G3 specific** | No concept page is linked *under another name* from more than two objective lines of one exam page. |
+| **G4 checked** | Every syllabus concept page is `verified`. |
+| **G5 sources** | Every Source Material reading has a `Resources/` page, and it is `verified`. |
+| **G6 questions** | Every syllabus concept has at least one question the quiz serves, in the exam's own bank. |
+| **G7 bank** | Every question the quiz serves from that bank is `verified`. |
+
+The rules underneath are `docs/verification.md`'s: nothing reaches `verified` without a citable
+external source read in that run (P1), and any edit drops a file back to `stale` (P4). Questions
+with an open critical finding are kept out of the quiz, so G6 and G7 count only questions that
+are actually served.
+
+**G3 exists because of the DISCs.** `[[Commercial General Liability|CGL Coverage B]]` looks
+specific, but it sends the reader to an overview that gives Coverage B one bullet. The gate counts
+links whose text doesn't name the page they point to; "Premium Auditing Process" → *Premium
+Audit* is fine. G3 can't catch a link to the **wrong** page under a plausible name (DISC-IA's
+"Types of Annuities" went to *Life Annuity*), or to the **wrong country's** page (a Canadian
+page standing in on a U.S. syllabus), so every campaign starts with a person or an agent reading
+each link (§1.2, rule 5).
+
+### 1.1 Status steps, and holding them
+
+- **development → beta**: once G2, G3 and G6 pass — the material exists, every section has its
+  own page, and every concept can be quizzed.
+- **beta → ready**: once all seven pass. Promotion is a one-line change in
+  `quiz/src/lib/examStatus.ts`, mirrored in `scripts/exam_catalog.json` (`examCatalog.test.ts`
+  holds them together); an exam leaving development joins the DEFAULT track
+  (`data/tracks.test.ts`). It is the maintainer's call (roadmap §0.1), in the same PR as the run
+  that got the exam there, citing the script's output.
+- **Holding ready** (new in Phase 1): `python3 scripts/publication_readiness.py --hold` runs in
+  `content-validation.yml`. A `ready` exam that fails a **structural** gate (G2, G3, G6 — a fact
+  about the pages, links and bank) fails the PR. A ready exam owed a **fact check** (G1, G4, G5,
+  G7 — an edit makes a page stale by design, and `verify-check.yml` repairs the record) and a
+  beta exam below the beta bar print as warnings: the first is a re-check the exam is owed, the
+  second its worklist.
+
+### 1.2 Rules every campaign keeps
+
+Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on every later one:
+
+1. **A file with an open major finding is `in_review`, never `verified`.** A critical finding
+   makes it `disputed`, and the quiz withholds the question.
+2. **The clean-up round may author, within limits.** A checker may delete a claim, restate it to
+   what a source it read says, reword a question its own finding proposed changing, retag, or
+   drop or retarget a link — each recorded as a finding plus a resolution, then verified again.
+   Anything new goes to a separate writer, and a different checker verifies it.
+3. **Don't make an exam depend on another exam's commercial reading.** Where a section leans on a
+   shared page whose other half rests on a book no one can read free, give the section its own
+   page.
+4. **Never cite an unauthorized copy.** Cite such a book by edition and pages; prefer an open
+   text covering the same ground.
+5. **Read every link before checking anything.** Wrong targets and the wrong country (Canadian
+   pages on U.S. syllabi, and back) waste the check that follows.
+6. **Editing a page another exam has verified costs that exam a re-check.** Count it in the
+   campaign; do the delta check in the same run where the source is already loaded.
+7. **Batch by source document, not by folder** (`docs/verification-plan.md` §2): one paper and
+   every question sat on it, wherever filed (`originally_exam`), or one reading with its concepts
+   *and* its resource page. Mechanical first; the model reads only the residue.
+8. **Nothing a PDF prints is retyped by a model** (`docs/pdf-question-pipeline.md`), and nothing
+   is invented — figures, chapters, codes and links are transcribed with their source.
+
+---
+
+## 2. Where each exam stands (2026-10-18)
+
+From `python3 scripts/publication_readiness.py --body all`, before this plan's Phase 1 changes.
+
+**Ready (7):**
+
+| Exam | Gates | What fails |
+|---|---:|---|
+| MAS-I, DISC-DA, DISC-RM, DISC-IA, Exam 7 | 7 / 7 | — |
+| **Exam P** | **5 / 7** | G4: *Insurer* is `in_review` (its Exam 9 and form-of-insurer bullets are unsourced). G6: six syllabus concepts have no question tagged — *Random Variable*, *Discrete* / *Continuous Random Variable*, *Insurer*, *Policyholder*, *Claim*. |
+| **Exam FM** | **6 / 7** | G3: *Term of Annuity* stands in, as "finite term", for three objective lines. |
+
+Two ready exams failing their own gates is an unbacked promise — roadmap §0.3, rule 1 — and it is
+why Phase 1 comes first.
+
+**Beta (6):**
+
+| Exam | Page | Concepts | Catch-alls | Unverified concepts | No question | Sources unverified | Bank verified | Gates |
+|---|---|---:|---:|---:|---:|---:|---|---:|
+| Exam 8 | verified | 39 | 0 | 1 | 0 | 1 / 12 | 143 / 143 | 5 / 7 |
+| PCPA | verified | 29 | 0 | 9 | 29 | 12 / 13 | no bank | 4 / 7 |
+| Exam 9 | verified | 60 | 0 | 48 | 10 | 9 / 9 | 98 / 121 | 3 / 7 |
+| Exam 6C | stale | 151 | 0 | 141 | 22 | 67 / 67 | 0 / 321 | 2 / 7 |
+| MAS-II | in review | 105 | 1 | 67 | 28 | 2 / 5 | 20 / 146 | 1 / 7 |
+| Exam 5 | in review | 136 | 2 | 60 | 7 | 4 / 6 | 0 / 349 | 1 / 7 |
+
+Five of the six are below the development → beta bar they now have to meet (G3 or G6). They were
+beta before the gates existed; `--hold` warns on them rather than failing.
+
+**Development (30):** Exam 6U (3 / 7; 45 readings unverified, no bank) and the 29 SOA exams
+past FM — the six ASA prelims (FAM, SRM, PA, ALTAM, ASTAM, ATPA) and the 23 FSA modules — each
+at 2–3 / 7. Every SOA page is `verified` against its syllabus PDF; none has a bank. Their G2
+failures are mostly the syllabus linker's cut-short and noise links (`[[Chain-Ladder]]`,
+`[[Whole Life]]`, `[[Distribution]]`), not missing concepts (§3.3–§3.4).
+
+**Across the vault:** 5,533 content files, about 55% verified; 3 stale (two retired DISC-RM
+questions and Exam 6C's page, held behind D8); **2 open critical findings**, both Exam 6C (*MCT*,
+*Capital Required*).
+
+---
+
+## 3. The workstreams
+
+Every open piece of content work, by kind. §4 puts them in order.
+
+### 3.0 Exam coverage — new exam pages (another session)
+
+Adding the SOA and CAS exams the vault lacks. A new page is generated through the syllabus
+pipeline (`docs/syllabus-pipeline.md`) and enters at `development`. **Nothing here duplicates
+it**; once its pages land they are measured in §2 and picked up by Phase 3 (ASA-level) or Phase 4
+(fellowship-level and no-bank exams).
+
+### 3.1 Publication campaigns, exam by exam
+
+Each step is a campaign: links read first (§1.2 rule 5), one sweep run and one resolve run,
+batched by source. The order is the CAS plan's, refreshed:
+
+| # | Exam | Gates | What it takes | Why here |
+|---|---|---:|---|---|
+| — | MAS-I, DISCs, Exam 7 | 7 / 7 | Done (10, 11 and 16 Oct 2026; Appendix A) | |
+| 1 | **Exam P, FM** (C8) | 5, 6 / 7 | Phase 1 | Already `ready`; the gates must hold |
+| 2 | **Exam 8** (C1) | 5 / 7 | *Risk*'s ERM section (its reading, Brehm, has no free copy — source it or cut it); the ISO CGL rating plan, in the CAS study kit only (D20) | Shares papers with 9; 34 of 9's questions already cleared |
+| 3 | **Exam 9** (C2) | 3 / 7 | Questions for 10 concepts; verify 48 concepts, 9 readings, the 23 unverified served questions on its own 7 papers | Most of its bank arrived verified through 7 and 8 |
+| 4 | **Exam 5** (C3) | 1 / 7 | D8 (the re-issued Fall 2026 v02 outline); 2 catch-alls (*Loss Reserving* stands in for reserving objectives); questions for 7 concepts; verify 60 concepts, 4 readings, 349 questions on 14 papers (find Spring 2018's booklet first) | Largest bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM |
+| 5 | **MAS-II** (C4) | 1 / 7 | The *Bühlmann Credibility* catch-all; questions for 28 concepts; verify 67 concepts, 2 readings (commercial: medium, D7), 126 questions on 3 fully scanned papers (OCR first) | Scanned papers make each question dear |
+| 6 | **Exam 6C** (C5) | 2 / 7 | D8 (F-001, domain C renumbering); the two criticals (V6, Phase 1); questions for 22 concepts; verify 141 concepts, 67 readings, 321 questions | Most concepts and readings, all free Canadian documents |
+| 7 | **PCPA** (C6) | 4 / 7 | A vault-written bank (29 concepts, most shared with MAS-I/II: tags plus a few new questions, D5); verify 9 concepts and 12 readings (several commercial) | No paper exists; the Projects simulator is the real practice |
+| 8 | **ASA prelims** (C9) | 2–3 / 7 | §4 Phase 3 — the plan itself doesn't exist yet | The next exams to become studiable, sat by far more candidates |
+| 9 | **Exam 6U** (C7) | 3 / 7 | Read every link for country first; a vault-written bank for 66 concepts; verify 56 concepts and 45 readings (all pages exist, none verified); its objective codes don't match its numbering | Furthest CAS exam from ready |
+| 10 | **FSA modules** (C10) | 2–3 / 7 | Pages and concepts exist, no banks; most readings have no free copy | Fellowship-level; fewest candidates per module |
+
+### 3.2 Fact check (VERIFY)
+
+The method is `docs/verification-plan.md` (one document per load, the packet tooling, the packet
+procedure, the sizing); the rules are `docs/verification.md`; a sweep is run by hand
+(`docs/validation-agent.md`, D19). The waves, with their status:
+
+| Wave | What | Status |
+|---|---|---|
+| 0 | The packet tooling (`verify_sources`, `verify_paper`, `verify_route`, `verify_record batch`, `verify_targets --by-source`) | ✅ built |
+| 1 | The backlog: disputed pages, open findings, stale files | ✅ run `2db6` (9 Oct). Left: the two 6C criticals it found (V6 → Phase 1) |
+| 2 | Syllabus pages | 🟡 all 31 SOA pages and 8 CAS pages verified. Left: Exam 5 and MAS-II `in_review`, 6U `in_review` (its open findings), 6C stale behind D8 |
+| 3a | FM Q351–Q462 | ✅ V4 (17 Oct). 10 topic-tag findings → V10, Phase 1 |
+| 3b–4b | The exam campaigns — 7 ✅, 8 🟡, then 9, 5, MAS-II, 6C | rides §3.1 |
+| 5 | The rest: 6U, PCPA, FSA and SOA development exams, orphan concepts, timeline pages | rides Phases 3–4 |
+
+Open fact-check items outside the campaigns:
+
+- **V6** — the two open criticals on 6C (*MCT*, *Capital Required*: ×1.5 where OSFI's MCT
+  guideline ÷1.5), and the majors that share the source (*Solvency*, *Supervisory Target Capital
+  Ratio*: LICAT's name for the MCT denominator). → Phase 1.
+- **V10** — FM's topic tags not in `scripts/ontology_map.py`. → Phase 1.
+- **V7** — run summaries for the 2026-10-11 Exam 7 and DISC-RM runs. Housekeeping. → Phase 2.
+- **V8** — the 363 concept-gap pages written in phases A–D are AI-drafted and `unverified`; they
+  need human review (CONCEPT_GAPS D5). → rides each exam's campaign; Phase 4 for the rest.
+- **Exam P's sample PDFs were re-issued again** (found 18 Oct): the SOA's sample questions and
+  solutions now hash `24980e6d…` / `e10d2649…`, not the `e47245…` / `efade8…` several Exam P
+  concept pages cite. No gate fails (a page stays verified against the copy it read), but the next
+  Exam P sweep re-cites the new files as a delta, as Wave 1 did after the last re-issue.
+- **V10's leftovers** — fm-370, fm-379, fm-391 and fm-421: a topic paired with another syllabus
+  section, or not a syllabus term ("Premium"). Each needs a retag and a delta re-check.
+- **V9** (proposed) — VERIFY can't move or retire a file, so E10's four stranded question files
+  and any mis-named page stay where they are. A rule change; the maintainer's.
+- **Off-syllabus questions** (249 CAS) ride their paper's packet if D6 says verify them.
+- **Orphan concepts** (46 at the 9 Oct count): link, merge or delete before spending a check (D9).
+
+### 3.3 Concept pages
+
+Phases A–D of `CONCEPT_GAPS_PLAN.md` are done: 363 pages written, every concept target on the
+study guides resolves but one. Left (C11):
+
+- ***Total Risk*** (GH-101), the one concept still missing.
+- **11 link fixes** — a guide links a variant of a page that exists (`Decision Making`,
+  `Financial Statement`, `Maximum Likelihood Estimator` …). Each wants an alias keyed the way
+  `syllabus_write.py` looks phrases up, then a re-render.
+- **26 cut-short links** (`[[Chain-Ladder]]` for *Chain Ladder Method*, `[[Whole Life]]`) and
+  **91 noise links** (`[[Data]]`, `[[United State]]`) — the linker's, fixed in the linker (§3.4),
+  not by writing pages. These are most of the SOA pages' G2 failures.
+- **9 ambiguous targets** (D15; default: link the proposed page) and **30 one-word targets**.
+- **21 stubs** (`Capital` is the most-linked, 6 guide links; eight have no body at all).
+- Follow-ups noticed in phase D: *Workers Compensation Insurance* is Canadian, but the `wc` alias
+  sends GI-302 (U.S.) there; *Risk Transfer* has nothing on pension risk transfer;
+  *Decision-Making* is a stub more guides now lean on; overlaps worth a look (*Social Inflation*
+  / *Nuclear Verdicts*, *Long-Tail Liability* / *Long Tail Lines*, *Non-Financial Risk* / IFRS
+  17's risk adjustment, *Cognitive Bias* / *Behavioral Finance*).
+- Canadian pages leading U.S. questions (Exam 7's leftovers): *Rating Agency*, *Concentration
+  Risk*, *Risk Transfer*.
+
+### 3.4 The syllabus pipeline
+
+From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and V3's findings:
+
+- **C17 — teach the writer the link names #1629 chose.** `syllabus_write.py --check` is not
+  clean on 15 of the 18 FSA pages: a re-render would put back the old link names, and link
+  CP-312's "Part 1" citation to the Part 2 (2020) page, which shares its title. It needs a
+  citation → page table (or to read the existing page's links) **before the next sitting is
+  rendered, and before any new exam page is generated over an old one**.
+- **The linker's noise and cut-short links** (§3.3) — unlink the noise, extend phrases to the page
+  they name. It moves most SOA exams' G2.
+- **C12 — packages 4–6 and 8**: `syllabus:` provenance blocks for the 14 hand-made pages (P, FM,
+  the CAS exams; regenerate a page with hand-authored content only once the overlay exists);
+  `page_lint.py` for concept pages, in CI on changed files. Owner decisions D1–D4 of that review
+  were applied implicitly and never written up (D18).
+
+### 3.5 Questions and the conversion pipeline
+
+- **C13 — the converter drops each CAS examiner's report's opening paragraph** (before "Part a"),
+  found in the Exam 7 campaign, which restored it by hand. Fix `pdf_extract.py`, then find the
+  gap mechanically in the other CAS banks (5, 6C, 8, 9, MAS-II) and restore it in each paper's
+  packet. **Do it before those banks' campaigns** — otherwise each packet restores it by hand.
+- **Vault-written banks** — G6 gaps in every beta exam (§3.1), whole banks for PCPA and 6U, and
+  later the SOA development exams, all through the `question-writer` skill, each question checked
+  by a different agent from its writer.
+- **SOA published material** — where the SOA publishes sample questions or past written-answer
+  papers for an ASA prelim (Phase 3 lists which, from the SOA's own pages), convert them with `soa-exam-converter` (Phase 3), never retyped.
+- **`standardize_questions.py` is unsafe to run** (found 18 Oct): it applies `ontology_map.py` to
+  every bank by topic string, and ten CAS questions — fifteen with V10's additions (Exam 9's *Yield
+  Curve*, *Convexity*, *Real Rate of Interest*) — share a string with a P / FM key. Scope it to the
+  P and FM banks before anyone runs it.
+- **Exam 7 leftovers (D10)**: questions on readings no longer on the syllabus (Patrik, Brehm /
+  Goldfarb, England & Verrall), and 2012 q20 filed under Exam 9. Default: keep them as they are.
+- **The converter's printed slips**: open minor findings on the Exam 8 papers are mostly CAS's own
+  printed errors the vault repeats untagged; each wants an "(as printed)" note in its paper's
+  packet.
+
+### 3.6 Resource pages
+
+`docs/resource-pages.md` is the standard; `resource_lint.py` holds every page to it in CI.
+
+- **C18** — two slips V3 found: the Atkinson & Dallas page carries only the Ch. 9 code
+  (ILA101-103-25) though ILA-101 also assigns Ch. 11 (ILA101-104-25); the COPLFR page's file name
+  says 2024 but its `Year` is 2025. → Phase 1.
+- **Atkinson & Dallas** (ILA-101): its lead names only the Ch. 9 reading (F-002), and its chapter
+  list rests on one library catalogue that wouldn't load; `in_review` until a catalogue confirms it.
+- **C16** — three study-kit texts with no contents available (Agricultural Programs, KPMG
+  Regulatory Oversight, McDonald) and Baer / Rendall's, which couldn't be fetched.
+- **D21** — Goldburd et al.: Exam 8 assigns the 2025 revision; the page describes 2020.
+- **Missing reading pages for new exams** — write them through the resource pipeline before their
+  concepts' packets run (`verification-plan.md` §3: a concept agent looking for its own document is
+  the most expensive way to find it).
+- **Cowork's corpus grows only through these pages** (roadmap A3): a real document enters Cowork
+  as a `Resources/Books/` page first.
+
+### 3.7 Figures and simulators
+
+- **C14** — concept figures for 6U, 7, 8, 9, PCPA and the DISCs (`docs/concept-figures.md`;
+  builders exist for P, FM, MAS-I, MAS-II, 5 and 6C). Generated — edit the builder, never the SVG.
+- **C15** — more distribution simulators (`docs/distribution-simulators.md`): Pareto (both
+  forms), Generalized Pareto, Weibull, Uniform, t, χ², F, GEV.
+- **MCT figure** — `figures_exam_6c.py` draws the ×1.5 error V6 corrects. → Phase 1, with V6.
+
+### 3.8 Not in this plan
+
+- **The Research corpus** (`docs/research-corpus-plan.md`, the dated `Resources/` timeline pages)
+  — parked with the Research tab (R1). Its pages are verified last (Wave 5).
+- **Comprehension checks** (357 files, rendered nowhere; `docs/comprehension-check-backlog.md`) —
+  parked (R2, D11).
+- **Concept Craft's relation labels** (X2) — app data, not vault pages; reviewed in the
+  Experiences lane.
+
+---
+
+## 4. The phases
+
+A phase ends when its exit test passes, measured by script, not judged. The ranking rule is the
+roadmap's (§0.3): an unbacked promise first, then what unblocks the most, then learner impact
+divided by cost — weighted by how many candidates sit the exam.
+
+### Phase 1 — Ready means ready
+
+**Why first:** two `ready` exams fail their own gates, and two critical findings stand on pages a
+reader can open. Each is a promise to the reader with nothing behind it.
+
+**Exit test:** `publication_readiness.py --check` passes on **every** `ready` exam; `--hold`
+runs in CI; `grep -rl 'open_critical: [1-9]'` over the vault finds nothing; no stale file but the
+ones held behind a maintainer's decision.
+
+| Item | Roadmap | Status |
+|---|---|---|
+| The `--hold` guard: a ready exam can't silently lose a structural gate | new | ✅ `publication_readiness.py --hold`, in `content-validation.yml`, tested |
+| Exam FM: *Term of Annuity*'s three "finite term" links removed (the words unchanged), the page re-verified against the SOA syllabus | C8 | ✅ FM 7 / 7 (run `7679`; the syllabus PDF unchanged). The noun-phrase linker now treats *finite* as a qualifier (`syllabus_lib.BREAK_WORDS`), or its test would demand the link back |
+| Exam P G6: vault-written questions for the six untested concepts, each checked by a different agent from its writer | C8 | ✅ `p-an-001`–`009` (runs `7432` and `488d`). The first `p-an-009` tested a jointly continuous pair, which the Nov 2026 syllabus excludes (multivariate is discrete-only); it was rewritten as a percentile of one continuous variable |
+| Exam P G4: *Insurer*'s two unsourced bullets sourced or restated, the page verified | C8 | ✅ verified, medium (run `66d2`): Exam 9's capital-cost bullet restated to Zhang and Feldblum (*Variance*) and Mildenhall & Major's free excerpt; the forms of insurer to Florida's statutes and Lloyd's. Re-check against Cummins (2000) when an Exam 9 sweep reaches it |
+| 6C's two criticals (*MCT*, *Capital Required*) and the majors on the same source; the MCT figure's builder | V6 | ✅ no open critical in the vault (run `1567`): *MCT*, *Capital Required*, *Supervisory Target Capital Ratio* verified; the same ×1.5 fixed on five more pages; `figures_exam_6c.py` fixed and four figures redrawn. The 18 majors it recorded on pages naming the MCT denominator "Base Solvency Buffer" (LICAT's term): all resolved (run `dd77`), and *Probable Maximum Loss* — verified, carrying an open major — re-verified. The 20 other pages it touched are `in_review`: their MCT content is checked, the rest not yet. Two findings are left for a writer: *Registered Reinsurance* F-002 (major: its example credits a collateralised unregistered cession as registered) and *Statement of Changes in Equity* F-002 (minor). *Unregistered Reinsurance*'s example now reaches the opposite conclusion — the collateralised treaty is cheaper — and wants a human read |
+| FM's topic tags into `ontology_map.py`; fm-358's printed wording | V10 | 🟡 13 topics added to `ontology_map.py`, 8 findings resolved, fm-358's wording closed as SOA's own (run `7679`). Left: fm-370, 379, 391 and 421 need a retag (their topic sits under another section, or isn't a syllabus term), which makes each stale until re-checked |
+| Two resource-page slips (Atkinson & Dallas's codes, COPLFR's year) | C18 | ✅ Atkinson & Dallas drops the wrong `Code` (both codes stay in its syllabus callout; the page is `in_review`, its chapter list unconfirmed). COPLFR's `Year` is right — the file name is the slip, which waits on V9 |
+
+**Result (18 Oct 2026): exit test met.** All seven `ready` exams pass `--check` (P and FM 7 / 7);
+`--hold` reports 0 errors; no open critical finding anywhere (disputed files: 0); the vault is
+**54.8% verified (3,035 of 5,542)**, with no file moved down a status and 33 moved up. Three files
+are stale, all held behind decisions (DISC-RM's two retired questions, 6C's page behind D8). What
+Phase 1 left for later is in §3.2 (V10's four retags, Exam P's re-issued samples), §3.5
+(`standardize_questions.py`) and §3.6 (Atkinson & Dallas).
+
+### Phase 2 — Fix the converter, then finish the beta exams
+
+**Why next:** the beta exams are where candidates already study, and most of their remaining work
+is verification the packet tooling makes cheap. The converter comes first because its gap is in
+every CAS bank about to be checked.
+
+1. **C13**, the converter's dropped opening paragraph: fix `pdf_extract.py`, list the affected
+   questions mechanically, restore them in each paper's packet.
+2. **Exam 8** (C1): the last two gates wait on outside sources (*Risk*'s ERM section, the ISO CGL
+   plan, D20). Promote when they pass.
+3. **Exam 9** (C2) → **Exam 5** (C3, after D8) → **MAS-II** (C4) → **Exam 6C** (C5, after D8) →
+   **PCPA** (C6, a vault-written bank). §3.1 has what each takes.
+4. Bring every beta exam up to the beta bar it already sits above — G3 and G6 — at the start of
+   its campaign, so `--hold` has no beta warnings left at the end of the phase.
+5. Housekeeping: V7's missing run summaries; the "(as printed)" notes on Exam 8's papers.
+
+**Exit test:** every beta exam passes `--check`, or is blocked only by a decision in §6.
+
+### Phase 3 — The SOA ASA prelims
+
+**Why:** FAM, SRM, PA, ALTAM, ASTAM and ATPA are the next exams sat by the most candidates, and
+they are all `development` with verified pages and no banks.
+
+1. **C9 — write the ASA-prelim section of this plan** (a short campaign table, as §3.1 is for
+   CAS): for each exam, what the SOA publishes to convert (sample questions, past written-answer
+   papers — checked on the SOA's own pages, never assumed), which readings are free and which
+   commercial (D7), and its gate baseline.
+2. **The linker first** (§3.4): C17's citation table, then unlink the noise and extend the
+   cut-short links, and re-render. That alone moves most of their G2 and G3.
+3. Write what's still missing (*Total Risk*, the stubs a prelim links), with the
+   `actuarial-concept-definitions` skill.
+4. Banks: convert what the SOA publishes (`soa-exam-converter`), then write the residue with
+   `question-writer`. development → beta when G2, G3 and G6 pass.
+5. Then their fact-check campaigns, as Phase 2's.
+
+New exam pages from §3.0 at ASA level join here.
+
+**Exit test:** the six prelims are `beta`.
+
+### Phase 4 — The rest
+
+Exam 6U (C7: links read for country first, then a vault-written bank), the 23 FSA modules (C10),
+V8's review of the 363 AI-drafted concept-gap pages that no campaign has reached, the orphan
+concepts (D9), and the remaining concept-gap leftovers (§3.3). New fellowship-level exam pages
+from §3.0 join here.
+
+### Alongside every phase
+
+Not ranked against the campaigns; pulled when a session has room or a campaign touches them:
+C14 (figures), C15 (simulators), C16 and D21 (resource pages), C12 (provenance blocks,
+`page_lint.py`).
+
+---
+
+## 5. Definition of done for content
+
+The roadmap's §0.4, as it applies to a vault change:
+
+- `python3 scripts/verify_check.py --sync` then `verify_check.py` (0 errors); every finding,
+  resolution and pass written through `verify_record.py`, with a `_runs` summary.
+- `validate_content.py`, `syllabus_lint.py`, `resource_lint.py` and
+  `publication_readiness.py --hold` clean; `generate_validation_status.py` and
+  `generate_coverage_report.py` regenerated if the counts moved.
+- A promotion cites `--check`'s output, and its line here and in the roadmap changes in the same
+  PR.
+- Nothing written by a model ships as `verified` on its writer's say-so: a different agent checks
+  it against a cited source, and the README's rule holds — no page is published 100% AI-written
+  without human review.
+
+---
+
+## 6. Content decisions (the maintainer's)
+
+The register is the roadmap's §6.1; these are the content ones, with their defaults. Sessions
+build with the default until the decision is made.
+
+| Roadmap | Was | Decision | Default meanwhile |
+|---|---|---|---|
+| D5 | CAS plan D1 | Does a bank written entirely by the vault count as ready? (the DISCs, PCPA, 6U) | Yes, recorded |
+| D6 | CAS plan D2, verification plan §7.3 | Verify the 249 off-syllabus questions with their papers? | No |
+| D7 | CAS plan D3, verification plan §7.6 | Is a medium confidence ceiling enough for a commercial-only source? | Yes |
+| D8 | CAS plan D4, verification plan §7.2 | 6C's F-001 (domain C renumbering), and Exam 5's v02 outline | — (needs a call) |
+| D9 | verification plan §7.4 | The orphan concepts: link, merge or delete | Leave them unverified |
+| D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | Keep as they are |
+| D15 | CONCEPT_GAPS §13 | The 9 ambiguous targets and the 21 stubs | Link the proposed pages |
+| D17 | CAS plan D5 | The DISC link design: one page per lettered section | The current design |
+| D18 | syllabus-pipeline-review §4 | The review's owner decisions D1–D4, applied but never written up | As applied |
+| D20 | — | A reading with no public copy (the ISO CGL plan) | `in_review`; Exam 8's G5 stays red |
+| D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
+| — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
+| — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |
+
+---
+
+## 7. Measuring
+
+Read-only, from the repo root:
+
+```bash
+python3 scripts/publication_readiness.py --body all     # §2's tables
+python3 scripts/publication_readiness.py --exam <id>     # one exam's failing items
+python3 scripts/publication_readiness.py --hold          # the Phase 1 guard (CI)
+python3 scripts/verify_check.py                          # 0 errors expected
+python3 scripts/verify_targets.py --by-source            # the fact-check queue, as packets
+python3 scripts/find_concept_gaps.py                     # §3.3's counts
+python3 scripts/syllabus_write.py --all --check          # C17: which pages a re-render would change
+grep -rl 'open_critical: [1-9]' Concepts questions Resources Exam*.md
+```
+
+---
+
+## Appendix A — Campaign records
+
+Moved here from `docs/cas-publication-plan.md` when it was folded into this plan, unchanged but
+for their headings; a section number inside them (§1, §3.6, "section 4") is the old plan's. They are the record of how the rules in §1.2 were learned.
+
+### A.1 The baseline, 10 Oct 2026
+
+This is the baseline from before this plan's first changes, on 10 Oct 2026:
+
+| Exam | Status | Page | Concepts | Missing / stub | Catch-alls | Concepts not verified | Concepts with no question | Sources not verified | Bank verified | Gates |
+|---|---|---|---:|---:|---:|---:|---:|---:|---|---:|
+| MAS-I | beta | verified | 176 | 0 | 2 | 0 | 0 | 0 / 8 | 164 / 281 | 5 / 7 |
+| MAS-II | beta | in review | 105 | 0 | 4 | 70 | 28 | 3 / 5 | 20 / 146 | 1 / 7 |
+| DISC-DA | development | verified | 35 | 1 | 4 | 28 | 35 | 1 / 1 | no bank | 2 / 7 |
+| DISC-RM | development | verified | 57 | 1 | 3 | 53 | 57 | 1 / 1 | no bank | 2 / 7 |
+| DISC-IA | development | verified | 68 | 0 | 6 | 58 | 68 | 1 / 1 | no bank | 3 / 7 |
+| 5 | beta | in review | 136 | 0 | 6 | 68 | 7 | 5 / 6 | 0 / 349 | 1 / 7 |
+| PCPA | beta | verified | 29 | 0 | 1 | 13 | 29 | 13 / 13 | no bank | 3 / 7 |
+| 6C | beta | in review | 151 | 0 | 0 | 149 | 22 | 67 / 67 | 0 / 321 | 2 / 7 |
+| 6U | development | in review | 66 | 0 | 0 | 65 | 66 | 46 / 46 (44 missing) | no bank | 3 / 7 |
+| 7 | beta | verified | 26 | 0 | 0 | 17 | 7 | 15 / 15 | 1 / 118 | 3 / 7 |
+| 8 | beta | verified | 38 | 0 | 1 | 26 | 6 | 12 / 12 (10 missing) | 0 / 132 | 2 / 7 |
+| 9 | beta | verified | 60 | 0 | 0 | 53 | 10 | 9 / 9 | 0 / 121 | 3 / 7 |
+
+Across the twelve exams, the work comes to:
+
+- **495** distinct concept pages to fact check;
+- **168** readings to write or fact check, **54** of them with no page at all;
+- **1,283** served questions to fact check;
+- **335** exam–concept pairs with no question.
+
+**No CAS exam is ready, and none is close except MAS-I.** It needs its 117 vault-written
+questions checked and two catch-all links fixed.
+
+The question work is concentrated:
+
+- The DISCs, 6U and PCPA have no bank at all.
+- The beta exams' gaps are a few concepts each, mostly ones their past papers never asked about.
+
+The fact-check work is spread across every exam. Even the MAS-I and P campaigns took a sweep run
+and a resolve run each.
+
+### A.2 The DISCs: specific links, specific pages, their own banks
+
+The DISCs got the most attention because the problem there is the links themselves, not only
+missing material. Each DISC syllabus is a list of lettered section titles from The Institutes, and
+nothing more. The exam page transcribes them word for word, and that transcription is `verified`.
+The links are the vault's own addition, and many of them sent a whole group of sections to one
+broad page:
+
+| Broad page | Sections it stood for |
+|---|---|
+| *Commercial General Liability* | 14 DISC-IA sections: Coverage A's insuring agreement, both halves of its exclusions, Coverages B and C, supplementary payments, who is an insured, limits, conditions, modifying the form, other GL forms |
+| *Homeowners Policy* | 7 HO-3 sections: property coverages, Section I perils and exclusions, property conditions, liability coverages, liability exclusions, conditions, endorsements |
+| *Building and Personal Property Coverage Form* | 5 BPP sections |
+| *Personal Auto Policy* | 6 PAP sections |
+| *Accounting Standards*, *Insurance Premium* | 4 and 3 accounting sections |
+| *Data Visualization*, *Predictive Analytics*, *Tidy Data*, *Statistical Learning* | 5, 4, 3 and 3 DISC-DA sections |
+| *Claims Handling*, *Business Strategy*, *Risk Mitigation* | 5, 4 and 3 DISC-RM sections |
+
+There were wrong targets too:
+
+- "Managing Dataframes" went to *Tidy Data*.
+- "Types of Annuities" went to *Life Annuity*.
+- "Uninsured Motorists Coverage" went to the Canadian *Uninsured Automobile Coverage*.
+- "Applying Property Insurance Limits and Deductibles" went to *Coverage Modifications*, the Exam P
+  loss-model page.
+- "Querying Data" went to *SQL*, a page that didn't exist.
+- "COPE Elements" went to *COPE*, also a page that didn't exist.
+
+#### A.2.1 Re-linking (done, 10 Oct 2026)
+
+All three pages were re-linked so that **each lettered section points to a page about that
+section**. Only the link targets changed; every section title is still the syllabus word for word,
+and the edit script refused any change to the words. The result is **67 specific pages**. Some
+examples:
+
+- *CGL Coverage A Insuring Agreement*, *CGL Coverage A Exclusions*, *CGL Coverage B*, *CGL Coverage
+  C*, *CGL Supplementary Payments*, *CGL Who Is an Insured*, *CGL Limits of Insurance*, *CGL
+  Conditions*, *CGL Endorsements*, *Specialty General Liability Forms*.
+- Six HO-3 pages and *Homeowners Endorsements*.
+- Eight BPP and causes-of-loss pages, and *Commercial Property Conditions*.
+- *PAP Liability Coverage*, *Uninsured Motorists Coverage*, *PAP Duties and General Provisions*,
+  *PAP Endorsements*.
+- The accounting pages: *Qualitative Characteristics of Accounting Information*, *Accounting
+  Frameworks*, *Accounting Rule Hierarchy*, *Premium Accounting*.
+- The underwriting and claims process pages: *Underwriting Process*, *Underwriting Guidelines*,
+  *Claims Handling Process*, *Unfair Claims Settlement Practices*.
+- The data pages: *Dataframe*, *SQL*, *Types of Plots*, *Chart Selection*, *Model Training and
+  Evaluation*, *Claims Modeling Dataset*, and so on.
+
+The overview pages stay, and they link down to the specific ones.
+
+After the re-link, G3 passes on all three DISCs. G2 then listed the new pages as missing, which made
+it the writing worklist.
+
+#### A.2.2 Writing the pages (done, 10 Oct 2026)
+
+Every new page is written to the `actuarial-concept-definitions` standard. Every fact must come
+from a **free primary source** that a fact checker can fetch later. The course text belongs to The
+Institutes and isn't available, so the sources are the documents the course itself teaches from:
+
+- ISO's specimen policy forms (CG 00 01, HO 00 03, PP 00 01, CP 00 10, CP 10 10/20/30, IL 00 17,
+  CP 00 90);
+- the NAIC's model acts (Unfair Claims Settlement Practices, Producer Licensing, Unfair Trade
+  Practices, the 2023 AI bulletin) and its Statutory Accounting Principles;
+- FASB Concepts Statement 8;
+- Cornell LII for tort law;
+- *R for Data Science* and *ISLR* for DISC-DA.
+
+Writers paraphrase the forms and never copy them; ISO holds the copyright. Each writer keeps a
+source note per page, which the fact checker starts from.
+
+**What writing found: the wrong country.** The writers turned up a second class of wrong link,
+which G3 can't see: pages written for **Canada** standing in for a U.S. course.
+
+- *Insurance Regulation*, *Rate Regulation*, *Market Conduct Regulation*, *Tort Litigation*,
+  *Workers Compensation Insurance*, *Uninsured Automobile Coverage*, *Unfair Discrimination*,
+  *Compulsory Auto Insurance*, *No-Fault Insurance* and *Residual Market* are all written for
+  Canada. That is right for Exam 6C and wrong for the DISCs.
+- The DISC sections that leaned on them now link new U.S. pages: *Reasons for Insurance
+  Regulation*, *State Rating Laws*, *State Market Conduct Regulation*, *Workers Compensation
+  Underwriting*, *Uninsured Motorists Coverage* and *Personal Auto Insurance Laws*.
+- Each new page links its Canadian counterpart in one line, and the Canadian pages are untouched.
+- Questions about U.S. rules no longer tag the Canadian pages.
+
+**Lesson for 6U.** Exam 6U is the U.S. variant of Exam 6. Its links need the same review for
+country before any of its pages are fact checked.
+
+In all, **74 specific pages** were written for the DISCs: the 67 from the first re-link, three
+U.S. regulation pages, and four more where a section still pointed at an overview (*General
+Liability Classification*, *Personal Auto Underwriting*, *Workers Compensation Underwriting* and
+*Personal Auto Insurance Laws*). About 70 existing pages gained the DISC material their sections
+needed: U.S. statutory accounting in the premium and reserve pages, PAP Part D in full, the
+property coinsurance clause, and others. Adding that material made **15 pages that had already
+been verified for other exams stale**, among them *Data Types*, *Earned Premium*, *Unearned
+Premium* and *Whole Life Insurance*. Each now needs a delta check, a cost to remember when one
+exam's campaign edits a page another exam shares.
+
+#### A.2.3 Banks (done, 10 Oct 2026: 70 / 131 / 221 questions)
+
+Each DISC gets a bank of the vault's own questions:
+
+- `questions/exam-disc-da/` (`discda-an-`)
+- `questions/exam-disc-rm/` (`discrm-an-`)
+- `questions/exam-disc-ia/` (`discia-an-`)
+
+The app wiring is in place: `scripts/exam_catalog.json`'s `bank`, `EXAM_LABEL_TO_ID`,
+`EXAM_BODIES` and the quiz builder's `EXAMS`.
+
+The DISC exam is 75 application-based multiple-choice questions in 100 minutes. So the questions
+are mostly four-option multiple choice on a short insurance scenario, written with the
+`question-writer` skill. The target is at least one question per concept in each DISC that links
+it, and at least two for every new specific page. No published DISC questions exist to convert:
+The Institutes sells its course guide and publishes no samples.
+
+#### A.2.4 Fact check, then promote (beta 10 Oct 2026; DISC-DA and DISC-IA ready the same day, DISC-RM 11 Oct)
+
+G2, G3 and G6 pass on all three DISCs, so they moved from development to beta and joined the
+DEFAULT track. The fact check runs as twelve packets, one per writer's area plus one for the
+study guides and the course pages (runs `2026-10-10T21:00Z/dv01`–`dv12`).
+
+A DISC page, reading or question can't be checked against the course, because the course isn't
+available. It is checked against the primary documents above. Those are what the course teaches,
+and they are a stronger source than a textbook's summary of them.
+
+- **DISC-IA**'s forms, model acts, accounting standards and tort law are all primary and free. So
+  DISC-IA can reach `verified` at **high** confidence.
+- **DISC-RM** leans more on industry practice: COSO, the CAS ERM overview, the NAIC and III. Some
+  of its pages may only reach **medium**.
+- **DISC-DA** is checked against open textbooks.
+
+**The three course textbook pages** (`Resources/Books/… (The Institutes - 2023)`) transcribe only
+the free syllabus PDFs and the CAS DISC page. Every claim on them was checked against those, so
+they were verified at **high**. The medium ceiling of D3 is for a page that says something about a
+commercial text's *contents*.
+
+#### A.2.5 What the fact check settled (10 Oct 2026)
+
+**Results.** Thirteen fact-check packets and their clean-up rounds checked about 700 files.
+Every vault-written question was recomputed blind before its key was read. The DISCs stood like
+this at the end of 10 Oct 2026:
+
+| Exam | Status | Gates | What is left |
+|---|---|---:|---|
+| **DISC-DA** | **ready** | 7/7 | nothing |
+| **DISC-IA** | **ready** | 7/7 | nothing |
+| **DISC-RM** | beta → **ready** 11 Oct 2026 | 5/7 → 7/7 | D6, settled 11 Oct (§3.6) |
+
+On DISC-RM, everything else passes: the study guide, the course page, 62 of 65 concept pages, and
+141 of 146 questions. The three pages left are *Insurer Goals and Constraints*, *Insurance
+Marketing* and *Insurtech*, and the five questions left are 035, 041, 047, 233 and 471. All of
+them wait on D6.
+
+**MAS-I** was promoted to **ready** the same day. All 117 of its vault-written questions were
+fact checked in runs `masa` and `masb`. So were the shared pages that DISC additions had made
+stale.
+
+**Rules adopted while running it.** These apply to every later campaign.
+
+1. **A file with an open major finding is `in_review`, never `verified`.** A critical finding makes
+   it `disputed`, and the quiz withholds the question.
+2. **The clean-up round may author, within limits.** A checker may delete a claim, restate it to
+   what a source it read says, reword a question its own finding proposed changing, retag, or
+   drop or retarget a link. Each change is recorded as a finding plus a resolution, and the file is
+   then verified again. Anything new goes to a separate writer, and a different checker verifies
+   it. Examples are *Levels of Strategy* and the four DISC-RM pages.
+3. **Don't make a DISC depend on another exam's commercial reading.** Five DISC-RM sections linked
+   pages shared with Exam 9, whose Exam 9 half rests on Brehm et al.: 1.3, 1.4, 4.4, 5.1 and 15.3.
+   The same went for the underwriting lines, whose *Underwriting* page carries life and health
+   material no free source covers. Section 8.1 now links *Underwriting Authority*, and the six
+   lines on underwriting a coverage now link *Underwriting Process*.
+   Those pages can't be verified until someone reads that book. Each of those sections now links its
+   own DISC page, and the shared pages are left for the Exam 9 campaign.
+4. **Never cite an unauthorized copy.** A checker found a full commercial textbook on a university
+   URL. The vault cites such a book bibliographically, by edition and pages, and never links the
+   copy. Prefer an open textbook covering the same ground. For DISC-RM that is Baranoff, Brockett
+   & Kahane, *Risk Management for Enterprises and Individuals* (Saylor, CC BY-NC-SA).
+5. **Watch for the wrong country.** The fact check found more Canadian (Exam 6C) pages linked from
+   U.S. DISC pages, beyond the ones writing caught: *Punitive Damages*, *Vicarious Liability*,
+   *Joint and Several Liability*, *Collateral Benefits*, *Limitation Period*, *Guaranty Funds*,
+   *Solvency Regulation* and *Notes to Financial Statements*. U.S. pages drop or retarget those
+   links. The Canadian pages are untouched.
+6. **Editing a page that another exam has verified costs that exam a re-check.** DISC additions made
+   15 such pages stale, among them MAS-I's *Data Types* and Exam 5's premium pages. Each needed a
+   delta check before MAS-I could be promoted.
+
+**What no free source states.** A few DISC-RM claims are frameworks that only The Institutes' course
+teaches:
+- insurer goals and constraints;
+- the list of marketing activities;
+- the four risk control goals;
+- essential, desirable and available coverage.
+
+They are the content of *Insurer Goals and Constraints* and *Insurance Marketing*, and of questions
+035, 041, 047, 233 and 471. The essential/desirable/available split rested only on lecture notes,
+so it was removed from *Insurance as a Risk Management Technique*. That leaves questions 035 and
+471 testing material no page now teaches. All of these stay `in_review` until someone checks them
+against the course text, or they are rewritten to what open sources say, or the questions are
+retired. That choice is decision D6. *Insurtech* is in the same position, because no open text is
+current enough.
+
+#### A.2.6 D6 settled the open-source way (11 Oct 2026)
+
+The maintainer chose to rewrite rather than buy the course text. Writers rewrote each page to what
+free sources state, and a different agent fact checked the result (runs `2026-10-11T02:10Z/dv14a`
+and `dv14b`):
+
+- *Insurer Goals and Constraints* drops the four goals and the internal/external split. It now says
+  what Baranoff et al. (Saylor), Werner & Modlin (Ch. 1, 8 and 13) and IRMI's glossary say: profit
+  and solvency as the aims, and capacity (the Kenney ratio, reinsurance), regulatory and
+  operational constraints, marketing considerations and the underwriting cycle as the limits.
+  Verified at medium.
+- *Insurance Marketing* drops the list of marketing activities. It now covers distribution, producer
+  licensing, compensation disclosure and the limits on advertising, from Baranoff §11.1 and the NAIC
+  Producer Licensing and Unfair Trade Practices model acts. Verified at high.
+- *Insurtech* rests on dated primary sources: the NAIC topic page, the NAIC AI model bulletin (2023)
+  and its adoption map (as of 1 Apr 2026), the IAIS FinTech report (2017) and AI application paper
+  (2025), the FIO's 2025 report and NCOIL's sandbox model act. Verified at high. **It will date**:
+  the adoption count needs refreshing when the NAIC map moves.
+- Questions 041 (the Kenney ratio), 047 (the model act's compensation disclosure) and 233 (what an
+  underwriter's loss control inspection is for) were rewritten to test what the pages now teach.
+- Questions 035 and 471 tested the essential/desirable/available split, which no page teaches. A
+  question can't be deleted (its log must keep a target), so they are **retired** as
+  `off_syllabus: true`: kept for the record, out of quiz draws, with a log comment saying why.
+
+`publication_readiness.py --check disc-rm` then passed all seven gates, and DISC-RM was promoted to
+**ready**. The cost of this route: those sections no longer teach the course's own framing, so a
+candidate should expect The Institutes' lists on the exam itself.
+
+### A.3 The Exam 7 campaign (11–16 Oct 2026)
+
+`publication_readiness.py --check 7` passed all seven gates on 16 Oct 2026, and Exam 7 was promoted to
+**ready**. How it got there, run `2026-10-11T02:10Z`:
+
+- **Links first.** Two objective links were retargeted (A9's "mean" no longer links the Exam P
+  *Expected Value*; A4's "layers of coverage" goes to *Layer Development Factor*, not the pricing page
+  *Layer of Insurance*), and the study guide was re-verified (`e7sg`).
+- **Eight paper packets** (`e7p12`–`e7p19`), each covering the Exam 7 questions filed under Exam 9 too:
+  199 questions, all verified. Every question was recomputed from its blind stem first. The packets
+  corrected arithmetic slips copied from CAS's printed sample answers (each noting what CAS printed),
+  restored examiner's report paragraphs the converter drops, and retargeted wrong links (IFRS 17 *Net
+  Income*, Exam 5 *Loss Ratio Method*, the Canadian *Rating Agency*).
+- **G6.** Eight vault-written questions (`cas7-an-001`–`008`) for the six concepts with none, and an Exam
+  7 section on *Predictive Distribution*, each checked by a different agent from the writer.
+- **Four reading packets** (`e7ra`–`e7rd`) verified the 15 readings and the 15 concept pages. Pages that
+  claimed more than their readings say were cut back to them: *Reinsurance Reserving* (Cape Cod, in no
+  Exam 7 reading), *Premium Reserve* (Teng & Perkins' retro premium asset only), *Ceded Loss Reserve*.
+  Two real errors were caught: *Range of Indications* summed yearly minima for Shapland's modeled range,
+  and *Reasonableness Testing* took BF IBNR off the BF ultimate. Pages shared with other exams had their
+  other half checked too (*Predictive Distribution* for MAS-II, against Mahler & Dean, medium; *Risk
+  Margin* for Exam 6C, against OSFI's MCT guideline and the CIA's IFRS 17 note).
+
+**Left for a maintainer** (minor findings; the questions stay verified and served):
+
+- **Questions on readings no longer on the syllabus.** Patrik's reinsurance chapter (Stanard-Bühlmann,
+  credibility IBNR, reinsurance reserving problems): 2012 q10, 2013 q10, 2015 q13, 2016 q16–q17, 2017
+  q16, 2018 q14, q16, 2019 q13 (2017 q14–q15 lean on it unflagged). Brehm's ERM and Goldfarb: 2018 q1
+  parts a–c, 2019 q1 parts e and g. England & Verrall: 2012 q9. Keep, split, or mark `off_syllabus`.
+- **2012 q20** is current Exam 7 material filed under Exam 9; moving the file would orphan its log.
+- **The converter drops each CAS examiner's report's opening paragraph** (before "Part a"). The Exam 7
+  packets restored it by hand where they found it; `pdf_extract.py` should be fixed, and other CAS banks
+  likely have the same gap.
+- **Canadian pages on U.S. questions**: *Rating Agency*, *Concentration Risk* and *Risk Transfer* (linked
+  from the Exam 7 preamble) lead with Canada.
+
+## Appendix B — Fact-check wave records
+
+Moved here from `docs/verification-plan.md` §5, which now keeps only the method.
+
+### B.1 Wave 1: the backlog (bands 0 and 1). About 80 files. **Done** (run `2026-10-09T19:04Z/2db6`)
+
+> **Outcome** (`.verify/_runs/2026-10-09T19-04Z-2db6.md`): 79 files, 72 now verified (21
+> high, 50 medium, 1 low). All 64 backlog findings outside Exam 6C's page were closed,
+> including the four criticals; 84 more were found and 78 of them fixed in the run.
+>
+> Left behind:
+> - **In review**, each for a source that couldn't be read: Close Year, Profit and
+>   Contingency Provision, Insurer and fm-231.
+> - **Untouched:** Exam 6C's syllabus page, which waits on its F-001.
+> - **New open findings on four 6C pages:** *MCT* and *Capital Required* multiply by 1.5
+>   where OSFI's guideline divides (critical); *Solvency* and *Supervisory Target Capital
+>   Ratio* use LICAT's name for the denominator (major).
+>
+> Two source drifts surfaced:
+> - SOA re-issued the Exam P sample PDFs under the same URLs. No key differs on the 565
+>   questions matched; 109 still need a look.
+> - CAS revised the Fall 2026 Exam 5 outline in place (v02), and `Exam 5 (CAS).md` is out
+>   of step with it.
+>
+> Fold both into the Exam P re-check and the Exam 5 campaign.
+
+- **4 disputed concept pages** with open criticals: *Complement of Credibility*,
+  *Expense Ratio*, *Exposure Base* and *In-Force*. **Each needs a human decision**
+  (`docs/verification.md`: disputed means a person settles it). Put the four, each with its
+  evidence, to the maintainer in one list.
+- **56 other open findings on 41 files**, nearly all Exam 5 concepts against *Basic
+  Ratemaking*. Run them as one packet with that book loaded once. This is also the first
+  slice of the Werner packet in Wave 4.
+- **Exam 6C's syllabus page**: 8 open findings. F-001, the domain C renumbering, is a
+  maintainer's call already written up in run `9495`.
+- **30 stale files**: 13 P and 2 FM questions (mostly after a retag), 12 Books pages, 2 concepts, and
+  Exam P's page. Re-verify these **as a delta**. Diff the file between the commit its last
+  pass recorded and HEAD, then check only the change against the source the pass already
+  cited. A retag needs the ontology checked, not the question recomputed. This needs git
+  history: run `git fetch --unshallow` (or a deep enough `--deepen`) first, because the
+  session clone is shallow.

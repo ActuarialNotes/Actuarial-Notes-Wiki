@@ -1,11 +1,16 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:24180daac234d021bae500d1e5f7f2b2512bee2757296532f05c46f84264824a
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:0cecb42673457c4f904a40c486782f0dd7795156ea63d07555af69f7592cb6bc
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §2.3 Time series patterns (seasonal vs cyclic), §2.8 seasonal ACF, read 2026-10-18, sha256:a13a2a978731e95537586c671e4b4edda0fbb1711e81a1f01e2c2b967f4212b7 — https://otexts.com/fpp3/graphics.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §3.2 additive vs multiplicative, log transform equivalence; §3.4 seasonal components adjusted to add to zero / to m, read 2026-10-18, sha256:c11e3a143a4e52c5365ce641b76b17dd41e682b285de613906a5a661dab3e00f — https://otexts.com/fpp3/decomposition.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §7.4 seasonal dummy variables and Fourier series, read 2026-10-18, sha256:0ef490a9dabfd7bb9be230474135cd45077cf20a695a4fdc3be360ac1ebfd5f4 — https://otexts.com/fpp3/regression.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.1 seasonal differencing, §9.9 seasonal ARIMA, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods (public domain), 6.4.4.3 Seasonality, sha256:adf8c97f38a47374958e44f0839ee93378ac58d664cfb81526b475ea520cfeb5 — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc443.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Seasonality.md
@@ -30,4 +35,4 @@ verification:
 >
 > > [!answer]-
 > > As a share of the level: $180/900 = 20\%$, $310/1550 = 20\%$, $420/2100 = 20\%$ — constant in **proportional** terms, growing in absolute terms.
-> > **Multiplicative.** Fit on $\log Y_t$, where the Q1 effect becomes a constant $\log(1.20) = 0.182$ addition and an additive seasonal model applies. Modelling the raw series additively would under-fit the early years and over-fit the late ones.
+> > **Multiplicative.** Fit on $\log Y_t$, where the Q1 effect becomes a constant $\log(1.20) = 0.182$ addition and an additive seasonal model applies.

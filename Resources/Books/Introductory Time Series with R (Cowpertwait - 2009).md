@@ -7,12 +7,15 @@ date: "2009"
 Type: "Textbook"
 ISBN: "978-0-387-88697-8"
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b3a74361731a901e9e9f01bdb9392a69ededb39027f78f0bdccb08c3e385f065
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:ed5234ed54eedd224bd326e2aab42171586fe0991cbc5d5be69fbc4cf22b0d0c
+  sources:
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer, Use R!, 2009) — publisher's front matter PDF, pp. i-xv (series page; title page; copyright page: ISBN 978-0-387-88697-8, e-ISBN 978-0-387-88698-5, DOI 10.1007/978-0-387-88698-5, LCCN 2009928496, (c) Springer Science+Business Media 2009; Preface pp. vii-viii; Contents pp. ix-xv), sha256:28b9b56070d54f40aa6bd824670eea29de2f6478397c4c7ff05f5763977fb3c8 — https://link.springer.com/content/pdf/bfm:978-0-387-88698-5/1"
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R — back cover and contents, library TOC scan (obalkyknih.cz), PDF pp.1-8, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026), p.3 Domain D tasks 1-4 and p.4 Cowpertwait citation 'Chapters 1-5 (excluding Sections 3.3 and 3.4), 6, 7 (Sections 7.1, 7.2 and 7.3)', D1-D4, B, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Resources/Books/Introductory Time Series with R (Cowpertwait - 2009).md
@@ -286,4 +289,4 @@ A concise text that takes the non-specialist, at a fairly quick pace, to where t
 ## Sources
 - [Introductory Time Series with R — front matter (Springer, 2009)](https://link.springer.com/content/pdf/bfm:978-0-387-88698-5/1) — the book's front matter, free from the publisher: title page, copyright page (ISBN, LCCN), the preface and the full table of contents
 - [Introductory Time Series with R (Springer Nature Link)](https://link.springer.com/book/10.1007/978-0-387-88698-5) — the publisher's record: authors, the Use R! series, softcover and eBook ISBNs, and the list of 12 chapters, which agrees with the contents
-- [CAS Exam MAS-II Content Outline (2025)](https://www.casact.org/sites/default/files/2023-06/MASII_Content_Outline.pdf) — the citation (Springer, 2009) and the assigned scope
+- [CAS Exam MAS-II Content Outline (2026)](https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) — the citation (Springer, 2009) and the assigned scope

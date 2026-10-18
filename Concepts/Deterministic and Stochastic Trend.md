@@ -1,11 +1,15 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d31f6d62fc2b0c1bd31b48e572563f3fa3c8d37bcb5237a0615fd9db7c5ed9d2
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:dafaa494f7146a4b478948e757bae5b0a63e3adeca8f306342639bd945a4cf96
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §10.4 Stochastic and deterministic trends, read 2026-10-18, sha256:95550082cbf540253feec34756c1bddb6550fd2cdf02857beb82defb0b570c7e — https://otexts.com/fpp3/dynamic-regression.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §7.3 Spurious regression, read 2026-10-18, sha256:0ef490a9dabfd7bb9be230474135cd45077cf20a695a4fdc3be360ac1ebfd5f4 — https://otexts.com/fpp3/regression.html"
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.1 differencing and unit root tests, Table 9.1, read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026), p.3 Domain D tasks 1-4 and p.4 Cowpertwait citation 'Chapters 1-5 (excluding Sections 3.3 and 3.4), 6, 7 (Sections 7.1, 7.2 and 7.3)', D1-D4, B, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Deterministic and Stochastic Trend.md
@@ -27,7 +31,7 @@ A **deterministic trend** is a fixed function of time that the series returns to
 - **Getting it wrong costs both ways.** Differencing a trend-stationary series over-differences it, injecting a spurious negative MA(1) term. Detrending a unit-root series leaves the trend behind and the residuals still non-stationary
 - The formal test is a unit-root (Dickey–Fuller) test: $H_0$ is a stochastic trend
 - Forecast intervals differ sharply — a deterministic trend gives intervals of roughly constant width, a stochastic one gives intervals widening as $\sqrt{h}$
-- **Spurious regression**: two independent series with stochastic trends will show a highly significant regression and a high $R^2$ purely from the shared drift. Always check the residual [[Autocorrelation Function|ACF]] before believing a time-series regression
+- **Spurious regression**: two independent series with stochastic trends can show a highly significant regression and a high $R^2$. Always check the residual [[Autocorrelation Function|ACF]] before believing a time-series regression
 
 ![[Media/Figures/Deterministic_and_Stochastic_Trend.svg|340]]
 

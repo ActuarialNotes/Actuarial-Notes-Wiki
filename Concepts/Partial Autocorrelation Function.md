@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e63cf0c5c6d71198dc7458e8981e85abe125d211ec71b6cc27fad8bc5547f192
-  sources: []
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed. (OTexts, open online text), §9.5 partial autocorrelations (removing lags 1..k-1; first PACF = first ACF; last coefficient of an AR(k); same ±1.96/√T critical values; identification rules), read 2026-10-18, sha256:35587d5a25830d81dcb41d6196d18eaee424556c40cae948bf52a5a1d1a79650 — https://otexts.com/fpp3/arima.html"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Partial Autocorrelation Function.md

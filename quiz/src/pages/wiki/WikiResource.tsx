@@ -86,10 +86,10 @@ export default function WikiResource() {
       )}
 
       {/* The citation block: the metadata card, and under it the exams it is
-          a reading for — one column, one width. */}
+          a reading for — one column, the page's width. */}
       {meta && (
-        <div className="flex w-fit max-w-full flex-col gap-3">
-          <ResourceMetaCard meta={meta} className="mb-0 w-full" />
+        <div className="flex flex-col gap-3">
+          <ResourceMetaCard meta={meta} className="mb-0" />
           <ResourceSyllabusCard
             assignments={syllabusAssignments}
             onOpen={ref => navigate(wikiRoute(ref))}

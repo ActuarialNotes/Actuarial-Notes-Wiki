@@ -303,6 +303,33 @@ describe('questionCredit — multi-part ignores essay parts', () => {
     expect(questionCredit(q, JSON.stringify({ a: '99' }))).toBe(0))
 })
 
+describe('questionCredit — self-graded written parts count', () => {
+  const q = parseQuestion(MULTI_PART_ESSAY_RAW)! // part a graded, part b written
+  const chosen = JSON.stringify({ a: '4.5' })
+  it('written part self-graded incorrect → half credit', () => {
+    expect(questionCredit(q, chosen, { [`${q.id}__b`]: 'incorrect' })).toBe(0.5)
+    expect(questionOutcome(q, chosen, { [`${q.id}__b`]: 'incorrect' })).toBe('partial')
+  })
+  it('written part self-graded correct → full credit', () =>
+    expect(questionCredit(q, chosen, { [`${q.id}__b`]: 'correct' })).toBe(1))
+
+  // A CAS question that is nothing but written parts — the whole question is
+  // the reader's to mark (Exam 5–9).
+  const written = { ...q, parts: q.parts!.map(p => ({ ...p, answer: '' })) }
+  const empty = JSON.stringify({})
+  it('every written part marked incorrect → no credit', () => {
+    const grades = { [`${q.id}__a`]: 'incorrect', [`${q.id}__b`]: 'incorrect' } as const
+    expect(questionCredit(written, empty, grades)).toBe(0)
+    expect(questionOutcome(written, empty, grades)).toBe('incorrect')
+  })
+  it('written parts marked correct and partial → their mean', () =>
+    expect(questionCredit(written, empty, { [`${q.id}__a`]: 'correct', [`${q.id}__b`]: 'partial' })).toBe(0.75))
+  it('no written part graded → no credit, never correct by default', () => {
+    expect(questionCredit(written, empty)).toBe(0)
+    expect(isAnswerCorrect(written, empty)).toBe(false)
+  })
+})
+
 // ── multi-part authored with no explicit "## Part" heading ────────────────────
 // Some CAS single-part written/calculation questions were authored with just
 // ### Answer / ### Explanation / ### Examiner Report sections and no part split.
@@ -384,8 +411,8 @@ describe('parseQuestion — single-part essay (no "## Part", no "### Answer")', 
   })
   it('model answer lives in the explanation', () =>
     expect(q.parts![0].explanation).toContain('non-recurring'))
-  it('isAnswerCorrect treats the all-essay question as correct', () =>
-    expect(isAnswerCorrect(q, JSON.stringify({ a: 'anything' }))).toBe(true))
+  it('isAnswerCorrect never marks the all-essay question correct without a self-grade', () =>
+    expect(isAnswerCorrect(q, JSON.stringify({ a: 'anything' }))).toBe(false))
 })
 
 describe('filterQuestions — sitting filters vs. questions moved between exams', () => {

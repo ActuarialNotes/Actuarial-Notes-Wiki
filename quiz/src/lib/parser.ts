@@ -149,9 +149,11 @@ export function isAnswerCorrect(question: Question, chosen: string): boolean {
       const chosenParts = JSON.parse(chosen) as Record<string, string>
       const parts = question.parts ?? []
       if (parts.length === 0) return false
-      // Essay parts (answer === '') are ungraded — exclude from correctness check.
+      // Written parts (answer === '') have no key: only the reader's self-grade
+      // can mark them (questionCredit), so with no grades they are left out — and
+      // a question that is nothing but written parts is not correct by default.
       const gradedParts = parts.filter(p => p.answer !== '')
-      if (gradedParts.length === 0) return true
+      if (gradedParts.length === 0) return false
       return gradedParts.every(part => {
         const partChosen = chosenParts[part.label] ?? ''
         if (part.type === 'multiple-choice') return partChosen === part.answer
@@ -188,24 +190,28 @@ export function questionCredit(
   if (question.type === 'multi-part') {
     try {
       const parts = question.parts ?? []
-      // Essay parts (answer === '') are ungraded — excluded, matching isAnswerCorrect.
-      const gradedParts = parts.filter(p => p.answer !== '')
-      if (gradedParts.length === 0) return 1
       const chosenParts = JSON.parse(chosen) as Record<string, string>
       let earned = 0
-      for (const part of gradedParts) {
+      let graded = 0
+      for (const part of parts) {
         const override = manualGrades[`${question.id}__${part.label}`]
         if (override !== undefined) {
+          graded += 1
           earned += override === 'correct' ? 1 : override === 'partial' ? 0.5 : 0
           continue
         }
+        // A written part (answer === '') counts only once the reader has
+        // self-graded it; left ungraded, it is out of the tally.
+        if (part.answer === '') continue
+        graded += 1
         const partChosen = chosenParts[part.label] ?? ''
         const right = part.type === 'multiple-choice'
           ? partChosen === part.answer
           : normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
         earned += right ? 1 : 0
       }
-      return earned / gradedParts.length
+      // Nothing graded (all written parts, none self-graded) earns nothing.
+      return graded > 0 ? earned / graded : 0
     } catch {
       return 0
     }

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:2fc573910fad71a978d1de6c78695e6146c4bab0af32ba8edc486a5eeab7d89a
+  content_hash: sha256:9872c799d91d9813b74b4e096c7abb4f5c905454ae05111b51bf6498dba31b56
   sources: []
   open_findings: 0
   open_critical: 0
@@ -52,27 +52,27 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 ## Learning Objectives
 
 > [!example]- FAP Risk in Actuarial Problems
-> During [[Your Risk|your Risk]] in Actuarial Problems study, you will be exposed to typical actuarial problems and the processes used by [[Actuary|actuaries]] to fully define problems. You will learn that problems [[Revolve Around Risk|revolve around risk]] and that identifying [[Risk|risks]] to be managed—i.e., looking below the surface—will [[Help You|help you]] to better define the real problem. You will learn how [[Effective Identification|effective identification]], analysis, and prioritization of various [[Risks Lead|risks leads]] to a [[Clearer Definition|clearer definition]] of the problem and, ultimately, better solutions.
+> During your [[Risk]] in Actuarial Problems study, you will be exposed to typical actuarial problems and the processes used by [[Actuary|actuaries]] to fully define problems. You will learn that problems [[Revolve Around Risk|revolve around risk]] and that identifying [[Risk|risks]] to be managed—i.e., looking below the surface—will help you to better define the real problem. You will learn how [[Effective Identification|effective identification]], analysis, and prioritization of various [[Risks Lead|risks leads]] to a [[Clearer Definition|clearer definition]] of the problem and, ultimately, better solutions.
 >
 > **Section 1: Module Overview**
 >
 > 1. Explain Define the Problem within the context of the Control [[Cycle]].
 > 2. Explain the significance of identifying and defining the real problem and its associated [[Risk|risks]].
 > 3. Describe [[Risk|risks]] that [[Actuary|actuaries]] manage within a [[Financial Security System|financial security system]].
-> 4. Describe [[Risk|risk]] management for [[Financial Security System|financial security systems]] from a [[Global Perspective|global perspective]].
+> 4. Describe [[Risk Management|risk management]] for [[Financial Security System|financial security systems]] from a global perspective.
 > 5. Identify commonalities among problems in [[Existing|existing]] areas of actuarial practice.
 >
 > **Section 2: Why Define the Problem**
 >
 > 6. Explain how Define the Problem fits within the context of the Control [[Cycle]].
-> 7. Given an example of a [[Financial Security System Failure|financial security system failure]], describe how a [[Better Problem Definition|better problem definition]] could have been employed to [[Help Avoid|help avoid]] the crisis.
+> 7. Given an example of a [[Financial Security System Failure|financial security system failure]], describe how a [[Better Problem Definition|better problem definition]] could have been employed to help avoid the crisis.
 > 8. Recognize the significance of successfully [[Defining|defining]] problems.
 > 9. Identify [[Risk|risks]] related to [[Financial Security System|financial security systems]].
 >
 > **Section 3: Introduction to Risk**
 >
 > 10. Define [[Risk|risk]] in an actuarial context.
-> 11. Describe [[Risk|risk]] management.
+> 11. Describe [[Risk Management|risk management]].
 > 12. Define [[Risk|risk]] types that need to be managed within a [[Financial Security System|financial security system]].
 > 13. Explain how [[Risk|risk]] is transferred from a consumer to a [[Financial Security System|financial security system]].
 > 14. Explain [[Risk Classification|risk classification]].
@@ -80,14 +80,14 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 > **Section 4: Define the Problem and Identify Risks**
 >
 > 15. Determine factors or influences that are important to identify and analyze [[Risk|risks]].
-> 16. Use techniques commonly used in [[Asset-Liability Management|asset-liability]] management ([[Asset-Liability Management|ALM]]) with [[Financial Security System|financial security systems]].
-> 17. Describe the various [[Risk|risk]] measures that are used in [[Asset-Liability Management|ALM]].
+> 16. Use techniques commonly used in [[Asset-Liability Management|asset-liability management]] ([[Asset-Liability Management|ALM]]) with [[Financial Security System|financial security systems]].
+> 17. Describe the various [[Risk Measure|risk measures]] that are used in [[Asset-Liability Management|ALM]].
 > 18. Describe the [[Regulatory Capital|capital requirements]] for a [[Financial Security System|financial security system]].
-> 19. Describe the role of [[Risk Measurement Tool|risk measurement tools]] when analyzing the [[Risk|risks]] in financial and [[Non-Financial Organization|non-financial organizations]].
+> 19. Describe the role of [[Risk Measurement|risk measurement]] tools when analyzing the [[Risk|risks]] in financial and [[Non-Financial Organization|non-financial organizations]].
 >
 > **Section 5: Recognize Problem Commonalities**
 >
-> 20. Describe aspects of actuarial work that are both fundamental and [[Common|common]] to all practice areas.
+> 20. Describe aspects of actuarial work that are both [[Fundamental|fundamental]] and common to all practice areas.
 > 21. [[Categorize Commonality|Categorize commonalities]] in actuarial problems.
 >
 > **Section 6: Communications**
@@ -96,8 +96,8 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 > 23. Eliminate and limit use of [[Acronym|acronyms]].
 > 24. Describe elements of [[Effective Presentation|effective presentations]].
 > 25. Describe elements of [[Effective Memo|effective memos]] and reports.
-> 26. [[Avoid Common Mistake|Avoid common mistakes]] when communicating as an [[Actuary|actuary]].
-> 27. Apply the principles of Actuarial Standards of Practice 41 (US), Standards of Practice 1700 (Canada), Section 8 Principle 6 ([[UK]]).
+> 26. Avoid common mistakes when communicating as an [[Actuary|actuary]].
+> 27. Apply the principles of [[Actuarial Standards of Practice]] 41 (US), [[Actuarial Standards of Practice|Standards of Practice]] 1700 (Canada), Section 8 Principle 6 (UK).
 
 > [!example]- Designing and Pricing an Actuarial Solution
 > In this module, Designing and Pricing an Actuarial Solution, you will further explore models by [[Tying Together|tying together]] what you have already learned into a framework for models that [[Emphasizes Pricing|emphasizes pricing]], reserving, and [[Funding|funding]]. Pricing is the function related to the determination of the cost for an individual to participate in a [[Financial Security System|financial security system]]. Reserving is the function related to the determination of the amount of assets currently needed to be available to meet the [[Financial Security System's Obligation|financial security system’s obligations]]. [[Funding]] is the function related to the determination of the [[Financial Security System's Future Capital Need|financial security system’s future capital needs]] and the allocation of current and [[Future Asset|future assets]] to meet those needs. The purposes and details of each of these types of models will be analyzed.
@@ -179,21 +179,21 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 > 23. Go back and forth between the Define the Model and Build the Model [[Stage|stages]].
 
 > [!example]- Selection of Initial Assumptions
-> From [[Your Study|your studies]], you have [[Learned Quite|learned quite]] a bit about assumptions. The definition of an assumption is “any non-factual, non-verifiable item that the [[Actuary Rely|actuary relies]] on in a model.” Assumptions may [[Involve Filling|involve filling]] in a missing piece of data, projecting a [[Future Expectation|future expectation]], or hypothesizing about the relationship between two variables. The major types of assumptions are economic, demographic, and experience-based. Assumptions are important to [[Actuary|actuaries]] and their stakeholders. How does an [[Actuary|actuary]] select assumptions? What is the set of assumptions that are material to the business problem, solution, and model? What [[Constraint|constraints]] or other determinants should be considered when selecting them? What methods and tools are available to [[Actuary|actuaries]] when they need to quantify assumptions? These are the questions that will be answered in this module.
+> From your studies, you have [[Learned Quite|learned quite]] a bit about assumptions. The definition of an assumption is “any non-factual, non-verifiable item that the [[Actuary Rely|actuary relies]] on in a model.” Assumptions may [[Involve Filling|involve filling]] in a missing piece of data, projecting a [[Future Expectation|future expectation]], or hypothesizing about the relationship between two variables. The major types of assumptions are economic, demographic, and experience-based. Assumptions are important to [[Actuary|actuaries]] and their stakeholders. How does an [[Actuary|actuary]] select assumptions? What is the set of assumptions that are material to the business problem, solution, and model? What [[Constraint|constraints]] or other determinants should be considered when selecting them? What methods and tools are available to [[Actuary|actuaries]] when they need to quantify assumptions? These are the questions that will be answered in this module.
 >
 > **Section 1: Module Overview**
 >
-> 1. Recall and describe the major [[Category|categories]] of assumptions.
+> 1. [[Recall]] and describe the major categories of assumptions.
 > 2. Describe assumption [[Constraint|constraints]] and determinants.
-> 3. Describe methods and [[Tool|tools]] for quantifying assumptions.
+> 3. Describe methods and tools for quantifying [[Assumption|assumptions]].
 > 4. Describe international considerations and [[Constraint|constraints]].
 > 5. Describe the [[Interdependency|interdependency]] of assumptions.
 >
 > **Section 2: Overview of Selecting Assumptions**
 >
 > 6. Recognize the significance of assumptions to the success of [[Ongoing Risk|ongoing risk]] management of the [[Financial Security System|financial security system]].
-> 7. Identify types of actuarial [[Assumption|assumptions]].
-> 8. Describe the processes used to select [[Initial|initial]] assumptions.
+> 7. Identify types of [[Actuarial Assumptions|actuarial assumptions]].
+> 8. Describe the [[Process|processes]] used to select initial assumptions.
 >
 > **Section 3: Assumption Constraints**
 >
@@ -209,9 +209,9 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 >
 > **Section 5: Methods and Tools for Quantifying Assumptions**
 >
-> 15. Types of methods and [[Tool|tools]] used to quantify assumptions.
-> 16. Methods used to select [[Initial|initial]] assumption.
-> 17. [[Tool|Tools]] used to select assumptions.
+> 15. Types of methods and tools used to quantify [[Assumption|assumptions]].
+> 16. Methods used to select initial [[Assumption|assumption]].
+> 17. Tools used to select [[Assumption|assumptions]].
 >
 > **Section 6: Applying Assumption Concepts**
 >
@@ -221,7 +221,7 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 >
 > 19. Describe [[Interdependency|interdependency]].
 > 20. Explain how assumptions are [[Dependent|dependent]] on other assumptions.
-> 21. Explain how assumptions are dependent on the [[Product'|product’s]] design.
+> 21. Explain how assumptions are dependent on the [[Product's|product’s]] design.
 
 > [!example]- Monitoring Results
 > In [[Previous Module|previous modules]] of this course, you learned that the Control Cycle can be [[Stated Quite|stated quite]] simply as three stages: Define the Problem, Design the Solution, and Monitor the Results. In [[Past Module|past modules]], you learned to Define the Problem and Design the Solution. In this module, you will explore the Monitor the Results stage of the Control Cycle.
@@ -234,7 +234,7 @@ FAP encompasses real-world applications and uses examples to demonstrate actuari
 > 4. Describe possible methods of analyzing [[Experience Data|experience data]].
 > 5. Identify the source of [[Experience Deviation|experience deviations]].
 > 6. Identify possible solutions to problems resulting from [[Experience Deviation|experience deviations]].
-> 7. Explain the importance of appropriate communication and [[Documentation While Monitoring|documentation while monitoring]] results.
+> 7. Explain the importance of appropriate communication and documentation while [[Monitoring|monitoring]] results.
 >
 > **Section 2: Introduction to Gathering Data**
 >

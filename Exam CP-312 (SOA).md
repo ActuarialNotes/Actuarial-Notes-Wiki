@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:442eeed4481a5db8a4a486ace9353ff855ff1846b77080e637c738b2b08c71ef
+  content_hash: sha256:fbc1e955cc01ba3d71c10e3150605933e5697caa99519312ae92af1e8dda7fa3
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-312, all pages, sha256:7c62bff559da90773de77ad707816992f3d41dd083df0e96d78aa8b67d34e757 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-312/2026-2027-cp-312-syllabus.pdf"
   open_findings: 1
@@ -33,12 +33,12 @@ verification:
 >
 > 1. Models and their outputs for [[Insurance Policy|insurance products]] including those with [[Complex Component|complex components]] such as:
 >    - [[Dynamic Policyholder Behavior|dynamic policyholder]] assumptions
->    - [[Multi-State|multi-states]]
+>    - multi-states
 >    - [[Equity-Linked Insurance|equity-linked guarantees]]
 >    - [[Indexed Annuity|index-linked credits]]
 > 2. Nested models and their [[Output|outputs]]
-> 3. Model [[Model Validation|validation]] techniques
-> 4. Model [[Efficiency|efficiency]] techniques
+> 3. [[Model Validation|Model validation]] techniques
+> 4. Model efficiency [[Technique|techniques]]
 >
 > **Readings:**
 > - Video: Model Risk, SOA, 2024 (1a)
@@ -62,12 +62,12 @@ verification:
 > [!example]- Other types of Models for Financial Business {30–45%}
 > The candidate will understand, apply, and evaluate other types of models for various types of [[Financial Business|financial business]]. The candidate will demonstrate an understanding of underlying methodologies: their strengths, limitations, and applications.
 >
-> 1. Describe, apply, and assess types of models such as the following and evaluate the [[Appropriateness|appropriateness]] of their usage:
+> 1. Describe, apply, and assess types of models such as the following and evaluate the appropriateness of their usage:
 >    - [[Economic Scenario Generator|Economic Scenario Generators]] (ESGs)
 >    - [[Market Risk]] Models
->    - Other statistical [[Model|models]]
-> 2. Describe, apply, and evaluate model [[Model Validation|validation]] techniques
-> 3. Describe, apply, and evaluate model [[Efficiency|efficiency]] techniques
+>    - Other statistical models
+> 2. Describe, apply, and evaluate [[Model Validation|model validation]] techniques
+> 3. Describe, apply, and evaluate model efficiency [[Technique|techniques]]
 >
 > **Readings:**
 > - Video: Model Risk, SOA, 2024 (2a)
@@ -94,16 +94,16 @@ verification:
 >     - Chapters 1-3, 6
 
 > [!example]- Model Governance {15–25%}
-> The candidate will understand and be able to apply appropriate model [[Model Governance|governance]] to assess and [[Address Issues Common|address issues common]] to the development and management of models.
+> The candidate will understand and be able to apply appropriate [[Model Governance|model governance]] to assess and address issues common to the development and management of models.
 >
 > 1. Describe and apply model [[Model Governance|governance best practices]] such as:
->    - Determining fit for [[Purpose|purpose]]
->    - Model design and [[Development|development]]
->    - Model [[Risk|risk]] management
->    - Model [[Model Validation|validation]]
->    - Model [[Maintenance|maintenance]] and change management
+>    - Determining fit for purpose
+>    - Model design and development
+>    - Model [[Risk Management|risk management]]
+>    - [[Model Validation|Model validation]]
+>    - Model maintenance and change management
 >    - Model and model [[Model Governance|governance documentation]] and disclosures
-> 2. Describe, compare and evaluate [[Model Governance|organizational structures]] for model [[Model Governance|governance]], including controls, roles, and responsibilities
+> 2. Describe, compare and evaluate [[Model Governance|organizational structures]] for [[Model Governance|model governance]], including controls, roles, and responsibilities
 >
 > **Readings:**
 > - ASOP 56: Modeling, Dec 2019, pp. 1-9 (3a)

@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3b10a1031d5985c57866fac52421fb21309fa080aa667917dd61c665e102aca8
+  content_hash: sha256:ba3d2e16023f69bb81822ad4639daee7684e11a0ebebe2e54e847769f664c325
   sources:
     - "SOA, October 2026 syllabus PDF for PA, all pages, sha256:1f1c46424d78ac04c297bf6c121bf9d03aec7d451560335cc9e07c7c533a4d84 — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf"
   open_findings: 0
@@ -37,42 +37,44 @@ The Predictive Analytics exam is administered as a three hour and thirty-minute 
 ## Learning Objectives
 
 > [!example]- Predictive Analytics Problem Definition {10–20%}
-> The Candidate will be able to identify the business problem, how the available data relates to possible analyses, and use the information to propose an appropriate [[Modeling|modeling]] approach.
+> The Candidate will be able to identify the business problem, how the available data relates to possible analyses, and use the information to propose an appropriate modeling approach.
 >
 > 1. Assess whether descriptive, predictive, and [[Data Analytics|prescriptive analytics]] applies to a business problem.
 > 2. Describe the characteristics of [[Predictive Analytics|predictive modeling]] problems.
 > 3. Explain the concepts of [[Bias|bias]], [[Variance|variance]], model complexity, and the [[Bias-Variance Tradeoff|bias-variance trade-off]].
-> 4. Translate a [[Vague Question|vague question]] into one that can be analyzed with [[Statistics|statistics]] and [[Predictive Analytics|predictive analytics]] to solve a business problem.
-> 5. Consider factors such as available data and technology, significance of business impact, and implementation [[Challenge|challenges]] to define the problem.
+> 4. Translate a vague question into one that can be analyzed with [[Statistics|statistics]] and [[Predictive Analytics|predictive analytics]] to solve a business problem.
+> 5. Consider factors such as available data and technology, significance of business impact, and implementation challenges to define the problem.
+>    - *Key concepts:* [[Predictive Analytics]]
 > 6. Assess what additional information or next steps would improve the ability to apply [[Predictive Analytics|predictive analytics]] to a business problem.
 
 > [!example]- Data Exploration and Visualization {20–30%}
-> The Candidate will be able to work with various data types, understand principles of data design, and construct a variety of [[Data Visualization|common visualizations]] for [[Exploratory Data Analysis|exploring data]].
+> The Candidate will be able to work with various [[Data Types|data types]], understand principles of [[Data Design|data design]], and construct a variety of [[Data Visualization|common visualizations]] for [[Exploratory Data Analysis|exploring data]].
 >
 > 1. Identify structured and [[Unstructured Data|unstructured data]] types.
 > 2. Identify the types of variables and terminology used in [[Predictive Analytics|predictive modeling]].
 > 3. Evaluate [[Data Design|effective data]] design with respect to time frame, sampling, and [[Data Design|granularity]].
-> 4. Apply the key principles of constructing [[Graph|graphs]].
+> 4. Apply the key principles of constructing [[Data Visualization|graphs]].
 > 5. Apply [[Univariate Plot|univariate data exploration]] techniques.
 > 6. Apply [[Bivariate Data Exploration|bivariate data exploration]] techniques.
 
 > [!example]- Data Transformations and Unsupervised Learning Techniques {10–20%}
-> The Candidate will be able to [[Transform Data|transform data]], including application of [[Unsupervised Learning|unsupervised learning]] techniques, to improve [[Predictive Analytics|predictive modeling]] outcomes.
+> The Candidate will be able to transform data, including application of [[Unsupervised Learning|unsupervised learning]] techniques, to improve [[Predictive Analytics|predictive modeling]] outcomes.
 >
 > 1. Create features from [[Feature Engineering|existing data]] that may add value.
-> 2. Apply [[Principal Component|principal components]] analysis to [[Transform Data|transform data]].
-> 3. Apply K-means and [[Hierarchical Clustering|hierarchical clustering]] to [[Transform Data|transform data]].
+> 2. Apply [[Principal Components Analysis|principal components analysis]] to transform data.
+> 3. Apply K-means and [[Hierarchical Clustering|hierarchical clustering]] to transform data.
 
 > [!example]- Generalized Linear Models {25–35%}
-> The Candidate will be able to select and validate a [[Generalized Linear|generalized linear]] model ([[Generalized Linear Model|GLM]]) and apply related modeling concepts as appropriate for a given business problem.
+> The Candidate will be able to select and validate a [[Generalized Linear Model|generalized linear model]] ([[Generalized Linear Model|GLM]]) and apply related modeling concepts as appropriate for a given business problem.
 >
 > 1. Select and validate a [[Generalized Linear Model|GLM]] as appropriate for a business problem.
-> 2. Apply offsets and [[Weight|weights]] as appropriate.
-> 3. Interpret model [[Coefficient|coefficients]], including interaction terms.
+> 2. Apply [[Offset Variable|offsets]] and weights as appropriate.
+> 3. Interpret model coefficients, including interaction terms.
+>    - *Key concepts:* [[Generalized Linear Model]], [[Interaction]]
 > 4. Select appropriate [[Hyperparameter|hyperparameters]] for [[Regularization|regularized regression]].
 
 > [!example]- Tree-Based Models {10–20%}
-> The Candidate will be able to apply tree-based models as appropriate for a [[Business|business]] problem.
+> The Candidate will be able to apply [[Decision Tree|tree-based]] models as appropriate for a business problem.
 >
 > 1. Construct, prune, and validate regression and [[Classification Tree|classification trees]].
 > 2. Apply [[Bagging|bagging]] and [[Random Forest|random forests]] as appropriate.

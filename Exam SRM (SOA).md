@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:65e6dad6985afec94dff89415bdeb72293c2366757550612459e392cf11b8214
+  content_hash: sha256:a115570d6add8f28149739a3ca52b4c7e62741e744a6d2353999910911c6d15a
   sources:
     - "SOA, January 2027 syllabus PDF for SRM, all pages, sha256:2165c0dec2c26a810a100a504f6a38ac05f02348c1af26e4c8ad71b679eb56af — https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf"
   open_findings: 0
@@ -56,30 +56,32 @@ The Statistics for Risk Modeling exam is a three and one-half hour exam that con
 > The Candidate will understand key concepts of [[Statistical Learning|statistical learning]].
 >
 > 1. Define terms used to classify the types of modeling problems and methods, including supervised versus [[Unsupervised Learning|unsupervised learning]] and regression versus classification.
-> 2. Compare the common methods of assessing model [[Accuracy|accuracy]].
+> 2. Compare the common methods of assessing model accuracy.
+>    - *Key concepts:* [[Bias-Variance Tradeoff]]
 > 3. Understand how the [[Bias-Variance Tradeoff|bias-variance tradeoff]] impacts the selection of [[Statistical Learning|statistical learning]] methods.
-> 4. Understand [[Cross-Validation|resampling]] methods used for model [[Model Validation|validation]], including
->    - [[Training]] set vs. test set approach
+> 4. Understand [[Cross-Validation|resampling]] methods used for [[Model Validation|model validation]], including
+>    - Training set vs. test set approach
 >    - [[Cross-Validation|k-fold cross-validation]]
 >    - [[Cross-Validation|Leave-one-out cross-validation]]
 
 > [!example]- Linear Models {40–50%}
-> The Candidate will understand key concepts concerning [[Generalized Linear|generalized linear]] models.
+> The Candidate will understand key concepts concerning [[Generalized Linear Model|generalized linear models]].
 >
-> 1. Compare model assumptions for ordinary least squares and [[Generalized Linear|generalized linear]] models.
-> 2. Identify the members of the [[Exponential Family|exponential family]] of distributions and [[Link Function|corresponding link]] functions.
-> 3. Apply the [[Business Context|business context]] of a problem to interpret parameters.
+> 1. Compare model assumptions for [[Ordinary Least Squares|ordinary least squares]] and [[Generalized Linear Model|generalized linear models]].
+> 2. Identify the members of the [[Exponential Family|exponential family]] of [[Probability Distributions|distributions]] and [[Link Function|corresponding link]] functions.
+> 3. Apply the business context of a problem to interpret parameters.
+>    - *Key concepts:* [[Linear Regression]]
 > 4. Interpret [[Model Diagnostics|diagnostic tests]] of model fit and assumption checking, using
->    - [[Graphical]] methods
->    - [[Quantitative]] methods
-> 5. Select an [[Appropriate|appropriate]] model, considering
->    - Distributions and [[Link|link]] functions
+>    - Graphical methods
+>    - Quantitative methods
+> 5. Select an appropriate model, considering
+>    - [[Probability Distributions|Distributions]] and [[Link Function|link functions]]
 >    - [[Variable Transformation|Variable transformations]] and interactions
->    - t and F [[Test|tests]]
+>    - t and F tests
 >    - [[AIC]] and [[BIC]]
->    - [[Likelihood]] ratio test
+>    - [[Likelihood Ratio Test|Likelihood ratio test]]
 > 6. Calculate and interpret [[Fitted Values|predicted values]], and [[Confidence Interval|confidence]] and [[Prediction Interval|prediction intervals]].
-> 7. Understand how approaches may differ compared to using an ordinary least [[Square|squares]] model, including
+> 7. Understand how approaches may differ compared to using an [[Ordinary Least Squares|ordinary least squares]] model, including
 >    - [[Regularization|Regularized regression]] ([[Regularization|lasso]], [[Regularization|ridge regression]])
 >    - [[K-Nearest Neighbors|K-nearest neighbors]]
 
@@ -87,7 +89,7 @@ The Statistics for Risk Modeling exam is a three and one-half hour exam that con
 > The Candidate will understand key concepts concerning [[Time Series|regression-based time series]] models.
 >
 > 1. Define the concepts and components of [[Time Series|stochastic time series processes]], including [[Random Walk|random walks]], [[Stationarity|stationarity]], and [[Autocorrelation Function|autocorrelation]].
-> 2. Describe specific time series models, including, [[Exponential Smoothing|exponential smoothing]], autoregressive, and autoregressive conditionally heteroskedastic models.
+> 2. Describe specific [[Time Series|time series]] models, including, [[Exponential Smoothing|exponential smoothing]], autoregressive, and [[ARCH Model|autoregressive conditionally heteroskedastic]] models.
 > 3. Calculate and interpret [[Fitted Values|predicted values]] and [[Confidence Interval|confidence intervals]].
 
 > [!example]- Decision Trees {20–25%}
@@ -96,21 +98,21 @@ The Statistics for Risk Modeling exam is a three and one-half hour exam that con
 > 1. Describe the construction of [[Decision Tree|decision trees]], including
 >    - How they are optimally fit to [[Train-Test Split|training data]]
 >    - How they are pruned to mitigate [[Overfitting|overfitting]]
-> 2. [[Predict]] outcomes using
+> 2. Predict outcomes using
 >    - [[Classification Tree|Classification trees]]
 >    - [[Regression Tree|Regression trees]]
 > 3. Describe [[Bagging|bagging]], [[Boosting|boosting]], and [[Random Forest|random forests]] and the [[Hyperparameter|hyperparameters]] used to control them.
 > 4. Compare [[Decision Tree|decision trees]] to linear models including uses and relative strengths.
 
 > [!example]- Unsupervised Learning Techniques {10–15%}
-> The Candidate will understand key concepts concerning [[Principal Component|principal component]] and cluster analysis.
+> The Candidate will understand key concepts concerning [[Principal Components Analysis|principal component]] and [[Clustering|cluster analysis]].
 >
-> 1. Define [[Principal Component|principal components]], including how they are calculated.
-> 2. Interpret the results of a [[Principal Component|principal components]] analysis, considering loading factors and proportion of [[Variance|variance]] explained.
-> 3. Describe and compare the [[Algorithm|algorithms]] for:
+> 1. Define [[Principal Components Analysis|principal components]], including how they are calculated.
+> 2. Interpret the results of a [[Principal Components Analysis|principal components analysis]], considering loading factors and [[Proportion of Variance Explained|proportion of variance explained]].
+> 3. Describe and compare the algorithms for:
 >    - [[K-Means Clustering|K-means clustering]]
 >    - [[Hierarchical Clustering|Hierarchical clustering]]
-> 4. Explain methods for deciding the number of [[Cluster|clusters]].
+> 4. Explain methods for deciding the number of [[Clustering|clusters]].
 
 ## Source Material
 > [!answer]- Source Material

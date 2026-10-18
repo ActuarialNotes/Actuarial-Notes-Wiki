@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:82eb6d796f039ad17525367358a12fe0f3732831b5f5e277af1b6427115a3f66
+  content_hash: sha256:4f6bb9ce92a8b3627d5849f720be9835753495b6c2bd71dcfffa57eaaf91b098
   sources:
     - "SOA, OCTOBER 2026 syllabus PDF for ASTAM, all pages, sha256:6d462aea25c09b15cc457176ecf2d5d6143df8fb88df9f366557de17ec1ec9ba — https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf"
   open_findings: 0
@@ -49,37 +49,37 @@ The ASTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > [!example]- Severity Models {8–18%}
 > The Candidate will understand, interpret, and be able to perform calculations with commonly used [[Severity Distribution|severity distributions]], including [[Generalized Extreme Value Distribution|extreme value distributions]].
 >
-> 1. Describe how changes in the [[Parameters Affect|parameters affect]] the distributions.
+> 1. Describe how changes in the parameters affect the [[Probability Distributions|distributions]].
 > 2. Create [[Creating New Distributions|new distributions]] by multiplication by a constant, raising to a power, exponentiation, mixing and [[Spliced Distribution|splicing]].
 > 3. Understand and interpret the characteristics of [[Severity Distribution|severity distributions]].
-> 4. Compare two distributions based on various characteristics of their tails, including [[Moment|moments]], ratios of [[Moment|moments]], limiting tail behavior, [[Hazard Rate|hazard rate]] functions, and [[Mean Excess Loss|mean excess]] functions.
+> 4. Compare two [[Probability Distributions|distributions]] based on various characteristics of their tails, including [[Moment|moments]], ratios of [[Moment|moments]], limiting tail behavior, [[Hazard Rate|hazard rate]] functions, and [[Mean Excess Loss|mean excess]] functions.
 > 5. Understand the derivation and characteristics of the [[Generalized Extreme Value Distribution|Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]].
 > 6. Apply the [[Generalized Extreme Value Distribution|Generalized Extreme]] Value and the [[Generalized Pareto Distribution|Generalized Pareto distributions]] to the estimation of [[Risk Measure|tail risk]] measures and [[Probability|probabilities]].
 
 > [!example]- Aggregate Models {12–22%}
-> The Candidate will understand, interpret, and be able to perform calculations with aggregate [[Model|models]].
+> The Candidate will understand, interpret, and be able to perform calculations with aggregate models.
 >
-> 1. Use [[Convolution|convolution]] and [[Panjer Recursion|recursive formulas]] to derive [[Probability|probability]] and distribution functions for aggregate [[Aggregate Loss Model|claims distributions]] with (a,b,0) or (a,b,1) [[Frequency|frequency]], and with [[Severity Discretization|discrete severity distributions]].
+> 1. Use [[Convolution|convolution]] and [[Panjer Recursion|recursive formulas]] to derive [[Probability|probability]] and [[Probability Distributions|distribution]] functions for aggregate [[Aggregate Loss Model|claims distributions]] with (a,b,0) or (a,b,1) [[Frequency|frequency]], and with [[Severity Discretization|discrete severity distributions]].
 > 2. Derive the [[Severity Discretization|discretized version]] of a [[Continuous Random Variable|continuous distribution]] using the method of rounding and [[Severity Discretization|local moment matching]].
-> 3. Perform calculations for sums of [[Compound Poisson|compound Poisson]] models.
+> 3. Perform calculations for sums of [[Compound Poisson Process|compound Poisson]] models.
 
 > [!example]- Coverage Modifications {8–18%}
 > The Candidate will understand, interpret, and be able to perform calculations with respect to [[Coverage Modifications|coverage modifications]].
 >
 > 1. Evaluate the effects of the following [[Coverage Modifications|coverage modifications]]: [[Deductible|deductibles]], [[Policy Limit|policy limits]], maximum covered loss, [[Coinsurance|coinsurance]], and [[Stop-Loss Reinsurance|stop loss reinsurance]].
-> 2. Calculate and interpret [[Loss Elimination|loss elimination]] ratios, [[Increased Limits|increased limits]] factors, and [[Deductible|deductible]] factors.
+> 2. Calculate and interpret [[Loss Elimination Ratio|loss elimination ratios]], [[Increased Limits|increased limits]] factors, and [[Deductible|deductible]] factors.
 > 3. Evaluate and interpret the effects of [[Inflation|inflation]] on losses.
 
 > [!example]- Construction and Selection of Parametric Models {14–24%}
-> The Candidate will understand and be able to construct and estimate parameters for [[Parametric|parametric]] models.
+> The Candidate will understand and be able to construct and estimate parameters for parametric models.
 >
 > 1. Estimate the parameters for [[Frequency|frequency]] and [[Severity Distribution|severity distributions]] by [[Maximum Likelihood Estimation|maximum likelihood]].
 > 2. Estimate the [[Variance|variance]] of the [[Estimator|estimators]] and construct normal and [[Approximate Confidence Interval|non-normal confidence intervals]].
-> 3. Use the [[Delta Method|delta]] method to estimate the [[Variance|variance]] of the [[Maximum Likelihood Estimator|maximum likelihood estimator]] of a function of the parameter(s).
-> 4. Estimate the parameters for [[Severity|severity]], [[Frequency|frequency]], and aggregate distributions using [[Bayesian Estimation]].
-> 5. Perform model [[Selection|selection]] using:
->    - [[Graphical]] procedures.
->    - [[Hypothesis Test|Hypothesis tests]], including Kolmogorov-Smirnov, [[Chi-square Goodness-Of-Fit|Chi-square goodness-of-fit]], and Likelihood ratio ([[Likelihood Ratio Test|LRT]]) tests.
+> 3. Use the [[Delta Method|delta method]] to estimate the [[Variance|variance]] of the [[Maximum Likelihood Estimation|maximum likelihood estimator]] of a function of the parameter(s).
+> 4. Estimate the parameters for [[Severity|severity]], [[Frequency|frequency]], and [[Aggregate Loss Model|aggregate distributions]] using [[Bayesian Estimation]].
+> 5. Perform model selection using:
+>    - Graphical procedures.
+>    - [[Hypothesis Testing|Hypothesis tests]], including Kolmogorov-Smirnov, [[Chi-Square Goodness-of-Fit Test|Chi-square goodness-of-fit]], and Likelihood ratio ([[Likelihood Ratio Test|LRT]]) tests.
 >    - Score-based approaches, including [[BIC|Schwarz Bayesian Criterion]] (SBC), [[BIC|Bayesian Information Criterion]] ([[BIC]]), and [[AIC|Akaike Information Criterion]] ([[AIC]]).
 
 > [!example]- Credibility {12–20%}
@@ -93,17 +93,17 @@ The ASTAM Exam is a three-hour exam consisting of six questions, worth a total o
 > The Candidate will be able to calculate [[Reserve|reserves]] for [[Short-Term Insurance Coverage|short-term insurance coverages]].
 >
 > 1. Understand, interpret, and apply techniques for estimating [[Unpaid Claims|outstanding claims]], using the following methods:
->    - Expected [[Loss]] Ratio
->    - [[Chain-Ladder]]
->    - [[Bornhuetter-Ferguson]]
+>    - [[Expected Loss Method|Expected Loss Ratio]]
+>    - [[Chain Ladder Method|Chain-Ladder]]
+>    - [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]]
 >    - [[Bayesian]]
 >    - [[Frequency]] and [[Severity]]
 > 2. Understand, interpret, and apply the following statistical models and assumptions used for [[Unpaid Claims|outstanding claims reserves]]:
->    - [[Mack'|Mack’s]] model
->    - [[Poisson]] model
+>    - [[Mack Chain Ladder Model|Mack’s model]]
+>    - Poisson model
 >    - [[Over-Dispersed Poisson Model|Overdispersed Poisson]] model
 > 3. Calculate [[Loss Trend|projected losses]] using [[Trend|trend]] analysis.
-> 4. Calculate overall [[Overall Rate Level Indication|average rates]] and rate changes using the [[Loss Cost|loss cost]] and loss ratio methods.
+> 4. Calculate overall [[Overall Rate Level Indication|average rates]] and [[Rate Change|rate changes]] using the [[Loss Cost|loss cost]] and [[Loss Ratio Method|loss ratio methods]].
 > 5. Calculate [[Classification Ratemaking|risk classification differential]] changes, including [[Balancing Back|balancing back]].
 
 ## Source Material

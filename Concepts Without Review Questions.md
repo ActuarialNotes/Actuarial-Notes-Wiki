@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1071 of 2142 syllabus concept entries (50%)** have at least one question in their exam's own bank.
+> **1071 of 2226 syllabus concept entries (48%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -15,39 +15,39 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam P-1 (SOA)]] | `exam-p` (716) | 71 / 72 | 99% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
 | [[Exam PAF (SOA)]] | none | 0 / 2 | 0% | 2 / 2 |
-| [[Exam FAM (SOA)]] | none | 0 / 71 | 0% | 10 / 10 |
-| [[Exam SRM (SOA)]] | none | 0 / 33 | 0% | 5 / 5 |
+| [[Exam FAM (SOA)]] | none | 0 / 86 | 0% | 10 / 10 |
+| [[Exam SRM (SOA)]] | none | 0 / 41 | 0% | 5 / 5 |
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
-| [[Exam PA (SOA)]] | none | 0 / 22 | 0% | 5 / 5 |
-| [[Exam ALTAM (SOA)]] | none | 0 / 62 | 0% | 7 / 7 |
-| [[Exam ASTAM (SOA)]] | none | 0 / 47 | 0% | 6 / 6 |
-| [[Exam ATPA (SOA)]] | none | 0 / 23 | 0% | 3 / 3 |
-| [[Exam FAP (SOA)]] | none | 0 / 9 | 0% | 4 / 4 |
+| [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
+| [[Exam ALTAM (SOA)]] | none | 0 / 64 | 0% | 7 / 7 |
+| [[Exam ASTAM (SOA)]] | none | 0 / 58 | 0% | 6 / 6 |
+| [[Exam ATPA (SOA)]] | none | 0 / 31 | 0% | 4 / 4 |
+| [[Exam FAP (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam APC (SOA)]] | none | 0 / 1 | 0% | 2 / 2 |
-| [[Exam CFE-101 (SOA)]] | none | 0 / 29 | 0% | 3 / 3 |
-| [[Exam CFE-201 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
+| [[Exam CFE-101 (SOA)]] | none | 0 / 31 | 0% | 3 / 3 |
+| [[Exam CFE-201 (SOA)]] | none | 0 / 14 | 0% | 4 / 4 |
 | [[Exam CP-311 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
-| [[Exam CP-312 (SOA)]] | none | 0 / 12 | 0% | 3 / 3 |
-| [[Exam CP-321 (SOA)]] | none | 0 / 45 | 0% | 6 / 6 |
-| [[Exam CP-341 (SOA)]] | none | 0 / 24 | 0% | 4 / 4 |
+| [[Exam CP-312 (SOA)]] | none | 0 / 11 | 0% | 3 / 3 |
+| [[Exam CP-321 (SOA)]] | none | 0 / 46 | 0% | 6 / 6 |
+| [[Exam CP-341 (SOA)]] | none | 0 / 25 | 0% | 4 / 4 |
 | [[Exam CP-351 (SOA)]] | none | 0 / 20 | 0% | 3 / 3 |
 | [[Exam GH-101 (SOA)]] | none | 0 / 20 | 0% | 4 / 4 |
 | [[Exam GH-201C (SOA)]] | none | 0 / 21 | 0% | 5 / 5 |
-| [[Exam GH-201U (SOA)]] | none | 0 / 23 | 0% | 5 / 5 |
+| [[Exam GH-201U (SOA)]] | none | 0 / 25 | 0% | 5 / 5 |
 | [[Exam GH-301 (SOA)]] | none | 0 / 20 | 0% | 6 / 6 |
-| [[Exam GI-101 (SOA)]] | none | 0 / 41 | 0% | 7 / 7 |
-| [[Exam GI-201 (SOA)]] | none | 0 / 47 | 0% | 7 / 7 |
-| [[Exam GI-301 (SOA)]] | none | 0 / 33 | 0% | 8 / 8 |
-| [[Exam GI-302 (SOA)]] | none | 0 / 34 | 0% | 4 / 4 |
-| [[Exam ILA-101 (SOA)]] | none | 0 / 36 | 0% | 5 / 5 |
-| [[Exam ILA-201I (SOA)]] | none | 0 / 23 | 0% | 4 / 4 |
-| [[Exam ILA-201U (SOA)]] | none | 0 / 27 | 0% | 4 / 4 |
+| [[Exam GI-101 (SOA)]] | none | 0 / 46 | 0% | 7 / 7 |
+| [[Exam GI-201 (SOA)]] | none | 0 / 51 | 0% | 7 / 7 |
+| [[Exam GI-301 (SOA)]] | none | 0 / 36 | 0% | 8 / 8 |
+| [[Exam GI-302 (SOA)]] | none | 0 / 39 | 0% | 4 / 4 |
+| [[Exam ILA-101 (SOA)]] | none | 0 / 37 | 0% | 5 / 5 |
+| [[Exam ILA-201I (SOA)]] | none | 0 / 24 | 0% | 4 / 4 |
+| [[Exam ILA-201U (SOA)]] | none | 0 / 29 | 0% | 4 / 4 |
 | [[Exam INV-101 (SOA)]] | none | 0 / 28 | 0% | 3 / 3 |
-| [[Exam INV-201 (SOA)]] | none | 0 / 39 | 0% | 3 / 3 |
+| [[Exam INV-201 (SOA)]] | none | 0 / 40 | 0% | 3 / 3 |
 | [[Exam RET-101 (SOA)]] | none | 0 / 30 | 0% | 4 / 4 |
-| [[Exam RET-201 (SOA)]] | none | 0 / 22 | 0% | 5 / 5 |
-| [[Exam RET-301 (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
-| [[Exam DMAC (SOA)]] | none | 0 / 2 | 0% | 4 / 4 |
+| [[Exam RET-201 (SOA)]] | none | 0 / 23 | 0% | 5 / 5 |
+| [[Exam RET-301 (SOA)]] | none | 0 / 15 | 0% | 4 / 4 |
+| [[Exam DMAC (SOA)]] | none | 0 / 2 | 0% | 5 / 5 |
 | [[Exam FAC (SOA)]] | none | 0 / 0 | — | 0 / 0 |
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
 | [[Exam MAS-II (CAS)]] | `exam-mas-ii` (168) | 100 / 102 | 98% | 0 / 4 |
@@ -64,9 +64,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
-| **Total** | | **1071 / 2142** | **50%** | |
+| **Total** | | **1071 / 2226** | **48%** | |
 
-107 concept pages are linked from no exam's learning objectives and are not counted.
+105 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
 
@@ -163,32 +163,36 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam FAM (SOA)
 
-*No question bank yet — all 71 syllabus concepts are uncovered.*
+*No question bank yet — all 86 syllabus concepts are uncovered.*
 
 ### Short-Term Insurance and Reinsurance Coverages {5–10%}
 
-*6 of 6 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Reinsurance]]
 - [[Coverage Modifications]]
 - [[Short-Term Insurance Coverage]]
+- [[Loss Elimination Ratio]]
 - [[Inflation]]
 - [[Excess of Loss]]
+- [[Claim]]
 - [[Insurer]]
 
 ### Severity, Frequency, and Aggregate Models {12.5–17.5%}
 
-*15 of 15 uncovered — **no questions at all***
+*17 of 17 uncovered — **no questions at all***
 
 - [[Severity]]
 - [[Frequency]]
 - [[Moment]]
 - [[Percentile]]
 - [[Scale and Shape Parameters]]
+- [[Probability Distributions]]
 - [[Individual Risk Model]]
 - [[Variance]]
 - [[Lognormal Distribution]]
 - [[Normal Approximation]]
+- [[Aggregate Loss Model]]
 - [[Probability]]
 - [[Convolution]]
 - [[Payment]]
@@ -208,32 +212,39 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Introduction to Credibility {2.5–5%}
 
-*1 of 1 uncovered — **no questions at all***
+*2 of 2 uncovered — **no questions at all***
 
 - [[Credibility]]
+- [[Limited Fluctuation Credibility]]
 
 ### Pricing and Reserving for Short-Term Insurance Coverages {10–15%}
 
-*11 of 11 uncovered — **no questions at all***
+*16 of 16 uncovered — **no questions at all***
 
 - [[Insurance Premium]]
 - [[Reserve]]
 - [[Short-Term Insurance Coverage]]
 - [[Unpaid Claims]]
+- [[Expected Loss Method]]
+- [[Chain Ladder Method]]
+- [[Bornhuetter-Ferguson Method]]
 - [[Ratemaking]]
 - [[Trend]]
 - [[On-Leveling]]
 - [[Expenses]]
 - [[Profit and Contingency Provision]]
 - [[Overall Rate Level Indication]]
+- [[Rate Change]]
 - [[Loss Cost]]
+- [[Loss Ratio Method]]
 
 ### Option Pricing Fundamentals {2.5–7.5%}
 
-*8 of 8 uncovered — **no questions at all***
+*9 of 9 uncovered — **no questions at all***
 
 - [[European Option]]
 - [[Risk-Neutral Valuation]]
+- [[Present Value]]
 - [[Black-Scholes Model]]
 - [[Cash Flow]]
 - [[Payoff]]
@@ -255,7 +266,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Mortality Models {10–15%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Life Table]]
 - [[Future Lifetime Random Variable]]
@@ -263,34 +274,39 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Mortality]]
 - [[Moment]]
 - [[Standard Actuarial Notation]]
+- [[Survival Model]]
 - [[Fractional Age Assumption]]
 
 ### Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
 
-*13 of 13 uncovered — **no questions at all***
+*16 of 16 uncovered — **no questions at all***
 
 - [[Random Variable]]
 - [[Expenses]]
+- [[Long-Term Insurance Coverage]]
 - [[Life Insurance]]
 - [[Pure Endowment]]
 - [[Life Annuity]]
 - [[Future Lifetime Random Variable]]
+- [[Payable Continuously]]
 - [[Probability]]
 - [[Variance]]
 - [[Covariance]]
 - [[Fractional Age Assumption]]
+- [[Expected Value]]
 - [[Mortality]]
 - [[Interest]]
 - [[Standard Actuarial Notation]]
 
 ### Premium and Policy Value Calculation for Long-Term Insurance Coverages {15–22.5%}
 
-*14 of 14 uncovered — **no questions at all***
+*15 of 15 uncovered — **no questions at all***
 
 - [[Insurance Premium]]
 - [[Policy Value]]
 - [[Long-Term Insurance Coverage]]
 - [[Future Loss Random Variable]]
+- [[Whole Life Insurance]]
 - [[Term Life Insurance]]
 - [[Endowment Insurance]]
 - [[Life Annuity]]
@@ -304,7 +320,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam SRM (SOA)
 
-*No question bank yet — all 33 syllabus concepts are uncovered.*
+*No question bank yet — all 41 syllabus concepts are uncovered.*
 
 ### Basics of Statistical Learning {5–10%}
 
@@ -318,14 +334,19 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Linear Models {40–50%}
 
-*11 of 11 uncovered — **no questions at all***
+*16 of 16 uncovered — **no questions at all***
 
+- [[Generalized Linear Model]]
+- [[Ordinary Least Squares]]
 - [[Exponential Family]]
+- [[Probability Distributions]]
 - [[Link Function]]
+- [[Linear Regression]]
 - [[Model Diagnostics]]
 - [[Variable Transformation]]
 - [[AIC]]
 - [[BIC]]
+- [[Likelihood Ratio Test]]
 - [[Fitted Values]]
 - [[Confidence Interval]]
 - [[Prediction Interval]]
@@ -334,13 +355,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Time Series Models {10–15%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Time Series]]
 - [[Random Walk]]
 - [[Stationarity]]
 - [[Autocorrelation Function]]
 - [[Exponential Smoothing]]
+- [[ARCH Model]]
 - [[Fitted Values]]
 - [[Confidence Interval]]
 
@@ -360,9 +382,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Unsupervised Learning Techniques {10–15%}
 
-*3 of 3 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
-- [[Variance]]
+- [[Principal Components Analysis]]
+- [[Clustering]]
+- [[Proportion of Variance Explained]]
 - [[K-Means Clustering]]
 - [[Hierarchical Clustering]]
 
@@ -385,7 +409,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam PA (SOA)
 
-*No question bank yet — all 22 syllabus concepts are uncovered.*
+*No question bank yet — all 27 syllabus concepts are uncovered.*
 
 ### Predictive Analytics Problem Definition {10–20%}
 
@@ -400,37 +424,42 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Data Exploration and Visualization {20–30%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
+- [[Data Types]]
+- [[Data Design]]
 - [[Data Visualization]]
 - [[Exploratory Data Analysis]]
 - [[Unstructured Data]]
 - [[Predictive Analytics]]
-- [[Data Design]]
 - [[Univariate Plot]]
 - [[Bivariate Data Exploration]]
 
 ### Data Transformations and Unsupervised Learning Techniques {10–20%}
 
-*4 of 4 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
 - [[Unsupervised Learning]]
 - [[Predictive Analytics]]
 - [[Feature Engineering]]
+- [[Principal Components Analysis]]
 - [[Hierarchical Clustering]]
 
 ### Generalized Linear Models {25–35%}
 
-*3 of 3 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
 - [[Generalized Linear Model]]
+- [[Offset Variable]]
+- [[Interaction]]
 - [[Hyperparameter]]
 - [[Regularization]]
 
 ### Tree-Based Models {10–20%}
 
-*4 of 4 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
+- [[Decision Tree]]
 - [[Classification Tree]]
 - [[Bagging]]
 - [[Random Forest]]
@@ -438,16 +467,16 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ALTAM (SOA)
 
-*No question bank yet — all 62 syllabus concepts are uncovered.*
+*No question bank yet — all 64 syllabus concepts are uncovered.*
 
 ### Survival Models for Contingent Cash Flows {10–20%}
 
 *18 of 18 uncovered — **no questions at all***
 
+- [[Multiple State Model]]
 - [[Joint Life]]
 - [[Annuity Contract]]
 - [[Mortality]]
-- [[Multiple State Model]]
 - [[State-Dependent Insurance]]
 - [[Health Insurance]]
 - [[Continuing Care Retirement Community]]
@@ -457,15 +486,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Transition Probability Matrix]]
 - [[Multiple Decrement Model]]
 - [[Fractional Age Assumption]]
+- [[Maximum Likelihood Estimation]]
 - [[Transition Intensity]]
 - [[Probability]]
 - [[Approximate Confidence Interval]]
 - [[Estimator]]
-- [[Maximum Likelihood Estimation]]
 
 ### Premium and Policy Valuation for Long-Term State-Dependent Coverages {12–20%}
 
-*12 of 12 uncovered — **no questions at all***
+*15 of 15 uncovered — **no questions at all***
 
 - [[Random Variable]]
 - [[Expenses]]
@@ -473,17 +502,21 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Joint Life]]
 - [[State-Dependent Insurance]]
 - [[Annuity Contract]]
+- [[Expected Value]]
 - [[Woolhouse's Formula]]
+- [[Present Value]]
 - [[Insurance Premium]]
 - [[Health Insurance]]
 - [[Equivalence Principle]]
 - [[Policy Value]]
 - [[Thiele's Differential Equation]]
+- [[Multiple State Model]]
 
 ### Joint Life Insurance and Annuities {8–16%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
+- [[Multiple State Model]]
 - [[Joint Life]]
 - [[Annuity Contract]]
 - [[Future Lifetime Random Variable]]
@@ -514,9 +547,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *12 of 12 uncovered — **no questions at all***
 
 - [[Pension Plan]]
+- [[Replacement Ratio]]
 - [[Defined Contribution Plan]]
 - [[Defined Benefit Plan]]
-- [[Replacement Ratio]]
 - [[Service Table]]
 - [[Salary Scale]]
 - [[Accrued Benefit]]
@@ -569,14 +602,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ASTAM (SOA)
 
-*No question bank yet — all 47 syllabus concepts are uncovered.*
+*No question bank yet — all 58 syllabus concepts are uncovered.*
 
 ### Severity Models {8–18%}
 
-*10 of 10 uncovered — **no questions at all***
+*11 of 11 uncovered — **no questions at all***
 
 - [[Severity Distribution]]
 - [[Generalized Extreme Value Distribution]]
+- [[Probability Distributions]]
 - [[Creating New Distributions]]
 - [[Spliced Distribution]]
 - [[Moment]]
@@ -588,31 +622,34 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Aggregate Models {12–22%}
 
-*7 of 7 uncovered — **no questions at all***
+*9 of 9 uncovered — **no questions at all***
 
 - [[Convolution]]
 - [[Panjer Recursion]]
 - [[Probability]]
+- [[Probability Distributions]]
 - [[Aggregate Loss Model]]
 - [[Frequency]]
 - [[Severity Discretization]]
 - [[Continuous Random Variable]]
+- [[Compound Poisson Process]]
 
 ### Coverage Modifications {8–18%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Coverage Modifications]]
 - [[Deductible]]
 - [[Policy Limit]]
 - [[Coinsurance]]
 - [[Stop-Loss Reinsurance]]
+- [[Loss Elimination Ratio]]
 - [[Increased Limits]]
 - [[Inflation]]
 
 ### Construction and Selection of Parametric Models {14–24%}
 
-*12 of 12 uncovered — **no questions at all***
+*15 of 15 uncovered — **no questions at all***
 
 - [[Frequency]]
 - [[Severity Distribution]]
@@ -622,7 +659,10 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Approximate Confidence Interval]]
 - [[Delta Method]]
 - [[Severity]]
+- [[Aggregate Loss Model]]
 - [[Bayesian Estimation]]
+- [[Hypothesis Testing]]
+- [[Chi-Square Goodness-of-Fit Test]]
 - [[Likelihood Ratio Test]]
 - [[BIC]]
 - [[AIC]]
@@ -638,45 +678,63 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Reserving and Pricing for Short-Term Insurance Coverages {15–29%}
 
-*13 of 13 uncovered — **no questions at all***
+*19 of 19 uncovered — **no questions at all***
 
 - [[Reserve]]
 - [[Short-Term Insurance Coverage]]
 - [[Unpaid Claims]]
+- [[Expected Loss Method]]
+- [[Chain Ladder Method]]
+- [[Bornhuetter-Ferguson Method]]
 - [[Bayesian]]
 - [[Frequency]]
 - [[Severity]]
+- [[Mack Chain Ladder Model]]
 - [[Over-Dispersed Poisson Model]]
 - [[Loss Trend]]
 - [[Trend]]
 - [[Overall Rate Level Indication]]
+- [[Rate Change]]
 - [[Loss Cost]]
+- [[Loss Ratio Method]]
 - [[Classification Ratemaking]]
 - [[Balancing Back]]
 
 ## Exam ATPA (SOA)
 
-*No question bank yet — all 23 syllabus concepts are uncovered.*
+*No question bank yet — all 31 syllabus concepts are uncovered.*
+
+### Ethical Foundations {5–10%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Data Ethics]]
+- [[Actuarial Standards of Practice]]
 
 ### Working with Data {20–30%}
 
-*8 of 8 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Predictive Analytics]]
 - [[Data Pipeline]]
+- [[Data Quality]]
 - [[Data Warehouse]]
 - [[Tidy Data]]
-- [[Data Quality]]
+- [[Data Validation]]
 - [[Relational Database]]
 - [[Outlier]]
 - [[Missing Data]]
+- [[Data Preparation]]
 
 ### Advanced Predictive Analytics Models {30–45%}
 
-*9 of 9 uncovered — **no questions at all***
+*12 of 12 uncovered — **no questions at all***
 
+- [[Predictive Accuracy]]
+- [[Linear Mixed Model]]
 - [[Neural Network]]
 - [[Bayesian]]
+- [[Decision Tree]]
 - [[Stacking]]
 - [[Explainability]]
 - [[Table Importability]]
@@ -687,7 +745,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Model Explainability and Communication {25–35%}
 
-*8 of 8 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Predictive Analytics]]
 - [[Explainability]]
@@ -697,19 +755,24 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Shapley Value]]
 - [[Lift]]
 - [[Model Governance]]
+- [[Actuarial Communication]]
+- [[Actuarial Standards of Practice]]
 
 ## Exam FAP (SOA)
 
-*No question bank yet — all 9 syllabus concepts are uncovered.*
+*No question bank yet — all 13 syllabus concepts are uncovered.*
 
 ### FAP Risk in Actuarial Problems
 
-*4 of 4 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
-- [[Actuary]]
 - [[Risk]]
+- [[Actuary]]
+- [[Risk Management]]
 - [[Asset-Liability Management]]
+- [[Risk Measure]]
 - [[Regulatory Capital]]
+- [[Actuarial Standards of Practice]]
 
 ### Designing and Pricing an Actuarial Solution
 
@@ -727,10 +790,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Selection of Initial Assumptions
 
-*5 of 5 uncovered — **no questions at all***
+*6 of 6 uncovered — **no questions at all***
 
 - [[Actuary]]
 - [[Constraint]]
+- [[Actuarial Assumptions]]
 - [[Corporate Governance]]
 - [[Risk]]
 - [[Regulatory Reporting]]
@@ -753,7 +817,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam CFE-101 (SOA)
 
-*No question bank yet — all 29 syllabus concepts are uncovered.*
+*No question bank yet — all 31 syllabus concepts are uncovered.*
 
 ### Enterprise Risk Management Foundations {24–40%}
 
@@ -767,26 +831,29 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Risk Analysis and Evaluation {23–39%}
 
-*10 of 10 uncovered — **no questions at all***
+*12 of 12 uncovered — **no questions at all***
 
 - [[Risk]]
 - [[Emerging Risk]]
 - [[Key Risk Indicator]]
 - [[Balance Sheet]]
 - [[Income Statement]]
+- [[Risk Measure]]
 - [[Risk Diversification]]
 - [[Stress Testing]]
 - [[Concentration Risk]]
 - [[Compounding Risk]]
+- [[Model Risk]]
 - [[Contagion Risk]]
 
 ### Embedding ERM into Decision-Making {28–46%}
 
-*15 of 15 uncovered — **no questions at all***
+*16 of 16 uncovered — **no questions at all***
 
 - [[Risk]]
 - [[Business Strategy]]
 - [[Risk Capital]]
+- [[Risk Measure]]
 - [[Economic Capital]]
 - [[Risk Appetite]]
 - [[Internal Control]]
@@ -802,7 +869,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam CFE-201 (SOA)
 
-*No question bank yet — all 13 syllabus concepts are uncovered.*
+*No question bank yet — all 14 syllabus concepts are uncovered.*
 
 ### Corporate Finance {15–29%}
 
@@ -825,11 +892,12 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Managerial Accounting and Operational Excellence {9–20%}
 
-*4 of 4 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
+- [[Managerial Accounting]]
 - [[Operational Excellence]]
 - [[Key Financial Measures]]
-- [[Managerial Accounting]]
+- [[Decision-Making]]
 - [[Best Practice]]
 
 ### Evolving Quantitative Methods and Technologies {25–45%}
@@ -857,14 +925,16 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Strategic Budgeting, Forecasting, and Value Measures {28–47%}
 
-*1 of 1 uncovered — **no questions at all***
+*2 of 2 uncovered — **no questions at all***
 
 - [[Strategic Budgeting]]
+- [[Decision-Making]]
 
 ### Decision Modeling and Optimization {13–22%}
 
-*2 of 2 uncovered — **no questions at all***
+*3 of 3 uncovered — **no questions at all***
 
+- [[Decision-Making]]
 - [[Constraint]]
 - [[Decision Analysis]]
 
@@ -877,11 +947,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam CP-312 (SOA)
 
-*No question bank yet — all 12 syllabus concepts are uncovered.*
+*No question bank yet — all 11 syllabus concepts are uncovered.*
 
 ### Cash Flow Models for Long-Term Insurance Business {35–50%}
 
-*8 of 8 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
 - [[Cash Flow]]
 - [[Long-Term Insurance Coverage]]
@@ -890,28 +960,26 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Equity-Linked Insurance]]
 - [[Indexed Annuity]]
 - [[Model Validation]]
-- [[Efficiency]]
 
 ### Other types of Models for Financial Business {30–45%}
 
-*4 of 4 uncovered — **no questions at all***
+*3 of 3 uncovered — **no questions at all***
 
 - [[Economic Scenario Generator]]
 - [[Market Risk]]
 - [[Model Validation]]
-- [[Efficiency]]
 
 ### Model Governance {15–25%}
 
 *3 of 3 uncovered — **no questions at all***
 
 - [[Model Governance]]
-- [[Risk]]
+- [[Risk Management]]
 - [[Model Validation]]
 
 ## Exam CP-321 (SOA)
 
-*No question bank yet — all 45 syllabus concepts are uncovered.*
+*No question bank yet — all 46 syllabus concepts are uncovered.*
 
 ### Plan and Product Provisions {5–15%}
 
@@ -928,7 +996,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Manual Rates {25–35%}
 
-*14 of 14 uncovered — **no questions at all***
+*15 of 15 uncovered — **no questions at all***
 
 - [[Data Quality]]
 - [[Manual Rate]]
@@ -937,6 +1005,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Underwriting]]
 - [[Funding]]
 - [[Guaranty Funds]]
+- [[Long-Term Care Rate Increase]]
 - [[Best Practice]]
 - [[Cash Flow]]
 - [[Insurance Premium]]
@@ -972,7 +1041,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Valuation Principle]]
 - [[Accounting Standards]]
 - [[GAAP]]
-- [[IFRS]]
+- [[IFRS 17]]
 - [[Best Practice]]
 
 ### Asset Adequacy {0–10%}
@@ -999,7 +1068,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam CP-341 (SOA)
 
-*No question bank yet — all 24 syllabus concepts are uncovered.*
+*No question bank yet — all 25 syllabus concepts are uncovered.*
 
 ### Types of Reinsurance Arrangements and Methods {30–40%}
 
@@ -1031,10 +1100,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Key Accounting and Regulatory Considerations {25–40%}
 
-*8 of 8 uncovered — **no questions at all***
+*9 of 9 uncovered — **no questions at all***
 
 - [[Credit for Reinsurance]]
 - [[Reinsurance Transaction]]
+- [[State and Federal Insurance Regulation]]
 - [[GAAP]]
 - [[Statutory Accounting Principles]]
 - [[Reinsurance]]
@@ -1193,11 +1263,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam GH-201U (SOA)
 
-*No question bank yet — all 23 syllabus concepts are uncovered.*
+*No question bank yet — all 25 syllabus concepts are uncovered.*
 
 ### Reserving {30–40%}
 
-*9 of 9 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Valuation Principle]]
 - [[Short-Term Insurance Coverage]]
@@ -1206,14 +1276,16 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Reserve]]
 - [[Trend]]
 - [[Seasonality]]
+- [[Claims Processing Changes]]
 - [[Data Quality]]
 - [[Best Practice]]
 
 ### Financial Statements {25–35%}
 
-*6 of 6 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
 - [[Financial Statements]]
+- [[Accounting Standards]]
 - [[GAAP]]
 - [[Regulatory Capital]]
 - [[Risk-Based Capital]]
@@ -1307,7 +1379,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam GI-101 (SOA)
 
-*No question bank yet — all 41 syllabus concepts are uncovered.*
+*No question bank yet — all 46 syllabus concepts are uncovered.*
 
 ### Introduction and Key Considerations {0–6%}
 
@@ -1341,7 +1413,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Projecting Ultimate Claims {42–56%}
 
-*11 of 11 uncovered — **no questions at all***
+*14 of 14 uncovered — **no questions at all***
 
 - [[Ultimate Loss]]
 - [[Reserving Data Organization]]
@@ -1349,6 +1421,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Development Triangle]]
 - [[Data Diagnostic Analysis]]
 - [[Frequency-Severity Method]]
+- [[Bornhuetter-Ferguson Method]]
+- [[Benktander Method]]
+- [[Cape Cod Method]]
 - [[Generalized Cape Cod Method]]
 - [[Berquist-Sherman Method]]
 - [[Case Reserves]]
@@ -1380,7 +1455,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Ratemaking {10–22%}
 
-*9 of 9 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Ratemaking]]
 - [[Expenses]]
@@ -1389,7 +1464,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Profit and Contingency Provision]]
 - [[Large Loss]]
 - [[Claim]]
-- [[Pure Premium]]
+- [[Pure Premium Method]]
+- [[Rate Change]]
 - [[Credibility]]
 
 ### Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) {0%}
@@ -1405,13 +1481,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam GI-201 (SOA)
 
-*No question bank yet — all 47 syllabus concepts are uncovered.*
+*No question bank yet — all 51 syllabus concepts are uncovered.*
 
 ### General Insurance Company Operations {5–10%}
 
-*11 of 11 uncovered — **no questions at all***
+*12 of 12 uncovered — **no questions at all***
 
 - [[Insurer]]
+- [[Insurance Distribution Systems]]
 - [[Insurance Policy]]
 - [[Underwriting]]
 - [[Ratemaking]]
@@ -1419,13 +1496,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Risk Control]]
 - [[Premium Audit]]
 - [[Insurance Risk]]
-- [[Reinsurance]]
+- [[Types of Reinsurance]]
 - [[Insurance-Linked Securities]]
 - [[International Insurance]]
 
 ### Regulatory Environment {20–32%}
 
-*9 of 9 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Insurance Regulation]]
 - [[Solvency]]
@@ -1435,6 +1512,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Government and Industry Insurance Programs]]
 - [[Credit-Based Insurance Scoring]]
 - [[Insurer]]
+- [[Price Optimization]]
 - [[Reinsurance]]
 
 ### Legal Environment {15–25%}
@@ -1486,8 +1564,9 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Responsibilities of the Actuary {5–10%}
 
-*5 of 5 uncovered — **no questions at all***
+*6 of 6 uncovered — **no questions at all***
 
+- [[Actuarial Standards of Practice]]
 - [[Actuary]]
 - [[International Actuarial Association]]
 - [[Statement of Actuarial Opinion]]
@@ -1496,7 +1575,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam GI-301 (SOA)
 
-*No question bank yet — all 33 syllabus concepts are uncovered.*
+*No question bank yet — all 36 syllabus concepts are uncovered.*
 
 ### Stochastic Reserving {15–25%}
 
@@ -1556,37 +1635,41 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Reinsurance {15–20%}
 
-*8 of 8 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Reinsurance]]
 - [[Reinsurance Reserving]]
 - [[Reinsurance Pricing]]
 - [[Risk Transfer Testing]]
+- [[Types of Reinsurance]]
 - [[Principal]]
 - [[Loss Development]]
+- [[Aggregate Loss Model]]
 - [[Reinstatements]]
 - [[Risk Transfer]]
 
 ### Catastrophe Models and Risk Loads {5–10%}
 
-*2 of 2 uncovered — **no questions at all***
+*3 of 3 uncovered — **no questions at all***
 
 - [[Catastrophe Model Output]]
 - [[Catastrophe Risk Load]]
+- [[Model Output]]
 
 ## Exam GI-302 (SOA)
 
-*No question bank yet — all 34 syllabus concepts are uncovered.*
+*No question bank yet — all 39 syllabus concepts are uncovered.*
 
 ### U.S. General Insurance Products and Coverages {5–10%}
 
-*19 of 19 uncovered — **no questions at all***
+*20 of 20 uncovered — **no questions at all***
 
 - [[Insurance Policy]]
 - [[Personal Auto Policy]]
 - [[Homeowners Policy]]
 - [[Insurable Interest]]
 - [[Policy Provisions]]
+- [[Insurance to Value]]
 - [[Property Insurance]]
 - [[Commercial Property Insurance]]
 - [[Loss Exposure]]
@@ -1615,7 +1698,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### U.S. GI Financial Reporting and Financial Health Measurement {35–50%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Financial Reporting]]
 - [[Insurer]]
@@ -1624,18 +1707,22 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[GAAP]]
 - [[Annual Statement Schedules]]
 - [[Risk-Based Capital]]
+- [[IRIS Ratios]]
 
 ### Responsibilities of a U.S. Signing General Insurance Actuary {30–45%}
 
-*3 of 3 uncovered — **no questions at all***
+*6 of 6 uncovered — **no questions at all***
 
+- [[Actuarial Standards of Practice]]
 - [[Appointed Actuary Responsibilities]]
-- [[Actuary]]
+- [[American Academy of Actuaries]]
 - [[Materiality]]
+- [[Statement of Actuarial Opinion]]
+- [[Actuarial Report]]
 
 ## Exam ILA-101 (SOA)
 
-*No question bank yet — all 36 syllabus concepts are uncovered.*
+*No question bank yet — all 37 syllabus concepts are uncovered.*
 
 ### Individual Life and Annuity Product Design and Pricing {15–25%}
 
@@ -1664,13 +1751,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Product Management {15–25%}
 
-*6 of 6 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
 - [[Life Insurance Distribution]]
 - [[Underwriting]]
 - [[Policyholder Taxation]]
 - [[Life Insurance]]
 - [[Annuity Contract]]
+- [[Insurer]]
 - [[Interest Rate Risk]]
 
 ### Introduction to Life and Annuity Valuation Concepts {15–25%}
@@ -1706,7 +1794,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ILA-201I (SOA)
 
-*No question bank yet — all 23 syllabus concepts are uncovered.*
+*No question bank yet — all 24 syllabus concepts are uncovered.*
 
 ### International Financial Reporting Requirements {40–50%}
 
@@ -1716,7 +1804,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Life Insurance]]
 - [[Annuity Contract]]
 - [[Life Insurance Company]]
-- [[IFRS]]
+- [[IFRS 17]]
 
 ### Capital Management {20–30%}
 
@@ -1731,10 +1819,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Management and Evaluation of Life Insurance Risks {10–15%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Insurance Risk]]
 - [[Risk Diversification]]
+- [[Offset Variable]]
 - [[Mortality]]
 - [[Longevity Risk]]
 - [[Rating Agency]]
@@ -1756,7 +1845,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ILA-201U (SOA)
 
-*No question bank yet — all 27 syllabus concepts are uncovered.*
+*No question bank yet — all 29 syllabus concepts are uncovered.*
 
 ### U.S. Financial Reporting Requirements {50–60%}
 
@@ -1775,10 +1864,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Capital Management {5–20%}
 
-*6 of 6 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
 - [[Regulatory Capital]]
 - [[Life Insurance Company]]
+- [[State and Federal Insurance Regulation]]
 - [[Economic Capital]]
 - [[Policyholder]]
 - [[Insurer]]
@@ -1786,12 +1876,13 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Management and Evaluation of Life Insurance Risks {5–20%}
 
-*8 of 8 uncovered — **no questions at all***
+*9 of 9 uncovered — **no questions at all***
 
 - [[Insurance Risk]]
 - [[Rating Agency]]
-- [[Risk]]
+- [[Risk Management]]
 - [[Risk Diversification]]
+- [[Offset Variable]]
 - [[Mortality]]
 - [[Longevity Risk]]
 - [[Life Insurance Company]]
@@ -1860,7 +1951,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam INV-201 (SOA)
 
-*No question bank yet — all 39 syllabus concepts are uncovered.*
+*No question bank yet — all 40 syllabus concepts are uncovered.*
 
 ### Key Types of Derivatives {5–15%}
 
@@ -1898,7 +1989,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Applications and Risks of Derivatives {30–50%}
 
-*16 of 16 uncovered — **no questions at all***
+*17 of 17 uncovered — **no questions at all***
 
 - [[Risk]]
 - [[Hedging]]
@@ -1916,6 +2007,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Correlation]]
 - [[Operational Risk]]
 - [[Target Volatility Fund]]
+- [[Risk Control]]
 
 ## Exam RET-101 (SOA)
 
@@ -1945,7 +2037,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Participant Risks {15–25%}
 
-*7 of 7 uncovered — **no questions at all***
+*8 of 8 uncovered — **no questions at all***
 
 - [[Risk]]
 - [[Retiree]]
@@ -1954,6 +2046,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 - [[Multi-Employer Plan]]
 - [[Social Insurance]]
 - [[Replacement Ratio]]
+- [[Plan Design]]
 
 ### Sponsor Risks {15–25%}
 
@@ -1990,7 +2083,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam RET-201 (SOA)
 
-*No question bank yet — all 22 syllabus concepts are uncovered.*
+*No question bank yet — all 23 syllabus concepts are uncovered.*
 
 ### Methods {10–20%}
 
@@ -2012,13 +2105,15 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Accounting Standards {35–45%}
 
-*5 of 5 uncovered — **no questions at all***
+*7 of 7 uncovered — **no questions at all***
 
 - [[Valuation]]
 - [[Retirement Plan]]
+- [[Accounting Standards]]
 - [[Plan Curtailment]]
 - [[Plan Merger and Spin-Off]]
 - [[Plan Sponsor]]
+- [[Plan Design]]
 
 ### Retirement Plan Investment and Risk Management {10–20%}
 
@@ -2046,23 +2141,25 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam RET-301 (SOA)
 
-*No question bank yet — all 13 syllabus concepts are uncovered.*
+*No question bank yet — all 15 syllabus concepts are uncovered.*
 
 ### Assumptions {20–30%}
 
-*3 of 3 uncovered — **no questions at all***
+*4 of 4 uncovered — **no questions at all***
 
 - [[Funding]]
 - [[Retirement Plan]]
 - [[Canadian Pension Legislation]]
+- [[Actuarial Standards of Practice]]
 
 ### Methods {20–30%}
 
-*9 of 9 uncovered — **no questions at all***
+*10 of 10 uncovered — **no questions at all***
 
 - [[Valuation]]
 - [[Funding]]
 - [[Canadian Pension Legislation]]
+- [[Actuarial Standards of Practice]]
 - [[Pension Plan]]
 - [[Going-Concern Valuation]]
 - [[Solvency]]
@@ -2072,9 +2169,10 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### Regulations: Evaluation and Application {20–30%}
 
-*4 of 4 uncovered — **no questions at all***
+*5 of 5 uncovered — **no questions at all***
 
 - [[Canadian Pension Legislation]]
+- [[Plan Design]]
 - [[Plan Termination]]
 - [[Plan Merger and Spin-Off]]
 - [[Registered Retirement Savings Plan]]
@@ -2097,6 +2195,12 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 *2 of 2 uncovered — **no questions at all***
 
 - [[Actuary]]
+- [[Decision-Making]]
+
+### Build Team
+
+*1 of 1 uncovered — **no questions at all***
+
 - [[Decision-Making]]
 
 ### Investigate Options

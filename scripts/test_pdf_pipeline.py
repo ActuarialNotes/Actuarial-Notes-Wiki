@@ -224,6 +224,25 @@ class TestAnswerKey(unittest.TestCase):
         text = "Question #7 Answer: D\nblah"
         self.assertEqual(px.answer_key(text)[7], "D")
 
+    def test_srm_key_form(self):
+        # `N.` over `Key:  E`; once on one line, once without the colon
+        text = "1. \nKey:  E \nwork\n\n13. \nKey E \nwork\n24. Key: C \nwork\n"
+        self.assertEqual(px.answer_key(text), {1: "E", 13: "E", 24: "C"})
+
+    def test_keyed_segmentation_recovers_a_keyless_solution(self):
+        # SRM prints Q7's solution under a bare `7.`, so the key anchor skips it
+        text = ("6. \nKey: B \nsix\n10\n0\n1\n\n7. \nThe intent is a classifier.\n\n"
+                "8. \nKey: D \neight\n")
+        bounds = px._fill_keyless(px.segment(text, px.KEY_ANCHOR_RE), text)
+        self.assertEqual([b.num for b in bounds], [6, 7, 8])
+        self.assertIn("classifier", text[bounds[1].start:bounds[1].end])
+        self.assertNotIn("classifier", text[bounds[0].start:bounds[0].end])
+
+    def test_key_header_is_stripped(self):
+        body, letter = px.strip_solution_header("Key:  E \nFirst, calculate the distance.")
+        self.assertEqual(letter, "E")
+        self.assertNotIn("Key", body)
+
     def test_strip_solution_header(self):
         body, letter = px.strip_solution_header("Solution: B\nLet X be the loss.")
         self.assertEqual(letter, "B")
@@ -1978,3 +1997,20 @@ class ReportGapsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestEquationDebris(unittest.TestCase):
+    """A MathType equation's text layer: its glyphs in drawing order (SOA SRM)."""
+
+    def test_debris_line(self):
+        self.assertTrue(px.equation_debris("( 1,0), (1,1)\nx x x x = - = = - =\nA hierarchical"))
+        self.assertTrue(px.equation_debris("relationship, 0\n1\ny x β β ε = + + ."))
+
+    def test_debris_one_glyph_to_a_line(self):
+        self.assertTrue(px.equation_debris(
+            "the residuals is\n25\n2\n= ∑ and the 2\nR statistic is 0.64.\n1\n230\ni i\ne\n=\nCalculate it."))
+
+    def test_prose_and_numbers_are_not_debris(self):
+        self.assertFalse(px.equation_debris("Statement I is correct – PCA finds a low dimension representation."))
+        self.assertFalse(px.equation_debris("| t | 1 | 2 | 3 |\n|---|---|---|---|\n| y | 31 | 35 | 37 |"))
+        self.assertFalse(px.equation_debris("I.\nWhen m = p, random forest and bagging are the same procedure."))

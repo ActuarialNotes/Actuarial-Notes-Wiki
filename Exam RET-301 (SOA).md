@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:578974a17d86ddb1da6cbe6c93da4bad0e4534919105bc47ea65805480f7ac03
+  content_hash: sha256:81c216ddcf56f8d4234764578839fb243c99127fc55973b1bb6d00bf2e37e4ae
   sources:
     - "SOA, Nov 2026/Jul 2027 syllabus PDF for RET-301, all pages, sha256:fecfabdab80723b1993fcaf1c56497cd1e08aec591f6eb83d32ef6da23c241d2 — https://www.soa.org/globalassets/assets/files/edu/2026/ret-301/2026-2027-ret-301-syllabus.pdf"
   open_findings: 0
@@ -27,7 +27,7 @@ verification:
 ## Learning Objectives
 
 > [!example]- Assumptions {20–30%}
-> The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions for [[Funding|funding]] purposes of [[Retirement Plan|retirement plans]] under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and actuarial standards of practice.
+> The candidate will understand how to analyze/synthesize the factors that go into selection of actuarial assumptions for [[Funding|funding]] purposes of [[Retirement Plan|retirement plans]] under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and [[Actuarial Standards of Practice|actuarial standards of practice]].
 >
 > 1. Describe and apply appropriate techniques used in the development of assumptions for [[Funding|funding]] purposes
 > 2. Evaluate and recommend appropriate assumptions for [[Funding|funding]] purposes
@@ -47,13 +47,13 @@ verification:
 > - RET301-100-25: Financial Services Commission of Ontario: Actuarial Guidance Note: Determination of the Solvency Liability Adjustment (1a)
 
 > [!example]- Methods {20–30%}
-> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Funding|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and actuarial standards of practice.
+> The candidate will understand how to prepare [[Valuation|valuation]] results, including [[Funding|required contributions]], for various purposes under [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]], [[Canadian Pension Legislation|tax legislation]], and [[Actuarial Standards of Practice|actuarial standards of practice]].
 >
 > 1. Differentiate between various purposes for valuing [[Pension Plan|pension plans]], including:
 >    - [[Going-Concern Valuation|Going concern funding]]
 >    - [[Solvency]] and hypothetical [[Plan Termination|wind-up]]
->    - [[Termination-wind-up|Termination/wind-up]]
-> 2. Analyze a variety of [[Asset Valuation Method|asset valuation]] methods appropriate for regulatory purposes
+>    - Termination/wind-up
+> 2. Analyze a variety of [[Asset Valuation Method|asset valuation methods]] appropriate for regulatory purposes
 > 3. Prepare [[Valuation|valuation]] results for [[Going-Concern Valuation|ongoing plans]] appropriate for regulatory purposes
 > 4. Prepare [[Valuation|valuation]] results for special purposes, including [[Plan Termination|plan terminations]], [[Plan Merger and Spin-Off|plan mergers]] or [[Plan Merger and Spin-Off|spin-off]], actuarial equivalence calculations and [[Plan Merger and Spin-Off|asset transfers]]
 >
@@ -71,10 +71,10 @@ verification:
 >
 > 1. Describe sources and framework of [[Canadian Pension Legislation|government regulation]]
 > 2. Describe and apply [[Canadian Pension Legislation|Canadian pension legislation]], [[Canadian Pension Legislation|regulatory policies]] and [[Canadian Pension Legislation|tax regulation pertaining]] to:
->    - [[Plan]] design
+>    - [[Plan Design|Plan design]]
 >    - [[Canadian Pension Legislation|Plan establishment]]
 >    - [[Canadian Pension Legislation|Members’ rights]]
->    - Contributions and [[Benefit|benefits]]
+>    - Contributions and benefits
 >    - [[Canadian Pension Legislation|Plan amendment]]
 >    - [[Plan Termination-wind-Up|Plan termination/wind-up]]
 >    - [[Plan Merger and Spin-Off|Plan merger]] or [[Plan Merger and Spin-Off|spin-off]]

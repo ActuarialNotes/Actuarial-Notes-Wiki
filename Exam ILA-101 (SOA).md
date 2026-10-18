@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:cbc56ebe3205a78fc0a727f1fef8294343920c2423b48d3f693b07f8451b86c9
+  content_hash: sha256:6a0bbc17d1f198578928302e7b03acb061de061f01cf00a1453ddb1416d0bd8b
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-101, all pages, sha256:6494067f4d7faee58407e441df609030bb743fd6678f122159d3287d00217e49 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-101/2026-2027-ila-101-syllabus.pdf"
   open_findings: 0
@@ -69,12 +69,12 @@ verification:
 > - Experience Study Calculations, SOA, Oct 2016 (revised Mar 2024), sections 2-4, 11, 12, 15, 17 & 18 (excluding 18.2, 18.8 & 18.9) (2e)
 
 > [!example]- Product Management {15–25%}
-> The candidate will understand common issues and practices related to [[Product]] Management.
+> The candidate will understand common issues and practices related to Product Management.
 >
 > 1. Describe and assess insurance and [[Life Insurance Distribution|annuity distribution]] approaches and [[Underwriting|underwriting]] approaches
 > 2. Describe and apply the significant US and [[Policyholder Taxation|Canadian tax regulations]] relating to the taxation of [[Life Insurance|individual life]] and [[Annuity Contract|annuity insurance products]]
-> 3. Recommend and justify changes to non-guaranteed [[Element|elements]]
-> 4. Describe and evaluate the [[Challenges Insurer|challenges insurers]] face in a [[Interest Rate Risk|rising interest rate environment]]
+> 3. Recommend and justify changes to [[Non-Guaranteed|non-guaranteed]] elements
+> 4. Describe and evaluate the challenges [[Insurer|insurers]] face in a [[Interest Rate Risk|rising interest rate environment]]
 >
 > **Readings:**
 > - Life Insurance for the Digital Age: An End-to-End View, Product Matters, Nov 2017 (3a)
@@ -114,7 +114,7 @@ verification:
 > 1. Describe and evaluate approaches for [[Asset-Liability Management|integrating ALM]] into an [[Enterprise's Risk|enterprise's risk]] and financial management framework
 > 2. Describe and apply the basic concepts of [[Cash Flow Matching|cash flow matching]], [[Immunization|immunization]], [[Redington Immunization|duration/convexity matching]], segmentation
 > 3. Describe how [[Embedded Option|common insurance guarantees generate embedded options]] and calculate the value of these options
-> 4. Explain the function and attributes of [[Common Asset|common assets]] used to support [[Life Insurance|life insurance]] and [[Annuity Contract|annuity liabilities]]
+> 4. Explain the function and attributes of common assets used to support [[Life Insurance|life insurance]] and [[Annuity Contract|annuity liabilities]]
 > 5. Describe basic terms, concepts, and types of [[Reinsurance Transaction|life insurance reinsurance arrangements]]
 > 6. Explain various methods and perform [[Financial Statement|financial statement]] calculations of [[Reinsurance Transaction|reinsurance transactions]], including [[Reinsurance Transaction|yearly renewable term]], [[Coinsurance|coinsurance]], [[Reinsurance Transaction|modified coinsurance]], and [[Reinsurance Transaction|funds withheld arrangements]]
 >

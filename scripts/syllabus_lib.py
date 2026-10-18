@@ -268,6 +268,7 @@ typical possible potential commonly effectively specifically especially optimall
 significant additional relevant
 particular applicable once
 finite
+might you your essential best initial common good while vague final single
 """.split())
 
 VERBS = frozenset("""
@@ -293,6 +294,9 @@ taking assessing needed cited accepted projecting managing valuing selecting ass
 recommend propose examine detect explore interpret formulate quantify differentiate synthesize prepare
 outline contrast critique appraise review reconcile mitigating evaluating describing demonstrating
 provide provides providing applies reduce reducing face faces transforming distinguishing varying compete competes
+affect affects help helps play plays meet meets modify transform extract optimize optimizes optimise optimises
+promote promotes defend predict investigate maintain maintains evolving introducing characterize
+recommended paying
 """.split())
 
 # Abstract nouns that name no concept of their own — "the *role* of…", "the
@@ -318,6 +322,9 @@ parts starting models assumption assumptions specification specifications mechan
 procedures task tasks hand improvements computations measure measures relationships limiting actuarial available
 relevance findings details methodologies decisions emphasis sources
 overview keys steps reasons evolution characteristics cooperation functions topic topics
+manner effort efficiency ability abilities viewpoint perspective situation situations challenge challenges
+foundation category categories skill skills requirement requirements record records tool tools context
+amounts
 """.split())
 
 WORD_RE = re.compile(r"[^\W\d_][\w'’\-/]*|\d[\d.,%]*")
@@ -335,7 +342,7 @@ def _generic(word: str) -> bool:
 # A noun phrase ends on its noun. A past participle or one of these adjectives
 # left at the end of a chunk ("qualitative information required", "the
 # organization's strategic …") is the clause running on, not part of a name.
-TRAILING_ADJECTIVES = frozenset("strategic regulatory financial operational statistical economic".split())
+TRAILING_ADJECTIVES = frozenset("strategic regulatory financial operational statistical economic paid payable".split())
 NOT_PARTICIPLES = frozenset("need needs speed seed feed greed breed creed embed hundred".split())
 # An adverb ("actuarially adjusted", "partially hedged") is never part of a name.
 NOT_ADVERBS = frozenset("""family supply anomaly monopoly oligopoly early assembly italy july rally
@@ -344,7 +351,9 @@ butterfly fly ally apply reply comply multiply quarterly monthly weekly daily ye
 
 def _trailing_only(word: str) -> bool:
     w = word.lower().strip("'’")
-    return w in TRAILING_ADJECTIVES or (len(w) > 4 and w.endswith("ed") and w not in NOT_PARTICIPLES)
+    # "tree-based", "risk-adjusted": a compound adjective, not the clause running on
+    return w in TRAILING_ADJECTIVES or (len(w) > 4 and w.endswith("ed") and w not in NOT_PARTICIPLES
+                                        and "-" not in w)
 
 
 def _adverb(word: str) -> bool:
@@ -382,6 +391,8 @@ def noun_phrases(text: str) -> list[tuple[int, int, str]]:
         nxt = matches[i + 1].group(0).lower() if i + 1 < len(matches) else ""
         if w == "defined" and nxt.startswith(("benefit", "contribution")):
             run.append(m)                    # "defined benefit plan" is a name, not a verb
+        elif w == "state" and run and not re.search(r"[^\s]", between):
+            run.append(m)                    # "multiple state models": a noun inside a phrase
         elif w in BREAK_WORDS or w.strip("-") in BREAK_WORDS or w in VERBS or len(w) == 1 or _adverb(w):
             flush()
         else:

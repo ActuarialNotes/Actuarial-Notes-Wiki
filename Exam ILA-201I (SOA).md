@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a5df1a8e76e3413c024586ea9f8b9cf93cf8d1a4c8cdcdbfefd654402c501e0a
+  content_hash: sha256:8a6f9e768a99ac2b950bcbfbbc6ceb8c8ab0bdf488a3294872d6940b3c0be3d9
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201I, all pages, sha256:3721debc55d50ac6297f07f9b9d906da5aa31f56b8a37a9ac4ff74bf257fcdf3 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201i/2026-2027-ila-201i-syllabus.pdf"
   open_findings: 0
@@ -29,8 +29,8 @@ verification:
 > [!example]- International Financial Reporting Requirements {40–50%}
 > The candidate will understand and apply [[Valuation Principle|valuation principles]] to [[Life Insurance|individual life insurance]] and [[Annuity Contract|annuity products]] issued by [[Life Insurance Company|international life insurance companies]].
 >
-> 1. Describe the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
-> 2. Evaluate the appropriate [[IFRS]] 17 accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
+> 1. Describe the appropriate [[IFRS 17]] accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
+> 2. Evaluate the appropriate [[IFRS 17]] accounting and [[Valuation Principle|valuation standards]] for [[Life Insurance|life insurance]] and [[Annuity Contract|annuity products]]
 >
 > **Readings:**
 > - ILA201-600-25: International Actuarial Note 100: Application of IFRS 17 (Ch. 1, section A – Introduction to GMM only, Ch. 5, 7-9 & 16) (1a, 1b)
@@ -65,7 +65,7 @@ verification:
 > [!example]- Management and Evaluation of Life Insurance Risks {10–15%}
 > The candidate will understand various approaches to manage and evaluate [[Insurance Risk|life insurance risks]].
 >
-> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and offsets between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
+> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and [[Offset Variable|offsets]] between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
 > 2. Understand the role and framework used by regulators and [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
 > 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) report
 >

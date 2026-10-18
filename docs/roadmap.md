@@ -249,6 +249,12 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    60 verified); Exam 8 at 6 / 7, held only by D20; V7 done. Exam 9's first round done (held by
    D22); MAS-II's first round done 18 Oct (4 / 7, held by D23 and three files). Next: Exam 5
    (after D8) → 6C (after D8), then PCPA's bank (C6).
+0b. **Content plan, Phase 3: the SOA ASA prelims** (started 2026-10-18, while Phase 2's
+   remaining campaigns wait on D8, D20, D22 and D23): C9's campaign table written (content plan
+   §3.1a — what the SOA publishes for each prelim, the readings, the order SRM → FAM → ASTAM,
+   ALTAM → PA, ATPA); the linker fixed (C17 and the noise/cut-short links), so G2 passes on all six
+   prelims and G3 on all but ALTAM, every changed page re-checked against its syllabus PDF. Next:
+   SRM's bank (76 SOA sample questions), piloted with the maintainer.
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -294,7 +300,7 @@ These are in order within each lane.
 - **C3:** Exam 5.
 - **C4:** MAS-II.
 - **C5:** 6C. It is blocked on decisions D8 and V6.
-- **C9: write the SOA ASA-prelim publication plan.** None exists today.
+- ~~**C9: write the SOA ASA-prelim publication plan.**~~ ✅ 2026-10-18, content plan §3.1a.
 - **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
   link fixes).
 
@@ -361,7 +367,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   all verified, which the build never collects. One shape: an appended `moved_to:` /
   `retired:` entry that the gate accepts in place of the target. It changes the VERIFY
   rules, so it is the maintainer's call. *(Proposed 2026-10-17.)*
-- **C17: teach the syllabus writer the link names #1629 chose.** `syllabus_write.py --check`
+- ~~**C17: teach the syllabus writer the link names #1629 chose.**~~ ✅ 2026-10-18 (content plan Phase 3: the writer keeps a page's chosen reading links and *Key concepts:* lines; `--all --check` clean, held by a test). `syllabus_write.py --check`
   is no longer clean on 15 of the 18 FSA pages: re-rendering for a new sitting would put
   back the old, unwritten link names, and would link CP-312's "Part 1" citation to the
   Part 2 (2020) page, because the two pages share a title. The writer needs a citation →
@@ -461,7 +467,7 @@ gates through `--hold` in CI.
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
-| C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
+| C9 | **An SOA ASA-prelim publication plan** | ✅ 2026-10-18 | — | Content plan §3.1a: for FAM, SRM, ALTAM, ASTAM, PA and ATPA, what the SOA publishes (found on its own pages: sample sets for all, written-answer papers for ALTAM/ASTAM, project sittings for PA, one ATPA sample; no FAM or SRM papers will be released), the readings (mostly commercial, D7), the gates and the order. Phase 3's linker step lifted all six to G2 (G3 all but ALTAM). Next: the banks, SRM first. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
 | C12 | Syllabus pipeline packages 4–6 and 8 | 🟡 | Later | Provenance `syllabus:` blocks for the 14 hand-made pages; a concept-page lint. `syllabus-pipeline-review.md` §5. |

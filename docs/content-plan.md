@@ -1,6 +1,6 @@
 # Content Plan
 
-_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round) · Re-measure at every
+_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round, the SOA prelims after Phase 3's linker work) · Re-measure at every
 roadmap review_
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
@@ -132,8 +132,8 @@ Five of the six are below the development → beta bar they now have to meet (G3
 beta before the gates existed; `--hold` warns on them rather than failing.
 
 **Development (30):** Exam 6U (3 / 7; 45 readings unverified, no bank) and the 29 SOA exams
-past FM — the six ASA prelims (FAM, SRM, PA, ALTAM, ASTAM, ATPA) and the 23 FSA modules — each
-at 2–3 / 7. Every SOA page is `verified` against its syllabus PDF; none has a bank. Their G2
+past FM — the six ASA prelims (FAM, SRM, PA, ALTAM, ASTAM, ATPA; 4 / 7, ALTAM 3, after Phase 3's linker
+work, §3.1a) and the 23 FSA modules — each at 2–3 / 7. Every SOA page is `verified` against its syllabus PDF; none has a bank. Their G2
 failures are mostly the syllabus linker's cut-short and noise links (`[[Chain-Ladder]]`,
 `[[Whole Life]]`, `[[Distribution]]`), not missing concepts (§3.3–§3.4).
 
@@ -169,9 +169,37 @@ batched by source. The order is the CAS plan's, refreshed:
 | 5 | **MAS-II** (C4) | 4 / 7 | First round done 18 Oct (Appendix A.5): G5 ✅ (6 / 6, Salis's study note added to the page), G7 167 / 168, G4 96 / 98. Left: the page's F-001, its 36 tasks against the outline's 21 (D23); Fall 2019 Q35's explanation (a writer); *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread) | Scanned papers; four of its five readings commercial |
 | 6 | **Exam 6C** (C5) | 3 / 7 | G6 ✅ (`cas6c-an-001`–`022`, all verified; `005` and `018` carry minor scope findings — IBC's consumer code and the IFRS 17 transition approaches are in no 6C reading). D8 (F-001, domain C renumbering); verify 137 concepts, 67 readings, 321 questions (83 got their report paragraph back, C13) | Most concepts and readings, all free Canadian documents |
 | 7 | **PCPA** (C6) | 4 / 7 | A vault-written bank (29 concepts, most shared with MAS-I/II: tags plus a few new questions, D5); verify 9 concepts and 12 readings (several commercial) | No paper exists; the Projects simulator is the real practice |
-| 8 | **ASA prelims** (C9) | 2–3 / 7 | §4 Phase 3 — the plan itself doesn't exist yet | The next exams to become studiable, sat by far more candidates |
+| 8 | **ASA prelims** (C9) | 4 / 7 (ALTAM 3) | §3.1a: G2 passes on all six, G3 on all but ALTAM; next the banks | The next exams to become studiable, sat by far more candidates |
 | 9 | **Exam 6U** (C7) | 3 / 7 | Read every link for country first; a vault-written bank for 66 concepts; verify 56 concepts and 45 readings (all pages exist, none verified); its objective codes don't match its numbering | Furthest CAS exam from ready |
 | 10 | **FSA modules** (C10) | 2–3 / 7 | Pages and concepts exist, no banks; most readings have no free copy | Fellowship-level; fewest candidates per module |
+
+### 3.1a The SOA ASA prelims (C9)
+
+The campaign table for Phase 3, as §3.1 is for CAS. Gates measured 18 Oct 2026 after the linker
+work below; what the SOA publishes was found on soa.org's own pages (its *Past Exams and
+Solutions* page and each exam's current syllabus PDF, which links the sample sets), never
+assembled from a filename pattern. The *Past Exams and Solutions* page says FAM and SRM papers
+"will not be released".
+
+| Exam | Gates | Concepts (unverified) | What the SOA publishes to convert | Readings |
+|---|---:|---:|---|---|
+| **SRM** | 4 / 7 | 41 (7) | One sample set: 76 MC questions with solutions in one PDF (`Files/Edu/2018/exam-srm-sample-questions.pdf`, last revised Oct 2026, Q76) | ISLR free (verified); Frees 2010 commercial |
+| **ASTAM** | 4 / 7 | 56 (23) | Sample set: 25 written-answer questions, Feb 2026 (Q22, Q24 in Excel); seven past sittings, Spring 2023–Apr 2026, 6 questions each with solutions | Klugman 2019 and Brown & Lennox 2022 commercial; ASTAM-21-26 and -22-23 free SOA study notes |
+| **FAM** | 4 / 7 | 80 (38) | FAM-S sample set: 103 MC questions (Topics 1–6, Jun/Jul 2026); FAM-L sample set: about 158 MC questions (Topics 7–10, Aug 2026), many from MLC papers 2012–2017 | Klugman, Brown & Lennox, Dickson et al. (AMLCR) — all commercial |
+| **ALTAM** | 3 / 7 | 61 (50) | Sample set: 61 written-answer questions, Jan 2026 (Q57–60 Excel); seven past sittings, Spring 2023–Apr 2026, 6 questions each | AMLCR commercial; ALTAM-21-23 free SOA study note |
+| **PA** | 4 / 7 | 23 (5) | Seven project sittings, Apr 2023–Apr 2026 (9–12 tasks, statement + model solution + data); Oct 2022's two R-format sittings partly transfer | ISLR free; Frees, Lander commercial; Healy commercial (the author posts a free edition at socviz.co) |
+| **ATPA** | 4 / 7 | 30 (15) | One sample assessment and model solution (2022, a 42 MB zip); no past assessments | The SOA's ATPA e-learning modules (candidates only) |
+
+Order, by candidates and by how much the SOA hands over ready-made: **SRM** (one MC set,
+a free main reading already verified) → **FAM** (two large MC sets, the most-sat prelim) →
+**ASTAM** and **ALTAM** (written-answer sets and papers, the CAS converter's shape) → **PA**
+and **ATPA** (projects: practice is the project, a bank only for the concepts — D5).
+
+Before the first conversion (step 4) a bank has to exist for the exam: the converter knows only
+`p`, `fm`, `mas-i` and `mas-ii` (`SOA_PREFIX` / `SOA_BANK` in `scripts/pdf_extract.py`), no
+prelim has a `bank` in `scripts/exam_catalog.json`, and the quiz builder's `QUIZ_EXAMS` and
+`bankLabelFor` don't list one. The skill pilots five questions' topic choices with the
+maintainer before the rest of a set is written.
 
 ### 3.2 Fact check (VERIFY)
 
@@ -217,9 +245,10 @@ study guides resolves but one. Left (C11):
 - **11 link fixes** — a guide links a variant of a page that exists (`Decision Making`,
   `Financial Statement`, `Maximum Likelihood Estimator` …). Each wants an alias keyed the way
   `syllabus_write.py` looks phrases up, then a re-render.
-- **26 cut-short links** (`[[Chain-Ladder]]` for *Chain Ladder Method*, `[[Whole Life]]`) and
-  **91 noise links** (`[[Data]]`, `[[United State]]`) — the linker's, fixed in the linker (§3.4),
-  not by writing pages. These are most of the SOA pages' G2 failures.
+- ~~**26 cut-short links** and **91 noise links**~~ — mostly fixed in the linker (§3.4, 18 Oct):
+  the SOA pages' G2 gaps went from 522 to 363, and `find_concept_gaps.py` now counts 217 missing
+  concepts (was 225). What is left is mostly the e-learning modules' prose (FAP, DMAC, PAF, ASF),
+  whose objectives are sentences rather than syllabus terms.
 - **9 ambiguous targets** (D15; default: link the proposed page) and **30 one-word targets**.
 - **21 stubs** (`Capital` is the most-linked, 6 guide links; eight have no body at all).
 - Follow-ups noticed in phase D: *Workers Compensation Insurance* is Canadian, but the `wc` alias
@@ -234,13 +263,17 @@ study guides resolves but one. Left (C11):
 
 From `docs/syllabus-pipeline-review.md` §5 (packages 1–3 and 9 are done) and V3's findings:
 
-- **C17 — teach the writer the link names #1629 chose.** `syllabus_write.py --check` is not
-  clean on 15 of the 18 FSA pages: a re-render would put back the old link names, and link
-  CP-312's "Part 1" citation to the Part 2 (2020) page, which shares its title. It needs a
-  citation → page table (or to read the existing page's links) **before the next sitting is
-  rendered, and before any new exam page is generated over an old one**.
-- **The linker's noise and cut-short links** (§3.3) — unlink the noise, extend phrases to the page
-  they name. It moves most SOA exams' G2.
+- ~~**C17 — teach the writer the link names #1629 chose.**~~ ✅ 18 Oct: `syllabus_write.py` reads
+  the page it is about to overwrite and keeps its Source Material links (the citation → page
+  table is the page itself; `Chosen`), any plain-text line there, and every `*Key concepts:*`
+  line. `--all --check` is clean on all 33 generated pages, held by a test.
+- ~~**The linker's noise and cut-short links**~~ ✅ 18 Oct: a phrase the chunker cut short grows
+  to the page it names (`Linker.extend`: up to two words before and three after, never into the
+  next phrase or across a verb); sub-items and preambles no longer link a lone word for the sake
+  of it; the chunker learned the verbs and generic nouns it was linking; `canonical_page` finds a
+  page spelled with hyphens. Ten prelim objectives whose words name no concept carry a chosen
+  `*Key concepts:*` line instead of a noise link. 30 SOA pages re-rendered; the 27 verified ones
+  re-checked as a delta (runs `a769`, `4220`). Left: the modules' prose (§3.3).
 - **C12 — packages 4–6 and 8**: `syllabus:` provenance blocks for the 14 hand-made pages (P, FM,
   the CAS exams; regenerate a page with hand-authored content only once the overlay exists);
   `page_lint.py` for concept pages, in CI on changed files. Owner decisions D1–D4 of that review
@@ -383,6 +416,16 @@ they are all `development` with verified pages and no banks.
 New exam pages from §3.0 at ASA level join here.
 
 **Exit test:** the six prelims are `beta`.
+
+**Progress (18 Oct 2026):**
+
+| Step | Roadmap | Status |
+|---|---|---|
+| 1. The ASA-prelim campaign table | C9 | ✅ §3.1a: what the SOA publishes for each, found on soa.org's own pages; the readings, free and commercial; the gate baseline and the order (SRM → FAM → ASTAM, ALTAM → PA, ATPA) |
+| 2. The linker | C17 | ✅ §3.4. G2 passes on all six prelims (FAM was 13 gaps, SRM 15, PA 10, ALTAM 4, ASTAM 15, ATPA 23); G3 on all but ALTAM. FAM's and ATPA's catch-alls were broken up by pointing four aliases at the specific page that exists (*Mortality*, *Survival Model*, *Data Preparation*, *Data Validation*); G3 now reads "DB plan" as naming *Defined Benefit Plan* and "lives" as *Life*. Every page re-checked against its syllabus PDF (unchanged) |
+| 3. What's still missing | C11 | ALTAM's one catch-all: *Life Insurance* stands in for "long-term life [and health insurance]" on three profit-testing lines — a coordination the chunker can't read; wants a specific page or a re-link by hand. *Total Risk* (GH-101) is not a prelim's |
+| 4. Banks | — | ⬜ Next: give SRM a bank (catalogue, converter prefix, quiz builder), pilot five of its 76 sample questions' topics with the maintainer, then the rest; FAM's two sets after |
+| 5. Fact-check campaigns | — | ⬜ After the banks. Five of the six prelims' main readings are commercial (D7) |
 
 ### Phase 4 — The rest
 

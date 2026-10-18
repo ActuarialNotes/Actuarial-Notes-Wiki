@@ -228,19 +228,28 @@ describe('splitSearchFilter', () => {
     const { scope, initial } = splitSearchFilter({
       exam: 'Exam 5', year: 2019, session: 'Spring', concepts: ['Trend'],
     })
-    expect(scope).toEqual({ concepts: ['Trend'] })
+    expect(scope).toEqual({})
     expect([...initial.exam]).toEqual(['Exam 5'])
     expect([...initial.sitting]).toEqual(['Spring 2019'])
-    expect(initial.difficulty.size + initial.concept.size).toBe(0)
+    expect([...initial.concept]).toEqual(['Trend'])
+    expect(initial.difficulty.size).toBe(0)
   })
 
   it('names a sitting with no session by its year, as the question does', () => {
     expect([...splitSearchFilter({ exam: 'Exam 7', year: 2015 }).initial.sitting]).toEqual(['2015'])
   })
 
-  it('starts on nothing when the filter names neither', () => {
-    const { scope, initial } = splitSearchFilter({ concept: 'Trend' })
-    expect(scope).toEqual({ concept: 'Trend' })
+  it('ticks the concepts in the Concepts filter, named as its options are', () => {
+    const { scope, initial } = splitSearchFilter({ concept: 'Residual Sum of Squares', concepts: ['ANOVA'] })
+    expect(scope).toEqual({})
+    expect([...initial.concept]).toEqual(['Residual Sum Of Squares', 'ANOVA'])
+    const opts = facetOptions([q({ wiki_link: ['Concepts/Residual+Sum+of+Squares'] })], 'concept', initial)
+    expect(opts.map(o => [o.value, o.count])).toEqual([['Residual Sum Of Squares', 1], ['ANOVA', 0]])
+  })
+
+  it('starts on nothing when the filter names none of them', () => {
+    const { scope, initial } = splitSearchFilter({ topic: 'Probability' })
+    expect(scope).toEqual({ topic: 'Probability' })
     expect(hasFacetFilters(initial)).toBe(false)
   })
 })

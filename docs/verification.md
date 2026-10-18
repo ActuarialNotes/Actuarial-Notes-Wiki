@@ -172,6 +172,13 @@ Rules that matter:
   (`test_a_hand_written_human_comment_is_preserved_verbatim`).
 - **Wrapped values.** A long `evidence:` runs onto indented continuation lines
   and is rejoined on parse.
+- **A withdrawn file keeps its log.** When a content file has to leave the vault
+  (Exam 5's "Spring 2018" files, which were Fall 2018 questions and one on no
+  paper), `verify_record.py withdraw <path> --note "…"` appends a `withdrawal`
+  entry and then deletes the file. The log stays, as the record of what was wrong
+  and why; `verify_check.py` accepts a withdrawn log's missing target, and fails a
+  withdrawn target that is still in the vault. A replacement takes a new path, so
+  it never inherits the old file's log.
 
 `.verify/_runs/<run_id>.md` holds per-batch run summaries. They are not logs and
 are excluded from the log checks.

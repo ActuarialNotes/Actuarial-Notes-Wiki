@@ -27,6 +27,7 @@ Usage:
   python3 scripts/verify_record.py comment <path> --note "..." [--author human:jordan]
   python3 scripts/verify_record.py pass <path> --status verified --confidence high \\
       --source "CAS Exam 5 Fall 2019 Q17 — official solution PDF p.4" --run-id R
+  python3 scripts/verify_record.py withdraw <path> --note "Why it leaves the vault" --run-id R
   python3 scripts/verify_record.py run --run-id R --summary summary.md
   python3 scripts/verify_record.py batch packet-ops.json --run-id R
 
@@ -281,6 +282,34 @@ def cmd_comment(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_withdraw(args: argparse.Namespace) -> int:
+    """Withdraw a content file: append a `withdrawal` entry, then delete the file.
+
+    The log is append-only (P3), so it stays — the record of what was wrong and
+    why the file left — and `verify_check` accepts a withdrawn log's missing
+    target. Recorded before the deletion, so the entry is written while the file
+    is still a content file.
+    """
+    rel = args.path
+    path = _require_content(rel)
+    log = V.read_log(rel)
+    entry_text = V.render_entry(
+        _next_comment_id(log),
+        args.title or "Withdrawn",
+        [
+            ("entry_type", "withdrawal"),
+            ("author", args.author),
+            ("run_id", args.run_id or ""),
+            ("date", args.date or today()),
+            ("note", args.note),
+        ],
+    )
+    V.append_entry(rel, entry_text, V.REPO_ROOT)
+    path.unlink()
+    print(f"{rel}: withdrawn (file removed, log kept)")
+    return 0
+
+
 def cmd_pass(args: argparse.Namespace) -> int:
     """Record the outcome of a check on one file, and update its block.
 
@@ -388,7 +417,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     return 0
 
 
-BATCH_OPS = ("finding", "resolution", "comment", "pass")
+BATCH_OPS = ("finding", "resolution", "comment", "pass", "withdraw")
 
 
 def op_argv(op: dict, defaults: dict) -> list[str]:
@@ -445,7 +474,7 @@ def cmd_batch(args: argparse.Namespace) -> int:
         except (ValueError, SystemExit) as exc:
             raise SystemExit(f"batch op {i} is malformed ({exc}); nothing was recorded")
     handlers = {"finding": cmd_finding, "resolution": cmd_resolution,
-                "comment": cmd_comment, "pass": cmd_pass}
+                "comment": cmd_comment, "pass": cmd_pass, "withdraw": cmd_withdraw}
     for i, ns in enumerate(parsed):
         try:
             handlers[ns.command](ns)
@@ -499,6 +528,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--locus", default="")
     p.add_argument("--note", required=True)
 
+    p = sub.add_parser("withdraw", help="withdraw a content file: log a withdrawal, delete the file")
+    common(p)
+    p.add_argument("--title", default="")
+    p.add_argument("--note", required=True)
+
     p = sub.add_parser("pass", help="record the outcome of a check and update the block")
     common(p)
     p.add_argument("--status", required=True, choices=V.STATUSES)
@@ -530,6 +564,7 @@ def main() -> int:
         "resolution": cmd_resolution,
         "comment": cmd_comment,
         "pass": cmd_pass,
+        "withdraw": cmd_withdraw,
         "run": cmd_run,
         "batch": cmd_batch,
     }[args.command](args)

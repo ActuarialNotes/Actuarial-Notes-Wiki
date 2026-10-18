@@ -7,7 +7,7 @@ description: Convert a CAS "Sample Answers and Examiner's Report" PDF (Exam 5/6/
 
 The conversion is a **scripted pipeline**, not a transcription job. Read
 `docs/pdf-question-pipeline.md` once for the design; this file is the operating
-procedure. `questions/exam-5/cas5-2018-001.md` is the format reference.
+procedure. `questions/exam-5/cas5-2018f-001.md` is the format reference.
 
 **Do not read the report and type out question files.** The examiner's report
 is structured text — `TOTAL POINT VALUE`, `Part a: 0.5 point`, `Sample 1`,

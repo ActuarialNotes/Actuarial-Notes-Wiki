@@ -343,6 +343,18 @@ class LogTests(TempVault):
         problems = C.check_log_file(V.log_path_for(rel, self.root))
         self.assertTrue(any("does not exist" in p.message for p in problems))
 
+    def test_a_withdrawn_target_may_be_gone_but_not_still_there(self) -> None:
+        rel = "questions/exam-5/gone.md"
+        V.append_entry(rel, self.FINDING.strip(), self.root)
+        V.append_entry(rel, V.render_entry("C-001", "Withdrawn", [
+            ("entry_type", "withdrawal"), ("author", "human:jordan"),
+            ("date", "2026-10-18"), ("note", "Not a question from this paper."),
+        ]), self.root)
+        log_file = V.log_path_for(rel, self.root)
+        self.assertFalse(any("does not exist" in p.message for p in C.check_log_file(log_file)))
+        self.write(rel, QUESTION)
+        self.assertTrue(any("withdrawn" in p.message for p in C.check_log_file(log_file)))
+
     def test_a_finding_with_no_severity_fails(self) -> None:
         rel = "questions/exam-5/q.md"
         self.write(rel, QUESTION)

@@ -285,7 +285,10 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
-- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects): real products
+- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects; its header is the
+  Resources page's — a search bar, the SOA / CAS picker, the body's exam strip, and a region
+  picker under an exam with regional syllabi like Exam 6 — `lib/storeExams.ts`,
+  `lib/examVariants.ts`): real products
   — exam **registration**, **study materials**, the **calculators** SOA and CAS allow, the
   syllabus **textbooks** — each opening a sheet of what its seller says about it, whose one
   button goes to the seller in a new tab. **Nothing is sold here** (the Gem Shop at

@@ -78,10 +78,48 @@ const CAS_MAS: ExamFee = { ...CAS_TABLE, parts: [{ amount: 550, student: 440 }] 
 /** "Exams 5, 6-Canada, 6-International, 6-United States, 7, 8 and 9 — $850.00, $680.00". */
 const CAS_UPPER: ExamFee = { ...CAS_TABLE, parts: [{ amount: 850, student: 680 }] }
 
+// SOA — the same page's ASA table: "Fundamentals of Actuarial Mathematics
+// (FAM) Exam $ 408.00", "Advanced Long-Term Actuarial Mathematics (ALTAM) Exam
+// $ 500.00", "Advanced Short-Term Actuarial Mathematics (ASTAM) Exam $ 500.00",
+// "Statistics for Risk Modeling (SRM) Exam $ 357.00", "Predictive Analytics (PA)
+// Exam $ 1,234.00", "Advanced Topics in Predictive Analytics (ATPA) Assessment
+// $ 1,255.00". Read 2026-10-18.
+const SOA_ASA: Omit<ExamFee, 'parts'> = { ...SOA_PRELIMINARY, checked: '2026-10-18' }
+
+// SOA — "FSA Exams and Modules 2026": every FSA exam, CP 311 to RET 301,
+// "$ 1,150.00" (GH 201-U and GH 201-C, ILA 201-U and ILA 201-I, alike), and
+// "Study notes for the FSA examinations are not included in exam fees and must
+// be purchased separately." Read 2026-10-18.
+const SOA_FSA: ExamFee = {
+  body: 'SOA',
+  source: SOA_FEES_PAGE,
+  checked: '2026-10-18',
+  includes: ['Study notes for the FSA examinations are not included in exam fees and must be purchased separately.'],
+  terms: SOA_PRELIMINARY.terms,
+  parts: [{ amount: 1150 }],
+}
+
+const FSA_EXAMS = [
+  'CP311', 'CP312', 'CP321', 'CP341', 'CP351',
+  'CFE101', 'CFE201',
+  'GH101', 'GH201', 'GH301',
+  'GI101', 'GI201', 'GI301', 'GI302',
+  'ILA101', 'ILA201',
+  'INV101', 'INV201',
+  'RET101', 'RET201', 'RET301',
+]
+
 /** Fees by exam_progress key. */
 export const EXAM_FEES: Readonly<Record<string, ExamFee>> = {
   P: { ...SOA_PRELIMINARY, parts: [{ amount: 275 }] },
   FM: { ...SOA_PRELIMINARY, parts: [{ amount: 275 }] },
+  FAM: { ...SOA_ASA, parts: [{ amount: 408 }] },
+  SRM: { ...SOA_ASA, parts: [{ amount: 357 }] },
+  PA: { ...SOA_ASA, parts: [{ amount: 1234 }] },
+  ALTAM: { ...SOA_ASA, parts: [{ amount: 500 }] },
+  ASTAM: { ...SOA_ASA, parts: [{ amount: 500 }] },
+  ATPA: { ...SOA_ASA, parts: [{ amount: 1255 }] },
+  ...Object.fromEntries(FSA_EXAMS.map(code => [`FSA-${code}`, SOA_FSA])),
   'MAS-I': CAS_MAS,
   'MAS-II': CAS_MAS,
   'CAS-5': CAS_UPPER,

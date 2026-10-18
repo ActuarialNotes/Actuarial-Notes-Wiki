@@ -29,6 +29,38 @@ test.describe('store', () => {
     await expect(page.getByText('Something went wrong')).toHaveCount(0)
   })
 
+  test('switches between the SOA and CAS ladders, and searches the shelf', async ({ page }) => {
+    await page.goto('/store')
+    await page.getByRole('radio', { name: 'SOA', exact: true }).click()
+    await expect(page.getByRole('radio', { name: 'Exam FAM' })).toBeVisible()
+    await expect(page.getByRole('radio', { name: 'Exam 5' })).toHaveCount(0)
+    await page.getByRole('radio', { name: 'Exam FAM' }).click()
+    await expect(page.getByTestId('store-item-register-FAM')).toBeVisible()
+
+    // The SOA's exams past FM are off the CAS ladder, so the choice goes.
+    await page.getByRole('radio', { name: 'CAS', exact: true }).click()
+    await expect(page).not.toHaveURL(/exam=FAM/)
+    await expect(page.getByRole('radio', { name: 'Exam FAM' })).toHaveCount(0)
+
+    // The search bar narrows every aisle at once, and rides the URL.
+    await page.getByRole('textbox', { name: 'Search the Shop' }).fill('Exam 9')
+    await expect(page).toHaveURL(/q=Exam/)
+    await expect(page.getByTestId('store-item-register-CAS-9')).toBeVisible()
+    await expect(page.getByTestId('store-item-register-CAS-5')).toHaveCount(0)
+  })
+
+  test('shows Exam 6 once, with its regions under the strip', async ({ page }) => {
+    await page.goto('/store')
+    await page.getByRole('radio', { name: 'CAS', exact: true }).click()
+    await expect(page.getByRole('radio', { name: 'Exam 6', exact: true })).toHaveCount(1)
+    await page.getByRole('radio', { name: 'Exam 6', exact: true }).click()
+    const regions = page.getByTestId('exam-variants')
+    await expect(regions).toBeVisible()
+    await regions.getByRole('radio', { name: 'Canada' }).click()
+    await expect(page).toHaveURL(/region=6C/)
+    await expect(page.getByTestId('store-item-register-CAS-6')).toBeVisible()
+  })
+
   test('opens a product sheet whose button goes to the seller', async ({ page }) => {
     await page.goto('/store?aisle=calculators')
 

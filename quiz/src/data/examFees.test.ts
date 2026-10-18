@@ -13,6 +13,15 @@ describe('feeText', () => {
     ['CAS-5', '$850 ($680 full-time students)'],
     ['CAS-9', '$850 ($680 full-time students)'],
     ['CAS-PCPA', '$300 exam, $700 project ($240 and $560 full-time students)'],
+    // SOA's 2026 table, read 2026-10-18.
+    ['FAM', '$408'],
+    ['SRM', '$357'],
+    ['PA', '$1,234'],
+    ['ALTAM', '$500'],
+    ['ASTAM', '$500'],
+    ['ATPA', '$1,255'],
+    ['FSA-GH101', '$1,150'],
+    ['FSA-RET301', '$1,150'],
   ])('%s → %s', (exam, text) => {
     expect(feeText(EXAM_FEES[exam]!)).toBe(text)
   })
@@ -34,9 +43,12 @@ describe('feeFact', () => {
     expect(examFee('CAS-DA')).toBeNull()
   })
 
-  it('is the row the info panel shows for every exam that has a fee', () => {
+  it('is the row the info panel shows for every exam it describes that has a fee', () => {
     for (const exam of Object.keys(EXAM_FEES)) {
       const about = exam === 'CAS-6' ? examAbout('CAS-6', '6c-1') : EXAM_ABOUT[exam]
+      // The SOA's exams past FM have a fee on the Store's registration shelf
+      // but no info-panel facts transcribed yet.
+      if (!about) continue
       const row = about?.facts.find(f => f.label === 'Fee' || f.label === 'Fees')
       expect(row, exam).toEqual(feeFact(exam))
     }

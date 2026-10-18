@@ -137,7 +137,7 @@ describe('extractSourceMaterial', () => {
 
   it('leaves a page with no source-material callout untouched', () => {
     const md = '## Learning Objectives\n> [!example]- A {10%}\n> 1. Do the thing.'
-    expect(extractSourceMaterial(md)).toEqual({ markdown: md, entries: [] })
+    expect(extractSourceMaterial(md)).toEqual({ markdown: md, entries: [], objectiveFilter: true })
   })
 
   it('ignores an [!answer] callout that is not the source-material list', () => {
@@ -313,13 +313,35 @@ describe('Exam 6C (CAS).md source material', () => {
     }
   })
 
-  it('offers every objective in the filter', () => {
-    expect(objectiveFilterOptions(entries, objectives).map(o => o.value))
-      .toEqual(objectives.map(o => o.code))
+  // The Fall 2026 outline renumbered domain C's tasks but its reading table
+  // kept the Fall 2025 codes, so a filter would file the IFRS 17 notes under
+  // reinsurance accounting. The page switches it off until the two agree.
+  it('switches its objective filter off', () => {
+    expect(extractSourceMaterial(md).objectiveFilter).toBe(false)
   })
 
   it('prints a note naming another source as text, not as a wiki link', () => {
     for (const entry of entries) expect(entry.detail ?? '', entry.name).not.toContain('[[')
+  })
+})
+
+// Exam 5's page numbers its tasks as the Fall 2026 (v02) outline does — A1–A18,
+// B1–B20 — so every reading's codes name an objective and the shelf filters.
+describe('Exam 5 (CAS).md source material', () => {
+  const md = readFileSync(path.join(REPO_ROOT, 'Exam 5 (CAS).md'), 'utf-8')
+  const { entries, objectiveFilter } = extractSourceMaterial(md)
+  const objectives = parseSyllabusObjectives(md)
+
+  it('numbers A1–A18 and B1–B20', () => {
+    expect(objectives.map(o => o.code)).toEqual([
+      ...Array.from({ length: 18 }, (_, i) => `A${i + 1}`),
+      ...Array.from({ length: 20 }, (_, i) => `B${i + 1}`),
+    ])
+  })
+
+  it('offers a filter over every cited objective', () => {
+    expect(objectiveFilter).toBe(true)
+    expect(objectiveFilterOptions(entries, objectives).length).toBeGreaterThan(1)
   })
 })
 
@@ -345,6 +367,27 @@ describe('Exam MAS-I (CAS).md source material', () => {
       expect(cited, entry.name).not.toEqual([])
       for (const code of cited) expect(codes.has(code), `${entry.name}: ${code}`).toBe(true)
     }
+  })
+})
+
+describe('the objective-filter switch', () => {
+  const page = (extra: string) => [
+    '> [!answer]- Source Material',
+    extra,
+    '> - [[A Book]]',
+    '>      - A1',
+  ].filter(Boolean).join('\n')
+
+  it('is on unless the callout says otherwise', () => {
+    expect(extractSourceMaterial(page('')).objectiveFilter).toBe(true)
+    expect(extractSourceMaterial('# No shelf').objectiveFilter).toBe(true)
+  })
+
+  it('is off for a callout carrying the comment, with or without a reason', () => {
+    expect(extractSourceMaterial(page('> %%objective-filter: off%%')).objectiveFilter).toBe(false)
+    const off = extractSourceMaterial(page('> %%objective-filter: off — codes out of step%%'))
+    expect(off.objectiveFilter).toBe(false)
+    expect(off.entries.map(e => e.name)).toEqual(['A Book'])
   })
 })
 

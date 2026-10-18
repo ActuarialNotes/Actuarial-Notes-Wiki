@@ -42,3 +42,21 @@ created: 2026-10-18
 - checks_run: full-text search of both C5 readings for prepayment terms; outline task wording; both examples recomputed; PSA ramp against OCC Comptroller's Handbook p.21 (rank 3); wiki links resolve
 - sources_checked: CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf; Panning, Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Willis Re Working Paper, July 2006), pp.1-12 read in full (title page, contents p.2, Sections 1-8, Table 1 p.9, formulas pp.6-9 read from the rendered pages), sha256:9f569b0edf7a677b08716b2c06103c0c7826007d00c5a17c5f4d32f129e32278 — https://www.casact.org/sites/default/files/2021-03/9_Panning.pdf; Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 read in full (PDF pp.1-37) with Tables 1-3, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf
 - note: Exam 9 is the only exam linking this page, and neither of its C5 readings discusses prepayment (F-001), so nothing on it could be verified against an Exam 9 source. Arithmetic is right.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Maintainer decision (2026-10-18, docs/content-plan.md §6): page cut back to the outline's words. The SMM/CPR/PSA formulas, both worked examples, effective duration and convexity and the tranching paragraph removed; the page now says what task C5 says, that neither C5 reading treats prepayment, and points to Mortgage-Backed Security for the mechanics.
+
+## [F-002/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-002
+- status: resolved
+- note: The 'lists prepayment under Credit Risk' sentence is gone; the page quotes task C5 and says the outline names prepayment as an example of task C5's interest rate and credit risk, the finding's proposed wording.

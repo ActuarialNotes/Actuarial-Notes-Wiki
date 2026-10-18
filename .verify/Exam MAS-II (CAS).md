@@ -181,3 +181,62 @@ created: 2026-10-09
 - checks_run: delta only: git diff HEAD~1 (552572f8) — one Source Material bullet added and {5 Sources} -> {6 Sources}; bullet name, codes and scope vs outline p.4; position follows the outline's alphabetical citation order (Cowpertwait, Goldburd, James, Salis, Tse, West); link resolves; six bullets counted
 - sources_checked: CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06), PDF pp.3-4 (Domain C tasks and readings; Complete Text References) incl. link annotations, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf
 - note: in_review: the delta checks out against the outline (F-004 resolved). F-001 (36 vault tasks vs the outline's 21, a scope call for the maintainer) stays open as a major, so the page cannot be verified (rule 1). Nothing else on the page was touched.
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:claude-code
+- run_id: 2026-10-18T18:16Z/d3cd
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Maintainer decision D23 (2026-10-18, docs/content-plan.md §6): the outline's 21 tasks restored in its words and numbering (A1-A2, B1-B4, C1-C11, D1-D4; MASII_CO_S_2026 v06 pp.2-3), links kept on the outline's own words; the vault's finer concepts (Posterior Distribution, AIC, BIC, Hidden Layer, Correlogram, Prediction Interval, …) moved to *Key concepts:* lines. The concept set is unchanged (diffed against HEAD), and the page's numbering now matches the Source Material codes.
+
+## [F-007] Domain B preamble capitalises 'Linear Mixed Models' where the outline has lower case
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:21Z/201b
+- date: 2026-10-18
+- severity: nit
+- status: open
+- locus: Domain B preamble
+- claim: 'Candidates should understand the structure of [[Linear Mixed Model]]s, including ...' (renders 'Linear Mixed Models').
+- evidence: CAS Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13; https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b), p.2, Domain B: 'Candidates should understand the structure of linear mixed models, including how to accommodate models with correlated observations ...'. Every other preamble and all 21 tasks, links reduced to their displayed text, match pp.2-3 character for character.
+- source_rank: 1
+- proposed_action: Write the link as [[Linear Mixed Model|linear mixed models]]; same target, outline's case.
+- applied: true
+- fingerprint: 76e866b8a835
+
+## [F-007/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:21Z/201b
+- date: 2026-10-18
+- resolves: F-007
+- status: resolved
+- note: Domain B preamble now reads '[[Linear Mixed Model|linear mixed models]]', as on outline p.2; link target unchanged, so the concept set is unchanged.
+
+## [F-008] Key concept Exact Credibility sits in Tse 8.4, outside the assigned 8.1-8.2
+- entry_type: finding
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:21Z/201b
+- date: 2026-10-18
+- severity: minor
+- status: open
+- locus: Domain A, task 2, *Key concepts:* line
+- claim: Task A2's key concepts list [[Exact Credibility]], so it counts as a MAS-II syllabus concept.
+- evidence: CAS Exam MAS-II Content Outline 2026 (sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b, https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf) p.4 assigns Tse 'Chapters 6.1-6.3, 7.1-7.4, 8.1-8.2, and 9.1-9.2'. Tse, Nonlife Actuarial Models (Cambridge 2009), printed Contents p.x (publisher preview PDF p.12, sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404, https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf): '8.1 Bayesian inference and estimation', '8.2 Conjugate distributions', '8.3 Bayesian versus Buhlmann credibility', '8.4 Linear exponential family and exact credibility'. The concept's own fact-check log (.verify/Concepts/Exact Credibility.md) also records 'Tse treats exactness in 8.3-8.4, outside the assigned 8.1-8.2'. The C-003 read that D23 was decided on listed Exact Credibility among concepts 'most of them inside assigned readings' without placing it; this is the new evidence. The conjugate pairs of 8.2 may show the Bayesian premium is linear without the name (the preview does not include Ch.8's text, so this could not be checked). The other Domain A-D key concepts were placed: Tse 6.2/6.3/7.2/8.1/8.2/9.1 by contents; James 2.2, 4.4 (confusion matrix), 8.1-8.2, 10.1-10.7, 12.1-12.4 by full-text search; Goldburd Ch.7 and Salis by full-text search; Cowpertwait 1.5, 2.2-2.3, 4.2-4.5, 6.3, 7.2 by contents; West all chapters.
+- source_rank: 2
+- proposed_action: Maintainer: drop [[Exact Credibility]] from A2's key concepts, or keep it under D23 if 8.2's conjugate-pair treatment is judged to cover it (needs a reading of Tse 8.2). Not auto-fixed: it changes the syllabus concept set and reverses part of a maintainer decision.
+- applied: false
+- fingerprint: fd7c76ed9ce7
+
+## [C-006] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T18:21Z/201b
+- date: 2026-10-18
+- status_set: verified
+- confidence: medium
+- checks_run: full pass after D23: 4 preambles and 21 tasks diffed character for character against outline pp.2-3 with links reduced to their displayed text (key-concept lines excluded; C3's 'a set decision of trees' kept as printed); domain titles and weights vs p.2; readings lines vs pp.2-3; six Source Material lines (names, codes, scopes) vs p.4; prerequisite callout vs p.5; lead's 4 hours vs p.1; every key concept placed in its domain's assigned sections (James, Goldburd, Salis by full-text search; Tse, Cowpertwait, West by contents); ### topic-list concepts are a subset of the key concepts plus Statistical Learning, Mean Square Error (James 2.2) and Exposure Base (Buhlmann-Straub, Tse 7.4)
+- sources_checked: CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6: delivery p.1, domains and weights p.2, Domain A-D preambles, tasks and readings pp.2-3, Complete Text References p.4, Assumed Knowledge p.5, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf; James et al., An Introduction to Statistical Learning 2nd ed., CAS-hosted PDF, full-text search located by bookmark section (2.2, 4.4, 8.1-8.2, 10.1-10.7, 12.1-12.4), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf; Goldburd, Khare, Tevet & Guller, GLMs for Insurance Rating, CAS Monograph 5, 2nd ed., full-text search, Ch.7 Model Validation and Selection, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf; Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II (Nov 2025), full-text search, sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf; Tse, Nonlife Actuarial Models (Cambridge 2009), publisher preview, printed Contents pp.ix-x (PDF pp.11-12), sha256:f6d009afdd1776907db090b41b72dd5a76d0b5ba3f0ee42e8b07279d5763b404 — https://api.pageplace.de/preview/DT0400.9780511630231_A24404031/preview-9780511630231_A24404031.pdf; Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.2-6, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf; West, Welch & Galecki, Linear Mixed Models 3rd ed., Routledge product page, Table of Contents (Chs 1-9, Apps A-C), sha256:92d5e15fd36f955bae4b032095aa1b1f6ce8ab8c20ff57d7df47283321d6454a — https://www.routledge.com/Linear-Mixed-Models-A-Practical-Guide-Using-Statistical-Software/West-Welch-Galecki/p/book/9781032019321
+- note: Verified, medium. Every task, preamble, weight and Source Material line now matches the 2026 outline (one nit, F-007, fixed: B preamble case). F-008 (minor, open): Exact Credibility is in Tse 8.4, outside the assigned 8.1-8.2. Confidence medium because Tse, West and Cowpertwait are commercial and were read at contents level only: Prediction Interval (Cowpertwait 5.9 'Forecasting from regression' / 'Prediction in R'), Predictive Distribution (Tse 8.1), Complement of Credibility (Tse 6.3 partial credibility) and Intraclass Correlation (West, all chapters) are placed by section title, not by the text.

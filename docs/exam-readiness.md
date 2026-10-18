@@ -19,7 +19,7 @@ a readiness percentage calls it, so they can never disagree:
 
 | Surface | Where |
 |---|---|
-| Dashboard **readiness square** (`NN% Ready` inside a mini ring, beside the exam-date and days-left squares) | `components/ReadinessCard.tsx` |
+| Dashboard **exam card** (`NN% Ready` inside a mini ring, beside the days left and the exam date) | `components/ReadinessCard.tsx` |
 | Dashboard **Study Guide** popup, opened by that square (the ring and the criterion bars — the breakdown of that one score) | `components/ReadinessCard.tsx` |
 | Study Guides exam list, an exam in progress ("NN% ready", text only — no bar) | `pages/wiki/WikiHome.tsx` → `components/ExamRow.tsx` |
 | Exam action menu (the study guide's title opens it) | `components/ConceptActionMenu.tsx` → `components/ReadinessBar.tsx` |

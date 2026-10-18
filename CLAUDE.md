@@ -1029,10 +1029,11 @@ Other important `lib/` modules:
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage, plus band, section breakdown and concept
-  tally); every surface that prints a readiness % calls it — the Dashboard's three
-  squares (exam date, days left, and `NN% Ready` inside a mini readiness ring, under the
-  exam tabs drawn as exam logos; the calendar, the primary actions and **Today's Study
-  Plan** follow), the **Study Guide** popup the readiness square opens (the ring and the
+  tally); every surface that prints a readiness % calls it — the Dashboard's exam
+  card (one card washed in the exam's accent: `NN% Ready` inside a mini readiness ring
+  beside the days left and the exam date, under the exam tabs drawn as exam logos; the
+  calendar, the primary actions and **Today's Study Plan** follow), the **Study Guide**
+  popup the card's ring opens (the ring and the
   criterion bar — it sits under the concept popup, ending where that pane begins, so a
   tapped arc stays highlighted while its concept reads below), the exam grid and the readiness projection. The exam study guide shows no
   readiness card (removed along with the orientation row). `computeReadiness` is the
@@ -1049,7 +1050,7 @@ Other important `lib/` modules:
   concept, each section sized by its exam weight, each arc filled by that concept's mastery
   state. Pure and tested. Two surfaces draw it and differ only in chrome — the Dashboard's
   Study Guide popup (`StudyGuideRadial`, with `MiniReadinessRing` — the arcs alone, round the
-  score — on the readiness square that opens it in `components/ReadinessCard.tsx`, with a legend,
+  score — on the Dashboard exam card's ring that opens it in `components/ReadinessCard.tsx`, with a legend,
   curved section labels and a middle that prints the score until a concept is hovered or
   selected, then that concept's readout) and the exam page's title-row badge
   (`components/ReadinessRing.tsx`, everything stripped off) — so the two can never disagree

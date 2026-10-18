@@ -448,10 +448,10 @@ gates through `--hold` in CI.
 | ID | Item | Status | Tier | Notes |
 |---|---|---|---|---|
 | C0 | Refresh the generated reports | ✅ 2026-10-17 | — | Both reports regenerated; CONCEPT_GAPS' generated half refreshed (0 missing resources); Exam 8's `source_pages: partial` dropped. Re-run them at each review (Appendix A). |
-| C1 | Exam 8 → ready | 🟡 5 of 7 gates (2026-10-17) | **Now** | Content plan Phase 2. Left: *Risk* (G4, its ERM section) and the ISO CGL plan (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
-| C2 | Exam 9 → ready | 🟡 3 of 7 | Next | Phase 2. 50 concepts, 9 readings, 10 concepts with no question, 57 questions. |
-| C3 | Exam 5 → ready | 🟡 1 of 7 | Next | Phase 2. Settle the findings against the v02 outline (D8); 2 catch-alls; 7 concepts with no question; 0 of 349 questions verified; the Spring 2018 booklet still has to be found. |
-| C4 | MAS-II → ready | 🟡 1 of 7 | Next | Phase 2. The papers are scanned. 28 concepts have no question; the *Bühlmann Credibility* catch-all. |
+| C1 | Exam 8 → ready | 🟡 6 of 7 gates (2026-10-18) | **Now** | Content plan Phase 2. *Risk* verified 18 Oct; only the ISO CGL plan is left (G5, D20). Open minor findings on the papers are mostly CAS's own printed slips the vault repeats untagged; they want an "(as printed)" note each. |
+| C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct (10 vault-written questions, 9 verified; `cas9-an-009` wants a C5 question a reading teaches). Left: 46 concepts, 9 readings, 23 questions on its own papers. |
+| C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Settle the findings against the v02 outline (D8); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
+| C4 | MAS-II → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct (23 vault-written questions, 22 verified). The papers are scanned. The page's F-002 (is exponential smoothing on the syllabus?) holds `masii-an-023`. |
 | C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Phase 2. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |

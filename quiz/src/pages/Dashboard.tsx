@@ -25,6 +25,7 @@ import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
 import { CompletionCornerBadge } from '@/components/CheckMark'
 import { ExamLogo } from '@/components/ExamLogo'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { examAccentStyle } from '@/lib/examColors'
 import { questionExamLabel } from '@/lib/examIds'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
@@ -802,9 +803,13 @@ export default function Dashboard() {
                 // scrolls under `overflow-x-auto`, which would clip an overhang.
                 const planDone = todayQuizByExam[wikiExamIdToProgressKey(s.examId)]?.complete ?? false
                 // The tab is the exam's logo — its monogram and ladder colour
-                // say which exam without printing the name; the active one is
-                // ringed, the rest held back.
+                // say which exam without printing the name (the card below
+                // names it). The active one is drawn full-strength and ringed
+                // in its own colour, the same hue the readiness card under it
+                // is washed in, so tab and card read as one object; the rest
+                // are held back to a tint of their colour.
                 const active = i === clampedIdx
+                const key = wikiExamIdToProgressKey(s.examId)
                 return (
                   <button
                     key={s.examId}
@@ -814,11 +819,14 @@ export default function Dashboard() {
                     aria-label={s.examLabel}
                     aria-pressed={active}
                     title={s.examLabel}
-                    className={`relative shrink-0 rounded-[14px] p-0.5 transition-opacity ${
-                      active ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-100'
+                    style={examAccentStyle(key)}
+                    className={`relative shrink-0 rounded-[13px] p-[3px] transition-[box-shadow,transform] ${
+                      active
+                        ? 'ring-2 ring-[var(--exam-accent,hsl(var(--primary)))]'
+                        : 'hover:scale-105'
                     }`}
                   >
-                    <ExamLogo examKey={wikiExamIdToProgressKey(s.examId)} size="md" />
+                    <ExamLogo examKey={key} size="md" muted={!active} />
                     {planDone && (
                       <CompletionCornerBadge label={`${s.examLabel}: today's study plan complete`} />
                     )}

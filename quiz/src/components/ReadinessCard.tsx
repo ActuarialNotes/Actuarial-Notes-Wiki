@@ -1,7 +1,8 @@
 import { useMemo, useState, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, CalendarDays, CheckCircle2, Circle, Gem, Lock, Pencil, Settings2, X } from 'lucide-react'
+import { examAccentStyle } from '@/lib/examColors'
 import { CheckMark } from '@/components/CheckMark'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
@@ -250,9 +251,9 @@ function StudyGuideRadial({
 
 // ── Mini readiness ring ────────────────────────────────────────────────────────
 //
-// The readiness square's ring: the Study Guide ring's arcs drawn thin around the
+// The dashboard card's ring: the Study Guide ring's arcs drawn thin around the
 // score, with nothing else — no labels, no legend, no hover. The full ring is a
-// tap away in the popup the square opens.
+// tap away in the popup it opens.
 
 const MINI_OUTER_R = RING_OUTER_R + 8
 const MINI_INNER_R = RING_OUTER_R - 14
@@ -261,7 +262,7 @@ function MiniReadinessRing({ segments, pct, flash }: { segments: RingSegment[]; 
   return (
     <svg
       viewBox={`0 0 ${RING_VIEWBOX} ${RING_VIEWBOX}`}
-      className="absolute inset-2 m-auto h-[calc(100%-1rem)] w-auto max-w-[calc(100%-1rem)]"
+      className="h-full w-full"
       aria-hidden="true"
       style={{
         filter: flash ? 'drop-shadow(0 0 8px rgba(34,197,94,0.55))' : 'none',
@@ -1148,9 +1149,10 @@ export function ReadinessCard({
 
   // What the Dashboard leads with, in this order:
   //
-  //   1. **Three squares** — the exam date, the days left, and the readiness
-  //      score inside a mini copy of the Study Guide ring. The readiness square
-  //      opens the full ring and its criteria in a popup (`studyGuideModal`).
+  //   1. **The exam at a glance** — one card: the readiness score inside a
+  //      mini copy of the Study Guide ring, the days left and the exam date.
+  //      The ring opens the full ring and its criteria in a popup
+  //      (`studyGuideModal`).
   //   2. **The calendar** — the schedule strip (`examScheduleBlock`, with
   //      `dayDetailPanel` for whichever day is tapped), then the primary
   //      actions (`actions`) bare on the page.
@@ -1396,97 +1398,109 @@ export function ReadinessCard({
     </>
   )
 
-  // The squares are buttons on a card surface — the same face `Card` paints.
-  const squareClass =
-    'relative flex aspect-square min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl bg-card p-2 text-center text-card-foreground shadow-sm transition-colors hover:bg-accent/60'
   const examDay = examDate ? new Date(examDate + 'T00:00:00') : null
+  const accent = examAccentStyle(progressKey)
 
   const readinessCardContent = (
     <div className="order-none flex flex-col gap-6">
-      {/* Three squares in one line, the three numbers the dashboard is about:
-          the day of the exam, how far off it is, and how ready the reader is
-          for it. The first two open the Study Plan modal on its exam-date
-          step; the third opens the Study Guide ring (`ringOpen`). */}
-      <div className="grid grid-cols-3 gap-4">
-        <button
-          type="button"
-          onClick={openExamDateStep}
-          className={squareClass}
-          aria-label={examDate ? `Exam date ${formatReadableDate(examDate)} — change it` : 'Set your exam date'}
-        >
-          <CalendarDays className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-          {examDay ? (
-            <>
-              <span className="text-2xl font-bold leading-none tracking-tight">
-                {examDay.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-              </span>
-              <span className="text-sm tabular-nums text-muted-foreground">{examDay.getFullYear()}</span>
-            </>
-          ) : (
-            <span className="text-base font-semibold leading-tight">Set date</span>
-          )}
-        </button>
+      {/* The exam at a glance — one card, in the exam's own colour, holding the
+          three numbers the dashboard is about: how ready the reader is (the
+          ring, which opens the Study Guide — `ringOpen`), how far off the exam
+          is, and the day it falls on (both open the Study Plan modal on its
+          exam-date step). They used to be three equal squares; the countdown
+          and the date are one fact read two ways, and the score is the one the
+          rest of the page acts on, so it leads and the two dates share a line. */}
+      <div style={accent} className="relative overflow-hidden rounded-2xl bg-card text-card-foreground shadow-sm">
+        {accent && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_0%_0%,var(--exam-accent-soft),transparent_65%)]"
+          />
+        )}
+        <div className="relative flex items-center gap-4 p-4 sm:gap-8 sm:p-6">
+          <button
+            ref={readinessSquareRef}
+            type="button"
+            onClick={() => setRingOpen(true)}
+            className="relative size-28 shrink-0 rounded-full transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:size-40"
+            aria-haspopup="dialog"
+            aria-label={`Exam readiness: ${readinessPct}% — open the study guide`}
+          >
+            <MiniReadinessRing segments={ringSegments} pct={readinessPct} flash={flashRadial} />
+          </button>
 
-        <button
-          type="button"
-          onClick={openExamDateStep}
-          className={squareClass}
-          aria-label={countdownLabel ?? 'Set your exam date'}
-        >
-          {daysToExam !== null && daysToExam > 1 ? (
-            <>
-              <span className="text-3xl font-bold leading-none tabular-nums tracking-tight">{daysToExam}</span>
-              <span className="text-sm text-muted-foreground">days left</span>
-            </>
-          ) : (
-            <span className={'text-xl font-bold leading-tight ' + (daysToExam === null || daysToExam < 0 ? 'text-muted-foreground' : '')}>
-              {countdownLabel ?? 'No date'}
-            </span>
-          )}
-        </button>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <p className="min-w-0 truncate text-sm font-medium text-muted-foreground">
+                <span className="text-foreground">{syllabus.examLabel}</span>
+                {syllabus.examTopic && <> · {syllabus.examTopic}</>}
+              </p>
+              {/* What today did to the score — green up, red down, absent when
+                  it hasn't moved (docs/exam-readiness.md). */}
+              {readinessMoveToday !== 0 && (
+                <span
+                  className={
+                    'ml-auto flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-xs font-semibold tabular-nums ' +
+                    (readinessMoveToday > 0
+                      ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                      : 'bg-red-500/10 text-red-600 dark:text-red-400')
+                  }
+                  title={`Readiness ${readinessMoveToday > 0 ? 'up' : 'down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
+                >
+                  {readinessMoveToday > 0
+                    ? <ArrowUp className="h-3 w-3" aria-hidden="true" />
+                    : <ArrowDown className="h-3 w-3" aria-hidden="true" />}
+                  {Math.abs(readinessMoveToday)}
+                </span>
+              )}
+            </div>
 
-        <button
-          ref={readinessSquareRef}
-          type="button"
-          onClick={() => setRingOpen(true)}
-          className={squareClass}
-          aria-haspopup="dialog"
-          aria-label={`Exam readiness: ${readinessPct}% — open the study guide`}
-        >
-          <MiniReadinessRing segments={ringSegments} pct={readinessPct} flash={flashRadial} />
-          {/* What today did to the score — green up, red down, absent when it
-              hasn't moved (docs/exam-readiness.md). */}
-          {readinessMoveToday !== 0 && (
-            <span
-              className={
-                'absolute right-1.5 top-1.5 flex items-center text-xs font-semibold tabular-nums ' +
-                (readinessMoveToday > 0
-                  ? 'text-green-600 dark:text-green-400'
-                  : 'text-red-600 dark:text-red-400')
+            <button
+              type="button"
+              onClick={openExamDateStep}
+              className="group mt-2 block max-w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label={
+                examDate
+                  ? `${countdownLabel ? countdownLabel + ', ' : ''}exam date ${formatReadableDate(examDate)} — change it`
+                  : 'Set your exam date'
               }
-              title={`${readinessMoveToday > 0 ? 'Up' : 'Down'} ${Math.abs(readinessMoveToday)} point${Math.abs(readinessMoveToday) === 1 ? '' : 's'} today`}
             >
-              {readinessMoveToday > 0
-                ? <ArrowUp className="h-3 w-3" aria-hidden="true" />
-                : <ArrowDown className="h-3 w-3" aria-hidden="true" />}
-              {Math.abs(readinessMoveToday)}
-            </span>
-          )}
-        </button>
-      </div>
+              {daysToExam !== null && daysToExam > 1 ? (
+                <span className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold leading-none tracking-tight tabular-nums sm:text-5xl">{daysToExam}</span>
+                  <span className="text-base text-muted-foreground">days left</span>
+                </span>
+              ) : (
+                <span className={'block text-2xl font-bold leading-tight sm:text-3xl ' + (daysToExam === null || daysToExam < 0 ? 'text-muted-foreground' : '')}>
+                  {countdownLabel ?? 'Set exam date'}
+                </span>
+              )}
+              <span className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="truncate tabular-nums">
+                  {examDay
+                    ? examDay.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+                    : 'Choose the day you sit it'}
+                </span>
+                <Pencil className="h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
+              </span>
+            </button>
 
-      {/* The next published sitting, only when it says something the date
-          square doesn't: no date chosen yet, or one outside every known window. */}
-      {showNextSitting && nextSitting && (
-        <button
-          type="button"
-          onClick={openExamDateStep}
-          className="-mt-1 flex w-full items-center gap-2 text-left text-sm text-muted-foreground hover:text-foreground"
-        >
-          <span className="min-w-0 flex-1 truncate">Next sitting · {formatSittingDate(nextSitting)}</span>
-          <span className="shrink-0 font-medium">{nextSitting.format}</span>
-        </button>
-      )}
+            {/* The next published sitting, only when it says something the
+                date doesn't: no date chosen yet, or one outside every known window. */}
+            {showNextSitting && nextSitting && (
+              <button
+                type="button"
+                onClick={openExamDateStep}
+                className="mt-1.5 block max-w-full truncate text-left text-xs text-muted-foreground hover:text-foreground"
+              >
+                Next sitting · {formatSittingDate(nextSitting)}
+                {nextSitting.format && <> · <span className="font-medium">{nextSitting.format}</span></>}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* The calendar: the schedule strip, and the day it opens below it. */}
       <section aria-label="Study schedule" className="space-y-1">

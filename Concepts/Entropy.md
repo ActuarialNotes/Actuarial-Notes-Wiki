@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ae53c7b81c6c1afff9cb682b2910e22f949dfac8212fa2a20b173e58ddb821f0
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9673147dd8f217f744fcbe1c6273358d42e6e162ac120332cf9ab32193223245
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Entropy.md
 ---
@@ -19,7 +20,7 @@ verification:
 
 - $\hat{p}_{mk}$ = proportion of class $k$ in node $m$
 - For **binary classification** ($K = 2$): $D = -\hat{p}\log\hat{p} - (1-\hat{p})\log(1-\hat{p})$, maximized at $\hat{p} = 0.5$
-- Entropy and Gini give numerically similar results and generally lead to the same tree structure
+- Entropy and Gini are quite similar numerically
 - **Information gain** = reduction in entropy from a split: $\Delta D = D_{\text{parent}} - \frac{n_L}{n}D_L - \frac{n_R}{n}D_R$
 - The split that **maximizes information gain** (minimizes child entropy) is chosen
 

@@ -1,12 +1,13 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:54b6adcd88ffc5feaac39a8f9c18dd0d53fedf620be31e33255d13dedfb5e732
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:2876ee0a8180b4e999b594a2eadb8997ad5f655f945a989ac4d32244b9667daa
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.2.1-8.2.3 and 8.2.5, printed pp.340-347, 351-352 (PDF pp.348-355, 359-360), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Bagging.md
 ---
@@ -30,4 +31,4 @@ verification:
 >
 > > [!answer]-
 > > **The trees.** A deep tree is high-variance — refit on a different resample it can change shape entirely — so averaging removes a large variance term.
-> > An OLS fit on $n = 3{,}000$ is already stable; its $\hat\beta$ barely moves across resamples ($\sigma^2$ small, $\rho$ near 1), so the bagged average is almost the original fit and the gain is negligible. Bagging pays where variance is the problem.
+> > An OLS fit with $n$ large relative to $p$ is already stable; its $\hat\beta$ barely moves across resamples ($\sigma^2$ small, $\rho$ near 1), so the bagged average is almost the original fit and the gain is negligible. Bagging pays where variance is the problem.

@@ -1,11 +1,12 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:032236477982957f7065cfe3dc3cacffaec0a1b807041962dddce14a6e8c2151
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f7acb858cbd26e222c711b932249378ed0b59b32d952ddccc64c62456ca88b23
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.1, printed pp.327-340 (PDF pp.335-348; printed = PDF - 8), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Tree Pruning.md
@@ -20,7 +21,7 @@ verification:
 - **Grow first, prune second.** Stopping early on a "no split improves RSS enough" rule is short-sighted — a weak split can unlock a strong one below it
 - $\alpha = 0$ keeps the full tree; raising $\alpha$ makes leaves progressively too expensive, collapsing the tree from the bottom up to a single node
 - The sequence of subtrees as $\alpha$ increases is **nested and finite**, so [[Cross-Validation]] over $\alpha$ picks the size and the tree is refit on the full data at that $\alpha$
-- For classification the loss is the misclassification rate, [[Gini Index]] or [[Entropy]]; Gini and entropy are preferred for *growing* because they are sensitive to node purity, misclassification rate for *pruning*
+- For classification the loss is the misclassification rate, [[Gini Index]] or [[Entropy]]; Gini and entropy are preferred for *growing* because they are sensitive to node purity, misclassification rate for *pruning* when prediction accuracy of the final pruned tree is the goal
 - Pruning is the single-tree answer to variance; [[Bagging]] and [[Random Forest]] attack the same problem by averaging instead, and their trees are typically left unpruned
 
 ![[Media/Figures/Tree_Pruning.svg|340]]

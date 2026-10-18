@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8336c63888259d59b238c0df3d5c5ca0ce8599ae5cc26992c96967975eb20ca3
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:58b9a5b1bd5bea60382f5ab9227fc56df1009063234c25316de13b5ca0f466da
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.2.1-8.2.3 and 8.2.5, printed pp.340-347, 351-352 (PDF pp.348-355, 359-360), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted copy, §8.3.3-8.3.4 lab, printed pp.358-360 (PDF pp.366-368), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Random Forest.md
 ---
@@ -30,4 +32,4 @@ A **random forest** is [[Bagging|bagged]] [[Decision Tree|trees]] with one extra
 >
 > > [!answer]-
 > > Start at $m = \sqrt{36} = 6$, then check OOB error at $m = 3$ and $m = 12$.
-> > At $m = 36$ the method **is bagging**: prior claim count is available at every split, so it is chosen at the root of nearly all 500 trees, the trees are near-copies, $\rho$ stays high and the averaged variance barely falls below a single tree's.
+> > At $m = 36$ the method **is bagging**: prior claim count is available at every split, so it is chosen at the root of nearly all the trees, the trees are near-copies, $\rho$ stays high and the averaged variance barely falls below a single tree's.

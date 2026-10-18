@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:a903070275ef3446d71c920aaf51e4febf05b152cfd3dd3bd9dba34f7fff51ea
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Unregistered Reinsurance.md
 ---

@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:648f48091c91f49d0a73b5680878940339f89585d5b2fd16f85b23ba50e8c0c6
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Insurance Legislation.md
 ---

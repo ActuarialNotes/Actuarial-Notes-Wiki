@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:cd0ffc5ab61eca3b478267bdc4e8555d374f1393614a2603403643a5f2e9bc3a
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Stress Testing.md
 ---

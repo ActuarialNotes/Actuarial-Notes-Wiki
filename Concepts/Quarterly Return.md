@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:359b93cbbcda9b1ffa4fa1cc01466b3fd5f1651468b26546616111ba42fb3c5d
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Quarterly Return.md
 ---

@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:a86cd271464836d38a1362f76524996a2c22e3530ac5678ac677dd0a13dee81d
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Statement of Changes in Equity.md
 ---

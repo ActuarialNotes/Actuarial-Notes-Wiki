@@ -1,37 +1,39 @@
 ---
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:27c469c1c187190abeebc3c790b74d6a9e1c56cd014c1d200cd609a56817a62b
-  sources: []
-  open_findings: 1
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d764243b3f484eff660f144817b200f7b48f08c3f81801112f617f358082dc1f
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), pp.3-5 (Minimums and Supervisory Targets defined; 100%/150% for MCT/BAAT; stage 1; Internal Targets from the ORSA, set above Supervisory Targets; industry-wide simplifying assumptions), sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Supervisory Target Capital Ratio.md
 ---
 
-**The Supervisory Target Capital Ratio** is the [[MCT]] ratio at which [[OSFI]] expects every federally regulated P&C insurer to operate: **$150\%$**. It is above the $100\%$ minimum, and the space between them is deliberate — it gives the regulator room to act while the insurer still has capital to work with.
+**The Supervisory Target Capital Ratio** is [[OSFI]]'s industry-wide supervisory target for the [[MCT]] ratio of federally regulated P&C insurers: **$150\%$**. It sits above the $100\%$ minimum as a cushion that facilitates OSFI's early intervention process.
 
 > $$\text{Supervisory target} = 150\%$$
 >
 > $$\text{Minimum} = 100\%$$
 
-- **Not a minimum, and not optional.** An insurer below $150\%$ has not breached a legal requirement, but it has fallen below the level at which OSFI considers it soundly capitalised, and heightened supervision follows.
-- **The three-level ladder:** the insurer's own **[[Internal Target Capital Ratio|internal target]]** (set through [[ORSA]], above $150\%$), the supervisory target ($150\%$), and the minimum ($100\%$). Each breach triggers a stronger response, and the ladder exists so that action begins early rather than at the point of failure.
-- **What a breach brings:** a required capital restoration plan with dates, restrictions on dividends and other capital distributions, increased reporting frequency, likely limits on growth (since growth raises the [[Base Solvency Buffer]]), and escalation through OSFI's intervention stages.
-- **Trend beats level.** A ratio of $160\%$ falling $20$ points a year is a more urgent problem than a stable $145\%$ — the first will breach the minimum within three years, the second will not. Supervisory attention follows direction.
-- **The target is uniform; the internal target is not.** OSFI applies $150\%$ to all, and expects each insurer's own target to reflect *its* risks — catastrophe exposure, business concentration, reserve uncertainty, growth plans — through [[ORSA]] and tested in [[FCT]].
+- **What it covers.** The minimum is the capital an insurer needs to cover the risks specified in the capital guideline; the supervisory target covers those risks and provides a margin for other risks. It provides additional capacity to absorb unexpected losses and addresses capital needs through on-going market access. Because the MCT's minimum capital required is capital required at the target level divided by $1.5$, an insurer at $150\%$ holds capital available equal to its capital required.
+- **Below it.** Failing to maintain capital above the supervisory target is, from OSFI's perspective, indicative of material safety and soundness concerns and a vulnerability to adverse conditions requiring immediate attention. An insurer whose capital approaches or falls below the supervisory target attracts increased supervisory attention, generally including an early warning intervention status (stage 1); the intensity and nature of the intervention depend on the insurer's circumstances.
+- **The three-level ladder:** the insurer's own **[[Internal Target Capital Ratio|internal target]]**, determined through its [[ORSA]] and set above the supervisory target; the supervisory target ($150\%$); and the minimum ($100\%$). An insurer that anticipates falling below its internal target must inform OSFI immediately and lay out its plans to return to it; one whose capital approaches or falls below the minimum leaves OSFI very concerned about its ongoing viability.
+- **Approaching counts, not only falling below.** Supervisory attention is drawn by capital that *approaches* the target. A ratio of $160\%$ falling $20$ points a year reaches $100\%$ in three years, while a stable $145\%$ stays where it is.
+- **The target is industry-wide; the internal target is not.** OSFI sets $150\%$ for the industry, but the Superintendent may, case by case and in consultation with an insurer, establish an alternative supervisory target based on its individual risk profile. The minimum and supervisory target rest on simplifying assumptions applicable industry-wide, so each insurer determines its own capital needs, and its internal target, through its [[ORSA]].
 
 ![[Media/Figures/Supervisory_Target_Capital_Ratio.svg|340]]
 
 > [!example]- How Much Room Is There? {Example}
-> An insurer holds a $158\%$ MCT ratio with capital available of $\$237$ million and a base solvency buffer of $\$150$ million. Its [[FCT]] report models a $1$-in-$100$ earthquake costing $\$46$ million net of reinsurance, after tax.
+> An insurer holds a $158\%$ MCT ratio with capital available of $\$237$ million and minimum capital required of $\$150$ million. Its [[FCT]] report models a $1$-in-$100$ earthquake costing $\$46$ million net of reinsurance, after tax.
 >
 > Does it survive the scenario, and what should the internal target be?
 >
 > > [!answer]-
-> > **After the event**, capital available falls by $\$46$ million. The buffer also changes — an earthquake consumes reinsurance and changes the risk profile — but take it as roughly unchanged for a first pass:
+> > **After the event**, capital available falls by $\$46$ million. Minimum capital required also changes — an earthquake consumes reinsurance and changes the risk profile — but take it as roughly unchanged for a first pass:
 > >
 > > $$\begin{align*}
 > > \text{MCT} &= \frac{\$237\text{M} - \$46\text{M}}{\$150\text{M}} \\
@@ -39,7 +41,7 @@ verification:
 > > &= 127\%
 > > \end{align*}$$
 > >
-> > **It survives** — above the $100\%$ minimum — **but lands below the $150\%$ supervisory target**, in escalation, with an earthquake to pay for and reduced access to capital markets precisely when it needs them.
+> > **It survives** — above the $100\%$ minimum — **but lands below the $150\%$ supervisory target**, where it attracts increased supervisory attention, generally an early warning (stage 1) status.
 > >
 > > **What the internal target should be.** If the insurer wants to remain at or above the supervisory target after its largest modelled event, it needs:
 > >
@@ -49,6 +51,6 @@ verification:
 > > \text{Implied target} &= \frac{\$271\text{M}}{\$150\text{M}} = 181\%
 > > \end{align*}$$
 > >
-> > **So an internal target of roughly $180\%$**, not the $158\%$ currently held — and that is before allowing for the possibility of a reserve strengthening or a market decline occurring in the same year, which [[FCT]] would test as a combined scenario.
+> > **So an internal target of roughly $180\%$**, not the $158\%$ currently held — and that is before allowing for the possibility of a reserve strengthening or a market decline occurring in the same year.
 > >
-> > **The general principle:** the internal target is not a comfort margin chosen by feel. It is derived from *how far the insurer's own scenarios say the ratio can fall*, and the supervisory target is the floor those scenarios must respect.
+> > **The general principle:** the internal target is not a comfort margin chosen by feel. It is determined from the insurer's own assessment of its risks through its [[ORSA]], and it must sit above the supervisory target.

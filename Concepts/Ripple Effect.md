@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:44eb5f086bbff01fa2695e8991c05bc340627405bc601338e3bba1f9af1948c7
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Ripple Effect.md
 ---

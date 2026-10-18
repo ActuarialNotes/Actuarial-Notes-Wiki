@@ -17,3 +17,21 @@ created: 2026-10-09
 - proposed_action: Name the denominator as the guideline does — minimum capital required — and check the example's figures on that basis.
 - applied: false
 - fingerprint: 78023915bad1
+
+## [F-001/R] Correction applied
+- entry_type: resolution
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:36Z/1567
+- date: 2026-10-18
+- resolves: F-001
+- status: resolved
+- note: Corrected this run: formula now MCT Ratio = Capital Available / Minimum Capital Required, the example's input is 'minimum capital required under the MCT $92 million', and the answer's 'from the buffer' reads 'from minimum capital required'. Arithmetic unchanged and rechecked: 820-690 = 130; 130/92 = 141.3%. Basis: MCT 2024 §1.1.1 and A-4 p.3 (minimum capital required is the MCT's capital requirement; Base Solvency Buffer is LICAT's).
+
+## [C-001] Validation pass — in_review
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T00:36Z/1567
+- date: 2026-10-18
+- status_set: in_review
+- checks_run: MCT ratio formula and the example's MCT arithmetic checked against MCT 2024 §1.1.1, §1.2.1 and A-4 pp.3-4; example recomputed (130, 141.3%).
+- note: Only the page's MCT content is checked. Not checked, and needing their own sources: the 'three levels' taxonomy, PACICC's failure causes (KPMG PACICC reading), OSFI's mandate and guaranty funds (OSFI Act / PACICC), the assessment-tools list, and the example's OSFI-response paragraph (OSFI's intervention guide, cited by A-4 footnote 5).

@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:d7ff4bab38a3d52b1de3fb599b12af139174f1aed761944e84de17d1e0dfbf67
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Registered Reinsurance.md
 ---

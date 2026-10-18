@@ -4,9 +4,9 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e789851682186bee74b20be635688c9b88ac5f8a86e233bff7dd4a9693fa916d
+  content_hash: sha256:16eef954b1b40ad4753feb5cfc9bdc9deffd4f270e908106831f5f1b1cd14c78
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Market Risk Margin.md
 ---
@@ -23,7 +23,7 @@ verification:
 ![[Media/Figures/Market_Risk_Margin.svg|340]]
 
 > [!example]- The Capital Cost of an Equity Allocation {Example}
-> An insurer holds $\$600$ million of investments, currently all in bonds yielding $4.2\%$. It is considering moving $\$90$ million into equities with an expected return of $8.5\%$. The equity risk factor is $30\%$; the bonds attract an interest rate margin of $3\%$ on the mismatched portion, unchanged by the switch. Capital available is $\$310$ million and the base solvency buffer is $\$185$ million.
+> An insurer holds $\$600$ million of investments, currently all in bonds yielding $4.2\%$. It is considering moving $\$90$ million into equities with an expected return of $8.5\%$. The equity risk factor is $30\%$; the bonds attract an interest rate margin of $3\%$ on the mismatched portion, unchanged by the switch. Capital available is $\$310$ million and minimum capital required is $\$185$ million.
 >
 > Evaluate.
 >
@@ -39,20 +39,20 @@ verification:
 > >
 > > $$0.30 \times \$90\text{M} = \$27\text{M}$$
 > >
-> > **Effect on the buffer and the ratio:**
+> > **Effect on minimum capital required and the ratio:**
 > >
 > > $$\begin{align*}
-> > \text{New BSB} &= \$185\text{M} + 1.5(\$27\text{M}) \\
-> > &= \$225.5\text{M} \\[4pt]
-> > \text{New MCT} &= \frac{\$310\text{M}}{\$225.5\text{M}} = 137\%
+> > \text{New MCR} &= \$185\text{M} + \frac{\$27\text{M}}{1.5} \\
+> > &= \$203\text{M} \\[4pt]
+> > \text{New MCT} &= \frac{\$310\text{M}}{\$203\text{M}} = 153\%
 > > \end{align*}$$
 > >
-> > against $\$310/\$185 = 168\%$ before. **A $31$-point fall in the capital ratio to earn $\$3.87$ million a year.**
+> > against $\$310/\$185 = 168\%$ before. **A $15$-point fall in the capital ratio to earn $\$3.87$ million a year.**
 > >
 > > **The return on the capital consumed**, after tax at $27\%$:
 > >
-> > $$\frac{0.73 \times \$3.87\text{M}}{\$40.5\text{M} \text{ (buffer increase)}} = 7.0\%$$
+> > $$\frac{0.73 \times \$3.87\text{M}}{\$27\text{M} \text{ (capital required increase)}} = 10.5\%$$
 > >
-> > which is at or below most insurers' cost of capital — before considering that equities can fall $30\%$ in a year, and tend to do so in the same conditions that produce underwriting losses.
+> > to be set against the insurer's cost of capital — before considering that equities can fall $30\%$ in a year, and tend to do so in the same conditions that produce underwriting losses.
 > >
-> > **Conclusion: decline, on these numbers.** And note the more general result the calculation illustrates — the MCT's equity factor is high enough that a P&C insurer's equity allocation is a capital decision before it is an investment decision. This is precisely why Canadian P&C balance sheets are bond-dominated, and it is not conservatism for its own sake.
+> > **Note the more general result** the calculation illustrates — the MCT's equity factor is high enough that a P&C insurer's equity allocation is a capital decision before it is an investment decision. This is precisely why Canadian P&C balance sheets are bond-dominated, and it is not conservatism for its own sake.

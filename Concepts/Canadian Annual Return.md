@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:cfe837cfc053f848a983cf3cb951648c156e8d0c642fbc659b4b803d1f219543
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Canadian Annual Return.md
 ---

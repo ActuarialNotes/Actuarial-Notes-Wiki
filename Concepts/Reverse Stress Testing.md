@@ -6,7 +6,7 @@ verification:
   last_checked_by: null
   content_hash: sha256:eb9bf64be370f9c3ba3a94536b6edebae901079f1535a82fcb1f02a19b26a487
   sources: []
-  open_findings: 0
+  open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Reverse Stress Testing.md
 ---

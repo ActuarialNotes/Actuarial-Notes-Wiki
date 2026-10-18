@@ -17,12 +17,15 @@ wiki_link:
 answer: "C"
 points: 2
 verification:
-  status: unverified
+  status: stale
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:94a9492c82072b7abc323b1d4ff77457f769286da17f9b23c8c5de7c2a6fcc6b
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:653c2689da6a5823dd813d59a6083ae781ee1713d530a165b8cabf1d00576b3e
+  sources:
+    - "Chapter 9 Experience Rating Using Credibility Theory | Loss Data Analytics, Ch.9 §9.1 (Z X̄ + (1−Z)M), §9.2.1 (λ_kp = (y_p/k)^2), §9.2.4 (Z = sqrt(n/n_0)), §9.3.1 (Z = n/(n+K), K = EPV/VHM; 'If the VHM increases then Z increases'), sha256:35a840449990c8fda61687ebde4646508b6296ffac3daba18f0181eb2511fa36 — https://openacttexts.github.io/Loss-Data-Analytics/ChapCredibility.html"
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.12 Credibility, printed pp.217-221 (PDF 229-233): 1,082 claims at p=90%, k=5% (z=1.645); square-root rule; Z = N/(N+K), K = EVPV/VHM, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "CAS Exam MAS-II Content Outline 2026, pp.2-4: Domain A tasks A1-A2, reading Tse Chs 6.1-6.3, 7.1-7.4, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-024.md
@@ -38,7 +41,7 @@ You are given the following three statements:
 
 - I. If $Z = 0.40$, the class's observed pure premium is \$500 and the complement is \$300, the credibility-weighted pure premium is \$380.
 - II. Under Bühlmann credibility, if the variance of the hypothetical means rises while the expected value of the process variance and the number of observations stay the same, the credibility factor falls.
-- III. Under limited fluctuation credibility, halving the tolerance from 5% to 2.5% (with the probability level unchanged) halves the credibility factor of a class with 400 claims.
+- III. Under limited fluctuation credibility, halving the tolerance from 5% to 2.5% (at a 90% probability level throughout) halves the credibility factor of a class with 400 claims.
 
 Determine which of the above statements are true.
 

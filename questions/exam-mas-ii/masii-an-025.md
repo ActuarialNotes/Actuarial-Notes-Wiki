@@ -16,12 +16,15 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:60ee6e63e8da3c77f5ec7173893546c470478b10d867dcfd5cf2dc34c3874590
-  sources: []
+  sources:
+    - "Bates, Mächler, Bolker & Walker, Fitting Linear Mixed-Effects Models using lme4, J. Stat. Softw. 67(1) 2015, §5.2, p.34: anova refits REML fits by ML, 'necessary in order to get sensible answers when comparing models that differ in their fixed effects', sha256:a9ae8934fbe46ac4c3a6d333a75c2c815f9d2ed7725d7613ddce1d5a5244bbff — https://www.jstatsoft.org/index.php/jss/article/download/v067i01/946"
+    - "Bolker et al., GLMM FAQ, 'Testing significance of random effects': LRT conservative when the null value (sigma^2=0) is on the boundary of the feasible space (the mixture-reference case), sha256:53ab8a0c586ae5893841de85a84585e1cb46e79852c7c349c9e5bedb5c63d231 — https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html"
+    - "CAS Exam MAS-II Content Outline 2026, pp.2-4: Domain B task B4 (diagnostics and variable selection), reading West et al. 3rd ed., sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-025.md

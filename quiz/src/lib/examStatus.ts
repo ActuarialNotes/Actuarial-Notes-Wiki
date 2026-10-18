@@ -13,7 +13,9 @@ import type { ItemStatus } from '@/data/tracks'
 //                   papers — and PCPA, which has no paper to convert)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
-//                   study from yet (Exam 6U, the SOA exams past FM).
+//                   study from yet (Exams 6U, 6I and 6T, the SOA exams past
+//                   FM, and the non-exam requirements — VEE, the modules and
+//                   the professionalism courses).
 //
 // An exam moves up when `scripts/publication_readiness.py --check` says so:
 // development → beta once every objective links a written, specific page and
@@ -43,7 +45,14 @@ const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', '
 // the FSA pathway's fellowship exams — have pages transcribed from their
 // syllabi by the syllabus pipeline (docs/syllabus-pipeline.md), and nothing else
 // yet: no question bank, concept pages mostly unwritten.
+// The non-exam requirements — the three VEEs, the SOA's e-learning modules
+// (PAF, ASF, FAP, DMAC), and the professionalism courses (the SOA's APC and FAC,
+// the CAS's Course on Professionalism, keyed `CAS-APC`) — have pages transcribed
+// from what the bodies publish about them, and no questions: there is nothing
+// here to study them from yet.
 const IN_DEVELOPMENT_EXAMS = new Set([
+  'VEE-MS', 'VEE-ECON', 'VEE-AF',
+  'PAF', 'ASF', 'FAP', 'APC', 'FSA-DMAC', 'FSA-FAC', 'CAS-APC',
   'FAM', 'SRM', 'PA', 'ALTAM', 'ASTAM', 'ATPA',
   'FSA-CFE101', 'FSA-CFE201',
   'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351',
@@ -57,12 +66,13 @@ const IN_DEVELOPMENT_EXAMS = new Set([
 /**
  * Variants of a shared progress key whose material lags the rest of the key.
  * Exam 6 is sat in regional variants that share `CAS-6`: 6C has its bank (the
- * Fall 2013–Fall 2019 Exam 6-Canada papers) and is beta, 6U has none and is
- * still a syllabus outline. Keyed by the page's own exam id — the ids
+ * Fall 2013–Fall 2019 Exam 6-Canada papers) and is beta; 6U, 6I
+ * (International) and 6T (Taipei, credited from the AICT's own exams) have none
+ * and are still a syllabus outline. Keyed by the page's own exam id — the ids
  * `bankLabelFor` in `lib/examIds.ts` and `LOCALIZED_EXAM_VARIANT_IDS` use.
  */
 const IN_DEVELOPMENT_VARIANTS: Record<string, ReadonlySet<string>> = {
-  'CAS-6': new Set(['6U']),
+  'CAS-6': new Set(['6U', '6I', '6T']),
 }
 
 /**
@@ -78,7 +88,7 @@ export function examStatus(progressKey: string | null | undefined, examId?: stri
   return 'beta'
 }
 
-/** True for the exams that are still scaffolding (Exam 6U, the SOA exams past FM). */
+/** True for the exams that are still scaffolding (Exams 6U/6I/6T, the SOA exams past FM, the non-exam requirements). */
 export function isExamInDevelopment(progressKey: string | null | undefined, examId?: string | null): boolean {
   return examStatus(progressKey, examId) === 'development'
 }

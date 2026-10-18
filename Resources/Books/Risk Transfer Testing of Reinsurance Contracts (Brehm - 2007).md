@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cf08fdc847d7fb2f4959790935429c8e9b7f64cbc83d5e5b3ef51a1927a8b681
+  content_hash: sha256:110396156a3e45b5a7d9e2a4779bb061367a6e93a6cebe3eb3ee6d0df04f7f18
   sources: []
   open_findings: 0
   open_critical: 0
@@ -23,6 +23,7 @@ A paper in Variance, Volume 01, Issue 01 (2007), that summarizes key results fro
 
 > [!info] On the syllabus
 > - [[Exam GI-301 (SOA)|Exam GI-301]] — Outcomes 7i; sections 2-5, pp. 11-17 (beginning with the first complete paragraph on p. 11).
+> - [[Exam 6I (CAS)|Exam 6I]] — objective D6; the whole summary.
 
 ## Abstract
 

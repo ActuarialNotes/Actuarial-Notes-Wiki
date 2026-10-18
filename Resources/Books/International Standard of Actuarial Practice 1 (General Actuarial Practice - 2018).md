@@ -23,6 +23,7 @@ A model standard of actuarial practice from the International Actuarial Associat
 
 > [!info] On the syllabus
 > - [[Exam GI-201 (SOA)|Exam GI-201]] — Outcomes 7b; the revision adopted December 2018.
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives B2, C1–C3, E2–E4; the standard, in the version dated April 2019 that the content outline cites.
 
 ## Preface
 

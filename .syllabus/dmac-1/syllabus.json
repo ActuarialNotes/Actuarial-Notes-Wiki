@@ -1,0 +1,408 @@
+{
+  "wiki_id": "dmac-1",
+  "body": "SOA",
+  "shape": "module",
+  "title": "Decision Making and Communication",
+  "sitting": "",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/dmac-objectives.pdf",
+  "source_sha256": "385e9f848ae0dae0f846f7f37a25a836ac807b44c16a2549f10eeb8797ec3c64",
+  "readings_url": "https://www.soa.org/education/exam-req/syllabus-study-materials/fsa-module-book-list/",
+  "readings_sha256": "1c36d4c2a19bb68e9ccd7700029c1a025876d0c8ee26604ed2f62db720a20fd1",
+  "extracted_at": "2026-10-17",
+  "intro": [
+    "Welcome to the Decision Making and Communication (DMAC) module and congratulations! You are nearing the completion of your educational requirements to become a fellow of the Society of Actuaries (FSA). You have worked hard to get to this point, and your goal is in sight. Soon you will begin your career as an FSA and will continue your education with professional development activities.",
+    "As an FSA, you will likely find yourself more involved in decision making — from the simple to the complex. You will continue to communicate and share information. You will most likely rely on and work more with others. Working with others and relying on others will require you to become more self-aware and aware of others’ needs. You will need to be able to trust others and eliminate any fears you would otherwise have when relying on someone else’s work.",
+    "Today, more and more actuaries are living up to marketplace demands and are assuming leadership roles in business, academia and other fields. The work you do, how you work with others, how you communicate and the decisions you make matter. The FSA Capstone Experience, which includes the DMAC module and the Fellowship Admissions Course (FAC), will help you develop these skills. It will also position you to make informed decisions and work better in group settings.",
+    "At the end of this module, you will write your DMAC Assignment, which you may use to prepare for your presentation at the FAC.",
+    "**Module Objectives**",
+    "- Describe the Integrated Decision-Making Process.\n- Identify how the competencies from the SOA Competency Framework support the elements of the decision-making process.\n- Apply the Integrated Decision-Making Process.\n- Evaluate the effectiveness of a decision-making process when applied to a business problem involving a variety of stakeholders.\n- Demonstrate effective business communication techniques.\n- Describe working preferences and how to relate to others based on their working preferences."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Integrated Decision-Making Process",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "During this section you will learn more about the Integrated Decision-Making Process. You will learn how the Society of Actuaries (SOA) Competency Framework aligns with this decision-making process. This section also exposes you to more working preferences so that you can reflect on how these preferences might affect decision making and communication.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Describe the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "List the main stages and elements of the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Relate the SOA Competency Framework to the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe how communication skills support a successful decision-making process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe the method of processing information known as chunking.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Build Team",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "In this section you will learn about Stage 1: Build Team. In addition to completing readings and other activities, you will also continue your work on the ERM case study.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain the key concepts of Stage 1: Build Team in the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Stage 1A: Enlist Everyone",
+          "bullets": [
+            "Explain how to enlist stakeholders.",
+            "Explain the importance of enlisting everyone."
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Stage 1B: Set Foundation",
+          "bullets": [
+            "Explain how to discover shared hopes.",
+            "Explain how to uncover the real issues.",
+            "Explain how to identify potential solutions.",
+            "Describe how communication skills help you build the team and identify options.",
+            "Explain the importance of setting this foundation before investigating options and making decisions."
+          ],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe effective facilitation and listening techniques.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe how working preferences affect team building and communication during the Build Team stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Identify the competency framework elements that are most relevant and important to the Build Team stage of decision making.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Evaluate the effectiveness of emotional recognition strategies in improving workplace communication and teamwork",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Develop strategies for continuously improving interpersonal skills through self-awareness, feedback, and ongoing development activities",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Develop personalized techniques or routines to maintain focus and presence during conversations",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Develop a set of probing questions tailored to different problem-solving scenarios to ensure comprehensive understanding.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Investigate Options",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "This section, Investigate Options, takes you to the next stage in the Integrated Decision-Making Process where the team will investigate each of the possible options. During this stage, the team will gather the right information and evidence and will establish criteria by which to assess the options.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain the key concepts of the Investigate Options stage in the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Explain how to gather the right information within the decision-making process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Explain how to get everything on the table to contribute to the decision-making process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe how communication skills help you investigate options and establish criteria.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Manage and resolve team conflicts effectively, including maintaining composure in uncomfortable situations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Describe how working preferences contribute to effective information gathering and analysis throughout the Investigate Options stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Identify the Society of Actuaries (SOA) Competency Framework elements that are most relevant and important to the Investigate Options stage of decision making.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Evaluate team dynamics and inclusivity by assessing how well diverse perspectives are integrated and unconscious biases are managed.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Evaluate the effectiveness of conflict management strategies in improving team dynamics and resolving differences.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Develop a personal strategy to improve awareness of nonverbal communication cues, both in yourself and others, to foster deeper understanding and connection in conversations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Evaluate the relative success of different reactions to uncomfortable situations and prioritize non-emotional responses.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Make Decision",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "In this section, Make Decision, you will learn about the Make Decision stage of the Integrated Decision-Making Process. This section will explain a process for making the decision. Completing this stage is a milestone. By reaching and confirming a shared decision that will best meet the needs of all stakeholders, the steps and activities in the Make Decision stage lead to the team’s ultimate goal of implementing an effective decision.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain the key concepts of the Make Decision stage in the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Explain how to write down choices that support shared hopes within the decision-making process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Explain how to map the solutions within the decision-making process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe how communication skills help you make a decision.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe how working preferences contribute to the Make Decision stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Identify the Society of Actuaries (SOA) Competency Framework elements that are most relevant and important to the Make Decision stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Evaluate the effectiveness of synthesizing multiple points of view in achieving consensus and promoting collaboration.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Choose appropriate techniques to gain alignment when seeking the best decision.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Implement Decision",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "This section will demonstrate the importance of preparing and executing a project plan to implement the decision. In addition, it will discuss the essential action of effectively monitoring the results. This section will also explain how the team maintains focus and energy during the implementation of the decision. It will also discuss how to celebrate the team’s successes.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain the key concepts of the Implement Decision stage in the Integrated Decision-Making Process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Explain how the Integrated Decision-Making Process fits into the actuarial Control Cycle.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Describe additional teams that may be involved when implementing the decision.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Explain how to create a project plan and implement the decision.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Explain how to monitor the results and celebrate the team’s success.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Describe how communication skills help you to implement the decision.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "g",
+          "num": 7,
+          "text": "Develop communication strategies tailored to audiences with diverse backgrounds and experience that promote inclusivity and clarity.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "h",
+          "num": 8,
+          "text": "Describe how working preferences contribute to team building and communication throughout the Implement Decision stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "i",
+          "num": 9,
+          "text": "Describe how to adapt your leadership approach to suit team dynamics and project needs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "j",
+          "num": 10,
+          "text": "Identify the Society of Actuaries (SOA) Competency Framework elements that are most relevant and important to the Implement Decision stage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "k",
+          "num": 11,
+          "text": "Evaluate the effectiveness of project management strategies in optimizing resources, adhering to timelines, and staying within budgetary constraints.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Lessing, Julia. 2025. Aspiring Actuarial Leaders: The Modern Manager’s Toolkit. Greenland, NH: ACTEX.",
+      "codes": "",
+      "parts": []
+    },
+    {
+      "citation": "Maruska, Don. 2004. How Great Decisions Get Made: 10 Easy Steps for Reaching Agreement on Even the Toughest Issues. New York: AMACOM.",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

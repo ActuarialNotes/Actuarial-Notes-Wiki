@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:12bc63d5c73995a3b8c4f01171c344d7eabdedc7e8e4baffc208d7babf4e1d08
+  content_hash: sha256:ab3d214490d4e4683eacd6d8c630dc6ae68e58f6f49bf64cac264d264da075d8
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ verification:
 A study note by Jim Klann on reinsurance commutation, the agreement between a ceding insurer and a reinsurer that provides for the valuation, payment and complete discharge of all obligations under a reinsurance contract. It focuses on the accounting for, and taxation of, commutations, and looks briefly at the parties' motivations, at pricing and at reserving in order to explain the accounting.
 
 > [!info] On the syllabus
+> - [[Exam 6I (CAS)|Exam 6I]] — objective D3; the whole study note (2013); candidates should refer to Edition 5 of the Odomirok et al. paper, *Financial Reporting Through the Lens of a Property/Casualty Actuary*, when reviewing it.
 > - [[Exam 6U (CAS)|Exam 6U]] — objective D3; the whole study note (2013); candidates should refer to Edition 5 of the Odomirok et al. paper, *Financial Reporting Through the Lens of a Property/Casualty Actuary*, when reviewing it.
 
 ## Introduction

@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7ea6b52376326be6c81acc1dfb7231e11eedcee0071b99d2b86713c092b9e240
+  content_hash: sha256:a34cc61c1dc2b3a4829ac3eef7ee3fdf30d6472a55dc11fb6031676d871b1380
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ verification:
 A Congressional Research Service report (updated December 27, 2019) on terrorism risk insurance and the federal Terrorism Risk Insurance Act (TRIA) program. It describes the goals and specifics of the current program, the coverage of nonconventional attacks, the insurability of terrorism risk and the terrorism insurance market before and after TRIA, and it compares the program's reauthorizations in a side-by-side table.
 
 > [!info] On the syllabus
+> - [[Exam 6I (CAS)|Exam 6I]] — objective A2; pp. 1–10, excluding the Terrorism Insurance Market section.
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives B1–B2; the Summary page and pp. 1–10, stopping at The Terrorism Insurance Market (CRS R45707, updated December 27, 2019, as the content outline states it)
 
 ## Summary

@@ -22,6 +22,7 @@ A chapter of the IAA Risk Book, developed and approved by the Insurance Regulati
 
 > [!info] On the syllabus
 > - [[Exam GI-201 (SOA)|Exam GI-201]] — Outcomes 7a; pp. 2-7.
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives B3, E1, E4; the chapter (May 2023).
 
 ## Introducing the IAA Risk Book
 

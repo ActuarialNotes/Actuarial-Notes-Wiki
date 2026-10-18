@@ -26,7 +26,7 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 
 | | | |
 |---|---|---|
-| **Exam pages** | 43 | One per exam: 12 CAS and 31 SOA, the FSA modules included. Learning objectives with their syllabus weights, the concepts under each objective, and the assigned readings with the chapters that are examinable. `Exam *.md` |
+| **Exam pages** | 55 | One per exam or requirement: 15 CAS and 40 SOA, the FSA modules, the VEEs and the professionalism courses included. Learning objectives with their syllabus weights, the concepts under each objective, and the assigned readings with the chapters that are examinable. `Exam *.md` |
 | **Concepts** | ~1,400 | One idea per page: a precise definition, the formula in LaTeX, worked examples with the answer folded away, and a figure where a picture helps. `Concepts/` |
 | **Sources** | ~750 | One real document per page: textbooks, papers, CAS study notes, CIA educational notes, OSFI guidelines, standards of practice and regulatory returns. Each page gives the document's own outline and which exams assign it. Alongside them is a dated timeline of Canadian P&C regulation and events. `Resources/` |
 | **Practice questions** | 3,300+ | SOA sample questions, CAS past papers and the vault's own questions, each tagged to its concepts and learning objective, with a worked solution. Questions from the written-answer papers (Exams 5, 7, 8 and 9) also carry the examiner's report. `questions/<exam>/` |
@@ -43,12 +43,14 @@ actuaries** who want a quick, sourced reference to material they last studied ye
 | [5](Exam%205%20(CAS).md) | CAS | Basic Techniques for Ratemaking and Estimating Claim Liabilities | Beta | 2013–2019 papers |
 | [6C](Exam%206C%20(CAS).md) | CAS | Regulation and Financial Reporting (Canada) | Beta | 2013–2019 papers |
 | [6U](Exam%206U%20(CAS).md) | CAS | Regulation and Financial Reporting (United States) | In development | — |
+| [6I](Exam%206I%20(CAS).md), [6T](Exam%206T%20(CAS).md) | CAS | Regulation and Financial Reporting (International; Taipei) | In development | — |
 | [7](Exam%207%20(CAS).md) | CAS | Advanced Estimation of Claims Liabilities | Complete | 2012–2019 papers |
 | [8](Exam%208%20(CAS).md) | CAS | Advanced Ratemaking | Beta | 2012–2019 papers |
 | [9](Exam%209%20(CAS).md) | CAS | Risk Management for Actuaries | Beta | 2012–2019 papers |
 | [PCPA](Exam%20PCPA%20(CAS).md) | CAS | Property and Casualty Predictive Analytics | Beta | Project simulator |
 | [DISC-DA](Exam%20DISC-DA%20(CAS).md), [DISC-RM](Exam%20DISC-RM%20(CAS).md), [DISC-IA](Exam%20DISC-IA%20(CAS).md) | CAS | The Institutes' online courses | Complete | The vault's own (The Institutes publish none) |
 | FAM, SRM, PA, ALTAM, ASTAM, ATPA and the 23 FSA modules | SOA | The ASA and FSA exams past FM | In development | — |
+| [VEE-MS](Exam%20VEE-MS%20(SOA).md), [VEE-ECON](Exam%20VEE-ECON%20(SOA).md), [VEE-AF](Exam%20VEE-AF%20(SOA).md); [PAF](Exam%20PAF%20(SOA).md), [ASF](Exam%20ASF%20(SOA).md), [FAP](Exam%20FAP%20(SOA).md), [DMAC](Exam%20DMAC%20(SOA).md); [APC](Exam%20APC%20(SOA).md), [FAC](Exam%20FAC%20(SOA).md), [COP](Exam%20COP%20(CAS).md) | SOA, CAS | The non-exam requirements: the VEE credits, the SOA's e-learning modules and the professionalism courses | In development | — |
 
 **Complete:** syllabus, concept pages and question bank are all in place. **Beta:** usable, and
 still being filled out. **In development:** the syllabus is mapped, but its concept pages and

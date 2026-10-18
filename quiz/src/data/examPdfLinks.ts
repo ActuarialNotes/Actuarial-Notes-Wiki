@@ -401,6 +401,40 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf',
     label: 'Syllabus',
   },
+  // The SOA's e-learning modules publish no syllabus: each module's page links
+  // its "Module Introduction and Objectives" instead, the document
+  // scripts/syllabus_extract.py read the module's page from (read 2026-10-17).
+  'paf-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/paf-objectives.pdf',
+    label: 'Module Objectives',
+  },
+  'asf-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/asf-objectives.pdf',
+    label: 'Module Objectives',
+  },
+  'fap-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2023/fap-intro-objectives.pdf',
+    label: 'Module Objectives',
+  },
+  'dmac-1': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/dmac-objectives.pdf',
+    label: 'Module Objectives',
+  },
+  // The three VEEs: the SOA's Guidelines for Approval of VEE Courses and
+  // Educational Experiences (effective November 1, 2024), which the CAS's VEE
+  // page links too. One document lists the topics of all three.
+  'vee-ms': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/edu-vee-guidelines.pdf',
+    label: 'VEE Guidelines',
+  },
+  'vee-econ': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/edu-vee-guidelines.pdf',
+    label: 'VEE Guidelines',
+  },
+  'vee-af': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/edu-vee-guidelines.pdf',
+    label: 'VEE Guidelines',
+  },
   'cfe-101': {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2026/cfe-101/2026-11-cfe-101-syllabus.pdf',
     label: 'Syllabus',
@@ -557,6 +591,19 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
   },
   'disc-ia': {
     url: 'https://www.casact.org/sites/default/files/2022-12/DISC_IA.pdf',
+    label: 'Syllabus',
+  },
+  // Fall 2026 administration — v03 of 8 Jul 2026 (`Exam_6I_ CO_2026_F`), the
+  // "October 2026 Content Outline" the CAS Exam 6 International page links.
+  '6i-1': {
+    url: 'https://www.casact.org/sites/default/files/2026-03/Exam_6I_CO_2026_Fall.pdf',
+    label: 'Content Outline',
+  },
+  // The 2023 Syllabus of Basic Education extract for Exam 6-Taipei (v01 of
+  // 16 Nov 2022), the later of the two the CAS Exam 6T page links. It names the
+  // AICT exams that are credited for 6T and lists no readings of its own.
+  '6t-1': {
+    url: 'https://www.casact.org/sites/default/files/2021-11/Exam6T_Syllabus.pdf',
     label: 'Syllabus',
   },
   // Exam 6U has no entry: its current document hasn't been located on

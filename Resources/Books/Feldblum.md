@@ -23,6 +23,7 @@ A CAS study note (3 October 2011) on rating agencies' financial strength ratings
 
 > [!info] On the syllabus
 > - [[Exam 6C (CAS)|Exam 6C]] — objectives C2–C4; pp. 1–7, including Appendix A; not Section 4, Appendices B–D, formulæ or the endnotes.
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives A1, A5; pp. 1–7, 14–15 (stopping at Best's Capital Adequacy Ratio), and Appendix A.
 > - [[Exam 6U (CAS)|Exam 6U]] — objective A2; pp. 1–7 and 14–15 (stopping at Best's Capital Adequacy Ratio) and Appendix A; not Section 4, Section 5 from Best's Capital Adequacy Ratio on p. 15, Appendices B–D, or the endnotes.
 
 ## Introduction

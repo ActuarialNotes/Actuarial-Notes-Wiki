@@ -17,7 +17,12 @@ syllabus PDF ─► syllabus_extract.py ─► .syllabus/<wiki id>/syllabus.json
 
 It was first run over **every SOA exam past FM** (2026-10-05): the six ASA exams — FAM,
 SRM, PA, ALTAM, ASTAM and the ATPA assessment — and the twenty-three exams of the FSA
-pathway (CFE, CP, GH, GI, ILA, INV and RET). P and FM keep their hand-made pages.
+pathway (CFE, CP, GH, GI, ILA, INV and RET). P and FM keep their hand-made pages. The SOA's
+four e-learning modules — PAF, ASF, FAP and DMAC — followed on 2026-10-18, through the module
+reader below. The other non-exam requirements publish no objectives document (the VEEs' topics
+are in the SOA's VEE course-approval guidelines; the APC, the FAC and the CAS's Course on
+Professionalism are described only on their course pages), so those pages, like Exams 6I and
+6T, are hand-transcribed with no `syllabus:` block.
 
 ## Stage 1 — `scripts/syllabus_extract.py` (PyMuPDF, no model)
 
@@ -47,6 +52,32 @@ lettered outcomes, with `•`/`o`/roman-numeral sub-items — and its readings i
 
 Page furniture (page numbers, the copyright line, the running header) is removed first.
 The JSON keeps the sha256 of the PDF it read.
+
+### The e-learning modules (`MODULES`, `"shape": "module"`)
+
+The SOA's e-learning modules — PAF, ASF, FAP and DMAC — publish no syllabus. Each module's
+page links a *Module Introduction and Objectives* document instead, and a book list (a PDF,
+or for DMAC a table on the FSA module book-list page). `MODULES` maps each wiki id to both,
+and `--wiki-id paf-1` (or `--all`) reads them with `module_extract`:
+
+- the **headings** are found by their type, not their words: the body size is the most
+  common one, the title the largest, and a heading level is any other style used three times
+  or more — so a sentence in the heading's words is never taken for one;
+- a one-level document (PAF, ASF, DMAC) makes a **topic of each section**: its paragraph is the
+  objective, its bullets the outcomes (numbered, no letters), its `o` sub-bullets their
+  bullets. FAP has a level more: a topic per **module** of the course, its sections the bold
+  groups the outcomes sit under, and its *Module Overview* description the objective;
+- *Module Introduction* and *Module Objectives* become the page's lead and its *About the
+  module* callout;
+- a section's lead-in ("After you complete this section, you will be able to:") is dropped,
+  as an exam syllabus's "The Candidate will be able to:" is;
+- no weights: the catalogue marks the page `"weighted": false`;
+- the book list's citations are the readings, each linked to `Title (Author - Year)`. A
+  dated citation matches a `Resources/Books/` page only when the page is filed under the same
+  year, since another year is another edition (Brown & Lennox's 2015 fourth edition is not the
+  2022 fifth's page).
+
+The JSON records both documents' URLs and sha256s; the page's H1 is the module's code.
 
 ## Stages 2–3 — `scripts/syllabus_write.py`
 

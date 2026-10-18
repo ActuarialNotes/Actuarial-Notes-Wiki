@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:fd0ffa6e6d5795157078eacacd3071a6043e4217b0597de2d12154a9a7d4bba5
+  content_hash: sha256:585c361d257a79ebca6466bbbfce813c08a1d0e0683f7c8b51da03f1aa9fbd52
   sources: []
   open_findings: 0
   open_critical: 0
@@ -22,6 +22,7 @@ verification:
 A CAS study note (January 2020) giving a foundational discussion of the functions and financial implications of reinsurance. It works through nine roles reinsurance plays in the insurance marketplace, each with a business issue and a reinsurance solution, and gives examples of the accounting treatment of the reinsurance transactions on an array of financial statements.
 
 > [!info] On the syllabus
+> - [[Exam 6I (CAS)|Exam 6I]] — objectives D1 and D4–D5; the whole study note, including errata.
 > - [[Exam 6U (CAS)|Exam 6U]] — objectives D1 and D4; the whole study note, including errata.
 
 ## Introduction

@@ -52,6 +52,15 @@ export interface Segment {
   ids: string[]
 }
 
+/**
+ * The heading every credential files its non-exam requirements under — what
+ * the body requires but doesn't call an exam: the VEE credits, courses and
+ * e-learning modules, and the professionalism courses. The Study Guides page
+ * draws each credential's sections under their own headings, so this one sits
+ * below the exams rather than among them.
+ */
+export const NON_EXAM_REQUIREMENTS = 'Non-Exam Requirements'
+
 export const TRACKS: Track[] = [
   {
     // The track a new account starts on. It isn't a credential path — it's
@@ -106,14 +115,6 @@ export const TRACKS: Track[] = [
     certPath: 'Exams/Certifications/Associate of the Society of Actuaries (ASA)',
     sections: [
       {
-        label: 'VEE Requirements',
-        items: [
-          { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', color: 'sky' },
-          { id: 'VEE-ECON', name: 'VEE Economics',               color: 'sky' },
-          { id: 'VEE-AF',   name: 'VEE Accounting & Finance',    color: 'sky' },
-        ],
-      },
-      {
         label: 'Preliminary Exams',
         items: [
           { id: 'P',  name: 'Exam P-1',  color: 'blue' },
@@ -121,15 +122,26 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        label: 'Exams & Courses',
+        label: 'Exams',
         items: [
-          { id: 'PAF',   name: 'PAF',        color: 'violet' },
           { id: 'FAM',   name: 'Exam FAM',   color: 'purple' },
           { id: 'SRM',   name: 'Exam SRM',   color: 'fuchsia' },
-          { id: 'ASF',   name: 'ASF',        color: 'pink' },
           { id: 'PA',    name: 'Exam PA',    color: 'rose' },
           { id: 'ALTAM', name: 'Exam ALTAM', color: 'red', or: 'ASTAM' },
           { id: 'ASTAM', name: 'Exam ASTAM', color: 'red', or: 'ALTAM' },
+        ],
+      },
+      {
+        // Everything the SOA requires that it doesn't call an exam: the VEE
+        // credits, the e-learning modules (PAF, ASF), the ATPA assessment, the
+        // FAP course and the APC.
+        label: NON_EXAM_REQUIREMENTS,
+        items: [
+          { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', color: 'sky' },
+          { id: 'VEE-ECON', name: 'VEE Economics',               color: 'sky' },
+          { id: 'VEE-AF',   name: 'VEE Accounting & Finance',    color: 'sky' },
+          { id: 'PAF',   name: 'PAF',        color: 'violet' },
+          { id: 'ASF',   name: 'ASF',        color: 'pink' },
           { id: 'ATPA',  name: 'ATPA',       color: 'orange' },
           { id: 'FAP',   name: 'FAP',        color: 'amber' },
           { id: 'APC',   name: 'APC',        color: 'slate' },
@@ -146,13 +158,6 @@ export const TRACKS: Track[] = [
     certPath: 'Exams/Certifications/Associate of the Casualty Actuarial Society (ACAS)',
     sections: [
       {
-        label: 'VEE Requirements',
-        items: [
-          { id: 'VEE-ECON', name: 'VEE Economics',            color: 'sky' },
-          { id: 'VEE-AF',   name: 'VEE Accounting & Finance', color: 'sky' },
-        ],
-      },
-      {
         label: 'Preliminary Exams',
         items: [
           { id: 'P',  name: 'Exam P-1',  color: 'blue' },
@@ -160,17 +165,27 @@ export const TRACKS: Track[] = [
         ],
       },
       {
-        label: 'Exams & Requirements',
+        label: 'Exams',
         items: [
           { id: 'MAS-I',    name: 'Exam MAS-I',  color: 'violet' },
           { id: 'MAS-II',   name: 'Exam MAS-II', color: 'violet' },
-          { id: 'CAS-IA',   name: 'CAS DISC IA', color: 'fuchsia' },
-          { id: 'CAS-DA',   name: 'CAS DISC DA', color: 'fuchsia' },
-          { id: 'CAS-RM',   name: 'CAS DISC RM', color: 'fuchsia' },
           { id: 'CAS-5',    name: 'Exam 5',      color: 'pink' },
           { id: 'CAS-PCPA', name: 'PCPA',        color: 'rose' },
           { id: 'CAS-6',    name: 'Exam 6',      color: 'orange' },
-          { id: 'CAS-APC',  name: 'APC',         color: 'slate' },
+        ],
+      },
+      {
+        // The VEE credits, the three DISC courses and the Course on
+        // Professionalism — keyed `CAS-APC`, the key readers' progress is
+        // stored under.
+        label: NON_EXAM_REQUIREMENTS,
+        items: [
+          { id: 'VEE-ECON', name: 'VEE Economics',            color: 'sky' },
+          { id: 'VEE-AF',   name: 'VEE Accounting & Finance', color: 'sky' },
+          { id: 'CAS-IA',   name: 'CAS DISC IA', color: 'fuchsia' },
+          { id: 'CAS-DA',   name: 'CAS DISC DA', color: 'fuchsia' },
+          { id: 'CAS-RM',   name: 'CAS DISC RM', color: 'fuchsia' },
+          { id: 'CAS-APC',  name: 'COP',         color: 'slate' },
         ],
       },
     ],
@@ -202,13 +217,6 @@ export const TRACKS: Track[] = [
           { id: 'ATPA',  name: 'ATPA',      color: 'orange' },
           { id: 'FAP',   name: 'FAP',       color: 'amber' },
           { id: 'APC',   name: 'APC',       color: 'slate' },
-        ],
-      },
-      {
-        label: 'Required Courses',
-        items: [
-          { id: 'FSA-DMAC', name: 'DMAC', color: 'amber' },
-          { id: 'FSA-FAC',  name: 'FAC',  color: 'slate' },
         ],
       },
       {
@@ -274,6 +282,14 @@ export const TRACKS: Track[] = [
           { id: 'FSA-CP351', name: 'CP 351', color: 'orange' },
         ],
       },
+      {
+        // The FSA Capstone Experience: the DMAC module and the FAC.
+        label: NON_EXAM_REQUIREMENTS,
+        items: [
+          { id: 'FSA-DMAC', name: 'DMAC', color: 'amber' },
+          { id: 'FSA-FAC',  name: 'FAC',  color: 'slate' },
+        ],
+      },
     ],
   },
   {
@@ -300,7 +316,7 @@ export const TRACKS: Track[] = [
           { id: 'CAS-5',    name: 'Exam 5',      color: 'pink' },
           { id: 'CAS-PCPA', name: 'PCPA',        color: 'rose' },
           { id: 'CAS-6',    name: 'Exam 6',      color: 'orange' },
-          { id: 'CAS-APC',  name: 'APC',         color: 'slate' },
+          { id: 'CAS-APC',  name: 'COP',         color: 'slate' },
         ],
       },
       {

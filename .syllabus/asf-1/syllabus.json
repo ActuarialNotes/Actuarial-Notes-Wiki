@@ -1,0 +1,155 @@
+{
+  "wiki_id": "asf-1",
+  "body": "SOA",
+  "shape": "module",
+  "title": "Actuarial Science Foundations",
+  "sitting": "",
+  "source_url": "https://www.soa.org/globalassets/assets/files/edu/asf-objectives.pdf",
+  "source_sha256": "f56b298197a6bad7145ffc4c2d8aa0ac636f118f717a3f6ca223f7a3efec794f",
+  "readings_url": "https://www.soa.org/globalassets/assets/files/edu/2026/edu-asf-booklist.pdf",
+  "readings_sha256": "635024697147de24182c77c3898c2af6061e587f1805808046543a5b9422cc22",
+  "extracted_at": "2026-10-17",
+  "intro": [
+    "The Actuarial Science Foundations Module provides candidates with insights into how actuaries complete their work, how they communicate the results of their work, how forces outside of actuarial practice influence their work, and how they, ultimately, solve actuarial problems. Candidates will get a chance to look more deeply into the Actuarial Control Cycle and even apply the control cycle to an actuarial problem.",
+    "When looking at actuarial communication, candidates will be able to explore samples of common actuarial communications, from emails to formal written reports.",
+    "A deep dive into external forces provides candidates with a unique perspective on the actuarial practice, which will help them understand how cultural/social values, demographics, government influences, and economic and business environments directly affect and influence their work as actuaries.",
+    "Finally, an exploration of solution design will provide candidates with a detailed look into the actuarial work that makes the most difference to every stakeholder an actuary has: the designed product.",
+    "This module also contains an End-of-Module Test, an Interactive Scenario, and an End-of-Module Assessment.",
+    "**Module Objectives**",
+    "- Explain how actuaries do their work\n- Describe common types of communications you will use as an actuary\n- Describe and explain how each category of external forces influences the work of actuaries\n- Design a solution"
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "How We Do Our Work",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Explain how the Actuarial Control Cycle facilitates actuarial work",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Describe common types of communications actuaries use to facilitate actuarial work",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "External Forces",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Define external forces",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Describe and explain how the following categories of external forces apply within and across global areas of actuarial practice and fit into the Actuarial Control Cycle framework",
+          "bullets": [
+            "Cultural/social values",
+            "Demographics",
+            "Governmental influences",
+            "Economic and business environment",
+            "Physical environment"
+          ],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Describe the changing nature of external forces",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Explain how changes in external forces can lead to risk",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Actuarial Solutions",
+      "weight_raw": "",
+      "weight": null,
+      "objective": "",
+      "outcomes": [
+        {
+          "letter": "a",
+          "num": 1,
+          "text": "Identify typical actuarial solutions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "b",
+          "num": 2,
+          "text": "Describe important aspects of designing solutions",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "c",
+          "num": 3,
+          "text": "Identify data needed to design a solution",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "d",
+          "num": 4,
+          "text": "Describe and use appropriate modeling techniques to design a solution",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "e",
+          "num": 5,
+          "text": "Describe the importance of assumptions when designing a solution",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": "f",
+          "num": 6,
+          "text": "Describe the importance of validation and reconciliation techniques when designing a solution",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Anway, K.L., et al., 2026. E-Learning Module Readings, Volume I: Foundations, (First Edition), Society of Actuaries.",
+      "codes": "",
+      "parts": []
+    },
+    {
+      "citation": "Brown, R. L. and Lennox, S., 2015. Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance (Fourth Edition), ACTEX Publications, Inc.",
+      "codes": "",
+      "parts": []
+    }
+  ]
+}

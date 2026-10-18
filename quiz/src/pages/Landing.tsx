@@ -500,7 +500,7 @@ export default function Landing() {
 
   // Filter reflecting the current quiz configuration — passed to the search
   // bar, which opens on it: the exam (and paper) as its Exam / Sitting
-  // choices, ticked, and the concepts as the pool.
+  // choices and the concepts as its Concepts choices, all ticked.
   const searchFilter = useMemo(
     () => quizSearchFilter({
       topic,
@@ -512,21 +512,6 @@ export default function Landing() {
     }),
     [topic, source, selectedSitting, selectedConcept, selectedConcepts, useTodaysPlan, plan],
   )
-
-  // Active filter chips shown in the search dropdown so the user can see and
-  // remove concept filters without leaving the search panel. The exam and the
-  // picked paper need none: the panel's Exam and Sitting filters open on them.
-  const filterPills = useMemo(() => {
-    const pills: { label: string; onRemove: () => void }[] = []
-    if (selectedConcept) {
-      pills.push({ label: selectedConcept, onRemove: () => setSelectedConcept('') })
-    }
-    selectedConcepts.forEach(c => {
-      pills.push({ label: c, onRemove: () => toggleConcept(c) })
-    })
-    return pills
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedConcept, selectedConcepts])
 
   // Dashboard launch is still resolving — hold a quiet loading state rather than
   // flashing the quiz config screen on the way into the quiz.
@@ -543,7 +528,6 @@ export default function Landing() {
     <>
     <QuizFloatingSearch
       filter={searchFilter}
-      filterPills={filterPills}
       strip={examStrip}
       banner={hasTopic ? <ExamStatusBanner status={examStatus(currentExam?.progressKey, currentExam?.examId)} /> : undefined}
     />

@@ -9,6 +9,7 @@ import {
 } from '@/components/FloatingSearchBar'
 import { highlightMatch } from '@/components/SearchHighlight'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { dialogOpenOver } from '@/lib/layeredDialog'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildStudyIndex, searchBy, type StudyIndexEntry } from '@/lib/appSearch'
@@ -64,11 +65,14 @@ export function DashboardSearchBar({ questions }: { questions: Question[] }) {
 
   useEffect(() => {
     if (!active) return
+    // A question row's Info dialog is portalled out of the panel: its presses
+    // and its Escape are the dialog's, not the search's.
     function onMouseDown(e: MouseEvent) {
+      if (dialogOpenOver(containerRef.current)) return
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) dismiss()
     }
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') dismiss()
+      if (e.key === 'Escape' && !dialogOpenOver(containerRef.current)) dismiss()
     }
     document.addEventListener('mousedown', onMouseDown)
     document.addEventListener('keydown', onKeyDown)

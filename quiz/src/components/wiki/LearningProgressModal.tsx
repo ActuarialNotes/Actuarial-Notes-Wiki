@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, Lock, Loader2, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/buttonVariants'
@@ -12,6 +12,7 @@ import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { MasteryBadge } from '@/components/MasteryBadge'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
+import { dialogOpenOver } from '@/lib/layeredDialog'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -223,9 +224,11 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const [headerLevel, setHeaderLevel] = useState<MasteryState | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      // A question's Info dialog, open over this one, takes its own Escape.
+      if (e.key === 'Escape' && !dialogOpenOver(dialogRef.current)) onClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -234,6 +237,7 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
   return (
     <OverlayPortal>
     <div
+      ref={dialogRef}
       // z-[130] — same hosts as ConceptQuestionsModal; see the note there.
       className="fixed inset-0 z-[130] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto paper-scrim"
       role="dialog"

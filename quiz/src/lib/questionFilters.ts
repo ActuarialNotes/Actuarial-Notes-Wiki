@@ -212,17 +212,22 @@ export function facetOptions(pool: Question[], facet: QuestionFacet, selection: 
 /**
  * Splits a surface's incoming filter into the pool it scopes and the facet
  * choices it starts on. The quiz builder hands its search panel the exam (and,
- * on the past-paper shelf, the sitting) it has picked; those used to narrow the
- * pool itself, which left the panel's Exam and Sitting filters with one option
- * and hid them — the panel filtered by an exam it no longer showed. As starting
- * choices they are on screen, ticked, and can be widened from the panel.
+ * on the past-paper shelf, the sitting) it has picked, and the concepts; those
+ * used to narrow the pool itself, which left the panel's Exam and Sitting
+ * filters with one option and hid them — the panel filtered by an exam it no
+ * longer showed — and drew the concepts as chips of their own beside a
+ * Concepts filter that didn't have them. As starting choices they are on
+ * screen, ticked, and can be widened from the panel. A concept is named the
+ * way the Concepts filter names it (`conceptLabel`), so it ticks its option.
  */
 export function splitSearchFilter(filter: QuestionFilter): { scope: QuestionFilter; initial: FacetSelection } {
-  const { exam, year, session, ...scope } = filter
+  const { exam, year, session, concept, concepts, ...scope } = filter
+  const chosenConcepts = [...(concept ? [concept] : []), ...(concepts ?? [])].map(conceptLabel)
   return {
     scope,
     initial: {
       ...emptyFacets(),
+      concept: new Set(chosenConcepts),
       exam: new Set(exam ? [exam] : []),
       sitting: new Set(year ? [sittingLabel(year, session)] : []),
     },

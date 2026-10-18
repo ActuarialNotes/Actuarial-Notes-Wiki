@@ -764,7 +764,7 @@ that panel's layer no matter how high its own number is. The hosts that do this:
 | Concept popup (`.concept-popup-aside`) | `z-40`, `z-index: 56` in focus mode |
 | Add-flashcards sheet (`pages/Flashcards.tsx`) | `z-[64]` |
 | Collect dialog (`CollectConceptModal`) | `z-[120]` |
-| Fact Check sheet, question-info panel, record modals | `z-[80]`, `z-[130]` |
+| Fact Check sheet, question-info panel, record modals | `z-[130]` |
 | Exams popout, sidebar drawer, mistakes review | `z-[50]`–`z-[60]` |
 
 A modal opened from one of those and left in place opens *behind* whatever paints above the

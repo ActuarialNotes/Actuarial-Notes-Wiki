@@ -16,13 +16,9 @@ import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSearchTracking } from '@/hooks/useSearchTracking'
 import { MobileNavButton } from '@/components/MobileNavButton'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { dialogOpenOver } from '@/lib/layeredDialog'
 import { QuestionFilterBar } from '@/components/QuestionFilterBar'
 import { FloatingSearchStrip } from '@/components/FloatingSearchBar'
-
-interface FilterPill {
-  label: string
-  onRemove: () => void
-}
 
 /** Attempt-history filter, cycled by a single button: all → attempted → new → all. */
 type AttemptStatus = 'all' | 'attempted' | 'new'
@@ -54,13 +50,11 @@ function isTouchPointer(): boolean {
 
 interface QuizFloatingSearchProps {
   /**
-   * The quiz builder's current selection. Its exam and sitting become the
-   * panel's starting Exam / Sitting choices (ticked, and widenable from the
-   * panel); everything else in it — the chosen concepts — scopes the pool.
+   * The quiz builder's current selection. Its exam, sitting and concepts
+   * become the panel's starting Exam / Sitting / Concepts choices (ticked, and
+   * widenable from the panel); anything else in it scopes the pool.
    */
   filter?: QuestionFilter
-  /** Active filter chips shown at the top of the dropdown with × to remove. */
-  filterPills?: FilterPill[]
   /**
    * The second line, for the builder of one exam: the study guide's strip, to
    * the pixel — the way back, the exam's logo, and the exam's controls at the
@@ -77,7 +71,7 @@ interface QuizFloatingSearchProps {
   banner?: ReactNode
 }
 
-export function QuizFloatingSearch({ filter, filterPills, strip, banner }: QuizFloatingSearchProps = {}) {
+export function QuizFloatingSearch({ filter, strip, banner }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
   const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
@@ -89,8 +83,8 @@ export function QuizFloatingSearch({ filter, filterPills, strip, banner }: QuizF
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // The quiz selection, split into the pool it scopes (its concepts) and the
-  // Exam / Sitting choices the panel opens on. Keyed by value, not identity:
+  // The quiz selection, split into the pool it scopes and the Exam / Sitting /
+  // Concepts choices the panel opens on. Keyed by value, not identity:
   // the builder rebuilds its filter object on renders that change nothing.
   const filterKey = JSON.stringify(filter ?? {})
   const { scope, initial } = useMemo(
@@ -110,6 +104,9 @@ export function QuizFloatingSearch({ filter, filterPills, strip, banner }: QuizF
   useEffect(() => {
     if (!active) return
     function handleMouseDown(e: MouseEvent) {
+      // A row's Info dialog is portalled out of the panel; a press on it isn't
+      // a press outside the search.
+      if (dialogOpenOver(containerRef.current)) return
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         closeDropdown()
       }
@@ -381,26 +378,9 @@ export function QuizFloatingSearch({ filter, filterPills, strip, banner }: QuizF
                   </div>
                 )}
 
-                {/* Filter pills + result count */}
+                {/* Result count */}
                 <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2">
-                  {filterPills && filterPills.length > 0 ? (
-                    filterPills.map(pill => (
-                      <span
-                        key={pill.label}
-                        className="inline-flex items-center gap-1 rounded-full bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
-                      >
-                        {pill.label}
-                        <button
-                          type="button"
-                          onClick={e => { e.stopPropagation(); pill.onRemove() }}
-                          aria-label={`Remove filter ${pill.label}`}
-                          className="hover:text-muted-foreground transition-colors ml-0.5 shrink-0"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    ))
-                  ) : !hasFacetFilters(facets) && attemptStatus === 'all' && (
+                  {!hasFacetFilters(facets) && attemptStatus === 'all' && (
                     <span className="text-xs text-muted-foreground">All questions</span>
                   )}
                   <span className="ml-auto text-xs font-medium text-muted-foreground shrink-0">

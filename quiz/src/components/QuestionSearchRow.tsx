@@ -8,6 +8,7 @@ import { conceptLabel } from '@/lib/questionFilters'
 import { MarkdownText, MARKDOWN_LIST_CLASS } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
+import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 
 // Renders question markdown (GFM tables + LaTeX) with the same table styling the
 // quiz uses, so data-heavy stems (development triangles, etc.) render as tables
@@ -73,6 +74,7 @@ export function DifficultyDots({ difficulty }: { difficulty: string }) {
 export function QuestionSearchRow({ question, query, selected = false, onToggleSelect, attemptSummary, attemptsTracked = false }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   const selectable = !!onToggleSelect
 
   return (
@@ -115,6 +117,20 @@ export function QuestionSearchRow({ question, query, selected = false, onToggleS
               {conceptLabel(link)}
             </span>
           ))}
+        </div>
+        {/* The quiz's Info: where the question came from and its fact check.
+            Its dialog is portalled, but React bubbles its clicks through this
+            wrapper — stopped here, or every press inside it would also toggle
+            the row's selection. The list already shows topic and difficulty,
+            so the study metadata is no hint here. */}
+        <div className="shrink-0" onClick={e => e.stopPropagation()}>
+          <QuestionInfoButton
+            question={question}
+            open={showInfo}
+            onOpenChange={setShowInfo}
+            showStudyMeta
+            className="min-h-0 px-2 py-1.5 sm:px-2.5"
+          />
         </div>
         <button
           type="button"

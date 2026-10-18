@@ -473,7 +473,7 @@ export default function Landing() {
   useActionBarHeight(actionBarRef, hasSelection)
 
   // The exam being configured, named in the search bar's strip.
-  const examStrip = useQuizExamStrip(currentExam, allQuestions, closeExam)
+  const examStrip = useQuizExamStrip(currentExam, allQuestions, syllabi, closeExam)
 
   // ── Question count ────────────────────────────────────────────────────────
   // "Full plan" carries its own value (builderOptions.tsx), so it never lights

@@ -909,7 +909,7 @@ class TestSoaFamLayouts(unittest.TestCase):
         solutions = (
             "June 12, 2025: Question 7.41 added\n"
             "Question 1.1\nAnswer C\nWork.\n3.0\n"
-            "Question 1.2\nAnswer: E\nMore.\nQuestion 2.1\nAnswer B\n"
+            "Question 1.2\nAnswer: E\nMore.\nQuestion# 2.1\nAnswer B\n"
         )
         labels = px.decimal_labels(solutions)
         self.assertEqual(labels, [(1, 1), (1, 2), (2, 1)])

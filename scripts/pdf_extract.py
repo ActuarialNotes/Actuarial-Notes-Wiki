@@ -1011,7 +1011,8 @@ KEY_ANCHOR_RE = re.compile(r"(?mi)^[ \t]*(\d{1,3})\.[ \t]*\n?(?=[ \t]*key[ \t]*:
 # that order. A label X.Y is numbered X·100 + Y, so the order and `--only`
 # ranges still work on plain integers.
 # Alone on its line: the version notes say `Question 7.41 added`.
-DECIMAL_HEADING_RE = re.compile(r"(?mi)^[ \t]*question[ \t]*:?[ \t]*(\d{1,2})\.(\d{1,2})[ \t]*$")
+# Once (6.44) `Question# 6.44`.
+DECIMAL_HEADING_RE = re.compile(r"(?mi)^[ \t]*question[ \t]*[:#]?[ \t]*(\d{1,2})\.(\d{1,2})[ \t]*$")
 
 
 SOURCE_NOTE_RE = re.compile(r"\s*\[[^\[\]]*\b(?:exam|question)\b[^\[\]]*\]\s*$", re.I)
@@ -1041,7 +1042,7 @@ def decimal_bounds(text: str, labels: list[tuple[int, int]], heading: bool) -> l
     hits: list[tuple[int, int, int]] = []
     pos = 0
     for chap, num in labels:
-        lead = r"question[ \t]*:?[ \t]*" if heading else ""
+        lead = r"question[ \t]*[:#]?[ \t]*" if heading else ""
         # The booklet sets `1.1` alone, `1.2.` with a stop, `1.4.      A self-…` on one line.
         tail = r"[ \t]*$" if heading else r"(?:\.|[ \t]*$)"
         m = re.compile(rf"(?mi)^[ \t]*{lead}{chap}\.{num}{tail}").search(text, pos)

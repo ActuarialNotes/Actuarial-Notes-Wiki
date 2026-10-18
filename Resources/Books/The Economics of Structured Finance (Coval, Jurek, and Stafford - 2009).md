@@ -7,13 +7,16 @@ date: "2009"
 Type: "Paper"
 Available from: "[aeaweb.org](https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3)"
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:88d654267540a22d5f913bd6e897fa79478cb51d4b92b96e3ef5e79020df3bec
-  sources: []
-  open_findings: 0
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:fab7b7fc72f3e7bcd572d2f33136b0fd682b8ee0e6534bcf151e6d040f60b31c
+  sources:
+    - "Coval, Jurek & Stafford, The Economics of Structured Finance, Harvard Business School Working Paper 09-060 (2008, the authors' institution's copy), printed pp.1-28 read in full (PDF pp.1-37) with Tables 1-3, sha256:887b5c53aeb5367b127322c6972a1c41176e96dc613bc52eee296002b971c551 — https://www.hbs.edu/ris/Publication%20Files/09-060.pdf"
+    - "American Economic Association, The Economics of Structured Finance (Journal of Economic Perspectives 23(1), Winter 2009, pp.3-25, DOI 10.1257/jep.23.1.3) — article record, citation metadata and abstract, sha256:c820f5b8d1d8d1c3f3126755ace10ec043cfe3787f3deec045447d6dbc432237 — https://www.aeaweb.org/articles?id=10.1257/jep.23.1.3"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), p.5 Domain C tasks C1-C7 and pp.7-8 text references, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 3
   open_critical: 0
   log: ".verify/Resources/Books/The Economics of Structured Finance (Coval, Jurek, and Stafford - 2009).md"
 ---
@@ -40,12 +43,12 @@ An article on the rise and fall of structured finance: pooling loans, bonds and 
 ## The Challenge of Rating Structured Finance Assets
 - Credit ratings measure the ability of issuers or entities to meet future financial commitments, based either on the anticipated likelihood of default or on the expected economic loss, the product of the likelihood of default and the severity of loss given default, so a rating can be thought of as a measure of a security's expected cash flow.
 - Rating agencies stress that ratings are designed only to give an ordinal ranking of long-run ("through-the-cycle") payoff prospects, whereas the expected-cash-flow reading takes a cardinal view.
-- Corporate bonds rated BBB or higher are investment grade, thought to represent low to moderate default risk; those rated BB and below are speculative grade, already in default or closer to it.
+- Corporate bonds rated BBB− or higher are investment grade, thought to represent low to moderate default risk; those rated BB+ and below are speculative grade, already in default or closer to it.
 - Table 1 reports Fitch's 10-year default probabilities and annualized default rates by rating at issuance, derived from historical data and used in Fitch's model for rating CDOs.
-- Within the investment-grade range there are ten rating categories (AAA to BBB) although the annualized default rate varies only between 0.02 and 0.75 percent, so distinguishing between them takes a striking degree of precision; the ten speculative-grade categories (BB to C) have default rates from 1.07 to 29.96 percent.
+- Within the investment-grade range there are ten rating categories (AAA to BBB−) although the annualized default rate varies only between 0.02 and 0.75 percent, so distinguishing between them takes a striking degree of precision; the ten speculative-grade categories (BB+ to C) have default rates from 1.07 to 29.96 percent.
 - In the single-name rating business securities were assessed independently, leaving agencies agnostic about default correlation; rating structured finance securities forced them to characterize the entire joint distribution of payoffs for the collateral pool, since CDOs rely on diversification to achieve credit enhancement.
 - The structure of CDOs magnifies the effect of imprecise estimates of default likelihoods, recovery amounts and default correlation, and of model errors from misspecified default dependencies; sequential application of capital structures, as in CDO², accentuates the problem.
-- Simulation set-up: 40 CDO pools, each of 100 bonds with a five-year default probability of 5 percent and a recovery rate of 50 percent of face value (each bond would be rated BB by Table 1), with pairwise default correlation 0.20 within a pool and zero between pools.
+- Simulation set-up: 40 CDO pools, each of 100 bonds with a five-year default probability of 5 percent and a recovery rate of 50 percent of face value (each bond would be rated BB+ by Table 1), with pairwise default correlation 0.20 within a pool and zero between pools.
 - Defaults are simulated with a simplified version of the copula method, the industry standard for portfolio losses, in which a firm defaults if its variable falls below the percentile matching its default probability and dependence comes from the joint distribution, often the multivariate Gaussian.
 - Each pool has three tranches: a junior tranche absorbing losses until the portfolio loss exceeds 6 percent, a mezzanine tranche absorbing losses between 6 and 12 percent, and a senior tranche absorbing losses above 12 percent; a CDO² ("CDO² [6–12]") is built by issuing a second capital structure against a pool of the 40 mezzanine tranches.
 - Under the baseline parameters the original CDO's mezzanine tranche is rated BBB− and its senior tranche, 88 percent of the capital structure, AAA; the CDO²'s mezzanine and senior tranches are both rated AAA (Table 2: default probabilities of 97.52 percent for the CDO's junior tranche, 2.07 percent for its mezzanine and 56.94 percent for the CDO²'s junior).

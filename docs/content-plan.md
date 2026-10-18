@@ -1,6 +1,6 @@
 # Content Plan
 
-_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §9 · Re-measure at every
+_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round) · Re-measure at every
 roadmap review_
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
@@ -103,7 +103,8 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 
 ## 2. Where each exam stands (2026-10-18)
 
-From `python3 scripts/publication_readiness.py --body all`, before this plan's Phase 1 changes.
+From `python3 scripts/publication_readiness.py --body all`, before this plan's Phase 1 changes;
+MAS-II's row is re-measured after its first campaign round (Appendix A.5).
 
 **Ready (7):**
 
@@ -124,7 +125,7 @@ why Phase 1 comes first.
 | PCPA | verified | 29 | 0 | 9 | 29 | 12 / 13 | no bank | 4 / 7 |
 | Exam 9 | verified | 60 | 0 | 48 | 10 | 9 / 9 | 98 / 121 | 3 / 7 |
 | Exam 6C | stale | 151 | 0 | 141 | 22 | 67 / 67 | 0 / 321 | 2 / 7 |
-| MAS-II | in review | 105 | 1 | 67 | 28 | 2 / 5 | 20 / 146 | 1 / 7 |
+| MAS-II | in review | 98 | 0 | 2 | 0 | 0 / 6 | 167 / 168 | 4 / 7 |
 | Exam 5 | in review | 136 | 2 | 60 | 7 | 4 / 6 | 0 / 349 | 1 / 7 |
 
 Five of the six are below the development → beta bar they now have to meet (G3 or G6). They were
@@ -165,7 +166,7 @@ batched by source. The order is the CAS plan's, refreshed:
 | 2 | **Exam 8** (C1) | 6 / 7 | Only G5: the ISO CGL rating plan, in the CAS study kit only (D20). *Risk* verified 18 Oct (run `rsk1`): its uncertainty half now quotes the SOA and SRA glossaries, the unsourced claims cut | Shares papers with 9; 34 of 9's questions already cleared |
 | 3 | **Exam 9** (C2) | 4 / 7 | First round done 18 Oct (Appendix A.4): G7 128 / 131, G5 7 / 9, G4 24 / 60. Left: three questions in review on a maintainer's call (2013 Q15, 2014 Q16, `cas9-an-009`), and 36 concepts and 2 readings resting on texts no session could read (D22) | Most of its bank arrived verified through 7 and 8 |
 | 4 | **Exam 5** (C3) | 3 / 7 | G3 and G6 ✅ (catch-alls re-linked; `cas5-an-001`–`007`, verified; *Claim Reserve*, newly linked, tagged on `cas5-2016s-q16`). D8 (the re-issued Fall 2026 v02 outline; the page is stale after the re-linking); verify 60 concepts, 4 readings, 349 questions on 14 papers (find Spring 2018's booklet first). Its reports were **paraphrased** when the bank was written, not transcribed — each paper's packet restores the report as printed, opening paragraph included (C13) | Largest bank; *Basic Ratemaking* and *Friedland* packets also serve the DISCs and FAM |
-| 5 | **MAS-II** (C4) | 3 / 7 | G3 and G6 ✅ (`masii-an-001`–`023`, 22 verified; `023` in review with the page's F-002 — does the outline's exclusion of Cowpertwait §3.4 take exponential smoothing off the syllabus?). Verify 67 concepts, 2 readings (commercial: medium, D7), 126 questions on 3 fully scanned papers (OCR first); the page is stale after the re-linking | Scanned papers make each question dear |
+| 5 | **MAS-II** (C4) | 4 / 7 | First round done 18 Oct (Appendix A.5): G5 ✅ (6 / 6, Salis's study note added to the page), G7 167 / 168, G4 96 / 98. Left: the page's F-001, its 36 tasks against the outline's 21 (D23); Fall 2019 Q35's explanation (a writer); *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread) | Scanned papers; four of its five readings commercial |
 | 6 | **Exam 6C** (C5) | 3 / 7 | G6 ✅ (`cas6c-an-001`–`022`, all verified; `005` and `018` carry minor scope findings — IBC's consumer code and the IFRS 17 transition approaches are in no 6C reading). D8 (F-001, domain C renumbering); verify 137 concepts, 67 readings, 321 questions (83 got their report paragraph back, C13) | Most concepts and readings, all free Canadian documents |
 | 7 | **PCPA** (C6) | 4 / 7 | A vault-written bank (29 concepts, most shared with MAS-I/II: tags plus a few new questions, D5); verify 9 concepts and 12 readings (several commercial) | No paper exists; the Projects simulator is the real practice |
 | 8 | **ASA prelims** (C9) | 2–3 / 7 | §4 Phase 3 — the plan itself doesn't exist yet | The next exams to become studiable, sat by far more candidates |
@@ -360,6 +361,7 @@ every CAS bank about to be checked.
 | G3 and G6 on every beta exam with a bank | — | ✅ Exam 5's two catch-alls and MAS-II's one broken up: each phrase re-linked so no page stands in, renamed, for more than two lines (*Claim Reserve* for "reserve analysis", *Empirical Bayes Credibility* for "structural parameters") — unlinking them would fail `test_syllabus_lib`'s every-noun-phrase-linked rule. 62 vault-written questions for the 67 untested concepts — Exam 5 7, Exam 9 10, MAS-II 23, Exam 6C 22 — each checked by a different agent from its writer. `--hold` warns only on PCPA, which has no bank (C6). Of the 62: **60 verified**, 2 `in_review` (`cas9-an-009`, `masii-an-023`). The checkers also opened findings on concept pages: *Contractual Service Margin*'s formula had its sign backwards (critical, fixed the same day to CIA note 222092 §4.6, the page back to `unverified`), and *Fault Determination Rules* (O. Reg. 668, not 664) and *Other Comprehensive Income Option* (PAA's locked-in date) were restated; *Lift* and *Predictive Accuracy* use the marketing definition of lift, not the readings', and want their reading packets |
 | Housekeeping: V7 | V7 | ✅ the two run summaries reconstructed from the per-file logs |
 | Exam 9's first round: 23 questions on its own papers, 9 readings, 46 concepts | C2 | 🟡 Four paper packets (`0ccf`, `9371`, `e85d`, `6aa0`) and five reading packets (`0103`, `9c55`, `770a`, `6bfb`, `8a71`). **21 of 23 questions verified**; the report paragraph restored on 11, sample answers on 5. **Seven readings verified** (Clark, Bernegger, Panning high; Brehm, Mildenhall & Major, Grossi & Kunreuther, Cummins 2000 medium, against outline, contents and catalogue). **Ten concepts verified** (Clark's reinsurance pages); the 36 others wait on D22. Errors fixed: Bernegger's MBBEFD special cases swapped (major); CJS's ratings had lost their notches; operational risk called a Solvency II module. Open for the resolve run: *Economic Value*'s EVA = M − ιQ is identically zero; *Prepayment Risk* is in no C5 reading |
+| MAS-II's first round: 126 questions on three papers, 67 concepts, 3 readings, the page | C4 | 🟡 Ten packets (`295e`, `f8d6`, `9dbf` papers; `5d97`, `e-nn`, `f7a6`, `2f99`, `09a7`, `765d` readings; `4700` the page and its four open-finding questions; `724f` the Salis page). **125 of 126 paper questions verified**, every vault key equal to CAS's; **65 of 67 concepts verified**; Cowpertwait, West and the new Salis page verified. Errors fixed: *Limited Fluctuation Credibility*'s aggregate CV² (critical); *Full Credibility Standard* counted observations, not expected claims; *Lift* and *Predictive Accuracy*'s marketing lift; Gini = 2·AUROC − 1 without the normalization; *K-Means*' steps out of order; *Double Lift Chart*'s example backwards; a lost table header (2018 Q40). Left: see A.5 |
 
 ### Phase 3 — The SOA ASA prelims
 
@@ -432,6 +434,8 @@ build with the default until the decision is made.
 | D18 | syllabus-pipeline-review §4 | The review's owner decisions D1–D4, applied but never written up | As applied |
 | D20 | — | A reading with no public copy (the ISO CGL plan) | `in_review`; Exam 8's G5 stays red |
 | D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
+| D23 | — | MAS-II's page has 36 tasks where the 2026 outline has 21 (F-001): restore the outline's (about ten in-reading concepts tagged on paper questions would leave the syllabus) or keep the vault's | The page as it is, `in_review`; G1 stays red |
+| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | Served, as they are |
 | D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | The 36 concepts and 2 readings stay `in_review`; G4 and G5 stay red |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |
@@ -808,6 +812,53 @@ Run on the packet tooling, one agent per packet; `--check 9` still fails G4, G5 
   reading that defines them.
 - **A slip of this round:** two agents shared a scratch file for their run id, so `8a71`'s entries on
   the eleven Brehm logs carry `0103`'s run id; each log has an `8a71` comment saying which are its own.
+
+### A.5 The MAS-II campaign, first round (18 Oct 2026)
+
+Ten agents, one per packet, then a writer and a different checker for the reading the page had
+missed. `--check MAS-II` fails G1, G4 and G7 (4 / 7).
+
+- **Paper packets.** `verify_paper.py build` couldn't segment the three scanned multiple-choice
+  booklets (`pdf_extract` found no questions), so each agent worked from the OCR'd cache pages
+  and the key page directly — a gap in the tooling for scanned MC papers. The two supplemental
+  case studies (Fall 2018, Fall 2019) are separate PDFs on CAS's Examiners' Reports page;
+  Spring 2019's is in the booklet. **125 of 126 verified** (67 high, 58 medium: the conceptual
+  items, checked against the key and an open text, since West and Tse are commercial). Every
+  vault answer equals CAS's; multi-letter keys (2018 Q34 C & E, 2019F Q34 A, B, C and Q38 D, E)
+  are noted on the file, which keys one. A blind-check weakness, recorded in the run summaries:
+  in two packets the key page came back with the booklet text, so part of each paper was
+  recomputed after the key had been seen.
+- **Reading packets.** ISLR (the CAS-hosted 2nd edition; the authors' host reset the
+  connection) in two packets, Goldburd Ch. 7 with Salis, credibility, time series, mixed models.
+  Only ISLR, Goldburd and Salis are free; Tse, Cowpertwait and West were checked at medium (D7)
+  against open texts — Loss Data Analytics, fpp3 and NIST's e-Handbook, the lme4 paper, SAS's
+  PROC MIXED guide and West's own shrinkage notes — and their resource pages against the
+  publishers' contents. **65 of 67 concepts verified** (14 high, 51 medium).
+- **The page.** Its F-002 resolved: cross-validation, the bootstrap, regularization and
+  exponential smoothing were the vault's own additions, in no outline task and outside the
+  assigned chapters, and were deleted (`masii-an-023`, on exponential smoothing, is now
+  `off_syllabus`). The outline lists a sixth reading the page lacked — Salis, *Measures of
+  Predictive Accuracy* (CAS study note, Nov 2025) — now written, verified (high) and on the page;
+  `syllabusVintages.ts` names it instead of patching it in. G5 6 / 6.
+
+**Left for a maintainer:**
+
+- **D23** — the page's F-001 (major): 36 tasks to the outline's 21. Restoring the outline's would
+  drop concepts such as *Posterior Distribution* (25 questions) and *AIC* (16).
+- **D24** — about 35 questions on the 2019 papers test McElreath's Bayesian/MCMC reading, no
+  longer assigned (Spring 2019's run lists 15; Fall 2019's about 20, still tagged "Introduction to
+  Credibility").
+- **2019F Q35** (`in_review`): an exponential prior with mean 7 pulls the posterior mode down,
+  not toward 7; the stem's mode of 2.1 can't come from its own model. A writer.
+- **Two pages wanting Cowpertwait itself**: *Backward Shift Operator* (§4.5.1, §6.3.1) and
+  *Correlogram*'s −1/n ± 2/√n bounds (§2.3.1).
+- **Minor, open** (writers): 2019S Q5 — the key needs the square-root rule on *expected* claims,
+  where Loss Data Analytics uses observed; 2019S Q35 and 2019F Q34, Q39's explanations; *Conjugate
+  Prior* lacks Tse's beta–geometric pair; *Empirical Bayes Credibility*'s "negative VHM set to 0";
+  *Predictive Accuracy* lacks the loss ratio chart; *Exact Credibility* and semiparametric
+  estimation sit outside the outline's Tse sections; ten ISLR-page claims the book doesn't make
+  (ESL would source most); `masii-an-008` (the bootstrap, MAS-I) and `-015` (elastic net, Exam 8)
+  may belong in other banks.
 
 ## Appendix B — Fact-check wave records
 

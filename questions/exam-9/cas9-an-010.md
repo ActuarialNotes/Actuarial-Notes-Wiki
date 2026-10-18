@@ -14,13 +14,15 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:92a409558bbe00c79aac4f2b9b1e4ba6cd63912a9bcb9bf96589a985107e70ea
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:eed29c4bd4d562985cb33fcf92996dd4429470c6f9eff5c73f13d21c347c0ad3
+  sources:
+    - "Directive 2009/138/EC (Solvency II), Annex IV §1 Basic SCR formula and correlation matrix (Market-Default 0.25, Market-Non-life 0.25, Default-Non-life 0.5), as published by legislation.gov.uk (original as adopted), sha256:4ebfc6d5b0e76219fd253e976fc953a7e86c88ddb09e4ae9bcce0f2a88cb1d4b — https://www.legislation.gov.uk/eudr/2009/138/annex/IV"
+    - "CAS Exam 9 Content Outline, Fall 2026 (v01 2026-03-18), Domains A-D tasks pp.3-6 and text references pp.7-8, sha256:be1980d41470fed30dec1b9af9412f4e936d666e65d01237684acde11f3e7fc8 — https://www.casact.org/sites/default/files/2026-03/Exam_9_CO_2026_Fall.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-9/cas9-an-010.md
 ---
@@ -55,7 +57,7 @@ $$
 C^2 = 10{,}900 + 2\,(1{,}200 + 450 + 1{,}200) = 16{,}600, \qquad C = \mathbf{128.84}
 $$
 
-The three risks together need 128.84 rather than 170: the diversification credit is 41.16. The default risk earns the least credit because it is the most correlated with the largest risk, non-life underwriting. The answer is **D**.
+The three risks together need 128.84 rather than 170: the diversification credit is 41.16. The answer is **D**.
 
 **Why not the others**
 

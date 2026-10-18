@@ -11,6 +11,11 @@ wordmark (`lib/appMode.ts`). **Study Mode** is everything below; **Cowork** is t
 product, in Preview and open only to approved accounts (`PREVIEW_APPROVED_EMAILS` in
 `lib/appMode.ts`; everyone else sees no pill at all) — see "Cowork" at the end of this file and `docs/cowork.md`.
 
+Across Study Mode floats the **Tutor** — the reader's own Gem Shop character, in the corner of
+every page, walking an Exam 5 candidate through the exam, purely algorithmically (no model).
+Preview, one approved account (`lib/tutor/access.ts`); see "The Tutor" at the end of this file
+and `docs/tutor.md`.
+
 1. **Content vault** (repo root) — an Obsidian-style markdown wiki: exam syllabus pages
    (`Exam *.md`), concept pages (`Concepts/*.md`), resource/timeline pages
    (`Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md`), and a practice-question
@@ -81,7 +86,9 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   `components/workflow/` (Workflows' board, + menu and panels),
   `components/collect/` (the 3D card the level-up ceremony spins), `components/battle/` (Quiz
   Battle's screens, `Matchmaking.tsx` the lobby), `components/craft/` (Concept Craft's board,
-  deck and a connection's card), `components/research/` (flag-gated).
+  deck and a connection's card), `components/tutor/` (the Tutor's character, panel, views and
+  practice card — `TutorHost.tsx` is the gate in the entry bundle, `TutorApp.tsx` the lazy
+  rest), `components/research/` (flag-gated).
   `components/CheckMark.tsx` is **the** checkmark — a filled disc with the tick masked out
   of it, so the tick shows whatever the mark is sitting on. Everything that means *done* or
   *picked* draws it (completed plan rows, a levelled-up concept's card, a selected quiz
@@ -278,7 +285,10 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
-- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects): real products
+- `docs/store.md` — the **Store** (`/store`, in the sidebar after Projects; its header is the
+  Resources page's — a search bar, the SOA / CAS picker, the body's exam strip, and a region
+  picker under an exam with regional syllabi like Exam 6 — `lib/storeExams.ts`,
+  `lib/examVariants.ts`): real products
   — exam **registration**, **study materials**, the **calculators** SOA and CAS allow, the
   syllabus **textbooks** — each opening a sheet of what its seller says about it, whose one
   button goes to the seller in a new tab. **Nothing is sold here** (the Gem Shop at
@@ -387,6 +397,14 @@ before touching that area**:
   are not the account's; the lobby pairs on the exam alone, since a rating would have to be
   stored), and only click-markable multiple choice is raced. Read before touching anything
   named `battle*` or `Matchmaking`.
+- `docs/tutor.md` — **the Tutor**, the plan and the build spec: the learning science it is
+  built on (retrieval, spacing, successive relearning, interleaving, calibration, worked
+  examples), the walk through the exam (phases from the exam date and the syllabus met), the
+  *moments* a part is served and the quiet rules that keep it unobtrusive, the item (one
+  lettered part of a past paper, its kind read off the command word), the memory model
+  (FSRS-4.5, gaps capped by the days left), the diagnosis of what is confusing, and who can
+  use it (`TUTOR_STAGE`: preview → beta for Pro → open). Read before touching anything under
+  `lib/tutor/`, `components/tutor/` or `tutorStore`.
 - `docs/actuaria-online.md` — **Actuaria Online**, the game layer over Study Mode (behind
   `ACTUARIA_ENABLED`, **on for approved accounts only** — `ACTUARIA_APPROVED_EMAILS` in
   `lib/actuaria/access.ts` is who may enter, and the database holds cohort membership to the
@@ -546,8 +564,10 @@ Other important `lib/` modules:
   (`factCheckBadge` → `components/FactCheckBadge.tsx` → `FactCheckPanel`; on a concept or
   resource page the way in is the *Fact Check* item of the action menu, on a question it is
   both the explanation panel's badge and the verdict row in the quiz's **Info** sheet, and on
-  an exam page it is the same item in the menu the exam's title opens). The panel shows the
-  verdict alone until the reader taps it, then unfolds the record — findings first, then what it was **Checked against**.
+  an exam page it is the same item in the menu the exam's title opens). The panel leads with
+  the verdict and one sentence (`factCheckOverview`: checked when, against how many sources,
+  what is open), then folding cards — **Open issues** (unfolded), **Checked against**,
+  **Check history** (each pass, `summarizeLog`'s `checks`), Fixed, Notes.
   `summarizeSource` and `summarizeLog` are what keep it short — the first cuts an auditor's
   citation into the source's name, the chapters/pages checked and its link (the sha256 never
   reaches the screen), the second splits the log into Open / Fixed / Notes and folds each
@@ -580,7 +600,7 @@ Other important `lib/` modules:
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (P, FM, MAS-I, the three DISCs — DISC-DA, DISC-RM, DISC-IA — and Exam 7, the CAS ones promoted by
   `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 8 and 9,
-  and PCPA) or `development` (Exams 6U, 6I and 6T, the SOA exams past FM — FAM, SRM, PA, ALTAM,
+  SRM — its bank the SOA's sample set — and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM — FAM, PA, ALTAM,
   ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
   requirements**: the three VEEs (`VEE-MS`, `VEE-ECON`, `VEE-AF`), the SOA's e-learning modules
   PAF, ASF, FAP and DMAC (`FSA-DMAC`), its APC and FAC (`FSA-FAC`), and the CAS's Course on
@@ -616,13 +636,16 @@ Other important `lib/` modules:
   (`Exam *.md`, including the non-exam requirements), but most are still in development, so
   an exam can be tracked on a credential path without being studiable — `data/tracks.test.ts` pins the
   DEFAULT track (what a new account lands on) to exams that *are*.
-- `data/tracks.ts` — the credential tracks. Each credential's sections run **Preliminary
-  Exams → Exams → `NON_EXAM_REQUIREMENTS`** ("Non-Exam Requirements": what the body requires
-  but doesn't call an exam — the VEEs, the DISCs, the SOA's modules and ATPA assessment, the
-  professionalism courses); the FSA's electives come before it, the FCAS lists its ACAS
-  requirements in one collapsed section and so has no group of its own. The Study Guides page
-  (`pages/wiki/WikiHome.tsx`) draws a credential in chunks, one heading per section, when it
-  has electives or that group, and titles a non-exam requirement's row without "Exam"
+- `data/tracks.ts` — the credential tracks. Each associate credential's sections run
+  **Preliminary Exams → Exams → `MODULES_AND_COURSES` → `VEE_CREDITS`** (the two
+  `NON_EXAM_SECTIONS`: what the body requires but doesn't call an exam — the DISCs, the SOA's
+  modules and ATPA assessment and the professionalism courses under the first, the VEEs under
+  the second). The FSA puts what every pathway shares first (its Modules and Courses — DMAC and
+  FAC — then Cross Practice) and then its six practice areas, marked `pathway: true`, which the
+  Study Guides page draws together under a *Pathways* heading as a grid of small lists; the FCAS
+  lists its ACAS requirements in one collapsed section and so has no group of its own. The Study
+  Guides page (`pages/wiki/WikiHome.tsx`) draws a credential in chunks, one heading per section,
+  when it has electives or a non-exam section, and titles a non-exam requirement's row without "Exam"
   (`requirementDisplayName` in `lib/wikiRoutes.ts` — `examDisplayName` keeps "Exam DISC-DA",
   which is the DISC banks' quiz label).
 - `examGuides.ts` — turns the tip pages the build collects out of `Guides/<exam page>/` into
@@ -732,8 +755,11 @@ Other important `lib/` modules:
   between two. `ungradedWrittenParts` is what makes Next (or Finish) on a question with written
   parts still ungraded open `components/GradePartsDialog.tsx`, which takes the grades right there
   (`components/SelfGradeButtons.tsx`, the one Full credit / Partial / No credit control) — only
-  while answers are revealed as the quiz goes. Note the grades are recorded (`manualGrades`) but
-  a written part still counts toward nothing: `questionCredit` and `effectiveIsCorrect` skip it.
+  while answers are revealed as the quiz goes. The grades are recorded (`manualGrades`) and
+  scored: `questionCredit` counts a self-graded written part like a keyed one (full, half, none),
+  each part weighted by its points, leaves an ungraded one out, and gives a question with nothing
+  graded no credit — never a free "correct"; the store's `effectiveIsCorrect` is that credit at 1.
+  The results screen weights each question by its `points` too (`quizPoints` in `lib/quizScore.ts`).
   Pure and tested; the flow is in `e2e/quiz.spec.ts`.
 - `quizBankInfo.ts` — what the quiz builder's **info button** (`components/QuizExamInfoButton.tsx`,
   in the exam's strip — the study guide's strip, less the version menu and syllabus) says about
@@ -1280,7 +1306,7 @@ Other important `lib/` modules:
   `useBattleMusic` in `hooks/useBattle.ts`, with the intensity from `battleMusicIntensity` in
   `battleDisplay.ts`. The battle's cues are `BATTLE_RECIPES` in `soundConfig.ts`. All pure
   modules are tested.
-- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+- `featureFlags.ts` — build-time feature flags (`ACTUARIA_ENABLED` — on, for the approved accounts in `lib/actuaria/access.ts`; `ACTUARIA_OPEN_TO_ALL`, which the e2e build sets with `VITE_ACTUARIA_PREVIEW=on`, opens it to everyone —, `COWORK_ENABLED`, `TUTOR_ENABLED` and `TUTOR_OPEN_TO_ALL` (the Tutor; the e2e build's `VITE_TUTOR_PREVIEW=on` opens it only to a page that sets `actuarial_tutor_preview`), `RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`, `FACT_CHECK_UI_ENABLED`, `TOUR_ENABLED`). `TOUR_ENABLED` is
   **off**: the guided onboarding tour (`components/OnboardingTour.tsx` +
@@ -1384,7 +1410,10 @@ compile — don't "clean up" the flagged code as dead.
   and `parseExamSyllabus` reads its links — but the app doesn't: `lib/sourceMaterial.ts`
   lifts the entries out and `WikiArticle` renders them as
   `components/wiki/SourceMaterialGallery.tsx`, the same shelf of cover/title/metadata cards
-  the Resources page shows, with each card carrying its reading assignment. The
+  the Resources page shows, with each card carrying its reading assignment — and the
+  Resources page's own filters above it (Publisher, Year, Vintage with its Added / Dropped
+  row; `sourceMaterialShelf` in `lib/sourceMaterial.ts`, the marks shared through
+  `components/wiki/VintageChanges.tsx`), less the Exam strip, since the page is one exam. The
   metadata comes from the resource page's front matter via the wiki index, so a source with
   no `Resources/Books/` page still gets a card, just a bare one. Obsidian inline footnotes
   (`^[…]`) in a reading line are flattened into parentheses, and a `[[link]]` in a note to
@@ -1418,6 +1447,7 @@ compile — don't "clean up" the flagged code as dead.
   `questions/<exam-id>/*.md` and nothing deeper (`validate_content.py` warns about a nested
   one — the four under `exam-p/probability/`, `exam-p/statistics/` and `exam-fm/interest/` are
   early seed questions VERIFY can't yet move, since a log may not be renamed). Current banks: `exam-p`, `exam-fm`,
+  `exam-srm` (the SOA's SRM sample set, `srm-<n>`, and five of the vault's own, `srm-an-001` …),
   `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
   (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the
   thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /
@@ -1696,3 +1726,35 @@ to know before changing it:
    first. `search`/`fetch` keep ChatGPT's exact result shapes; tool names are public API.
 3. **The export and the endpoint are versioned together.** Change the export's shape → bump
    `KNOWLEDGE_BASE_VERSION` and `SUPPORTED_KB_VERSION` in the same change.
+
+## The Tutor
+
+The reader's own Gem Shop character — the animal and colourway on their account, drawn by the same
+`AvatarDisplay` the shop draws (`lib/tutor/character.ts`; the fox until they pick one) — in the
+bottom-right corner of every page (`components/tutor/`), for the accounts its
+rollout stage admits — **Preview**: `TUTOR_APPROVED_EMAILS` in `lib/tutor/access.ts`, one
+account; **Beta** (one line, `TUTOR_STAGE = 'beta'`) adds every Pro subscriber. To anyone else
+it doesn't exist and its lazy chunk is never fetched. It walks an **Exam 5** candidate through
+the exam and is **purely algorithmic**: no model, no generated text — every word of feedback is
+the vault's (concept page, sample answer, examiners' report) or a templated sentence about the
+candidate's own record (`lib/tutor/copy.ts`). `docs/tutor.md` is the full account; four things
+to know before changing it:
+
+1. **The engine is `lib/tutor/`, all pure and tested.** `items.ts` (a question's lettered parts
+   as items, each part's concepts and kind), `examinerNotes.ts` (the report's lost-credit
+   sentences, verbatim), `memory.ts` (FSRS-4.5 + the exam-horizon cap), `log.ts` (the
+   append-only event log and its fold — relearning, flags, calibration), `scheduler.ts` (the
+   next step: relearn → due → new, page first), `journey.ts` (phases, the exam date),
+   `diagnosis.ts` (what is confusing), `moments.ts` (when to speak), `context.ts` (what is on
+   screen), `bank.ts` (answers into the rest of the app). `tutorVault.test.ts` runs it over the
+   real Exam 5 bank.
+2. **It keeps a scheduler, never a score.** Levels are the mastery ladder's and readiness is
+   `computeExamReadiness`'s; the Tutor prints neither of its own and pays no reward of its own.
+   Its answers are banked through `recordReviewAnswers`, one part as a one-part question under
+   its question's id with only its own concepts, so they count everywhere a quiz answer does.
+3. **Its record is an event log** in localStorage (`actuarial_tutor_v1:<user id>`); everything
+   it knows is `foldLog(events, ladderSeeds, now)`. Don't store derived state.
+4. **The quiet rules are the feature.** No bubble during a quiz, a battle, the PDF reader, a
+   focused field or focus mode; bubbles 8 minutes apart; two declines of a kind and it stops for
+   the day (`moments.ts`).
+

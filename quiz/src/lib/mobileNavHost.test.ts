@@ -18,10 +18,11 @@ describe('pageHostsNavButton', () => {
     expect(pageHostsNavButton('/actuaria/sector/CAS-5')).toBe(true)
     expect(pageHostsNavButton('/tools')).toBe(true)
     expect(pageHostsNavButton('/tools/bornhuetter-ferguson')).toBe(true)
+    expect(pageHostsNavButton('/store')).toBe(true)
   })
 
   it('leaves every other route to the app header', () => {
-    for (const path of ['/search', '/settings', '/store', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
+    for (const path of ['/search', '/settings', '/store/gems', '/upgrade', '/quiz', '/review', '/auth', '/project']) {
       expect(pageHostsNavButton(path)).toBe(false)
     }
   })

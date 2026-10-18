@@ -57,3 +57,14 @@ created: 2026-10-09
 - checks_run: Delta re-check after PR #1629 (commit 3ee3ec5, 'retarget exam links'). Last verified 2026-10-10 at commit 2c83a177: that version's recorded content_hash recomputes. git diff 2c83a177..HEAD: 2 line(s) changed, all in Readings/Source Material reading lines; with [[target|display]] reduced to its display text the page is byte-identical to the verified version (only link targets moved). Every new target resolves to an existing Resources/Books page describing the document the citation names, and each target page's On the syllabus callout names this exam. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block; each changed reading line, links stripped, located verbatim in the PDF text. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors. SOA's exam page for this exam, fetched today, links this one syllabus PDF.
 - sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf
 - note: Verified high. Words unchanged since the 2026-10-10 verification; only reading-link targets moved, each to the page for the same document. ASOP 12 now links 'ASOP 12 - Risk Classification (ASB - 2005)' for a reading the SOA cites as 'Last Revised 2011': the same standard (adopted 2005). The 'This article may be accessed…' line was a link to a page that should not exist; it is now plain text, words unchanged. Concept-link targets were not changed by the delta and were not judged.
+
+## [C-006] Validation pass — verified (delta re-check)
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:49Z/a769
+- date: 2026-10-18
+- status_set: verified
+- confidence: high
+- checks_run: Delta re-check after a link-only re-render (syllabus_write.py: reading links kept as the page chose them, cut-short phrases grown to the page they name, noise links dropped; content plan Phase 3, C17). The verified version is the one at 3a78434d. 6 line(s) changed; with links reduced to their text and *Key concepts:* lines set aside, the page is byte-identical to the verified version. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors; syllabus_write --all --check clean.
+- sources_checked: SOA, Mar 2027/Jul 2027 syllabus PDF for GI-301, all pages, sha256:491e74c9baec0e9f74552e9c589f0738d914c4d340827727b0d78bea4e23d72e — https://www.soa.org/globalassets/assets/files/edu/2026/gi-301/2027-03-gi-301-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

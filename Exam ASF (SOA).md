@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:017ac2ee3d3d0cff02b8a8a77597e2121c8970f199ca2ca74d049b550a624835
+  content_hash: sha256:7196ca78ccdf86441a99fa389a5ed5293bcf22c99ec670cfbd4615346dc865a6
   sources: []
   open_findings: 0
   open_critical: 0
@@ -52,7 +52,7 @@ The Actuarial Science Foundations Module provides candidates with insights into 
 > 1. Define [[External Force|external forces]]
 > 2. Describe and explain how the following categories of [[External Force|external forces]] apply within and across global areas of actuarial practice and fit into the Actuarial Control Cycle framework
 >    - [[Cultural-social Value|Cultural/social values]]
->    - [[Demographics]]
+>    - Demographics
 >    - [[Governmental Influence|Governmental influences]]
 >    - Economic and [[External Environment|business environment]]
 >    - [[Physical Environment|Physical environment]]

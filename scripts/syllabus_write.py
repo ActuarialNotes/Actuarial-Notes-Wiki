@@ -108,7 +108,7 @@ IRREGULAR_PLURALS = {"analyses": "analysis", "bases": "basis", "criteria": "crit
                      "losses": "loss", "processes": "process", "businesses": "business",
                      "classes": "class", "taxes": "tax", "annuities": "annuity",
                      "liabilities": "liability", "policies": "policy", "companies": "company"}
-NOT_PLURAL_RE = re.compile(r"(ss|us|is|ics|ous|ys|as|s's)$")
+NOT_PLURAL_RE = re.compile(r"(ss|us|is|ics|ous|ys|as|['’]s)$")   # "Mack's" is a possessive
 
 
 def singular(word: str) -> str:
@@ -157,22 +157,80 @@ class Linker:
         plain = phrase.replace("’", "'")
         return self.existing(phrase) or clean_name(title_case(singular_phrase(plain))) or clean_name(plain)
 
-    def link(self, text: str) -> str:
+    # Words a phrase may grow over to reach the page it names, but never
+    # starts or ends on: "the [[American Academy of Actuaries]]", never "the
+    # American Academy".
+    EDGE_STOPS = frozenset("a an the of and or to in for with by on from at as its their this that these those "
+                           "each any all such".split())
+
+    def extend(self, text: str, start: int, end: int,
+               others: list[tuple[int, int, str]] = ()) -> tuple[int, int, str] | None:
+        """The chunker trims generic words off a phrase's edges ("[[Principal
+        Component]] analysis", "Expected [[Loss]] Ratio", "[[Generalized
+        Linear]] model"), and that can cut a name short. The longest run of
+        up to two words before and three after — whitespace between them, no
+        punctuation — that names a page the vault has; or None. A run never
+        cuts into one of the line's `others` phrases ("excess of loss" out of
+        "excess of [loss reinsurance]") or grows across a verb ("government
+        programs providing health")."""
+        words = list(sl.WORD_RE.finditer(text))
+        inside = [i for i, m in enumerate(words) if m.start() >= start and m.end() <= end]
+        if not inside:
+            return None
+        first, last = inside[0], inside[-1]
+
+        def joined(i: int, j: int) -> bool:   # words i and j (= i + 1) sit side by side
+            return not text[words[i].end():words[j].start()].strip()
+
+        lefts = [first]
+        while len(lefts) < 3 and lefts[-1] > 0 and joined(lefts[-1] - 1, lefts[-1]):
+            lefts.append(lefts[-1] - 1)
+        rights = [last]
+        while len(rights) < 4 and rights[-1] + 1 < len(words) and joined(rights[-1], rights[-1] + 1):
+            rights.append(rights[-1] + 1)
+        best: tuple[int, int, str] | None = None
+        for i in lefts:
+            for j in rights:
+                if (i, j) == (first, last):
+                    continue
+                if words[i].group(0).lower() in self.EDGE_STOPS or words[j].group(0).lower() in self.EDGE_STOPS:
+                    continue
+                a, b = words[i].start(), words[j].end()
+                if any(s2 < b and a < e2 and not (a <= s2 and e2 <= b) for s2, e2, _ in others):
+                    continue
+                if any(words[k].group(0).lower() in sl.VERBS for k in range(i + 1, j)
+                       if not first <= k <= last):
+                    continue
+                phrase = text[a:b]
+                if self.existing(phrase) and (best is None or len(phrase) > len(best[2])):
+                    best = (words[i].start(), words[j].end(), phrase)
+        return best
+
+    def link(self, text: str, fallback: bool = True) -> str:
         """`text` with every noun phrase that needs a note wrapped in a link
         (`syllabus_lib.needs_note`: a single word only when it has a page). A
-        line that would otherwise link nothing links its last noun phrase — or,
-        with none, its last generic noun ("Calculate and recommend
-        assumptions") — so every objective names at least one concept."""
+        phrase cut short of a page's name is grown to it (`extend`). With
+        `fallback`, a line that would otherwise link nothing links its last
+        noun phrase — or, with none, its last generic noun ("Calculate and
+        recommend assumptions") — so every objective names at least one
+        concept; a sub-item or a preamble needn't."""
         out, last = [], 0
         found = sl.noun_phrases(text)
-        phrases = [p for p in found if sl.needs_note(p[2], lambda w: self.existing(w) is not None)]
-        if not phrases:
-            phrases = found[-1:]
-        if not phrases:
-            generic = [m for m in sl.WORD_RE.finditer(text)
-                       if m.group(0).lower() in sl.GENERIC_NOUNS and not m.group(0)[0].isdigit()]
-            phrases = [(m.start(), m.end(), m.group(0)) for m in generic[-1:]]
+        grown = []
+        for start, end, phrase in found:
+            ext = self.extend(text, start, end, [f for f in found if f[0] != start])
+            grown.append(ext or (start, end, phrase))
+        phrases = [p for p in grown if sl.needs_note(p[2], lambda w: self.existing(w) is not None)]
+        if not phrases and fallback:
+            phrases = grown[-1:]
+            if not phrases:
+                generic = [m for m in sl.WORD_RE.finditer(text)
+                           if m.group(0).lower() in sl.GENERIC_NOUNS and not m.group(0)[0].isdigit()]
+                phrases = [self.extend(text, m.start(), m.end()) or (m.start(), m.end(), m.group(0))
+                           for m in generic[-1:]]
         for start, end, phrase in phrases:
+            if start < last:          # swallowed by the phrase before it, grown
+                continue
             target = self.target(phrase)
             out.append(text[last:start])
             out.append(f"[[{phrase}]]" if target == phrase else f"[[{target}|{phrase}]]")
@@ -279,6 +337,50 @@ def reading_target(citation: str, shelf: Shelf) -> str:
     return clean_name(title) + (f" ({tail})" if tail else "")
 
 
+class Chosen:
+    """The Source Material links a page already carries: citation → page.
+
+    The shelf matches a citation by its words, and that can't tell apart two
+    works that share a title (*The Importance of Centralization …*, Part 1 of
+    2019 and Part 2 of 2020) or know that a reading's page was written under
+    another name (`OSFI Reinsurance`, `CIA FCT 1`). Once a person or a session
+    has chosen the page a citation links, a re-render keeps that choice: an
+    entry's shown text is the citation it was rendered from, so the page itself
+    is the citation → page table. A citation the page doesn't carry yet (a new
+    sitting's reading) falls back to the shelf. A top-level line that was left
+    as plain text — a footnote the extractor read as a reading — stays plain.
+
+    The same goes for an objective's `*Key concepts:*` line, the concept a
+    person chose for an objective whose own words name none ("Analyze and
+    interpret gains by source" → *Analysis of Surplus*): it is kept under the
+    objective whose words it follows, and that objective needs no fallback
+    link (`Linker.link`)."""
+
+    def __init__(self, text: str = ""):
+        self.target: dict[str, str] = {}
+        self.plain: set[str] = set()
+        self.key_concepts: dict[str, list[str]] = {}   # objective's words → its *Key concepts:* lines
+        if not text:
+            return
+        page = sl.parse_exam_page("", text)
+        for section in page.sections:
+            for o in section.objectives:
+                lines = [x for x in o.extra if sl.KEY_CONCEPTS_RE.match(x)]
+                if lines:
+                    self.key_concepts[" ".join(_words(o.text))] = lines
+        for line in page.source_lines:
+            top = re.match(r"^-\s+(.*?)\s*$", line)
+            if not top:
+                continue
+            links = list(vl.iter_links(top.group(1)))
+            if not links:
+                self.plain.add(top.group(1))
+                continue
+            link = links[0]
+            shown = link.display or link.target
+            self.target.setdefault(shown, link.target)
+
+
 def split_note(citation: str) -> tuple[str, list[str]]:
     """A citation's bracketed asides (`[Candidates may also use …]`) can't sit
     in a link's text, which `]` would end; they become notes beneath it."""
@@ -308,7 +410,11 @@ def codes_note(codes: str) -> str:
     return f" ({codes})" if codes else ""
 
 
-def render(data: dict, vault: vl.Vault) -> str:
+def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
+    """The page for `data`. `chosen` is the Source Material links the page on
+    disk already carries (see `Chosen`); without it every reading is matched
+    afresh."""
+    chosen = chosen or Chosen()
     ident = exam_identity(data)
     linker = Linker(vault, data["wiki_id"])
     shelf = Shelf(vault)
@@ -349,7 +455,7 @@ def render(data: dict, vault: vl.Vault) -> str:
     for t in data["topics"]:
         L.append(f"> [!example]- {t['title']} {weight_tag(t)}".rstrip())
         if t["objective"]:
-            L.append(f"> {linker.link(t['objective'])}")
+            L.append(f"> {linker.link(t['objective'], fallback=False)}")
         L.append(">")
         group = None
         for o in t["outcomes"]:
@@ -359,10 +465,14 @@ def render(data: dict, vault: vl.Vault) -> str:
                 L += [f"> **{o['group']}**", ">"]
                 group = o["group"]
             n = outcome_num(o)
-            L.append(f"> {n}. {linker.link(o['text'])}")
+            bullets = [linker.link(b, fallback=False) for b in o["bullets"]]
+            key_concepts = chosen.key_concepts.get(" ".join(_words(o["text"])), [])
+            linked = key_concepts or any("[[" in b for b in bullets)
+            L.append(f"> {n}. {linker.link(o['text'], fallback=not linked)}")
             pad = " " * len(f"{n}. ")
-            for b in o["bullets"]:
-                L.append(f">{pad} - {linker.link(b)}")
+            for b in bullets:
+                L.append(f">{pad} - {b}")
+            L += [f"> {k}" for k in key_concepts]
         if t["resources"]:
             L += [">", "> **Readings:**"]
             for r in t["resources"]:
@@ -374,12 +484,21 @@ def render(data: dict, vault: vl.Vault) -> str:
 
     L += ["## Source Material", "> [!answer]- Source Material", ">"]
     entries: dict[str, dict] = {}
+    by_target: dict[str, str] = {}     # target → the key of the first entry linking it
     readings = [r for t in data["topics"] for r in t["resources"]] or data["readings"]
     for r in readings:
         cite, notes = split_note(r["citation"])
-        target = reading_target(cite, shelf) if r["citation"] != "e-Learning Modules" \
-            else f"{ident['name']} e-Learning Modules (SOA)"
-        e = entries.setdefault(target, {"cite": cite, "lines": []})
+        shown = cite.replace("|", "-")
+        if shown in chosen.target or shown in chosen.plain:
+            # The page's own choice: an entry of its own, as the page has it.
+            target = chosen.target.get(shown, "")
+            key = "cite:" + shown
+        else:
+            target = reading_target(cite, shelf) if r["citation"] != "e-Learning Modules" \
+                else f"{ident['name']} e-Learning Modules (SOA)"
+            key = by_target.get(target, target)
+        by_target.setdefault(target, key)
+        e = entries.setdefault(key, {"cite": cite, "target": target, "lines": []})
         lines = notes + [p["text"] + codes_note(p["codes"]) for p in r["parts"]]
         if r["codes"] and not r["parts"]:
             lines.append("Background" if r["codes"] == "Background" else f"Outcomes {r['codes']}")
@@ -389,9 +508,12 @@ def render(data: dict, vault: vl.Vault) -> str:
         for x in lines:
             if x not in e["lines"]:
                 e["lines"].append(x)
-    for target, e in entries.items():
-        shown = e["cite"].replace("|", "-")
-        L.append(f"> - [[{target}]]" if shown == target else f"> - [[{target}|{shown}]]")
+    for e in entries.values():
+        shown, target = e["cite"].replace("|", "-"), e["target"]
+        if not target:
+            L.append(f"> - {shown}")
+        else:
+            L.append(f"> - [[{target}]]" if shown == target else f"> - [[{target}|{shown}]]")
         for x in e["lines"]:
             L.append(f">      - {x}")
     return "\n".join(L).rstrip() + "\n"
@@ -466,11 +588,12 @@ def write(wiki_id: str, vault: vl.Vault, check: bool) -> bool:
         data = json.load(fh)
     rel = page_name(data)
     path = os.path.join(ROOT, rel)
-    text = render(data, vault)
     old = ""
     if os.path.exists(path):
         with open(path, encoding="utf-8") as fh:
             old = fh.read()
+    text = render(data, vault, Chosen(old))
+    if old:
         fm, body = sl.split_frontmatter(old)
         verification = re.search(r"^verification:.*\Z", fm, re.S | re.M)
         if verification:   # keep the block verify_check.py owns, last

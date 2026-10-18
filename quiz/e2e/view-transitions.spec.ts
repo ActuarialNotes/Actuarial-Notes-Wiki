@@ -62,7 +62,7 @@ test.describe('tab-switch view transitions', () => {
           // `root` is the page's own sheet (the html element); the rail, the
           // phone header and the "Return to quiz" pill are the chrome held
           // still over it.
-          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume'])
+          const allowed = new Set(['root', 'paper-rail', 'paper-header', 'paper-resume', 'paper-tutor'])
           expect(names.every(n => allowed.has(n)), `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(true)
           expect(new Set(names).size, `${path} · ${body} · ${move}: ${names.join(', ')}`).toBe(names.length)
         }

@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-09
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:2f88920501444060816a5e3b26035b9965ad5817db556dc3e6a9e7aca068b6b1
+  content_hash: sha256:bef49249b15bf54be3ff7479fb023981454b826b1772e1c6a85180b0d6622c22
   sources:
     - "SOA, current syllabus PDF for ATPA, all pages, sha256:16d5e74841e90fdb61402248cb585dc8d7a3ceedbf678341478145a9e2fb4410 — https://www.soa.org/globalassets/assets/files/edu/2022/2022-01-atpa-learning-objectives.pdf"
   open_findings: 0
@@ -33,45 +33,48 @@ The Advanced Topics in Predictive Analytics course provides candidates with the 
 ## Learning Objectives
 
 > [!example]- Ethical Foundations {5–10%}
-> The Candidate will be able to work with data and models in an ethical and [[Responsible Manner|responsible manner]].
+> The Candidate will be able to work with data and models in an ethical and responsible manner.
 >
-> 1. Apply a general ethical framework for working with [[Data|data]] and models.
-> 2. Discuss and comply with relevant [[Standard|standards]] of practice.
-> 3. Discuss and comply with relevant regulations that apply to working with [[Data|data]] and models.
+> 1. Apply a general ethical framework for working with data and models.
+>    - *Key concepts:* [[Data Ethics]]
+> 2. Discuss and comply with relevant [[Actuarial Standards of Practice|standards of practice]].
+> 3. Discuss and comply with relevant regulations that apply to working with data and models.
+>    - *Key concepts:* [[Data Ethics]]
 
 > [!example]- Working with Data {20–30%}
 > The Candidate will be able to understand basic database calculations and manipulations and prepare data for [[Predictive Analytics|predictive modeling]] applications.
 >
 > 1. Understand the basic structure of a [[Data Pipeline|data pipeline]], including being able to perform the following tasks:
->    - Evaluate the quality of appropriate [[Data|data]] sources for a problem
+>    - Evaluate the quality of appropriate [[Data Quality|data sources]] for a problem
 >    - Explain the difference between a database, [[Data Warehouse|data lake]], and [[Data Warehouse|data warehouse]]
 >    - Describe how different [[Tidy Data|data structures]] can be used in different analytical tasks.
-> 2. Explain the basics concepts of database management, in particular, extract, transform, and load (ETL) operations. Demonstrate these [[Skill|skills]] by performing the following:
->    - [[Extract Data|Extract data]] from various [[Data Pipeline|file structures]]
->    - Subset, aggregate, summarize, and [[Otherwise Modify Data|otherwise modify data]] for specific exploratory or modeling purposes
->    - Create [[Data Pipeline|data sets]] as a [[Final Product|final product]] of extracting and transforming data that can be used in a predictive model.
-> 3. Assess the accuracy and quality of [[Data|data]].
->    - Describe how [[Data Quality|data collection practices]] and assumptions [[Affect Data Quality|affect data quality]].
->    - Validate the data for [[Data Quality|internal consistency]].
+> 2. Explain the basics concepts of database management, in particular, extract, transform, and load (ETL) operations. Demonstrate these skills by performing the following:
+>    - Extract data from various [[Data Pipeline|file structures]]
+>    - Subset, aggregate, summarize, and otherwise modify data for specific exploratory or modeling purposes
+>    - Create [[Data Pipeline|data sets]] as a final product of extracting and transforming data that can be used in a predictive model.
+> 3. Assess the accuracy and quality of data.
+>    - Describe how [[Data Quality|data collection practices]] and assumptions affect [[Data Quality|data quality]].
+>    - Validate the data for [[Data Validation|internal consistency]].
 > 4. Explain the terminology and structure of [[Relational Database|relational databases]] and be able to use common keys between collections of data to merge information from multiple sources.
-> 5. Clean and organize [[Data|data]] by performing each of the following:
+> 5. Clean and organize data by performing each of the following:
 >    - Check for [[Outlier|outliers]], both univariate and multivariate
->    - [[Missing Data|Handle missing data]] (including understanding the types of missing data) by selecting the appropriate action from deletion of the record, [[Missing Data|imputation]], and adding a missing value flag.
-> 6. Detect possible biases introduced when [[Data Pipeline|preparing data]] for a predictive model.
+>    - [[Missing Data|Handle missing data]] (including understanding the types of [[Missing Data|missing data]]) by selecting the appropriate action from deletion of the record, [[Missing Data|imputation]], and adding a missing value flag.
+> 6. Detect possible biases introduced when [[Data Preparation|preparing data]] for a predictive model.
 
 > [!example]- Advanced Predictive Analytics Models {30–45%}
-> The Candidate will fit a variety of models and select one appropriate to the [[Circumstance|circumstances]] and intended use.
+> The Candidate will fit a variety of models and select one appropriate to the circumstances and intended use.
 >
-> 1. Explain the importance of model [[Accuracy|accuracy]].
-> 2. Explain, fit, evaluate, and make [[Prediction|predictions]] with each of the following models:
->    - [[Additive]] models
->    - [[Linear]] mixed models
+> 1. Explain the importance of model accuracy.
+>    - *Key concepts:* [[Predictive Accuracy]]
+> 2. Explain, fit, evaluate, and make predictions with each of the following models:
+>    - Additive models
+>    - [[Linear Mixed Model|Linear mixed models]]
 >    - [[Neural Network|Neural networks]].
 > 3. Apply [[Bayesian]] techniques to predictive models.
-> 4. Compare model results with those from [[Linear|linear]] and tree-based methods.
+> 4. Compare model results with those from linear and [[Decision Tree|tree-based]] methods.
 > 5. Explain the benefits of and demonstrate the combination of multiple models via [[Stacking|stacking]] and blending.
-> 6. Select and justify a modeling approach based on accuracy, [[Explainability|explainability]], stability, [[Analytical Effort|analytical effort]], [[Computational Efficiency|computational efficiency]], and [[Table Importability|table importability]], taking into account the [[Business Context|business context]] of the problem.
-> 7. Recognize and mitigate the [[Effect|effect]] of:
+> 6. Select and justify a modeling approach based on accuracy, [[Explainability|explainability]], stability, analytical effort, computational efficiency, and [[Table Importability|table importability]], taking into account the business context of the problem.
+> 7. Recognize and mitigate the effect of:
 >    - Starting with [[Variable Selection|too many variables]]
 >    - Repeated use of [[Train-test-validate Set|train/test/validate sets]]
 >    - Model [[Bias|bias]], including fairness concepts and [[Proxy Discrimination|proxy discrimination]].
@@ -84,16 +87,18 @@ The Advanced Topics in Predictive Analytics course provides candidates with the 
 >    - Suitability, [[Interpretability|decomposability]], [[Interpretability|algorithmic transparency]], and [[Interpretability|post-hoc interpretability]]
 >    - The difference between [[Explainability|explainability]] and [[Interpretability|interpretability]]
 >    - When a lack of [[Explainability|explainability]] may be acceptable.
-> 2. Communicate and justify a [[Recommended Analytics|recommended analytics]] solution, including use as appropriate of:
+> 2. Communicate and justify a recommended analytics solution, including use as appropriate of:
 >    - [[Variable Importance|Variable importance plots]]
->    - Partial [[Partial Dependence Plot|dependence plots]]
+>    - [[Partial Dependence Plot|Partial dependence plots]]
 >    - [[Partial Dependence Plot|Individual conditional expectation plots]]
 >    - [[Shapley Value|Shapley values]]
 >    - [[Lift]] and [[Lift|gain charts]].
-> 3. Explain why a model is predicting certain values for certain [[Record|records]].
-> 4. Perform data and model [[Model Governance|governance]] and develop model documentation in an [[Ethical Context|ethical context]].
-> 5. Communicate in a clear and [[Straightforward Manner|straightforward manner]] using [[Common Language|common language]] that is appropriate for the intended audience.
-> 6. Structure a report in an [[Effective Manner While|effective manner while]] following standards of practice for actuarial communication.
+> 3. Explain why a model is predicting certain values for certain records.
+>    - *Key concepts:* [[Explainability]]
+> 4. Perform data and [[Model Governance|model governance]] and develop model documentation in an ethical context.
+> 5. Communicate in a clear and straightforward manner using common language that is appropriate for the intended audience.
+>    - *Key concepts:* [[Actuarial Communication]]
+> 6. Structure a report in an effective manner while following [[Actuarial Standards of Practice|standards of practice]] for [[Actuarial Communication|actuarial communication]].
 
 ## Source Material
 > [!answer]- Source Material

@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:7232da80d8ea541b417e2e145e01a779f7e14912a2ced22840ef57b3985f9039
+  content_hash: sha256:43801f42d5b58b5ff24e2023a145e8bac2e5265f1dcd51e3581a9c8291563605
   sources:
     - "SOA, Jul 2027 syllabus PDF for GI-302, all pages, sha256:4b007f27cdfa4e554dca8638841ef73fddfcf1d0d1e3a954be6244f334c3a284 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-302/2027-07-gi-302-syllabus.pdf"
   open_findings: 0
@@ -30,15 +30,15 @@ verification:
 > The candidate will understand the different types of general [[Insurance Policy|insurance products]] and coverages offered in the [[United State|United States]].
 >
 > 1. Describe the contents of the [[Personal Auto Policy|ISO Personal Auto Policy]] ([[Personal Auto Policy|PAP]]) and the [[Homeowners Policy|ISO Homeowners]] ([[Homeowners Policy|HO]]) policies and the coverages they provide.
-> 2. Explain how [[Insurable Interest|insurable interest]], [[Policy Provisions|policy provisions]] for valuing losses, and insurance to value affect a [[Property Insurance|loss payment]] amount under [[Property Insurance|property insurance]].
+> 2. Explain how [[Insurable Interest|insurable interest]], [[Policy Provisions|policy provisions]] for valuing losses, and [[Insurance to Value|insurance to value]] affect a [[Property Insurance|loss payment]] amount under [[Property Insurance|property insurance]].
 > 3. Describe [[Commercial Property Insurance|commercial property insurance]] in terms of categories of [[Loss Exposure|loss exposures]].
 > 4. Describe the contents of the [[Commercial Property Insurance|ISO commercial property]] (CP) and general liability ([[Commercial General Liability|CGL]]) policies, and types of coverage they provide.
-> 5. Identify the factors that [[Affect Commercial Insurance Premium|affect commercial insurance premiums]] and how [[Insurance Premium|premium]] is determined.
+> 5. Identify the factors that affect [[Commercial Insurance Premium|commercial insurance premiums]] and how [[Insurance Premium|premium]] is determined.
 > 6. Describe [[Business Auto Coverage|commercial auto insurance]] in terms of the [[Loss Exposure|loss exposures]].
 > 7. Describe the contents of the [[Business Auto Coverage|ISO Commercial Automobile policies]] and the coverages they provide.
 > 8. Describe the [[Workers Compensation|workers compensation]] ([[Workers Compensation Insurance|WC]]) system.
 > 9. Explain why [[Employers Liability Insurance|employers liability insurance]] is needed and how the [[Employers Liability Insurance|ISO WC]] and [[Employers Liability Insurance Policy Address|Employers Liability Insurance Policy address]] this need.
-> 10. Explain how [[Workers Compensation Classification|premium bases]], classifications, and [[Premium Adjustments Affect WC Insurance|premium adjustments affect WC insurance]].
+> 10. Explain how [[Workers Compensation Classification|premium bases]], classifications, and [[Insurance Premium|premium]] adjustments affect [[WC Insurance|WC insurance]].
 > 11. Describe various [[Specialty Insurance Coverage|specialty insurance coverages]] (including [[Umbrella Liability Insurance|excess liability]], [[Umbrella Liability Insurance|umbrella liability]], [[Professional Liability Insurance|professional liability]], [[Cyber Insurance|cyber risk]], surety and [[Terrorism Insurance|terrorism]]).
 >
 > **Readings:**
@@ -79,7 +79,7 @@ verification:
 > 1. Demonstrate knowledge of U.S. [[GAAP]], U.S. statutory accounting and U.S. tax accounting for general [[Insurer|insurance companies]].
 > 2. Describe the elements of the [[NAIC Annual Statement]].
 > 3. Complete and interpret [[Annual Statement Schedules|NAIC Annual Statement pages/schedules]] (as referenced in the resources).
-> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[Risk-Based Capital|NAIC RBC]] and IRIS Ratios).
+> 4. Evaluate the [[Financial Health|financial health]] of a U.S. general [[Insurer|insurer]] using the [[NAIC Annual Statement|Annual Statement]] (e.g., [[Risk-Based Capital|NAIC RBC]] and [[IRIS Ratios]]).
 >
 > **Readings:**
 > - FRE-802-19: National Association of Insurance Commissioners (NAIC), Accounting Practices and Procedures Manual, 2018 Preamble (3a)
@@ -103,11 +103,11 @@ verification:
 >     - Part 3: General Insurance Financial Health Topics (sections 10.4.3, 10.8.3, 11.8, 11.10-11.11, 12.9, 12.10.2 & 12.11)
 
 > [!example]- Responsibilities of a U.S. Signing General Insurance Actuary {30–45%}
-> The candidate will be able to use applicable standards of practice to carry out the responsibilities of a U.S. [[Appointed Actuary Responsibilities|signing general insurance actuary]] as defined by regulators and the [[American Academy]] of [[Actuary|Actuaries]].
+> The candidate will be able to use applicable [[Actuarial Standards of Practice|standards of practice]] to carry out the responsibilities of a U.S. [[Appointed Actuary Responsibilities|signing general insurance actuary]] as defined by regulators and the [[American Academy of Actuaries]].
 >
 > 1. Describe and apply the concept of [[Materiality|materiality]].
-> 2. Describe, interpret and apply the applicable U.S. [[Standard|Standards]] of Practice.
-> 3. Describe, interpret and apply the responsibilities of a [[Appointed Actuary Responsibilities|signing actuary]] with respect to the U.S. Statement of Actuarial Opinion and the Actuarial Report.
+> 2. Describe, interpret and apply the applicable U.S. [[Actuarial Standards of Practice|Standards of Practice]].
+> 3. Describe, interpret and apply the responsibilities of a [[Appointed Actuary Responsibilities|signing actuary]] with respect to the U.S. [[Statement of Actuarial Opinion]] and the [[Actuarial Report]].
 >
 > **Readings:**
 > - Materiality, Concepts on Professionalism, Task Force on Materiality, AAA, 2006, No. 8 (pp. 1-8, 13-17 & 19-20) (4a)

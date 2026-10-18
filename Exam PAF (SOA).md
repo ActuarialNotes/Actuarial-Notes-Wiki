@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f5b20dc21207cf2c6ad5624466d21964e99140a28d84e77b0f07a09cb64984a3
+  content_hash: sha256:5020fc9733110885817682796ac0011aa620c4e4aaa5798a24d65619bca19b44
   sources: []
   open_findings: 0
   open_critical: 0
@@ -45,9 +45,9 @@ Welcome to the Pre-Actuarial Foundations Module! As you embark on this journey o
 > The purpose of this topic is to provide a [[Brief History|brief history]] of the actuarial profession, to consider the future of the profession, to explore the role of [[Today's Actuary|today’s actuary]], to detail the [[Actuary's Skill Set|actuary’s skill sets]] and to review the [[Profession's Code|profession’s codes]] of conduct.
 >
 > 1. Describe important historical [[Events Influencing|events influencing]] the actuarial profession
-> 2. Describe today’s and [[Tomorrow'|tomorrow's]] actuarial practice
+> 2. Describe today’s and [[Tomorrow's|tomorrow's]] actuarial practice
 > 3. Define “[[Actuary|actuary]]”
-> 4. Identify the actuary’s knowledge, skills and [[Ability|abilities]]
+> 4. Identify the [[Actuary's|actuary’s]] knowledge, skills and abilities
 > 5. Describe what an [[Actuary Contribute|actuary contributes]] as a professional
 
 > [!example]- What Actuaries Do
@@ -62,10 +62,10 @@ Welcome to the Pre-Actuarial Foundations Module! As you embark on this journey o
 > 7. Explain why it is crucial for [[Professional Actuary|professional actuaries]] to be [[Effective Communicator|effective communicators]]
 
 > [!example]- Building Your Emotional Intelligence Skills
-> [[Actuaries Need High Emotional Intelligence Skill|Actuaries need high emotional intelligence skills]], as well as [[Technical Skill|technical skills]], to be successful in their work. This section will [[Introduce You|introduce you]] to the topic of [[Emotional Intelligence]], the Reflect-Adapt-Relate model, and how [[Emotional Intelligence]] will [[Help You|help you]] to become a [[Better Actuary|better actuary]].
+> [[Actuaries Need High Emotional Intelligence|Actuaries need high emotional intelligence]] skills, as well as technical skills, to be successful in their work. This section will introduce you to the topic of [[Emotional Intelligence]], the Reflect-Adapt-Relate model, and how [[Emotional Intelligence]] will help you to become a [[Better Actuary|better actuary]].
 >
 > 1. Define [[Emotional Intelligence|emotional intelligence]] and explain its importance to an [[Actuary's Success|actuary’s success]] in their career
-> 2. Plan specific actions to improve [[Your Emotional Intelligence|your emotional intelligence]]
+> 2. Plan specific actions to improve your [[Emotional Intelligence|emotional intelligence]]
 > 3. Use self-awareness techniques to identify [[Emotional Trigger|emotional triggers]]
 > 4. Use adaptability approaches to manage [[Impulse|impulses]]
 > 5. Use [[Social Awareness|social awareness]] techniques to [[Plan Simple Communication|plan simple communication]]

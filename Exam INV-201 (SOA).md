@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:f2960bded782f2830dd995ab7ca9dd12790bf86ec051be26aac544cf43e3b5b7
+  content_hash: sha256:82e65ecc17a3bd6a08a79ba7a3365636e3c6e2092fa4e4775349e2582e1535b7
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for INV-201, all pages, sha256:8b5d280585ae9d0e35943729f861ac13ada7462be850c328da93645b7bbd9bc1 — https://www.soa.org/globalassets/assets/files/edu/2026/inv-201/2026-2027-inv-201-syllabus.pdf"
   open_findings: 0
@@ -27,18 +27,18 @@ verification:
 ## Learning Objectives
 
 > [!example]- Key Types of Derivatives {5–15%}
-> The candidate will understand key types of [[Derivative|derivatives]].
+> The candidate will understand key types of derivatives.
 >
 > 1. Understand the [[Payoff|payoffs]] of basic [[Derivative Instrument|derivative instruments]] including:
->    - [[Forward|Forwards]]
->    - [[Future|Futures]]
->    - [[Swap|Swaps]]
->    - [[Call|Calls]]
+>    - Forwards
+>    - Futures
+>    - Swaps
+>    - Calls
 >    - [[Payoff|Puts]]
 >    - [[Payoff|Caps]]
 >    - [[Payoff|Floors]]
 >    - [[Swaption]]
->    - [[Currency]]
+>    - Currency
 >    - [[Credit]]
 > 2. Be able to identify the key differences between forwards and [[Future|futures]]
 > 3. Be able to compare European, American, Bermudan, [[Exotic Option|Asian options]], and various [[Exotic Option|exotic options]]
@@ -50,7 +50,7 @@ verification:
 >    - [[Option Trading Strategy|Call spreads]]
 >    - [[Option Trading Strategy|Put spreads]]
 >    - [[Option Trading Strategy|Collars]]
->    - Covered [[Call|calls]]
+>    - Covered calls
 >    - [[Option Trading Strategy|Butterfly spreads]]
 >    - Straddles and [[Option Trading Strategy|strangles]]
 >
@@ -72,7 +72,7 @@ verification:
 > 3. Understand [[Put-Call Parity|put-call parity]] and price bounds
 > 4. Understand [[Itō Calculus|Stochastic Calculus theory]] and technique used in [[Risk-Neutral Valuation|pricing derivatives]] including:
 >    - [[Stochastic Differential Equation|Stochastic differential equations]]
->    - Itō [[Integral|integral]]
+>    - Itō integral
 >    - Itō's [[Itō Calculus|Lemma]]
 >    - Itō [[Itō Calculus|Isometry]]
 >    - [[Martingale|Martingales]],
@@ -80,8 +80,8 @@ verification:
 >    - [[Girsanov's Theorem|Girsanov's theorem]]
 > 5. Understand and apply the concepts of [[Risk-Neutral Valuation|risk-neutral]] measure, forward measure, normalization, and the market price of [[Risk|risk]]
 > 6. Understand [[Risk-Neutral Valuation|option pricing]] techniques including:
->    - Calculating an [[Expectation|expectation]]
->    - By solving an [[PDE]]
+>    - Calculating an expectation
+>    - By solving an PDE
 > 7. Understand the limitations of the [[Black-Scholes Model|Black-Scholes-Merton]] model
 > 8. Understand and apply [[Euler-Maruyama Discretization|numerical discretization]] methods to price options including [[Euler-Maruyama Discretization|Euler-Maruyama discretization]] and [[Euler-Maruyama Discretization|transition density]] methods
 > 9. Calibrate a model to [[Model Calibration|observed prices]] of [[Model Calibration|traded securities]] including fitting to a given [[Yield Curve|yield curve]]
@@ -136,7 +136,7 @@ verification:
 > 7. Demonstrate an understanding of [[Hedging|hedging]] for [[Embedded Option|embedded option]] in liabilities with:
 > 8. [[Risk|Risks]] that can be hedged, including those of equity, [[Interest Rate|interest rate]], [[Volatility|volatility]], and [[Option Greeks|cross Greeks]],
 > 9. [[Risk|Risks]] that can only be partially hedged or cannot be hedged, including those of [[Policyholder|policyholder]] behavior, [[Mortality|mortality]], basis, [[Credit Risk|counterparty]], [[Correlation|correlation]], and [[Operational Risk|operational failures]]
-> 10. Demonstrate an understanding of [[Target Volatility Fund|target volatility funds]] and their effect on [[Target Volatility Fund|fund performance]], [[Equity-Linked Insurance|guarantee cost]], and [[Risk|risk]] control
+> 10. Demonstrate an understanding of [[Target Volatility Fund|target volatility funds]] and their effect on [[Target Volatility Fund|fund performance]], [[Equity-Linked Insurance|guarantee cost]], and [[Risk Control|risk control]]
 >
 > **Readings:**
 > - Options, Futures, and Other Derivatives, Hull, John C., Pearson, 11th Edition, 2021

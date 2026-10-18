@@ -9,6 +9,7 @@ import { calloutComponents } from '@/components/calloutComponents'
 import { codeComponents } from '@/components/codeComponents'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { SourceMaterialGallery } from '@/components/wiki/SourceMaterialGallery'
+import { examPillLabel } from '@/lib/resourceExams'
 import { CredentialPath } from '@/components/wiki/CredentialPath'
 import { readCredentialPathMarker } from '@/data/credentialPaths'
 import { extractSourceMaterial, parseSyllabusObjectives, SOURCE_MATERIAL_MARKER } from '@/lib/sourceMaterial'
@@ -122,6 +123,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     }
   }, [markdown])
 
+  // The exam a study guide is for, as a resource's `exams` name it — what
+  // the shelf's Vintage filter looks the syllabus editions up by.
+  const sourceExam = useMemo(() => {
+    const file = sourcePath?.split('/').pop()?.replace(/\.md$/i, '')
+    return file && /^Exam\b/i.test(file) && sourceMaterial.length > 0 ? examPillLabel(file) : null
+  }, [sourcePath, sourceMaterial])
+
   // One place decides what a wiki reference does when clicked: the article's own
   // links and the source-material cards both go through it.
   const openRef = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -152,7 +160,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       )
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === SOURCE_MATERIAL_MARKER) {
-        return <SourceMaterialGallery entries={sourceMaterial} objectives={objectives} onOpen={openRef} />
+        return <SourceMaterialGallery entries={sourceMaterial} objectives={objectives} exam={sourceExam} onOpen={openRef} />
       }
       // The SOA/CAS credential path — on the general study guide, and on each
       // designation page opened at that designation. The vault writes it as an
@@ -214,7 +222,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, theme])
+  }), [openRef, hideImages, titleBadge, sourceMaterial, objectives, sourceExam, theme])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, the matching wikilink is flagged and

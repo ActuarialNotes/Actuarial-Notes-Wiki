@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Minus, Plus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useWikiPage } from '@/hooks/useWikiPage'
 import { StudyGuidesPageRow } from '@/components/wiki/StudyGuidesPageRow'
 import { ExamStrip } from '@/components/ExamStrip'
+import { ExamVariantPicker } from '@/components/ExamVariantPicker'
+import { groupExamVariants, variantRegion } from '@/lib/examVariants'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useExamProgress } from '@/contexts/examProgress'
 import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
@@ -34,11 +35,13 @@ import {
   vintageToParams,
   vintageView,
   withCurrentExams,
+  VINTAGE_CHANGE_RING,
   type VintageChange,
   type VintageShelfEntry,
 } from '@/lib/resourceVintages'
 import { syllabusEditions } from '@/data/syllabusVintages'
 import { cn } from '@/lib/utils'
+import { AddedCount, ChangePill, DroppedToggle } from '@/components/wiki/VintageChanges'
 
 // The Exam filter is the strip of exam logos; the rest are dropdowns.
 const DROPDOWN_FACETS = RESOURCE_FACETS.filter(facet => facet !== 'exam')
@@ -47,30 +50,6 @@ const EMPTY_TITLE: Record<ResourceFacet, string> = {
   exam: 'None of these resources is a syllabus reading',
   publisher: 'None of these resources names its publisher',
   year: 'None of these resources names its year',
-}
-
-// A changed reading wears the diff's own colours (docs/style-guide.md §4.1):
-// green for what an edition added, red for what it dropped.
-const CHANGE_RING: Record<VintageChange, string> = {
-  added: 'ring-2 ring-green-500/60',
-  dropped: 'ring-2 ring-red-500/50',
-}
-
-function ChangePill({ change, edition }: { change: VintageChange; edition: string }) {
-  const Icon = change === 'added' ? Plus : Minus
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold',
-        change === 'added'
-          ? 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
-          : 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100',
-      )}
-    >
-      <Icon className="h-3 w-3 shrink-0" aria-hidden />
-      {change === 'added' ? `New in ${edition}` : `Dropped in ${edition}`}
-    </span>
-  )
 }
 
 /**
@@ -99,7 +78,7 @@ function ResourceShelfCard({
       className={cn(
         'h-full overflow-hidden flex flex-row items-stretch transition-all duration-150',
         onOpen && 'hover:bg-accent/40',
-        change && CHANGE_RING[change],
+        change && VINTAGE_CHANGE_RING[change],
       )}
     >
       {book.coverImage && (
@@ -149,65 +128,6 @@ function ResourceShelfCard({
   return (
     <button type="button" onClick={onOpen} className="w-full text-left appearance-none bg-transparent p-0">
       {card}
-    </button>
-  )
-}
-
-/**
- * What an edition added, with how many — a fact about the edition, not a
- * switch: the added readings are on its shelf and marked either way, so it
- * wears the green its cards wear and can't be pressed. (It was a toggle; turning
- * it off left the additions leading the grid with nothing saying why.)
- */
-function AddedCount({ count }: { count: number }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium',
-        count > 0
-          ? 'border-green-500/40 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100'
-          : 'bg-card opacity-40',
-      )}
-    >
-      <Plus className="h-3.5 w-3.5 shrink-0" aria-hidden />
-      Added
-      <span className="text-xs tabular-nums opacity-70">{count}</span>
-    </span>
-  )
-}
-
-/**
- * The changes row's one toggle: put what the edition dropped back on the
- * shelf, struck through, with how many. Pressed, it wears the red the cards
- * it brings back wear.
- */
-function DroppedToggle({
-  count,
-  active,
-  onToggle,
-}: {
-  count: number
-  active: boolean
-  onToggle: () => void
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onToggle}
-      disabled={count === 0}
-      data-sound="select"
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40',
-        active
-          ? 'border-red-500/40 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100'
-          : 'bg-card enabled:hover:bg-accent',
-      )}
-    >
-      <Minus className="h-3.5 w-3.5 shrink-0" aria-hidden />
-      Dropped
-      <span className="text-xs tabular-nums opacity-70">{count}</span>
     </button>
   )
 }
@@ -269,6 +189,12 @@ export default function WikiResources() {
   const chosenExam = selection.exam.size > 0 ? [...selection.exam][0] : null
   const body = bodyForExam(chosenExam, bodyOverride ?? defaultBody(selectedTrack), strips)
   const strip = strips[body]
+  // An exam with a syllabus per region (Exam 6's 6C, 6U, 6I, 6T) is one logo on
+  // the strip. Choosing it puts every variant on the shelf, and the region
+  // picker under the strip narrows it to one (`lib/examVariants.ts`).
+  const groups = useMemo(() => groupExamVariants(strip), [strip])
+  const chosenGroup = chosenExam ? groups.find(g => g.members.some(m => m.label === chosenExam)) ?? null : null
+  const chosenVariant = chosenGroup && chosenGroup.members.length > 1 && selection.exam.size === 1 ? chosenExam : null
   const bodyBooks = useMemo(() => resourcesForBody(books, strip), [books, strip])
   const { label: vintageLabel, showDropped } = useMemo(() => vintageFromParams(searchParams), [searchParams])
   // One exam with its syllabus editions on file: the shelf is one edition's
@@ -324,10 +250,10 @@ export default function WikiResources() {
     setSearchParams(resourceFacetsToParams(toggleResourceFacet(selection, facet, value), searchParams), { replace: true })
   }
 
-  // One exam at a time, or none. A vintage is an edition of one exam's
-  // syllabus, so another exam starts at its own newest.
-  function chooseExam(label: string | null) {
-    const exam = new Set(label ? [label] : [])
+  // One exam at a time — every region of it, or one — or none. A vintage is
+  // an edition of one exam's syllabus, so another exam starts at its own newest.
+  function chooseExam(label: string | readonly string[] | null) {
+    const exam = new Set(label === null ? [] : typeof label === 'string' ? [label] : label)
     const next = resourceFacetsToParams({ ...selection, exam }, searchParams)
     setSearchParams(vintageToParams(null, showDropped, next), { replace: true })
   }
@@ -377,11 +303,21 @@ export default function WikiResources() {
       </header>
 
       <ExamStrip
-        exams={strip.map(e => ({ value: e.label, name: e.label, logoKey: e.key }))}
-        value={chosenExam}
-        onChange={chooseExam}
+        exams={groups.map(g => ({ value: g.key, name: g.name, logoKey: g.key }))}
+        value={chosenGroup?.key ?? null}
+        onChange={key => chooseExam(key === null ? null : groups.find(g => g.key === key)!.members.map(m => m.label))}
         className="sm:-mx-6 sm:px-6"
       />
+
+      {chosenGroup && chosenGroup.members.length > 1 && (
+        <ExamVariantPicker
+          className="-mt-3"
+          examName={chosenGroup.name}
+          options={chosenGroup.members.map(m => ({ value: m.label, label: variantRegion(m.label) ?? m.label }))}
+          value={chosenVariant}
+          onChange={label => chooseExam(label ?? chosenGroup.members.map(m => m.label))}
+        />
+      )}
 
       <div className="-mt-3 flex flex-wrap items-center gap-2">
         {DROPDOWN_FACETS.map(facet => {
@@ -409,7 +345,9 @@ export default function WikiResources() {
           emptyTitle={
             selection.exam.size === 1
               ? 'No earlier edition of this exam’s syllabus is on file'
-              : 'Choose one exam to see its syllabus by edition'
+              : chosenGroup
+                ? 'Choose one region to see its syllabus by edition'
+                : 'Choose one exam to see its syllabus by edition'
           }
           surface="card"
           single

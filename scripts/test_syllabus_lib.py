@@ -58,6 +58,10 @@ class ChunkerEdgeTest(unittest.TestCase):
         self.assertEqual(phrases("risk once aggregated"), ["risk"])
         self.assertEqual(phrases("Provide advice on early retirement"), ["advice", "early retirement"])
 
+    def test_state_inside_a_phrase_is_a_noun(self):
+        self.assertEqual(phrases("Apply Markov multiple state models"), ["Markov multiple state"])   # "models" is generic
+        self.assertEqual(phrases("Describe and state the loss reserve"), ["loss reserve"])
+
     def test_defined_benefit_is_a_name(self):
         self.assertEqual(phrases("Traditional defined benefit plans"), ["Traditional defined benefit plans"])
         self.assertEqual(phrases("the losses defined above"), ["losses"])

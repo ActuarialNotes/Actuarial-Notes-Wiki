@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1d008a2b3fb199491eaab5544efc34fc5724c82b3cb53af35e7bec334e23f795
+  content_hash: sha256:98cb6fafce6afb9d8836e61b0f3836b4fea120898ffef005b2c55a111d1604a5
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for CP-311, all pages, sha256:7dedee1b904e4a1b0614847f5810a87cd25c7f59181beb010e168cfc827ff701 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-311/2026-2027-cp-311-syllabus.pdf"
   open_findings: 0
@@ -29,14 +29,14 @@ verification:
 > [!example]- Introduction to Strategic Management {26–43%}
 > The candidate will understand and apply strategic management concepts and frameworks to develop an [[Business Strategy|organization’s business strategies]] and solutions.
 >
-> 1. Evaluate and apply strategic management concepts, recognizing factors that [[Affect Development|affect development]] and implementation of strategies:
+> 1. Evaluate and apply strategic management concepts, recognizing factors that affect development and implementation of strategies:
 >    - Describe and apply strategic management models including [[Porter's Five Forces|Porter's five forces]] model and value chain analysis
 >    - Assess and recommend an appropriate [[Business-Level Strategy|business-level strategy]] for a given situation
 >    - Assess and recommend an appropriate [[Corporate-Level Strategy|corporate-level strategy]] for a given situation
 >    - Explain the impact of [[Competitive Dynamics|competitive dynamics]] on strategic management
 > 2. Evaluate commonly used [[Business Strategy|business strategies]] and their application under different economic, [[Risk|risk]] and [[External Environment|business environments]]:
 >    - Critique and evaluate internal/organic and [[External-inorganic Growth Strategy|external/inorganic growth strategies]]
->    - Assess and recommend [[Business Strategy|business strategies]] under different [[Business Situation|business situations]] and [[External Environment|market opportunities]], utilizing the applicable strategic or change management models
+>    - Assess and recommend [[Business Strategy|business strategies]] under different business situations and [[External Environment|market opportunities]], utilizing the applicable strategic or change management models
 >
 > **Readings:**
 > - Strategic Management: Concepts and Cases: Competitiveness and Globalization, Concepts, Hitt, Michael, Ireland, Duane, and Hoskisson, Robert, 14th Edition, 2023
@@ -58,14 +58,14 @@ verification:
 > - CP311-108-26: Tying Short Term Decisions to Long Term Strategy (1a, 1b)
 
 > [!example]- Strategic Budgeting, Forecasting, and Value Measures {28–47%}
-> The candidate will understand how [[Strategic Budgeting|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and [[Strategic Budgeting|forecasting]]. The candidate will also understand measures of an organization’s value and their uses in [[Decision Making|decision making]].
+> The candidate will understand how [[Strategic Budgeting|sustainable growth]] and value can be created through [[Strategic Budgeting|strategic budgeting]] and [[Strategic Budgeting|forecasting]]. The candidate will also understand measures of an organization’s value and their uses in [[Decision-Making|decision making]].
 >
 > 1. Explain how [[Strategic Budgeting|strategic budgeting]] and [[Strategic Budgeting|forecasting]] can create value and [[Strategic Budgeting|sustainable growth]]
 > 2. Assess how [[Strategic Budgeting|effective strategic budgeting]] and [[Strategic Budgeting|forecasting]] are in [[Strategic Budgeting|tracking progress]] of an [[Strategic Budgeting|organization’s initiatives]]
 > 3. Demonstrate how an organization’s strategic goals can be effectively incorporated into the [[Strategic Budgeting|financial budgeting]] and [[Strategic Budgeting|forecasting decision making process]]
 > 4. Evaluate and recommend appropriate value measures for an [[Organization|organization]]
 > 5. Assess the impact of performance measures and incentives on key business decisions and [[Stakeholder|stakeholder]] value
-> 6. Assess an [[Organization's Ability|organization’s ability]] to create value and recommend actions to improve value creation
+> 6. Assess an organization’s ability to create value and recommend actions to improve value [[Creation|creation]]
 >
 > **Readings:**
 > - Handbook of Budgeting, Lalli, W.R., 6th Edition, 2012
@@ -86,7 +86,7 @@ verification:
 >     - Ch 43: Banks (2d, 2f)
 
 > [!example]- Decision Modeling and Optimization {13–22%}
-> The candidate will understand how to apply [[Decision Making|decision making]] models to general managerial decisions within specified [[Constraint|constraints]].
+> The candidate will understand how to apply [[Decision-Making|decision making]] models to general managerial decisions within specified [[Constraint|constraints]].
 >
 > 1. Apply fundamental techniques and frameworks of management science to make [[Informed Business|informed business]] decisions
 > 2. Apply statistical and quantification methods to analyze managerial decisions with [[Decision Analysis|uncertain conditions]]
@@ -102,7 +102,7 @@ verification:
 > - CP311-111-26: Deciding How to Decide (3a)
 
 > [!example]- Organizational Behavior {8–13%}
-> The candidate will understand the role [[Organizational Behavior Plays|organizational behavior plays]] in [[Decision-Making|organizational decision-making]] and efficacy.
+> The candidate will understand the role organizational behavior plays in [[Decision-Making|organizational decision-making]] and efficacy.
 >
 > 1. Evaluate the impact of human behavior factors on the effectiveness of [[Decision-Making|decision-making processes]] within organizations
 > 2. Explain the role of [[Cognitive Bias|cognitive biases]] on [[Making Suboptimal Individual|making suboptimal individual]] decisions

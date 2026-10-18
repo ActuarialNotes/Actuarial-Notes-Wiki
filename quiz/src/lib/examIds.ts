@@ -16,6 +16,10 @@ import { wikiExamIdToProgressKey } from './wikiParser'
 export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
   'Financial Mathematics': 'FM',
+  // SRM's bank is the SOA's sample set (`srm-<n>`, sample question n). Unlike
+  // P and FM, the SOA's own subject line isn't the label: the bank says
+  // "Exam SRM", as the CAS banks name their exam.
+  'Exam SRM': 'SRM',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   // The three DISC courses. The Institutes sells their sample questions and

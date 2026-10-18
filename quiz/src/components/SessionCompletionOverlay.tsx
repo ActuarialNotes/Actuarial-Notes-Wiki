@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Loader2, X } from 'lucide-react'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
-import { effectiveOutcome } from '@/lib/quizScore'
+import { effectiveOutcome, quizPoints } from '@/lib/quizScore'
 import { QuestionCard } from '@/components/QuestionCard'
 import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions, questionCredit } from '@/lib/parser'
+import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
@@ -85,15 +85,13 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
   // grades aren't persisted with historical sessions, so partial credit here
   // comes purely from auto-graded multi-part questions. Before load, fall back
   // to the DB's whole-question correct_count.
-  const scoredPoints = loadState.status === 'done'
-    ? loadState.questions.reduce(
-        (sum, q) => sum + questionCredit(q, loadState.responses[q.id]?.chosen, {}),
-        0,
-      )
-    : session.correct_count
-  const pct = session.total_questions > 0
-    ? Math.round((scoredPoints / session.total_questions) * 100)
-    : 0
+  const points = loadState.status === 'done'
+    ? quizPoints(loadState.questions, loadState.responses, {})
+    : null
+  const scoredPoints = points ? points.earned : session.correct_count
+  const pct = points
+    ? points.percentage
+    : session.total_questions > 0 ? Math.round((scoredPoints / session.total_questions) * 100) : 0
 
   return (
     <div
@@ -154,6 +152,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
                 percentage: pct,
                 correctCount: session.correct_count,
                 scoredPoints,
+                totalPoints: points && !points.unitPoints ? points.possible : undefined,
                 totalQuestions: session.total_questions,
                 timeTakenSeconds: session.time_taken_seconds,
                 isLoggedIn,

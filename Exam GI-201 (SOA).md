@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:3e135b36a821bbf5cc25719b80e49f6b939efa8b7b5e88d35c597a12b8850556
+  content_hash: sha256:f801a536185cbbf3c8e1a7f7c723752b0de30430a67994b550e5912705e88ebd
   sources:
     - "SOA, Nov 2026/Mar 2027 syllabus PDF for GI-201, all pages, sha256:4dbbf9122436567ff8e22809f250e5be00e12897cd6b67c6ed52e3f53e05dcc9 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-201/2026-2027-gi-201-syllabus.pdf"
   open_findings: 1
@@ -31,13 +31,13 @@ verification:
 >
 > 1. Describe the various core and supporting functions of a general [[Insurer|insurance company]].
 > 2. Differentiate among the various classifications of [[Insurer|insurers]].
-> 3. Describe the marketing and distribution of general [[Insurance Policy|insurance products]].
+> 3. Describe the marketing and [[Insurance Distribution Systems|distribution]] of general [[Insurance Policy|insurance products]].
 > 4. Understand the processes for [[Underwriting|underwriting]] and [[Ratemaking|pricing general insurance policies]].
 > 5. Describe the activities and challenges in the [[Claims Handling|claim handling process]].
 > 6. Describe the goals of [[Risk Control|insurer risk]] control activities.
 > 7. Explain why [[Premium Audit|premium audits]] are conducted.
 > 8. Demonstrate knowledge of general [[Insurance Risk|insurance risks]], perils, product characteristics / issues, and contracts.
-> 9. Describe and compare the different types of [[Reinsurance|reinsurance]] and [[Insurance-Linked Securities|risk mitigation instruments]].
+> 9. Describe and compare the different [[Types of Reinsurance|types of reinsurance]] and [[Insurance-Linked Securities|risk mitigation instruments]].
 > 10. Demonstrate knowledge of the issues regarding [[International Insurance|international business]] for [[Insurer|insurance companies]].
 >
 > **Readings:**
@@ -57,7 +57,7 @@ verification:
 > 4. Discuss the issues regarding [[Usage-Based Insurance|usage-based insurance]] and telematics in [[Personal Auto Policy|automobile insurance]].
 > 5. Describe the development of general insurance programs controlled by government or [[Government and Industry Insurance Programs|collective insurance industry organizations]] and their mechanisms of operation.
 > 6. Discuss the issues with the use of [[Credit-Based Insurance Scoring|credit scores]] by [[Insurer|insurers]].
-> 7. Understand the function and regulation of price [[Optimization|optimization]].
+> 7. Understand the function and regulation of [[Price Optimization|price optimization]].
 > 8. Outline the function and regulation of [[Captive|captives]].
 > 9. Understand the functions and [[Insurance Regulation|regulatory environment]] for [[Reinsurance|reinsurance]].
 >
@@ -153,10 +153,10 @@ verification:
 >     - Ch. 13: General Insurance Financial Ratings (excluding sections 13.4.3-13.4.6.4, 13.5.2 and the first paragraph on page 376 after the Insight box)
 
 > [!example]- Responsibilities of the Actuary {5–10%}
-> The candidate will understand the standards of practice and professionalism required of the [[Actuary|actuary]].
+> The candidate will understand the [[Actuarial Standards of Practice|standards of practice]] and professionalism required of the [[Actuary|actuary]].
 >
 > 1. Describe, interpret and apply [[International Actuarial Association|professionalism principles]] as defined by the [[International Actuarial Association]] ([[International Actuarial Association|IAA]]).
-> 2. Describe, interpret and apply Standards of Practice as defined by the [[International Actuarial Association|IAA]].
+> 2. Describe, interpret and apply [[Actuarial Standards of Practice|Standards of Practice]] as defined by the [[International Actuarial Association|IAA]].
 > 3. Demonstrate knowledge of the general [[Statement of Actuarial Opinion|insurance actuarial opinion]] and the role of the [[Appointed Actuary|appointed actuary]].
 > 4. Describe and apply the concept of [[Materiality|materiality]].
 >

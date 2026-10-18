@@ -20,6 +20,13 @@ import { compareExamLabels } from './resourceExams'
 
 export type VintageChange = 'added' | 'dropped'
 
+// A changed reading wears the diff's own colours (docs/style-guide.md §4.1):
+// green for what an edition added, red for what it dropped.
+export const VINTAGE_CHANGE_RING: Record<VintageChange, string> = {
+  added: 'ring-2 ring-green-500/60',
+  dropped: 'ring-2 ring-red-500/50',
+}
+
 const key = (name: string) => name.trim().toLowerCase()
 
 /**

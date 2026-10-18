@@ -3,7 +3,7 @@ import { ShieldCheck, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { FACT_CHECK_UI_ENABLED } from '@/lib/featureFlags'
 import { factCheckBadge, type Verification } from '@/lib/verification'
-import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_TONE_ICONS } from '@/lib/factCheckTone'
+import { FACT_CHECK_TONE_CLASSES, FACT_CHECK_ICONS } from '@/lib/factCheckTone'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import { useIsReadingPdf } from '@/hooks/usePdfReader'
 import { OverlayPortal } from '@/components/ui/OverlayPortal'
@@ -44,7 +44,7 @@ export function FactCheckBadge({
   if (!FACT_CHECK_UI_ENABLED) return null
 
   const badge = factCheckBadge(verification)
-  const Icon = FACT_CHECK_TONE_ICONS[badge.tone]
+  const Icon = FACT_CHECK_ICONS[badge.kind]
 
   return (
     <>

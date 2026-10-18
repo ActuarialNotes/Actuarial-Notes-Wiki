@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:b1c6fe9a2ee769a3c9b90061978aff5f42f4186f4e97b7467a194dce98d56fa3
+  content_hash: sha256:9b96ee8536f5f1d0e854d4aa2c15b3657f42244bfb172c7edd4843f9d2cb0b14
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for CP-351, all pages, sha256:1064f311cfb7c1ae88c5fd045edb5c776c9ccbf8b7538da0d64d63b0df4755d5 — https://www.soa.org/globalassets/assets/files/edu/2026/cp-351/2026-2027-cp-351-syllabus.pdf"
   open_findings: 0
@@ -27,9 +27,9 @@ verification:
 ## Learning Objectives
 
 > [!example]- Objectives of Asset Liability Management {5–20%}
-> The candidate will understand the objectives of [[Asset-Liability Management|Asset Liability]] Management ([[Asset-Liability Management|ALM]]).
+> The candidate will understand the objectives of [[Asset-Liability Management|Asset Liability Management]] ([[Asset-Liability Management|ALM]]).
 >
-> 1. Explain the principles of [[Asset-Liability Management|Asset Liability]] Management
+> 1. Explain the principles of [[Asset-Liability Management|Asset Liability Management]]
 > 2. Understand the lessons learned from [[ALM Failure|ALM failures]]
 > 3. Demonstrate an understanding of various [[ALM Risk|ALM risks]]
 > 4. Describe how different [[Pension|pension]] and [[Embedded Option|insurance contracts generate embedded options]]

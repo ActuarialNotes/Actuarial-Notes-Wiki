@@ -16,32 +16,20 @@
 
 import { extractSourceMaterial } from './sourceMaterial'
 import { compareExamLabels, examPillLabel, type ExamPageSource } from './resourceExams'
+import { wikiExamIdToProgressKey } from './wikiParser'
+import { isStoreExamKey } from './storeExams'
 
 /**
  * The exam a reading-list label names — the labels `lib/resourceExams.ts`
- * prints on a resource's pills ("Exam P-1", "Exam 6C") — or undefined for an
- * exam the Store doesn't carry (the SOA exams past FM), whose readings stay off
- * its shelf.
+ * prints on a resource's pills ("Exam P-1", "Exam 6C", "Exam GH-201U") — as
+ * the exam_progress key the Store files it under (`P`, `CAS-6`, `FSA-GH201`),
+ * or undefined for a requirement the Store doesn't carry (a VEE, a module),
+ * whose readings stay off its shelf. Regional variants share their exam's key,
+ * as they do on the tracks: 6C and 6U are both Exam 6.
  */
-const READING_LABEL_KEYS: Readonly<Record<string, string>> = {
-  'Exam P-1': 'P',
-  'Exam FM-2': 'FM',
-  'Exam MAS-I': 'MAS-I',
-  'Exam MAS-II': 'MAS-II',
-  'Exam DISC-IA': 'CAS-IA',
-  'Exam DISC-DA': 'CAS-DA',
-  'Exam DISC-RM': 'CAS-RM',
-  'Exam 5': 'CAS-5',
-  'Exam PCPA': 'CAS-PCPA',
-  'Exam 6C': 'CAS-6',
-  'Exam 6U': 'CAS-6',
-  'Exam 7': 'CAS-7',
-  'Exam 8': 'CAS-8',
-  'Exam 9': 'CAS-9',
-}
-
 export function readingExamKey(label: string): string | undefined {
-  return READING_LABEL_KEYS[label]
+  const key = wikiExamIdToProgressKey(label.replace(/^Exam\s+/i, '').trim())
+  return isStoreExamKey(key) ? key : undefined
 }
 
 /** One exam's assignment of the book. */

@@ -9,7 +9,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:9ae507a4a87e3b7a64c1304333e494f824c5803d806607dc634fcaae11700d5a
+  content_hash: sha256:3e6adf08ec2154da7e4183379b095dd00b625bd8ead2d9d0f4986927cbfcc301
   sources: []
   open_findings: 0
   open_critical: 0
@@ -43,74 +43,74 @@ Welcome to the Decision Making and Communication (DMAC) module and congratulatio
 ## Learning Objectives
 
 > [!example]- Integrated Decision-Making Process
-> During this section you will learn more about the [[Integrated Decision-Making Process]]. You will learn how the Society of [[Actuary|Actuaries]] (SOA) [[Competency Framework Align|Competency Framework aligns]] with this [[Decision-Making|decision-making process]]. This section also [[Exposes You|exposes you]] to more working preferences so that you can reflect on how these [[Preferences Might Affect Decision Making|preferences might affect decision making]] and communication.
+> During this section you will learn more about the [[Integrated Decision-Making Process]]. You will learn how the Society of [[Actuary|Actuaries]] (SOA) [[Competency Framework Align|Competency Framework aligns]] with this [[Decision-Making|decision-making process]]. This section also exposes you to more working preferences so that you can reflect on how these preferences might affect [[Decision-Making|decision making]] and communication.
 >
 > 1. Describe the [[Integrated Decision-Making Process]].
 > 2. List the [[Main Stage|main stages]] and elements of the [[Integrated Decision-Making Process]].
 > 3. Relate the [[SOA Competency]] Framework to the [[Integrated Decision-Making Process]].
-> 4. Describe how [[Communication Skill|communication skills]] support a [[Successful Decision-Making Process|successful decision-making process]].
+> 4. Describe how communication skills support a [[Successful Decision-Making Process|successful decision-making process]].
 > 5. Describe the method of [[Processing Information Known|processing information known]] as chunking.
 
 > [!example]- Build Team
-> In this section you will learn about Stage 1: Build Team. In addition to [[Completing Reading|completing readings]] and other activities, you will also [[Continue Your|continue your]] work on the [[ERM Case Study|ERM case study]].
+> In this section you will learn about Stage 1: Build Team. In addition to [[Completing Reading|completing readings]] and other activities, you will also continue your work on the [[ERM Case Study|ERM case study]].
 >
 > 1. Explain the key concepts of Stage 1: Build Team in the [[Integrated Decision-Making Process]].
 > 2. Stage 1A: [[Enlist Everyone]]
 >    - Explain how to [[Enlist Stakeholder|enlist stakeholders]].
 >    - Explain the importance of [[Enlisting Everyone|enlisting everyone]].
-> 3. Stage 1B: Set [[Foundation]]
+> 3. Stage 1B: Set Foundation
 >    - Explain how to [[Discover Shared Hope|discover shared hopes]].
->    - Explain how to uncover the [[Real|real]] issues.
->    - Explain how to identify potential [[Solution|solutions]].
->    - Describe how [[Communication Skills Help You|communication skills help you]] build the team and identify options.
+>    - Explain how to uncover the real issues.
+>    - Explain how to identify potential solutions.
+>    - Describe how communication skills help you build the team and identify options.
 >    - Explain the importance of setting this foundation before [[Investigating Option|investigating options]] and making decisions.
 > 4. Describe [[Effective Facilitation|effective facilitation]] and listening techniques.
-> 5. Describe how working [[Preferences Affect Team Building|preferences affect team building]] and communication during the Build [[Team Stage|Team stage]].
-> 6. Identify the competency framework elements that are most relevant and important to the Build [[Team Stage|Team stage]] of [[Decision Making|decision making]].
+> 5. Describe how working preferences affect [[Team Building|team building]] and communication during the Build [[Team Stage|Team stage]].
+> 6. Identify the competency framework elements that are most relevant and important to the Build [[Team Stage|Team stage]] of [[Decision-Making|decision making]].
 > 7. Evaluate the effectiveness of [[Emotional Recognition Strategy|emotional recognition strategies]] in [[Improving Workplace Communication|improving workplace communication]] and teamwork
-> 8. Develop strategies for continuously [[Improving Interpersonal Skill|improving interpersonal skills]] through self-awareness, feedback, and [[Ongoing Development Activity|ongoing development activities]]
-> 9. Develop personalized techniques or routines to [[Maintain Focus|maintain focus]] and presence during conversations
+> 8. Develop strategies for continuously [[Improving Interpersonal|improving interpersonal]] skills through self-awareness, feedback, and [[Ongoing Development Activity|ongoing development activities]]
+> 9. Develop personalized techniques or routines to maintain focus and presence during [[Conversation|conversations]]
 > 10. Develop a set of [[Probing Question|probing questions]] tailored to different [[Problem-Solving Scenario|problem-solving scenarios]] to [[Ensure Comprehensive|ensure comprehensive]] understanding.
 
 > [!example]- Investigate Options
-> This section, [[Investigate Option|Investigate Options]], [[Takes You|takes you]] to the [[Next Stage|next stage]] in the [[Integrated Decision-Making Process]] where the team will investigate each of the possible options. During this stage, the team will gather the right information and evidence and will establish criteria by which to assess the options.
+> This section, Investigate Options, takes you to the [[Next Stage|next stage]] in the [[Integrated Decision-Making Process]] where the team will investigate each of the possible options. During this stage, the team will gather the right information and evidence and will establish criteria by which to assess the options.
 >
-> 1. Explain the key concepts of the [[Investigate Options Stage|Investigate Options stage]] in the [[Integrated Decision-Making Process]].
+> 1. Explain the key concepts of the Investigate [[Options Stage|Options stage]] in the [[Integrated Decision-Making Process]].
 > 2. Explain how to gather the right information within the [[Decision-Making|decision-making process]].
 > 3. Explain how to [[Get Everything|get everything]] on the table to contribute to the [[Decision-Making|decision-making process]].
-> 4. Describe how [[Communication Skills Help You Investigate Option|communication skills help you investigate options]] and establish criteria.
-> 5. Manage and [[Resolve Team Conflict|resolve team conflicts]] effectively, including [[Maintaining Composure|maintaining composure]] in [[Uncomfortable Situation|uncomfortable situations]].
-> 6. Describe how working [[Preferences Contribute|preferences contribute]] to [[Effective Information Gathering|effective information gathering]] and analysis throughout the [[Investigate Options Stage|Investigate Options stage]].
-> 7. Identify the Society of [[Actuary|Actuaries]] (SOA) Competency Framework elements that are most relevant and important to the [[Investigate Options Stage|Investigate Options stage]] of [[Decision Making|decision making]].
+> 4. Describe how communication skills help you investigate options and [[Establish|establish]] criteria.
+> 5. Manage and [[Resolve Team Conflict|resolve team conflicts]] effectively, including [[Maintaining Composure|maintaining composure]] in uncomfortable situations.
+> 6. Describe how working [[Preferences Contribute|preferences contribute]] to [[Effective Information Gathering|effective information gathering]] and analysis throughout the Investigate [[Options Stage|Options stage]].
+> 7. Identify the Society of [[Actuary|Actuaries]] (SOA) Competency Framework elements that are most relevant and important to the Investigate [[Options Stage|Options stage]] of [[Decision-Making|decision making]].
 > 8. Evaluate [[Team Dynamics|team dynamics]] and inclusivity by assessing how well [[Diverse Perspective|diverse perspectives]] are integrated and [[Unconscious Biase|unconscious biases]] are managed.
 > 9. Evaluate the effectiveness of [[Conflict Management Strategy|conflict management strategies]] in [[Improving Team Dynamics|improving team dynamics]] and [[Resolving Difference|resolving differences]].
 > 10. Develop a [[Personal Strategy|personal strategy]] to improve awareness of [[Nonverbal Communication Cue|nonverbal communication cues]], both in yourself and others, to [[Foster Deeper|foster deeper]] understanding and connection in conversations.
-> 11. Evaluate the [[Relative Success|relative success]] of different reactions to [[Uncomfortable Situation|uncomfortable situations]] and prioritize [[Non-Emotional Response|non-emotional responses]].
+> 11. Evaluate the [[Relative Success|relative success]] of different reactions to uncomfortable situations and prioritize [[Non-Emotional Response|non-emotional responses]].
 
 > [!example]- Make Decision
-> In this section, Make Decision, you will learn about the Make [[Decision Stage|Decision stage]] of the [[Integrated Decision-Making Process]]. This section will explain a process for making the decision. Completing this stage is a milestone. By reaching and confirming a [[Shared Decision|shared decision]] that will [[Best Meet|best meet]] the needs of all stakeholders, the steps and activities in the Make [[Decision Stage Lead|Decision stage lead]] to the [[Team's Ultimate|team’s ultimate]] goal of implementing an [[Effective Decision|effective decision]].
+> In this section, Make Decision, you will learn about the Make [[Decision Stage|Decision stage]] of the [[Integrated Decision-Making Process]]. This section will explain a process for making the decision. Completing this stage is a milestone. By reaching and confirming a [[Shared Decision|shared decision]] that will best meet the needs of all stakeholders, the steps and activities in the Make [[Decision Stage Lead|Decision stage lead]] to the [[Team's Ultimate|team’s ultimate]] goal of implementing an [[Effective Decision|effective decision]].
 >
 > 1. Explain the key concepts of the Make [[Decision Stage|Decision stage]] in the [[Integrated Decision-Making Process]].
 > 2. Explain how to write down choices that support [[Shared Hope|shared hopes]] within the [[Decision-Making|decision-making process]].
 > 3. Explain how to map the solutions within the [[Decision-Making|decision-making process]].
-> 4. Describe how [[Communication Skills Help You|communication skills help you]] make a decision.
+> 4. Describe how communication skills help you make a [[Decision|decision]].
 > 5. Describe how working [[Preferences Contribute|preferences contribute]] to the Make [[Decision Stage|Decision stage]].
 > 6. Identify the Society of [[Actuary|Actuaries]] (SOA) Competency Framework elements that are most relevant and important to the Make [[Decision Stage|Decision stage]].
 > 7. Evaluate the effectiveness of [[Synthesizing Multiple Point|synthesizing multiple points]] of view in achieving consensus and [[Promoting Collaboration|promoting collaboration]].
-> 8. Choose appropriate techniques to [[Gain Alignment|gain alignment]] when seeking the [[Best Decision|best decision]].
+> 8. Choose appropriate techniques to [[Gain Alignment|gain alignment]] when seeking the best decision.
 
 > [!example]- Implement Decision
-> This section will demonstrate the importance of preparing and executing a [[Project Plan|project plan]] to implement the decision. In addition, it will discuss the [[Essential Action|essential action]] of effectively monitoring the results. This section will also explain how the [[Team Maintains Focus|team maintains focus]] and energy during the implementation of the decision. It will also discuss how to celebrate the [[Team's Success|team’s successes]].
+> This section will demonstrate the importance of preparing and executing a [[Project Plan|project plan]] to implement the decision. In addition, it will discuss the essential action of effectively monitoring the results. This section will also explain how the team maintains focus and energy during the implementation of the decision. It will also discuss how to celebrate the [[Team's Success|team’s successes]].
 >
 > 1. Explain the key concepts of the Implement [[Decision Stage|Decision stage]] in the [[Integrated Decision-Making Process]].
 > 2. Explain how the [[Integrated Decision-Making Process Fit|Integrated Decision-Making Process fits]] into the actuarial Control Cycle.
 > 3. Describe additional teams that may be involved when implementing the [[Decision|decision]].
 > 4. Explain how to create a [[Project Plan|project plan]] and implement the decision.
 > 5. Explain how to monitor the results and celebrate the [[Team's Success|team’s success]].
-> 6. Describe how [[Communication Skills Help You|communication skills help you]] to implement the decision.
-> 7. Develop [[Communication Strategy|communication strategies]] tailored to audiences with [[Diverse Background|diverse backgrounds]] and experience that [[Promote Inclusivity|promote inclusivity]] and clarity.
+> 6. Describe how communication skills help you to implement the [[Decision|decision]].
+> 7. Develop [[Communication Strategy|communication strategies]] tailored to audiences with [[Diverse Background|diverse backgrounds]] and experience that promote inclusivity and clarity.
 > 8. Describe how working [[Preferences Contribute|preferences contribute]] to [[Team Building|team building]] and [[Communication Throughout|communication throughout]] the Implement [[Decision Stage|Decision stage]].
-> 9. Describe how to [[Adapt Your Leadership|adapt your leadership]] approach to [[Suit Team Dynamics|suit team dynamics]] and [[Project Need|project needs]].
+> 9. Describe how to adapt your leadership approach to [[Suit Team Dynamics|suit team dynamics]] and [[Project Need|project needs]].
 > 10. Identify the Society of [[Actuary|Actuaries]] (SOA) Competency Framework elements that are most relevant and important to the Implement [[Decision Stage|Decision stage]].
 > 11. Evaluate the effectiveness of [[Project Management Strategy|project management strategies]] in [[Optimizing Resource|optimizing resources]], adhering to timelines, and staying within [[Budgetary Constraint|budgetary constraints]].
 

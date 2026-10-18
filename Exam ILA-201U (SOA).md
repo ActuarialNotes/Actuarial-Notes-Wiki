@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:46e6009b52903acdb35a56f3b0969822224e44a966aa431796f77dd4767eb9d9
+  content_hash: sha256:c1c648eb65e9bef7137054f9d61057a75df6a29bcd98f35820fa85bc03834cd8
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for ILA-201U, all pages, sha256:daa04ce74955f3f9410aa18ae501d020420272b16de1fe550a788bf89c1d4e87 — https://www.soa.org/globalassets/assets/files/edu/2026/ila-201u/2026-2027-ila-201u-syllabus.pdf"
   open_findings: 0
@@ -63,9 +63,9 @@ verification:
 > - Targeted Improvements Interactive Model (1b)
 
 > [!example]- Capital Management {5–20%}
-> The candidate will understand how to explain and apply the methods, approaches and tools of [[Regulatory Capital|financial capital]] management for [[Life Insurance Company|life insurance company]] under a US regulatory framework.
+> The candidate will understand how to explain and apply the methods, approaches and tools of [[Regulatory Capital|financial capital]] management for [[Life Insurance Company|life insurance company]] under a [[State and Federal Insurance Regulation|US regulatory]] framework.
 >
-> 1. Explain and calculate [[Regulatory Capital|required capital]] under a US regulatory framework
+> 1. Explain and calculate [[Regulatory Capital|required capital]] under a [[State and Federal Insurance Regulation|US regulatory]] framework
 > 2. Describe the purpose and application of [[Economic Capital|economic capital]]
 > 3. Explain and evaluate the respective perspectives of regulators, investors, [[Policyholder|policyholders]] and [[Insurer|insurance company]] management regarding the role and determination of [[Capital|capital]]
 > 4. Explain and apply methods in [[Capital|capital]] management
@@ -78,9 +78,9 @@ verification:
 > - ILA201-800-25: Theory of Risk Capital in Financial Firms (2d)
 
 > [!example]- Management and Evaluation of Life Insurance Risks {5–20%}
-> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of diversification, [[Rating Agency|crediting rating agency frameworks]], and the assessment of [[Risk|risk]] management.
+> The candidate will understand types of [[Insurance Risk|life insurance risks]], the impacts of diversification, [[Rating Agency|crediting rating agency frameworks]], and the assessment of [[Risk Management|risk management]].
 >
-> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and offsets between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
+> 1. Analyze the impact of [[Risk Diversification|risk diversification]], including considerations for modeling and [[Offset Variable|offsets]] between [[Mortality|mortality]] and [[Longevity Risk|longevity risk]]
 > 2. Understand the role and framework used by [[Rating Agency|credit rating agencies]] for evaluating [[Life Insurance Company|life insurance companies]]
 > 3. Explain and understand the use and application of the [[ORSA|Own Risk Solvency Assessment]] ([[ORSA]]) report
 >

@@ -167,6 +167,77 @@ class NamingTest(unittest.TestCase):
                          "ASOP 12 - Risk Classification (ASB - 2005)")
 
 
+class LinkerTest(unittest.TestCase):
+    """The linker grows a phrase the chunker cut short to the page it names, and
+    links nothing for the sake of it on a sub-item or a preamble (C17's sequel)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.linker = sw.Linker(vl.Vault(), "srm-1")
+
+    def test_a_cut_short_phrase_grows_to_its_page(self):
+        self.assertEqual(self.linker.link("Apply principal components analysis to transform data"),
+                         "Apply [[Principal Components Analysis|principal components analysis]] to transform data")
+        self.assertEqual(self.linker.link("Fit and validate a generalized linear model."),
+                         "Fit and validate a [[Generalized Linear Model|generalized linear model]].")
+        self.assertIn("[[Ordinary Least Squares|ordinary least squares]]",
+                      self.linker.link("Fit an ordinary least squares model"))
+
+    def test_growth_never_cuts_into_the_next_phrase_or_crosses_a_verb(self):
+        line = self.linker.link("basic forms of proportional and excess of loss reinsurance")
+        self.assertNotIn("[[Excess of Loss|excess of loss]] reinsurance", line)
+
+    def test_a_sub_item_links_only_what_names_a_concept(self):
+        self.assertEqual(self.linker.link("Graphical procedures", fallback=False), "Graphical procedures")
+        # …while an objective with nothing else to link still names something
+        self.assertIn("[[", self.linker.link("Graphical procedures"))
+
+    def test_verbs_the_chunker_missed_cut_a_phrase(self):
+        self.assertEqual([p for _, _, p in sl.noun_phrases("describe how changes in the parameters affect the distributions")],
+                         ["parameters", "distributions"])   # "changes" is generic
+
+
+class ChosenTest(unittest.TestCase):
+    """A re-render keeps the Source Material links a page already carries (C17)."""
+
+    PAGE = """## Source Material
+> [!answer]- Source Material
+>
+> - [[Centralization (TMP - 2019)|Centralization, Part 1, Nov 2019]]
+>      - Outcomes 3a
+> - [[Centralization (TMP - 2020)|Centralization, Part 2, Apr 2020]]
+> - 1 A footnote the extractor read as a reading.
+"""
+
+    def test_reads_the_page_as_a_table(self):
+        chosen = sw.Chosen(self.PAGE)
+        self.assertEqual(chosen.target["Centralization, Part 1, Nov 2019"], "Centralization (TMP - 2019)")
+        self.assertEqual(chosen.target["Centralization, Part 2, Apr 2020"], "Centralization (TMP - 2020)")
+        self.assertEqual(chosen.plain, {"1 A footnote the extractor read as a reading."})
+
+    def test_a_key_concepts_line_survives_a_re_render(self):
+        page = (
+            "## Learning Objectives\n\n"
+            "> [!example]- Profit Analysis {10%}\n"
+            "> 2. Analyze and interpret gains by [[Source|source]].\n"
+            ">    - *Key concepts:* [[Analysis of Surplus]]\n"
+        )
+        chosen = sw.Chosen(page)
+        self.assertEqual(chosen.key_concepts, {"Analyze and interpret gains by source.":
+                                               ["   - *Key concepts:* [[Analysis of Surplus]]"]})
+
+    def test_every_generated_page_re_renders_unchanged(self):
+        """`syllabus_write.py --all --check` is clean: rendering a page over itself
+        changes nothing, so a new sitting's render shows only the sitting's changes."""
+        vault = vl.Vault()
+        for wiki_id in sorted(os.listdir(sw.SYLLABUS_DIR)):
+            json_path = os.path.join(sw.SYLLABUS_DIR, wiki_id, "syllabus.json")
+            if not os.path.exists(json_path):
+                continue
+            with self.subTest(exam=wiki_id):
+                self.assertFalse(sw.write(wiki_id, vault, check=True))
+
+
 class VaultTest(unittest.TestCase):
     """Every page the pipeline wrote still says what its syllabus says."""
 

@@ -45,6 +45,17 @@ export function examQuizTopic(fileName: string): string | undefined {
 }
 
 /**
+ * The study guide a quiz bank answers to — the exam page whose **Start Quiz**
+ * draws from `topic` — as its vault file name, or undefined when no page does.
+ * The inverse of `examQuizTopic`, so the quiz builder's **Study Guide** button
+ * and the study guide's **Start Quiz** button are one round trip.
+ */
+export function examStudyGuideFor(syllabi: WikiExamSyllabus[], topic: string): string | undefined {
+  if (!topic) return undefined
+  return syllabi.find(s => s.fileName && examQuizTopic(s.fileName) === topic)?.fileName
+}
+
+/**
  * The study guides a resource is a reading for — the exam pages whose `Source
  * Material` callout links it — in ladder order (Exam P before Exam 7). Empty
  * when no exam lists it, which is what greys out a resource's **Open in Study

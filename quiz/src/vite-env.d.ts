@@ -29,6 +29,11 @@ interface ImportMetaEnv {
    */
   readonly VITE_ACTUARIA_PREVIEW?: string
   readonly VITE_COWORK_PREVIEW?: string
+  /**
+   * `on` lets a page that asks for it (localStorage `actuarial_tutor_preview`)
+   * see the Tutor signed out — the e2e suite's build. See `TUTOR_OPEN_TO_ALL`.
+   */
+  readonly VITE_TUTOR_PREVIEW?: string
 }
 
 // Google Analytics, defined by `initAnalytics()` (lib/analytics.ts) only on a

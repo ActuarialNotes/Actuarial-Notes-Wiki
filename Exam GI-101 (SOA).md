@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:d9d194ae7be116b7b724d159b4c5068aec1a79088f518449d3075ced99c2c4b8
+  content_hash: sha256:23f59b5a58ab47ae8a41f180c41fbe296299bc4727a1ad50f31e2f36d5c3f9a8
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GI-101, all pages, sha256:deff8d9676e026ae827058576884bedf8a89f8c05d6edaeff432713d147efd48 — https://www.soa.org/globalassets/assets/files/edu/2026/gi-101/2026-2027-gi-101-syllabus.pdf"
   open_findings: 0
@@ -27,10 +27,10 @@ verification:
 ## Learning Objectives
 
 > [!example]- Introduction and Key Considerations {0–6%}
-> The candidate will understand the key considerations for and key concepts underlying general [[Insurance|insurance]] actuarial work.
+> The candidate will understand the key considerations for and key concepts underlying general insurance actuarial work.
 >
 > 1. Identify sources of [[Professional Responsibilities of the Actuary|professionalism requirements]] and good practice
-> 2. Demonstrate knowledge of [[Good|good]] practice related to actuarial work
+> 2. Demonstrate knowledge of good practice related to actuarial [[Work|work]]
 > 3. Use the actuarial control cycle to [[Frame|frame]] actuarial work
 > 4. Understand the components of [[Ultimate Loss|ultimate values]]
 > 5. Explain how estimates of [[Ultimate Loss|ultimate values]] are used
@@ -74,7 +74,7 @@ verification:
 > 2. Identify and describe good practice related to projecting [[Ultimate Loss|ultimate claims]] with regard to [[Reserving Data Organization|required data]], [[Large Loss|large claims]], and comparison of current to prior actuarial work
 > 3. Identify the types of [[Development Triangle|development triangles]] that can be used for [[Data Diagnostic Analysis|investigative testing]]
 > 4. Analyze [[Development Triangle|development triangles]] for [[Data Diagnostic Analysis|investigative testing]]
-> 5. Describe the key assumptions underlying the following projection methods: development method, [[Frequency-Severity Method|development-based frequency-severity]] method, expected method, [[Bornhuetter Ferguson]] method, Benktander method, [[Cape Cod]] method, and [[Generalized Cape Cod Method|Generalized Cape Cod]] method
+> 5. Describe the key assumptions underlying the following projection methods: development method, [[Frequency-Severity Method|development-based frequency-severity]] method, expected method, [[Bornhuetter-Ferguson Method|Bornhuetter Ferguson method]], [[Benktander Method|Benktander method]], [[Cape Cod Method|Cape Cod method]], and [[Generalized Cape Cod Method|Generalized Cape Cod method]]
 > 6. Demonstrate knowledge of good practice related to projecting [[Ultimate Loss|ultimate values]]
 > 7. Estimate [[Ultimate Loss|ultimate values]] using the methods cited in (e)
 > 8. Describe the [[Berquist-Sherman Method|Berquist-Sherman data]] adjustments and their key assumptions
@@ -122,8 +122,8 @@ verification:
 > 3. Explain the requirements for loadings for catastrophes and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
 > 4. Calculate loadings for catastrophes and [[Large Loss|large claims]]
 > 5. Apply loadings for catastrophes and [[Large Loss|large claims]] in [[Ratemaking|ratemaking]]
-> 6. Describe the [[Claim|claim]] ratio and [[Pure Premium|pure premium]] methods of [[Ratemaking|ratemaking]]
-> 7. Calculate indicated rates and rate changes using the [[Claim|claim]] ratio and [[Pure Premium|pure premium]] methods
+> 6. Describe the [[Claim|claim]] ratio and [[Pure Premium Method|pure premium methods]] of [[Ratemaking|ratemaking]]
+> 7. Calculate indicated rates and [[Rate Change|rate changes]] using the [[Claim|claim]] ratio and [[Pure Premium Method|pure premium methods]]
 > 8. Demonstrate the use of [[Credibility|credibility]] in [[Ratemaking|ratemaking]]
 >
 > **Readings:**
@@ -134,7 +134,7 @@ verification:
 > [!example]- Analyze and Evaluate Real-Life Scenarios (Included in Topics 2, 3, 5 & 6) {0%}
 > The candidate will be able to define an approach for actuarial analyses supporting [[Financial Reporting|financial reporting]] and [[Ratemaking|ratemaking]] analyses under various [[Real-Life Scenario|real-life scenarios]]. The candidates will be able to define [[Self-Insurance Funding|funding requirements]] for self-insurers.
 >
-> 1. Identify data and information [[Requirement|requirements]]
+> 1. Identify [[Data|data]] and information requirements
 > 2. [[Data Diagnostic Analysis|Conduct investigative testing]]
 > 3. Choose projection methods to estimate [[Ultimate Loss|ultimate values]]
 > 4. Estimate [[Ultimate Loss|ultimate values]]

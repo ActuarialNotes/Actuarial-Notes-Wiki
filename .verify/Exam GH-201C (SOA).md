@@ -57,3 +57,14 @@ created: 2026-10-09
 - checks_run: Delta re-check after PR #1629 (commit 3ee3ec5, 'retarget exam links'). Last verified 2026-10-10 at commit 2c83a177: that version's recorded content_hash recomputes. git diff 2c83a177..HEAD: 4 line(s) changed, all in Readings/Source Material reading lines; with [[target|display]] reduced to its display text the page is byte-identical to the verified version (only link targets moved). Every new target resolves to an existing Resources/Books page describing the document the citation names, and each target page's On the syllabus callout names this exam. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block; each changed reading line, links stripped, located verbatim in the PDF text. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors. SOA's exam page for this exam, fetched today, links this one syllabus PDF.
 - sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf
 - note: Verified high. Words unchanged since the 2026-10-10 verification; only reading-link targets moved, each to the page for the same document. GH201-693-26 (LICAT) now links the ILA201-604-25 LICAT page (OSFI LICAT 2025, issued Nov 2024), whose On the syllabus callout carries this GH-201C reading and its chapter list: same guideline, one page for both exams. Concept-link targets were not changed by the delta and were not judged.
+
+## [C-006] Validation pass — verified (delta re-check)
+- entry_type: comment
+- author: agent:validate-v1
+- run_id: 2026-10-18T16:49Z/a769
+- date: 2026-10-18
+- status_set: verified
+- confidence: high
+- checks_run: Delta re-check after a link-only re-render (syllabus_write.py: reading links kept as the page chose them, cut-short phrases grown to the page they name, noise links dropped; content plan Phase 3, C17). The verified version is the one at 3a78434d. 2 line(s) changed; with links reduced to their text and *Key concepts:* lines set aside, the page is byte-identical to the verified version. Syllabus PDF re-fetched today: sha256 identical to the page's syllabus block. syllabus_lint fidelity (every topic, weight, objective, outcome and sub-item word for word vs .syllabus JSON): 0 errors; syllabus_write --all --check clean.
+- sources_checked: SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-201C, all pages, sha256:60999330e3666841b42b153f750e2200e44e15b790f18c356f68e5b709330b4b — https://www.soa.org/globalassets/assets/files/edu/2026/gh-201c/2026-2027-gh-201c-syllabus.pdf
+- note: Verified high. Words unchanged; only link markup changed. Concept-link targets were not judged.

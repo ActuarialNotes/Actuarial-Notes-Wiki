@@ -4,7 +4,9 @@ import {
   parseVerificationLog,
   openFindings,
   openCriticalFindings,
+  checkerName,
   factCheckBadge,
+  factCheckOverview,
   findingOutcome,
   formatCheckedDate,
   summarizeEvidence,
@@ -157,6 +159,51 @@ describe('factCheckBadge', () => {
     const badge = factCheckBadge({ ...v, status: 'disputed', confidence: null })
     expect(badge.tone).toBe('red')
     expect(badge.label).toBe('Disputed')
+  })
+})
+
+describe('factCheckOverview', () => {
+  const v = parseVerification(VERIFIED)!
+
+  it('says when and against how much a clean page was checked', () => {
+    expect(factCheckOverview(v)).toEqual({
+      headline: 'Fact checked',
+      sentence: 'Checked against 2 sources on 12 Aug 2026. No open issues.',
+    })
+  })
+
+  it('names open issues in the headline, and that none is critical', () => {
+    // Exam 8's state: verified, two minor/nit findings still open. The amber
+    // tint alone read as "needs a re-check".
+    const open = factCheckOverview({ ...v, openFindings: 2 })
+    expect(open.headline).toBe('Fact checked · 2 open issues')
+    expect(open.sentence).toBe('Checked against 2 sources on 12 Aug 2026. None of the open issues is critical.')
+    expect(factCheckOverview({ ...v, openFindings: 1 }).sentence).toContain('The open issue is not critical.')
+    expect(factCheckBadge({ ...v, openFindings: 2 }).kind).toBe('checked-open')
+  })
+
+  it('tells a stale page from one with open issues', () => {
+    const stale = { ...v, status: 'stale' as const }
+    expect(factCheckBadge(stale).kind).toBe('stale')
+    expect(factCheckOverview(stale).sentence).toContain('last check on 12 Aug 2026')
+  })
+
+  it('leads with a critical issue', () => {
+    expect(factCheckOverview({ ...v, openFindings: 1, openCritical: 1 })).toEqual({
+      headline: 'Known issue',
+      sentence: '1 critical issue open. Read it before relying on this page.',
+    })
+  })
+
+  it('is plain about a page nobody has checked', () => {
+    expect(factCheckOverview(null).headline).toBe('Not fact checked')
+  })
+})
+
+describe('checkerName', () => {
+  it('names an agent pass as automated and a person by name', () => {
+    expect(checkerName('agent:validate-v1')).toBe('Automated check')
+    expect(checkerName('human:jordan')).toBe('jordan')
   })
 })
 
@@ -346,6 +393,20 @@ describe('summarizeLog', () => {
     expect(summary.open.map((g) => g.entry.id)).toEqual(['F-002'])
     expect(summary.resolved.map((g) => g.entry.id)).toEqual(['F-001'])
     expect(summary.notes.map((g) => g.entry.id)).toEqual(['C-001'])
+  })
+
+  it('lists the validation passes as checks, newest first, not as notes', () => {
+    const pass = (id: string, date: string) => `
+## [${id}] Validation pass — verified
+- entry_type: comment
+- author: agent:validate-v1
+- date: ${date}
+- status_set: verified
+- note: Verified high.
+`
+    const summary = summarizeLog(parseVerificationLog(LOG + pass('C-010', '2026-08-01') + pass('C-011', '2026-08-12')))
+    expect(summary.checks.map((g) => g.entry.id)).toEqual(['C-011', 'C-010'])
+    expect(summary.notes).toEqual([])
   })
 
   it('folds a resolution into the finding it closes instead of listing it twice', () => {

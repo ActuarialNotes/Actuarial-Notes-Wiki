@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
+import { questionCredit } from '@/lib/parser'
 import type { Question, QuizMode, SelfGrade } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
@@ -270,31 +270,10 @@ export interface MasteryTransition {
 }
 
 // Returns the effective correctness of a question, taking manual grade overrides
-// into account. For multi-part questions each part may be individually overridden.
+// into account — full credit only. For multi-part questions each part may be
+// individually overridden, including the written parts only a self-grade marks.
 function effectiveIsCorrect(q: Question, chosen: string, manualGrades: Record<string, SelfGrade>): boolean {
-  if (q.type === 'free-entry') {
-    const override = manualGrades[q.id]
-    if (override !== undefined) return override === 'correct'
-    return isAnswerCorrect(q, chosen)
-  }
-  if (q.type === 'multi-part') {
-    try {
-      const parts = q.parts ?? []
-      const gradedParts = parts.filter(p => p.answer !== '')
-      if (gradedParts.length === 0) return true
-      const chosenParts = JSON.parse(chosen) as Record<string, string>
-      return gradedParts.every(part => {
-        const override = manualGrades[`${q.id}__${part.label}`]
-        if (override !== undefined) return override === 'correct'
-        const partChosen = chosenParts[part.label] ?? ''
-        if (part.type === 'multiple-choice') return partChosen === part.answer
-        return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
-      })
-    } catch {
-      return false
-    }
-  }
-  return isAnswerCorrect(q, chosen)
+  return questionCredit(q, chosen, manualGrades) >= 1
 }
 
 type QuizStatus = QuizSessionStatus

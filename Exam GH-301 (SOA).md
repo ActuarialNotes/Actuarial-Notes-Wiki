@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-17
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:1aff49e8a2fb3decff9e09182c8cad8779dab4a7639b6830519c4986347ba548
+  content_hash: sha256:79bd80c24dc5016516e651722bc11b3b31aacbe226c76d854b24c8f2484ef66d
   sources:
     - "SOA, Nov 2026/Mar 2027/Jul 2027 syllabus PDF for GH-301, all pages, sha256:2b82384993b1cb676fe74d312b7fcf5fd309d063ae2bd1366085014fe87dcdbd — https://www.soa.org/globalassets/assets/files/edu/2026/gh-301/2026-2027-gh-301-syllabus.pdf"
   open_findings: 0
@@ -27,11 +27,11 @@ verification:
 ## Learning Objectives
 
 > [!example]- Provider Contracting and Reimbursement {20–30%}
-> The candidate will understand how to evaluate the effectiveness of [[Provider Reimbursement|provider reimbursement]] methods from both a cost and [[Quality Viewpoint|quality viewpoint]].
+> The candidate will understand how to evaluate the effectiveness of [[Provider Reimbursement|provider reimbursement]] methods from both a cost and quality viewpoint.
 >
 > 1. Describe contracts between payers and [[Provider|providers]]
 > 2. Calculate [[Provider Reimbursement|provider payments]] under various [[Provider Reimbursement|reimbursement]] methods
-> 3. Evaluate [[Provider Reimbursement|standard contracting]] methods from a cost-effective and [[Quality Perspective|quality perspective]]
+> 3. Evaluate [[Provider Reimbursement|standard contracting]] methods from a cost-effective and quality perspective
 > 4. Evaluate [[Accountable Care Organization|accountable care organizations]] (ACO) and their impact on quality, [[Utilization|utilization]], and cost
 >
 > **Readings:**
@@ -75,7 +75,7 @@ verification:
 >
 > 1. Apply [[Risk|risk]] adjustment to [[Underwriting|underwriting]], pricing, [[Claim|claims]], and [[Care Management Program|care management situations]] (applications include [[Medicare]], [[Medicaid]], and [[Affordable Care Act|ACA products]])
 > 2. Apply [[Risk|risk]] adjustment concepts to [[Health Risk Adjustment|normalize population claims experience]]
-> 3. Apply applicable [[Best Practice|best practices]] in [[Risk|risk]] adjustment
+> 3. Apply [[Best Practice|applicable best practices]] in [[Risk|risk]] adjustment
 >
 > **Readings:**
 > - Healthcare Risk Adjustment and Predictive Modeling, Duncan, Ian G., 2nd Edition, 2018 (3a, 3b)
@@ -109,9 +109,9 @@ verification:
 > - eLearning Module: FSA: Terminology and Analytical Use of Data for Healthcare Actuaries (4a-4h)
 
 > [!example]- Social Determinants of Health {5–15%}
-> The candidate will understand how to explain the [[Social Determinants of Health|social determinants]] of health (SDOH) and their impact on [[Health Care System|health care costs]] and policy.
+> The candidate will understand how to explain the [[Social Determinants of Health|social determinants of health]] (SDOH) and their impact on [[Health Care System|health care costs]] and policy.
 >
-> 1. Explain the [[Social Determinants of Health|social determinants]] of health and how they impact the cost of healthcare
+> 1. Explain the [[Social Determinants of Health|social determinants of health]] and how they impact the cost of healthcare
 > 2. Describe program design and economic techniques used to measure program [[Performance|performance]]
 > 3. Describe the current use of SDOH in [[Traditional Actuarial Practice|traditional actuarial practices]]
 > 4. Evaluate applications of [[Social Determinants of Health|SDOH derived statistics]] in actuarial models

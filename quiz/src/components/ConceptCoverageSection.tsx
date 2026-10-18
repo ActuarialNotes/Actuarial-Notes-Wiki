@@ -41,6 +41,9 @@ export interface ScoreSummary {
   // Fractional points earned (partial credit included). Falls back to
   // correctCount for the "Correct" tile when omitted.
   scoredPoints?: number
+  // Points the quiz was worth, when its questions aren't all worth one — the
+  // tile then reads in points rather than as a count of questions.
+  totalPoints?: number
   totalQuestions: number
   timeTakenSeconds: number | null
   conceptsLevelledUp?: number
@@ -303,8 +306,8 @@ export function ConceptCoverageSection({
           <div className="flex flex-wrap gap-6 mt-4">
             <div>
               <span className="text-2xl font-bold tabular-nums">{formatScore(score.scoredPoints ?? score.correctCount)}</span>
-              <span className="text-lg text-muted-foreground">/{score.totalQuestions}</span>
-              <p className="text-xs text-muted-foreground mt-0.5">Correct</p>
+              <span className="text-lg text-muted-foreground">/{formatScore(score.totalPoints ?? score.totalQuestions)}</span>
+              <p className="text-xs text-muted-foreground mt-0.5">{score.totalPoints !== undefined ? 'Points' : 'Correct'}</p>
             </div>
             <div>
               <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>

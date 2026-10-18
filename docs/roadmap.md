@@ -113,6 +113,7 @@ An item is ✅ only when all of the following are true:
 | **Concept Craft** | Candidates | ✅ live. Its relation labels are AI-written and not yet reviewed | — | `concept-craft.md` |
 | **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |
 | **Actuaria Online** (game layer) | Candidates | 🟡 phases 0–3 built, one approved account | `ACTUARIA_ENABLED` + `ACTUARIA_APPROVED_EMAILS` | `actuaria-online.md` |
+| **Tutor** (a guided walk through the exam; purely algorithmic) | Exam 5 candidates | 🟡 Phase 1 built, Preview: one approved account | `TUTOR_ENABLED` + `TUTOR_STAGE` / `TUTOR_APPROVED_EMAILS` | `tutor.md` |
 | **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
 | **Simulated learner** | Us, for content QA | 🟡 offline pipeline built; no live run has succeeded | — | `simulated-learner.md` |
 | **Research tab** (Canadian P&C corpus + AI Ask) | Upper-exam candidates | 🅿️ parked | `RESEARCH_TAB_ENABLED` / `RESEARCH_AI_ENABLED` = false | `research-ai-disabled.md`, `research-corpus-plan.md` |
@@ -253,6 +254,13 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    `off_syllabus`, Exam 9's held questions settled bar `cas9-an-009` (content plan, Phase 2).
    Exam 9's open-text packets done the same day (34 of 35 concepts verified; 5 / 7, held by
    *Enterprise Risk Management* and two readings). Next: Exam 5's papers → 6C → PCPA's bank (C6).
+0b. **Content plan, Phase 3: the SOA ASA prelims** (started 2026-10-18): C9's campaign table written (content plan
+   §3.1a — what the SOA publishes for each prelim, the readings, the order SRM → FAM → ASTAM,
+   ALTAM → PA, ATPA); the linker fixed (C17 and the noise/cut-short links), so G2 passes on all six
+   prelims and G3 on all but ALTAM, every changed page re-checked against its syllabus PDF. **SRM is
+   beta** (18 Oct): its bank is the SOA's 72 live sample questions, converted, plus five
+   vault-written questions (verified) for the concepts the set misses; G1, G2, G3 and G6 pass.
+   Next: FAM's two sample sets, then SRM's fact-check campaign (G4, G5, G7).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -298,7 +306,7 @@ These are in order within each lane.
 - **C3:** Exam 5.
 - **C4:** MAS-II.
 - **C5:** 6C. D8 settled 2026-10-18; V6 closed in Phase 1.
-- **C9: write the SOA ASA-prelim publication plan.** None exists today.
+- ~~**C9: write the SOA ASA-prelim publication plan.**~~ ✅ 2026-10-18, content plan §3.1a.
 - **C11:** the concept-gap leftovers (*Total Risk*, the 9 ambiguous targets, 21 stubs, 11
   link fixes).
 
@@ -365,7 +373,7 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   all verified, which the build never collects. One shape: an appended `moved_to:` /
   `retired:` entry that the gate accepts in place of the target. It changes the VERIFY
   rules, so it is the maintainer's call. *(Proposed 2026-10-17.)*
-- **C17: teach the syllabus writer the link names #1629 chose.** `syllabus_write.py --check`
+- ~~**C17: teach the syllabus writer the link names #1629 chose.**~~ ✅ 2026-10-18 (content plan Phase 3: the writer keeps a page's chosen reading links and *Key concepts:* lines; `--all --check` clean, held by a test). `syllabus_write.py --check`
   is no longer clean on 15 of the 18 FSA pages: re-rendering for a new sitting would put
   back the old, unwritten link names, and would link CP-312's "Part 1" citation to the
   Part 2 (2020) page, because the two pages share a title. The writer needs a citation →
@@ -381,6 +389,16 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   `scripts/ontology_map.py`. Either add the nine topics there (each is a syllabus term with
   a concept page), or retag the questions, which makes them stale until re-verified.
   *(2026-10-17.)*
+- **L9: a written part counts for what the reader marked it.** The quiz records a written
+  part's self-grade (`manualGrades`) but `effectiveIsCorrect` skips essay parts, and a
+  question with no graded part left returns **correct**: 144 of Exam 5's 278 lettered
+  questions and 58 of its 72 unlettered ones are written-only, so pressing *Check answers*
+  on one levels up every concept it is tagged with, whatever was written. The same holds
+  for the written CAS banks (6C, 7, 8, 9). Proposed: a written part counts as its
+  self-grade (full credit correct, partial and no credit not — the rule the Tutor already
+  uses, `lib/tutor/bank.ts`), and an ungraded one counts for nothing. It changes how every
+  CAS written exam's mastery and readiness move, so it is the maintainer's call.
+  *(Found planning the Tutor, 2026-10-18.)*
 
 ---
 
@@ -429,12 +447,13 @@ Shipped:
 | ID | Item | Status | Tier | Notes and subplan |
 |---|---|---|---|---|
 | L1 | Learning instrumentation | ✅ 2026-10-17 | — | `concept_retention` (the first answer on a concept past its decay window, once per decay episode, `retained` true or false), `reminder_opened` / `reminder_session` (the email's `utm_source`, then the first quiz within 6 h), `mistake_reviewed`. Pure rules in `lib/learningSignals.ts`; GA4 custom definitions to add are in `analytics-and-monitoring.md` (G3). |
-| L2 | Confidence and calibration | ⬜ | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Was P2.7. |
-| L3 | Spaced mistakes deck | 🟡 the card has shipped | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. Was P2.8. |
+| L2 | Confidence and calibration | 🟡 in the Tutor (L8), Exam 5 | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Built inside the Tutor (`lib/tutor/`); the quiz itself still has no tap. Was P2.7. |
+| L3 | Spaced mistakes deck | 🟡 the card has shipped; successive relearning in the Tutor | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. The Tutor relearns a missed part in-session, then +1 and +3 days (`log.ts`). Was P2.8. |
 | L4 | Finish the Practice Exam | 🟡 timer and reveal ✅ | Next | Still to do: sitting-shaped, syllabus-weighted assembly; a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
-| L5 | Interleaving in quiz assembly | ⬜ | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
+| L5 | Interleaving in quiz assembly | 🟡 in the Tutor's sessions | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
 | L6 | Tunable spaced-repetition intervals | ⬜ | Later | `DECAY_DAYS_*` are constants in `mastery.ts`. Needs L1. Was P2.1. |
 | L7 | Web push reminders | ⬜ | Later | Blocked on E12. Same rules as the email: opt-in, quiet days, framed as an invitation. Was half of P1.3. |
+| L8 | **The Tutor** | 🟡 Phase 1 built 2026-10-18, Preview | Next | `tutor.md`. The reader's own Gem Shop character, floating on every page, walking an Exam 5 candidate through the exam: phases from the exam date, a part served at the moment it is worth most (after reading, when due, to relearn a miss), an FSRS-4.5 scheduler capped by the days left, confidence before every reveal, self-grades banked through `recordReviewAnswers`, and a diagnosis of what is confusing (sure-and-wrong, persistent misses, confusable siblings on one syllabus line, shaky foundations, the weakest kind of part, calibration) with the examiners' reports quoted verbatim. No model. Next: Phase 2 (debrief, timed sets, a `user_tutor_events` sync table), then Beta for Pro (D25). |
 | — | Comprehension checks | 🗑 | — | Retired 2026-09-25. Collection happens at Level 1. Was P1.5; see R2. |
 | — | "Fading concepts" card | 🗑 | — | Removed. `lib/masteryAnalytics.ts` stays for the heatmap. Was P2.5. |
 | — | In-app "report this question" | ✅ | — | Built as part of VERIFY. What's left is operating it (V2). Was P2.3. |
@@ -465,7 +484,7 @@ gates through `--hold` in CI.
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
-| C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
+| C9 | **An SOA ASA-prelim publication plan** | ✅ 2026-10-18 | — | Content plan §3.1a: for FAM, SRM, ALTAM, ASTAM, PA and ATPA, what the SOA publishes (found on its own pages: sample sets for all, written-answer papers for ALTAM/ASTAM, project sittings for PA, one ATPA sample; no FAM or SRM papers will be released), the readings (mostly commercial, D7), the gates and the order. Phase 3's linker step lifted all six to G2 (G3 all but ALTAM). SRM's bank converted and SRM promoted to beta, 18 Oct. Next: FAM's banks. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
 | C12 | Syllabus pipeline packages 4–6 and 8 | 🟡 | Later | Provenance `syllabus:` blocks for the 14 hand-made pages; a concept-page lint. `syllabus-pipeline-review.md` §5. |
@@ -473,7 +492,7 @@ gates through `--hold` in CI.
 | C14 | Concept figures for 6U, 7, 8, 9, PCPA and the DISCs | ⬜ | Later | Builders exist only for P, FM, MAS-I, MAS-II, 5 and 6C. |
 | C15 | More distribution simulators | ⬜ | Later | Pareto (both forms), Generalized Pareto, Weibull, Uniform, t, χ², F, GEV. All 10 static SVG embeds are already replaced. |
 | C16 | Resource-page leftovers | ⬜ | Later | 3 texts whose contents aren't available; Baer/Rendall (`resource-pages.md` §5). |
-| C17 | Study guides for every SOA and CAS requirement | ✅ 2026-10-18 | — | Pages for Exams 6I and 6T, the three VEEs, the SOA's PAF, ASF, FAP and DMAC modules (`syllabus_extract.py`'s module reader), the APC, the FAC and the CAS's Course on Professionalism, all `development`, with a `Resources/Books/` page for each new reading. Each credential's Study Guides list has a *Non-Exam Requirements* group (`NON_EXAM_REQUIREMENTS` in `data/tracks.ts`). Not covered: the Joint Board's EA exams on the FSA catalogue; 6T's version menu still lists the CAS-6 windows, which the AICT's exams don't follow. |
+| C17 | Study guides for every SOA and CAS requirement | ✅ 2026-10-18 | — | Pages for Exams 6I and 6T, the three VEEs, the SOA's PAF, ASF, FAP and DMAC modules (`syllabus_extract.py`'s module reader), the APC, the FAC and the CAS's Course on Professionalism, all `development`, with a `Resources/Books/` page for each new reading. Each credential's Study Guides list files them under *Modules and Courses* and *VEE Credits* (`NON_EXAM_SECTIONS` in `data/tracks.ts`); the FSA's list puts what every pathway shares first and groups its six pathways below it. Not covered: the Joint Board's EA exams on the FSA catalogue; 6T's version menu still lists the CAS-6 windows, which the AICT's exams don't follow. |
 
 ### 4.4 V: Fact Check (VERIFY)
 
@@ -572,9 +591,10 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
   `Resources/Books/` page.
 - **Actuaria → Quiz Battle.** It uses one reducer, so Actuaria's Phase 4 would change Quiz
   Battle's "nothing saved" rule.
-- **The approved-email lists.** The same one address is the whole of both the Cowork list
-  and the Actuaria list. Actuaria's list is also mirrored in SQL. Opening either product to
-  more people (D1) means changing each place.
+- **The approved-email lists.** The same one address is the whole of the Cowork list, the
+  Actuaria list and the Tutor's. Actuaria's list is also mirrored in SQL. Opening any of them
+  to more people (D1, D25) means changing each place; the Tutor's next step is one line
+  (`TUTOR_STAGE = 'beta'`).
 
 ---
 
@@ -609,6 +629,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D22 | Exam 9's unread readings: Brehm et al., Mildenhall & Major and Grossi & Kunreuther (study kit or sold, chapters unread), and the Cummins (2000, 2008) and Coval, Jurek & Stafford journal texts (paywalled, or SSRN/AEA blocked to the sessions): supply a copy, or name a free author-posted one a session can reach (the 2012 archived Wharton paper for Cummins 2000; SSRN 1057401 for Cummins 2008) | C2 run `6bfb` and the campaign's other reading packets | Exam 9's G4 and G5 | ✅ settled 2026-10-18: verify on open texts at D7's medium ceiling; only what no open source covers stays `in_review` |
 | D23 | MAS-II's page carries 36 tasks where the 2026 outline lists 21: restore the outline's tasks (dropping about ten concepts that are in the readings and tagged on paper questions, *Posterior Distribution* and *AIC* among them), or keep the vault's finer tasks and mark which are its own | C4 run `4700` (page F-001) | MAS-II's G1 | ✅ settled 2026-10-18: the outline's 21 tasks, the vault's concepts on `*Key concepts:*` lines |
 | D24 | MAS-II's 2019 papers test McElreath's Bayesian/MCMC reading (about 35 questions: MCMC, multilevel models, HPDIs, DIC, WAIC), which the 2026 outline no longer assigns: mark them `off_syllabus`, or keep them in quiz draws | C4 runs `f8d6`, `9dbf` | MAS-II's bank | ✅ settled 2026-10-18: `off_syllabus` |
+| D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 
 ### 6.2 Settled: don't re-open without a new reason
 
@@ -673,6 +694,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/actuarial-tools.md` | Subplan: Tools | A2 | Active. **Needs refresh** (A6) | 2026-10-10 |
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
+| `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
 | `docs/syllabus-pipeline-review.md` | Record: the pipeline's design review | C12 | Record; its open packages are in the content plan §3.4 | 2026-10-18 |
 | `docs/actuarial-agent-product-plan.md` | Plan: an in-app agent | A5 | 🅿️ Phase A shipped as the connector; the rest waits on D2 | 2026-10-09 |
@@ -766,6 +788,11 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-18, the Tutor.** L8 proposed and built to Phase 1 in Preview (`docs/tutor.md`):
+  Exam 5, one approved account, no model. It carries the first working versions of L2
+  (confidence), L3 (successive relearning) and L5 (interleaving), inside its own sessions.
+  Planning it found L9 (§3.4): written-only questions count as correct in quizzes.
 
 - **2026-10-18, the Content Plan.** The content subplans are consolidated into
   `docs/content-plan.md` (the CAS publication plan folded in and removed; the verification plan

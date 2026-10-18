@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-10
+  last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6e9dae5bcff93b801a618e7afcee0eac2bf48ca26db8da21a10bea5c367fc5ae
+  content_hash: sha256:0faf60dd10d44a40f71a01c5f59b5487418b732e4cae80ec13ab1c29e5cdcca0
   sources:
     - "SOA, October 2026 syllabus PDF for FAM, all pages, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
@@ -47,9 +47,9 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 >
 > 1. Identify the types of [[Coverage Modifications|coverage modifications]] for [[Short-Term Insurance Coverage|short-term insurance]].
 > 2. Perform calculations assessing the impact of [[Coverage Modifications|coverage modifications]].
-> 3. Perform calculations of the [[Loss Elimination|loss elimination]] ratio and the effect of [[Inflation|inflation]] on losses.
+> 3. Perform calculations of the [[Loss Elimination Ratio|loss elimination ratio]] and the effect of [[Inflation|inflation]] on losses.
 > 4. Identify the operation of basic forms of proportional and excess of [[Excess of Loss|loss reinsurance]] and understand their impact on reserving and pricing.
-> 5. Determine the allocation of [[Claim Amounts Paid|claim amounts paid]] by the [[Insurer|insurer]] and [[Reinsurance|reinsurer]] under various forms of [[Reinsurance|reinsurance]].
+> 5. Determine the allocation of [[Claim|claim]] amounts paid by the [[Insurer|insurer]] and [[Reinsurance|reinsurer]] under various forms of [[Reinsurance|reinsurance]].
 
 > [!example]- Severity, Frequency, and Aggregate Models {12.5–17.5%}
 > The Candidate will understand the characteristics of and uses for commonly used [[Severity|severity]], [[Frequency|frequency]], and aggregate models.
@@ -57,28 +57,28 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > **The Candidate will be able to, for severity models:**
 >
 > 1. Calculate [[Moment|moments]] and [[Percentile|percentiles]].
-> 2. Identify the role of scale and [[Scale and Shape Parameters|shape parameters]] in continuous models.
-> 3. Recognize classes of [[Distribution|distributions]] and their relationships.
-> 4. [[Characterize Distribution|Characterize distributions]] by existence of [[Moment|moments]].
+> 2. Identify the role of [[Scale and Shape Parameters|scale and shape parameters]] in continuous models.
+> 3. Recognize classes of [[Probability Distributions|distributions]] and their relationships.
+> 4. Characterize [[Probability Distributions|distributions]] by existence of [[Moment|moments]].
 >
 > **The Candidate will be able to, for frequency models:**
 >
-> 5. Identify the role of parameters for the (a,b,0) and (a,b,1) classes of [[Distribution|distributions]].
-> 6. Recognize the (a,b,0) and (a,b,1) classes of [[Distribution|distributions]] and their relationships.
-> 7. Perform calculations for the (a,b,0) and (a,b,1) classes of [[Distribution|distributions]].
-> 8. Identify appropriate [[Distribution|distributions]] for a given application.
+> 5. Identify the role of parameters for the (a,b,0) and (a,b,1) classes of [[Probability Distributions|distributions]].
+> 6. Recognize the (a,b,0) and (a,b,1) classes of [[Probability Distributions|distributions]] and their relationships.
+> 7. Perform calculations for the (a,b,0) and (a,b,1) classes of [[Probability Distributions|distributions]].
+> 8. Identify appropriate [[Probability Distributions|distributions]] for a given application.
 >
 > **The Candidate will be able to, for aggregate risk models:**
 >
-> 9. Define collective and [[Individual Risk Model|individual risk]] models and calculate their mean and [[Variance|variance]].
-> 10. Use the [[Lognormal Distribution|log-normal]] or [[Normal Approximation|normal approximation]] to approximate the aggregate distribution.
+> 9. Define collective and [[Individual Risk Model|individual risk models]] and calculate their mean and [[Variance|variance]].
+> 10. Use the [[Lognormal Distribution|log-normal]] or [[Normal Approximation|normal approximation]] to approximate the [[Aggregate Loss Model|aggregate distribution]].
 > 11. Calculate [[Probability|probabilities]] using the [[Convolution|convolution]] method.
 > 12. Calculate the expected [[Payment|payment]] for [[Stop-Loss Reinsurance|stop-loss insurance]].
 > 13. Calculate Value at [[Risk]] and Tail Value at [[Risk]].
-> 14. Determine whether a given [[Risk|risk]] measure has certain [[Risk Measure|desirable properties]].
+> 14. Determine whether a given [[Risk Measure|risk measure]] has certain [[Risk Measure|desirable properties]].
 
 > [!example]- Parametric Estimation {2.5–7.5%}
-> The Candidate will understand and be able to estimate parameters for [[Parametric|parametric]] models.
+> The Candidate will understand and be able to estimate parameters for parametric models.
 >
 > 1. Estimate the parameters for [[Severity|severity]] and [[Frequency Distribution|frequency distributions]] using [[Maximum Likelihood Estimation]] for:
 >    - Complete, [[Grouped Data|individual data]]
@@ -89,26 +89,26 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > The Candidate will understand the concepts of [[Credibility|credibility]] and be able to apply certain types of [[Credibility|credibility]] in some practical settings.
 >
 > 1. Understand the concept of [[Credibility|credibility]].
-> 2. Perform calculations using [[Limited Fluctuation|limited fluctuation]] (classical) [[Credibility|credibility]].
+> 2. Perform calculations using [[Limited Fluctuation Credibility|limited fluctuation]] (classical) [[Credibility|credibility]].
 
 > [!example]- Pricing and Reserving for Short-Term Insurance Coverages {10–15%}
 > The Candidate will be able to use basic methods to calculate [[Insurance Premium|premiums]] and [[Reserve|reserves]] for [[Short-Term Insurance Coverage|short-term insurance coverages]].
 >
 > 1. Describe and apply techniques for estimating [[Unpaid Claims|outstanding claims]], using the following methods:
->    - Expected [[Loss]] Ratio
->    - [[Chain-Ladder]]
->    - [[Bornhuetter-Ferguson]]
+>    - [[Expected Loss Method|Expected Loss Ratio]]
+>    - [[Chain Ladder Method|Chain-Ladder]]
+>    - [[Bornhuetter-Ferguson Method|Bornhuetter-Ferguson]]
 > 2. Understand the objectives of [[Ratemaking|ratemaking]] and the data used for [[Ratemaking|ratemaking]].
 > 3. Calculate the adjustments to [[Ratemaking|ratemaking data]], including development, [[Trend|trend]] and [[On-Leveling|adjusting premium]] to current [[On-Leveling|rate levels]].
 > 4. Understand how [[Expenses|expenses]] and the profit and [[Profit and Contingency Provision|contingencies loading]] are used in [[Ratemaking|ratemaking]].
-> 5. Calculate overall [[Overall Rate Level Indication|average rates]] and rate changes using the [[Loss Cost|loss cost]] and loss ratio methods.
+> 5. Calculate overall [[Overall Rate Level Indication|average rates]] and [[Rate Change|rate changes]] using the [[Loss Cost|loss cost]] and [[Loss Ratio Method|loss ratio methods]].
 
 > [!example]- Option Pricing Fundamentals {2.5–7.5%}
-> The Candidate will be able to value [[European Option|simple options]] and derivatives using [[Risk-Neutral Valuation|risk neutral]] expected present values, under the binomial and [[Black-Scholes Model|Black-Scholes]] models.
+> The Candidate will be able to value [[European Option|simple options]] and derivatives using [[Risk-Neutral Valuation|risk neutral]] expected [[Present Value|present values]], under the binomial and [[Black-Scholes Model|Black-Scholes models]].
 >
 > 1. Identify the [[Cash Flow|cash flows]] and characteristics of [[Payoff|puts]] and calls.
-> 2. Apply the [[Binomial Option Pricing Model|binomial option pricing]] model to calculate the price of a [[European Option|simple European-style derivative]] on a [[Single Non-Dividend Paying Asset|single non-dividend paying asset]].
-> 3. Apply the [[Black-Scholes Model|Black-Scholes formula]] to calculate the price and [[Delta Hedging|delta hedge]] of a [[European Option|simple European-style derivative]] on a [[Single Non-Dividend Paying Asset|single non-dividend paying asset]].
+> 2. Apply the [[Binomial Option Pricing Model|binomial option pricing model]] to calculate the price of a [[European Option|simple European-style derivative]] on a single non-dividend paying asset.
+> 3. Apply the [[Black-Scholes Model|Black-Scholes formula]] to calculate the price and [[Delta Hedging|delta hedge]] of a [[European Option|simple European-style derivative]] on a single non-dividend paying asset.
 > 4. Apply [[Put-Call Parity|put-call parity]].
 
 > [!example]- Long-Term Insurance Coverages and Retirement Financial Security Programs {2.5–5%}
@@ -120,25 +120,25 @@ The Fundamentals of Actuarial Mathematics exam is a three-and-one-half hour exam
 > [!example]- Mortality Models {10–15%}
 > The Candidate will understand key concepts concerning parametric and [[Life Table|non-parametric mortality]] models for [[Future Lifetime Random Variable|individual lives]].
 >
-> 1. Understand [[Parametric Survival Model|parametric survival]] models, [[Life Table|life tables]], and the relationships between them.
-> 2. Given a [[Parametric Survival Model|parametric survival]] model, calculate survival and [[Future Lifetime Random Variable|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]].
-> 3. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for [[Future Lifetime Random Variable|future lifetime distributions]] and [[Moment|moments]], including select and ultimate functions.
-> 4. Given a [[Life Table|life table]], calculate survival and [[Future Lifetime Random Variable|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]], using appropriate [[Fractional Age Assumption|fractional age]] assumptions where necessary.
+> 1. Understand [[Parametric Survival Model|parametric survival models]], [[Life Table|life tables]], and the relationships between them.
+> 2. Given a [[Parametric Survival Model|parametric survival model]], calculate survival and [[Mortality|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]].
+> 3. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for [[Survival Model|future lifetime distributions]] and [[Moment|moments]], including select and ultimate functions.
+> 4. Given a [[Life Table|life table]], calculate survival and [[Mortality|mortality probabilities]], the force of [[Mortality|mortality]] function, and [[Moment|moments]] of the curtate and [[Future Lifetime Random Variable|complete future lifetime random variable]], using appropriate [[Fractional Age Assumption|fractional age assumptions]] where necessary.
 > 5. Understand and apply select [[Life Table|life tables]].
 
 > [!example]- Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
-> The Candidate will be able to perform calculations on the present value [[Random Variable|random variables]] associated with benefits and [[Expenses|expenses]] for [[Long Term Insurance Coverage|long term insurance coverages]].
+> The Candidate will be able to perform calculations on the present value [[Random Variable|random variables]] associated with benefits and [[Expenses|expenses]] for [[Long-Term Insurance Coverage|long term insurance coverages]].
 >
-> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Life Annuity|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on annual, 1/m-thly and [[Continuous Payment Frequency|continuous payment frequency]].
+> 1. Identify the present value [[Random Variable|random variables]] associated with [[Life Insurance|life insurance]], [[Pure Endowment|endowment]], and [[Life Annuity|annuity payments]] for [[Future Lifetime Random Variable|single lives]], based on annual, 1/m-thly and [[Payable Continuously|continuous payment frequency]].
 > 2. Calculate [[Probability|probabilities]], means, [[Variance|variances]] and [[Covariance|covariances]] for the [[Random Variable|random variables]] in Topic 9(a), using [[Fractional Age Assumption|fractional age]] or [[Fractional Age Assumption|claims acceleration approximations]] where appropriate.
-> 3. Understand the relationships between the insurance, [[Pure Endowment|endowment]], and annuity present value [[Random Variable|random variables]] in Topic 9(a), and between their expected values.
+> 3. Understand the relationships between the insurance, [[Pure Endowment|endowment]], and annuity present value [[Random Variable|random variables]] in Topic 9(a), and between their [[Expected Value|expected values]].
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).
-> 5. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for the expected values of the [[Random Variable|random variables]] in Topic 9(a).
+> 5. Identify and apply [[Standard Actuarial Notation|standard actuarial notation]] for the [[Expected Value|expected values]] of the [[Random Variable|random variables]] in Topic 9(a).
 
 > [!example]- Premium and Policy Value Calculation for Long-Term Insurance Coverages {15–22.5%}
 > The Candidate will be able to use and explain the [[Insurance Premium|premium]] and [[Policy Value|policy value calculation processes]] for [[Long-Term Insurance Coverage|long-term insurance coverages]].
 >
-> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with term and [[Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
+> 1. Identify the [[Future Loss Random Variable|future loss random variables]] associated with [[Whole Life Insurance|whole life]], [[Term Life Insurance|term life]], and [[Endowment Insurance|endowment insurance]], and with term and [[Life Annuity|whole life annuities]], on [[Future Lifetime Random Variable|single lives]].
 > 2. Calculate [[Insurance Premium|premiums]] based on the [[Equivalence Principle|equivalence principle]], the [[Portfolio Percentile Principle|portfolio percentile principle]], and for a given expected present value of profit, for the policies in Topic 10(a).
 > 3. Calculate and interpret [[Policy Value|gross premium]], [[Policy Value|net premium]] and [[Modified Net Premium Policy Value|modified net premium policy values]] for the policies in Topic 10(a).
 > 4. Calculate the effect of changes in underlying assumptions (e.g., [[Mortality|mortality]] and [[Interest|interest]]).

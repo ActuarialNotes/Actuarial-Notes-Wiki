@@ -146,7 +146,17 @@ export function contentPathFromVerification(v: Verification | null | undefined):
 
 export type FactCheckTone = 'green' | 'amber' | 'grey' | 'red'
 
+/**
+ * Which verdict a badge is, finer than its tone: amber is both a page checked
+ * with something still open and a page edited since its check, and the two
+ * want different marks — a reader shown the "re-check" arrows on a page that
+ * *was* checked reasonably reads it as not checked at all.
+ */
+export type FactCheckKind =
+  | 'checked' | 'checked-open' | 'unchecked' | 'stale' | 'review' | 'issue' | 'disputed'
+
 export interface FactCheckBadge {
+  kind: FactCheckKind
   label: string
   /** The same verdict in one or two words, for a dense row or a menu pill. */
   short: string
@@ -179,6 +189,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
     // A critical finding outranks every other state: it is the one thing a
     // reader has to know before they trust the page.
     return {
+      kind: 'issue',
       label: 'Known issue',
       short: 'Issue',
       tone: 'red',
@@ -187,6 +198,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   }
   if (!v || v.status === 'unverified') {
     return {
+      kind: 'unchecked',
       label: 'Not fact checked',
       short: 'Unchecked',
       tone: 'grey',
@@ -195,6 +207,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   }
   if (v.status === 'disputed') {
     return {
+      kind: 'disputed',
       label: 'Disputed',
       short: 'Disputed',
       tone: 'red',
@@ -203,6 +216,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   }
   if (v.status === 'stale') {
     return {
+      kind: 'stale',
       label: 'Re-check needed',
       short: 'Re-check',
       tone: 'amber',
@@ -211,6 +225,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   }
   if (v.status === 'in_review') {
     return {
+      kind: 'review',
       label: 'Under review',
       short: 'Review',
       tone: 'amber',
@@ -220,6 +235,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   const date = formatCheckedDate(v.lastChecked)
   if (v.openCritical > 0) {
     return {
+      kind: 'issue',
       label: 'Known issue',
       short: 'Issue',
       tone: 'red',
@@ -228,6 +244,7 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
   }
   if (v.openFindings > 0) {
     return {
+      kind: 'checked-open',
       label: date ? `Fact checked · ${date}` : 'Fact checked',
       short: 'Checked',
       tone: 'amber',
@@ -235,11 +252,73 @@ export function factCheckBadge(v: Verification | null | undefined): FactCheckBad
     }
   }
   return {
+    kind: 'checked',
     label: date ? `Fact checked · ${date}` : 'Fact checked',
     short: 'Checked',
     tone: 'green',
     detail: `Checked against ${v.sources.length} source${v.sources.length === 1 ? '' : 's'}.`,
   }
+}
+
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
+
+export interface FactCheckOverview {
+  /** The verdict, without the date — the sentence under it carries that. */
+  headline: string
+  /** One plain sentence: what was checked, when, and what is left. */
+  sentence: string
+}
+
+/**
+ * The top of the Fact Check panel: a verdict and one sentence that answers the
+ * three things a reader looks for in it — *was it checked*, *when, against
+ * how much*, and *is anything wrong*. The badge's label packs the date into the
+ * verdict for a title row; here they are said in order instead, and an open
+ * finding is named as such in the headline rather than left to a tint.
+ */
+export function factCheckOverview(v: Verification | null | undefined): FactCheckOverview {
+  const badge = factCheckBadge(v)
+  const date = formatCheckedDate(v?.lastChecked ?? null)
+  const sources = v?.sources.length ?? 0
+  const checkedOn = [
+    sources > 0 ? `Checked against ${plural(sources, 'source')}` : 'Checked',
+    date ? ` on ${date}` : '',
+  ].join('')
+  switch (badge.kind) {
+    case 'unchecked':
+      return { headline: badge.label, sentence: 'No one has checked this page against a source yet.' }
+    case 'review':
+      return { headline: badge.label, sentence: 'A fact check is under way.' }
+    case 'stale':
+      return {
+        headline: badge.label,
+        sentence: date
+          ? `Edited since its last check on ${date}, so what is below describes the earlier version.`
+          : 'Edited since its last check, so what is below describes the earlier version.',
+      }
+    case 'disputed':
+      return { headline: badge.label, sentence: 'Sources disagree, or a critical issue is unresolved.' }
+    case 'issue':
+      return {
+        headline: badge.label,
+        sentence: `${plural(v?.openCritical ?? 0, 'critical issue')} open. Read ${(v?.openCritical ?? 0) === 1 ? 'it' : 'them'} before relying on this page.`,
+      }
+    case 'checked-open': {
+      const n = v?.openFindings ?? 0
+      return {
+        headline: `Fact checked · ${plural(n, 'open issue')}`,
+        sentence: `${checkedOn}. ${n === 1 ? 'The open issue is not' : 'None of the open issues is'} critical.`,
+      }
+    }
+    case 'checked':
+      return { headline: 'Fact checked', sentence: `${checkedOn}. No open issues.` }
+  }
+}
+
+/** `agent:validate-v1` → "Automated check"; `human:jordan` → "jordan". */
+export function checkerName(author: string): string {
+  if (/^agent:/.test(author)) return 'Automated check'
+  return author.replace(/^human:/, '')
 }
 
 // ─── Sidecar logs ────────────────────────────────────────────────────────────
@@ -497,6 +576,11 @@ export interface LogSummary {
   resolved: LogEntryGroup[]
   /** Comments and questions — reader reports, mostly. */
   notes: LogEntryGroup[]
+  /**
+   * The checks themselves — the entries that set the page's status (a
+   * validation pass), newest first: *what was checked, when*.
+   */
+  checks: LogEntryGroup[]
 }
 
 const SEVERITY_ORDER: Record<string, number> = {
@@ -512,7 +596,7 @@ export function summarizeLog(log: VerificationLog): LogSummary {
     }
   }
 
-  const summary: LogSummary = { open: [], resolved: [], notes: [] }
+  const summary: LogSummary = { open: [], resolved: [], notes: [], checks: [] }
   for (const entry of log.entries) {
     // A resolution belongs to the finding it closes; listing it separately would
     // say the same thing twice, in two places, out of order.
@@ -523,6 +607,8 @@ export function summarizeLog(log: VerificationLog): LogSummary {
       else summary.open.push(group)
     } else if (entry.entryType === 'correction' || entry.entryType === 'resolution') {
       summary.resolved.push(group)
+    } else if (logField(entry, 'status_set')) {
+      summary.checks.unshift(group)
     } else {
       summary.notes.push(group)
     }

@@ -4,6 +4,44 @@
 
 import { questionCredit, type Question, type SelfGrade } from '@/lib/parser'
 
+// What a question is worth on the paper (its `points`), so a 2.5-point CAS
+// question counts for five times a 0.5-point one. A question with no positive
+// points is worth one.
+export function questionPoints(q: Question): number {
+  return Number.isFinite(q.points) && q.points > 0 ? q.points : 1
+}
+
+export interface QuizPoints {
+  earned: number
+  possible: number
+  /** Earned over possible, as a whole percentage. */
+  percentage: number
+  /** True when every question is worth one point — the score is a count. */
+  unitPoints: boolean
+}
+
+// A finished quiz's score, every question weighted by its points: each earns
+// its credit (questionCredit) times what it is worth.
+export function quizPoints(
+  questions: Question[],
+  responses: Record<string, { chosen: string | null } | undefined>,
+  manualGrades: Record<string, SelfGrade>,
+): QuizPoints {
+  let earned = 0
+  let possible = 0
+  for (const q of questions) {
+    const worth = questionPoints(q)
+    possible += worth
+    earned += worth * questionCredit(q, responses[q.id]?.chosen, manualGrades)
+  }
+  return {
+    earned,
+    possible,
+    percentage: possible > 0 ? Math.round((earned / possible) * 100) : 0,
+    unitPoints: questions.every(q => questionPoints(q) === 1),
+  }
+}
+
 // Trim a fractional score to a tidy label: "2" not "2.0", "1.5", "0.33".
 export function formatScore(n: number): string {
   return String(Math.round(n * 100) / 100)

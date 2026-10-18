@@ -25,6 +25,9 @@ export function pageHostsNavButton(pathname: string): boolean {
   if (pathname.startsWith('/project/')) return true
   // The Concept Craft board (its own top bar), and the topic links that open it.
   if (isUnder(pathname, '/craft')) return true
+  // The Shop (StoreSearchBar) — `/store` exactly; the Gem Shop under it is a
+  // plain page under the app header.
+  if (pathname === '/store') return true
   // The Tools tab (ToolsSearchBar) — the catalogue and every tool under it.
   if (isUnder(pathname, '/tools')) return true
   // Actuaria (its HUD row, and the title screen's own top line) — every

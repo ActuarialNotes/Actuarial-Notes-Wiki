@@ -169,7 +169,7 @@ Fact Check status by file type:
 | Resources | 40 | 0 | 0 | 0 | 708 | 748 |
 | **All** | **2,681 (48.6%)** | 13 | 2 | 21 | 2,804 | 5,521 |
 
-There are **2 open critical findings**, both on Exam 6C: *MCT* and *Capital Required*. The
+There are **2 open critical findings**, both on Exam 6C: *MCT* and *Capital Required*. *(Both closed 2026-10-18 by V6; the vault is now 54.8% verified with 0 disputed files — Appendix B.)* The
 percentage verified fell from 49.9% because about 1,560 new pages were added unverified,
 not because anything regressed.
 
@@ -236,7 +236,12 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    vault secrets, then run the smoke test (`daily-plan-email.md`), and record the result
    in that doc.
 
-**Lane 3, content and Fact Check:**
+**Lane 3, content and Fact Check** (ordered by `content-plan.md`'s phases since 2026-10-18):
+0. ~~**Content plan, Phase 1: ready means ready.**~~ ✅ 2026-10-18: every `ready` exam passes all
+   seven gates (P and FM were at 5 and 6, C8); `publication_readiness.py --hold` guards them in CI;
+   no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
+   ×1.5); V10's topic tags and C18's slips done, bar four FM retags. Next is Phase 2: the
+   converter (C13), then the beta exams.
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -356,11 +361,12 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   Part 2 (2020) page, because the two pages share a title. The writer needs a citation →
   page table (or to read the existing page's links) before the next sitting is rendered.
   *(Found by V3, 2026-10-17.)*
-- **C18: two resource-page slips found by V3.** The Atkinson & Dallas page carries the
+- ~~**C18: two resource-page slips found by V3.**~~ ✅ 2026-10-18 (content plan Phase 1). The Atkinson & Dallas page carries the
   Ch. 9 reading's code (ILA101-103-25) though ILA-101 also assigns its Ch. 11 under
   ILA101-104-25, so that card shows the wrong code; the COPLFR page's file name says 2024
   but its `Year` is 2025. *(2026-10-17.)*
-- **V10: settle the FM topic tags.** V4 left 10 minor findings on fm-358…406: their
+- ~~**V10: settle the FM topic tags.**~~ 🟡 2026-10-18 (content plan Phase 1): 13 topics added to
+  `ontology_map.py`, 8 findings resolved; fm-370, 379, 391 and 421 still need a retag. V4 left 10 minor findings on fm-358…406: their
   `topic` values (*Effective Rate*, *Convexity*, *Real Rate of Interest* …) aren't in
   `scripts/ontology_map.py`. Either add the nine topics there (each is a syllabus term with
   a concept page), or retag the questions, which makes them stale until re-verified.
@@ -448,7 +454,7 @@ gates through `--hold` in CI.
 | C5 | Exam 6C → ready | 🟡 2 of 7 | Next | Phase 2. Blocked on D8 (F-001) and the two critical findings (V6). 142 concepts and 67 readings to verify. |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
-| C8 | Close P and FM's own gaps | 🟡 | Next | FM: Q351–Q462 verified (V4); left, the *Term of Annuity* catch-all. P: *Insurer* is in review; 6 generic concepts have no question. |
+| C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
 | C9 | **An SOA ASA-prelim publication plan** | ⬜ no plan exists | Next | FAM, SRM, ALTAM, ASTAM, PA and ATPA. The SOA publishes sample questions for some of them (`soa-exam-converter`). Their commercial textbooks make D7 relevant. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
@@ -472,7 +478,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V3 | Delta re-check of the stale exam pages | ✅ 2026-10-17 | — | 18 FSA pages verified (run `ad0b`); 6U back to `in_review` (its open findings); 6C stays stale behind V6. Noted, not filed: `syllabus_write.py --check` is no longer clean on 15 of the 18 — re-rendering would undo #1629's link names. |
 | V4 | Wave 3a: FM Q351–Q462 | ✅ 2026-10-17 | — | All 112 verified (runs `48b2`, `63b1`). 12 minor findings open: 10 topics not in `ontology_map.py` (add them, or retag), and fm-358's day-1/day-10 wording, which is SOA's. `verify_paper.py` now uses a question's printed number to pick its page. |
 | V5 | Waves 3b–5 | 🟡 Exam 7 and the DISCs done | rides C1–C7 | Each exam's campaign carries its own packets. |
-| V6 | The 2 open critical findings | ⬜ | Next | 6C's *MCT* and *Capital Required* (×1.5 vs ÷1.5). |
+| V6 | The 2 open critical findings | ✅ 2026-10-18 | — | Runs `1567`, `dd77`: *MCT*, *Capital Required*, *Supervisory Target Capital Ratio*, *Probable Maximum Loss* verified; the ×1.5 and LICAT's "Base Solvency Buffer" fixed on 20 more pages (now `in_review`); the 6C figure builder fixed. Left: *Registered Reinsurance* F-002 (major), for a writer. |
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ⬜ | Next | The 2026-10-11 runs have no `_runs` summary. Housekeeping. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
 
@@ -746,6 +752,13 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-18, the Content Plan.** The content subplans are consolidated into
+  `docs/content-plan.md` (the CAS publication plan folded in and removed; the verification plan
+  reduced to its method), in four phases. **Phase 1, ready means ready, is done:** all 7 ready
+  exams pass all 7 gates, `publication_readiness.py --hold` runs in CI, no open critical finding
+  remains (V6 ✅), C8 ✅, C18 ✅, V10 🟡. The vault is **54.8% verified (3,035 of 5,542)**, with 0
+  disputed files.
 
 - **2026-10-17, the next phase.** The Now lanes, worked through:
   - **Engineering:** lint at 0 (E10); E6 golden vectors ✅; E5's `Landing.tsx` split

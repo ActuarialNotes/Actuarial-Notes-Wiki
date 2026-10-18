@@ -1,10 +1,10 @@
 ---
 verification:
-  status: in_review
+  status: stale
   confidence: null
   last_checked: 2026-10-18
   last_checked_by: agent:validate-v1
-  content_hash: sha256:37211bb575df69fbe3f4b32af5e4ea73388850a71fe3c3d4b94d7dcfe832fa9d
+  content_hash: sha256:2160eedbdc7e68f7e88bfb7f5bebc47ae2df6350bf857726b25c4bb2db755cef
   sources:
     - "CAS, Exam Content Outline — Modern Actuarial Statistics II (MAS-II), 2026 (MASII_CO_S_2026 v06 2026_1_13), PDF pp.1-6, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
     - "CAS, Exam MAS-II — Modern Actuarial Statistics-II exam page, read 2026-10-18: '2026 Content Outline' the only outline linked; windows Oct 28 - Nov 5, 2026 and Jan 27 - Feb 2, 2027, sha256:a3a6e5a216691e4995b823b45d304f8ca8cbc70cdc4e07370734b8b167defe8f — https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii"
@@ -137,7 +137,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 
 
 ## Source Material
-> [!answer]- Source Material {5 Sources}
+> [!answer]- Source Material {6 Sources}
 > 
 > - [[Introductory Time Series with R (Cowpertwait - 2009)]]
 >      - D1–D4 — Chapters 1–5 (excluding Sections 3.3 and 3.4), 6, 7 (Sections 7.1, 7.2 and 7.3)
@@ -145,6 +145,8 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 >      - C10–C11 — CAS Monograph #5, 2nd edition, Chapter 7
 > - [[An Introduction to Statistical Learning (James et al. - 2021)]]
 >      - C1–C9 — 2nd edition, Chapters 1 (Background reading only), 2.2, 4.4.2 (Confusion Matrix Only), 8, 10, 12. Exam questions will not be sourced directly from Chapter 1.
+> - [[Measures of Predictive Accuracy (Salis - 2025)]]
+>      - C3, C10 — CAS Study Note, November 2025
 > - [[Nonlife Actuarial Models (Tse - 2009)]]
 >      - A1–A2 — Chapters 6.1–6.3, 7.1–7.4, 8.1–8.2, and 9.1–9.2
 > - [[Linear Mixed Models (West et al. - 2022)]]

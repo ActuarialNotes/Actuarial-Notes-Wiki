@@ -246,24 +246,35 @@ Where the way in sits depends on the surface:
 Either way opens `FactCheckDialog` over `FactCheckPanel` — a bottom sheet on a
 phone, a centred `max-w-lg` card above `sm`, per `docs/style-guide.md` §8.1.
 
-A reader arrives with one question — *can I trust what I just read?* — and the
-verdict answers it in a line. Everything else is the working behind that verdict,
-and it is a lot: findings, the notes people have left, and the books the page was
-read against. So the panel shows the verdict and nothing else until it is asked
-for more; the record unfolds under it on a tap, and folds away again.
+A reader arrives with three questions — *can I trust what I just read?*, *is
+anything wrong with it?*, and *how do they know?* — and the panel answers them
+top to bottom, each a step further in: a verdict that is always on screen, then a
+stack of cards that fold, only the one about what is wrong opened by default.
 
-- **The verdict tile.** The tone's tinted mark beside the verdict, on the
-  `rounded-xl bg-muted/50` block the question-info sheet leads with, with a
-  chevron: it is the panel's one control as well as its answer. One supporting
-  line under it, never two: the one-sentence `detail` for the statuses whose
-  label doesn't say what to do about it (`in_review`, `stale`, `disputed`),
-  otherwise the check date when the label doesn't already carry it. The **Report
-  an issue** action stays out of the disclosure — it is what the panel is *for*,
-  not something it tells you.
-- **Open / Fixed / Notes** — the log, fetched through `fetchWikiFile` on the
-  first unfolding (not on mount: a reader who only wanted the verdict never pays
-  for it) and split by `summarizeLog`. It comes first because what has been
-  *found* on a page is what a reader came for. Each section is a card that folds
+- **The verdict.** The mark beside a headline and one sentence
+  (`factCheckOverview`): whether the page was checked, when, against how many
+  sources, and whether anything is open — *Fact checked · 2 open issues* over
+  "Checked against 2 sources on 17 Oct 2026. None of the open issues is
+  critical." Both come from the page's own `verification:` block, so they never
+  wait on the log and never contradict it. The mark is chosen by the badge's
+  `kind`, not its tone (`FACT_CHECK_ICONS`): a checked page with something open
+  is amber but keeps the double check, and only a page edited since its check
+  shows the re-check arrows. The **Report an issue** action sits in the footer
+  beside the **Full record** link — it is what the panel is *for*, not
+  something it tells you.
+- **Open issues** — the open findings, the only card unfolded by default. Its
+  mark takes the worst open severity's tone and its supporting line is the
+  breakdown ("1 minor · 1 nit").
+- **Check history** — each pass that set the page's status (an entry with
+  `status_set`, `summarizeLog`'s `checks`), newest first: its date and the
+  status it set; opened, what the pass concluded (`note`), who ran it and how
+  confident, and behind one more tap *What was compared* (`checks_run`) — the
+  itemised evidence for the conclusion, long, and so the last thing shown.
+- **The log**, fetched through `fetchWikiFile` when the panel mounts. A page
+  nobody has checked has no log, and shows nothing for it; a page the block
+  says *was* checked but whose log can't be read says so ("Couldn't load the
+  details of this check") rather than "nothing recorded".
+- **Open / Fixed / Notes** — the rest of the log, split by `summarizeLog`. Each section is a card that folds
   (`components/FactCheckSection.tsx`), in the verdict tile's own shape — a
   tinted mark, the section's name and count, a chevron as big as the tile's —
   so the folded stack reads as a summary on its own (*Open 3 · Fixed 11 ·
@@ -292,10 +303,9 @@ for more; the record unfolds under it on a tap, and folds away again.
 - **Checked against** — the sources the pass actually cited, as the same
   `components/wiki/ResourceMetaCard.tsx` the resource page leads with: cover,
   title, author, the bibliographic chips, the link to go and get it, and under
-  them the chapters and pages the claim was checked on. It is under the record
-  because it is how a reader would go and settle a finding themselves, and it
-  is the last card of the same folding shape — folded unless it is the only
-  one, since a page with no log has nothing else to open.
+  them the chapters and pages the claim was checked on. It sits right under Open
+  issues because it is how a reader would go and settle a finding themselves,
+  and it is unfolded by default unless there are open issues to read first.
 
   A citation is written for an auditor — the work, the pages, a sha256 of the
   exact file that was read, a version string, a URL — so

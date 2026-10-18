@@ -2659,7 +2659,7 @@ def reinsurance_contracts_held() -> Fig:
 
 
 @figure("Registered Reinsurance", "A cedant inside Canada, within OSFI's reach, "
-        "ceding to a registered reinsurer beside it for full capital credit and "
+        "ceding to a registered reinsurer beside it for capital credit and "
         "across the border to an unregistered one for none", width=WID)
 def registered_reinsurance() -> Fig:
     f = vcard()
@@ -2682,7 +2682,7 @@ def registered_reinsurance() -> Fig:
     f.text(288, 364, "unregistered", cls="bold")
 
     f.arrow(200, 160, 262, 160, colour=GREEN, width=2)
-    f.text(231, 146, "full credit", cls="sm")
+    f.text(231, 146, "credit", cls="sm")
     f.arrow(192, 196, 264, 300, colour=AMBER, width=2, dash=True)
     f.text(216, 280, "no credit", cls="sm", anchor="end")
     return f

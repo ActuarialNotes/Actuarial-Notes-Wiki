@@ -1,11 +1,13 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a86cd271464836d38a1362f76524996a2c22e3530ac5678ac677dd0a13dee81d
-  sources: []
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7f89eb53ec161c51239466588de53d3e63ca992bda77c3c3b9c2d66c5fabd002
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
   open_findings: 1
   open_critical: 0
   log: .verify/Concepts/Statement of Changes in Equity.md
@@ -38,7 +40,7 @@ verification:
 > >
 > > **The insurer earned $\$46$ million and paid out $\$60$ million** — a payout ratio of $130\%$. Combined with a $\$28$ million OCI loss (most likely FVOCI bond values falling as rates rose), equity fell $\$42$ million, or $14\%$.
 > >
-> > **Why this is a supervisory concern.** Dividends exceeding earnings are a distribution of accumulated capital, and they were paid in a year when the balance sheet was also absorbing an unrealised investment loss. If the [[Base Solvency Buffer]] were $\$160$ million, the [[MCT]] ratio fell from roughly $194\%$ to $168\%$ in a single year, and **$60\%$ of that decline was a discretionary decision by the board**.
+> > **Why this is a supervisory concern.** Dividends exceeding earnings are a distribution of accumulated capital, and they were paid in a year when the balance sheet was also absorbing an unrealised investment loss. If minimum capital required were $\$160$ million, the [[MCT]] ratio fell from roughly $194\%$ to $168\%$ in a single year, and **$60\%$ of that decline was a discretionary decision by the board**.
 > >
 > > **The questions that follow:**
 > >

@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:44eb5f086bbff01fa2695e8991c05bc340627405bc601338e3bba1f9af1948c7
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d2f315ccb8e950ece10fbbb9efd0ecc11db6a6bb13ee97d7d05558ce424f5d79
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Ripple Effect.md
 ---
@@ -23,7 +25,7 @@ verification:
 ![[Media/Figures/Ripple_Effect.svg|340]]
 
 > [!example]- A Catastrophe With and Without Ripples {Example}
-> An insurer suffers a $\$60$ million net catastrophe loss. Capital available before the event is $\$340$ million and the base solvency buffer is $\$200$ million.
+> An insurer suffers a $\$60$ million net catastrophe loss. Capital available before the event is $\$340$ million and minimum capital required under the [[MCT]] is $\$200$ million.
 >
 > Model the effect with direct impact only, then with ripple effects: reinstatement premium $\$8$ million; reinsurance renewal cost rising $\$12$ million annually; a downgrade causing a $9\%$ loss of commercial business worth $\$14$ million of annual underwriting contribution; and borrowing costs rising $\$3$ million annually.
 >

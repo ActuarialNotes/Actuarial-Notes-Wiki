@@ -1,12 +1,14 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a6e4c733ed0b1942f948146eb7beb8c9b74f3034e207fda2912ea0180ee09471
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:7c21312b69610f6618058c68f04acc9b36ebc204d9f5a10f7c716ee1aa5a8877
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Materiality.md
 ---
@@ -23,7 +25,7 @@ verification:
 ![[Media/Figures/Materiality.svg|340]]
 
 > [!example]- Setting and Applying a Materiality Standard {Example}
-> An insurer has [[Insurance Contract Liabilities]] of $\$800$ million, [[Capital Available]] of $\$260$ million, a [[Base Solvency Buffer]] of $\$150$ million (so an [[MCT]] ratio of $173\%$), and pre-tax income of $\$35$ million. Its [[Internal Target Capital Ratio|internal target]] is $170\%$.
+> An insurer has [[Insurance Contract Liabilities]] of $\$800$ million, [[Capital Available]] of $\$260$ million, minimum capital required of $\$150$ million (so an [[MCT]] ratio of $173\%$), and pre-tax income of $\$35$ million. Its [[Internal Target Capital Ratio|internal target]] is $170\%$.
 >
 > Select a materiality standard for the valuation, and apply it to three findings: a $\$3$ million data reconciliation difference; a $\$9$ million potential understatement in one line's tail; and eleven separate approximations each conservative by about $\$0.8$ million.
 >
@@ -33,7 +35,7 @@ verification:
 > > - $1\%$ of liabilities: $\$8$M
 > > - $5\%$ of capital available: $\$13$M
 > > - $10\%$ of pre-tax income: $\$3.5$M
-> > - The amount that would take the MCT ratio below the $170\%$ internal target: capital available would need to fall to $1.70 \times \$150 = \$255$M, so **$\$5$ million** pre-tax (roughly $\$7$M pre-tax at a $27\%$ rate).
+> > - The amount that would take the MCT ratio below the $170\%$ internal target: capital available would need to fall to $1.70 \times \$150 = \$255$M, so **$\$5$ million** after tax (roughly $\$7$M pre-tax at a $27\%$ rate).
 > >
 > > The last is the tightest and the most decision-relevant: this insurer sits $3$ points above its internal target, so a modest error changes the supervisory picture. **Select roughly $\$5$–$7$ million**, and document why.
 > >

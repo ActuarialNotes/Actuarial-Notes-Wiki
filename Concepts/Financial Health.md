@@ -1,19 +1,21 @@
 ---
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a48fbc32bd2d6066ee385cb8856f44004596b579def4a7a840f7a253f1b72fcb
-  sources: []
-  open_findings: 1
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b6a03ad9ab0aa21b7082493d82f309acfb05ce96b45233488b0be686d0f61603
+  sources:
+    - "OSFI, Minimum Capital Test Guideline (2024), Guideline A, §1.1.1, §1.1.2, §1.2.1, §4.2.1, sha256:ec08c0d9b998c17749d099bdc0e96aeb4508a912b9a5d4eb390335602b03fd0e — https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/minimum-capital-test-guideline-2024"
+    - "OSFI Guideline A-4, Regulatory Capital and Internal Capital Targets (December 2017), p.3, sha256:f68346b481f701b9a9ccac13cac872c8e7c009c96d2a7a51b66e523c00e6b1fa — https://www.casact.org/sites/default/files/2021-03/6C_OSFI_Target_Capital.pdf"
+  open_findings: 0
   open_critical: 0
   log: .verify/Concepts/Financial Health.md
 ---
 
 **Financial Health** is an insurer's capacity to keep its promises — to pay claims as they fall due, today and under adverse conditions, while remaining a going concern. It is judged not from one number but from capital adequacy, reserve adequacy, profitability, leverage, liquidity and reinsurance quality read together, using the tools each jurisdiction's regulators and [[Rating Agency|rating agencies]] supply.
 
-> $$\text{MCT ratio} = \frac{\text{Capital Available}}{\text{Base Solvency Buffer}}$$
+> $$\text{MCT ratio} = \frac{\text{Capital Available}}{\text{Minimum Capital Required}}$$
 >
 > $$\text{RBC ratio} = \frac{\text{Total Adjusted Capital}}{\text{Authorized Control Level RBC}}$$
 
@@ -40,7 +42,7 @@ verification:
 > [!example]- Two Insurers, One MCT Ratio {Example}
 > Two Canadian insurers each report an MCT ratio of $210\%$. Insurer A has claim liabilities of $1.5$ times capital available and favourable development. Insurer B has claim liabilities of $3.2$ times capital available, adverse development in each of the last three years, and $28\%$ premium growth.
 >
-> If B's claim liabilities prove $10\%$ deficient, what is its MCT ratio? (Treat capital available as moving dollar for dollar with the deficiency and ignore the change in the buffer.)
+> If B's claim liabilities prove $10\%$ deficient, what is its MCT ratio? (Treat capital available as moving dollar for dollar with the deficiency and ignore the change in minimum capital required.)
 >
 > > [!answer]-
 > > Let capital available be $C$, so liabilities are $3.2C$. A $10\%$ deficiency is $0.32C$.
@@ -53,4 +55,4 @@ verification:
 > > \end{align*}
 > > $$
 > >
-> > Below the $150\%$ supervisory target — and understated, since strengthening reserves also raises the buffer. The same $10\%$ error at Insurer A costs $0.15C$ and leaves it at $178.5\%$. Identical ratios, very different health: the reserves-to-capital leverage and the development trend are what separate them.
+> > Below the $150\%$ supervisory target — and overstated, since strengthening reserves also raises minimum capital required. The same $10\%$ error at Insurer A costs $0.15C$ and leaves it at $178.5\%$. Identical ratios, very different health: the reserves-to-capital leverage and the development trend are what separate them.

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 46 360 366" width="360" height="366" role="img">
-  <title>A cedant inside Canada, within OSFI's reach, ceding to a registered reinsurer beside it for full capital credit and across the border to an unregistered one for none</title>
+  <title>A cedant inside Canada, within OSFI's reach, ceding to a registered reinsurer beside it for capital credit and across the border to an unregistered one for none</title>
   <style>:root {
   --surf: #ffffff; --edge: #c7c7c7; --ink: #000000; --dim: #424242;
   --grid: #dedede; --soft: #e8e8e8; --axis: #8c8c8c;
@@ -90,7 +90,7 @@ text {
     <rect x="290.8" y="328.32" width="6.72" height="5.6" fill="#d97706" fill-opacity="0.55"/>
     <text x="288" y="364" text-anchor="middle" class="bold">unregistered</text>
     <line x1="200" y1="160" x2="262" y2="160" class="thin" stroke="#059669" stroke-width="2" marker-end="url(#ah059669)"/>
-    <text x="231" y="146" text-anchor="middle" class="sm">full credit</text>
+    <text x="231" y="146" text-anchor="middle" class="sm">credit</text>
     <line x1="192" y1="196" x2="264" y2="300" class="thin dash" stroke="#d97706" stroke-width="2" marker-end="url(#ahd97706)"/>
     <text x="216" y="280" text-anchor="end" class="sm">no credit</text>
   </g>

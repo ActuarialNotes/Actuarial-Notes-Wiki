@@ -25,6 +25,7 @@ import mdmath
 import pdf_extract as px
 import question_classify as qc
 import question_write as qw
+import report_gaps as rg
 
 
 # ─── mdmath ───────────────────────────────────────────────────────────────────
@@ -1540,14 +1541,20 @@ class TestWriter(unittest.TestCase):
         self.assertIn("### Examiner Report\nMost candidates knew the weighted LDF.", part_b)
         self.assertNotIn("weighted LDF", md.split("## Part b")[0])
 
-    def test_a_question_wide_report_stays_out_when_parts_have_their_own(self):
+    def test_a_question_wide_report_opens_the_first_part_that_has_its_own(self):
+        # C13: the report's opening paragraph, printed above `Part a`, used to
+        # be dropped whenever a part carried commentary of its own.
         record = dict(self.LEGACY_RECORD, parts=[
-            dict(self.LEGACY_RECORD["parts"][0], report="Part a comment."),
-            self.LEGACY_RECORD["parts"][1],
+            self.LEGACY_RECORD["parts"][0],
+            dict(self.LEGACY_RECORD["parts"][1], report="Part b comment."),
         ])
         md = qw.render(record, self.JUDGED)
-        self.assertIn("Part a comment.", md)
-        self.assertNotIn("weighted LDF", md)
+        part_b = md.split("## Part b")[1]
+        self.assertIn(
+            "### Examiner Report\nMost candidates knew the weighted LDF.\n\nPart b comment.", part_b
+        )
+        self.assertNotIn("weighted LDF", md.split("## Part b")[0])
+        self.assertEqual(md.count("weighted LDF"), 1)
 
     def test_report_override_replaces_the_named_part(self):
         record = qw.apply_report_override(
@@ -1931,6 +1938,42 @@ class TestEndToEnd(unittest.TestCase):
             doc.close()
             self.assertTrue((tmp / "page.png").exists())
             self.assertLess(w * h, full.width * full.height)
+
+
+class ReportGapsTest(unittest.TestCase):
+    """C13: finding and restoring the report paragraph the writer dropped."""
+
+    OVERALL = ("Candidates were expected to test for calendar year impacts and identify "
+               "causes of those impacts. Most candidates performed well.")
+    FILE = (
+        "---\nid: \"x\"\n---\n\nStem.\n\n## Part a (1 point)\n\n### Explanation\nWork.\n\n"
+        "### Examiner Report\nThe most common error was E[Z].\n\n## Part b (1 point)\n\n"
+        "### Explanation\nMore.\n\n### Examiner Report\nMost listed inflation.\n"
+    )
+
+    def test_a_file_without_the_paragraph_is_missing(self):
+        self.assertEqual(rg.score(self.OVERALL, self.FILE), "missing")
+
+    def test_restoring_it_opens_the_first_report_and_then_scores_present(self):
+        restored = rg.insert_overall(self.FILE, self.OVERALL)
+        part_a = restored.split("## Part b")[0]
+        self.assertIn("### Examiner Report\nCandidates were expected", part_a)
+        self.assertIn("identify causes of those impacts. Most candidates performed well.\n\n"
+                      "The most common error was E[Z].", part_a)
+        self.assertEqual(restored.count("Candidates were expected"), 1)
+        self.assertEqual(rg.score(self.OVERALL, restored), "present")
+
+    def test_a_reworded_paragraph_is_paraphrased_not_missing(self):
+        reworded = self.FILE.replace(
+            "The most common error",
+            "Candidates had to identify the causes of calendar year impacts and test for "
+            "those impacts; most performed well. The most common error",
+        )
+        self.assertEqual(rg.score(self.OVERALL, reworded), "paraphrased")
+
+    def test_no_paragraph_and_no_report_section(self):
+        self.assertEqual(rg.score("", self.FILE), "none")
+        self.assertIsNone(rg.insert_overall("## Explanation\n\nNo report.", self.OVERALL))
 
 
 if __name__ == "__main__":

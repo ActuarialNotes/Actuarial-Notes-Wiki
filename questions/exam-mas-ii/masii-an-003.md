@@ -14,12 +14,14 @@ wiki_link:
 answer: "C"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5eb154528ece981893e86bf149614393eff3691e983cdc4872d06a363f7bdb6a
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.12 Credibility, printed pp.220-221 (PDF 232-233): Z = N/(N+K), K = EVPV/VHM, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
+    - "Dean, Topics in Credibility Theory, SOA Construction and Evaluation of Actuarial Models Study Note (C-24-05), PDF pp.10-11: Bühlmann Z = N/(N+K), N the number of observations, sha256:6e31928104c195095960e92ec11de665106d1c11357b8bb5674410d377afc1b0 — https://www.soa.org/globalassets/assets/files/edu/c-24-05.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-003.md

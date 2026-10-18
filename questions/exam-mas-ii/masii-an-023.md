@@ -12,13 +12,17 @@ wiki_link:
 answer: "C"
 points: 2
 verification:
-  status: unverified
+  status: in_review
   confidence: null
-  last_checked: null
-  last_checked_by: null
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2f6096379a230b86c3453e80d626518091d4a2452cd9b23a35c3d0f291fe4e1e
-  sources: []
-  open_findings: 0
+  sources:
+    - "Hyndman & Athanasopoulos, Forecasting: Principles and Practice, 3rd ed., §8.1 Simple exponential smoothing, 'Flat forecasts', page read 2026-10-18, sha256:be59a506b32748ede644be78b4509e9660d3920d21dea766901d5e9b3af71749 — https://otexts.com/fpp3/ses.html"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.3.2 Forecasting with Single Exponential Smoothing, sha256:107a46792d21ed5714d01205286236b5dc51f32a09838c71324e81220ac0586d — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc432.htm"
+    - "Cowpertwait & Metcalfe, Introductory Time Series with R (Springer 2009), contents, library TOC scan PDF pp.1-2, sha256:64c8d1acd2d515e84acce255da1766a7b544603ad1096f40b2ed7949bc4d791c — https://obalkyknih.cz/file/toc/233741/pdf"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), p.4 Cowpertwait chapter scope, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+  open_findings: 2
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-023.md
 ---

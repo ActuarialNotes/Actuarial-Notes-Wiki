@@ -14,12 +14,13 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5a094a6167186896e96bed16fcdf4864ea2354acf49508533f712ff6032c3fe2
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §2.2.1-2.2.2, PDF pp.43-46: training MSE declines monotonically; U-shaped test MSE; 'Overfitting refers specifically to the case in which a less flexible model would have yielded a smaller test MSE'; 'the expected test MSE can never lie below Var(e)', sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-007.md

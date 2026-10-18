@@ -13,12 +13,13 @@ wiki_link:
 answer: "E"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:e7de116b322f88b73e9c64a5c0a4c021413a5eb97ee42a3fa7f5754530940b3d
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §10.1, PDF pp.411-413: parameters beta0..betaK and w10..wKp all estimated; Fig.10.1 caption 'these Ak are not directly observed. The functions hk(.) are not fixed in advance, but are learned during the training'; without a nonlinear g 'the model f(X) in (10.1) would collapse into a simple linear model', sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-013.md

@@ -12,12 +12,13 @@ wiki_link:
 answer: "E"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:67fddd9449b11903681b5d51e0fb96fa45dcf9f364757a8b2ee6babaf2c03f1c
-  sources: []
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2020), §7.2.1 Simple Quantile Plots, printed pp.77-78 (PDF 87-88): steps 1-6 incl. 'Compare the two quantile plots'; criteria predictive accuracy, monotonicity, vertical distance; Figure 22 worked comparison, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-019.md

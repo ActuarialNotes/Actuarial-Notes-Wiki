@@ -13,13 +13,15 @@ wiki_link:
 answer: "A"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:b04587134a9ef5b8e3d7d46c421e4e6c735cd5fd49087df1660b6504213b2910
-  sources: []
-  open_findings: 0
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2020), §10.5 Elastic Net GLMs, printed pp.101-104 (PDF 111-114), Eq.27 and footnote 27, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), pp.3-4 Domain C tasks and readings, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-015.md
 ---

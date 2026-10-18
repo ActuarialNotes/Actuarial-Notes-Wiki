@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:3da3b245b84573870a43e477d0a8b944d084ba04b291826de28b4cfb2fb232d4
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §8.2.1 Out-of-Bag Error Estimation, PDF pp.350-351: about two-thirds of observations per tree, 'around B/3 predictions'; 'with B sufficiently large, OOB error is virtually equivalent to leave-one-out cross-validation error'; OOB error 'a valid estimate of the test error', sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-009.md

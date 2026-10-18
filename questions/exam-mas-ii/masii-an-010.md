@@ -13,12 +13,13 @@ wiki_link:
 answer: "B"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:17f64e5d42c2468999060867b5fbeb97be8537fef68e1fe533193cf5a5c1525a
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §8.2.1 Variable Importance Measures, PDF p.351: 'the total amount that the RSS (8.1) is decreased due to splits over a given predictor, averaged over all B trees', sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-010.md

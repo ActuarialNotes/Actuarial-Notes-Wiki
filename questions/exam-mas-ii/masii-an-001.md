@@ -14,12 +14,13 @@ wiki_link:
 answer: "B"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:19a8ea5e2ffc008291a4fac2d8620d04017c5944d52973a66c8bc29228536161
-  sources: []
+  sources:
+    - "Werner & Modlin, Basic Ratemaking, 5th ed. (CAS 2016), Ch.12 Credibility, printed pp.217-220 (PDF 229-232): full-credibility standard 1,082 claims at p=90%, k=5%; square-root rule Z = sqrt(n/1,082); worked example Z = sqrt(100/1,082) = 0.30, sha256:6b214d4db52674df2e83343920c06781e491254bd77f27e32ba312faaff3782c — https://www.casact.org/sites/default/files/2021-03/5_Werner_Modlin.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-001.md

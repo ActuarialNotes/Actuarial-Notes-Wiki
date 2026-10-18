@@ -13,13 +13,15 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:753cd7300809870c62f11e03e5b4301929f9f75ee621e933da39d30cd4881bfc
-  sources: []
-  open_findings: 0
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §5.2 eq.(5.8), PDF p.220: SE_B = sqrt(1/(B-1) sum (alpha*r - mean)^2), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
+    - "CAS, Exam MAS-II Content Outline 2026 (MASII_CO_S_2026 v06 2026_1_13), p.4 James et al. chapters; p.5 MAS-I review list, sha256:babf0548b7d674e02d2cffdaee11e5063f8e8c03b3461b8ba2bdfdbc0f90ea1b — https://www.casact.org/sites/default/files/2026-01/MASII_Content_Outlines_2026.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-008.md
 ---

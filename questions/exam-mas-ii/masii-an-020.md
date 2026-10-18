@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:689dbb11d195184ade3a11f1db52dd29adc2cd3f9e78a97b5d18ad65933ad0a5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a3dba3e5eba77df7dff97e2d0c5e6cfcbb839912e36ac01aa31d8858f7acb9f0
+  sources:
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2020), §7.2.2 Double Lift Charts, printed pp.78-79 (PDF 88-89): sort ratio Model A / Model B; first quantile 'those risks which Model A thinks are best relative to Model B'; winner matches actual pure premium in each quantile, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-020.md
@@ -46,7 +47,7 @@ In decile 1 the actual (0.72) is close to the proposed model (0.75) and far belo
 
 **Why not the others**
 
-- **B** — a flat line near 1.00 in a double lift chart is the signature of the *losing* model: the risks it fails to separate are the ones the other model has identified.
+- **B** — in a double lift chart the winning model is the one that more closely matches the actual pure premium in each quantile, not the one whose predictions stay near 1.00. Here the current plan is the further from the actuals in both deciles (0.98 against 0.72, and 0.96 against 1.35).
 - **C** — that describes a simple quantile plot, sorted on one model's prediction. A double lift chart sorts on the ratio, so decile 1 is "best relative to the current plan", not best in absolute terms.
 - **D** — disagreement between the models is exactly what the chart is built to examine.
 - **E** — in decile 10 the proposed model *under*-predicts (1.12 against 1.35), and by less than the current plan does.

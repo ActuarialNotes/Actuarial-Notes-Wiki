@@ -13,12 +13,13 @@ wiki_link:
 answer: "E"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:abb8b9b31919a0f33f1de7cd66648864028c463c5fffe9ecde4ca68cf3889eee
-  sources: []
+  sources:
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.4.6 Box-Jenkins Model Identification, sha256:5b9f5c9fc2ca32741d35d3218d0c94f95a2fd5cdc4adcdbe28dacc200a185921 — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc446.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-022.md

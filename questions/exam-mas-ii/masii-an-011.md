@@ -12,12 +12,13 @@ wiki_link:
 answer: "A"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:014c692f231397ec2c10e108cd36d03985f0fa246fa776fbeb2d2fc00d3e986b
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §8.1.1, PDF p.338: regions chosen to minimize RSS (8.1); recursive binary splitting picks the cutpoint giving the greatest reduction in RSS, sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-011.md

@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:01620c3e47ab2e42554f06cd21cba3146a0f62f15e31ecce645004c63d41aa2e
-  sources: []
+  sources:
+    - "Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II (updated November 6, 2025), §3.2 Gini Index (for Lift), PDF pp.4-7: aggregate by predicted loss cost; x cumulative exposure, y cumulative loss; G = 1 - sum (x_j - x_(j-1))(y_(j-1) + y_j), sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2020), §7.2.4 The Gini Index, printed pp.80-81 (PDF 90-91): twice the area between the Lorenz curve and the line of equality, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-021.md

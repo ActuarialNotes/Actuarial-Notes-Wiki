@@ -12,12 +12,14 @@ wiki_link:
 answer: "C"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:19a6c2864c2569f626f11d945ae0936b377fae6f942fa49a3484453b3b8940b5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:84521bc3d86cdf0d8bafd874b20712c907d3bfd180a146f1f7d4f0b042fa9ae8
+  sources:
+    - "Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II (updated November 6, 2025), §4.2 Tables 8-12, PDF pp.8-12: ROC points by threshold, trapezoidal AUROC, pair-count form AUROC = (1/2NP) sum n_i(c_(i-1) + c_i), sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
+    - "Goldburd, Khare, Tevet & Guller, Generalized Linear Models for Insurance Rating, CAS Monograph 5, 2nd ed. (2020), §7.3, printed p.82 (PDF 92): Gini for a logistic model from the Lorenz curve, sha256:89b203ea55208911c4d8f6ef1ede4dd6c0206d47999b5e8aff96fe233c0ff757 — https://www.casact.org/sites/default/files/2021-01/05-Goldburd-Khare-Tevet.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-017.md
@@ -64,7 +66,7 @@ Equivalently, AUROC is the share of (fraud, non-fraud) pairs in which the fraud 
 
 **Why not the others**
 
-- **A** — 2(0.6875) - 1 = 0.375 is the Gini index, not the AUROC; counting the pairs a non-fraud wins, 5/16 = 0.3125, lands here too.
+- **A** — counting the pairs a non-fraud wins, 5/16 = 0.3125, lands here.
 - **B** — 0.5 is a model that ranks no better than chance; this one ranks fraud higher in 11 of 16 pairs.
 - **D** — 0.75 is the accuracy, sensitivity and specificity at a threshold of 0.55, a single point of the curve rather than the area under all of it.
 - **E** — would require the frauds to outrank nearly every non-fraud; here claim 2 (not fraud) outranks three of the four frauds, and claim 7 (fraud) sits below claims 5 and 6.

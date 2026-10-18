@@ -15,12 +15,14 @@ wiki_link:
 answer: "A"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:173ab19c2163b7b3e1638f3fcd97da3ee3b2a902dec457ef8960d210e700fe9a
-  sources: []
+  sources:
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.4.6 Box-Jenkins Model Identification, sha256:5b9f5c9fc2ca32741d35d3218d0c94f95a2fd5cdc4adcdbe28dacc200a185921 — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc446.htm"
+    - "NIST/SEMATECH e-Handbook of Statistical Methods, §6.4.4.8 Box-Jenkins Model Diagnostics, sha256:679fab31f21e0a357942a10c8214750aee9e5933bf2986958974a176e03d866f — https://www.itl.nist.gov/div898/handbook/pmc/section4/pmc448.htm"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-005.md

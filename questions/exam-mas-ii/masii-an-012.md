@@ -13,12 +13,13 @@ wiki_link:
 answer: "E"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:5eb6c3dbaa9e552600b4a007180fc7b4d0956c4c1599110b4a884a54de76f080
-  sources: []
+  sources:
+    - "James, Witten, Hastie & Tibshirani, An Introduction to Statistical Learning, 2nd ed. (Springer 2021), CAS-hosted PDF, §10.1 eqs.(10.1)-(10.5), PDF pp.411-412: f(X) = beta0 + sum beta_k g(w_k0 + sum w_kj X_j); sigmoid (10.4); ReLU g(z) = (z)+ (10.5), sha256:f708349f34d2b345a40766f7b4830d22c1bcbf90b4194ae603dcd1245b4e975f — https://www.casact.org/sites/default/files/2022-12/James-G.-et-al.-2nd-edition-Springer-2021.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-012.md

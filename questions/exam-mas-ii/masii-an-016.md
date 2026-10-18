@@ -11,12 +11,13 @@ wiki_link:
 answer: "D"
 points: 2
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-18
+  last_checked_by: agent:validate-v1
   content_hash: sha256:85e8660fb6b77d65c24a7e9456d00070dbefdafef4454fe7a5b6137ec2e2e81e
-  sources: []
+  sources:
+    - "Salis, Measures of Predictive Accuracy, CAS Study Note for MAS-II (updated November 6, 2025), §4.1 Tables 6-7, PDF p.8: specificity TN/N; sensitivity TP/P; precision TP/P*; negative predicted value TN/N*, sha256:e952ace6ea6cdc1bea50ffcd81e53227de836e9e7b58a85bb13e86885f67a010 — https://www.casact.org/sites/default/files/2026-01/MAS-II_Measures_of_Predictive_Accuracy_Study_Note-1.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-mas-ii/masii-an-016.md

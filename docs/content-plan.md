@@ -344,13 +344,25 @@ every CAS bank about to be checked.
 1. ~~**C13**, the converter's dropped opening paragraph~~ ✅ (below).
 2. **Exam 8** (C1): the last two gates wait on outside sources (*Risk*'s ERM section, the ISO CGL
    plan, D20). Promote when they pass.
-3. **Exam 9** (C2) → **Exam 5** (C3, after D8) → **MAS-II** (C4) → **Exam 6C** (C5, after D8) →
+3. **Exam 9** (C2) → **Exam 5** (C3) → **MAS-II** (C4) → **Exam 6C** (C5) →
    **PCPA** (C6, a vault-written bank). §3.1 has what each takes.
 4. Bring every beta exam up to the beta bar it already sits above — G3 and G6 — at the start of
    its campaign, so `--hold` has no beta warnings left at the end of the phase.
 5. Housekeeping: V7's missing run summaries; the "(as printed)" notes on Exam 8's papers.
 
 **Exit test:** every beta exam passes `--check`, or is blocked only by a decision in §6.
+
+**Decisions settled (18 Oct 2026):** D8, D22, D23, D24 and Exam 9's three held questions are
+decided (§6), so nothing in this phase now waits on the maintainer except D20, whose default
+stands — Exam 8 stays beta until the ISO manual is read. The work they unblock, in order:
+
+1. **Page edits** — Exam 5 (D8: A18, the v02 wording, `*Key concepts:*` lines, chapter scopes),
+   Exam 6C (D8: domain C re-transcribed, F-002's scope, the objective filter dropped) and MAS-II
+   (D23: the outline's 21 tasks), each re-verified against its outline so G1 can pass.
+2. **MAS-II's bank** — the ~35 McElreath questions marked `off_syllabus` (D24).
+3. **Exam 9** — the three held questions resolved as decided, then the 36 concepts' open-text
+   packets (D22).
+4. Then the campaigns as §3.1 orders them: Exam 5's papers, 6C's, PCPA's bank.
 
 **Progress (18 Oct 2026):**
 
@@ -426,18 +438,19 @@ build with the default until the decision is made.
 | D5 | CAS plan D1 | Does a bank written entirely by the vault count as ready? (the DISCs, PCPA, 6U) | Yes, recorded |
 | D6 | CAS plan D2, verification plan §7.3 | Verify the 249 off-syllabus questions with their papers? | No |
 | D7 | CAS plan D3, verification plan §7.6 | Is a medium confidence ceiling enough for a commercial-only source? | Yes |
-| D8 | CAS plan D4, verification plan §7.2 | 6C's F-001 (domain C renumbering), and Exam 5's v02 outline | — (needs a call) |
+| D8 | CAS plan D4, verification plan §7.2 | 6C's F-001 (domain C renumbering), and Exam 5's v02 outline | ✅ settled 18 Oct 2026: **transcribe CAS's words; the vault's additions go on `*Key concepts:*` lines.** 6C: domain C's five tasks as the Fall 2026 outline prints them, in its order; F-002's added scope (litigation environment, funding mechanisms) linked to the nearest existing pages; the shelf's Learning objective filter dropped for 6C until CAS's reading codes match its tasks (6U's precedent). Exam 5: A18 added, every task and the domain B preamble restored to the v02 outline's words, the vault-added clauses' links moved to `*Key concepts:*` lines (the concept set unchanged), and the Werner and Friedland chapter scopes added to Source Material |
 | D9 | verification plan §7.4 | The orphan concepts: link, merge or delete | Leave them unverified |
 | D10 | CAS plan §4.1 | Exam 7's questions on dropped readings; 2012 q20 filed under Exam 9 | Keep as they are |
 | D15 | CONCEPT_GAPS §13 | The 9 ambiguous targets and the 21 stubs | Link the proposed pages |
 | D17 | CAS plan D5 | The DISC link design: one page per lettered section | The current design |
 | D18 | syllabus-pipeline-review §4 | The review's owner decisions D1–D4, applied but never written up | As applied |
-| D20 | — | A reading with no public copy (the ISO CGL plan) | `in_review`; Exam 8's G5 stays red |
+| D20 | — | A reading with no public copy (the ISO CGL plan) | ✅ settled 18 Oct 2026: **the default stands.** P1 is not loosened: the page stays `in_review`, Exam 8 stays beta, until someone reads the study-kit manual |
 | D21 | — | Goldburd et al. 2020 vs the 2025 revision Exam 8 assigns | The page as it is |
-| D23 | — | MAS-II's page has 36 tasks where the 2026 outline has 21 (F-001): restore the outline's (about ten in-reading concepts tagged on paper questions would leave the syllabus) or keep the vault's | The page as it is, `in_review`; G1 stays red |
-| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | Served, as they are |
-| D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | The 36 concepts and 2 readings stay `in_review`; G4 and G5 stay red |
+| D23 | — | MAS-II's page has 36 tasks where the 2026 outline has 21 (F-001): restore the outline's (about ten in-reading concepts tagged on paper questions would leave the syllabus) or keep the vault's | ✅ settled 18 Oct 2026: **the outline's 21 tasks, verbatim**; the vault's finer concepts (*Posterior Distribution*, *AIC* …) stay on the syllabus on `*Key concepts:*` lines — D8's rule |
+| D24 | — | MAS-II's 2019 papers' ~35 Bayesian/MCMC questions (McElreath, no longer assigned): `off_syllabus` or served | ✅ settled 18 Oct 2026: **`off_syllabus: true`** — kept, found by sitting and search, out of quiz draws, as Exam 9's and 6C's outlived questions are |
+| D22 | — | Exam 9's unread readings (Brehm, Mildenhall & Major, Grossi & Kunreuther; both Cummins articles; CJS's JEP text): a copy, or a reachable author-posted one | ✅ settled 18 Oct 2026: **verify on open texts at D7's medium ceiling** — each concept against a citable open source that states the same thing (MAS-II's method: Loss Data Analytics, fpp3, NIST), with the assigned reading's contents and catalogue record as the scope check. Only what no open source covers stays `in_review`. The two readings' own pages stay as verified at medium |
 | — | verification plan §7.5 | Write missing reading pages before their concepts' packets | ✅ settled: write them first (6U's and Exam 8's were) |
+| — | Exam 9 campaign (A.4) | Its three held questions | ✅ settled 18 Oct 2026: **2013 Q15** gets a note naming the two assumptions its key rests on (no investment income on capital; losses at year end), then a re-pass; **2014 Q16b** keeps CAS's ranking (the CDO² tranche safest) with a note that CAS accepted any ranking with a valid explanation, then a re-pass; ***Prepayment Risk*** is cut back to the outline's words and `cas9-an-009` replaced by a C5 question on what Panning or CJS teach |
 | — | CAS plan D6 | Frameworks only The Institutes' course states | ✅ settled 11 Oct 2026: rewritten to open sources (Appendix A.2.6) |
 
 ---

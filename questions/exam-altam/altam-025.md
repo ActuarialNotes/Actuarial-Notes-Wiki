@@ -12,17 +12,25 @@ wiki_link:
   - Concepts/Annuities
   - Concepts/Equivalence+Principle
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:641649a52c7fa40be9ecaaee810fd3fe2cacf4beb35f9a87bcd0bdfa2739e6a1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-025.md
 ---
 
 ABC Insurance uses the following model for calculating premiums and policy values for joint life insurance policies.
 
-*(Figure: four-state model — 0: (x), (y) alive; 1: (x) alive, (y) dead; 2: (x) dead, (y) alive; 3: (x) dead, (y) dead; arrows 0 → 1, 0 → 2, 1 → 3 and 2 → 3)*
+![State diagram: 0, (x), (y) alive; 1, (x) alive, (y) dead; 2, (x) dead, (y) alive; 3, (x) dead, (y) dead. Arrows run 0 to 1, 0 to 2, 1 to 3 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-025-state-diagram.png)
 
 The forces of transition are as follows, where $\mu_z^s$ is the force of mortality at age $z$ under the Standard Ultimate Life Table (SULT).
 
 $$\mu_{x:y}^{01} = \mu_y^s - 0.005; \qquad \mu_{x:y}^{02} = \mu_x^s; \qquad \mu_x^{13} = \mu_x^s + 0.0025; \qquad \mu_y^{23} = \mu_y^s + 0.005$$
-
-(This is Question 4 from the Spring 2022 Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -107,6 +115,8 @@ $$P = \frac{500{,}000\left(\bar{A}_{x:y}^{01} + \bar{A}_{x:y}^{02}\right)}{\bar{
 Exactly 10 years after issue $(y)$ dies while $(x)$ survives. At that time, $(x)$ uses the sum insured to provide a continuous annuity paying $X$ per year while she survives. The annuity amount is determined using the equivalence principle with $\delta = 4\%$.
 
 Calculate $X$.
+
+(This is Question 4 from the Spring 2022 Written Answer exam.)
 
 ### Explanation
 $$X = \frac{500{,}000}{\bar{a}_{50}^{11}} = \frac{500{,}000}{\bar{a}_{x:y|\delta^{**}=0.0425}^s} = \frac{500{,}000}{17.9917} = 27{,}791$$

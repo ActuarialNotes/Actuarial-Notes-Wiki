@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Transition+Intensity
   - Concepts/State-Dependent+Insurance
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d15ff43682abc1cc203ec48d5eaeb5f06c7353304249f828071ee5c9e6f9ba65
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-015.md
 ---
 
 You are using the following model to price a 10-year Disability Income Insurance policy issued to $(x)$.
 
-*(Figure: three-state model — Healthy (0), Sick (1), Dead (2); arrows 0 → 1, 1 → 0, 0 → 2 and 1 → 2)*
+![State diagram: Healthy (0), Sick (1) and Dead (2); arrows run 0 to 1, 1 to 0, 0 to 2 and 1 to 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-015-state-diagram.png)
 
 The product has the following features.
 
@@ -41,8 +51,6 @@ You are also given:
 (ix) $\delta = 0.07$.
 
 (x) $\bar{a}_{x:\overline{10}|}^{00} = 5.844$; $\bar{a}_{x:\overline{10}|}^{01} = 0.684$; $\bar{A}_{x:\overline{10}|}^{01} = 0.175$; $\bar{A}_{x:\overline{10}|}^{02} = 0.151$.
-
-(LTAM, Spring 2020, Question 4)
 
 ## Part a (2 points)
 
@@ -99,6 +107,8 @@ $$\begin{align*}
 
 Calculate the premium for this new policy, using the model and parameters given above.
 
+(LTAM, Spring 2020, Question 4)
+
 ### Explanation
 The only change is the duration of the sickness benefit.
 
@@ -119,4 +129,4 @@ $$\begin{align*}
 $$\Rightarrow P = \frac{3020 + 1182.05 + 391.68}{5.5518} = 827.43$$
 
 ### Examiner Report
-**Graders' Comments:** *This part was challenging, and few candidates achieved full marks, but many candidates achieved partial credit for answers that indicated some understanding.*
+Graders' Comments: This part was challenging, and few candidates achieved full marks, but many candidates achieved partial credit for answers that indicated some understanding.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Annuities
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2ac85c6701b044db88951cc1ec6bc973978a5f302074c3f7d7cb9f5ac5f0cb22
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-011.md
 ---
 
 An individual, who is now 65 years old, is entering a Continuing Care Retirement Community (CCRC) under a full life care (Type A) contract. The individual will move into an Independent Living Unit (ILU). The individual pays a one-time fee of $F$ immediately on entry and a level monthly fee of $M$ at the start of each month that she is in the CCRC, including the first.
@@ -34,7 +44,7 @@ You are given:
 
 (v) The CCRC uses the following multiple state model to determine the fee structure.
 
-*(Figure: state diagram — ILU (State 0), ALU (State 1), SNF (State 2), Dead (State 3); arrows run 0 → 1, 1 → 2, and from each of States 0, 1 and 2 to State 3.)*
+![State diagram: ILU (State 0), ALU (State 1), SNF (State 2) and Dead (State 3); arrows run 0 to 1, 1 to 2, and from each of States 0, 1 and 2 to State 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-011-state-diagram.png)
 
 (vi) The following actuarial functions have been evaluated for the model at $i = 0.05$
 

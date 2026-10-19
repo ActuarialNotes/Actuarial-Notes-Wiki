@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Life+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:95da03382aa5fd4859d7551b3c6680a834ec9f95bf4d50e809faaecd2b0350d4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-014.md
 ---
 
 For a fully discrete three-year term insurance of 100,000 on a person, age 40, you are given:

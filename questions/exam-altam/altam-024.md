@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Random+Variable
   - Concepts/Life+Insurance
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:50ad7d58b113f24cfa944487aba986a609335c6f378b3833b3a8121fcaadd8e3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-024.md
 ---
 
 ABC Insurance issues a 10-year endowment insurance policy to Person A who is 60 and Person B who is 50. The sum insured is 200,000 payable at the earliest of the end of the year of the first death and the end of 10 years. Premiums are paid annually in advance.
@@ -25,8 +35,6 @@ You are given:
 (iii) Person A and Person B have independent future lifetimes.
 
 (iv) Gross premiums are calculated using the equivalence principle.
-
-(This is Question 5 from the Fall 2021 Form A Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -90,6 +98,8 @@ Following a major economic upheaval, the interest rate has increased to 10.25% p
 (i) Calculate the percentage reduction in the gross premium, as a result of the change in the interest rate.
 
 (ii) State with reasons whether the percentage reduction in the premium for a 10-year term joint life insurance on Person A and Person B would be greater or less than the change in (i) above.
+
+(This is Question 5 from the Fall 2021 Form A Written Answer exam.)
 
 ### Explanation
 (i)

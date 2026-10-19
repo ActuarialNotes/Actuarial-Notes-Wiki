@@ -12,13 +12,23 @@ wiki_link:
   - Concepts/Annuities
   - Concepts/Present+Value
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5de30ace481412b04fc9f38a95482dc416aa757a61e9e12d558805ad6b326ed4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-006.md
 ---
 
 You are analyzing waiting times and expenses associated with optometric procedures. The analysis is based on the multiple state model illustrated below.
 
 An individual who is diagnosed with a specific eye condition moves into State 1, where they are Monitored. When the condition progresses, they move onto a Wait List for surgery (State 2). Surgery (State 3) is performed once their name reaches the top of the wait list. The time spent on the wait list is random, depending on the progression of the disease and the availability of surgical resources.
 
-*(Figure: state diagram — Healthy (State 0) → Monitored (State 1) → Wait List (State 2) → Surgery (State 3).)*
+![State diagram: Healthy (State 0), Monitored (State 1), Wait List (State 2) and Surgery (State 3); arrows run 0 to 1, 1 to 2 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-006-state-diagram.png)
 
 You are given the following information:
 

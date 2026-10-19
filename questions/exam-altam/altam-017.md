@@ -11,11 +11,19 @@ wiki_link:
   - Concepts/Future+Lifetime+Random+Variable
   - Concepts/Independent+Random+Variables
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2b2143bdf283c00982bc1fba8d5f744ef5d4a0df1ca218d1ac8147b996e30457
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-017.md
 ---
 
 For $(x)$ and $(y)$ with independent future lifetimes, you are given that $q_x = 0.2$ and $q_y = 0.1$.
-
-(MLC, Fall 2014, Question 3)
 
 ## Part a (1 point)
 
@@ -36,7 +44,7 @@ Sketch the graph of ${}_sp_x$ as a function of $s$ for $0 \le s \le 1$. You shou
 ### Explanation
 The function is
 
-*(Figure: graph of ${}_sp_x$ against $s$ (years), $0 \le s \le 1$)*
+![Graph of sp_x against s (years), s from 0 to 1: a straight line falling from 1 at s = 0 to 0.8 at s = 1, vertical axis marked 0 to 1.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-017-graph.png)
 
 ### Examiner Report
 **Graders' Comments:** *Most candidates did well on this part. Candidates who sketched a non-linear function for ${}_tp_x$, or who sketched a different probability, or who sketched a line from 1 to 0, received no credit for this part.*
@@ -44,6 +52,8 @@ The function is
 ## Part c (3 points)
 
 Show that ${}_sq_{xy} = s\,q_{xy} + g(s)\,q_{\overline{xy}}$ for $0 \le s \le 1$, where $g(s)$ is a function of $s$ that you should specify.
+
+(MLC, Fall 2014, Question 3)
 
 ### Explanation
 $$\begin{align*}

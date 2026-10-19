@@ -12,13 +12,21 @@ wiki_link:
   - Concepts/Annuities
   - Concepts/Multiple+State+Model
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d7bd85d3c6f317e3e0b09c518eb6991fb724046fe8d0ef48c523a77452bd17c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-023.md
 ---
 
 Assume the following 4-state joint life model of mortality.
 
-*(Figure: four-state model — 0: (x) alive, (y) alive; 1: (x) dead, (y) alive; 2: (x) alive, (y) dead; 3: (x) dead, (y) dead; arrows 0 → 1 labelled $\mu_{x+t}^{01}$, 0 → 2 labelled $\mu_{y+t}^{02}$, 1 → 3 labelled $\mu_{y+t}^{13}$ and 2 → 3 labelled $\mu_{x+t}^{23}$)*
-
-(This is Question 6 from the Spring 2021 Written Answer exam.)
+![State diagram: 0, (x) alive, (y) alive; 1, (x) dead, (y) alive; 2, (x) alive, (y) dead; 3, (x) dead, (y) dead. Arrows run 0 to 1 (labelled mu_{x+t}^01), 0 to 2 (labelled mu_{y+t}^02), 1 to 3 (labelled mu_{y+t}^13) and 2 to 3 (labelled mu_{x+t}^23).](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-023-state-diagram.png)
 
 ## Part a (1 point)
 
@@ -114,6 +122,8 @@ You are given the following information:
 (v) $\bar{a}_{70|70} = 2.0317$
 
 Calculate the level annual rate of benefit, using the Euler-Maclaurin-Woolhouse approximation.
+
+(This is Question 6 from the Spring 2021 Written Answer exam.)
 
 ### Explanation
 Let $B$ = annual annuity payment rate

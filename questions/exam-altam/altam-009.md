@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Multiple+State+Model
   - Concepts/State-Dependent+Insurance
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:708f7ba2e4c5dfef7e77759aabdd913f5d7da9575a1919986559ab571e051047
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-009.md
 ---
 
 On 1/1/2009, a person purchased a 10-year hybrid long term care and life insurance product. The product has the following features:
@@ -51,7 +61,7 @@ Draw a sketch of a Markov model that could be used to model this hybrid insuranc
 ### Explanation
 One model is given below. Others may also be appropriate.
 
-*(Figure: state diagram — Active, ≥5 ADLs (0); Impaired, 4 ADLs (1); Severely impaired, ≤3 ADLs (2); Dead (3). Arrows run 0 → 1, 1 → 0, 1 → 2, 2 → 1, and from each of 0, 1 and 2 to 3.)*
+![State diagram: Active, at least 5 ADLs (0); Impaired, 4 ADLs (1); Severely impaired, at most 3 ADLs (2); Dead (3). Arrows run 0 to 1, 1 to 0, 1 to 2, 2 to 1, and from each of 0, 1 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-009-state-diagram.png)
 
 ## Part c (2 points)
 

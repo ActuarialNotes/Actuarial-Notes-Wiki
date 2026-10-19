@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Annuities
   - Concepts/Present+Value
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:528ad088b6608a8a666791845446520e23ad33cbd1fbf258953ff597f968deb7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-005.md
 ---
 
 You are analyzing costs associated with a medical condition. You model the progression of the condition after a new diagnosis using the following 4-state model.
 
-*(Figure: state diagram — Diagnosed (State 0), Severe symptoms (State 1), Remission (State 2), Surgery (State 3); arrows run 0 → 1, 1 → 2, 2 → 1 and 1 → 3.)*
+![State diagram: Diagnosed (State 0), Severe symptoms (State 1), Remission (State 2) and Surgery (State 3); arrows run 0 to 1, 1 to 2, 2 to 1 and 1 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-005-state-diagram.png)
 
 You are given the following information. Time $t$ is measured in years from the date of diagnosis.
 

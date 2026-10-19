@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Fractional+Age+Assumption
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef888c42282ad6039c9aaa31d6f80067c7fdeccc0d891667e8eca28b80a66a1f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-022.md
 ---
 
 D and M are each aged 50, and have independent future lifetimes. They purchase a fully discrete last survivor whole life insurance of 100,000. You are given:
@@ -31,8 +41,6 @@ D and M are each aged 50, and have independent future lifetimes. They purchase a
 (vii) Other acquisition expenses, payable at issue, are 70% of $G$.
 
 (viii) The two-term Woolhouse formula is used to value single and joint life annuities.
-
-(This is Question 4 from the Fall 2020 Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -129,6 +137,8 @@ $$\begin{align*}
 ## Part e (3 points)
 
 Calculate the policy value at time 19.5 if both D and M are alive at that time. Assume a constant force of mortality between ages 69 and 70 for the individual lives.
+
+(This is Question 4 from the Fall 2020 Written Answer exam.)
 
 ### Explanation
 $$\begin{align*}

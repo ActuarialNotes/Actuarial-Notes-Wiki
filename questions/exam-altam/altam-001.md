@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Transition+Intensity
   - Concepts/Annuities
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc1f6b0dfe8dc12a2c6f0cca0e9e21530dd634368bc07657267e3f967bced964
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-001.md
 ---
 
 A long-term care provider offers three care levels. Transitions are modeled as a Markov multiple-state model. Transitions and states are shown in the following diagram:
 
-*(Figure: state diagram — Level 0 Care (0), Level 1 Care (1), Level 2 Care (2) and Dead (3); arrows run 0 → 1, 1 → 0, 1 → 2, 0 → 3, 1 → 3 and 2 → 3.)*
+![State diagram: Level 0 Care (0), Level 1 Care (1), Level 2 Care (2) and Dead (3); arrows run 0 to 1, 1 to 0, 1 to 2, 0 to 3, 1 to 3 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-001-state-diagram.png)
 
 ## Part a (1 point)
 

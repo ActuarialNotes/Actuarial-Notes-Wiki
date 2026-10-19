@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Internal+Rate+of+Return
   - Concepts/Reserve
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:27e16242a4ff07276af487886d5c57ae70c628883c438e0900b835bf12ec6c93
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-027.md
 ---
 
 For a special 3-year term life insurance issued to (50) with a premium refund feature, you are given:
@@ -49,8 +59,6 @@ For a special 3-year term life insurance issued to (50) with a premium refund fe
 | Year 1 | Year 2 | Year 3 |
 |---|---|---|
 | 0.01 | 0.02 | 0.03 |
-
-(This is a modified version of Question 5 from the Fall 2014 Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -123,6 +131,8 @@ Product C: The same special 3-year term life insurance as Product A, except that
 | 0 | 0 |
 | 1 | 300 |
 | 2 | 800 |
+
+(This is a modified version of Question 5 from the Fall 2014 Written Answer exam.)
 
 ### Explanation
 The IRR of B is $j$ where $155 = 210v_j^3 \Rightarrow j = 10.65\%$.

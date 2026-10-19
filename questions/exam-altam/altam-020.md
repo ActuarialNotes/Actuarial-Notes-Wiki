@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Insurance+Premium
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:38d8a60d37b0676eb7b286a1eb2c05c3a69e1cebcfc6a273cb5d9b1d18c7d087
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-020.md
 ---
 
 An insurer uses the following model for joint life policies.
 
-*(Figure: five-state model — 0: (x) alive, (y) alive; 1: (x) alive, (y) dead; 2: (x) dead, (y) alive; 3: (x) dead, (y) dead; 4: (x) dead, (y) dead; arrows 0 → 1, 0 → 2, 0 → 4, 1 → 3 and 2 → 3)*
+![State diagram: 0, (x) alive and (y) alive; 1, (x) alive and (y) dead; 2, (x) dead and (y) alive; 3, (x) dead and (y) dead; 4, (x) dead and (y) dead. Arrows run 0 to 1, 0 to 2, 0 to 4, 1 to 3 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-020-state-diagram.png)
 
 You are given the following additional information
 
@@ -29,8 +39,6 @@ You are given the following additional information
 (iv) $i = 0.05$
 
 (v) For $x = 40$ and $y = 50$, $\bar{a}_{x:y:\overline{10}|}^{00} = 7.8487$ and $\bar{A}_{x:y:\overline{10}|}^{03} = 0.00789$
-
-(This is Question 3 from the Fall 2019 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -110,6 +118,8 @@ State with reasons whether each of the following would be higher, lower or stay 
 (iii) $\bar{a}_{x|y}$
 
 (iv) The annual net premium for the contract in (c).
+
+(This is Question 3 from the Fall 2019 Written Answer exam.)
 
 ### Explanation
 (i) $\bar{a}_{x:y:\overline{10}|}^{00}$: Stays the **same**.

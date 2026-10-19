@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Annuities
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:07f73a497f5580b37fccb50ea58ead2da03f5eddcda8d795ff8dfa95cd34d54e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-008.md
 ---
 
 You are using the following 3-state Markov model to price a 10-year disability insurance product.
 
-*(Figure: state diagram — Healthy (0), Temporarily Disabled (1), Dead (2); arrows run 0 → 1, 1 → 0, 0 → 2 and 1 → 2.)*
+![State diagram: Healthy (0), Temporarily Disabled (1) and Dead (2); arrows run 0 to 1, 1 to 0, 0 to 2 and 1 to 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-008-state-diagram.png)
 
 ## Part a (2 points)
 

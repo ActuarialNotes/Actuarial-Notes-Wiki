@@ -12,13 +12,23 @@ wiki_link:
   - Concepts/Thiele's+Differential+Equation
   - Concepts/Markov+Chain
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:67b7d08c7634325aa331f2a8b6a74de70b35d252c0c936f93e9506636a385af4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-016.md
 ---
 
 An insurer issues a 20-year term insurance to (50) which pays a death benefit of 500,000, and an additional 100,000 on diagnosis of a critical illness (CI).
 
 The insurer uses the Markov model illustrated below to value the CI benefit.
 
-*(Figure: three-state model — Healthy (0), Critically Ill (1), Dead (2); arrows 0 → 1, 0 → 2 and 1 → 2)*
+![State diagram: Healthy (0), Critically Ill (1) and Dead (2); arrows run 0 to 1, 0 to 2 and 1 to 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-016-state-diagram.png)
 
 You are given the following information:
 
@@ -38,8 +48,6 @@ You are given the following information:
 |---|---|---|---|---|---|---|---|
 | 60 | 10.1729 | 0.34249 | 0.39077 | 0.47904 | 0.75055 | 0.13135 | 0.75283 |
 | 70 | 6.5690 | 0.49594 | 0.54335 | 0.62237 | | | |
-
-(LTAM, Spring 2022, Question 2)
 
 ## Part a (3 points)
 
@@ -133,6 +141,8 @@ One reason for the change is that mortality is very high in the first year after
 (i) Define the Markov property.
 
 (ii) Explain whether high mortality in the period immediately after a CI diagnosis is consistent with the Markov property.
+
+(LTAM, Spring 2022, Question 2)
 
 ### Explanation
 (i) Under the Markov property, for a policy in State 1 at time t, the probability of moving from State 1 to State 2 in any future time interval is independent of the history of the state process before time t.

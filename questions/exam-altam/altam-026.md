@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Insurance+Premium
   - Concepts/Life+Insurance
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6882bf2c5bc3973ad8814986bf0267f59da2f405f608f07e57e68df0031ea969
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-026.md
 ---
 
 An insurer issues fully discrete whole life insurance policies to 10,000 lives, each age 45, with independent future lifetimes.
@@ -24,9 +34,6 @@ The death benefit for each policy is 100,000. Gross premiums are determined usin
 | Expense at Start of the Year | 75% of premium + 100 per policy in the first year; 10% of premium + 20 per policy thereafter | 75% of premium + 105 per policy | Same as pricing |
 | Settlement Expense | 200 per policy | Same as pricing | 220 per policy |
 | Mortality | Standard Ultimate Life Table | Same as pricing | 10 deaths |
-
-(This is a modified version of Question 4 from the Spring 2014 Written Answer exam.)
-(Part (a) and part (b) are covered by the FAM-L exam.)
 
 ## Part a (2 points)
 
@@ -82,6 +89,9 @@ Mortality Gain: 0
 ## Part d (1 point)
 
 Explain the sources and direction of any gains or losses in policy year 2. Exact values are not necessary.
+
+(This is a modified version of Question 4 from the Spring 2014 Written Answer exam.)
+(Part (a) and part (b) are covered by the FAM-L exam.)
 
 ### Explanation
 Interest: No gain or loss, as experience matches the assumption.

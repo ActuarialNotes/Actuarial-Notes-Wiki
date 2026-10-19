@@ -10,6 +10,16 @@ wiki_link:
   - Concepts/Transition+Intensity
   - Concepts/Probability
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c78bf8b0b64100ad6fdb71f87baeea2961fba3c11347c17cb7ebe88610531b7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-002.md
 ---
 
 You are given the following excerpt from a triple decrement table:

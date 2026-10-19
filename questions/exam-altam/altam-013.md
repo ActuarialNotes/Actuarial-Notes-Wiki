@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Loss+Random+Variable
   - Concepts/State-Dependent+Insurance
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c8d8e0f73ddb8a9714b818c0b990b0f24a0cd5f67b51d746cadb175696f0fdb7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-013.md
 ---
 
 An insurer issues a whole life insurance of 50,000 to (55), with a waiver of premium on disability. You are evaluating this policy using the following model:
 
-*(Figure: state diagram — Active (State 0), Disabled (State 1), Dead (State 2); arrows run 0 → 1, 0 → 2 and 1 → 2.)*
+![State diagram: Active (State 0), Disabled (State 1) and Dead (State 2); arrows run 0 to 1, 0 to 2 and 1 to 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-013-state-diagram.png)
 
 You are given:
 

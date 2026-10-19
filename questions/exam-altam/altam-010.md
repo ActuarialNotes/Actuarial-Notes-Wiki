@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Transition+Intensity
   - Concepts/Annuities
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:53e0063bb06783f032dc9cd6b026850a78a02145f65d7dc72853fca5cb516e8d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-010.md
 ---
 
 You are using the following multiple state Markov model to analyze a long term care product which provides coverage until the death of the insured. Assume all relevant transition intensities exist.
 
-*(Figure: state diagram — Active, ≥ 5 ADLs (State 0); Mildly impaired, 4 ADLs (State 1); Severely impaired, ≤ 3 ADLs (State 2); Cognitive Impairment (State 3); Dead (State 4). Arrows run 0 → 1, 1 → 2, from each of States 0, 1 and 2 to State 3 and to State 4, and 3 → 4.)*
+![State diagram: Active, at least 5 ADLs (State 0); Mildly impaired, 4 ADLs (State 1); Severely impaired, at most 3 ADLs (State 2); Cognitive Impairment (State 3); Dead (State 4). Arrows run 0 to 1, 1 to 2, from each of States 0, 1 and 2 to State 3 and to State 4, and 3 to 4.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-010-state-diagram.png)
 
 You are given the following information:
 

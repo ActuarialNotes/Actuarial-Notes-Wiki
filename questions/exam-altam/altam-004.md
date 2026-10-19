@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/State-Dependent+Insurance
   - Concepts/Mortality
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:84713683c9f800735f21a90a1fa82112c583a878979f847971884380fb8f503d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-004.md
 ---
 
 A life insurer issues a 5-year term insurance, with premiums payable half-yearly, to a person who is age 60. The death benefit of 100,000 is paid at the end of the half-year of death.
@@ -77,7 +87,7 @@ Graders' Comments: Most candidates knew to use either EPV or recursive formula t
 
 In the final year of the policy, the insurer decides to re-evaluate the gross premium policy value due to a virus that is spreading through the community. The insurer uses the following multiple state model.
 
-*(Figure: state diagram — Healthy (0), At Risk (1), Sick (2), Dead (3); as printed, arrows run 0 → 1, 1 → 2, 0 ↔ 2 (a double-headed arrow), 0 → 3 and 2 → 3.)*
+![State diagram: Healthy (0), At Risk (1), Sick (2) and Dead (3); arrows run 0 to 1, 1 to 2, 0 to 3 and 2 to 3, and a double-headed arrow joins 0 and 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-004-state-diagram.png)
 
 A Healthy person will move to State 1, At Risk, if exposed to the virus. Every person moving into the At Risk state will be tested for the virus. If the result of the test is positive, the person moves to State 2, Sick; otherwise, the person will move back to the Healthy state.
 

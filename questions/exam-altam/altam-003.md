@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Variance
   - Concepts/Normal+Approximation
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6874436d7d74a00230d408981d652e249c2e680289620fe975072cb1eabb9c15
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-003.md
 ---
 
 For a special fully discrete two-year term insurance on an individual, age 60, you are given:

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Reserve
   - Concepts/Independent+Random+Variables
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d0bc6f915f9736c0c517fb708127b6afcc56834c1dd6a641ff6fff26ede1e71
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-019.md
 ---
 
 Person P and Person R, each age 40, buy a fully discrete, last survivor insurance with a sum insured of 100,000
@@ -25,9 +35,6 @@ You are given:
 (iii) $i = 0.05$
 
 (iv) With independent future lifetimes, $\ddot{a}_{40:40:\overline{20}|} = 12.9028$.
-
-(LTAM, Spring 2019, Question 4)
-(This is Question 4 from the Spring 2019 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -154,6 +161,9 @@ $$\Rightarrow \mathrm{E}\left[{}_{10}L \mid \text{at least 1 alive}\right] = 8{,
 ## Part f (1 point)
 
 Because the insurer is not informed of the first death for these policies, the actuary decides that they should hold the same reserve for all policies in force. Explain which, if any, of the policy values in part (e) would be a suitable value for the time 10 reserve for each in-force policy.
+
+(LTAM, Spring 2019, Question 4)
+(This is Question 4 from the Spring 2019 Written Answer exam.)
 
 ### Explanation
 The policy value used should correspond most closely with the information available. The insurance company knows that no claim has been made, so it knows that both lives have not died, but it does not know whether one or both lives are alive. Correspondingly, it should hold the reserve based on the policy value in (iii), which is suitable for the information that at least one life has survived. For each individual policy, this will be the wrong number – the correct number will either be the value in (i) or the value in (ii), but overall the value in (iii) will be most accurate in aggregate.

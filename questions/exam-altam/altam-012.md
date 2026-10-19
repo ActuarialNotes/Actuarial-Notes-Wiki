@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/State-Dependent+Insurance
   - Concepts/Transition+Intensity
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bfa4974d488059fd64608e3b3fe317bb59c0ae91d1cadd5d7787bdae5dcf9f26
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-012.md
 ---
 
 Person G, who is age 45, has recently suffered a disabling injury on the job. G's prognosis is uncertain. His annual salary before the accident was 100,000
@@ -51,7 +61,7 @@ State two possible reasons why the long term annuity would replace less than 100
 
 MRH uses the following multiple state model:
 
-*(Figure: state diagram — Disabled; prognosis uncertain (State 0), Recovered (State 1), Permanently disabled (State 2), Dead (State 3); arrows run 0 → 1, 0 → 2, 0 → 3, 1 → 3 and 2 → 3.)*
+![State diagram: Disabled; prognosis uncertain (State 0), Recovered (State 1), Permanently disabled (State 2) and Dead (State 3); arrows run 0 to 1, 0 to 2, 0 to 3, 1 to 3 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-012-state-diagram.png)
 
 You are given:
 

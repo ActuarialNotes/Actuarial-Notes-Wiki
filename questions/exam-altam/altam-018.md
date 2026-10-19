@@ -13,18 +13,26 @@ wiki_link:
   - Concepts/Annuities
   - Concepts/Policy+Value
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1aa9f9c8b4a6bfdd36247091a3e395783d5f065e16049429f3eb3c498f6f5a43
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-018.md
 ---
 
 The mortality of a couple, $(x)$ and $(y)$, is modeled using the Markov multiple-state model described in the following diagram:
 
-*(Figure: four-state model — 0: (x) alive, (y) alive; 1: (x) dead, (y) alive; 2: (x) alive, (y) dead; 3: (x) dead, (y) dead; arrows 0 → 1, 0 → 2, 1 → 3 and 2 → 3)*
+![State diagram: 0, (x) alive and (y) alive; 1, (x) dead and (y) alive; 2, (x) alive and (y) dead; 3, (x) dead and (y) dead. Arrows run 0 to 1, 0 to 2, 1 to 3 and 2 to 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-018-state-diagram.png)
 
 You are given:
 
 - $\mu_{x+t:y+t}^{01} = A + Bc^{x+t}$ $\quad\mu_{x+t:y+t}^{02} = A + Bc^{y+t}$ $\quad\mu_{y+t}^{13} = D + Bc^{y+t}$ $\quad\mu_{x+t}^{23} = E + Bc^{x+t}$
 - $A = 0.0001$ $\quad B = 10^{-5}$ $\quad c = 1.12$ $\quad D = 0.00015$ $\quad E = 0.0002$
-
-(MLC, Fall 2015, Question 2)
 
 ## Part a (1 point)
 
@@ -128,6 +136,8 @@ $$\Rightarrow P = \frac{330{,}504}{0.989737} = 333{,}931$$
 (ii) Write down Thiele's differential equation for the policy value at $t$, $t \ge 10$, assuming both lives survive to $t$.
 
 (iii) Using Euler's forward method, with a step size of $h = 0.5$, calculate the policy value required at 10.5 assuming both lives are alive at that time.
+
+(MLC, Fall 2015, Question 2)
 
 ### Explanation
 (i)

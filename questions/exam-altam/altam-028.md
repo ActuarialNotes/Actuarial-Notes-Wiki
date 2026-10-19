@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Chapman-Kolmogorov+Equations
   - Concepts/Policy+Value
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6ea6c3e02bb18fff7f04ebc502efbd6c0558b1d175dcf852e9db6c59233ea23e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-028.md
 ---
 
 You are performing a profit test on a 50,000, fully discrete 10-year term life insurance policy issued to a healthy life age 60.
@@ -52,8 +62,6 @@ $$\begin{array}{c} \\ 0 \\ 1 \\ 2 \end{array}
 | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ |
 | 2 | 0.46667 | 0.49680 | 4.7328 | 0.2533 | 3.3340 | 1.4060 |
 | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ | ⋮ |
-
-(This is Question 1 from the Fall 2018 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -133,6 +141,8 @@ You are given the following additional information regarding the profit test for
 (i) Show that $\Pi_3$ is 70 to the nearest 10. You should calculate the value to the nearest 0.1.
 
 (ii) Calculate the Discounted Payback Period.
+
+(This is Question 1 from the Fall 2018 Written Answer exam.)
 
 ### Explanation
 (i)

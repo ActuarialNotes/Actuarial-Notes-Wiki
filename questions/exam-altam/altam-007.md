@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Insurance+Premium
   - Concepts/Equivalence+Principle
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ef612f78671aa206a4a488824c2a607de04b957be737c91b2a28f72b5477e3e6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-007.md
 ---
 
 An actuarial student in your department is using the following 3-state Markov model to price a one-year consumer warranty for a television.
 
-*(Figure: state diagram — Working (0), Under Repair (1), Broken Beyond Repair (2); arrows run 0 → 1 ($\mu_t^{01}$), 1 → 0 ($\mu_t^{10}$) and 1 → 2 ($\mu_t^{12}$).)*
+![State diagram: Working (0), Under Repair (1) and Broken Beyond Repair (2); arrows run 0 to 1 (labelled mu_t^01), 1 to 0 (labelled mu_t^10) and 1 to 2 (labelled mu_t^12).](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-007-state-diagram.png)
 
 The product has the following features:
 

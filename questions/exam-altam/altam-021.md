@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Random+Variable
   - Concepts/Insurance+Premium
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c89fd31a4d2b7a9473fbb50a93281f8522e1a70ea7c7c3893dd5218f73348d12
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-021.md
 ---
 
 A fully discrete, joint life 10-year endowment insurance policy, with sum insured 100,000, is issued to two independent lives, both aged 70. Premiums are payable annually until the earlier of the first death or the contract maturity.
@@ -29,8 +39,6 @@ You are given:
 (v) The gross premium is $G = 10{,}658$.
 
 (vi) $L_0$ is the gross loss at issue random variable.
-
-(This is Question 1 from the Spring 2020 Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -124,6 +132,8 @@ In a sub-portfolio of 10 identical, independent policies issued to couples with 
 | Age at death of second to die | 77.2 | 93.1 | 81.7 | 90.1 | 92.3 | 95.0 | 96.3 | 91.7 | 94.2 | 100.8 |
 
 Without further calculation, state whether the value of the total profit realized in this sub-portfolio will be greater or less than the expected value of the profit for the sub-portfolio. Justify your answer.
+
+(This is Question 1 from the Spring 2020 Written Answer exam.)
 
 ### Explanation
 The total profit realized in this sub-portfolio will be <u>**greater**</u> than its expected value.

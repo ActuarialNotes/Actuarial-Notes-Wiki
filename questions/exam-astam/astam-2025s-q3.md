@@ -20,7 +20,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b13d0b6a5d52873c67005932071c94bfa39483a9ade4cb6195910ed221d68c6a
+  content_hash: sha256:dcf6b9a4bf642ca11464536aec471a98c4bf03ee85dedcefb37fedbde8827c3a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -75,7 +75,7 @@ Examiners' Comments: Candidates struggled with this part often not addressing th
 
 ### Explanation
 
-(i) Let $Y \sim \text{Pareto}(\alpha, \theta)$ denote the ground-up loss random variable. Given a deductible $d$, the claim severity random variable is $Y_d = Y - d \mid Y > d$, so that
+(i) Let $Y \sim \text{Pareto}(\alpha, \theta)$ denote the ground-up loss random variable. Given a deducible $d$, the claim severity random variable is $Y_d = Y - d \mid Y > d$, so that
 
 $$
 \begin{align*}

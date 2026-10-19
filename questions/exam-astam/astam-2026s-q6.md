@@ -19,7 +19,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:214151f08b58f5ec74a0052d10c0f9f93a8c8545c0a51e4cf1497937163b7263
+  content_hash: sha256:08363beedd93646251fe06ea661d0c5390320a3dce3981c50623c47e16dbfe19
   sources: []
   open_findings: 0
   open_critical: 0
@@ -140,10 +140,9 @@ ES = E\left[X \mid X > Q\right] &= \frac{1}{S(Q)}\int_Q^\infty x\, f(x)\, dx \\
 
 **Method 2:** As above, but using the density function
 
+$$ES = \frac{1}{S(Q)}\int_Q^\infty x\, f(x)\, dx \quad \text{where} \quad f(x) = -\frac{d}{dx}S^H(x) = \hat{\alpha}k\, x^{-\hat{\alpha} - 1}$$
+
 $$\begin{align*}
-ES &= \frac{1}{S(Q)}\int_Q^\infty x\, f(x)\, dx \quad \text{where} \quad f(x) \\
-   &= -\frac{d}{dx}S^H(x) \\
-&= \hat{\alpha}k\, x^{-\hat{\alpha} - 1} \\
 \Rightarrow ES &= \frac{1}{S(Q)}\int_Q^\infty \hat{\alpha}k\, x^{-\hat{\alpha}}\, dx \\
 &= \frac{\hat{\alpha}k}{0.01}\left[\frac{1}{\hat{\alpha} - 1}Q^{-(\hat{\alpha} - 1)}\right] \\
 &= \frac{3.113\,(0.032)d^{3.113}}{(0.01)(2.113)Q^{2.113}} \\

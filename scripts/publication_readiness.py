@@ -128,17 +128,39 @@ def _expand_acronyms(display: str, page_name: str) -> str:
     return re.sub(r"\b[A-Z]{2,}\b", spell, display)
 
 
-def renamed(link: VL.Link, page_name: str) -> bool:
+PREPOSITIONS = {"in", "of", "to", "for", "on", "with", "by", "from", "under", "at"}
+
+
+def _shared_head(after: str, missing: set[str]) -> bool:
+    """True when the text after a link coordinates it with a phrase whose last words are
+    exactly `missing` — the head noun the two share: "long-term life *and health insurance*"
+    says "long-term life insurance"."""
+    m = re.match(r"\s*(?:and|or)\s+([^,;.:()]+)", after)
+    if not m or not missing:
+        return False
+    words = _stems(m.group(1))
+    # A parallel noun phrase: a modifier or two before the shared head, no clause of its own
+    # ("and manage liquidity in fixed income portfolios" coordinates a verb, not a noun).
+    if len(words) > len(missing) + 2 or set(words) & PREPOSITIONS:
+        return False
+    return set(words[-len(missing):]) == missing
+
+
+def renamed(link: VL.Link, page_name: str, after: str = "") -> bool:
     """True when a link's text names something other than its page.
 
     Not renamed: text that contains the page's name ("Premium Auditing Process" names *Premium
-    Audit*) or shortens it ("distributions" for *Probability Distributions*). Renamed: text with
+    Audit*) or shortens it ("distributions" for *Probability Distributions*), counting a head
+    noun shared with the phrase it is coordinated with (`after`, the line's text past the
+    link: "long-term life and health insurance" names *Life Insurance*). Renamed: text with
     words of its own that leave part of the page's name out ("CGL Coverage B" does not name
     *Commercial General Liability*)."""
     if not link.display:
         return False
     shown = set(_stems(link.display))
     page = set(_stems(re.sub(r"\s*\([^)]*\)", "", page_name)))
+    if _shared_head(after, page - shown):
+        shown |= page - shown
     if page <= shown or shown <= page:
         return False
     # An acronym of the page's own name shortens it ("DB plan"), but an acronym followed by
@@ -176,7 +198,8 @@ def objective_lines(page: Path, vault: VL.Vault, wiki_id: str, tables: dict) -> 
                 if name and vault.is_concept(name):
                     if name not in names:
                         names.append(name)
-                    if renamed(link, name):
+                    after = SL.strip_links(line[line.index("]]", link.start) + 2:])
+                    if renamed(link, name, after):
                         aliased.add(name)
             if names:
                 out.append((s.title, SL.strip_links(line).strip(), names, aliased))

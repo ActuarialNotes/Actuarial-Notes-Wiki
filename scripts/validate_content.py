@@ -71,6 +71,7 @@ EXAM_LABEL_BY_DIR = {
     "exam-fam": "Exam FAM",
     "exam-srm": "Exam SRM",
     "exam-astam": "Exam ASTAM",
+    "exam-altam": "Exam ALTAM",
     "exam-5": "Exam 5",
     "exam-6c": "Exam 6C",
     "exam-7": "Exam 7",

@@ -28,6 +28,9 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   // question n) and its released sittings, Spring 2023 on
   // (`astam-<year><s|f>-q<n>`). The Excel-workbook question is left out.
   'Exam ASTAM': 'ASTAM',
+  // ALTAM's the same way: its sample set (`altam-<n>`, many of them old MLC and
+  // LTAM written-answer questions) and its released sittings, Spring 2023 on.
+  'Exam ALTAM': 'ALTAM',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   // The three DISC courses. The Institutes sells their sample questions and

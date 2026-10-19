@@ -40,6 +40,18 @@ class RenamedTest(unittest.TestCase):
     def test_lives_names_a_life(self):
         self.assertFalse(pr.renamed(link("[[Joint Life|joint lives]]"), "Joint Life"))
 
+    def test_a_head_noun_shared_with_a_coordinate_counts(self):
+        # "long-term life and health insurance": both halves are insurance.
+        life = link("[[Life Insurance|long-term life]]")
+        self.assertFalse(pr.renamed(life, "Life Insurance", " and health insurance, and annuity contracts."))
+        # Only the missing words, and only as the coordinate's own head.
+        self.assertTrue(pr.renamed(life, "Life Insurance", " and health benefits"))
+        self.assertTrue(pr.renamed(life, "Life Insurance", ", insurance"))
+        # A coordinated clause that happens to end in the page's words is not a shared head.
+        self.assertTrue(pr.renamed(link("[[Fixed Income Portfolio|enhance yield]]"), "Fixed Income Portfolio",
+                                   " and manage liquidity in fixed income portfolios"))
+        self.assertTrue(pr.renamed(life, "Life Insurance"))
+
     def test_parenthetical_in_the_page_name_is_ignored(self):
         self.assertFalse(pr.renamed(link("[[Central Limit Theorem (CLT)|central limit theorem]]"), "Central Limit Theorem (CLT)"))
 

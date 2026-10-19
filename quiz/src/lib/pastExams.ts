@@ -203,9 +203,11 @@ export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
   'Probability': 30,
   'Financial Mathematics': 30,
   // The SOA's syllabi: FAM 34 and SRM 35 multiple-choice questions, ASTAM six
-  // written-answer questions (one of them the Excel question the bank omits).
+  // written-answer questions (one of them the Excel question the bank omits),
+  // and ALTAM the same.
   'Exam FAM': 34,
   'Exam SRM': 35,
+  'Exam ALTAM': 6,
   'Exam ASTAM': 6,
   'Exam MAS-I': 40,
   'Exam MAS-II': 42,

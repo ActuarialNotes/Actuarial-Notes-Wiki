@@ -299,6 +299,36 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: 'Model Solutions',
   },
 
+  // ── SOA Exam ALTAM — as ASTAM: the model solutions, from the same page ─────
+  'Exam ALTAM|2023|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-altam.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ALTAM|2023|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ALTAM|2024|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ALTAM|2024|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ALTAM|2025|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-altam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ALTAM|2025|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-altam-solutions.pdf',
+    label: "Model Solutions & Examiners' Comments",
+  },
+  'Exam ALTAM|2026|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-altam-solutions.pdf',
+    label: "Model Solutions & Examiners' Comments",
+  },
+
   // ── CAS Exam MAS-I — multiple choice, so paper + final answer key ─────────
   'Exam MAS-I|2018|spring': {
     url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf',
@@ -353,6 +383,10 @@ const EXAM_LEVEL_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf',
     label: 'Sample Questions',
   },
+  'Exam ALTAM': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf',
+    label: 'Sample Questions',
+  },
 }
 
 // The solutions half of the same sample sets. Transcribed like everything else
@@ -375,6 +409,10 @@ const EXAM_LEVEL_SOLUTION_LINKS: Record<string, ExamPdfLink> = {
   },
   'Exam ASTAM': {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf',
+    label: 'Sample Solutions',
+  },
+  'Exam ALTAM': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf',
     label: 'Sample Solutions',
   },
 }

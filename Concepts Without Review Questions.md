@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-19 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1252 of 3349 syllabus concept entries (37%)** have at least one question in their exam's own bank.
+> **1314 of 3349 syllabus concept entries (39%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -19,7 +19,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam SRM (SOA)]] | `exam-srm` (77) | 41 / 41 | 100% | 0 / 5 |
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
-| [[Exam ALTAM (SOA)]] | none | 0 / 64 | 0% | 7 / 7 |
+| [[Exam ALTAM (SOA)]] | `exam-altam` (94) | 62 / 64 | 97% | 0 / 7 |
 | [[Exam ASTAM (SOA)]] | `exam-astam` (62) | 56 / 58 | 97% | 0 / 6 |
 | [[Exam ATPA (SOA)]] | none | 0 / 31 | 0% | 4 / 4 |
 | [[Exam FAP (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
@@ -93,7 +93,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam F2FIE (CIA)]] | none | 0 / 33 | 0% | 8 / 8 |
 | [[Exam F3FIE (CIA)]] | none | 0 / 36 | 0% | 7 / 7 |
 | [[Exam F3BNK (CIA)]] | none | 0 / 26 | 0% | 6 / 6 |
-| **Total** | | **1252 / 3349** | **37%** | |
+| **Total** | | **1314 / 3349** | **39%** | |
 
 99 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -287,138 +287,19 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ALTAM (SOA)
 
-*No question bank yet — all 64 syllabus concepts are uncovered.*
-
-### Survival Models for Contingent Cash Flows {10–20%}
-
-*18 of 18 uncovered — **no questions at all***
-
-- [[Multiple State Model]]
-- [[Joint Life]]
-- [[Annuity Contract]]
-- [[Mortality]]
-- [[State-Dependent Insurance]]
-- [[Health Insurance]]
-- [[Continuing Care Retirement Community]]
-- [[Long-Term Insurance Coverage]]
-- [[Kolmogorov's Forward Equation]]
-- [[Chapman-Kolmogorov Equations]]
-- [[Transition Probability Matrix]]
-- [[Multiple Decrement Model]]
-- [[Fractional Age Assumption]]
-- [[Maximum Likelihood Estimation]]
-- [[Transition Intensity]]
-- [[Probability]]
-- [[Approximate Confidence Interval]]
-- [[Estimator]]
+*2 of 64 syllabus concepts have no question in `questions/exam-altam/`.*
 
 ### Premium and Policy Valuation for Long-Term State-Dependent Coverages {12–20%}
 
-*15 of 15 uncovered — **no questions at all***
+*1 of 15 uncovered*
 
-- [[Random Variable]]
-- [[Expenses]]
-- [[Future Lifetime Random Variable]]
-- [[Joint Life]]
-- [[State-Dependent Insurance]]
-- [[Annuity Contract]]
-- [[Expected Value]]
-- [[Woolhouse's Formula]]
-- [[Present Value]]
-- [[Insurance Premium]]
-- [[Health Insurance]]
-- [[Equivalence Principle]]
-- [[Policy Value]]
-- [[Thiele's Differential Equation]]
-- [[Multiple State Model]]
-
-### Joint Life Insurance and Annuities {8–16%}
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Multiple State Model]]
-- [[Joint Life]]
-- [[Annuity Contract]]
-- [[Future Lifetime Random Variable]]
-- [[Insurance Premium]]
-- [[Annuities]]
-- [[Equivalence Principle]]
-- [[Policy Value]]
-
-### Profit Analysis {10–20%}
-
-*12 of 12 uncovered — **no questions at all***
-
-- [[Profit Vector]]
-- [[Insurance Premium]]
-- [[Reserve]]
-- [[Profit Testing]]
-- [[Analysis of Surplus]]
-- [[Profit Signature]]
-- [[Internal Rate of Return]]
-- [[Profit Margin]]
-- [[Discounted Payback Period]]
-- [[Life Insurance]]
-- [[Health Insurance]]
-- [[Annuity Contract]]
-
-### Pension Plans and Retirement Benefits {10–18%}
-
-*12 of 12 uncovered — **no questions at all***
-
-- [[Pension Plan]]
-- [[Replacement Ratio]]
-- [[Defined Contribution Plan]]
-- [[Defined Benefit Plan]]
-- [[Service Table]]
-- [[Salary Scale]]
-- [[Accrued Benefit]]
-- [[Actuarial Accrued Liability]]
-- [[Normal Cost]]
-- [[Projected Unit Credit Method]]
-- [[Traditional Unit Credit Method]]
-- [[Valuation]]
-
-### Universal Life Insurance {10–18%}
-
-*11 of 11 uncovered — **no questions at all***
-
-- [[Universal Life Insurance]]
-- [[Insurance Premium]]
-- [[Reserve]]
-- [[Cash Flow]]
-- [[No-Lapse Guarantee]]
-- [[Profit Testing]]
-- [[Profit Vector]]
-- [[Profit Signature]]
-- [[Internal Rate of Return]]
-- [[Profit Margin]]
-- [[Discounted Payback Period]]
+- [[Expenses]] — tagged in another bank (41)
 
 ### Embedded Options in Life Insurance and Annuity Products {10–18%}
 
-*20 of 20 uncovered — **no questions at all***
+*1 of 20 uncovered*
 
-- [[Equity-Linked Insurance]]
-- [[Life Insurance]]
-- [[Annuity Contract]]
-- [[Reserve]]
-- [[Hedging]]
-- [[Risk]]
-- [[Payoff]]
-- [[Guaranteed Minimum Death Benefit]]
-- [[Guaranteed Minimum Maturity Benefit]]
-- [[Guaranteed Minimum Income Benefit]]
-- [[Guaranteed Minimum Withdrawal Benefit]]
-- [[Black-Scholes Model]]
-- [[Replicating Portfolio]]
-- [[Delta Hedging]]
-- [[Profit Testing]]
-- [[Profit Vector]]
-- [[Profit Signature]]
-- [[Internal Rate of Return]]
-- [[Profit Margin]]
-- [[Discounted Payback Period]]
+- [[Risk]] — tagged in another bank (4)
 
 ## Exam ASTAM (SOA)
 
@@ -428,7 +309,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *2 of 19 uncovered*
 
-- [[Reserve]] — tagged in another bank (1)
+- [[Reserve]] — tagged in another bank (8)
 - [[Short-Term Insurance Coverage]] — tagged in another bank (2)
 
 ## Exam ATPA (SOA)
@@ -1970,8 +1851,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *2 of 26 uncovered*
 
-- [[Variance]] — tagged in another bank (85)
-- [[Expected Value]] — tagged in another bank (106)
+- [[Variance]] — tagged in another bank (86)
+- [[Expected Value]] — tagged in another bank (111)
 
 ## Exam DISC-DA (CAS)
 

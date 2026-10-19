@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3d7ef41dc354c52af04e24456d83a8f32a809a4d657eab0dc4e1d28afbef8e3f
+  content_hash: sha256:be8e6a0e633453dcb4d7e48935a3d676b8dde922246d63d7c6e28ac5c2e37e42
   sources: []
   open_findings: 0
   open_critical: 0
@@ -44,8 +44,9 @@ Assume first that $N$, can be modeled as a Poisson random variable.
 $$
 \begin{align*}
 L(\lambda) &= \frac{\lambda^{\sum_{i=1}^{n} k_i} e^{-n\lambda}}{\prod_{i=1}^{n} k_i!} \Rightarrow \log L = \sum_{i=1}^{n} k_i \log \lambda - n\lambda - \sum_{i=1}^{n} \log k_i! \\
-\Rightarrow \frac{\partial \log L}{\partial \lambda} &= \frac{\sum_{i=1}^{n} k_i}{\lambda} - n \Rightarrow \hat{\lambda} = \frac{\sum_{i=1}^{n} k_i}{n} \\
-                                                     &= \bar{k} \\
+\Rightarrow \frac{\partial \log L}{\partial \lambda} &= \frac{\sum_{i=1}^{n} k_i}{\lambda} - n \\
+\Rightarrow \hat{\lambda} &= \frac{\sum_{i=1}^{n} k_i}{n} \\
+&= \bar{k} \\
 \Rightarrow \hat{\lambda} &= \frac{1625 \times 0 + 307 \times 1 + 58 \times 2 + 9 \times 3 + 1 \times 4}{2000} \\
                           &= 0.227.
 \end{align*}

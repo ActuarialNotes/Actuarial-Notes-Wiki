@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:75a14dc07309d96050d52971410eea201dfdd716d5961342486b1595fd006d2b
+  content_hash: sha256:f8e098b30fce9d4608530d8b433f11d2c8604eabfd81aef3de631e9c9e833736
   sources: []
   open_findings: 0
   open_critical: 0
@@ -108,7 +108,7 @@ Therefore, a 95% confidence interval for the mean $\mu$ is given by
 
 $$
 \begin{align*}
-g(\hat{\alpha}) &\pm 1.96 \cdot \sqrt{\widehat{Var}(g(\hat{\alpha}))} = g(\hat{\alpha}) \pm 1.96 \cdot se(g(\hat{\alpha})) \\
+g(\hat{\alpha}) \pm 1.96 \cdot \sqrt{\widehat{Var}(g(\hat{\alpha}))} &= g(\hat{\alpha}) \pm 1.96 \cdot se(g(\hat{\alpha})) \\
 &= \frac{100}{\hat{\alpha} - 1} \pm 1.96 \cdot \frac{1}{\sqrt{n}}\left(\frac{100\hat{\alpha}}{\hat{\alpha} - 1}\right)
 \end{align*}
 $$

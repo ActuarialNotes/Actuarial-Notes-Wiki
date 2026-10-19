@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
-> Generated 2026-10-18 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1112 of 2226 syllabus concept entries (50%)** have at least one question in their exam's own bank.
+> Generated 2026-10-19 by `scripts/generate_coverage_report.py` — edit the script, not this page.
+> **1196 of 2226 syllabus concept entries (54%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -15,7 +15,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam P-1 (SOA)]] | `exam-p` (716) | 71 / 72 | 99% | 0 / 3 |
 | [[Exam FM-2 (SOA)]] | `exam-fm` (459) | 91 / 91 | 100% | 0 / 5 |
 | [[Exam PAF (SOA)]] | none | 0 / 2 | 0% | 2 / 2 |
-| [[Exam FAM (SOA)]] | none | 0 / 86 | 0% | 10 / 10 |
+| [[Exam FAM (SOA)]] | `exam-fam` (274) | 84 / 86 | 98% | 0 / 10 |
 | [[Exam SRM (SOA)]] | `exam-srm` (77) | 41 / 41 | 100% | 0 / 5 |
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
@@ -50,11 +50,11 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam DMAC (SOA)]] | none | 0 / 2 | 0% | 5 / 5 |
 | [[Exam FAC (SOA)]] | none | 0 / 0 | — | 0 / 0 |
 | [[Exam MAS-I (CAS)]] | `exam-mas-i` (281) | 178 / 178 | 100% | 0 / 3 |
-| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (168) | 100 / 102 | 98% | 0 / 4 |
+| [[Exam MAS-II (CAS)]] | `exam-mas-ii` (141) | 100 / 102 | 98% | 0 / 4 |
 | [[Exam DISC-DA (CAS)]] | `exam-disc-da` (70) | 42 / 42 | 100% | 0 / 10 |
 | [[Exam DISC-RM (CAS)]] | `exam-disc-rm` (144) | 65 / 65 | 100% | 0 / 15 |
 | [[Exam DISC-IA (CAS)]] | `exam-disc-ia` (221) | 97 / 97 | 100% | 0 / 16 |
-| [[Exam 5 (CAS)]] | `exam-5` (356) | 137 / 139 | 99% | 0 / 2 |
+| [[Exam 5 (CAS)]] | `exam-5` (357) | 137 / 139 | 99% | 0 / 2 |
 | [[Exam PCPA (CAS)]] | none | 0 / 30 | 0% | 3 / 3 |
 | [[Exam 6C (CAS)]] | `exam-6c` (343) | 159 / 159 | 100% | 0 / 3 |
 | [[Exam 6U (CAS)]] | none | 0 / 80 | 0% | 4 / 4 |
@@ -64,7 +64,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
-| **Total** | | **1112 / 2226** | **50%** | |
+| **Total** | | **1196 / 2226** | **54%** | |
 
 105 concept pages are linked from no exam's learning objectives and are not counted.
 
@@ -163,160 +163,19 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam FAM (SOA)
 
-*No question bank yet — all 86 syllabus concepts are uncovered.*
-
-### Short-Term Insurance and Reinsurance Coverages {5–10%}
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Reinsurance]]
-- [[Coverage Modifications]]
-- [[Short-Term Insurance Coverage]]
-- [[Loss Elimination Ratio]]
-- [[Inflation]]
-- [[Excess of Loss]]
-- [[Claim]]
-- [[Insurer]]
+*2 of 86 syllabus concepts have no question in `questions/exam-fam/`.*
 
 ### Severity, Frequency, and Aggregate Models {12.5–17.5%}
 
-*17 of 17 uncovered — **no questions at all***
+*1 of 17 uncovered*
 
-- [[Severity]]
-- [[Frequency]]
-- [[Moment]]
-- [[Percentile]]
-- [[Scale and Shape Parameters]]
-- [[Probability Distributions]]
-- [[Individual Risk Model]]
-- [[Variance]]
-- [[Lognormal Distribution]]
-- [[Normal Approximation]]
-- [[Aggregate Loss Model]]
-- [[Probability]]
-- [[Convolution]]
-- [[Payment]]
-- [[Stop-Loss Reinsurance]]
-- [[Risk]]
-- [[Risk Measure]]
-
-### Parametric Estimation {2.5–7.5%}
-
-*5 of 5 uncovered — **no questions at all***
-
-- [[Severity]]
-- [[Frequency Distribution]]
-- [[Maximum Likelihood Estimation]]
-- [[Grouped Data]]
-- [[Censoring]]
-
-### Introduction to Credibility {2.5–5%}
-
-*2 of 2 uncovered — **no questions at all***
-
-- [[Credibility]]
-- [[Limited Fluctuation Credibility]]
-
-### Pricing and Reserving for Short-Term Insurance Coverages {10–15%}
-
-*16 of 16 uncovered — **no questions at all***
-
-- [[Insurance Premium]]
-- [[Reserve]]
-- [[Short-Term Insurance Coverage]]
-- [[Unpaid Claims]]
-- [[Expected Loss Method]]
-- [[Chain Ladder Method]]
-- [[Bornhuetter-Ferguson Method]]
-- [[Ratemaking]]
-- [[Trend]]
-- [[On-Leveling]]
-- [[Expenses]]
-- [[Profit and Contingency Provision]]
-- [[Overall Rate Level Indication]]
-- [[Rate Change]]
-- [[Loss Cost]]
-- [[Loss Ratio Method]]
-
-### Option Pricing Fundamentals {2.5–7.5%}
-
-*9 of 9 uncovered — **no questions at all***
-
-- [[European Option]]
-- [[Risk-Neutral Valuation]]
-- [[Present Value]]
-- [[Black-Scholes Model]]
-- [[Cash Flow]]
-- [[Payoff]]
-- [[Binomial Option Pricing Model]]
-- [[Delta Hedging]]
-- [[Put-Call Parity]]
+- [[Frequency]] — tagged in another bank (23)
 
 ### Long-Term Insurance Coverages and Retirement Financial Security Programs {2.5–5%}
 
-*7 of 7 uncovered — **no questions at all***
+*1 of 7 uncovered*
 
 - [[Insurance Coverage]]
-- [[Retirement Plan]]
-- [[Insurable Interest]]
-- [[Long-Term Insurance Coverage]]
-- [[Annuities]]
-- [[Defined Benefit Plan]]
-- [[Defined Contribution Plan]]
-
-### Mortality Models {10–15%}
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Life Table]]
-- [[Future Lifetime Random Variable]]
-- [[Parametric Survival Model]]
-- [[Mortality]]
-- [[Moment]]
-- [[Standard Actuarial Notation]]
-- [[Survival Model]]
-- [[Fractional Age Assumption]]
-
-### Present Value Random Variables for Long-Term Insurance Coverages {12.5–20%}
-
-*16 of 16 uncovered — **no questions at all***
-
-- [[Random Variable]]
-- [[Expenses]]
-- [[Long-Term Insurance Coverage]]
-- [[Life Insurance]]
-- [[Pure Endowment]]
-- [[Life Annuity]]
-- [[Future Lifetime Random Variable]]
-- [[Payable Continuously]]
-- [[Probability]]
-- [[Variance]]
-- [[Covariance]]
-- [[Fractional Age Assumption]]
-- [[Expected Value]]
-- [[Mortality]]
-- [[Interest]]
-- [[Standard Actuarial Notation]]
-
-### Premium and Policy Value Calculation for Long-Term Insurance Coverages {15–22.5%}
-
-*15 of 15 uncovered — **no questions at all***
-
-- [[Insurance Premium]]
-- [[Policy Value]]
-- [[Long-Term Insurance Coverage]]
-- [[Future Loss Random Variable]]
-- [[Whole Life Insurance]]
-- [[Term Life Insurance]]
-- [[Endowment Insurance]]
-- [[Life Annuity]]
-- [[Future Lifetime Random Variable]]
-- [[Equivalence Principle]]
-- [[Portfolio Percentile Principle]]
-- [[Modified Net Premium Policy Value]]
-- [[Mortality]]
-- [[Interest]]
-- [[Extra Risk]]
 
 ## Exam SRM (SOA)
 
@@ -2169,10 +2028,10 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ### B. Linear Mixed Models {10–20%}
 
-*2 of 27 uncovered*
+*2 of 26 uncovered*
 
-- [[Variance]] — tagged in another bank (61)
-- [[Expected Value]] — tagged in another bank (104)
+- [[Variance]] — tagged in another bank (83)
+- [[Expected Value]] — tagged in another bank (106)
 
 ## Exam DISC-DA (CAS)
 
@@ -2194,8 +2053,8 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *2 of 77 uncovered*
 
-- [[Insurer]] — tagged in another bank (8)
-- [[Risk]] — tagged in another bank (2)
+- [[Insurer]] — tagged in another bank (10)
+- [[Risk]] — tagged in another bank (4)
 
 ## Exam PCPA (CAS)
 

@@ -1,7 +1,7 @@
 # Concepts Without Review Questions
 
 > Generated 2026-10-19 by `scripts/generate_coverage_report.py` — edit the script, not this page.
-> **1196 of 2226 syllabus concept entries (54%)** have at least one question in their exam's own bank.
+> **1252 of 3349 syllabus concept entries (37%)** have at least one question in their exam's own bank.
 
 A concept is a `[[link]]` inside an exam page's learning-objective callouts; it is covered when a question in that exam's bank lists it in `wiki_link:`. Off-syllabus questions and questions withheld for an open critical finding don't count. A concept also tagged in another exam's bank is marked — those are re-tagging gaps rather than missing questions. Generic terms (Insurer, Risk, Claim) will rarely be tagged and can be read past.
 
@@ -20,7 +20,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam ASF (SOA)]] | none | 0 / 3 | 0% | 2 / 2 |
 | [[Exam PA (SOA)]] | none | 0 / 27 | 0% | 5 / 5 |
 | [[Exam ALTAM (SOA)]] | none | 0 / 64 | 0% | 7 / 7 |
-| [[Exam ASTAM (SOA)]] | none | 0 / 58 | 0% | 6 / 6 |
+| [[Exam ASTAM (SOA)]] | `exam-astam` (62) | 56 / 58 | 97% | 0 / 6 |
 | [[Exam ATPA (SOA)]] | none | 0 / 31 | 0% | 4 / 4 |
 | [[Exam FAP (SOA)]] | none | 0 / 13 | 0% | 4 / 4 |
 | [[Exam APC (SOA)]] | none | 0 / 1 | 0% | 2 / 2 |
@@ -64,9 +64,38 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 | [[Exam 7 (CAS)]] | `exam-7` (126) | 26 / 29 | 90% | 0 / 1 |
 | [[Exam 8 (CAS)]] | `exam-8` (143) | 39 / 39 | 100% | 0 / 2 |
 | [[Exam 9 (CAS)]] | `exam-9` (131) | 66 / 66 | 100% | 0 / 4 |
-| **Total** | | **1196 / 2226** | **54%** | |
+| [[Exam ACIA-M1 (CIA)]] | none | 0 / 17 | 0% | 3 / 3 |
+| [[Exam ACIA-M2 (CIA)]] | none | 0 / 16 | 0% | 2 / 2 |
+| [[Exam ACIA-CAPSTONE (CIA)]] | none | 0 / 242 | 0% | 5 / 5 |
+| [[Exam PC-M1 (CIA)]] | none | 0 / 37 | 0% | 19 / 19 |
+| [[Exam PC-M2 (CIA)]] | none | 0 / 17 | 0% | 14 / 14 |
+| [[Exam F1PC (CIA)]] | none | 0 / 38 | 0% | 9 / 9 |
+| [[Exam F2PC (CIA)]] | none | 0 / 53 | 0% | 6 / 6 |
+| [[Exam F3PC (CIA)]] | none | 0 / 37 | 0% | 7 / 7 |
+| [[Exam ILA-M1 (CIA)]] | none | 0 / 40 | 0% | 10 / 10 |
+| [[Exam ILA-M2 (CIA)]] | none | 0 / 29 | 0% | 6 / 6 |
+| [[Exam F1ILA (CIA)]] | none | 0 / 39 | 0% | 7 / 7 |
+| [[Exam F2ILA (CIA)]] | none | 0 / 30 | 0% | 6 / 6 |
+| [[Exam F3ILA (CIA)]] | none | 0 / 49 | 0% | 8 / 8 |
+| [[Exam GB-M1 (CIA)]] | none | 0 / 31 | 0% | 8 / 8 |
+| [[Exam GB-M2 (CIA)]] | none | 0 / 33 | 0% | 7 / 7 |
+| [[Exam F1GB (CIA)]] | none | 0 / 21 | 0% | 8 / 8 |
+| [[Exam F2GB (CIA)]] | none | 0 / 19 | 0% | 7 / 7 |
+| [[Exam F3GB (CIA)]] | none | 0 / 30 | 0% | 7 / 7 |
+| [[Exam RET-M1 (CIA)]] | none | 0 / 32 | 0% | 9 / 9 |
+| [[Exam RET-M2 (CIA)]] | none | 0 / 15 | 0% | 5 / 5 |
+| [[Exam F1RET (CIA)]] | none | 0 / 33 | 0% | 5 / 5 |
+| [[Exam F2RET (CIA)]] | none | 0 / 18 | 0% | 6 / 6 |
+| [[Exam F3RET (CIA)]] | none | 0 / 33 | 0% | 7 / 7 |
+| [[Exam FIE-M1 (CIA)]] | none | 0 / 46 | 0% | 11 / 11 |
+| [[Exam FIE-M2 (CIA)]] | none | 0 / 30 | 0% | 6 / 6 |
+| [[Exam F1FIE (CIA)]] | none | 0 / 43 | 0% | 7 / 7 |
+| [[Exam F2FIE (CIA)]] | none | 0 / 33 | 0% | 8 / 8 |
+| [[Exam F3FIE (CIA)]] | none | 0 / 36 | 0% | 7 / 7 |
+| [[Exam F3BNK (CIA)]] | none | 0 / 26 | 0% | 6 / 6 |
+| **Total** | | **1252 / 3349** | **37%** | |
 
-105 concept pages are linked from no exam's learning objectives and are not counted.
+99 concept pages are linked from no exam's learning objectives and are not counted.
 
 ---
 
@@ -169,7 +198,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *1 of 17 uncovered*
 
-- [[Frequency]] — tagged in another bank (23)
+- [[Frequency]] — tagged in another bank (26)
 
 ### Long-Term Insurance Coverages and Retirement Financial Security Programs {2.5–5%}
 
@@ -393,103 +422,14 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 ## Exam ASTAM (SOA)
 
-*No question bank yet — all 58 syllabus concepts are uncovered.*
-
-### Severity Models {8–18%}
-
-*11 of 11 uncovered — **no questions at all***
-
-- [[Severity Distribution]]
-- [[Generalized Extreme Value Distribution]]
-- [[Probability Distributions]]
-- [[Creating New Distributions]]
-- [[Spliced Distribution]]
-- [[Moment]]
-- [[Hazard Rate]]
-- [[Mean Excess Loss]]
-- [[Generalized Pareto Distribution]]
-- [[Risk Measure]]
-- [[Probability]]
-
-### Aggregate Models {12–22%}
-
-*9 of 9 uncovered — **no questions at all***
-
-- [[Convolution]]
-- [[Panjer Recursion]]
-- [[Probability]]
-- [[Probability Distributions]]
-- [[Aggregate Loss Model]]
-- [[Frequency]]
-- [[Severity Discretization]]
-- [[Continuous Random Variable]]
-- [[Compound Poisson Process]]
-
-### Coverage Modifications {8–18%}
-
-*8 of 8 uncovered — **no questions at all***
-
-- [[Coverage Modifications]]
-- [[Deductible]]
-- [[Policy Limit]]
-- [[Coinsurance]]
-- [[Stop-Loss Reinsurance]]
-- [[Loss Elimination Ratio]]
-- [[Increased Limits]]
-- [[Inflation]]
-
-### Construction and Selection of Parametric Models {14–24%}
-
-*15 of 15 uncovered — **no questions at all***
-
-- [[Frequency]]
-- [[Severity Distribution]]
-- [[Maximum Likelihood Estimation]]
-- [[Variance]]
-- [[Estimator]]
-- [[Approximate Confidence Interval]]
-- [[Delta Method]]
-- [[Severity]]
-- [[Aggregate Loss Model]]
-- [[Bayesian Estimation]]
-- [[Hypothesis Testing]]
-- [[Chi-Square Goodness-of-Fit Test]]
-- [[Likelihood Ratio Test]]
-- [[BIC]]
-- [[AIC]]
-
-### Credibility {12–20%}
-
-*4 of 4 uncovered — **no questions at all***
-
-- [[Credibility]]
-- [[Bayesian]]
-- [[Bühlmann Credibility]]
-- [[Empirical Bayes Credibility]]
+*2 of 58 syllabus concepts have no question in `questions/exam-astam/`.*
 
 ### Reserving and Pricing for Short-Term Insurance Coverages {15–29%}
 
-*19 of 19 uncovered — **no questions at all***
+*2 of 19 uncovered*
 
-- [[Reserve]]
-- [[Short-Term Insurance Coverage]]
-- [[Unpaid Claims]]
-- [[Expected Loss Method]]
-- [[Chain Ladder Method]]
-- [[Bornhuetter-Ferguson Method]]
-- [[Bayesian]]
-- [[Frequency]]
-- [[Severity]]
-- [[Mack Chain Ladder Model]]
-- [[Over-Dispersed Poisson Model]]
-- [[Loss Trend]]
-- [[Trend]]
-- [[Overall Rate Level Indication]]
-- [[Rate Change]]
-- [[Loss Cost]]
-- [[Loss Ratio Method]]
-- [[Classification Ratemaking]]
-- [[Balancing Back]]
+- [[Reserve]] — tagged in another bank (1)
+- [[Short-Term Insurance Coverage]] — tagged in another bank (2)
 
 ## Exam ATPA (SOA)
 
@@ -2030,7 +1970,7 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 
 *2 of 26 uncovered*
 
-- [[Variance]] — tagged in another bank (83)
+- [[Variance]] — tagged in another bank (85)
 - [[Expected Value]] — tagged in another bank (106)
 
 ## Exam DISC-DA (CAS)
@@ -2343,3 +2283,2604 @@ A concept is a `[[link]]` inside an exam page's learning-objective callouts; it 
 ## Exam 9 (CAS)
 
 *Every syllabus concept has at least one question.*
+
+## Exam ACIA-M1 (CIA)
+
+*No question bank yet — all 17 syllabus concepts are uncovered.*
+
+### A. Introduction and actuarial communications
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Event]]
+
+### B. The actuarial environment
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Risk Management]]
+- [[Emerging Risk]]
+- [[Risk]]
+- [[Capital]]
+- [[Insurer]]
+- [[Interest Rate]]
+- [[Hedging]]
+- [[Reinsurance]]
+- [[Climate Change]]
+- [[Cyber Insurance]]
+
+### C. Actuarial work
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Decision-Making]]
+- [[Risk]]
+- [[Business Strategy]]
+- [[Peer Review]]
+- [[Actuarial Standards of Practice]]
+- [[Data Quality]]
+
+## Exam ACIA-M2 (CIA)
+
+*No question bank yet — all 16 syllabus concepts are uncovered.*
+
+### D. Traditional actuarial solutions
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Pension]]
+- [[Life Insurance]]
+- [[Cash Flow]]
+- [[Expenses]]
+- [[Short-Term Insurance Coverage]]
+- [[Model Output]]
+
+### E. Advanced actuarial models and predictive analytics applications
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Predictive Analytics]]
+- [[Constraint]]
+- [[Correlation]]
+- [[Overfitting]]
+- [[Data Quality]]
+- [[Missing Data]]
+- [[Tidy Data]]
+- [[Risk]]
+- [[Operational Excellence]]
+- [[Data Visualization]]
+
+## Exam ACIA-CAPSTONE (CIA)
+
+*No question bank yet — all 242 syllabus concepts are uncovered.*
+
+### A1. Probability
+
+*27 of 27 uncovered — **no questions at all***
+
+- [[Sample Space]]
+- [[Event]]
+- [[Probability]]
+- [[Axioms of Probability]]
+- [[Mutually Exclusive Events]]
+- [[Independent Events]]
+- [[Combinatorics]]
+- [[Permutation]]
+- [[Conditional Probability]]
+- [[Random Variable]]
+- [[Probability Density Function (PDF)]]
+- [[Cumulative Distribution Function (CDF)]]
+- [[Mode]]
+- [[Median]]
+- [[Percentile]]
+- [[Variance]]
+- [[Standard Deviation]]
+- [[Coefficient of Variation]]
+- [[Moment]]
+- [[Independent Random Variables]]
+- [[Variance and Standard Deviation]]
+- [[Covariance]]
+- [[Correlation Coefficient]]
+- [[Probability Distributions]]
+- [[Order Statistics]]
+- [[Moments for Linear Combinations]]
+- [[Central Limit Theorem]]
+
+### A2. Financial mathematics
+
+*64 of 64 uncovered — **no questions at all***
+
+- [[Interest Rate]]
+- [[Simple Interest]]
+- [[Compound Interest]]
+- [[Accumulation Function]]
+- [[Future Value]]
+- [[Discount Factor]]
+- [[Discount Rate]]
+- [[Convertible m-thly]]
+- [[Effective Rate]]
+- [[Inflation]]
+- [[Real Rate of Interest]]
+- [[Force of Interest]]
+- [[Equation of Value]]
+- [[Variable Force of Interest]]
+- [[Nominal Interest Rate Convertible m-thly]]
+- [[Effective Discount Rate]]
+- [[Nominal Discount Rate Convertible m-thly]]
+- [[Cash Flow]]
+- [[Annuity Immediate]]
+- [[Annuity Due]]
+- [[Perpetuity]]
+- [[Payable m-thly]]
+- [[Level Payment Annuity]]
+- [[Term of Annuity]]
+- [[Payment Amount]]
+- [[Level Annuity]]
+- [[Level Perpetuity]]
+- [[Arithmetic Progression]]
+- [[Geometric Progression]]
+- [[Principal]]
+- [[Interest]]
+- [[Term of Loan]]
+- [[Outstanding Balance]]
+- [[Final Payment]]
+- [[Drop Payment]]
+- [[Balloon Payment]]
+- [[Amortization]]
+- [[Payment Period]]
+- [[Refinancing]]
+- [[Payment]]
+- [[Redemption Value]]
+- [[Coupon]]
+- [[Coupon Rate]]
+- [[Term of Bond]]
+- [[Yield Rate]]
+- [[Book Value]]
+- [[Accumulation of Discount]]
+- [[Amortization of Premium]]
+- [[Duration]]
+- [[Convexity]]
+- [[Portfolio]]
+- [[Spot Rate]]
+- [[Forward Rate]]
+- [[Yield Curve]]
+- [[Modified Duration]]
+- [[Cash Flow Matching]]
+- [[Immunization]]
+- [[Full Immunization]]
+- [[Redington Immunization]]
+- [[Asset Adequacy Analysis]]
+- [[Risk]]
+- [[Market Value]]
+- [[Credit Risk]]
+- [[Bonds]]
+
+### A3. Business, economics, and finance
+
+*36 of 36 uncovered — **no questions at all***
+
+- [[Life Insurance Company Taxation]]
+- [[Key Financial Measures]]
+- [[Financial Position]]
+- [[Cash Flow Statement]]
+- [[Capital]]
+- [[Capital Budgeting]]
+- [[Payment]]
+- [[Interest Rate]]
+- [[Inflation]]
+- [[Risk]]
+- [[Portfolio]]
+- [[Volatility]]
+- [[Correlation]]
+- [[Market Risk]]
+- [[Variance]]
+- [[Risk Measure]]
+- [[Decision Tree]]
+- [[Capital Structure]]
+- [[Valuation]]
+- [[Payoff]]
+- [[Cash Flow]]
+- [[Exotic Option]]
+- [[Financial Risk]]
+- [[Option Trading Strategy]]
+- [[Put-Call Parity]]
+- [[European Option]]
+- [[Risk-Neutral Valuation]]
+- [[Binomial Option Pricing Model]]
+- [[Percentile]]
+- [[Option Greeks]]
+- [[Delta Method]]
+- [[Gamma]]
+- [[Delta Hedging]]
+- [[Insurer]]
+- [[Equity-Linked Insurance]]
+- [[Annuities]]
+
+### A4. Actuarial mathematics
+
+*85 of 85 uncovered — **no questions at all***
+
+- [[Annuities]]
+- [[Pension Plan]]
+- [[Pension]]
+- [[Present Value]]
+- [[Insurance Premium]]
+- [[Reserve]]
+- [[Survival Model]]
+- [[Mortality]]
+- [[Grouped Data]]
+- [[Maximum Likelihood Estimation]]
+- [[Variance]]
+- [[Confidence Interval]]
+- [[Estimator]]
+- [[Transition Intensity]]
+- [[Multiple State Model]]
+- [[Random Variable]]
+- [[Conditional Probability]]
+- [[Markov Chain]]
+- [[Probability]]
+- [[Fractional Age Assumption]]
+- [[Percentile]]
+- [[Interest]]
+- [[Expenses]]
+- [[Policy Value]]
+- [[Future Loss Random Variable]]
+- [[Analysis of Surplus]]
+- [[Internal Rate of Return]]
+- [[Profit Margin]]
+- [[Defined Benefit Plan]]
+- [[Defined Contribution Plan]]
+- [[Group Health Insurance]]
+- [[Valuation]]
+- [[Replacement Ratio]]
+- [[Accrued Benefit]]
+- [[Expected Value]]
+- [[Actuarial Accrued Liability]]
+- [[Normal Cost]]
+- [[Projected Unit Credit Method]]
+- [[Traditional Unit Credit Method]]
+- [[Moment]]
+- [[Probability Distributions]]
+- [[Generalized Extreme Value Distribution]]
+- [[Severity]]
+- [[Hazard Rate]]
+- [[Mean Excess Loss]]
+- [[Individual Risk Model]]
+- [[Normal Distribution]]
+- [[Aggregate Loss Model]]
+- [[Payment]]
+- [[Deductible]]
+- [[Coverage Modifications]]
+- [[Gamma]]
+- [[Exponential Distribution]]
+- [[Loss Elimination Ratio]]
+- [[Increased Limits]]
+- [[Inflation]]
+- [[Risk]]
+- [[Risk Measure]]
+- [[Frequency]]
+- [[Censoring]]
+- [[Delta Method]]
+- [[Bayesian Estimation]]
+- [[Hypothesis Testing]]
+- [[Chi-Square Goodness-of-Fit Test]]
+- [[Likelihood Ratio Test]]
+- [[BIC]]
+- [[AIC]]
+- [[Limited Fluctuation Credibility]]
+- [[Credibility]]
+- [[Partial Credibility]]
+- [[Bayesian]]
+- [[Bühlmann Credibility]]
+- [[Conjugate Prior]]
+- [[Short-Term Insurance Coverage]]
+- [[Policy Limit]]
+- [[Excess of Loss]]
+- [[Claim]]
+- [[Insurer]]
+- [[Reinsurance]]
+- [[Rating Factors]]
+- [[Exposure Base]]
+- [[Experience Rating]]
+- [[Chain Ladder Method]]
+- [[Pure Premium]]
+- [[Loss Ratio Method]]
+
+### A5. Predictive analytics
+
+*64 of 64 uncovered — **no questions at all***
+
+- [[Unsupervised Learning]]
+- [[Exploratory Data Analysis]]
+- [[Model Validation]]
+- [[Exponential Family]]
+- [[Probability Distributions]]
+- [[Link Function]]
+- [[Maximum Likelihood Estimation]]
+- [[Model Diagnostics]]
+- [[Variable Transformation]]
+- [[Likelihood Ratio Test]]
+- [[AIC]]
+- [[BIC]]
+- [[Fitted Values]]
+- [[Confidence Interval]]
+- [[Prediction Interval]]
+- [[Ordinary Least Squares]]
+- [[Regularization]]
+- [[K-Nearest Neighbors]]
+- [[Generalized Linear Model]]
+- [[Offset Variable]]
+- [[Bias]]
+- [[Variance]]
+- [[Bias-Variance Tradeoff]]
+- [[Hyperparameter]]
+- [[Extended Linear Model]]
+- [[ANOVA]]
+- [[Generalized Additive Model]]
+- [[Local Regression]]
+- [[Partial Least Squares]]
+- [[Principal Components Analysis]]
+- [[Statistical Software]]
+- [[Model Structure]]
+- [[Linear Mixed Model]]
+- [[Variable Selection]]
+- [[Summary Statistics]]
+- [[Bayesian]]
+- [[Time Series]]
+- [[Stationarity]]
+- [[Autocorrelation Function]]
+- [[Random Walk]]
+- [[Exponential Smoothing]]
+- [[ARCH Model]]
+- [[Proportion of Variance Explained]]
+- [[Decision Tree]]
+- [[Regression Tree]]
+- [[Bagging]]
+- [[Boosting]]
+- [[Random Forest]]
+- [[Classification Tree]]
+- [[Gini Index]]
+- [[Entropy]]
+- [[Clustering]]
+- [[K-Means Clustering]]
+- [[Hierarchical Clustering]]
+- [[Predictive Analytics]]
+- [[Statistics]]
+- [[Missing Data]]
+- [[Data Design]]
+- [[Bivariate Data Exploration]]
+- [[Data Visualization]]
+- [[Data Quality]]
+- [[Outlier]]
+- [[Data Issues]]
+- [[Actuarial Communication]]
+
+## Exam PC-M1 (CIA)
+
+*No question bank yet — all 37 syllabus concepts are uncovered.*
+
+### Introduction to risk and insurance
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Insurable Risk]]
+- [[Risk Management]]
+- [[Risk Management Process]]
+- [[Exposure Base]]
+
+### Insurance categories and functions
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Credit]]
+- [[Capital]]
+
+### Regulatory framework
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[PACICC]]
+- [[Insurance Companies Act]]
+
+### Insurance as a contract: The insurance policy
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Insurable Interest]]
+- [[Excess Insurance]]
+
+### Insurance documents and processes
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Endorsement]]
+- [[Insurance Policy]]
+
+### Insurance companies
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Underwriting]]
+- [[Claim]]
+- [[Reinsurance]]
+- [[Types of Reinsurance]]
+
+### Claims
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Claim]]
+- [[Coinsurance]]
+
+### Industry organizations: The customer
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Bureau of Canada]]
+- [[Insurance Operations]]
+- [[Facility Association]]
+
+### Introduction to automobile insurance
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Personal Auto Policy]]
+
+### Third-party liability coverage; direct compensation-property damage coverage
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Policy Limit]]
+- [[Direct Compensation Property Damage]]
+- [[Deductible]]
+
+### Accident benefits
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Payment]]
+- [[Expenses]]
+- [[Collateral Benefits]]
+
+### Uninsured automobile coverage
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Claim]]
+
+### Loss or damage coverages
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Deductible]]
+- [[Payment]]
+- [[Data Analytics]]
+
+### Statutory conditions
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Personal Auto Policy]]
+
+### General provisions, definitions, and exclusions
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Personal Auto Policy]]
+
+### Endorsements for use with the owner’s policy, the driver’s policy
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Endorsement]]
+
+### Automobile insurance consumer protection
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Companies Act]]
+- [[Facility Association]]
+- [[Risk Sharing Pool]]
+
+### Automobile insurance across Canada
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Personal Auto Policy]]
+- [[Probability Distributions]]
+
+### Principles of actuarial evidence
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Valuation]]
+- [[Interest]]
+- [[Actuarial Standards of Practice]]
+- [[Pension]]
+
+## Exam PC-M2 (CIA)
+
+*No question bank yet — all 17 syllabus concepts are uncovered.*
+
+### Introduction to property insurance
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Property Insurance]]
+- [[Claim]]
+
+### Legislation and general principles in common-law provinces and territories and Québec
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Property Insurance]]
+
+### Perils and hazards
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Property Insurance]]
+- [[Risk]]
+- [[Insurance Bureau of Canada]]
+
+### Anatomy of a property policy: Overview
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Property Insurance]]
+
+### Anatomy of a property policy: The homeowners form
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Property Insurance]]
+
+### Endorsements and floaters
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Endorsement]]
+- [[Property Insurance]]
+
+### Commercial property insurance
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Commercial Property Insurance]]
+
+### Negligence: The ABC rule (common Law)
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Negligence]]
+
+### Defenses against negligence in common law
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Defenses Against Negligence]]
+- [[Strict Liability]]
+
+### Québec: Defenses against extra-contractual liability
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Limitation Period]]
+
+### General legal principles
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Agent]]
+- [[Negligence]]
+- [[Class Action]]
+- [[Limitation Period]]
+
+### Products liability and its effects
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Products Liability]]
+
+### Standard commercial general liability policy
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Commercial General Liability]]
+
+### Emerging trends in liability insurance
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Liability Insurance]]
+- [[Cyber Insurance]]
+
+## Exam F1PC (CIA)
+
+*No question bank yet — all 38 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Insurance Policy]]
+
+### Regulations and applicable standards {15%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Professional Responsibilities of the Actuary]]
+
+### Data {10%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Claim]]
+- [[Expenses]]
+- [[On-Leveling]]
+- [[Homogeneity]]
+- [[Credibility]]
+- [[External Environment]]
+
+### Catastrophe modelling {5%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Catastrophe Modelling]]
+- [[Exposure Base]]
+- [[Overall Rate Level Indication]]
+
+### Pricing – overall rate level indication {25%}
+
+*16 of 16 uncovered — **no questions at all***
+
+- [[Overall Rate Level Indication]]
+- [[Loss Ratio]]
+- [[Pure Premium]]
+- [[Credibility]]
+- [[Data Quality]]
+- [[Claim]]
+- [[Expenses]]
+- [[Profit Margin]]
+- [[Regulatory Capital]]
+- [[Return on Capital]]
+- [[Seasonality]]
+- [[Large Loss]]
+- [[Frequency]]
+- [[Severity Distribution]]
+- [[Claims Made Coverage]]
+- [[Insurance Pricing]]
+
+### Pricing – segmentation {25%}
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[Adverse Selection]]
+- [[Risk]]
+- [[Generalized Linear Model]]
+- [[Neural Network]]
+- [[Credibility]]
+- [[Link Function]]
+- [[Model Output]]
+- [[Deductible]]
+- [[Linkage]]
+- [[Unpaid Claims]]
+- [[Exposure Base]]
+
+### Pricing – large account pricing {5%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Credibility]]
+- [[Deductible]]
+- [[Self-Insured Retention]]
+
+### Pricing – reinsurance {10%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Insurance Premium]]
+- [[Types of Reinsurance]]
+
+### Portfolio analytics {5%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Exposure Base]]
+- [[Mix of Business]]
+
+## Exam F2PC (CIA)
+
+*No question bank yet — all 53 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Unpaid Claims]]
+- [[Insurer]]
+
+### Regulations and applicable standards {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Insurance Companies Act]]
+- [[Financial Reporting]]
+- [[Professional Responsibilities of the Actuary]]
+- [[Unpaid Claims]]
+
+### Data {10%}
+
+*13 of 13 uncovered — **no questions at all***
+
+- [[Claim]]
+- [[Exposure Base]]
+- [[Unpaid Claims]]
+- [[Development Triangle]]
+- [[Homogeneity]]
+- [[Credibility]]
+- [[Calendar Year]]
+- [[Accident Year]]
+- [[Policy Year]]
+- [[Underwriting Year]]
+- [[Report Year]]
+- [[IFRS]]
+- [[External Environment]]
+
+### Estimating unpaid claims – basic topics {25%}
+
+*17 of 17 uncovered — **no questions at all***
+
+- [[Unpaid Claims]]
+- [[Insurer]]
+- [[Financial Reporting]]
+- [[Interest]]
+- [[Development Triangle]]
+- [[Claim]]
+- [[Allocated Loss Adjustment Expense]]
+- [[Bornhuetter-Ferguson Method]]
+- [[Data Quality]]
+- [[Earned Premium]]
+- [[Exposure Base]]
+- [[Seasonality]]
+- [[Mix of Business]]
+- [[External Environment]]
+- [[Risk]]
+- [[Discount]]
+- [[Investment Income]]
+
+### Estimation of unpaid claims – advanced topics {20%}
+
+*15 of 15 uncovered — **no questions at all***
+
+- [[Unpaid Claims]]
+- [[Unallocated Loss Adjustment Expenses ULAE]]
+- [[Reinsurance]]
+- [[Reinsurance Contracts Held]]
+- [[Claim]]
+- [[Earned Premium]]
+- [[Insurance Premium]]
+- [[Reinstatements]]
+- [[Layer of Insurance]]
+- [[Credibility]]
+- [[Stochastic Processes]]
+- [[Markov Chain Monte Carlo]]
+- [[Aggregate Loss Model]]
+- [[Correlation]]
+- [[Actuary]]
+
+### IFRS17 financial reporting {30%}
+
+*17 of 17 uncovered — **no questions at all***
+
+- [[IFRS 17]]
+- [[Contract Boundary]]
+- [[Premium Allocation Approach]]
+- [[Level of Aggregation]]
+- [[Portfolio]]
+- [[Liability for Incurred Claims]]
+- [[Discount Rate]]
+- [[IFRS]]
+- [[Risk]]
+- [[Non-Financial Risk]]
+- [[Cost of Capital]]
+- [[Reinsurance Contracts Held]]
+- [[Contractual Service Margin]]
+- [[Onerous Contract]]
+- [[Loss Component]]
+- [[Financial Statements]]
+- [[Key Financial Measures]]
+
+## Exam F3PC (CIA)
+
+*No question bank yet — all 37 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Enterprise Risk Management]]
+
+### ERM concept, framework, and process {10%}
+
+*12 of 12 uncovered — **no questions at all***
+
+- [[Enterprise Risk Management]]
+- [[Risk Management]]
+- [[Insurer]]
+- [[ORSA]]
+- [[Rating Agency]]
+- [[Data Issues]]
+- [[Risk Appetite]]
+- [[Risk Identification]]
+- [[Risk Assessment]]
+- [[Risk Mitigation]]
+- [[Risk]]
+- [[Emerging Risk]]
+
+### Risk categories and risk identification {10%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Individual Risk Model]]
+- [[Insurer]]
+- [[Insurance Risk]]
+- [[Credit Risk]]
+- [[Market Risk]]
+- [[Operational Risk]]
+
+### Economic capital modelling and aggregation of risks {25%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Correlation]]
+- [[Probability Distributions]]
+- [[Model Risk]]
+- [[Parameter Risk]]
+- [[Economic Capital]]
+- [[Decision-Making]]
+- [[Enterprise Risk Management]]
+- [[Corporate Governance]]
+- [[Stress Testing]]
+
+### Risk measurement and assessment {30%}
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Risk Measure]]
+- [[Probability]]
+- [[Model Validation]]
+- [[Regulatory Capital]]
+- [[Risk]]
+- [[Underwriting]]
+- [[Credit]]
+- [[Corporate Governance]]
+
+### Stress and scenario testing {10%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Stress Testing]]
+- [[Reverse Stress Testing]]
+- [[FCT]]
+- [[Risk]]
+- [[Climate Change]]
+
+### Capital management {15%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[ORSA]]
+- [[FCT]]
+- [[Risk Identification]]
+- [[Risk]]
+- [[Regulatory Capital]]
+- [[Internal Control]]
+- [[Capital]]
+- [[Risk Measure]]
+- [[Economic Capital]]
+
+## Exam ILA-M1 (CIA)
+
+*No question bank yet — all 40 syllabus concepts are uncovered.*
+
+### Introduction to risk and insurance
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Insurable Risk]]
+- [[Life Insurance]]
+- [[Risk Management]]
+- [[Risk Management Process]]
+- [[Exposure Base]]
+
+### Insurance categories and functions
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Credit]]
+- [[Capital]]
+- [[Insurer]]
+
+### Regulatory framework
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Insurance Companies Act]]
+- [[Life Insurance]]
+
+### Insurance company operations
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Underwriting]]
+- [[Claim]]
+- [[Reinsurance]]
+- [[Risk Management]]
+- [[Actuary]]
+- [[Risk]]
+- [[Types of Reinsurance]]
+
+### Insurance documents and processes
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Endorsement]]
+- [[Policyholder]]
+
+### The insurance marketplace
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Life Insurance]]
+- [[Annuities]]
+- [[Employment Insurance]]
+- [[Pension Plan]]
+
+### Consulting firm operations
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Pension Plan]]
+- [[Rate Regulation]]
+- [[Valuation]]
+- [[Financial Reporting]]
+- [[Defined Benefit Plan]]
+- [[Peer Review]]
+- [[Appointed Actuary]]
+- [[Probability Distributions]]
+- [[Risk Management]]
+- [[Actuary]]
+
+### Life insurance product development process
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Life Insurance]]
+- [[Annuity Contract]]
+- [[Insurer]]
+- [[Insurance Policy]]
+- [[Annuities]]
+- [[Critical Illness Insurance]]
+- [[Actuary]]
+- [[Product Development Process]]
+
+### Actuarial models
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Best Practice]]
+- [[Model Governance]]
+- [[Risk Management]]
+- [[Model Validation]]
+- [[Corporate Governance]]
+- [[Actuarial Standards of Practice]]
+- [[Discount Rate]]
+- [[Inflation]]
+
+### Principles of actuarial evidence
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Valuation]]
+- [[Interest]]
+- [[Actuarial Standards of Practice]]
+- [[Pension]]
+
+## Exam ILA-M2 (CIA)
+
+*No question bank yet — all 29 syllabus concepts are uncovered.*
+
+### Professional considerations
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Appointed Actuary]]
+- [[Actuary]]
+- [[Life Insurance Company]]
+- [[Valuation]]
+- [[Enterprise Risk Management]]
+- [[Life Insurance]]
+- [[Actuarial Standards of Practice]]
+- [[Financial Reporting]]
+- [[FCT]]
+
+### Overview of the regulatory framework in Canada
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Regulator]]
+- [[Insurance Policy]]
+- [[Insurer]]
+
+### Regulation and taxation of insurance
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Solvency Regulation]]
+- [[Solvency]]
+- [[Financial Reporting]]
+- [[Constraint]]
+
+### Canadian financial reporting
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Annuities]]
+- [[IFRS 17]]
+- [[Annuity Contract]]
+
+### Asset and portfolio management
+
+*12 of 12 uncovered — **no questions at all***
+
+- [[Portfolio Management Process]]
+- [[Insurer]]
+- [[Investment Policy Statement]]
+- [[Constraint]]
+- [[Portfolio]]
+- [[Asset Allocation]]
+- [[Immunization]]
+- [[Convexity]]
+- [[Investment Income]]
+- [[Hedging]]
+- [[Forward Rate]]
+- [[Risk]]
+
+### Communication and organizational behaviour
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Cognitive Bias]]
+- [[Risk]]
+
+## Exam F1ILA (CIA)
+
+*No question bank yet — all 39 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Valuation]]
+- [[Reserve]]
+
+### Regulations and applicable standards {15%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurance Companies Act]]
+- [[Financial Reporting]]
+- [[Professional Responsibilities of the Actuary]]
+- [[Valuation]]
+- [[Reserve]]
+
+### Data {10%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Valuation]]
+- [[Reserve]]
+- [[Whole Life Insurance]]
+- [[Annuities]]
+- [[External Environment]]
+- [[IFRS]]
+
+### Principles of valuation - basic topics {15%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Reserve]]
+- [[Financial Reporting]]
+- [[Interest]]
+- [[Data Quality]]
+- [[Valuation]]
+
+### Principles of valuation – advanced topics {25%}
+
+*15 of 15 uncovered — **no questions at all***
+
+- [[Reserve]]
+- [[Unallocated Loss Adjustment Expenses ULAE]]
+- [[Reinsurance]]
+- [[Reinsurance Contracts Held]]
+- [[Claim]]
+- [[Layer of Insurance]]
+- [[Risk Transfer]]
+- [[Regulatory Capital]]
+- [[Cash Flow]]
+- [[Financial Statements]]
+- [[Stochastic Processes]]
+- [[Unpaid Claims]]
+- [[Correlation]]
+- [[Actuary]]
+- [[Valuation]]
+
+### IFRS 17 financial reporting {25%}
+
+*14 of 14 uncovered — **no questions at all***
+
+- [[IFRS]]
+- [[Contract Boundary]]
+- [[Premium Allocation Approach]]
+- [[Level of Aggregation]]
+- [[Portfolio]]
+- [[Liability for Incurred Claims]]
+- [[Risk]]
+- [[Non-Financial Risk]]
+- [[Cost of Capital]]
+- [[Reinsurance Contracts Held]]
+- [[Contractual Service Margin]]
+- [[Loss Component]]
+- [[Onerous Contract]]
+- [[Key Financial Measures]]
+
+### Financial management {10%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Key Financial Measures]]
+- [[Valuation]]
+- [[Embedded Value]]
+- [[Financial Economics]]
+
+## Exam F2ILA (CIA)
+
+*No question bank yet — all 30 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Principal]]
+
+### Data {10%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Homogeneity]]
+- [[Credibility]]
+- [[External Environment]]
+
+### Drivers of product design {25%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Claim]]
+- [[Underwriting]]
+
+### Design and purpose of various product types, benefits, and features {25%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Annuity Contract]]
+- [[Constraint]]
+- [[Insurance Risk]]
+- [[Volatility]]
+
+### Relationship between the product features, risks, assumptions, and modelling {25%}
+
+*16 of 16 uncovered — **no questions at all***
+
+- [[Policyholder Dividend]]
+- [[Embedded Option]]
+- [[Insurance Premium]]
+- [[Lapse]]
+- [[Risk]]
+- [[Mortality]]
+- [[Underwriting]]
+- [[Reinsurance]]
+- [[Expenses]]
+- [[IFRS 17]]
+- [[Rate of Return]]
+- [[Regulatory Capital]]
+- [[Securitization]]
+- [[Multi-State Model]]
+- [[Hedging]]
+- [[Decision-Making]]
+
+### Actuarial requirements of product implementation and monitoring {15%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Policy Form Regulation]]
+- [[Mortality]]
+- [[Expenses]]
+- [[Policyholder]]
+- [[Premium Persistency]]
+- [[Experience Study]]
+- [[Actuary]]
+
+## Exam F3ILA (CIA)
+
+*No question bank yet — all 49 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Enterprise Risk Management]]
+
+### ERM concept, framework, and process {10%}
+
+*12 of 12 uncovered — **no questions at all***
+
+- [[Enterprise Risk Management]]
+- [[Risk Management]]
+- [[Insurer]]
+- [[ORSA]]
+- [[Rating Agency]]
+- [[Data Issues]]
+- [[Risk Appetite]]
+- [[Risk Identification]]
+- [[Risk Assessment]]
+- [[Risk Mitigation]]
+- [[Risk]]
+- [[Emerging Risk]]
+
+### Risk categories and risk identification {10%}
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Individual Risk Model]]
+- [[Market Risk]]
+- [[Interest Rate Risk]]
+- [[Credit Risk]]
+- [[Insurance Risk]]
+- [[Operational Risk]]
+- [[Moral Hazard]]
+- [[Emerging Risk]]
+- [[Mortality]]
+- [[Lapse]]
+
+### Economic capital modelling and aggregation of risks {25%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Correlation]]
+- [[Probability Distributions]]
+- [[Model Risk]]
+- [[Parameter Risk]]
+- [[Economic Capital]]
+- [[Decision-Making]]
+- [[Enterprise Risk Management]]
+- [[Corporate Governance]]
+- [[Stress Testing]]
+
+### Risk measurement and assessment {20%}
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Risk Measure]]
+- [[Probability]]
+- [[Model Validation]]
+- [[Regulatory Capital]]
+- [[Risk]]
+- [[Underwriting]]
+- [[Credit]]
+- [[Corporate Governance]]
+
+### Stress and scenario testing {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Stress Testing]]
+- [[FCT]]
+- [[Risk]]
+- [[Climate Change]]
+
+### Capital management {10%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[ORSA]]
+- [[FCT]]
+- [[Risk Identification]]
+- [[Risk]]
+- [[Regulatory Capital]]
+- [[Internal Control]]
+- [[Capital]]
+- [[Risk Measure]]
+- [[Economic Capital]]
+
+### Asset/liability management {10%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Asset-Liability Management]]
+- [[Annuity Contract]]
+- [[Portfolio]]
+- [[Hedging]]
+- [[Immunization]]
+- [[Investment Policy Statement]]
+- [[Asset Allocation]]
+- [[Performance Measurement]]
+- [[Constraint]]
+
+## Exam GB-M1 (CIA)
+
+*No question bank yet — all 31 syllabus concepts are uncovered.*
+
+### Introduction to risk and insurance
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Insurable Risk]]
+- [[Life Insurance]]
+- [[Risk Management]]
+- [[Risk Management Process]]
+- [[Exposure Base]]
+
+### Insurance categories and functions
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Credit]]
+- [[Capital]]
+- [[Insurer]]
+
+### Regulatory framework
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Insurance Companies Act]]
+- [[Life Insurance]]
+
+### Insurance company operations
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Underwriting]]
+- [[Claim]]
+- [[Reinsurance]]
+- [[Risk Management]]
+- [[Actuary]]
+- [[Risk]]
+- [[Types of Reinsurance]]
+
+### Insurance documents and processes
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Endorsement]]
+- [[Policyholder]]
+
+### The insurance marketplace
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Life Insurance]]
+- [[Annuities]]
+- [[Employment Insurance]]
+- [[Pension Plan]]
+
+### Consulting firm operations
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Pension Plan]]
+- [[Rate Regulation]]
+- [[Valuation]]
+- [[Financial Reporting]]
+- [[Defined Benefit Plan]]
+- [[Peer Review]]
+- [[Appointed Actuary]]
+- [[Probability Distributions]]
+- [[Risk Management]]
+- [[Actuary]]
+
+### Principles of actuarial evidence
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Valuation]]
+- [[Interest]]
+- [[Actuarial Standards of Practice]]
+- [[Pension]]
+
+## Exam GB-M2 (CIA)
+
+*No question bank yet — all 33 syllabus concepts are uncovered.*
+
+### Professional considerations
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Appointed Actuary]]
+- [[Actuary]]
+- [[Life Insurance Company]]
+- [[Valuation]]
+- [[Enterprise Risk Management]]
+- [[Life Insurance]]
+- [[Actuarial Standards of Practice]]
+- [[Financial Reporting]]
+- [[FCT]]
+
+### Benefit law and regulation
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Corporate Governance]]
+- [[Risk]]
+- [[Data Issues]]
+
+### Regulation and taxation of insurance
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Solvency Regulation]]
+- [[Solvency]]
+- [[Constraint]]
+
+### Canadian financial reporting
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Annuities]]
+- [[IFRS 17]]
+- [[Annuity Contract]]
+
+### Risk management and mitigation
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Rating Agency]]
+- [[Insurer]]
+- [[FCT]]
+- [[Stress Testing]]
+- [[ORSA]]
+- [[Actuarial Standards of Practice]]
+- [[Risk]]
+- [[Mortality]]
+- [[Lapse]]
+- [[Credit Risk]]
+
+### Risk management and reinsurance
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Reinsurance]]
+- [[Risk Appetite]]
+- [[Risk Identification]]
+- [[Risk Assessment]]
+- [[Risk Mitigation]]
+- [[Risk]]
+- [[Underwriting Guidelines]]
+- [[Underwriting]]
+
+### Communication and organizational behaviour
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Cognitive Bias]]
+- [[Risk]]
+
+## Exam F1GB (CIA)
+
+*No question bank yet — all 21 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Health Insurance]]
+
+### Product design {25%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Critical Illness Insurance]]
+- [[Long-Term Care Insurance]]
+- [[Employee Benefit Plan]]
+
+### Benefit law and regulation {20%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Defined Benefit Plan]]
+- [[Claim]]
+- [[Insurer]]
+
+### Insurance company law and regulation {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[OSFI]]
+- [[Insurance Companies Act]]
+- [[Probability Distributions]]
+- [[Insurance Policy]]
+
+### Workers’ compensation {5%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Social Insurance]]
+
+### Public and other benefit programs {15%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Employment Insurance]]
+- [[Group Health Insurance]]
+- [[Health Care Insurance]]
+
+### The U.S. healthcare model {10%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Group Health Insurance]]
+- [[Affordable Care Act]]
+- [[Medicare]]
+- [[Medicaid]]
+- [[Insurer]]
+- [[Actuary]]
+
+### Other healthcare models {10%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Interest]]
+- [[Insurer]]
+- [[Actuary]]
+
+## Exam F2GB (CIA)
+
+*No question bank yet — all 19 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Principal]]
+
+### Experience studies and predictive modelling {20%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Experience Study]]
+- [[Insurance Premium]]
+- [[Pharmacy Benefit]]
+- [[Trend]]
+- [[Claim]]
+- [[Predictive Analytics]]
+
+### Credibility {10%}
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Credibility]]
+- [[Utilization]]
+- [[Predictive Analytics]]
+
+### Capital requirements {15%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Regulatory Capital]]
+- [[Capital]]
+
+### Product pricing {25%}
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Underwriting Process]]
+- [[Predictive Analytics]]
+- [[Trend]]
+- [[Insurer]]
+- [[Actuarial Standards of Practice]]
+- [[Medical Cost Trend]]
+- [[Manual Rate]]
+- [[Actual vs Expected Analysis]]
+
+### Profitability measures {10%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Return on Capital]]
+- [[Insurance Premium]]
+
+### Insurance company taxation {10%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Investment Income Tax]]
+
+## Exam F3GB (CIA)
+
+*No question bank yet — all 30 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Valuation]]
+- [[Reserve]]
+- [[Financial Reporting]]
+
+### Reserving and claim liabilities {35%}
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[IFRS 17]]
+- [[Actuarial Standards of Practice]]
+- [[Educational Note]]
+- [[Valuation]]
+- [[Insurance Premium]]
+- [[IBNR]]
+- [[Reserve]]
+- [[Chain Ladder Method]]
+- [[Claim]]
+- [[Claim Reserve]]
+- [[Data Quality]]
+
+### Benefit taxation {15%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Claim]]
+- [[Plan Design]]
+
+### Employee benefits accounting {15%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Retiree Group Benefits]]
+
+### Insurance company financial reporting {10%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[IFRS]]
+- [[NAIC Annual Statement]]
+- [[Life Insurance Company Taxation]]
+- [[Accounting Standards]]
+- [[Reserve]]
+- [[IFRS 17]]
+- [[Premium Allocation Approach]]
+
+### Financial and capital management {10%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Financial Economics]]
+- [[Economic Capital]]
+- [[Reinsurance]]
+- [[Capital]]
+
+### Asset and liability management {15%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Asset Allocation]]
+- [[Insurer]]
+- [[Asset-Liability Management]]
+- [[Embedded Value]]
+- [[Valuation]]
+- [[Risk Margin]]
+- [[Rate of Return]]
+
+## Exam RET-M1 (CIA)
+
+*No question bank yet — all 32 syllabus concepts are uncovered.*
+
+### Introduction to risk and insurance
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Insurable Risk]]
+- [[Life Insurance]]
+- [[Risk Management]]
+- [[Risk Management Process]]
+- [[Exposure Base]]
+
+### Insurance categories and functions
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Credit]]
+- [[Capital]]
+- [[Insurer]]
+
+### Insurance company operations
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Underwriting]]
+- [[Claim]]
+- [[Reinsurance]]
+- [[Risk Management]]
+- [[Actuary]]
+- [[Risk]]
+- [[Types of Reinsurance]]
+
+### Consulting firm operations
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Pension Plan]]
+- [[Rate Regulation]]
+- [[Valuation]]
+- [[Financial Reporting]]
+- [[Defined Benefit Plan]]
+- [[Peer Review]]
+- [[Appointed Actuary]]
+- [[Probability Distributions]]
+- [[Risk Management]]
+- [[Actuary]]
+
+### The insurance marketplace
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Life Insurance]]
+- [[Annuities]]
+- [[Employment Insurance]]
+- [[Pension Plan]]
+
+### Actuaries in corporations
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Pension Plan]]
+- [[Actuary]]
+- [[Valuation]]
+
+### The Canadian retirement environment and professionalism
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Utilization]]
+- [[Replacement Ratio]]
+- [[Pension Plan]]
+- [[Longevity Risk]]
+- [[Actuary]]
+
+### The U.S. retirement environment and professionalism
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Social Insurance]]
+- [[Actuarial Standards of Practice]]
+
+### Principles of actuarial evidence
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Valuation]]
+- [[Interest]]
+- [[Actuarial Standards of Practice]]
+- [[Pension]]
+
+## Exam RET-M2 (CIA)
+
+*No question bank yet — all 15 syllabus concepts are uncovered.*
+
+### Canadian pension legislation
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Plan Sponsor]]
+- [[Funding]]
+- [[Rate Regulation]]
+
+### Pension plan projections
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Pension Plan]]
+- [[Risk]]
+- [[Actuarial Standards of Practice]]
+
+### Pension plan de-risking
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Group Health Insurance]]
+
+### Reporting, valuation, and management of benefit arrangements
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Funding]]
+- [[Solvency]]
+- [[Plan Termination]]
+- [[Valuation]]
+- [[Plan Merger and Spin-Off]]
+- [[Interest]]
+- [[Normal Cost]]
+- [[Pension Plan]]
+
+### Communication and organizational behaviour
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Cognitive Bias]]
+- [[Risk]]
+
+## Exam F1RET (CIA)
+
+*No question bank yet — all 33 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Funding]]
+- [[Insurance Regulation]]
+- [[Pension Plan]]
+
+### Retirement benefits and pension mathematics {30%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Defined Benefit Plan]]
+- [[Defined Contribution Plan]]
+- [[Hybrid Plan]]
+- [[Retirement Plan]]
+- [[Target Benefit Plan]]
+- [[Going-Concern Valuation]]
+- [[Normal Cost]]
+- [[Projected Unit Credit Method]]
+- [[Ancillary Benefit]]
+
+### Pension legislation {30%}
+
+*14 of 14 uncovered — **no questions at all***
+
+- [[Plan Sponsor]]
+- [[Underwriting]]
+- [[Interest]]
+- [[Commuted Value]]
+- [[Vesting]]
+- [[Pension]]
+- [[Decumulation]]
+- [[Plan Termination]]
+- [[Plan Merger and Spin-Off]]
+- [[Credit]]
+- [[Canadian Pension Legislation]]
+- [[Frequency]]
+- [[Valuation]]
+- [[Rate Regulation]]
+
+### Income tax legislation and regulation {30%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Registered Retirement Savings Plan]]
+- [[Pension Plan]]
+- [[Pension]]
+- [[Target Benefit Plan]]
+- [[Multi-Employer Plan]]
+- [[Rate Regulation]]
+- [[Canadian Pension Legislation]]
+
+### Professionalism and standards of practice relative to plan funding {10%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Plan Sponsor]]
+- [[Interest]]
+- [[Actuarial Communication]]
+- [[Actuarial Standards of Practice]]
+- [[Pension Plan]]
+- [[Going-Concern Valuation]]
+- [[Plan Termination]]
+- [[Asset Valuation Method]]
+- [[Educational Note]]
+
+## Exam F2RET (CIA)
+
+*No question bank yet — all 18 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Pension Plan]]
+
+### Accounting standards {30%}
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Financial Statements]]
+- [[Accounting Standards]]
+- [[Actuarial Cost Method]]
+- [[Pension]]
+- [[Retiree Group Benefits]]
+- [[Vesting]]
+- [[Amortization]]
+- [[Defined Benefit Plan]]
+
+### Reporting of pension, post-employment benefits, and post-retirement benefits for financial statement and proxy circular purposes {25%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Pension]]
+
+### Investments and asset allocation {20%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Investment Vehicle]]
+- [[Pension Plan]]
+- [[Investment Policy Statement]]
+- [[Corporate Governance]]
+
+### Pension governance and fiduciary duties {15%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Risk]]
+
+### Professionalism and standards of practice relative to plan accounting {10%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Plan Sponsor]]
+- [[Interest]]
+- [[Actuarial Communication]]
+- [[Actuarial Standards of Practice]]
+
+## Exam F3RET (CIA)
+
+*No question bank yet — all 33 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Enterprise Risk Management]]
+
+### ERM concept, framework, and process {15%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Enterprise Risk Management]]
+- [[Risk Management]]
+- [[Rating Agency]]
+- [[Data Issues]]
+- [[Risk Appetite]]
+- [[Risk Identification]]
+- [[Risk Assessment]]
+- [[Risk Mitigation]]
+- [[Risk]]
+- [[Emerging Risk]]
+
+### Risk categories and risk identification {15%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Individual Risk Model]]
+- [[Interest Rate Risk]]
+- [[Credit Risk]]
+- [[Market Risk]]
+- [[Operational Risk]]
+
+### Investment risk management {25%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Market Risk]]
+- [[Investment Policy Statement]]
+- [[Plan Design]]
+- [[Valuation]]
+- [[Funding]]
+- [[Plan Sponsor]]
+- [[Funding Policy]]
+
+### Risk management and financial economics {10%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Interest]]
+- [[Plan Sponsor]]
+- [[Retirement Plan]]
+- [[Risk]]
+- [[Financial Economics]]
+- [[Valuation]]
+
+### Mathematics of financial risks {10%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Predictive Analytics]]
+- [[Duration]]
+- [[Convexity]]
+- [[Immunization]]
+
+### Pension plan de-risking {25%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Duration]]
+- [[Convexity]]
+- [[Longevity Risk]]
+- [[Pension Plan]]
+- [[Group Health Insurance]]
+- [[Ancillary Benefit]]
+
+## Exam FIE-M1 (CIA)
+
+*No question bank yet — all 46 syllabus concepts are uncovered.*
+
+### Introduction to risk and insurance
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Insurable Risk]]
+- [[Life Insurance]]
+- [[Risk Management]]
+- [[Risk Management Process]]
+- [[Exposure Base]]
+
+### Insurance categories and functions
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Credit]]
+- [[Capital]]
+- [[Retirement Plan]]
+- [[Insurer]]
+
+### Regulatory framework
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Insurance Companies Act]]
+- [[Life Insurance]]
+
+### Insurance company operations
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Insurer]]
+- [[Underwriting]]
+- [[Claim]]
+- [[Reinsurance]]
+- [[Risk Management]]
+- [[Actuary]]
+- [[Risk]]
+- [[Types of Reinsurance]]
+
+### Insurance documents and processes
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Endorsement]]
+- [[Policyholder]]
+
+### The insurance marketplace
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Insurance Policy]]
+- [[Life Insurance]]
+- [[Annuities]]
+- [[Employment Insurance]]
+- [[Pension Plan]]
+
+### Introduction to enterprise risk management (ERM)
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Risk Taxonomies]]
+- [[Risk Management]]
+- [[Insurer]]
+- [[Pension Plan]]
+- [[Rating Agency]]
+- [[Risk]]
+- [[Insurance Regulation]]
+- [[Enterprise Risk Management]]
+
+### Topics in corporate finance
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Capital Budgeting]]
+- [[Business Strategy]]
+- [[Decision Tree]]
+- [[Risk]]
+
+### Quantitative techniques
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Bootstrap]]
+- [[Yield Curve]]
+- [[Principal Components Analysis]]
+- [[R-Squared]]
+
+### Actuarial models
+
+*13 of 13 uncovered — **no questions at all***
+
+- [[Financial Risk]]
+- [[Risk-Neutral Valuation]]
+- [[Equity-Linked Insurance]]
+- [[Risk]]
+- [[Risk Management]]
+- [[Accounting Standards]]
+- [[Event]]
+- [[Asset Adequacy Analysis]]
+- [[Cash Flow]]
+- [[Insurance Policy]]
+- [[Pension]]
+- [[Target Volatility Fund]]
+- [[Risk Control]]
+
+### Principles of actuarial evidence
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Actuary]]
+- [[Valuation]]
+- [[Interest]]
+- [[Actuarial Standards of Practice]]
+- [[Pension]]
+
+## Exam FIE-M2 (CIA)
+
+*No question bank yet — all 30 syllabus concepts are uncovered.*
+
+### Overview of the regulatory framework in Canada
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Insurance Regulator]]
+
+### Canadian financial reporting
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[IFRS 17]]
+- [[General Measurement Model]]
+- [[Insurance Contract Liabilities]]
+- [[IFRS]]
+- [[Amortization]]
+- [[Contractual Service Margin]]
+- [[Insurance Cash Flows]]
+- [[Discount Rate]]
+- [[Yield Curve]]
+- [[Valuation]]
+- [[Key Financial Measures]]
+
+### Considerations in Canadian practice
+
+*3 of 3 uncovered — **no questions at all***
+
+- [[Corporate Governance]]
+- [[Insurtech]]
+- [[Actuary]]
+
+### Strategic decision-making
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Porter's Five Forces]]
+- [[Business-Level Strategy]]
+- [[Competitive Dynamics]]
+- [[Corporate Governance]]
+
+### Asset and portfolio management
+
+*11 of 11 uncovered — **no questions at all***
+
+- [[Portfolio Management Process]]
+- [[Investment Policy Statement]]
+- [[Constraint]]
+- [[Portfolio]]
+- [[Asset Allocation]]
+- [[Immunization]]
+- [[Convexity]]
+- [[Investment Income]]
+- [[Hedging]]
+- [[Forward Rate]]
+- [[Risk]]
+
+### Communication and organizational behaviour
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Cognitive Bias]]
+- [[Risk]]
+
+## Exam F1FIE (CIA)
+
+*No question bank yet — all 43 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Principal]]
+
+### Mathematics, statistics and stochastic calculus {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Probability]]
+- [[Risk-Neutral Valuation]]
+- [[Martingale]]
+- [[Stochastic Differential Equation]]
+
+### Introduction to option pricing theory {20%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Risk-Neutral Valuation]]
+- [[Interest Rate Derivative]]
+- [[Girsanov's Theorem]]
+- [[Black-Scholes Model]]
+- [[Interest Rate]]
+
+### Introduction to credit and liquidity risk {20%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Event]]
+- [[Mortgage-Backed Security]]
+- [[Probability]]
+- [[Exposure Base]]
+- [[Expected Loss]]
+- [[Credit Risk]]
+- [[Valuation]]
+- [[Risk]]
+- [[Structured Finance]]
+- [[Portfolio]]
+
+### Derivatives and hedging {10%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Volatility]]
+- [[Hedging]]
+- [[Delta Hedging]]
+- [[Portfolio]]
+
+### Fixed-income securities {20%}
+
+*16 of 16 uncovered — **no questions at all***
+
+- [[Cash Flow]]
+- [[Rating Agency]]
+- [[Corporate Bond]]
+- [[Risk]]
+- [[Interest Rate]]
+- [[Credit]]
+- [[Mortgage-Backed Security]]
+- [[Portfolio]]
+- [[Immunization]]
+- [[Yield Curve]]
+- [[Modified Duration]]
+- [[Convexity]]
+- [[Callable Bond]]
+- [[Cap on Non-Pecuniary Damages]]
+- [[Payoff]]
+- [[Swaption]]
+
+### Guaranteed investment products and annuities {15%}
+
+*15 of 15 uncovered — **no questions at all***
+
+- [[Embedded Option]]
+- [[Guaranteed Minimum Death Benefit]]
+- [[Guaranteed Minimum Withdrawal Benefit]]
+- [[Guaranteed Minimum Income Benefit]]
+- [[Risk]]
+- [[Policyholder]]
+- [[Credit]]
+- [[Risk Management]]
+- [[Hedging]]
+- [[Interest Rate]]
+- [[Volatility]]
+- [[Option Greeks]]
+- [[Mortality]]
+- [[Lapse]]
+- [[Correlation]]
+
+## Exam F2FIE (CIA)
+
+*No question bank yet — all 33 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Principal]]
+
+### Investment policy and governance {10%}
+
+*8 of 8 uncovered — **no questions at all***
+
+- [[Interest]]
+- [[Principal]]
+- [[Corporate Governance]]
+- [[Efficiency]]
+- [[Investment Policy Statement]]
+- [[Portfolio Rebalancing]]
+- [[Passive Management]]
+- [[Risk]]
+
+### Asset allocation {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Constraint]]
+- [[Asset Class]]
+- [[Asset Allocation]]
+- [[Investment Policy Statement]]
+
+### Equities {20%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Portfolio]]
+- [[Asset Class]]
+- [[Exposure Base]]
+- [[Asset Allocation]]
+- [[Active Management]]
+
+### Advanced option pricing {20%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Volatility]]
+- [[Bonds]]
+- [[Volatility Smile]]
+- [[Hedging]]
+- [[Stochastic Volatility]]
+
+### Alternative assets {10%}
+
+*5 of 5 uncovered — **no questions at all***
+
+- [[Real Estate]]
+- [[Insurance-Linked Securities]]
+- [[Hedge Fund]]
+- [[Private Equity]]
+- [[Portfolio]]
+
+### Machine learning, neural networks, application of blockchain on insurance {10%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Reinsurance]]
+- [[Insurance Risk]]
+- [[Risk]]
+- [[Model Validation]]
+- [[Feature Engineering]]
+- [[Neural Network]]
+- [[Overfitting]]
+
+### Financial reporting {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[IFRS]]
+- [[Accounting Standards]]
+- [[IFRS 17]]
+- [[Premium Allocation Approach]]
+
+## Exam F3FIE (CIA)
+
+*No question bank yet — all 36 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*2 of 2 uncovered — **no questions at all***
+
+- [[Principal]]
+- [[Enterprise Risk Management]]
+
+### ERM concept, framework, and process {10%}
+
+*12 of 12 uncovered — **no questions at all***
+
+- [[Enterprise Risk Management]]
+- [[Risk Management]]
+- [[Insurer]]
+- [[ORSA]]
+- [[Rating Agency]]
+- [[Data Issues]]
+- [[Risk Appetite]]
+- [[Risk Identification]]
+- [[Risk Assessment]]
+- [[Risk Mitigation]]
+- [[Risk]]
+- [[Emerging Risk]]
+
+### Risk categories and risk identification {10%}
+
+*7 of 7 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Individual Risk Model]]
+- [[Market Risk]]
+- [[Credit Risk]]
+- [[Interest Rate Risk]]
+- [[Prepayment Risk]]
+- [[Reinvestment Risk]]
+
+### Economic capital modelling and aggregation of risks {25%}
+
+*10 of 10 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Correlation]]
+- [[Probability Distributions]]
+- [[Model Risk]]
+- [[Parameter Risk]]
+- [[Economic Capital]]
+- [[Decision-Making]]
+- [[Enterprise Risk Management]]
+- [[Corporate Governance]]
+- [[Stress Testing]]
+
+### Risk measurement and assessment {25%}
+
+*6 of 6 uncovered — **no questions at all***
+
+- [[Risk Measure]]
+- [[Probability]]
+- [[Model Validation]]
+- [[Regulatory Capital]]
+- [[Risk]]
+- [[Credit]]
+
+### Stress and scenario testing {15%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Stress Testing]]
+- [[FCT]]
+- [[Risk]]
+- [[Climate Change]]
+
+### Economic capital and ORSA {15%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Risk Management]]
+- [[ORSA]]
+- [[FCT]]
+- [[Risk Identification]]
+- [[Risk]]
+- [[Capital]]
+- [[Internal Control]]
+- [[Risk Measure]]
+- [[Economic Capital]]
+
+## Exam F3BNK (CIA)
+
+*No question bank yet — all 26 syllabus concepts are uncovered.*
+
+### Principal terms {0%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Principal]]
+
+### Operations of a banking institution {15%}
+
+*9 of 9 uncovered — **no questions at all***
+
+- [[Credit]]
+- [[Cost of Capital]]
+- [[Balance Sheet]]
+- [[Capital]]
+- [[Regulatory Capital]]
+- [[Economic Capital]]
+- [[Non-Financial Risk]]
+- [[Pension]]
+- [[Actuary]]
+
+### The banking regulatory framework {20%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Accounting Standards]]
+
+### Risk management in a banking operation {25%}
+
+*16 of 16 uncovered — **no questions at all***
+
+- [[Risk]]
+- [[Correlation]]
+- [[Pension]]
+- [[Risk Appetite]]
+- [[Risk-Based Capital]]
+- [[Frequency]]
+- [[Severity]]
+- [[Credit]]
+- [[Operational Risk]]
+- [[Portfolio]]
+- [[Survival Model]]
+- [[Credit Risk]]
+- [[Balance Sheet]]
+- [[Cash Flow]]
+- [[Market Risk]]
+- [[Securitization]]
+
+### Bank capital management framework {25%}
+
+*4 of 4 uncovered — **no questions at all***
+
+- [[Capital]]
+- [[IFRS]]
+- [[Regulatory Capital]]
+- [[Risk]]
+
+### Banking strategies and problem solving {15%}
+
+*1 of 1 uncovered — **no questions at all***
+
+- [[Business Strategy]]

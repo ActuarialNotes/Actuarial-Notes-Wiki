@@ -34,7 +34,9 @@ describe('sectors', () => {
     expect(cas.indexOf('CAS-6')).toBe(cas.indexOf('CAS-PCPA') + 1)
     // One place per exam: Exam 6's regional pages share a key.
     expect(new Set(keys).size).toBe(keys.length)
-    for (let i = 1; i < sectors.length; i++) expect(ladderRank(sectors[i].key)).toBeGreaterThan(ladderRank(sectors[i - 1].key))
+    // The top of each ladder takes the same hue (ASTAM's and Exam 9's), so two
+    // rungs may tie; none may come before a lower one.
+    for (let i = 1; i < sectors.length; i++) expect(ladderRank(sectors[i].key)).toBeGreaterThanOrEqual(ladderRank(sectors[i - 1].key))
   })
 
   it('leaves requirements that are not rungs — the DISCs — off the map', () => {

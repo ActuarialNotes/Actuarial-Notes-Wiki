@@ -1,0 +1,118 @@
+---
+id: "astam-017"
+exam: "Exam ASTAM"
+topic: "Maximum Likelihood Estimation"
+learning_objective: "Construction and Selection of Parametric Models"
+difficulty: medium
+type: multi-part
+wiki_link:
+  - Concepts/Maximum+Likelihood+Estimation
+  - Concepts/Truncation
+  - Concepts/Censoring
+  - Concepts/Cramér-Rao+Lower+Bound
+  - Concepts/Delta+Method
+  - Concepts/Policy+Limit
+points: 5
+---
+
+You are given the following data from a sample of 6 claims. The ground up loss for the risk is assumed to be exponential with mean $\theta$.
+
+| Loss Amount | Modification |
+|---|---|
+| 120 | None |
+| 640 | None |
+| 700 | None |
+| 820 | \$100 deductible |
+| 1220 | \$100 deductible |
+| 1500 | Censored at \$1500 |
+
+## Part a
+
+Write down the likelihood function for this sample and simplify as far as possible.
+
+### Explanation
+
+$$
+\begin{align*}
+L(\theta) &= f(120)\,f(640)\,f(700)\,\frac{f(820)}{S(100)}\,\frac{f(1220)}{S(100)}\,S(1500) \\
+&= \left(\frac{e^{-120/\theta}}{\theta}\right)\left(\frac{e^{-640/\theta}}{\theta}\right)\left(\frac{e^{-700/\theta}}{\theta}\right)\left(\frac{e^{-820/\theta}}{\theta e^{-100/\theta}}\right)\left(\frac{e^{-1220/\theta}}{\theta e^{-100/\theta}}\right)e^{-1500/\theta} \\
+&= \theta^{-5}\,e^{-4800/\theta}
+\end{align*}
+$$
+
+## Part b
+
+Show that the Maximum Likelihood Estimate of the parameter $\theta$ is $\hat{\theta} = 960$.
+
+### Explanation
+
+$$
+\begin{align*}
+l(\theta) &= \log L(\theta) \\
+          &= -5\log\theta - \frac{4800}{\theta} \\
+\frac{dl}{d\theta} &= -\frac{5}{\theta} + \frac{4800}{\theta^2} \\
+\Rightarrow \hat{\theta} &= \frac{4800}{5} \\
+                   &= 960
+\end{align*}
+$$
+
+## Part c
+
+Estimate the standard deviation of $\hat{\theta}$ using Cramer-Rao lower bound.
+
+### Explanation
+
+$$
+V[\hat{\theta}] \approx -\left(\frac{d^2 l}{d\theta^2}\right)^{-1}_{\theta=\hat{\theta}}
+$$
+
+$$
+\begin{align*}
+\frac{d^2 l}{d\theta^2} &= \frac{5}{\theta^2} - \frac{9600}{\theta^3} \\
+\Rightarrow V[\hat{\theta}] &\approx \frac{\hat{\theta}^3}{9600 - 5\hat{\theta}} \\
+                        &= 184{,}320 \\
+SD[\hat{\theta}] &\approx 429.3
+\end{align*}
+$$
+
+## Part d
+
+Let $Y$ be the random variable representing the insured loss amount per claim with a limit of \$1000 and no deductible. Use your fitted model to estimate $E[Y]$.
+
+### Explanation
+
+$Y = \max(X, 1000)$
+
+$$
+\begin{align*}
+E[Y] &= \theta\left(1 - e^{-1000/\theta}\right) \quad \text{from the formula sheet} \\
+&\approx 960(0.64713) \\
+     &= 621.25
+\end{align*}
+$$
+
+## Part e
+
+Using the delta method, construct an approximate 80% confidence for $E[Y]$.
+
+### Explanation
+
+$$
+g(\theta) = \theta\left(1 - e^{-1000/\theta}\right) \;\Rightarrow\; g(\hat{\theta}) = 621.25
+$$
+
+$$
+V\left[g(\hat{\theta})\right] \approx \left(g'(\hat{\theta})\right)^2 V\left[\hat{\theta}\right] \quad \text{by the delta method}
+$$
+
+$$
+\begin{align*}
+g'(\theta) &= 1 - e^{-1000/\theta} + \frac{1000}{\theta}e^{-1000/\theta} \\
+\Rightarrow g'(\hat{\theta}) &= 1.0147 \\
+\Rightarrow V\left[g(\hat{\theta})\right] &\approx 1.0147^2(184{,}320) \\
+           &= 189{,}780 \\
+           &= 435.6^2
+\end{align*}
+$$
+
+80% CI is approximately $621.25 \pm 1.28(435.6) = (62.96, 1179.54)$

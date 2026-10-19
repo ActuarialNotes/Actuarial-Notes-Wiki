@@ -1,0 +1,609 @@
+{
+  "wiki_id": "ila-m1",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "ILA-M1",
+  "title": "ILA Module 1: Actuarial work and life insurance applications",
+  "name": "Actuarial work and life insurance applications",
+  "track": "ILA",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011",
+  "source_page": "https://www.cia-ica.ca/publications/223035e/",
+  "source_title": "FCIA Syllabus – Individual life and annuities track",
+  "source_date": "2024-01-29",
+  "source_sha256": "ff0543bc33cd8d299931b668b66d589ebd03f5bc7595fd11ce67173d4e1a9097",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    18,
+    21
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months from the date of module purchase to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction to risk and insurance",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe risk including insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Provide examples of types of insurable risks and classes of life insurance that respond to insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and provide examples of perils and hazards.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the conflicts that can arise in the objectives of risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify and describe the five steps of the risk management process:",
+          "bullets": [
+            "a. Step 1 – Identifying and analyzing exposures.",
+            "b. Step 2 – Formulating options.",
+            "c. Step 3 – Selecting the best technique.",
+            "d. Step 4 – Implementing the risk management plan.",
+            "e. Step 5 – Monitoring results and modifying the plan."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Insurance categories and functions",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the basic insurance relationship of pooling funds to pay losses.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the major functions of insurance:",
+          "bullets": [
+            "a. Spread of risk.",
+            "b. Aid to security.",
+            "c. Aid to credit.",
+            "d. Loss prevention.",
+            "e. Source of capital.",
+            "f. Source of employment."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and describe categories of insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify and describe categories of retirement schemes.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the different forms of insurance companies (e.g., stock mutual, government insurers, captive insurance companies.)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain financial stability and returns for insurers including the differences for stock companies and mutuals.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Regulatory framework",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the different roles of government in the regulation of insurance companies including federal control and provincial and territorial control.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the major laws and regulations impacting insurance in Canada including:",
+          "bullets": [
+            "a. The Insurance Companies Act.",
+            "b. Provincial and territorial insurance acts.",
+            "c. Regulations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role of privacy laws in life insurance including the Personal Information Protection and Electronic Documents Act.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe how the United States and Canada monitor the insurance market and regulate it.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe why consumer protections are needed.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain the purposes of regulatory consumer laws and regulations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recognize the key points of a sample of regulations or laws relating to market regulation.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Insurance company operations",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the major functions of an insurance company, including:",
+          "bullets": [
+            "a. Finance, accounting, and investment.",
+            "b. Actuarial.",
+            "c. Marketing, agency, or production.",
+            "d. Underwriting.",
+            "e. Claims.",
+            "f. Reinsurance.",
+            "g. Risk management."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe basic insurance administration and how actuaries are involved.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe underwriting regimes, applications for insurance, preferred criteria, and screening tests, and how they relate to selection of risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "For reinsurance:",
+          "bullets": [
+            "a. Explain the purpose of reinsurance.",
+            "b. Describe the primary methods and types of reinsurance.",
+            "c. Describe the main reinsurance contract provisions."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the roles and responsibilities of actuaries in insurance companies.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Insurance documents and processes",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand insurance as a contract and describe the major components of an insurance policy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and explain key insurance documents including:",
+          "bullets": [
+            "a. The policy.",
+            "b. Certificates of insurance.",
+            "c. Endorsements.",
+            "d. Binders/cover notes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the major sections of an insurance policy including:",
+          "bullets": [
+            "a. Coverage summary.",
+            "b. Insuring agreements.",
+            "c. Statutory conditions.",
+            "d. Policy conditions.",
+            "e. Signature clause."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the process and requirements for assigning, terminating, and renewing an insurance contract.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify the stakeholders in an insurance policy (policyholder, insureds, including employees and dependents, etc.).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe insurance documentation and processes.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "The insurance marketplace",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe basic insurance products:",
+          "bullets": [
+            "a. Life insurance and annuities.",
+            "b. Property and casualty (P&C).",
+            "c. Health and group insurance.",
+            "d. Government-sponsored and public plans:",
+            "\ti. Employment Insurance;",
+            "\tii. Workers’ compensation;",
+            "\tiii. Health care; and",
+            "\tiv. Pension plans."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe key issues related to customers of insurance products.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Consulting firm operations",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the traditional functions of a consulting firm:",
+          "bullets": [
+            "a. Administration and consulting of pension plans.",
+            "b. Filing requirements.",
+            "c. Actuarial valuation and financial reporting requirements.",
+            "d. Benefit plan design and amendments.",
+            "e. Audit and peer review.",
+            "f. Appointed Actuary tasks and responsibilities.",
+            "g. Product design and pricing.",
+            "h. Negotiation of premium rates.",
+            "i. Sales and distribution of insurance.",
+            "j. Third-party administration.",
+            "k. Risk management."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the roles and responsibilities of actuaries in consulting firms.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Life insurance product development process",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe contractual provisions applicable to life insurance and annuity contracts, including, but not limited to:",
+          "bullets": [
+            "a. Insurer requirements;",
+            "b. Policyholder options; and",
+            "c. Participating product requirements."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe typical insurance products in Canada.",
+          "bullets": [
+            "a. Life products (e.g., whole, term, universal, annuities, etc.).",
+            "b. P&C (e.g., auto, homeowner, liability, etc.).",
+            "c. Group insurance (e.g., health, dental, long-term disability, critical illness, etc.)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and explain steps in the iterative control-cycle process within the context of product development:",
+          "bullets": [
+            "a. Idea generation;",
+            "b. Feasibility;",
+            "c. Planning the design;",
+            "d. Actuarial development:",
+            "e. Assumptions;",
+            "f. Key performance indicators, including profitability and risk metrics and standards;",
+            "g. Regulatory issues;",
+            "h. Choice of model; and",
+            "i. Implementing and monitoring the experience of the product."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and explain interaction of the actuary with other stakeholders within the product development process.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Actuarial models",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe model efficiency concepts and explain and apply both the representative scenarios and replicating liabilities techniques for improving model efficiency.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain and apply the technique for the compression of model data using the \"cluster analysis spatial approach.\"",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and evaluate best practices for actuarial model governance over process and controls.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and evaluate key components of model risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and apply model validation techniques and methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe issues and techniques related to sound spreadsheet model management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe best practices documentation and governance over assumptions used in models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe and evaluate guidance related to models in actuarial standards of practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Describe and evaluate issues related to open and closed coding of models, and methods for addressing those issues and concerns.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Describe and evaluate considerations around the governance of expert judgment in actuarial modelling.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Describe and evaluate considerations related to modelling investments, discount rates, inflation, and catastrophic mortality.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Describe and evaluate considerations related to centralizing the actuarial modelling function.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 10,
+      "title": "Principles of actuarial evidence",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the role of actuaries in family law, including the valuation of pension plan benefits in marriage (relationship) breakdown.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role of actuaries in civil litigation, including damages in personal injuries, fatalities, wrongful termination, insurance and reinsurance disputes, pension disputes, and other litigation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role conferred to actuaries by the Criminal Code of Canada in calculating the criminal rate of interest.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and distinguish the roles of a fact witness, an expert witness, and a provider of litigation advice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the context provided by the common law, legislation, and the rules of civil procedure on actuarial evidence practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe the role of CIA Rules of Professional Conduct and the Standards of Practice and (Part 1000, general, and Part 4000, actuarial evidence) in guiding the professionalism of actuarial evidence practice. Show awareness of the importance of professionalism for actuaries whose actuarial evidence practice is incidental to full-time practice in another actuarial practice area, such as insurance or pensions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the functions fulfilled by other professionals in the litigation area, such as life-care planners, vocational experts, accountants, economists, engineers, personal financial planners, business valuators, appraisers, and structured settlement brokers, and how these professionals complement and compete with the function of actuaries in actuarial evidence.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

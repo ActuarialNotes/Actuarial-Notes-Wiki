@@ -25,6 +25,13 @@ describe('examMonogramLines', () => {
     expect(examMonogramLines('APC')).toEqual(['APC'])
   })
 
+  it('drops the CIA prefix the same way, and shortens the Capstone', () => {
+    expect(examMonogramLines('CIA-F1PC')).toEqual(['F1', 'PC'])
+    expect(examMonogramLines('CIA-F3BNK')).toEqual(['F3', 'BNK'])
+    expect(examMonogramLines('CIA-PC-M1')).toEqual(['PC', 'M1'])
+    expect(examMonogramLines('CIA-ACIA-CAPSTONE')).toEqual(['ACIA', 'CAP'])
+  })
+
   it('splits a hyphenated name at its own hyphen', () => {
     expect(examMonogramLines('MAS-I')).toEqual(['MAS', 'I'])
     expect(examMonogramLines('MAS-II')).toEqual(['MAS', 'II'])

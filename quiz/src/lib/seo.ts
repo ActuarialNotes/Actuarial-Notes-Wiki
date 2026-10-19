@@ -527,7 +527,7 @@ export function conceptSeo(input: { name: string; markdown: string; exams: SeoCr
 export function examSeo(input: { fileName: string; markdown: string; questions: number }): SeoPage {
   const { fileName, markdown, questions } = input
   const name = examDisplayName(fileName)
-  const body = /\((SOA|CAS)\)\s*$/i.exec(fileName)?.[1]?.toUpperCase()
+  const body = /\((SOA|CAS|CIA)\)\s*$/i.exec(fileName)?.[1]?.toUpperCase()
   const meta = parseExamMetadata(markdown)
   const syllabus = meta ? parseExamSyllabus(markdown, meta.examId, meta.examLabel, meta.examTopic, fileName) : null
   const concepts = new Set(syllabus?.topics.flatMap(t => t.concepts.map(c => c.name.toLowerCase())) ?? []).size

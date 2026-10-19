@@ -30,7 +30,7 @@ export interface ExamMonogram {
  *
  * The CAS upper-level keys are namespaced (`CAS-5`, `CAS-PCPA`) but the exam is
  * called "Exam 5" or "PCPA", so the prefix is dropped — the tile says what the
- * candidate says.
+ * candidate says. The CIA's are namespaced the same way (`CIA-F1PC`, `CIA-PC-M1`).
  * Anything longer than three characters is split over two lines: at the name's
  * own hyphen when it has one (`MAS-I` → MAS / I), otherwise down the middle
  * with the shorter line on top (`ALTAM` → AL / TAM), which keeps the letter
@@ -39,10 +39,11 @@ export interface ExamMonogram {
 // A key whose letters aren't the requirement's name: the CAS's Course on
 // Professionalism is stored under `CAS-APC`, the key readers' progress has
 // always been kept under, but the CAS calls it the COP.
-const MONOGRAM_NAMES: Record<string, string> = { 'CAS-APC': 'COP' }
+// The CIA's Capstone, keyed by its full name, is shortened to ACIA over CAP.
+const MONOGRAM_NAMES: Record<string, string> = { 'CAS-APC': 'COP', 'CIA-ACIA-CAPSTONE': 'ACIA-CAP' }
 
 export function examMonogramLines(examKey: string): string[] {
-  const name = (MONOGRAM_NAMES[examKey] ?? examKey).replace(/^CAS-/, '').trim().toUpperCase()
+  const name = (MONOGRAM_NAMES[examKey] ?? examKey).replace(/^(?:CAS|CIA)-/, '').trim().toUpperCase()
   if (!name) return ['?']
   if (name.length <= 3) return [name]
 

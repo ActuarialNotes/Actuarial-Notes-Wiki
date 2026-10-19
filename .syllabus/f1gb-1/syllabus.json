@@ -1,0 +1,391 @@
+{
+  "wiki_id": "f1gb-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F1GB",
+  "title": "Exam F1GB: Product Design and Group Benefits Environment",
+  "name": "Product Design and Group Benefits Environment",
+  "track": "GB",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015",
+  "source_page": "https://www.cia-ica.ca/publications/223036e/",
+  "source_title": "FCIA Syllabus – Group benefits track",
+  "source_date": "2024-01-30",
+  "source_sha256": "9da8271fdd48491e46fcc1e9c4482e7e747a8c16ea2b8d4814ff0979968316de",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    5,
+    7
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques of design that are relevant to group insurance.",
+    "2. Apply these principles and techniques within the context of group insurance.",
+    "3. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions and to develop appropriate proposals or recommendations relating to pricing group insurance products.",
+    "4. Understand the Canadian health insurance environment.",
+    "5. Understand US and other health insurance environments.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in group benefits and health insurance design. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Product design",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Analyze benefits’ design features and provisions (life, premium waiver, accidental death, and dismemberment [AD&D], disability, medical, drug, dental, critical illness [CI], long-term care [LTC], optional benefits, individual health insurance). (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Analyze issues associated with benefit design and calculate, compare, and contrast benefit-coverage levels (drug formularies, new drugs, drug substitution [generic or other], preferred provider networks, direct payment, evolution of dental-fee guides, emerging illnesses, digital/virtual products, health care/wellness spending accounts, etc.). (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze and calculate possible participant anti-selection and its related impacts. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand the rationale underlying risk classification for individual health products. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the structure of employee-benefit plans and products offered, and the rationale for offering these structures. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Recommend an employee-benefit strategy considering an employer’s objectives. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Benefit law and regulation",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand the effects of applicable legislation and regulation, including (but not limited to) privacy, human rights, and non-discrimination on the following: (B2)",
+          "bullets": [
+            "a. Allowable benefits and exclusions.",
+            "b. Benefit plan design and pricing.",
+            "c. Plan administration.",
+            "d. Claims management and administration.",
+            "e. Human rights and non-discrimination."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Outline provisions of the Canadian Life and Health Insurance Association (CLHIA) guidelines and calculate impacts where applicable (definitions of groups, takeover rules, coordination of benefits, disclosure). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline and apply applicable provisions of the Civil Code of Québec to group insurance. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Outline and apply applicable provisions of other relevant laws and regulations to group insurance. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Apply relevant case law and interpret its implications. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Outline and apply provincially mandated benefits (prescription drug coverage in Québec, etc.). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Compare and contrast the main differences between Québec law and the rest of Canada (designation of beneficiary, change of insurers, civil union, etc.). (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Outline and describe the legal aspects of self-insurance. (B2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Insurance company law and regulation",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand and apply the following legislation: (B3)",
+          "bullets": [
+            "a. Office of the Superintendent of Financial Institutions (OSFI) guidelines.",
+            "b. Insurance Companies Act.",
+            "c. Uniform Life Insurance Act and major variations.",
+            "d. Uniform Health Insurance Act and major variations.",
+            "e. Québec’s Civil Code.",
+            "f. Other provincial laws that have an impact on insurance (regulations on insurance and other acts, laws on the sale and distribution of insurance products, etc.)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Evaluate special issues (group creditor insurance, change of carrier, designation of beneficiary, etc.). (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and understand relevant case law and its implications. (D2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Workers’ compensation",
+      "part": null,
+      "weight": [
+        5.0,
+        5.0
+      ],
+      "weight_raw": "5%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Outline and evaluate the following: (B5)",
+          "bullets": [
+            "a. Social insurance programs governed by provincial legislation, with emphasis on prevention of workplace injuries, diseases, and fatalities.",
+            "b. Association of Workers’ Compensation Boards of Canada (AWCBC).",
+            "c. Publicly insured programs vs. self-insured programs.",
+            "d. Integration of workers’ compensation programs with private group insurance programs.",
+            "e. Unique aspects of disability management when disability arises from a cause covered under workers’ compensation."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Public and other benefit programs",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Analyze the impact of following public plans on group insurance: (C4)",
+          "bullets": [
+            "a. Canada/Québec Pension Plans.",
+            "b. Canada Health Act.",
+            "c. Provincial medical and drug plans.",
+            "d. Provincial automobile plans.",
+            "e. Employment Insurance.",
+            "f. Québec Parental Insurance Plan.",
+            "g. Québec Public Prescription Drug Insurance Plan.",
+            "h. National pharmacare initiative."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Evaluate how private group insurance plans work within the framework of public programs in Canada. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Perform calculations under the plans mentioned in 1. above. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate Government's role in health-care policy and regulation. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze financing and the flow of funds in the Canadian health-care system and the role of the provider and government. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe variations in consumer behavior under the Canadian health system. (D2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "The U.S. healthcare model",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand the operations of various types of (public, private, or both) health-care models applicable in the United States and their financing: (B3)",
+          "bullets": [
+            "a. Health Maintenance Organization (HMO).",
+            "b. Preferred Provider Organization (PPO).",
+            "c. Private Group Insurance Plans.",
+            "d. Affordable Care Act (ACA or Obamacare).",
+            "e. Medicare and Medicaid."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Differentiate the role of various players in the U.S. system (networks, employers, insurers, actuaries) (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Critique social programs in Canada and the United States, and discuss the value of the different systems. (B5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Other healthcare models",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand the various types of (public, private, or both) health-care models: (B2)",
+          "bullets": [
+            "a. Other countries of interest (such as the United Kingdom and China).",
+            "b. Developing country for health-care models (such as India)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Compare and contrast the role of various stakeholders in these systems (networks, employers, insurers, actuaries). (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

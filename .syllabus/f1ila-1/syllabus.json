@@ -1,0 +1,504 @@
+{
+  "wiki_id": "f1ila-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F1ILA",
+  "title": "Exam F1ILA: Finance and Valuation",
+  "name": "Finance and Valuation",
+  "track": "ILA",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011",
+  "source_page": "https://www.cia-ica.ca/publications/223035e/",
+  "source_title": "FCIA Syllabus – Individual life and annuities track",
+  "source_date": "2024-01-29",
+  "source_sha256": "ff0543bc33cd8d299931b668b66d589ebd03f5bc7595fd11ce67173d4e1a9097",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    5,
+    9
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques for estimating reserves and claims-related expenses (hereafter referred to simply as “claims”) that are relevant to life insurance.",
+    "2. Apply these principles and techniques within the context of life insurance.",
+    "3. Evaluate the considerations involved in selecting a best estimate reserve.",
+    "4. Understand how estimating reserves links to wider business processes (e.g., business planning, pricing, financial reporting, and capital setting).",
+    "5. Describe International Financial Reporting Standard 17 - Insurance Contracts (hereafter referred to as IFRS 17) and calculate actuarial values for financial reporting under IFRS 17.",
+    "6. Create appropriate proposals and recommendations related to reserves and IFRS 17 financial reporting in the life insurance business.",
+    "7. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA learning management system. The ranges of weights (in parentheses) attached to the examination topics further below apply to most of the administered exams. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the valuation of reserves and IFRS 17 financial reporting for life insurers. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Regulations and applicable standards",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply legislation (e.g., the Insurance Companies Act) and regulations (e.g., Office of the Superintendent of Financial Institutions guidelines) relevant to the Appointed Actuary’s valuation for financial-reporting purposes. (A3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply actuarial professionalism requirements applicable to the valuation of reserves and IFRS 17 financial reporting. (B3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Data",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate the types of data and information required for valuation of reserves, their sources, and main uses. (A4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Differentiate types of data and information required for IFRS 17 financial reporting, their sources, and main uses. (A4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze the implications to data requirements for different life insurance product features (e.g., term vs. whole life vs. universal life, annuities, accumulation guarantees). (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate the insurer’s internal environment (such as changes in operations or information technology [IT]) on data used for valuation of reserves. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze the influence of external environments on data used for valuation of reserves and IFRS 17. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Evaluate the possible causes of data errors and the effects of inadequate data and information. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Create appropriate data-validation processes. (C6)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Principles of valuation - basic topics",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Analyze the purpose of reserving for life insurers, including: (A4)",
+          "bullets": [
+            "a. The reasons for calculating reserves and how these might influence the approach (such as financial reporting, financial planning and analysis, and pricing); and",
+            "b. The key stakeholders and their interests in the reserves held and reported."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Calculate and evaluate reserves using appropriate methods. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "For methods in 2.:",
+          "bullets": [
+            "a. Generate the assumptions and mechanics. (C6)",
+            "b. Analyze assumption changes and determine their influence on the results of reserves. (C4)",
+            "c. Critique the technique with varying data quality and completeness and in different situations. (D5)",
+            "d. Evaluate the strengths and limitations of each technique and the impact of limitations on results. (D5)",
+            "e. Select the appropriate technique and assumptions given specific circumstances. (D5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply processes to integrate more complex factors potentially relevant for the estimation of reserves of a given claims portfolio.",
+          "bullets": [
+            "a. Select the appropriate technique and assumptions given changes to the internal and external environment like changes in underwriting practices, public-health measures, and economic conditions. (C3)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the role of valuation assumptions with a focus on the following: (C4)",
+          "bullets": [
+            "a. Regular assumptions vs. one-time adjustments.",
+            "b. Economic and non-economic assumptions.",
+            "c. Understand their mechanics, such as how to construct and use select and ultimate tables. (B2)",
+            "d. Analyze assumption changes, determine their influence on the results, and describe techniques for a controlled implementation process. (B4)",
+            "e. Explain how assumptions are impacted by impacts to the insurance environment such as legislative changes or changes to availability of underwriting data. (B2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Determine whether to adjust for adverse deviation and calculate such adjustments to a best estimate of reserves. (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Principles of valuation – advanced topics",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe, calculate, and evaluate approaches to allow for various other items in an actuary’s estimation of reserves, including: (C5)",
+          "bullets": [
+            "a. Claims-management expenses (including allocated and unallocated loss-adjustment expenses) and other costs.",
+            "b. Latent claims and potential claims features that have not manifested in the reported claims data.",
+            "c. Late reported claims and potential claims features that have not manifested in the reported claims data."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Critique margins for adverse deviations, including their purpose, how they are set, and the financial consequences of setting them inappropriately. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Calculate estimates of reserves for reinsurance.",
+          "bullets": [
+            "a. Compare the approaches to calculating reserves for reinsurance contracts held by analyzing claims gross and net of reinsurance held vs. claims gross of reinsurance held and claims ceded to reinsurance. (C4)",
+            "b. Calculate reserves for reinsurance held using appropriate techniques and assumptions that reflect the characteristics of reinsurance contracts held (e.g., contract terms and conditions, data availability). (C3)",
+            "c. Calculate reserves for various layers of claims. (C3)",
+            "d. Explain the consequences and calculate the effect on both ceding and assuming companies with respect to the following under various structures: (C3)",
+            "\ti. Risk transfer and its effect on regulatory capital requirements (including impact on minimum regulatory capital requirements);",
+            "\tii. Cash flow;",
+            "\tiii. Financial statements; and",
+            "\tiv. Tax and reserve credit requirements."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate stochastic processes for estimating reserves.",
+          "bullets": [
+            "a. Evaluate the likely sources of uncertainty in estimates of unpaid claims. (B5)",
+            "b. Evaluate the uses of stochastic techniques for estimating unpaid claims. (B5)",
+            "c. Evaluate the following types of stochastic techniques, including data required, key assumptions, and mechanics: (B5)",
+            "\ti. Analytic; and",
+            "\tii. Simulation-based.",
+            "d. Evaluate the issues, advantages, and disadvantages of each of the techniques, including sensitivity to assumptions. (C5)",
+            "e. Evaluate the approach to aggregating the results of stochastic estimates of unpaid claims across multiple lines of business and discuss methods of correlation. (C5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the results of reserves for adequacy and reasonableness. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Generate alternative estimates of reserves and highlight some of the professional issues in resolving them. (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the factors an actuary should consider and the typical diagnostics used in assessing the reasonableness of the results of estimates of unpaid claims. (D2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Critique the reasonableness of changes in the results of reserves over time by describing the factors an actuary should consider. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Analyze current experience to monitor performance and recommend reserves for interim valuations. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Communicate an estimate of unpaid claims:",
+          "bullets": [
+            "a. Describe what is meant by a best-estimate reserve. (B2)",
+            "b. Describe the uses, advantages, and disadvantages of estimating ranges of reserves using the following approaches: (B2)",
+            "\ti. Stochastic models.",
+            "\tii. Scenario tests; and",
+            "\tiii. Use of alternative sets of assumptions.",
+            "c. Understand the issues to be considered when communicating ranges in estimates of reserves and uncertainties. (D2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Compare and analyze valuation methods in Canada and the United States. (B4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "IFRS 17 financial reporting",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe IFRS 17, – Accounting for Insurance Contracts including its purpose, scope, classification of contracts, and contract boundaries. (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Analyze how insurance contracts are measured using the: (B4)",
+          "bullets": [
+            "a. General measurement approach;",
+            "b. Variable fee approach; and",
+            "c. Premium allocation approach."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Reflect considerations related to the level of aggregation when accounting for business under IFRS 17, including determination of the unit of account and setting of portfolios and groups of contracts. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Estimate future cash flows for the liability for remaining coverage and the liability for incurred claims under the general measurement approach, variable fee approach, and the premium allocation approach. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Create discount rate curves both using the top-down and bottom-up approaches referred to in IFRS 17. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Determine risk adjustment for non-financial risk, including:",
+          "bullets": [
+            "a. Reflect the criteria for and measurement of the risk adjustment under the general measurement approach, variable fee approach, and the premium allocation approach. (C4)",
+            "b. Apply multiple methods, including: (C4)",
+            "\ti. Quantile;",
+            "\tii. Cost of capital; and",
+            "\tiii. Margin.",
+            "c. Adjust the role of diversification and allocation in the determination and the application of the risk adjustment. (C4)",
+            "d. Determine the risk adjustment for reinsurance contracts held. (C4)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Determine key actuarial components of IFRS 17 financial statements, including:",
+          "bullets": [
+            "a. Contractual service margin; (C4)",
+            "b. Liability for remaining coverage; (C4)",
+            "c. Liability for incurred claims; (C4)",
+            "d. Risk adjustment for non-financial risk; (C4)",
+            "e. Discounting; (C4)",
+            "f. Loss component; (C4)",
+            "g. Onerous contracts; (C4)",
+            "h. Non-distinct investment component. (C4)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Analyze the components (statements, key exhibits, and schedules) of the Canadian regulatory return and how they interrelate. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Calculate key financial metrics and evaluate an insurer’s financial performance and strength based on such ratios. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Describe the Appointed Actuary’s role with respect to IFRS 17 financial reporting. (B2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Financial management",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and calculate financial performance measures. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Perform financial analysis by product line and total company. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply methods of valuation to business and asset acquisitions and divestitures, including embedded-value methodologies. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain and apply methods of surplus management and financial management. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and apply the principle of creation of value from a financial economics perspective. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe the principles underlying the determination of Canadian regulatory capital (i.e., the Canadian Life Insurance Capital Adequacy Test, or LICAT), including the following: (B2)",
+          "bullets": [
+            "a. Identification of significant risk components; (B2)",
+            "b. Identification of specialized product LICAT requirements;",
+            "c. Interpreting results from a regulatory perspective. (B2)",
+            "d. Compare and contrast to other regulatory capital regimes. (C4)"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

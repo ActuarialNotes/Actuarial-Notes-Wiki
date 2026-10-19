@@ -9,7 +9,7 @@ import { ExamVariantPicker } from '@/components/ExamVariantPicker'
 import { groupExamVariants, variantRegion } from '@/lib/examVariants'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { useExamProgress } from '@/contexts/examProgress'
-import { defaultBody, loadBody, saveBody, type ExamBody } from '@/lib/bodyFilter'
+import { defaultGuideBody, loadGuideBody, saveBody, type GuideBody } from '@/lib/bodyFilter'
 import { ExamPill, MetaPill, PdfPill } from '@/components/wiki/ResourcePills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { buildWikiIndex, bundledWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -158,7 +158,7 @@ export default function WikiResources() {
   // The SOA/CAS picker the Study Guides page carries, the same stored choice
   // (`lib/bodyFilter.ts`): it picks whose exams the strip offers, and with no
   // exam chosen, whose readings the shelf holds.
-  const [bodyOverride, setBodyOverride] = useState<ExamBody | null>(loadBody)
+  const [bodyOverride, setBodyOverride] = useState<GuideBody | null>(loadGuideBody)
 
   useEffect(() => {
     setPageRefs([])
@@ -182,12 +182,16 @@ export default function WikiResources() {
   const examCount = examPages.length
   const selection = useMemo(() => resourceFacetsFromParams(searchParams), [searchParams])
   const strips = useMemo(
-    () => ({ SOA: resourceStripExams(examPages, 'SOA'), CAS: resourceStripExams(examPages, 'CAS') }),
+    () => ({
+      SOA: resourceStripExams(examPages, 'SOA'),
+      CAS: resourceStripExams(examPages, 'CAS'),
+      CIA: resourceStripExams(examPages, 'CIA'),
+    }),
     [examPages],
   )
   // The strip picks one exam at a time; an older link naming several shows the first.
   const chosenExam = selection.exam.size > 0 ? [...selection.exam][0] : null
-  const body = bodyForExam(chosenExam, bodyOverride ?? defaultBody(selectedTrack), strips)
+  const body = bodyForExam(chosenExam, bodyOverride ?? defaultGuideBody(selectedTrack), strips)
   const strip = strips[body]
   // An exam with a syllabus per region (Exam 6's 6C, 6U, 6I, 6T) is one logo on
   // the strip. Choosing it puts every variant on the shelf, and the region
@@ -259,7 +263,7 @@ export default function WikiResources() {
   }
 
   // The other body's ladder doesn't hold the chosen exam, so the choice goes.
-  function chooseBody(next: ExamBody) {
+  function chooseBody(next: GuideBody) {
     saveBody(next)
     setBodyOverride(next)
     if (next !== body && chosenExam) chooseExam(null)
@@ -297,6 +301,7 @@ export default function WikiResources() {
           options={[
             { value: 'SOA', label: 'SOA' },
             { value: 'CAS', label: 'CAS' },
+            { value: 'CIA', label: 'CIA' },
           ]}
           className="shrink-0"
         />

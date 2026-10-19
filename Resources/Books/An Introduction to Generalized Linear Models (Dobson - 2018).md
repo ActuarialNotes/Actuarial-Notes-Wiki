@@ -8,11 +8,11 @@ Edition: "4th"
 Type: "Textbook"
 ISBN: "978-1-138-74151-5"
 verification:
-  status: verified
-  confidence: high
+  status: stale
+  confidence: null
   last_checked: 2026-10-09
   last_checked_by: agent:validate-v1
-  content_hash: sha256:6c63eb3d70d625ce36f84bae5f9b05f20479a8a3decda2edf34c2d8d82acc2a6
+  content_hash: sha256:d1daa06db416a6fcc17289e948c976bc526845127b785e7a0ba1773b723cb140
   sources:
     - "Dobson & Barnett, An Introduction to Generalized Linear Models, 4th ed. (CRC Press, 2018), publisher eBook preview: title and copyright pages, Contents pp. vii-xiii (PDF pp.8-14), Preface, sha256:40ed0b2549113ee0bea29e41786886ce992ffa29251ad26fb1037385bb51611a — https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf"
     - "Routledge product page, An Introduction to Generalized Linear Models 4th ed., Description, fetched 2026-10-05, sha256:17ebb9fececc386c6efcfbb797506166d5e280424b9fceb0508dde85a00a7ef7 — https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515"
@@ -27,6 +27,7 @@ A textbook presenting generalized linear models as a unified framework for stati
 
 > [!info] On the syllabus
 > - [[Exam MAS-I (CAS)|Exam MAS-I]] — objectives C1–C9; Chapters 1–9, excluding 6.3.3, 6.7, 6.8 and 7.9.
+> - [[Exam ACIA-CAPSTONE (CIA)|ACIA Capstone Exam]] — A5.2 Generalized linear models (C): Chapters 1-9, excluding 6.7, 6.8, 7.9 — alternate reading.
 
 ## 1 Introduction
 - 1.1 Background
@@ -264,3 +265,4 @@ A textbook presenting generalized linear models as a unified framework for stati
 - [An Introduction to Generalized Linear Models, Fourth Edition — publisher's preview (CRC Press, 2018)](https://api.pageplace.de/preview/DT0400.9781351726221_A37406780/preview-9781351726221_A37406780.pdf) — the book's opening pages as distributed in the eBook preview: title page, copyright page (edition, ISBNs), the full table of contents and the preface
 - [An Introduction to Generalized Linear Models, 4th Edition (Routledge)](https://www.routledge.com/An-Introduction-to-Generalized-Linear-Models/Dobson-Barnett/p/book/9781138741515) — the publisher's description, and its chapter list, which agrees with the contents on 14 chapters, the Postface and the Appendix
 - [CAS Exam MAS-I Content Outline (2026)](https://www.casact.org/sites/default/files/2026-06/MASI_ContentOutline_2026.pdf) — the citation (4th edition, Chapman and Hall/CRC Press, 2018) and the assigned scope
+- [CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026)](https://www.cia-ica.ca/publications/997001e/) — the citation (title, edition, authors and ISBN) and the syllabus sections it is assigned for on the ACIA Capstone Exam, from the syllabus's background reading tables

@@ -15,8 +15,9 @@ import type { ItemStatus } from '@/data/tracks'
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
 //                   study from yet (Exams 6U, 6I and 6T, the SOA exams past
-//                   FM, and the non-exam requirements — VEE, the modules and
-//                   the professionalism courses).
+//                   FM, the CIA's ACIA and FCIA exams and modules, and the
+//                   non-exam requirements — VEE, the modules and the
+//                   professionalism courses).
 //
 // An exam moves up when `scripts/publication_readiness.py --check` says so:
 // development → beta once every objective links a written, specific page and
@@ -64,6 +65,15 @@ const IN_DEVELOPMENT_EXAMS = new Set([
   'FSA-ILA101', 'FSA-ILA201',
   'FSA-INV101', 'FSA-INV201',
   'FSA-RET101', 'FSA-RET201', 'FSA-RET301',
+  // The CIA's own pathway: the ACIA modules and Capstone Exam, and each FCIA track's two modules
+  // and three exams (F3BNK the banking option for F3FIE) — pages transcribed
+  // from the CIA's syllabi by the same pipeline, and nothing else yet.
+  'CIA-ACIA-M1', 'CIA-ACIA-M2', 'CIA-ACIA-CAPSTONE',
+  'CIA-PC-M1', 'CIA-PC-M2', 'CIA-F1PC', 'CIA-F2PC', 'CIA-F3PC',
+  'CIA-ILA-M1', 'CIA-ILA-M2', 'CIA-F1ILA', 'CIA-F2ILA', 'CIA-F3ILA',
+  'CIA-GB-M1', 'CIA-GB-M2', 'CIA-F1GB', 'CIA-F2GB', 'CIA-F3GB',
+  'CIA-RET-M1', 'CIA-RET-M2', 'CIA-F1RET', 'CIA-F2RET', 'CIA-F3RET',
+  'CIA-FIE-M1', 'CIA-FIE-M2', 'CIA-F1FIE', 'CIA-F2FIE', 'CIA-F3FIE', 'CIA-F3BNK',
 ])
 
 /**

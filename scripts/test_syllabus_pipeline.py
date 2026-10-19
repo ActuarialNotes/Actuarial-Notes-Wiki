@@ -140,6 +140,96 @@ class ExtractQuirksTest(unittest.TestCase):
         self.assertEqual(rows[1]["codes"], "6a, c-d, f")
 
 
+def _line(x, text, size=9, bold=False, page=5, y=0):
+    return {"x": x, "y": y, "size": size, "bold": bold, "text": text, "page": page}
+
+
+class CiaTest(unittest.TestCase):
+    """The CIA's syllabi, read by type and column (the PDFs aren't committed)."""
+
+    def test_exam_topics(self):
+        lines = [
+            _line(72, "The aim of this exam is for candidates to develop the following skills:"),
+            _line(72, "Understand the main principles and techniques of pricing that are relevant to P&C insurance,"),
+            _line(72, "including techniques to estimate a technical price."),
+            _line(78, "1. Principal terms", bold=True),
+            _line(96, "1."),
+            _line(114, "Define the principal terms used in pricing P&C insurance products. (A1)"),
+            _line(78, "3. Reporting of pension, post-employment benefits, and post-retirement benefits for financial statem", bold=True),
+            _line(78, "and proxy circular purposes (25%)", bold=True),
+            _line(96, "4."),
+            _line(114, "Calculate and evaluate estimates of unpaid claims using the following"),
+            _line(114, "techniques: (C5)"),
+            _line(132, "a."),
+            _line(150, "Development;"),
+            _line(132, "c."),
+            _line(150, "Describe the following types of stochastic techniques: (B2)"),
+            _line(170, "i. Analytic; and"),
+            _line(96, "10. Create appropriate data-validation processes. (C6)"),
+        ]
+        aim, topics = se._cia_exam_topics(lines)
+        self.assertEqual(aim, ["The aim of this exam is for candidates to develop the following skills:",
+                               "- Understand the main principles and techniques of pricing that are relevant to "
+                               "P&C insurance, including techniques to estimate a technical price."])
+        self.assertEqual([(t["title"], t["weight_raw"]) for t in topics], [
+            ("Principal terms", None),
+            ("Reporting of pension, post-employment benefits, and post-retirement benefits for financial "
+             "statem and proxy circular purposes", "25%"),
+        ])
+        self.assertEqual(topics[0]["weight"], [0, 0])     # examined inside the other topics: {0%}
+        obj = topics[1]["outcomes"]
+        self.assertEqual(obj[0]["text"], "Calculate and evaluate estimates of unpaid claims using the following techniques: (C5)")
+        self.assertEqual(obj[0]["bullets"], ["a. Development;", "c. Describe the following types of stochastic "
+                                             "techniques: (B2)", "\ti. Analytic; and"])
+        self.assertEqual((obj[1]["num"], obj[1]["text"]), (10, "Create appropriate data-validation processes. (C6)"))
+
+    def test_acia_module_topics(self):
+        lines = [
+            _line(72, "A. Introduction and actuarial communications", size=12),
+            _line(72, "Description: The first portion of the module introduces the profession;", bold=True),
+            _line(72, "it explains the history of the profession."),
+            _line(72, "Content and learning objectives:", bold=True),
+            _line(90, "1."),
+            _line(108, "What it means to be an actuary in Canada"),
+            _line(122, "a."),
+            _line(140, "Define the word “actuary” and what it means to be an actuary in"),
+            _line(140, "Canada."),
+        ]
+        [topic] = se._acia_module_topics(lines)
+        self.assertEqual(topic["objective"], "The first portion of the module introduces the profession; "
+                                             "it explains the history of the profession.")
+        [o] = topic["outcomes"]
+        self.assertEqual((o["letter"], o["group"]), ("a", "1. What it means to be an actuary in Canada"))
+        self.assertEqual(o["text"], "Define the word “actuary” and what it means to be an actuary in Canada.")
+
+    def test_reading_cell(self):
+        cell = se._reading_cell("Loss Models: From Data to Decisions, 5th Edition Authors: Stuart A. Klugman, "
+                                "Harry H. Panjer, Gordon E. Willmot ISBN: 978-1-119-52378-9 Chapter 6")
+        self.assertEqual(cell, {"title": "Loss Models: From Data to Decisions, 5th Edition",
+                                "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+                                "isbn": "978-1-119-52378-9", "assign": "Chapter 6"})
+        self.assertIsNone(se._reading_cell("Background"))
+        self.assertIsNone(se._reading_cell("N/A"))
+
+    def test_naming(self):
+        exam = {"body": "CIA", "code": "F1PC", "name": "Pricing", "title": "Exam F1PC: Pricing"}
+        module = {"body": "CIA", "code": "PC-M1", "name": "Principles and practice of insurance", "title": ""}
+        self.assertEqual(sw.page_name(exam), "Exam F1PC (CIA).md")
+        self.assertEqual(sw.exam_identity(module)["code"], "PC Module 1")
+        self.assertEqual(sw.cia_source_page({"source_title": "FCIA Syllabus – Property and casualty track",
+                                             "source_date": "2025-10-30"}),
+                         "FCIA Syllabus – Property and casualty track (CIA - 2025)")
+
+    def test_reading_targets(self):
+        isbns = {"9781119523789": "Loss Models - From Data to Decisions (Klugman - 2019)"}
+        self.assertEqual(sw.cia_reading_target({"citation": "Loss Models", "isbn": "978-1-119-52378-9"}, isbns),
+                         "Loss Models - From Data to Decisions (Klugman - 2019)")
+        self.assertEqual(sw.cia_reading_target({"citation": "ACIA Module 2", "isbn": None}, isbns), "")
+        self.assertEqual(sw.cia_reading_target({"citation": "Derivatives Markets, 3rd Edition",
+                                                "authors": "Robert L. McDonald", "isbn": None}, isbns),
+                         "Derivatives Markets (McDonald)")
+
+
 class NamingTest(unittest.TestCase):
     def test_exam_identity(self):
         ident = sw.exam_identity({"title": "GH 201-C – Valuation and Regulation, Canada", "wiki_id": "gh-201c"})

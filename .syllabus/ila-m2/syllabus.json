@@ -1,0 +1,474 @@
+{
+  "wiki_id": "ila-m2",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "ILA-M2",
+  "title": "ILA Module 2: Professional considerations in the life insurance environment",
+  "name": "Professional considerations in the life insurance environment",
+  "track": "ILA",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011",
+  "source_page": "https://www.cia-ica.ca/publications/223035e/",
+  "source_title": "FCIA Syllabus – Individual life and annuities track",
+  "source_date": "2024-01-29",
+  "source_sha256": "ff0543bc33cd8d299931b668b66d589ebd03f5bc7595fd11ce67173d4e1a9097",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    22,
+    24
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months from the date of module purchase to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Professional considerations",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Outline the qualification requirements of the appointed actuary in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role and responsibilities of the appointed/valuation actuary in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline for which instances an appointed actuary is required in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the roles and responsibilities of actuaries in life insurance companies, such as in the areas of valuation, pricing, policy illustration, and ERM.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Outline qualification requirements under the U.S. qualification standard (USQS).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Outline requirements of the CIA professional standards that may inadvertently be breached in the life insurance practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Identify and apply actuarial standards of practice relevant to:",
+          "bullets": [
+            "a. Financial reporting and valuation.",
+            "b. Financial condition testing.",
+            "c. Non-guaranteed elements."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Overview of the regulatory framework in Canada",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Summarize the regulation applicable to the insurance market in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Summarize the regulation applicable to the investment market in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify the major regulators of the insurance sector in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify the major regulators of the investment sector in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Summarize the activities of insurance regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Summarize the activities of investment regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the goals of regulation and laws in the investment and insurance sectors.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Explain how regulation protects consumers of insurance products and investors in insurance companies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand the compliance function in an investment management organization.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Regulation and taxation of insurance",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain why solvency regulation is important.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe implications of insolvency.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the financial-reporting requirements.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the regulatory processes used to monitor solvency.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain how contracts are taxed to the owner of the contract.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe constraints on policy design imposed by tax laws.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the two major categories of differences between pre-tax and taxable earnings.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Distinguish between the different forms of taxes paid by Canadian companies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand the differences between federal and provincial taxation.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Canadian financial reporting",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply the principles underlying the determination of LICAT, including the following:",
+          "bullets": [
+            "a. Identification of significant risk components;",
+            "b. Identification of specialized-product LICAT requirements;",
+            "c. Interpreting results from a regulatory perspective; and",
+            "d. Compare and contrast to other regulatory capital regimes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and explain the regulatory and tax environment for insurance and annuities in Canada, specifically: effect on product development, reserving, pricing, and business practices.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe key IFRS 17 financial concepts for written and ceded coverages and how they are calculated.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe IFRS 17 valuation methods.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Calculate IFRS 17 liabilities for life and annuity products and their associated riders.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Asset and portfolio management",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the portfolio management process in an insurance company and the role of investment policy, the investment actuary, and external portfolio managers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and evaluate how a company's objectives, needs, and constraints affect investment strategy and portfolio construction.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role of, and significant considerations related to the design and function of, asset-allocation strategies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe fixed-asset portfolio management methods, immunization (including derivatives) and cash-matching strategies, and convexity.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and assess alternative investment portfolios in the context of an insurance company portfolio.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe and apply methods and processes for evaluating portfolio performance, including performance attribution, sources of earnings analysis on investment income, benchmarks, metrics, and risk-adjusted performance appraisals.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the principles of liquidity risk management in the context of insurance company portfolio management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe how an insurance company can hedge against the cost of borrowing through forward rate, futures and perform related calculations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Demonstrate understanding of regulators’ guidance and context for different approaches to responsible investment and, specifically, the integration of ESG factors in the investment process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Demonstrate an understanding of the underlying issues that constitute factors within each of the ESG areas.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Demonstrate an understanding of the ESG market: relevance, size, scope, key drivers and challenges, and risks and opportunities.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Communication and organizational behaviour",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain differences between good and poor communication techniques and their implications.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply techniques to structure ideas logically.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Develop clear, fact-based messages that can be communicated persuasively.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the role of cognitive biases on making suboptimal individual decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the role of organizational behavior on organizational decision-making processes and efficacy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain why communication is strategically important to organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe how information is communicated within organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe organizational and individual barriers to effective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Identify the risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Explain how to overcome communication barriers and minimize risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Recognize the influence of unconscious biases, culture, and diversity on communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Apply the CIA Standards of Practice and Rules of Professional Conduct in business communication.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

@@ -37,7 +37,7 @@ describe('examStatus', () => {
 
   it('matches the progress keys the exam pages resolve to', () => {
     // The vault's file names, cleaned the way WikiHome/WikiExam clean them.
-    for (const id of ['6U']) {
+    for (const id of ['6U', 'F1PC', 'F3BNK', 'PC-M1', 'ACIA-M2']) {
       expect(isExamInDevelopment(wikiExamIdToProgressKey(id), id)).toBe(true)
     }
     for (const id of ['P-1', 'MAS-II', 'DISC-DA', 'DISC-RM', 'DISC-IA', '5', 'PCPA', '6C', '7', '8', '9']) {

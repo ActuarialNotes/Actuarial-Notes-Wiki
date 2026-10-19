@@ -608,6 +608,45 @@ const SYLLABUS_PDF_LINKS: Record<string, ExamPdfLink> = {
   },
   // Exam 6U has no entry: its current document hasn't been located on
   // casact.org. Adding a guess is the one thing this file forbids.
+
+  // ── CIA ───────────────────────────────────────────────────────────────────
+  // The CIA publishes one syllabus per FCIA track — the track's three exams and
+  // two modules in one PDF, "Version: Current" (PC's reposted 30 Oct 2025, the
+  // others the January 2024 PDFs) — and one for the ACIA modules and Capstone
+  // Exam (last updated 19 Jan 2026).
+  // Each URL is the download link on the document's cia-ica.ca publication page
+  // (read 2026-10-19), and is what scripts/syllabus_extract.py read the pages
+  // from; the CIA serves it through a script, not a `.pdf` path, which is why
+  // `PDF_DOWNLOAD_ENDPOINTS` in lib/examPdf.ts names it.
+  'f1pc-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019', label: 'Syllabus' },
+  'f2pc-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019', label: 'Syllabus' },
+  'f3pc-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019', label: 'Syllabus' },
+  'pc-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019', label: 'Syllabus' },
+  'pc-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019', label: 'Syllabus' },
+  'f1ila-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011', label: 'Syllabus' },
+  'f2ila-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011', label: 'Syllabus' },
+  'f3ila-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011', label: 'Syllabus' },
+  'ila-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011', label: 'Syllabus' },
+  'ila-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011', label: 'Syllabus' },
+  'f1gb-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015', label: 'Syllabus' },
+  'f2gb-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015', label: 'Syllabus' },
+  'f3gb-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015', label: 'Syllabus' },
+  'gb-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015', label: 'Syllabus' },
+  'gb-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015', label: 'Syllabus' },
+  'f1ret-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023', label: 'Syllabus' },
+  'f2ret-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023', label: 'Syllabus' },
+  'f3ret-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023', label: 'Syllabus' },
+  'ret-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023', label: 'Syllabus' },
+  'ret-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023', label: 'Syllabus' },
+  'f1fie-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'f2fie-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'f3fie-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'f3bnk-1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'fie-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'fie-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007', label: 'Syllabus' },
+  'acia-m1': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235', label: 'Syllabus' },
+  'acia-m2': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235', label: 'Syllabus' },
+  'acia-capstone': { url: 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235', label: 'Syllabus' },
 }
 
 export function getSittingPdfLink(examTopic: string, year: number, session?: string): ExamPdfLink | null {

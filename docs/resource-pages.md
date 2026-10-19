@@ -147,6 +147,7 @@ cover.
 | `Study Note` | a CAS or SOA study note |
 | `Monograph` | the CAS monograph series |
 | `Course` | an online course, read through its published syllabus |
+| `Syllabus` | an examining body's syllabus, when it is itself an exam's source — the CIA's FCIA and ACIA syllabi, whose exams list no readings |
 | `Paper` | a journal article, E-Forum paper, research paper, working-party or discussion paper |
 | `Report` | a government, committee, consultant or research report |
 | `Educational Note` | a CIA educational note |

@@ -200,7 +200,11 @@ before touching that area**:
   renders the page — every noun phrase of an objective linked to its concept page, or to the
   page that should exist — and `syllabus_lint.py` holds a page with a `syllabus:` block to its
   JSON word for word. It wrote the study guides of every SOA exam past FM (FAM, SRM, PA, ALTAM,
-  ASTAM, ATPA and the 23 FSA exams, all `development`); P and FM keep hand-made pages. Read
+  ASTAM, ATPA and the 23 FSA exams, all `development`); P and FM keep hand-made pages. Its CIA
+  reader (`--cia`) wrote the Canadian Institute of Actuaries' own pathway: ACIA Modules 1–2 and
+  the Capstone Exam, and each FCIA track's two modules and three exams (`Exam F1PC (CIA).md`,
+  `Exam PC-M1 (CIA).md`, all `development`), whose one source is the syllabus document itself —
+  the FCIA syllabi list no readings. Read
   before touching `scripts/syllabus_*.py` or regenerating a page for a new sitting.
 - `docs/validation-agent.md` — the VALIDATE agent (`.claude/agents/validate.md`, `/validate`):
   how a sweep picks its batch, what context it loads (the *complete* prior log — that is the
@@ -610,7 +614,10 @@ Other important `lib/` modules:
   so their banks (`exam-disc-da` / `-rm` / `-ia`) are the vault's own, written for
   the DISC campaign (`docs/content-plan.md`, Appendix A.2). PCPA is beta with no bank — CAS releases no PCPA paper or sample
   questions to convert — because its page and the Projects tab's simulator are material
-  to study from. Exam 6's variants share `CAS-6` but not a status, so a surface that knows
+  to study from. The CIA's own requirements are all `development` and keyed under the body —
+  `CIA-F1PC`, `CIA-PC-M1`, `CIA-ACIA-CAPSTONE` (`wikiExamIdToProgressKey`) — with their own
+  ACIA and FCIA tracks in `data/tracks.ts` (the FCIA's five specialty tracks as pathways,
+  `electiveSlots: 5`). Exam 6's variants share `CAS-6` but not a status, so a surface that knows
   which page it is drawing passes the page's id too (`examStatus(key, '6U')`, the id from
   `examPageIdFromFile` in `lib/examMenu.ts`); with no id, `CAS-6` reads as beta. A beta exam
   promoted before all its readings had `Resources/Books/` pages carries
@@ -1027,7 +1034,10 @@ Other important `lib/` modules:
   `viewTransition.ts`, still drawn as a push), so Back from a review never lands on a quiz that
   is over. Pure and tested; the flows are in `e2e/wiki.spec.ts` and `e2e/quiz-resume.spec.ts`.
 - `bodyFilter.ts` — the **SOA/CAS picker** that rides the title row on both the Quiz and Study
-  Guides tabs. One choice, one storage key, one fallback: the two tabs are one ladder seen
+  Guides tabs. The Study Guides tab's two pages (exams, resources) offer a third body, the
+  **CIA** (`GuideBody`, its ACIA and FCIA tracks — `CIA_TRACK_KEYS`); a page without CIA
+  material reads a stored `CIA` as no choice (`loadBody`) and opens on the reader's track's
+  body. One choice, one storage key, one fallback: the two tabs are one ladder seen
   twice, and they each used to own a copy of the rule. The copies had drifted in opposite
   directions, so a reader on the DEFAULT track (neither body's) opened one tab on CAS and the
   other on SOA and switching tabs looked like the picker changing itself. Pure and tested.

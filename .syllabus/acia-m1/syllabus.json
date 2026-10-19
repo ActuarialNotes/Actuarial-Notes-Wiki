@@ -1,0 +1,382 @@
+{
+  "wiki_id": "acia-m1",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "ACIA-M1",
+  "title": "ACIA Module 1",
+  "name": "",
+  "track": null,
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235",
+  "source_page": "https://www.cia-ica.ca/publications/997001e/",
+  "source_title": "CIA Education Syllabus – ACIA Capstone Exam and Modules",
+  "source_date": "2026-01-19",
+  "source_sha256": "2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    3,
+    5
+  ],
+  "intro": [
+    "The ACIA modules are a core educational requirement toward ACIA designation. They are intended to bridge accredited university education or education obtained via other actuarial organizations with the work environment.",
+    "They are administered online via the CIA learning management system.",
+    "The modules assume some knowledge of the topics acquired via a recognized university degree or through other Associate-level education. Outcomes that participants are expected to achieve often cover multiple learning objectives, with an emphasis on communications in most tasks.",
+    "The modules contain recordings, short readings, and/or quizzes. Each module includes a case study that includes various deliverables such as emails, reports, memorandums, recorded presentations, or spreadsheets. These case studies apply theoretical topics covered in the participant’s university degree or other recognized Associate-level education to practical actuarial scenarios; the content should not be new to the participant, but the application may be.",
+    "There is no formal prerequisite for the ACIA modules. Participants in an accredited university will be expected to have completed some actuarial courses prior to completing the first ACIA module, likely in their second year of university.",
+    "The second module should be completed when a participant has nearly completed all courses relevant to the ACIA Capstone Exam. It is expected that these participants undertake the second module in the last year of their university program. Participants are responsible for ensuring they have the appropriate knowledge."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "A. Introduction and actuarial communications",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": "The first portion of the module introduces the profession and gives a general context to the participant; it explains the history of the profession, describes the context of actuarial work and the different fields of practice. Communication in an actuarial setting is also discussed: audiences, technical and non-technical writing, and the impact of cultural diversity on communication. Finally, different channels of oral and written business communication (e.g., email, letter, memorandum, report, summary, presentation deck, messaging, and chat software) are introduced. Their purpose is explained, and the formatting rules for such communication are also exposed.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define the word “actuary” and what it means to be an actuary in Canada. Explain why actuaries are professionals.",
+          "bullets": [],
+          "group": "1. What it means to be an actuary in Canada"
+        },
+        {
+          "letter": "b",
+          "text": "Describe historical events that have impacted the profession in Canada and worldwide.",
+          "bullets": [],
+          "group": "1. What it means to be an actuary in Canada"
+        },
+        {
+          "letter": "c",
+          "text": "Describe today’s areas of practice.",
+          "bullets": [],
+          "group": "1. What it means to be an actuary in Canada"
+        },
+        {
+          "letter": "d",
+          "text": "Discuss the future of the actuarial profession.",
+          "bullets": [],
+          "group": "1. What it means to be an actuary in Canada"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the different audiences (e.g., peer to peer, within the firm, external clients, customers).",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "b",
+          "text": "Understand cultural diversity and its impact on communication.",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "c",
+          "text": "Develop written and oral communication intended for audiences within and outside the actuary’s organization (i.e., match the audience with the purpose and medium of communication).",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "d",
+          "text": "Establish differences between technical and non-technical writing.",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "e",
+          "text": "Identify the appropriate use of different channels of written communication (e.g., email, letter, memorandum, report, summary).",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "f",
+          "text": "Understand the main characteristics and structure of these channels (i.e., the various parts of a letter, memorandum, report, summary).",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "g",
+          "text": "Compose emails, letters, memorandums, reports, and summaries.",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "h",
+          "text": "Write effective and concise written communication.",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "i",
+          "text": "Prepare meaningful visual media (e.g., charts, tables, infographics, videos) and visual aids (e.g., slides).",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        },
+        {
+          "letter": "j",
+          "text": "Identify key principles of effective public speaking and appropriate delivery techniques for in-person and virtual settings.",
+          "bullets": [],
+          "group": "2. Actuaries and the art of communication"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "B. The actuarial environment",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": "The second portion of the module describes the actuarial environment: the financial systems, the external forces actuaries are facing, the risks stemming from changes in these external forces. Risk management, quantification, mitigation, and transfer are explained in detail. Emerging risks are also described. Finally, the participant is exposed to the impact of regulations on the environment.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Understand how business works in various environments.",
+          "bullets": [],
+          "group": "1. The context of actuarial work"
+        },
+        {
+          "letter": "b",
+          "text": "Outline the context of actuarial work and its main processes.",
+          "bullets": [],
+          "group": "1. The context of actuarial work"
+        },
+        {
+          "letter": "c",
+          "text": "Define the main steps of risk management: identification, quantification, and mitigation.",
+          "bullets": [],
+          "group": "1. The context of actuarial work"
+        },
+        {
+          "letter": "d",
+          "text": "Explain the major sources of risk from (changing) external forces and their impact on our financial system.",
+          "bullets": [],
+          "group": "1. The context of actuarial work"
+        },
+        {
+          "letter": "a",
+          "text": "Describe financial systems within the national and global context.",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the main participants in financial markets and explain their objectives and roles.",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "c",
+          "text": "Describe the major factors affecting the development of financial systems.",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "d",
+          "text": "Explain the main risks to the stability of national and global financial systems.",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "e",
+          "text": "Describe the operations, governance structure, legislative framework, capital, and risk management of Canadian financial institutions (e.g., insurance companies, banks).",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "f",
+          "text": "Describe the determinants of interest rates, price and wage inflation, GDP, and unemployment.",
+          "bullets": [],
+          "group": "2. Financial systems"
+        },
+        {
+          "letter": "a",
+          "text": "Define external forces.",
+          "bullets": [],
+          "group": "3. External forces"
+        },
+        {
+          "letter": "b",
+          "text": "Categorize the forces (e.g., cultural, demographic, economic, physical) and explain how they fit in the actuarial context.",
+          "bullets": [],
+          "group": "3. External forces"
+        },
+        {
+          "letter": "c",
+          "text": "Explain how changes in external forces can lead to risk.",
+          "bullets": [],
+          "group": "3. External forces"
+        },
+        {
+          "letter": "a",
+          "text": "Define and describe risk management in an actuarial context.",
+          "bullets": [],
+          "group": "4. Risks and risk management"
+        },
+        {
+          "letter": "b",
+          "text": "Define risk types and classify them.",
+          "bullets": [],
+          "group": "4. Risks and risk management"
+        },
+        {
+          "letter": "c",
+          "text": "Explain how risk can be transferred to others (e.g., hedging, insurance, reinsurance, specialized markets, retained versus ceded).",
+          "bullets": [],
+          "group": "4. Risks and risk management"
+        },
+        {
+          "letter": "a",
+          "text": "Explain how to identify new relevant risks.",
+          "bullets": [],
+          "group": "5. Emerging risks"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the impact of climate change and cyber risk on actuarial risks.",
+          "bullets": [],
+          "group": "5. Emerging risks"
+        },
+        {
+          "letter": "c",
+          "text": "Explain blockchain and its impact on risk reduction.",
+          "bullets": [],
+          "group": "5. Emerging risks"
+        },
+        {
+          "letter": "a",
+          "text": "Describe the regulatory context and the impact of regulations on actuarial work.",
+          "bullets": [],
+          "group": "6. Regulations"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the international environment for actuarial work.",
+          "bullets": [],
+          "group": "6. Regulations"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "C. Actuarial work",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": "The third portion of the module builds on the actuarial environment and explains how actuaries work to provide sound solutions. An overview of actuarial work is provided, with a particular emphasis on the distinction between actuarial work and that of other financial experts. The actuarial control cycle is introduced, and each component of actuarial work is described. Decision-making and problem solving, and ethics and professionalism are also introduced.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain the difference between the work of an actuary and that of other financial experts.",
+          "bullets": [],
+          "group": "1. Actuarial work"
+        },
+        {
+          "letter": "a",
+          "text": "Describe how actuarial solutions are developed to manage risk.",
+          "bullets": [],
+          "group": "2. The actuarial control cycle and the different steps of actuarial work"
+        },
+        {
+          "letter": "b",
+          "text": "Describe how actuarial solutions are designed and priced.",
+          "bullets": [],
+          "group": "2. The actuarial control cycle and the different steps of actuarial work"
+        },
+        {
+          "letter": "c",
+          "text": "Describe how models are selected and used in actuarial practice.",
+          "bullets": [],
+          "group": "2. The actuarial control cycle and the different steps of actuarial work"
+        },
+        {
+          "letter": "d",
+          "text": "Describe the processes used to determine assumptions.",
+          "bullets": [],
+          "group": "2. The actuarial control cycle and the different steps of actuarial work"
+        },
+        {
+          "letter": "e",
+          "text": "Describe the elements of the process of monitoring results.",
+          "bullets": [],
+          "group": "2. The actuarial control cycle and the different steps of actuarial work"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the dynamics of decision-making and outline its process.",
+          "bullets": [],
+          "group": "3. Decision-making and problem solving"
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate the effect of firm structure and other stakeholders on decision-making.",
+          "bullets": [],
+          "group": "3. Decision-making and problem solving"
+        },
+        {
+          "letter": "c",
+          "text": "Define the impact of political, legislative, economic, societal, and technological trends on business strategy.",
+          "bullets": [],
+          "group": "3. Decision-making and problem solving"
+        },
+        {
+          "letter": "d",
+          "text": "Define, use, and apply the following: effective negotiation, decision-making skills, leadership, strategic insights, relationship management.",
+          "bullets": [],
+          "group": "3. Decision-making and problem solving"
+        },
+        {
+          "letter": "e",
+          "text": "Apply a decision-making process to case studies and problem solving.",
+          "bullets": [],
+          "group": "3. Decision-making and problem solving"
+        },
+        {
+          "letter": "a",
+          "text": "Describe ethics and professionalism and how they apply in everyday work.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the main principles of actuarial professionalism.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "c",
+          "text": "Understand the importance of checking work and the need to consider peer review.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "d",
+          "text": "Understand how to determine and apply professional standards and guidance appropriately, including when an assignment may be governed by professional standards of more than one actuarial organization.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "e",
+          "text": "Understand the importance of being qualified to practice and the impacts of providing an opinion or doing work outside of your domain.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "f",
+          "text": "Describe necessary standards of practice and their impact on actuarial work (e.g., data quality, assumptions).",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        },
+        {
+          "letter": "g",
+          "text": "Understand the principles and importance of diversity, equity, and inclusion.",
+          "bullets": [],
+          "group": "4. Ethics and professionalism"
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

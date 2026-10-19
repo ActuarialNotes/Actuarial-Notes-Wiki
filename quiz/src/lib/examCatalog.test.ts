@@ -28,7 +28,7 @@ interface CatalogRow {
   exam_id: string
   wiki_id: string
   progress_key: string
-  body: 'SOA' | 'CAS'
+  body: 'SOA' | 'CAS' | 'CIA'
   bank: string | null
   status: 'ready' | 'beta' | 'development'
   /** false when the exam's outline publishes no section weights (the DISCs). */

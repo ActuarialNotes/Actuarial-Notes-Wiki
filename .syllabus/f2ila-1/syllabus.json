@@ -1,0 +1,373 @@
+{
+  "wiki_id": "f2ila-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F2ILA",
+  "title": "Exam F2ILA: Product Design and Pricing",
+  "name": "Product Design and Pricing",
+  "track": "ILA",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36227&fid=17011",
+  "source_page": "https://www.cia-ica.ca/publications/223035e/",
+  "source_title": "FCIA Syllabus – Individual life and annuities track",
+  "source_date": "2024-01-29",
+  "source_sha256": "ff0543bc33cd8d299931b668b66d589ebd03f5bc7595fd11ce67173d4e1a9097",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    10,
+    12
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques of pricing that are relevant to life insurance, including techniques to estimate the key components of a technical price.",
+    "2. Apply these principles and techniques within the context of life insurance.",
+    "3. Understand how pricing links to wider business processes (e.g., business planning, estimating reserves, and capital setting).",
+    "4. Create and evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions and to develop appropriate proposals or recommendations relating to pricing life insurance products.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA learning management system. The ranges of weights (in parentheses) attached to the examination topics further below apply to most of the administered exams. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define the principal terms used in pricing life insurance products. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Data",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate the types of data and information required for pricing, their sources, and main uses. (A4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply the concepts of homogeneity and credibility in selecting data for pricing analyses. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze the implications to data requirements of different characteristics of insurance. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate the influence of the insurer’s internal environment (such as changes in operations or IT) on data used for pricing analyses. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the influence of external environments on data used for pricing analyses. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand the possible causes of data errors and the effects of inadequate data and information. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Create appropriate data-validation processes. (C6)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Drivers of product design",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and explain the insurance market stakeholders, how they interact, and their needs: (B2)",
+          "bullets": [
+            "a. Customers;",
+            "b. Distributors;",
+            "c. Internal stakeholders (claims, underwriting, marketing, admin/operations, etc.)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe, explain, and evaluate drivers of product design (B5):",
+          "bullets": [
+            "a. Company strengths and weaknesses;",
+            "b. Economic conditions;",
+            "c. Marketplace demographics;",
+            "d. Consumer behaviour;",
+            "e. Distribution channel behaviour;",
+            "f. Market evolution, such as availability of market data and advancement of technology;",
+            "g. Market shocks (i.e., COVID-19 and the loss of fluid-tested underwriting);",
+            "h. Competition;",
+            "i. Regulatory requirements."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Design and purpose of various product types, benefits, and features",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe, in detail, product types, benefits, and features of life and annuity products. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Construct and recommend designs consistent with the market needs and constraints identified in the idea-generation step. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Evaluate feasibility of designs with respect to: (D5)",
+          "bullets": [
+            "a. Profitability;",
+            "b. Product risk profile;",
+            "c. Systems implementation;",
+            "d. Marketing and competition;",
+            "e. Operations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and apply the principles of macro pricing (project-based analysis vs. unit-based pricing) (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and evaluate how diversification of insurance risks can reduce volatility. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Relationship between the product features, risks, assumptions, and modelling",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and evaluate the setting of appropriate assumptions for product characteristics, like: (B5)",
+          "bullets": [
+            "a. Riders.",
+            "b. Policyholder dividends.",
+            "c. Equity-linked account/fund values.",
+            "d. Embedded options.",
+            "e. Return of premium (e.g., on death, lapse, maturity).",
+            "f. Secondary guarantees.",
+            "g. Premium payment patterns.",
+            "h. Payout annuity benefits.",
+            "i. Crediting methodology."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and evaluate the setting of appropriate assumptions for risks and other factors, like (B5):",
+          "bullets": [
+            "a. Mortality, morbidity, lapse.",
+            "b. Company experience and industry data.",
+            "c. The marketplace.",
+            "d. Underwriting.",
+            "e. Distribution channel characteristics.",
+            "f. Business mix.",
+            "g. Reinsurance.",
+            "h. Expenses (fixed, variable, marginal).",
+            "i. Taxes (income and premium); and",
+            "j. Investment strategy."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze results and recommend actions with respect to risk and profit measures, like: (D5)",
+          "bullets": [
+            "a. IFRS 17;",
+            "b. Rate-of-return measures:",
+            "\ti. ROE, IRR, ROI, ROA;",
+            "\tii. Risk-adjusted versions of i. above;",
+            "c. Market-consistent pricing; and",
+            "d. Embedded value."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze the capital requirements for a product and solutions such as reinsurance and securitization. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the use of generalized linear, stochastic, and multi-state models, the advantages and disadvantages of each, and the methods for their construction (C2).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Interpret and analyze model results described in 5. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe and apply methods for modelling guarantees linked to investment performance and their hedges (GMMB, GMDB, GMAB) (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Draw insights from financial data to validate past decisions and support future proposals. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand source-of-earnings analysis and its use in decision-making with regards to product development and pricing (C5).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Understand, explain, and use results for purposes of decision-making. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Understand and describe Part 2700 of the CIA Standards of Practice – Policyholder Dividend Determination. (C2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Actuarial requirements of product implementation and monitoring",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and evaluate compliance with illustration regulations and other policy-form regulations (C5).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Evaluate variation in the actual experience from expected in assumptions – including (but not limited to) business mix, mortality, investment returns, expenses, and policyholder behavior such as policy and premium persistency – through the use of experience studies. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Evaluate and explain the impact of the variation in the actual experience from expected to other actuaries, insurance professionals, and a non-technical audience. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Recommend changes to non-guaranteed elements for deviations from expected. (C6)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

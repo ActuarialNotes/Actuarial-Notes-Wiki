@@ -1,0 +1,470 @@
+{
+  "wiki_id": "f3gb-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F3GB",
+  "title": "Exam F3GB: Group Benefits Reserving",
+  "name": "Group Benefits Reserving",
+  "track": "GB",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015",
+  "source_page": "https://www.cia-ica.ca/publications/223036e/",
+  "source_title": "FCIA Syllabus – Group benefits track",
+  "source_date": "2024-01-30",
+  "source_sha256": "9da8271fdd48491e46fcc1e9c4482e7e747a8c16ea2b8d4814ff0979968316de",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    11,
+    13
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques for estimating reserves and claims-related expenses that are relevant to group insurance.",
+    "2. Apply these principles and techniques within the context of group insurance.",
+    "3. Evaluate the considerations involved in selecting a best-estimate reserve.",
+    "4. Understand how reserves link to wider business processes (e.g., business planning, pricing, financial reporting, and capital setting).",
+    "5. Describe reporting requirements and calculate actuarial values for financial reporting.",
+    "6. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the valuation of reserves and financial reporting for group insurers. (A1).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Reserving and claim liabilities",
+      "part": null,
+      "weight": [
+        35.0,
+        35.0
+      ],
+      "weight_raw": "35%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Outline the various uses of reserving (life insurance company financial reporting, reporting to client on refund accounting, pricing, etc.) and evaluate their impact on the selection of methods and assumptions. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply the Canadian Asset Liability Method (CALM). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Evaluate the impact of IFRS 17 on group insurance reserving. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply the applicable standards of practice (SOP). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify the applicable educational notes. (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand, calculate, and evaluate provisions for adverse deviations (PfADs). (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Compare and contrast aggregate and seriatim approaches. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe current tables/studies used in valuation (CIA experience analyses, group long-term disability (GLTD), Krieger, SOA tables, etc.). (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Perform calculations for waiver of premiums (WP). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Perform calculations for LTD (disabled reserves). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Perform calculations for non-traditional approaches (WP and LTD reserves based on medical prognosis, etc.). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Perform calculations for incurred but not reported (IBNR) reserves (including the chain-ladder method). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Perform analysis on different reserving methods. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 14,
+          "text": "Evaluate stochastic approaches to calculation of group insurance reserves. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 15,
+          "text": "Evaluate stop-loss reserves reflecting timing mismatch between premium and claims. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 16,
+          "text": "Explain the limitations and biases of the traditional valuation methods. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 17,
+          "text": "Evaluate data resources and appropriateness for calculating reserves. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 18,
+          "text": "Describe the role and responsibilities of the appointed/valuation actuary. (B2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Benefit taxation",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the following benefit taxation features and perform related calculations: (C4)",
+          "bullets": [
+            "a. Income tax – federal (including relevant folios and interpretation bulletins).",
+            "b. Income tax – provincial (including differences with federal income tax).",
+            "c. Premium sales taxes and similar taxes.",
+            "d. Other premium taxes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and perform calculations to evaluate the impact of taxation on: (C5)",
+          "bullets": [
+            "a. Claims.",
+            "b. Plan design, including flexible benefits plans.",
+            "c. Plan funding (cross-experience rating, cost sharing, etc.)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and perform calculations relative to alternate benefit funding structures such as (C3):",
+          "bullets": [
+            "a. Administrative services only (ASO).",
+            "b. Employee life and health trusts."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Employee benefits accounting",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare post-retirement benefits vs. benefits while not actively at work. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Evaluate actuarial aspects of accounting for employee future benefits: (D5)",
+          "bullets": [
+            "a. Canadian accounting recommendations under IAS 19.",
+            "b. CPA section 3462–3463 (private sector and not-for-profit).",
+            "c. CPA 3250, and CPA 3255 (public sector) plus non-Canadian accounting recommendations (Accounting Standards Codification [ASC]) 715/712 – U.S. regarding employee future benefits."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Calculate actuarial liabilities and other accounting items related to employee future benefits. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply CIA practice-specific standards to employee benefits. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze the following issues related to post-employment benefits: (D4)",
+          "bullets": [
+            "a. Why employers offer post-retirement and post-employment benefits.",
+            "b. Cost inflation.",
+            "c. Selection.",
+            "d. Reasonability of assumptions."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Insurance company financial reporting",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Generate a basic financial statement and its components, including the impact of IFRS 17. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the following concepts and perform relevant calculations: (C3)",
+          "bullets": [
+            "a. Canada Annual Statement: statements, key exhibits, and schedules.",
+            "b. Taxable income.",
+            "c. Fair-value accounting principles.",
+            "d. International accounting standards.",
+            "e. Actuarial reviews of reserves."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply the IFRS 17 general method approach, variable fee approach, and premium allocation approach. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Financial and capital management",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate surplus management and earnings management (D4).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe creation of value from a financial economics perspective (C4).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Relative to economic capital,",
+          "bullets": [
+            "a. analyze the significant risk components; (C4)",
+            "b. select calculation methods appropriate to stakeholders’ perspectives; and (D3)",
+            "c. describe how a company would implement an economic cap.(C5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate the use of reinsurance as a capital management technique. (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Asset and liability management",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare and contrast asset models. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Compare and contrast asset allocation across the various lines of business of an insurer. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline the selection process of assets for backing group insurance liabilities. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and apply the relationship between interest rate guarantees on refund arrangements and selection of assets. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Compare and contrast the relationship between asset liability management (ALM) at the corporate level and ALM at the line-of-business level. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Analyze liability models related to group insurance. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Interpret and develop appropriate presentation of results. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Evaluate the impacts of interest-crediting rates on pricing for new business. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Evaluate the impacts of interest-crediting rates on valuation of liabilities. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Assess risk margins related to the rate of return of assets. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

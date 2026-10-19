@@ -1,0 +1,435 @@
+{
+  "wiki_id": "f3pc-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F3PC",
+  "title": "Exam F3PC: ERM, Economic Capital Modelling, and Stress and Scenario Testing",
+  "name": "ERM, Economic Capital Modelling, and Stress and Scenario Testing",
+  "track": "PC",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019",
+  "source_page": "https://www.cia-ica.ca/publications/223037e/",
+  "source_title": "FCIA Syllabus – Property and casualty track",
+  "source_date": "2025-10-30",
+  "source_sha256": "0575840476ad793f948c74b31fa387d8c7381fb377295679a9347728644b9a39",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    13,
+    16
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques of enterprise risk management (ERM) and economic capital modelling that are relevant to P&C insurance.",
+    "2. Apply these principles and techniques within the context of P&C insurance.",
+    "3. Understand how ERM and economic capital modelling links to wider business processes (e.g., business planning, pricing, estimating unpaid claims, and capital setting).",
+    "4. Create and evaluate hypothetical scenarios, including using judgement to assess the implications of possible actions and to develop appropriate proposals or recommendations for P&C insurers.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in ERM, economic capital modelling, and stress and scenario testing. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "ERM concept, framework, and process",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply the concept of ERM. (D3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply the framework for risk management and control within an insurer. (D3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe regulatory requirements related to ERM, including own-risk and solvency assessment (ORSA). (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the perspectives of credit-rating agencies. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Reflect data issues in general and special considerations with respect to ERM. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Demonstrate how to determine and articulate: (C3)",
+          "bullets": [
+            "a. Risk appetite",
+            "b. Risk identification.",
+            "c. Risk assessment.",
+            "d. Risk monitoring.",
+            "e. Risk limits.",
+            "f. Risk mitigation.",
+            "g. Risk capacity.",
+            "h. Risk tolerances.",
+            "i. Desired risk profile.",
+            "j. Risk objectives.",
+            "k. Risk reporting."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Assess the implications of financial and other risks and opportunities for strategic planning. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe the risk management control cycle, including the relevance of external influences and emerging risks. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Utilize methods to identify risks and their causes and implications. (D4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Risk categories and risk identification",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain what is meant by risk and uncertainty, including different definitions and concepts of risk. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe risk taxonomy, including an awareness of how individual risks might be categorized in different ways. (B1)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe common risks faced by P&C insurers, including: (B2)",
+          "bullets": [
+            "a. Insurance risk (e.g., pricing, catastrophe, and reserving).",
+            "b. Credit risk.",
+            "c. Market risk.",
+            "d. Liquidity risk.",
+            "e. Operational risk.",
+            "f. ESG and climate-related risks.",
+            "g. Foreign exchange risk.",
+            "h. Regulatory risk.",
+            "i. Political risk.",
+            "j. Reputational risk.",
+            "k. Strategic risk."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze the relationship between systemic risk vs. non-systemic and specific risk vs. concentration of risk. (B4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Economic capital modelling and aggregation of risks",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the extent to which each of the risks in 3.3 can be amenable to quantitative analysis. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Demonstrate an understanding of the use of correlation measures.",
+          "bullets": [
+            "a. Describe enterprise-wide risk-aggregation techniques that incorporate the use of correlation. (C5)",
+            "b. Apply different correlation measures based on their relative merits and implications. (C4)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply copulas as part of the process of modelling multivariate risks and evaluate different types of copulas for a given situation. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Reflect the importance of the tails of distributions, tail correlations, and low frequency/high severity events. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe how extreme-value theory can be used to help model risks that have a low probability. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Demonstrate how model and parameter risk can be incorporated into an economic capital model. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Use economic capital models in the overall ERM decision-making process. (C4)",
+          "bullets": [
+            "a. Describe the development and use of models for decision-making purposes in ERM. (B2)",
+            "b. Demonstrate how the decision-making process considers the organization’s risk appetite and corporate governance and builds on the results of stochastic modelling, scenario analysis, stress testing, and analysis of model and parameter risk. (D4)",
+            "c. Evaluate different types of models for a given purpose. (D5)"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Risk measurement and assessment",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Using common risk measures (such as VAR, TVAR, and probability of ruin), determine risk exposures and tolerances using these measures. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the key considerations in deriving and applying economic capital modelling techniques using deterministic and stochastic models. (D2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Recommend a specific choice of model based on the results of both quantitative and qualitative analysis of financial and insurance data. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe approaches, including parameterization and validation, for the assessment of capital requirements for the following risk types: (C2)",
+          "bullets": [
+            "a. Catastrophe.",
+            "b. Underwriting and pricing.",
+            "c. Reserving.",
+            "d. Credit.",
+            "e. Climate related.",
+            "f. Liquidity.",
+            "g. Operational."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the practical considerations (including data availability, parameterization, and validation procedures) that should be borne in mind when undertaking capital modelling. (D2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Calculate regulatory capital requirement (P&C-4). (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Demonstrate an understanding of regulators’ guidance and context for different approaches to responsible investment and, specifically, the integration of environmental, social, and governance (ESG) factors in the investment process. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Demonstrate an understanding of the underlying issues that constitute factors within each of the ESG areas. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Demonstrate an understanding of the ESG market: relevance, size, scope, key drivers and challenges, and risks and opportunities. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Stress and scenario testing",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the use of scenario analysis and stress testing (including reverse stress testing) in the risk-measurement process, including the advantages and disadvantages of each. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the Appointed Actuary’s responsibilities related to financial condition testing (FCT). (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain the primary categories of risk associated with climate change from a P&C insurer’s perspective, including:",
+          "bullets": [
+            "a. Transition risk; (A2)",
+            "b. Physical risk and environmental risks; and (A2)",
+            "c. Liability risk. (A2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the actuary’s role with respect to climate-change risk. (B2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Capital management",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply key elements of ORSA and FCT, specifically risk identification and assessment, quantification of risk to capital requirements, the Appointed Actuary’s role, board oversight and senior management responsibility, monitoring, reporting, and internal controls. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Demonstrate an understanding of capital calculations.",
+          "bullets": [
+            "a. Utilize the concept of economic measures of value and capital and their uses in corporate decision-making processes. (D5)",
+            "b. Evaluate different risk measures and capital-assessment approaches. (D5)",
+            "c. Demonstrate the ability to develop a capital model for a representative financial firm. (D6)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Compare techniques for allocating capital across an organization. (C4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

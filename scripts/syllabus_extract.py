@@ -824,6 +824,604 @@ def run_module(wiki_id: str) -> dict:
     return data
 
 
+# ── the CIA's syllabi ────────────────────────────────────────────────────────
+#
+# The Canadian Institute of Actuaries publishes one syllabus per FCIA track —
+# its three exams and two modules in one PDF — and one for the ACIA modules
+# and Capstone Exam. The documents are typeset alike, and are read by their
+# type and indentation rather than their words:
+#
+#   Exam F1PC: Pricing                          13pt bold — an exam or module
+#   Part A – Principles and practice …          a module's part (12–13pt)
+#     2. Regulations and applicable standards (15%)   9pt bold — a topic
+#        1.  Apply relevant legislation … (A3)        an objective, Bloom code kept
+#            a.  Loss ratio;                          its lettered sub-items
+#                i. Analytic; and                     and theirs
+#
+# An exam's first topic, *Principal terms*, carries no weight: the terms are
+# examined inside every other topic, which together are weighted to 100%. It
+# is transcribed as {0%}, the way GI 101's Topic 7 is, so readiness gives it no
+# weight of its own. The ACIA modules have no weights at all; each lettered
+# section is a topic, its *Description:* the objective, its numbered headings
+# the groups its lettered objectives sit under.
+#
+# Neither document lists readings — the FCIA exams are open-book and the
+# modules carry their material in the CIA's learning management system — so a
+# page's one source is the syllabus itself (`readings`). Each URL is the
+# document's own download link on its cia-ica.ca publication page, read
+# 2026-10-19; the publication page is kept beside it.
+
+CIA = "https://www.cia-ica.ca"
+CIA_DL = f"{CIA}/app/themes/wicket/custom/dl_file.php"
+CIA_TRACKS: dict[str, dict[str, str]] = {
+    # `date` is the version's: the PC syllabus was reposted on 30 Oct 2025; the
+    # other four are the PDFs created in January 2024 (printed © 2024), which
+    # their publication pages still date to their first posting, 3 Feb 2023.
+    "PC": {"name": "Property and casualty track", "page": f"{CIA}/publications/223037e/",
+           "url": f"{CIA_DL}?p=36231&fid=17019", "date": "2025-10-30"},
+    "ILA": {"name": "Individual life and annuities track", "page": f"{CIA}/publications/223035e/",
+            "url": f"{CIA_DL}?p=36227&fid=17011", "date": "2024-01-29"},
+    "GB": {"name": "Group benefits track", "page": f"{CIA}/publications/223036e/",
+           "url": f"{CIA_DL}?p=36229&fid=17015", "date": "2024-01-30"},
+    "RET": {"name": "Retirement benefits track", "page": f"{CIA}/publications/223038e/",
+            "url": f"{CIA_DL}?p=36233&fid=17023", "date": "2024-02-02"},
+    "FIE": {"name": "Finance, investments and ERM with option in Banking",
+            "page": f"{CIA}/publications/223034e/", "url": f"{CIA_DL}?p=36225&fid=17007", "date": "2024-01-30"},
+}
+CIA_ACIA = {"name": "ACIA Capstone Exam and Modules", "page": f"{CIA}/publications/997001e/",
+            "url": f"{CIA_DL}?p=608114&fid=627235", "date": "2026-01-19"}
+
+CIA_EXAM_RE = re.compile(r"^Exam (F[123](?:PC|ILA|GB|RET|FIE|BNK)):\s*(.+)$")
+CIA_MODULE_RE = re.compile(r"^(PC|ILA|GB|RET|FIE|ACIA) Module ([12])(?::\s*(.*))?$")
+CIA_TOPIC_RE = re.compile(r"^(\d+)\.\s+(.+?)(?:\s*\((\d+(?:\.\d+)?)%\))?$")
+CIA_NUM_RE = re.compile(r"^(\d+)\.\s*(.*)$")
+CIA_LETTER_RE = re.compile(r"^([a-z])\.\s*(.*)$")
+CIA_ROMAN_RE = re.compile(r"^((?:i|ii|iii|iv|v|vi|vii|viii|ix|x)\.)\s*(.*)$")
+
+
+def cia_lines(pdf_path: str) -> list[dict]:
+    """Every text line with its column, size and weight, page furniture
+    (page numbers, the *Last updated* stamp, the back cover) removed."""
+    import pymupdf  # lazy
+
+    out: list[dict] = []
+    with pymupdf.open(pdf_path) as doc:
+        for page in doc:
+            for block in page.get_text("dict")["blocks"]:
+                for line in block.get("lines", []):
+                    spans = [s for s in line["spans"] if s["text"].strip()]
+                    if not spans:
+                        continue
+                    text = norm(clean("".join(s["text"] for s in spans)))
+                    size = round(spans[0]["size"])
+                    if size <= 8 or text.startswith("Last updated"):
+                        continue
+                    if text.startswith("©"):
+                        return out
+                    out.append({"x": round(line["bbox"][0]), "y": round((line["bbox"][1] + line["bbox"][3]) / 2), "size": size,
+                                "bold": "Bold" in spans[0]["font"], "text": text, "page": page.number + 1})
+    return out
+
+
+def _paragraphs(texts: list[str]) -> list[str]:
+    """Lines reflowed into paragraphs: a line ending a sentence (or a lead-in's
+    colon) ends its paragraph."""
+    paras: list[str] = []
+    cur = ""
+    for t in texts:
+        cur = join_wrapped(cur, t) if cur else t
+        if re.search(r"[.:;]\)?$", t):
+            paras.append(norm(cur))
+            cur = ""
+    if cur:
+        paras.append(norm(cur))
+    return paras
+
+
+def _cia_units(lines: list[dict]) -> list[dict]:
+    """Cut a CIA syllabus into its exams and modules: each unit's title, the
+    lines under it, and the overview paragraphs that precede its group (the
+    exams' *Background*, the modules' *Background*)."""
+    units: list[dict] = []
+    overview: dict[str, list[str]] = {"exam": [], "module": []}
+    section = None          # which overview the 9pt body text belongs to
+    cur = None
+    for i, l in enumerate(lines):
+        t = l["text"]
+        title = l["size"] >= 13 and l["bold"] and not t.startswith("Part ")
+        if title:
+            prev = lines[i - 1] if i else None
+            if cur and prev and prev["size"] == l["size"] and prev["bold"] and cur["lines"] == [] \
+                    and not CIA_EXAM_RE.match(t) and not CIA_MODULE_RE.match(t):
+                cur["title"] = join_wrapped(cur["title"], t)     # a title that wraps
+                continue
+            if CIA_EXAM_RE.match(t) or CIA_MODULE_RE.match(t):
+                cur = {"title": t, "lines": [], "kind": "exam" if t.startswith("Exam") else "module", "page": l["page"]}
+                units.append(cur)
+            else:
+                cur = None
+                if re.search(r"exams? syllabuses overview|^ACIA Module Syllabus$", t, re.I):
+                    section = "exam" if "exam" in t.lower() else "module"
+                elif re.search(r"modules syllabuses overview", t, re.I):
+                    section = "module"
+                elif l["size"] >= 16:
+                    section = None
+            continue
+        if cur is None:
+            if section and l["size"] == 9 and l["x"] < 80:
+                overview[section].append(t)
+            continue
+        cur["lines"].append(l)
+    for u in units:
+        u["overview"] = _paragraphs(overview[u["kind"]])
+    return units
+
+
+def _cia_exam_topics(lines: list[dict]) -> tuple[list[str], list[dict]]:
+    """An FCIA exam or module: its aim (the lines before the first topic) and
+    its topics. Columns: topic 78, objective number 96 / text 114, a lettered
+    item 132 / its text 150, a roman item ~170 / its text 186."""
+    aim: list[str] = []
+    topics: list[dict] = []
+    part = None
+    topic = obj = None
+    target = None            # where a continuation line goes: (dict, key)
+    for l in lines:
+        t, x = l["text"], l["x"]
+        if t.startswith("Part ") and l["size"] >= 12:
+            part, topic, obj, target = t, None, None, None
+            continue
+        if l["bold"] and 74 <= x <= 84:
+            m = CIA_TOPIC_RE.match(t)
+            if m:
+                weight = float(m.group(3)) if m.group(3) else None
+                topic = {"num": int(m.group(1)), "title": m.group(2).strip(), "part": part,
+                         "weight": [weight, weight] if weight is not None else [0, 0],
+                         "weight_raw": f"{m.group(3)}%" if m.group(3) else None,
+                         "objective": None, "outcomes": [], "resources": []}
+                topics.append(topic)
+                obj, target = None, None
+            elif topic is not None:      # a topic title that wraps
+                title = join_wrapped(topic["title"], t)
+                w = re.search(r"\s*\((\d+(?:\.\d+)?)%\)$", title)
+                if w:
+                    title = title[: w.start()]
+                    topic["weight"] = [float(w.group(1))] * 2
+                    topic["weight_raw"] = f"{w.group(1)}%"
+                topic["title"] = title
+            continue
+        if topic is None:
+            aim.append((x, t))
+            continue
+        if 90 <= x <= 100:
+            m = CIA_NUM_RE.match(t)
+            if m:
+                obj = {"letter": None, "num": int(m.group(1)), "text": m.group(2), "bullets": [], "group": None}
+                topic["outcomes"].append(obj)
+                target = (obj, "text")
+                continue
+        if 126 <= x <= 136 and obj is not None:
+            m = CIA_LETTER_RE.match(t)
+            if m:
+                obj["bullets"].append(f"{m.group(1)}. {m.group(2)}".rstrip())
+                target = (obj["bullets"], len(obj["bullets"]) - 1)
+                continue
+        if 164 <= x <= 176 and obj is not None:
+            m = CIA_ROMAN_RE.match(t)
+            if m:
+                obj["bullets"].append(f"\t{m.group(1)} {m.group(2)}".rstrip())
+                target = (obj["bullets"], len(obj["bullets"]) - 1)
+                continue
+        if target is None:
+            raise ValueError(f"page {l['page']}: a line with nowhere to go: {t!r}")
+        holder, key = target
+        holder[key] = join_wrapped(holder[key], t) if holder[key].strip() else (holder[key] + t)
+    for tp in topics:
+        for o in tp["outcomes"]:
+            o["text"] = norm(o["text"])
+            o["bullets"] = [("\t" if b.startswith("\t") else "") + norm(b) for b in o["bullets"]]
+    return _aim_paragraphs(aim), topics
+
+
+def _aim_paragraphs(aim: list[tuple[int, str]]) -> list[str]:
+    """An exam's aim: its lead-in and the skills it lists, one paragraph each.
+    Some list the skills numbered (a number at 90, its text at 108), some as
+    bare lines at the margin; a skill ends where its sentence does."""
+    items: list[str] = []
+    cur = ""
+    for x, t in aim:
+        m = CIA_NUM_RE.match(t) if 86 <= x <= 94 else None
+        if m:
+            if cur:
+                items.append(norm(cur))
+            cur = f"{m.group(1)}. {m.group(2)}".rstrip()
+            continue
+        cur = join_wrapped(cur, t) if cur else t
+        if re.search(r"[.:]\)?$", t):
+            items.append(norm(cur))
+            cur = ""
+    if cur:
+        items.append(norm(cur))
+    # The skills after the lead-in are a list; the numbered ones keep their
+    # number, the bare ones become bullets.
+    return [x if i == 0 or CIA_NUM_RE.match(x) else f"- {x}" for i, x in enumerate(items)]
+
+
+def _acia_module_topics(lines: list[dict]) -> list[dict]:
+    """An ACIA module: a topic per lettered section (12pt), its *Description:*
+    the objective, a numbered heading (90/108) the group its lettered
+    objectives (122/140) sit under."""
+    topics: list[dict] = []
+    topic = obj = None
+    group = None
+    target = None
+    mode = None
+    for l in lines:
+        t, x = l["text"], l["x"]
+        if l["size"] == 12 and re.match(r"^[A-Z]\.\s", t):
+            topic = {"num": len(topics) + 1, "title": t, "part": None, "weight": None, "weight_raw": None,
+                     "objective": "", "outcomes": [], "resources": []}
+            topics.append(topic)
+            obj, group, target, mode = None, None, None, "description"
+            continue
+        if topic is None:
+            continue
+        if t.startswith("Description:"):
+            topic["objective"] = t.removeprefix("Description:").strip()
+            target = (topic, "objective")
+            continue
+        if t.startswith("Content and learning objectives"):
+            mode, target = "objectives", None
+            continue
+        if mode == "objectives" and 86 <= x <= 94:
+            m = CIA_NUM_RE.match(t)
+            if m:
+                group = {"text": f"{m.group(1)}. {m.group(2)}".rstrip()}
+                target = (group, "text")
+                continue
+        if mode == "objectives" and 118 <= x <= 126:
+            m = CIA_LETTER_RE.match(t)
+            if m:
+                obj = {"letter": m.group(1), "text": m.group(2), "bullets": [], "group": group}
+                topic["outcomes"].append(obj)
+                target = (obj, "text")
+                continue
+        if target is None:
+            raise ValueError(f"page {l['page']}: a line with nowhere to go: {t!r}")
+        holder, key = target
+        holder[key] = join_wrapped(holder[key], t) if holder[key] else t
+    for tp in topics:
+        tp["objective"] = norm(tp["objective"])
+        for o in tp["outcomes"]:
+            o["text"] = norm(o["text"])
+            o["group"] = norm(o["group"]["text"]) if o["group"] else None
+    return topics
+
+
+# ── the ACIA Capstone Exam ───────────────────────────────────────────────────
+#
+# The ACIA syllabus's second half is the Capstone Exam's: a preamble, six
+# general learning objectives, a table of which syllabus sections each part of
+# the exam assesses, an appendix of those sections (A1–A5, each lettered
+# objective under a numbered sub-section) and, last, tables of background
+# readings by section. The appendix is the page's topics — no weights — and the
+# reading tables its readings — ruled tables, read by PyMuPDF's table finder:
+# a reading and an alternate (tables 1–3), or a reading and two alternates
+# (table 4).
+
+CAPSTONE_CODE_RE = re.compile(r"^A\d\.\d+$")
+CAPSTONE_GROUP_RE = re.compile(r"^(A\d\.\d+)\s+(.+)$")
+ISBN_IN_RE = re.compile(r"ISBN:\s*([\d-]+)")
+
+
+def _headed(lines: list[dict]) -> list[tuple[str, list[dict]]]:
+    """The document cut at its 13–16pt bold headings."""
+    out: list[tuple[str, list[dict]]] = []
+    for l in lines:
+        if l["bold"] and l["size"] >= 13 and l["x"] < 80:
+            if out and out[-1][1] == [] and l["size"] == 16 and out[-1][0].endswith(("ACIA", "the ACIA")):
+                out[-1] = (join_wrapped(out[-1][0], l["text"]), [])
+                continue
+            out.append((l["text"], []))
+        elif out:
+            out[-1][1].append(l)
+    return out
+
+
+def _numbered(lines: list[dict]) -> list[str]:
+    """A section's paragraphs (margin text), numbered items (90/108) and their
+    lettered sub-items (122/140), as callout-ready text: an item is `1. …`,
+    a sub-item `   - a. …` on the line beneath."""
+    out: list[str] = []
+    margin: list[str] = []
+    item = None
+    for l in lines:
+        t, x = l["text"], l["x"]
+        if x < 80:
+            if item is not None:
+                out.append(item)
+                item = None
+            margin.append(t)
+            continue
+        if margin:
+            out += _paragraphs(margin)
+            margin = []
+        m = CIA_NUM_RE.match(t) if 86 <= x <= 94 else None
+        n = CIA_LETTER_RE.match(t) if 118 <= x <= 126 else None
+        if m:
+            if item is not None:
+                out.append(item)
+            item = f"{m.group(1)}. {m.group(2)}".rstrip()
+        elif n and item is not None:
+            item += f"\n   - {n.group(1)}. {n.group(2)}".rstrip()
+        elif item is not None:
+            item = join_wrapped(item, t) if not item.endswith(". ") else item + t
+    if item is not None:
+        out.append(item)
+    if margin:
+        out += _paragraphs(margin)
+    return [norm(x) if "\n" not in x else "\n".join(norm(y) if not y.startswith("   ") else "   " + norm(y) for y in x.split("\n")) for x in out]
+
+
+def _assessed(lines: list[dict]) -> list[str]:
+    """*Topics assessed on the exam*: its lead, then one line per part of the
+    exam — the part, its length, the university-degree sections and the ACIA
+    module sections it draws on — then the note beneath the table. The table
+    is unruled, so a cell's lines are placed by column (where they start) and
+    by row (the part label nearest them); a cell's lines are its list, a line
+    ending "and" running on."""
+    page = lines[0]["page"]
+    label = re.compile(r"^\d[ab]?\. [A-Z]+$")
+    table = [l for l in lines if l["page"] == page and not l["bold"]]
+    anchors = [l for l in table if 74 <= l["x"] <= 84 and label.match(l["text"])]
+    rows = [{"y": a["y"], "part": a["text"], "duration": [], "degree": [], "module": []} for a in anchors]
+    for l in table:
+        if l in anchors or l["x"] < 80 or not rows:
+            continue
+        row = min(rows, key=lambda r: abs(r["y"] - l["y"]))
+        row["duration" if l["x"] < 200 else "degree" if l["x"] < 390 else "module"].append(l["text"])
+
+    def listed(cell: list[str]) -> str:
+        out = ""
+        for line in cell:
+            out = f"{out} {line}" if out.endswith(" and") else f"{out}; {line}" if out else line
+        return norm(out)
+
+    margin = [l for l in lines if l["x"] < 80 and not l["bold"] and l not in anchors]
+    lead = _paragraphs([l["text"] for l in margin if l["page"] == page])
+    note = _paragraphs([l["text"] for l in margin if l["page"] > page])
+    parts = [f"- {r['part']} ({listed(r['duration'])}) — from an accredited university degree: "
+             f"{listed(r['degree'])} — from the ACIA module: {listed(r['module'])}" for r in rows]
+    return lead + parts + note
+
+
+def _capstone_topics(lines: list[dict]) -> list[dict]:
+    """The appendix: a topic per `A1. Probability` (13pt), a group per
+    `A1.1 Probability` (12pt), lettered objectives (122/140) and their roman
+    sub-items (166/184)."""
+    topics: list[dict] = []
+    topic = obj = group = None
+    target = None
+    for l in lines:
+        t, x = l["text"], l["x"]
+        if l["size"] == 13 and l["bold"] and re.match(r"^A\d\.\s", t):
+            topic = {"num": len(topics) + 1, "title": t, "part": None, "weight": None, "weight_raw": None,
+                     "objective": None, "outcomes": [], "resources": []}
+            topics.append(topic)
+            obj, group, target = None, None, None
+            continue
+        if topic is None:
+            continue
+        if l["size"] == 12:
+            m = CAPSTONE_GROUP_RE.match(t)
+            group = f"{m.group(1)} {m.group(2)}" if m else t
+            obj, target = None, None
+            continue
+        if x < 80 and group and obj is None:
+            # A sub-section's lead-in ("For frequency, severity, and aggregate
+            # models:") rides with its heading.
+            group = f"{group} — {t}" if " — " not in group else join_wrapped(group, t)
+            continue
+        if 118 <= x <= 126:
+            m = CIA_LETTER_RE.match(t)
+            if m:
+                obj = {"letter": m.group(1), "text": m.group(2), "bullets": [], "group": group}
+                topic["outcomes"].append(obj)
+                target = (obj, "text")
+                continue
+        if 162 <= x <= 170 and obj is not None:
+            m = CIA_ROMAN_RE.match(t)
+            if m:
+                obj["bullets"].append(f"{m.group(1)} {m.group(2)}".rstrip())
+                target = (obj["bullets"], len(obj["bullets"]) - 1)
+                continue
+        if target is None:
+            raise ValueError(f"page {l['page']}: a line with nowhere to go: {t!r}")
+        holder, key = target
+        holder[key] = join_wrapped(holder[key], t) if holder[key].strip() else holder[key] + t
+    for tp in topics:
+        for o in tp["outcomes"]:
+            o["text"] = norm(o["text"])
+            o["group"] = norm(o["group"]) if o["group"] else None
+            o["bullets"] = [norm(b) for b in o["bullets"]]
+    return topics
+
+
+def _reading_cell(text: str) -> dict | None:
+    """One reading cell: the work's title, its authors and ISBN where the cell
+    prints them (a work's first row), and what it assigns."""
+    text = norm(text)
+    if not text or text in ("N/A", "Background") or text.startswith(("Not on the", "CIA accredited")):
+        return None
+    isbn = ISBN_IN_RE.search(text)
+    head = re.split(r"\s+(?:Authors?:|ISBN:|Chapters?\s|Sections?\s)", text, maxsplit=1)[0].strip()
+    assign = re.search(r"\b(Chapters?\s.*)$", text)
+    authors = re.search(r"Authors?:\s*(.+?)(?=\s+ISBN:|\s+Chapters?\s|$)", text)
+    return {"title": head.rstrip(" ,"), "authors": authors.group(1).strip() if authors else None,
+            "isbn": isbn.group(1) if isbn else None, "assign": assign.group(1).strip() if assign else None}
+
+
+def _cell_text(cell: str | None) -> str:
+    """A table cell's lines joined as the PDF wraps them (an ISBN broken at a
+    hyphen is rejoined)."""
+    out = ""
+    for line in clean(cell or "").split("\n"):
+        out = join_wrapped(out, line) if out else line.strip()
+    return norm(out)
+
+
+def _capstone_readings(pdf_path: str, first_page: int) -> list[dict]:
+    """The background-reading tables, read with PyMuPDF's table finder (the
+    tables are ruled): for every syllabus section with a reading, each reading
+    and alternate and what it assigns for that section."""
+    import pymupdf  # lazy
+
+    rows: list[list[str]] = []
+    with pymupdf.open(pdf_path) as doc:
+        for page in doc:
+            if page.number + 1 < first_page:
+                continue
+            for table in page.find_tables().tables:
+                for row in table.extract():
+                    cells = [_cell_text(c) for c in row]
+                    if cells and CAPSTONE_CODE_RE.match(cells[0]):
+                        rows.append(cells)
+    readings: list[dict] = []
+    known: dict[str, dict] = {}      # title → its first cell (authors, ISBN)
+    for code, topic, section, *refs in rows:
+        for i, cell in enumerate(refs):
+            c = _reading_cell(cell)
+            if c is None:
+                continue
+            first = known.setdefault(c["title"], c)
+            what = f"{code} {topic} ({section})" + (f": {c['assign']}" if c["assign"] else "")
+            if i:
+                what += " — alternate reading"
+            readings.append({"citation": first["title"], "authors": first["authors"], "isbn": first["isbn"],
+                             "codes": code, "parts": [{"text": what, "codes": ""}]})
+    return readings
+
+
+def capstone_extract(pdf_path: str, doc: dict) -> dict:
+    with open(pdf_path, "rb") as fh:
+        sha = hashlib.sha256(fh.read()).hexdigest()
+    lines = [l for l in cia_lines(pdf_path) if "....." not in l["text"] and l["page"] > 2]
+    sections = _headed(lines)
+    by = {title: body for title, body in sections}
+    intro: list[str] = []
+    intro += _paragraphs([l["text"] for l in by["Preamble"]])
+    intro += _numbered(by["General learning objectives"])
+    intro += _assessed(by["Topics assessed on the exam"])
+    intro += _numbered(by["Considerations on exam/performance assessment by the CIA"])
+    first = next(i for i, l in enumerate(lines) if l["text"].startswith("Appendix to the ACIA Capstone"))
+    reading_at = next(i for i, l in enumerate(lines) if l["text"].startswith("Background reading references"))
+    topics = _capstone_topics(lines[first + 1:reading_at])
+    readings = _capstone_readings(pdf_path, lines[reading_at]["page"])
+    pages = [l["page"] for l in lines if l["text"] == "ACIA Capstone Exam Syllabus"]
+    return {
+        "wiki_id": "acia-capstone",
+        "body": "CIA",
+        "shape": "cia-exam",
+        "code": "ACIA-CAPSTONE",
+        "title": "ACIA Capstone Exam",
+        "name": "ACIA Capstone Exam",
+        "track": None,
+        "sitting": "",
+        "source_url": doc["url"],
+        "source_page": doc["page"],
+        "source_title": f"CIA Education Syllabus – {doc['name']}",
+        "source_date": doc["date"],
+        "source_sha256": sha,
+        "extracted_at": date.today().isoformat(),
+        "pages": [pages[0] if pages else 8, lines[-1]["page"]],
+        "intro": intro,
+        "topics": topics,
+        "readings": readings,
+    }
+
+
+def cia_extract(pdf_path: str, doc: dict, track: str | None) -> list[dict]:
+    """Every exam and module a CIA syllabus holds, one `syllabus.json` each."""
+    with open(pdf_path, "rb") as fh:
+        sha = hashlib.sha256(fh.read()).hexdigest()
+    out = []
+    for u in _cia_units(cia_lines(pdf_path)):
+        exam = CIA_EXAM_RE.match(u["title"])
+        module = CIA_MODULE_RE.match(u["title"])
+        if exam:
+            code, name = exam.group(1), exam.group(2)
+            wiki_id, shape = code.lower() + "-1", "cia-exam"
+        else:
+            code = f"{module.group(1)}-M{module.group(2)}"
+            name = module.group(3) or ""
+            wiki_id, shape = code.lower(), "cia-module"
+        if track is None and not module:
+            continue        # the ACIA syllabus's Capstone Exam is not read here
+        if module and module.group(1) == "ACIA":
+            aim, topics = [], _acia_module_topics(u["lines"])
+        else:
+            aim, topics = _cia_exam_topics(u["lines"])
+        if not topics:
+            raise ValueError(f"{u['title']}: no topics read")
+        if module:      # a module's sections are not weighted
+            for tp in topics:
+                tp["weight"] = None
+        # Of the overview, only what is about sitting the exam or taking the
+        # module: the history paragraph (which in the PC syllabus names the GB
+        # track by mistake), the track table and the Bloom's taxonomy note
+        # are about the document, and a lead-in to a list it drops ends ':'.
+        if u["kind"] == "exam":
+            overview = [p for p in u["overview"] if p.startswith("Exams are administered")]
+        else:
+            overview = [p for p in u["overview"] if not p.endswith(":")]
+        out.append({
+            "wiki_id": wiki_id,
+            "body": "CIA",
+            "shape": shape,
+            "code": code,
+            "title": u["title"],
+            "name": name.strip(),
+            "track": track,
+            "sitting": "",
+            "source_url": doc["url"],
+            "source_page": doc["page"],
+            "source_title": f"{'FCIA Syllabus – ' + doc['name'] if track else 'CIA Education Syllabus – ' + doc['name']}",
+            "source_date": doc["date"],
+            "source_sha256": sha,
+            "extracted_at": date.today().isoformat(),
+            "pages": [u["page"], u["lines"][-1]["page"]],
+            "intro": aim + overview,
+            "topics": topics,
+            "readings": [],
+        })
+    return out
+
+
+def run_cia(only: str | None = None) -> list[dict]:
+    docs = [(k, v) for k, v in CIA_TRACKS.items()] + [(None, CIA_ACIA)]
+    results = []
+    for track, doc in docs:
+        cache = os.path.join(OUT_DIR, "_cia", f"{track or 'acia'}.pdf")
+        os.makedirs(os.path.dirname(cache), exist_ok=True)
+        if not os.path.exists(cache):
+            fetch(doc["url"], cache)
+        extracted = cia_extract(cache, doc, track)
+        if track is None:
+            extracted.append(capstone_extract(cache, doc))
+        for data in extracted:
+            if only and data["wiki_id"] != only:
+                continue
+            out = os.path.join(OUT_DIR, data["wiki_id"])
+            os.makedirs(out, exist_ok=True)
+            with open(os.path.join(out, "syllabus.json"), "w", encoding="utf-8") as fh:
+                json.dump(data, fh, indent=2, ensure_ascii=False)
+                fh.write("\n")
+            n_out = sum(len(t["outcomes"]) for t in data["topics"])
+            print(f"{data['wiki_id']}: {len(data['topics'])} topics, {n_out} objectives — {data['title']}")
+            results.append(data)
+    return results
+
+
 def fetch(url: str, dest: str) -> None:
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (actuarial-notes syllabus_extract)"})
     with urllib.request.urlopen(req, timeout=60) as r, open(dest, "wb") as fh:
@@ -853,12 +1451,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--url")
     ap.add_argument("--pdf", help="a local copy of the PDF (default: download --url)")
     ap.add_argument("--all", action="store_true", help="every syllabus in SOURCES")
+    ap.add_argument("--cia", action="store_true", help="every exam and module of the CIA's syllabi")
     args = ap.parse_args(argv)
+    if args.cia:
+        run_cia(args.wiki_id)
+        return 0
     if args.all:
         for wid, url in SOURCES.items():
             run(wid, url, None)
         for wid in MODULES:
             run_module(wid)
+        run_cia()
         return 0
     if not args.wiki_id:
         ap.error("--wiki-id (or --all) is required")

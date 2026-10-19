@@ -12,11 +12,22 @@
 
 export type ExamBody = 'SOA' | 'CAS'
 
+/**
+ * The bodies the Study Guides tab's two pages pick between: the SOA and the
+ * CAS, and the Canadian Institute of Actuaries, whose own ACIA and FCIA
+ * exams and modules have study guides but no question bank, past paper or
+ * product. The Quiz tab, the Store and Flashcards offer only `ExamBody`; the
+ * choice is still stored once, and a page that doesn't offer the CIA opens
+ * on the reader's track's body instead (`loadBody` reads `CIA` as no choice).
+ */
+export type GuideBody = ExamBody | 'CIA'
+
 export const BODY_FILTER_KEY = 'quiz.bodyFilter'
 
 /** The credential tracks of each body. */
 export const SOA_TRACK_KEYS: ReadonlySet<string> = new Set(['ASA', 'FSA'])
 export const CAS_TRACK_KEYS: ReadonlySet<string> = new Set(['ACAS', 'FCAS'])
+export const CIA_TRACK_KEYS: ReadonlySet<string> = new Set(['ACIA', 'FCIA'])
 
 /**
  * The body to open on when the reader has never picked one: their track's, and
@@ -31,9 +42,19 @@ export function defaultBody(selectedTrack: string): ExamBody {
   return CAS_TRACK_KEYS.has(selectedTrack) ? 'CAS' : 'SOA'
 }
 
+/** The Study Guides tab's body for a track: the CIA's for its two tracks. */
+export function defaultGuideBody(selectedTrack: string): GuideBody {
+  return CIA_TRACK_KEYS.has(selectedTrack) ? 'CIA' : defaultBody(selectedTrack)
+}
+
 /** Narrow an untrusted string (a stored value) to a body, or null. */
 export function parseBody(value: string | null | undefined): ExamBody | null {
   return value === 'SOA' || value === 'CAS' ? value : null
+}
+
+/** The same, for the Study Guides tab, which offers the CIA too. */
+export function parseGuideBody(value: string | null | undefined): GuideBody | null {
+  return value === 'CIA' ? value : parseBody(value)
 }
 
 /** The stored choice, or null when there is none to honour. */
@@ -45,7 +66,16 @@ export function loadBody(): ExamBody | null {
   }
 }
 
-export function saveBody(body: ExamBody): void {
+/** The stored choice as the Study Guides tab reads it. */
+export function loadGuideBody(): GuideBody | null {
+  try {
+    return parseGuideBody(localStorage.getItem(BODY_FILTER_KEY))
+  } catch {
+    return null
+  }
+}
+
+export function saveBody(body: GuideBody): void {
   try {
     localStorage.setItem(BODY_FILTER_KEY, body)
   } catch {

@@ -1,0 +1,730 @@
+{
+  "wiki_id": "fie-m1",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "FIE-M1",
+  "title": "FIE Module 1: Actuarial work, insurance, and investments applications",
+  "name": "Actuarial work, insurance, and investments applications",
+  "track": "FIE",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007",
+  "source_page": "https://www.cia-ica.ca/publications/223034e/",
+  "source_title": "FCIA Syllabus – Finance, investments and ERM with option in Banking",
+  "source_date": "2024-01-30",
+  "source_sha256": "596ac4b5b2e73cdc20410d14652686301c4d219b2bf85fd838751770de91b539",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    20,
+    24
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months, from the date of module purchase, to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction to risk and insurance",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe risk, including insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Provide examples of types of insurable risks and classes of life insurance that respond to insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and provide examples of perils and hazards.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the conflicts that can arise in the objectives of risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify and describe the five steps of the risk management process:",
+          "bullets": [
+            "a. Step 1 – Identifying and analyzing exposures.",
+            "b. Step 2 – Formulating options.",
+            "c. Step 3 – Selecting the best technique.",
+            "d. Step 4 – Implementing the risk management plan.",
+            "e. Step 5 – Monitoring results and modifying the plan."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Insurance categories and functions",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the basic insurance relationship of pooling funds to pay losses.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the major functions of insurance:",
+          "bullets": [
+            "a. Spread of risk.",
+            "b. Aid to security.",
+            "c. Aid to credit.",
+            "d. Loss prevention.",
+            "e. Source of capital.",
+            "f. Source of employment."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and describe categories of insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify and describe categories of retirement plans.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the different forms of insurance companies (e.g., stock mutual, government insurers, captive insurance companies.)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain financial stability and returns for insurers including the differences for stock companies and mutuals.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Regulatory framework",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the different roles of government in the regulation of insurance companies, including federal control and provincial and territorial control.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the major laws and regulations impacting insurance in Canada, including:",
+          "bullets": [
+            "a. The Insurance Companies Act.",
+            "b. Provincial and territorial insurance acts.",
+            "c. Regulations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role of privacy laws in life insurance, including the Personal Information Protection and Electronic Documents Act.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe how the United States and Canada monitor the insurance market and regulate it.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe why consumer protections are needed.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain the purposes of regulatory consumer laws and regulations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recognize the key points of a sample of regulations or laws relating to market regulation.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Insurance company operations",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the major functions of an insurance company, including:",
+          "bullets": [
+            "a. Finance, accounting, and investment.",
+            "b. Actuarial.",
+            "c. Marketing, agency, or production.",
+            "d. Underwriting.",
+            "e. Claims.",
+            "f. Reinsurance.",
+            "g. Risk management."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe basic insurance administration and how actuaries are involved.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe underwriting regimes, applications for insurance, preferred criteria, and screening tests and how they relate to selection of risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "For reinsurance:",
+          "bullets": [
+            "a. Explain the purpose of reinsurance.",
+            "b. Describe the primary methods and types of reinsurance.",
+            "c. Describe the main reinsurance contract provisions."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the roles and responsibilities of actuaries in insurance companies.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Insurance documents and processes",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain insurance as a contract and describe the major components of an insurance policy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and explain key insurance documents, including:",
+          "bullets": [
+            "a. The policy.",
+            "b. Certificates of insurance.",
+            "c. Endorsements.",
+            "d. Binders/cover notes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the major sections of an insurance policy, including:",
+          "bullets": [
+            "a. Coverage summary.",
+            "b. Insuring agreements.",
+            "c. Statutory conditions.",
+            "d. Policy conditions.",
+            "e. Signature clause."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the process and requirements for assigning, terminating, and renewing an insurance contract.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify the stakeholders in an insurance policy (policyholder, insureds, including employees and dependents, etc.).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe insurance documentation and processes.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "The insurance marketplace",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe basic insurance products:",
+          "bullets": [
+            "a. Life insurance and annuities.",
+            "b. Property and casualty (P&C).",
+            "c. Health and group insurance.",
+            "d. Government-sponsored and public plans:",
+            "\ti. Employment Insurance.",
+            "\tii. Workers’ compensation.",
+            "\tiii. Health care.",
+            "\tiv. Pension plans."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe key issues related to customers of insurance products.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Introduction to enterprise risk management (ERM)",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand the set of risk taxonomies and apply it to different frameworks.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the need for risk management in an operation-wide capacity.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the implications of tail events on a firm’s results.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain how banks, insurers, pension plans (or financial intermediaries) and rating agencies define risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify the drivers behind some well-publicized insolvencies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand the role that related banking regulation has played in the development of insurance regulation for risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe global regulatory initiatives as they relate to ERM.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Provide an overview of European, U.S., and Canadian ERM regulatory initiatives.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Describe rating-agency expectations for ERM.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Topics in corporate finance",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare and contrast methods to determine the value of a business or project, including the impact on capital budgeting and allocation decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Assess the impact of business strategies including acquisitions, divestitures, and/or restructurings.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Assess and recommend methods a company may use to allocate its costs and how these methods impact the perceived performance of a company or its component lines of business.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply fundamental techniques and frameworks of management science to make informed business decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Apply linear optimization models to managerial decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Develop decision trees, scenario tests, and simulation models.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Assess and apply methods and processes for quantifying and managing hedgeable and non-hedgeable risks within any business enterprise.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Evaluate complex systems and describe how these systems can mitigate risks and improve sustainability.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Quantitative techniques",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Demonstrate an understanding of the mathematical considerations for analyzing financial time series.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain how to bootstrap a yield curve.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Understand and apply various techniques for analyzing conditional heteroscedastic models, including ARCH and GARCH.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand and apply various techniques for analyzing multivariate time series.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Apply various techniques for analyzing factor models, including principal component analysis and statistical factor analysis.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand and apply various regression techniques, including interpreting regression results such as F-statistic and R-squared.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Understand and interpret various supervised and unsupervised machine learning and advanced analytics algorithms.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Explain the steps of preparing, wrangling, and exploring big data for financial forecasting.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Evaluate the fit of a machine-learning algorithm.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Evaluate appropriateness and quality of data compiled with respect to its level of compliance with regulatory and quality assurance requirements.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 10,
+      "title": "Actuarial models",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply the techniques of Monte Carlo simulation as it applies to financial risk models, option pricing, and economic scenario generation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the theories of four popular variance-reduction techniques: antithetic variates, control variates, stratified sampling, and importance sampling.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify options embedded in financial products and the risks they pose.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe derivative types and demonstrate the use of derivatives in risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain how liabilities are calculated under Canadian and U.S. statutory reporting.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain the general concepts underlying specific U.S. accounting standards for asset reporting, valuing deferred acquisition cost assets, and valuing liabilities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Produce and analyze the outcomes of various events and situations impacting an insurance product’s reserves and cash-flow projections.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Understand the components of assets and liabilities of a bank.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Perform cash-flow projections of a bank, and how cash flows and key liquidity metrics change in response to stressed liquidity scenarios.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Understand and apply liability-driven investing, particularly in relation to insurance products and pensions (including de-risking strategies such as annuity buy-ins vs. buyouts).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Demonstrate an understanding of target volatility funds and their effect on guarantee cost and risk-control function.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 11,
+      "title": "Principles of actuarial evidence",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the role of actuaries in family law, including the valuation of pension plan benefits in marriage (relationship) breakdown.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role of actuaries in civil litigation, including damages in personal injuries, fatalities, wrongful termination, insurance and reinsurance disputes, pension disputes, and other litigation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role conferred to actuaries by the Criminal Code of Canada in calculating the criminal rate of interest.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and distinguish the roles of a fact witness, an expert witness, and a provider of litigation advice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the context provided by the common law, legislation, and the rules of civil procedure on actuarial evidence practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe the role of CIA Rules of Professional Conduct and the Standards of Practice (Part 1000, general, and Part 4000, actuarial evidence) in guiding the professionalism of actuarial evidence practice. Show awareness of the importance of professionalism for actuaries whose actuarial evidence practice is incidental to full-time practice in another actuarial practice area, such as insurance or pensions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the functions fulfilled by other professionals in the litigation area -- such as life-care planners, vocational experts, accountants, economists, engineers, personal financial planners, business valuators, appraisers, and structured settlement brokers -- and how these professionals complement and compete with the function of actuaries in actuarial evidence.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

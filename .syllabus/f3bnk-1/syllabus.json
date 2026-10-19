@@ -1,0 +1,484 @@
+{
+  "wiki_id": "f3bnk-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F3BNK",
+  "title": "Exam F3BNK: Banking Applications",
+  "name": "Banking Applications",
+  "track": "FIE",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007",
+  "source_page": "https://www.cia-ica.ca/publications/223034e/",
+  "source_title": "FCIA Syllabus – Finance, investments and ERM with option in Banking",
+  "source_date": "2024-01-30",
+  "source_sha256": "596ac4b5b2e73cdc20410d14652686301c4d219b2bf85fd838751770de91b539",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    15,
+    18
+  ],
+  "intro": [
+    "The aim of exam F3BNK is to expose candidates to key principles of risk management and banking practice and the application thereof, including governance and strategy setting and the principles of actuarial practice in solving problems, and to produce coherent advice and recommendations in the management of a banking operation.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and written responses to specific questions. Candidates will complete the exam through the CIA learning management system."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the banking industry. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Operations of a banking institution",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Discuss the role of banking institutions in economies: (C4)",
+          "bullets": [
+            "a. To facilitate loan-deposit transformation.",
+            "b. To facilitate investments by firms and to enable growth and job creation.",
+            "c. To facilitate local and international trade."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Discuss the implication of the different types of banks on the overall economic cycle, including: (D4)",
+          "bullets": [
+            "a. Central banks/reserve banks.",
+            "b. Lending banks funded by customer deposits.",
+            "c. Lending banks funded by wholesale deposits.",
+            "d. Investment banks.",
+            "e. Universal banks.",
+            "f. Community banks/mutual banks.",
+            "g. Development banks."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Demonstrate what constitutes the main risks for various activities carried out by banks, including: (C2)",
+          "bullets": [
+            "a. Retail banking activities and various products offered.",
+            "b. Corporate banking activities and various products offered.",
+            "c. Investment banking activities and various products offered.",
+            "d. Features and pricing of banking products."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Demonstrate how to mitigate a bank’s risks exposure regarding its different sources of revenue, including: (D3)",
+          "bullets": [
+            "a. Net interest income from banking book operations.",
+            "b. Non-interest income from banking book operations.",
+            "c. Trading income from trading book operations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Quantify the impact of a bank’s cost base on trading book and banking book product lines, including: (B5)",
+          "bullets": [
+            "a. Operational expenses.",
+            "b. Cost of credit.",
+            "c. Cost of capital.",
+            "d. Cost of liquidity.",
+            "e. Tax."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Produce a bank’s financial statements and balance sheet. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Analyze the main types of capital that must be held by a bank, including: (B4)",
+          "bullets": [
+            "a. Capital requirements based on risk-weighted assets.",
+            "b. Regulatory capital.",
+            "c. Economic capital requirements.",
+            "d. Available capital or book capital."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Determine and analyze the various sources of funds that banks use to fund their operations, including: (B4)",
+          "bullets": [
+            "a. Deposit taking.",
+            "b. Wholesale markets funding.",
+            "c. Central bank funding.",
+            "d. Retained earnings."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Derive similarities and differences between the main types of financial and non-financial risks faced by a bank vs. a traditional actuarial practice area (i.e., pension, insurance, etc.). (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Explain how actuaries can play a key role in a banking operation. (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "The banking regulatory framework",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the main provisions of the Canadian Bank Act and its regulations. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe a typical corporate governance structure of a banking operation, including: (C2)",
+          "bullets": [
+            "a. Board of directors, board committees, roles, and responsibilities.",
+            "b. Executive committee and senior management, roles, and responsibilities.",
+            "c. Various committees existing within a bank and their roles and responsibilities."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline the key elements of the Basel I framework and perceived shortcomings of the Basel I accord. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand the Basel II framework and discuss the implications of Basel II for banking operations. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand the Basel III framework and discuss the implications of Basel III for banking operations. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Outline the roles of central/reserve banks in managing and regulating banking operations. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Outline the evolution of the Basel regulations. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Discuss how failure to implement key principles for effective risk data aggregation and risk reporting under Basel framework may lead to major losses. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand the various international legislation, guidance notes, and accounting standards under which banks operate, including: (B2)",
+          "bullets": [
+            "a. Legislation governing companies.",
+            "b. Legislation governing banks.",
+            "c. Directives and guidance notes issued by the Basel Committee on Banking Supervision.",
+            "d. Central/reserve banks and other local and international regulatory bodies.",
+            "e. Canadian and international accounting standards."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Risk management in a banking operation",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Discuss the role of high-level risk management in a banking operation (D4).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Discuss the role of an ERM risk management framework in banking. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Discuss the root cause of major financial failures of the past. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Discuss the impact on banking operations of an aggregation of risk, including (D4):",
+          "bullets": [
+            "a. Diversification.",
+            "b. Concentration.",
+            "c. Correlation."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Derive similarities and differences between the process of controlling risks in a banking operation vs. a traditional actuarial practice area (i.e., pension, insurance, etc.), including but not limited to: (D5)",
+          "bullets": [
+            "a. Setting loan-sanctioning criteria.",
+            "b. Setting risk appetite, tolerance, and limits.",
+            "c. Allocation of risk-based capital."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Demonstrate how risk modelling may be used to identify and measure the different types of risks in a banking operation, including: (C3)",
+          "bullets": [
+            "a. Frequency, severity, and exposure modelling for both credit and operational risk.",
+            "b. Statistical modelling for portfolio management.",
+            "c. Survival models for credit risk management.",
+            "d. Market-implied probability of default and survival curves:",
+            "\ti. Default and survival curves.",
+            "\tii. Closed-form analytical approximations vs. Monte Carlo simulation.",
+            "\tiii. Emerging modelling techniques",
+            "e. Asset/liability modelling for balance-sheet management.",
+            "f. Control cycle for all models.",
+            "g. Cash-flow models for budgeting and balance-sheet management."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Discuss the nature, impact, and risk-mitigation procedures relative to: (D4)",
+          "bullets": [
+            "a. Operational risk.",
+            "b. Liquidity risk.",
+            "c. Credit risk — standardized approach.",
+            "d. Credit risk — internal ratings-based approach.",
+            "e. Settlement and counterparty risk.",
+            "f. Credit valuation adjustment (CVA) risk.",
+            "g. Market risk.",
+            "h. Climate-change risk."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Derive similarities and differences in how risks in a banking operation may be mitigated and/or managed vs. a traditional actuarial practice area (i.e., pension, insurance etc.), including but not limited to: (D5)",
+          "bullets": [
+            "a. Positions.",
+            "b. Credit hedging.",
+            "c. Securitization.",
+            "d. Dealing with central counterparty clearing house (CCP)."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Bank capital management framework",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand and evaluate the banking model and capital, including: (D5)",
+          "bullets": [
+            "a. The difference between capital and liquidity.",
+            "b. Bank balance sheet.",
+            "c. Capital to cover possible losses.",
+            "d. Expected (per IFRS 9) and unexpected losses.",
+            "e. Capital regulation."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Discuss key capital considerations, including: (C5)",
+          "bullets": [
+            "a. Regulatory capital adequacy requirements (risk-weighted assets).",
+            "b. Regulatory minimum leverage ratio (unweighted assets).",
+            "c. Capital ratio, based on risk-weighted assets.",
+            "d. Regulatory liquidity adequacy requirements.",
+            "e. Credit rating considerations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Understand and create a capital management policy. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand and create a liquidity management policy. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand a bank’s dividend policy and its remuneration policy and assess their implications for capital management. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand and perform a reverse stress test. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Discuss the resulting risks of a poor implementation of a bank’s recovery plan. (D4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Banking strategies and problem solving",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Analyze the implications of competing business lines on a bank's strategy and business model, including: (D4)",
+          "bullets": [
+            "a. Economic and competition outlook.",
+            "b. Business strategy.",
+            "c. Ability to support business strategy.",
+            "d. Financial forecasts.",
+            "e. Considerations of strategy and business plan.",
+            "f. Possible acquisitions/disposals.",
+            "g. Approval of strategy and business plan."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Discuss the implementation and evaluation of a bank’s strategy and business plan and subsequent monitoring. (D2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Through analysis, integration, and critically evaluating results, draw conclusions and make recommendations, particularly about a bank's optimal strategy. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze a case study and solve complex problems associated with it. (C4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

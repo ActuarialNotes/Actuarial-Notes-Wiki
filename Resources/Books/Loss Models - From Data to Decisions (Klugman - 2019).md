@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:4b8d4fb32b176a46b378f2fb9bb033532472416a0afedcb4136b251687b779b1
+  content_hash: sha256:41b9260717498326fe9bc4c54a771e2f56978d1d75afd2d015825e1bf51860e7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,7 @@ A guide to the modeling techniques used throughout many branches of actuarial sc
 > [!info] On the syllabus
 > - [[Exam FAM (SOA)|Exam FAM]] — Chapter 3 (Sections 1, 2, 4.1, 5); Chapter 4; Chapter 5 (Sections 3, 4); Chapter 6; Chapter 8 (Sections 1-5); Chapter 9 (Sections 1, 2, 3.1, 3.2, 7, 8.1, 8.2); Chapter 11 (Sections 1-4); Chapter 12 (Sections 1-3); Chapter 16. The syllabus also lists Corrections and Comments for Loss Models, Fifth Edition.
 > - [[Exam ASTAM (SOA)|Exam ASTAM]] — Chapter 3: Sections 3.3, 3.4.2-3.4.6; Chapter 5: Sections 5.1, 5.2; Chapter 7: Sections 7.1, 7.2; Chapter 8; Chapter 9: Sections 9.3.1, 9.3.2, 9.4 (Theorem 9.7 & Example 9.9 only), 9.5, 9.6 (except 9.6.1), 9.7; Chapter 11: Sections 11.5-11.7; Chapter 12: Section 12.4; Chapter 13; Chapter 15 (except Section 15.4.2); Chapter 17; Chapter 18.
+> - [[Exam ACIA-CAPSTONE (CIA)|ACIA Capstone Exam]] — A4.7 Severity models (C): Chapters 4 and 5 (Sections 5.1, 5.2.1-5.2.4 and 5.3); A4.8 Frequency models in short-term insurance (C): Chapter 6; A4.9 Aggregate models (C): Chapter 9 (excluding Sections 9.6.1 and 9.8.3); A4.10 Coverage modifications (C): Chapter 8; A4.11 Risk measures (C): Chapter 3; A4.12 Construction and selection of parametric models (C): Chapters 11 (Sections 11.1-11.6), 12 (excluding Section 12.5), 13 and 15 (excluding Section 15.4.2); A4.13 Credibility (C): Chapters 16-18.
 
 ## Preface
 
@@ -342,3 +343,4 @@ A guide to the modeling techniques used throughout many branches of actuarial sc
 - [Loss Models: From Data to Decisions, 5th Edition (Wiley)](https://www.wiley.com/en-us/Loss+Models%3A+From+Data+to+Decisions%2C+5th+Edition-p-9781119523789) — the authors, hardcover ISBN 978-1-119-52378-9, May 2019 publication, 560 pages and the publisher's description
 - [SOA Exam FAM syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf) — the citation (Fifth Edition, 2019, Wiley) and the assigned chapters and sections for FAM
 - [SOA Exam ASTAM syllabus, Fall 2026](https://www.soa.org/globalassets/assets/files/edu/2026/astam/2026-fall-exam-astam-syllabus.pdf) — the assigned chapters and sections for ASTAM
+- [CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026)](https://www.cia-ica.ca/publications/997001e/) — the citation (title, edition, authors and ISBN) and the syllabus sections it is assigned for on the ACIA Capstone Exam, from the syllabus's background reading tables

@@ -32,3 +32,4 @@ quiz/tailwind.config.js
 quiz/tailwind.config.d.ts
 quiz/playwright.config.js
 quiz/playwright.config.d.ts
+.syllabus/_cia/

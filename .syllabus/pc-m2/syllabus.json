@@ -1,0 +1,656 @@
+{
+  "wiki_id": "pc-m2",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "PC-M2",
+  "title": "PC Module 2: Insurance on property and insurance against liability",
+  "name": "Insurance on property and insurance against liability",
+  "track": "PC",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019",
+  "source_page": "https://www.cia-ica.ca/publications/223037e/",
+  "source_title": "FCIA Syllabus – Property and casualty track",
+  "source_date": "2025-10-30",
+  "source_sha256": "0575840476ad793f948c74b31fa387d8c7381fb377295679a9347728644b9a39",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    25,
+    28
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months from the date of module purchase to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction to property insurance",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain property insurance and how it works.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the elements of a property insurance policy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the evolution of property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe who and what are covered in property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify and describe the development of property insurance contracts and key concepts, including claim concepts.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Legislation and general principles in common-law provinces and territories and Québec",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain the legal context for property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the legislation and its interaction with property policies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the impact of privacy laws in property insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Perils and hazards",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define “peril.”",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the scope of property insurance including key concepts such as fortuitous event and perils and risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and describe the named perils in Insurance Bureau of Canada Habitational Forms: discussion.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify and describe non-standard perils.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and provide examples of hazards.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Anatomy of a property policy: Overview",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the structure and types of personal property policies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe key policy forms and clauses in property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain how to read a property policy.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Anatomy of a property policy: The homeowners form",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and describe the opening sections of homeowner forms.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe property insurance coverages, including:",
+          "bullets": [
+            "a. Coverage A – dwelling building.",
+            "b. Coverage B – detached private structures.",
+            "c. Coverage C – personal property.",
+            "d. Coverage D – additional living expense."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe extensions, applications, and limitations of coverage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the basis of claim payment in property insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Anatomy of a property policy: Exclusions",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Provide an overview of exclusions in a property policy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe exclusions for property not insured.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe exclusions for loss or damage not insured.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe application of the water-damage exclusion.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Endorsements and floaters",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and provide examples of endorsements in property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and provide examples of floaters in property insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Other property coverages",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe property coverage for condominiums.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe property coverage for tenants.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Commercial property insurance",
+      "part": "Part A – Insurance on property",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the named perils and broad-form perils associated with commercial property insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe exclusions of the commercial property broad form.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain limits of insurance of the commercial property broad form.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 1,
+      "title": "Introduction to liability insurance",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe liability imposed by law.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe Canadian law, including.",
+          "bullets": [
+            "a. Jurisdiction.",
+            "b. Two systems of civil law in Canada."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Negligence: The ABC rule (common Law)",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe negligence in tort.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the duty of care, including:",
+          "bullets": [
+            "a. Duty-to-your-neighbour principle.",
+            "b. Duty-of-care legislation.",
+            "c. Contractual duty.",
+            "d. Bailee’s duty of care."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe breach of duty including foreseeability and the causal relationship between breach and damages.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Defenses against negligence in common law",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and describe defenses against negligence, including:",
+          "bullets": [
+            "a. Common defenses.",
+            "b. Defenses to strict liability.",
+            "c. Defenses to absolute liability."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the effect of onus of proof.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Québec: Extra-contractual liability",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe extra-contractual liability in Québec.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe causal relationship between the fault and the injury.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain injury or damage suffered.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Québec: Defenses against extra-contractual liability",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and describe defenses against extra-contractual liability in Québec.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and describe defenses for manufacturers and distributors of products.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain limitation periods.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "General legal principles",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe legal concepts between parties in a liability lawsuit.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the principal and agent relationship in a liability lawsuit.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain municipal liability and categories of negligence.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe class actions, including limitation periods and judgment interest.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Products liability and its effects",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe products liability, including burden of proof for products claims and contract theory of products liability.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the effect of warnings and labels in product liability.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe other defences to product liability including contributory negligence and intermediate examination.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Standard commercial general liability policy",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and describe insuring agreements and their exclusions in commercial general liability (CGL) policy, including:",
+          "bullets": [
+            "a. Section I – Coverages.",
+            "b. Section II – Who is insured.",
+            "c. Section III – Limits of insurance.",
+            "d. Section IV – Conditions.",
+            "e. Section V – Definitions."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and describe common exclusions of the CGL policy.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Declarations page, other employer’s liability coverages",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the CGL policy declarations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and describe other employer liability coverages, including workers’ compensation and employer’s liability insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 10,
+      "title": "Emerging trends in liability insurance",
+      "part": "Part B – Insurance against liability",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe emerging trends in liability insurance, including:",
+          "bullets": [
+            "a. Cyber risk.",
+            "b. The sharing economy.",
+            "c. The autonomous vehicle."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

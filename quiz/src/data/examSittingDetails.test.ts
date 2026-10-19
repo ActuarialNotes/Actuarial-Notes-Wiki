@@ -9,7 +9,7 @@ import { examIdFromFile } from '../lib/wikiRoutes'
 
 const VAULT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 const ISO = /^\d{4}-\d{2}-\d{2}$/
-const PUBLISHERS = /^https:\/\/www\.(casact|soa)\.org\//
+const PUBLISHERS = /^https:\/\/www\.(?:(?:casact|soa)\.org|cia-ica\.ca)\//
 
 /** Every study guide the vault has: its exam key and its wiki exam id. */
 function studyGuides(): { exam: string; guide: string }[] {

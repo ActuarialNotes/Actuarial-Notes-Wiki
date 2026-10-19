@@ -94,6 +94,7 @@ TYPES = (
     "Study Note",             # a CAS/SOA study note
     "Monograph",              # the CAS monograph series
     "Course",                 # an online course (read through its published syllabus)
+    "Syllabus",               # an examining body's syllabus, when it is itself the source
     "Paper",                  # a journal, E-Forum, research or working-party paper; an article
     "Report",                 # a government, committee, consultant or research report
     "Educational Note",       # CIA educational notes

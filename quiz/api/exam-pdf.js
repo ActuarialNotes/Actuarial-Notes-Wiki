@@ -46,7 +46,22 @@ const DEFAULT_HOSTS = [
   'www.msaresearch.com',
   'pacicc.ca',
   'www.pacicc.ca',
+  'www.cia-ica.ca',
 ];
+
+// A publisher that serves its PDFs through a download script rather than at a
+// `.pdf` path (the CIA's `dl_file.php?p=…&fid=…`): the host and the script's
+// exact path, and nothing else on the host. Mirrors `PDF_DOWNLOAD_ENDPOINTS` in
+// `src/lib/examPdf.ts`.
+const PDF_DOWNLOAD_ENDPOINTS = [
+  { host: 'www.cia-ica.ca', path: '/app/themes/wicket/custom/dl_file.php' },
+];
+
+function isPdfPath(parsed) {
+  if (/\.pdf$/i.test(parsed.pathname)) return true;
+  const host = parsed.hostname.toLowerCase();
+  return PDF_DOWNLOAD_ENDPOINTS.some(e => e.host === host && e.path === parsed.pathname);
+}
 
 const FETCH_TIMEOUT_MS = 20000;
 const MAX_BYTES = 40 * 1024 * 1024;
@@ -84,7 +99,7 @@ export function resolvePdfTarget(rawUrl, hosts = allowedHosts()) {
   if (!hosts.includes(parsed.hostname.toLowerCase())) {
     return { error: `Host not allowed: ${parsed.hostname}` };
   }
-  if (!/\.pdf$/i.test(parsed.pathname)) return { error: 'Source is not a PDF' };
+  if (!isPdfPath(parsed)) return { error: 'Source is not a PDF' };
   return { url: parsed.toString(), hostname: parsed.hostname };
 }
 

@@ -147,6 +147,14 @@ describe('the exam strip', () => {
     expect(strips.CAS.find(e => e.label === 'Exam 6C')?.key).toBe('CAS-6')
   })
 
+  it('lists the CIA ladder: the ACIA modules and Capstone, then each FCIA track', () => {
+    const cia = resourceStripExams(['Exam F1PC (CIA)', 'Exam PC-M1 (CIA)', 'Exam ACIA-CAPSTONE (CIA)', ...PAGES], 'CIA')
+    expect(cia.map(e => e.label)).toEqual(['Exam ACIA-CAPSTONE', 'Exam PC-M1', 'Exam F1PC'])
+    const three = { ...strips, CIA: cia }
+    expect(bodyForExam('Exam F1PC', 'SOA', three)).toBe('CIA')
+    expect(bodyForExam('Exam 7', 'CIA', three)).toBe('CAS')
+  })
+
   it("opens on an exam's own body when only the other ladder has it", () => {
     expect(bodyForExam('Exam 7', 'SOA', strips)).toBe('CAS')
     expect(bodyForExam('Exam P-1', 'SOA', strips)).toBe('SOA')

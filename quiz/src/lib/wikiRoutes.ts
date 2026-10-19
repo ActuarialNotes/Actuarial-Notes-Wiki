@@ -165,7 +165,10 @@ export function examIdFromFile(name: string): string {
 // courses — is filed as `Exam … (Body).md` like every syllabus page (the
 // collectors read `Exam*.md`), and keeps that label wherever it is a quiz bank's
 // name (`Exam DISC-DA`). Only a list of requirements titles it without "Exam".
-const NON_EXAM_REQUIREMENT_RE = /^(?:VEE-[A-Z]+|DISC-[A-Z]+|PAF|ASF|ATPA|FAP|APC|DMAC|FAC|COP)$/
+const NON_EXAM_REQUIREMENT_RE = /^(?:VEE-[A-Z]+|DISC-[A-Z]+|PAF|ASF|ATPA|FAP|APC|DMAC|FAC|COP|[A-Z]+-M\d)$/
+
+// A CIA module's id (`PC-M1`, `ACIA-M2`) and the name the CIA gives it.
+const CIA_MODULE_RE = /^([A-Z]+)-M(\d)$/
 
 /** True for a page's exam id (`VEE-MS`, `DISC-DA`, `COP`) that names no exam. */
 export function isNonExamRequirement(examId: string): boolean {
@@ -176,10 +179,16 @@ export function isNonExamRequirement(examId: string): boolean {
 // display name, or for a non-exam requirement the requirement on its own.
 //   "Exam MAS-I (CAS).md" → "Exam MAS-I"
 //   "Exam VEE-MS (SOA).md" → "VEE-MS"
+//   "Exam PC-M1 (CIA).md"  → "PC Module 1"
+//   "Exam ACIA-CAPSTONE (CIA).md" → "ACIA Capstone Exam"
 export function requirementDisplayName(name: string): string {
   const label = examDisplayName(name)
   const id = label.replace(/^Exam\s+/i, '')
-  return isNonExamRequirement(id) ? id : label
+  // The CIA's Capstone has a name of its own, which its id only abbreviates.
+  if (id === 'ACIA-CAPSTONE') return 'ACIA Capstone Exam'
+  if (!isNonExamRequirement(id)) return label
+  const module = id.match(CIA_MODULE_RE)
+  return module ? `${module[1]} Module ${module[2]}` : id
 }
 
 // Display name for an exam page: the file name without its `.md` extension and
@@ -191,7 +200,7 @@ export function requirementDisplayName(name: string): string {
 export function examDisplayName(name: string): string {
   const cleaned = name
     .replace(/\.md$/i, '')
-    .replace(/\s*\((?:SOA|CAS)\)\s*$/i, '')
+    .replace(/\s*\((?:SOA|CAS|CIA)\)\s*$/i, '')
     .trim()
   return cleaned || name
 }

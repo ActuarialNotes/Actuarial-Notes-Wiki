@@ -19,7 +19,8 @@ It was first run over **every SOA exam past FM** (2026-10-05): the six ASA exams
 SRM, PA, ALTAM, ASTAM and the ATPA assessment — and the twenty-three exams of the FSA
 pathway (CFE, CP, GH, GI, ILA, INV and RET). P and FM keep their hand-made pages. The SOA's
 four e-learning modules — PAF, ASF, FAP and DMAC — followed on 2026-10-18, through the module
-reader below. The other non-exam requirements publish no objectives document (the VEEs' topics
+reader below, and the Canadian Institute of Actuaries' ACIA and FCIA syllabi on 2026-10-19,
+through the CIA reader. The other non-exam requirements publish no objectives document (the VEEs' topics
 are in the SOA's VEE course-approval guidelines; the APC, the FAC and the CAS's Course on
 Professionalism are described only on their course pages), so those pages, like Exams 6I and
 6T, are hand-transcribed with no `syllabus:` block.
@@ -78,6 +79,45 @@ and `--wiki-id paf-1` (or `--all`) reads them with `module_extract`:
   2022 fifth's page).
 
 The JSON records both documents' URLs and sha256s; the page's H1 is the module's code.
+
+### The CIA's syllabi (`--cia`, `"body": "CIA"`)
+
+The Canadian Institute of Actuaries publishes one syllabus per FCIA track — the track's two
+modules and three exams in one PDF — and one for the ACIA modules and Capstone Exam.
+`CIA_TRACKS` and `CIA_ACIA` name each document's download link on its cia-ica.ca publication
+page (read 2026-10-19; the publication page is kept beside it), and
+`python3 scripts/syllabus_extract.py --cia` (also part of `--all`) writes one JSON per exam
+and module: `f1pc-1` … `f3bnk-1`, `pc-m1` … `fie-m2`, `acia-m1`, `acia-m2`, `acia-capstone`.
+The PDFs are cached under `.syllabus/_cia/` (git-ignored).
+
+- The documents are read by **type and column**, not words (`cia_lines`): a 13pt bold
+  line is an exam (`Exam F1PC: Pricing`) or a module (`PC Module 1: …`); `Part A – …` a
+  module's part (rendered as a `###` heading between its callouts); a 9pt bold line at the
+  topic column a topic, with its weight in parentheses; then an objective's number and text,
+  its lettered sub-items and their roman ones, each at its own column. Bloom codes (`(C5)`)
+  stay in the objective's words. A line with nowhere to go raises rather than being dropped.
+- An exam's first topic, *Principal terms*, is unweighted — the terms are examined inside the
+  other topics, which sum to 100% — so it carries `{0%}`, as GI 101's Topic 7 does. The
+  modules are unweighted (`"weighted": false`).
+- The exam's aim and the overview's paragraph on how it is sat go in *About the exam*; the
+  module overview's paragraphs on who takes it and for how long, in *About the module*.
+- The FCIA syllabi list **no readings**: the exams are open-book and the modules carry their
+  material in the CIA's learning management system. A page's one Source Material entry is the
+  syllabus document itself, a `Resources/Books/` page of `Type: "Syllabus"`, with the pages it
+  takes up there.
+- The **ACIA Capstone Exam** (`capstone_extract`) is the ACIA syllabus's second half: its
+  preamble, general objectives, the table of the sections each part assesses and the
+  assessment principles go in *About the exam*; the appendix (A1–A5, each lettered objective
+  under a numbered sub-section) is its topics; and its ruled background-reading tables are
+  read with PyMuPDF's table finder. A reading links the `Resources/Books/` page carrying **its
+  ISBN** (`isbn_shelf` in the writer), which tells Brown & Lennox's 4th edition from the 5th.
+  *ACIA Module 2*, named as a reading for three sections, stays plain text: the shelf's
+  cards are resource pages.
+- `syllabus_write.py` names a CIA page `Exam <code> (CIA).md` (`F1PC`, `PC-M1`,
+  `ACIA-CAPSTONE`); a module's H1 is the CIA's name for it, *PC Module 1*.
+
+The app keys them under the body — `CIA-F1PC`, `CIA-PC-M1`, `CIA-ACIA-CAPSTONE`
+(`wikiExamIdToProgressKey`) — so none can collide with an SOA or CAS key.
 
 ## Stages 2–3 — `scripts/syllabus_write.py`
 

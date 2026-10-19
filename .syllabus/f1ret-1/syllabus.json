@@ -1,0 +1,400 @@
+{
+  "wiki_id": "f1ret-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F1RET",
+  "title": "Exam F1RET: Pension Funding and Regulation",
+  "name": "Pension Funding and Regulation",
+  "track": "RET",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023",
+  "source_page": "https://www.cia-ica.ca/publications/223038e/",
+  "source_title": "FCIA Syllabus – Retirement benefits track",
+  "source_date": "2024-02-02",
+  "source_sha256": "346a3f86d917a2c6fb9561e1b96f92faebcec248d81f3138a0b5f9a8d5214150",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    5,
+    8
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main provisions, principles, regulation, professional standards, governance, and techniques of funding and administration applicable to retirement benefits.",
+    "2. Apply these principles and techniques within the context of pension plans.",
+    "3. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions and to develop appropriate proposals or recommendations relating to the funding and administration of pension plans.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the funding and regulatory environment of retirement benefits. (A1).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Retirement benefits and pension mathematics",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and analyze the features of traditional defined benefit plans and defined contribution plans. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and analyze the structure of the following plan types: (C4)",
+          "bullets": [
+            "a. Traditional defined benefit plans.",
+            "b. Defined contribution and savings plans.",
+            "c. Hybrid plans.",
+            "d. Multi-employer pension plans.",
+            "e. Other alternative retirement plans such as shared-risk plans, target-benefit plans, and jointly sponsored pension plans."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Perform periodic valuations of ongoing plans, calculating normal cost, actuarial liability, and gains and losses, using a variety of cost methods: (C3)",
+          "bullets": [
+            "a. Unit credit and projected unit credit.",
+            "b. Entry age normal.",
+            "c. Individual level premium.",
+            "d. Aggregate.",
+            "e. Attained age normal."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Compare and contrast methods described in 2. and determine their appropriateness factoring in the plan sponsor’s objectives and regulatory requirements. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Calculate actuarially equivalent benefits, subsidized benefits, and other ancillary benefits. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Pension legislation",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and apply federal and provincial pension benefit acts and regulations. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and apply the various retirement benefit arrangements available to a plan sponsor. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and apply applicable agreements respecting multi-jurisdictional pension plans between provincial regulators. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Recognize, define, interpret, apply, calculate, and evaluate minimum standards in respect of the following provisions of registered pension plans: (C5)",
+          "bullets": [
+            "a. Eligibility requirements.",
+            "b. Retirement benefit formula (uniform accrual and integration with government benefits).",
+            "c. Employer cost (50 percent cost rule).",
+            "d. Interest credited on member contributions.",
+            "e. Termination benefits such as commuted values.",
+            "f. Death benefits.",
+            "g. Spousal protection.",
+            "h. Vesting and locking-in provisions.",
+            "i. Portability (LIFs, RIFs).",
+            "j. Pension credit splitting upon marriage breakdown.",
+            "k. Retirement age.",
+            "l. Disclosure requirements/privacy/rights to information.",
+            "m. Statement for members (annual or at retirement/termination).",
+            "n. Indexation of pensions.",
+            "o. Decumulation.",
+            "p. Pension fund investment requirements.",
+            "q. Remittance of contributions.",
+            "r. Statutory required benefits (such as grow-in benefits in Ontario)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Produce funding requirements under applicable provincial and federal minimum standard legislation considering: (C6)",
+          "bullets": [
+            "a. Going-concern basis.",
+            "b. Solvency/hypothetical wind-up.",
+            "c. Plan termination.",
+            "d. Plan mergers and asset transfers.",
+            "e. Plan conversion.",
+            "f. Temporary funding relief measures.",
+            "g. Use of letters of credit.",
+            "h. Additional mandated liabilities.",
+            "i. Solvency reserve accounts.",
+            "j. Stabilization provisions and smoothing techniques.",
+            "k. Plan amendments.",
+            "l. Restrictions on benefit payouts."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Apply, analyze, and evaluate the following: (C5)",
+          "bullets": [
+            "a. Partial/full plan termination.",
+            "b. Plan mergers and asset transfers.",
+            "c. Plan conversion.",
+            "d. Plan amendments.",
+            "e. Surplus ownership/contribution holiday.",
+            "f. Funding relief measures.",
+            "g. Frequency of valuation.",
+            "h. Use of letters of credit.",
+            "i. Use of solvency reserves account."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Outline the following different filing requirements and reports, including: (B2)",
+          "bullets": [
+            "a. Annual Information Return (AIR).",
+            "b. Actuarial Valuation Report and Actuarial Information Summary (AIS).",
+            "c. Pension Benefits Guarantee Fund (PBGF) Assessment.",
+            "d. Other provincially legislated forms (e.g., Financial Statement and Form 8 – Investment Information Summary/Form 7 – Summary or Revised Summary of Contributions).",
+            "e. Relevant policies and guidance from pension regulators.",
+            "f. Member communications, including annual benefit statements, termination, and retirement election forms."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Income tax legislation and regulation",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply and analyze rules and provisions outlined in the following: (C3)",
+          "bullets": [
+            "a. Income Tax Act and Regulations (pension/retirement savings sections only);",
+            "b. Information circulars, FAQs, and interpretation bulletins (pension-related only);",
+            "c. Canada Revenue Agency (CRA) Registered Plans Directorate bulletins, newsletters, and technical manuals;",
+            "d. CRA pension-related forms and guides;",
+            "e. Types of registered retirement savings plan (RRSP)/pension plans (defined benefit/defined contribution/hybrid/combination), and overall individual/plan-specific limits;",
+            "f. Permissible funding arrangements;",
+            "g. Permissible benefits;",
+            "h. Retiring allowance;",
+            "i. Pension adjustment (PA), past-service pension adjustment (PSPA), and pension adjustment reversal (PAR);",
+            "j. Plan registration rules;",
+            "k. Limits on registered defined benefit plan benefits;",
+            "l. Permissible distributions and transfers;",
+            "m. Deductibility of contributions;",
+            "n. Allowable surplus;",
+            "o. Phased retirement;",
+            "p. Shared-risk plans;",
+            "q. Jointly sponsored pension plans (JSPPs);",
+            "r. Multi-employer pension plans (MEPPs) and specified multi-employer plans (SMEPs);",
+            "s. Flexible pension plans;",
+            "t. Group RRSP/deferred profit-sharing plan (DPSP)/employee profit-sharing plan (EPSP)/tax-free savings account (TFSA)/supplemental executive retirement plan (SERP)/retirement compensation arrangement (RCA); and",
+            "u. Reporting and filing requirements."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Outline the filing process of T244 (or part of Joint AIR), trust filings (T3D/T3P/T3-RCA). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline the reporting and calculation process of PAs, PSPAs, and PARs (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze and recommend plan-design features compliant with tax legislation. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Apply, analyze, and evaluate features and rules governing maximum funding valuation/specified individuals/designated plans/individual pension plans. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Professionalism and standards of practice relative to plan funding",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply the standards related to communications to plan sponsors and others with an interest in an actuary’s results (i.e., participants, auditors, etc.). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain and apply the professional conduct guidelines. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain and apply relevant qualification standards. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Demonstrate compliance with requirements regarding the actuary’s responsibilities to participants, plan sponsors, etc. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain and apply all of the applicable standards of practice related to valuing pension benefits. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Recognize situations and actions that violate or compromise standards or professional conduct guidelines. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recommend a course of action to repair a violation of standards or professional conduct guidelines. (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Outline differences between pension commuted values and capitalized value for marriage-breakdown purposes. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Consider, assess, and decide on provisions for adverse deviations (PfADs) or statutory margins in going-concern valuations. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Describe and apply the techniques used in the development of going-concern economic and demographic assumptions. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Calculate and develop incremental cost on a hypothetical wind-up or solvency basis, sensitivity analysis, and plausible adverse scenarios. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Outline and apply CIA Guidance on Asset Valuation Methods. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Interpret and apply CIA Consolidated Standards of Practice, educational notes, and guidance provided by relevant CIA committees. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

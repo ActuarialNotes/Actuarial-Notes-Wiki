@@ -1,0 +1,429 @@
+{
+  "wiki_id": "f2gb-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F2GB",
+  "title": "Exam F2GB: Group Benefits Product Pricing",
+  "name": "Group Benefits Product Pricing",
+  "track": "GB",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36229&fid=17015",
+  "source_page": "https://www.cia-ica.ca/publications/223036e/",
+  "source_title": "FCIA Syllabus – Group benefits track",
+  "source_date": "2024-01-30",
+  "source_sha256": "9da8271fdd48491e46fcc1e9c4482e7e747a8c16ea2b8d4814ff0979968316de",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    8,
+    10
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques of pricing that are relevant to group insurance, including techniques to estimate the key components of a technical price.",
+    "2. Apply these principles and techniques within the context of group insurance.",
+    "3. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions and to develop appropriate proposals or recommendations relating to pricing group insurance products.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in group benefits and health insurance pricing. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Experience studies and predictive modelling",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain and apply the relevancy and limitations of actuarial experience studies available for group insurance (industry tables and information: life mortality, waiver of premiums, long-term disability [LTD] termination, rate comparisons, expense benchmarks, Life Insurance Market Research Association, etc.). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Relative to 1., explain reasons for selecting applicable tables and their sources and characteristics: (D2)",
+          "bullets": [
+            "a. CIA, Krieger, GLTD, CPP, QPP.",
+            "b. LTD incidence rates (Have and Garand)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Compare and contrast the differences between the CIA’s Predictive Analytics Model for Canadian Group Disability Termination Experience and the Group Long-term Disability Termination Study. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate the relevancy and limitations of non-actuarial experience studies available for group insurance, such as Régie de l’assurance maladie du Québec (RAMQ) data for prescription drugs. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze the sources, relevancy, and limitations of trends and forecasts studies available for group insurance (economic forecasts, disability incidence, and health-trend data) for the following: (C4)",
+          "bullets": [
+            "a. RAMQ data for prescription drugs.",
+            "b. Economic trends published quarterly by chartered banks.",
+            "c. Annual drug-trend studies produced by pharmacy benefits managers.",
+            "d. Annual health-care-cost-trend studies by major consulting firms."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Perform calculations for claims models for various types of coverage: (C3)",
+          "bullets": [
+            "a. Models for health and dental benefits.",
+            "b. Models for stop-loss claims."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Outline expense models for various types of coverage. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe how predictive modelling techniques can be used for claims analytics. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Credibility",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain and outline the principles underlying the notion of credibility in group insurance. (D2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the variability of the notion of credibility in the group insurance market. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze the factors affecting the credibility of a particular group (statistical heterogeneity, etc.). (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Assess utilization of industry statistics and company experience. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Develop and apply credibility formulae to relevant calculations. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Evaluate credibility in the context of predictive models (C5).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Compare traditional actuarial models with predictive modelling techniques. (C4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Capital requirements",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the principles underlying the determination of regulatory capital, in particular OSFI’s Life Insurance Capital Adequacy Test (LICAT), including the following: (C4)",
+          "bullets": [
+            "a. Identification of significant risk components.",
+            "b. Identification of specialized product LICAT requirements; and",
+            "c. Interpreting results from a regulatory perspective."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Outline and calculate the capital impacts of funding structures (refund accounting with claims fluctuation reserves, stop-loss, large amount pooling, hold-harmless agreements, etc.). (C4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Product pricing",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Outline and apply the underwriting process. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Evaluate how predictive analytics techniques can be used to estimate trends. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify risk-mitigation strategies (such as pre-existing condition exclusions). (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze the features, provisions, and pricing structures of flexible benefits. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify, compare, and contrast pricing variables relevant to group insurance by product (demographic variables, variables that vary from one group to another, variables that vary from one insurer to another, economic variables, etc.). (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Apply relevant standards of practice. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Create a medical-cost-trend experience analysis. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Develop and recommend assumptions. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Calculate and recommend a manual rate. (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Apply critical metrics to evaluate actual vs. expected results. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Profitability measures",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Outline and calculate the following profitability measures: (C3)",
+          "bullets": [
+            "a. Return on capital.",
+            "b. Return on equity.",
+            "c. Percent of premium.",
+            "d. Percent of assets.",
+            "e. Earnings per share.",
+            "f. Types of embedded value (“traditional,” “European,” “market consistent”)."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Outline and explain the uses of embedded value. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Outline and explain the sources of earnings. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Perform benchmarking. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Financial arrangements in a group insurance plan",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare and contrast the main features and benefits of financial arrangements (pooling, retention, hold-harmless, and self-insurance). (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and analyze issues associated with self-insurance. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Perform calculations relative to 1. and 2. above. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Insurance company taxation",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the following insurance company taxation features: (B2)",
+          "bullets": [
+            "a. Tax reserves.",
+            "b. Investment income tax (IIT).",
+            "c. Income tax.",
+            "d. Claims fluctuation reserve (CFR) allowable; and",
+            "e. Premium taxes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Perform calculations relative to 1. above. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

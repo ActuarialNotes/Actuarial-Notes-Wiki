@@ -12,7 +12,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d772035144e19c93ae5b1ae101e5c00952b1ca38c1303e87a9baa2993564bf7d
+  content_hash: sha256:aedbb36cc80cd101af35cd0a3bc06cb111a23daa58637c97d0b455b54c4136e9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -25,6 +25,7 @@ A textbook on the modern mathematics of life insurance, suitable for advanced un
 > [!info] On the syllabus
 > - [[Exam FAM (SOA)|Exam FAM]] — Chapter 1; Chapter 2; Chapter 3 (except Sections 4, 10, 11, 12); Chapter 4; Chapter 5; Chapter 6; Chapter 7 (Sections 1-3 [except 2.4, 2.5], 7, 8); Chapter 16. Exercises are considered part of the required readings.
 > - [[Exam ALTAM (SOA)|Exam ALTAM]] — Chapter 3 (Sections 4 and 10); Chapter 7 (Sections 2.4 and 4); Chapter 8; Chapter 9; Chapter 10; Chapter 11 (except section 12); Chapter 13 (except section 8); Chapter 14; Chapter 15 (sections 1-3); Chapter 17; Chapter 18 (Sections 5 and 6) [Note: sections 1 through 3 are background only]. Exercises are considered part of the required readings.
+> - [[Exam ACIA-CAPSTONE (CIA)|ACIA Capstone Exam]] — A4.1 Long-term insurance coverages (C, SLT): Chapter 1; A4.2 Survival models and their estimation (C, SLT): Chapters 2, 3 and 18; A4.3 Present value random variables (C, SLT): Chapters 4, 5, 8, 9 and 10; A4.4 Long-term insurance premium calculation (C, SLT): Chapters 6, 8, 9, 10, 13 and 14; A4.5 Long-term insurance reserves (SLT): Chapters 7-10; A4.6 Pension plans and retirement benefits (SLT): Chapter 11.
 
 > [!note] Contents unavailable
 > The book's full table of contents could not be read: Cambridge's front-matter PDF could not be fetched, and its book pages and Google Books list only some of the chapter titles, without chapter numbers. This page records its citation and assignment from the syllabus, and its description from the publisher.
@@ -38,3 +39,4 @@ A textbook on the modern mathematics of life insurance, suitable for advanced un
 - [SOA Exam FAM syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf) — the citation (Third Edition, Dickson, Hardy and Waters, 2020) and the chapters and sections assigned for FAM
 - [SOA Exam ALTAM syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf) — the chapters and sections assigned for ALTAM
 - [ALTAM-21-23: Variable Annuity Guarantees (SOA)](https://www.soa.org/globalassets/assets/files/edu/2023/2023-07-altam-21-23.pdf) — its statement that it is to be read with Chapter 15 of this book
+- [CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026)](https://www.cia-ica.ca/publications/997001e/) — the citation (title, edition, authors and ISBN) and the syllabus sections it is assigned for on the ACIA Capstone Exam, from the syllabus's background reading tables

@@ -11,7 +11,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:37e99cb5fecfd8437995a95d89ffafe613c9a81794a1c5da95888b7ed45af98c
+  content_hash: sha256:743a802bc8f47928f4d3c363e18cc88b3446422ef05f5b3a084cf81d22a41751
   sources: []
   open_findings: 0
   open_critical: 0
@@ -24,6 +24,7 @@ A text that gives budding actuaries and financial analysts a foundation in multi
 > [!info] On the syllabus
 > - [[Exam SRM (SOA)|Exam SRM]] — Chapter 1 – Background only; Chapter 2 – Sections 1-8; Chapter 3 – Sections 1-5; Chapter 5 – Sections 1-7; Chapter 6 – Sections 1-3; Chapter 7 – Sections 1-6; Chapter 8 – Sections 1-4; Chapter 9 – Sections 1-5; Chapter 11 – Sections 1-6; Chapter 12 – Sections 1-4; Chapter 13 – Sections 1-6.
 > - [[Exam PA (SOA)|Exam PA]] — Chapter 1 – Background only; Chapter 2 – Sections 1-8; Chapter 3 – Sections 1-5; Chapter 5 – Sections 1-7; Chapter 6 – Sections 1-3; Chapter 11 – Sections 1-6; Chapter 12 – Sections 1-4; Chapter 13 – Sections 1-6. While Chapters 7-9 are covered in Exam SRM, these models will not be covered in this exam.
+> - [[Exam ACIA-CAPSTONE (CIA)|ACIA Capstone Exam]] — A5.2 Generalized linear models (C): Chapters 2 (Sections 1-8), 3 (Sections 1-5), 5 (Sections 1-7), 11 (Sections 1-6), 12 (Sections 1-4) and 13 (Sections 1-6) — alternate reading; A5.13 Communication in predictive analytics (C): Chapter 6 (Sections 1-5) — alternate reading.
 
 ## Preface
 
@@ -92,3 +93,4 @@ A text that gives budding actuaries and financial analysts a foundation in multi
 - [Book Resources — Regression Modeling (Frees, University of Wisconsin–Madison)](https://users.ssc.wisc.edu/~ewfrees/regression/book-resources/) — corroborates the chapter titles and numbers for Chapters 1–21 and the three appendices
 - [SOA Exam SRM syllabus, January 2027](https://www.soa.org/globalassets/assets/files/edu/2027/spring/syllabi/2027-01-exam-srm-syllabus.pdf) — the citation (Frees, 2010, Cambridge) and the chapters and sections assigned for SRM
 - [SOA Exam PA syllabus, October 2026](https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-exam-pa-syllabus.pdf) — the assigned chapters and sections for PA, and its note on Chapters 7-9
+- [CIA Education Syllabus – ACIA Capstone Exam and Modules (CIA, last updated January 19, 2026)](https://www.cia-ica.ca/publications/997001e/) — the citation (title, edition, authors and ISBN) and the syllabus sections it is assigned for on the ACIA Capstone Exam, from the syllabus's background reading tables

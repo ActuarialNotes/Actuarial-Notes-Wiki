@@ -161,6 +161,7 @@ are in Appendix A.
 | SOA past FM (29 exams) | none | — | development |
 | Exam 6I, Exam 6T | none | — | development |
 | Non-exam requirements (VEE ×3, PAF, ASF, FAP, APC, DMAC, FAC, COP) | none | — | development |
+| CIA: ACIA Modules 1–2 and Capstone, the FCIA tracks' 10 modules and 16 exams | none | — | development |
 
 Fact Check status by file type:
 
@@ -494,6 +495,8 @@ gates through `--hold` in CI.
 | C16 | Resource-page leftovers | ⬜ | Later | 3 texts whose contents aren't available; Baer/Rendall (`resource-pages.md` §5). |
 | C17 | Study guides for every SOA and CAS requirement | ✅ 2026-10-18 | — | Pages for Exams 6I and 6T, the three VEEs, the SOA's PAF, ASF, FAP and DMAC modules (`syllabus_extract.py`'s module reader), the APC, the FAC and the CAS's Course on Professionalism, all `development`, with a `Resources/Books/` page for each new reading. Each credential's Study Guides list files them under *Modules and Courses* and *VEE Credits* (`NON_EXAM_SECTIONS` in `data/tracks.ts`); the FSA's list puts what every pathway shares first and groups its six pathways below it. Not covered: the Joint Board's EA exams on the FSA catalogue; 6T's version menu still lists the CAS-6 windows, which the AICT's exams don't follow. |
 
+| C19 | The CIA's own route to Fellowship | ✅ 2026-10-19 | — | 29 study guides transcribed from the CIA's syllabi by a CIA reader in `syllabus_extract.py`: ACIA Modules 1 and 2 and the ACIA Capstone Exam (its background readings linked by ISBN), and for each of the five FCIA tracks (PC, ILA, GB, RET, FIE) its two modules and three exams, F3BNK the banking option — all `development`, with a `Resources/Books/` page for each of the six syllabus documents and for Boudreault & Renaud and McDonald. ACIA and FCIA credential tracks (`data/tracks.ts`, the FCIA's five tracks as pathways) and a **CIA** choice on the Study Guides tab's two pages (`GuideBody` in `lib/bodyFilter.ts`). Not covered: the CIA Professionalism Workshop and the APLC (no syllabus published), the FCIA and Capstone exam dates, questions; and the exam pages now put ~85 kB gzip more into first paint (`virtual:exam-pages`), leaving 16 kB of the budget. |
+
 ### 4.4 V: Fact Check (VERIFY)
 
 Subplans: `verification.md` (the rules), `verification-plan.md` (the waves) and
@@ -788,6 +791,10 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-19, the CIA pathway.** C19: the CIA's ACIA and FCIA requirements join the
+  catalogue as study guides (development), with their own credential tracks and a CIA choice
+  on the Study Guides tab.
 
 - **2026-10-18, the Tutor.** L8 proposed and built to Phase 1 in Preview (`docs/tutor.md`):
   Exam 5, one approved account, no model. It carries the first working versions of L2

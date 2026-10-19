@@ -10,6 +10,13 @@ describe('requirementDisplayName', () => {
     expect(requirementDisplayName('Exam DMAC (SOA).md')).toBe('DMAC')
   })
 
+  it('names a CIA module the way the CIA does', () => {
+    expect(requirementDisplayName('Exam PC-M1 (CIA).md')).toBe('PC Module 1')
+    expect(requirementDisplayName('Exam ACIA-M2 (CIA).md')).toBe('ACIA Module 2')
+    expect(requirementDisplayName('Exam F1PC (CIA).md')).toBe('Exam F1PC')
+    expect(requirementDisplayName('Exam ACIA-CAPSTONE (CIA).md')).toBe('ACIA Capstone Exam')
+  })
+
   it('leaves an exam its "Exam"', () => {
     expect(requirementDisplayName('Exam MAS-I (CAS).md')).toBe('Exam MAS-I')
     expect(requirementDisplayName('Exam PA (SOA).md')).toBe('Exam PA')

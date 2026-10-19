@@ -1,0 +1,922 @@
+{
+  "wiki_id": "pc-m1",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "PC-M1",
+  "title": "PC Module 1: Principles and practice of insurance and Canadian automobile insurance",
+  "name": "Principles and practice of insurance and Canadian automobile insurance",
+  "track": "PC",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019",
+  "source_page": "https://www.cia-ica.ca/publications/223037e/",
+  "source_title": "FCIA Syllabus – Property and casualty track",
+  "source_date": "2025-10-30",
+  "source_sha256": "0575840476ad793f948c74b31fa387d8c7381fb377295679a9347728644b9a39",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    18,
+    24
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months from the date of module purchase to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Introduction to risk and insurance",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe risk, including insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Provide examples of types of insurable risks and classes of property and casualty (P&C) insurance that respond to insurable risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and provide examples of perils and hazards.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and provide examples of proximate cause.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain the objectives of risk management, including pre-loss and post-loss.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain the conflicts that can arise in the objectives of risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Identify and describe the five steps of the risk management process:",
+          "bullets": [
+            "a. Step 1 – Identifying and analyzing exposures.",
+            "b. Step 2 – Formulating options.",
+            "c. Step 3 – Selecting the best technique.",
+            "d. Step 4 – Implementing the risk management plan.",
+            "e. Step 5 – Monitoring results and modifying the plan."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Insurance categories and functions",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the basic insurance relationship of pooling funds to pay losses.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the major functions of insurance:",
+          "bullets": [
+            "a. Spread of risk.",
+            "b. Aid to security.",
+            "c. Aid to credit.",
+            "d. Loss prevention.",
+            "e. Source of capital.",
+            "f. Source of employment."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and describe categories of insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Regulatory framework",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the different roles of government in the regulation of insurance companies including federal control and provincial and territorial control.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role of the Property and Casualty Insurance Compensation Corporation (PACICC)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the major laws and regulations impacting insurance in Canada including:",
+          "bullets": [
+            "a. The Insurance Companies Act.",
+            "b. Provincial and territorial insurance acts.",
+            "c. The Highway Traffic Act.",
+            "d. Regulations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the purpose of statutory conditions and Québec general conditions related to P&C insurance",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the role of privacy laws in P&C insurance, including the Personal Information Protection and Electronic Documents Act",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Insurance as a contract: The insurance policy",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the requirements of contracts in common law and in Québec.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the requirements of insurance contracts with respect to:",
+          "bullets": [
+            "a. Insurable interest.",
+            "b. Indemnity, including the principle of indemnity.",
+            "c. Utmost good faith."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain the principles reinforcing indemnity, including:",
+          "bullets": [
+            "a. Salvage.",
+            "b. Subrogation.",
+            "c. Contribution.",
+            "d. Excess insurance."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Insurance documents and processes",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and explain key insurance documents, including:",
+          "bullets": [
+            "a. The policy.",
+            "b. Certificates of insurance.",
+            "c. Endorsements.",
+            "d. Binders/cover notes."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the major sections of an insurance policy, including:",
+          "bullets": [
+            "a. Coverage summary.",
+            "b. Insuring agreements.",
+            "c. Statutory conditions and Québec general conditions.",
+            "d. Policy conditions.",
+            "e. Signature clause."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the process and requirements for assigning, terminating, and renewing an insurance contract.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Insurance companies",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate the types of insurance providers, including:",
+          "bullets": [
+            "a. Stock companies.",
+            "b. Mutuals.",
+            "c. Government insurers.",
+            "d. Captive insurance companies.",
+            "e. Lloyd’s insurance market."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain financial stability and returns for insurers, including the differences for stock companies and mutuals.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the major functions of an insurance company, including:",
+          "bullets": [
+            "a. Finance, accounting, and investment.",
+            "b. Actuarial.",
+            "c. Marketing, agency, or production.",
+            "d. Underwriting.",
+            "e. Claims."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the purpose of reinsurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the primary methods and types of reinsurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Claims",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe claims in the P&C insurance context.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the differences in first-party and third-party claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe direct and indirect losses.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe prejudice in the context of P&C insurance claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Define the following key terms of P&C insurance claims:",
+          "bullets": [
+            "a. Forfeiture.",
+            "b. Prescription.",
+            "c. Salvage.",
+            "d. Subrogation.",
+            "e. Contribution.",
+            "f. Coinsurance."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Industry organizations: The customer",
+      "part": "Part A – Principles and practice of insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the role of the following insurance industry organizations and associations:",
+          "bullets": [
+            "a. Insurance Institute of Canada.",
+            "b. Insurance Bureau of Canada.",
+            "c. Institute for Catastrophic Loss Reduction.",
+            "d. Centre for Study of Insurance Operations.",
+            "e. Underwriters Laboratories of Canada.",
+            "f. Insurance Brokers Association of Canada.",
+            "g. Canadian Independent Adjusters’ Association.",
+            "h. Canadian Insurance Claims Managers Association.",
+            "i. Facility Association."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 1,
+      "title": "Introduction to automobile insurance",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the role of the legal jurisdictions in automobile insurance, including:",
+          "bullets": [
+            "a. Federal jurisdiction.",
+            "b. Provincial and territorial legislation.",
+            "c. Municipal bylaws."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the origins of automobile insurance, including car-use exposures requiring coverage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain the evolution of the automobile policy, including standard policy forms.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe proof-of-insurance requirements, including:",
+          "bullets": [
+            "a. Motor vehicle liability insurance cards.",
+            "b. Proof of financial responsibility."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Third-party liability coverage; direct compensation-property damage coverage",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate between tort and direct compensation systems.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe third-party liability coverage and exclusions under third-party liability coverage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and explain additional coverage available under third-party liability coverage, including:",
+          "bullets": [
+            "a. Amounts exceeding the policy limit.",
+            "b. Rented or leased automobiles."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the responsibilities of insured persons.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe non-economic and economic loss in the context of lawsuits for automobile-injury claims.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe absolute liability.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe direct compensation-property damage (DCPD) coverage, including:",
+          "bullets": [
+            "a. Deductibles under DCPD.",
+            "b. Determination of fault."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Accident benefits",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify insured persons under accident benefits coverage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the benefits under accident benefits coverage, including:",
+          "bullets": [
+            "a. Income-replacement benefit.",
+            "b. Non-earner benefit.",
+            "c. Caregiver benefit.",
+            "d. Medical, rehabilitation, and attendant-care benefits.",
+            "e. Payment of other expenses.",
+            "f. Death and funeral benefits.",
+            "g. Optional benefits."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and explain exclusions to accident benefits coverage.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe the interaction of accident benefits coverage with other systems, including:",
+          "bullets": [
+            "a. Accidents arising out of province.",
+            "b. Social-assistance payments.",
+            "c. Collateral benefits.",
+            "d. Workers’ compensation."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain the situation with respect to accident benefits fraud, including:",
+          "bullets": [
+            "a. Operation of fraud rings.",
+            "b. Planned accidents.",
+            "c. Rehabilitation and medical-service providers."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Uninsured automobile coverage",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the coverage for damage caused by uninsured or unidentified motorists, including:",
+          "bullets": [
+            "a. What and who are covered.",
+            "b. Interpretation of “struck.”",
+            "c. Claims procedures.",
+            "d. Limitations and exclusions."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain coverage for damage caused by inadequately insured motorists, including the family protection endorsement.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Identify and explain the operations of motor vehicle accident claims funds.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Loss or damage coverages",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the different types of loss or damage coverages, including:",
+          "bullets": [
+            "a. Specified perils.",
+            "b. Comprehensive.",
+            "c. Collision or upset.",
+            "d. All perils."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe exclusions under loss or damage coverages, including consequences of impaired driving and cannabis use.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the deductible clause and deductible under loss or damage coverages.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify and explain additional benefits under loss or damage coverages, including:",
+          "bullets": [
+            "a. Payment of charges.",
+            "b. Forgoing right to recover.",
+            "c. Temporary substitute automobiles.",
+            "d. Loss of use due to theft coverage."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe agreements of insureds under loss or damage coverages.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain the situation with respect to fraud under loss or damage coverages, including:",
+          "bullets": [
+            "a. Fraudulent automobile insurance sales.",
+            "b. Leased and phantom vehicles.",
+            "c. Theft rings.",
+            "d. Staged accidents.",
+            "e. Arson."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Explain how data analytics are used to combat automobile insurance fraud and the role of CANATICS (Canadian National Insurance Crime Services).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Statutory conditions",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe key statutory conditions related to automobile insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "General provisions, definitions, and exclusions",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "In the context of automobile insurance, define:",
+          "bullets": [
+            "a. Occupant.",
+            "b. Automobile."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the following general provisions and exclusions of automobile insurance:",
+          "bullets": [
+            "a. Territory.",
+            "b. Two or more automobiles insured.",
+            "c. Trailers and towing.",
+            "d. Inspection.",
+            "e. General exclusions."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the environment for automobile and transportation sharing and implications for automobile insurance.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 8,
+      "title": "Endorsements for use with the owner’s policy, the driver’s policy",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain the purpose of automobile insurance endorsements.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Identify and describe endorsements:",
+          "bullets": [
+            "a. Providing permission.",
+            "b. Restricting or excluding coverage.",
+            "c. Extending coverage.",
+            "d. To alter policy terms."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the driver’s auto policy.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 9,
+      "title": "Automobile insurance consumer protection",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and describe the laws and regulations impacting automobile insurance in Canada, including:",
+          "bullets": [
+            "a. The Insurance Companies Act.",
+            "b. Provincial and territorial insurance acts.",
+            "c. The Highway Traffic Act, Traffic Safety Act, and Motor Vehicle Act.",
+            "d. Regulations."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the automobile insurance regulations for consumer protection in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the purpose and functions of the:",
+          "bullets": [
+            "a. Facility Association.",
+            "b. Risk-sharing pool.",
+            "c. Québec risk-sharing plan."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 10,
+      "title": "Automobile insurance across Canada",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the environment for automobile insurance across Canada, including:",
+          "bullets": [
+            "a. Distribution of automobile insurance.",
+            "b. Provinces and territories with private insurance systems.",
+            "c. Provinces with government insurance systems.",
+            "d. The Québec system, the Société de l’assurance automobile du Québec (SAAQ)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe property-loss settlements in private, government, tort, and no-fault jurisdictions.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 11,
+      "title": "Principles of actuarial evidence",
+      "part": "Part B – Automobile Insurance",
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the role of actuaries in family law, including the valuation of pension-plan benefits in marriage (relationship) breakdown.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role of actuaries in civil litigation, including damages in personal injuries, fatalities, wrongful termination, insurance and reinsurance disputes, pension disputes, and other litigation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role conferred to actuaries by the Criminal Code of Canada in calculating the criminal rate of interest.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe and distinguish the roles of a fact witness, an expert witness, and a provider of litigation advice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the context provided by the common law, legislation, and the rules of civil procedure on actuarial evidence practice.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe the role of CIA Rules of Professional Conduct and the Standards of Practice (Part 1000, general, and Part 4000, actuarial evidence) in guiding the professionalism of actuarial evidence practice. Show awareness of the importance of professionalism for actuaries whose actuarial evidence practice is incidental to full-time practice in another actuarial practice area, such as insurance or pensions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the functions fulfilled by other professionals in the litigation area, such as life-care planners, vocational experts, accountants, economists, engineers, personal financial planners, business valuators, appraisers and structured settlement brokers, and how these professionals complement and compete with the function of actuaries in actuarial evidence.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { defaultBody, parseBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS } from './bodyFilter'
+import { defaultBody, defaultGuideBody, parseBody, parseGuideBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, CIA_TRACK_KEYS } from './bodyFilter'
 
 describe('defaultBody', () => {
   it('opens on the body of the reader’s own track', () => {
@@ -31,5 +31,24 @@ describe('parseBody', () => {
     expect(parseBody('soa')).toBeNull()
     expect(parseBody(null)).toBeNull()
     expect(parseBody('')).toBeNull()
+  })
+})
+
+describe('the CIA, on the Study Guides tab only', () => {
+  it('opens the Study Guides tab on the CIA for a CIA track', () => {
+    for (const track of CIA_TRACK_KEYS) expect(defaultGuideBody(track)).toBe('CIA')
+    for (const track of CAS_TRACK_KEYS) expect(defaultGuideBody(track)).toBe('CAS')
+    expect(defaultGuideBody('DEFAULT')).toBe('SOA')
+  })
+
+  it('opens a tab with no CIA ladder on the SOA for a CIA track', () => {
+    for (const track of CIA_TRACK_KEYS) expect(defaultBody(track)).toBe('SOA')
+  })
+
+  it('reads a stored CIA as a choice only where the CIA is offered', () => {
+    expect(parseGuideBody('CIA')).toBe('CIA')
+    expect(parseGuideBody('CAS')).toBe('CAS')
+    expect(parseGuideBody('cia')).toBeNull()
+    expect(parseBody('CIA')).toBeNull()
   })
 })

@@ -1,0 +1,413 @@
+{
+  "wiki_id": "ret-m2",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "RET-M2",
+  "title": "RET Module 2: Professional considerations in the retirement benefits environment",
+  "name": "Professional considerations in the retirement benefits environment",
+  "track": "RET",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023",
+  "source_page": "https://www.cia-ica.ca/publications/223038e/",
+  "source_title": "FCIA Syllabus – Retirement benefits track",
+  "source_date": "2024-02-02",
+  "source_sha256": "346a3f86d917a2c6fb9561e1b96f92faebcec248d81f3138a0b5f9a8d5214150",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    20,
+    21
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months from the date of module purchase to complete each FCIA module. As a general guideline, candidates should allocate approximately 100 hours to complete all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Canadian pension legislation",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe federal and provincial pension benefit acts and regulations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the various retirement benefit arrangements available to a plan sponsor.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and apply applicable agreements respecting multi-jurisdictional pension plans between provincial regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Recognize, define, interpret, and apply minimum standards of registered pension plans.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe funding requirements under applicable provincial minimum standard legislation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Outline and understand the different filing requirements for registered pension plans.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Pension plan projections",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand various assumptions needed for a forecast.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the basics of climate science and its impact on the work of actuaries.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Understand the different approaches to liability forecasting.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand the different approaches to asset forecasting.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the process to conduct climate scenario analysis for pension plans.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Design and construct replication portfolios using available assets or products to mitigate risk.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Evaluate various governmental rules and policies given a hypothetical regulatory framework.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Analyze the investment strategy of a provider of benefits, taking into account:",
+          "bullets": [
+            "a. any asset/liability matching requirements;",
+            "b. the trade-off between risk and reward;",
+            "c. an awareness of adding value to the shareholders of the business; and",
+            "d. integration of ESG factors."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Describe how projection models may be used to develop strategies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Evaluate risk-sharing and liability transfer transactions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Assess the components of dynamic rebalancing.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Analyze a forecast study in the context of actuarial standards of practice in Canada.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Pension plan de-risking",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand and describe how glide paths are used as a de-risking tool.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Discuss how margins in assumptions can be used as a de-risking tool.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Discuss how change in plan provisions can be used as a de-risking measure.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Consider, assess, and design target-benefit pension plans and shared-risk pension plans.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Interpret, analyze, and apply jurisprudence and legal environment.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand the process relative to annuity purchases:",
+          "bullets": [
+            "a. Annuities buy-ins versus buyouts.",
+            "b. Legal and contribution requirements.",
+            "c. Transfers in kind.",
+            "d. Legal contract reviews.",
+            "e. Coordination among annuity providers.",
+            "f. Conversion from annuity buy-in to buyout.",
+            "g. Discharge of liabilities under applicable legislation."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe how Assuris and PBGF protection can be optimized.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Consider the impact of ancillary provisions (such as indexation, survivor benefits, etc.).",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand legislative changes to plan provisions allowing annuity purchases.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Outline the issues arising from the discontinuance of benefit provision, including:",
+          "bullets": [
+            "a. the rights and expectations of beneficiaries;",
+            "b. the availability and selection of a method of provision of discontinuance benefits; and",
+            "c. the level of available assets."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Reporting, valuation, and management of benefit arrangements",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare and contrast the objectives of funding, solvency, hypothetical wind-up and accounting actuarial valuations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the issues that arise from the transfer or amendment of benefit rights; for example, following significant corporate activity (such as an acquisition or plan merger), including:",
+          "bullets": [
+            "a. the interests and responsibilities of the parties involved;",
+            "b. the terms set out in the legal documentation;",
+            "c. financial aspects, such as the calculation of the transfer values and benefits provided; and",
+            "d. related accounting implications."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Determine an appropriate method and appropriate financial and demographic assumptions for a valuation of a pension arrangement and placing values on benefits and contributions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe how climate-related risks could impact the valuation assumptions for liabilities and normal cost of pension plans.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Communication and organizational behaviour",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain differences between effective and poor communication techniques and their implications.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply techniques to structure ideas logically.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Develop clear, fact-based messages that can be communicated persuasively.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the role of cognitive biases on making suboptimal individual decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the role of organizational behavior on organizational decision-making processes and efficacy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain why communication is strategically important to organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe how information is communicated within organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe organizational and individual barriers to effective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Identify the risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Explain how to overcome communication barriers and minimize risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Recognize the influence of culture and diversity on communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Apply the CIA Standards of Practice and Rules of Professional Conduct in business communication.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

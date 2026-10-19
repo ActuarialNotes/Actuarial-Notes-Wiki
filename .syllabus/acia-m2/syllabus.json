@@ -1,0 +1,257 @@
+{
+  "wiki_id": "acia-m2",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "ACIA-M2",
+  "title": "ACIA Module 2",
+  "name": "",
+  "track": null,
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235",
+  "source_page": "https://www.cia-ica.ca/publications/997001e/",
+  "source_title": "CIA Education Syllabus – ACIA Capstone Exam and Modules",
+  "source_date": "2026-01-19",
+  "source_sha256": "2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    6,
+    7
+  ],
+  "intro": [
+    "The ACIA modules are a core educational requirement toward ACIA designation. They are intended to bridge accredited university education or education obtained via other actuarial organizations with the work environment.",
+    "They are administered online via the CIA learning management system.",
+    "The modules assume some knowledge of the topics acquired via a recognized university degree or through other Associate-level education. Outcomes that participants are expected to achieve often cover multiple learning objectives, with an emphasis on communications in most tasks.",
+    "The modules contain recordings, short readings, and/or quizzes. Each module includes a case study that includes various deliverables such as emails, reports, memorandums, recorded presentations, or spreadsheets. These case studies apply theoretical topics covered in the participant’s university degree or other recognized Associate-level education to practical actuarial scenarios; the content should not be new to the participant, but the application may be.",
+    "There is no formal prerequisite for the ACIA modules. Participants in an accredited university will be expected to have completed some actuarial courses prior to completing the first ACIA module, likely in their second year of university.",
+    "The second module should be completed when a participant has nearly completed all courses relevant to the ACIA Capstone Exam. It is expected that these participants undertake the second module in the last year of their university program. Participants are responsible for ensuring they have the appropriate knowledge."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "D. Traditional actuarial solutions",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": "The fourth portion of the module complements university or other recognized education by reintroducing actuarial solutions to traditional problems. Fields of application of such traditional solutions could be pensions, life insurance, or general insurance.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe why and how models are used for pricing, reserving, and assessing profitability and sustainability of life insurance products or pension arrangements.",
+          "bullets": [],
+          "group": "1. Complement of long-term actuarial mathematics"
+        },
+        {
+          "letter": "b",
+          "text": "Apply actuarial models and cash-flow techniques used in pricing, reserving, and assessing profitability of contracts for contingent payments with appropriate allowance for expenses of life insurance and pension fund applications.",
+          "bullets": [],
+          "group": "1. Complement of long-term actuarial mathematics"
+        },
+        {
+          "letter": "c",
+          "text": "Describe typical and practical applications of traditional long-term solutions, building on solutions commonly considered in a university education.",
+          "bullets": [],
+          "group": "1. Complement of long-term actuarial mathematics"
+        },
+        {
+          "letter": "d",
+          "text": "Compare and justify actuarial solutions relative to long-term applications in the context of life insurance and pension.",
+          "bullets": [],
+          "group": "1. Complement of long-term actuarial mathematics"
+        },
+        {
+          "letter": "e",
+          "text": "Draw connections between simple solutions part of a university education and advanced actuarial problems relative to long-term applications.",
+          "bullets": [],
+          "group": "1. Complement of long-term actuarial mathematics"
+        },
+        {
+          "letter": "a",
+          "text": "Describe why and how models are used for pricing, reserving, and assessing profitability of short-term insurance products.",
+          "bullets": [],
+          "group": "2. Complement of short-term actuarial mathematics"
+        },
+        {
+          "letter": "b",
+          "text": "Apply actuarial models and projected cash-flow techniques in pricing, reserving, and assessing profitability of contracts for contingent payments, with appropriate allowance for expenses of short-term insurance.",
+          "bullets": [],
+          "group": "2. Complement of short-term actuarial mathematics"
+        },
+        {
+          "letter": "c",
+          "text": "Describe typical and practical applications of traditional short-term solutions, building on solutions already considered in university education.",
+          "bullets": [],
+          "group": "2. Complement of short-term actuarial mathematics"
+        },
+        {
+          "letter": "d",
+          "text": "Compare and justify actuarial solutions relative to short-term applications.",
+          "bullets": [],
+          "group": "2. Complement of short-term actuarial mathematics"
+        },
+        {
+          "letter": "e",
+          "text": "Draw connections between simple solutions part of a university education and advanced actuarial problems relative to short-term applications.",
+          "bullets": [],
+          "group": "2. Complement of short-term actuarial mathematics"
+        },
+        {
+          "letter": "a",
+          "text": "Recognize appropriate model outputs to communicate the key elements of an actuarial solution and uncertainties, tailored to the intended audience.",
+          "bullets": [],
+          "group": "3. Communication of results and uncertainties"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "E. Advanced actuarial models and predictive analytics applications",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": "This final portion of the module introduces predictive modelling to actuarial problems, building on the predictive analytics models taught at Canadian universities or through other recognized actuarial education to prepare participants for the workplace. Examples will be applicable to all practice areas.",
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Identify the problem to be solved using predictive analytics techniques.",
+          "bullets": [],
+          "group": "1. Notions in predictive analytics"
+        },
+        {
+          "letter": "b",
+          "text": "Understand the business objectives, statistical objectives, and constraints of a problem, including implementation limitations and challenges.",
+          "bullets": [],
+          "group": "1. Notions in predictive analytics"
+        },
+        {
+          "letter": "c",
+          "text": "Explain how to create models that fit a business problem and that can be validated, monitored, and updated.",
+          "bullets": [],
+          "group": "1. Notions in predictive analytics"
+        },
+        {
+          "letter": "d",
+          "text": "Identify common issues and pitfalls such as correlation and causation, impact of data biases, and overfitting models.",
+          "bullets": [],
+          "group": "1. Notions in predictive analytics"
+        },
+        {
+          "letter": "a",
+          "text": "Describe measures of data quality and understand the importance of appropriate data.",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "b",
+          "text": "Construct datasets and use appropriate tools for cleaning, restructuring, and transforming data to be suitable for solving real-world problems, including how to handle missing data.",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "c",
+          "text": "Describe various data structures, sources of data, and their characteristics, including extremely large datasets.",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "d",
+          "text": "Describe the possible aims of a data analysis (e.g., descriptive, inferential, predictive).",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "e",
+          "text": "Explain the ethical, legal, and regulatory issues involved in using personal data and others’ work.",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "f",
+          "text": "Explain the main issues to be addressed by a data governance policy and its importance for an organization.",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "g",
+          "text": "Explain the risks associated with use of data (including algorithmic decision-making).",
+          "bullets": [],
+          "group": "2. Data and systems"
+        },
+        {
+          "letter": "a",
+          "text": "Evaluate the appropriateness of a model and its assumptions for addressing the business problem.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "b",
+          "text": "Understand the difference between a stochastic and a deterministic model and identify the advantages/disadvantages of each.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the purposes of scenario-based and proxy models.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "d",
+          "text": "Understand the short- and long-run properties of a model, and how this may be relevant in deciding whether a model is suitable for a particular application.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "e",
+          "text": "Apply parsimony to model selection, balancing model complexity and accuracy.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "f",
+          "text": "Discuss the business processes and limitations relative to the implementation of a predictive model.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "g",
+          "text": "Use test data to estimate and confirm model parameters.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "h",
+          "text": "Use graphical and quantitative tools to validate and monitor the model.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "i",
+          "text": "Plan and produce a model with clear documentation, enabling detailed checking and high-level scrutiny.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "j",
+          "text": "Perform checks on the results of a model, including applying sensitivity of assumptions and/or scenario tests.",
+          "bullets": [],
+          "group": "3. Model selection and validation"
+        },
+        {
+          "letter": "a",
+          "text": "Create appropriate data visualizations to communicate the key elements of a predictive modelling analysis, tailored to the intended audience.",
+          "bullets": [],
+          "group": "4. Communication of results and uncertainties"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the meaning and value of reproducible research and describe the elements required to ensure a data analysis is reproducible.",
+          "bullets": [],
+          "group": "4. Communication of results and uncertainties"
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

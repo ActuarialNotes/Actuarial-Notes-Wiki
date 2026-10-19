@@ -7,7 +7,7 @@ import { requirementDisplayName, wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { NON_EXAM_SECTIONS, TRACKS, type Track } from '@/data/tracks'
 import { GENERAL_GUIDES } from '@/data/examGuides'
-import { defaultBody, loadBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, type ExamBody } from '@/lib/bodyFilter'
+import { defaultGuideBody, loadGuideBody, saveBody, SOA_TRACK_KEYS, CAS_TRACK_KEYS, CIA_TRACK_KEYS, type GuideBody } from '@/lib/bodyFilter'
 import { ExamDateMeta, ExamRow, ExamRowMeta } from '@/components/ExamRow'
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
 import { LogoTile } from '@/components/LogoTile'
@@ -32,7 +32,7 @@ function examNameToTrackKey(name: string): string {
   return wikiExamIdToProgressKey(cleaned)
 }
 
-const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
+const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA', 'ACIA', 'FCIA']
 
 // WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
 const SEARCH_BAR_H = 56
@@ -181,10 +181,10 @@ export default function WikiHome() {
   // choice is stored so the Quiz tab opens on the same body — one ladder, seen
   // twice. `lib/bodyFilter.ts` holds the key, the track sets and the fallback,
   // so the two tabs cannot drift apart on any of them.
-  const [filterOverride, setFilterOverride] = useState<ExamBody | null>(loadBody)
-  const filter = filterOverride ?? defaultBody(selectedTrack)
+  const [filterOverride, setFilterOverride] = useState<GuideBody | null>(loadGuideBody)
+  const filter = filterOverride ?? defaultGuideBody(selectedTrack)
 
-  function handleSetFilter(f: ExamBody) {
+  function handleSetFilter(f: GuideBody) {
     saveBody(f)
     setFilterOverride(f)
   }
@@ -246,7 +246,7 @@ export default function WikiHome() {
 
   const filteredTrackGroups = useMemo(() =>
     allTrackGroups.filter(g =>
-      filter === 'SOA' ? SOA_TRACK_KEYS.has(g.track.key) : CAS_TRACK_KEYS.has(g.track.key),
+      ({ SOA: SOA_TRACK_KEYS, CAS: CAS_TRACK_KEYS, CIA: CIA_TRACK_KEYS })[filter].has(g.track.key),
     ),
     [allTrackGroups, filter],
   )
@@ -327,6 +327,7 @@ export default function WikiHome() {
           options={[
             { value: 'SOA', label: 'SOA' },
             { value: 'CAS', label: 'CAS' },
+            { value: 'CIA', label: 'CIA' },
           ]}
           className="shrink-0"
         />

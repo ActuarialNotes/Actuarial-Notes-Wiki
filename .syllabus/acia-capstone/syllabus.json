@@ -1,0 +1,2381 @@
+{
+  "wiki_id": "acia-capstone",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "ACIA-CAPSTONE",
+  "title": "ACIA Capstone Exam",
+  "name": "ACIA Capstone Exam",
+  "track": null,
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=608114&fid=627235",
+  "source_page": "https://www.cia-ica.ca/publications/997001e/",
+  "source_title": "CIA Education Syllabus – ACIA Capstone Exam and Modules",
+  "source_date": "2026-01-19",
+  "source_sha256": "2a0fb1facb47c97a76ac956d86f0514bcb9e5459ecdc0a973bd3f6f155e3d291",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    8,
+    31
+  ],
+  "intro": [
+    "The overarching goal of the ACIA Capstone Exam is to help participants prepare for the actuarial profession and tasks related to entry-level actuarial positions. Participants are expected to demonstrate integration of knowledge of actuarial concepts and communicate results with a few short assignments. The exam assumes knowledge acquired in a recognized university degree, as well as from the ACIA module, focusing on application and communication.",
+    "The ACIA Capstone Exam is administered as an open-book, six-hour exam, requiring analysis in the context of a problem and submission of written responses to specified tasks. The exam is split into two sections: a four-hour mandatory common section and a two-hour specialized section, long- or short-term, selected at exam registration.",
+    "Participants will complete the exam through the learning management system, with secure online proctoring. The exam is open book and participants are responsible for bringing their own reference material to the exam. Strict adherence to the exam rules and regulations, which will be communicated in advance, is mandatory.",
+    "General learning objectives are shown below, with Bloom’s taxonomy classification in parentheses.",
+    "1. Demonstrate a clear understanding of actuarial problems. (B5)",
+    "2. Apply mathematical, statistical, and financial models and methods to solve actuarial problems. (C3)",
+    "3. Produce efficient and readable computer codes to implement actuarial models in various platforms, such as R and Excel. (C6)",
+    "4. Perform an actuarial analysis to support decision-making in a given business environment. (C4)",
+    "5. Formulate and support recommendations based on actuarial analysis in a business context. (C6)",
+    "6. Write an effective communication (e.g., executive summary, email, presentation, excerpts from a report) on assumptions, methods, and results of actuarial analysis to an appropriate audience (e.g., peers, internal stakeholders, management). (C6)",
+    "The exam is composed of two parts – Part 1 Common (C) and Part 2a Specialized Long-term (SLT) or 2b Specialized Short-term (SST), as outlined below. Please refer to the Appendix to the CIA Capstone Exam Syllabus and to the ACIA Module Syllabus for more details on the background knowledge.",
+    "- 1. C (4 hours) — from an accredited university degree: A3.9 to A3.13; A4.1 to A4.4; A4.7 to A4.14; A5, except A5.3, A5.4 and A5.5 — from the ACIA module: A, B, C",
+    "- 2a. SLT (2 hours) — from an accredited university degree: Common knowledge, A4.5 and A4.6 — from the ACIA module: A, B, C, D1, E",
+    "- 2b. SST (2 hours) — from an accredited university degree: Common knowledge and A4.15; A5.3 and A5.4 — from the ACIA module: A, B, C, D2, E",
+    "Note: Prerequisite knowledge is expected to be acquired either through the accredited university degree or another actuarial organizations and ACIA modules. While some references relative to the Capstone Exam topics are found in the appendix, it is not possible to provide all potential references to all sections as accredited universities and other actuarial organizations use various source materials.",
+    "Performance of a participant’s answers will be evaluated on the following principles:",
+    "1. The overall quality of the answers’ technical components:\n   - a. The accuracy of the steps leading to the results (e.g., method, code, answers, formulas used in worksheets).\n   - b. The relevance and coherence of the analyses performed with code and worksheets provided.",
+    "2. The overall quality of the communication:\n   - a. The ability to effectively communicate a complex analysis and solution to the targeted audience for the appropriate purpose.\n   - b. The ability to appropriately address the problem or the given mandate.",
+    "Participants are highly encouraged to document and comment their computer code to help demonstrate their ability to translate an abstract actuarial problem into a computer program. Performance will also be assessed on the nature of the assignments."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "A1. Probability",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define set functions, sample space, and events. Define probability as a set function on a collection of events and state the basic axioms of probability.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate probabilities of mutually exclusive events.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate probabilities using addition and multiplication rules.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "d",
+          "text": "Define independence and calculate probability of independent events.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate probabilities using combinatorics, such as combinations and permutations.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "f",
+          "text": "Define and calculate conditional probabilities.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "g",
+          "text": "State Bayes’s theorem and use it to calculate conditional probabilities.",
+          "bullets": [],
+          "group": "A1.1 Probability"
+        },
+        {
+          "letter": "a",
+          "text": "Explain and apply the concepts of random variables, probability and probability density functions, and cumulative distribution functions.",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate conditional probabilities.",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "c",
+          "text": "Explain and calculate expected value, mode, median, percentile, and higher moments.",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "d",
+          "text": "Explain and calculate variance, standard deviation, and coefficient of variation.",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "e",
+          "text": "Define probability-generating functions and moment-generating functions and use them to calculate probabilities and moments.",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "f",
+          "text": "Determine the sum of independent random variables (Poisson and normal).",
+          "bullets": [],
+          "group": "A1.2 Univariate random variables"
+        },
+        {
+          "letter": "a",
+          "text": "Explain and perform calculations concerning joint probability and probability density functions and cumulative distribution functions.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "b",
+          "text": "Determine conditional and marginal probability and probability density functions and cumulative distribution functions.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate moments for joint, conditional, and marginal random variables.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "d",
+          "text": "Explain and apply joint moment-generating functions.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate variance and standard deviation for conditional and marginal probability distributions.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "f",
+          "text": "Calculate joint moments, such as the covariance and the correlation coefficient.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "g",
+          "text": "Determine the distribution of a transformation of jointly distributed random variables.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "h",
+          "text": "Determine the distribution of order statistics from a set of independent random variables.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "i",
+          "text": "Calculate probabilities and moments for linear combinations of independent random variables.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        },
+        {
+          "letter": "j",
+          "text": "State and apply the central limit theorem.",
+          "bullets": [],
+          "group": "A1.3 Multivariate random variables"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "A2. Financial mathematics",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Define and recognize the definitions of the following terms: interest rate; simple interest; compound interest; accumulation function; future value; current value, present value, and net present value; discount factor; discount rate; convertible m-thly; nominal rate; effective rate; inflation and real rate of interest; force of interest; and equation of value.",
+          "bullets": [],
+          "group": "A2.1 Time value of money"
+        },
+        {
+          "letter": "b",
+          "text": "Given any three of interest rate, period, present value, and future value, calculate the remaining item based on simple or compound interest.",
+          "bullets": [],
+          "group": "A2.1 Time value of money"
+        },
+        {
+          "letter": "c",
+          "text": "Solve time value of money equations involving variable force of interest.",
+          "bullets": [],
+          "group": "A2.1 Time value of money"
+        },
+        {
+          "letter": "d",
+          "text": "Given any one of the effective interest rate, the nominal interest rate convertible m-thly, the effective discount rate, the nominal discount rate convertible m-thly, or the force of interest, calculate all of the other items.",
+          "bullets": [],
+          "group": "A2.1 Time value of money"
+        },
+        {
+          "letter": "e",
+          "text": "Write the equation of value given a set of cash flows and an interest rate.",
+          "bullets": [],
+          "group": "A2.1 Time value of money"
+        },
+        {
+          "letter": "a",
+          "text": "Define the following terms: annuity-immediate; annuity-due; perpetuity; payable m-thly or payable continuously; level-payment annuity; arithmetic increasing/decreasing annuity; geometric increasing/decreasing annuity; and term of annuity.",
+          "bullets": [],
+          "group": "A2.2 Annuities with payments that are not contingent"
+        },
+        {
+          "letter": "b",
+          "text": "For each of the following types of annuity and cash flows, given sufficient information of immediate or due, present value, future value, current value, interest rate, payment amount, and term of annuity, the participant should be able to calculate any remaining item: level annuity, finite term; and level perpetuity; and non-level annuities/cash flows: arithmetic progression, finite term; arithmetic progression, perpetuity; geometric progression, finite term; geometric progression, perpetuity; and other non-level annuities/cash flows.",
+          "bullets": [],
+          "group": "A2.2 Annuities with payments that are not contingent"
+        },
+        {
+          "letter": "a",
+          "text": "Define the following terms: principal, interest, term of loan, outstanding balance, final payment (drop payment, balloon payment), amortization, and sinking fund.",
+          "bullets": [],
+          "group": "A2.3 Loans"
+        },
+        {
+          "letter": "b",
+          "text": "Given any four of term of loan, interest rate, payment amount, payment period, or principal, calculate the remaining item, including refinancing.",
+          "bullets": [],
+          "group": "A2.3 Loans"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate the outstanding balance at any point in time, the amount of interest and principal repayment in a given payment, including refinancing.",
+          "bullets": [],
+          "group": "A2.3 Loans"
+        },
+        {
+          "letter": "d",
+          "text": "Given the quantities, except one, in a sinking-fund arrangement, calculate the missing quantity, including refinancing.",
+          "bullets": [],
+          "group": "A2.3 Loans"
+        },
+        {
+          "letter": "a",
+          "text": "Define the following terms: price; redemption value; par value/face value; coupon, coupon rate; term of bond; yield rate; callable/non-callable; book value; and accumulation of discount, amortization of premium.",
+          "bullets": [],
+          "group": "A2.4 Bonds"
+        },
+        {
+          "letter": "b",
+          "text": "Given sufficient partial information about the following items, calculate any of the remaining items: price, book value, amortization of premium, accumulation of discount, redemption value, face value, yield rate, coupon, coupon rate, term of bond, point in time that a bond has a given book value, amortization of premium, or accumulation of discount.",
+          "bullets": [],
+          "group": "A2.4 Bonds"
+        },
+        {
+          "letter": "a",
+          "text": "Define the following terms: yield rate/rate of return; dollar-weighted rate of return/time-weighted rate of return; current value; duration (Macaulay, modified); convexity (Macaulay, modified); portfolio; spot rate; forward rate; yield curve; and stock price, stock dividend.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the portfolio yield rate, the dollar-weighted and time-weighted rate of return, the duration and convexity of a set of cash flows, and the Macaulay or modified durations.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "c",
+          "text": "Use duration and convexity to approximate the change in present value due to a change in interest rate using first-order linear approximation based on Macaulay or modified duration.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the price of a stock using the dividend discount model.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "e",
+          "text": "Explain how market data can be used to construct a yield curve.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "f",
+          "text": "Apply the term structure of interest rates to modelling various cash flows, including calculating the sensitivity of the value to changes in the term structure.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "g",
+          "text": "Describe the characteristics of the main investment assets and of the markets in such assets and explain the principal economic influences on investment market price levels and total returns.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "h",
+          "text": "Explain the principal economic influences on investment market price levels and total returns, and describe and explain the theoretical and historical relationships between the total returns and the components of total returns on the main asset classes and key economic variables.",
+          "bullets": [],
+          "group": "A2.5 General cash flows and portfolios"
+        },
+        {
+          "letter": "a",
+          "text": "Define and recognize the definitions of the following terms: cash-flow matching, immunization (including full immunization), and Redington immunization.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "b",
+          "text": "Construct an investment portfolio to fully immunize a set of liability cash flows, an investment portfolio to match present value and duration of a set of liability cash flows, and an investment portfolio to exactly match a set of liability cash flows.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "c",
+          "text": "Explain how asset/liability modelling can be used to develop an appropriate investment strategy; explain methods of quantifying the risk of investing in different classes and subclasses of investment.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the price of a stock using the dividend discount model.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "e",
+          "text": "Explain how market data can be used to construct a yield curve.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "f",
+          "text": "Apply the term structure of interest rates to modelling various cash flows, including calculating the sensitivity of the value to changes in the term structure.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "g",
+          "text": "Describe the characteristics of the main investment assets and of the markets in such assets and explain the principal economic influences on investment market price levels and total returns.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "h",
+          "text": "Explain the principal economic influences on investment market price levels and total returns; describe and explain the theoretical and historical relationships between the total returns and the components of total returns on the main asset classes and key economic variables.",
+          "bullets": [],
+          "group": "A2.6 Immunization"
+        },
+        {
+          "letter": "a",
+          "text": "Recognize and define the following terms: swap rate, swap term, or swap tenor; notional amount; market value of a swap; settlement dates; settlement period; counterparties; deferred swap; amortizing swap; accreting swap; and interest rate swap net payments.",
+          "bullets": [],
+          "group": "A2.7 Interest rate swaps"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the swap rate and the market value of an interest rate swap, deferred or otherwise, and with either constant or varying notional amount.",
+          "bullets": [],
+          "group": "A2.7 Interest rate swaps"
+        },
+        {
+          "letter": "c",
+          "text": "Explain how asset/liability modelling can be used to develop an appropriate investment strategy; explain methods of quantifying the risk of investing in different classes and subclasses of investment.",
+          "bullets": [],
+          "group": "A2.7 Interest rate swaps"
+        },
+        {
+          "letter": "a",
+          "text": "Define and recognize the components of interest rates including the following: real risk-free rate, inflation rate, default risk premium, liquidity premium, and maturity risk premium.",
+          "bullets": [],
+          "group": "A2.8 Determinants of interest rates"
+        },
+        {
+          "letter": "b",
+          "text": "Explain how the components of interest rates apply in various contexts, such as commercial loans, mortgages, credit cards, bonds, and government securities.",
+          "bullets": [],
+          "group": "A2.8 Determinants of interest rates"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the theories of why interest rates differ by term, including liquidity preference (opportunity cost), expectations, preferred habitat, and market segmentation.",
+          "bullets": [],
+          "group": "A2.8 Determinants of interest rates"
+        },
+        {
+          "letter": "d",
+          "text": "Explain how interest rates differ from one country to another (e.g., U.S. vs. Canada).",
+          "bullets": [],
+          "group": "A2.8 Determinants of interest rates"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "A3. Business, economics, and finance",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the basic principles of personal and corporate taxation and the taxation of investments held by institutions.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "b",
+          "text": "Explain why companies are required to produce annual reports and accounts.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "c",
+          "text": "Explain fundamental accounting concepts and terms and describe the main sources of accounting regulation.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "d",
+          "text": "Explain the purpose and interactions between a statement of financial performance, statement of financial position, and cash-flow statements.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "e",
+          "text": "Explain the value of reporting on environmental, social, and economic sustainability, and other alternatives to traditional financial reporting, and describe possible contents of such reports.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "f",
+          "text": "Explain the basic structure of company and group accounts.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "g",
+          "text": "Explain the purpose of the main components of company accounts and interpret them.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "h",
+          "text": "Construct simple statements of financial position and profit or loss.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "i",
+          "text": "Calculate and interpret financial and accounting ratios.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "j",
+          "text": "Explain the characteristics of various forms of equity capital from the point of view of the issuer and the investor.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "k",
+          "text": "Explain the characteristics of various forms of long-term debt capital from the point of view of the issuer and the investor.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "l",
+          "text": "Explain the characteristics of various forms of short- and medium-term financing from the point of view of the issuer and the investor.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "m",
+          "text": "Calculate weighted-average cost of capital.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "n",
+          "text": "Explain the main methods of capital budgeting.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "o",
+          "text": "Calculate a project's investment return.",
+          "bullets": [],
+          "group": "A3.1 Basic accounting and finance"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the concept of utility and how rational utility-maximizing agencies make consumption choices.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the elasticity of supply and demand and the effects on a market of the different levels of elasticity.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the interaction between supply and demand and the way in which equilibrium market prices are achieved.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "d",
+          "text": "Explain various pricing strategies that can be used by firms.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "e",
+          "text": "Explain the core economic concepts involved in choices made by businesses with respect to short-and long-run investment and production choices.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "f",
+          "text": "Explain competitive markets and how they operate.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "g",
+          "text": "Explain profitability in markets with imperfect competition.",
+          "bullets": [],
+          "group": "A3.2 Microeconomics"
+        },
+        {
+          "letter": "a",
+          "text": "Explain basic macroeconomic measures (e.g., GDP) used to compare the economies of countries.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the structure of public finances for an industrialized country.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the effect of fiscal and monetary policy on the economy, including the effect on financial markets.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "d",
+          "text": "Explain the role of international trade, exchange rates, and the balance of payments in the economy.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "e",
+          "text": "Explain the effect of savings and consumption rates on the economy.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "f",
+          "text": "Explain the major factors affecting the level of interest rates, the rate of inflation, the exchange rate, the level of employment, and the rate of growth for an industrialized country.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "g",
+          "text": "Describe the function of money in the economy.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "h",
+          "text": "Explain how interest rates are determined.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "i",
+          "text": "Explain the relationship between money and interest rates.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "j",
+          "text": "Explain how macroeconomic policies affect businesses.",
+          "bullets": [],
+          "group": "A3.3 Macroeconomics"
+        },
+        {
+          "letter": "a",
+          "text": "Estimate the risk and return of an asset, given appropriate inputs.",
+          "bullets": [],
+          "group": "A3.4 Mean-variance portfolio theory"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the risk and expected return of a portfolio of many risky assets, given the expected return, volatility, and correlation of returns of the individual assets.",
+          "bullets": [],
+          "group": "A3.4 Mean-variance portfolio theory"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the assumptions of mean-variance theory and understand the importance of the mean/standard-deviation diagram and the resulting efficient market frontier.",
+          "bullets": [],
+          "group": "A3.4 Mean-variance portfolio theory"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the optimal portfolio, locate the capital market line, and describe the limitations of this approach.",
+          "bullets": [],
+          "group": "A3.4 Mean-variance portfolio theory"
+        },
+        {
+          "letter": "e",
+          "text": "Describe how portfolio risk can be reduced through diversification across multiple securities or across multiple asset classes.",
+          "bullets": [],
+          "group": "A3.4 Mean-variance portfolio theory"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the assumptions and properties of the capital asset pricing model (CAPM).",
+          "bullets": [],
+          "group": "A3.5 Asset pricing models"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the required return on a particular asset, a portfolio, or a project using the CAPM.",
+          "bullets": [],
+          "group": "A3.5 Asset pricing models"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the assumptions of a factor model for security returns.",
+          "bullets": [],
+          "group": "A3.5 Asset pricing models"
+        },
+        {
+          "letter": "d",
+          "text": "Identify the expected return, factors, factor betas, and firm-specific components of a security from its factor equation.",
+          "bullets": [],
+          "group": "A3.5 Asset pricing models"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate the required return on a particular asset, a portfolio, or a project using a single-factor and a multi-factor model.",
+          "bullets": [],
+          "group": "A3.5 Asset pricing models"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the definition of efficient markets and distinguish between the strong, semi-strong, and weak versions of the efficient-market hypothesis (EMH).",
+          "bullets": [],
+          "group": "A3.6 Market efficiency and behavioural finance"
+        },
+        {
+          "letter": "b",
+          "text": "Identify empirical evidence for or against each form of the EMH.",
+          "bullets": [],
+          "group": "A3.6 Market efficiency and behavioural finance"
+        },
+        {
+          "letter": "c",
+          "text": "Identify empirical examples of market anomalies that show results contrary to the EMH.",
+          "bullets": [],
+          "group": "A3.6 Market efficiency and behavioural finance"
+        },
+        {
+          "letter": "d",
+          "text": "Use behavioural finance to demonstrate why asset prices, especially in times of uncertainty and high volatility, may deviate from their fundamental values.",
+          "bullets": [],
+          "group": "A3.6 Market efficiency and behavioural finance"
+        },
+        {
+          "letter": "a",
+          "text": "Define the following measures of investment risk: variance, semi-variance, value at risk (VaR) and tail value at risk (TVaR).",
+          "bullets": [],
+          "group": "A3.7 Investment risk and project analysis"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the advantages and disadvantages of the risk measures listed above.",
+          "bullets": [],
+          "group": "A3.7 Investment risk and project analysis"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate the risk measures listed above to compare investment opportunities.",
+          "bullets": [],
+          "group": "A3.7 Investment risk and project analysis"
+        },
+        {
+          "letter": "d",
+          "text": "Understand the following methods to conduct risk analysis: sensitivity analysis, break-even analysis, scenario analysis, and Monte Carlo simulation.",
+          "bullets": [],
+          "group": "A3.7 Investment risk and project analysis"
+        },
+        {
+          "letter": "e",
+          "text": "Use a decision tree to model future outcomes and analyze real options embedded in a project.",
+          "bullets": [],
+          "group": "A3.7 Investment risk and project analysis"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the two main forms of financing: equity issues and debt issues.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the process by which a company raises capital, including venture capital, IPOs, additional issues, and private placement.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate the effect from changes in capital structure on a company’s overall value, equity beta, cost of debt, cost of equity, and weighted-average cost of capital, assuming the two Modigliani–Miller propositions hold.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "d",
+          "text": "Describe the effect of corporate tax and costs of financial distress, including the threat of bankruptcy, on the capital structure of a company.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "e",
+          "text": "Explain the role of agency costs and asymmetric information in affecting a company’s pecking order of financing choices.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "f",
+          "text": "Describe different possible structures for a business entity and their advantages and disadvantages.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "g",
+          "text": "Explain the principles and objectives of investment management and analyze the investment needs of an institutional or individual investor.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "h",
+          "text": "Describe methods for the valuation of asset portfolios and explain their appropriateness in different situations.",
+          "bullets": [],
+          "group": "A3.8 Capital structure"
+        },
+        {
+          "letter": "a",
+          "text": "Distinguish between long and short positions for both assets (including short selling of stocks) and derivatives on assets.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "b",
+          "text": "Recognize the transaction costs affecting profit calculations for both assets and derivatives on assets (including commissions and bid-ask spread).",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "c",
+          "text": "Recognize the definitions of the following terms relating to both forward contracts and prepaid forward contracts: forward contract, prepaid forward contracts, outright purchase, fully leveraged purchase, payoff of long and short forward, net profit of long and short forward.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "d",
+          "text": "Determine payoffs and profits for both long and short positions on forward contracts.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate prices for both forward contracts and prepaid forward contracts on stocks with no dividends, continuous dividends, and discrete dividends.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "f",
+          "text": "Construct a synthetic forward from the underlying stock and a risk-free asset, and identify arbitrage opportunities when the synthetic forward price is different from the market forward price.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "g",
+          "text": "Recognize the definitions of the following terms: marking to market, margin balance, maintenance margin, and margin call.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "h",
+          "text": "Evaluate an investor’s margin balance based on changes in asset values.",
+          "bullets": [],
+          "group": "A3.9 Introductory derivatives – forwards and futures"
+        },
+        {
+          "letter": "a",
+          "text": "Define and recognize the following terms: call and put options, expiration date, strike price, moneyness, and option style.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate the payoff and profit on both long and short positions with respect to both call and put options.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "c",
+          "text": "Explain the cash-flow characteristics of exotic options: Asian (arithmetic and geometric), barrier, compound, gap, exchange, and lookback.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the payoffs on exotic options: lookback, chooser, shout, rainbow, and forward start.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "e",
+          "text": "Recognize that a long put can be used as an insurance strategy for a long stock position and a short call can be used as an insurance strategy for a short stock position.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "f",
+          "text": "Explain how the following option strategies can be used as tools to manage financial risk or speculate on price or volatility: option spreads (bull, bear, ratio), collar, straddle, strangle, and butterfly spread.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "g",
+          "text": "Evaluate the payoff and profit of the option strategies described above.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "h",
+          "text": "Apply put-call parity to European options on stocks with no dividends, continuous dividends, and discrete dividends.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "i",
+          "text": "Compare options with respect to term-to-maturity and strike price.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "j",
+          "text": "Identify factors affecting the early exercise of American options and the situations where the values of European and American options are the same.",
+          "bullets": [],
+          "group": "A3.10 General properties of options"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the concept of no arbitrage when comparing actual and synthetic calls or when comparing actual and synthetic puts.",
+          "bullets": [],
+          "group": "A3.11 Binomial pricing models"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the concepts underlying the risk-neutral approach to valuing derivatives securities in the context of the binomial option pricing model.",
+          "bullets": [],
+          "group": "A3.11 Binomial pricing models"
+        },
+        {
+          "letter": "c",
+          "text": "Price options under a one-period binomial model on a stock with no dividends.",
+          "bullets": [],
+          "group": "A3.11 Binomial pricing models"
+        },
+        {
+          "letter": "d",
+          "text": "Extend the binomial model to multi-period settings for pricing European and American call and put options as well as the following option types: Asian, barrier, and gap.",
+          "bullets": [],
+          "group": "A3.11 Binomial pricing models"
+        },
+        {
+          "letter": "e",
+          "text": "Extend the binomial model to other underlying assets, including stock indices with continuous dividends, stocks with discrete dividends, currencies, and futures contracts.",
+          "bullets": [],
+          "group": "A3.11 Binomial pricing models"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate log-normal-based probabilities and percentiles for stock prices.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate log-normal-based means and variances of stock prices.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate log-normal-based conditional expectations of stock prices given that options expire in the money.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "d",
+          "text": "Recognize the assumptions underlying the Black–Scholes model.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "e",
+          "text": "Use the Black–Scholes formula to value European calls and puts on stocks with no dividends, stock indices with continuous dividends, stocks with discrete dividends, currencies, and futures contracts.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "f",
+          "text": "Generalize the Black–Scholes formula to value gap calls, gap puts, and exchange options, chooser options, and forward-start options.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "g",
+          "text": "Estimate a stock’s historical volatility from past stock-price data.",
+          "bullets": [],
+          "group": "A3.12 Black–Scholes option pricing model"
+        },
+        {
+          "letter": "a",
+          "text": "Compute and interpret option Greeks, including Delta, Gamma, Theta, Vega, Rho, and Psi.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "b",
+          "text": "Compute the elasticity, Sharpe ratio, and risk premium for both an individual option (call or put) and a portfolio consisting of both options of multiple types and the underlying stock.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "c",
+          "text": "Approximate option prices using Delta, Gamma, and Theta.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "d",
+          "text": "Perform delta hedging by calculating the quantities of option units, stock shares, and cash to hold, and whether those positions should be long or short.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "e",
+          "text": "Perform gamma hedging by calculating the quantities of option units (of various types) and stock shares to hold, and whether those positions should be long or short.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "f",
+          "text": "Explain how life insurers use derivatives to hedge long-term risks from the asset portfolio.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "g",
+          "text": "Explain how P&C insurers use derivatives to hedge short-term risks from the liability portfolio.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "h",
+          "text": "Explain how investment guarantees can be formed from equity-linked insurance and annuities.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        },
+        {
+          "letter": "i",
+          "text": "Explain how options are employed in both pension funding and asset/liability management.",
+          "bullets": [],
+          "group": "A3.13 Option Greeks and risk management"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "A4. Actuarial mathematics",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Describe the long-term coverages in insurance (life, health, and general), annuities, and retirement benefits (e.g., pensions, retiree health care, etc.).",
+          "bullets": [],
+          "group": "A4.1 Long-term insurance coverages"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the similarities and differences among the long-term coverages identified in a).",
+          "bullets": [],
+          "group": "A4.1 Long-term insurance coverages"
+        },
+        {
+          "letter": "c",
+          "text": "Describe the appropriate models to be used to calculate expected present values, premiums or contributions, and reserves for each long-term coverage.",
+          "bullets": [],
+          "group": "A4.1 Long-term insurance coverages"
+        },
+        {
+          "letter": "a",
+          "text": "Explain and interpret survival models and transition between states.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate and interpret standard functions including survival and mortality probabilities, force of mortality, and complete and curtate expectation of life.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate non-parametric estimates of survival models using the Kaplan–Meier, Nelson–Aalen, Cox proportional-hazards, and Kernel density estimators' formulas for seriatim data and adaptations for grouped data.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate, using both seriatim and grouped data, maximum likelihood estimates of transition probabilities assuming constant transition intensity during fixed age intervals.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate the variances of and construct confidence intervals for the estimators in parts c) and d).",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "f",
+          "text": "Calculate transition intensities exactly or estimate transition intensities using large sample approximations.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "g",
+          "text": "Describe and apply simple longevity models.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "h",
+          "text": "For models dealing with multiple lives and/or multiple states, explain the random variables associated with the model and calculate and interpret marginal and conditional probabilities.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "i",
+          "text": "Construct and interpret select and ultimate survival models, including computer applications.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "j",
+          "text": "Describe the behavior of Markov chain models, identify possible transitions between states, and calculate and interpret the probability of being in a particular state and transitioning between states.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "k",
+          "text": "Apply to calculations involving these models' appropriate approximation methods for fractional ages based on uniform distribution of deaths or constant force.",
+          "bullets": [],
+          "group": "A4.2 Survival models and their estimation"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate and interpret probabilities, means, percentiles, and higher moments.",
+          "bullets": [],
+          "group": "A4.3 Present value random variables"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate and interpret the effect of changes in underlying assumptions such as mortality and interest.",
+          "bullets": [],
+          "group": "A4.3 Present value random variables"
+        },
+        {
+          "letter": "c",
+          "text": "Apply to calculations involving these random variables appropriate approximation methods such as uniform distribution of deaths, constant force, Woolhouse, and Euler.",
+          "bullets": [],
+          "group": "A4.3 Present value random variables"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate and interpret probabilities, means, percentiles, and higher moments of random variables associated with these premiums, including loss-at-issue random variables.",
+          "bullets": [],
+          "group": "A4.4 Long-term insurance premium calculation"
+        },
+        {
+          "letter": "b",
+          "text": "Using any of the models in learning objective A4.3 c), calculate and interpret the effect of changes in policy design and underlying assumptions such as changes in mortality, benefits, expenses, interest, and dividends.",
+          "bullets": [],
+          "group": "A4.4 Long-term insurance premium calculation"
+        },
+        {
+          "letter": "c",
+          "text": "Perform the calculations in a) and b) for contracts associated with specified contingent cash flows, including annuities, universal life, and participating insurance.",
+          "bullets": [],
+          "group": "A4.4 Long-term insurance premium calculation"
+        },
+        {
+          "letter": "d",
+          "text": "Apply to calculations involving these premiums appropriate approximation methods such as uniform distribution of deaths, constant force, Woolhouse, and Euler.",
+          "bullets": [],
+          "group": "A4.4 Long-term insurance premium calculation"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate and interpret the following reserve types: net premium, modified, gross premium, expense.",
+          "bullets": [],
+          "group": "A4.5 Long-term insurance reserves"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate and interpret probabilities, means, variances, and percentiles of random variables associated with these reserves, including future-loss random variables.",
+          "bullets": [],
+          "group": "A4.5 Long-term insurance reserves"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and interpret common profit measures such as expected profit, actual profit, gain, gain by source and period, internal rate of return, profit margin, and break-even year.",
+          "bullets": [],
+          "group": "A4.5 Long-term insurance reserves"
+        },
+        {
+          "letter": "d",
+          "text": "Apply appropriate approximation methods such as uniform distribution of deaths, constant force, Woolhouse, and Euler.",
+          "bullets": [],
+          "group": "A4.5 Long-term insurance reserves"
+        },
+        {
+          "letter": "a",
+          "text": "Describe and compare defined benefit and defined contribution pension plans, including final salary and career average earning plans.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "b",
+          "text": "Describe retiree health-care plans.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "c",
+          "text": "Identify and interpret the common states and decrements for pension plans and the parametric and tabular models, including Markov chain models, associated with these decrements.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "d",
+          "text": "Given particular participant data, plan provisions, and valuation assumptions, apply the models mentioned in c) to defined benefit pension plans and calculate and interpret replacement ratios, accrued benefits, gain or loss, and their expected values with adjustments such as the early-retirement reduction factor.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "e",
+          "text": "Given particular participant data, plan provisions, and valuation assumptions, calculate and interpret the actuarial accrued liability and the normal cost for defined benefit plans under projected unit credit (PUC) and traditional unit credit (TUC) cost methods.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "f",
+          "text": "Calculate and interpret the effect of changes in underlying valuation assumptions such as mortality, discrete salary increases, other decrements, and interest on the quantities mentioned in d) and e).",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "g",
+          "text": "Apply to calculations involving these plans and benefits appropriate approximation methods, such as uniform distribution of deaths, constant force, Woolhouse, and Euler.",
+          "bullets": [],
+          "group": "A4.6 Pension plans and retirement benefits"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate the basic distributional quantities: moments, percentiles, generating functions.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "b",
+          "text": "Describe how changes in parameters affect the distribution.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "c",
+          "text": "Recognize classes of distributions, including extreme value distributions, suitable for modelling the distribution of severity of loss and their relationships.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "d",
+          "text": "Apply the following techniques for creating new families of distributions: multiplication by a constant, raising to a power, exponentiation, and mixing.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "e",
+          "text": "Identify the applications in which each distribution is used and the reasons why.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "f",
+          "text": "Apply the distribution to an application given the parameters.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "g",
+          "text": "Compare two distributions based on various characteristics of their tails, including moments, ratios of moments, limiting tail behavior, hazard rate function, and mean excess function.",
+          "bullets": [],
+          "group": "A4.7 Severity models"
+        },
+        {
+          "letter": "a",
+          "text": "Describe how changes in parameters affect the distribution.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate moments and generating functions.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "c",
+          "text": "Identify the applications for which each distribution is used and reasons why.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "d",
+          "text": "Apply the distribution to an application given the parameters.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "e",
+          "text": "Apply the zero-truncated or zero-modified distribution to an application given the parameters.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "f",
+          "text": "Recognize classes of distributions and their relationships.",
+          "bullets": [],
+          "group": "A4.8 Frequency models — For the Poisson, mixed Poisson, binomial, negative binomial, geometric distribution, and mixtures thereof:"
+        },
+        {
+          "letter": "a",
+          "text": "Define collective and individual risk models and calculate their expectation and variance.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "b",
+          "text": "Use the normal distribution to approximate the aggregate distribution.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "c",
+          "text": "Use the recursive formula to calculate the values of the collective risk models with discrete distributions of severities.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "d",
+          "text": "Calculate the expected aggregate payments in the presence of an aggregate deductible.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "e",
+          "text": "Evaluate the effect of the coverage modifications on the expected aggregate payments.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "f",
+          "text": "Perform the exact calculation of aggregate loss distribution in case of the normal distribution of severities, exponential and gamma (Erlang) distribution of severities, and a compound model with negative binomial frequency and exponential distribution of severities.",
+          "bullets": [],
+          "group": "A4.9 Aggregate models"
+        },
+        {
+          "letter": "a",
+          "text": "Evaluate the effect of coverage modifications, in particular, deductibles, limits, and co-insurance.",
+          "bullets": [],
+          "group": "A4.10 Coverage modifications — For frequency, severity, and aggregate models:"
+        },
+        {
+          "letter": "b",
+          "text": "Calculate loss elimination ratios and increased limits factors.",
+          "bullets": [],
+          "group": "A4.10 Coverage modifications — For frequency, severity, and aggregate models:"
+        },
+        {
+          "letter": "c",
+          "text": "Evaluate the effects of inflation on losses.",
+          "bullets": [],
+          "group": "A4.10 Coverage modifications — For frequency, severity, and aggregate models:"
+        },
+        {
+          "letter": "a",
+          "text": "Calculate value at risk (VaR) and tail value at risk (TVaR) and explain their use and limitations.",
+          "bullets": [],
+          "group": "A4.11 Risk measures"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the desirable properties of a risk measure and determine whether a given risk measure has these properties.",
+          "bullets": [],
+          "group": "A4.11 Risk measures"
+        },
+        {
+          "letter": "a",
+          "text": "Estimate the parameters for severity, frequency, and aggregate distributions using maximum likelihood estimation for:",
+          "bullets": [
+            "i. Complete, individual data;",
+            "ii. Complete, grouped data; and",
+            "iii. Truncated or censored data."
+          ],
+          "group": "A4.12 Construction and selection of parametric models"
+        },
+        {
+          "letter": "b",
+          "text": "Estimate the variance of the estimators and construct confidence intervals.",
+          "bullets": [],
+          "group": "A4.12 Construction and selection of parametric models"
+        },
+        {
+          "letter": "c",
+          "text": "Use the delta method to estimate the variance of the maximum likelihood estimator of a function of the parameter(s).",
+          "bullets": [],
+          "group": "A4.12 Construction and selection of parametric models"
+        },
+        {
+          "letter": "d",
+          "text": "Estimate the parameters for severity, frequency, and aggregate distributions using Bayesian estimation.",
+          "bullets": [],
+          "group": "A4.12 Construction and selection of parametric models"
+        },
+        {
+          "letter": "e",
+          "text": "Perform model selection using the following (including graphical procedures):",
+          "bullets": [
+            "i. Hypothesis tests, including chi-square goodness-of-fit and likelihood ratio test (LRT), and computer applications.",
+            "ii. Score-based approaches, including Schwarz’s Bayesian criterion (SBC)/Bayesian information criterion (BIC), and Akaike information criterion (AIC)."
+          ],
+          "group": "A4.12 Construction and selection of parametric models"
+        },
+        {
+          "letter": "a",
+          "text": "Apply limited fluctuation (classical) credibility, including criteria for both full and partial credibility.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "b",
+          "text": "Perform Bayesian analysis using both discrete and continuous models.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "c",
+          "text": "Apply Bühlmann and Bühlmann–Straub models and understand the relationship of these to the Bayesian model.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "d",
+          "text": "Apply conjugate priors in Bayesian analysis and, in particular, the Poisson-gamma model.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "e",
+          "text": "Apply empirical Bayesian methods in the non-parametric and semi-parametric cases.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "f",
+          "text": "Calculate Bayes estimate/Bayesian premium.",
+          "bullets": [],
+          "group": "A4.13 Credibility"
+        },
+        {
+          "letter": "a",
+          "text": "Describe different types of short-term insurance coverage, including homeowners, liability, health, disability, and dental.",
+          "bullets": [],
+          "group": "A4.14 Short-term insurance and reinsurance coverages"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the types of policy limits and coverage modifications for short-term insurance.",
+          "bullets": [],
+          "group": "A4.14 Short-term insurance and reinsurance coverages"
+        },
+        {
+          "letter": "c",
+          "text": "Describe the operation of basic forms of proportional and excess of loss reinsurance.",
+          "bullets": [],
+          "group": "A4.14 Short-term insurance and reinsurance coverages"
+        },
+        {
+          "letter": "d",
+          "text": "Derive the distribution of claim amounts paid by the insurer and reinsurer under various forms of reinsurance.",
+          "bullets": [],
+          "group": "A4.14 Short-term insurance and reinsurance coverages"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the role of rating factors and exposure.",
+          "bullets": [],
+          "group": "A4.15 Pricing and reserving for short-term insurance coverages"
+        },
+        {
+          "letter": "b",
+          "text": "Describe the different forms of experience rating.",
+          "bullets": [],
+          "group": "A4.15 Pricing and reserving for short-term insurance coverages"
+        },
+        {
+          "letter": "c",
+          "text": "Describe and apply techniques for estimating unpaid losses from a run-off triangle using the chain ladder, average cost per claim, and Bornhuetter–Ferguson methods.",
+          "bullets": [],
+          "group": "A4.15 Pricing and reserving for short-term insurance coverages"
+        },
+        {
+          "letter": "d",
+          "text": "Describe the underlying statistical models for the methods in c).",
+          "bullets": [],
+          "group": "A4.15 Pricing and reserving for short-term insurance coverages"
+        },
+        {
+          "letter": "e",
+          "text": "Calculate premiums using the pure premium and loss ratio methods.",
+          "bullets": [],
+          "group": "A4.15 Pricing and reserving for short-term insurance coverages"
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "A5. Predictive analytics",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": "a",
+          "text": "Explain the types of modelling problems and methods, including supervised versus unsupervised learning and regression versus classification.",
+          "bullets": [],
+          "group": "A5.1 Basics of statistical learning — Participants will be able to do the following:"
+        },
+        {
+          "letter": "b",
+          "text": "Explain the common methods of assessing model accuracy.",
+          "bullets": [],
+          "group": "A5.1 Basics of statistical learning — Participants will be able to do the following:"
+        },
+        {
+          "letter": "c",
+          "text": "Employ basic methods of exploratory data analysis, including data checking and validation.",
+          "bullets": [],
+          "group": "A5.1 Basics of statistical learning — Participants will be able to do the following:"
+        },
+        {
+          "letter": "a",
+          "text": "Describe and explain the components of, in particular, the exponential family of distributions and link functions.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "b",
+          "text": "Estimate parameters using least squares and maximum likelihood.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "c",
+          "text": "Interpret diagnostic tests of model fit and assumption checking using both graphical and quantitative methods.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "d",
+          "text": "Select an appropriate model, including distribution and link function, variable transformations and interactions, Pearson’s chi-square statistic, t and F tests, likelihood ratio test, and AIC and BIC.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "e",
+          "text": "Interpret model results with emphasis on using the model to answer the underlying business question.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "f",
+          "text": "Calculate and interpret predicted values, confidence, and prediction intervals.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "g",
+          "text": "Understand how approaches may differ compared to using an ordinary least squares model, including lasso, ridge regression, and k-nearest neighbors (KNN).",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "h",
+          "text": "Implement ordinary least squares regression in a coding language and understand model assumptions.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "i",
+          "text": "Understand the specifications of the GLM and the model assumptions.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "j",
+          "text": "Create new features appropriate for GLMs.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "k",
+          "text": "Interpret model coefficients, interaction terms, offsets, and weights.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "l",
+          "text": "Select and validate a GLM appropriately.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "m",
+          "text": "Explain the concepts of bias, variance, model complexity, and the bias-variance trade-off.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "n",
+          "text": "Select appropriate hyperparameters for regularized regression.",
+          "bullets": [],
+          "group": "A5.2 Generalized linear models"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the assumptions behind different forms of the extended linear model and be able to select the appropriate model, such as: ordinary least squares, generalized linear model, ANOVA, generalized additive models, local regression, lasso ridge regression, partial least squares, and principal component analysis (PCA) regression.",
+          "bullets": [],
+          "group": "A5.3 Extended linear models"
+        },
+        {
+          "letter": "b",
+          "text": "Evaluate models developed using the extended linear model approach.",
+          "bullets": [],
+          "group": "A5.3 Extended linear models"
+        },
+        {
+          "letter": "c",
+          "text": "Understand the algorithms behind the numerical solutions for the different forms of the extended linear model family to enable interpretation of output from the statistical software employed in modelling and to make appropriate modelling choices when selecting modelling options.",
+          "bullets": [],
+          "group": "A5.3 Extended linear models"
+        },
+        {
+          "letter": "d",
+          "text": "Understand and be able to select the appropriate model structure for an extended linear model given the behavior of the dataset to be modelled.",
+          "bullets": [],
+          "group": "A5.3 Extended linear models"
+        },
+        {
+          "letter": "e",
+          "text": "Identify the advantages and limitations of modelling techniques.",
+          "bullets": [],
+          "group": "A5.3 Extended linear models"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the assumptions behind linear mixed models and use that understanding to evaluate how to set up a linear mixed-effect model design to best accomplish the goals of the modelling exercise.",
+          "bullets": [],
+          "group": "A5.4 Linear mixed models"
+        },
+        {
+          "letter": "b",
+          "text": "Understand the algorithms behind the numerical solutions for the linear mixed model to enable interpretation of output from the statistical software employed in modelling to make appropriate choices when evaluating modelling options.",
+          "bullets": [],
+          "group": "A5.4 Linear mixed models"
+        },
+        {
+          "letter": "c",
+          "text": "Understand and be able to select the appropriate model structure and variable selection for a linear mixed model given the behavior of the dataset to be modelled by interpreting the model diagnostics and/or summary statistics on the variables available in the model, along with any graphs depicting how the dependent variable behaves as a function of possible explanatory variables.",
+          "bullets": [],
+          "group": "A5.4 Linear mixed models"
+        },
+        {
+          "letter": "a",
+          "text": "Evaluate the different options available when creating and using Bayesian models for a given modelling assignment.",
+          "bullets": [],
+          "group": "A5.5 Bayesian analysis and Markov chain Monte Carlo"
+        },
+        {
+          "letter": "b",
+          "text": "Understand how to set up a Bayesian Markov chain Monte Carlo (MCMC) model and evaluate how a given set of design choices affects the results of a model.",
+          "bullets": [],
+          "group": "A5.5 Bayesian analysis and Markov chain Monte Carlo"
+        },
+        {
+          "letter": "c",
+          "text": "Understand Bayesian computation, how MCMC methods are used, and how to evaluate model performance.",
+          "bullets": [],
+          "group": "A5.5 Bayesian analysis and Markov chain Monte Carlo"
+        },
+        {
+          "letter": "d",
+          "text": "Interpret and calculate diagnostics of simulation performance to evaluate when a given modelling approach should be used.",
+          "bullets": [],
+          "group": "A5.5 Bayesian analysis and Markov chain Monte Carlo"
+        },
+        {
+          "letter": "e",
+          "text": "Understand how to apply model checking, evaluation, comparison, and expansion techniques as an aid to interpreting and evaluating model diagnostics.",
+          "bullets": [],
+          "group": "A5.5 Bayesian analysis and Markov chain Monte Carlo"
+        },
+        {
+          "letter": "a",
+          "text": "Define and explain the concepts and components of stochastic time-series processes, including stationarity and autocorrelation.",
+          "bullets": [],
+          "group": "A5.6 Time-series models"
+        },
+        {
+          "letter": "b",
+          "text": "Describe specific time-series models, including random walk, exponential smoothing, autoregressive, and autoregressive conditionally heteroskedastic.",
+          "bullets": [],
+          "group": "A5.6 Time-series models"
+        },
+        {
+          "letter": "c",
+          "text": "Calculate and interpret predicted values and confidence and prediction intervals.",
+          "bullets": [],
+          "group": "A5.6 Time-series models"
+        },
+        {
+          "letter": "a",
+          "text": "Define principal components.",
+          "bullets": [],
+          "group": "A5.7 Principal component analysis"
+        },
+        {
+          "letter": "b",
+          "text": "Interpret the results of a principal component analysis, considering loading factors and proportion of variance explained.",
+          "bullets": [],
+          "group": "A5.7 Principal component analysis"
+        },
+        {
+          "letter": "c",
+          "text": "Explain uses of principal components.",
+          "bullets": [],
+          "group": "A5.7 Principal component analysis"
+        },
+        {
+          "letter": "d",
+          "text": "Understand and apply principal component analysis.",
+          "bullets": [],
+          "group": "A5.7 Principal component analysis"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the purpose and uses of decision trees.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "b",
+          "text": "Explain and interpret decision trees considering regression trees and recursive binary splitting.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "c",
+          "text": "Explain and interpret bagging, boosting, and random forests.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "d",
+          "text": "Explain and interpret classification trees, their construction, Gini index, and entropy.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "e",
+          "text": "Compare decision trees to linear models.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "f",
+          "text": "Interpret the results of a decision tree analysis.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "g",
+          "text": "Construct regression and classification trees.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "h",
+          "text": "Use bagging and random forests to improve accuracy.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "i",
+          "text": "Use boosting to improve accuracy.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "j",
+          "text": "Select appropriate hyperparameters for decision trees and related techniques.",
+          "bullets": [],
+          "group": "A5.8 Decision trees"
+        },
+        {
+          "letter": "a",
+          "text": "Explain the uses of clustering.",
+          "bullets": [],
+          "group": "A5.9 Cluster analysis"
+        },
+        {
+          "letter": "b",
+          "text": "Explain K-means clustering.",
+          "bullets": [],
+          "group": "A5.9 Cluster analysis"
+        },
+        {
+          "letter": "c",
+          "text": "Explain hierarchical clustering.",
+          "bullets": [],
+          "group": "A5.9 Cluster analysis"
+        },
+        {
+          "letter": "d",
+          "text": "Explain methods for deciding the number of clusters.",
+          "bullets": [],
+          "group": "A5.9 Cluster analysis"
+        },
+        {
+          "letter": "e",
+          "text": "Compare hierarchical with K-means clustering.",
+          "bullets": [],
+          "group": "A5.9 Cluster analysis"
+        },
+        {
+          "letter": "a",
+          "text": "Understand the different types of predictive modelling problems.",
+          "bullets": [],
+          "group": "A5.10 Predictive analytics problem definition and tools"
+        },
+        {
+          "letter": "b",
+          "text": "Write and execute basic commands in R using RStudio or other coding languages.",
+          "bullets": [],
+          "group": "A5.10 Predictive analytics problem definition and tools"
+        },
+        {
+          "letter": "c",
+          "text": "Translate a vague question into one that can be analyzed with statistics and predictive analytics to solve a business problem.",
+          "bullets": [],
+          "group": "A5.10 Predictive analytics problem definition and tools"
+        },
+        {
+          "letter": "d",
+          "text": "Consider factors such as available data and technology, significance of business impact, and implementation challenges to define the problem",
+          "bullets": [],
+          "group": "A5.10 Predictive analytics problem definition and tools"
+        },
+        {
+          "letter": "a",
+          "text": "Identify structured, unstructured, and semi-structured data.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "b",
+          "text": "Identify the types of variables and terminology used in predictive modelling.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "c",
+          "text": "Understand basic methods of handling missing data.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "d",
+          "text": "Implement effective data design with respect to time frame, sampling, and granularity.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "e",
+          "text": "Apply univariate and bivariate data exploration techniques.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "f",
+          "text": "Understand the key principles of constructing graphs.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "g",
+          "text": "Create a variety of graphs using a computer package.",
+          "bullets": [],
+          "group": "A5.11 Data types, exploration, and visualization"
+        },
+        {
+          "letter": "a",
+          "text": "Evaluate the quality of appropriate data sources for a problem.",
+          "bullets": [],
+          "group": "A5.12 Data issues and resolution"
+        },
+        {
+          "letter": "b",
+          "text": "Identify opportunities to create features from the basic data that may add value.",
+          "bullets": [],
+          "group": "A5.12 Data issues and resolution"
+        },
+        {
+          "letter": "c",
+          "text": "Identify outliers and other data issues.",
+          "bullets": [],
+          "group": "A5.12 Data issues and resolution"
+        },
+        {
+          "letter": "d",
+          "text": "Handle non-linear relationships via transformations.",
+          "bullets": [],
+          "group": "A5.12 Data issues and resolution"
+        },
+        {
+          "letter": "e",
+          "text": "Identify the regulations, standards, and ethics surrounding predictive modelling and data collection.",
+          "bullets": [],
+          "group": "A5.12 Data issues and resolution"
+        },
+        {
+          "letter": "a",
+          "text": "Develop and justify a recommended analytics solution.",
+          "bullets": [],
+          "group": "A5.13 Communication in predictive analytics"
+        },
+        {
+          "letter": "b",
+          "text": "Communicate in a clear and straightforward manner using common language that is appropriate for the intended audience.",
+          "bullets": [],
+          "group": "A5.13 Communication in predictive analytics"
+        },
+        {
+          "letter": "c",
+          "text": "Structure a report in an effective manner.",
+          "bullets": [],
+          "group": "A5.13 Communication in predictive analytics"
+        },
+        {
+          "letter": "d",
+          "text": "Follow standards of practice for actuarial communication.",
+          "bullets": [],
+          "group": "A5.13 Communication in predictive analytics"
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": [
+    {
+      "citation": "Actuarial Finance: Derivatives, Quantitative Models and Risk Management",
+      "authors": "Mathieu Boudreault, Jean-François Renaud",
+      "isbn": "978-1-119-13700-9",
+      "codes": "A3.9",
+      "parts": [
+        {
+          "text": "A3.9 Introductory derivatives – forwards and futures (C, SLT, SST): Chapter 3",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Derivatives Markets, 3rd Edition",
+      "authors": "Robert L. McDonald",
+      "isbn": "978-0-321-54308-0",
+      "codes": "A3.9",
+      "parts": [
+        {
+          "text": "A3.9 Introductory derivatives – forwards and futures (C, SLT, SST): Chapters 2-5 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Finance: Derivatives, Quantitative Models and Risk Management",
+      "authors": "Mathieu Boudreault, Jean-François Renaud",
+      "isbn": "978-1-119-13700-9",
+      "codes": "A3.10",
+      "parts": [
+        {
+          "text": "A3.10 General properties of options (C, SLT, SST): Chapters 5-6",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Derivatives Markets, 3rd Edition",
+      "authors": "Robert L. McDonald",
+      "isbn": "978-0-321-54308-0",
+      "codes": "A3.10",
+      "parts": [
+        {
+          "text": "A3.10 General properties of options (C, SLT, SST): Chapters 3-9 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Finance: Derivatives, Quantitative Models and Risk Management",
+      "authors": "Mathieu Boudreault, Jean-François Renaud",
+      "isbn": "978-1-119-13700-9",
+      "codes": "A3.11",
+      "parts": [
+        {
+          "text": "A3.11 Binomial pricing models (C, SLT, SST): Chapters 9-12",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Derivatives Markets, 3rd Edition",
+      "authors": "Robert L. McDonald",
+      "isbn": "978-0-321-54308-0",
+      "codes": "A3.11",
+      "parts": [
+        {
+          "text": "A3.11 Binomial pricing models (C, SLT, SST): Chapters 10-11 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Finance: Derivatives, Quantitative Models and Risk Management",
+      "authors": "Mathieu Boudreault, Jean-François Renaud",
+      "isbn": "978-1-119-13700-9",
+      "codes": "A3.12",
+      "parts": [
+        {
+          "text": "A3.12 Black-Scholes option pricing model (C, SLT, SST): Chapters 16-18",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Derivatives Markets, 3rd Edition",
+      "authors": "Robert L. McDonald",
+      "isbn": "978-0-321-54308-0",
+      "codes": "A3.12",
+      "parts": [
+        {
+          "text": "A3.12 Black-Scholes option pricing model (C, SLT, SST): Chapter 12 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Finance: Derivatives, Quantitative Models and Risk Management",
+      "authors": "Mathieu Boudreault, Jean-François Renaud",
+      "isbn": "978-1-119-13700-9",
+      "codes": "A3.13",
+      "parts": [
+        {
+          "text": "A3.13 Option Greeks and risk management (C, SLT, SST): Chapter 20",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Derivatives Markets, 3rd Edition",
+      "authors": "Robert L. McDonald",
+      "isbn": "978-0-321-54308-0",
+      "codes": "A3.13",
+      "parts": [
+        {
+          "text": "A3.13 Option Greeks and risk management (C, SLT, SST): Chapter 12 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.1",
+      "parts": [
+        {
+          "text": "A4.1 Long-term insurance coverages (C, SLT): Chapter 1",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.2",
+      "parts": [
+        {
+          "text": "A4.2 Survival models and their estimation (C, SLT): Chapters 2, 3 and 18",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.3",
+      "parts": [
+        {
+          "text": "A4.3 Present value random variables (C, SLT): Chapters 4, 5, 8, 9 and 10",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.4",
+      "parts": [
+        {
+          "text": "A4.4 Long-term insurance premium calculation (C, SLT): Chapters 6, 8, 9, 10, 13 and 14",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.5",
+      "parts": [
+        {
+          "text": "A4.5 Long-term insurance reserves (SLT): Chapters 7-10",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Actuarial Mathematics for Life Contingent Risks, 3rd Edition",
+      "authors": "David C. M. Dickson, Mary R. Hardy, Howard R. Waters",
+      "isbn": "978-1-108-47808-3",
+      "codes": "A4.6",
+      "parts": [
+        {
+          "text": "A4.6 Pension plans and retirement benefits (SLT): Chapter 11",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.7",
+      "parts": [
+        {
+          "text": "A4.7 Severity models (C): Chapters 4 and 5 (Sections 5.1, 5.2.1-5.2.4 and 5.3)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance, 4th Edition",
+      "authors": "Robert Brown, W. Scott Lennox",
+      "isbn": "978-1-625-42474-7",
+      "codes": "A4.7",
+      "parts": [
+        {
+          "text": "A4.7 Severity models (C) — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.8",
+      "parts": [
+        {
+          "text": "A4.8 Frequency models in short-term insurance (C): Chapter 6",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.9",
+      "parts": [
+        {
+          "text": "A4.9 Aggregate models (C): Chapter 9 (excluding Sections 9.6.1 and 9.8.3)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.10",
+      "parts": [
+        {
+          "text": "A4.10 Coverage modifications (C): Chapter 8",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.11",
+      "parts": [
+        {
+          "text": "A4.11 Risk measures (C): Chapter 3",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.12",
+      "parts": [
+        {
+          "text": "A4.12 Construction and selection of parametric models (C): Chapters 11 (Sections 11.1-11.6), 12 (excluding Section 12.5), 13 and 15 (excluding Section 15.4.2)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Loss Models: From Data to Decisions, 5th Edition",
+      "authors": "Stuart A. Klugman, Harry H. Panjer, Gordon E. Willmot",
+      "isbn": "978-1-119-52378-9",
+      "codes": "A4.13",
+      "parts": [
+        {
+          "text": "A4.13 Credibility (C): Chapters 16-18",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance, 4th Edition",
+      "authors": "Robert Brown, W. Scott Lennox",
+      "isbn": "978-1-625-42474-7",
+      "codes": "A4.14",
+      "parts": [
+        {
+          "text": "A4.14 Short-term insurance and reinsurance coverages (C): Chapters 2 and 5 (Sections 5.5.1 and 5.5.2) — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Introduction to Ratemaking and Loss Reserving for Property and Casualty Insurance, 4th Edition",
+      "authors": "Robert Brown, W. Scott Lennox",
+      "isbn": "978-1-625-42474-7",
+      "codes": "A4.15",
+      "parts": [
+        {
+          "text": "A4.15 Pricing and reserving for short-term insurance coverages (SST): Chapters 3, 4 and 5 (Sections 5.5.3 and 5.5.4) — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, 2nd Edition",
+      "authors": "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani",
+      "isbn": "978-1-0716-1417-4",
+      "codes": "A5.1",
+      "parts": [
+        {
+          "text": "A5.1 Basics of statistical learning (C): Chapters 2 (Sections 1-3) and 5 (Sections 1 and 3)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, 2nd Edition",
+      "authors": "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani",
+      "isbn": "978-1-0716-1417-4",
+      "codes": "A5.2",
+      "parts": [
+        {
+          "text": "A5.2 Generalized linear models (C): Chapters 3 (Sections 1-6), 4 (Sections 1-3 and 6) and 6 (Sections 1-5)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Regression Modeling with Actuarial and Financial Applications",
+      "authors": "Edward W. Frees",
+      "isbn": "978-0-5211-3596-2",
+      "codes": "A5.2",
+      "parts": [
+        {
+          "text": "A5.2 Generalized linear models (C): Chapters 2 (Sections 1-8), 3 (Sections 1-5), 5 (Sections 1-7), 11 (Sections 1-6), 12 (Sections 1-4) and 13 (Sections 1-6) — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Generalized Linear Models, 4th Edition",
+      "authors": "Annette J. Dobson, Adrian G. Barnett",
+      "isbn": "978-1-138-74151-5",
+      "codes": "A5.2",
+      "parts": [
+        {
+          "text": "A5.2 Generalized linear models (C): Chapters 1-9, excluding 6.7, 6.8, 7.9 — alternate reading",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, 2nd Edition",
+      "authors": "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani",
+      "isbn": "978-1-0716-1417-4",
+      "codes": "A5.7",
+      "parts": [
+        {
+          "text": "A5.7 Principal component analysis (C): Chapter 12 (Sections 1 and 2)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, 2nd Edition",
+      "authors": "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani",
+      "isbn": "978-1-0716-1417-4",
+      "codes": "A5.8",
+      "parts": [
+        {
+          "text": "A5.8 Decision trees (C): Chapter 8 (Sections 1 and 3)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "An Introduction to Statistical Learning, with Applications in R, 2nd Edition",
+      "authors": "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani",
+      "isbn": "978-1-0716-1417-4",
+      "codes": "A5.9",
+      "parts": [
+        {
+          "text": "A5.9 Cluster analysis (C): Chapter 12 (Section 4)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "ACIA Module 2",
+      "authors": null,
+      "isbn": null,
+      "codes": "A5.10",
+      "parts": [
+        {
+          "text": "A5.10 Predictive analytics problem definition and tools (C)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "ACIA Module 2",
+      "authors": null,
+      "isbn": null,
+      "codes": "A5.11",
+      "parts": [
+        {
+          "text": "A5.11 Data types, exploration and visualization (C)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "ACIA Module 2",
+      "authors": null,
+      "isbn": null,
+      "codes": "A5.12",
+      "parts": [
+        {
+          "text": "A5.12 Data issues and resolution (C)",
+          "codes": ""
+        }
+      ]
+    },
+    {
+      "citation": "Regression Modeling with Actuarial and Financial Applications",
+      "authors": "Edward W. Frees",
+      "isbn": "978-0-5211-3596-2",
+      "codes": "A5.13",
+      "parts": [
+        {
+          "text": "A5.13 Communication in predictive analytics (C): Chapter 6 (Sections 1-5) — alternate reading",
+          "codes": ""
+        }
+      ]
+    }
+  ]
+}

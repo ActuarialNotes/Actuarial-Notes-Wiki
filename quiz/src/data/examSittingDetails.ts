@@ -277,6 +277,79 @@ function moduleAbout(name: string, page: string, objectives: string, facts: Exam
   }
 }
 
+// ── The CIA's own requirements ────────────────────────────────────────────────
+// Read 2026-10-19 off the CIA's syllabi (each track's FCIA syllabus, and the
+// ACIA syllabus for the modules and the Capstone) and its Becoming a Fellow /
+// ACIA modules and Capstone Exam pages. The FCIA exam dates the CIA publishes
+// aren't transcribed yet, so each says where they are.
+
+const CIA_FELLOW: SittingSource = { label: 'CIA — Becoming a Fellow', url: 'https://www.cia-ica.ca/becoming-a-member/becoming-a-fellow/' }
+const CIA_ACIA_PAGE: SittingSource = {
+  label: 'CIA — ACIA modules and Capstone Exam',
+  url: 'https://www.cia-ica.ca/becoming-a-member/becoming-an-associate/acia-modules-and-capstone-exam/',
+}
+const CIA_DL = 'https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php'
+const CIA_TRACK_SYLLABI: Record<string, SittingSource> = {
+  pc: { label: 'CIA — FCIA syllabus, property and casualty track', url: `${CIA_DL}?p=36231&fid=17019` },
+  ila: { label: 'CIA — FCIA syllabus, individual life and annuities track', url: `${CIA_DL}?p=36227&fid=17011` },
+  gb: { label: 'CIA — FCIA syllabus, group benefits track', url: `${CIA_DL}?p=36229&fid=17015` },
+  ret: { label: 'CIA — FCIA syllabus, retirement benefits track', url: `${CIA_DL}?p=36233&fid=17023` },
+  fie: { label: 'CIA — FCIA syllabus, finance, investments and ERM track', url: `${CIA_DL}?p=36225&fid=17007` },
+}
+const CIA_ACIA_SYLLABUS: SittingSource = { label: 'CIA — ACIA Capstone Exam and modules syllabus', url: `${CIA_DL}?p=608114&fid=627235` }
+
+const CIA_EXAM_FACTS: ExamAbout['facts'] = [
+  { label: 'Length', value: '4 hours' },
+  { label: 'Format', value: 'Open book; written responses to questions set in the context of a problem' },
+  { label: 'Delivery', value: 'Through the CIA’s learning management system' },
+]
+const CIA_MODULE_FACTS: ExamAbout['facts'] = [
+  { label: 'Format', value: 'Online module in the CIA’s learning management system' },
+  { label: 'Access', value: 'Six months from the date of purchase' },
+  { label: 'Time', value: 'About 100 hours' },
+]
+const CIA_EXAM_DATES = 'The CIA publishes its FCIA exam dates on its Becoming a Fellow page, and they aren’t transcribed here yet.'
+const CIA_MODULE_NO_SITTINGS = 'A module is taken online on the candidate’s own schedule, so it has no sittings.'
+
+function ciaTrackAbout(track: string): Record<string, ExamAbout> {
+  const syllabus = CIA_TRACK_SYLLABI[track]
+  const exams = [`f1${track}-1`, `f2${track}-1`, `f3${track}-1`, ...(track === 'fie' ? ['f3bnk-1'] : [])]
+  return {
+    ...Object.fromEntries(exams.map(id => [id, {
+      facts: CIA_EXAM_FACTS, source: CIA_FELLOW, factSources: [syllabus], noSittings: CIA_EXAM_DATES,
+    }])),
+    ...Object.fromEntries([`${track}-m1`, `${track}-m2`].map(id => [id, {
+      facts: CIA_MODULE_FACTS, source: CIA_FELLOW, factSources: [syllabus], noSittings: CIA_MODULE_NO_SITTINGS,
+    }])),
+  }
+}
+
+const CIA_GUIDE_ABOUT: Record<string, ExamAbout> = {
+  ...ciaTrackAbout('pc'),
+  ...ciaTrackAbout('ila'),
+  ...ciaTrackAbout('gb'),
+  ...ciaTrackAbout('ret'),
+  ...ciaTrackAbout('fie'),
+  'acia-m1': {
+    facts: [{ label: 'Format', value: 'Online module with recordings, short readings and quizzes, and a case study' }],
+    source: CIA_ACIA_PAGE, factSources: [CIA_ACIA_SYLLABUS], noSittings: CIA_MODULE_NO_SITTINGS,
+  },
+  'acia-m2': {
+    facts: [{ label: 'Format', value: 'Online module with recordings, short readings and quizzes, and a case study' }],
+    source: CIA_ACIA_PAGE, factSources: [CIA_ACIA_SYLLABUS], noSittings: CIA_MODULE_NO_SITTINGS,
+  },
+  'acia-capstone': {
+    facts: [
+      { label: 'Length', value: '6 hours: a 4-hour common section and a 2-hour specialized section, long- or short-term' },
+      { label: 'Format', value: 'Open book; written responses to tasks set in the context of a problem' },
+      { label: 'Delivery', value: 'Through the CIA’s learning management system, with secure online proctoring' },
+    ],
+    source: CIA_ACIA_PAGE,
+    factSources: [CIA_ACIA_SYLLABUS],
+    noSittings: 'The CIA publishes the Capstone Exam’s dates on its ACIA pages, and they aren’t transcribed here yet.',
+  },
+}
+
 const GUIDE_ABOUT: Record<string, ExamAbout> = {
   // The SOA exams past FM. The facts are transcribed from each exam's syllabus
   // (the PDF its study guide was converted from — data/examPdfLinks.ts); a
@@ -531,6 +604,7 @@ const GUIDE_ABOUT: Record<string, ExamAbout> = {
     source: { label: 'CAS — Course on Professionalism', url: 'https://www.casact.org/exams-admissions/exams/acas-exams/course-professionalism' },
     noSittings: 'The CAS lists each Course on Professionalism on its own page, and none is transcribed here yet.',
   },
+  ...CIA_GUIDE_ABOUT,
 }
 
 // ── Each sitting ──────────────────────────────────────────────────────────────

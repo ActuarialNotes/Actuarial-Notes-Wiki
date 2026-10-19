@@ -50,6 +50,14 @@ export function wikiExamIdToProgressKey(examId: string): string {
   // The SOA's fellowship (FSA) exams: `GH-101`, `GH-201C`, `ILA-201U`. The
   // tracks key them `FSA-GH101`, one key for a course's regional variants (the
   // way Exam 6's variants share `CAS-6`) — so the `-C`/`-U` letter is dropped.
+  // The CIA's own requirements: the FCIA track exams (`F1PC`, `F3BNK`) and
+  // the ACIA and FCIA track modules (`ACIA-M1`, `PC-M2`) and the ACIA
+  // Capstone Exam (`ACIA-CAPSTONE`), each keyed under the
+  // body — `CIA-F1PC`, `CIA-PC-M2` — so none can collide with an SOA or CAS key.
+  if (/^F[123](?:PC|ILA|GB|RET|FIE|BNK)$/.test(examId) || /^(?:ACIA|PC|ILA|GB|RET|FIE)-M[12]$/.test(examId)
+    || examId === 'ACIA-CAPSTONE') {
+    return `CIA-${examId}`
+  }
   const fsa = examId.match(/^(CFE|CP|GH|GI|ILA|INV|RET)-(\d{3})[A-Z]?$/)
   if (fsa) return `FSA-${fsa[1]}${fsa[2]}`
   if (/^[A-Z]+-\d+$/.test(examId)) return examId.replace(/-\d+$/, '')

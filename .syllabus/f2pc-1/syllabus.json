@@ -1,0 +1,458 @@
+{
+  "wiki_id": "f2pc-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F2PC",
+  "title": "Exam F2PC: Estimating Unpaid Claims and Financial Reporting under IFRS 17 - Insurance Contracts",
+  "name": "Estimating Unpaid Claims and Financial Reporting under IFRS 17 - Insurance Contracts",
+  "track": "PC",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36231&fid=17019",
+  "source_page": "https://www.cia-ica.ca/publications/223037e/",
+  "source_title": "FCIA Syllabus – Property and casualty track",
+  "source_date": "2025-10-30",
+  "source_sha256": "0575840476ad793f948c74b31fa387d8c7381fb377295679a9347728644b9a39",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    9,
+    12
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques for estimating unpaid claims and claims-related expenses (hereafter referred to simply as “claims”) that are relevant to P&C insurance (including reinsurance).",
+    "2. Apply these principles and techniques within the context of P&C insurance.",
+    "3. Evaluate the considerations involved in selecting a best estimate of unpaid claims.",
+    "4. Understand how estimating unpaid claims links to wider business processes (e.g., business planning, pricing, financial reporting, and capital setting).",
+    "5. Describe IFRS 17 - Insurance Contracts (hereafter referred to as “IFRS 17”) and calculate actuarial values for financial reporting under IFRS 17.",
+    "6. Create appropriate proposals and recommendations related to estimates of unpaid claims and IFRS 17 financial reporting in P&C insurance business.",
+    "7. Evaluate hypothetical scenarios, including using judgement to assess the implications of possible actions.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the estimation of unpaid claims and IFRS 17 financial reporting for P&C insurers. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Regulations and applicable standards",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply legislation (e.g., the Insurance Companies Act) and regulations (e.g., Office of the Superintendent of Financial Institutions guidelines) relevant to the Appointed Actuary’s valuation for financial reporting purposes. (A3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply actuarial professionalism requirements applicable to the estimation of unpaid claims and IFRS 17 financial reporting. (B3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Data",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Differentiate the types of data (including claims and exposures) and information required for estimating unpaid claims, their sources, and main uses. (A4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Build development triangles. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Differentiate the types of data and information required for IFRS 17 financial reporting, their sources, and main uses. (A4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply the concepts of homogeneity and credibility of data in estimating unpaid claims and for IFRS 17 financial reporting. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand the implications to data requirements of different characteristics of insurance (e.g., long tail vs. short tail, low frequency/high severity vs. high frequency/low severity lines of business). (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Organize data by calendar year, accident year, policy year, underwriting year, and report year, and understand when each is appropriate. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Evaluate the influence of the insurer’s internal environment (such as changes in operations or information technology) on data used for estimation of unpaid claims and IFRS 17. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Evaluate the influence of external environments (such as economic and judicial decisions) on data used for estimation of unpaid claims and IFRS 17. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand the possible causes of data errors and the effects of inadequate data and information. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Create appropriate data-validation processes. (C6)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Estimating unpaid claims – basic topics",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the purpose of estimating unpaid claims for P&C insurers, including:",
+          "bullets": [
+            "a. The reasons for calculating estimates of unpaid claims and how these might influence the approach (such as financial reporting, financial planning and analysis, and pricing) (A2); and",
+            "b. The key stakeholders and their interests in the results of estimates of unpaid claims. (A2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Use development triangles (including claims, allocated loss-adjustment expense, counts, ratios, and average values) as a diagnostic tool. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze the range of general issues that can affect estimation of unpaid claims using triangle-based techniques and identify how to deal with such issues. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Calculate and evaluate estimates of unpaid claims using the following techniques: (C5)",
+          "bullets": [
+            "a. Development;",
+            "b. Expected claim;",
+            "c. Bornhuetter-Ferguson;",
+            "d. Cape Cod;",
+            "e. Benktander;",
+            "f. Frequency severity; and",
+            "g. Berquist-Sherman."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "For each of the above techniques:",
+          "bullets": [
+            "a. Understand the assumptions and mechanics. (C2)",
+            "b. Analyze assumption changes and determine their influence on the results of estimates of unpaid claims. (C4)",
+            "c. Evaluate the technique when used with varying data quality and completeness and in different situations. (D5)",
+            "d. Describe the strengths and limitations of each technique and the impact of limitations on results. (D2)",
+            "e. Select the appropriate technique and assumptions given specific circumstances. (D5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Apply processes to integrate more complex factors potentially relevant for the estimation of unpaid claims of a given claims portfolio.",
+          "bullets": [
+            "a. Reflect the circumstances under which claims periods defined by underwriting period, accident period, and reporting period approaches may be used. (C3)",
+            "b. Distinguish between incurred but not yet reported (IBNYR) and incurred but not enough reported (IBNER) components of an estimate of unpaid claims. (C3)",
+            "c. Apply and evaluate the earned premium concept in various contexts of the estimation of unpaid claims. (C5)",
+            "d. Understand the drivers of exposure changes for claims portfolios (such as shifts in types of exposures or seasonality) and adjust projection techniques to allow for such changes in estimating unpaid claims. (D4)",
+            "e. Apply an allowance for claims inflation in the estimation of unpaid claims. (C3)",
+            "f. Measure and respond appropriately to changes in the internal environment (such as changes in claims-processing systems or the mix of business) and the external environment (such as judicial decisions). (D4)",
+            "g. Execute on the concepts of a best estimate and a risk adjustment. (D6)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Determine whether to discount for investment income and adjust for adverse deviation and calculate such adjustments to a best estimate of unpaid claims. (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Estimation of unpaid claims – advanced topics",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe, calculate, and evaluate approaches to allow for various other items in an actuary’s estimation of unpaid claims, including:",
+          "bullets": [
+            "a. Salvage and subrogation recovery items; (C5)",
+            "b. Claims-management expenses (including allocated and unallocated loss-adjustment expenses) and other costs; (C5)",
+            "c. Latent claims and potential claims features that have not manifested in the reported claims data; and (C5)",
+            "d. Discounted cash flows such as no-fault automobile accident benefits and other recurring benefits. (C5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Calculate estimates of unpaid claims for reinsurance.",
+          "bullets": [
+            "a. Understand reinsurance cover considerations when differentiating losses-occurring basis and a risks-attaching basis and considerations for catastrophe covers. (B2)",
+            "b. Evaluate the approaches to estimating unpaid claims for reinsurance contracts held by analyzing claims gross and net of reinsurance held vs. claims gross of reinsurance held and claims ceded to reinsurance. (C5)",
+            "c. Calculate and evaluate estimates of unpaid claims for reinsurance held using appropriate techniques and assumptions that reflect the characteristics of reinsurance contracts held (e.g., contract terms and conditions, data availability). (C5)",
+            "d. Determine the effect on relevant earnings patterns and estimation of unpaid claims of non-annual covers, non-uniform risks, common renewal dates, unclosed business, adjustment premiums, risks attaching at future dates, reinstatement premiums, and other loss-responsive mechanisms. (C3)",
+            "e. Calculate and evaluate estimates of unpaid claims for various layers of claims. (C5)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Develop estimates of unpaid claims using credibility models (C3), including:",
+          "bullets": [
+            "a. Testing the results for reasonableness; and (C4)",
+            "b. Describing the strengths and weaknesses of such methods. (B2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate stochastic processes for estimating unpaid claims.",
+          "bullets": [
+            "a. Describe the likely sources of uncertainty in estimates of unpaid claims. (B2)",
+            "b. Describe the uses of stochastic techniques for estimating unpaid claims. (B2)",
+            "c. Describe the following types of stochastic techniques, including data required, key assumptions, and mechanics: (B2)",
+            "\ti. Analytic; and",
+            "\tii. Simulation-based.",
+            "d. Differentiate Mack, bootstrapping, and Markov chain Monte Carlo approaches for estimating unpaid claims and quantifying uncertainty in such estimates. (C4)",
+            "e. Describe the features of aggregate claims distributions, as well as the inherent risk correlations and diversification that apply. (C2)",
+            "f. Extend a frequency-severity technique to include stochasticity. (C3)",
+            "g. Describe the issues, advantages, and disadvantages of each of the techniques, including sensitivity to assumptions. (C2)",
+            "h. Describe the approach to aggregating the results of stochastic estimates of unpaid claims across multiple lines of business and discuss methods of correlation. (C2)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe machine-learning approaches with individual claim case reserves, including the advantages and challenges with such approaches. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Evaluate the results of estimates of unpaid claims for adequacy and reasonableness. (D5)",
+          "bullets": [
+            "a. Understand how alternative estimates of unpaid claims can arise and highlight some of the professional issues in resolving them. (D2)",
+            "b. Describe the factors an actuary should consider and evaluate the typical diagnostics used in assessing the reasonableness of the results of estimates of unpaid claims. (D4)",
+            "c. Describe the factors an actuary should consider in assessing the reasonableness of changes in the results of estimates of unpaid claims over time. (D2)",
+            "d. Analyze current experience to monitor performance and recommend estimates of unpaid claims for interim valuations. (D4)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Communicate an estimate of unpaid claims.",
+          "bullets": [
+            "a. Describe what is meant by a “best-estimate reserve.” (A2)",
+            "b. Describe the uses, advantages, and disadvantages of estimating ranges of unpaid claims using the following approaches: (B2)",
+            "\ti. Stochastic models;",
+            "\tii. Scenario tests; and",
+            "\tiii. Use of alternative sets of assumptions.",
+            "c. Defend the issues to be considered when communicating ranges in estimates of unpaid claims and uncertainties. (D5)"
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "IFRS17 financial reporting",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe IFRS 17 – Accounting for Insurance Contracts including its purpose, scope, classification of contracts, and contract boundaries. (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply both IFRS 17 measurement approaches: (C3)",
+          "bullets": [
+            "a. General measurement approach; and",
+            "b. Premium allocation approach."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Reflect considerations related to the level of aggregation when accounting for business under IFRS 17 including determination of the unit of account and setting of portfolios and groups of contracts. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Estimate future cash flows for the liability for remaining coverage and the liability for incurred claims under both the general measurement approach and the premium allocation approach. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Determine discount rates using the top down and bottom-up approaches referred to in IFRS 17. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Determine risk adjustment for non-financial risk, including:",
+          "bullets": [
+            "a. Reflect the criteria for and measurement of the risk adjustment under the general measurement approach and the premium allocation approach. (C4)",
+            "b. Apply multiple methods, including: (C4)",
+            "\ti. Quantile;",
+            "\tii. Cost of capital; and",
+            "\tiii. Margin.",
+            "c. Adjust for the role of diversification and allocation in the determination and the application of the risk adjustment. (C4)",
+            "d. Determine the risk adjustment for reinsurance contracts held. (C4)"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Determine key actuarial components of IFRS 17 financial statements, including:",
+          "bullets": [
+            "a. Contractual service margin; (C4)",
+            "b. Liability for remaining coverage; (C4)",
+            "c. Liability for incurred claims; (C4)",
+            "d. Risk adjustment for non-financial risk; (C4)",
+            "e. Discounting; (C4)",
+            "f. Onerous contracts (C4); and",
+            "g. Loss component (C4);"
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe the components (financial statements, key exhibits, and schedules) of the Canadian regulatory return (P&C-1, P&C-2 and P&C-3) and how they interrelate. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Calculate key financial metrics and evaluate an insurer’s financial performance and strength based on such ratios. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Describe the Appointed Actuary’s role with respect to IFRS 17 financial reporting. (B2)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

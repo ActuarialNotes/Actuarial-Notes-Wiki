@@ -1,0 +1,556 @@
+{
+  "wiki_id": "fie-m2",
+  "body": "CIA",
+  "shape": "cia-module",
+  "code": "FIE-M2",
+  "title": "FIE Module 2: Professional considerations in the investment environment",
+  "name": "Professional considerations in the investment environment",
+  "track": "FIE",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007",
+  "source_page": "https://www.cia-ica.ca/publications/223034e/",
+  "source_title": "FCIA Syllabus – Finance, investments and ERM with option in Banking",
+  "source_date": "2024-01-30",
+  "source_sha256": "596ac4b5b2e73cdc20410d14652686301c4d219b2bf85fd838751770de91b539",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    25,
+    27
+  ],
+  "intro": [
+    "The primary audience for the FCIA modules is individuals who desire to be admitted as Fellows of the CIA.",
+    "Individuals seeking continuing professional development credit can also register for the FCIA modules.",
+    "Each FCIA candidate through Pathways 1 and 2 is required to complete both FCIA modules, while Pathway 3 candidates will have to complete the second module. It is anticipated that FCIA module candidates will have six months, from the date of module purchase, to complete each FCIA module. As a general guideline, candidates should expect to spend approximately 100 hours completing all activities included in a module."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Overview of the regulatory framework in Canada",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Summarize the regulation applicable to the insurance market in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Summarize the regulation applicable to the investment market in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Summarize the regulation applicable to the retirement market in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify the major regulators of the insurance sector in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Identify the major regulators of the investment sector in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Identify the major regulators of the retirement sector in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Summarize the activities of insurance regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Summarize the activities of investment regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Summarize the activities of the retirement regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Summarize the activities of banking regulators.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Describe the goals of regulation and laws in the investment and insurance sectors.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Explain how regulation protects consumers and investors.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Understand the compliance function in an investment management organization.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Canadian financial reporting",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand the IFRS 17 framework and contrast the general measurement model and building-block approach with the variable fee approach for insurance contract liability measurement.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Calculate the components of insurance contract liabilities under IFRS 17.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Evaluate profit and losses, including the amortization of the contractual service margin (CSM) , under the IFRS 17 framework, with use of insurance cash flows that vary and do not vary with underlying items.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Discuss the methods of construction of discount rates and yield curve under IFRS 17 including the estimation of the illiquidity premium.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe how climate-related risks could impact the valuation assumptions for pricing and reserving.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Determine key actuarial components of IFRS 17 financial statements.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Calculate key financial metrics and evaluate an insurer’s financial performance and strength based on such metrics.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe the Appointed Actuary’s role with respect to IFRS 17 financial reporting.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Considerations in Canadian practice",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe and explain the insurance market stakeholders, how they interact, and their needs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and explain the investment market stakeholders, how they interact, and their needs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe and explain the banking market stakeholders, how they interact, and their needs.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand the implications of replacing LIBOR with alternative reference rates.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand and discuss the latest developments of environmental, social, and governance (ESG) investing in Canada.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Discuss the impacts and potential of insurtech.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Discuss the application of blockchain and cryptocurrencies on insurance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Explain the basic properties of a smart contract.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Understand centralization versus decentralization and the concept of distributed consensus in the context of cryptocurrencies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Understand the basics of climate science and its impact on the work of actuaries.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Describe the process to conduct climate-scenario analysis for financial institutions.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Strategic decision-making",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Analyze an organization’s external environment and internal organization.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and apply strategic management models, including Porter’s five forces and value-chain analysis.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe types of business-level strategies and recommend an appropriate business-level strategy for a given situation.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the impact of competitive dynamics on strategic management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Develop and apply causal loop diagrams that model the feedback structure of complex systems.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Apply stocks and flows to dynamic modelling.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Apply dynamic modelling to business decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Understand what is meant by strategic thinking and management process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Determine strategic questions related to business sustainability and corporate governance.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Develop a strategic plan.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Evaluate the impact of a strategic plan on the financial statement and capital resources of an entity.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Asset and portfolio management",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the portfolio management process, and the role of investment policy, the investment actuary, and external portfolio managers.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe and evaluate how a company's objectives, needs, and constraints affect investment strategy and portfolio construction.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Describe the role of and significant considerations related to the design and function of asset-allocation strategies.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Describe fixed-asset portfolio management methods, immunization (including derivatives), cash-matching strategies, and convexity.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and assess alternative investment portfolios in the context of an insurance company portfolio.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Describe and apply methods and processes for evaluating portfolio performance, including performance attribution, sources of earnings analysis on investment income, benchmarks, metrics, and risk-adjusted performance appraisals.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe the principles of liquidity risk management.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe hedging against the cost of borrowing through forward rate, futures and perform related calculations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Demonstrate understanding of regulator guidance and context for different approaches to responsible investment and, specifically, the integration of ESG factors in the investment process.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Demonstrate an understanding of the underlying issues that constitute factors within each of the ESG areas.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Demonstrate an understanding of the ESG market: relevance, size, scope, key drivers and challenges, and risks and opportunities.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Communication and organizational behaviour",
+      "part": null,
+      "weight": null,
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain differences between good and poor communication techniques and their implications.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Apply techniques to structure ideas logically.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Develop clear, fact-based messages that can be communicated persuasively.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Explain the role of cognitive biases on making suboptimal individual decisions.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Evaluate the role of organizational behavior on organizational decision-making processes and efficacy.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Explain why communication is strategically important to organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Describe how information is communicated within organizations.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe organizational and individual barriers to effective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Identify the risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Explain how to overcome communication barriers and minimize risks of ineffective communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Recognize the influence of culture and diversity on communication.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Apply the CIA Standards of Practice and Rules of Professional Conduct in business communication.",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

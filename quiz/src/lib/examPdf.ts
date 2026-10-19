@@ -41,16 +41,38 @@ export const EXAM_PDF_HOSTS = [
   // PACICC's report on the actuary's role in safeguarding solvency.
   'pacicc.ca',
   'www.pacicc.ca',
+  // The Canadian Institute of Actuaries' syllabi — through the one download
+  // endpoint below, never any other path on the host.
+  'www.cia-ica.ca',
 ]
 
-/** Can this URL be shown in the viewer? https, a `.pdf`, on a publisher we proxy. */
+/**
+ * A publisher that serves its PDFs through a download script rather than at a
+ * `.pdf` path: the host and the script's exact path. The CIA's publication
+ * pages link every document as `dl_file.php?p=…&fid=…`, the FCIA and ACIA
+ * syllabi among them. Mirrors `PDF_DOWNLOAD_ENDPOINTS` in
+ * `quiz/api/exam-pdf.js`; the endpoint still refuses a response that isn't a
+ * PDF.
+ */
+export const PDF_DOWNLOAD_ENDPOINTS: readonly { host: string; path: string }[] = [
+  { host: 'www.cia-ica.ca', path: '/app/themes/wicket/custom/dl_file.php' },
+]
+
+/** A `.pdf` path, or a publisher's download script named in `PDF_DOWNLOAD_ENDPOINTS`. */
+function isPdfPath(parsed: URL): boolean {
+  if (/\.pdf$/i.test(parsed.pathname)) return true
+  const host = parsed.hostname.toLowerCase()
+  return PDF_DOWNLOAD_ENDPOINTS.some(e => e.host === host && e.path === parsed.pathname)
+}
+
+/** Can this URL be shown in the viewer? https, a `.pdf` (or a known download script), on a publisher we proxy. */
 export function isSupportedPdfSource(url: string): boolean {
   try {
     const parsed = new URL(url)
     return (
       parsed.protocol === 'https:' &&
       EXAM_PDF_HOSTS.includes(parsed.hostname.toLowerCase()) &&
-      /\.pdf$/i.test(parsed.pathname)
+      isPdfPath(parsed)
     )
   } catch {
     return false

@@ -1,0 +1,585 @@
+{
+  "wiki_id": "f1fie-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F1FIE",
+  "title": "Exam F1FIE: Financial Products",
+  "name": "Financial Products",
+  "track": "FIE",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36225&fid=17007",
+  "source_page": "https://www.cia-ica.ca/publications/223034e/",
+  "source_title": "FCIA Syllabus – Finance, investments and ERM with option in Banking",
+  "source_date": "2024-01-30",
+  "source_sha256": "596ac4b5b2e73cdc20410d14652686301c4d219b2bf85fd838751770de91b539",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    5,
+    7
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand different types of financial products and their uses.",
+    "2. Understand the main principles and techniques of pricing that are relevant to investments.",
+    "3. Apply these principles and techniques within the context of investing.",
+    "4. Understand how pricing links to wider business processes (e.g., business planning and capital setting).",
+    "5. Create and evaluate hypothetical scenarios, including using judgment to assess the implications of actions and to develop appropriate proposals or recommendations relating to investment products.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and written responses to specific questions. Candidates will complete the exam through the CIA learning management system."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in financial products and securities. (A1)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Mathematics, statistics and stochastic calculus",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand and apply concepts of probability and statistics important in mathematical finance. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the importance of the no-arbitrage condition in asset pricing. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply the concept of martingale in asset pricing. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Understand and apply Itô’s integral and stochastic differential equations. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand and apply Itô’s lemma. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand and apply Jensen’s inequality. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Assess mathematical considerations for analyzing financial time series. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Understand the importance of the Feynman-Kac theorem to diffusion processes. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Introduction to option pricing theory",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand and apply various techniques for analyzing conditional heteroscedastic models, including ARCH (autoregressive conditionally heteroscedastic) and GARCH (generalized autoregressive conditionally heteroscedastic). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Perform calculations and evaluate results of option-pricing techniques and theory for equity and interest rate derivatives. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply the basic concepts of currency markets (purchase-price parity, law of one price, etc.). (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify differences and implications of real-world versus risk-neutral probability measures. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand and apply Girsanov’s theorem in changing measures. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Understand and apply the Black-Scholes-Merton PDE (partial differential equation). (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Identify limitations of the Black-Scholes pricing formula.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Describe and apply approaches for relaxing the assumptions used in the Black-Scholes formula. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Apply and assess alternatives to the Black-Scholes-Merton model or alternative techniques that can be used to deal with option-pricing technique limitations. (B6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Demonstrate an understanding of interest rate models. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Understand and apply the concept of calibration and describe the issues related to calibration. (B6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Understand and assess the Heath-Jarrow-Morton (HJM) model and the HJM no-arbitrage condition. (B6)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Introduction to credit and liquidity risk",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Understand events and causes of the 2008 global credit crisis relating to mortgage-backed securities (MBS) and credit-default swaps (CDS). (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand the basic concepts of credit risk modelling such as probability of default, loss given default, exposure at default, and expected loss. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Apply and assess credit-valuation models. (B6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply and assess the Merton asset-value models in the context of credit risk. (B6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand and apply credit-default swaps. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Apply and assess mortgage-default models in the valuation of mortgage-backed securities (B6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Measure and perform marking-to-market counterparty credit risk in credit derivatives. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Understand the rationale, markets, and risks of structured finance. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Compare the use of credit-spread measures in portfolio construction. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Describe risk considerations in investment-grade versus high-yield bond portfolios. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Understand the concept of liquidity risk and the threat it represents to financial intermediaries and markets. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Measure and monitor liquidity risk, using various liquidity-measurement tools and ratios. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Understand liability-termination provisions such as book-value surrender and the impact on a company’s overall liquidity risk. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 14,
+          "text": "Apply liquidity risk models, including modelling cash flow of various types of assets under various scenario analysis and time horizons. (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 15,
+          "text": "Create liquidity risk management plans and procedures, including addressing appropriate product design, investment guidelines, and reporting given a desired liquidity risk level. (C6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 16,
+          "text": "Be familiar with rating agency expectations for liquidity and the implications for company ratings. (D4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Derivatives and hedging",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Compare and contrast the various kinds of volatility. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Compare and contrast various approaches for setting volatility assumptions in hedging. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Compare and contrast different approaches to hedging. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Perform delta hedging and understand the interplay between hedging assumptions and hedging outcomes. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe and understand economic scenarios where hedging strategies may be ineffective for certain portfolios. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Demonstrate how interest rate swaps, forwards, and futures can be used to modify a portfolio’s risk and return. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Utilize derivatives to achieve targeted equity and interest rate risk exposures. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Discuss methods of forecasting volatility and understand the applications of volatility and variance swaps. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Fixed-income securities",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Explain the cash-flow characteristics and pricing of government securities. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Analyze par yield curves, spot curves, and forward curves and their relationship to traded security prices. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Analyze the different characteristics of securities issued by government agencies. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Evaluate features of provincial and municipal bonds, and the role of rating agencies in pricing them. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the cash flow of various corporate bonds considering underlying risks such as interest rate, credit, and event risks. (A2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Analyze cash-flow patterns and underlying drivers and risks of mortgage-backed securities and collateralized mortgage obligations. (D4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Construct portfolios of fixed-income securities using the following broad categories: (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Managing funds against a target return; and",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Evaluate strategies for managing funds and immunizing funds against single and multiple liabilities.",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Understand and discuss approaches to setting expectations for fixed-income returns. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Evaluate the effects of capital markets expectations on the yield curve. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Perform calculations of modified duration, convexity, and duration times spread (DTS) and its applications towards various fixed-income strategies (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Apply the model to price common interest sensitive instruments, including callable bonds, bond options, caps, floors and swaptions. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 7,
+      "title": "Guaranteed investment products and annuities",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Identify and evaluate the impact of embedded options in liabilities, specifically variable annuities guaranteed riders (guaranteed minimum accumulation benefit [GMAB], guaranteed minimum death benefit [GMDB], guaranteed minimum withdrawal benefit [GMWB], and guaranteed minimum income benefit [GMIB]). (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Understand risks associated with guaranteed riders, including market, insurance, policyholder behaviour, basis, credit, regulatory, and accounting. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Perform risk management and dynamic hedging for existing GMxB and its embedded options. (D6)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Analyze hedgeable components that are equity, interest rate, volatility, and cross Greeks. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze partially hedgeable or unhedgeable components that are policyholder behaviour, mortality and lapse, basis risk, counterparty exposure, foreign bonds and equities, correlation, and operation failures. (C2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Compare and contrast static vs. dynamic hedging. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Analyze how differences between modeled and actual outcomes for guarantees affect financial results over time. (D4)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

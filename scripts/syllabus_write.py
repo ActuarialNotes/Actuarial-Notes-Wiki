@@ -68,6 +68,12 @@ def exam_identity(data: dict) -> dict:
     Pricing`; `GH 201-C – …` → `GH-201C`; `Fundamentals of Actuarial
     Mathematics Exam` (wiki id `fam-1`) → `FAM`."""
     title = data["title"]
+    if data.get("body") == "CIA":
+        # `Exam F1PC: Pricing` → `F1PC`; `PC Module 1: …` → `PC-M1`, shown as
+        # "PC Module 1"; the ACIA modules have no name of their own.
+        code = data["code"]
+        shown = re.sub(r"^([A-Z]+)-M(\d)$", r"\1 Module \2", code) if code != "ACIA-CAPSTONE" else data["name"]
+        return {"exam_id": code, "code": shown, "name": data["name"] or shown, "fellowship": False}
     m = re.match(r"^([A-Z]{2,3}) (\d{3})(?:-([A-Z]))?\s*[–—-]?\s*(.+)$", title)
     if m:
         exam_id = f"{m.group(1)}-{m.group(2)}{m.group(3) or ''}"
@@ -79,7 +85,7 @@ def exam_identity(data: dict) -> dict:
 
 
 def page_name(data: dict) -> str:
-    return f"Exam {exam_identity(data)['exam_id']} (SOA).md"
+    return f"Exam {exam_identity(data)['exam_id']} ({data.get('body', 'SOA')}).md"
 
 
 def clean_name(text: str) -> str:
@@ -410,6 +416,92 @@ def codes_note(codes: str) -> str:
     return f" ({codes})" if codes else ""
 
 
+CIA_TRACK_NAMES = {
+    "PC": "property and casualty", "ILA": "individual life and annuities", "GB": "group benefits",
+    "RET": "retirement benefits", "FIE": "finance, investments and ERM",
+}
+
+
+def cia_lead(data: dict, ident: dict) -> str:
+    """A CIA page's first line: which designation the exam or module counts
+    towards, and in which track — what the syllabus's own title says."""
+    track = data.get("track")
+    if track is None and data["code"] == "ACIA-CAPSTONE":
+        return ("The **ACIA Capstone Exam** is the Canadian Institute of Actuaries' exam toward the "
+                "Associate (ACIA) designation.")
+    if track is None:
+        return (f"**{ident['code']}** is one of the two modules the Canadian Institute of Actuaries "
+                "requires toward the Associate (ACIA) designation.")
+    where = f"the {CIA_TRACK_NAMES[track]} track of the Canadian Institute of Actuaries' Fellowship (FCIA) pathway"
+    if data["code"] == "F3BNK":
+        where += ", the banking option in place of Exam F3FIE"
+    if data["shape"] == "cia-module":
+        return f"**{ident['code']} – {ident['name']}** is one of the two modules of {where}."
+    return f"**{data['code']} – {ident['name']}** is an exam of {where}."
+
+
+def cia_source_page(data: dict) -> str:
+    """The `Resources/Books/` page of the syllabus a CIA page transcribes:
+    `Title (CIA - Year)`, the vault's convention."""
+    return clean_name(data["source_title"]) + f" (CIA - {data['source_date'][:4]})"
+
+
+def isbn_shelf(vault: vl.Vault) -> dict[str, str]:
+    """`Resources/Books/` pages by the ISBN their frontmatter carries, digits
+    only — how a CIA reading, which prints its ISBN, finds its edition's page."""
+    out: dict[str, str] = {}
+    for name, path in vault.by_name.items():
+        if not path.startswith("Resources/Books/"):
+            continue
+        with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+            m = re.search(r'^ISBN:\s*"?([\d-]+X?)"?\s*$', fh.read(4000), re.M)
+        if m:
+            out[re.sub(r"\D", "", m.group(1))] = name
+    return out
+
+
+def cia_reading_target(r: dict, isbns: dict[str, str]) -> str:
+    """A Capstone reading's page: the one carrying its ISBN; none for an ACIA
+    module, which the shelf (whose cards are resource pages) lists as plain
+    text; else the page that should exist, `Title (Surname)` — the CIA prints
+    no year, so none is given."""
+    if r.get("isbn"):
+        page = isbns.get(re.sub(r"\D", "", r["isbn"]))
+        if page:
+            return page
+    if re.match(r"^ACIA Module \d$", r["citation"]):
+        return ""       # a module, not a reading: the shelf holds it as plain text
+    title = clean_name(re.sub(r",\s*\d+(?:st|nd|rd|th) Edition$", "", r["citation"]))
+    surname = (r.get("authors") or "").split(",")[0].split()[-1:] if r.get("authors") else []
+    return title + (f" ({surname[0]})" if surname else "")
+
+
+def cia_sources(data: dict, ident: dict, vault: vl.Vault) -> list[str]:
+    """The FCIA syllabi list no readings: the exams are open-book and the
+    modules carry their material in the CIA's learning management system. Their
+    one source is the syllabus, with the pages the exam or module takes up in
+    it. The Capstone Exam's syllabus lists background readings by section;
+    those come first, each with every section it serves."""
+    L: list[str] = []
+    entries: dict[str, dict] = {}
+    isbns = isbn_shelf(vault) if data["readings"] else {}
+    for r in data["readings"]:
+        target = cia_reading_target(r, isbns)
+        e = entries.setdefault(target or r["citation"], {"cite": r["citation"], "target": target, "lines": []})
+        e["lines"] += [p["text"] for p in r["parts"]]
+    for e in entries.values():
+        shown, target = e["cite"].replace("|", "-"), e["target"]
+        if not target:
+            L.append(f"> - {shown}")
+        else:
+            L.append(f"> - [[{target}]]" if shown == target else f"> - [[{target}|{shown}]]")
+        L += [f">      - {x}" for x in e["lines"]]
+    lo, hi = data["pages"]
+    pages = f"p. {lo}" if lo == hi else f"pp. {lo}–{hi}"
+    unit = ident["code"] if data["shape"] == "cia-module" else ident["name"] if data["track"] is None else f"Exam {data['code']}"
+    return L + [f"> - [[{cia_source_page(data)}]]", f">      - {unit} ({pages})"]
+
+
 def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
     """The page for `data`. `chosen` is the Source Material links the page on
     disk already carries (see `Chosen`); without it every reading is matched
@@ -429,17 +521,27 @@ def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
         "---",
     ]
     L += fm + ["", '<div class="exam-nav"', f'     data-current="{ident["exam_id"]}|{ident["name"]}">', "</div>", ""]
-    module = data.get("shape") == "module"
-    L.append(f"# {ident['exam_id']}" if module else f"# Exam {ident['exam_id']}")
+    module = data.get("shape") in ("module", "cia-module")
+    cia = data.get("body") == "CIA"
+    if cia:
+        # A module is titled by its name ("PC Module 1"), the Capstone by its
+        # own ("ACIA Capstone Exam"), an FCIA exam by its code.
+        L.append(f"# {ident['code']}" if module or data["code"] == "ACIA-CAPSTONE" else f"# Exam {ident['exam_id']}")
+    else:
+        L.append(f"# {ident['exam_id']}" if module else f"# Exam {ident['exam_id']}")
     sittings = data["sitting"]
-    if ident["fellowship"]:
+    if cia:
+        L.append(cia_lead(data, ident))
+    elif ident["fellowship"]:
         when = f" Its syllabus covers the {sittings} sittings." if sittings else ""
         L.append(f"**{ident['code']} – {ident['name']}** is an exam of the Society of Actuaries' "
                  f"Fellowship (FSA) pathway.{when}")
     else:
         L.append(data["intro"][0] if data["intro"] else f"**{ident['name']}** is an exam of the Society of Actuaries.")
     L.append("")
-    about = data["intro"][1:]
+    # A CIA page's lead is its own line, so all of the syllabus's paragraphs
+    # (the exam's aim, how it is sat) go in the callout.
+    about = list(data["intro"]) if cia else data["intro"][1:]
     # A module's first paragraph can end on a colon over a list ("The concepts
     # you will learn in this module include:"); the list stays with it.
     while module and about and about[0].startswith("- "):
@@ -452,7 +554,11 @@ def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
         L.append("")
     L += ["## Learning Objectives", ""]
 
+    part = None
     for t in data["topics"]:
+        if t.get("part") and t["part"] != part:
+            part = t["part"]
+            L += [f"### {part}", ""]
         L.append(f"> [!example]- {t['title']} {weight_tag(t)}".rstrip())
         if t["objective"]:
             L.append(f"> {linker.link(t['objective'], fallback=False)}")
@@ -465,13 +571,16 @@ def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
                 L += [f"> **{o['group']}**", ">"]
                 group = o["group"]
             n = outcome_num(o)
-            bullets = [linker.link(b, fallback=False) for b in o["bullets"]]
+            bullets = [("\t" if b.startswith("\t") else "") + linker.link(b.lstrip("\t"), fallback=False)
+                       for b in o["bullets"]]
             key_concepts = chosen.key_concepts.get(" ".join(_words(o["text"])), [])
             linked = key_concepts or any("[[" in b for b in bullets)
             L.append(f"> {n}. {linker.link(o['text'], fallback=not linked)}")
             pad = " " * len(f"{n}. ")
             for b in bullets:
-                L.append(f">{pad} - {b}")
+                # A CIA sub-item's own sub-items (`i.`, `ii.`) sit a level in.
+                inner = "   " if b.startswith("\t") else ""
+                L.append(f">{pad}{inner} - {b.lstrip()}")
             L += [f"> {k}" for k in key_concepts]
         if t["resources"]:
             L += [">", "> **Readings:**"]
@@ -483,6 +592,9 @@ def render(data: dict, vault: vl.Vault, chosen: Chosen | None = None) -> str:
         L.append("")
 
     L += ["## Source Material", "> [!answer]- Source Material", ">"]
+    if cia:
+        L += cia_sources(data, ident, vault)
+        return "\n".join(L).rstrip() + "\n"
     entries: dict[str, dict] = {}
     by_target: dict[str, str] = {}     # target → the key of the first entry linking it
     readings = [r for t in data["topics"] for r in t["resources"]] or data["readings"]
@@ -535,7 +647,7 @@ def expected_lines(data: dict) -> list[tuple[str, str]]:
         for o in t["outcomes"]:
             out.append((f"{t['title']} {o['letter']})", f"{outcome_num(o)}. {o['text']}"))
             for b in o["bullets"]:
-                out.append((f"{t['title']} {o['letter']}) bullet", f"- {b}"))
+                out.append((f"{t['title']} {o['letter']}) bullet", f"- {b.lstrip()}"))
     return out
 
 

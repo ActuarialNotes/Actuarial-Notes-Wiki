@@ -3,7 +3,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest'
 // stubbed. What matters here is the refusals: this endpoint takes a URL from
 // the client, so the allowlist is the only thing between it and an open proxy.
 import handler, { resolvePdfTarget } from '../../api/exam-pdf.js'
-import { EXAM_PDF_HOSTS } from './examPdf'
+import { EXAM_PDF_HOSTS, PDF_DOWNLOAD_ENDPOINTS } from './examPdf'
 
 const REPORT = 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exam5_sp19-5.pdf'
 
@@ -55,6 +55,17 @@ describe('resolvePdfTarget', () => {
     // that opens on a request the endpoint then refuses.
     for (const host of EXAM_PDF_HOSTS) {
       expect(resolvePdfTarget(`https://${host}/a.pdf`).url).toBe(`https://${host}/a.pdf`)
+    }
+  })
+
+  it('serves a download script only at the exact path the client names', () => {
+    // The CIA links its documents as `dl_file.php?p=…&fid=…`: that script is
+    // served, and no other path on the host.
+    for (const { host, path: script } of PDF_DOWNLOAD_ENDPOINTS) {
+      const url = `https://${host}${script}?p=36231&fid=17019`
+      expect(resolvePdfTarget(url).url).toBe(url)
+      expect(resolvePdfTarget(`https://${host}/publications/223037e/`).error).toMatch(/not a PDF/)
+      expect(resolvePdfTarget(`https://${host}${script}x`).error).toMatch(/not a PDF/)
     }
   })
 

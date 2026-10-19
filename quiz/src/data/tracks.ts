@@ -48,6 +48,13 @@ export interface Track {
   conceptPage: string | null
   certPath: string | null
   sections: TrackSection[]
+  /**
+   * How many of the track's electives its bar draws a segment for — what a
+   * candidate completes from them. Four for the FSA (its pathway's courses and
+   * the further technical courses); the FCIA's specialty track is five: two
+   * modules and three exams. Defaults to four.
+   */
+  electiveSlots?: number
 }
 
 export interface Segment {
@@ -353,6 +360,121 @@ export const TRACKS: Track[] = [
       },
     ],
   },
+  {
+    // The Canadian Institute of Actuaries' own route to its Associate
+    // designation (Pathway 1, from a CIA-accredited degree): the two ACIA
+    // modules and the Capstone Exam. Candidates who already hold another
+    // body's associate-level credits (Pathway 2) take the same modules and,
+    // in some cases, the Capstone. The CIA Professionalism Workshop is also
+    // required and has no page here yet.
+    key: 'ACIA',
+    name: 'ACIA | Associate of the Canadian Institute of Actuaries',
+    label: 'ACIA',
+    fullName: 'Associate of the Canadian Institute of Actuaries',
+    conceptPage: 'Associate of the Canadian Institute of Actuaries (ACIA)',
+    certPath: null,
+    sections: [
+      {
+        label: 'Exams',
+        items: [
+          { id: 'CIA-ACIA-CAPSTONE', name: 'ACIA Capstone Exam', color: 'indigo' },
+        ],
+      },
+      {
+        label: MODULES_AND_COURSES,
+        items: [
+          { id: 'CIA-ACIA-M1', name: 'ACIA Module 1', color: 'sky' },
+          { id: 'CIA-ACIA-M2', name: 'ACIA Module 2', color: 'sky' },
+        ],
+      },
+    ],
+  },
+  {
+    // The FCIA through the CIA's own exams (Pathways 1 and 2): one of five
+    // specialty tracks, each two modules and three open-book exams — in the
+    // finance, investments and ERM track, F3BNK (banking) may stand in for
+    // F3FIE. The Advanced Professionalism and Leadership Course and the
+    // experience requirement complete it; neither has a page here yet.
+    key: 'FCIA',
+    name: 'FCIA | Fellow of the Canadian Institute of Actuaries',
+    label: 'FCIA',
+    fullName: 'Fellow of the Canadian Institute of Actuaries',
+    conceptPage: 'Fellow of the Canadian Institute of Actuaries (FCIA)',
+    certPath: null,
+    electiveSlots: 5,
+    sections: [
+      {
+        label: 'ACIA Requirements',
+        collapsed: true,
+        items: [
+          { id: 'CIA-ACIA-M1', name: 'ACIA Module 1', color: 'sky' },
+          { id: 'CIA-ACIA-M2', name: 'ACIA Module 2', color: 'sky' },
+          { id: 'CIA-ACIA-CAPSTONE', name: 'ACIA Capstone Exam', color: 'indigo' },
+        ],
+      },
+      {
+        label: 'Property and Casualty',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'CIA-PC-M1', name: 'PC Module 1', color: 'rose' },
+          { id: 'CIA-PC-M2', name: 'PC Module 2', color: 'rose' },
+          { id: 'CIA-F1PC',  name: 'Exam F1PC',   color: 'rose' },
+          { id: 'CIA-F2PC',  name: 'Exam F2PC',   color: 'rose' },
+          { id: 'CIA-F3PC',  name: 'Exam F3PC',   color: 'rose' },
+        ],
+      },
+      {
+        label: 'Individual Life and Annuities',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'CIA-ILA-M1', name: 'ILA Module 1', color: 'teal' },
+          { id: 'CIA-ILA-M2', name: 'ILA Module 2', color: 'teal' },
+          { id: 'CIA-F1ILA',  name: 'Exam F1ILA',   color: 'teal' },
+          { id: 'CIA-F2ILA',  name: 'Exam F2ILA',   color: 'teal' },
+          { id: 'CIA-F3ILA',  name: 'Exam F3ILA',   color: 'teal' },
+        ],
+      },
+      {
+        label: 'Group Benefits',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'CIA-GB-M1', name: 'GB Module 1', color: 'green' },
+          { id: 'CIA-GB-M2', name: 'GB Module 2', color: 'green' },
+          { id: 'CIA-F1GB',  name: 'Exam F1GB',   color: 'green' },
+          { id: 'CIA-F2GB',  name: 'Exam F2GB',   color: 'green' },
+          { id: 'CIA-F3GB',  name: 'Exam F3GB',   color: 'green' },
+        ],
+      },
+      {
+        label: 'Retirement Benefits',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'CIA-RET-M1', name: 'RET Module 1', color: 'yellow' },
+          { id: 'CIA-RET-M2', name: 'RET Module 2', color: 'yellow' },
+          { id: 'CIA-F1RET',  name: 'Exam F1RET',   color: 'yellow' },
+          { id: 'CIA-F2RET',  name: 'Exam F2RET',   color: 'yellow' },
+          { id: 'CIA-F3RET',  name: 'Exam F3RET',   color: 'yellow' },
+        ],
+      },
+      {
+        label: 'Finance, Investments and ERM',
+        elective: true,
+        pathway: true,
+        items: [
+          { id: 'CIA-FIE-M1', name: 'FIE Module 1', color: 'cyan' },
+          { id: 'CIA-FIE-M2', name: 'FIE Module 2', color: 'cyan' },
+          { id: 'CIA-F1FIE',  name: 'Exam F1FIE',   color: 'cyan' },
+          { id: 'CIA-F2FIE',  name: 'Exam F2FIE',   color: 'cyan' },
+          { id: 'CIA-F3FIE',  name: 'Exam F3FIE',   color: 'cyan', or: 'CIA-F3BNK' },
+          { id: 'CIA-F3BNK',  name: 'Exam F3BNK',   color: 'cyan', or: 'CIA-F3FIE' },
+        ],
+      },
+    ],
+  },
 ]
 
 const STATUS_ORDER: Record<ItemStatus, number> = { completed: 0, in_progress: 1, not_started: 2 }
@@ -429,7 +551,7 @@ export function getTrackSegments(
     const sorted = [...electiveItems].sort(
       (a, b) => STATUS_ORDER[getStatus(a.id, progress)] - STATUS_ORDER[getStatus(b.id, progress)],
     )
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < (track.electiveSlots ?? 4); i++) {
       if (i < sorted.length) {
         const el = sorted[i]
         segments.push({ status: getStatus(el.id, progress), color: el.color, label: el.name, ids: [el.id] })

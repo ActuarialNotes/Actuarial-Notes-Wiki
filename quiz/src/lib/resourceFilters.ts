@@ -2,7 +2,7 @@ import type { WikiIndexItem } from './wikiIndex'
 import { compareExamLabels } from './resourceExams'
 import { examDisplayName } from './wikiRoutes'
 import { wikiExamIdToProgressKey } from './wikiParser'
-import { CAS_TRACK_KEYS, SOA_TRACK_KEYS, type ExamBody } from './bodyFilter'
+import { CAS_TRACK_KEYS, CIA_TRACK_KEYS, SOA_TRACK_KEYS, type GuideBody } from './bodyFilter'
 import { TRACKS } from '../data/tracks'
 
 // The filters on the Study Guides tab's **Resources** page — Exam, Publisher
@@ -154,8 +154,8 @@ export interface ResourceStripExam {
   key: string
 }
 
-const BODY_TRACKS: Record<ExamBody, ReadonlySet<string>> = { SOA: SOA_TRACK_KEYS, CAS: CAS_TRACK_KEYS }
-const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
+const BODY_TRACKS: Record<GuideBody, ReadonlySet<string>> = { SOA: SOA_TRACK_KEYS, CAS: CAS_TRACK_KEYS, CIA: CIA_TRACK_KEYS }
+const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA', 'ACIA', 'FCIA']
 
 /** An exam page's progress key, from its name (`Exam GH-201C (SOA)` → `FSA-GH201`). */
 function examPageKey(name: string): string {
@@ -168,7 +168,7 @@ function examPageKey(name: string): string {
  * exam once (P and FM sit on both an associate and a fellow track), an exam's
  * regional variants (6C, 6U) side by side.
  */
-export function resourceStripExams(examPageNames: readonly string[], body: ExamBody): ResourceStripExam[] {
+export function resourceStripExams(examPageNames: readonly string[], body: GuideBody): ResourceStripExam[] {
   const byKey = new Map<string, string[]>()
   for (const name of examPageNames) {
     const key = examPageKey(name)
@@ -196,18 +196,17 @@ export function resourceStripExams(examPageNames: readonly string[], body: ExamB
 
 /**
  * The body a shelf opens on when its URL names an exam: the exam's own body if
- * only the other body's ladder has it (a link to Exam 7 opens on CAS whatever
+ * only another body's ladder has it (a link to Exam 7 opens on CAS whatever
  * was last picked), otherwise the one picked.
  */
-export function bodyForExam(
+export function bodyForExam<B extends string>(
   label: string | null,
-  picked: ExamBody,
-  strips: Readonly<Record<ExamBody, readonly ResourceStripExam[]>>,
-): ExamBody {
-  if (!label) return picked
-  const other: ExamBody = picked === 'SOA' ? 'CAS' : 'SOA'
-  const inPicked = strips[picked].some(e => e.label === label)
-  return !inPicked && strips[other].some(e => e.label === label) ? other : picked
+  picked: B,
+  strips: Readonly<Record<B, readonly ResourceStripExam[]>>,
+): B {
+  if (!label || strips[picked].some(e => e.label === label)) return picked
+  const other = (Object.keys(strips) as B[]).find(b => b !== picked && strips[b].some(e => e.label === label))
+  return other ?? picked
 }
 
 /**

@@ -1,0 +1,491 @@
+{
+  "wiki_id": "f2ret-1",
+  "body": "CIA",
+  "shape": "cia-exam",
+  "code": "F2RET",
+  "title": "Exam F2RET: Pension Financial Reporting",
+  "name": "Pension Financial Reporting",
+  "track": "RET",
+  "sitting": "",
+  "source_url": "https://www.cia-ica.ca/app/themes/wicket/custom/dl_file.php?p=36233&fid=17023",
+  "source_page": "https://www.cia-ica.ca/publications/223038e/",
+  "source_title": "FCIA Syllabus – Retirement benefits track",
+  "source_date": "2024-02-02",
+  "source_sha256": "346a3f86d917a2c6fb9561e1b96f92faebcec248d81f3138a0b5f9a8d5214150",
+  "extracted_at": "2026-10-19",
+  "pages": [
+    9,
+    11
+  ],
+  "intro": [
+    "The aim of this exam is for candidates to develop the following skills:",
+    "1. Understand the main principles and techniques of financial reporting relevant to retirement benefits.",
+    "2. Apply these principles and techniques within the context of pension plans.",
+    "3. Evaluate hypothetical scenarios, including using judgment to assess the implications of possible actions and to develop appropriate proposals or recommendations relating to financial reporting of pension plans.",
+    "Exams are administered as an open-book, four-hour exam requiring analysis in the context of a problem and submission of written responses to specific questions. Candidates will complete the exam through the CIA’s learning management system. The ranges of weights (expressed in parentheses) attached to the examination topics further below apply to most of exams administered. Candidates should also recognize that questions often cover multiple learning objectives, including communication."
+  ],
+  "topics": [
+    {
+      "num": 1,
+      "title": "Principal terms",
+      "part": null,
+      "weight": [
+        0,
+        0
+      ],
+      "weight_raw": null,
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Define principal terms used in the financial reporting environment of retirement benefits. (A1).",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 2,
+      "title": "Accounting standards",
+      "part": null,
+      "weight": [
+        30.0,
+        30.0
+      ],
+      "weight_raw": "30%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Recognize, define, calculate, and interpret financial-statement components: balance sheet/profit-and-loss statement/changes in other comprehensive income/notes to financial statements. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Compare and contrast applicable accounting standards. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Evaluate recognition of liability/accounting expense. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Apply actuarial cost methods. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Analyze and decide on actuarial assumptions relative to pension and other post-employment benefits. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Consider and apply allocation, attribution, and vesting. (B4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recognize and evaluate benefit changes. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Recognize and evaluate assumption changes. (B5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Evaluate recognition and amortization of past service costs. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Evaluate recognition and amortization of actuarial gains and losses. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Recognize and appraise curtailment, settlement, and annuity purchase. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Recognize and calculate termination benefits, business discontinuance, and a combination of both. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Differentiate and distinguish the accounting treatment applicable to shared-risk or multi-employer pension and benefit plans. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 14,
+          "text": "Recognize and apply IAS 19 disclosure requirements. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 15,
+          "text": "Recognize and apply FASB disclosure requirements. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 16,
+          "text": "Recognize and apply IFRIC 14 adjustments and asset ceiling. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 17,
+          "text": "Outline and apply the CIA/CICA Joint Policy Statement. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 18,
+          "text": "Analyze and evaluate accounting impacts of transactions such as mergers, acquisitions, and purchase price adjustment. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 3,
+      "title": "Reporting of pension, post-employment benefits, and post-retirement benefits for financial statement and proxy circular purposes",
+      "part": null,
+      "weight": [
+        25.0,
+        25.0
+      ],
+      "weight_raw": "25%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe, explain, and understand the different components of executive compensation, such as: (B3)",
+          "bullets": [
+            "a. Salary.",
+            "b. Short- and long-term compensation incentives (performance share units, stock options, stock appreciation rights, deferral plans), pensions, group benefits, share purchase plan, perquisites, and severance/change-in-control agreements."
+          ],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Define the purpose of executive compensation and explain its governance practices, including proxy circulars. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Interpret and apply the CPA Canada Handbook. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Interpret and apply IAS 19 and IFRIC 14. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Understand the concept of accrual versus cash basis for pension plan assets. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Differentiate audited financial reports and audited financial statements. (C4)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Understand and use audited financial statements and reports: (C3)",
+          "bullets": [
+            "a. versus financial reports from custodians; and",
+            "b. concerning how residual benefits are treated."
+          ],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 4,
+      "title": "Investments and asset allocation",
+      "part": null,
+      "weight": [
+        20.0,
+        20.0
+      ],
+      "weight_raw": "20%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Assess the different types and combinations of investment vehicles for providing retirement benefits given the particulars of a stakeholder’s financial circumstances, philosophy, industry, workforce, and benefit package. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Distinguish the various strategies, approaches, and techniques used to manage retirement fund assets. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Assess a statement of investment policy including how environmental, social, and governance (ESG) factors should be integrated in the investment process. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Assess the potential effects of various investments and investment policies on stakeholders, including tax implications. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Describe the regulatory restrictions on, and guidelines for, retirement plan assets. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Solve for a measure of investment performance relevant to a given benchmark. (C5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 5,
+      "title": "Pension governance and fiduciary duties",
+      "part": null,
+      "weight": [
+        15.0,
+        15.0
+      ],
+      "weight_raw": "15%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Describe the roles of plan administrator, board of trustees, and pension committee. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Describe the role of pension advisory authorities. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Define, describe, and interpret benefit rights. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Identify, assess, and evaluate funding obligations/responsibility for deficits. (C5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Interpret, analyze, and assess the right to surplus. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Recognize and apply family law and marriage-breakdown requirements. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recognize and interpret basic principles of trust law. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 8,
+          "text": "Consider and apply bankruptcy and insolvency legislation. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 9,
+          "text": "Consider and apply employment standards legislation. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 10,
+          "text": "Consider and apply human-rights legislation. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 11,
+          "text": "Consider and apply key pension case law, jurisprudence, and legal opinions such as Monsanto, Indalex, McCarthy Tétrault legal opinionon implications of climate-related risks for Canadian pension plan fiduciaries and policymakers, etc. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 12,
+          "text": "Demonstrate an understanding of regulator guidance and context for different approaches to responsible investment and, specifically, the integration of ESG factors in the investment process. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 13,
+          "text": "Demonstrate an understanding of the underlying issues that constitute factors within each of the ESG areas. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 14,
+          "text": "Demonstrate an understanding of the ESG market: relevance, size, scope, key drivers and challenges, and risks and opportunities. (C3)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    },
+    {
+      "num": 6,
+      "title": "Professionalism and standards of practice relative to plan accounting",
+      "part": null,
+      "weight": [
+        10.0,
+        10.0
+      ],
+      "weight_raw": "10%",
+      "objective": null,
+      "outcomes": [
+        {
+          "letter": null,
+          "num": 1,
+          "text": "Apply the standards related to communications to plan sponsors and others with an interest in an actuary’s results. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 2,
+          "text": "Explain the professional conduct guidelines. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 3,
+          "text": "Explain relevant qualification standards. (B3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 4,
+          "text": "Demonstrate compliance with requirements regarding an actuary’s responsibilities to plan sponsors, plan members, etc. (D5)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 5,
+          "text": "Explain and apply all relevant standards of practice related to valuing retirement and other benefit obligations. (C3)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 6,
+          "text": "Recognize situations and actions that violate or compromise standards of professional conduct guidelines. (B2)",
+          "bullets": [],
+          "group": null
+        },
+        {
+          "letter": null,
+          "num": 7,
+          "text": "Recommend a course of action to repair a violation of the standards or professional conduct guidelines. (D5)",
+          "bullets": [],
+          "group": null
+        }
+      ],
+      "resources": []
+    }
+  ],
+  "readings": []
+}

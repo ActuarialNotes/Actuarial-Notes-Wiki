@@ -11,13 +11,14 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Service+Table
   - Concepts/Defined+Benefit+Plan
+  - Concepts/Valuation
 points: 5
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b93fbebbca0aa2bdec9566a0333c2fe2a64a0cff085a55f6e8503f7f07d06d06
+  content_hash: sha256:043f3aa1f33ef511f2755bba294942d813ff84227081512c5822569c56e55466
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,8 +49,6 @@ You are given:
 
 (ix) $\ddot{a}^{(12)}_{63.5} = 13.514, \quad \ddot{a}^{(12)}_{64.5} = 13.231, \quad \ddot{a}^{(12)}_{65} = 13.086$
 
-(This is Question 3 from the Spring 2019 Written Answer exam.)
-
 ## Part a (2 points)
 
 Show that the Actuarial Liability for D is 595,000 to the nearest 1000. You should calculate the value to the nearest 1.
@@ -71,6 +70,8 @@ $$
 ## Part b (3 points)
 
 Show that the Normal Contribution for D is 36,000 to the nearest 1000. You should calculate the value to the nearest 10.
+
+(This is Question 3 from the Spring 2019 Written Answer exam.)
 
 ### Explanation
 $$AL_0 + NC = EPV(\text{benefits for mid-year exits}) + v\,p^{00}_{63}\,AL_1$$

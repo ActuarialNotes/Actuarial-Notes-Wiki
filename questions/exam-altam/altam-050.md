@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d98af4f67f94edd034eb96d9bc227476e7c31bfe95a46c016883d394899f903a
+  content_hash: sha256:801f42513c13a00f15ef946713b082825e1cda67efaa092c55f25e0f4de0a645
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,8 +32,6 @@ You are given:
 |---|---|---|---|---|---|---|
 | 1 | 20% | 75 | 0.025 | 4.5% | 6.50% | 1.5 |
 | 2 | 8% | 75 | 0.030 | 4.5% | 5.75% | 1.4 |
-
-(This is Question 3 from the Spring 2017 Written Answer exam.)
 
 ## Part a (3 points)
 
@@ -133,6 +131,8 @@ $${}_{10}V = 4Q\,\ddot{a}_{70}^{(4)} = 70095$$
 In the eleventh year, Person S decides that they no longer needs the annuity and asks the company to pay the reserve. The insurance company refuses to pay the full reserve.
 
 Explain why the insurance company would not agree to S's request.
+
+(This is Question 3 from the Spring 2017 Written Answer exam.)
 
 ### Explanation
 

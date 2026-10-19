@@ -11,13 +11,14 @@ wiki_link:
   - Concepts/Black-Scholes+Model
   - Concepts/Replicating+Portfolio
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
+  - Concepts/Payoff
 points: 4
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:f903e4dc46ba1f08889aee54457231bcdac4818894dfd2804bd65394c260c889
+  content_hash: sha256:38e1e0b3af0925eaf00ba90d4d3ee9ce69bc49fb3bec84afbb864028598f7bc8
   sources: []
   open_findings: 0
   open_critical: 0

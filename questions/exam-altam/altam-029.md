@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:e48986893f915344551ab167dd8a8d7cd7995a3b5605e62fe666426ca3a0108b
+  content_hash: sha256:653e6fd47801b560e7592d01a0b23d721cbe7964ee5d28c33f8304a42a239b42
   sources: []
   open_findings: 0
   open_critical: 0
@@ -54,8 +54,6 @@ $$p^{01}_{x+k} = 0.01 + 0.002k, \quad p^{02}_{x+k} = 0.008 + 0.003k, \quad p^{03
 (vi) The insurer earns interest on investments of 6% per year.
 
 (vii) The hurdle rate is 10% per year.
-
-(This is Question 5 from the Spring 2019 Written Answer exam.)
 
 ## Part a (3 points)
 
@@ -175,6 +173,8 @@ You are given the first three values of the profit signature:
 $$\Pi_0 = -500 \qquad \Pi_1 = -770 \qquad \Pi_2 = 3536$$
 
 Calculate the partial net present value for the first 3 years, NPV(3).
+
+(This is Question 5 from the Spring 2019 Written Answer exam.)
 
 ### Explanation
 $$NPV(3) = \sum_{k=0}^{3} \Pi_k\,v^k_{10\%} = -500 - \frac{770}{1.1} + \frac{3536}{1.1^2} + \frac{4914.91}{1.1^3} = 5414.96$$

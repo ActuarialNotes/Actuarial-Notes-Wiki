@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:d50baf6c0439f6c041690b1e73ddd0934ed2a29f528c956516b8efff4b05de86
+  content_hash: sha256:e19a078e0390fbd89341373bca4e9f498797498505a59111ca6d23dfdce9f6e9
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,8 +42,6 @@ You are given the following additional information:
 (iv) The valuation interest rate is 5%.
 
 (v) Members have the option of taking a lump sum at retirement equal to the expected present value of their retirement pension, using the valuation assumptions.
-
-(This is Question 6 from the Fall 2018 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -130,6 +128,8 @@ $$B^* = \frac{1{,}293{,}125.93}{12\left(13.5498 - \frac{11}{24}\right)} = 8{,}23
 (i) Define adverse selection.
 
 (ii) Explain how adverse selection might impact the pension plan's costs based on the employees' selection of annuity with guarantee, annuity without guarantee, and lump sum.
+
+(This is Question 6 from the Fall 2018 Written Answer exam.)
 
 ### Explanation
 (i) Adverse selection in insurance refers to a situation where a policyholder makes a decision based on asymmetric information about the risk, i.e. information known to the policyholder but unknown to the insurer. Policyholders who represent higher risk tend to buy more insurance.

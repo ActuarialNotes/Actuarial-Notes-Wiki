@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:cfe250df0a2c3e852bc82261999e30ac7c258afb25f57427ef7f8a259745fbca
+  content_hash: sha256:9e0ca7395e524392dba9fa1f0f4f0bed527dd499c457b1aa4c096a3e2084d515
   sources: []
   open_findings: 0
   open_critical: 0
@@ -48,8 +48,6 @@ The assumptions used for profit testing this policy are:
 (viii) $\Pr_1 = 31{,}213$.
 
 XYZ uses a gross premium of 80,000 in its first profit test for this two year term policy.
-
-(This is Question 2 from the Fall 2021 Form A Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -160,6 +158,8 @@ $$
 ## Part h (1 point)
 
 Policies where profits increase as the lapse rate increases are called lapse supported policies. Explain why such policies are risky to the insurance company.
+
+(This is Question 2 from the Fall 2021 Form A Written Answer exam.)
 
 ### Explanation
 Lapse rates are much less predictable than mortality rates. A contract that is only profitable if people lapse is very vulnerable to the risk that policyholders lapse at much lower than the expected rates. The growth of the third party market for insurance makes lapsing much less attractive for policyholders, as a rational policyholder would not lapse a policy that could have positive value on the third party market.

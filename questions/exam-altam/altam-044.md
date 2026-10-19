@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:249cf1b7f28528de5702aed8a533a364119e4a78c1386dc75a0d810cda2d3c08
+  content_hash: sha256:1d0b44cc03b096f05432298da091bee46b7ededa8b2c1344ba91ad8149451d00
   sources: []
   open_findings: 0
   open_critical: 0
@@ -44,8 +44,6 @@ You are also given the following summary membership data, as of the valuation da
 | 35 | 20 | Active | - | 45,000 | 8 |
 | 60 | 5 | Active | - | 62,000 | 25 |
 | 70 | 1 | Retired | 32,000 | -- | 30 |
-
-(This is Question 6 from the Fall 2020 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -104,6 +102,8 @@ $$NC = \frac{102{,}704}{317{,}750} = 32.32\%$$
 ## Part d (2 points)
 
 Without further calculation, state whether the change in the normal contribution rate would be greater or smaller under Projected Unit Credit funding. Justify your answer.
+
+(This is Question 6 from the Fall 2020 Written Answer exam.)
 
 ### Explanation
 

@@ -15,7 +15,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1943f6a9416dea4e669b73c0fc6e4638afd9c44a625a4247c39f2a2ed4c5d69b
+  content_hash: sha256:3e477e6c351bb3df85faed764c6ddb0cb6d727e91ceeff7b3ca2fcafa6d45d71
   sources: []
   open_findings: 0
   open_critical: 0
@@ -36,8 +36,6 @@ Person D buys a Type B universal life contract of 100,000. You are given:
 - (ii) The credited interest rate is $i = 0.06$.
 - (iii) D's account value at the end of year 1 is 165.
 - (iv) Except as indicated, there are no deaths or surrenders.
-
-(This is Question 5 from the Fall 2015 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -103,6 +101,8 @@ D's identical twin, M, buys a contract identical to D's. If M pays 1000 every ye
 M will pay premiums of 1000 in 9 of the first 10 years. M will pay no premium in one year, with the year of no premium equally likely to be year 3 or year 10.
 
 Calculate M's expected surrender value at the end of year 10.
+
+(This is Question 5 from the Fall 2015 Written Answer exam.)
 
 ### Explanation
 

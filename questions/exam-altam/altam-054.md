@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:632d6a3e42a7a1cfd8567f5f4fd17cb4ece31bb146d206cd0b1a0f18421568b5
+  content_hash: sha256:e209d05d3436f96a5ccccf57d537b87c3c2da5c3e901db78a17a6478f6179d14
   sources: []
   open_findings: 0
   open_critical: 0
@@ -40,8 +40,6 @@ You are also given the following profit testing assumptions:
 | 2-10 | 0.003 + 0.001$k$ | 0.050 | 6% | 5% | 10 |
 
 Expenses are incurred at the start of each policy year. Your company uses account values as reserves. The account value at the end of year 2, for a policy in force, is 1500.
-
-(This is Question 6 from the Spring 2014 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -82,6 +80,8 @@ Your company's pricing actuary asks you to redo the profit test using the end of
 - (i) (*3 points*) Calculate the revised expected profit for policy year 2, per policy in force at the start of year 2.
 - (ii) (*1 point*) Explain why the expected profit in policy year 2 decreases due to this change.
 - (iii) (*1 point*) State with reasons whether the total present value of profits in all years will increase, decrease, or stay the same due to this change.
+
+(This is Question 6 from the Spring 2014 Written Answer exam.)
 
 ### Explanation
 

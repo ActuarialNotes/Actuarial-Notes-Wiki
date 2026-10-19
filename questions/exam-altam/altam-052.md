@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:7b91d0b3f415819f3e98ba840f720eb133eb71a635747c1ddd912e4c8873c683
+  content_hash: sha256:b0bee0655d08066bdc096be7ab3a3742b9784f4e9218255ba7aa877c37a8b924
   sources: []
   open_findings: 0
   open_critical: 0
@@ -33,8 +33,6 @@ For universal life insurance policies with a death benefit of 100,000 plus the a
 | 1 | 2500 | 5% | 5.00 | 30 | $0.8 * AV_1$ |
 
 (ii) The credited interest rate is $i = 0.06$.
-
-(This is Question 6 from the Spring 2015 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -103,6 +101,8 @@ $$NPV(1) = \Pr_0 + \Pr_1\,v_{14\%} = -200 + 403.6v = 154.0$$
 You have calculated that the Net Present Value (NPV) for the policy is 2000. Your supervisor suggests that the 10% surrender assumption is too low. He recommends assuming 20% of the policies in force surrender at the end of year 1.
 
 Calculate the revised NPV using the new surrender assumption.
+
+(This is Question 6 from the Spring 2015 Written Answer exam.)
 
 ### Explanation
 

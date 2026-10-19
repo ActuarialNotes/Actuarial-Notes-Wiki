@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:def43d94f10b6a1cea30294e1386094a7be0509be02dd3bd2d5534f1ea3b14e5
+  content_hash: sha256:9ce35d27794227dc9e387e146436d9e5804f004c16c08ed5483a55982bb3325a
   sources: []
   open_findings: 0
   open_critical: 0
@@ -35,8 +35,6 @@ A company sponsors a defined benefit pension plan. Key attributes of the pension
 (ii) $A^{(12)}_{65} = 0.470$
 
 An individual joined the company on January 1, 2009 at exact age 40. The individual is planning to retire on January 1, 2034 at age 65. The salary for 2014 is 80,000 and the individual receives annual raises of 4% each January 1.
-
-(This is Question 2 from the Fall 2014 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -103,6 +101,8 @@ You are also given:
 (v) The contribution balance is converted to a monthly life annuity using assumptions (i) and (ii) above.
 
 Calculate the percentage of each year's salary that the individual needs to contribute so that their total replacement ratio is 80% at age 65.
+
+(This is Question 2 from the Fall 2014 Written Answer exam.)
 
 ### Explanation
 We require (0.8 - 0.573) = 0.227 replacement ratio for the DC plan.

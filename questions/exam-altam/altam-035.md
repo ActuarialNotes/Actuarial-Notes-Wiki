@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:685f62f9c14e2736635c0e5fa5905dd7ee4f89b4729a6bbb61c7e7b1a7fdc155
+  content_hash: sha256:16bb0c789c108dde4eb1cab66352caf154c243b8c8ee36c649457b39a965ff14
   sources: []
   open_findings: 0
   open_critical: 0
@@ -46,8 +46,6 @@ The assumptions used for profit testing this policy are:
 (vi) At the end of each of the first two years, 10% of the surviving policyholders withdraw.
 
 (vii) There are no cash values.
-
-(This is Question 2 from the Fall 2021 Form B Written Answer exam.)
 
 ## Part a (1 point)
 
@@ -168,6 +166,8 @@ $$
 ## Part e (3 points)
 
 XYZ wants to achieve a profit margin of 10% on this policy. Calculate the gross premium that XYZ should charge to meet that objective.
+
+(This is Question 2 from the Fall 2021 Form B Written Answer exam.)
 
 ### Explanation
 The NPV in terms of G is ($v = v_{0.12}$)

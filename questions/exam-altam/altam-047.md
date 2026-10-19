@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:79bcf52e45ccfe9dd643fa07f2de3e15258daeb3674d2dad898a1c32e4e76afc
+  content_hash: sha256:15b5c0234153380f9bf948b71bc1da0b31cbf0b8d1c1945a18373dd716380fc3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,8 +32,6 @@ M plans for the retirement based on the following assumptions:
 - Salaries increase continuously at an annual rate of 2%, compounded continuously.
 - Contributions are invested continuously to a fund earning a 6% per year force of interest.
 - M intends to retire on their 60<sup>th</sup> birthday.
-
-(This is Question 6 from the Fall 2021 Form B Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -138,6 +136,8 @@ Calculate the monthly benefit payable from M's entitlements from both the DC pen
 M elects to receive an integrated pension which will start at $X$ per month at age 60 and will reduce to $X$–1000 per month at age 65, so as to provide a level benefit before and after the start of M's GPP benefit, assuming M survives to age 65.
 
 Calculate $X$, assuming the 2/3 survivor pension option.
+
+(This is Question 6 from the Fall 2021 Form B Written Answer exam.)
 
 ### Explanation
 

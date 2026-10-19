@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:bcb398280f12cc269fdab48f6f2ec19935dc0a029ce724f8b02426ddb76fc731
+  content_hash: sha256:c4b8e47610d6f45d1e24cf0c7028f76df1e4de38722578ee8364885330462772
   sources: []
   open_findings: 0
   open_critical: 0
@@ -32,7 +32,6 @@ You are given:
 
 (ii) $i = 0.05$
 
-(This is Question 1 from the Fall 2021 Form B Written Answer exam.)
 (Part (a), (b) and (c) are covered by the FAM-L exam.)
 
 ## Part a (2 points)
@@ -110,6 +109,8 @@ You are given:
 (i) Show that the surplus earned on the portfolio in the 11th policy year, per policy in force at the start of the year, was 160 to the nearest 10. You should calculate the value to the nearest 1.
 
 (ii) Calculate the gain by source, in the order: (1) Interest; (2) Mortality; (3) Expenses.
+
+(This is Question 1 from the Fall 2021 Form B Written Answer exam.)
 
 ### Explanation
 **(i)** Total gain: using the actual experience (\*) during year 11,

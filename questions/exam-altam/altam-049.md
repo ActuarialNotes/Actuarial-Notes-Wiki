@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:1f33f0f7790a785b41c54c6feea0ea0f0c5144b30df848d1ea580c7568f802d1
+  content_hash: sha256:2d071a1266b9dc4d99c866c3438d6eb9c0698155b49b546aac3da477674b0a33
   sources: []
   open_findings: 0
   open_critical: 0
@@ -34,8 +34,6 @@ You are given:
 | 1 | 4800 | 20% | 2.31 | 4% | 3647 | 2500 |
 | 2 | 4800 | 5% | 2.46 | 4% | 8166 | 1500 |
 | 3 | 4800 | 5% | 2.62 | 4% | - | 0 |
-
-(This is Question 2 from the Fall 2017 Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -118,6 +116,8 @@ $$\begin{align*}
 ## Part d (1 point)
 
 Calculate the profit margin.
+
+(This is Question 2 from the Fall 2017 Written Answer exam.)
 
 ### Explanation
 

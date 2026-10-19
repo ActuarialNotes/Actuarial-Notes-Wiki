@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b3d7f033a532124e77b03aaa0eaba0217ae1b7b4497063a3b986abfe8bae2a05
+  content_hash: sha256:b861582247e181ef4947ba483f6ae50ffcb045f978fc5533b413965d7f667ca7
   sources: []
   open_findings: 0
   open_critical: 0
@@ -47,7 +47,6 @@ You are given:
 
 (viii) ${}_kV^g$ denotes the gross premium policy value at the end of year $k$.
 
-(This is Question 1 from the Fall 2021 Form A Written Answer exam.)
 (Part (a), (b) and (c) are covered by the FAM-L exam.)
 
 ## Part a (1 point)
@@ -184,6 +183,8 @@ $\Rightarrow$ a loss from mortality of 104,723.65
 An actuary at NED Life was asked to calculate the gain by source. He wasn't sure which order to use, so he calculated the gain based on all six possible orders. Referring to the sources of gain in order by their first letters, the order you did in part (d) was EIM.
 
 Without further calculation, state, using the three-letter ids, which, if any, of the other 5 orders had the same gain from interest as EIM. Justify your response.
+
+(This is Question 1 from the Fall 2021 Form A Written Answer exam.)
 
 ### Explanation
 The orders **MEI and EMI** had the same interest gain as EIM.

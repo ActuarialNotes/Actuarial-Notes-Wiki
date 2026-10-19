@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:aae2b9846913e7ef4535c6a811b398649f3077de3a2a399c50593ac6d0218c50
+  content_hash: sha256:1e648af5102e63d4bf20d0021d7ad287fea5a05a8bbf569461f628f41c852d5d
   sources: []
   open_findings: 0
   open_critical: 0
@@ -46,8 +46,6 @@ You are also given the following valuation assumptions and information:
 - (viii) $a_x^w$ represents the value on withdrawal at age $x$ of an annuity of 1 per year paid monthly in advance from age 65, including the survivor's benefit.
 - (ix) $a_{58.5}^w = 10.5804$; $a_{59.5}^w = 11.1456$
 - (x) The valuation uses the traditional unit credit funding method.
-
-(This is Question 6 from the Fall 2021 Form A Written Answer exam.)
 
 ## Part a (2 points)
 
@@ -149,6 +147,8 @@ EPV(\text{mid-year-exits}) &= (35.5)(0.018)(100{,}000)\left(\frac{w_{57}}{l_{57}
 Person J withdraws at age 57.5 and immediately gets divorced. Under the divorce settlement, Person M will receive a pension of $X/3$ for life from age 65, and Person J will receive a pension of $X$ for life from age 65. The value of the settlement is equal to the value of the joint and last survivor pension payable had the couple not divorced.
 
 Calculate $X$.
+
+(This is Question 6 from the Fall 2021 Form A Written Answer exam.)
 
 ### Explanation
 

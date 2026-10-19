@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:b013bfd4c8fa5fdfa7e31c016abd9dc9667d159a47ca08f0cbecc3552d8bee8f
+  content_hash: sha256:8ed0288dc239e15d321e9edd5fed0cfc4e7b5aa8330e4539ad7328cd2d9597bd
   sources: []
   open_findings: 0
   open_critical: 0
@@ -39,8 +39,6 @@ The valuation at January 1, 2022 uses the projected unit cost (PUC) method with 
 - (iii) Decrements before retirement follow the Standard Service Table.
 - (iv) $i = 0.05$
 - (v) Under post-retirement mortality $\ddot{a}_{63.5}^{(12)} = 13.5139$.
-
-(This is Question 5 from the Spring 2022 Written Answer exam.)
 
 ## Part a (3 points)
 
@@ -124,6 +122,8 @@ You are given the following additional information
 - $\ddot{a}_{64}^{(12)} = 13.3735$.
 
 Calculate the gain or loss to the pension plan during 2022.
+
+(This is Question 5 from the Spring 2022 Written Answer exam.)
 
 ### Explanation
 

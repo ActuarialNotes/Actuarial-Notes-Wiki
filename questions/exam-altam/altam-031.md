@@ -12,13 +12,14 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Profit+Signature
   - Concepts/Equivalence+Principle
+  - Concepts/Annuity+Contract
 points: 10
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ebdad27e0bd11656474d44d2df6bb1e7cc3ab3419b36e3da58236ba2b33c23dd
+  content_hash: sha256:39604d7836ad2fce47462889fdb76af8861339fceee97de706604ca9be8e2b99
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,8 +43,6 @@ The basis for calculating the premium and policy values is as follows:
 (vi) The premium is determined using the equivalence principle.
 
 The single premium is 100,000.
-
-(This is Question 5 from the Spring 2020 Written Answer exam.) (Part (a) is covered by the FAM-L exam.)
 
 ## Part a (2 points)
 
@@ -147,6 +146,8 @@ $$
 (ii) Show that $\Pr_9^{(1)} = 140$ to the nearest 10. You should calculate the value to the nearest 0.1.
 
 (iii) Calculate $\Pi_9$.
+
+(This is Question 5 from the Spring 2020 Written Answer exam.) (Part (a) is covered by the FAM-L exam.)
 
 ### Explanation
 (i)

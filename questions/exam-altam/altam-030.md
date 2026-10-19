@@ -11,13 +11,14 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Lapse
   - Concepts/Net+Present+Value
+  - Concepts/Annuity+Contract
 points: 9
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3ec51f51d71688fdaaa79032234a1bd24457213680b041a0b8b2b1f8d47b8c60
+  content_hash: sha256:6535af943eeb92df0f08f3e80011970ccc940b3fc5212c17242535d6e4e06fd3
   sources: []
   open_findings: 0
   open_critical: 0
@@ -39,8 +40,6 @@ You are given the following premium assumptions:
 (v) $i = 0.05$
 
 (vi) Premiums are calculated using the equivalence principle.
-
-(This is Question 6 from the Fall 2019 Written Answer exam.) (Part (a) is covered by the FAM-L exam.)
 
 ## Part a (2 points)
 
@@ -121,6 +120,8 @@ $$
 ## Part c (3 points)
 
 The insurer calculates the NPV for each policy issued as 8860. Calculate the NPV at the start of the second year of future cashflows for each policy in force at that time.
+
+(This is Question 6 from the Fall 2019 Written Answer exam.) (Part (a) is covered by the FAM-L exam.)
 
 ### Explanation
 Let $NPV_1$ be the EPV at the start of year 2 (time 1) of future emerging profits per policy in force.

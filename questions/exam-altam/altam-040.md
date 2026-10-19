@@ -12,13 +12,14 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Service+Table
   - Concepts/Woolhouse's+Formula
+  - Concepts/Valuation
 points: 8
 verification:
   status: unverified
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:94c21ede73f6bc85ab6f87f8e482e9a4a085129d4bea983ed86d6e0bcf29e7b1
+  content_hash: sha256:8acfbcd12721d320d1ba6b02b9fa8be06ab121eafb0c59e9b6084f7fb86eaa1d
   sources: []
   open_findings: 0
   open_critical: 0

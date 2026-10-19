@@ -17,7 +17,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:56b00b78a31092155c3c636647cac5602490165b92c1b97fa5306ba358b17532
+  content_hash: sha256:b741a72e57461de12915796eec3f4cd99cc44df1aea0fcfa677dc92fc3cc3361
   sources: []
   open_findings: 0
   open_critical: 0
@@ -44,8 +44,6 @@ The valuation assumptions are:
 - $i = 0.05$
 - $\ddot{a}_{63.5}^{(12)} = 13.5139$; $\ddot{a}_{64.5}^{(12)} = 13.2312$; $\ddot{a}_{65}^{(12)} = 13.0870$
 - The funding method is Traditional Unit Credit.
-
-(This is Question 5 from the Spring 2021 Written Answer exam.)
 
 ## Part a (4 points)
 
@@ -99,6 +97,8 @@ EPV(\text{mid-year retirements}) &= \alpha\,[(TPS)_{63} + 0.5\,S_{63}] \cdot \le
 
 - (i) Calculate the Actuarial Liability for the death in service benefit for D at 1/1/2021.
 - (ii) Calculate the Normal Contribution for the death in service benefit for D at 1/1/2021.
+
+(This is Question 5 from the Spring 2021 Written Answer exam.)
 
 ### Explanation
 

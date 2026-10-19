@@ -18,7 +18,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:087008c8d37f5d772df266f7bbc469a617da973ee450ed18c146a383e9ac1e3c
+  content_hash: sha256:608380a773e88d59b599e6560b3865b59b643c7658f9bdfd8af15dfd8a60c765
   sources: []
   open_findings: 0
   open_critical: 0
@@ -37,8 +37,6 @@ You are given:
 - (vi) Salaries are assumed to increase by 3% each year up to and including age 54, and by 2.5% each year from age 55.
 - (vii) Woolhouse's 2-term formula is used for monthly annuity functions.
 - (viii) The benefits are funded using the Projected Unit Credit method.
-
-(This is Question 6 from the Spring 2020 Written Answer exam.)
 
 ## Part a (3 points)
 
@@ -131,6 +129,8 @@ $$NC\ rate = \frac{NC}{S_{40}} = \frac{17{,}266.45}{110{,}000(1.03)} = 0.1524$$
 ## Part c (1 point)
 
 The plan actuary is concerned that couples may have future lifetimes which are positively correlated. State with reasons whether the expected present value of the reversionary partner benefits would increase, decrease, or stay the same, in this case.
+
+(This is Question 6 from the Spring 2020 Written Answer exam.)
 
 ### Explanation
 

@@ -170,6 +170,8 @@
     "long term health insurance": "Health Insurance",
     "long term health insurance benefit": "Health Insurance",
     "long term life": "Life Insurance",
+    "individual/joint life mortality": "Joint Life",
+    "guaranteed minimum accumulation/maturity benefit": "Guaranteed Minimum Maturity Benefit",
     "heterogeneity": "Mortality",
     "mortality curve": "Mortality",
     "non parametric mortality": "Life Table",

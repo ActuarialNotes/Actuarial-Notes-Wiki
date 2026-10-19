@@ -7,9 +7,9 @@ syllabus:
 verification:
   status: verified
   confidence: high
-  last_checked: 2026-10-18
+  last_checked: 2026-10-19
   last_checked_by: agent:validate-v1
-  content_hash: sha256:a4d64e90469c4edd14f83fb0e62b403770036f554a00e74f8f173ce5f03b5dd0
+  content_hash: sha256:3a08748edc87b193659aca3bac39c84bb72644d7c65eded0fc41301238f36653
   sources:
     - "SOA, OCTOBER 2026 syllabus PDF for ALTAM, all pages, sha256:44b64a78219337f43387cb52837c7c2ce590ae2b97321d6e8e4e29ab2cd38c5e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-altam-syllabus.pdf"
   open_findings: 0
@@ -47,7 +47,7 @@ The ALTAM Exam is a three-hour exam consisting of six questions, worth a total o
 ## Learning Objectives
 
 > [!example]- Survival Models for Contingent Cash Flows {10–20%}
-> The Candidate will understand key concepts concerning [[Multiple State Model|multiple state mortality/morbidity]] and [[Individual-joint Life Mortality|individual/joint life mortality]] models for insurance and [[Annuity Contract|annuity contracts]].
+> The Candidate will understand key concepts concerning [[Multiple State Model|multiple state mortality/morbidity]] and [[Joint Life|individual/joint life mortality]] models for insurance and [[Annuity Contract|annuity contracts]].
 >
 > 1. Understand and explain features of typical [[Mortality|mortality curves]] and [[Mortality|heterogeneities]] in [[Mortality|mortality]].
 > 2. Apply [[Multiple State Model|Markov multiple state models]] to [[State-Dependent Insurance|state-contingent life]] and [[Health Insurance|long-term health insurance benefits]], and [[Continuing Care Retirement Community|Continuing Care Retirement Communities]] (CCRCs).
@@ -112,7 +112,7 @@ The ALTAM Exam is a three-hour exam consisting of six questions, worth a total o
 >    - [[Guaranteed Minimum Withdrawal Benefit|Guaranteed minimum withdrawal benefit]]
 > 2. Value the following [[Equity-Linked Insurance|options embedded]] in insurance and [[Annuity Contract|annuity contracts]], using the [[Black-Scholes Model|Black-Scholes model]]:
 >    - [[Guaranteed Minimum Death Benefit|Guaranteed minimum death benefit]]
->    - [[Guaranteed Minimum Accumulation-maturity Benefit|Guaranteed minimum accumulation/maturity benefit]]
+>    - [[Guaranteed Minimum Maturity Benefit|Guaranteed minimum accumulation/maturity benefit]]
 > 3. Construct a [[Replicating Portfolio|replicating portfolio]] for the options in 7(b) using [[Delta Hedging|delta-hedging]]
 > 4. Understand and evaluate the costs associated with [[Delta Hedging|discrete-time rebalancing]].
 > 5. Use [[Profit Testing|deterministic profit testing]] to assess [[Profit Vector|emerging surplus]] for [[Equity-Linked Insurance|equity-linked life insurance cash flows]], including [[Profit Signature|profit signature]], [[Profit Vector|profit vector]], net present value, [[Internal Rate of Return|internal rate of return]], [[Profit Margin|profit margin]], and [[Discounted Payback Period|discounted payback periods]], under best estimate or stress test assumptions.

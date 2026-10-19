@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Thiele's+Differential+Equation
   - Concepts/Policy+Value
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:a4fb6b370df00c93f0304b3c8c44c46af7fbf484bb33395f7da9193a11c8355a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q2.md
 ---
 
 An insurance company offers the following range of options for critical illness (CI) insurance riders attached to a life insurance policy. In each case the critical illness benefit would be paid immediately upon diagnosis of a covered critical illness.
@@ -29,11 +39,17 @@ Option C: Additional lump sum benefit on CI diagnosis
 
 For each of the options above, state with reasons which of the following models could be used to calculate premiums and reserves.
 
-Model 1: *(Figure: Healthy (0), Critically Ill (1) and Dead (2), with arrows from 0 to 1 and from 0 to 2.)*
+Model 1:
 
-Model 2: *(Figure: Healthy (0), Critically Ill (1), Dead (2) and Dead (3), with arrows from 0 to 1, from 0 to 2 and from 1 to 3.)*
+![Model 1 state diagram: Healthy 0, Critically Ill 1 and Dead 2, with arrows from 0 to 1 and from 0 to 2](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023f-q2-model-1.png)
 
-Model 3: *(Figure: Healthy (0), Critically Ill (1) and Dead (2), with arrows from 0 to 1, from 0 to 2 and from 1 to 2.)*
+Model 2:
+
+![Model 2 state diagram: Healthy 0, Critically Ill 1, Dead 2 and Dead 3, with arrows from 0 to 1, from 0 to 2 and from 1 to 3](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023f-q2-model-2.png)
+
+Model 3:
+
+![Model 3 state diagram: Healthy 0, Critically Ill 1 and Dead 2, with arrows from 0 to 1, from 0 to 2 and from 1 to 2](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023f-q2-model-3.png)
 
 ### Explanation
 For Option A,
@@ -184,7 +200,7 @@ For Part (e), a few candidates got full credit in this part. Most candidates did
 Sketch the graph of ${}_tV^{(0)}$ as a function of $t$ for $5 \le t \le 6$. You should mark key numerical values on each axis.
 
 ### Explanation
-*(Figure: the model solution's sketch of ${}_tV^{(0)}$ for $5 \le t \le 6$. The horizontal axis is marked at 5 and 6; the vertical axis is marked at 702.6, 714.3, 1198.43 and 1210.13. At $t = 5$ the curve jumps from 702.6 up to 1198.43, decreases to 714.3 at $t = 6$, and jumps again at $t = 6$ to 1210.13.)*
+![Model solution sketch of tV(0) for t from 5 to 6. The horizontal axis is marked at 5 and 6; the vertical axis is marked at 702.6, 714.3, 1198.43 and 1210.13. At t = 5 there is a filled dot at 702.6 and an open circle at 1198.43; the curve falls from 1198.43 to a filled dot at 714.3 at t = 6, where a dashed line rises to an open circle at 1210.13](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023f-q2-reserve-sketch.png)
 
 ### Examiner Report
 Most candidates didn't do well in this part (f) and didn't give details of the graph. They didn't realize the graph of reserve has stepwise jumps at premium payment times. Some sketched an increasing curve even though they computed a negative derivative in Part (e).

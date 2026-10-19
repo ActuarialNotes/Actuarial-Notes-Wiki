@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Internal+Rate+of+Return
   - Concepts/Profit+Margin
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:02eb6a4c348b951da1a32ceaba0e7bd00022006558acd0bf58f8806ee6bcf50e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024f-q4.md
 ---
 
 An insurance company sells fully discrete 2-year term life insurance policies to lives age 60. The death benefit is 1,000,000. The gross premium is 4,300.

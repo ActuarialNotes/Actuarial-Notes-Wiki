@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
   - Concepts/Guaranteed+Minimum+Income+Benefit
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:18a6e8c3c860e8b732f955cd37b870126eff66fb496cdeafdd6024b4f2fceff2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024s-q6.md
 ---
 
 A policyholder age 70 purchases two policies:

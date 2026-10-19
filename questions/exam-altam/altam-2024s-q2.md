@@ -15,11 +15,21 @@ wiki_link:
   - Concepts/Fractional+Age+Assumption
   - Concepts/Adverse+Selection
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:42815c195962254181821cfe509679780d3368adb176dc123c7622ecce228ed5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024s-q2.md
 ---
 
 An insurer models the mortality of couples, denoted $(x)$ and $(y)$, using the Markov multiple-state model described in the following diagram:
 
-*(Figure: four states — State 0: $(x)$ alive, $(y)$ alive; State 1: $(x)$ dead, $(y)$ alive; State 2: $(x)$ alive, $(y)$ dead; State 3: $(x)$ dead, $(y)$ dead — with arrows from State 0 to State 1, State 0 to State 2, State 1 to State 3 and State 2 to State 3.)*
+![State diagram: State 0 (x) alive, (y) alive; State 1 (x) dead, (y) alive; State 2 (x) alive, (y) dead; State 3 (x) dead, (y) dead; with arrows from State 0 to State 1, State 0 to State 2, State 1 to State 3 and State 2 to State 3](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2024s-q2-state-diagram.png)
 
 ## Part a (1 point)
 

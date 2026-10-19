@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Equity-Linked+Insurance
   - Concepts/Embedded+Option
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e4bf4a8bb06cc266bb2430fccec63efe3565b50467ad60763b23f7d8775dd1ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024f-q6.md
 ---
 
 A 10-year equity-linked policy is issued to a life age 60. The policyholder pays a single premium of 1000. The policy offers a guaranteed minimum maturity benefit (GMMB) of 100% of the single premium. The insurer deducts a management charge at a rate of 2% per year, payable continuously, from the policyholder's funds. There are no other expense deductions.

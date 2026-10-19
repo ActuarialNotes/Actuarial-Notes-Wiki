@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Service+Table
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2832cab5c321e37915d4d4704c92c47870c6217091010db560660868fee1ae67
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q6.md
 ---
 
 You are the actuary for a defined benefit pension plan that offers a Final Average Salary (FAS) pension. The final average salary is the average of the earnings in the final two years, and the pension is paid as a whole life annuity due, payable monthly from retirement. The accrual rate is 2%.

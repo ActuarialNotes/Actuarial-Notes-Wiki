@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Pension+Plan
   - Concepts/Annuities
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dc282d0eaab505fb593fc2f793ddf3c896c5743d8b12957d72b66213f6bb6d18
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q5.md
 ---
 
 A company has a defined contribution (DC) pension plan with the following features:

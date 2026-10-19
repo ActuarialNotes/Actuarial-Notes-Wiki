@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
   - Concepts/Adverse+Selection
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:75f9d5a2e309f4ce4646ade0ede14888d1cfe36f5b7d10eddbcf4c6a08ded4f0
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024s-q3.md
 ---
 
 NED Life sells special whole life insurances of 100,000 that include a sickness benefit. You are given:

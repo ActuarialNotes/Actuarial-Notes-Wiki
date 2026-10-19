@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Delta+Hedging
   - Concepts/Equity-Linked+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bf27a094ad129e2dc3de6274ff072de97584d3f4879eeb9a67267e00496f102b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q6.md
 ---
 
 ## Part a (2 points)

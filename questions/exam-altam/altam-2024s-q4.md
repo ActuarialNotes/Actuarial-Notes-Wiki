@@ -15,11 +15,21 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Long-Term+Care+Insurance
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:30509a738aaaa031f42f1e02a7561cd819c49115564fb6d3086832bc52cd4bcf
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024s-q4.md
 ---
 
 An insurer is analyzing its long term care insurance data. The objective of the study is to estimate transition intensities for the underlying multiple state model illustrated in the following diagram.
 
-*(Figure: four states — State 0, State 1, State 2 and State 3 — with arrows from State 0 to State 1, State 1 to State 0, State 0 to State 2, State 1 to State 2 and State 2 to State 3.)*
+![State diagram: State 0, State 1, State 2 and State 3, with arrows from State 0 to State 1, State 1 to State 0, State 0 to State 2, State 1 to State 2 and State 2 to State 3](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2024s-q4-state-diagram.png)
 
 Transition intensities are assumed to be constant over each year of age.
 

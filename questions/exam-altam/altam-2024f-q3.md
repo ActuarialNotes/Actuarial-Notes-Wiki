@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
   - Concepts/Joint+Life
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fe0462aa5582d93935947eced9f03411da49f215d98c35aae66bae1f1736e698
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024f-q3.md
 ---
 
 You are the actuary for a small defined benefit pension plan. You are given the following information.

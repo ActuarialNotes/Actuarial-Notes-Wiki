@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Profit+Signature
   - Concepts/Reserve
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:74aec6675ae6fdac7d3e1c077d7b6110f290ef69912298ac3d25f3f46b6c79ea
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q3.md
 ---
 
 You are conducting a profit test of a Type A universal life insurance policy with a face amount of 150,000 issued to (40).

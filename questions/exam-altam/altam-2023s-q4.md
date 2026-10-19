@@ -14,13 +14,23 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Thiele's+Differential+Equation
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:28e9750c3aad48da0b51433f0dfb0ce7456b4d537c204df486568943078154ed
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q4.md
 ---
 
 A Continuing Care Retirement Community (CCRC) offers new residents Modified Life Care contracts.
 
 The CCRC contains three different types of accommodation: Independent Living Units (ILU), Assisted Living Units (ALU), and Specialized Nursing Facilities (SNF). The following Markov model is used to determine fees.
 
-*(Figure: ILU (State 0), ALU (State 1), SNF (State 2) and Dead (State 3), with arrows from State 0 to State 1, State 1 to State 2, and from each of States 0, 1 and 2 to State 3.)*
+![State diagram: ILU State 0, ALU State 1, SNF State 2 and Dead State 3, with arrows from State 0 to State 1, State 1 to State 2, and from each of States 0, 1 and 2 to State 3](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023s-q4-state-diagram.png)
 
 You are given:
 

@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Fractional+Age+Assumption
   - Concepts/Pension+Risk+Transfer
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3d78c1fc40ff272be107da7d55c8c1049516b3a44f990ef08ba4e01f463b3ca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024s-q5.md
 ---
 
 You are the actuary for a small defined benefit pension plan. At the valuation on 1/1/2024 there are 5 members, all of whom retired at age 65 as detailed below. All benefits are paid in the form of a monthly annuity-due payable during the life of the member with payments guaranteed for 10 years following retirement (that is, up to the attainment of age 75).

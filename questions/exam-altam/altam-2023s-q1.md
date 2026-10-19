@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Expected+Value
   - Concepts/Present+Value
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2bd3c8b0f1c1e219c61f940b882a13d1e158674f548e21a9f4217a10cb20000e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q1.md
 ---
 
 You are given the following information about a portfolio of in-force policies.

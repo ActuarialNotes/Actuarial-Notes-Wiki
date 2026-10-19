@@ -14,11 +14,21 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Policy+Value
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:878dbcf1c16bbce265d9a2fa7c9134bbdf192c29b98d091dd981886004d7ff0a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023s-q2.md
 ---
 
 Consider the following multi-state model for modeling joint life insurance policies issued to a couple $(x)$ and $(y)$:
 
-*(Figure: State 0, $(x)$ alive, $(y)$ alive; State 1, $(x)$ dead, $(y)$ alive; State 2, $(x)$ alive, $(y)$ dead; State 3, $(x)$ dead, $(y)$ dead. Arrows: State 0 to State 1 ($\mu_{x:y}^{01}$), State 0 to State 2 ($\mu_{x:y}^{02}$), State 0 to State 3 ($\mu_{x:y}^{03}$), State 1 to State 3 ($\mu_{y}^{13}$) and State 2 to State 3 ($\mu_{x}^{23}$).)*
+![State diagram: State 0 (x) alive, (y) alive; State 1 (x) dead, (y) alive; State 2 (x) alive, (y) dead; State 3 (x) dead, (y) dead. Arrows: State 0 to State 1 (mu 01 x:y), State 0 to State 2 (mu 02 x:y), State 0 to State 3 (mu 03 x:y), State 1 to State 3 (mu 13 y) and State 2 to State 3 (mu 23 x)](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023s-q2-state-diagram.png)
 
 ## Part a (1 point)
 

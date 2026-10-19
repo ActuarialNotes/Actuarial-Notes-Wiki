@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Equivalence+Principle
   - Concepts/Policy+Value
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ed11f0ad39e26885bfed0513b2145ea1402fcca22c49fc1537525bb7b77a4c2d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q1.md
 ---
 
 XYZ Insurance issues fully discrete joint life 20-year endowment insurance policies to couples, each age 65, with independent future lifetimes. The sum insured is 100,000, payable at the end of the year of the first death, or at time 20 if both individuals survive to that time.

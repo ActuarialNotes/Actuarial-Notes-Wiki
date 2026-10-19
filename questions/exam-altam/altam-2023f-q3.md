@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
   - Concepts/Hedging
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3056c110064f3576689dc7cf36a37d1fc21bc1f74f39ab3bc7c4256338f289b3
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q3.md
 ---
 
 An insurer sells a 3-year single premium Variable Annuity contract, with the following provisions:

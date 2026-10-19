@@ -14,11 +14,21 @@ wiki_link:
   - Concepts/Estimator
   - Concepts/Probability
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:47dc2ebbef3cfcd129c03ec0e3cac704c01cb67ab42b6c5c1b1a096ab9b55f41
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q4.md
 ---
 
 Twenty individuals with independent future lifetimes, all exact age 70, are subject to the following multi-state nursing home model:
 
-*(Figure: Healthy (0), Nursing Home (1), Memory Care (2) and Dead (3), with arrows from 0 to 1, from 1 to 0, from 0 to 3, from 1 to 3, from 1 to 2 and from 2 to 3.)*
+![State diagram: Healthy 0, Nursing Home 1, Memory Care 2 and Dead 3, with arrows from 0 to 1, from 1 to 0, from 0 to 3, from 1 to 3, from 1 to 2 and from 2 to 3](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2023f-q4-state-diagram.png)
 
 You are using maximum likelihood estimation to estimate model transition intensities, assuming constant transition intensities.
 
@@ -92,7 +102,7 @@ Part c: Common errors here were candidates misunderstanding the total exposure, 
 
 ## Part d (2 points)
 
-Calculate the maximum likelihood estimate of ${}_1p_{70}^{00}$.
+Calculate the maximum likelihood estimate of ${}_1p_{70}^{\overline{00}}$.
 
 ### Explanation
 Due to the invariance property of MLEs, the MLE for ${}_1p_{70}^{\overline{00}}$ is ${}_1\hat{p}_{70}^{\overline{00}} = e^{-\left(\hat{\mu}_{70}^{01} + \hat{\mu}_{70}^{03}\right)}$.

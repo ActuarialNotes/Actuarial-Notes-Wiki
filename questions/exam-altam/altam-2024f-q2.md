@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Probability
   - Concepts/Fractional+Age+Assumption
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5ebea87d580132eaf5a0fdd03a4d0a2eb9247ee99a45a410ce41e10f9c41d6fb
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024f-q2.md
 ---
 
 A life age 60 purchases a 5-year critical illness policy which pays 100,000 at the end of the year of death or of diagnosis of a critical illness, whichever occurs first. There is no benefit on lapse.

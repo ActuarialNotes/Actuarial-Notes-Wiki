@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Life+Insurance
   - Concepts/Cash+Flow
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:76e6f98472362cbab97ba41da39a22739c60499d4e66e013c4fa2dda803a7d82
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2023f-q5.md
 ---
 
 An insurer sells both Type A and Type B universal life insurance policies to lives age 75.

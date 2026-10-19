@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Joint+Life
   - Concepts/Life+Insurance
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6fb57179f2a13849fa10c67ec5b7878a169f24e30b1e4ea786558a2eec6bb041
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2024f-q5.md
 ---
 
 For a Type B universal life policy with annual premiums, you are given the following information:
@@ -49,7 +59,7 @@ $$AV_2 = \left(1817.88 + 0.98P - 100 - 1.2q_{51}(100{,}000)\right)(1.06) = 3729.
 
 **(ii)**
 
-*(Figure: sketch of $AV_t$ against $t$ for $0 \le t < 2$.)*
+![Hand-drawn model solution sketch of AVt against t from 0 to 2, vertical axis marked 1000 to 5000. AV starts at 0 at t = 0 and jumps to AV0+ = 1715, rises slowly to AV1 = 1817 at t = 1, jumps to AV1+ = 3518, then rises slowly to AV2- = 3729 at t = 2](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2024f-q5-av-sketch-year-0-2.png)
 
 ### Examiner Report
 Overall, candidates were well-prepared for this question.
@@ -91,7 +101,7 @@ $$DB = AV_{41.6} + ADB = 201{,}320$$
 
 **(ii)**
 
-*(Figure: sketch of $AV_t$ against $t$ for $41 \le t < 41.6$.)*
+![Hand-drawn model solution sketch of AVt against t from 41 to 41.6, vertical axis broken above 0 and marked 95,000 to 110,000. At t = 41 the AV41 value near 110,000 drops vertically to AV41+ = 97,839, then rises gradually to AV41.6 = 101,320 at t = 41.6](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2024f-q5-av-sketch-age-91.png)
 
 ### Examiner Report
 Candidates did reasonably well on this part. The great majority remembered to add the 100,000 face amount to the AV. Mistakes with the mortality charge -- such as applying only a fractional portion of COI charges -- and/or the 0.6 years of interest accumulation were fairly common. As with Part A, the vertical jumps in the graphing portion of this question were commonly misunderstood. Key features of the graph were AV41 = 109,467, jump down to AV 41+ = 97,839, gradual rise to AV41.6 = 101,320.

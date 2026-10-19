@@ -23,7 +23,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:3fd9fcb69fc2f307ecc8c98989101362eb0fca200071266f32e8eff2cb7181aa
+  content_hash: sha256:133fccb1850ca81ca078d49722bc88639d29e8df993e3b289a9e87c6dc636f48
   sources: []
   open_findings: 0
   open_critical: 0
@@ -95,7 +95,7 @@ h(x) = \frac{f(x)}{S(x)} = \frac{\alpha\theta_X^\alpha}{(\theta_X + x)^{\alpha+1
 $$
 
 ### Examiner Report
-Part (c) asked for a proof of the maximum excess loss formula for the Pareto distribution. For full credit candidates were expected to prove the result starting from the definition of the function, but substantial partial credit was given to the candidates who used the excess loss formula from the formula sheet.
+Part (c) asked for a proof of the maximum excess loss formula for the Pareto distribution. For full credit candidates were expected to ***prove*** the result starting from the definition of the function, but substantial partial credit was given to the candidates who used the excess loss formula from the formula sheet.
 
 ## Part d (2 points)
 

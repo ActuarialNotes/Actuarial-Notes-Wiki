@@ -123,6 +123,7 @@ const CONTENT_GROUPS: ReadonlyArray<readonly [prefix: string, group: string]> = 
   ['/', 'Quiz builder'],
   ['/quiz', 'Quiz'],
   ['/review', 'Quiz review'],
+  ['/games', 'Games'],
   ['/battle', 'Quiz Battle'],
   ['/craft', 'Concept Craft'],
   ['/dashboard', 'Dashboard'],

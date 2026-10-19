@@ -168,7 +168,9 @@ test.describe('tab-switch view transitions', () => {
     await expect(examP).toBeVisible()
     expect(await scrollY()).toBe(listY)
 
-    // Quiz Battle's way in and its setups are all `/battle`.
+    // Games is a page of its own; Quiz Battle's way in and its setups are all `/battle`.
+    await page.getByTestId('quiz-games-entry').click()
+    await page.waitForURL('**/games')
     await page.getByTestId('quiz-battle-entry').click()
     await page.waitForURL('**/battle')
     await page.getByTestId('battle-mode-local').click()
@@ -176,7 +178,7 @@ test.describe('tab-switch view transitions', () => {
     await page.getByRole('button', { name: 'Back', exact: true }).click()
     await expect(page.getByTestId('battle-mode-local')).toBeVisible()
 
-    await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'pop'])
+    await expect.poll(moves).toEqual(['push', 'pop', 'push', 'push', 'push', 'pop'])
     await expect.poll(() => page.evaluate(() => ({ ...document.documentElement.dataset }))).toEqual({})
   })
 

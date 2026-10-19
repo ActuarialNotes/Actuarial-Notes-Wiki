@@ -7,10 +7,11 @@ question counts double so a battle is never over before its last question.
 Online, the players choose what it's played on: each picks up to three topics,
 and the questions are drawn from both picks (see *Topics* below).
 
-It lives at **`/battle`**, opened from the **Quiz Battle** card at the top of the
-Quiz tab (the same slot, grid and 48px tile the Study Guides tab gives its
+It lives at **`/battle`**, opened from the **Quiz Battle** row on **Games**
+(`/games`, `pages/Games.tsx`), which the Quiz tab's one **Games** row opens from
+above its exam list (the same slot and 48px tile the Study Guides tab gives its
 general guide, so the two tabs' exam lists still line up). The route is a sheet
-laid over the Quiz tab (`deskPlace` in `lib/viewTransition.ts`) and lights the
+laid over Games, itself a sheet over the Quiz tab (`deskPlace` in `lib/viewTransition.ts`) and lights the
 Quiz item in the sidebar.
 
 There are three ways in — **Random opponent** (the matchmaking lobby), **Same

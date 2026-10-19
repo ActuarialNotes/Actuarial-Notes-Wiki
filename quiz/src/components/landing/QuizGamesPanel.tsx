@@ -1,36 +1,25 @@
 import { ListPanel, ListRow } from '@/components/ui/ListPanel'
-import { BattleLogo } from '@/components/battle/BattleLogo'
-import { CraftLogo } from '@/components/craft/CraftLogo'
+import { GamesLogo } from '@/components/GamesLogo'
 
 /**
- * Quiz Battle and Concept Craft — ways of quizzing rather than exams, so they
- * sit above the ladder, where the Study Guides tab keeps its general guide:
- * one-row panels of the same list the exams are drawn in, with the same 48px
- * tile, so the two tabs line up.
+ * Games — Quiz Battle and Concept Craft — are ways of quizzing rather than
+ * exams, so they sit above the ladder as one row, where the Study Guides tab
+ * keeps its general guide: a one-row panel of the same list the exams are
+ * drawn in, with the same 48px tile, so the two tabs line up. The games
+ * themselves are listed on their own page (`pages/Games.tsx`).
  */
 export function QuizGamesPanel() {
   return (
     <section>
-      <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2">
-        <ListPanel>
-          <ListRow
-            to="/battle"
-            data-testid="quiz-battle-entry"
-            leading={<BattleLogo size="lg" />}
-            title="Quiz Battle"
-            subtitle="Race a friend through the same questions"
-          />
-        </ListPanel>
-        <ListPanel>
-          <ListRow
-            to="/craft"
-            data-testid="concept-craft-entry"
-            leading={<CraftLogo size="lg" />}
-            title="Concept Craft"
-            subtitle="Connect concepts to make new ones"
-          />
-        </ListPanel>
-      </div>
+      <ListPanel>
+        <ListRow
+          to="/games"
+          data-testid="quiz-games-entry"
+          leading={<GamesLogo size="lg" />}
+          title="Games"
+          subtitle="Quiz Battle and Concept Craft"
+        />
+      </ListPanel>
     </section>
   )
 }

@@ -14,8 +14,8 @@ find 80% of it within your first 20% of its pairs for **gold** (**Medals**). Eve
 found stays on the board, so a topic ends as a map of how its concepts relate — the
 strongly connected drawn close together, the loosely connected further out.
 
-It lives at **`/craft`** — one board, opened from the **Concept Craft** row at the
-top of the Quiz tab, beside Quiz Battle: a way of studying, not an exam. The board
+It lives at **`/craft`** — one board, opened from the **Concept Craft** row on
+**Games** (`/games`, which the Quiz tab's **Games** row opens), beside Quiz Battle: a way of studying, not an exam. The board
 opens straight away, empty the first time, and its **+** (bottom right, the largest control on the board) opens the
 **starter packs**: every topic, under its exam's logo, in ladder order, in a menu that
 opens upwards from the button and scrolls in place. Picking one adds that topic's seeds to the board — a pack on the

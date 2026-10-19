@@ -74,10 +74,11 @@ const DESK: { prefix: string; tab: number; depth: number; below?: number }[] = [
   { prefix: '/flashcards', tab: 2, depth: 0 },
   { prefix: '/', tab: 3, depth: 0 },
   { prefix: '/quiz', tab: 3, depth: 1 },
-  // Quiz Battle is opened from the Quiz tab's exam list, a sheet over it.
-  { prefix: '/battle', tab: 3, depth: 1 },
-  // Concept Craft is opened from the same place: one board, a sheet over it.
-  { prefix: '/craft', tab: 3, depth: 1 },
+  // Games is opened from the Quiz tab's exam list, a sheet over it; Quiz
+  // Battle and Concept Craft are opened from Games, a sheet over that.
+  { prefix: '/games', tab: 3, depth: 1 },
+  { prefix: '/battle', tab: 3, depth: 2 },
+  { prefix: '/craft', tab: 3, depth: 2 },
   { prefix: '/review', tab: 3, depth: 2 },
   // The Projects tab; an attempt is a sheet laid over the list of briefs.
   { prefix: '/project', tab: 4, depth: 0, below: 1 },

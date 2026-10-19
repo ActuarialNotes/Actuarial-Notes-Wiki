@@ -753,7 +753,7 @@ function CraftPlay({
 
 function BoardHeader({ tally, scoreboard = null }: { tally: TopicTally | null; scoreboard?: ReactNode }) {
   // Back where the board was opened from — the Quiz tab, or a study guide.
-  const back = useBack({ to: '/', label: 'Quiz' })
+  const back = useBack({ to: '/games', label: 'Games' })
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border px-3">
       <MobileNavButton className="lg:hidden" />

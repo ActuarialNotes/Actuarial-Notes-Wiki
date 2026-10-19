@@ -67,6 +67,8 @@ test.describe('quiz battle', () => {
 
   test('is reached from the Quiz tab', async ({ page }) => {
     await page.goto('/')
+    await page.getByTestId('quiz-games-entry').click()
+    await expect(page).toHaveURL(/\/games$/)
     await page.getByTestId('quiz-battle-entry').click()
     await expect(page).toHaveURL(/\/battle$/)
     await expect(page.getByRole('heading', { name: 'Quiz Battle' })).toBeVisible()

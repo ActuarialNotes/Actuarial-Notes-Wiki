@@ -115,7 +115,7 @@ so they open in the same popup viewer as a real page. See `docs/cowork.md`.
   tag, topic, a line of facts as plain text, and a chevron — and both exam lists draw it: the
   Quiz tab (question count, exam date) and Study Guides (exam date, "NN% ready"; no bar).
   It is a `ListRow` in a `ListPanel` (`components/ui/ListPanel.tsx`), the grouped list every
-  "tap to go there" entry on those two pages uses (Quiz Battle, Concept Craft, the general guide,
+  "tap to go there" entry on those two pages uses (Games, the general guide,
   Actuaria).
   See `docs/style-guide.md` §7.2a.
   `components/ConceptTile.tsx` is **the** concept tile — a concept as a small static card, its
@@ -312,8 +312,8 @@ before touching that area**:
   (`data/storeReviews.ts`, never paraphrased), and every listing ends in the legal notice
   `storeDisclaimer` writes. Read before touching
   anything named `store*`, `examFees` or `GemShop`.
-- `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle at the top of
-  the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
+- `docs/concept-craft.md` — **Concept Craft** (`/craft`, the row beside Quiz Battle on **Games**,
+  `/games` — `pages/Games.tsx`, opened by the one Games row at the top of the Quiz tab): topics crafted out of their building blocks on one dark, zoomable board. It
   opens empty; its **+** opens the **starter packs** — every topic, grouped under its exam's
   logo — and each pack added deals that topic's **seeds** — what nothing in the topic is made from, and no more
   (`seedConcepts`; 3 to 30 cards, a little under two-fifths of the vault) — and the reader
@@ -377,7 +377,8 @@ before touching that area**:
   earlier in-browser deploy on the reader's own API key was removed as a security risk. All of
   `lib/workflow*.ts` is pure and tested; the flows are `e2e/workflow.spec.ts`. Read before touching
   anything named `workflow*` or `Workflow`.
-- `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, the card at the top of the Quiz tab): two
+- `docs/quiz-battle.md` — **Quiz Battle** (`/battle`, a row on Games — `/games`, opened from the
+  Quiz tab's Games row): two
   players racing through the same questions, on one screen under **buzzer** rules (first to
   buzz answers, a miss hands the other the steal) or on two devices under **simultaneous**
   rules (each locks in unseen; the fastest right answer earns most). The scoring table (100 +

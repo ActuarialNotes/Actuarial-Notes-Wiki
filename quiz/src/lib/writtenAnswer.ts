@@ -24,6 +24,28 @@ export function ungradedWrittenParts(
   return writtenParts(question).filter(p => grades[p.label] === undefined)
 }
 
+/**
+ * How far a question's written parts have been graded, for the self-grade
+ * screen's question bar: `done` when every part has a grade, `partial` when
+ * some do, `none` when none do. A question with no written parts is `done` —
+ * there is nothing left on it to grade.
+ */
+export interface GradingProgress {
+  state: 'done' | 'partial' | 'none'
+  graded: number
+  total: number
+}
+
+export function gradingProgress(
+  question: Question,
+  grades: Record<string, SelfGrade | undefined>,
+): GradingProgress {
+  const total = writtenParts(question).length
+  const graded = total - ungradedWrittenParts(question, grades).length
+  const state = graded === total ? 'done' : graded > 0 ? 'partial' : 'none'
+  return { state, graded, total }
+}
+
 // ── Sample answers ──────────────────────────────────────────────────────────
 //
 // An examiner's report often prints more than one full-credit answer to a

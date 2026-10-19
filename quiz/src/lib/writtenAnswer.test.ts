@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { splitSampleAnswers, ungradedWrittenParts, writtenParts } from './writtenAnswer'
+import { gradingProgress, splitSampleAnswers, ungradedWrittenParts, writtenParts } from './writtenAnswer'
 import { parseQuestion } from './parser'
 
 describe('splitSampleAnswers', () => {
@@ -184,5 +184,12 @@ describe('written parts', () => {
 
   it('do not exist outside a multi-part question', () => {
     expect(writtenParts({ ...q, type: 'free-entry' })).toEqual([])
+  })
+
+  it('report how far grading has got', () => {
+    expect(gradingProgress(q, {})).toEqual({ state: 'none', graded: 0, total: 2 })
+    expect(gradingProgress(q, { a: 'correct', b: 'partial' })).toEqual({ state: 'partial', graded: 1, total: 2 })
+    expect(gradingProgress(q, { b: 'correct', c: 'incorrect' })).toEqual({ state: 'done', graded: 2, total: 2 })
+    expect(gradingProgress({ ...q, type: 'free-entry' }, {})).toEqual({ state: 'done', graded: 0, total: 0 })
   })
 })

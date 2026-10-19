@@ -21,13 +21,33 @@ history — but nothing on screen says "mock" any more. Two labels replace it, b
 **The source and the format are two choices.** The tab says where the questions come from
 (Today's Plan, By Topic, Past Papers); the format control beside Start says how they're sat —
 **Quiz** (a short set: the count and difficulties picked, answers as you go by default) or
-**Practice Exam** (full length — a sitting whole, or the exam's paper length from any other
-source — every difficulty, answers at the end by default). Any source can be sat either way:
+**Practice Exam** (full length — a sitting whole, or from any other source a paper shaped like the
+real one — every difficulty, answers at the end by default). Any source can be sat either way:
 a past paper as a quiz, a set of topics as a practice exam. They used to be one control, whose
 Past Papers tab also meant "practice exam" (and was even *named* Practice Exam for P and FM),
 so where the questions came from and how they were sat couldn't be told apart. The mode id
 `mock-exam` is the format; `source === 'papers'` is the shelf. A quiz of a few questions from
 one sitting is a random few, kept in the paper's order (`hooks/useQuestions.ts`).
+
+**A practice exam of no one sitting is shaped like the paper** (`lib/practiceExam.ts`,
+`drawPracticeExam`, used by `useQuestions` and the builder's shuffle alike):
+
+- **Length.** A paper paced per question takes its question count from `EXAM_PACE`
+  (`lib/quizTiming.ts`) — P and FM 30, FAM 34, SRM 35, MAS-I and MAS-II 45, the DISCs 75 — so
+  the timer and the paper agree; a written paper paced per point (Exam 5's ~55 points, ASTAM's
+  and ALTAM's 60) is drawn to its **point total**, since its questions run from half a point
+  to a dozen. Exams with neither (6C, 7, 8, 9) take their released papers' size from
+  `PRACTICE_EXAM_QUESTIONS`.
+- **Spread.** Each syllabus section gets its share at its published weight (the midpoint of
+  `{20–30%}`; an unweighted syllabus, like the DISCs', counts each topic alike), largest
+  remainder, a short section's shortfall handed to the others. A question is placed by its
+  `learning_objective`, else its concepts; `practiceExamVault.test.ts` holds every question of
+  every bank to a section.
+- **Formats.** Only what the paper sets (`PRACTICE_EXAM_TYPES`: multiple choice for the SOA's
+  MC papers and the DISCs; multiple choice and fill-in-the-blank for MAS; written parts,
+  multiple choice and free entry for CAS's upper exams; written answer for ASTAM/ALTAM), and
+  every one of those the bank holds appears at least once — swapped in for a question of the
+  commonest format in the same section, nearest in points.
 
 The rule is the one the report button follows (`Examiner's Report` vs `Exam & Answer Key`):
 **the label follows the content.** "Mock" said the paper was a fabrication, which for most of
@@ -78,7 +98,7 @@ frontmatter are inconsistent (`Spring`, `spring`, `Sp`), so `normalizeSession` f
 without it one sitting splits into two rows.
 
 The first entry in the shelf is always **Mix**: the generated, syllabus-distributed practice
-exam (`PRACTICE_EXAM_QUESTIONS` in `lib/pastExams.ts`), which is all this source was before there
+exam (`drawPracticeExam` in `lib/practiceExam.ts`), which is all this source was before there
 was a browser. Selecting it is `selectedSitting === null`, exactly as before.
 
 ### Scope of the catalogue

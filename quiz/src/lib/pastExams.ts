@@ -1,5 +1,6 @@
 import { isFromAnotherExamsPaper, type Question } from './parser'
 import { getPastExamSittings, type ExamSession, type PastExamSitting } from '@/data/pastExams'
+import { paceForExam } from './quizTiming'
 
 // The read side of the past-exam shelf: merges the authored sitting catalogue
 // (`data/pastExams.ts`) with the sittings the question bank actually holds, and
@@ -195,23 +196,21 @@ export function buildPastExamRows(questions: Question[], exam: string): PastExam
  * so the mode carries one name and only the *source* below distinguishes them.
  */
 /**
- * How many questions a practice exam draws on each exam — the real paper's
- * length. Read by the quiz builder's Practice Exam and by Actuaria's
- * Simulation (docs/actuaria-online.md §6.10), so the two can't disagree.
+ * How many questions a practice exam draws on an exam whose paper is not paced
+ * per question — the real paper's length where a source gives one, its
+ * released papers' size where none does. An exam paced per question
+ * (`EXAM_PACE` in lib/quizTiming.ts) takes its length from there instead, so
+ * the timer and the paper can't disagree about how long the exam is.
  */
 export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
-  'Probability': 30,
-  'Financial Mathematics': 30,
-  // The SOA's syllabi: FAM 34 and SRM 35 multiple-choice questions, ASTAM six
-  // written-answer questions (one of them the Excel question the bank omits),
-  // and ALTAM the same.
-  'Exam FAM': 34,
-  'Exam SRM': 35,
+  // Guides/Exam 5 (CAS): "typically around 25 questions worth roughly 55
+  // points" — the points are what a practice exam is drawn to
+  // (lib/practiceExam.ts); this is the count the builder shows beside them.
+  'Exam 5': 25,
+  // The SOA's syllabi: ASTAM six written-answer questions (one of them the
+  // Excel question the bank omits), and ALTAM the same.
   'Exam ALTAM': 6,
   'Exam ASTAM': 6,
-  'Exam MAS-I': 40,
-  'Exam MAS-II': 42,
-  'Exam 5': 25,
   // No format guide gives these, so they are the released papers' own size:
   // the thirteen Fall 2013–Fall 2019 Exam 6C papers held 394 questions, the
   // eight 2012–2019 Exam 7 papers 200, the eight Exam 8 papers 173 and the
@@ -223,8 +222,15 @@ export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
   'Exam 9': 25,
 }
 
-/** A practice exam's length on `exam` (a bank label), 30 where no paper says. */
+/**
+ * A practice exam's length on `exam` (a bank label): the paper's question
+ * count where its pace is per question, else the table above, 30 where
+ * nothing says. Read by the quiz builder's Practice Exam and by Actuaria's
+ * Simulation (docs/actuaria-online.md §6.10), so the two can't disagree.
+ */
 export function practiceExamQuestions(exam: string): number {
+  const pace = paceForExam(exam)
+  if (pace?.per === 'question') return pace.units
   return PRACTICE_EXAM_QUESTIONS[exam] ?? 30
 }
 

@@ -23,6 +23,7 @@ import { useActionBarHeight } from '@/hooks/useActionBarHeight'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { buildPastExamRows, examSourceLabel, practiceExamQuestions } from '@/lib/pastExams'
+import { drawPracticeExam, practiceExamBlueprint } from '@/lib/practiceExam'
 import { applyPassRates } from '@/lib/passRates'
 import { useExamPassRates } from '@/hooks/useExamPassRates'
 import { examStatus } from '@/lib/examStatus'
@@ -373,6 +374,7 @@ export default function Landing() {
     todaysPlanPool,
     inLevels,
     attempted: attemptsByQuestionId,
+    mode,
   })
 
   // How many the pool holds, and how many of those the quiz will pull.
@@ -417,8 +419,12 @@ export default function Landing() {
     // first best-covering question, so running it over a freshly ordered pool
     // yields a different set that still covers the day's concepts.
     const planConcepts = useTodaysPlan ? buildTodaysPlanSelection()?.concepts : undefined
+    // A practice exam of no one sitting is drawn to the paper's shape
+    // (lib/practiceExam.ts) — the same draw the quiz makes unshuffled.
     const draw = planConcepts
       ? selectQuestionsForCoverage(shuffle(currentPool), planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
+      : mode === 'mock-exam' && !(source === 'papers' && selectedSitting)
+      ? drawPracticeExam(currentPool, { ...practiceExamBlueprint(topic), questions: quizQuestionCount }, syllabusForTopic)
       : shuffle(currentPool).slice(0, quizQuestionCount)
     keepDraw(draw.map(q => q.id))
   }

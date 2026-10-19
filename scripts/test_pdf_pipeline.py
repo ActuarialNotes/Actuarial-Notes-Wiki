@@ -898,6 +898,38 @@ class TestSoaFm2026Layout(unittest.TestCase):
         self.assertEqual([b.num for b in px.segment(solutions)], [351, 352, 353, 354])
 
 
+class TestSoaFamLayouts(unittest.TestCase):
+    """The SOA's FAM-S and FAM-L sample sets (June and August 2026)."""
+
+    def test_fam_s_solutions_heading_with_a_colon(self):
+        solutions = "Question #27\nKey: B\nWork.\nQuestion: #28\nKey: B\nMore.\nQuestion: #29\nKey: C\n"
+        self.assertEqual([b.num for b in px.segment(solutions)], [27, 28, 29])
+
+    def test_fam_l_labels_come_from_the_solutions_headings(self):
+        solutions = (
+            "June 12, 2025: Question 7.41 added\n"
+            "Question 1.1\nAnswer C\nWork.\n3.0\n"
+            "Question 1.2\nAnswer: E\nMore.\nQuestion# 2.1\nAnswer B\n"
+        )
+        labels = px.decimal_labels(solutions)
+        self.assertEqual(labels, [(1, 1), (1, 2), (2, 1)])
+        bounds = px.decimal_bounds(solutions, labels, heading=True)
+        self.assertEqual([b.num for b in bounds], [101, 102, 201])
+        booklet = (
+            "1.1\nDetermine which is NOT true.\n1.2.\nAn equation:\n2.1\n"
+            "Calculate.\n2.1.      Another reading.\n"
+        )
+        cut = px.decimal_bounds(booklet, labels, heading=False)
+        self.assertEqual([b.num for b in cut], [101, 102, 201])
+        self.assertIn("An equation", booklet[cut[1].start : cut[1].end])
+        self.assertIn("Calculate.", booklet[cut[2].start : cut[2].end])
+
+    def test_a_source_note_after_option_e_is_the_prompt(self):
+        note = px.SOURCE_NOTE_RE.search("489 [Question 8 on the Fall 2014 exam]")
+        self.assertEqual(note.group(0).strip(), "[Question 8 on the Fall 2014 exam]")
+        self.assertIsNone(px.SOURCE_NOTE_RE.search("[0, 1]"))
+
+
 class TestSpring2016Faults(unittest.TestCase):
     """Four faults the CAS Exam 5 Spring 2016 paper exposed.
 

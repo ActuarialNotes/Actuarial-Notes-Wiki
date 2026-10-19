@@ -15,10 +15,11 @@ import type { Question } from './parser'
 //    paper was sat as: `originally_exam` when the
 //    syllabus has since moved the material (an Exam 7 paper's ERM question is
 //    still the CAS's, whatever exam it counts towards now).
-//  - **A published sample question** — the Exam P, FM and SRM banks, which are
-//    the SOA's sample sets. The SOA administers these exams and publishes their
-//    sample questions; the bank files sample question n as `p-<n>` / `fm-<n>` /
-//    `srm-<n>`.
+//  - **A published sample question** — the Exam P, FM, FAM and SRM banks, which
+//    are the SOA's sample sets. The SOA administers these exams and publishes
+//    their sample questions; the bank files sample question n as `p-<n>` /
+//    `fm-<n>` / `srm-<n>`, and FAM's two sets as `fams-<n>` and
+//    `faml-<chapter>-<n>` (FAM-L numbers its questions by AMLCR chapter).
 //  - **The vault's own question** — written for Actuarial Notes, published by
 //    no examining body. Listed below by id, because a file that names no
 //    sitting reads the same either way and the frontmatter can't be given a
@@ -39,6 +40,7 @@ export const PUBLISHER_ORDER: readonly QuestionPublisher[] = ['SOA', 'CAS', 'Act
 export const EXAM_BODIES: Readonly<Record<string, ExamBody>> = {
   'P': 'SOA',
   'FM': 'SOA',
+  'FAM': 'SOA',
   'SRM': 'SOA',
   'MAS-I': 'CAS',
   'MAS-II': 'CAS',

@@ -203,6 +203,8 @@ export const PRACTICE_EXAM_QUESTIONS: Readonly<Record<string, number>> = {
   'Probability': 30,
   'Financial Mathematics': 30,
   // The SOA's syllabus (`Exam SRM (SOA).md`): 35 multiple-choice questions.
+  // The SOA's syllabus (`Exam FAM (SOA).md`): 34 multiple-choice questions.
+  'Exam FAM': 34,
   'Exam SRM': 35,
   'Exam MAS-I': 40,
   'Exam MAS-II': 42,

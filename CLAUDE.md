@@ -604,7 +604,7 @@ Other important `lib/` modules:
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (P, FM, MAS-I, the three DISCs — DISC-DA, DISC-RM, DISC-IA — and Exam 7, the CAS ones promoted by
   `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 8 and 9,
-  SRM — its bank the SOA's sample set — and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM — FAM, PA, ALTAM,
+  FAM and SRM — their banks the SOA's sample sets — and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM — PA, ALTAM,
   ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
   requirements**: the three VEEs (`VEE-MS`, `VEE-ECON`, `VEE-AF`), the SOA's e-learning modules
   PAF, ASF, FAP and DMAC (`FSA-DMAC`), its APC and FAC (`FSA-FAC`), and the CAS's Course on
@@ -1457,6 +1457,8 @@ compile — don't "clean up" the flagged code as dead.
   `questions/<exam-id>/*.md` and nothing deeper (`validate_content.py` warns about a nested
   one — the four under `exam-p/probability/`, `exam-p/statistics/` and `exam-fm/interest/` are
   early seed questions VERIFY can't yet move, since a log may not be renamed). Current banks: `exam-p`, `exam-fm`,
+  `exam-fam` (the SOA's two FAM sample sets — FAM-S as `fams-<n>`, FAM-L as `faml-<chapter>-<n>`
+  after its numbering by AMLCR chapter — and six of the vault's own, `fam-an-001` …),
   `exam-srm` (the SOA's SRM sample set, `srm-<n>`, and five of the vault's own, `srm-an-001` …),
   `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
   (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the

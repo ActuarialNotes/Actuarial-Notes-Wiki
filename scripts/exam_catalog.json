@@ -7,7 +7,7 @@
     { "page": "Exam P-1 (SOA).md",    "exam_id": "P-1",    "wiki_id": "p-1",    "progress_key": "P",      "body": "SOA", "bank": "exam-p",      "status": "ready" },
     { "page": "Exam FM-2 (SOA).md",   "exam_id": "FM-2",   "wiki_id": "fm-2",   "progress_key": "FM",     "body": "SOA", "bank": "exam-fm",     "status": "ready" },
     { "page": "Exam PAF (SOA).md", "exam_id": "PAF", "wiki_id": "paf-1", "progress_key": "PAF", "body": "SOA", "bank": null, "status": "development", "weighted": false },
-    { "page": "Exam FAM (SOA).md", "exam_id": "FAM", "wiki_id": "fam-1", "progress_key": "FAM", "body": "SOA", "bank": null, "status": "development" },
+    { "page": "Exam FAM (SOA).md", "exam_id": "FAM", "wiki_id": "fam-1", "progress_key": "FAM", "body": "SOA", "bank": "exam-fam", "status": "beta" },
     { "page": "Exam SRM (SOA).md", "exam_id": "SRM", "wiki_id": "srm-1", "progress_key": "SRM", "body": "SOA", "bank": "exam-srm", "status": "beta" },
     { "page": "Exam ASF (SOA).md", "exam_id": "ASF", "wiki_id": "asf-1", "progress_key": "ASF", "body": "SOA", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam PA (SOA).md", "exam_id": "PA", "wiki_id": "pa-1", "progress_key": "PA", "body": "SOA", "bank": null, "status": "development" },

@@ -20,6 +20,10 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   // P and FM, the SOA's own subject line isn't the label: the bank says
   // "Exam SRM", as the CAS banks name their exam.
   'Exam SRM': 'SRM',
+  // FAM's bank is the SOA's two sample sets, each numbered from 1: FAM-S
+  // (`fams-<n>`, Topics 1-6) and FAM-L (`faml-<chapter>-<n>`, Topics 7-10,
+  // numbered by AMLCR chapter as the SOA numbers them).
+  'Exam FAM': 'FAM',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   // The three DISC courses. The Institutes sells their sample questions and

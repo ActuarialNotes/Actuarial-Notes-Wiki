@@ -635,7 +635,7 @@ Other important `lib/` modules:
   `lib/examCatalog.test.ts` holds to it), not in the surfaces — and add it to the DEFAULT
   track in `data/tracks.ts`, which `data/tracks.test.ts` requires to offer every studiable
   exam. The quiz builder offers any exam with a question bank (its hand-kept `QUIZ_EXAMS` in
-  `lib/quizBuilder.ts`, practice-exam sizes in `PRACTICE_EXAM_QUESTIONS` in `lib/pastExams.ts`) and would show an
+  `lib/quizBuilder.ts`, a practice exam's shape — length or points, formats, section weights — in `lib/practiceExam.ts`) and would show an
   in-development one dimmed, under the same dashed *In Development* tag. Exam 6's regional variants share the
   `CAS-6` progress key and only 6C has a bank, so `bankLabelFor` in `lib/examIds.ts` binds
   the 6C syllabus to `Exam 6C` and leaves 6U unbound — read a syllabus's bank label through

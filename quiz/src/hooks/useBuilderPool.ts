@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { Question } from '@/lib/parser'
+import type { Question, QuizMode } from '@/lib/parser'
 import { builderPool, newQuestionCount, type QuizSitting, type QuizSource } from '@/lib/quizBuilder'
 import { difficultyLevelCounts } from '@/lib/quizDifficulty'
 
@@ -19,6 +19,7 @@ export function useBuilderPool({
   todaysPlanPool,
   inLevels,
   attempted,
+  mode,
 }: {
   questions: Question[]
   topic: string
@@ -31,12 +32,14 @@ export function useBuilderPool({
   inLevels: (q: Question) => boolean
   /** The reader's attempt history, by question id. */
   attempted: { has(id: string): boolean }
+  /** The format — a practice exam holds only the formats its paper sets. */
+  mode: QuizMode
 }) {
   // The questions the current configuration covers before the difficulty
   // choice — what the menu's per-level counts are read from.
   const unleveledPool = useMemo(
-    () => builderPool({ questions, topic, source, sitting, concept, concepts, todaysPlanPool }),
-    [source, topic, questions, sitting, concept, todaysPlanPool, concepts],
+    () => builderPool({ questions, topic, source, sitting, concept, concepts, todaysPlanPool, mode }),
+    [source, topic, questions, sitting, concept, todaysPlanPool, concepts, mode],
   )
 
   // How many questions each level holds there, said under each level's name.

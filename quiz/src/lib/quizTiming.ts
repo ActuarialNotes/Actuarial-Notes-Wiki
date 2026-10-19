@@ -45,6 +45,12 @@ export const EXAM_PACE: Record<string, ExamPace> = {
   'Exam MAS-II': { minutes: 240, per: 'question', units: 45 },
   // Guides/Exam 5 (CAS): a 4-hour written paper worth roughly 55 points.
   'Exam 5': { minutes: 240, per: 'point', units: 55 },
+  // The DISCs have no format guide; CAS's DISC page (transcribed in
+  // `data/examSittingDetails.ts`): "100 minutes to complete 75
+  // application-based multiple-choice questions" — each of the three alike.
+  'Exam DISC-DA': { minutes: 100, per: 'question', units: 75 },
+  'Exam DISC-RM': { minutes: 100, per: 'question', units: 75 },
+  'Exam DISC-IA': { minutes: 100, per: 'question', units: 75 },
 }
 
 /** Seconds a pace allows per question (or per point). */

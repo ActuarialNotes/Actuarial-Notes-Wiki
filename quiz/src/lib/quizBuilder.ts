@@ -17,6 +17,7 @@ import type { ExamBody } from '@/lib/bodyFilter'
 import { decayIfStale, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { filterQuestions, type Question, type QuestionFilter, type QuizMode } from '@/lib/parser'
 import { planConceptsToday } from '@/lib/planCompletion'
+import { fitsPaperFormat, practiceExamBlueprint } from '@/lib/practiceExam'
 import type { RevealMode } from '@/lib/revealMode'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -237,16 +238,28 @@ export function builderPool(input: {
   concepts: readonly string[]
   /** Today's plan's pool when it is the source, else null. */
   todaysPlanPool: Question[] | null
+  /**
+   * The format. A practice exam of no one sitting holds only the question
+   * formats its paper sets (lib/practiceExam.ts); a sitting is sat whole.
+   */
+  mode?: QuizMode
 }): Question[] {
-  const { questions, topic, source, sitting, concept, concepts, todaysPlanPool } = input
+  const { questions, topic, source, sitting, concept, concepts, todaysPlanPool, mode } = input
   if (source === 'papers') {
     if (!topic) return []
-    return filterQuestions(questions, papersFilter(topic, sitting))
+    const paper = filterQuestions(questions, papersFilter(topic, sitting))
+    return mode === 'mock-exam' && !sitting ? paperFormatsOnly(paper, topic) : paper
   }
   if (concept) return filterQuestions(questions, { concept })
   if (todaysPlanPool) return todaysPlanPool
   if (!topic) return []
-  return filterQuestions(questions, conceptsFilter(topic, concepts))
+  const pool = filterQuestions(questions, conceptsFilter(topic, concepts))
+  return mode === 'mock-exam' ? paperFormatsOnly(pool, topic) : pool
+}
+
+function paperFormatsOnly(pool: Question[], topic: string): Question[] {
+  const blueprint = practiceExamBlueprint(topic)
+  return blueprint.types ? pool.filter(q => fitsPaperFormat(blueprint, q)) : pool
 }
 
 /**

@@ -309,8 +309,8 @@ These are in order within each lane.
   the edge function. L5, L6 and §7's two rows are unblocked; they need data to accrue.
 - **L2:** confidence and calibration.
 - **L3:** a spaced mistakes deck. It consumes L2.
-- **L4:** finish the Practice Exam: syllabus-weighted assembly, a post-exam readiness
-  delta, and a hand-off to what to review next.
+- **L4:** finish the Practice Exam: a post-exam readiness delta and a hand-off to what to
+  review next (syllabus-weighted, paper-shaped assembly is done — `lib/practiceExam.ts`).
 
 **Content:**
 - **C2:** Exam 9.
@@ -475,7 +475,7 @@ Shipped:
 | L1 | Learning instrumentation | ✅ 2026-10-17 | — | `concept_retention` (the first answer on a concept past its decay window, once per decay episode, `retained` true or false), `reminder_opened` / `reminder_session` (the email's `utm_source`, then the first quiz within 6 h), `mistake_reviewed`. Pure rules in `lib/learningSignals.ts`; GA4 custom definitions to add are in `analytics-and-monitoring.md` (G3). |
 | L2 | Confidence and calibration | 🟡 in the Tutor (L8), Exam 5 | Next | One tap (sure / unsure / guessing) before the reveal; a calibration view; high-confidence errors feed L3. Built inside the Tutor (`lib/tutor/`); the quiz itself still has no tap. Was P2.7. |
 | L3 | Spaced mistakes deck | 🟡 the card has shipped; successive relearning in the Tutor | Next | Re-ask a missed question after a delay (2–3 days), mixed into normal sessions, prioritised by L2. The Tutor relearns a missed part in-session, then +1 and +3 days (`log.ts`). Was P2.8. |
-| L4 | Finish the Practice Exam | 🟡 timer and reveal ✅ | Next | Still to do: sitting-shaped, syllabus-weighted assembly; a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
+| L4 | Finish the Practice Exam | 🟡 timer, reveal and paper-shaped assembly ✅ | Next | Still to do: a post-exam readiness delta; a "review next" hand-off. `mock-exam-browser.md`. Was P2.2. |
 | L5 | Interleaving in quiz assembly | 🟡 in the Tutor's sessions | Later | The study plan doesn't interleave either since keystone concepts were removed. A/B it once L1 exists. Was P2.6. |
 | L6 | Tunable spaced-repetition intervals | ⬜ | Later | `DECAY_DAYS_*` are constants in `mastery.ts`. Needs L1. Was P2.1. |
 | L7 | Web push reminders | ⬜ | Later | Blocked on E12. Same rules as the email: opt-in, quiet days, framed as an invitation. Was half of P1.3. |

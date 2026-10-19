@@ -3,6 +3,8 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import { drawByDifficulty, shuffle } from '@/lib/quizDifficulty'
 import { inPaperOrder } from '@/lib/pastExams'
+import { drawPracticeExam, practiceExamBlueprint, syllabusForBank } from '@/lib/practiceExam'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import type { Question, QuestionFilter } from '@/lib/parser'
 import { useShowFlaggedQuestions } from '@/hooks/useShowFlaggedQuestions'
 
@@ -11,6 +13,8 @@ export function useQuestions(filters: QuestionFilter) {
   // session by default (filterQuestions does it); the Settings toggle is how a
   // reviewer gets at them to fix them. See lib/verification.ts.
   const [showFlagged] = useShowFlaggedQuestions()
+  // A practice exam is weighed by its exam's syllabus sections.
+  const { syllabi } = useWikiSyllabus()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -39,9 +43,19 @@ export function useQuestions(filters: QuestionFilter) {
         // carries one (the old builder slider's `level`), a uniform shuffle when it doesn't. A pinned id list
         // is always shuffled — it is taken whole, and `filterQuestions` ignores
         // a sitting beside it, so neither the paper nor the lean has a say.
+        // A practice exam of no one sitting is drawn to the paper's shape — its
+        // formats, its sections at their weights, its length or point total
+        // (lib/practiceExam.ts).
         const sitting = Boolean(filters.year || filters.session) && !filters.ids?.length
+        const practiceExam = filters.mode === 'mock-exam' && !sitting && !filters.ids?.length && !!filters.exam
         const result = sitting
           ? inPaperOrder(limit < filtered.length ? shuffle(filtered).slice(0, limit) : filtered)
+          : practiceExam
+          ? drawPracticeExam(
+              filtered,
+              { ...practiceExamBlueprint(filters.exam!), ...(filters.count ? { questions: filters.count } : {}) },
+              syllabusForBank(syllabi, filters.exam!),
+            )
           : filters.difficultyTarget !== undefined && !filters.ids?.length
           ? drawByDifficulty(filtered, limit, filters.difficultyTarget)
           : shuffle(filtered).slice(0, limit)
@@ -58,7 +72,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, difficultiesKey, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, filters.difficultyTarget, difficultiesKey, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session, showFlagged, syllabi])
 
   return { questions, loading, error }
 }

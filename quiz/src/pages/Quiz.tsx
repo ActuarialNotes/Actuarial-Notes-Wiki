@@ -12,6 +12,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { GradePartsDialog } from '@/components/GradePartsDialog'
+import { SelfGradeScreen } from '@/components/SelfGradeScreen'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { QuestionInfoButton } from '@/components/QuestionInfoButton'
 import { PreQuizConcepts } from '@/components/PreQuizConcepts'
@@ -616,76 +617,21 @@ export default function Quiz() {
 
   // ── Self-grading screen (reveal='end' with written questions) ────────────
   if (showSelfGradeScreen) {
-    const totalEssayParts = essayQuestions.reduce(
-      (n, q) => n + (q.parts ?? []).filter(p => p.answer === '').length,
-      0,
-    )
-    const gradedCount = Object.keys(essaySelfGrades).length
-
     return (
-      <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold">Self-Grade Written Responses</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              Review each written response and grade yourself before seeing your results.
-            </p>
-          </div>
-          <span className="text-sm text-muted-foreground shrink-0">
-            {gradedCount}/{totalEssayParts} graded
-          </span>
-        </div>
-
-        <div className="space-y-8">
-          {essayQuestions.map(q => {
-            const qGrades: Record<string, SelfGrade> = {}
-            for (const [key, grade] of Object.entries(essaySelfGrades)) {
-              const sep = key.indexOf('__')
-              if (sep >= 0 && key.slice(0, sep) === q.id) {
-                qGrades[key.slice(sep + 2)] = grade
-              }
-            }
-            return (
-              <QuestionCard
-                key={q.id}
-                question={q}
-                selectedAnswer={responses[q.id]?.chosen ?? null}
-                onAnswer={() => {}}
-                showExplanation={true}
-                isLocked={true}
-                showMeta={true}
-                essaySelfGrades={qGrades}
-                onEssaySelfGrade={(partLabel, grade) =>
-                  setEssaySelfGrades(prev => ({ ...prev, [`${q.id}__${partLabel}`]: grade }))
-                }
-              />
-            )
-          })}
-        </div>
-
-        {submitError && (
-          <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-3">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            {submitError}
-          </div>
-        )}
-
-        <div className="flex justify-between items-center pt-2">
-          <Button variant="outline" size="lg" onClick={() => setShowSelfGradeScreen(false)}>
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Back to Quiz
-          </Button>
-          <Button
-            onClick={submitQuiz}
-            size="lg"
-            disabled={isSubmitting}
-            className="bg-foreground text-background hover:bg-foreground/90"
-          >
-            {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-            {mode === 'mock-exam' ? 'Submit Exam' : 'Finish Quiz'}
-          </Button>
-        </div>
-      </div>
+      <SelfGradeScreen
+        questions={essayQuestions}
+        numbers={Object.fromEntries(storeQuestions.map((q, i) => [q.id, i + 1]))}
+        responses={responses}
+        grades={essaySelfGrades}
+        onGrade={(questionId, partLabel, grade) =>
+          setEssaySelfGrades(prev => ({ ...prev, [`${questionId}__${partLabel}`]: grade }))
+        }
+        onBack={() => setShowSelfGradeScreen(false)}
+        onSubmit={submitQuiz}
+        submitLabel={mode === 'mock-exam' ? 'Submit Exam' : 'Finish Quiz'}
+        isSubmitting={isSubmitting}
+        submitError={submitError}
+      />
     )
   }
 

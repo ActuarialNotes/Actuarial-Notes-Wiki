@@ -69,6 +69,7 @@ EXAM_PAGE_BY_BANK = {
     "exam-fam": "Exam FAM (SOA).md",
     "exam-srm": "Exam SRM (SOA).md",
     "exam-astam": "Exam ASTAM (SOA).md",
+    "exam-altam": "Exam ALTAM (SOA).md",
     "exam-5": "Exam 5 (CAS).md",
     "exam-6c": "Exam 6C (CAS).md",
     "exam-6u": "Exam 6U (CAS).md",

@@ -48,6 +48,7 @@ export const QUIZ_EXAMS: readonly QuizExam[] = [
   { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'], progressKey: 'FM' },
   { value: 'Exam FAM', label: 'Exam FAM', tracks: ['ASA'], progressKey: 'FAM' },
   { value: 'Exam SRM', label: 'Exam SRM', tracks: ['ASA'], progressKey: 'SRM' },
+  { value: 'Exam ALTAM', label: 'Exam ALTAM', tracks: ['ASA'], progressKey: 'ALTAM' },
   { value: 'Exam ASTAM', label: 'Exam ASTAM', tracks: ['ASA'], progressKey: 'ASTAM' },
   { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'], progressKey: 'MAS-I' },
   { value: 'Exam MAS-II', label: 'Exam MAS-II', tracks: ['ACAS'], progressKey: 'MAS-II' },

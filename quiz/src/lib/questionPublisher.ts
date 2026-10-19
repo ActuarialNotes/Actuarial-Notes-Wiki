@@ -43,6 +43,7 @@ export const EXAM_BODIES: Readonly<Record<string, ExamBody>> = {
   'FAM': 'SOA',
   'SRM': 'SOA',
   'ASTAM': 'SOA',
+  'ALTAM': 'SOA',
   'MAS-I': 'CAS',
   'MAS-II': 'CAS',
   'CAS-DA': 'CAS',

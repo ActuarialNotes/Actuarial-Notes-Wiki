@@ -139,6 +139,16 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 9', year: 2014, session: 'Spring' },
   { exam: 'Exam 9', year: 2013, session: 'Spring' },
 
+  // ── SOA Exam ALTAM ─── the same shape and the same list (read 2026-10-19);
+  // earlier papers were LTAM's and MLC's, different exams.
+  { exam: 'Exam ALTAM', year: 2026, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2025, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2025, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2024, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2024, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2023, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ALTAM', year: 2023, session: 'Spring', officialQuestionCount: 6 },
+
   // ── SOA Exam ASTAM ─── written answer, six questions; the SOA's Past Exams
   // and Solutions page lists every sitting from Spring 2023 (read 2026-10-19).
   // Earlier papers were STAM's, a different exam.

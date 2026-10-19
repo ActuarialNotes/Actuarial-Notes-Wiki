@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Term+Life+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:685f62f9c14e2736635c0e5fa5905dd7ee4f89b4729a6bbb61c7e7b1a7fdc155
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-035.md
 ---
 
 XYZ Insurance Company sells three-year term policies with a death benefit of 1,000,000 payable at the end of the year of death, to lives age $x$. Premiums are payable annually.

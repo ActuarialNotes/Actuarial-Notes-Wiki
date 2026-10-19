@@ -13,9 +13,19 @@ wiki_link:
   - Concepts/Net+Present+Value
   - Concepts/Profit+Margin
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1f33f0f7790a785b41c54c6feea0ea0f0c5144b30df848d1ea580c7568f802d1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-049.md
 ---
 
-(*8 points*) A life insurance company issues a Type B universal life policy with an Additional Death Benefit of 150,000 to a life age 35.
+A life insurance company issues a Type B universal life policy with an Additional Death Benefit of 150,000 to a life age 35.
 
 You are given:
 
@@ -41,6 +51,8 @@ $$\Rightarrow AV_3 = \left(8166 + 4800(0.95) - 377.88\right)(1.04) = 12{,}842$$
 
 The total DV in year 3 is $DB_3 = ADB_3 + AV_3 = 162{,}842$
 
+## Part b (3 points)
+
 Now the company wants to carry out a profit test of this contract using the following assumptions:
 
 - (i) At the end of the first year, 10% of the in-force policyholders surrender.
@@ -53,8 +65,6 @@ Now the company wants to carry out a profit test of this contract using the foll
 - (viii) Percent of premium expenses are 25% in the first year and 7% for years 2 and 3.
 - (ix) Expenses on death are 500.
 - (x) The hurdle rate is 10% per year.
-
-## Part b (3 points)
 
 Calculate the profit vector.
 

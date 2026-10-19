@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Salary+Scale
   - Concepts/Accrued+Benefit
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:def43d94f10b6a1cea30294e1386094a7be0509be02dd3bd2d5534f1ea3b14e5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-038.md
 ---
 
 A company sponsors a defined benefit pension plan. Key attributes of the pension plan are:

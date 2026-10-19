@@ -12,11 +12,21 @@ wiki_link:
   - Concepts/Profit+Signature
   - Concepts/Net+Present+Value
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e48986893f915344551ab167dd8a8d7cd7995a3b5605e62fe666426ca3a0108b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-029.md
 ---
 
 A 5-year term life insurance policy with a partially accelerated Critical Illness (CI) rider is sold to a Healthy life age $x$. The policy is to be profit-tested using the multiple state model:
 
-*(Figure: State 0 Healthy → State 1 CI diagnosed; State 0 Healthy → State 3 Dead no CI; State 1 CI diagnosed → State 2 Dead after CI.)*
+![State diagram: State 0 Healthy to State 1 CI diagnosed; State 0 Healthy to State 3 Dead no CI; State 1 CI diagnosed to State 2 Dead after CI](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-029-state-diagram.png)
 
 The policy pays 600,000 at the end of the year of CI diagnosis, if the policyholder is still alive at the end of that year; 1,000,000 at the end of the year of death, if the policyholder was in State 0 at the start of that year; and 500,000 at the end of the year of death if the policyholder was in State 1 at the start of that year.
 

@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Salary+Scale
   - Concepts/Life+Annuity
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d50baf6c0439f6c041690b1e73ddd0934ed2a29f528c956516b8efff4b05de86
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-041.md
 ---
 
 A corporation offers its employees a Final Salary Defined Benefit pension with an accrual rate of 2% per year of service. The Final Pensionable Salary is the salary earned in the final year of employment. The pension is paid as a single life monthly annuity-due with a 10-year guarantee.

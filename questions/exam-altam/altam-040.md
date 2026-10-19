@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Service+Table
   - Concepts/Woolhouse's+Formula
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:94c21ede73f6bc85ab6f87f8e482e9a4a085129d4bea983ed86d6e0bcf29e7b1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-040.md
 ---
 
 On December 31, 2015, an individual, who is age 55, has 25 years of service. The individual's salary in 2015 was 50,000.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Lapse
   - Concepts/Net+Present+Value
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3ec51f51d71688fdaaa79032234a1bd24457213680b041a0b8b2b1f8d47b8c60
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-030.md
 ---
 
 An insurer issues a 20-year deferred annuity contract to (65). Level annual premiums will be paid for a maximum of 10 years. On survival to age 85, an annuity of 36,000 per year is paid annually in advance. If the life dies after 10 years, but before the first annuity payment, the premiums paid are returned without interest, at the end of the year of death. There is no payment on death in the first 10 years.

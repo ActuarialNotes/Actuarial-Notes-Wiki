@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Replicating+Portfolio
   - Concepts/Risk-Neutral+Valuation
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4568422f72a71323802e0f1371863b5fc80c8617315a622ba66fb49e277e397e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-056.md
 ---
 
 A 10-year equity-linked policy is issued to ($x$). The policy offers a guaranteed minimum maturity benefit of 100% of the initial single premium. After an initial expense charge of 5% of the premium, the remainder is invested in separate fund. The insurer deducts a 0.2% management charge from the policyholder's fund at the end of each month, if the policyholder survives.

@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Actuarial+Accrued+Liability
   - Concepts/Normal+Cost
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b013bfd4c8fa5fdfa7e31c016abd9dc9667d159a47ca08f0cbecc3552d8bee8f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-048.md
 ---
 
-(*9 points*) B is the sole member of a final average salary pension plan which is being valued on January 1, 2022. At the valuation date B is 63 years old and has 12 years of service. B's salary at the valuation date is 72,100. B's salary in 2021 was 70,000.
+B is the sole member of a final average salary pension plan which is being valued on January 1, 2022. At the valuation date B is 63 years old and has 12 years of service. B's salary at the valuation date is 72,100. B's salary in 2021 was 70,000.
 
 The pension plan benefits are as follows:
 
@@ -54,9 +64,9 @@ $$\begin{align*}
 &= 16{,}503.92 \quad \text{(or 16,503.90 if using 178,206)}
 \end{align*}$$
 
-You are also given that the projected accrued liability for B's retirement benefits on January 1, 2023, assuming that B is employed then, is 191,309.
-
 ## Part b (2 points)
+
+You are also given that the projected accrued liability for B's retirement benefits on January 1, 2023, assuming that B is employed then, is 191,309.
 
 - (i) Show that the actuarial liability of B's retirement benefits at January 1, 2022 is 167,150 to the nearest 10. You should calculate the value to the nearest 1.
 - (ii) Calculate the normal cost for B's retirement benefits as of January 1, 2022.

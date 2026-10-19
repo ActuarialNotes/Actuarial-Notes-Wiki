@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Lapse
   - Concepts/Term+Life+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cfe250df0a2c3e852bc82261999e30ac7c258afb25f57427ef7f8a259745fbca
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-034.md
 ---
 
 XYZ Insurance Company sells two year term policies to lives age $x$. The death benefit of 1,000,000 is payable at the end of the year of death. Premiums are payable annually.

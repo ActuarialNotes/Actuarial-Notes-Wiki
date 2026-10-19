@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
   - Concepts/Equivalence+Principle
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:79bcf52e45ccfe9dd643fa07f2de3e15258daeb3674d2dad898a1c32e4e76afc
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-047.md
 ---
 
-(*9 points*) Person M enrolled in a defined contribution (DC) pension plan at age 35. Person M and their employer each contribute 6% of Person M's salary to the pension fund.
+Person M enrolled in a defined contribution (DC) pension plan at age 35. Person M and their employer each contribute 6% of Person M's salary to the pension fund.
 
 M plans for the retirement based on the following assumptions:
 

@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Net+Present+Value
   - Concepts/Multiple+Decrement+Model
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7b91d0b3f415819f3e98ba840f720eb133eb71a635747c1ddd912e4c8873c683
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-052.md
 ---
 
-(*9 points*) For universal life insurance policies with a death benefit of 100,000 plus the account value issued to independent lives age 50, you are given:
+For universal life insurance policies with a death benefit of 100,000 plus the account value issued to independent lives age 50, you are given:
 
 (i)
 

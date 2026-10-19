@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Recursion
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bcb398280f12cc269fdab48f6f2ec19935dc0a029ce724f8b02426ddb76fc731
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-033.md
 ---
 
 A whole life insurance policy on (50) has an initial sum insured of 200,000 payable at the end of the year of death. At the beginning of each policy year after the first, the sum insured will increase by 5,000. The insured will pay level annual premiums payable for at most 20 years.

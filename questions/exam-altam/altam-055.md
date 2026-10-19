@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Profit+Testing
   - Concepts/Profit+Signature
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bbb79c32eda567191de216c738fb6fe2f581a87ca54ca52d2574751724a24832
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-055.md
 ---
 
 An insurer issues a 3-year equity-linked insurance policy to ($x$). The policyholder pays a single premium of 5000, and an additional policy fee of 350. The insurer invests 100% of the premium in a separate account, with management charges of 2.5% of the fund value deducted at the start of each year including the first.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Present+Value
   - Concepts/Annuities
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3090828ddb99e6608c4ad413ad51439634f7516a73b0cf9817bfda36e92c8532
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-037.md
 ---
 
 (This is a modified version of Question 7 from the Spring 2014 Written Answer exam.)

@@ -10,9 +10,19 @@ wiki_link:
   - Concepts/Expected+Value
   - Concepts/Random+Variable
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:1943f6a9416dea4e669b73c0fc6e4638afd9c44a625a4247c39f2a2ed4c5d69b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-051.md
 ---
 
-(*10 points*) Person D buys a Type B universal life contract of 100,000. You are given:
+Person D buys a Type B universal life contract of 100,000. You are given:
 
 (i)
 

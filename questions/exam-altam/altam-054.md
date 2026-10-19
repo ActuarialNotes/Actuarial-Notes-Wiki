@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Reserve
   - Concepts/Multiple+Decrement+Model
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:632d6a3e42a7a1cfd8567f5f4fd17cb4ece31bb146d206cd0b1a0f18421568b5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-054.md
 ---
 
-(*10 points*) For Type B universal life insurances with additional death benefit 100,000 on lives age 60, you are given the following policy details:
+For Type B universal life insurances with additional death benefit 100,000 on lives age 60, you are given the following policy details:
 
 | Policy Year $k$ | Annual Premium | Credited Interest Rate | Percent of Premium Expense Charge | Annual Expense Charge | Annual Cost of Insurance Rate per 1000 | Surrender Charge |
 |---|---|---|---|---|---|---|

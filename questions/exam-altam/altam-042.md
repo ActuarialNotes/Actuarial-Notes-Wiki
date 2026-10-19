@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Service+Table
   - Concepts/Defined+Benefit+Plan
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b93fbebbca0aa2bdec9566a0333c2fe2a64a0cff085a55f6e8503f7f07d06d06
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-042.md
 ---
 
 Person D is a member of a pension plan that offers an annual retirement pension of 2% of the member's career average earnings for each year of service.

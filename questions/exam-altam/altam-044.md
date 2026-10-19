@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Defined+Benefit+Plan
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:249cf1b7f28528de5702aed8a533a364119e4a78c1386dc75a0d810cda2d3c08
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-044.md
 ---
 
-(*8 points*) You act as the valuation actuary for a corporation which sponsors a final average salary defined benefit pension plan for its employees. The age retirement benefit provisions and valuation assumptions for the corporation's plan are described below.
+You act as the valuation actuary for a corporation which sponsors a final average salary defined benefit pension plan for its employees. The age retirement benefit provisions and valuation assumptions for the corporation's plan are described below.
 
 - The accrual rate is 2% per year of service.
 - The final average salary is defined as the salary over the final year of employment.

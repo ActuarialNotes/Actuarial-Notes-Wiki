@@ -11,9 +11,19 @@ wiki_link:
   - Concepts/Reserve
   - Concepts/Life+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8eafd8eee5f7ef59a1e324e327fe7134541388c6bec6efed7a0bc0a2bace005b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-053.md
 ---
 
-(*10 points*) For a Type A universal life policy issued to (50), you are given:
+For a Type A universal life policy issued to (50), you are given:
 
 - (i) The face amount is 100,000.
 - (ii) All cash flows occur at policy anniversaries.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Replicating+Portfolio
   - Concepts/Guaranteed+Minimum+Maturity+Benefit
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f903e4dc46ba1f08889aee54457231bcdac4818894dfd2804bd65394c260c889
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-061.md
 ---
 
 Your company issues 2-year equity-linked policies to lives age 85. Policyholders pay a single premium of 10,000. The insurer deducts a management charge of 3% of the fund value at the start of each year, including the first. There are no other expense deductions. The fund price is 1 per share at inception. There is no guaranteed minimum maturity benefit.

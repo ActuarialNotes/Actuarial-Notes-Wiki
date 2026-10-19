@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Woolhouse's+Formula
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d98af4f67f94edd034eb96d9bc227476e7c31bfe95a46c016883d394899f903a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-050.md
 ---
 
-(*8 points*) An insurer issues a Type A universal life policy with a face amount of 100,000 and an annual premium of 50,000.
+An insurer issues a Type A universal life policy with a face amount of 100,000 and an annual premium of 50,000.
 
 You are given:
 

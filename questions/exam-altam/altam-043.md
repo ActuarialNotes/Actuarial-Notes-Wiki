@@ -13,9 +13,19 @@ wiki_link:
   - Concepts/Joint+Life
   - Concepts/Woolhouse's+Formula
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:087008c8d37f5d772df266f7bbc469a617da973ee450ed18c146a383e9ac1e3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-043.md
 ---
 
-(*8 points*) Person X is a member of a defined benefit pension plan which offers an annual pension of 2% of the final one year's salary for each year of service. The benefit is a whole life annuity-due paid monthly. At the valuation date, 1/1/2020, X is 40 years old with 20 years' service. X's salary during the 12 months prior to the valuation was 110,000.
+Person X is a member of a defined benefit pension plan which offers an annual pension of 2% of the final one year's salary for each year of service. The benefit is a whole life annuity-due paid monthly. At the valuation date, 1/1/2020, X is 40 years old with 20 years' service. X's salary during the 12 months prior to the valuation was 110,000.
 
 You are given:
 

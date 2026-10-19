@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Deferred+Annuity
   - Concepts/Salary+Scale
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13a916dec7757fc3455df078ecbfc87cf7975aecfdb4e0b8817fbacbba00e3e5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-039.md
 ---
 
 A person begins work at age 40 at ABC Life on January 1, 2014, with a starting salary of 30,000. The person will switch jobs to XYZ Re at some time before age 55 at the then-current salary and will remain at XYZ Re until retirement.

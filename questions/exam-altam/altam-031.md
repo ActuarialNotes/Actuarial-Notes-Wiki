@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Profit+Signature
   - Concepts/Equivalence+Principle
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ebdad27e0bd11656474d44d2df6bb1e7cc3ab3419b36e3da58236ba2b33c23dd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-031.md
 ---
 
 A life insurer issues a single premium whole life annuity-immediate, payable annually, with a 10-year guarantee, to B who is age 65.

@@ -13,9 +13,19 @@ wiki_link:
   - Concepts/Joint+Life
   - Concepts/Fractional+Age+Assumption
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:aae2b9846913e7ef4535c6a811b398649f3077de3a2a399c50593ac6d0218c50
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-046.md
 ---
 
-(*9 points*) A person (J), who is 57, is a member of a final average salary defined benefit pension plan. The person has 35 years service. You are given the following information. The person's salary was 100,000 last year and this year.
+A person (J), who is 57, is a member of a final average salary defined benefit pension plan. The person has 35 years service. You are given the following information. The person's salary was 100,000 last year and this year.
 
 - The accrual rate is 1.8%
 - The pension is payable monthly to the plan member from age 65, with a 100% survivor pension paid to the member's partner after the member's death, provided this occurs after age 65.

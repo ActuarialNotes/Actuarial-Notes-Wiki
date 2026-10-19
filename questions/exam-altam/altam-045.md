@@ -12,9 +12,19 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Accrued+Benefit
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:56b00b78a31092155c3c636647cac5602490165b92c1b97fa5306ba358b17532
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-045.md
 ---
 
-(*8 points*) You are given the following information about D, who is a member of a Career Average Earnings pension plan.
+You are given the following information about D, who is a member of a Career Average Earnings pension plan.
 
 - (i) On the valuation date, 1/1/2021, D is 63 years old.
 - (ii) D joined the pension plan on 1/1/1998.

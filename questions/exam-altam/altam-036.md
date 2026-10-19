@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Life+Table
   - Concepts/Long-Term+Care+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d1fa76f7504891346c87d4da4101acec6f9de2bff0a695758283b0fd9391daae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-036.md
 ---
 
 An insurer offers "immediate needs annuities" (INAs) to lives age 80 or older who are moving permanently into long term care facilities (LTCFs). The annuity may be purchased as a single premium annuity-due, or as a single premium deferred annuity-due, with a 2-year deferral period. The annuity payments are paid directly to the care home to cover the resident's costs.

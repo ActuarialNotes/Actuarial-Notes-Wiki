@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Future+Lifetime+Random+Variable
   - Concepts/Expected+Value
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b3d7f033a532124e77b03aaa0eaba0217ae1b7b4497063a3b986abfe8bae2a05
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-032.md
 ---
 
 NED Life issues a fully discrete whole life insurance of 100,000 on (50) with a return of premium benefit subject to the following conditions:
@@ -150,7 +160,7 @@ $\Rightarrow$ a gain from expenses of 15,085
 
 Actual interest earned – expected interest earned, using the actual expenses
 
-$$1000\left({}_{15}V^g + 0.96P\right)\left(i^*_{15} - 0.05\right) = 1000\left[34{,}333.78 + 0.96(2000)\right](0.002) = \mathbf{72{,}507.56}$$
+$$1000\left({}_{15}V^g + 0.96P\right)\left(i^*_{15} - 0.05\right) = 1000\left[34{,}333.78 + 0.96(2000)\right](.002) = \mathbf{72{,}507.56}$$
 
 $\Rightarrow$ a gain from interest of 72,507.56
 

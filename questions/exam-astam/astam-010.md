@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Estimator
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:47022406af56a7d6183494c773e24fdc9ddf6717c09142a62e6412ade8881ee4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-010.md
 ---
 
 For a portfolio of short-term insurance contracts, claim amounts are modeled with a density function

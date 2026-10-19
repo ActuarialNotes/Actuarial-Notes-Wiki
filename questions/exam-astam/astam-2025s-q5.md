@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Credibility
   - Concepts/Expected+Loss+Method
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9ad63c93ac6e34be7c95e316aeb357614b3dccbfe5e375cf9aa4841d4e250c3c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025s-q5.md
 ---
 
 You are calculating outstanding claim reserves for your company's portfolio of short-term insurance contracts.

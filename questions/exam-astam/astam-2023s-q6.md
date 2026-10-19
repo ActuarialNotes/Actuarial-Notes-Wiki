@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Poisson+Distribution
   - Concepts/Approximate+Confidence+Interval
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:382ddea213dc139aa196d5b16b390d1a5d72ed9138e58900fbd6acb2d832ff2a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q6.md
 ---
 
 ## Part a (2 points)

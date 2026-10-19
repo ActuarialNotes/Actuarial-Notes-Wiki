@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/BIC
   - Concepts/Poisson+Distribution
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:61d14b24a953a26f4a618f2e1f3e8cc8cbbac4f3e7eb4db52d9465e0f95bdd34
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q2.md
 ---
 
 You are given the following claim frequency data for a line of business with 100 one-year policies.

@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Unpaid+Claims
   - Concepts/Credibility
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2baae69f2da4d3d2b8c69b2b0bd05f8ad9ddb903be3210fb203f0b6c311b7dcd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2026s-q5.md
 ---
 
 You are analyzing the following cumulative claims run-off triangle for a commercial insurance. Assume that claims are fully developed by the end of Development Year 2.

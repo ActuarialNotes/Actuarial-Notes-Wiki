@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Mean+Excess+Loss
   - Concepts/Weibull+Distribution
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fb50bf288e32c56b6917957db8ecb11cfe588d0d4af53e2c02c9b2c5928d8220
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025f-q3.md
 ---
 
 The loss severity random variable $X$ has a Uniform distribution on the interval $[a, b]$. We denote this by $X \sim \text{Unif}(a, b)$.

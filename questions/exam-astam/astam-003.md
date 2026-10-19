@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Bornhuetter-Ferguson+Method
   - Concepts/Unpaid+Claims
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9b7dc1c3272635d12e5d4e334d7cf681a1aa7d72deebc19bdef4c04533c03ad6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-003.md
 ---
 
 During 2021, AAA Insurance collects the following premium amounts:

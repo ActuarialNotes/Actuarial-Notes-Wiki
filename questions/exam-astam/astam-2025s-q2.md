@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Frequency
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f0952f6e7ca744c3aeef9cf4f90aa7069cf847493a8c3b476651751ca49153c4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025s-q2.md
 ---
 
 An insurance company is analyzing a portfolio of 10 independent auto insurance policies. Drivers are classified into two categories, "Urban Drivers" and "Rural Drivers".

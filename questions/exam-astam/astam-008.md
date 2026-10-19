@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Exponential+Distribution
   - Concepts/Generalized+Extreme+Value+Distribution
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:21aaa6c75323b704b41c2a4dfaa35fc05a6bdbcdcf8e983bb95c4bb53cbdf03c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-008.md
 ---
 
 The random variable $X$ has distribution function $F(x)$ where

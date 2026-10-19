@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Profit+Margin
   - Concepts/Severity+Discretization
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8166a008aae960f538851a0b1aa2ef316bd5a9a3fda5bcc839efb6a420868863
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2026s-q3.md
 ---
 
 For a medical insurance policy, the number of claims follows a Poisson distribution with $\lambda = 2$. The amount of each claim follows an exponential distribution with $\theta = 1000$. Let $S$ denote the aggregate claims random variable for an individual policy.

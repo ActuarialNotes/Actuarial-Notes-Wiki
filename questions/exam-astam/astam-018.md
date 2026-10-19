@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Frequency
   - Concepts/Maximum+Likelihood+Estimation
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:13c5726509736f43c124512818d060bd9fb22310e37900b3b2b229b56abe4dc5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-018.md
 ---
 
 A claims study examines the frequency of automobile claims among 400 policies. An actuarial assistant has fit several frequency models (including Zero-Modified distributions) to the claims data using Maximum Likelihood Estimation. Summarized results are shown below.

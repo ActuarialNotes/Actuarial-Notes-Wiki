@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Exact+Credibility
   - Concepts/Posterior+Distribution
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9ffb10b0ad637c8e738169e7660746839cf40cb31085a95c4e3d16a801c36cb6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025s-q6.md
 ---
 
 For a portfolio of 100 independent policies, the annual claim amount on a policy, conditional on the risk parameter $\Theta = \theta$, has an exponential distribution with mean $\theta$.

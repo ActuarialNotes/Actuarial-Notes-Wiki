@@ -11,7 +11,18 @@ wiki_link:
   - Concepts/Panjer+Recursion
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Aggregate+Loss+Model
+  - Concepts/Probability
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:9f40c05c8efc2748d9fd63bc52ac2de0299c1a49b818faea2a3e0885df52e6d6
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-016.md
 ---
 
 XYZ Insurer has two lines of insurance business with their aggregate claim payments denoted by $S_1$ and $S_2$, respectively.

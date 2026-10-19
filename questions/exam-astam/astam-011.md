@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Geometric+Distribution
   - Concepts/Hypothesis+Testing
 points: 3
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d7ef41dc354c52af04e24456d83a8f32a809a4d657eab0dc4e1d28afbef8e3f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-011.md
 ---
 
 For a portfolio of 2000 policyholders of automobile insurance, you are given the observed number of claims per policyholder for a given period:

@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Maximum+Likelihood+Estimation
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:973b0047aca85a064b4275b0f8a0d953f55d703b288b2f03f94596a369c980ad
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025f-q2.md
 ---
 
 You are analyzing the distribution of the number of claims during a one-year period for a portfolio of 2000 property insurance policies. The number of claims for each policy are assumed to be independent and identically distributed. You are given the following observed data:

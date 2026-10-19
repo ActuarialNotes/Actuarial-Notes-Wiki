@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Stop-Loss+Reinsurance
   - Concepts/Policy+Limit
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3de18ca69603e703e0acc0113e7f824d48b02b1b02fc4b35eef27aed924140ba
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q1.md
 ---
 
 You are the actuary for an insurance company that writes one year insurance coverage on a risk with the following frequency and severity distributions.

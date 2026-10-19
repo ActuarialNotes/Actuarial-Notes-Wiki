@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Excess+of+Loss
   - Concepts/Policy+Limit
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:186460c56520dc3c7d1d9840600bcfaf1efc17ece44f45dfb29d9e0156e3d20b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2026s-q2.md
 ---
 
 NED Insurance Company sells a liability insurance policy. The policyholder can select a deductible of 0, 500, or 1000.

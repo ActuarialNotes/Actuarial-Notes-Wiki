@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Short+Tail+Insurance
   - Concepts/Prediction+Error
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:64b7c4506dad56346317952d27e49168eb9c401cdf8910da589372f99e913a2a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024f-q6.md
 ---
 
 You are analyzing a run-off triangle of aggregate claims. The development factors are:

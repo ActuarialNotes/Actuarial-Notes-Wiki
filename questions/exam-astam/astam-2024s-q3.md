@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Frequency
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:f7c24a40dfd4b8423b10da3862f90fa34746261d03ecd3807061ff7e5a7a9bff
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024s-q3.md
 ---
 
 Let $S$ denote the aggregate claims for a portfolio of policies issued by ABC insurance company. You are given:

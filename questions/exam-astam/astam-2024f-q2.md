@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Policy+Limit
   - Concepts/Coverage+Modifications
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c69f35b5899acf157a80691c2723e7cf16be55a25dc995f19d8fedc3b2d7c34d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024f-q2.md
 ---
 
 ## Part a (3 points)

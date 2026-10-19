@@ -11,6 +11,16 @@ wiki_link:
   - Concepts/Empirical+Bayes+Credibility
   - Concepts/Unbiasedness
 points: 3
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cd28d2dd80dad0e1b396358ba541234622412eaca70c4732f05ef602542ba562
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-009.md
 ---
 
 An insurer manages a portfolio of $r$ commercial insurance policies.

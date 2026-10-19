@@ -14,7 +14,20 @@ wiki_link:
   - Concepts/Pareto+Distribution
   - Concepts/Weibull+Distribution
   - Concepts/Generalized+Extreme+Value+Distribution
+  - Concepts/Moment
+  - Concepts/Severity+Distribution
+  - Concepts/Probability+Distributions
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3fd9fcb69fc2f307ecc8c98989101362eb0fca200071266f32e8eff2cb7181aa
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q2.md
 ---
 
 An insurer is analyzing its auto insurance claims with a focus on the right tails of the distributions.

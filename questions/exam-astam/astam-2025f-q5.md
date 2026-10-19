@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Inflation
   - Concepts/Unpaid+Claims
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c3415de0f75b1f3fd04c449412be95fb9e30aea118936abd45a9fa5e4837e563
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025f-q5.md
 ---
 
 A casualty insurance company sells a product that pays a single fixed payment of 200 if the insured is hospitalized.

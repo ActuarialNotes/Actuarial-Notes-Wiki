@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Delta+Method
   - Concepts/Policy+Limit
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc4820c82dfef7dc7407a73e0c1dcbb71686379afcb1582786688a655782607e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-017.md
 ---
 
 You are given the following data from a sample of 6 claims. The ground up loss for the risk is assumed to be exponential with mean $\theta$.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Delta+Method
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:75a14dc07309d96050d52971410eea201dfdd716d5961342486b1595fd006d2b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-025.md
 ---
 
 Let $X_1, X_2, \ldots, X_n$ be a random sample from a population with Pareto distribution having unknown parameter $\alpha$ but known parameter $\theta = 100$.

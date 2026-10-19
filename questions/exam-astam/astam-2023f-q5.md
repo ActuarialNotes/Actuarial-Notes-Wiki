@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Loss+Ratio+Method
   - Concepts/Overall+Rate+Level+Indication
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b6f94df91f2588a85543721fcd9d8089be5395f5d55f26c91b366c4b7dea1dac
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q5.md
 ---
 
 An insurer has a portfolio of one-year policies with annual premiums. The claims triangle below shows the incremental claim payments for the portfolio for each of the last four accident years, by development year. Assume all incremental payments are made at the middle of each year, and claims are fully developed by the end of Development Year (DY) 3.

@@ -14,7 +14,18 @@ wiki_link:
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Bühlmann+Credibility
   - Concepts/Credibility
+  - Concepts/Bayesian
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:e1b2d7f26c34c72e5194f61af59488542993e9c2dc30640b12c7e40247ac2735
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2026s-q4.md
 ---
 
 Let $N$ denote the claim frequency random variable for an automobile insurance policy. The distribution of $N$ is assumed to depend on the driving habits of the policyholder. To model this, the insurer assumes that $N$ depends on an unknown risk parameter $\Lambda$, where $\Lambda$ varies by policyholder.

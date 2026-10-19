@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Credibility
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7a7e326e7cf9b792aa0a605addcbc27a2add7aab1512612bef0e24bc00863037
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q4.md
 ---
 
 For a portfolio of $m$ independent policies, the number of claims in a year for the $i^{th}$ policy, denoted $I_i$, is a Bernoulli random variable with parameter $q$.

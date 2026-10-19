@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Geometric+Distribution
   - Concepts/Credibility
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:d1a3708b3686e569dd972dc483edde65e712a21a07077fecf78256f86e443c48
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024f-q5.md
 ---
 
 ## Part a (1 point)

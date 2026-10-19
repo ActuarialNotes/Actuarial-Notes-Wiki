@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Delta+Method
   - Concepts/Variance
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:33382becdd57313410adae9a80c663e304cf6607309a0e85d4e95b2b5333ff22
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-019.md
 ---
 
 You are fitting a lognormal distribution to a sample of size with complete individual data.

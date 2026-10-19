@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Credibility
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:73469295c7caba655b840d4a8ad8ccce13943085005f876f2228c953a6f56054
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q3.md
 ---
 
 You are given that, under nonparametric empirical Bayes parameter estimation for the Bühlmann-Straub credibility model, $X_{ij}$ denotes the claim frequency from risk group $i$ in year $j$, and

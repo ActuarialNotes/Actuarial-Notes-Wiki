@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Pro+Rata+Reinsurance
   - Concepts/Coverage+Modifications
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3c7cfe717d541c098b4aa296309c24059bec5a7cda5bb989ef628143a1a36b11
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-007.md
 ---
 
 Aggregate claims for a portfolio are assumed to follow a compound Poisson distribution, with Poisson parameter $\lambda = 50$. The individual claims distribution is lognormal, with parameters $\mu = 6.0, \quad \sigma^2 = 1.5$.

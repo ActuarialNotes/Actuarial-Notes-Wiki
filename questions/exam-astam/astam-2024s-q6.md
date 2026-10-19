@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Risk+Measure
   - Concepts/Hazard+Rate
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b6295c883ffa776d3c84a0c736fdecccd7c0d1190d56c79e784b34f937fd317a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024s-q6.md
 ---
 
 An actuary is investigating the severity of losses from a commercial line for reinsurance pricing, using a data set of 500 observations of loss severity, denoted $X$. The actuary first proposes to estimate the loss severity using a frailty model with frailty random variable $\Lambda$. You are given:

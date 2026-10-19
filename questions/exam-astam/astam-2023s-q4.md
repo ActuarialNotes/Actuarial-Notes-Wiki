@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Empirical+Distribution
   - Concepts/Tail+Weight
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:dafa0e171845ce040e228b9085c4503a66326a8fe97d0310ef005ae1d2d9d937
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q4.md
 ---
 
 A company is modeling the severity of flood losses. The following table shows the largest 20 values from a sample of 750 observations in decreasing order, with their ranks.

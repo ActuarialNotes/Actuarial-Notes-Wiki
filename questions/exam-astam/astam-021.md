@@ -12,7 +12,18 @@ wiki_link:
   - Concepts/Aggregate+Loss+Model
   - Concepts/Expected+Value+of+Process+Variance
   - Concepts/Variance+of+Hypothetical+Means
+  - Concepts/Bayesian
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7a42c62a669c98f640438c8dddeb48409ad4a41984895a7e103c1b273a830a55
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-021.md
 ---
 
 For all policies in an auto insurance portfolio, the number of accidents in a year follows a Poisson distribution with unknown parameter $\theta$. The accident rate depends on the driving quality of the policyholder as described in the table below. The driving quality is not known in advance to the insurer.

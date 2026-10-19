@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Likelihood+Ratio+Test
   - Concepts/Hypothesis+Testing
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:00662b2d2b9ffa24c08ee49fd87c2c130acb4bf308669273e5d25709a570fd16
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q3.md
 ---
 
 An actuary is analyzing a sample of 1000 claims, as part of a review of pricing assumptions. Claims are assumed to be independent and identically distributed. Let $x_i$ denote the amount of the $i^{th}$ claim in the sample.

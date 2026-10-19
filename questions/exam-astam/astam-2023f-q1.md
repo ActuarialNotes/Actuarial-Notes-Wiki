@@ -14,7 +14,18 @@ wiki_link:
   - Concepts/Policy+Limit
   - Concepts/Severity+Discretization
   - Concepts/Aggregate+Loss+Model
+  - Concepts/Continuous+Random+Variable
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:7b467ddac1337c2b7c4a834df9118261ae0e5f04a4860bc70b42f5be1c65e19b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q1.md
 ---
 
 An insurance company sells a 1-year insurance policy covering dental costs. In 2023, the policy has no deductible and no policy limit.

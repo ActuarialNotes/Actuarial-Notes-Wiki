@@ -9,7 +9,18 @@ wiki_link:
   - Concepts/Risk+Measure
   - Concepts/Generalized+Extreme+Value+Distribution
   - Concepts/Exponential+Distribution
+  - Concepts/Probability
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecca5b8e95b0139fcc66b1a76b004143eeb9069a77846ba3a5850ecd05df7b7a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-005.md
 ---
 
 You are given that $X_1, X_2, \ldots, X_n$ are independent and identically distributed copies of a continuous loss random variable $X$, where $X$ represents a firm's aggregate daily losses from operational risks. Let $M_n = \max\left(X_1, X_2, \ldots, X_n\right)$.

@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Loss+Cost
   - Concepts/Classification+Ratemaking
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fdf3c18bb91d92b6fc1876c7380a3bc7eafa1dc9249a1a5329b8824fb01d1765
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-002.md
 ---
 
 ## Part a

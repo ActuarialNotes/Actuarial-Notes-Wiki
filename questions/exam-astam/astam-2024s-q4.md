@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Weibull+Distribution
   - Concepts/Variance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:30fb0cfa4caf4b6f5ed7e6f1c909c6613c66e95bb68abfa5d03eda750b54c006
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024s-q4.md
 ---
 
 The loss severity for an insurance policy has the following density function:

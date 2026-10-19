@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Unpaid+Claims
   - Concepts/Development+Factor
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:620174d4a01e8b96e416139144666018bf02439804ddf3c25253ee3eb9768c4e
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-020.md
 ---
 
 You are given the following run-off triangle of incremental claim payments, $X_{ij}$. Assume all claims are settled by the end of development year 4.

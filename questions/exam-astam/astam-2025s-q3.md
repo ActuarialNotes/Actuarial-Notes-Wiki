@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Pareto+Distribution
   - Concepts/Overall+Rate+Level+Indication
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b13d0b6a5d52873c67005932071c94bfa39483a9ade4cb6195910ed221d68c6a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025s-q3.md
 ---
 
 The ratemaking actuary for a property and casualty insurance company is analyzing automobile claims data.

@@ -14,7 +14,18 @@ wiki_link:
   - Concepts/Risk+Measure
   - Concepts/Severity+Discretization
   - Concepts/Negative+Binomial+Distribution
+  - Concepts/Moment
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:356f93d2b505269a41264e50cee43b4a8af5e15173e0ed09d28851dabb03c63f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025f-q6.md
 ---
 
 Claims from an insurance portfolio have a compound distribution. The primary distribution is negative binomial, with parameters $r = 5$ and $\beta = 3$. The secondary distribution is gamma with parameters $\alpha = 0.035$ and $\theta = 36{,}000$.

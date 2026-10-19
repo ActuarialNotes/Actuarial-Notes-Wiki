@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Censoring
   - Concepts/Fisher+Information
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:6559e92be6612464f3142e75f6cf4f335f0cdf36d711fbe320a56b9d5c9af89b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-006.md
 ---
 
 Individual losses from a risk follow a Pareto distribution with parameters $\alpha$ and $\lambda$. Insurance covers these losses up to a policy limit of $M$. There is no deductible.

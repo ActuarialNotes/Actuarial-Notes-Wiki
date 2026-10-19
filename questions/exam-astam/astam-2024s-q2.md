@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Permissible+Loss+Ratio
   - Concepts/Central+Limit+Theorem
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:ecb7c101230e17abb8386163d7e389d3355c218d09e7718cce7059df9e58ce4a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024s-q2.md
 ---
 
 XYZ Insurance sells medical liability insurance.

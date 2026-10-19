@@ -14,7 +14,18 @@ wiki_link:
   - Concepts/Mean+Excess+Loss
   - Concepts/Generalized+Extreme+Value+Distribution
   - Concepts/Pareto+Distribution
+  - Concepts/Severity+Distribution
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:4c781bdc168171b5c3f5731630c0dea61b63493a855f010805d9770d5573fb0a
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024f-q4.md
 ---
 
 An insurance company has a portfolio of insurance policies for which the loss random variable, $X > 0$, has the following survival function:

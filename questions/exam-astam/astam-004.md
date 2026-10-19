@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Variance+of+Hypothetical+Means
   - Concepts/Aggregate+Loss+Model
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3d7f9b300b08b9663fc6d09deafab8c8c43fd75447051c03c98d4ba471f59eae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-004.md
 ---
 
 CBA Insurance Company splits drivers into three categories – Safe, Not So Safe, and Reckless. Within each category, claim frequency is Poisson distributed, and claim severity is Gamma distributed, but the parameters of the frequency and severity distributions differ, as shown in the following table.

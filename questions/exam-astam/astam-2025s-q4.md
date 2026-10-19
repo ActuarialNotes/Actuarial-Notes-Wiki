@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Loss+Elimination+Ratio
   - Concepts/Coinsurance
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bfd50351e0439d06efb86a97a41767c3e8b73896e273188ffb88889280b5bc90
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2025s-q4.md
 ---
 
 An actuary is analyzing the reported losses from an auto insurance with an ordinary deductible of $d$. Let $X$ denote the ground-up loss random variable, which is assumed to have a Pareto distribution with known $\theta$ and unknown $\alpha$.

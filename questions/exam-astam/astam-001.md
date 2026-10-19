@@ -12,7 +12,18 @@ wiki_link:
   - Concepts/Kolmogorov-Smirnov+Test
   - Concepts/Hypothesis+Testing
   - Concepts/Model+Selection
+  - Concepts/Severity
 points: 4
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:cc5aed2285a0c59246f3ff3ede454a89b1a6241413eecf9efe285830fd2b7c79
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-001.md
 ---
 
 Santiago Substandard Auto Company (SSAC) sells automobile insurance to drivers with bad driving records. Each policy only covers one automobile.

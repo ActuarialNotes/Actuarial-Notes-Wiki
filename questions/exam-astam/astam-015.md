@@ -12,7 +12,18 @@ wiki_link:
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Severity+Discretization
   - Concepts/Panjer+Recursion
+  - Concepts/Continuous+Random+Variable
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c20abe38189004a28216e2f12f2e98c95120b3998beb91a9c3c9a71507b45a51
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-015.md
 ---
 
 The ground-up loss severity random variable for a liability insurance risk is denoted $Y$. Conditioning on $\Lambda = \lambda$, $Y$ follows an exponential distribution with mean $1/\lambda$, and $\Lambda$ is gamma distributed with $\alpha = 4$, and $\theta = 0.002$.

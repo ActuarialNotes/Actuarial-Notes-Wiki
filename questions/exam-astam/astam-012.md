@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Fisher+Information
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:64857c968df8c3995126fbfd2c2c21c163e1eeae0bd676172a6d3e684d7c6815
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-012.md
 ---
 
 You are the actuary with the task of fitting a loss model to a set of 533 observed claims, over a two-year period, from a portfolio of liability insurance policies with very long tails. There is no censoring or truncation in the observed claims.

@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Variance+of+Hypothetical+Means
   - Concepts/Poisson+Distribution
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:131183bc3d12cde8fe0661f07a7c713ee3916763aac73c0881e1884c12eaa140
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-023.md
 ---
 
 In a Bühlmann credibility model, you are given that for a portfolio of short-term insurance contracts, the number of claims $X_1, \ldots, X_T$, conditional on $\Theta$, are independent and identically distributed with

@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Parameter+Risk
   - Concepts/Unpaid+Claims
 points: 8
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d87d51e3ba9792f28863c1c63063c1822d1112f6a35e2872146c703c56e85cd
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023f-q6.md
 ---
 
 You are analyzing the following cumulative claims run-off triangle information using Mack's model. Assume all claims are settled by the end of Development Year (DY) 4.

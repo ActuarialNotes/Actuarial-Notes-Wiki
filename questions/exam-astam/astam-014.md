@@ -12,7 +12,20 @@ wiki_link:
   - Concepts/Risk+Measure
   - Concepts/Generalized+Extreme+Value+Distribution
   - Concepts/Tail+Weight
+  - Concepts/Moment
+  - Concepts/Severity+Distribution
+  - Concepts/Probability+Distributions
 points: 6
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:75229d2e5bae1f5644cffc3813b7b95b3fdef24ef8fb63b90fd20793a2c1c0c2
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-014.md
 ---
 
 Two severity models, denoted by $X_1$ and $X_2$, are created to estimate a ground-up loss. You are given the following information.

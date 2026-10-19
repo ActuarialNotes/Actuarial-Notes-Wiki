@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Credibility
   - Concepts/Expected+Value+of+Process+Variance
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bc94cf1c0328490d667cbb5bb267b725630d2f43dc2c71e12333820c2d3d61e7
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024s-q5.md
 ---
 
 A company sells three classes of policies, A, B, and C, in equal numbers. The per-policy aggregate loss distributions for policies in each class, for one exposure period, are as follows:

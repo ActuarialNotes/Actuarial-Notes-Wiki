@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Rate+Change
   - Concepts/Territory+Ratemaking
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:bcaf2fef3422d08f2a1c5c4618ad85543cf88f6ac0525cbb51d8b5b17e1b4cee
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2023s-q5.md
 ---
 
 You are conducting a ratemaking analysis for a line of business that is sold in only two geographical areas, Territory A and Territory B.

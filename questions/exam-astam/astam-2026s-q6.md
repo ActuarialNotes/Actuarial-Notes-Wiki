@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
   - Concepts/Estimator
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:214151f08b58f5ec74a0052d10c0f9f93a8c8545c0a51e4cf1497937163b7263
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2026s-q6.md
 ---
 
 A reinsurance company is analyzing the tail risk of cyber losses. The following table provides the largest 20 values from a sample of 500 cyber losses, in decreasing order.

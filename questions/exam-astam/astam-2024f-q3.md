@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Inflation
   - Concepts/Normal+Approximation
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:16aac18733f13fc7106f7b87dae099aa6867dc1008296cc095ad6968c2cf3f7b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-2024f-q3.md
 ---
 
 An insurance company sells one-year insurance policy on a risk with the following loss frequency distribution

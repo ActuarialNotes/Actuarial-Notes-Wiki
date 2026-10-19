@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Delta+Method
 points: 5
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2536652919fca64360de572d3726af6d9a0b76690ccc92ffdcacb61f10c2d49c
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-astam/astam-013.md
 ---
 
 An insurance company offers telematics insurance to its automobile insurance policyholders. For a portfolio with $n$ new policies, a total of $M$ claims is recorded in the first $t_0$ months of cover. You may assume that each policy gives rise to a maximum of one claim and that claims arise independently of the others.

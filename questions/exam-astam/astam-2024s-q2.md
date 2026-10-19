@@ -20,7 +20,7 @@ verification:
   confidence: null
   last_checked: null
   last_checked_by: null
-  content_hash: sha256:ecb7c101230e17abb8386163d7e389d3355c218d09e7718cce7059df9e58ce4a
+  content_hash: sha256:e6b972f17789ec166798731116fe334a2c474a8aee873d108449113330849c32
   sources: []
   open_findings: 0
   open_critical: 0
@@ -42,10 +42,6 @@ Briefly describe two differences between the distributions of the loss for a sin
 
 ### Examiner Report
 For Part(a), the candidates did not do great on this question. Many did correctly identify the difference in variance. However, beyond that they tended not really address the question with regard to the difference between the distributions. For Part (b) and Part (c), virtually everyone got these correct. The only common error was that some candidates did not note the B was the Base.
-
-For Part (d), most students received zero or very few points on this question. A common mistake was to try to mathematically equate the two formulas. Very few candidates demonstrated a true understanding of the conditions necessary for the two approaches to be the same.
-
-For Part e, students still did well on this part although not as well as on b and c. A common error was using the inverse of the off-balance factor.
 
 ## Part b (2 points)
 
@@ -113,6 +109,9 @@ Another method for calculating new differentials is the loss cost method.
 
 (ii) On the other hand, if the cell population is homogeneous, even with several risk classifications, the differentials from the two methods will yield to the same result.
 
+### Examiner Report
+For Part (d), most students received zero or very few points on this question. A common mistake was to try to mathematically equate the two formulas. Very few candidates demonstrated a true understanding of the conditions necessary for the two approaches to be the same.
+
 ## Part e (2 points)
 
 You are given the following additional data:
@@ -136,3 +135,6 @@ $$\frac{0.72(5{,}000) + 1(10{,}000) + 1.14(5{,}000)}{0.80(5{,}000) + 1(10{,}000)
 The revised base premium rate for 2024 should therefore be
 
 $$\frac{1.098}{0.965}\left(1{,}500\right) = 1706.74$$
+
+### Examiner Report
+For Part e, students still did well on this part although not as well as on b and c. A common error was using the inverse of the off-balance factor.

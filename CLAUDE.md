@@ -794,6 +794,14 @@ Other important `lib/` modules:
   browser and the concept detail modal — add it to any new surface that lists questions rather than
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
+- `questionLayout.ts` — the two formats that get a **control of their own** on the quiz card
+  (`components/QuestionCard.tsx`): a *matching* question (a `multi-part` whose every part
+  repeats one option list) is drawn by `components/MatchingQuestion.tsx` as the list once
+  and a row of letters per item; an *ordering* question (a `free-entry` whose stem is one
+  `- (A)` list and whose answer is every letter once) by `components/OrderingQuestion.tsx`
+  as a list moved up and down. Read off the question's shape, the same rule as the
+  question-writer's `audit_questions.py`; grading and storage are untouched (the parts'
+  JSON, the letter string). Pure and tested; the flows are `e2e/question-layouts.spec.ts`.
 - `questionPreview.ts` — the collapsed preview every question list shows: a few lines of the
   question's *prose*, not six words of it. A stem is prose wrapped around data, so the
   flattening drops the tables, images and fenced blocks (keeping their captions, which is
@@ -1363,7 +1371,7 @@ Other important `lib/` modules:
   which is why `findSyllabiForConcept` lives in `wikiParser.ts` (re-exported from
   `conceptMatch.ts`) and `examIds.ts` imports `./wikiParser`.
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **216 test files /
+`*.test.ts` files sit alongside the modules they test (vitest). There are **217 test files /
 ~4200 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, the research/resource-timeline
 modules, and the AI connector's protocol and tools — `mcp*.test.ts` exercise the plain-JS

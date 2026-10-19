@@ -6,9 +6,12 @@ import { TopicBadge } from '@/components/TopicBadge'
 import { MarkdownText, MARKDOWN_LIST_CLASS, READING_MD_CLASS } from '@/components/MarkdownText'
 import { SelfGradeButtons } from '@/components/SelfGradeButtons'
 import { SampleAnswerCards, ExaminerReportCard } from '@/components/AnswerReference'
+import { MatchingQuestion } from '@/components/MatchingQuestion'
+import { OrderingQuestion } from '@/components/OrderingQuestion'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
+import { matchingLayout, orderingLayout } from '@/lib/questionLayout'
 import type { Question, Part, SelfGrade } from '@/lib/parser'
 
 export type { SelfGrade }
@@ -315,6 +318,24 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
   )
 }
 
+// ── Exam / topic / difficulty badges ────────────────────────────────────────
+
+function QuestionMeta({ question }: { question: Question }) {
+  return (
+    <div className="flex flex-wrap gap-2 mb-3">
+      <TopicBadge label={question.exam} variant="topic" />
+      <TopicBadge label={question.topic} variant="tag" />
+      <TopicBadge label={question.difficulty} variant="difficulty" />
+      {question.originally_exam && (
+        <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
+      )}
+      {question.off_syllabus && (
+        <TopicBadge label="Not on a current syllabus" variant="tag" />
+      )}
+    </div>
+  )
+}
+
 // ── Main QuestionCard ────────────────────────────────────────────────────────
 
 export function QuestionCard({
@@ -362,19 +383,7 @@ export function QuestionCard({
     return (
       <Card className="w-full">
         <CardHeader className="pb-3">
-          {showMeta && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              <TopicBadge label={question.exam} variant="topic" />
-              <TopicBadge label={question.topic} variant="tag" />
-              <TopicBadge label={question.difficulty} variant="difficulty" />
-              {question.originally_exam && (
-                <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-              )}
-              {question.off_syllabus && (
-                <TopicBadge label="Not on a current syllabus" variant="tag" />
-              )}
-            </div>
-          )}
+          {showMeta && <QuestionMeta question={question} />}
           <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
@@ -422,23 +431,54 @@ export function QuestionCard({
     const answered = isLocked && selectedAnswer !== null
     const autoCorrect = answered && isAnswerCorrect(question, selectedAnswer!)
     const correct = selfGrade !== undefined ? selfGrade === 'correct' : autoCorrect
+    const ordering = orderingLayout(question)
+    const stemClass = `text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`
+
+    if (ordering) {
+      return (
+        <Card className="w-full">
+          <CardHeader className="pb-3">
+            {showMeta && <QuestionMeta question={question} />}
+            {ordering.lead && (
+              <MarkdownText conceptNames={conceptNames} className={stemClass}>{ordering.lead}</MarkdownText>
+            )}
+          </CardHeader>
+
+          <CardContent className="space-y-3">
+            <OrderingQuestion
+              key={question.id}
+              layout={ordering}
+              answer={selectedAnswer}
+              correctAnswer={question.answer}
+              isLocked={isLocked}
+              showExplanation={showExplanation}
+              onAnswer={onAnswer}
+            />
+            {/* The tail is the entry instruction ("Enter the letters…"), which
+                the list replaces; anything else it says still reads. */}
+            {ordering.tail && !/^enter the letters/i.test(ordering.tail) && (
+              <MarkdownText conceptNames={conceptNames} className={stemClass}>{ordering.tail}</MarkdownText>
+            )}
+
+            {showExplanation && answered && (
+              <ExplanationPanel
+                explanation={question.explanation}
+                wikiLinks={question.wiki_link}
+                verification={question.verification}
+                questionId={question.id}
+                isCorrect={autoCorrect}
+                examinerReport={question.examiner_report}
+              />
+            )}
+          </CardContent>
+        </Card>
+      )
+    }
 
     return (
       <Card className="w-full">
         <CardHeader className="pb-3">
-          {showMeta && (
-            <div className="flex flex-wrap gap-2 mb-3">
-              <TopicBadge label={question.exam} variant="topic" />
-              <TopicBadge label={question.topic} variant="tag" />
-              <TopicBadge label={question.difficulty} variant="difficulty" />
-              {question.originally_exam && (
-                <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-              )}
-              {question.off_syllabus && (
-                <TopicBadge label="Not on a current syllabus" variant="tag" />
-              )}
-            </div>
-          )}
+          {showMeta && <QuestionMeta question={question} />}
           <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
           </MarkdownText>
@@ -476,23 +516,12 @@ export function QuestionCard({
 
   // ── multi-part ───────────────────────────────────────────────────────────
   const parts = question.parts ?? []
+  const matching = matchingLayout(question)
 
   return (
     <Card className="w-full">
       <CardHeader className="pb-3">
-        {showMeta && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            <TopicBadge label={question.exam} variant="topic" />
-            <TopicBadge label={question.topic} variant="tag" />
-            <TopicBadge label={question.difficulty} variant="difficulty" />
-            {question.originally_exam && (
-              <TopicBadge label={`Formerly ${question.originally_exam}`} variant="tag" />
-            )}
-            {question.off_syllabus && (
-              <TopicBadge label="Not on a current syllabus" variant="tag" />
-            )}
-          </div>
-        )}
+        {showMeta && <QuestionMeta question={question} />}
         {question.stem && (
           <MarkdownText conceptNames={conceptNames} className={`text-[17px] sm:text-lg leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_table]:text-sm [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1 ${MARKDOWN_LIST_CLASS}`}>
             {question.stem}
@@ -501,7 +530,18 @@ export function QuestionCard({
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {parts.map(part => (
+        {matching ? (
+          <MatchingQuestion
+            layout={matching}
+            answers={isLocked && selectedAnswer
+              ? (() => { try { return JSON.parse(selectedAnswer) as Record<string, string> } catch { return {} } })()
+              : partAnswers}
+            isLocked={isLocked}
+            showExplanation={showExplanation}
+            onPick={handlePartAnswer}
+            conceptNames={conceptNames}
+          />
+        ) : parts.map(part => (
           <PartCard
             // Part labels repeat across questions ("a", "b", …), so keying on
             // the label alone would hand the next question's part A the

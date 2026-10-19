@@ -20,6 +20,13 @@ not the other way round — and vary formats across a batch.
 
 Every template below omits `verification:` — `verify_check.py --sync` adds it.
 
+Two formats get a control of their own on the quiz card (`quiz/src/lib/questionLayout.ts`),
+so write them **exactly** to the templates below: a **matching** question — every part an
+option list identical to the others' — is drawn as the list once and a row of letters per
+item; an **ordering** question — a single `- (A)` list and an answer that is every letter
+once — is drawn as a list the reader moves items up and down in. Grading is unchanged. A
+question that drifts from the shape falls back to the generic per-part / text-box control.
+
 ---
 
 ## Single best answer

@@ -60,6 +60,31 @@ The vault's rule applies here as everywhere else (roadmap §6.2).
 | Page | `pages/Community.tsx` (lazy), `components/community/` |
 | Flow | `e2e/community.spec.ts` |
 
+## The look
+
+The page is drawn in the topics' colours, so it reads as many conversations rather than one
+list.
+
+- **A hue per topic.** `lib/community/topicColors.ts` gives every topic a hue. The exams under
+  Exams take their own exam accent from `examColors.ts`, so Exam FM is the same blue here as on
+  the Quiz tab. Like `examAccentStyle`, `topicAccentStyle` paints nothing: it returns custom
+  properties (`--topic-accent`, `-muted`, `-soft`, `-vivid`, `-light`), and `.topic-ink` in
+  `index.css` picks the readable shade for small text in each theme.
+- **What is coloured, and by what.**
+  - An event's date tile wears its *lead* topic (`leadTopic`: an exam, then the practice areas,
+    so a CAS meeting is Property & Casualty red and an SOA one Life & Health pink).
+  - A place's tile wears its kind's colour.
+  - A post's author wears a steady colour of their own (`nameHue`). That colour is identity,
+    never a verdict, like Quiz Battle's player colours.
+- **The overview's layout.**
+  - **Hero:** a drifting field of topic colours, live counts, and the places stacked like faces.
+  - **Events:** the next one as a poster ("Next up", with a large countdown), then a rail of
+    the few after it to swipe along.
+  - **Discussions:** the most-discussed threads, with a flame on a busy one and a dot on a fresh
+    one.
+- **Motion.** Cards rise in a short stagger and the live dots breathe. Both stop under reduced
+  motion (`index.css`, "Community").
+
 ## The feed
 
 `GET /api/community-feed` reads the newest 100 posts on r/actuary through the **Arctic Shift**

@@ -51,7 +51,9 @@ test.describe('community', () => {
     await expect(page).toHaveURL(/\/community$/)
     await expect(page.getByRole('heading', { name: 'Community', level: 1 })).toBeVisible()
     await expect(page.getByRole('heading', { name: 'What actuaries are saying' })).toBeVisible()
-    await expect(page.getByTestId('community-post').first()).toContainText('Passed Exam FM')
+    // The overview leads with the most-discussed thread (30 comments to 14).
+    await expect(page.getByTestId('community-post').first()).toContainText('Entry level salary')
+    await expect(page.getByTestId('community-featured-event')).toBeVisible()
   })
 
   test('follows a topic and builds For you from it', async ({ page }) => {

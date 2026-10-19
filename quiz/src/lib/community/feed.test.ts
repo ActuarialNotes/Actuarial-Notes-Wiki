@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { agoLabel, parseFeed, parsePost, postsForYou, postsInTopic, searchPosts } from './feed'
+import { agoLabel, parseFeed, parsePost, postsForYou, postsInLastDay, postsInTopic, searchPosts, sortPosts } from './feed'
 
 const wire = (over: Record<string, unknown> = {}) => ({
   id: 'abc123',
@@ -89,5 +89,24 @@ describe('agoLabel', () => {
     expect(agoLabel(new Date('2026-10-19T02:00:00Z'), now)).toBe('10h')
     expect(agoLabel(new Date('2026-10-16T12:00:00Z'), now)).toBe('3d')
     expect(agoLabel(new Date('2026-10-01T12:00:00Z'), now)).toBe('Oct 1')
+  })
+})
+
+describe('sortPosts and postsInLastDay', () => {
+  const posts = parseFeed({
+    posts: [
+      wire({ id: 'old-busy', createdAt: '2026-10-10T00:00:00Z', comments: 90 }),
+      wire({ id: 'new-quiet', createdAt: '2026-10-19T10:00:00Z', comments: 1 }),
+      wire({ id: 'mid', createdAt: '2026-10-18T20:00:00Z', comments: 90 }),
+    ],
+  }).posts
+
+  it('sorts newest or most discussed', () => {
+    expect(sortPosts(posts, 'new').map(p => p.id)).toEqual(['new-quiet', 'mid', 'old-busy'])
+    expect(sortPosts(posts, 'discussed').map(p => p.id)).toEqual(['mid', 'old-busy', 'new-quiet'])
+  })
+
+  it('counts the last day', () => {
+    expect(postsInLastDay(posts, new Date('2026-10-19T12:00:00Z'))).toBe(2)
   })
 })

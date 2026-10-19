@@ -125,3 +125,17 @@ export function agoLabel(at: Date, now: Date): string {
   if (days < 7) return `${days}d`
   return at.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
 }
+
+export type PostSort = 'new' | 'discussed'
+
+/** Posts in an order: newest first, or most commented first (newest breaking ties). */
+export function sortPosts(posts: readonly CommunityPost[], sort: PostSort): CommunityPost[] {
+  const byNew = (a: CommunityPost, b: CommunityPost) => b.createdAt.getTime() - a.createdAt.getTime()
+  return [...posts].sort(sort === 'new' ? byNew : (a, b) => b.comments - a.comments || byNew(a, b))
+}
+
+/** How many posts went up in the last day — the hero's "N posts today". */
+export function postsInLastDay(posts: readonly CommunityPost[], now: Date): number {
+  const since = now.getTime() - 86_400_000
+  return posts.filter(p => p.createdAt.getTime() >= since).length
+}

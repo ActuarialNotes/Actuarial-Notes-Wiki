@@ -172,6 +172,10 @@ day** than their first-ever visit — the D1 return signal.
 
 Several of these must be done in GA4 itself — the code can't:
 
+> **As of 2026-10-19, steps 1, 2, 5 and 6 were not done** (`analytics-audit-2026-10-19.md`):
+> about half of all page views are duplicates, internal traffic is still in reports, and no
+> param can be reported. Until they are, report on the human segment that audit defines.
+
 1. **Admin → Data streams → (web) → Enhanced measurement → Page views → Show
    advanced settings → untick "Page changes based on browser history events".**
    The app sends its own page views; left on, every in-app navigation counts twice.

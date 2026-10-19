@@ -10,8 +10,8 @@ import type { ItemStatus } from '@/data/tracks'
 //                   that pass every gate of `scripts/publication_readiness.py`)
 //   'beta'        — usable, still being filled out (MAS-II, Exams 5,
 //                   6C, 8 and 9 — their banks converted from the released
-//                   papers — FAM and SRM, from the SOA's sample sets, ASTAM
-//                   from its sample set and released papers, and
+//                   papers — FAM and SRM, from the SOA's sample sets, ALTAM and
+//                   ASTAM from their sample sets and released papers, and
 //                   PCPA, which has no paper to convert)
 //   'development' — syllabus scaffolding only: no question bank, concept
 //                   pages mostly unwritten. Not something a candidate can
@@ -48,8 +48,9 @@ const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', '
 // five of the vault's own questions covered the concepts the set doesn't;
 // FAM the same way, from its two sets (FAM-S and FAM-L) and six of the
 // vault's own; ASTAM from its written-answer sample set and its seven released
-// sittings (Spring 2023 to Spring 2026), and two of the vault's own.
-// The SOA exams past FM — PA, ALTAM, the ATPA assessment and
+// sittings (Spring 2023 to Spring 2026), and two of the vault's own; ALTAM from
+// its sample set and seven sittings alone.
+// The SOA exams past FM — PA, the ATPA assessment and
 // the FSA pathway's fellowship exams — have pages transcribed from their
 // syllabi by the syllabus pipeline (docs/syllabus-pipeline.md), and nothing else
 // yet: no question bank, concept pages mostly unwritten.
@@ -61,7 +62,7 @@ const READY_EXAMS = new Set(['P', 'FM', 'MAS-I', 'CAS-DA', 'CAS-RM', 'CAS-IA', '
 const IN_DEVELOPMENT_EXAMS = new Set([
   'VEE-MS', 'VEE-ECON', 'VEE-AF',
   'PAF', 'ASF', 'FAP', 'APC', 'FSA-DMAC', 'FSA-FAC', 'CAS-APC',
-  'PA', 'ALTAM', 'ATPA',
+  'PA', 'ATPA',
   'FSA-CFE101', 'FSA-CFE201',
   'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351',
   'FSA-GH101', 'FSA-GH201', 'FSA-GH301',

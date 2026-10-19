@@ -11,7 +11,7 @@
     { "page": "Exam SRM (SOA).md", "exam_id": "SRM", "wiki_id": "srm-1", "progress_key": "SRM", "body": "SOA", "bank": "exam-srm", "status": "beta" },
     { "page": "Exam ASF (SOA).md", "exam_id": "ASF", "wiki_id": "asf-1", "progress_key": "ASF", "body": "SOA", "bank": null, "status": "development", "weighted": false },
     { "page": "Exam PA (SOA).md", "exam_id": "PA", "wiki_id": "pa-1", "progress_key": "PA", "body": "SOA", "bank": null, "status": "development" },
-    { "page": "Exam ALTAM (SOA).md", "exam_id": "ALTAM", "wiki_id": "altam-1", "progress_key": "ALTAM", "body": "SOA", "bank": "exam-altam", "status": "development" },
+    { "page": "Exam ALTAM (SOA).md", "exam_id": "ALTAM", "wiki_id": "altam-1", "progress_key": "ALTAM", "body": "SOA", "bank": "exam-altam", "status": "beta" },
     { "page": "Exam ASTAM (SOA).md", "exam_id": "ASTAM", "wiki_id": "astam-1", "progress_key": "ASTAM", "body": "SOA", "bank": "exam-astam", "status": "beta" },
     { "page": "Exam ATPA (SOA).md", "exam_id": "ATPA", "wiki_id": "atpa-1", "progress_key": "ATPA", "body": "SOA", "bank": null, "status": "development" },
     { "page": "Exam FAP (SOA).md", "exam_id": "FAP", "wiki_id": "fap-1", "progress_key": "FAP", "body": "SOA", "bank": null, "status": "development", "weighted": false },

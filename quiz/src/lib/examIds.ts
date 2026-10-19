@@ -24,6 +24,10 @@ export const EXAM_LABEL_TO_ID: Record<string, string> = {
   // (`fams-<n>`, Topics 1-6) and FAM-L (`faml-<chapter>-<n>`, Topics 7-10,
   // numbered by AMLCR chapter as the SOA numbers them).
   'Exam FAM': 'FAM',
+  // ASTAM's bank is written-answer: the SOA's sample set (`astam-<n>`, sample
+  // question n) and its released sittings, Spring 2023 on
+  // (`astam-<year><s|f>-q<n>`). The Excel-workbook question is left out.
+  'Exam ASTAM': 'ASTAM',
   'Exam MAS-I': 'MAS-I',
   'Exam MAS-II': 'MAS-II',
   // The three DISC courses. The Institutes sells their sample questions and

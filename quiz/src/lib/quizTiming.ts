@@ -33,6 +33,9 @@ export const EXAM_PACE: Record<string, ExamPace> = {
   // No format guide yet; the SOA's own syllabus (`Exam SRM (SOA).md`, its
   // opening line): three and one-half hours, 35 multiple-choice questions.
   'Exam SRM': { minutes: 210, per: 'question', units: 35 },
+  // No format guide yet; the SOA's own syllabus (`Exam ASTAM (SOA).md`, its
+  // opening line): a three-hour written exam of six questions, 60 points.
+  'Exam ASTAM': { minutes: 180, per: 'point', units: 60 },
   // Guides/Exam MAS-I (CAS): 4 hours, 45 multiple-choice questions.
   'Exam MAS-I': { minutes: 240, per: 'question', units: 45 },
   // Guides/Exam MAS-II (CAS): 4 hours, 45 multiple-choice questions.

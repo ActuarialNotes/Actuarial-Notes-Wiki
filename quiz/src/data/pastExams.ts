@@ -139,6 +139,17 @@ export const PAST_EXAM_SITTINGS: PastExamSitting[] = [
   { exam: 'Exam 9', year: 2014, session: 'Spring' },
   { exam: 'Exam 9', year: 2013, session: 'Spring' },
 
+  // ── SOA Exam ASTAM ─── written answer, six questions; the SOA's Past Exams
+  // and Solutions page lists every sitting from Spring 2023 (read 2026-10-19).
+  // Earlier papers were STAM's, a different exam.
+  { exam: 'Exam ASTAM', year: 2026, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2025, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2025, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2024, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2024, session: 'Spring', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2023, session: 'Fall', officialQuestionCount: 6 },
+  { exam: 'Exam ASTAM', year: 2023, session: 'Spring', officialQuestionCount: 6 },
+
   // ── CAS Exam MAS-I ─── first sat Spring 2018 ──────────────────────────────
   { exam: 'Exam MAS-I', year: 2019, session: 'Fall', officialQuestionCount: 45 },
   { exam: 'Exam MAS-I', year: 2019, session: 'Spring', officialQuestionCount: 45 },

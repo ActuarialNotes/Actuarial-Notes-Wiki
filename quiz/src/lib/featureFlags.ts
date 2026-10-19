@@ -280,3 +280,21 @@ export const TUTOR_ENABLED: boolean = true
  * sets it, and there the comparison is a constant `false`.
  */
 export const TUTOR_OPEN_TO_ALL: boolean = import.meta.env.VITE_TUTOR_PREVIEW === 'on'
+
+/**
+ * **Community** (docs/community.md) — the Community tab (`/community`): what
+ * actuaries are saying in public forums, the meetings coming up near the
+ * reader, and the forums, societies, CAS regional affiliates and local clubs
+ * where the profession gathers, browsed and followed by topic. ON, and open to
+ * the approved accounts alone (`COMMUNITY_APPROVED_EMAILS` in
+ * `lib/community/access.ts` — Preview: one account); to anyone else there is
+ * no sidebar row and `/community` redirects to the dashboard. One lazy chunk.
+ */
+export const COMMUNITY_ENABLED: boolean = true
+
+/**
+ * The preview override: Community open to every viewer, signed out included.
+ * Only the e2e suite's build sets `VITE_COMMUNITY_PREVIEW=on`
+ * (playwright.config.ts); no deployed build does.
+ */
+export const COMMUNITY_OPEN_TO_ALL: boolean = import.meta.env.VITE_COMMUNITY_PREVIEW === 'on'

@@ -2386,3 +2386,40 @@ summary .katex-display,
   .tutor-bubble,
   .tutor-panel { animation: none; }
 }
+
+/* ── Community (docs/community.md) ────────────────────────────────────────
+   A page that should feel lived in: cards rise into place in a short stagger
+   (each sets --rise-delay), the "live" dot breathes, and the hero's colour
+   field drifts slowly behind the title. All three stop under reduced motion. */
+@keyframes community-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.community-rise {
+  animation: community-rise 420ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+@keyframes community-live {
+  0%   { box-shadow: 0 0 0 0 hsl(142 70% 45% / 0.55); }
+  70%  { box-shadow: 0 0 0 7px hsl(142 70% 45% / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(142 70% 45% / 0); }
+}
+.community-live {
+  animation: community-live 2s ease-out infinite;
+}
+@keyframes community-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-3%, 2%, 0) scale(1.06); }
+}
+.community-drift {
+  animation: community-drift 18s ease-in-out infinite;
+}
+/* A topic's colour as small text: the deep shade on a light page, the light
+   one on a dark page, where the deep one sinks into the surface. */
+.topic-ink { color: var(--topic-vivid); }
+.dark .topic-ink { color: var(--topic-light); }
+@media (prefers-reduced-motion: reduce) {
+  .community-rise { animation: none; }
+  .community-live { animation: none; }
+  .community-drift { animation: none; }
+}

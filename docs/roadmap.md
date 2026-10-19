@@ -114,6 +114,7 @@ An item is ✅ only when all of the following are true:
 | **Store** and Gem Shop | Candidates | ✅ live. Sells nothing; links to sellers | — | `store.md` |
 | **Actuaria Online** (game layer) | Candidates | 🟡 phases 0–3 built, one approved account | `ACTUARIA_ENABLED` + `ACTUARIA_APPROVED_EMAILS` | `actuaria-online.md` |
 | **Tutor** (a guided walk through the exam; purely algorithmic) | Exam 5 candidates | 🟡 Phase 1 built, Preview: one approved account | `TUTOR_ENABLED` + `TUTOR_STAGE` / `TUTOR_APPROVED_EMAILS` | `tutor.md` |
+| **Community** (forums, events and places, by topic) | Candidates and practitioners | 🟡 built, Preview: one approved account | `COMMUNITY_ENABLED` + `COMMUNITY_APPROVED_EMAILS` | §4.7 X9; `community.md` |
 | **Listen recordings** | Candidates | 🟡 2 recordings built locally, none uploaded | — | `listen-recordings.md` |
 | **Simulated learner** | Us, for content QA | 🟡 offline pipeline built; no live run has succeeded | — | `simulated-learner.md` |
 | **Research tab** (Canadian P&C corpus + AI Ask) | Upper-exam candidates | 🅿️ parked | `RESEARCH_TAB_ENABLED` / `RESEARCH_AI_ENABLED` = false | `research-ai-disabled.md`, `research-corpus-plan.md` |
@@ -592,6 +593,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 | X5 | Simulated learner: a first live run | ⬜ refused by the model's safeguards | Later | `simulations/runs/` is empty. Rework the persona prompt, then run it. |
 | X6 | Projects: more briefs and exams | ✅ 3 PCPA briefs | Later | Another exam's project is one entry in `data/projects.ts`. |
 | X7 | Store: Amazon prices | 🟢 | Later | Needs the `AMAZON_CREATORS_*` environment variables, or stays `price: null`. |
+| X9 | **Community** | 🟡 built 2026-10-19, Preview | Next | `community.md`. The `/community` tab: r/actuary's newest posts (live, through the Arctic Shift archive, as posted), 26 upcoming meetings and 39 communities (forums, the CAS regional affiliates, local clubs) transcribed from their own pages, followed and browsed by topic, sorted by distance from a chosen city. Next: a refresh routine for the events table, more sources in the feed (GoActuary's Discourse JSON), a server table for follows once it leaves Preview (D26). |
 | X8 | The visual-noise backlog | 🟡 §3.1, §3.2 and §3.9 done | Next | §3.3–§3.8 are open (the line references in the doc are stale), plus the style-guide edits in §6. The "Hover the graph" hint is false on touch screens. |
 
 ### 4.8 R: Parked
@@ -622,7 +624,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 - **The approved-email lists.** The same one address is the whole of the Cowork list, the
   Actuaria list and the Tutor's. Actuaria's list is also mirrored in SQL. Opening any of them
   to more people (D1, D25) means changing each place; the Tutor's next step is one line
-  (`TUTOR_STAGE = 'beta'`).
+  (`TUTOR_STAGE = 'beta'`). Community's list (`lib/community/access.ts`) is the fourth.
 
 ---
 
@@ -657,6 +659,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D22 | Exam 9's unread readings: Brehm et al., Mildenhall & Major and Grossi & Kunreuther (study kit or sold, chapters unread), and the Cummins (2000, 2008) and Coval, Jurek & Stafford journal texts (paywalled, or SSRN/AEA blocked to the sessions): supply a copy, or name a free author-posted one a session can reach (the 2012 archived Wharton paper for Cummins 2000; SSRN 1057401 for Cummins 2008) | C2 run `6bfb` and the campaign's other reading packets | Exam 9's G4 and G5 | ✅ settled 2026-10-18: verify on open texts at D7's medium ceiling; only what no open source covers stays `in_review` |
 | D23 | MAS-II's page carries 36 tasks where the 2026 outline lists 21: restore the outline's tasks (dropping about ten concepts that are in the readings and tagged on paper questions, *Posterior Distribution* and *AIC* among them), or keep the vault's finer tasks and mark which are its own | C4 run `4700` (page F-001) | MAS-II's G1 | ✅ settled 2026-10-18: the outline's 21 tasks, the vault's concepts on `*Key concepts:*` lines |
 | D24 | MAS-II's 2019 papers test McElreath's Bayesian/MCMC reading (about 35 questions: MCMC, multilevel models, HPDIs, DIC, WAIC), which the 2026 outline no longer assigns: mark them `off_syllabus`, or keep them in quiz draws | C4 runs `f8d6`, `9dbf` | MAS-II's bank | ✅ settled 2026-10-18: `off_syllabus` |
+| D26 | Who beyond the one approved account sees **Community**, and whether it stays free | `community/access.ts`, `community.md` | X9 | Approved account only |
 | D25 | The Tutor after Beta: Beta is the approved accounts plus **Pro** (the maintainer's call, 2026-10-18); is the open stage free or Pro, and which exam comes after Exam 5 | `tutor.md` §10 | L8 | Preview: one account. Beta = Pro, when the maintainer moves `TUTOR_STAGE` |
 
 ### 6.2 Settled: don't re-open without a new reason
@@ -723,6 +726,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/cowork-source-inventory.md` | Queue: Cowork sources | A3 | Active. **§4 counts are stale** | 2026-09-20 |
 | `docs/actuaria-online.md` | Build spec: Actuaria | X3 | Phases 0–3 built; Phase 4 parked | 2026-10-05 |
 | `docs/tutor.md` | Plan and build spec: the Tutor | L8 | Phase 1 built; Preview | 2026-10-18 |
+| `docs/community.md` | Build spec: the Community tab | X9 | Built; Preview | 2026-10-19 |
 | `docs/visual-noise-review.md` | Backlog: UI copy | X8 | Active. Its line references are stale | 2026-10-05 |
 | `docs/syllabus-pipeline-review.md` | Record: the pipeline's design review | C12 | Record; its open packages are in the content plan §3.4 | 2026-10-18 |
 | `docs/actuarial-agent-product-plan.md` | Plan: an in-app agent | A5 | 🅿️ Phase A shipped as the connector; the rest waits on D2 | 2026-10-09 |
@@ -817,6 +821,10 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-19, Community.** X9 built in Preview (`docs/community.md`): a Community tab for
+  one approved account — the r/actuary feed, upcoming meetings and the places actuaries
+  gather, by topic. D26 opened.
 
 - **2026-10-19, the CIA pathway.** C19: the CIA's ACIA and FCIA requirements join the
   catalogue as study guides (development), with their own credential tracks and a CIA choice

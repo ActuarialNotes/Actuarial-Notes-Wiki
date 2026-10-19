@@ -429,6 +429,17 @@ before touching that area**:
   document) and *there is no second reader* (a Cowork resource opens in `ConceptPopup`; its own
   documents are registered as virtual vault files to keep that true). Read before touching
   anything named `cowork*`, `ModeSwitcher` or `appMode`.
+- `docs/community.md` — **Community** (`/community`, a sidebar row after the Shop, Preview: one
+  approved account — `COMMUNITY_APPROVED_EMAILS` in `lib/community/access.ts`, behind
+  `COMMUNITY_ENABLED`): where actuaries gather — r/actuary's newest posts, read live through the
+  Arctic Shift archive by `quiz/api/community-feed.js` and shown as posted; upcoming meetings and
+  the communities themselves (forums, the CAS regional affiliates, local clubs, student
+  associations), transcribed from their own pages into `data/communityEvents.ts` /
+  `data/communityPlaces.ts` with `source` and `checked`; everything browsed and followed by
+  **topic** (`lib/community/topics.ts` — plain word patterns, never a model) and sorted by
+  distance from a home city the reader picks (`lib/community/places.ts`; an affiliate matched by
+  the territory it names, `servingHome`). Follows and home are localStorage
+  (`hooks/useCommunity.ts`). Read before touching anything named `community*` or `Community`.
 - `docs/ai-connector.md` — the **AI connector**: Actuarial Notes as an MCP server that Claude and
   ChatGPT add as a custom connector (facts = the build-time vault export, tools = search / fetch /
   syllabus / concept / practice / marking, skills = MCP prompts + the uploadable Agent Skill). Covers

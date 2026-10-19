@@ -13,12 +13,14 @@ wiki_link:
 answer: "E"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-19
+  last_checked_by: agent:validate-v1
   content_hash: sha256:88c0fa62e0aee6d99c9d7e9ae17c4023af085b01f6c4661bcde0bfc058460d23
-  sources: []
+  sources:
+    - "SOA Tables for Exam FAM (October 2024), A.2.3.1 Pareto: F(x), VaR_p, TVaR_p = VaR_p + theta(1-p)^(-1/alpha)/(alpha-1), E[X^k], p.6, sha256:430c8babdb38ff53ae7ce7d5d1d3bd55c2890eeb9ae96db5015121d1c2f11e17 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/2024-10-exam-fam-tables.pdf"
+    - "SOA Exam FAM Syllabus, October 2026, Topic 6 (a), (c) p.5; Topic 7 (a), (b) p.6; Topic 2 (m) p.3, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/fam-an-006.md

@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-19
+  last_checked_by: agent:validate-v1
   content_hash: sha256:4d15d853d53aef774f1db23bb4ecfad415e0215264729cb48fb4cb116adf3acf
-  sources: []
+  sources:
+    - "Wikipedia, Put option (fetched 2026-10-19), Put option: holder's right to sell at strike to the writer; writer receives premium, buys at strike on exercise; writer long the underlying; value K-S at exercise, sha256:09e1271c87e00bfee9d9819260d6473327585d7265ed72b01eb8f12552a7120b — https://en.wikipedia.org/wiki/Put_option"
+    - "SOA Exam FAM Syllabus, October 2026, Topic 6 (a), (c) p.5; Topic 7 (a), (b) p.6; Topic 2 (m) p.3, sha256:90172025d8bd9d69e18e974fdee447963e54258e5f0e419aa3ef5b7d3e55a00e — https://www.soa.org/globalassets/assets/files/edu/2026/fall/syllabi/2026-10-fam-syllabus.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/fam-an-001.md

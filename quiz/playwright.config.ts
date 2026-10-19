@@ -35,6 +35,9 @@ const buildEnv = {
   // that asks for it (localStorage `actuarial_tutor_preview`) meet it signed
   // out, so e2e/tutor.spec.ts walks it and no other spec ever sees the owl.
   VITE_TUTOR_PREVIEW: 'on',
+  // The Community tab is open to one approved account; the suite's build opens
+  // it to every viewer (e2e/community.spec.ts, `COMMUNITY_OPEN_TO_ALL`).
+  VITE_COMMUNITY_PREVIEW: 'on',
 }
 
 export default defineConfig({

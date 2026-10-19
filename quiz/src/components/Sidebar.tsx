@@ -22,6 +22,7 @@ import {
   ShoppingBag,
   Sparkles,
   Sun,
+  Users,
   Workflow,
   X,
 } from 'lucide-react'
@@ -43,6 +44,7 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { COWORK_ENABLED, RESEARCH_TAB_ENABLED, TOOLS_ENABLED } from '@/lib/featureFlags'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
+import { useCommunityAccess } from '@/hooks/useCommunityAccess'
 import { StatusChip } from '@/components/actuaria/StatusChip'
 import { ModeSwitcher } from '@/components/ModeSwitcher'
 import { useCoworkLibrary } from '@/hooks/useCoworkLibrary'
@@ -407,6 +409,7 @@ export default function Sidebar() {
   // Actuaria is open to approved accounts alone (lib/actuaria/access.ts): no
   // one else sees its row.
   const { allowed: showActuaria } = useActuariaAccess()
+  const showCommunity = useCommunityAccess()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
@@ -776,6 +779,17 @@ export default function Sidebar() {
             collapsed={collapsed}
             onNavigate={closeMobile}
           />
+          {/* Where actuaries gather — forums, events and places, by topic
+              (docs/community.md). Approved accounts only while in Preview. */}
+          {showCommunity && (
+            <SidebarItem
+              to="/community"
+              label="Community"
+              icon={<Users className="h-5 w-5 lg:h-4 lg:w-4" />}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
+          )}
           {showActuaria && <PlayNav collapsed={collapsed} onNavigate={closeMobile} />}
             </>
           )}

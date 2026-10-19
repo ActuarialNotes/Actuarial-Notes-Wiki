@@ -35,7 +35,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { canEnterMode, modeDestination, type AppMode } from '@/lib/appMode'
 import { actuariaDestination } from '@/lib/actuaria/access'
 import { useActuariaAccess } from '@/hooks/useActuariaAccess'
-import { ACTUARIA_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
+import { useCommunityAccess } from '@/hooks/useCommunityAccess'
+import { ACTUARIA_ENABLED, COMMUNITY_ENABLED, COWORK_ENABLED, COWORK_OPEN_TO_ALL, RESEARCH_TAB_ENABLED, TOOLS_ENABLED, TOUR_ENABLED } from '@/lib/featureFlags'
 import { pageHostsNavButton } from '@/lib/mobileNavHost'
 import { captureError } from '@/lib/errorMonitoring'
 import { lazyRoute } from '@/lib/lazyRoute'
@@ -62,6 +63,9 @@ const { Component: Store, preload: loadStore } = lazyRoute(() => import('@/pages
 // Actuarial Tools (docs/actuarial-tools.md) — calculators, each one card. Lazy:
 // the engine and its grids are for the readers who open a tool.
 const { Component: Tools, preload: loadTools } = lazyRoute(() => import('@/pages/Tools'))
+// Community (docs/community.md) — forums, events and places, by topic. Lazy,
+// and approved accounts only (lib/community/access.ts).
+const { Component: Community, preload: loadCommunity } = lazyRoute(() => import('@/pages/Community'))
 // Workflows (docs/workflows.md) — Cowork's second place: sources, data,
 // tools and concepts chained on a board. Its own chunk.
 const { Component: WorkflowBuilder, preload: loadWorkflowBuilder } = lazyRoute(() => import('@/pages/WorkflowBuilder'))
@@ -96,6 +100,7 @@ function preloadRoute(path: string): Promise<unknown> | null {
   if (route === '/battle') return loadBattle()
   if (route === '/craft' || route.startsWith('/craft/')) return loadCraft()
   if (route === '/store') return loadStore()
+  if (COMMUNITY_ENABLED && (route === '/community' || route.startsWith('/community/'))) return loadCommunity()
   if (TOOLS_ENABLED && (route === '/tools' || route.startsWith('/tools/'))) return loadTools()
   if (ACTUARIA_ENABLED && (route === '/actuaria' || route.startsWith('/actuaria/'))) return loadActuaria()
   if (route === '/wiki') return Promise.all([loadWikiLayout(), loadWikiHome()])
@@ -327,6 +332,18 @@ function StoreRoute() {
   )
 }
 
+function CommunityRoute() {
+  const allowed = useCommunityAccess()
+  if (!allowed) return <Navigate to="/dashboard" replace />
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<WikiFallback />}>
+        <Community />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
 function ToolsRoute() {
   if (!TOOLS_ENABLED) return <Navigate to="/dashboard" replace />
   return (
@@ -409,6 +426,8 @@ export default function App({ initialSession }: { initialSession: Session | null
                 {/* Workflows moved to Cowork; an old link lands there. */}
                 <Route path="/tools/workflow" element={<Navigate to="/cowork/workflows" replace />} />
                 <Route path="/tools/:slug" element={<ToolsRoute />} />
+                <Route path="/community" element={<CommunityRoute />} />
+                <Route path="/community/topic/:topicId" element={<CommunityRoute />} />
                 <Route path="/store/gems" element={<ErrorBoundary><GemShop /></ErrorBoundary>} />
                 <Route path="/research" element={
                   RESEARCH_TAB_ENABLED ? (

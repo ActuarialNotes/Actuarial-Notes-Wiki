@@ -13,6 +13,16 @@ wiki_link:
   - Concepts/Joint+Life
   - Concepts/Reserve
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:8f7bf957e8b952c4238110bed3378ec16199658b5992a80449fa512dd8b75c5f
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2026s-q5.md
 ---
 
 You are developing a Type A last survivor universal life policy of 1,000,000 on a couple, Xiaobai and Yvette. At the issue date Xiaobai is 51 and Yvette is 61. You are given:

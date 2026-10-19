@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Replacement+Ratio
   - Concepts/Woolhouse's+Formula
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:26287694147b58724e739d621d6db0dd6d5566a2514e9064bee9860672c6980d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025s-q5.md
 ---
 
 Jo is a member of a final average salary Defined Benefit (DB) pension plan. The annual accrual rate is 2% and the final average salary is based on the average of the previous three years' salaries.
@@ -136,7 +146,7 @@ Quite a few candidates omitted this part. Good candidates understood the correct
 Describe one advantage and one disadvantage for Jo of Option A compared with Option B.
 
 ### Explanation
-Advantages:
+Advantages
 
 - The DB part of the pension carries no investment risk during the accumulation (pre-retirement) period; it is guaranteed (given FAS) as long as the employer survives. It is also increasing with salary. Under Option B all assets are vulnerable to investment risk.
 - Annuitization of DC assets depends on mortality and interest rates at retirement. Under Option A at least the DB part of the income is safe from interest rate / annuity pricing risk.

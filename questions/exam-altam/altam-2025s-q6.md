@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Guaranteed+Minimum+Withdrawal+Benefit
   - Concepts/Equity-Linked+Insurance
 points: 9
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:c0896db9a39c3ce32e915ac31354527a74d36de70a20756a7a8488343c3baba4
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025s-q6.md
 ---
 
 An insurer issues 10-year Variable Annuity policies, each with a single premium of $P = 100{,}000$, to lives age 50 at issue.

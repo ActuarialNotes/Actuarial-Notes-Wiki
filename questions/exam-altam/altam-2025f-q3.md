@@ -15,11 +15,21 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
   - Concepts/Thiele's+Differential+Equation
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:acc07b70c6dfa0b8583a4646b787435a3ab1ffcd878d33d46b6cd9deb146e222
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025f-q3.md
 ---
 
 An insurance company uses the following model to price joint life insurance products.
 
-*(Figure: State 0 — (x) Alive, (y) Alive; State 1 — (x) Alive, (y) Dead; State 2 — (x) Dead, (y) Alive; State 3 — (x) Dead, (y) Dead; State 4 — (x) Dead, (y) Dead. Arrows from State 0 to States 1, 2 and 4, from State 1 to State 3, and from State 2 to State 3.)*
+![Joint life model: State 0, (x) Alive, (y) Alive; State 1, (x) Alive, (y) Dead; State 2, (x) Dead, (y) Alive; State 3, (x) Dead, (y) Dead; State 4, (x) Dead, (y) Dead. Arrows from State 0 to State 4, State 0 to State 1, State 0 to State 2, State 1 to State 3, and State 2 to State 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2025f-q3-joint-life-model.png)
 
 Let $\mu_z^s$ denote the force of mortality for a life age $z$ under the Standard Ultimate Survival Model (SUSM).
 

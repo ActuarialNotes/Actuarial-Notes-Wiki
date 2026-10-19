@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Thiele's+Differential+Equation
 points: 11
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2d99dd686107c5ff2ac6ccc939e79f9fdd87b4cb9ded2ae1948bab4d5eea89d5
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2026s-q3.md
 ---
 
 You are using the Standard Sickness-Death multiple state model to price a whole life insurance policy issued to (50), with a waiver of premiums on sickness.
@@ -133,10 +143,9 @@ $${}_{10^+}V^{(1)} = {}_{10}V^{(1)} = 49{,}334$$
 
 $$\frac{d}{dt}\,{}_tV^{(0)} = \delta\,{}_tV^{(0)} - \mu_{x+t}^{01}\left({}_tV^{(1)} - {}_tV^{(0)}\right) - \mu_{x+t}^{02}\left(S - {}_tV^{(0)}\right)$$
 
-$$\Rightarrow \lim_{t \to 10^+} \frac{d}{dt}\,{}_tV^{(0)} = \delta\,{}_{10^+}V^{(0)} - \mu_{60}^{01}\left({}_{10}V^{(1)} - {}_{10^+}V^{(0)}\right) - \mu_{60}^{02}\left(S - {}_{10^+}V^{(0)}\right)$$
-
 $$
 \begin{align*}
+\Rightarrow \lim_{t \to 10^+} \frac{d}{dt}\,{}_tV^{(0)} &= \delta\,{}_{10^+}V^{(0)} - \mu_{60}^{01}\left({}_{10}V^{(1)} - {}_{10^+}V^{(0)}\right) - \mu_{60}^{02}\left(S - {}_{10^+}V^{(0)}\right) \\
 &= (0.04879)(28{,}094.74) - 0.014086(49{,}334 - 28{,}094.74) - 0.014518(100{,}000 - 28{,}094.74) \\
 &= 27.6498
 \end{align*}

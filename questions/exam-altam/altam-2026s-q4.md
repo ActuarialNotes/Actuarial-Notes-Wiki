@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Defined+Contribution+Plan
   - Concepts/Hybrid+Plan
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:3bb08da484a255335cd844f4f9c889811e1c229eaaf0737d562a84abd77ade1d
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2026s-q4.md
 ---
 
 A company has a hybrid pension plan combining a Final Average Salary Defined Benefit (DB) plan with a Defined Contribution (DC) top-up.

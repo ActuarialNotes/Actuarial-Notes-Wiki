@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Normal+Cost
   - Concepts/Early+Retirement
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:51dfd9b50052b4a16e4ade49483c52e67388abb817a134801e649fba5eb0dd2b
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025f-q6.md
 ---
 
 Lin is a member of a final average salary pension plan. On December 31, 2024, Lin is exactly 50 years old, with 20 years of pensionable service. Lin's salary in 2024 was 100,000.

@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Kolmogorov's+Forward+Equation
   - Concepts/Whole+Life+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:af2057ccec408054ac89d3003074e118f67849fd4c960cb5ecb10e469b59f6ce
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025s-q4.md
 ---
 
 You are pricing a special fully discrete whole life insurance on a life age 60. The death benefit is 100,000 during the first 20 years and 200,000 thereafter.
@@ -56,7 +66,7 @@ Most candidates did pretty well on this. Common issues were candidates treating 
 
 The insurer decides to include lapses in the pricing model, as illustrated in the following multiple state model.
 
-*(Figure: State 0 Active, with arrows to State 1 Dead and to State 2 Lapsed.)*
+![Multiple state model: State 0 Active, with arrows to State 1 Dead and to State 2 Lapsed.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2025s-q4-lapse-model.png)
 
 You are given:
 

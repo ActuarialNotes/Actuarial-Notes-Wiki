@@ -15,11 +15,21 @@ wiki_link:
   - Concepts/Disability+Income+Insurance
   - Concepts/Critical+Illness+Insurance
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:453fee4213fe214e1d57e589ee9e2b5e6cbcdf666bdb215a736c99d2b7f257df
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025s-q2.md
 ---
 
 You are analyzing an insurance policy with disability income benefits and critical illness benefits. You use the following multiple state model:
 
-*(Figure: Healthy (State 0), Disabled (State 1), Critically Ill (State 2) and Dead (State 3), with arrows from State 0 to State 1, State 0 to State 3, State 1 to State 2 and State 1 to State 3.)*
+![Multiple state model: Healthy, State 0; Disabled, State 1; Critically Ill, State 2; Dead, State 3. Arrows from State 0 to State 1, State 0 to State 3, State 1 to State 2 and State 1 to State 3.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2025s-q2-state-diagram.png)
 
 You are given the following information:
 
@@ -80,7 +90,7 @@ $$
 
 ### Examiner Report
 - The most successful candidates remembered to identify the boundary conditions and used the appropriate subscripts throughout the Kolmogorov forward differential equations for the first part of the question.
-- For the second part of the question, the most successful candidates showed enough work through the derivation of the integral for tpx01 to confirm their understanding of the proof being requested.
+- For the second part of the question, the most successful candidates showed enough work through the derivation of the integral for ${}_tp_x^{01}$ to confirm their understanding of the proof being requested.
 
 ## Part c (2 points)
 
@@ -147,9 +157,7 @@ The insurer decides to include an additional death benefit of 50,000 in this pol
 Sketch a diagram of a revised model incorporating this change.
 
 ### Explanation
-The revised model keeps States 0–3 and their transitions (Healthy → Disabled, Healthy → Dead (State 3), Disabled → Critically Ill, Disabled → Dead (State 3)) and adds a new state, **Dead – State 4**, with a transition from Critically Ill (State 2) to Dead (State 4).
-
-*(Figure: the model solution's diagram — the original four states with a new box "Dead, State 4" below Critically Ill, State 2, and an arrow from State 2 to State 4.)*
+![Revised model: Healthy, State 0; Disabled, State 1; Critically Ill, State 2; Dead, State 3; and a new box Dead, State 4. Arrows from State 0 to State 1, State 0 to State 3, State 1 to State 2, State 1 to State 3, and from State 2 to State 4.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2025s-q2-revised-model.png)
 
 ### Examiner Report
 Examiners' Notes: Most candidates did well on this part of the question. The most successful candidates realized that a separate Dead state was needed to identify the unique benefit being offered to individuals moving from the Critically Ill state to the Dead state.

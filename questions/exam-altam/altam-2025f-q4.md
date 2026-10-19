@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Approximate+Confidence+Interval
   - Concepts/Hypothesis+Testing
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:2222b9c17b10e112fff41993fd0da42c2e11043461f0ba62dd3edfdaaa6d0dae
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025f-q4.md
 ---
 
 An insurer is analyzing its mortality experience, using the Alive-Dead model, assuming the force of mortality $\mu_x$ is constant within the age range $[x, x+1)$. There are $n$ independent lives in the group.

@@ -14,6 +14,16 @@ wiki_link:
   - Concepts/Policy+Value
   - Concepts/Insurance+Premium
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fc35911731f01a570a7264091812cd3b10c44239bcb1bbb5bec153939c5a7728
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025s-q3.md
 ---
 
 A fully discrete 20-year last survivor endowment insurance policy is issued to Kim (60) and Alex (70). You are given:

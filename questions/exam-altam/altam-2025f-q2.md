@@ -12,6 +12,16 @@ wiki_link:
   - Concepts/No-Lapse+Guarantee
   - Concepts/Reserve
 points: 7
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:5a2b817a09b8f452bbc2c48dab0a651fe5d95c126894646c0c2c36d2d710c458
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025f-q2.md
 ---
 
 An individual age 40 purchases a Type A Universal Life insurance policy with a Face Amount of 100,000.

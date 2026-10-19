@@ -15,11 +15,21 @@ wiki_link:
   - Concepts/Profit+Signature
   - Concepts/Profit+Margin
 points: 12
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:b09241dc815bb6304a362d154e201c919d303493dd084d5a4d01d66b43767672
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2025f-q5.md
 ---
 
 NED Insurance Company uses the following multi-state model to price and reserve term life insurance policies offering an additional benefit for lives in Nursing Home care.
 
-*(Figure: Healthy (State 0), Nursing Home (State 1) and Dead (State 2), with arrows from State 0 to State 1, State 1 to State 0, State 0 to State 2 and State 1 to State 2.)*
+![Multiple state model: Healthy, State 0; Nursing Home, State 1; Dead, State 2. Arrows from State 0 to State 1, State 1 to State 0, State 0 to State 2, and State 1 to State 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-2025f-q5-state-diagram.png)
 
 Let $P_x$ denote the one-year probability transition matrix for a person age $x$. You are given:
 

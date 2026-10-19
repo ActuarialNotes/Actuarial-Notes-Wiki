@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Joint+Life
   - Concepts/Adverse+Selection
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:516a58625bb3496b9371174cdbf7f6cc1ee124228165c6600a85537e8cb113f1
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2026s-q2.md
 ---
 
 An insurer offers a fully discrete two-year special joint life insurance policy to a couple aged $x$ and $y$. You are given the following policy information:

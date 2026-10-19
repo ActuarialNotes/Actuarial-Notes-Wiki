@@ -15,6 +15,16 @@ wiki_link:
   - Concepts/Equity-Linked+Insurance
   - Concepts/Lognormal+Distribution
 points: 10
+verification:
+  status: unverified
+  confidence: null
+  last_checked: null
+  last_checked_by: null
+  content_hash: sha256:fd545e868f16b3394dc903daef60a1a5723de872d10c19cdad2dc57868df7013
+  sources: []
+  open_findings: 0
+  open_critical: 0
+  log: .verify/questions/exam-altam/altam-2026s-q6.md
 ---
 
 An insurer issues a 10-year equity-linked contract to (70). The single premium is 100,000. You are given the following information and assumptions.
@@ -122,8 +132,8 @@ $${}_{10}p_{70}\,(0.35548) = 0.29528$$
 
 ### Examiner Report
 1. This part, relates to material from FAM, where it is explained that underlying the Black Scholes formula is an assumption that the risky asset price follows a lognormal process.
-2. A small number of stronger candidates correctly identified the random variable (S10) and also correctly identified the threshold for triggering the guarantee, but almost none were able to calculate the probability.
-3. The key misunderstanding was how to convert the information about the lognnormal process into information about the probability distribution of S10
+2. A small number of stronger candidates correctly identified the random variable ($S_{10}$) and also correctly identified the threshold for triggering the guarantee, but almost none were able to calculate the probability.
+3. The key misunderstanding was how to convert the information about the lognnormal process into information about the probability distribution of $S_{10}$
 
 ## Part d (2 points)
 

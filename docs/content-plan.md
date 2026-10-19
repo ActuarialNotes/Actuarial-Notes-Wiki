@@ -1,6 +1,6 @@
 # Content Plan
 
-_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round, FAM after its bank (19 Oct), the SOA prelims after Phase 3's linker work, SRM after its bank) · Re-measure at every
+_Measured **2026-10-18** against `main` @ `ac1b277` with the commands in §7 (MAS-II re-measured after its first round, FAM and ASTAM after their banks (19 Oct), the SOA prelims after Phase 3's linker work, SRM after its bank) · Re-measure at every
 roadmap review_
 
 This is the **one plan for the vault's content**: the exam pages, concept pages, resource pages
@@ -104,7 +104,7 @@ Adopted during the DISC, MAS-I and Exam 7 campaigns (Appendix A), and binding on
 ## 2. Where each exam stands (2026-10-18)
 
 From `python3 scripts/publication_readiness.py --body all`, before this plan's Phase 1 changes;
-MAS-II's row is re-measured after its first campaign round (Appendix A.5), SRM's and FAM's after their banks
+MAS-II's row is re-measured after its first campaign round (Appendix A.5), SRM's, FAM's and ASTAM's after their banks
 (Phase 3, step 4).
 
 **Ready (7):**
@@ -118,7 +118,7 @@ MAS-II's row is re-measured after its first campaign round (Appendix A.5), SRM's
 Two ready exams failing their own gates is an unbacked promise — roadmap §0.3, rule 1 — and it is
 why Phase 1 comes first.
 
-**Beta (8):**
+**Beta (9):**
 
 | Exam | Page | Concepts | Catch-alls | Unverified concepts | No question | Sources unverified | Bank verified | Gates |
 |---|---|---:|---:|---:|---:|---:|---|---:|
@@ -130,13 +130,14 @@ why Phase 1 comes first.
 | Exam 5 | in review | 136 | 2 | 60 | 7 | 4 / 6 | 0 / 349 | 1 / 7 |
 | SRM | verified | 41 | 0 | 7 | 0 | 1 / 2 | 5 / 77 | 4 / 7 |
 | FAM | verified | 80 | 0 | 37 | 0 | 3 / 3 | 6 / 274 | 4 / 7 |
+| ASTAM | verified | 56 | 0 | 22 | 0 | 4 / 4 | 2 / 62 | 4 / 7 |
 
 Five of the first six were below the development → beta bar they now have to meet (G3 or G6) — they
 were beta before the gates existed; Phase 2 has since lifted every one with a bank over it. SRM,
-promoted 18 Oct, and FAM, 19 Oct, entered over the bar (G2, G3, G6). `--hold` warns on them rather than failing.
+promoted 18 Oct, and FAM and ASTAM, 19 Oct, entered over the bar (G2, G3, G6). `--hold` warns on them rather than failing.
 
-**Development (28):** Exam 6U (3 / 7; 45 readings unverified, no bank) and the 27 SOA exams
-past FM but SRM and FAM — four ASA prelims (PA, ALTAM, ASTAM, ATPA; 4 / 7, ALTAM 3, after Phase 3's linker
+**Development (27):** Exam 6U (3 / 7; 45 readings unverified, no bank) and the 26 SOA exams
+past FM but SRM, FAM and ASTAM — three ASA prelims (PA, ALTAM, ATPA; 4 / 7, ALTAM 3, after Phase 3's linker
 work, §3.1a) and the 23 FSA modules — each at 2–3 / 7. Every SOA page is `verified` against its syllabus PDF; none of them has a bank. Their G2
 failures are mostly the syllabus linker's cut-short and noise links (`[[Chain-Ladder]]`,
 `[[Whole Life]]`, `[[Distribution]]`), not missing concepts (§3.3–§3.4).
@@ -173,7 +174,7 @@ batched by source. The order is the CAS plan's, refreshed:
 | 5 | **MAS-II** (C4) | 4 / 7 | First round done 18 Oct (Appendix A.5): G5 ✅ (6 / 6, Salis's study note added to the page), G7 167 / 168, G4 96 / 98. Left: the page's F-001, its 36 tasks against the outline's 21 (D23); Fall 2019 Q35's explanation (a writer); *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread) | Scanned papers; four of its five readings commercial |
 | 6 | **Exam 6C** (C5) | 3 / 7 | G6 ✅ (`cas6c-an-001`–`022`, all verified; `005` and `018` carry minor scope findings — IBC's consumer code and the IFRS 17 transition approaches are in no 6C reading). D8 (F-001, domain C renumbering); verify 137 concepts, 67 readings, 321 questions (83 got their report paragraph back, C13) | Most concepts and readings, all free Canadian documents |
 | 7 | **PCPA** (C6) | 4 / 7 | A vault-written bank (29 concepts, most shared with MAS-I/II: tags plus a few new questions, D5); verify 9 concepts and 12 readings (several commercial) | No paper exists; the Projects simulator is the real practice |
-| 8 | **ASA prelims** (C9) | 4 / 7 (ALTAM 3) | §3.1a: G2 passes on all six, G3 on all but ALTAM. SRM's bank done and SRM beta (18 Oct); FAM's two sample sets done and FAM beta (19 Oct); next ASTAM and ALTAM's written-answer sets, and the SRM and FAM fact-check campaigns | The next exams to become studiable, sat by far more candidates |
+| 8 | **ASA prelims** (C9) | 4 / 7 (ALTAM 3) | §3.1a: G2 passes on all six, G3 on all but ALTAM. SRM's bank done and SRM beta (18 Oct); FAM's two sample sets done and FAM beta (19 Oct); ASTAM's sample set and seven papers done and ASTAM beta (19 Oct); next ALTAM's written-answer sets, and the SRM, FAM and ASTAM fact-check campaigns | The next exams to become studiable, sat by far more candidates |
 | 9 | **Exam 6U** (C7) | 3 / 7 | Read every link for country first; a vault-written bank for 66 concepts; verify 56 concepts and 45 readings (all pages exist, none verified); its objective codes don't match its numbering | Furthest CAS exam from ready |
 | 10 | **FSA modules** (C10) | 2–3 / 7 | Pages and concepts exist, no banks; most readings have no free copy | Fellowship-level; fewest candidates per module |
 
@@ -188,7 +189,7 @@ assembled from a filename pattern. The *Past Exams and Solutions* page says FAM 
 | Exam | Gates | Concepts (unverified) | What the SOA publishes to convert | Readings |
 |---|---:|---:|---|---|
 | **SRM** — beta | 4 / 7 (G1–G3, G6) | 41 (7) | One sample set: 76 MC questions with solutions in one PDF (`globalassets/assets/Files/Edu/2018/exam-srm-sample-questions.pdf`, last revised Oct 2026, Q76; sha256 `6453fceb…`). **Converted** 18 Oct: 72 live questions (`srm-001`–`076`) + 5 vault-written (`srm-an-001`–`005`, verified) | ISLR free (verified); Frees 2010 commercial |
-| **ASTAM** | 4 / 7 | 56 (23) | Sample set: 25 written-answer questions, Feb 2026 (Q22, Q24 in Excel); seven past sittings, Spring 2023–Apr 2026, 6 questions each with solutions | Klugman 2019 and Brown & Lennox 2022 commercial; ASTAM-21-26 and -22-23 free SOA study notes |
+| **ASTAM** — beta | 4 / 7 (G1–G3, G6) | 56 (22) | Sample set: 25 written-answer questions (questions version Feb 23, 2026, sha256 `0294cf4e…`; solutions Jan 19, 2025, `c4206394…`; Q22, Q24 in Excel); seven past sittings, Spring 2023–Apr 2026, 6 questions each with model solutions (examiners' comments on most), from 2024 on Q1 the Excel question. **Converted** 19 Oct: 23 sample (`astam-<n>`) + 37 past-paper (`astam-<year><s\|f>-q<n>`) + 2 vault-written (`astam-an-001`–`002`, verified) | Klugman 2019 and Brown & Lennox 2022 commercial; ASTAM-21-26 and -22-23 free SOA study notes |
 | **FAM** — beta | 4 / 7 (G1–G3, G6) | 80 (37) | FAM-S sample set: 103 live MC questions (Topics 1–6; questions Jun 15, solutions Jul 17, 2026; sha256 `ef535e21…` / `7b3f61d8…`); FAM-L sample set: 165 live MC questions (Topics 7–10, Aug 18, 2026; `4aaf3469…` / `9e7f7b03…`), many from MLC papers 2012–2017. **Converted** 19 Oct: 268 (`fams-<n>`, `faml-<chapter>-<n>`) + 6 vault-written (`fam-an-001`–`006`, verified) | Klugman, Brown & Lennox, Dickson et al. (AMLCR) — all commercial |
 | **ALTAM** | 3 / 7 | 61 (50) | Sample set: 61 written-answer questions, Jan 2026 (Q57–60 Excel); seven past sittings, Spring 2023–Apr 2026, 6 questions each | AMLCR commercial; ALTAM-21-23 free SOA study note |
 | **PA** | 4 / 7 | 23 (5) | Seven project sittings, Apr 2023–Apr 2026 (9–12 tasks, statement + model solution + data); Oct 2022's two R-format sittings partly transfer | ISLR free; Frees, Lander commercial; Healy commercial (the author posts a free edition at socviz.co) |
@@ -221,6 +222,8 @@ skill's five-question pilot of topic choices was not run as a conversation: the 
 objectives are the PR's to review.
 
 **How FAM's sets converted** (19 Oct): four PDFs, booklet and solutions for each set, all linked from the October 2026 syllabus. The extractor learned three layouts (`fam-s` / `fam-l` in `SOA_PREFIX`): FAM-S heads five solutions `Question: #28` and prints withdrawn questions `Deleted.` (5, 62, 65–67, 79, 80); FAM-L numbers by AMLCR chapter (`7.41`), read off the solutions' `Question 7.41` headings and found in the booklet in that order (one, 6.44, written `Question# 6.44`), and ends a past-paper question with `[Question 8 on the Fall 2014 exam]`, which rode on option E. The SOA sets equations as embedded objects, so the text layer scrambled nearly every formula: ten agents transcribed every prompt from the page images and rewrote every solution from the SOA's own, same method and figures, keeping the SOA's printed slips as printed (none changes a key; the three a transcriber had corrected were restored with a note). Five solution diagrams and FAM-S Q17's density graph were cropped from the PDFs.
+
+**How ASTAM's sets converted** (19 Oct): the CAS converter's shape, not the SOA extractor's — six written-answer questions a paper, each part a `## Part` with the SOA's model solution as its `### Explanation` and the examiners' comments, verbatim, as its `### Examiner Report`, filed under the part each names. The SOA sets equations as embedded objects, so seven agents transcribed every question from 130-dpi page images (the PDFs' text layer for prose and numbers only), and four more re-read every file against the images. The Excel-workbook question (sample Q22 and Q24, Q1 of every sitting from Spring 2024) is left out: its data and its answer live in the workbook. Four plots the questions turn on are the PDFs' own images, extracted unchanged (`Media/Attachments/astam-*.png`). Three papers run to (f) or (g), which the parser had folded into (e) — fixed for twelve CAS questions too. The linter's `--fix` split of `a = b = c` rows made three false equalities (sample Q11, Q17, Spring 2026 Q6) that the checkers undid; check its output on any `align*` row holding two statements. No sample or past question projects losses with a trend, so *Loss Trend* and *Trend* got two vault-written questions. The SOA's printed slips — about seventy, none changing a final answer except Fall 2024 Q6(b)(i), whose printed reserve (7,617, "show 7,600") the printed formula doesn't give (8,065) — are kept as printed and listed in Appendix A.6.
 
 ### 3.2 Fact check (VERIFY)
 
@@ -470,9 +473,10 @@ New exam pages from §3.0 at ASA level join here.
 | 1. The ASA-prelim campaign table | C9 | ✅ §3.1a: what the SOA publishes for each, found on soa.org's own pages; the readings, free and commercial; the gate baseline and the order (SRM → FAM → ASTAM, ALTAM → PA, ATPA) |
 | 2. The linker | C17 | ✅ §3.4. G2 passes on all six prelims (FAM was 13 gaps, SRM 15, PA 10, ALTAM 4, ASTAM 15, ATPA 23); G3 on all but ALTAM. FAM's and ATPA's catch-alls were broken up by pointing four aliases at the specific page that exists (*Mortality*, *Survival Model*, *Data Preparation*, *Data Validation*); G3 now reads "DB plan" as naming *Defined Benefit Plan* and "lives" as *Life*. Every page re-checked against its syllabus PDF (unchanged) |
 | 3. What's still missing | C11 | ALTAM's one catch-all: *Life Insurance* stands in for "long-term life [and health insurance]" on three profit-testing lines — a coordination the chunker can't read; wants a specific page or a re-link by hand. *Total Risk* (GH-101) is not a prelim's |
-| 4. Banks | — | 🟡 **SRM ✅ beta** (18 Oct): the bank wired through (catalogue, label, quiz builder, pace, DEFAULT track, Concept Craft labels for its three boards), the SOA's 72 live sample questions converted (§3.1a has the recipe and what the PDF needed), and five vault-written questions for the concepts the set doesn't reach (*Model Validation*, *Train-Test Split*, *K-Nearest Neighbors*, *Autocorrelation Function*, *ARCH Model*) — each checked by a different agent from its writer and verified (run `7805`; the two on Frees medium, D7). `--check srm-1`: G1, G2, G3, G6 pass. The topic choices await the maintainer's review in the PR, in place of the skill's pilot. **FAM ✅ beta** (19 Oct), the same way: the bank wired through (catalogue, label `Exam FAM`, quiz builder, 34 questions in 3½ hours, DEFAULT track, 236 Concept Craft labels for its eight boards); both sample sets converted, 268 live questions (FAM-S 103, FAM-L 165) — see *How FAM's sets converted* below; 46 concept tags read off the questions for 24 syllabus concepts the topics didn't name; and six vault-written questions for the five concepts no SOA question tests plus TVaR (*Cash Flow*, *Delta Hedging*, *Insurable Interest*, *Defined Benefit Plan*, *Defined Contribution Plan*, *Risk*), checked by a different agent and verified (run `7017`; five medium on open texts, `fam-an-006` high on the SOA's FAM tables; one major fixed — `fam-an-003` had a second defensible answer). `--check fam-1`: G1, G2, G3, G6 pass. Topic choices await the maintainer's review in the PR. Next: ASTAM and ALTAM |
+| 4. Banks | — | 🟡 **SRM ✅ beta** (18 Oct): the bank wired through (catalogue, label, quiz builder, pace, DEFAULT track, Concept Craft labels for its three boards), the SOA's 72 live sample questions converted (§3.1a has the recipe and what the PDF needed), and five vault-written questions for the concepts the set doesn't reach (*Model Validation*, *Train-Test Split*, *K-Nearest Neighbors*, *Autocorrelation Function*, *ARCH Model*) — each checked by a different agent from its writer and verified (run `7805`; the two on Frees medium, D7). `--check srm-1`: G1, G2, G3, G6 pass. The topic choices await the maintainer's review in the PR, in place of the skill's pilot. **FAM ✅ beta** (19 Oct), the same way: the bank wired through (catalogue, label `Exam FAM`, quiz builder, 34 questions in 3½ hours, DEFAULT track, 236 Concept Craft labels for its eight boards); both sample sets converted, 268 live questions (FAM-S 103, FAM-L 165) — see *How FAM's sets converted* below; 46 concept tags read off the questions for 24 syllabus concepts the topics didn't name; and six vault-written questions for the five concepts no SOA question tests plus TVaR (*Cash Flow*, *Delta Hedging*, *Insurable Interest*, *Defined Benefit Plan*, *Defined Contribution Plan*, *Risk*), checked by a different agent and verified (run `7017`; five medium on open texts, `fam-an-006` high on the SOA's FAM tables; one major fixed — `fam-an-003` had a second defensible answer). `--check fam-1`: G1, G2, G3, G6 pass. Topic choices await the maintainer's review in the PR. **ASTAM ✅ beta** (19 Oct): the bank wired through (catalogue, label `Exam ASTAM`, quiz builder, paced by the point — three hours for 60 — a six-question practice exam, the seven sittings on the past-paper shelf with their model-solution PDFs, DEFAULT track, 150 Concept Craft labels: 96 for its six boards, 54 for connections on other exams' boards that had none, MAS-II's credibility board among them); 60 SOA questions transcribed (*How ASTAM's sets converted*, §3.1a); seven syllabus concepts tagged on the questions that work with them (*Moment*, *Severity*, *Severity Distribution*, *Probability Distributions*, *Continuous Random Variable*, *Probability*, *Bayesian*); two vault-written questions on trend, checked by a different agent and verified (run `f53e`, medium on Werner & Modlin ch. 6, Brown & Lennox being commercial). `--check astam-1`: G1, G2, G3, G6 pass. Next: ALTAM |
 | 4a. SRM's fact-check campaign | — | ⬜ G7: the 72 converted questions against the SOA's PDF (one paper packet); G4: 7 concepts; G5: Frees 2010 (commercial, D7; Frees posts an online version of the text) |
 | 4b. FAM's fact-check campaign | — | ⬜ G7: 268 converted questions against the SOA's four PDFs (two packets, FAM-S and FAM-L), the ~45 printed slips the transcribers noted each wanting an "(as printed)" note (listed in the PR); G4: 37 concepts; G5: all three readings commercial (D7). The concept pages the transcribers found missing — the (a,b,0)/(a,b,1) class, Burr, Gompertz–Makeham, select-and-ultimate tables, expectation of life, variable annuity, coherent risk measure — are tagged under broader pages for now; FAM's VaR/TVaR line links *Risk*, a definitions page, where *Risk Measure* holds the material |
+| 4c. ASTAM's fact-check campaign | — | ⬜ G7: 60 converted questions against the SOA's eight question/solution pairs (one packet each), Appendix A.6's slips each wanting an "(as printed)" note; G4: 22 concepts; G5: Klugman and Brown & Lennox commercial (D7), the two SOA study notes free |
 | 5. Fact-check campaigns | — | ⬜ After the banks. Five of the six prelims' main readings are commercial (D7) |
 
 ### Phase 4 — The rest
@@ -951,6 +955,77 @@ missed. `--check MAS-II` fails G1, G4 and G7 (4 / 7).
   estimation sit outside the outline's Tse sections; ten ISLR-page claims the book doesn't make
   (ESL would source most); `masii-an-008` (the bootstrap, MAS-I) and `-015` (elastic net, Exam 8)
   may belong in other banks.
+
+### A.6 ASTAM's bank: the SOA's printed slips (19 Oct 2026)
+
+What the transcribers and checkers found printed in the SOA's ASTAM PDFs and kept as printed (P1:
+the vault transcribes, it doesn't correct the publisher). Each wants an "(as printed)" note, or a
+finding, when ASTAM's paper packets run (Phase 3, step 4c). Under each heading a bare Q is that
+group's paper; "S"/"F" is its Spring or Fall paper.
+The checkers' finds, last, name their paper in full.
+
+**Sample 9-16**
+
+- Q9(a) assumption 2 prints Var[X_ij|θ_j]·m_ij (θ_i meant)
+- Q9(c)(ii) weights "proportional to Var" (inverse meant)
+- Q12(c) se 0.0638 in solution vs 0.0639 in table; −0.06886 matches 0.0639
+- Q12(a) asks four steps, solution lists five
+- Q14(a) mixture written as weighted sum βY1+(1−β)Y2
+
+**Sample 17-25 (22, 24 Excel skipped)**
+
+- Q17(d) Y = max(X,1000) (min meant; E[Y]=621.25 right); (e) "80% confidence" missing "interval"
+- Q18(a) SBC −424.5 − 5.99 = 30.49 (−430.49 meant); (b) "If H1 is true" (H0 meant), "ZM Poison"; (e) "Geometric based on SBC" (ZM Geometric best)
+- Q19 stem "a sample of size with" (n missing)
+- Q20(d)(i) s2² second line drops ½; (d)(ii) m1 = β3 printed 0.9929 vs table 0.9928; (e) "raw Bs estimator"
+- Q21(g) solution names "Adam"
+- Q23(a) proof ends "= ν + a = μ + a" (Poisson only); (e) 0.1745 vs μ̂ 0.1746
+- Q25(b) information as inverse of −∂l/∂α (second derivative meant); (d) variance (1/n)(100α̂/(α̂−1))² — (α̂−1) should be squared
+
+**Spring 2026 (Q1 Excel skipped)**
+
+- Q3(e)(ii) E[X∧x] = 2000[1−e^{−x/1000}] (1000 meant; figures use 1000)
+- Q6(c) d = X(464) (484 meant)
+- Q6(d)(ii) Method 3 (0.99)^0.678765 (0.01 meant)
+- Q3(c)(ii) 1,704,200 rounded (1,704,240); Q5(d)(iv) 579.78 vs 579.79
+
+**Sample 1-8**
+
+- Q2(d)(ii) prompt "developed in Question 16" (part (d)(i) meant); solution labels sub-parts (d),(e); E(S)=E(N)E(S) (E(X) meant); "Class C" for Reckless
+- Q2(b) 2019 "= 1.172368" without P; Q2(c) solution only "See the proof on Page 127 and 128 of Brown and Lennox"
+- Q3(b)/(c) f̂1..f̂5 vs β̂0 = 1/(f̂0…f̂4) indexing
+- Q4 solutions print an "(e)" duplicating (d) — omitted
+- Q5(c) ES_α(X) vs α(n); Q6(c) α̂ = 3.3836 without working
+- Q7(c) 2722.8 printed, 2722.38 implied; 6,899.98 (b) vs 6899.94 (d); Q7(e) SD[S] 12,784.7 (12,784.79)
+
+**2025 Spring/Fall (Q1 Excel skipped both)**
+
+- S Q3(b) solution steps (i)–(iv) vs question (i)–(iii); Q3(c)(iii) off-balance 0.9771 (0.97734), carried into (d)
+- S Q4(c) Method 3 "dx" after z = x − d; S Q5(a) 1568/1650 valued 1.1176 (=1568/1403); S Q6(b) "= =" written once
+- F Q3(b) GEV ξ=−1 "for y > 1" (y < 1); F Q4(c)(ii) g2 = f1g1 + f2g0 missing j/s weights; F Q4(d) E[X**]
+- F Q5(c) solution labels (iv)/(v) shifted; F Q6(c)(i) "moments of L" (W); F Q6(c)(ii) μ*+(σ*)² missing /2; F Q6 comment 8 mentions an instruction not in the question
+
+**2023 Spring/Fall (no Excel question)**
+
+- S Q2(b)(i) ZM Poisson likelihood (1−e^{−λ})^{54} (−54 meant); S Q3(c) X̄2 0.35455 vs 0.35454
+- S Q5(c) denominator printed 12,292.0 (12,075.25; answer 217.84 uses the right one); S Q5(d)(i) 4.36% (4.38%)
+- S Q6(b) 245.8 − 225 = 20.77 (unrounded); S Q6(d) solution steps (i)–(iv) vs question (i)–(iii)
+- F Q2 solution letters off by one from (c)(i); F Q2(e) denominator expansion wrong, conclusion unaffected
+- F Q3 unclosed parenthesis; F Q1(c)(i) "θ* = 1080" → "θ* is 1080" (lint)
+
+**2024 Spring/Fall (Q1 Excel skipped both)**
+
+- S Q2(a) SD of average "1/N times" (1/√N); S Q2(b) (25000+30000)/20×1/0.85 (fixed expenses 3,000; 1647.06 = 28,000/20/0.85); S Q2(c) Region C labelled A/B
+- S Q4(e)(i) h(θ) = h(θ̂) no hat; S Q6(b)(ii) λ for scale γ; S Q6(c) "c_n x + d" missing subscript
+- F Q3(e)(i) "oayment"; F Q5(d)(ii) 2500/2499 placement (0.22307 applies it to whole); F Q3(b) LER asked but solution stops at E[X∧d] = 494.79
+- F Q6(b)(i): C̃6,7 printed 16,799 / reserve 7,617 ("show 7,600"); printed formula gives 17,247 / 8,065; 0.497849 should be 0.497859
+
+**Found by the checkers**
+
+- 2023f Q5 comments "Execl"; 2023f Q2(c) comment "maximum excess loss formula" (mean); 2023f Q2(c)(i) θ+d+y missing X subscript; 2023f Q1(b) comment "Full credit or no credit" (partial?); 2023f Q1(d) "aggregate payments to the insurer"
+- 2024f Q5(c)(ii) unbalanced brackets in solution
+- Sample Q10(b) MGF integral repeats e^{−λx} after combining
+- 2025s Q4(e) '28% of small losses eliminated' (F(1000)=0.378); 2025s Q3(b)(i) 'deducible'; 2026s Q6 comments 'question..', 'umber'
 
 ## Appendix B — Fact-check wave records
 

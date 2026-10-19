@@ -242,6 +242,20 @@ describe('parseQuestion — multi-part with essay part', () => {
   })
 })
 
+describe('parseQuestion — parts past (e)', () => {
+  // SOA ASTAM papers and several CAS papers run to (f) or (g); a part the
+  // heading pattern missed used to be folded into the one before it.
+  const raw = `---\nid: "x"\nexam: "Exam ASTAM"\ntopic: "Deductible"\nlearning_objective: "Coverage Modifications"\ndifficulty: medium\ntype: multi-part\npoints: 7\nwiki_link: Concepts/Deductible\n---\n\nStem.\n\n${
+    'abcdefg'.split('').map(l => `## Part ${l} (1 point)\n\nAsk ${l}.\n\n### Explanation\nSolve ${l}.\n`).join('\n')
+  }`
+  const q = parseQuestion(raw)!
+
+  it('reads every part through (g)', () => {
+    expect(q.parts!.map(p => p.label)).toEqual(['a', 'b', 'c', 'd', 'e', 'f', 'g'])
+    expect(q.parts![4].stem).not.toContain('Ask f')
+  })
+})
+
 // ── questionCredit / questionOutcome (partial credit) ─────────────────────────
 
 describe('questionCredit — multiple-choice', () => {

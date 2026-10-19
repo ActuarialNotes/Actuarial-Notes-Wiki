@@ -312,7 +312,7 @@ function parsePartSections(content: string): {
 //   ### Examiner Report
 //   [text]
 function parseMultiPartBody(body: string): Part[] | null {
-  const PART_HEADING_RE = /^## Part ([A-Ea-e])(?:\s*\(([0-9.]+)\s*points?\))?[^\n]*/gm
+  const PART_HEADING_RE = /^## Part ([A-Ha-h])(?:\s*\(([0-9.]+)\s*points?\))?[^\n]*/gm
   const matches = [...body.matchAll(PART_HEADING_RE)]
   if (matches.length === 0) return null
 

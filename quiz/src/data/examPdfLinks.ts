@@ -265,6 +265,40 @@ const SITTING_PDF_LINKS: Record<string, ExamPdfLink> = {
     label: "Examiner's Report",
   },
 
+  // ── SOA Exam ASTAM — the paper and its model solutions are separate PDFs ──
+  // Transcribed from soa.org's Past Exams and Solutions page (read
+  // 2026-10-19). The solutions are the document a question is checked
+  // against, so they are what's linked. The names follow no pattern: Fall
+  // 2025's solutions are filed `2026/spring/…/2025-11-astam-solutions.pdf`.
+  'Exam ASTAM|2023|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-astam.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ASTAM|2023|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/astam-fall-2023-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ASTAM|2024|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-astam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ASTAM|2024|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-astam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ASTAM|2025|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2025/spring/solutions/2025-spring-astam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+  'Exam ASTAM|2025|fall': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2025-11-astam-solutions.pdf',
+    label: "Model Solutions & Examiners' Comments",
+  },
+  'Exam ASTAM|2026|spring': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2026/spring/solutions/2026-spring-astam-solutions.pdf',
+    label: 'Model Solutions',
+  },
+
   // ── CAS Exam MAS-I — multiple choice, so paper + final answer key ─────────
   'Exam MAS-I|2018|spring': {
     url: 'https://www.casact.org/sites/default/files/2021-02/admissions_studytools_exammasi_spmasi-18.pdf',
@@ -313,6 +347,12 @@ const EXAM_LEVEL_PDF_LINKS: Record<string, ExamPdfLink> = {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2017/exam-fm-sample-questions.pdf',
     label: 'Sample Questions',
   },
+  // ASTAM's sample set, linked from its October 2026 syllabus (version of
+  // February 23, 2026); its solutions are dated January 19, 2025.
+  'Exam ASTAM': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf',
+    label: 'Sample Questions',
+  },
 }
 
 // The solutions half of the same sample sets. Transcribed like everything else
@@ -331,6 +371,10 @@ const EXAM_LEVEL_SOLUTION_LINKS: Record<string, ExamPdfLink> = {
   },
   'Financial Mathematics': {
     url: 'https://www.soa.org/globalassets/assets/files/edu/2017/exam-fm-sample-solutions.pdf',
+    label: 'Sample Solutions',
+  },
+  'Exam ASTAM': {
+    url: 'https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf',
     label: 'Sample Solutions',
   },
 }

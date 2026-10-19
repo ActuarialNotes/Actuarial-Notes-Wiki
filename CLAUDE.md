@@ -604,8 +604,9 @@ Other important `lib/` modules:
 - `examStatus.ts` — how far along each exam's material is, keyed by exam_progress key:
   `ready` (P, FM, MAS-I, the three DISCs — DISC-DA, DISC-RM, DISC-IA — and Exam 7, the CAS ones promoted by
   `scripts/publication_readiness.py --check`), `beta` (MAS-II, Exams 5, 6C, 8 and 9,
-  FAM and SRM — their banks the SOA's sample sets — and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM — PA, ALTAM,
-  ASTAM, ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
+  FAM and SRM — their banks the SOA's sample sets — ASTAM, from its sample set and released papers,
+  and PCPA) or `development` (Exams 6U, 6I and 6T, the other SOA exams past FM — PA, ALTAM,
+  ATPA and the FSA pathway's exams, keyed `FSA-GH101` etc. — and the **non-exam
   requirements**: the three VEEs (`VEE-MS`, `VEE-ECON`, `VEE-AF`), the SOA's e-learning modules
   PAF, ASF, FAP and DMAC (`FSA-DMAC`), its APC and FAC (`FSA-FAC`), and the CAS's Course on
   Professionalism, page id `COP`, still keyed `CAS-APC` because readers' progress is stored
@@ -1460,6 +1461,9 @@ compile — don't "clean up" the flagged code as dead.
   `exam-fam` (the SOA's two FAM sample sets — FAM-S as `fams-<n>`, FAM-L as `faml-<chapter>-<n>`
   after its numbering by AMLCR chapter — and six of the vault's own, `fam-an-001` …),
   `exam-srm` (the SOA's SRM sample set, `srm-<n>`, and five of the vault's own, `srm-an-001` …),
+  `exam-astam` (written answer: the SOA's ASTAM sample set as `astam-<n>`, its seven released
+  sittings, Spring 2023–Spring 2026, as `astam-<year><s|f>-q<n>` — the Excel-workbook question of
+  each left out — and two of the vault's own, `astam-an-001` …),
   `exam-mas-i`, `exam-mas-ii`, the three DISCs' `exam-disc-da` / `exam-disc-rm` / `exam-disc-ia`
   (the vault's own questions, `discda-an-001` …), `exam-5` (hundreds of questions each), `exam-6c` — the
   thirteen Fall 2013–Fall 2019 Exam 6-Canada papers, 394 questions — and `exam-7` /

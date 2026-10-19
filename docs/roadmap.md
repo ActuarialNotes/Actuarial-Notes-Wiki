@@ -263,8 +263,12 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    vault-written questions (verified) for the concepts the set misses; G1, G2, G3 and G6 pass.
    **FAM is beta** (19 Oct): its bank is the SOA's two sample sets, 268 live questions (FAM-S 103,
    FAM-L 165), converted, plus six vault-written questions (verified) for the concepts the sets miss;
-   G1, G2, G3 and G6 pass. Next: ASTAM and ALTAM's written-answer sets, then the SRM and FAM
-   fact-check campaigns (G4, G5, G7).
+   G1, G2, G3 and G6 pass. **ASTAM is beta** (19 Oct): its bank is the SOA's written-answer sample
+   set (23 questions) and its seven released sittings, Spring 2023–Spring 2026 (37), transcribed
+   from the page images with the SOA's model solutions and examiners' comments, every file
+   re-checked against the PDF by a second agent — the seven Excel-workbook questions left out — plus
+   two vault-written trend questions (verified); G1, G2, G3 and G6 pass. Next: ALTAM's
+   written-answer sets, then the SRM, FAM and ASTAM fact-check campaigns (G4, G5, G7).
 1. ~~**C0: refresh the generated reports.**~~ ✅ 2026-10-17: both reports regenerated and
    passing `--check`, CONCEPT_GAPS' generated half refreshed (0 missing resources), and
    Exam 8's `"source_pages": "partial"` dropped.
@@ -488,7 +492,7 @@ gates through `--hold` in CI.
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
-| C9 | **An SOA ASA-prelim publication plan** | ✅ 2026-10-18 | — | Content plan §3.1a: for FAM, SRM, ALTAM, ASTAM, PA and ATPA, what the SOA publishes (found on its own pages: sample sets for all, written-answer papers for ALTAM/ASTAM, project sittings for PA, one ATPA sample; no FAM or SRM papers will be released), the readings (mostly commercial, D7), the gates and the order. Phase 3's linker step lifted all six to G2 (G3 all but ALTAM). SRM's bank converted and SRM promoted to beta, 18 Oct; FAM's two sets converted and FAM promoted to beta, 19 Oct. Next: ASTAM and ALTAM's banks. |
+| C9 | **An SOA ASA-prelim publication plan** | ✅ 2026-10-18 | — | Content plan §3.1a: for FAM, SRM, ALTAM, ASTAM, PA and ATPA, what the SOA publishes (found on its own pages: sample sets for all, written-answer papers for ALTAM/ASTAM, project sittings for PA, one ATPA sample; no FAM or SRM papers will be released), the readings (mostly commercial, D7), the gates and the order. Phase 3's linker step lifted all six to G2 (G3 all but ALTAM). SRM's bank converted and SRM promoted to beta, 18 Oct; FAM's two sets converted and FAM promoted to beta, 19 Oct; ASTAM's sample set and seven papers converted and ASTAM promoted to beta, 19 Oct. Next: ALTAM's bank. |
 | C10 | The 23 FSA modules | ⬜ | Later | They have syllabus pages and concept pages, but no banks. |
 | C11 | Concept-gap leftovers | 🟡 | Next | *Total Risk* (GH-101); 9 ambiguous targets (D15); 21 stubs; 11 link-variant aliases; linker noise (D3 in that plan). |
 | C12 | Syllabus pipeline packages 4–6 and 8 | 🟡 | Later | Provenance `syllabus:` blocks for the 14 hand-made pages; a concept-page lint. `syllabus-pipeline-review.md` §5. |

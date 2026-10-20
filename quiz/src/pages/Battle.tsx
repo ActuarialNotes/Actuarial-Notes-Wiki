@@ -244,7 +244,7 @@ function BattlePage({
   // Out of Quiz Battle the way the reader came in — the Quiz tab, a study
   // guide, the Dashboard. Actuaria's station is a tab of its own world, and
   // its exit always leads to the map.
-  const back = useBack({ to: skin.home.path, label: 'Quiz' })
+  const back = useBack({ to: skin.home.path, label: 'Games' })
   const inWorld = skin.id === 'actuaria'
   const [params, setParams] = useSearchParams()
   const { user } = useAuth()

@@ -64,6 +64,7 @@ function strength(page: Page, x: string, y: string) {
 test.describe('concept craft', () => {
   test('opens from the Quiz tab onto an empty board, and adds a starter pack from the + menu', async ({ page }) => {
     await page.goto('/')
+    await page.getByTestId('quiz-games-entry').click()
     await page.getByTestId('concept-craft-entry').click()
     await expect(page).toHaveURL(/\/craft$/)
     await expect(page.getByTestId('craft-empty')).toBeVisible()

@@ -748,8 +748,8 @@ export default function Sidebar() {
             }
             collapsed={collapsed}
             end
-            // Quiz Battle and Concept Craft are ways of quizzing, opened from this tab.
-            forceActive={location.pathname === '/battle' || location.pathname === '/craft' || location.pathname.startsWith('/craft/')}
+            // Games — Quiz Battle and Concept Craft — are ways of quizzing, opened from this tab.
+            forceActive={location.pathname === '/games' || location.pathname === '/battle' || location.pathname === '/craft' || location.pathname.startsWith('/craft/')}
             onNavigate={closeMobile}
             badge={quizBadge}
             dataTour="nav-quiz"

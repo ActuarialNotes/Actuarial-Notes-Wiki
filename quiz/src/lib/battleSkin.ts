@@ -67,7 +67,7 @@ export const PLAIN_SKIN: BattleSkin = {
   friend: { title: 'A friend, online', plain: null },
   screens: { localSetup: 'Same-screen battle', hostSetup: 'Create a room', lobby: 'Find an opponent', join: 'Join a battle' },
   resultsLabel: null,
-  home: { path: '/', label: 'Back' },
+  home: { path: '/games', label: 'Back' },
   joinBase: '/battle',
   review: 'Question by question',
   claim: 'a wrong buzz',

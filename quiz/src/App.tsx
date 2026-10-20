@@ -9,6 +9,7 @@ import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
 import AuthCallback from '@/pages/AuthCallback'
 import Quiz from '@/pages/Quiz'
+import Games from '@/pages/Games'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Flashcards from '@/pages/Flashcards'
@@ -404,6 +405,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/quiz" element={<Quiz />} />
+                <Route path="/games" element={<Games />} />
                 <Route path="/battle" element={<BattleRoute />} />
                 {/* Concept Craft: the board, and a link adding one topic's pack to it. */}
                 <Route path="/craft" element={<CraftRoute />} />

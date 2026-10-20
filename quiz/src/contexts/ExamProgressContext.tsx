@@ -174,6 +174,11 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     return true
   }, [user])
 
+  // The three writers below upsert one column onto an exam's row. When the
+  // account has no row for that exam yet, the database creates it with its
+  // default status, `not_started`, and the local copy must say the same —
+  // saving a date or a plan is not adding the exam. Only the exams popout's
+  // Add (and a first quiz) marks an exam in progress.
   const updateTargetDate = useCallback(async (examId: string, date: string | null): Promise<boolean> => {
     if (!userId) return false
     const payload: Record<string, unknown> = {
@@ -189,7 +194,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     }
     setExamRows(prev => prev.some(r => r.exam_id === examId)
       ? prev.map(r => r.exam_id === examId ? { ...r, target_date: date } : r)
-      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: date }])
+      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: date }])
     return true
   }, [userId])
 
@@ -205,7 +210,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     }
     setExamRows(prev => prev.some(r => r.exam_id === examId)
       ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_config: config } : r)
-      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: null, study_plan_config: config }])
+      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, study_plan_config: config }])
     return true
   }, [userId])
 
@@ -221,7 +226,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     }
     setExamRows(prev => prev.some(r => r.exam_id === examId)
       ? prev.map(r => r.exam_id === examId ? { ...r, study_plan_cache: plan } : r)
-      : [...prev, { exam_id: examId, status: 'in_progress' as ItemStatus, target_date: null, study_plan_cache: plan }])
+      : [...prev, { exam_id: examId, status: 'not_started' as ItemStatus, target_date: null, study_plan_cache: plan }])
     return true
   }, [userId])
 

@@ -66,10 +66,18 @@ export function useTodayQuizCounts(): TodayQuizCounts {
   // so the badge has to size itself the same way.
   const answeredQuestionIds = useTodayAnsweredQuestions()
 
-  const syllabusP    = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'P') ?? null
-  const syllabusFM   = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'FM') ?? null
-  const syllabusMAS  = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'MAS-I') ?? null
-  const syllabusCAS5 = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'CAS-5') ?? null
+  // Only build a plan for an exam the reader is studying. Building one caches
+  // it against the account, and caching a plan for an exam they never added
+  // used to put that exam on their dashboard as in progress — a new account
+  // adding its first exam found P, FM, MAS-I and 5 already there.
+  const active = (key: string) =>
+    user && isPro && examProgress[key] === 'in_progress'
+      ? syllabi.find(s => wikiExamIdToProgressKey(s.examId) === key) ?? null
+      : null
+  const syllabusP    = active('P')
+  const syllabusFM   = active('FM')
+  const syllabusMAS  = active('MAS-I')
+  const syllabusCAS5 = active('CAS-5')
 
   const { plan: planP }    = useStudyPlan(syllabusP,    masteryRecords, targetDates['P'] ?? null,     masteryLoading)
   const { plan: planFM }   = useStudyPlan(syllabusFM,   masteryRecords, targetDates['FM'] ?? null,    masteryLoading)

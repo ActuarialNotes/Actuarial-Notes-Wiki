@@ -410,21 +410,21 @@ _Contributors add items here in a PR. The maintainer ranks them at the next revi
   uses, `lib/tutor/bank.ts`), and an ungraded one counts for nothing. It changes how every
   CAS written exam's mastery and readiness move, so it is the maintainer's call.
   *(Found planning the Tutor, 2026-10-18.)*
-- **G8: keep the Singapore crawler out of GA4.** About 3,660 of the 90 days' reported users
+- **G8: keep the Singapore crawler out of GA4.** About 3,890 of the 90 days' reported users
   are one headless profile (Singapore, Windows 10 Chrome, 1280×1200, one wiki page each, never
   interacts) that passes `decideMeasurement`: a normal user agent and no `navigator.webdriver`.
-  Still arriving (426 on 2026-10-18). Block or challenge it in the Vercel firewall from its
+  Still arriving (426 on 2026-10-18, 157 on 2026-10-19). Block or challenge it in the Vercel firewall from its
   logged user agent and IPs (a Vercel setting, so the maintainer's), or add its user agent to
-  `isAutomatedUserAgent`. *(GA4 audit, 2026-10-19.)*
+  `isAutomatedUserAgent`. *(GA4 audit, 2026-10-20.)*
 - **G9: a result count on the `search` event.** "Searches that lead nowhere" can't be read
   without one, and the 1.5 s pause fires mid-word (`liability`, `liability for`,
   `liability for in`). Add `result_count` (and register it), and fire on a pause plus leaving
-  the box or opening a result. *(GA4 audit, 2026-10-19.)*
-- **L10: why half of first quizzes end before the first answer.** Of 31 people who started a
-  first quiz in 90 days, 17 answered a question. The pre-quiz concept list
+  the box or opening a result. *(GA4 audit, 2026-10-20.)*
+- **L10: why half of first quizzes end before the first answer.** Of 59 people who started a
+  first quiz in 90 days, 30 answered a question. The pre-quiz concept list
   (`PreQuizConcepts`) or the first question is where they leave; the audit can't tell which.
   An event for leaving the concept list, or a look at the flow on a phone, would.
-  *(GA4 audit, 2026-10-19.)*
+  *(GA4 audit, 2026-10-20.)*
 
 ---
 
@@ -575,7 +575,7 @@ Subplans: `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitori
 |---|---|---|---|---|
 | G1 | Confirm the daily email sends | 🟢 built; live state unknown | **Now** | Maintainer: Resend, the secrets, the smoke test. Record the outcome in the doc. |
 | G2 | SEO outside the repo | ⬜ | Next | A path-preserving `wiki.actuarialnotes.com` redirect (today it sends every path to the home page); submitting the sitemap. |
-| G3 | The GA4 admin checklist | ⬜ checked 2026-10-19: steps 1, 2, 5, 6 not done | Next | 8 manual steps in `analytics-and-monitoring.md`. The audit (`analytics-audit-2026-10-19.md`) found history-change page views still on (~47% of page views are duplicates), the Internal Traffic filter in Testing (internal devices are 66% of engagement time), and no custom definitions or key events. Steps 3, 4, 7, 8 can't be read through the API. |
+| G3 | The GA4 admin checklist | ⬜ checked 2026-10-20: steps 1, 2, 5, 6 not done | Next | 8 manual steps in `analytics-and-monitoring.md`. The audit (`analytics-audit-2026-10-20.md`) found history-change page views still on (46% of page views are duplicates), the Internal Traffic filter in Testing (internal devices are 56% of the production host's engagement time) and at least one team phone untagged, and no custom definitions or key events. Steps 3, 4, 7, 8 can't be read through the API. |
 | G4 | Monetization packaging | 🟡 "Pro" rename; Today's Study Plan is Pro-only | Later | Stripe hasn't changed since July. Waits on D13. Rule: never paywall the core retrieval loop. Was P4.3. |
 | G5 | Referrals | 🅿️ | Parked | Was P4.2. Comes back once the gem economy's metrics (§7) are actually read. |
 | G6 | Leagues' deliberate deferrals | ⬜ | Later | Realtime boards, study-group leagues (Actuaria's cohorts are the model to copy), league history. |
@@ -730,7 +730,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | `docs/research-ai-disabled.md` | Re-enable checklist | R1 | 🅿️ Needs to mention `RESEARCH_TAB_ENABLED` | 2026-06-14 |
 | `docs/comprehension-check-backlog.md` | Backlog | R2 | 🅿️ parked | 2026-10-05 |
 | `docs/assessment-2026-08-31.md` | A one-off audit | — | **Historical.** Its recommendations are folded in here | 2026-10-05 |
-| `docs/analytics-audit-2026-10-19.md` | A one-off audit: GA4 | G3, G8, G9, L10 | Snapshot; its actions are those rows | 2026-10-19 |
+| `docs/analytics-audit-2026-10-20.md` | A one-off audit: GA4 | G3, G8, G9, L10 | Snapshot; its actions are those rows | 2026-10-20 |
 | `docs/validation-agent-first-run.md` | A first-run record | — | Historical; every item closed | — |
 | `docs/pcpa-project.md`, `quiz-battle.md`, `concept-craft.md`, `store.md`, `workflows.md`, `cowork.md`, `ai-connector.md`, `listen-recordings.md`, `simulated-learner.md`, `daily-plan-email.md`, `leagues.md`, `seo.md`, `analytics-and-monitoring.md` | Feature design docs. Each has a short "next", "not yet" or "deferrals" list | X, A and G rows | Reference | various |
 | All other `docs/*.md` | How a module works | — | Reference; no open items | various |

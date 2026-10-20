@@ -172,7 +172,7 @@ day** than their first-ever visit — the D1 return signal.
 
 Several of these must be done in GA4 itself — the code can't:
 
-> **As of 2026-10-19, steps 1, 2, 5 and 6 were not done** (`analytics-audit-2026-10-19.md`):
+> **As of 2026-10-20, steps 1, 2, 5 and 6 were not done** (`analytics-audit-2026-10-20.md`):
 > about half of all page views are duplicates, internal traffic is still in reports, and no
 > param can be reported. Until they are, report on the human segment that audit defines.
 

@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Mortality
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:84713683c9f800735f21a90a1fa82112c583a878979f847971884380fb8f503d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b20b9f9587e02294b1168c1b6cd4b6a120c00829055c5485882eef246c2a8d73
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q4, pp.7-8, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q4, pp.7-8, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-004.md
@@ -87,7 +89,7 @@ Graders' Comments: Most candidates knew to use either EPV or recursive formula t
 
 In the final year of the policy, the insurer decides to re-evaluate the gross premium policy value due to a virus that is spreading through the community. The insurer uses the following multiple state model.
 
-![State diagram: Healthy (0), At Risk (1), Sick (2) and Dead (3); arrows run 0 to 1, 1 to 2, 0 to 3 and 2 to 3, and a double-headed arrow joins 0 and 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-004-state-diagram.png)
+![State diagram: Healthy (0), At Risk (1), Sick (2) and Dead (3); arrows run 0 to 1, 1 to 2, 0 to 3 and 2 to 3, and a double-headed arrow joins 0 and 2.](https://raw.githubusercontent.com/ActuarialNotes/Actuarial-Notes-Wiki/main/Media/Attachments/altam-004-state-diagram.png) (as printed)
 
 A Healthy person will move to State 1, At Risk, if exposed to the virus. Every person moving into the At Risk state will be tested for the virus. If the result of the test is positive, the person moves to State 2, Sick; otherwise, the person will move back to the Healthy state.
 
@@ -124,7 +126,7 @@ Calculate the revised gross premium policy value for the insured's policy at tim
 ### Explanation
 $${}_4V^{(0)} = 100{,}000\left({}_{0.5}p_{64}^{03}\,v^{0.5} + \left(p_{64}^{03} - {}_{0.5}p_{64}^{03}\right)v\right) - 0.9(270)\left(1 + \left(1 - {}_{0.5}p_{64}^{03}\right)v^{0.5}\right)$$
 
-$${}_{0.5}p_{64}^{03} = 1 - 0.00264 = 0.99736$$
+$${}_{0.5}p_{64}^{03} = 1 - 0.00264 = 0.99736 \text{ (as printed)}$$
 
 So
 

@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Reserve
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:27e16242a4ff07276af487886d5c57ae70c628883c438e0900b835bf12ec6c93
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:54cef493433af3d5e73a5ef3439e656055f4ce5bed22d98dd731404ee47730c3
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q27, pp.49-50, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q27, pp.53-54, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-027.md
@@ -114,7 +116,7 @@ $$\Rightarrow (\Pi_0, \Pi_1, \Pi_2, \Pi_3) = (-155.00,\ 65.82,\ 36.82,\ 109.65)$
 $$\Rightarrow NPV = \sum_{k=0}^{3} \Pi_k \cdot v_{14\%}^k = 5.08$$
 
 ### Examiner Report
-**Graders' Comments:** *Most candidates did this part well. The most common errors were incorrect survival probabilities when calculating the profit signature from the provit vector, and incorrect discounting periods for the NPV.*
+**Graders' Comments:** *Most candidates did this part well. The most common errors were incorrect survival probabilities when calculating the profit signature from the provit (as printed) vector, and incorrect discounting periods for the NPV.*
 
 ## Part d (3 points)
 
@@ -139,11 +141,11 @@ The IRR of B is $j$ where $155 = 210v_j^3 \Rightarrow j = 10.65\%$.
 
 and the IRR of A is greater than 14%, because the NPV at 14% is positive. Hence IRR of B is less than IRR of A.
 
-Product C has lower reserves in year 1,which allow an earlier release of surplus compared to Product A, which give a higher NPV than A at an 14% hurdle rate, but does not necessarily mean that C has a higher IRR.
+Product C has lower reserves in year 1,which (as printed) allow an earlier release of surplus compared to Product A, which give a higher NPV than A at an 14% hurdle rate, but does not necessarily mean that C has a higher IRR.
 
 The lower reserve in year 1 results in the following profit signature for C: (-155.00, 165.23, -64.58, 109.65)
 
-We note that the NPV of A is a little larger than 14%, because the NPV at 14% is close to zero. Calculating the NPV for A and C at 16% gives $-0.65$ for A and 9.7 for C. Hence, the IRR for C is greater than 16% , and for A is less than 16%.
+We note that the NPV (as printed) of A is a little larger than 14%, because the NPV at 14% is close to zero. Calculating the NPV for A and C at 16% gives $-0.65$ for A and 9.7 for C. Hence, the IRR for C is greater than 16% , and for A is less than 16%.
 
 That is $\Rightarrow IRR(B) < IRR(A) < IRR(C)$
 

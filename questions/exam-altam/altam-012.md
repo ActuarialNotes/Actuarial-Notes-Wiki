@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Transition+Intensity
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:bfa4974d488059fd64608e3b3fe317bb59c0ae91d1cadd5d7787bdae5dcf9f26
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bf9caeb723e97af2f2ffd451a9bd37db75af63aae67effd68cfacbed60f57353
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q12, pp.23-24, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q12, pp.22-23, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-012.md
@@ -43,9 +45,6 @@ State two reasons why structured settlements often use an annuity format rather 
 
 - risk of running out of funds from squandering/over spending.
 
-### Examiner Report
-Graders' Comments: Performance on parts (a) and (b) was mixed. Some candidates did not answer those two parts, others provided only one relevant reason for each part and/or repeated the same reasons for both parts. A number of candidates discussed pricing or underwriting issues, in one or both parts, for which no credit was awarded.
-
 ## Part b (1 point)
 
 State two possible reasons why the long term annuity would replace less than 100% of G's pre-injury earnings.
@@ -56,6 +55,9 @@ State two possible reasons why the long term annuity would replace less than 100
 2) **Incentive to return to work:** The $IP$ may choose to return to work if that would increase his/her (net) income.
 
 3) **$IP$ at fault:** The payments may be reduced if the $IP$ is (partially) at fault.
+
+### Examiner Report
+Graders' Comments: Performance on parts (a) and (b) was mixed. Some candidates did not answer those two parts, others provided only one relevant reason for each part and/or repeated the same reasons for both parts. A number of candidates discussed pricing or underwriting issues, in one or both parts, for which no credit was awarded.
 
 ## Part c (2 points)
 
@@ -81,7 +83,7 @@ Show that the expected present value of future benefits at $t = 0$, the start da
 ### Explanation
 The benefits are 90,000 when in States 0 or 2 plus 20,000 when in State 0 for up to 2 years. So,
 
-$$EPV = 90{,}000\left(\bar{a}_x^{00} + \bar{a}_x^{02}\right) + 20{,}000\,\bar{a}_{x:\overline{2}|}.$$
+$$EPV = 90{,}000\left(\bar{a}_x^{00} + \bar{a}_x^{02}\right) + 20{,}000\,\bar{a}_{x:\overline{2}|} \text{ (as printed)}.$$
 
 Since returning to State 0 after leaving it is impossible, we have
 
@@ -102,7 +104,7 @@ $$\Rightarrow EPV = 90{,}000\left(0.559 + 7.161\right) + 20{,}000(0.543444) = 70
 ### Explanation
 (i)
 
-$${}_2V^{(0)} = 90{,}000\left(\bar{a}_{x+2}^{00} + \bar{a}_{x+2}^{02}\right) = 698{,}670$$
+$${}_2V^{(0)} = 90{,}000\left(\bar{a}_{x+2}^{00} + \bar{a}_{x+2}^{02}\right) = 698{,}670 \text{ (as printed)}$$
 
 (ii)
 

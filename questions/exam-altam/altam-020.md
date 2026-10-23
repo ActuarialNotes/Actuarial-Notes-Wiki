@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Insurance+Premium
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:38d8a60d37b0676eb7b286a1eb2c05c3a69e1cebcfc6a273cb5d9b1d18c7d087
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1db5d276da1a582b028fa207d644c0198efe97fd502a6a8b1d5b43f67345279c
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q20, pp.38-39, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q20, pp.37-38, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-020.md
@@ -78,7 +80,7 @@ $$\begin{align*}
 \end{align*}$$
 
 ### Examiner Report
-**Graders' Comments:** *Only the most well-prepared candidates achieved full or nearly full credit on this part. Partial credit was awarded to candidates who showed some understanding of the question by writing down some formulas relevant to the calculation of these probabilities of transition..*
+**Graders' Comments:** *Only the most well-prepared candidates achieved full or nearly full credit on this part. Partial credit was awarded to candidates who showed some understanding of the question by writing down some formulas relevant to the calculation of these probabilities of transition.. (as printed)*
 
 ## Part c (3 points)
 

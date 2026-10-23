@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Fractional+Age+Assumption
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:ef888c42282ad6039c9aaa31d6f80067c7fdeccc0d891667e8eca28b80a66a1f
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b207cca8ebe74a45772ec5bcf3c640c1a4fe0b6031fa3802b6dc09a2da36a582
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q22, p.42, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q22, pp.41-43, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-022.md
@@ -65,7 +67,7 @@ $$\ddot{a}_{\overline{50:50}:\overline{20}|}^{(2)} = 2\ddot{a}_{50:\overline{20}
 $$\ddot{a}_{50:\overline{20}|}^{(2)} = \ddot{a}_{50:\overline{20}|} - \frac{1}{4}\left(1 - {}_{20}E_{50}\right) = 12.8428 - 0.25(1 - 0.34824) = 12.6799$$
 
 $$\begin{align*}
-\ddot{a}_{50:50:\overline{20}|}^{(2)} &= \ddot{a}_{50:50}^{(2)} - {}_{20}E_{50} \times \ddot{a}_{70:70}^{(2)} \\
+\ddot{a}_{50:50:\overline{20}|}^{(2)} &= \ddot{a}_{50:50}^{(2)} - {}_{20}E_{50} \text{ (as printed)} \times \ddot{a}_{70:70}^{(2)} \\
 &= \left(\ddot{a}_{50:50} - \frac{1}{4}\right) - \left({}_{20}p_{50}\right)^2(1.05)^{-20}\left(\ddot{a}_{70:70} - \frac{1}{4}\right) \\
 &= (15.8195 - 0.25) - (0.92398)^2(1.05)^{-20}(9.9774 - 0.25) \\
 &= 12.4396
@@ -100,7 +102,7 @@ $$\begin{align*}
 $$\Rightarrow G = \frac{13{,}193}{15.5661} = 847.55$$
 
 ### Examiner Report
-**Graders' Comments:** *Not many candidates received full credit, but most of those that attempted this part received the majority of points for correctly setting up the EPV formulas. Common mistakes included :*
+**Graders' Comments:** *Not many candidates received full credit, but most of those that attempted this part received the majority of points for correctly setting up the EPV formulas. Common mistakes included : (as printed)*
 
 - *Incorrect expense payment (60% vs. 70%)*
 - *Missing the annuity portion due when exactly 1 person is alive*

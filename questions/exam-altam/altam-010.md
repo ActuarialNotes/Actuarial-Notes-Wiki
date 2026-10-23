@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Annuities
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:53e0063bb06783f032dc9cd6b026850a78a02145f65d7dc72853fca5cb516e8d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:14506b0c1b5a8503f416deeb8ddfccc79fc1f050902d167d1271bebe5a3b00ec
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q10, pp.19-20, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q10, pp.19-20, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-010.md
@@ -108,7 +110,7 @@ $$\int_0^\infty {}_rp_{90}^{11}\,\mu_{90+r}^{12}\left(\bar{a}_{90+r}^{\overline{
 So the EPV is
 
 $$\begin{align*}
-\int_0^\infty e^{-0.24r}\times 0.10\times\left(2.5641 - 0.4542\right)e^{-0.05r}\,dr &= 0.21099\int_0^\infty e^{-0.29r}\,dr \\
+\int_0^\infty e^{-0.24r}\times 0.10\times\left(2.5641 - 0.4542 \text{ (as printed)}\right)e^{-0.05r}\,dr &= 0.21099\int_0^\infty e^{-0.29r}\,dr \\
 &= \frac{0.21099}{0.29} \\
 &= 0.7276
 \end{align*}$$
@@ -124,4 +126,4 @@ Reason 1: Short term payments involve relatively high expenses. Once the illness
 
 Reason 2: In some cases the policyholders will have other sources of income for short term sickness, eg sick pay from employment.
 
-Reason 3: Offer policyholders a choice, for the same premium they will receive higher benefits for long term sickness in return for giving up benefit for shorter bouts.
+Reason 3: Offer policyholders a choice, for the same premium they will receive higher benefits for long term sickness in return for giving up benefit for shorter bouts. (as printed)

@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Insurance+Premium
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c89fd31a4d2b7a9473fbb50a93281f8522e1a70ea7c7c3893dd5218f73348d12
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b4f827e50c8e81e396d527de04ac6a3864b129b8aebeb27c2cdcfb181df7e9d3
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q21, pp.40-41, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q21, pp.39-40, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-021.md
@@ -48,9 +50,6 @@ Calculate the probability that both lives survive to the end of the contract.
 Due to independence:
 
 $${}_{10}p_{70:70} = \left({}_{10}p_{70}\right)^2 = \left(\frac{l_{80}}{l_{70}}\right)^2 = \left(\frac{75{,}657.2}{91{,}082.4}\right)^2 = 0.689972$$
-
-### Examiner Report
-**Graders' Comments:** *The majority of candidates did well on parts (a) to (d) with many receiving full credit. Part (e) proved much more challenging, with few candidates receiving full credit.*
 
 ## Part b (2 points)
 
@@ -151,3 +150,6 @@ The EPV of the 2 death benefits was lower than expected.
 The mortality experience in this sub-portfolio was better than expected and the death benefits were paid relatively late in the term of the policy (at times 6 and 9).
 
 Consequently, the EPV of the benefits was lower than expected.
+
+### Examiner Report
+**Graders' Comments:** *The majority of candidates did well on parts (a) to (d) with many receiving full credit. Part (e) proved much more challenging, with few candidates receiving full credit.*

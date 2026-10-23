@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Equivalence+Principle
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:641649a52c7fa40be9ecaaee810fd3fe2cacf4beb35f9a87bcd0bdfa2739e6a1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c886156a22fc0a1cb97f867a5082917a4377de0dfbe208398c8828c160c9e79c
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q25, pp.46-47, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q25, pp.49-50, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-025.md
@@ -119,7 +121,7 @@ Calculate $X$.
 (This is Question 4 from the Spring 2022 Written Answer exam.)
 
 ### Explanation
-$$X = \frac{500{,}000}{\bar{a}_{50}^{11}} = \frac{500{,}000}{\bar{a}_{x:y|\delta^{**}=0.0425}^s} = \frac{500{,}000}{17.9917} = 27{,}791$$
+$$X = \frac{500{,}000}{\bar{a}_{50}^{11}} = \frac{500{,}000}{\bar{a}_{x:y|\delta^{**}=0.0425}^s} \text{ (as printed)} = \frac{500{,}000}{17.9917} = 27{,}791$$
 
 ### Examiner Report
 **Graders' Comments:** *Parts (e) and (f) were quite straightforward, relying on given answers from earlier parts. However, many candidates who struggled with part (d) skipped these parts.*

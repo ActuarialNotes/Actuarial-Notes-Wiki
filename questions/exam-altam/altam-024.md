@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Life+Insurance
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:50ad7d58b113f24cfa944487aba986a609335c6f378b3833b3a8121fcaadd8e3
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:86cabbfa16cfbd89a9d6bb049dd9c5b7822950b97a6d4dcf943bcf6ef5862902
+  sources:
+    - "SOA Exam ALTAM Sample Written-Answer Questions (January 2026), Q24, p.45, sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Sample Written-Answer Solutions (January 2026), Q24, pp.47-48, sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-024.md
@@ -89,7 +91,7 @@ Expenses are 25% of the first year's premium plus 10% of all renewal premiums. C
 $$G = \frac{S\,A_{50:60:\overline{10}|}}{(0.9)\,\ddot{a}_{50:60:\overline{10}|} - 0.15} = \frac{124{,}720}{6.96396} = 17{,}909.35$$
 
 ### Examiner Report
-**Graders' Comments:** *Again, candidates did well on this part. The most common error was the double counting first year expense (using a separate 0.25 instead and using .15)*
+**Graders' Comments:** *Again, candidates did well on this part. The most common error was the double counting first year expense (using a separate 0.25 instead and using .15) (as printed)*
 
 ## Part e (2 points)
 
@@ -114,4 +116,4 @@ A reduction of $(17{,}909.35 - 13{,}601.27)/17{,}909.35 = 0.2405$ or 24.05%
 (ii) The percentage reduction would be **less** for a 10-year term insurance. The endowment insurance also pays a benefit in case of survival to time 10. The percentage reduction in the EPV of the survival benefit will be larger than the percentage reduction in the EPV of the death benefit (which is paid early, on average, and is therefore relatively less affected by a change in the interest rate).
 
 ### Examiner Report
-**Graders' Comments:** *For Part (i) the most common error was not calculating the correct discount rate or calculating the net premium instead of the gross premium. For Part (ii), many candidates did not really address the question answered and instead commented on expenses or joint life versus single life as opposed to the difference between term and endowment.*
+**Graders' Comments:** *For Part (i) the most common error was not calculating the correct discount rate or calculating the net premium instead of the gross premium. For Part (ii), many candidates did not really address the question answered (as printed) and instead commented on expenses or joint life versus single life as opposed to the difference between term and endowment.*

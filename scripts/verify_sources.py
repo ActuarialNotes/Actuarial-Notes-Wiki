@@ -150,6 +150,10 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
     texts: list[str] = []
     ocr_pages: list[int] = []
     image_pages: list[int] = []
+    # A scanned page OCR was tried on and gave nothing back. Tesseract fails
+    # quietly (several fetches OCR'ing at once left whole booklets blank), and
+    # every stem on such a page then reads as `diverges`, so say so.
+    ocr_failed: list[int] = []
     for i, page in enumerate(doc):
         text = page.get_text()
         scanned = len(text.strip()) < SCAN_TEXT_THRESHOLD and bool(page.get_images())
@@ -161,6 +165,8 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
                     text = ocr_text
                     ocr_pages.append(i + 1)
                     scanned = False
+            if scanned:
+                ocr_failed.append(i + 1)
         if scanned:
             image_pages.append(i + 1)
         texts.append(text)
@@ -170,6 +176,7 @@ def _extract_pdf(path: Path, ocr: bool) -> dict:
         "outline": [[lvl, str(t), pg] for lvl, t, pg, *_ in doc.get_toc()],
         "ocr_pages": ocr_pages,
         "image_pages": image_pages,
+        "ocr_failed": ocr_failed,
         "ocr": use_ocr,
     }
     doc.close()
@@ -279,7 +286,11 @@ def _summary(meta: dict) -> str:
         bits.append(f"OCR pages {ranges(meta['ocr_pages'])}")
     if meta.get("image_pages"):
         bits.append(f"image-only pages {ranges(meta['image_pages'])}")
-    return f"{meta['url']}\n  " + " · ".join(bits) + f"\n  {source_dir(meta['url'])}"
+    out = f"{meta['url']}\n  " + " · ".join(bits) + f"\n  {source_dir(meta['url'])}"
+    if meta.get("ocr_failed"):
+        out += (f"\n  WARNING: OCR returned nothing on pages {ranges(meta['ocr_failed'])} — "
+                "re-fetch with --refresh, one document at a time")
+    return out
 
 
 def ranges(nums: list[int]) -> str:

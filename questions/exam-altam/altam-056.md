@@ -13,13 +13,15 @@ wiki_link:
   - Concepts/Risk-Neutral+Valuation
 points: 4
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:4568422f72a71323802e0f1371863b5fc80c8617315a622ba66fb49e277e397e
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:a3747e1d150df63aef5e720cd9d86ae4cfe1cfbdb1a6e31b9bc5afa2e25fad5b
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q56, pp.103 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q56, pp.111-112 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-altam/altam-056.md
 ---
@@ -68,7 +70,7 @@ Given σ = 0.25, $x = 60$, $P = 100{,}000$, Standard Ultimate Life Table mortali
 
 ### Explanation
 
-$${}_{10}p_{60} = 0.94255; \quad P = 100{,}000; \quad \xi = 0.747230$$
+$${}_{10}p_{60} = 0.94255; \quad P = 100{,}000; \quad \xi = 0.747230 \text{ (as printed)}$$
 
 $$\begin{align*}
 {}_{10}p_{60}\,P\,\xi\,BSP\left(1/\xi\right) &= {}_{10}p_{60}\,P\,\xi\left(\frac{1}{\xi}e^{-10r}\,\Phi(-d_2) - \Phi(-d_1)\right) \\
@@ -78,7 +80,7 @@ $$\begin{align*}
 $$d_1 = \frac{\log(\xi) + (r + \sigma^2/2)(10)}{\sigma\sqrt{10}} = 0.53279; \quad d_2 = d_1 - \sigma\sqrt{10} = -0.25778$$
 
 $$\begin{align*}
-\Rightarrow \pi(0) &= 0.94255(100{,}000)\left(e^{-10 \times 0.04}\,\Phi(0.25778) - 0.74723\,\Phi(-0.53279)\right) \\
+\Rightarrow \pi(0) &= 0.94255(100{,}000)\left(e^{-10 \times 0.04}\,\Phi(0.25778) - 0.74723\text{ (as printed)}\,\Phi(-0.53279)\right) \\
 &= 0.94255(100{,}000)(0.181325) \\
  &= 17{,}091
 \end{align*}$$

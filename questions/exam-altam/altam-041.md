@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Life+Annuity
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:e19a078e0390fbd89341373bca4e9f498797498505a59111ca6d23dfdce9f6e9
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:9b3db1e667cd44f202c41037e25f46f425d78525a79f9becde7a32e8a0eea481
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q41, pp.75-76 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q41, pp.84-85 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-041.md
@@ -102,7 +104,7 @@ $$
 Assume that the employee takes the lump sum option. State with reasons whether the internal rate of return (IRR) that the employee has earned on their contributions is more than or less than 9.6% per year compounded monthly.
 
 ### Explanation
-Since the lump sum of 1,293,126 is larger than the value of contributions at 9.6% (995,524), the IRR that earned by taking the lump sum is more than 9.6% convertible monthly.
+Since the lump sum of 1,293,126 is larger than the value of contributions at 9.6% (995,524), the IRR that earned (as printed) by taking the lump sum is more than 9.6% convertible monthly.
 
 ### Examiner Report
 *Graders' Comments:* Many candidates tried to answer the question in general terms instead of comparing the options using the results from parts b) and c).

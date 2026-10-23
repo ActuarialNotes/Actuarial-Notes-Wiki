@@ -14,13 +14,15 @@ wiki_link:
   - Concepts/Profit+Signature
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:bbb79c32eda567191de216c738fb6fe2f581a87ca54ca52d2574751724a24832
-  sources: []
-  open_findings: 0
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:d1773b1c0f63d18132442af3a39c6802c4d221004420bbd4c526638fc04a4ccb
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q55, pp.101-102 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q55, pp.108-110 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+  open_findings: 1
   open_critical: 0
   log: .verify/questions/exam-altam/altam-055.md
 ---
@@ -79,10 +81,10 @@ Calculate the profit vector for the contract.
 Explanation:
 
 - The income is the MC from part (a), plus 350 policy fee in the first year.
-- Expenses at time 0 are the 200 pre-contract costs; in year 1 the expenses are 2% of F<sub>0</sub>; in year 2 and 3 the expenses are 1% of F<sub>t</sub>. plus 30.
+- Expenses at time 0 are the 200 pre-contract costs; in year 1 the expenses are 2% of F<sub>0</sub>; in year 2 and 3 the expenses are 1% of F<sub>t</sub>. (as printed) plus 30.
 - Interest is 5% of income – expenses.
 - The expected death benefit cost, EDB<sub>t</sub>, is $q_{x+t-1}\left(5000 - F_t\right)^+$
-- The expected maturity benefit cost, EMB<sub>t</sub> is 0 in the first two years. In the third year is is $p_{x+2}\left(5000 - F_3\right)^+$
+- The expected maturity benefit cost, EMB<sub>t</sub> is 0 in the first two years. In the third year is is (as printed) $p_{x+2}\left(5000 - F_3\right)^+$
 - The Profit vector value for the t-th year is $\Pr_t = \text{Income}_t - \text{Expenses}_t + \text{Interest}_t - \text{EDB}_t - \text{EMB}_t$
 
 ## Part c

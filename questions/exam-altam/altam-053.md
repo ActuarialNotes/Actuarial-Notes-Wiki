@@ -12,12 +12,14 @@ wiki_link:
   - Concepts/Life+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8eafd8eee5f7ef59a1e324e327fe7134541388c6bec6efed7a0bc0a2bace005b
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:6213c67e39e23d5a2a1b0bc0584ed36982481672fd6b6af7e2deb18b43d7aa71
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q53, pp.97-98 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q53, pp.105 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-053.md
@@ -88,9 +90,9 @@ $AV_1 = 15{,}468.6$ from (b)(i)
 
 $$\begin{align*}
 ADB_1 &= DB_1 - AV_1 \\
-      &= 100{,}000 - 15{,}486.6 \\
+      &= 100{,}000 - 15{,}486.6 \text{ (as printed)} \\
       &= 84{,}513.4 \\
-CV_1 &= 15{,}486.6 - 0.05(15{,}000) \\
+CV_1 &= 15{,}486.6 \text{ (as printed)} - 0.05(15{,}000) \\
      &= 14{,}736.6
 \end{align*}$$
 

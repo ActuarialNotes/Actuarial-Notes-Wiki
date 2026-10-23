@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Woolhouse's+Formula
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:801f42513c13a00f15ef946713b082825e1cda67efaa092c55f25e0f4de0a645
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:b6e4c5a1f5075911c9fdd629192dd46b378e4b921c901f880a672b356be5cee5
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q50, pp.91-92 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q50, pp.101-102 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-050.md
@@ -49,7 +51,7 @@ AV_1 &= \left(50{,}000(0.8) - 75 - (0.025)(100{,}000 - AV_1)\,v_{4.5\%}\right)(1
 
 Check corridor factor: $\dfrac{DB}{AV_1} = \dfrac{100{,}000}{41{,}017} = 2.44 > CF_1$
 
-Since the ratio of the DB to the AV is greater than the corridor factor, not adjustment to the DB is required.
+Since the ratio of the DB to the AV is greater than the corridor factor, not (as printed) adjustment to the DB is required.
 
 For the second year, we have
 
@@ -59,13 +61,13 @@ AV_2 &= \left(41{,}017 + 50{,}000(0.92) - 75 - (0.03)(100{,}000 - AV_2)\,v_{4.5\
 \Rightarrow AV_2 &= 91{,}689
 \end{align*}$$
 
-Check corridor factor: $\dfrac{DB}{AV_2} = \dfrac{100{,}000}{91{,}689} = 1.09 < CF_1$
+Check corridor factor: $\dfrac{DB}{AV_2} = \dfrac{100{,}000}{91{,}689} = 1.09 < CF_1$ (as printed)
 
 The ratio is too small, and the corridor factor applies. We must recalculate the account value.
 
 $$\begin{align*}
 AV_2 &= \left(41{,}017 + 50{,}000(0.92) - 75 - (0.03)(0.4 \times AV_2)\,v_{4.5\%}\right)(1.0575) \\
-\Rightarrow AV_2\left(1 + 0.03(0.4)\,v_{4.5\%}(1.0575)\right) &= 91{,}9416 \\
+\Rightarrow AV_2\left(1 + 0.03(0.4)\,v_{4.5\%}(1.0575)\right) &= 91{,}9416 \text{ (as printed)} \\
 \Rightarrow AV_2 &= 90{,}838
 \end{align*}$$
 
@@ -90,7 +92,7 @@ You are given that the net single premium and reserves for this annuity are calc
 - (iii) $i = 0.05$
 - (iv) The two-term Woolhouse formula
 
-Show that $Q$ is 1630 to the nearest 10. You should calculate $Q$ to the nearest 1.
+Show that $Q$ is 1630 (as printed) to the nearest 10. You should calculate $Q$ to the nearest 1.
 
 ### Explanation
 
@@ -128,7 +130,7 @@ $${}_{10}V = 4Q\,\ddot{a}_{70}^{(4)} = 70095$$
 
 ## Part d (1 point)
 
-In the eleventh year, Person S decides that they no longer needs the annuity and asks the company to pay the reserve. The insurance company refuses to pay the full reserve.
+In the eleventh year, Person S (as printed) decides that they no longer needs the annuity and asks the company to pay the reserve. The insurance company refuses to pay the full reserve.
 
 Explain why the insurance company would not agree to S's request.
 

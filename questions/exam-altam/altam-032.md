@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Expected+Value
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b861582247e181ef4947ba483f6ae50ffcb045f978fc5533b413965d7f667ca7
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:01de802d3003f96ec45db772459879139e7c970de360d36414a750c80028a97f
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q32, pp.59-60 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q32, pp.63-65 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-032.md
@@ -97,7 +99,7 @@ $${}_{10}V^g = (S + 1000)A_{60} + 10P\,A_{60} + P(IA)_{60} - 0.95P\,\ddot{a}_{60
 
 $$
 \begin{align*}
-{}_{10}V^g &= (100{,}000 + 1000)(0.029028) + 10(1000)(0.229028) + (2000)(6.63303) - 0.95(2000)(14.9041) \\
+{}_{10}V^g &= (100{,}000 + 1000)(0.029028) + 10(1000)(0.229028) + (2000)(6.63303) - 0.95(2000)(14.9041) \text{ (as printed)} \\
 &= 29{,}318.28 + 5805.60 + 13{,}266.06 - 28{,}317.79 \\
 &= 20{,}072.15
 \end{align*}
@@ -163,7 +165,7 @@ $$1000\left({}_{15}V^g + 0.96P\right)\left(i^*_{15} - 0.05\right) = 1000\left[34
 
 $\Rightarrow$ a gain from interest of 72,507.56
 
-So the gain from interest is 87,553.78 – 15,046.22 = 72,507.56
+So the gain from interest is 87,553.78 – 15,046.22 = 72,507.56 (as printed)
 
 **Gain from mortality (M):**
 
@@ -171,7 +173,7 @@ Expected mortality cost – actual mortality cost, using the actual expenses and
 
 $$\left[1000\,q_{65}\left(S + 16P + E^*_{15}\right) + 1000\,p_{65}\,{}_{16}V^g\right] - \left[1000(0.007)\left(S + 16P + E^*_{15}\right) + 1000(0.993)\,{}_{16}V^g\right]$$
 
-$$= 792{,}610 + 37{,}258{,}812.78 - 938{,}000 - 37{,}218{,}146.43 = \mathbf{-104{,}723.65}$$
+$$= 792{,}610 + 37{,}258{,}812.78 - 938{,}000 - 37{,}218{,}146.43 = \mathbf{-104{,}723.65} \text{ (as printed)}$$
 
 $\Rightarrow$ a loss from mortality of 104,723.65
 

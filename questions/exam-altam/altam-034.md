@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Term+Life+Insurance
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:9e0ca7395e524392dba9fa1f0f4f0bed527dd499c457b1aa4c096a3e2084d515
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:68a6b57ba1d43ebcdd3176c4b91c244026a44aac5e0b2aa5e2e8106a4f84cb2b
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q34, pp.63-64 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q34, pp.69-70 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-034.md
@@ -123,7 +125,7 @@ $\Rightarrow$ $j = -6.7\%$ or $\mathbf{14.83\%}$ $\Rightarrow$ Keeping the posit
 Your boss questions how you can have a positive IRR but a negative NPV. Explain how this is possible.
 
 ### Explanation
-The NPV is being calculated at a risk discount rate of 20% while the IRR uses a discount rate of 14.83. The 20% discount rate results in a negative because the discounted profits at the end of one year and at the end of two years when discounted at 20% are not sufficient to cover the pre-contract expenses. The NPV is positive for some rates of return less than 20%. The IRR>0 for discount rates less than IRR=14.83% (rates between -6.7% and 14.83%).
+The NPV is being calculated at a risk discount rate of 20% while the IRR uses a discount rate of 14.83. The 20% discount rate results in a negative because the discounted profits at the end of one year and at the end of two years when discounted at 20% are not sufficient to cover the pre-contract expenses. The NPV is positive for some rates of return less than 20%. The IRR>0 (as printed) for discount rates less than IRR=14.83% (rates between -6.7% and 14.83%).
 
 ### Examiner Report
 *Graders' Comments:* Many candidates simply restated the question here and could not point to how it's possible to have a positive IRR but a negative NPV. Some mentioned the difference in discount rate vs IRR, but we were really looking for commentary of the timing of the cash flows.

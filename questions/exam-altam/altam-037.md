@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Annuities
 points: 7
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3090828ddb99e6608c4ad413ad51439634f7516a73b0cf9817bfda36e92c8532
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:dfcb79270fdeaabeddbe1783842062e376c4091ae3c4a99b035cacf468d1c092
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q37, pp.70 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q37, pp.76 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-037.md
@@ -50,7 +52,7 @@ A benefit plan provides a retirement benefit if the employee lives to age 65, an
 
 You are given:
 
-- A person started the employment on January1, 1990 at exact age 38 with a starting salary of 50,000.
+- A person started the employment on January1 (as printed), 1990 at exact age 38 with a starting salary of 50,000.
 - The company gives salary increases of 3% on January 1 each year.
 - Employees can terminate employment only by retirement at 65 or death.
 

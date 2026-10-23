@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Equivalence+Principle
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:15b5c0234153380f9bf948b71bc1da0b31cbf0b8d1c1945a18373dd716380fc3
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c1832b856540fa9d1c8d5afdd361ad73be16b3fe97380651f20a9ab1ec7646ee
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q47, pp.85-86 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q47, pp.94-96 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-047.md
@@ -172,4 +174,4 @@ $${}_{5}q_{60} = 1 - {}_{5}p_{60} = 1 - \frac{94{,}579.7}{96{,}634.1} = 1 - 0.97
 
 ### Examiner Report
 
-*Graders' Comments:* Few attempted this part and very few got it right. The key is to consider all the possible outcomes when the couple (jointly or singly) reaches 65..
+*Graders' Comments:* Few attempted this part and very few got it right. The key is to consider all the possible outcomes when the couple (jointly or singly) reaches 65.. (as printed)

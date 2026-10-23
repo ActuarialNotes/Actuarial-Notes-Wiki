@@ -11,12 +11,14 @@ wiki_link:
   - Concepts/Random+Variable
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3e477e6c351bb3df85faed764c6ddb0cb6d727e91ceeff7b3ca2fcafa6d45d71
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c19131f0b83d3d65ebd9999d5a3085c24fcf58eb269a1dfb465fb6f58b302201
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q51, pp.93-94 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q51, pp.103 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-051.md
@@ -78,7 +80,7 @@ If D paid 200 in year 2, then in year 3 D will pay either 1000 with probability 
 
 There are four possible outcomes for $AV_3$, and hence for the death benefit and surrender values. Note that the surrender value cannot be negative.
 
-| P<sub>1</sub> | P<sub>2</sub> | AV<sub>3</sub> | DB<sub>3</sub> | SV<sub>3</sub> | Prob |
+| P<sub>1</sub> (as printed) | P<sub>2</sub> (as printed) | AV<sub>3</sub> | DB<sub>3</sub> | SV<sub>3</sub> | Prob |
 |---|---|---|---|---|---|
 | 1000 | 1000 | 1616.8 | 101,616.8 | 1516.8 | 0.36 |
 | 1000 | 200 | 853.6 | 100,853.6 | 753.6 | 0.24 |

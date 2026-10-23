@@ -15,12 +15,15 @@ wiki_link:
   - Concepts/Valuation
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:8acfbcd12721d320d1ba6b02b9fa8be06ab121eafb0c59e9b6084f7fb86eaa1d
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:078d7108f66de5e437fa2fe9fef1425c3f575c58e763e1216a582311e50a7fd7
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q40, pp.73-74 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q40, pp.80-83 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+    - "SOA ALTAM April 2026 exam workbook (tables), sheet 'Service Table' (Standard Service Table), sha256:2d8c59a01df2a61781bafcf3c64f9f85304dca80e284e5da1f73d9f223440074 — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-excel.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-040.md
@@ -147,7 +150,7 @@ $$
 
 **(ii)**
 
-For the NC, we must calculate the expected accrued benefit, $B_{61}$, one year after the valuation date.
+For the NC, we must calculate the expected accrued benefit, $B_{61}$ (as printed), one year after the valuation date.
 
 $$B_{56} = 0.016\cdot 26\cdot 50{,}000\cdot\left(\frac{1.03 + 1 + 1.03^{-1}}{3}\right) = 20{,}806$$
 

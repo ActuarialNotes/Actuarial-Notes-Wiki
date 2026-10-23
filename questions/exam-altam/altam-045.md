@@ -13,12 +13,15 @@ wiki_link:
   - Concepts/Accrued+Benefit
 points: 8
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:b741a72e57461de12915796eec3f4cd99cc44df1aea0fcfa677dc92fc3cc3361
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:e125a7488b86b3dba4cd0bd1453bf7f967c67447be74c6b716b677bcc6cc8f2c
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q45, pp.82 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q45, pp.90-91 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
+    - "SOA ALTAM April 2026 exam workbook (tables), sheet 'Service Table' (Standard Service Table), sha256:2d8c59a01df2a61781bafcf3c64f9f85304dca80e284e5da1f73d9f223440074 — https://www.soa.org/globalassets/assets/files/edu/2026/altam/april-2026-altam-excel.xlsx"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-045.md
@@ -124,20 +127,20 @@ Alternatively,
 
 $$\begin{align*}
 NC &= v\,p_{63}\,AL_1 - AL_0 + EPV(\text{mid-year deaths}) \\
-&= \left(\frac{1}{1.05}\right)\left(\frac{42{,}805}{47{,}579}\right)(1008.26) - 1649.09 + 872.20 \\
+&= \left(\frac{1}{1.05}\right)\left(\frac{42{,}805}{47{,}579}\right)(1008.26) - 1649.09 + 872.20 \text{ (as printed)} \\
 &= 86.95
 \end{align*}$$
 
 where
 
 $$\begin{align*}
-AL_1 &= 4\alpha\,[(TPS)_{63} + s_{63}] \cdot \left\{\frac{d_{64}}{l_{64}}\,v^{0.5}\right\} \\
+AL_1 &= 4\alpha\,[(TPS)_{63} + s_{63}\text{ (as printed)}] \cdot \left\{\frac{d_{64}}{l_{64}}\,v^{0.5}\right\} \\
 &= 4(0.02)(2{,}570{,}000)\left\{\frac{215.1}{42{,}805}\,v^{0.5}\right\} \\
 &= 1008.26
 \end{align*}$$
 
 $$\begin{align*}
-EPV(\text{mid-year deaths}) &= 4\alpha\,[(TPS)_{63} + 0.5\,S_{63}] \cdot \left\{\frac{r_{63}}{l_{63}}\,v^{0.5}\right\} \\
+EPV(\text{mid-year deaths}) &= 4\alpha\,[(TPS)_{63} + 0.5\,S_{63}] \cdot \left\{\frac{r_{63}}{l_{63}}\,v^{0.5}\right\} \text{ (as printed)} \\
 &= 4(0.02)(2{,}485{,}000)\{0.004387\} \\
 &= 872.14
 \end{align*}$$

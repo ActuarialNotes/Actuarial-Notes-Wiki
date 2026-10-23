@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Annuity+Contract
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:39604d7836ad2fce47462889fdb76af8861339fceee97de706604ca9be8e2b99
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:27b65294ddbc8aa11f06ae5ad426dfd7be4fbd086f4abd68429c0f15f40f5625
+  sources:
+    - "SOA Exam ALTAM Written-Answer Sample Questions (January 2026), Q31, pp.57-58 (question), sha256:49872aa3db3e280fce82dc8c261668a20462050dd761c2995ab214ffc31dc4de — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-questions.pdf"
+    - "SOA Exam ALTAM Written-Answer Sample Solutions (January 2026), Q31, pp.61-62 (solution and graders' comments), sha256:3e52f41d261382185358d31d5ce2eed38ef94578f2c04dce17a3d38b50385e90 — https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-01-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-031.md
@@ -86,9 +88,9 @@ Note that at age 73, the annuity is within the 10-year guarantee period. So only
 
 (ii) $p^{02}_{73} = 0$
 
-Since there is no possible transition from State 0 at 73 to State 2 at age 74since the annuity is within the guarantee period.
+Since there is no possible transition from State 0 at 73 to State 2 at age 74since (as printed) the annuity is within the guarantee period.
 
-(iii) $p^{12}_{73} = 0$ Since payments would continue until age 76 if annuitant died before 73.
+(iii) $p^{12}_{73} = 0$ Since payments would continue until age 76 if annuitant died before 73 (as printed).
 
 ## Part c (2 points)
 
@@ -170,7 +172,7 @@ Pr_9^{(1)} &= {}_8V^{(1)}(i_9 - i) \\
 \end{align*}
 $$
 
-(i)
+(i) (as printed)
 
 $$
 \begin{align*}

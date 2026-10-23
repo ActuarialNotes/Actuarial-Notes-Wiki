@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ProBadge } from '@/components/ProBadge'
 import { CheckMark } from '@/components/CheckMark'
-import { BadgeArt, FundArt, ProgressArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
+import { FundArt, ProgressArt, ProjectArt, StrategyArt, StudyPlanArt } from '@/components/ProBenefitArt'
 import { trackUpgradeClicked } from '@/lib/analytics'
 
 // What Pro unlocks — each one a thing the app actually gates on `isPro`
@@ -29,36 +29,30 @@ const HEADLINE_BENEFITS = [
 // two. A card marked `wide` spans both columns; its picture needs the room.
 const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element; wide?: boolean }[] = [
   {
-    title: 'Know what to study today',
+    title: 'Follow a Daily Study Plan',
     body: 'Set your exam date and the syllabus is split into daily lists, sized to the time you have left. Fall behind or start forgetting something, and the plan changes to match.',
     Art: StudyPlanArt,
   },
   {
-    title: 'Pick the order',
+    title: 'Choose a Study Strategy',
     body: 'Work through the syllabus from the first reading, or start with the topics worth the most marks. You can change your mind later in your plan settings.',
     Art: StrategyArt,
   },
   {
-    title: 'See what\'s sticking',
+    title: 'Track Learning Progress',
     body: 'Each concept moves up from New to Level 3 as you answer questions on it, and you can see which questions moved it. Leave one too long and it drops back a level, so you find out in time to review it.',
     Art: ProgressArt,
     wide: true,
   },
   {
-    title: 'Practise the PCPA project',
+    title: 'Rehearse the PCPA Project',
     body: 'Pick a case, get a data set and build your model in R or Python in the browser. Write the report under the real 1,250-word limit, then see how your model does on data it hasn\'t seen.',
     Art: ProjectArt,
   },
   {
-    title: 'A badge only Pro members can buy',
-    body: 'The Custom Badge in the Gem Shop is for Pro members. Earn the gems by studying and it\'s yours.',
-    Art: BadgeArt,
-  },
-  {
-    title: 'Help build the next exam',
+    title: 'Fund New Exams and Questions',
     body: 'Actuarial Notes is made by one person. Your subscription pays for the hours that go into adding exams, writing questions and checking them against the source material.',
     Art: FundArt,
-    wide: true,
   },
 ]
 

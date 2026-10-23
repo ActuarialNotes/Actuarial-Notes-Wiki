@@ -22,8 +22,11 @@ did and why, and follow it next time.
    for the app's own claims about itself. If a feature is half-built (the Custom
    Badge can be bought but is shown nowhere yet), don't write around the gap with
    vague words; say less, and tell the maintainer.
-2. **Name the reader's situation, not the feature.** "Know what to study today",
-   not "Personalized daily study plans".
+2. **Titles name the feature; bodies say what it does for the reader.** A title
+   is a label the reader can find again in the app: "Track Learning Progress",
+   not "See what's sticking". A clever or situational title ("Know what to study
+   today", "Feel your progress") is vague, and vague reads as AI. Save the
+   reader's situation for the body.
 3. **Use the app's own nouns.** Study plan, concept, Level 1, the Gem Shop, the
    PCPA project, a past paper. A reader learns these words from the app; copy that
    swaps in synonyms ("learning journey", "knowledge areas") makes them guess.
@@ -61,15 +64,17 @@ against the list before showing it.
 | Rhetorical questions | "Ready to pass?" | A statement or a button |
 | Exclamation marks in confirmations | "Code redeemed! Welcome aboard." | "That worked. You have Pro now." |
 | "Whether you're X or Y" | "Whether you're just starting or nearly done…" | Talk to one reader |
-| Title Case Headings For Everything | "Track Your Concept Mastery" | Sentence case |
+| A title describing who can have it, not what it is | "A badge only Pro members can buy" | The feature's name: "Associate and Fellowship Badges" |
 
 One em dash in a page is not a crime. A page where every second sentence hinges
 on one is.
 
 ## Shapes
 
-- **Card title:** 2–6 words, sentence case, what the reader gets or does. No
-  full stop.
+- **Card title:** 2–6 words in Title Case, a verb and the feature's name as the
+  app spells it: "Track Learning Progress", "Choose a Study Strategy",
+  "Rehearse the PCPA Project". No full stop. (Page headings and body text stay
+  in sentence case.)
 - **Card body:** one or two sentences, under ~40 words. Lead with the concrete
   action; end on the fact, not a flourish.
 - **Button:** a verb and its object ("Get Pro", "Redeem"). No "Click here".
@@ -93,5 +98,13 @@ on one is.
 Each entry: the date, the screen, what the maintainer said, and the rule it
 implies. Newest first.
 
+- 2026-10-23 · Upgrade page · Card titles were too vague ("See what's
+  sticking"). Wanted: the feature, said precisely, Title Case, like "Track
+  Learning Progress". → Titles are a verb plus the feature's in-app name.
+- 2026-10-23 · Upgrade page · "A badge only Pro members can buy" is very AI.
+  Better is naming the thing ("Associate and Fellowship Badges"). → Name the
+  feature, never describe its eligibility in the title. (The card itself was
+  dropped: the designation badges aren't Pro-only, and the one Pro-only badge
+  shows nowhere yet. A benefit card needs a feature that's really gated.)
 - 2026-10-23 · Upgrade page · First draft of this skill, written alongside the
   rewrite of the Upgrade page's copy. Nothing reviewed yet.

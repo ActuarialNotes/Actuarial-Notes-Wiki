@@ -501,7 +501,8 @@ before touching that area**:
   its exam weighting), the bands and the insight line. `computeExamReadiness` is the *one* readiness
   number — the exam-page card, the Dashboard radial, the exam grid and the readiness
   projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
-- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz, with an
+- `docs/pcpa-project.md` — the **Projects tab** (`/project`, in the sidebar after Quiz — a
+  **Pro** feature, its row marked with the Pro chip and the page locked to anyone else, with an
   open attempt's Brief / Workspace / Report / Submit views as rows under it — `lib/attemptViews.ts`;
   the PCPA study guide's **Project** button leads there too) and the **PCPA project simulator**
   behind it: every brief is a card grouped by the exam it is a project for (`data/projects.ts`

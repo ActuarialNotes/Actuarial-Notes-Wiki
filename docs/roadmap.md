@@ -242,6 +242,14 @@ to §4. Where an item has a former roadmap ID (P0–P4), §4 gives it.
    in that doc.
 
 **Lane 3, content and Fact Check** (ordered by `content-plan.md`'s phases since 2026-10-18):
+00. **V11, content plan Phase Q: every question file verified** (the lane's current focus,
+   2026-10-23; it goes ahead of everything left in Phases 2–4). 817 served questions are not
+   verified; 494 of them are the SOA prelims' banks, transcribed by a model from page images. The
+   waves, batched by source document: **Q1**, those 494 (SRM, FAM, ASTAM, ALTAM; 16 packets on 23
+   free SOA PDFs); **Q2**, Exam 6C's 13 papers (321 served, 73 off-syllabus); **Q3**, the residue
+   (in-review and stale questions, V10's retags, the 49 report-paragraph deltas, Exam P's
+   re-issued samples); **Q4**, the other off-syllabus questions (D6, settled *yes*). No bank grows
+   by unverified files while it runs. 🟡 Q1 round 1 started 2026-10-23.
 0. ~~**Content plan, Phase 1: ready means ready.**~~ ✅ 2026-10-18: every `ready` exam passes all
    seven gates (P and FM were at 5 and 6, C8); `publication_readiness.py --hold` guards them in CI;
    no open critical finding is left (V6: *MCT*, *Capital Required* and seven more pages, ÷1.5 not
@@ -507,7 +515,7 @@ gates through `--hold` in CI.
 | C2 | Exam 9 → ready | 🟡 4 of 7 | Next | Phase 2. G6 closed 18 Oct. First round 18 Oct (content plan Appendix A.4): 128 of 131 on-syllabus questions, 24 of 60 concepts and 7 of 9 readings verified. Left: three questions in review (decisions for a maintainer), and 36 concepts and 2 readings that rest on texts no session could read — Brehm et al., Mildenhall & Major, Grossi & Kunreuther (study kit or sold) and the Cummins (2000, 2008) and Coval-Jurek-Stafford journal texts (**D22**). |
 | C3 | Exam 5 → ready | 🟡 3 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct. Apply the v02 outline (D8, settled 18 Oct: verbatim, `*Key concepts:*` lines); 60 concepts, 4 readings, 349 questions (their reports paraphrased — restore as printed in each packet); the Spring 2018 booklet still has to be found. |
 | C4 | MAS-II → ready | 🟡 4 of 7 | Next | Phase 2. G3 and G6 closed 18 Oct; first campaign round 18 Oct (content plan Appendix A.5): 167 of 168 questions, 96 of 98 concepts and all 6 readings verified (G5 ✅; Salis's study note, missing from the page, added). Left: the page's F-001 — it carries more tasks than the outline's 21 (**D23**); Fall 2019 Q35's explanation; *Backward Shift Operator* and *Correlogram*, which quote Cowpertwait's own wording (commercial, unread). |
-| C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. D8 settled 18 Oct (domain C re-transcribed, objective filter dropped). 137 concepts, 67 readings and 321 questions to verify. |
+| C5 | Exam 6C → ready | 🟡 3 of 7 | Next | Phase 2. G6 closed 18 Oct (22 vault-written questions, all verified); V6's criticals closed in Phase 1. D8 settled 18 Oct (domain C re-transcribed, objective filter dropped). 137 concepts, 67 readings and 321 questions to verify; the questions are V11's wave Q2 (content plan Phase Q). |
 | C6 | A PCPA bank | ⬜ | Later | Phase 2. The bank would be vault-written, because the CAS releases no PCPA questions. 29 concepts. |
 | C7 | Exam 6U | ⬜ development, 3 of 7 | Later | Phase 4. All 45 reading pages exist, none verified. Its objective codes don't match its numbering. |
 | C8 | Close P and FM's own gaps | ✅ 2026-10-18 | — | Content plan Phase 1. FM: the *Term of Annuity* catch-all unlinked, page re-verified (run `7679`). P: 9 vault-written questions `p-an-001`–`009` for the six untested concepts, checked by other agents (`7432`, `488d`); *Insurer* verified (`66d2`). Both 7 / 7. |
@@ -540,6 +548,7 @@ Waves 0 and 1 are done. Wave 2 is mostly done.
 | V6 | The 2 open critical findings | ✅ 2026-10-18 | — | Runs `1567`, `dd77`: *MCT*, *Capital Required*, *Supervisory Target Capital Ratio*, *Probable Maximum Loss* verified; the ×1.5 and LICAT's "Base Solvency Buffer" fixed on 20 more pages (now `in_review`); the 6C figure builder fixed. Left: *Registered Reinsurance* F-002 (major), for a writer. |
 | V7 | Run summaries for the Exam 7 and DISC-RM runs | ✅ 2026-10-18 | — | Reconstructed from the per-file logs: `.verify/_runs/2026-10-11T02-10Z-e7.md` and `…-dv14.md`. |
 | V8 | Verify the 363 concept-gap pages | ⬜ | rides V5 | Written in phases A–D; human review required (that plan's D5). |
+| V11 | **Every question file verified** (content plan, Phase Q) | 🟡 Q1 running | **Now** | 2,826 of 3,643 served questions verified, 58 of 290 off-syllabus (2026-10-23; `generate_validation_status.py` now writes a *Question banks* table). The waves: Q1 SOA prelims (494), Q2 Exam 6C (394), Q3 the residue, Q4 Exam 9's and 8's off-syllabus (156). Takes over the G7 halves of C5 and C9. |
 
 ### 4.5 A: AI and practitioner products
 
@@ -641,7 +650,7 @@ Where a default is given, sessions build with it until the decision is made.
 | D3 | **Dataset licence terms** for the SOA tables, the CAS triangles, and the Bank of Canada data | tools §14 #6 | A2 datasets | Leave them out |
 | D4 | Tools access and pricing; HTTP API keys; open-sourcing the engine | tools §14 #2–8 | A2 HTTP | Free; no HTTP endpoint |
 | D5 | Does a bank written entirely by the vault count as **ready**? The DISCs were promoted on that assumption | content plan §6 (was CAS D1) | the C track | Yes, but record it |
-| D6 | Verify the **off-syllabus** questions (249 CAS)? | content plan §6 (was CAS D2) | V5 sizing | No |
+| D6 | Verify the **off-syllabus** questions (249 CAS)? | content plan §6 (was CAS D2) | V5 sizing | ✅ settled 2026-10-23: yes, with the focus on every question file (V11); each rides its paper's packet |
 | D7 | Is a **medium confidence ceiling** enough for commercial-only sources? | content plan §6 (was CAS D3) | C9, MAS-II | Yes |
 | D8 | 6C's **F-001**, and Exam 5's **v02 outline** findings | content plan §6 (was CAS D4) | C3, C5 | ✅ settled 2026-10-18: transcribe CAS's words, the vault's additions on `*Key concepts:*` lines; 6C's objective filter dropped until CAS's codes agree (content plan §6) |
 | D9 | The **46 orphan concepts** | content plan §6 | V5 | Leave them unverified |
@@ -718,7 +727,7 @@ Every planning document in the repo, what it is for, and how healthy it is. A do
 | Document | Role | Covers | State | Last touched |
 |---|---|---|---|---|
 | `docs/roadmap.md` | **This file**: governance, priorities, status | Everything | Active | 2026-10-17 |
-| `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V10 | Active. Phase 1 in this PR | 2026-10-18 |
+| `docs/content-plan.md` | **Subplan: all vault content**: the gates, every exam's standing, the workstreams, the phases, the content decisions, the campaign records | C1–C18, V3–V11 | Active. Phase Q (every question verified) is the current focus | 2026-10-23 |
 | `docs/verification-plan.md` | Method: fact-check packets, tooling, sizing | V5 | Reference. Its waves and decisions moved to the content plan | 2026-10-18 |
 | `CONCEPT_GAPS_PLAN.md` | Record of phases A–D, and the generated gap worklist | C11 | Record; its open items are in the content plan §3.3 | 2026-10-18 |
 | `docs/cas-publication-plan.md` | — | — | 🗑 **Folded into `content-plan.md`** 2026-10-18 | — |
@@ -821,6 +830,12 @@ ls Concepts/*.md | wc -l; ls Resources/Books/*.md | wc -l
 ```
 
 ## Appendix B: Revision history
+
+- **2026-10-23, the question banks first.** V11 added and made lane 3's current focus: content
+  plan Phase Q, every question file verified, ahead of the rest of Phases 2–4. 2,826 of 3,643
+  served questions are verified, and the 494 the SOA prelims' conversions transcribed from page
+  images go first (wave Q1). D6 settled: the off-syllabus questions are verified too, with their
+  papers.
 
 - **2026-10-19, Community.** X9 built in Preview (`docs/community.md`): a Community tab for
   one approved account — the r/actuary feed, upcoming meetings and the places actuaries

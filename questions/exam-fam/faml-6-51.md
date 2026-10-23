@@ -12,12 +12,14 @@ wiki_link:
 answer: "D"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:d59d78f52d25af5662804db454932ae6b51240b341fe91f62c8feaf982e465a5
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:719cbfc04260123cf8d7a82e5f76a64913c23a565425d6e6412dd4b2bb0fdfe3
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 7-10 (August 18, 2026), Q6.51, p.90, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 7-10 (August 18, 2026), Q6.51, p.60, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-51.md
@@ -39,7 +41,7 @@ For a special 10-year deferred whole life annuity-due of 50,000 on (62), you are
 
 Calculate the net premium for this special annuity.
 
-[A modified version of Question 14 on the Fall 2013 exam
+[A modified version of Question 14 on the Fall 2013 exam (as printed)
 
 - A) 34,400
 - B) 34,500

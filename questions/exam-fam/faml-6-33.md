@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:f1c396408933c42d163345f895d5e2365aad1bb372be59d00dbf5bd26df29cea
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:3ffb8268764a2b17655f323c86e568ed80e62652aac10e5808ad376152c7f84f
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 7-10 (August 18, 2026), Q6.33, p.76, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 7-10 (August 18, 2026), Q6.33, p.51, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-33.md
@@ -26,7 +28,7 @@ verification:
 
 An insurance company sells 15-year pure endowments of 10,000 to 500 lives, each age $x$, with independent future lifetimes. The single premium for each pure endowment is determined by the equivalence principle.
 
-(i) You are given:
+(i) You are given: (as printed)
 
 (ii) $i = 0.03$
 

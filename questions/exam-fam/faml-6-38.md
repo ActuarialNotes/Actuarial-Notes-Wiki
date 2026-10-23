@@ -13,12 +13,14 @@ wiki_link:
 answer: "B"
 points: 1
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:df782821fcc0bb30cce970bab62d9727c949d026f0bd2aa1c0c8bdc213cf55a1
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:1c891ad4dd6242d73271aec6ae66267f571c7113e758b69d372f62f343d5efe6
+  sources:
+    - "SOA Exam FAM Sample Questions, Syllabus Topics 7-10 (August 18, 2026), Q6.38, p.79, sha256:4aaf3469628f2b63a689c187d963857a5a6e749c5eaca9978b264d854f60a28d — https://www.soa.org/globalassets/assets/files/edu/2024/fall/questions/2024-10-exam-fam-l-sample-questions.pdf"
+    - "SOA Exam FAM Sample Solutions, Syllabus Topics 7-10 (August 18, 2026), Q6.38, p.53, sha256:9e7f7b03e0252ccb8f69e4f453d443d8d7cb43ef3945d05c935fdf234cae72ab — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/2024-10-exam-fam-l-sample-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-fam/faml-6-38.md
@@ -61,7 +63,7 @@ $$\begin{align*}
 &= \frac{(1.05)}{(0.05)}\left(1 - A^{1}_{x:\overline{n}|} - A_{x:\overline{n}|}^{\ \ 1}\right)
 \end{align*}$$
 
-$$A_{x:\overline{n}|} = \frac{i}{\delta}\left(A^{1}_{x:\overline{n}|}\right) + {}_{n}E_{x}$$
+$$A_{x:\overline{n}|}\text{ (as printed)} = \frac{i}{\delta}\left(A^{1}_{x:\overline{n}|}\right) + {}_{n}E_{x}$$
 
 $$\begin{align*}
 \Rightarrow 0.192 &= \frac{0.05}{0.04879}\left(A^{1}_{x:\overline{n}|}\right) + 0.172 \\

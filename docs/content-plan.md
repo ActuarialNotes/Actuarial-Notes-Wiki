@@ -1162,7 +1162,7 @@ also be in the original.
 
 **Sample 15-28**
 
-- Q15(e) stray "1000" and integral repeated; Q16(a)(iii) "90.75283)" for "(0.75283)", A^12_70 without bar; Q16(b)(ii) uses 97,500 (10V(1) = 95,700; printed −2652.8 follows 97,500); Q16(d)(ii) "State 2" (1 meant)
+- Q15(e) stray "1000" and integral repeated; Q16(a)(iii) "90.75283)" for "(0.75283)", A^12_70 without bar; Q16(b)(ii) uses 97,500 (10V(1) = 95,700; the printed −2652.8 follows 95,700, so only the bracket's 97,500 is the slip — corrected 23 Oct, run `e686`); Q16(d)(ii) "State 2" (1 meant)
 - Q18(b)(ii) missing ∫_0^t; typos "dies early than", "policy calues", "ti the", "polict values"; Q20(b) "transition.."
 - Q22(b) 20E50 for 20E50:50; Q22(c) "Common mistakes included :"; Q24 "the question answered", "using a separate 0.25 instead and using .15"
 - Q25(f) denominator ā^s_{x:y|δ**} (single-life ā_50 at 4.25% meant; 17.9917 single-life); Q26(b) "approach.."; Q27(c) "provit vector"; Q27(d) "NPV of A ... larger than 14%" (IRR meant), "year 1,which"

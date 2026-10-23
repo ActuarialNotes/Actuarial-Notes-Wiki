@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Maximum+Likelihood+Estimation
 points: 5
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:13c5726509736f43c124512818d060bd9fb22310e37900b3b2b229b56abe4dc5
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:65d2f6f59a505bbd6ad66b7e20341bfaa2f2298aac905bd924b20f1e2df2778e
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q18, p.23, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q18, p.34, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-018.md
@@ -51,7 +53,7 @@ The SBC = the maximum value of the Log Likelihood function less the log of the s
 The Neg Binomial has two parameters therefore
 
 $$
-SBC = l(\theta) - \frac{2}{2}\ln 400 = -424.5 - 5.99 = 30.49
+SBC = l(\theta) - \frac{2}{2}\ln 400 = -424.5 - 5.99 = 30.49 \text{ (as printed)}
 $$
 
 ## Part b
@@ -60,7 +62,7 @@ Perform a Likelihood ratio test to compare the ZM Poisson to the Poisson.
 
 $H_0$: population is a Poisson
 
-$H_1$: population is a ZM Poison
+$H_1$: population is a ZM Poison (as printed)
 
 ### Explanation
 
@@ -72,7 +74,7 @@ T &= 2\ln(L_1) - 2\ln(L_0) \\
 \end{align*}
 $$
 
-If $H_1$ is true then the test stat follows a Chi-Squared with 1 degree of freedom. We have $T = 3.2 < 3.841 = \chi^2_{0.95}$ and therefore we do not reject $H_0$.
+If $H_1$ is true (as printed) then the test stat follows a Chi-Squared with 1 degree of freedom. We have $T = 3.2 < 3.841 = \chi^2_{0.95}$ and therefore we do not reject $H_0$.
 
 ## Part c
 
@@ -109,5 +111,5 @@ Using the above scores and any other criteria, pick a preferred model and justif
 
 Possible choices
 
-- Geometric based on SBC, simplicity
+- Geometric (as printed) based on SBC, simplicity
 - ZM Neg Binomial based on likelihood, Chi-squared test

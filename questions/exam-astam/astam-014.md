@@ -17,12 +17,14 @@ wiki_link:
   - Concepts/Probability+Distributions
 points: 6
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:75229d2e5bae1f5644cffc3813b7b95b3fdef24ef8fb63b90fd20793a2c1c0c2
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:bc60f9c5a06d653a59aedb09ef016f2387a8aac757418fe84079251682d530d4
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q14, p.19, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q14, pp.27-28, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-014.md
@@ -45,7 +47,7 @@ Show that $\beta = 0.6$.
 ### Explanation
 $X_1$ is a mixture of two exponential distributions, i.e.
 
-$X_1 = \beta Y_1 + (1-\beta) Y_2$ where $Y_1 \sim \exp(1000)$ and $Y_2 \sim \exp(500)$
+$X_1 = \beta Y_1 + (1-\beta) Y_2$ (as printed) where $Y_1 \sim \exp(1000)$ and $Y_2 \sim \exp(500)$
 
 $$\operatorname{E}\left[X_1\right] = \beta \operatorname{E}\left[Y_1\right] + (1-\beta)\operatorname{E}\left[Y_2\right] = \beta(1000) + (1-\beta)500$$
 
@@ -100,7 +102,7 @@ $$
 f_{X_2}(x) = \begin{cases} k(0.002)e^{-0.002x} & 0 < x \le 500 \\[4pt] c\,\dfrac{\alpha\theta^\alpha}{(\theta + x)^{\alpha+1}} & 500 < x \end{cases} \qquad \text{for constants } k \text{ and } c.
 $$
 
-$$F_{X_2}(500) = k\left(1 - e^{-1}\right) = F_{X_1}(500) = 0.6\left(1 - e^{-0.5}\right) + 0.4\left(1 - e^{-1}\right) = 0.48893$$
+$$F_{X_2}(500) = k\left(1 - e^{-1}\right) = F_{X_1}(500)0.6\left(1 - e^{-0.5}\right) + 0.4\left(1 - e^{-1}\right) = 0.48893 \text{ (as printed)}$$
 
 $$\Rightarrow k = 0.77348$$
 

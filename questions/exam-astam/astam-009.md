@@ -12,12 +12,14 @@ wiki_link:
   - Concepts/Unbiasedness
 points: 3
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:cd28d2dd80dad0e1b396358ba541234622412eaca70c4732f05ef602542ba562
-  sources: []
+  status: verified
+  confidence: medium
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:c41ef877e8032eb7447a2eff7c7460ef6c1fbe516016fedbd7cadb99b03d586d
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q9, p.14, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q9, pp.19-20, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-009.md
@@ -44,7 +46,7 @@ You are given the following information.
 The assumptions are
 
 1. $E\left[X_{ij} \mid \theta_i\right] = \mu(\theta_i)$ independent of $j$
-2. $Var\left[X_{i,j} \mid \theta_j\right] \times m_{i,j} = v(\theta_i)$ independent of $j$
+2. $Var\left[X_{i,j} \mid \theta_j\right] \times m_{i,j} = v(\theta_i)$ (as printed) independent of $j$
 
 In this case:
 
@@ -81,7 +83,7 @@ $$
 The estimator for $\mu$ is $\hat{\mu} = \dfrac{\sum_{i=1}^{r} Z_i \bar{X}_i}{\sum_{i=1}^{r} Z_i}$
 
 - (i) Show that that the estimator for $\mu$ is unbiased.
-- (ii) The weights used in the estimator for $\mu$ are proportional to $\operatorname{Var}[\bar{X}_i]$. Explain why this weighting is preferred to other possible weightings.
+- (ii) The weights used in the estimator for $\mu$ are proportional to $\operatorname{Var}[\bar{X}_i]$ (as printed). Explain why this weighting is preferred to other possible weightings.
 
 ### Explanation
 (i) From (a) we have $E\left[X_{ij} \mid \theta_i\right] = \mu(\theta_i)$
@@ -96,4 +98,4 @@ $$
 \end{align*}
 $$
 
-(ii) Using a weighted average of unbiased estimates, where the weights are approximately equal to the variance of each estimate generates (approximately) the minimum variance unbiased estimator, compared with any other weighted average.
+(ii) Using a weighted average of unbiased estimates, where the weights are approximately equal to the variance (as printed) of each estimate generates (approximately) the minimum variance unbiased estimator, compared with any other weighted average.

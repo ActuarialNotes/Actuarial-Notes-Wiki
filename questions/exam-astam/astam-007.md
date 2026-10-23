@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Coverage+Modifications
 points: 6
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:3c7cfe717d541c098b4aa296309c24059bec5a7cda5bb989ef628143a1a36b11
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:f79f50cbd9e37606188bf37437e0a67d19e43e761cd97b2a887de04d33c43505
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q7, p.12, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q7, pp.16-17, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-007.md
@@ -96,7 +98,7 @@ $$Var\left[S^*\right] = \lambda S(d)E\left[\left(Y^*\right)^2\right] = 2.5345 \t
 $$\begin{aligned}
 E\left[\left(Y^*\right)^2\right] &= \frac{1}{S(d)}\int_d^\infty (x - d)^2 f(x)\,dx \\
 &= \frac{1}{S(d)}\int_d^\infty x^2 f(x)\,dx - 2d\,\frac{1}{S(d)}\int_d^\infty x f(x)\,dx + d^2 \\
-&= \frac{1}{S(d)}\left(e^{2\mu + 2\sigma^2}\left(1 - \Phi\left(\frac{\log d - \mu - 2\sigma^2}{\sigma}\right)\right)\right) - 2d\big(2722.8 + 3000\big) + d^2 \\
+&= \frac{1}{S(d)}\left(e^{2\mu + 2\sigma^2}\left(1 - \Phi\left(\frac{\log d - \mu - 2\sigma^2}{\sigma}\right)\right)\right) - 2d\big(2722.8 + 3000\big) + d^2 \text{ (as printed)} \\
 &= 51{,}037{,}050 - 34{,}334{,}283 + 9{,}000{,}000 \\
 &= 25{,}702{,}767 \\
 &= 5{,}069.79^2
@@ -114,7 +116,7 @@ Now we have
 
 $$Y^* = (1 - \alpha)Y; \quad S = \sum_1^N Y; \quad S^* = \sum_1^N Y^*$$
 
-So $E\left[S^*\right] = (1 - \alpha)E\left[S\right]$ i.e. $6899.94 = (1 - \alpha)42{,}702.94$
+So $E\left[S^*\right] = (1 - \alpha)E\left[S\right]$ i.e. $6899.94 = (1 - \alpha)42{,}702.94$ (as printed)
 
 $$\Rightarrow \alpha = 0.8384$$
 
@@ -133,7 +135,7 @@ Var\left[S^*\right] &= Var\left[(1 - \alpha)S\right] \\
 \Rightarrow SD\left[S^*\right] &= (1 - \alpha)SD\left[S\right] \\
 E\left[Y^2\right] &= e^{2\mu + 2\sigma^2} \\
 &= 3{,}269{,}017 \\
-\Rightarrow SD[S] &= 12{,}784.7 \\
+\Rightarrow SD[S] &= 12{,}784.7 \text{ (as printed)} \\
 \Rightarrow SD\left[S^*\right] &= 2065.8
 \end{aligned}$$
 

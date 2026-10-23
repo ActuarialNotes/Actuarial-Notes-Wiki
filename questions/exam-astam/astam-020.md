@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Development+Factor
 points: 5
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:620174d4a01e8b96e416139144666018bf02439804ddf3c25253ee3eb9768c4e
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:75d554aa19e1a4e3699bb71da9f9c185a71f13ccdcdb5825abdd469fd5ea5aad
+  sources:
+    - "SOA ASTAM Sample Questions (version of Feb. 23, 2026), Q20, p.25, sha256:0294cf4e8717191cda2747e7a6bb49fbb5e2d08f2d281ec979e670621de74ab4 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/questions/february-2024-astam-questions.pdf"
+    - "SOA ASTAM Solutions to Sample Questions, Q20, pp.37-39, sha256:c4206394603cf205da0668d40333bee5aaa6e3dadcaa241fdb03e5488a1ba4e1 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/february-2024-astam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-astam/astam-020.md
@@ -130,12 +132,12 @@ Using the formula sheet, with $I = J = 4$,
 $$
 \begin{align*}
 s_2^2 &= \frac{1}{2}\sum_{j=0}^{2}\hat{\gamma}_j\left(\frac{X_{2,j}}{\hat{\gamma}_j} - \hat{C}_{2,4}\right)^2 \\
-&= \left\{0.6931\left(\frac{1283}{0.6931} - 1787\right)^2 + 0.1708\left(\frac{283}{0.1708} - 1787\right)^2 + 0.1086\left(\frac{172}{0.1086} - 1787\right)^2\right\} \\
+&= \left\{0.6931\left(\frac{1283}{0.6931} - 1787\right)^2 + 0.1708\left(\frac{283}{0.1708} - 1787\right)^2 + 0.1086\left(\frac{172}{0.1086} - 1787\right)^2\right\} \text{ (as printed)} \\
 &= 5112
 \end{align*}
 $$
 
-(ii) $m_0 = \hat{\beta}_4 = 1.00$; $m_1 = \hat{\beta}_3 = 0.9929$; $m_2 = \hat{\beta}_2 = 0.9725$; $m_3 = \hat{\beta}_1 = 0.8639$; $m_4 = \hat{\beta}_0 = 0.6931$.
+(ii) $m_0 = \hat{\beta}_4 = 1.00$; $m_1 = \hat{\beta}_3 = 0.9929$ (as printed); $m_2 = \hat{\beta}_2 = 0.9725$; $m_3 = \hat{\beta}_1 = 0.8639$; $m_4 = \hat{\beta}_0 = 0.6931$.
 
 $$
 m = \sum_{i=0}^{4} m_i = 4.5224; \qquad \sum_{i=0}^{4} m_i^2 = 4.1583.
@@ -176,4 +178,4 @@ Explain briefly how the Bühlmann-Straub model can be seen as a special case of 
 
 The Bornhuetter Ferguson estimate can be written as $\hat{C}_i^{BF} = \hat{\beta}_{I-i}\,\hat{C}_{i,J} + \left(1 - \hat{\beta}_{I-i}\right)\mu_i$.
 
-Typically, the $\mu_i$ estimate is determined using a loss ratio or other subjective method, but we can see that the Bühlmann-Straub estimate uses the same formula, but with $\mu_i$ set equal to the raw Bs estimator for AY $i$.
+Typically, the $\mu_i$ estimate is determined using a loss ratio or other subjective method, but we can see that the Bühlmann-Straub estimate uses the same formula, but with $\mu_i$ set equal to the raw Bs estimator (as printed) for AY $i$.

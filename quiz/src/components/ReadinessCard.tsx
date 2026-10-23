@@ -593,6 +593,7 @@ export function ReadinessCard({
   // (lib/readinessDelta.ts). Held back with a null while the mastery records are still
   // arriving, so an empty record set never becomes the day's starting line.
   const readinessMoveToday = useReadinessDelta(
+    user?.id ?? null,
     wikiExamIdToProgressKey(syllabus.examId),
     !masteryLoading && readiness.counts.total > 0 ? readiness.overallPct : null,
   )

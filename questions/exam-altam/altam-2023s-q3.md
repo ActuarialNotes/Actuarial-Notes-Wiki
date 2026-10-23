@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Reserve
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:74aec6675ae6fdac7d3e1c077d7b6110f290ef69912298ac3d25f3f46b6c79ea
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:932d8e5e56d2c87ea34ae5eca767b274ea71532b205f98474f82aa9d32a11a05
+  sources:
+    - "SOA Exam ALTAM Spring 2023 — exam (question paper), Q3, pp.6-7, sha256:22d9ab9530cb311d979dada69c2af9c6f87cba7fd854e2da29793aa3d2715095 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-altam.pdf"
+    - "SOA Exam ALTAM Spring 2023 — model solutions and examiners' comments, Q3, pp.6-8, sha256:7808fbbb76bc8d54d394976603e8123a3fdb44a6020cfd126cc95f3c6814b512 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-altam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023s-q3.md
@@ -66,7 +68,7 @@ $$
 $$
 \begin{align*}
 \Rightarrow AV_9 &= \left(62000 + 7000(0.94) - 55 - \left(0.002\left(F - AV_9\right)v_{5\%}\right)\right)(1.06) \\
-&= \frac{72636 - 0.002\,v_{5\%}(150{,}000)}{1 - 0.002\,v_{5\%}(1.06)} \\
+&= \frac{72636 - 0.002\,v_{5\%}(150{,}000)}{1 - 0.002\,v_{5\%}(1.06)} \text{ (as printed)} \\
 &= \frac{72333}{0.99798} \\
 &= 72480
 \end{align*}
@@ -85,7 +87,7 @@ $$
 where $AV_9 = 72480$;
 
 $$
-(COI)_{10} = \max\left(0.0022\left(F - AV_{10}\right)v_{5\%},\ 0.0022(0.97)AV_{10}\,v_{5\%}\right)
+(COI)_{10} = \max\left(0.0022\left(F - AV_{10}\right)v_{5\%},\ 0.0022(0.97)AV_{10}\,v_{5\%}\right) \text{ (as printed)}
 $$
 
 Assume (first) that $F - AV_{10} > 0.91AV_{10}$,

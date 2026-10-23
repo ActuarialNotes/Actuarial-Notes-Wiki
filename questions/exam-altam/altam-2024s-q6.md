@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Guaranteed+Minimum+Income+Benefit
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:18a6e8c3c860e8b732f955cd37b870126eff66fb496cdeafdd6024b4f2fceff2
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Spring 2024 — exam (question paper), Q6, pp.14-15, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf"
+    - "SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q6, pp.16-18, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024s-q6.md

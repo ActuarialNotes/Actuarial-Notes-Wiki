@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Pension+Risk+Transfer
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:c3d78c1fc40ff272be107da7d55c8c1049516b3a44f990ef08ba4e01f463b3ca
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:46138c65e0443a5606d4185676912a3f7bc4de5104ead199ea1c5701886081bc
+  sources:
+    - "SOA Exam ALTAM Spring 2024 — exam (question paper), Q5, pp.12-13, sha256:7877c415a5859ee881046def4553cc2d714688607058c1d807a069d873320ee5 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/exams/spring-2024-altam-exam.pdf"
+    - "SOA Exam ALTAM Spring 2024 — model solutions and examiners' comments, Q5, pp.13-15, sha256:1ff2f7da08ae0d9bf5e542c2cbd87fa4b81ce334e1e47f8b117ecacc1103fb65 — https://www.soa.org/globalassets/assets/files/edu/2024/spring/solutions/spring-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024s-q5.md
@@ -145,7 +147,7 @@ The plan sponsor is considering purchasing annuities to provide the remaining be
 1. Protect the sponsor from investment and survivorship risks;
 2. Eliminate the need for expenses of administering plan (i.e., no more valuations required);
 3. Retirees may feel better protected by guaranteed insured benefit.
-4. Get the employer out of the business of managing an annuity portfolio (overlaps with item (2)?).
+4. Get the employer out of the business of managing an annuity portfolio (overlaps with item (2)?) (as printed).
 
 **Disadvantages**
 

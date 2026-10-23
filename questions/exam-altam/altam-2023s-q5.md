@@ -14,12 +14,14 @@ wiki_link:
   - Concepts/Annuities
 points: 9
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:dc282d0eaab505fb593fc2f793ddf3c896c5743d8b12957d72b66213f6bb6d18
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:526c3f1a3b4809050bec987caa63e3ea1fa6ecc374d4b4a6a4468454885386d2
+  sources:
+    - "SOA Exam ALTAM Spring 2023 — exam (question paper), Q5, pp.10-11, sha256:22d9ab9530cb311d979dada69c2af9c6f87cba7fd854e2da29793aa3d2715095 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-altam.pdf"
+    - "SOA Exam ALTAM Spring 2023 — model solutions and examiners' comments, Q5, pp.11-12, sha256:7808fbbb76bc8d54d394976603e8123a3fdb44a6020cfd126cc95f3c6814b512 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-altam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023s-q5.md
@@ -66,7 +68,7 @@ $$
 $$
 
 $$
-V = 6{,}600\,s_{\overline{1}|}^{(12)}(1+i)^{19}\left(\frac{1 - (1.03v)^{20}}{1 - (1.03v)}\right) = 322{,}128
+V = 6{,}600\,s_{\overline{1}|}^{(12)}(1+i)^{19}\left(\frac{1 - (1.03v)^{20}}{1 - (1.03v)}\right) = 322{,}128 \text{ (as printed)}
 $$
 
 where $s_{\overline{1}|}^{(12)} = \dfrac{i}{i^{(12)}} = 1.02796$
@@ -120,7 +122,7 @@ Let $C$ denote the total (employer and employee) contribution rate. Then the equ
 $$
 \begin{align*}
 1{,}434{,}990 &= 322{,}128(1+i)^{20} + S_{45}\,C\,s_{\overline{1}|}^{(12)}(1+i)^{19}\left(\frac{1 - (1.03v)^{20}}{1 - (1.03v)}\right) \\
-&= 1{,}066{,}341 + 108{,}367(1.02796)(3.11790)(15.2285)C \\
+&= 1{,}066{,}341 \text{ (as printed)} + 108{,}367(1.02796)(3.11790)(15.2285)C \\
 &= 1{,}066{,}341 + 5{,}289{,}237C
 \end{align*}
 $$

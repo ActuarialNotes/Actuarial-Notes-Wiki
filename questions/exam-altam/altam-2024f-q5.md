@@ -13,12 +13,14 @@ wiki_link:
   - Concepts/Life+Insurance
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:6fb57179f2a13849fa10c67ec5b7878a169f24e30b1e4ea786558a2eec6bb041
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:06717ff6e935f84d27049d45fcc81a86828b5f28ab8f6b2dee4de1be6dba4277
+  sources:
+    - "SOA Exam ALTAM Fall 2024 — exam (question paper), Q5, pp.11-12, sha256:a75dc6453611a1e32f792a8f6c5efa70b61d82ce0a86291594d816b74f01b830 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2024 — model solutions and examiners' comments, Q5, pp.10-12, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024f-q5.md
@@ -95,7 +97,7 @@ Calculate the total amount of death benefit paid.
 ### Explanation
 **(i)**
 
-$$AV_{41.6} = \left(109{,}500 + 0.98(2000) - 100 - 1.2q_{91}(100{,}000)\right)(1.06)^{0.6} = 101{,}320$$
+$$AV_{41.6} = \left(109{,}500 \text{ (as printed)} + 0.98(2000) - 100 - 1.2q_{91}(100{,}000)\right)(1.06)^{0.6} = 101{,}320$$
 
 $$DB = AV_{41.6} + ADB = 201{,}320$$
 

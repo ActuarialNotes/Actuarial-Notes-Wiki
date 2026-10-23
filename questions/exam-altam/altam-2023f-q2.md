@@ -16,12 +16,14 @@ wiki_link:
   - Concepts/Policy+Value
 points: 12
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
-  content_hash: sha256:a4fb6b370df00c93f0304b3c8c44c46af7fbf484bb33395f7da9193a11c8355a
-  sources: []
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
+  content_hash: sha256:191e2fde564a6338e625a96c4b4a4fc31e979c7bd09b626b424574f4e8e3a1f8
+  sources:
+    - "SOA Exam ALTAM Fall 2023 — exam (question paper), Q2, pp.4-5, sha256:c162b6a75c9ccaedf38fcc9f7f4debf83abcf768f1e6ee6ff0d84e89e3098bc7 — https://www.soa.org/globalassets/assets/files/edu/2023/fall/exams/fall-2023-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2023 — model solutions and examiners' comments, Q2, pp.4-6, sha256:df2ab0d9bc15ea197487448a071c8d909aa27d14841c082505cbb63358a6b93b — https://www.soa.org/globalassets/assets/files/edu/2023/fall/solutions/altam-fall-2023-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023f-q2.md
@@ -68,7 +70,7 @@ For Option C,
 - Model 1 would not work for this option because it only allows for a single payment, and two payments are necessary in the event that the insured receives a CI diagnosis prior to death.
 
 ### Examiner Report
-For Part (a), most candidate understood the features of each model; however very few candidates identified all the applicable models for each option and only picked one.
+For Part (a), most candidate (as printed) understood the features of each model; however very few candidates identified all the applicable models for each option and only picked one.
 
 ## Part b (1 point)
 
@@ -128,7 +130,7 @@ $$
 $$
 
 ### Examiner Report
-For Part (c), most candidate did well. Typical mistake was applying Woolhouse's formula to term annuity instead of whole-life annuity.
+For Part (c), most candidate (as printed) did well. Typical mistake was applying Woolhouse's formula to term annuity instead of whole-life annuity.
 
 ## Part d (3 points)
 
@@ -140,7 +142,7 @@ EPV Death Benefit:
 $$
 \begin{align*}
 &100{,}000\left(\bar{A}_{50}^{02} - e^{-10\delta}\,{}_{10}p_{50}^{00}\,\bar{A}_{60}^{02} - e^{-10\delta}\,{}_{10}p_{50}^{01}\,\bar{A}_{60}^{12}\right) \\
-&= 100{,}000\left(0.21878 - e^{-0.5}(0.9088)(0.33174) - e^{-0.5}(0.04512)(0.41861)\right) \\
+&= 100{,}000\left(0.21878 - e^{-0.5}(0.9088)(0.33174) - e^{-0.5}(0.04512)(0.41861)\right) \text{ (as printed)} \\
 &= 2240.14
 \end{align*}
 $$
@@ -162,7 +164,7 @@ $$
 $$
 
 ### Examiner Report
-For Part (d), most candidate did well. Typical mistake was candidates omitted transition from state 1 to 2 in computing term life insurance.
+For Part (d), most candidate (as printed) did well. Typical mistake was candidates omitted transition from state 1 to 2 in computing term life insurance.
 
 ## Part e (2 points)
 

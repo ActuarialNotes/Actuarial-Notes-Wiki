@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Present+Value
 points: 10
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:2bd3c8b0f1c1e219c61f940b882a13d1e158674f548e21a9f4217a10cb20000e
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Spring 2023 — exam (question paper), Q1, pp.2-3, sha256:22d9ab9530cb311d979dada69c2af9c6f87cba7fd854e2da29793aa3d2715095 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/exams/spring-2023-exam-altam.pdf"
+    - "SOA Exam ALTAM Spring 2023 — model solutions and examiners' comments, Q1, pp.1-3, sha256:7808fbbb76bc8d54d394976603e8123a3fdb44a6020cfd126cc95f3c6814b512 — https://www.soa.org/globalassets/assets/files/edu/2023/spring/solutions/spring-2023-solutions-altam.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2023s-q1.md

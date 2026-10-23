@@ -15,12 +15,14 @@ wiki_link:
   - Concepts/Profit+Margin
 points: 11
 verification:
-  status: unverified
-  confidence: null
-  last_checked: null
-  last_checked_by: null
+  status: verified
+  confidence: high
+  last_checked: 2026-10-23
+  last_checked_by: agent:validate-v1
   content_hash: sha256:02eb6a4c348b951da1a32ceaba0e7bd00022006558acd0bf58f8806ee6bcf50e
-  sources: []
+  sources:
+    - "SOA Exam ALTAM Fall 2024 — exam (question paper), Q4, pp.9-10, sha256:a75dc6453611a1e32f792a8f6c5efa70b61d82ce0a86291594d816b74f01b830 — https://www.soa.org/globalassets/assets/files/edu/2024/fall/exams/2024-fall-altam-exam.pdf"
+    - "SOA Exam ALTAM Fall 2024 — model solutions and examiners' comments, Q4, pp.7-9, sha256:bef60a4ff411c7fa3eb0fd8d4b6a52a32d8ddf620ff365270c2a6dce96299a4f — https://www.soa.org/globalassets/assets/files/edu/2024/fall/solutions/fall-2024-altam-solutions.pdf"
   open_findings: 0
   open_critical: 0
   log: .verify/questions/exam-altam/altam-2024f-q4.md

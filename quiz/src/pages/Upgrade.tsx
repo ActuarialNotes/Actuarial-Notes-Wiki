@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useBack } from '@/hooks/useBack'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, BadgeCheck, Heart, Loader2, Lock, Tag, type LucideIcon } from 'lucide-react'
+import { ArrowRight, BadgeCheck, FlaskConical, Heart, Loader2, Lock, Tag, type LucideIcon } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
@@ -43,6 +43,7 @@ const BENEFITS: { title: string; body: string; Art: () => React.JSX.Element }[] 
 ]
 
 const EXTRAS: { text: string; Icon: LucideIcon }[] = [
+  { text: 'Projects: rehearse the PCPA project, start to finish', Icon: FlaskConical },
   { text: 'Pro-only Custom Badge in the Gem Shop', Icon: BadgeCheck },
   { text: 'Fund new exams, questions and features', Icon: Heart },
 ]

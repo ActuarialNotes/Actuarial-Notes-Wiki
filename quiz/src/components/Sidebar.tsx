@@ -325,7 +325,8 @@ function StudyGuidesNav({ collapsed, onNavigate }: { collapsed: boolean; onNavig
 }
 
 /**
- * The Projects row and, while an attempt is open, that attempt's views under
+ * The Projects row — a Pro feature, so it carries the Pro chip for every
+ * reader — and, while an attempt is open, that attempt's views under
  * it — Brief, Workspace, Report, Submit (Results once submitted) — mirroring
  * the switcher in the attempt's top bar, which the attempt page publishes to
  * `useAttemptNav`. Choosing one replaces the history entry, as the switcher
@@ -344,6 +345,7 @@ function ProjectsNav({ collapsed, onNavigate }: { collapsed: boolean; onNavigate
         collapsed={collapsed}
         onNavigate={onNavigate}
         state={attempt ? 'within' : undefined}
+        badge={<ProBadge />}
       />
       {attempt && (
         <SubRows collapsed={collapsed}>

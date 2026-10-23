@@ -49,6 +49,13 @@ class SourceCacheTests(unittest.TestCase):
                 else:
                     S.os.environ[S.CACHE_ENV] = saved
 
+    def test_the_summary_warns_when_ocr_gave_nothing_back(self) -> None:
+        meta = {"url": "u", "kind": "pdf", "pages": 40, "sha256": "ab",
+                "image_pages": [1, 2, 3], "ocr_failed": [1, 2, 3]}
+        self.assertIn("WARNING: OCR returned nothing on pages 1-3", S._summary(meta))
+        meta.update(image_pages=[], ocr_failed=[], ocr_pages=[1, 2, 3])
+        self.assertNotIn("WARNING", S._summary(meta))
+
     def test_a_page_spec_is_clipped_to_the_document(self) -> None:
         self.assertEqual(S.page_spec("3-5,9,40", 10), [3, 4, 5, 9])
         self.assertEqual(S.page_spec("", 3), [1, 2, 3])
